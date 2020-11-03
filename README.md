@@ -121,11 +121,30 @@ Be patient - lots of output is given as aws2tf:
 
 The following terraform resource types are supported by this tool at this time:
 
+### App Mesh
+* aws_appmesh_mesh
+* aws_appmesh_route
+* aws_appmesh_virtual_service
+* aws_appmesh_virtual_node
+* aws_appmesh_virtual_route
+
 ### Athena
 * aws_athena_named_query
   
 ### Autoscaling
 * aws_autoscaling_group
+
+### CodeBuild
+* aws_codebuild_project
+
+### CodePipeline
+* aws_codepipeline
+
+### Config
+* aws_config_configuration_recorder
+* aws_config_delivery_channel
+* aws_config_configuration_recorder_status
+* aws_config_rule
 
 ### Directory Services
 * aws_directory_service_directory

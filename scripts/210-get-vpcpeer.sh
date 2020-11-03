@@ -57,6 +57,12 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "vpc_id" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
+                        lvpc=`echo $tt2`
+                    fi
+                    if [[ ${tt1} == "peer_vpc_id" ]]; then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
+                        rvpc=`echo $tt2`
                     fi
                     # can't do this a vpc is in remote account
                     #if [[ ${tt1} == "peer_vpc_id" ]]; then
@@ -70,7 +76,8 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-            
+            ../../scripts/100-get-vpc.sh $lvpc
+            ../../scripts/100-get-vpc.sh $rvpc
         done
     fi
 done

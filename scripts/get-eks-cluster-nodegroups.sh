@@ -23,7 +23,7 @@ if [ "$kcount" -gt "0" ]; then
 
         jcount=`$AWS eks list-nodegroups --cluster-name $cln | jq ".nodegroups | length"`
         
-        echo jcount=$jcount
+        #echo jcount=$jcount
         if [ "$jcount" -gt "0" ]; then
             jcount=`expr $jcount - 1`
             for j in `seq 0 $jcount`; do

@@ -1,4 +1,4 @@
-# aws2tf supports Terraform v0.12
+# aws2tf
 
 **Work in progress - please report any issues you find.**
 
@@ -17,8 +17,8 @@ There should hopefully be no subsequent additions or deletions reported by the t
 
 ## Requirements & Prerequisites
 + The tool is written for the bash shell script & Python3 and has been tested on macOS
-+ AWS cli (V1) **version 1.17.4 or higher** needs to be installed and you need a login with at least "Read" priviledges
-+ terraform **version v0.12.25 or higher** needs to be installed
++ AWS cli (V1) **version 1.18.0 or higher** needs to be installed and you need a login with at least "Read" priviledges
++ terraform **version v0.12.29** needs to be installed
 + jq **version 1.6 or higher**
 
 
@@ -115,7 +115,7 @@ Be patient - lots of output is given as aws2tf:
 + Performs the necessary 'terraform import' commands
 + And finally runs a 'terraform plan'
 
-
+----
 
 ## Supported Resource Types
 

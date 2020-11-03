@@ -75,8 +75,13 @@ To generate the terraform files for an EKS cluster named "mycluster"
 ./aws2tf.sh -t eks -i mycluster
 ```
 
-The currently supported Resources groups/types are:
+The currently supported types are:
 
+* tgw - Transit Gateway resources -i <transit gateway id>
+* vpc - A VPC and it's related resources -i <VPC id>
+* eks - An EKS cluster and it's related resources -i <Cluster Name>
+* ecs - An ECS cluster and it's related resources -i <Cluster Name>
+* iam - All IAM related users, groups, policies & roles
 
 
 To get all the VPC related resources in a particular VPC
@@ -88,10 +93,7 @@ To use a specific region and profile
 ./aws2tf.sh -t vpc -i vpc-xxxxxxxxx -r eu-west-1 -p default
 ```
 
-* tgw - Transit Gateway resources -i <transit gateway id>
-* vpc - A VPC and it's related resources -i <VPC id>
-* eks - An EKS cluster and it's related resources -i <Cluster Name>
-* ecs - An ECS cluster and it's related resources
+
 
 
 Using the cumulative mode

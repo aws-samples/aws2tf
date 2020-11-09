@@ -242,7 +242,7 @@ Can fail if your login doesn't have acccess to KMS
 
 ### S3 Buckets
 
-Can fail if your login/SPN doesn't have acccess to the KMS used for encryption.
+Can fail if you don't have acccess to the KMS key used for encryption.
 
 
 

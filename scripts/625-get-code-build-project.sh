@@ -76,7 +76,6 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "availability_zone_id" ]];then skip=1;fi
                     if [[ ${tt1} == "vpc_id" ]]; then
                         vpcid=`echo $tt2 | tr -d '"'`
-                        echo $vpcid
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`
                     fi
                
@@ -88,9 +87,7 @@ for c in `seq 0 0`; do
                 
             done <"$file"
 
-
             if [ "$vpcid" != "" ]; then
-                echo "**** getting VPC ***"
                 ../../scripts/100-get-vpc.sh $vpcid
             fi
             if [ "$ecrr" != "" ]; then 

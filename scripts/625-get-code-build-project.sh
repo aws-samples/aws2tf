@@ -44,6 +44,9 @@ for c in `seq 0 0`; do
             #	done
             file="t1.txt"
             echo $aws2tfmess > $fn
+            ecrr=""
+            trole=""
+            vpcid=""
             while IFS= read line
             do
 				skip=0
@@ -57,9 +60,11 @@ for c in `seq 0 0`; do
 
                     if [[ ${tt1} == "service_role" ]];then 
                                 skip=0;
-                                trole=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`
+                                trole=`echo "$tt2" | rev | cut -d'/' -f 1 | rev | tr -d '"'`
+                                #echo $trole
                                 echo "depends_on = [aws_iam_role.$trole]" >> $fn              
                                 t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
+            
                     fi
                     if [[ ${tt2} == *"dkr.ecr"* ]]; then
                         ecrr=`echo $tt2 | cut -f2 -d '/' | tr -d '"'`
@@ -70,8 +75,9 @@ for c in `seq 0 0`; do
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
                     if [[ ${tt1} == "availability_zone_id" ]];then skip=1;fi
                     if [[ ${tt1} == "vpc_id" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
+                        vpcid=`echo $tt2 | tr -d '"'`
+                        echo $vpcid
+                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`
                     fi
                
                 fi
@@ -81,10 +87,20 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-            ../../scripts/get-ecr.sh $ecrr
+
+
+            if [ "$vpcid" != "" ]; then
+                echo "**** getting VPC ***"
+                ../../scripts/100-get-vpc.sh $vpcid
+            fi
+            if [ "$ecrr" != "" ]; then 
+                ../../scripts/get-ecr.sh $ecrr
+            fi
             ## role arn
-            ../../scripts/050-get-iam-roles.sh $trole
-            
+            if [ "$trole" != "" ]; then
+                ../../scripts/050-get-iam-roles.sh $trole
+            fi
+
         done
         
     fi

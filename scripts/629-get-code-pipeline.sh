@@ -52,13 +52,13 @@ for c in `seq 0 0`; do
                 if [[ ${t1} == *"="* ]];then
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
-                    echo $tt2
+                    #echo $tt2
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
 
                     if [[ ${tt1} == "role_arn" ]];then 
                                 skip=0;
-                                trole=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`
+                                trole=`echo "$tt2" | rev | cut -d'/' -f 1 | rev | tr -d '"'`
                                 echo "depends_on = [aws_iam_role.$trole]" >> $fn              
                                 t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
                     fi

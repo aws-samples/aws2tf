@@ -22,16 +22,16 @@ for c in `seq 0 0`; do
    
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	echo $cm | jq .
-    echo "here"
+	#echo $cm | jq .
+    #echo "here"
     if [ "$1" != "" ]; then 
         awsout=`echo $cm | jq .`
     else
         awsout=`eval $cm`
     fi 
-    echo awsout=$awsout
+    #echo awsout=$awsout
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
-    echo count=$count
+    #echo count=$count
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do

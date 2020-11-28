@@ -36,17 +36,28 @@ for c in `seq 0 0`; do
             terraform state show $ttft.$cname > t2.txt
             tfa=`printf "%s.%s" $ttft $cname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
-            #echo $awsj | jq . 
+            #echo $awsj | jq .
+            
             rm $ttft.$cname.tf
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+            mv t1.txt t1.txt.sav
             #	for k in `cat t1.txt`; do
             #		echo $k
             #	done
-            file="t1.txt"
+            
             echo $aws2tfmess > $fn
             ecrr=""
             trole=""
             vpcid=""
+            vpcid=$(cat $tfa.json | jq -r .values.vpc_config[0].vpc_id) 
+            if [ "$vpcid" != "" ]; then
+                ../../scripts/100-get-vpc.sh $vpcid
+                ../../scripts/105-get-subnet.sh $vpcid
+                ../../scripts/110-get-security-group.sh $vpcid
+            fi
+
+            mv t1.txt.sav t1.txt
+            file="t1.txt"
             while IFS= read line
             do
 				skip=0
@@ -74,9 +85,25 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "rule_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
                     if [[ ${tt1} == "availability_zone_id" ]];then skip=1;fi
+                    
+                    if [[ ${tt1} == "encryption_key" ]]; then                 
+                        earn=`echo "$tt2" | rev | cut -d'/' -f 1 | rev | tr -d '"'`
+                        t1=`printf "%s = data.aws_kms_alias.%s.arn" $tt1 $earn`
+                    fi                  
+                    
                     if [[ ${tt1} == "vpc_id" ]]; then
                         vpcid=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`
+                    fi
+
+                else
+                    if [[ "$t1" == *"subnet-"* ]]; then
+                        t1=`echo $t1 | tr -d '"|,'`
+                        t1=`printf "aws_subnet.%s.id," $t1`
+                    fi
+                    if [[ "$t1" == *"sg-"* ]]; then
+                        t1=`echo $t1 | tr -d '"|,'`
+                        t1=`printf "aws_security_group.%s.id," $t1`
                     fi
                
                 fi
@@ -87,9 +114,7 @@ for c in `seq 0 0`; do
                 
             done <"$file"
 
-            if [ "$vpcid" != "" ]; then
-                ../../scripts/100-get-vpc.sh $vpcid
-            fi
+
             if [ "$ecrr" != "" ]; then 
                 ../../scripts/get-ecr.sh $ecrr
             fi

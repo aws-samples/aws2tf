@@ -29,14 +29,22 @@ for c in `seq 0 0`; do
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-
+            #echo $awsout | jq .
+            
+            
+            
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].PolicyName" | tr -d '"'`
             rarn=`echo $awsout | jq ".${pref[(${c})]}[(${i})].PolicyArn" | tr -d '"'`
             ocname=`echo $cname`
             cname=${cname//./_}
             cname=`printf "%s__%s" $1 $cname`
             echo $cname
-            
+            fn=`printf "%s__%s.tf" $ttft $cname`
+            if [ -f "$fn" ] ; then
+                echo "$fn exists already skipping"
+                exit
+            fi
+
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
             printf "}" >> $ttft.$cname.tf
             terraform import $ttft.$cname $1/$rarn
@@ -47,11 +55,12 @@ for c in `seq 0 0`; do
             #		echo $k
             #	done
             file="t1.txt"
-            fn=`printf "%s__%s.tf" $ttft $cname`
+            pnam=""
             echo $aws2tfmess > $fn
             while IFS= read line
             do
                 skip=0
+                
                 # display $line or do something with $line
                 t1=`echo "$line"`
                 if [[ ${t1} == *"="* ]];then
@@ -65,6 +74,19 @@ for c in `seq 0 0`; do
                         t1=`printf "%s = aws_iam_role.%s.id" $tt1 $tsel`
                         skip=0;
                     fi
+                    if [[ ${tt1} == "policy_arn" ]];then 
+                        echo "tt2=$tt2"
+                        if [[ "${tt2}" == *"service-role"* ]]; then
+                            pnam=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`
+                            echo "parn=$tt2"
+                            echo "pnam=$pnam"
+
+                            t1=`printf "%s = aws_iam_policy.%s.arn" $tt1 $pnam`
+                        fi
+                        skip=0;
+                    fi
+
+
                     if [[ ${tt1} == "arn" ]];then skip=1; fi
                     if [[ ${tt1} == "id" ]];then skip=1; fi
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
@@ -85,7 +107,11 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"   # done while
-            
+            echo "pre=policy pnam=$pnam"
+            if [[ "$pnam" != "" ]];then 
+                echo "Get the Policy $pnam"
+                ../../scripts/055-get-iam-policies.sh $pnam
+            fi
         done # done for i
     fi
 done

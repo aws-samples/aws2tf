@@ -98,7 +98,7 @@ To use a specific region and profile
 
 Using the cumulative mode
 
-If for example you want to get several VPC's you can use the cumulative mode:
+If for example you want to get several VPCs you can use the cumulative mode:
 
 To get all the VPC related resources in a particular VPC
 ```

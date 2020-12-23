@@ -51,7 +51,7 @@ for c in `seq 0 0`; do
                     getp=1
                 fi
             else
-                echo "not set dollar 1"
+                #echo "not set dollar 1"
                 getp=0
             fi
             if [ "$getp" == "1" ]; then

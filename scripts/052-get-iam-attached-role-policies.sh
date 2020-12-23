@@ -75,7 +75,7 @@ for c in `seq 0 0`; do
                         skip=0;
                     fi
                     if [[ ${tt1} == "policy_arn" ]];then 
-                        echo "tt2=$tt2"
+                        #echo "tt2=$tt2"
                         if [[ "${tt2}" == *"service-role"* ]]; then
                             pnam=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`
                             parn=`echo $tt2`

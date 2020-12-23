@@ -78,7 +78,7 @@ for c in `seq 0 0`; do
                         #echo "tt2=$tt2"
                         if [[ "${tt2}" == *"service-role"* ]]; then
                             pnam=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`
-                            parn=`echo $tt2`
+                            parn=`echo $tt2 | tr -d '"'`
                             echo "parn=$parn"
                             echo "pnam=$pnam"
             

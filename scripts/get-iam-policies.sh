@@ -29,6 +29,7 @@ for c in `seq 0 0`; do
               
                 getp=0
                 if [ $cname == $1 ]; then
+                    echo "Match"
                     getp=1
                 fi
             else

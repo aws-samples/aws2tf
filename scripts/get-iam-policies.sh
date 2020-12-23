@@ -4,7 +4,7 @@ if [ "$1" != "" ]; then
 else
     cmd[0]="$AWS iam list-policies --scope Local"
 fi
-
+echo $1
 pref[0]="Policies"
 tft[0]="aws_iam_policy"
 getp=0
@@ -18,8 +18,9 @@ for c in `seq 0 0`; do
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
-            echo $i
+            #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Arn" | tr -d '"'`
+            parn=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Arn" | tr -d '"'`
             ocname=`echo $cname`
             cname=`echo $cname | rev | cut -f1 -d'/' | rev `
             pname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].PolicyName"`
@@ -28,7 +29,7 @@ for c in `seq 0 0`; do
             if [ "$1" != "" ]; then
               
                 getp=0
-                if [ $cname == $1 ]; then
+                if [ $parn == $1 ]; then
                     echo "Match"
                     getp=1
                 fi

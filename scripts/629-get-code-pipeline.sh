@@ -46,6 +46,7 @@ for c in `seq 0 0`; do
             file="t1.txt"
             echo $aws2tfmess > $fn
             rarns=()
+            doned=0
             while IFS= read line
             do
 				skip=0
@@ -63,8 +64,10 @@ for c in `seq 0 0`; do
                                 trole=`echo "$tt2" | rev | cut -d'/' -f 1 | rev | tr -d '"'`
                                 echo "***trole=$trole"
                                 rarns+=`printf "\"%s\" " $trole`
-                                
-                                echo "depends_on = [aws_iam_role.$trole]" >> $fn              
+                                if [ "$doned" == "0" ]; then
+                                    echo "depends_on = [aws_iam_role.$trole]" >> $fn  
+                                    doned=1 
+                                fi           
                                 t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
                     fi
 

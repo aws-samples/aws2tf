@@ -120,11 +120,12 @@ for c in `seq 0 0`; do
                 
             done <"$file"
 
-
+            echo "***********  ecrr=$ecrr"
             if [ "$ecrr" != "" ]; then 
                 ../../scripts/get-ecr.sh $ecrr
             fi
             ## role arn
+            echo "***********  trole=$trole"
             if [ "$trole" != "" ]; then
                 ../../scripts/050-get-iam-roles.sh $trole
             fi

@@ -58,7 +58,6 @@ for c in `seq 0 0`; do
                             while [[ "$t1" != "]" ]] ;do
                                 read line
                                 t1=`echo "$line"`
-                                echo $t1
                             done
                         fi
                     fi

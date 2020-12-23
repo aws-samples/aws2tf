@@ -33,7 +33,7 @@ for c in `seq 0 0`; do
                 fi
             else
                 echo "not set"
-                getp=1
+                getp=0
             fi
             if [ "$getp" == "1" ]; then
                 fn=`printf "%s__%s.tf" $ttft $cname`

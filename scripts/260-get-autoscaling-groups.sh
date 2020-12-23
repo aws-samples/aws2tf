@@ -26,6 +26,7 @@ for c in `seq 0 0`; do
             #	for k in `cat t1.txt`; do
             #		echo $k
             #	done
+            az-0
             file="t1.txt"
             fn=`printf "%s__%s.tf" $ttft $cname`
             echo $aws2tfmess > $fn
@@ -46,6 +47,23 @@ for c in `seq 0 0`; do
 
                     if [[ ${tt1} == "volume_id" ]];then skip=1;fi
                     if [[ ${tt1} == "user_data" ]];then skip=1;fi
+                    if [[ ${tt1} == "availability_zones" ]];then 
+                        az=1;
+                    fi
+
+                    if [[ ${tt1} == "vpc_zone_identifier" ]];then
+                        if [[ ${az} == "1" ]];then
+                            echo "vpc_zone_identifier skipping ..."  
+                            skip=1
+                            while [[ "$t1" != "]" ]] ;do
+                                read line
+                                t1=`echo "$line"`
+                                echo $t1
+                            done
+                        fi
+                    fi
+
+
                     #if [[ ${tt1} == "default_route_table_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "default_network_acl_id" ]];then skip=1;fi

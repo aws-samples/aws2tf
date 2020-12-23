@@ -50,7 +50,7 @@ for c in `seq 0 0`; do
             trole=""
             vpcid=""
             vpcid=$(cat $tfa.json | jq -r .values.vpc_config[0].vpc_id) 
-            if [ "$vpcid" != "" ]; then
+            if [ "$vpcid" != "" ] && [ "$vpcid" != "null" ]; then
                 ../../scripts/100-get-vpc.sh $vpcid
                 ../../scripts/105-get-subnet.sh $vpcid
                 ../../scripts/110-get-security-group.sh $vpcid

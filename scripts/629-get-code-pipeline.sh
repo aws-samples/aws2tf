@@ -46,6 +46,7 @@ for c in `seq 0 0`; do
             file="t1.txt"
             echo $aws2tfmess > $fn
             rarns=()
+            allowid=0
             doned=0
             while IFS= read line
             do
@@ -57,7 +58,13 @@ for c in `seq 0 0`; do
                     tt2=`echo "$line" | cut -f2- -d'='`
                     #echo $tt2
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
-                    if [[ ${tt1} == "id" ]];then skip=1; fi          
+                    if [[ ${tt1} == "id" ]];then 
+                        if [ "$allowid" == "0" ]; then
+                            skip=1
+                        else
+                            skip=0      
+                        fi
+                    fi          
 
                     if [[ ${tt1} == "role_arn" ]];then 
                                 skip=0;
@@ -85,6 +92,10 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "vpc_id" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
+                    fi
+                else
+                    if [[ "$t1" == *"encryption_key"* ]]; then
+                        allowid=1
                     fi
                
                 fi

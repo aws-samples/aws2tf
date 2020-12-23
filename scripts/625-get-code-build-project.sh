@@ -80,6 +80,10 @@ for c in `seq 0 0`; do
                     if [[ ${tt2} == *"dkr.ecr"* ]]; then
                         ecrr=`echo $tt2 | cut -f2 -d '/' | tr -d '"'`
                     fi
+                    if [[ ${tt1} == "buildspec" ]]; then
+                        t1="buildspec = <<EOT"
+                    fi
+
 
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "rule_id" ]];then skip=1;fi
@@ -88,7 +92,7 @@ for c in `seq 0 0`; do
                     
                     if [[ ${tt1} == "encryption_key" ]]; then                 
                         earn=`echo "$tt2" | rev | cut -d'/' -f 1 | rev | tr -d '"'`
-                        t1=`printf "%s = data.aws_kms_alias.%s.arn" $tt1 $earn`
+                        t1=`printf "%s = \"data.aws_kms_alias.%s.arn\"" $tt1 $earn`
                     fi                  
                     
                     if [[ ${tt1} == "vpc_id" ]]; then

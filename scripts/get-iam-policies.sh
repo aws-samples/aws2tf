@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]=`printf "$AWS iam list-policies | jq '.Policies[] | select(.Arn==%s)' | jq ." $1`
+    cmd[0]=`printf "$AWS iam list-policies | jq '.Policies[] | select(.Arn==\"%s\")' | jq ." $1`
 else
     cmd[0]="$AWS iam list-policies --scope Local"
 fi

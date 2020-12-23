@@ -14,7 +14,13 @@ for c in `seq 0 0`; do
     ttft=${tft[(${c})]}
     echo $cm
     awsout=`eval $cm`
-    count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    if [ "$1" != "" ]; then
+        count=1
+        count=`echo $awsout | jq ". | length"`
+    else
+        count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    fi
+    echo "count=$count"
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do

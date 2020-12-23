@@ -66,8 +66,6 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "location" ]];then 
                                 skip=0;
                                 s3buck=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`
-                                #echo "depends_on = [aws_iam_role.$trole]" >> $fn              
-                                #t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
                     fi
 
 

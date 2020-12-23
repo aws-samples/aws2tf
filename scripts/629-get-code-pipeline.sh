@@ -91,12 +91,12 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-            echo "rarns=$rarns"
+            #echo "rarns=$rarns"
             ## role arn
             for therole in ${rarns[@]}; do
-                echo "therole=$therole"
+                #echo "therole=$therole"
                 trole1=`echo $therole | tr -d '"'`
-                echo "calling for $trole1"
+                #echo "calling for $trole1"
                 if [ "$trole1" != "" ]; then
                     ../../scripts/050-get-iam-roles.sh $trole1
                 fi

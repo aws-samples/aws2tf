@@ -1,5 +1,4 @@
 #!/bin/bash
-#!/bin/bash
 #if [ "$1" != "" ]; then
 #    cmd[0]="$AWS iam iam list-policies"
 #else
@@ -32,7 +31,7 @@ for c in `seq 0 0`; do
                     getp=1
                 fi
             else
-                echo "not set"
+                echo "not set dollar 1"
                 getp=0
             fi
             if [ "$getp" == "1" ]; then

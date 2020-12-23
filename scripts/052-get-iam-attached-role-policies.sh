@@ -78,9 +78,10 @@ for c in `seq 0 0`; do
                         echo "tt2=$tt2"
                         if [[ "${tt2}" == *"service-role"* ]]; then
                             pnam=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`
-                            echo "parn=$tt2"
+                            parn="echo $tt2"
+                            echo "parn=$parn"
                             echo "pnam=$pnam"
-
+            
                             t1=`printf "%s = aws_iam_policy.%s.arn" $tt1 $pnam`
                         fi
                         skip=0;
@@ -109,7 +110,7 @@ for c in `seq 0 0`; do
             done <"$file"   # done while
             echo "pre-policy pnam=$pnam"
             if [[ "$pnam" != "" ]];then 
-                echo "Get the Policy $pnam $parn"
+                echo "Get the Policy name=$pnam arn=$parn"
                 ../../scripts/get-iam-policies.sh $parn
             fi
         done # done for i

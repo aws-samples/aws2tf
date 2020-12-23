@@ -32,7 +32,7 @@ for c in `seq 0 0`; do
                     getp=1
                 fi
             else
-                echo "not set $1"
+                echo "not set"
                 getp=1
             fi
             if [ "$getp" == "1" ]; then

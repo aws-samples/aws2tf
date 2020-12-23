@@ -15,8 +15,10 @@ for c in `seq 0 0`; do
     echo $cm
     awsout=`eval $cm`
     if [ "$1" != "" ]; then
-        count=1
         count=`echo $awsout | jq ". | length"`
+        if [ "$count" -gt "1" ]; then
+            count=1
+        fi
     else
         count=`echo $awsout | jq ".${pref[(${c})]} | length"`
     fi

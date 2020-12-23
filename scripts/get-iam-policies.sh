@@ -12,17 +12,18 @@ for c in `seq 0 0`; do
  
     cm=${cmd[$c]}
     ttft=${tft[(${c})]}
-    #echo $cm
+    echo $cm
     awsout=`eval $cm`
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
-            #echo $i
+            echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Arn" | tr -d '"'`
             ocname=`echo $cname`
             cname=`echo $cname | rev | cut -f1 -d'/' | rev `
             pname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].PolicyName"`
+            echo $cname
 
             if [ "$1" != "" ]; then
               

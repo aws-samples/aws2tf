@@ -1,6 +1,11 @@
 #!/bin/bash
+#!/bin/bash
+if [ "$1" != "" ]; then
+    cmd[0]="$AWS iam iam list-policies"
+else
+    cmd[0]="$AWS iam list-policies --scope Local"
+fi
 
-cmd[0]="$AWS iam list-policies --scope Local"
 pref[0]="Policies"
 tft[0]="aws_iam_policy"
 getp=0
@@ -18,8 +23,7 @@ for c in `seq 0 0`; do
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Arn" | tr -d '"'`
             ocname=`echo $cname`
             cname=`echo $cname | rev | cut -f1 -d'/' | rev `
-            
-
+            pname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].PolicyName"`
 
             if [ "$1" != "" ]; then
               

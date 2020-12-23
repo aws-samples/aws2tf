@@ -1,10 +1,10 @@
 #!/bin/bash
 #!/bin/bash
-if [ "$1" != "" ]; then
-    cmd[0]="$AWS iam iam list-policies"
-else
+#if [ "$1" != "" ]; then
+#    cmd[0]="$AWS iam iam list-policies"
+#else
     cmd[0]="$AWS iam list-policies --scope Local"
-fi
+#fi
 
 pref[0]="Policies"
 tft[0]="aws_iam_policy"

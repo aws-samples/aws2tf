@@ -20,7 +20,7 @@ for c in `seq 0 0`; do
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
-        rarns=()
+        
         for i in `seq 0 $count`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
@@ -45,6 +45,7 @@ for c in `seq 0 0`; do
             #	done
             file="t1.txt"
             echo $aws2tfmess > $fn
+            rarns=()
             while IFS= read line
             do
 				skip=0
@@ -61,6 +62,7 @@ for c in `seq 0 0`; do
                                 skip=0;
                                 trole=`echo "$tt2" | rev | cut -d'/' -f 1 | rev | tr -d '"'`
                                 rarns+=$trole
+                                echo "***trole=$trole"
                                 echo "depends_on = [aws_iam_role.$trole]" >> $fn              
                                 t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
                     fi
@@ -88,15 +90,19 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-            
+
             ## role arn
             for therole in ${rarns[@]}; do
-                trole=`echo $thefole | tr -d '"'`
-                echo "calling for $trole"
-                ../../scripts/050-get-iam-roles.sh $trole
+                echo "therole=$therole"
+                trole1=`echo $thefole | tr -d '"'`
+                echo "calling for $trole1"
+                if [ "$trole1" != "" ]; then
+                    ../../scripts/050-get-iam-roles.sh $trole1
+                fi
             done           
-
-            ../../scripts/060-get-s3.sh $s3buck
+            if [ "$s3buck" != "" ]; then
+                ../../scripts/060-get-s3.sh $s3buck
+            fi
             
         done
         

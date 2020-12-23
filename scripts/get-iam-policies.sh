@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS iam iam list-policies"
+    cmd[0]="$AWS iam list-policies"
 else
     cmd[0]="$AWS iam list-policies --scope Local"
 fi

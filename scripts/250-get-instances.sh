@@ -128,6 +128,9 @@ for c in `seq 0 0`; do
                     if [[ "$t1" == *"ebs_block_device"* ]]; then
                         ebs=1
                     fi
+                    if [[ "$t1" == *"root_block_device"* ]]; then
+                        ebs=0
+                    fi
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1

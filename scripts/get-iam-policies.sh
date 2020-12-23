@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS iam list-policies"
+    cmd[0]=`printf "$AWS iam list-policies jq --arg myt \"%s\" '.Policies[] | select(.PolicyName==$myt)' | jq ." $1`
 else
     cmd[0]="$AWS iam list-policies --scope Local"
 fi
@@ -19,11 +19,20 @@ for c in `seq 0 0`; do
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Arn" | tr -d '"'`
-            parn=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Arn" | tr -d '"'`
-            ocname=`echo $cname`
-            cname=`echo $cname | rev | cut -f1 -d'/' | rev `
-            pname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].PolicyName"`
+            if [ "$1" != "" ]; then
+                cname=`echo $awsout | jq ".Arn" | tr -d '"'`
+                parn=`echo $awsout | jq ".Arn" | tr -d '"'`
+                ocname=`echo $cname`
+                cname=`echo $cname | rev | cut -f1 -d'/' | rev `
+                pname=`echo $awsout | jq -r ".PolicyName"`
+            else
+                cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Arn" | tr -d '"'`
+                parn=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Arn" | tr -d '"'`
+                ocname=`echo $cname`
+                cname=`echo $cname | rev | cut -f1 -d'/' | rev `
+                pname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].PolicyName"`
+            fi
+            
             echo $cname
 
             if [ "$1" != "" ]; then

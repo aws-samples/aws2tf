@@ -81,7 +81,9 @@ for c in `seq 0 0`; do
                         ecrr=`echo $tt2 | cut -f2 -d '/' | tr -d '"'`
                     fi
                     if [[ ${tt1} == "buildspec" ]]; then
-                        t1="buildspec = <<EOT"
+                        if [[ ${tt2} == *"EOT"* ]]; then
+                            t1="buildspec = <<EOT"
+                        fi
                     fi
 
 

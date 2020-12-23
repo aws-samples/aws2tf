@@ -66,6 +66,7 @@ for c in `seq 0 0`; do
             #	for k in `cat t1.txt`; do
             #		echo $k
             #	done
+            ebs=0
             file="t1.txt"
             fn=`printf "%s__%s.tf" $ttft $cname`
             echo $aws2tfmess > $fn
@@ -103,7 +104,12 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "private_ip" ]];then skip=1;fi
                     if [[ ${tt1} == "public_ip" ]];then skip=1;fi
                     if [[ ${tt1} == "public_dns" ]];then skip=1;fi
-                    if [[ ${tt1} == "device_name" ]];then skip=1;fi
+                    
+                    if [[ ${tt1} == "device_name" ]];then 
+                        if [ ${ebs} == "0" ]; then
+                            skip=1;
+                        fi
+                    fi
                     #if [[ ${tt1} == "ipv6_association_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "ipv6_cidr_block" ]];then skip=1;fi    
                     if [[ ${tt1} == "subnet_id" ]]; then
@@ -118,6 +124,9 @@ for c in `seq 0 0`; do
                     if [[ "$t1" == *"sg-"* ]]; then
                         t1=`echo $t1 | tr -d '"|,'`
                         t1=`printf "aws_security_group.%s.id," $t1`
+                    fi
+                    if [[ "$t1" == *"ebs_block_device"* ]]; then
+                        ebs=1
                     fi
                 fi
                 if [ "$skip" == "0" ]; then

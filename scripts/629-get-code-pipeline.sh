@@ -61,8 +61,9 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "role_arn" ]];then 
                                 skip=0;
                                 trole=`echo "$tt2" | rev | cut -d'/' -f 1 | rev | tr -d '"'`
-                                rarns+=$trole
                                 echo "***trole=$trole"
+                                rarns+=$trole
+                                
                                 echo "depends_on = [aws_iam_role.$trole]" >> $fn              
                                 t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
                     fi
@@ -90,7 +91,7 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-
+            echo "rarns=$rarns"
             ## role arn
             for therole in ${rarns[@]}; do
                 echo "therole=$therole"

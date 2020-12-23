@@ -80,9 +80,9 @@ for c in `seq 0 0`; do
                     if [[ ${tt2} == *"dkr.ecr"* ]]; then
                         ecrr=`echo $tt2 | cut -f2 -d '/' | tr -d '"'`
                     fi
-                    #if [[ ${tt1} == "buildspec" ]]; then
-                    #    t1="buildspec = <<EOT"
-                    #fi
+                    if [[ ${tt1} == "buildspec" ]]; then
+                        t1="buildspec = <<EOT"
+                    fi
 
 
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi

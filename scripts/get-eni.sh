@@ -61,7 +61,7 @@ for c in `seq 0 0`; do
                     #if [[ ${tt1} == "ipv6_association_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "ipv6_cidr_block" ]];then skip=1;fi
                     if [[ ${tt1} == "ipv6_addresses" ]];then 
-                        if [[ ${tt2} == "[]" ]];then
+                        if [[ ${tt2} == *"[]"* ]];then
                             skip=1
                         fi
                     fi

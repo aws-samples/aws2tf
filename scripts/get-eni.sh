@@ -60,6 +60,12 @@ for c in `seq 0 0`; do
                     #if [[ ${tt1} == "default_network_acl_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "ipv6_association_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "ipv6_cidr_block" ]];then skip=1;fi
+                    if [[ ${tt1} == "ipv6_addresses" ]];then 
+                        if [[ ${tt2} == "[]" ]];then
+                            skip=1
+                        fi
+                    fi
+
 
                     if [[ ${tt1} == "vpc_id" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`

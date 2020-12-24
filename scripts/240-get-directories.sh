@@ -47,11 +47,29 @@ for c in `seq 0 0`; do
                     fi
                     if [[ ${tt1} == "security_group_id" ]];then skip=1;fi
                     if [[ ${tt1} == "dns_ip_addresses" ]];then 
-                        skip=1;
-                        read line
-                        read line
-                        read line
+                        tt2=`echo $tt2 | tr -d '"'` 
+                        skip=1
+                        while [ "$t1" != "]" ] && [ "$tt2" != "[]" ] ;do
+                        #while [[ "$t1" != "]" ]] ;do
+                            read line
+                            t1=`echo "$line"`
+                            #echo $t1
+                        done
+
                     fi
+                    if [[ ${tt1} == "availability_zones" ]];then
+                        #echo "dns block" 
+                        tt2=`echo $tt2 | tr -d '"'` 
+                        skip=1
+                        while [ "$t1" != "]" ] && [ "$tt2" != "[]" ] ;do
+                        #while [[ "$t1" != "]" ]] ;do
+
+                            read line
+                            t1=`echo "$line"`
+                            #echo $t1
+                        done
+                    fi
+
                     #if [[ ${tt1} == "ipv6_association_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "ipv6_cidr_block" ]];then skip=1;fi
                     if [[ ${tt1} == "vpc_id" ]]; then

@@ -48,6 +48,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "hosted_zone_id" ]];then skip=1;fi
                     if [[ ${tt1} == "status" ]];then skip=1;fi
                     if [[ ${tt1} == "resource_id" ]];then skip=1;fi
+                    if [[ ${tt1} == "latest_restorable_time" ]];then skip=1;fi
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1

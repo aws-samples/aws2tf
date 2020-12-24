@@ -108,7 +108,7 @@ echo " "
 printf "provider \"aws\" {\n" > aws.tf
 printf " region = \"%s\" \n" $r >> aws.tf
 printf " shared_credentials_file = \"~/.aws/credentials\" \n"  >> aws.tf
-printf " version = \"= 3.8.0\" \n"  >> aws.tf
+printf " version = \"= 3.22.0\" \n"  >> aws.tf
 printf " profile = \"%s\" \n" $p >> aws.tf
 printf "}\n" >> aws.tf
 

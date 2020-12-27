@@ -15,8 +15,8 @@ fi
 pref[0]="Buckets"
 tft[0]="aws_s3_bucket"
 idfilt[0]="Name"
-
-theregion=`echo $AWS | cut -f5 -d ' '`
+theregion=`cat aws.tf | grep region | awk '{print $3}' | tr -d '"'`
+#theregion=`echo $AWS | cut -f5 -d ' '`
  
 for c in `seq 0 0`; do
    

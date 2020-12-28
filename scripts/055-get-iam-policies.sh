@@ -1,10 +1,11 @@
 #!/bin/bash
-if [ "$1" != "" ]; then
-    cmd[0]=`printf "$AWS iam list-policies | jq '.Policies[] | select(.Arn==\"%s\")' | jq ." $1`
-else
+#!/bin/bash
+#if [ "$1" != "" ]; then
+#    cmd[0]="$AWS iam iam list-policies"
+#else
     cmd[0]="$AWS iam list-policies --scope Local"
-fi
-echo $1
+#fi
+
 pref[0]="Policies"
 tft[0]="aws_iam_policy"
 getp=0
@@ -12,47 +13,27 @@ for c in `seq 0 0`; do
  
     cm=${cmd[$c]}
     ttft=${tft[(${c})]}
-    echo $cm
+    #echo $cm
     awsout=`eval $cm`
-    if [ "$1" != "" ]; then
-        count=`echo $awsout | jq ". | length"`
-        if [ "$count" -gt "1" ]; then
-            count=1
-        fi
-    else
-        count=`echo $awsout | jq ".${pref[(${c})]} | length"`
-    fi
-    echo "count=$count"
+    count=`echo $awsout | jq ".${pref[(${c})]} | length"`
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            if [ "$1" != "" ]; then
-                cname=`echo $awsout | jq ".Arn" | tr -d '"'`
-                parn=`echo $awsout | jq ".Arn" | tr -d '"'`
-                ocname=`echo $cname`
-                cname=`echo $cname | rev | cut -f1 -d'/' | rev `
-                pname=`echo $awsout | jq -r ".PolicyName"`
-            else
-                cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Arn" | tr -d '"'`
-                parn=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Arn" | tr -d '"'`
-                ocname=`echo $cname`
-                cname=`echo $cname | rev | cut -f1 -d'/' | rev `
-                pname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].PolicyName"`
-            fi
-            
-            echo "$ttft $cname"
+            cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Arn" | tr -d '"'`
+            ocname=`echo $cname`
+            cname=`echo $cname | rev | cut -f1 -d'/' | rev `
+            pname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].PolicyName"`
 
             if [ "$1" != "" ]; then
               
                 getp=0
-                if [ $parn == $1 ]; then
-                    echo "Match"
+                if [ $cname == $1 ]; then
                     getp=1
                 fi
             else
-                #echo "not set dollar 1"
-                getp=0
+                echo "not set"
+                getp=1
             fi
             if [ "$getp" == "1" ]; then
                 fn=`printf "%s__%s.tf" $ttft $cname`

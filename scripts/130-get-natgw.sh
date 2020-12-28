@@ -24,7 +24,7 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].NatGatewayId" | tr -d '"'`
-            echo $cname
+            echo "$ttft $cname"
             eipall=`echo $awsout | jq ".${pref[(${c})]}[(${i})].NatGatewayAddresses[0].AllocationId" | tr -d '"'`
             echo "eipall = $eipall"
             fn=`printf "%s__%s.tf" $ttft $cname`

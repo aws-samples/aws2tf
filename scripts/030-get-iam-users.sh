@@ -28,7 +28,7 @@ for c in `seq 0 0`; do
             fi
             ocname=`echo $cname`
             cname=${cname//./_}
-            echo $cname
+            echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $cname`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"

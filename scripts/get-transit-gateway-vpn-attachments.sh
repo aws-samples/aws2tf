@@ -25,7 +25,7 @@ for c in `seq 0 0`; do
                 cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].TransitGatewayAttachmentId" | tr -d '"'`
                 tgwid=`echo $awsout | jq ".${pref[(${c})]}[(${i})].TransitGatewayId" | tr -d '"'`
                 vpnid=`echo $awsout | jq ".${pref[(${c})]}[(${i})].ResourceId" | tr -d '"'`
-                echo $cname $tgwid
+                echo "$ttft $cname $tgwid"
                 printf "data \"%s\" \"%s\" {\n" $ttft $cname > $ttft.$cname.tf
                 printf "transit_gateway_id = aws_ec2_transit_gateway.%s.id \n" $tgwid >> $ttft.$cname.tf
                 printf "vpn_connection_id  = aws_vpn_connection.%s.id \n" $vpnid >> $ttft.$cname.tf

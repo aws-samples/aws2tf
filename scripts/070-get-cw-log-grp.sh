@@ -23,11 +23,11 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
-            echo $cname
+            echo "$ttft $cname"
             rname=${cname//:/_}
             rname=${rname//./_}
             rname=${rname//\//_}
-            echo $rname
+            #echo $rname
 
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then

@@ -36,7 +36,7 @@ for t in ${asgs[@]}; do
     awsout=`eval $cm`
     
 
-    echo $cname
+    echo "$ttft $cname"
          
     printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
     printf "}" $cname >> $ttft.$cname.tf

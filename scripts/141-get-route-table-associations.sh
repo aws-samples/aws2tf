@@ -23,7 +23,7 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].RouteTableId" | tr -d '"'`
-            echo $cname
+            echo "$ttft $cname"
             # get the subnet id
             # Inner loop associations
             awsout2=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Associations"`

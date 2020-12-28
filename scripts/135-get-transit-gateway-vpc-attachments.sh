@@ -21,7 +21,7 @@ for c in `seq 0 0`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].TransitGatewayAttachmentId" | tr -d '"'`
             tgwid=`echo $awsout | jq ".${pref[(${c})]}[(${i})].TransitGatewayId" | tr -d '"'`
-            echo $cname $tgwid
+            echo "$ttft $cname" $tgwid
             fn=`printf "%s__%s.tf" $ttft $cname`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"

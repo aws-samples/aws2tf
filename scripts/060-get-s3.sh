@@ -53,7 +53,6 @@ for c in `seq 0 0`; do
                 else
                     br=`echo $br | jq .LocationConstraint | tr -d '"'`
                 fi
-                # echo $cname $br $theregion
                 
                 if [ "$br" == "$theregion" ]; then
                              

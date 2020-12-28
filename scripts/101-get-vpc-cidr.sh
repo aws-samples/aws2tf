@@ -30,7 +30,7 @@ for c in `seq 0 0`; do
             #echo "$basecidr $thiscidr"
             if [ $basecidr != $thiscidr ]; then
                 cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
-                echo $cname
+                echo "$ttft $cname"
                 fn=`printf "%s__%s.tf" $ttft $cname`
                 printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
                 printf "}" $cname >> $ttft.$cname.tf

@@ -19,7 +19,7 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
        
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].ClientVpnEndpointId" | tr -d '"'`
-            echo $cname
+            echo "$ttft $cname"
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
             printf "}" $cname >> $ttft.$cname.tf
             terraform import $ttft.$cname $cname
@@ -80,7 +80,7 @@ for c in `seq 0 0`; do
                 subid=`echo $awsout2 | jq ".${pref[(${d})]}[(${j})].TargetNetworkId" | tr -d '"'`
                 cvpnid=`echo $awsout2 | jq ".${pref[(${d})]}[(${j})].ClientVpnEndpointId" | tr -d '"'`
 
-                echo $cname2
+                echo "$ttft $cname2"
                 printf "resource \"%s\" \"%s\" {\n" $ttft2 $cname2 > $fn2
                 printf "subnet_id = \"%s\" \n" $subid >> $fn2
                 printf "client_vpn_endpoint_id = \"%s\" \n" $fn2

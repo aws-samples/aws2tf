@@ -25,7 +25,7 @@ for c in `seq 0 0`; do
             #echo "i=$i"
             skipit=0
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Instances[].InstanceId" | tr -d '"'`
-            echo $cname
+            echo "$ttft $cname"
             ivpc=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Instances[].VpcId" | tr -d '"'`
             for ci in `echo $cloud9s`;do
                 c9=`echo $ci | tr -d '"'`

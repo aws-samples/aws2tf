@@ -35,7 +35,7 @@ for c in `seq 0 0`; do
                 tcount=`echo $tags | jq ". | length"`
               
                 
-                echo $cname
+                echo "$ttft $cname"
                 fn=`printf "%s__%s.tf" $ttft $cname`
                 if [ -f "$fn" ] ; then
                     echo "$fn exists already skipping"

@@ -33,7 +33,7 @@ for c in `seq 0 0`; do
                 cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             fi
 
-            echo $cname
+            echo "$ttft $cname"
             fn=`printf "%s__k_%s.tf" $ttft $cname`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"

@@ -18,7 +18,7 @@ for c in `seq 0 0`; do
             regname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].HomeRegion")
             if [ "$region" == "$regname" ]; then
                 cname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].Name"`
-                echo $cname
+                echo "$ttft $cname"
                 printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
                 printf "}" $cname >> $ttft.$cname.tf
                 terraform import $ttft.$cname $cname

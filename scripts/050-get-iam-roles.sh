@@ -18,7 +18,7 @@ for c in `seq 0 0`; do
     cm=${cmd[$c]}
     #echo "role command = $cm"
     ttft=${tft[(${c})]}
-    echo $cm
+    #echo $cm
     awsout=`eval $cm`
     if [ "$1" != "" ]; then
         count=1
@@ -37,7 +37,7 @@ for c in `seq 0 0`; do
             fi
             ocname=`echo $cname`
             cname=${cname//./_}
-            echo $cname
+            echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $cname`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"

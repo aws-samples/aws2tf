@@ -22,7 +22,7 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].TransitGatewayRouteTableId" | tr -d '"'`
-            echo $cname
+            echo "$ttft $cname"
             rexists="no"
             fn=`printf "%s__%s.tf" $ttft $cname`
             if [ -f "$fn" ] ; then

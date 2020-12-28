@@ -23,7 +23,7 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})]" | tr -d '"'`
-            echo $cname
+            echo "$ttft $cname"
             ren=`printf "%s:%s" $cln $cname`
             of=`printf "%s__%s__%s.tf" $ttft $cln $cname`
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $of

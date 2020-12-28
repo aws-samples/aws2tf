@@ -31,7 +31,7 @@ for c in `seq 0 0`; do
             ocname=`echo $cname`
             cname=${cname//./_}
             cname=`printf "%s__%s" $1 $cname`
-            echo $cname
+            echo "$ttft $cname"
             
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
             printf "}" >> $ttft.$cname.tf

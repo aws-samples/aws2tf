@@ -25,7 +25,7 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].NetworkInterfaceId" | tr -d '"'`
-            echo $cname
+            echo "$ttft $cname"
             for ci in `echo $cloud9s`;do
                 c9=`echo $ci | tr -d '"'`
                 if [ "$c9" == "$cname" ]; then

@@ -27,7 +27,7 @@ for c in `seq 0 0`; do
             #echo $i
             
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
-            #echo $cname
+            #echo "$ttft $cname"
             lbarn=`echo $cname`
             attribs=`$AWS elbv2 describe-load-balancer-attributes --load-balancer-arn ${lbarn}`
             

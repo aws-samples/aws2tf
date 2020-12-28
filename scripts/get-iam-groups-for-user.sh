@@ -28,7 +28,7 @@ for c in `seq 0 0`; do
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].GroupName" | tr -d '"'`
             ocname=`echo $cname`
             cname=${cname//./_}
-            echo $cname
+            echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $1__$cname`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"

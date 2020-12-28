@@ -11,7 +11,7 @@ hznam=`${AWS} servicediscovery get-namespace --id $ids | jq '.Namespace.Name' | 
 echo $hz
 vpc=`$AWS route53 get-hosted-zone --id $hz | jq .VPCs[0].VPCId | tr -d '"'`
 cname=`echo $hznam | sed 's/\./_/g'`
-echo $cname
+echo "$ttft $cname"
 fn=`printf "%s__%s.tf" $ttft $cname`
 printf "resource \"%s\" \"%s\" {\n" $ttft $cname > $fn
 printf "name= \"%s\"\n" $cname >> $fn

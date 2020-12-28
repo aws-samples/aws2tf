@@ -3,7 +3,7 @@ for i in `terraform state list | grep aws_s3_bucket_policy`; do
     terraform state show  $i > t2.txt
     terraform show  -json | jq --arg myt $i '.values.root_module.resources[]| select(.address==$myt)' > $i.json
     cname=`echo $i | cut -f2 -d'.'`
-    echo $cname
+    echo "$ttft $cname"
     cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
     file="t1.txt"
     fn=`printf "%s__%s.tf" $ttft $cname`

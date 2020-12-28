@@ -26,7 +26,7 @@ for c in `seq 0 0`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].DestinationCidrBlock" | tr -d '"'`
         
-            echo $cname
+            echo "$ttft $cname"
             rname=${cname//./_}
             rname=${rname//\//_}
             rname=`printf "%s_%s" $tgwrtbid $rname`

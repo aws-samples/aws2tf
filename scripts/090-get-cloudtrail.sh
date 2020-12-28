@@ -46,6 +46,20 @@ for c in `seq 0 0`; do
                             s3buck=$(echo $tt2 | tr -d '"')
                             t1=`printf "%s = aws_s3_bucket.%s.bucket" $tt1 $s3buck`                    
                         fi
+                        if [[ ${tt1} == "cloud_watch_logs_group_arn" ]];then 
+                            cwarn=`echo $tt2 | tr -d '"'`
+                            echo "*** $cwarn"
+                            sub="log-group:"
+                            rest=${cwarn#*$sub}
+                            echo "*** rest = $rest"
+                            cwnam=`echo $rest | cut -f1 -d':'`
+                            rcwnam=${cwnam//:/_}
+                            rcwnam=${rcwnam//./_}
+                            rcwnam=${rcwnam//\//_}
+                            echo "** cwnam= $cwnam   rcwnam= $rcwnam"
+                            skip=0;                                                                         
+                            t1=`printf "%s = aws_cloudwatch_log_group.%s.arn" $tt1 $rcwnam`
+                        fi
                         if [[ ${tt1} == "cloud_watch_logs_role_arn" ]];then 
                             rarn=`echo $tt2 | tr -d '"'` 
                             skip=0;
@@ -72,8 +86,12 @@ for c in `seq 0 0`; do
                 if [ "$trole" != "" ]; then
                     ../../scripts/050-get-iam-roles.sh $trole
                 fi
-                if [ "$trole" != "" ]; then
+                if [ "$kmsarn" != "" ]; then
                     ../../scripts/080-get-kms-key.sh $kmsarn
+                fi
+                if [ "$cwnam" != "" ]; then
+                    echo "get log grp $cwnam"
+                    ../../scripts/070-get-cw-log-grp.sh "$cwnam"
                 fi
 
             fi

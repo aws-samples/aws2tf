@@ -56,7 +56,7 @@ for c in `seq 0 0`; do
                         if [[ ${tt1} == "kms_key_id" ]];then 
                             kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                            
                             kmsarn=$(echo $tt2 | tr -d '"')
-                            t1=`printf "%s = \"aws_kms_key.%s.id\"" $tt1 $kid`                    
+                            t1=`printf "%s = aws_kms_key.k_%s.key_id" $tt1 $kid`                    
                         fi
 
                     fi

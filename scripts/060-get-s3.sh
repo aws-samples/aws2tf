@@ -38,7 +38,13 @@ for c in `seq 0 0`; do
             
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
             echo $cname
+
             if [ "$cname" != "null" ] ; then
+                fn=`printf "%s__%s.tf" $ttft $cname`
+                if [ -f "$fn" ] ; then
+                    echo "$fn exists already skipping"
+                    exit
+                fi
                 
                 # check region
                 br=`$AWS s3api get-bucket-location --bucket ${cname}`
@@ -60,6 +66,7 @@ for c in `seq 0 0`; do
                     cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
                     file="t1.txt"
                     fn=`printf "%s__%s.tf" $ttft $cname`
+
                     flines=`wc -l $file | awk '{ print $1 }'`
                     #echo "$cname lines in file t1.txt= $flines"
                     if [[ $flines > 0 ]]; then

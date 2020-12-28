@@ -166,6 +166,14 @@ pre="629*"
 fi
 
 
+if [ "$t" == "kms" ]; then
+pre="080*"
+#if [ "$i" == "no" ]; then
+#    echo "Cluster Name null exiting - specify with -i <cluster-name>"
+#    exit
+#fi
+fi
+
 pwd
 if [ "$c" == "no" ]; then
     echo "terraform init"

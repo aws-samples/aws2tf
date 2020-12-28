@@ -53,6 +53,11 @@ for c in `seq 0 0`; do
                                                     
                             t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
                         fi
+                        if [[ ${tt1} == "kms_key_id" ]];then 
+                            kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                            
+                            kmsarn=$(echo $tt2 | tr -d '"')
+                            t1=`printf "%s = \"aws_kms_key.%s.id\"" $tt1 $kid`                    
+                        fi
 
                     fi
                     if [ "$skip" == "0" ]; then
@@ -67,6 +72,10 @@ for c in `seq 0 0`; do
                 if [ "$trole" != "" ]; then
                     ../../scripts/050-get-iam-roles.sh $trole
                 fi
+                if [ "$trole" != "" ]; then
+                    ../../scripts/080-get-kms-key.sh $kmsarn
+                fi
+
             fi
         done
     fi

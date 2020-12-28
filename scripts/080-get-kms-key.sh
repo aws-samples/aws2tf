@@ -1,13 +1,14 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS ec2 describe-subnets --filters \"Name=vpc-id,Values=$1\"" 
+    cmd[0]="$AWS kms describe-key --key-id $1"
+    pref[0]="KeyMetadata"   
 else
-    cmd[0]="$AWS ec2 describe-subnets"
+    cmd[0]="$AWS kms list-keys"
+    pref[0]="Keys"
 fi
 
-pref[0]="Subnets"
-tft[0]="aws_subnet"
-idfilt[0]="SubnetId"
+tft[0]="aws_kms_key"
+idfilt[0]="KeyId"
 
 #rm -f ${tft[0]}.tf
 
@@ -17,14 +18,23 @@ for c in `seq 0 0`; do
 	ttft=${tft[(${c})]}
 	#echo $cm
     awsout=`eval $cm`
-    count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    if [ "$1" != "" ]; then
+        count=1
+    else
+        count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    fi
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
+            if [ "$1" != "" ]; then
+                cname=$(echo $awsout | jq -r ".${pref[(${c})]}.${idfilt[(${c})]}")
+            else
+                cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
+            fi
+
             echo $cname
-            fn=`printf "%s__%s.tf" $ttft $cname`
+            fn=`printf "%s__k_%s.tf" $ttft $cname`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
                 continue
@@ -33,11 +43,13 @@ for c in `seq 0 0`; do
             printf "}" $cname >> $ttft.$cname.tf
             printf "terraform import %s.%s %s" $ttft $cname $cname > import_$ttft_$cname.sh
             terraform import $ttft.$cname $cname
-            terraform state show $ttft.$cname > t2.txt
-            tfa=`printf "%s.%s" $ttft $cname`
+            terraform state mv $ttft.$cname $ttft.k_$cname
+            terraform state show $ttft.k_$cname > t2.txt
+            tfa=`printf "%s.%s" $ttft k_$cname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
             #echo $awsj | jq . 
             rm $ttft.$cname.tf
+            # rename state to save problems later
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             #	for k in `cat t1.txt`; do
             #		echo $k
@@ -56,32 +68,23 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "ipv6_cidr_block_association_id" ]];then skip=1;fi
+                    if [[ ${tt1} == "key_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
-                    if [[ ${tt1} == "availability_zone_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "vpc_id" ]]; then
+                    if [[ ${tt1} == "kms:"* ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
+                        t1=`printf "\"%s\" = \"%s\"" $tt1 $tt2`
                     fi
+
                 # else
-                    #
+                    #              
                 fi
+
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
                     echo $t1 >> $fn
                 fi
                 
             done <"$file"
-
-            ofn=`printf "output__%s__%s.tf" $ttft $cname`
-            printf "output \"%s__%s__id\" {\n" $ttft $cname > $ofn
-            printf "value = %s.%s.id\n" $ttft $cname >> $ofn
-            printf "}\n" $ttft $cname >> $ofn
-
-            dfn=`printf "data/data_%s__%s.tf" $ttft $cname`
-            printf "data \"%s\" \"%s\" {\n" $ttft $cname > $dfn
-            printf "id = \"%s\"\n" $cname >> $dfn
-            printf "}\n" $ttft $cname >> $dfn
             
         done
 

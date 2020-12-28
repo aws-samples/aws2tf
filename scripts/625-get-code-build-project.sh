@@ -22,7 +22,7 @@ for c in `seq 0 0`; do
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})]" | tr -d '"'`
+            cname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})]"`
             echo $cname
             fn=`printf "%s__%s.tf" $ttft $cname`
             if [ -f "$fn" ] ; then
@@ -120,12 +120,12 @@ for c in `seq 0 0`; do
                 
             done <"$file"
 
-            echo "***********  ecrr=$ecrr"
+
             if [ "$ecrr" != "" ]; then 
                 ../../scripts/get-ecr.sh $ecrr
             fi
             ## role arn
-            echo "***********  trole=$trole"
+
             if [ "$trole" != "" ]; then
                 ../../scripts/050-get-iam-roles.sh $trole
             fi

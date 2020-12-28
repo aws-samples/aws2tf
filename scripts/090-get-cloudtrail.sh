@@ -17,7 +17,7 @@ for c in `seq 0 0`; do
             #echo $i
             regname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].HomeRegion")
             if [ "$region" == "$regname" ]; then
-                cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Name" | tr -d '"'`
+                cname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].Name"`
                 echo $cname
                 printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
                 printf "}" $cname >> $ttft.$cname.tf
@@ -44,10 +44,16 @@ for c in `seq 0 0`; do
                         if [[ ${tt1} == "home_region" ]];then skip=1;fi
                         if [[ ${tt1} == "s3_bucket_name" ]];then                             
                             s3buck=$(echo $tt2 | tr -d '"')
-                            t1=`printf "%s = aws_s3_bucket.%s.bucket" $tt1 $s3buck`
-                            
-
+                            t1=`printf "%s = aws_s3_bucket.%s.bucket" $tt1 $s3buck`                    
                         fi
+                        if [[ ${tt1} == "cloud_watch_logs_role_arn" ]];then 
+                            rarn=`echo $tt2 | tr -d '"'` 
+                            skip=0;
+                            trole=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`
+                                                    
+                            t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
+                        fi
+
                     fi
                     if [ "$skip" == "0" ]; then
                         #echo $skip $t1
@@ -56,8 +62,10 @@ for c in `seq 0 0`; do
                     
                 done <"$file"
                 if [ "$s3buck" != "" ]; then
-                    echo "*** S3 $s3buck"
                     ../../scripts/060-get-s3.sh $s3buck
+                fi
+                if [ "$trole" != "" ]; then
+                    ../../scripts/050-get-iam-roles.sh $trole
                 fi
             fi
         done

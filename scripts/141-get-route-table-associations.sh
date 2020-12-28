@@ -96,10 +96,11 @@ for c in `seq 0 0`; do
                 done
             fi
         done
-        terraform fmt
-        terraform validate
     fi
 done
-
+if [[ "$1" == "" ]]; then   
+    terraform fmt
+    terraform validate
+fi
 rm -f t*.txt
 

@@ -98,13 +98,13 @@ for c in `seq 0 0`; do
          echo "attached role policies $ocname"
         ../../scripts/052-get-iam-attached-role-policies.sh $ocname
         
-        echo "fmt"
-        terraform fmt
-        echo "validate"
-        terraform validate
+
     
     fi
 done
-
+if [[ "$1" == "" ]]; then   
+    terraform fmt
+    terraform validate
+fi
 rm -f t*.txt
 

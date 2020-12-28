@@ -37,7 +37,7 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
-            echo $cname
+            echo "$ttft $cname"
 
             if [ "$cname" != "null" ] ; then
                 fn=`printf "%s__%s.tf" $ttft $cname`
@@ -53,7 +53,7 @@ for c in `seq 0 0`; do
                 else
                     br=`echo $br | jq .LocationConstraint | tr -d '"'`
                 fi
-                echo $cname $br $theregion
+                # echo $cname $br $theregion
                 
                 if [ "$br" == "$theregion" ]; then
                              
@@ -139,16 +139,15 @@ for c in `seq 0 0`; do
     else
         terraform state rm $ttft.$cname
     fi 
-    echo "Done $cname"
+    #echo "Done $cname"
 done
 
 # get the policies that were pulled out:
 
-
-
-terraform fmt
-terraform validate
-
+if [[ "$1" == "" ]]; then   
+    terraform fmt
+    terraform validate
+fi
 
 rm -f t*.txt
 exit

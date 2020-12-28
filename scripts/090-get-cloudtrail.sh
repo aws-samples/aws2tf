@@ -48,18 +48,19 @@ for c in `seq 0 0`; do
                         fi
                         if [[ ${tt1} == "cloud_watch_logs_group_arn" ]];then 
                             cwarn=`echo $tt2 | tr -d '"'`
-                            echo "*** $cwarn"
+                           
                             sub="log-group:"
                             rest=${cwarn#*$sub}
-                            echo "*** rest = $rest"
+                           
                             cwnam=`echo $rest | cut -f1 -d':'`
                             rcwnam=${cwnam//:/_}
                             rcwnam=${rcwnam//./_}
                             rcwnam=${rcwnam//\//_}
-                            echo "** cwnam= $cwnam   rcwnam= $rcwnam"
+                            #echo "** cwnam= $cwnam   rcwnam= $rcwnam"
                             skip=0;                                                                         
                             t1=`printf "%s = aws_cloudwatch_log_group.%s.arn" $tt1 $rcwnam`
                         fi
+
                         if [[ ${tt1} == "cloud_watch_logs_role_arn" ]];then 
                             rarn=`echo $tt2 | tr -d '"'` 
                             skip=0;
@@ -70,7 +71,8 @@ for c in `seq 0 0`; do
                         if [[ ${tt1} == "kms_key_id" ]];then 
                             kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                            
                             kmsarn=$(echo $tt2 | tr -d '"')
-                            t1=`printf "%s = aws_kms_key.k_%s.key_id" $tt1 $kid`                    
+                            #echo $t1
+                            t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid`                    
                         fi
 
                     fi
@@ -98,7 +100,11 @@ for c in `seq 0 0`; do
         done
     fi
 done
-terraform fmt
-terraform validate
+
+if [[ "$1" == "" ]]; then   
+    terraform fmt
+    terraform validate
+fi
+
 rm -f t*.txt
 

@@ -77,22 +77,17 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-
-            #ofn=`printf "output__%s__%s.tf" $ttft $rname`
-            #printf "output \"%s__%s__id\" {\n" $ttft $rname > $ofn
-            #printf "value = %s.%s.id\n" $ttft $rname >> $ofn
-            #printf "}\n" $ttft $rname >> $ofn
-
-            #dfn=`printf "data/data_%s__%s.tf" $ttft $rname`
-            #printf "data \"%s\" \"%s\" {\n" $ttft $rname > $dfn
-            #printf "id = \"%s\"\n" $rname >> $dfn
-            #printf "}\n" $ttft $rname >> $dfn
             
         done
 
     fi
 done
-terraform fmt
-terraform validate
+
+
+if [[ "$1" == "" ]]; then   
+    terraform fmt
+    terraform validate
+fi
+
 rm -f t*.txt
 

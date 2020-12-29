@@ -1,15 +1,14 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS lambda get-function --function-name $1"
-    pref[0]="Configuration"
+    cmd[0]="$AWS lambda list-aliases --function-name $1"
+    pref[0]="Aliases"
 else
-    cmd[0]="$AWS lambda list-functions"
-    pref[0]="Functions"
-
+    echo "must supply a finction name"
+    exit
 fi
 
-tft[0]="aws_lambda_function"
-idfilt[0]="FunctionName"
+tft[0]="aws_lambda_alias"
+idfilt[0]="Name"
 
 #rm -f ${tft[0]}.tf
 
@@ -19,20 +18,16 @@ for c in `seq 0 0`; do
 	ttft=${tft[(${c})]}
 	#echo $cm
     awsout=`eval $cm`
-    if [ "$1" != "" ]; then
-        count=1
-    else
-        count=`echo $awsout | jq ".${pref[(${c})]} | length"`
-    fi
+
+    count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    echo $count
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            if [ "$1" != "" ]; then
-                cname=$(echo $awsout | jq -r ".${pref[(${c})]}.${idfilt[(${c})]}")
-            else
-                cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
-            fi
+
+            cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
+            
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $cname`
             if [ -f "$fn" ] ; then
@@ -42,7 +37,7 @@ for c in `seq 0 0`; do
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
             printf "}" $cname >> $ttft.$cname.tf
             printf "terraform import %s.%s %s" $ttft $cname $cname > import_$ttft_$cname.sh
-            terraform import $ttft.$cname "$cname" | grep Import
+            terraform import $ttft.$cname "$1/$cname" | grep Import
             terraform state show $ttft.$cname > t2.txt
             tfa=`printf "%s.%s" $ttft $cname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
@@ -71,11 +66,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "qualified_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "version" ]];then skip=1;fi
                     if [[ ${tt1} == "source_code_size" ]];then skip=1;fi
-                    if [[ ${tt1} == "vpc_id" ]]; then
-                        vpcid=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`
-                        skip=1
-                    fi
+
                     if [[ ${tt1} == "role" ]];then 
                         rarn=`echo $tt2 | tr -d '"'` 
                         skip=0;
@@ -85,16 +76,10 @@ for c in `seq 0 0`; do
                         t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
                     fi
 
-                else
-                    if [[ "$t1" == *"subnet-"* ]]; then
-                        t1=`echo $t1 | tr -d '"|,'`
-                        t1=`printf "aws_subnet.%s.id," $t1`
-                    fi
-                    if [[ "$t1" == *"sg-"* ]]; then
-                        t1=`echo $t1 | tr -d '"|,'`
-                        t1=`printf "aws_security_group.%s.id," $t1`
-                    fi
 
+
+                # else
+                    #
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
@@ -103,19 +88,9 @@ for c in `seq 0 0`; do
                 
             done <"$file"
 
-            if [ "$trole" != "" ]; then
-                ../../scripts/050-get-iam-roles.sh $trole
-            fi
-            if [ "$vpcid" != "" ]; then
-                ../../scripts/100-get-vpc.sh $vpcid
-                ../../scripts/105-get-subnet.sh $vpcid
-                ../../scripts/110-get-security-group.sh $vpcid
-            fi
-            
-            if [ "$cname" != "" ]; then
-                ../../scripts/get-lambda-alias.sh $cname
-            fi
-        
+
+
+           
         done
 
     fi

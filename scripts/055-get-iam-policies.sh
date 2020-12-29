@@ -94,9 +94,11 @@ for c in `seq 0 0`; do
         done # done for i
     fi
 done
-echo "fmt"
-terraform fmt
-echo "validate"
-terraform validate
+
+if [[ "$1" == "" ]]; then   
+    terraform fmt
+    terraform validate
+fi
+
 rm -f t*.txt
 

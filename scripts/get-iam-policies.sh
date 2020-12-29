@@ -4,7 +4,7 @@ if [ "$1" != "" ]; then
 else
     cmd[0]="$AWS iam list-policies --scope Local"
 fi
-echo $1
+#echo $1
 pref[0]="Policies"
 tft[0]="aws_iam_policy"
 getp=0
@@ -12,7 +12,7 @@ for c in `seq 0 0`; do
  
     cm=${cmd[$c]}
     ttft=${tft[(${c})]}
-    echo $cm
+    #echo $cm
     awsout=`eval $cm`
     if [ "$1" != "" ]; then
         count=`echo $awsout | jq ". | length"`
@@ -61,7 +61,7 @@ for c in `seq 0 0`; do
                     exit
                 fi
 
-                echo "cname=$cname"
+                #echo "cname=$cname"
                 printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
                 printf "}" >> $ttft.$cname.tf
                 terraform import $ttft.$cname $ocname | grep Import

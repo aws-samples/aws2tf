@@ -7,8 +7,6 @@ fi
 c=0
 cm=${cmd[$c]}
 
-
-
 pref[0]="AttachedPolicies"
 tft[0]="aws_iam_role_policy_attachment"
 

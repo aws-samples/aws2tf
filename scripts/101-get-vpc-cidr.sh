@@ -19,7 +19,8 @@ for c in `seq 0 0`; do
     awsout=`eval $cm`
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
     #echo $awsout | jq .
-    #echo "count=$count"
+    #
+    echo "vpc cidr count=$count"
     if [ "$count" == "" ]; then count=0 ; fi
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`

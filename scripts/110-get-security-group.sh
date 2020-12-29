@@ -18,10 +18,10 @@ for c in `seq 0 0`; do
  
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	echo $cm
+	#echo $cm
     awsout=`eval $cm`
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
-    echo "num SG's = $count"
+    #echo "num SG's = $count"
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do

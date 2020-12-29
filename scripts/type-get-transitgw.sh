@@ -19,5 +19,5 @@ fi
 #
 done
 done
-echo "**** Type Validate Call****" 
+echo "**** Type Validate Call ****" 
 terraform validate

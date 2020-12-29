@@ -115,9 +115,7 @@ printf "}\n" >> aws.tf
 cat aws.tf
 cp ../../stubs/*.tf .
 
-if [ "$t" == "no" ]; then 
-t="*"
-fi
+if [ "$t" == "no" ]; then t="*"; fi
 
 pre="*"
 if [ "$t" == "vpc" ]; then
@@ -157,22 +155,10 @@ fi
 fi
 
 
-if [ "$t" == "code" ]; then
-pre="629*"
-#if [ "$i" == "no" ]; then
-#    echo "Cluster Name null exiting - specify with -i <cluster-name>"
-#    exit
-#fi
-fi
+if [ "$t" == "code" ]; then pre="629*"; fi
 
+if [ "$t" == "kms" ]; then pre="08*"; fi
 
-if [ "$t" == "kms" ]; then
-pre="080*"
-#if [ "$i" == "no" ]; then
-#    echo "Cluster Name null exiting - specify with -i <cluster-name>"
-#    exit
-#fi
-fi
 
 pwd
 if [ "$c" == "no" ]; then
@@ -182,10 +168,7 @@ fi
 
 exclude="iam"
 
-if [ "$t" == "iam" ]; then
-pre="03*"
-exclude="xxxxxxx"
-fi
+if [ "$t" == "iam" ]; then pre="03*" && exclude="xxxxxxx"; fi
 ls
 #############################################################################
 

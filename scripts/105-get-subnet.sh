@@ -73,10 +73,6 @@ for c in `seq 0 0`; do
                 
             done <"$file"
 
-            ofn=`printf "output__%s__%s.tf" $ttft $cname`
-            printf "output \"%s__%s__id\" {\n" $ttft $cname > $ofn
-            printf "value = %s.%s.id\n" $ttft $cname >> $ofn
-            printf "}\n" $ttft $cname >> $ofn
 
             dfn=`printf "data/data_%s__%s.tf" $ttft $cname`
             printf "data \"%s\" \"%s\" {\n" $ttft $cname > $dfn

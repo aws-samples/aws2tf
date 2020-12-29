@@ -199,6 +199,9 @@ The following terraform resource types are supported by this tool at this time:
 * aws_kms_key
 * aws_kms_alias
 
+### Lambda
+* aws_lambda_function
+
 ### Resource Groups
 * aws_resource_group
 

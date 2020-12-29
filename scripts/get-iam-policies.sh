@@ -22,7 +22,7 @@ for c in `seq 0 0`; do
     else
         count=`echo $awsout | jq ".${pref[(${c})]} | length"`
     fi
-    echo "count=$count"
+    #echo "count=$count"
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
@@ -47,7 +47,7 @@ for c in `seq 0 0`; do
               
                 getp=0
                 if [ $parn == $1 ]; then
-                    echo "Match"
+                    #echo "Match"
                     getp=1
                 fi
             else

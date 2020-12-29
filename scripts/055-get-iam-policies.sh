@@ -42,7 +42,7 @@ for c in `seq 0 0`; do
                     exit
                 fi
 
-                echo "cname=$cname"
+                echo "$ttft $cname"
                 printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
                 printf "}" >> $ttft.$cname.tf
                 terraform import $ttft.$cname $ocname

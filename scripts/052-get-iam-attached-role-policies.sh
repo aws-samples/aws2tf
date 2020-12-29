@@ -110,7 +110,7 @@ for c in `seq 0 0`; do
             done <"$file"   # done while
             #echo "pre-policy pnam=$pnam"
             if [[ "$pnam" != "" ]];then 
-                echo "Get the Policy name=$pnam arn=$parn"
+                #echo "Get the Policy name=$pnam arn=$parn"
                 ../../scripts/get-iam-policies.sh $parn
             fi
         done # done for i

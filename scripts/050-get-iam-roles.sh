@@ -47,7 +47,7 @@ for c in `seq 0 0`; do
 
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
             printf "}" >> $ttft.$cname.tf
-            echo $ttft.$cname $ocname
+            #echo $ttft.$cname $ocname
             terraform import $ttft.$cname $ocname
             terraform state show $ttft.$cname > t2.txt
             rm $ttft.$cname.tf
@@ -98,10 +98,10 @@ for c in `seq 0 0`; do
             
         done # done for i
         # Get attached role policies
-        pwd
-        echo "role policies $ocname"
+        
+        #echo "role policies $ocname"
         ../../scripts/051-get-iam-role-policies.sh $ocname
-         echo "attached role policies $ocname"
+        #echo "attached role policies $ocname"
         ../../scripts/052-get-iam-attached-role-policies.sh $ocname
         
 

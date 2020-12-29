@@ -42,7 +42,7 @@ for c in `seq 0 0`; do
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
             printf "}" $cname >> $ttft.$cname.tf
             printf "terraform import %s.%s %s" $ttft $cname $cname > import_$ttft_$cname.sh
-            terraform import $ttft.$cname $cname
+            terraform import $ttft.$cname "$cname" > /dev/null 
             terraform state show $ttft.$cname > t2.txt
             tfa=`printf "%s.%s" $ttft $cname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json

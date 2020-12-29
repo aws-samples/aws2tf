@@ -6,8 +6,6 @@ else
 fi
 c=0
 cm=${cmd[$c]}
-echo $cm
-
 
 #cmd[0]="$AWS ec2 describe-internet-gateways"
 

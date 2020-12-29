@@ -1,16 +1,15 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS ecs describe-clusters --cluster $1" 
-    pref[0]="clusters"
-    idfilt[0]="clusterName"
+    cmd[0]="$AWS lambda get-function --function-name $1"
+    pref[0]="Configuration"
 else
-    cmd[0]="$AWS ecs list-clusters"
-    pref[0]="clusterArns"
-    idfilt[0]=""
+    cmd[0]="$AWS lambda list-functions"
+    pref[0]="Functions"
+
 fi
 
-tft[0]="aws_ecs_cluster"
-
+tft[0]="aws_lambda_function"
+idfilt[0]="FunctionName"
 
 #rm -f ${tft[0]}.tf
 
@@ -20,20 +19,29 @@ for c in `seq 0 0`; do
 	ttft=${tft[(${c})]}
 	#echo $cm
     awsout=`eval $cm`
-    count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    if [ "$1" != "" ]; then
+        count=1
+    else
+        count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    fi
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
             if [ "$1" != "" ]; then
-                cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
+                cname=$(echo $awsout | jq -r ".${pref[(${c})]}.${idfilt[(${c})]}")
             else
-                cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})]" | cut -f2 -d'/' | tr -d '"'`
+                cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             fi
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $cname`
+            if [ -f "$fn" ] ; then
+                echo "$fn exists already skipping"
+                continue
+            fi
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
             printf "}" $cname >> $ttft.$cname.tf
+            printf "terraform import %s.%s %s" $ttft $cname $cname > import_$ttft_$cname.sh
             terraform import $ttft.$cname $cname
             terraform state show $ttft.$cname > t2.txt
             tfa=`printf "%s.%s" $ttft $cname`
@@ -58,29 +66,27 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "ipv6_cidr_block_association_id" ]];then skip=1;fi
-                    #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
-                    if [[ ${tt1} == "availability_zone_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "state" ]];then skip=1;fi
-                    if [[ ${tt1} == "dns_entry" ]];then skip=1;fi
-
-                    if [[ ${tt1} == "requester_managed" ]];then skip=1;fi
-                    if [[ ${tt1} == "prefix_list_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "cidr_blocks" ]];then
-                        echo "matched cidr"  
-                        skip=1
-                        while [[ "$t1" != "]" ]] ;do
-                            read line
-                            t1=`echo "$line"`
-                            echo $t1
-                        done
-                    fi
-                    if [[ ${tt1} == "network_interface_ids" ]];then skip=1;fi
+                    if [[ ${tt1} == "last_modified" ]];then skip=1;fi
+                    if [[ ${tt1} == "invoke_arn" ]];then skip=1;fi
+                    if [[ ${tt1} == "qualified_arn" ]];then skip=1;fi
+                    if [[ ${tt1} == "version" ]];then skip=1;fi
+                    if [[ ${tt1} == "source_code_size" ]];then skip=1;fi
                     if [[ ${tt1} == "vpc_id" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
                     fi
-               
+                    if [[ ${tt1} == "role" ]];then 
+                        rarn=`echo $tt2 | tr -d '"'` 
+                        skip=0;
+                        trole=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`
+                                                    
+                        t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
+                    fi
+
+
+
+                # else
+                    #
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
@@ -88,19 +94,21 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-            ../../scripts/get-ecs-service.sh $cname
+
+            if [ "$trole" != "" ]; then
+                ../../scripts/050-get-iam-roles.sh $trole
+            fi
+
+           
         done
+
     fi
 done
-terraform fmt
-terraform validate
+
+if [[ "$1" == "" ]]; then   
+    terraform fmt
+    terraform validate
+fi
+
 rm -f t*.txt
-
-
-# $AWS ecs list-attributes --target-type container-instance --cluster myecsprod
-# $AWS ecs list-container-instances --cluster myecsprod
-# $AWS ecs describe-container-instances --container-instances arn:aws:ecs:eu-west-1:566972129213:container-instance/b05e4516-71c3-487f-a2cf-31b42f7bc722 --cluster myecsprod 
-# get instance id
-# use above to find asg
-# $AWS autoscaling describe-auto-scaling-groups
 

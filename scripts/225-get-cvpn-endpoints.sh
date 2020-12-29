@@ -66,7 +66,7 @@ for c in `seq 0 0`; do
         for d in `seq 1 1`; do
             echo inner 2 $cname2
             rm -f ${tft[1]}*.tf
-            echo $cmd[1]
+            #echo $cmd[1]
             cm2=`printf "%s %s " "${cmd[$d]}" $cname`
             ttft2=${tft[(${d})]}
             echo command2 = $cm2 

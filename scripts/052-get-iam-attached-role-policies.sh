@@ -6,7 +6,7 @@ else
 fi
 c=0
 cm=${cmd[$c]}
-echo $cm
+
 
 
 pref[0]="AttachedPolicies"

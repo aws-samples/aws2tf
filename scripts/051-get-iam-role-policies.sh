@@ -6,8 +6,6 @@ else
 fi
 c=0
 cm=${cmd[$c]}
-echo $cm
-
 
 pref[0]="PolicyNames"
 tft[0]="aws_iam_role_policy"

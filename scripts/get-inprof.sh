@@ -12,7 +12,7 @@ for c in `seq 0 0`; do
    
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	echo $cm
+	#echo $cm
     awsout=`eval $cm`
     count=1 # as only one profile name
     if [ "$count" -gt "0" ]; then

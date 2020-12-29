@@ -6,9 +6,6 @@ else
 fi
 c=0
 cm=${cmd[$c]}
-echo $cm
-
-
 
 pref[0]="LaunchTemplates"
 tft[0]="aws_launch_template"

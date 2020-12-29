@@ -28,7 +28,7 @@ if [ $? -eq 0 ]; then
 
         for i in `ls *.tf`; do
             cmd=`printf "sed -i'.tmp' -e 's/%s/vpc-%s/g' $i" $vpcrn $cln`
-            echo $cmd
+            #echo $cmd
             eval $cmd
         done
 
@@ -72,7 +72,7 @@ for i in `ls aws_subnet__*.tf`; do
     subn=`printf "sub-%s-%s" $pb $zn`
     echo "$subrn --> $subn"
     cmd=`printf "sed -i'.orig' -e 's/%s/%s/g' $i" $subrn $subn`
-    echo $cmd
+    #echo $cmd
     eval $cmd
     echo "mv aws_subnet__${subrn}.tf ${subn}.tf"
     
@@ -81,7 +81,7 @@ for i in `ls aws_subnet__*.tf`; do
     # check every file
     for i in `ls *.tf`; do
         cmd=`printf "sed -i'.tmp' -e 's/%s/%s/g' $i" $subrn $subn`
-        echo $cmd
+        #echo $cmd
         eval $cmd
     done
 done
@@ -103,7 +103,7 @@ if [ $? -eq 0 ]; then
         echo $vpcern
 
         cmd=`printf "sed -i'.orig' -e 's/%s/vpce-%s/g' $i" $vpcern $srv`
-        echo $cmd
+        #echo $cmd
         eval $cmd
 
 

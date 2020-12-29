@@ -7,7 +7,7 @@ fi
 
 pref[0]="DhcpOptions"
 tft[0]="aws_vpc_dhcp_options"
-echo ${cmd[0]}
+#echo ${cmd[0]}
 
 for c in `seq 0 0`; do
     cm=${cmd[$c]}

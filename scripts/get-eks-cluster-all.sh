@@ -48,7 +48,7 @@ if [ "$kcount" -gt "0" ]; then
             
             cm=${cmd[$c]}
             ttft=${tft[(${c})]}
-            echo $cm
+            #echo $cm
             awsout=`eval $cm`
             count=`echo $awsout | jq ".${pref[(${c})]} | length"`
             count=1 # one cluster at a time !

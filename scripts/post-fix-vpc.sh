@@ -20,7 +20,7 @@ echo $vpcrn
 
 for i in `ls *.tf`; do
     cmd=`printf "sed -i'.orig' -e 's/%s/vpc-%s/g' $i" $vpcrn $cln`
-    echo $cmd
+    #echo $cmd
     eval $cmd
 done
 

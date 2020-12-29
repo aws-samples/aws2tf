@@ -43,6 +43,7 @@ for c in `seq 0 0`; do
             printf "}" $cname >> $ttft.$cname.tf
             printf "terraform import %s.%s %s" $ttft $cname $cname > import_$ttft_$cname.sh
             terraform import $ttft.k_$cname "$cname" | grep Import
+            echo $?
             #terraform state mv $ttft.$cname $ttft.k_$cname
             terraform state show $ttft.k_$cname > t2.txt
             tfa=`printf "%s.%s" $ttft k_$cname`

@@ -9,7 +9,7 @@ for c in `seq 0 0`; do
     cm=${cmd[$c]}
     #echo "role command = $cm"
     ttft=${tft[(${c})]}
-    echo $cm
+    #echo $cm
     awsout=`eval $cm`
     if [ "$1" != "" ]; then
         count=1

@@ -9,7 +9,7 @@ tft[1]="aws_athena_named_query"
 for c in `seq 0 0`; do
     cm=${cmd[$c]}
     ttft=${tft[(${c})]}
-    echo $cm
+    #echo $cm
     awsout=`eval $cm`
     #echo $awsout
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`

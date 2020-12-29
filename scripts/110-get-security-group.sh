@@ -96,7 +96,7 @@ for i in `cat tf1.tmp` ; do
     if [ $? -eq 0 ]; then
         ssg=1
     fi
-    echo $ssg
+    #echo $ssg
     echo "$fn $ttft $cname"
     
     echo $aws2tfmess > $fn

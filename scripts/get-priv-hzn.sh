@@ -30,7 +30,7 @@ ttft="aws_route53_zone"
             printf "resource \"%s\" \"%s\" {\n" $ttft $rname > $fn
             printf "}"  >> $fn
             
-            terraform import $ttft.$rname $rname
+            terraform import $ttft.$rname $rname | grep Import
             terraform state show $ttft.$rname > t2.txt
             
             rm $fn

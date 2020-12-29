@@ -48,7 +48,7 @@ for c in `seq 0 0`; do
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
             printf "}" >> $ttft.$cname.tf
             #echo $ttft.$cname $ocname
-            terraform import $ttft.$cname $ocname
+            terraform import $ttft.$cname $ocname | grep Import
             terraform state show $ttft.$cname > t2.txt
             rm $ttft.$cname.tf
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
@@ -83,7 +83,7 @@ for c in `seq 0 0`; do
                         lh=`echo $tt1 | tr -d '"'`
                         skip=0;
                         t1=`printf "\"%s\"=%s" $lh $tt2`
-                        echo $t1
+                        #echo $t1
                     fi
                     #if [[ ${tt1} == "default_network_acl_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "ipv6_association_id" ]];then skip=1;fi

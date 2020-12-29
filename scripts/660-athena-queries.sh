@@ -38,7 +38,7 @@ if [ "$count" -gt "0" ]; then
         ttft=${tft[(${c2})]}
         printf "resource \"%s\" \"%s\" {" $ttft $cname > $cname.tf
         printf "}" $cname >> $cname.tf
-        terraform import $ttft.$cname $qid
+        terraform import $ttft.$cname $qid | grep Import
         if [ $? -ne 0 ]; then
             exit
         fi

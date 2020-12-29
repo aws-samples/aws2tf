@@ -60,7 +60,7 @@ if [ "$kcount" -gt "0" ]; then
                             #echo "pre-import"
                             #ls -l
                             echo "Importing ....."
-                            terraform import $ttft.$cname $ocname
+                            terraform import $ttft.$cname $ocname | grep Import
                             terraform state show $ttft.$cname > t2.txt
                             tfa=`printf "%s.%s" $ttft $cname`
                             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json

@@ -39,7 +39,7 @@ for c in `seq 0 0`; do
             printf "resource \"%s\" \"%s\" {\n" $ttft $rname > $fn
             printf "}"  >> $fn
             
-            terraform import $ttft.$rname "$cname"
+            terraform import $ttft.$rname "$cname" | grep Import
             terraform state show $ttft.$rname > t2.txt
             
             rm $fn

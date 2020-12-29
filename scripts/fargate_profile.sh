@@ -29,7 +29,7 @@ for c in `seq 0 0`; do
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $of
             printf "}" $cname >> $of
             echo "$ttft.$cname $ren"
-            terraform import $ttft.$cname $ren
+            terraform import $ttft.$cname $ren | grep Import
             terraform state show $ttft.$cname > t2.txt
             rm -f $of
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt

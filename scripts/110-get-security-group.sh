@@ -62,7 +62,7 @@ for c in `seq 0 0`; do
                 fi
 
                 printf "}\n" $cname >> $fn
-                terraform import $ttft.$cname $cname
+                terraform import $ttft.$cname "$cname" | grep Import
                 
             #fi
         done

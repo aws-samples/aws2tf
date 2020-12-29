@@ -42,7 +42,7 @@ for c in `seq 0 0`; do
                 fi
 
                 kmsid=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].TargetKeyId")
-                if [ "$kmsarn" != "" ]; then
+                if [ "$kmsid" != "" ]; then
                     ../../scripts/080-get-kms-key.sh $kmsid
                 fi
 
@@ -76,16 +76,15 @@ for c in `seq 0 0`; do
                         if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                         if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                         if [[ ${tt1} == "key_id" ]];then skip=1;fi
-                        #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
+                        if [[ ${tt1} == "target_key_arn" ]];then skip=1;fi
                         if [[ ${tt1} == "kms:"* ]]; then
                             tt2=`echo $tt2 | tr -d '"'`
                             t1=`printf "\"%s\" = \"%s\"" $tt1 $tt2`
                         fi
-                        if [[ ${tt1} == "target_key_arn" ]];then 
-                            kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                            
-                            kmsarn=$(echo $tt2 | tr -d '"')
-                            #echo $t1
-                            t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid`                    
+                        if [[ ${tt1} == "target_key_id" ]];then                             
+                            kid=$(echo $tt2 | tr -d '"')
+                            
+                            t1=`printf "%s = aws_kms_key.k_%s.id" $tt1 $kid`                    
                         fi
 
                     # else

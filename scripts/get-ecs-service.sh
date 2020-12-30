@@ -25,21 +25,20 @@ for c in `seq 0 0`; do
             #echo $i
             arn=`echo $awsout | jq ".${pref[(${c})]}[(${i})]" | tr -d '"'`
             echo "ARN = $arn"
-            cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})]" | cut -f2 -d'/' | tr -d '"'`
-            
+            cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})]" | rev | cut -d'/' -f 1 | rev | tr -d '"'`
             rname=${cname//:/_}
             rname=${rname//\//_}
-            echo $rname
+            echo "rname=$rname cname=$cname"
             fn=`printf "%s__%s.tf" $ttft $rname`
             printf "resource \"%s\" \"%s\" {\n" $ttft $rname > $fn
             printf "}"  >> $fn
-            
-            terraform import $ttft.$rname "$1/$cname" | grep Import
+            #echo "terraform import $ttft.$rname $1/$cname"
+            terraform import $ttft.$rname "$1/$cname" 
             terraform state show $ttft.$rname > t2.txt
             
             rm $fn
 
-            tfa=`printf "%s.%s" $ttft $rname`
+            tfa=`printf "data/%s.%s" $ttft $rname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
             #echo $awsj | jq . 
            
@@ -94,15 +93,17 @@ for c in `seq 0 0`; do
            
             echo "get hostzone id"
             comm=`printf "$AWS ecs describe-services --services %s --cluster %s | jq '.services[].serviceRegistries[0].registryArn' | tr -d '\"'" $arn $1`
-            echo $comm
+            #echo $comm
             srvid=`eval $comm`
             srvid=`echo $srvid | cut -f2 -d'/'`
-            nsid=`$AWS servicediscovery get-service --id $srvid | jq .Service.NamespaceId | tr -d '\"'`
-            echo $nsid
-            # get zone id
-            hzid=`$AWS servicediscovery get-namespace --id $nsid | jq .Namespace.Properties.DnsProperties.HostedZoneId | tr -d '"'`
-            ../../scripts/get-priv-hzn.sh $hzid
-
+            #echo "srvid = $srvid"
+            if [ "$srvid" != "null" ]; then
+                nsid=`$AWS servicediscovery get-service --id $srvid | jq .Service.NamespaceId | tr -d '\"'`
+                echo $nsid
+                # get zone id
+                hzid=`$AWS servicediscovery get-namespace --id $nsid | jq .Namespace.Properties.DnsProperties.HostedZoneId | tr -d '"'`
+                ../../scripts/get-priv-hzn.sh $hzid
+            fi
         done
     fi
 done

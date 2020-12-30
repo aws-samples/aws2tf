@@ -88,6 +88,7 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
+            echo "Getting Services $cname"
             ../../scripts/get-ecs-service.sh $cname
         done
     fi

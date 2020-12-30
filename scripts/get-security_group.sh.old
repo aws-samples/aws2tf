@@ -76,7 +76,7 @@ for i in `cat tf1.tmp` ; do
 terraform state rm $i
 done
 
-terraform fmt
+terraform fmt > /dev/null
 terraform validate
 rm -f t*.txt tf1.tmp
 

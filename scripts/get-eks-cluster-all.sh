@@ -175,10 +175,7 @@ if [ "$kcount" -gt "0" ]; then
             fi
         done 
         # address supporting eks cluster resources
-        echo "fmt"
-        terraform fmt
-        echo "validate"
-        terraform validate
+
         
     done  # k  
 fi

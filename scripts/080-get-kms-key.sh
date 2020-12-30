@@ -35,7 +35,7 @@ for c in `seq 0 0`; do
             keyd=`$AWS kms describe-key --key-id $cname`
             keystate=$(echo $keyd | jq -r .KeyMetadata.KeyState)
             keyman=$(echo $keyd | jq -r .KeyMetadata.KeyManager)
-            if [ "$keystate" == "Enabled" ]; then
+            if [ "$keystate" == "Enabled" ] && [ "$keyman" != "AWS" ]; then
                 echo "$ttft $cname"
                 fn=`printf "%s__k_%s.tf" $ttft $cname`
                 if [ -f "$fn" ] ; then
@@ -44,7 +44,7 @@ for c in `seq 0 0`; do
                 fi
                 printf "resource \"%s\" \"k_%s\" {" $ttft $cname > $ttft.$cname.tf
                 printf "}" $cname >> $ttft.$cname.tf
-                printf "terraform import %s.%s %s" $ttft $cname $cname > import_$ttft_$cname.sh
+                printf "terraform import %s.%s %s" $ttft $cname $cname > "data/import_$ttft_$cname.sh"
                 terraform import $ttft.k_$cname "$cname"
                 if [ $? -eq 0 ]; then
             
@@ -96,17 +96,19 @@ for c in `seq 0 0`; do
                     mv $ttft.$cname.tf $ttft.$cname.tf.failed
                 fi 
             else
-                echo "$ttft $cname key state = $keystate"
+                echo "$ttft $cname key state = $keystate  key manager = $keyman"
             fi  
+            if [ "$keyman" == "AWS" ];then
+                dfn=`printf "data_%s__k_%s.tf" $ttft $cname`
+                echo "AWS managed key data $dfn"
+                printf "data \"%s\" \"k_%s\" {\n" $ttft $cname > $dfn
+                printf "key_id = \"%s\"\n" $cname >> $dfn
+                printf "}\n" >> $dfn
+            fi
         done
 
     fi
 done
-
-if [[ "$1" == "" ]]; then   
-    terraform fmt
-    terraform validate
-fi
 
 rm -f t*.txt
 

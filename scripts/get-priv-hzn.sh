@@ -89,8 +89,6 @@ ttft="aws_route53_zone"
             done <"$file"
             
 
-terraform fmt
-terraform validate
 rm t*.txt
 #$AWS route53 get-hosted-zone --id Z0956511MQ670ZMC5AV9
 # get vpc-id from above

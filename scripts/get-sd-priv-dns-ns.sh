@@ -19,7 +19,6 @@ printf "vpc= \"%s\"\n" $vpc >> $fn
 printf "}\n" $cname >> $fn
 done
 
-terraform fmt
-terraform validate
+
 
 

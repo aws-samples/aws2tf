@@ -107,7 +107,6 @@ for c in `seq 0 0`; do
         done
     fi
 done
-terraform fmt
 
 rm -f t*.txt
 

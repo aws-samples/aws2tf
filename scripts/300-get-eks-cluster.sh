@@ -128,7 +128,7 @@ if [ "$kcount" -gt "0" ]; then
                     printf "}" >> $ttft.$cname.tf
                     terraform import $ttft.$cname $ocname | grep Import
                     terraform state show $ttft.$cname > t2.txt
-                    tfa=`printf "%s.%s" $ttft $cname`
+                    tfa=`printf "data/%s.%s" $ttft $cname`
                     terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
                     #cat $tfa.json | jq .
        
@@ -235,11 +235,6 @@ fi
 ####  endpoint_public_access  = true
 
 
-
-echo "fmt"
-terraform fmt
-echo "validate"
-terraform validate
 rm -f t*.txt
 echo "run command ....."
 echo "$AWS eks update-kubeconfig --name $cname"

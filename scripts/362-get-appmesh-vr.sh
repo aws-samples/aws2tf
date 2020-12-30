@@ -81,8 +81,7 @@ for c in `seq 0 0`; do
             ../../scripts/365-get-appmesh-r.sh $1 $cname
             
         done
-        terraform fmt
-        terraform validate
+
     fi
 done
 

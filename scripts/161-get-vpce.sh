@@ -29,7 +29,7 @@ for c in `seq 0 0`; do
             printf "}" $cname >> $ttft.$cname.tf
             terraform import $ttft.$cname "$cname" | grep Import
             terraform state show $ttft.$cname > t2.txt
-            tfa=`printf "%s.%s" $ttft $cname`
+            tfa=`printf "data/%s.%s" $ttft $cname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
             #echo $awsj | jq . 
             rm $ttft.$cname.tf
@@ -123,10 +123,6 @@ for c in `seq 0 0`; do
         done
     fi 
 done
-if [[ "$1" == "" ]]; then   
-    terraform fmt
-    terraform validate
-fi
 
 rm -f t*.txt
 

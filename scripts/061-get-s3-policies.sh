@@ -43,7 +43,4 @@ for i in `terraform state list | grep aws_s3_bucket_policy`; do
     done <"$file" 
 done
 
-terraform fmt
-terraform validate
 rm -f t*.txt
-exit

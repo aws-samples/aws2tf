@@ -242,8 +242,8 @@ echo "--------------------------------------------------------------------------
 echo "aws2tf output files are in generated/tf.$mysub"
 echo "---------------------------------------------------------------------------"
 
-echo "Terraform fmt ..."
-terraform fmt
+echo "terraform fmt > /dev/null ..."
+terraform fmt > /dev/null
 echo "Terraform validate ..."
 terraform validate .
 

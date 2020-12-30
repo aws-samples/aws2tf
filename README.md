@@ -16,9 +16,9 @@ And finally runs a
 There should hopefully be no subsequent additions or deletions reported by the terraform plan command as all the approriate terraform configuration files will have have automatically been created.
 
 ## Requirements & Prerequisites
-+ The tool is written for the bash shell script & Python3 and has been tested on macOS 10.15.7
-+ AWS cli (V1) **version 2.1.1 or higher** needs to be installed and you need a login with at least "Read" priviledges
-+ terraform **version v0.12.29** needs to be installed
++ The tool is written for the bash shell script & Python3 and has been tested on macOS 10.15.7.
++ AWS cli (v2) **version 2.1.15 or higher** needs to be installed and you need a login with at least "Read" priviledges.
++ terraform **version v0.14.3** or higher needs to be installed.
 + jq **version 1.6 or higher**
 
 

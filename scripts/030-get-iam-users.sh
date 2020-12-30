@@ -76,8 +76,7 @@ for c in `seq 0 0`; do
             
         done # done for i
         # Get attached role policies       
-        terraform fmt
-        terraform validate
+        
     fi
 done
 

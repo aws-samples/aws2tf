@@ -28,7 +28,7 @@ for c in `seq 0 0`; do
             fi
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
             printf "}" $cname >> $ttft.$cname.tf
-            printf "terraform import %s.%s %s" $ttft $cname $cname > import_$ttft_$cname.sh
+            printf "terraform import %s.%s %s" $ttft $cname $cname > data/import_$ttft_$cname.sh
             terraform import $ttft.$cname "$cname" | grep Import
             terraform state show $ttft.$cname > t2.txt
             rm $ttft.$cname.tf
@@ -76,10 +76,7 @@ for c in `seq 0 0`; do
         done
     fi
 done
-if [[ "$1" == "" ]]; then   
-    terraform fmt
-    terraform validate
-fi
+
 rm -f t*.txt
 
 #

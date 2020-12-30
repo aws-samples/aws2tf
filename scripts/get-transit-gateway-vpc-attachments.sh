@@ -109,7 +109,6 @@ for c in `seq 0 0`; do
 
     fi
 done
-#terraform fmt
-#terraform validate
+
 rm -f t*.txt
 

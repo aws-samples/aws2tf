@@ -87,8 +87,7 @@ for c in `seq 0 0`; do
             printf "}\n" >> $dfn
             
         done
-        terraform fmt
-        terraform validate
+
     fi
 done
 

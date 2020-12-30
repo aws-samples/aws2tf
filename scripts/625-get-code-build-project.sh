@@ -31,10 +31,10 @@ for c in `seq 0 0`; do
             fi
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
             printf "}" $cname >> $ttft.$cname.tf
-            printf "terraform import %s.%s %s" $ttft $cname $cname > import_$ttft_$cname.sh
+            printf "terraform import %s.%s %s" $ttft $cname $cname > data/import_$ttft_$cname.sh
             terraform import $ttft.$cname "$cname" | grep Import
             terraform state show $ttft.$cname > t2.txt
-            tfa=`printf "%s.%s" $ttft $cname`
+            tfa=`printf "data/%s.%s" $ttft $cname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
             #echo $awsj | jq .
             
@@ -134,7 +134,6 @@ for c in `seq 0 0`; do
         
     fi
 done
-terraform fmt
-terraform validate
+
 rm -f t*.txt
 

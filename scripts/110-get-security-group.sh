@@ -159,7 +159,5 @@ for i in `cat tf1.tmp` ; do
                 done <"$file"
 done
 
-#terraform fmt
-#terraform validate
 #rm -f t*.txt tf1.tmp
 

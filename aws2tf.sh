@@ -59,7 +59,7 @@ if [ "$mysub" == "null" ]; then
     exit
 fi
 
-mkdir -p generated/tf.$mysub/data
+
 
 s=`echo $mysub`
 cd generated/tf.$mysub
@@ -68,16 +68,17 @@ cd generated/tf.$mysub
 if [ "$f" = "no" ]; then
     if [ "$c" = "no" ]; then
         echo "Cleaning generated/tf.$mysub"
-        rm -f resources*.txt *.sh
-        rm -f processed.txt
-        rm -f *.tf *.json
-        rm -f terraform.*
-        rm -rf .terraform   
+        rm -f *.txt *.sh *.log *.sav
+        rm -f *.tf *.json *.tmp 
+        rm -f terraform.* tfplan 
+        rm -rf .terraform data 
     fi
 else
     sort -u processed.txt > pt.txt
     cp pt.txt processed.txt
 fi
+
+mkdir -p data
 
 rm -f import.log
 #if [ "$f" = "no" ]; then
@@ -105,15 +106,23 @@ echo " "
 
 
 # write the aws.tf file
-printf "provider \"aws\" {\n" > aws.tf
+printf "terraform { \n" > aws.tf
+printf "  required_providers {\n" >> aws.tf
+printf "   aws = {\n" >> aws.tf
+printf "     source  = \"hashicorp/aws\"\n" >> aws.tf
+printf "      version = \"~> 3.22\"\n" >> aws.tf
+printf "    }\n" >> aws.tf
+printf "  }\n" >> aws.tf
+printf "}\n" >> aws.tf
+printf "\n" >> aws.tf
+printf "provider \"aws\" {\n" >> aws.tf
 printf " region = \"%s\" \n" $r >> aws.tf
 printf " shared_credentials_file = \"~/.aws/credentials\" \n"  >> aws.tf
-printf " version = \"= 3.22.0\" \n"  >> aws.tf
 printf " profile = \"%s\" \n" $p >> aws.tf
 printf "}\n" >> aws.tf
 
 cat aws.tf
-cp ../../stubs/*.tf .
+#cp ../../stubs/*.tf .
 
 if [ "$t" == "no" ]; then t="*"; fi
 
@@ -164,7 +173,7 @@ if [ "$t" == "lambda" ]; then pre="700*"; fi
 pwd
 if [ "$c" == "no" ]; then
     echo "terraform init"
-    terraform init 2>&1 | tee -a import.log
+    terraform init -no-color 2>&1 | tee -a import.log
 fi
 
 exclude="iam"
@@ -212,7 +221,7 @@ for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do
         done <"$file"
 
         echo "$docomm" >> processed.txt
-        
+        terraform validate -no-color
     fi
     
 done
@@ -222,25 +231,21 @@ done
 
 date
 
-#if [ "$x" = "yes" ]; then
-#    echo "Attempting to extract secrets"
-#    ../../scripts/kms_secrets.sh
-#fi
 
-#rm -f terraform*.backup
-
-echo "Terraform fmt ..."
-terraform fmt
+echo "terraform fmt > /dev/null ..."
+terraform fmt > /dev/null
 echo "Terraform validate ..."
-terraform validate .
+terraform validate -no-color
 
 
 if [ "$v" = "yes" ]; then
     exit
 fi
 
+echo "Terraform Refresh ..."
+terraform refresh  -no-color
 echo "Terraform Plan ..."
-terraform plan .
+terraform plan . -no-color
 
 echo "---------------------------------------------------------------------------"
 echo "aws2tf output files are in generated/tf.$mysub"

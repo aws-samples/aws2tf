@@ -29,11 +29,11 @@ for c in `seq 0 0`; do
             #echo $i
 
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
+            rname=${cname//:/_}
+            rname=${rname//./_}
+            rname=${rname//\//_}
+            echo "$ttft $cname"
             if [[ "$cname" != *"alias/aws/"* ]];then
-                rname=${cname//:/_}
-                rname=${rname//./_}
-                rname=${rname//\//_}
-
                 echo "$ttft $cname"
                 fn=`printf "%s__%s.tf" $ttft $rname`
                 if [ -f "$fn" ] ; then
@@ -97,16 +97,19 @@ for c in `seq 0 0`; do
                     fi
                     
                 done <"$file"
+            else
+                dfn=`printf "data_%s__%s.tf" $ttft $rname`
+                echo "AWS managed key alias data $dfn"
+                printf "data \"%s\" \"%s\" {\n" $ttft $rname > $dfn
+                printf "name = \"%s\"\n" "$cname" >> $dfn
+                printf "}\n" >> $dfn
             fi
+            
         done
 
     fi
 done
 
-if [[ "$1" == "" ]]; then   
-    terraform fmt
-    terraform validate
-fi
 
 rm -f t*.txt
 

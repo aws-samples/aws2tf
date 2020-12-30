@@ -74,8 +74,8 @@ if [ "$f" = "no" ]; then
         rm -rf .terraform data 
     fi
 else
-    sort -u processed.txt > pt.txt
-    cp pt.txt processed.txt
+    sort -u data/processed.txt > data/pt.txt
+    cp pt.txt data/processed.txt
 fi
 
 mkdir -p data
@@ -196,7 +196,7 @@ for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do
         if [ "$f" = "no" ]; then
             eval $docomm 2>&1 | tee -a import.log
         else
-            grep "$docomm" processed.txt
+            grep "$docomm" data/processed.txt
             if [ $? -eq 0 ]; then
                 echo "skipping $docomm"
             else
@@ -220,7 +220,7 @@ for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do
 
         done <"$file"
 
-        echo "$docomm" >> processed.txt
+        echo "$docomm" >> data/processed.txt
         terraform validate -no-color
     fi
     

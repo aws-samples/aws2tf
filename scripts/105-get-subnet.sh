@@ -1,6 +1,10 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS ec2 describe-subnets --filters \"Name=vpc-id,Values=$1\"" 
+    if [[ "$1" == "vpc-"* ]]; then
+        cmd[0]="$AWS ec2 describe-subnets --filters \"Name=vpc-id,Values=$1\"" 
+    else
+        cmd[0]="$AWS ec2 describe-subnets --subnet-ids $1"
+    fi
 else
     cmd[0]="$AWS ec2 describe-subnets"
 fi

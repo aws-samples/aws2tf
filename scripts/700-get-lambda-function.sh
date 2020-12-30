@@ -54,6 +54,8 @@ for c in `seq 0 0`; do
             #	done
             file="t1.txt"
             echo $aws2tfmess > $fn
+            sgs=()
+            subnets=()
             while IFS= read line
             do
 				skip=0
@@ -88,10 +90,12 @@ for c in `seq 0 0`; do
                 else
                     if [[ "$t1" == *"subnet-"* ]]; then
                         t1=`echo $t1 | tr -d '"|,'`
+                        subnets+=`printf "\"%s\" " $t1`
                         t1=`printf "aws_subnet.%s.id," $t1`
                     fi
                     if [[ "$t1" == *"sg-"* ]]; then
                         t1=`echo $t1 | tr -d '"|,'`
+                        sgs+=`printf "\"%s\" " $t1`
                         t1=`printf "aws_security_group.%s.id," $t1`
                     fi
 
@@ -108,9 +112,26 @@ for c in `seq 0 0`; do
             fi
             if [ "$vpcid" != "" ]; then
                 ../../scripts/100-get-vpc.sh $vpcid
-                ../../scripts/105-get-subnet.sh $vpcid
-                ../../scripts/110-get-security-group.sh $vpcid
             fi
+
+
+            for sub in ${subnets[@]}; do
+                #echo "therole=$therole"
+                sub1=`echo $sub | tr -d '"'`
+                echo "calling for $sub1"
+                if [ "$sub1" != "" ]; then
+                    ../../scripts/105-get-subnet.sh $sub1
+                fi
+            done
+
+            for sg in ${sgs[@]}; do
+                #echo "therole=$therole"
+                sg1=`echo $sg | tr -d '"'`
+                echo "calling for $sg1"
+                if [ "$sg1" != "" ]; then
+                    ../../scripts/110-get-security-group.sh $sg1
+                fi
+            done 
 
             if [ "$cname" != "" ]; then
                 ../../scripts/get-lambda-alias.sh $cname

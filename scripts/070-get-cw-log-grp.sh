@@ -23,31 +23,30 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
-            echo "$ttft $cname"
-            rname=${cname//:/_}
-            rname=${rname//./_}
-            rname=${rname//\//_}
-            #echo $rname
-
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            echo "$ttft $cname import"
             fn=`printf "%s__%s.tf" $ttft $rname`
-            if [ -f "$fn" ] ; then
-                echo "$fn exists already skipping"
-                continue
-            fi
-            printf "resource \"%s\" \"%s\" {" $ttft $rname > $ttft.$rname.tf
-            printf "}" >> $ttft.$rname.tf
-            printf "terraform import %s.%s %s" $ttft $rname "$cname" > import_$ttft_$rname.sh
-            terraform import $ttft.$rname "$cname" | grep Import
-            terraform state show $ttft.$rname > t2.txt
-            tfa=`printf "data/%s.%s" $ttft $rname`
-            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
-            #echo $awsj | jq . 
-            rm $ttft.$rname.tf
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-            #	for k in `cat t1.txt`; do
-            #		echo $k
-            #	done
-            file="t1.txt"
+            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
+            #echo "calling import sub"
+            . ../../scripts/parallel_import.sh $ttft $cname &
+        done
+
+        jc=`jobs -r | wc -l | tr -d ' '`
+        echo "Waiting for $jc Terraform imports"
+        wait
+        echo "Finished importing"
+        # tf files
+
+
+        for i in `seq 0 $count`; do
+            #echo $i
+            cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            echo "$ttft $cname tf files"
+            fn=`printf "%s__%s.tf" $ttft $rname`
+            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
+
+            file=`printf "%s-%s-1.txt" $ttft $rname`
             echo $aws2tfmess > $fn
             while IFS= read line
             do

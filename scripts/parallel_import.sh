@@ -16,11 +16,21 @@ rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
 mkdir -p $ttft-$rname && cd $ttft-$rname
 
 cp ../aws.tf .
-cp ../terraform.tfstate .
-cp ../.terraform.lock.hcl .
-cp -r ../.terraform .
+#cp ../terraform.tfstate .
+#cp ../.terraform.lock.hcl .
+#cp -r ../.terraform .
 #echo "TF Init..."
-#terraform init -no-color > /dev/null
+terraform init -no-color > /dev/null
+if [ $? -ne 0 ]; then
+    echo "init backoff & retry"
+    sleep 10
+    terraform init -no-color > /dev/null
+    if [ $? -ne 0 ]; then
+            echo "init long backoff & retry with full errors"
+            sleep 20
+            terraform init -no-color > /dev/null
+    fi
+fi
 
 printf "resource \"%s\" \"%s\" {" $ttft $rname > $ttft.$rname.tf
 printf "}" >> $ttft.$rname.tf

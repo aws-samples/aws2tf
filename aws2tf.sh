@@ -181,14 +181,13 @@ exclude="iam"
 if [ "$t" == "iam" ]; then pre="03*" && exclude="xxxxxxx"; fi
 ls
 #############################################################################
-
 date
 lc=0
 echo "t=$t"
 echo "loop through providers"
-pwd
 for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do    
-    echo "$com"
+    start=`date +%s`
+    echo "$com" 
     if [[ "$com" == *"${exclude}"* ]]; then
         echo "skipping $com"
     else
@@ -222,6 +221,9 @@ for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do
 
         echo "$docomm" >> data/processed.txt
         terraform validate -no-color
+        end=`date +%s`
+        runtime=$((end-start))
+        echo "$com runtime in seconds $runtime"
     fi
     
 done

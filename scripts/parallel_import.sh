@@ -35,7 +35,7 @@ fi
 printf "resource \"%s\" \"%s\" {" $ttft $rname > $ttft.$rname.tf
 printf "}" >> $ttft.$rname.tf
 #echo "Importing..."           
-terraform import $ttft.$rname "$cname" | grep Import 
+terraform import $ttft.$rname "$cname" | grep Import
 #echo "local state list"
 #terraform state list -no-color
 

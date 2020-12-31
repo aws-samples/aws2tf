@@ -26,7 +26,7 @@ for c in `seq 0 0`; do
             #echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-            echo "$ttft $cname"
+            echo "$ttft $cname import"
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ]; then continue; fi
             #echo "calling import sub"
@@ -41,7 +41,7 @@ for c in `seq 0 0`; do
             #echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-            echo "$ttft $cname"
+            echo "$ttft $cname tf files"
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ]; then continue; fi
 

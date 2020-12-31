@@ -1,17 +1,19 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
     if [[ "$1" == "vpc-"* ]]; then
-        cmd[0]="$AWS ec2 describe-security-groups --filters \"Name=vpc-id,Values=$1\"" 
+        cmd[0]="$AWS ec2 describe-subnets --filters \"Name=vpc-id,Values=$1\"" 
     else
-        cmd[0]="$AWS ec2 describe-security-groups --group-ids $1" 
+        cmd[0]="$AWS ec2 describe-subnets --subnet-ids $1"
     fi
 else
-    cmd[0]="$AWS ec2 describe-security-groups"
+    cmd[0]="$AWS ec2 describe-subnets"
 fi
-c=0
-pref[0]="SecurityGroups"
-tft[0]="aws_security_group"
-idfilt[0]="GroupId"
+
+pref[0]="Subnets"
+tft[0]="aws_subnet"
+idfilt[0]="SubnetId"
+
+#rm -f ${tft[0]}.tf
 
 for c in `seq 0 0`; do
     
@@ -28,14 +30,14 @@ for c in `seq 0 0`; do
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $rname`
-            if [ -f "$fn" ]; then continue; fi
+            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
             #echo "calling import sub"
             . ../../scripts/parallel_import.sh $ttft $cname &
         done
-        jc=`jobs -r | wc -l | tr -d ' '`
-        echo "Waiting for $jc Terraform imports"
+        jc=`jobs -r | wc -l`
+        echo "waiting on $jc imports"
         wait
-        echo "Finished importing"
+        echo "finished import subs"
         # tf files
         for i in `seq 0 $count`; do
             #echo $i
@@ -43,7 +45,7 @@ for c in `seq 0 0`; do
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $rname`
-            if [ -f "$fn" ]; then continue; fi
+            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
 
             file=`printf "%s-%s-1.txt" $ttft $rname`
             echo $aws2tfmess > $fn
@@ -52,7 +54,7 @@ for c in `seq 0 0`; do
 				skip=0
                 # display $line or do something with $line
                 t1=`echo "$line"` 
-                if [[ ${t1} == *"="* ]]; then
+                if [[ ${t1} == *"="* ]];then
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
@@ -69,14 +71,14 @@ for c in `seq 0 0`; do
                 # else
                     #
                 fi
-                if [[ "$skip" == "0" ]]; then
+                if [ "$skip" == "0" ]; then
                     #echo $skip $t1
                     echo $t1 >> $fn
                 fi
                 
             done <"$file"
 
-            if [[ "$vpcid" != "" ]]; then
+            if [ "$vpcid" != "" ]; then
                 ../../scripts/100-get-vpc.sh $vpcid
             fi
 
@@ -85,11 +87,15 @@ for c in `seq 0 0`; do
             printf "data \"%s\" \"%s\" {\n" $ttft $rname > $dfn
             printf "id = \"%s\"\n" "$cname" >> $dfn
             printf "}\n" >> $dfn
-           
-        done # for i
-    fi
-done  # for c
 
+
+            
+        done
+
+    fi
+done
+
+pwd
 rm -f *.backup 
 rm -f *-1.txt
 

@@ -27,26 +27,27 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             echo "$ttft $cname"
-            fn=`printf "%s__%s.tf" $ttft $cname`
-            if [ -f "$fn" ] ; then
-                echo "$fn exists already skipping"
-                continue
-            fi
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" $cname >> $ttft.$cname.tf
-            printf "terraform import %s.%s %s" $ttft $cname $cname > data/import_$ttft_$cname.sh
-            terraform import $ttft.$cname "$cname" | grep Import
-            terraform state show $ttft.$cname > t2.txt
-            tfa=`printf "data/%s.%s" $ttft $cname`
-            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
-            #echo $awsj | jq . 
-            rm $ttft.$cname.tf
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-            #	for k in `cat t1.txt`; do
-            #		echo $k
-            #	done
-            file="t1.txt"
+            fn=`printf "%s__%s.tf" $ttft $rname`
+            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
+            #echo "calling import sub"
+            . ../../scripts/parallel_import.sh $ttft $cname &
+        done
+        jc=`jobs -r | wc -l | tr -d ' '`
+        echo "Waiting for $jc Terraform imports"
+        wait
+        echo "Finished importing"
+        # tf files
+        for i in `seq 0 $count`; do
+            #echo $i
+            cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            echo "$ttft $cname"
+            fn=`printf "%s__%s.tf" $ttft $rname`
+            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
+
+            file=`printf "%s-%s-1.txt" $ttft $rname`
             echo $aws2tfmess > $fn
             while IFS= read line
             do
@@ -64,8 +65,8 @@ for c in `seq 0 0`; do
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
                     if [[ ${tt1} == "availability_zone_id" ]];then skip=1;fi
                     if [[ ${tt1} == "vpc_id" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
+                        vpcid=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`
                     fi
                 # else
                     #
@@ -77,17 +78,21 @@ for c in `seq 0 0`; do
                 
             done <"$file"
 
+            if [ "$vpcid" != "" ]; then
+                ../../scripts/100-get-vpc.sh $vpcid
+            fi
 
-            dfn=`printf "data/data_%s__%s.tf" $ttft $cname`
-            printf "data \"%s\" \"%s\" {\n" $ttft $cname > $dfn
-            printf "id = \"%s\"\n" $cname >> $dfn
-            printf "}\n" $ttft $cname >> $dfn
+
+            dfn=`printf "data/data_%s__%s.tf" $ttft $rname`
+            printf "data \"%s\" \"%s\" {\n" $ttft $rname > $dfn
+            printf "id = \"%s\"\n" "$cname" >> $dfn
+            printf "}\n" >> $dfn
             
         done
-
     fi
 done
 
-
-rm -f t*.txt
+pwd
+rm -f *.backup 
+rm -f *-1.txt
 

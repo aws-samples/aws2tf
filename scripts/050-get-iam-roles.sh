@@ -36,12 +36,16 @@ for c in `seq 0 0`; do
                 cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].RoleName" | tr -d '"'`
             fi
             ocname=`echo $cname`
+
+
+
+
             cname=${cname//./_}
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $cname`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
-                exit
+                continue
             fi
 
 
@@ -95,17 +99,15 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"   # done while
-            
-        done # done for i
-        # Get attached role policies
-        
-        #echo "role policies $ocname"
-        ../../scripts/051-get-iam-role-policies.sh $ocname
-        #echo "attached role policies $ocname"
-        ../../scripts/052-get-iam-attached-role-policies.sh $ocname
-        
 
-    
+            # Get attached role policies
+            
+            #echo "role policies $ocname"
+            ../../scripts/051-get-iam-role-policies.sh $ocname
+            #echo "attached role policies $ocname"
+            ../../scripts/052-get-iam-attached-role-policies.sh $ocname
+
+        done # done for i           
     fi
 done
 

@@ -35,7 +35,19 @@ fi
 printf "resource \"%s\" \"%s\" {" $ttft $rname > $ttft.$rname.tf
 printf "}" >> $ttft.$rname.tf
 #echo "Importing..."           
-terraform import $ttft.$rname "$cname" | grep Import
+terraform import $ttft.$rname "$cname" > /dev/null
+if [ $? -ne 0 ]; then
+    echo "Import backoff & retry"
+    sleep 10
+    terraform init -no-color > /dev/null
+    terraform import $ttft.$rname "$cname" > /dev/null
+    if [ $? -ne 0 ]; then
+            echo "Import long backoff & retry with full errors"
+            sleep 20
+            terraform init -no-color > /dev/null
+            terraform import $ttft.$rname "$cname" > /dev/null
+    fi
+fi
 #echo "local state list"
 #terraform state list -no-color
 
@@ -66,7 +78,7 @@ if [ $? -ne 0 ]; then
 fi
 mv $ttft-$rname-1.txt ..
 cd .. 
-rm -rf $ttft-$rname
+#rm -rf $ttft-$rname
 #echo "top level state list"
 #terraform state list | grep $ttft.$rname
 #echo "exit parallel import"

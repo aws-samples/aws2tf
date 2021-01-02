@@ -185,6 +185,7 @@ date
 lc=0
 echo "t=$t"
 echo "loop through providers"
+tstart=`date +%s`
 for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do    
     start=`date +%s`
     echo "$com" 
@@ -229,10 +230,11 @@ for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do
 done
 
 #########################################################################
-
+tend=`date +%s`
+truntime=$((tend-tstart))
+echo "Total runtime in seconds $truntime"
 
 date
-
 
 echo "terraform fmt > /dev/null ..."
 terraform fmt > /dev/null

@@ -26,7 +26,7 @@ for c in `seq 0 0`; do
             #	for k in `cat t1.txt`; do
             #		echo $k
             #	done
-            az-0
+            az=0
             file="t1.txt"
             fn=`printf "%s__%s.tf" $ttft $cname`
             echo $aws2tfmess > $fn

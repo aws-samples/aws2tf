@@ -62,6 +62,7 @@ fi
 
 
 s=`echo $mysub`
+mkdir -p  generated/tf.$mysub
 cd generated/tf.$mysub
 
 

@@ -165,7 +165,7 @@ fi
 fi
 
 
-if [ "$t" == "code" ]; then pre="629*"; fi
+if [ "$t" == "code" ]; then pre="62*"; fi
 
 if [ "$t" == "kms" ]; then pre="08*"; fi
 

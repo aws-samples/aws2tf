@@ -18,7 +18,7 @@ if [ "$kcount" -gt "0" ]; then
             cln=`$AWS eks list-clusters  | jq ".clusters[(${k})]" | tr -d '"'`      
         fi
                 
-        echo cluster name $cln
+        #echo cluster name $cln
         cname=`echo $cln`
 
         jcount=`$AWS eks list-nodegroups --cluster-name $cln | jq ".nodegroups | length"`
@@ -38,7 +38,7 @@ if [ "$kcount" -gt "0" ]; then
                     rm -f ${tft[0]}*.tf
                     cm=${cmd[$c]}
                     ttft=${tft[(${c})]}
-                    echo "inner command=$cm"
+                    #echo "inner command=$cm"
                     awsout=`eval $cm`
                     #echo awsout
                     #echo $awsout | jq .
@@ -47,7 +47,7 @@ if [ "$kcount" -gt "0" ]; then
                     if [ "$count" -gt "0" ]; then
                         count=`expr $count - 1`
                         for i in `seq 0 $count`; do
-                            echo $i
+                            #echo $i
                             cname=`echo $awsout | jq ".${pref[(${c})]}.clusterName" | tr -d '"'`
                             ngnam=`echo $awsout | jq ".${pref[(${c})]}.nodegroupName" | tr -d '"'`
                             ocname=`printf "%s:%s" $cname $ngnam`

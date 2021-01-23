@@ -72,7 +72,7 @@ if [ "$f" = "no" ]; then
         rm -f *.txt *.sh *.log *.sav
         rm -f *.tf *.json *.tmp 
         rm -f terraform.* tfplan 
-        rm -rf .terraform data 
+        rm -rf .terraform data aws_*
     fi
 else
     sort -u data/processed.txt > data/pt.txt

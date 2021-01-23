@@ -22,18 +22,23 @@ for c in `seq 0 0`; do
             #echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-            echo "$ttft $cname import"
+            
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then continue; fi
             #echo "calling import sub"
             #terraform state rm $ttft.$rname > /dev/null
+            echo "$ttft $cname import"
             . ../../scripts/parallel_import.sh $ttft $cname &
         done
 
+         
         jc=`jobs -r | wc -l | tr -d ' '`
-        echo "Waiting for $jc Terraform imports"
-        wait
-        echo "Finished importing"
+        if [ $jc -gt 0 ];then
+            echo "Waiting for $jc Terraform imports"
+            wait
+            echo "Finished importing"
+        fi
+        
         
         
         # tf files
@@ -41,7 +46,7 @@ for c in `seq 0 0`; do
             #echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-            echo "$ttft $cname tf files"
+            #echo "$ttft $cname tf files"
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then continue; fi
 

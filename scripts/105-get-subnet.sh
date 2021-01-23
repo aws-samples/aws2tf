@@ -35,9 +35,11 @@ for c in `seq 0 0`; do
             . ../../scripts/parallel_import.sh $ttft $cname &
         done
         jc=`jobs -r | wc -l | tr -d ' '`
-        echo "Waiting for $jc Terraform imports"
-        wait
-        echo "Finished importing"
+        if [ $jc -gt 0 ];then
+            echo "Waiting for $jc Terraform imports"
+            wait
+            echo "Finished importing"
+        fi
         # tf files
         for i in `seq 0 $count`; do
             #echo $i
@@ -80,6 +82,7 @@ for c in `seq 0 0`; do
             done <"$file"
 
             if [ "$vpcid" != "" ]; then
+                #echo "subnet vpc call with vpcid=$vpcid"
                 ../../scripts/100-get-vpc.sh $vpcid
             fi
 

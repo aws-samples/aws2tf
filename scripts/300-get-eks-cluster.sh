@@ -18,7 +18,7 @@ if [ "$kcount" -gt "0" ]; then
         else
             cln=`$AWS eks list-clusters  | jq ".clusters[(${k})]" | tr -d '"'`         
         fi
-        echo cluster name $cln  
+        #echo cluster name $cln  
          
         cmd[0]=`echo "$AWS eks describe-cluster --name $cln"` 
         cm=${cmd[$c]}
@@ -89,7 +89,7 @@ if [ "$kcount" -gt "0" ]; then
                     pname=`echo $fgp | jq ".fargateProfileNames[(${p})]" | tr -d '"'`
                     echo "faregate profile = $pname"
                     fg=`$AWS eks describe-fargate-profile --cluster-name $cln --fargate-profile-name $pname`
-                    echo "fargate"
+                    #echo "fargate"
                     fgparn=`echo $fg | jq ".fargateProfile.fargateProfileArn" | tr -d '"'`
                     podarn=`echo $fg | jq ".fargateProfile.podExecutionRoleArn" | tr -d '"'`
                     echo "Fargate profile arn = $fgparn" 

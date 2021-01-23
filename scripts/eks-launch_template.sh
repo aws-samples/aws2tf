@@ -57,6 +57,18 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "association_id" ]];then skip=1;fi
+                    if [[ ${tt1} == "iops" ]];then 
+                        iops=`echo $tt2 | tr -d '"'`
+                        if [ "$iops" == "0" ];then
+                            skip=1;
+                        fi
+                    fi
+                    if [[ ${tt1} == "throughput" ]];then 
+                        thpt=`echo $tt2 | tr -d '"'`
+                        if [ "$thpt" == "0" ];then
+                            skip=1;
+                        fi
+                    fi
 
                     #if [[ ${tt1} == "public_dns" ]];then skip=1;fi
                     #if [[ ${tt1} == "private_dns" ]];then skip=1;fi

@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS ec2 describe-launch-templates --filter \"Name=vpc-id,Values=$1\""
+    cmd[0]="$AWS ec2 describe-launch-templates --launch-template-ids $1"
 else
     cmd[0]="$AWS ec2 describe-launch-templates"
 fi
@@ -43,10 +43,12 @@ for c in `seq 0 0`; do
             do
 				skip=0
                 # display $line or do something with $line
-                t1=`echo "$line"` 
+                t1=`echo "$line"`
+                #echo $t1 
                 if [[ ${t1} == *"="* ]];then
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
+                    #echo $tt1
                     if [[ ${tt1} == "arn" ]];then
                         if [[ ${tt2} == *"launch-template"* ]];then
                             skip=1
@@ -59,8 +61,18 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "association_id" ]];then skip=1;fi
 
-                    #if [[ ${tt1} == "public_dns" ]];then skip=1;fi
-                    #if [[ ${tt1} == "private_dns" ]];then skip=1;fi
+                    if [[ ${tt1} == "iops" ]];then 
+                        iops=`echo $tt2 | tr -d '"'`
+                        if [ "$iops" == "0" ];then
+                            skip=1;
+                        fi
+                    fi
+                    if [[ ${tt1} == "throughput" ]];then 
+                        thpt=`echo $tt2 | tr -d '"'`
+                        if [ "$thpt" == "0" ];then
+                            skip=1;
+                        fi
+                    fi
                     if [[ ${tt1} == "default_version" ]];then skip=1;fi
                     if [[ ${tt1} == "latest_version" ]];then skip=1;fi
                     if [[ ${tt1} == "security_group_names" ]];then skip=1;fi

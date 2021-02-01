@@ -47,6 +47,12 @@ for c in `seq 0 0`; do
             tfa=`printf "data/%s.%s" $ttft $cname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
             #echo $awsj | jq . 
+            s3rep=$($AWS lambda get-function --function-name $cname | jq -r .Code.RepositoryType)
+            if [ $s3rep == "S3" ]; then
+                s3loc=$($AWS lambda get-function --function-name $cname | jq -r .Code.Location)
+                echo "Getting function code:  $cname.zip"
+                curl -s -o $cname.zip ${s3loc}
+            fi 
             rm $ttft.$cname.tf
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             #	for k in `cat t1.txt`; do
@@ -65,11 +71,18 @@ for c in `seq 0 0`; do
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
-                    if [[ ${tt1} == "id" ]];then skip=1; fi          
+                    if [[ ${tt1} == "id" ]];then
+                        if [ -f "$cname.zip" ]; then 
+                            t1=`printf "filename = file(\"%s.zip\")" $cname`
+                        fi
+                    fi  
+                    if [[ ${tt1} == "invoke_arn" ]];then skip=1;fi        
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "last_modified" ]];then skip=1;fi
-                    if [[ ${tt1} == "invoke_arn" ]];then skip=1;fi
+                    if [[ ${tt1} == "source_code_hash" ]];then 
+                      t1=`printf "source_code_hash = filebase64sha256(\"%s.zip\")" $cname`
+                    fi
                     if [[ ${tt1} == "qualified_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "version" ]];then skip=1;fi
                     if [[ ${tt1} == "source_code_size" ]];then skip=1;fi

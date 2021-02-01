@@ -76,7 +76,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "invoke_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "qualified_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "version" ]];then skip=1;fi
-                    if [[ ${tt1} == "source_code_size" ]];then skip=1;fi
+                    if [[ ${tt1} == "type" ]];then skip=1;fi
                     if [[ ${tt1} == "vpc_id" ]]; then
                         vpcid=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`

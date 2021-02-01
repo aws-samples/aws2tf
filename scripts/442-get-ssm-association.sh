@@ -1,14 +1,14 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS ssm list-documents --filters \"Key=Owner,Values=Self\""
-    pref[0]="environments"
+    cmd[0]="$AWS ssm list-associations"
+    pref[0]="Associations"
 else
-    cmd[0]="$AWS ssm list-documents --filters \"Key=Owner,Values=Self\""
-    pref[0]="DocumentIdentifiers"
+    cmd[0]="$AWS ssm list-associations"
+    pref[0]="Associations"
 fi
 
-tft[0]="aws_ssm_document"
-idfilt[0]="Name"
+tft[0]="aws_ssm_association"
+idfilt[0]="AssociationId"
 
 #rm -f ${tft[0]}.tf
 
@@ -34,8 +34,7 @@ for c in `seq 0 0`; do
                 cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             fi
             echo "$ttft $cname"
-            rname=`printf "%s" $cname`
-            $AWS ssm get-document --name $rname > $rname.json
+            rname=`printf "asoc-%s" $cname`
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
@@ -70,15 +69,8 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "id" ]];then skip=1;fi
                     if [[ ${tt1} == "latest_version" ]];then skip=1;fi
                     if [[ ${tt1} == "owner" ]];then skip=1;fi
-                    if [[ ${tt1} == "last_modified" ]];then skip=1;fi
-                    if [[ ${tt1} == "status" ]];then skip=1;fi
-                    if [[ ${tt1} == "instance_type" ]];then skip=1;fi
-                    if [[ ${tt1} == "version" ]];then skip=1;fi
-                    if [[ ${tt1} == "schema_version" ]];then skip=1;fi
-                    if [[ ${tt1} == "hash" ]];then skip=1;fi
-                    if [[ ${tt1} == "hash_type" ]];then skip=1;fi
-                    if [[ ${tt1} == "document_version" ]];then skip=1;fi
-                    if [[ ${tt1} == "default_version" ]];then skip=1;fi
+
+                    if [[ ${tt1} == "association_id" ]];then skip=1;fi
                     if [[ ${tt1} == "description" ]];then skip=1;fi
                     if [[ ${tt1} == "vpc_id" ]]; then
                         vpcid=`echo $tt2 | tr -d '"'`

@@ -50,7 +50,7 @@ for c in `seq 0 0`; do
             s3rep=$($AWS lambda get-function --function-name $cname | jq -r .Code.RepositoryType)
             if [ $s3rep == "S3" ]; then
                 s3loc=$($AWS lambda get-function --function-name $cname | jq -r .Code.Location)
-                echo "Getting function code:  $cname.zip"
+                echo "Getting Lambda function code:  $cname.zip"
                 curl -s -o $cname.zip ${s3loc}
             fi 
             rm $ttft.$cname.tf

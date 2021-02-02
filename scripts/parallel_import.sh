@@ -78,7 +78,7 @@ if [ $? -ne 0 ]; then
 fi
 mv $ttft-$rname-1.txt ..
 cd .. 
-#rm -rf $ttft-$rname
+rm -rf $ttft-$rname
 #echo "top level state list"
 #terraform state list | grep $ttft.$rname
 #echo "exit parallel import"

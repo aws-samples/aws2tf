@@ -7,7 +7,7 @@ else
     pref[0]="InstanceProfiles"
 fi
 
-pref[0]="InstanceProfiles"
+
 tft[0]="aws_iam_instance_profile"
 idfilt[0]="InstanceProfileName"
 
@@ -19,13 +19,20 @@ for c in `seq 0 0`; do
 	ttft=${tft[(${c})]}
 	#echo $cm
     awsout=`eval $cm`
-    count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    if [ "$1" != "" ]; then
+        count=1
+    else
+        count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    fi
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
-            rarn=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Roles[0].Arn" | tr -d '"'`
+            if [ "$1" != "" ]; then
+                cname=`echo $awsout | jq ".${pref[(${c})]}.${idfilt[(${c})]}" | tr -d '"'`
+            else
+                cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
+            fi
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             echo "$ttft $cname import"
             fn=`printf "%s__%s.tf" $ttft $rname`
@@ -40,7 +47,13 @@ for c in `seq 0 0`; do
 
         for i in `seq 0 $count`; do
             #echo $i
-            cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
+            if [ "$1" != "" ]; then
+                cname=`echo $awsout | jq ".${pref[(${c})]}.${idfilt[(${c})]}" | tr -d '"'`
+                rarn=`echo $awsout | jq ".${pref[(${c})]}.Roles[0].Arn" | tr -d '"'`
+            else
+                cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
+                rarn=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Roles[0].Arn" | tr -d '"'`
+            fi
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             echo "$ttft $cname tf files"
             fn=`printf "%s__%s.tf" $ttft $rname`
@@ -60,6 +73,10 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
+                    if [[ ${tt1} == "role" ]];then 
+                        tt2=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_iam_role.%s.name" $tt1 $tt2`
+                    fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "unique_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi

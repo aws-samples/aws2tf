@@ -11,7 +11,6 @@ else
     cmd[0]="$AWS s3api list-buckets"
 fi
 
-
 pref[0]="Buckets"
 tft[0]="aws_s3_bucket"
 idfilt[0]="Name"

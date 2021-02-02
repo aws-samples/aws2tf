@@ -74,6 +74,9 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "id" ]];then
                         if [ -f "$cname.zip" ]; then 
                             t1=`printf "filename = filebase64(\"%s.zip\")" $cname`
+                            printf "lifecycle {\n" >> $fn
+                            printf "   ignore_changes = [filename]\n" >> $fn
+                            printf "}\n" >> $fn
                         fi
                     fi  
                     if [[ ${tt1} == "invoke_arn" ]];then skip=1;fi        

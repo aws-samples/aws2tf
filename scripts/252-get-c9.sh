@@ -16,9 +16,9 @@ for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	echo $cm
+	#echo $cm
     awsout=`eval $cm`
-    echo $awsout | jq .
+    #echo $awsout | jq .
     if [ "$1" != "" ]; then
         count=1
     else
@@ -67,8 +67,11 @@ for c in `seq 0 0`; do
                     tt2=`echo "$line" | cut -f2- -d'='`
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
                     if [[ ${tt1} == "id" ]];then 
-                    skip=0;
-                    t1=`printf "instance_type=\"t3.small\""` 
+                        skip=0;
+                        t1=`printf "instance_type=\"t3.small\""` 
+                        printf "lifecycle {\n" >> $fn
+                        printf "   ignore_changes = [instance_type]\n" >> $fn
+                        printf "}\n" >> $fn
                     fi          
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi

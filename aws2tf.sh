@@ -225,7 +225,7 @@ for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do
         terraform validate -no-color
         end=`date +%s`
         runtime=$((end-start))
-        echo "$com runtime in seconds $runtime"
+        echo "$com runtime $runtime seconds"
     fi
     
 done

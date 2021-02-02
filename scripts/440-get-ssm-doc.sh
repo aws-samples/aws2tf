@@ -67,10 +67,10 @@ for c in `seq 0 0`; do
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
-                    if [[ ${tt1} == "id" ]];then skip=1;fi
+                    if [[ ${tt1} == "id" ]];then skip=1; fi
                     if [[ ${tt1} == "latest_version" ]];then skip=1;fi
                     if [[ ${tt1} == "owner" ]];then skip=1;fi
-                    if [[ ${tt1} == "last_modified" ]];then skip=1;fi
+                    #if [[ ${tt1} == "last_modified" ]];then skip=1;fi
                     if [[ ${tt1} == "status" ]];then skip=1;fi
                     if [[ ${tt1} == "instance_type" ]];then skip=1;fi
                     if [[ ${tt1} == "version" ]];then skip=1;fi
@@ -109,6 +109,9 @@ for c in `seq 0 0`; do
                         done 
                         skip=0
                         t1=`printf "content = file(\"%s.json\")" $rname`
+                        printf "lifecycle {\n" >> $fn
+                        printf "   ignore_changes = [content]\n" >> $fn
+                        printf "}\n" >> $fn
                     fi
                                                             
                     if [[ ${tt1} == "platform_types" ]];then 

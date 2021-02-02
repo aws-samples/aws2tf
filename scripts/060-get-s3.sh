@@ -107,8 +107,12 @@ for c in `seq 0 0`; do
                                 fd=1
                                 fi
                                 if [[ ${tt1} == "acl" ]];then
-                                skip=0
-                                acl=1
+                                    skip=0
+                                    acl=1
+                                    printf "lifecycle {\n" >> $fn
+                                    printf "   ignore_changes = [acl,force_destroy]\n" >> $fn
+                                    printf "}\n" >> $fn
+                                    
                                 fi
                                 if [[ ${tt1} == "bucket_domain_name" ]];then skip=1;fi
                                 if [[ ${tt1} == "bucket_regional_domain_name" ]];then skip=1;fi

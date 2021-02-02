@@ -109,9 +109,7 @@ for c in `seq 0 0`; do
                                 if [[ ${tt1} == "acl" ]];then
                                     skip=0
                                     acl=1
-                                    printf "lifecycle {\n" >> $fn
-                                    printf "   ignore_changes = [acl,force_destroy]\n" >> $fn
-                                    printf "}\n" >> $fn
+
                                     
                                 fi
                                 if [[ ${tt1} == "bucket_domain_name" ]];then skip=1;fi
@@ -127,6 +125,9 @@ for c in `seq 0 0`; do
                                 fi
                                 if [[ $acl = 0 ]]; then
                                     printf "acl = \"private\" \n" >> $fn
+                                    printf "lifecycle {\n" >> $fn
+                                    printf "   ignore_changes = [acl,force_destroy]\n" >> $fn
+                                    printf "}\n" >> $fn
                                 fi
                             fi
                             if [ "$skip" == "0" ];then

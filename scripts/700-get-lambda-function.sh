@@ -73,7 +73,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
                     if [[ ${tt1} == "id" ]];then
                         if [ -f "$cname.zip" ]; then 
-                            t1=`printf "filename = file(\"%s.zip\")" $cname`
+                            t1=`printf "filename = filebase64(\"%s.zip\")" $cname`
                         fi
                     fi  
                     if [[ ${tt1} == "invoke_arn" ]];then skip=1;fi        

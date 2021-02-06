@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS ec2 describe-dhcp-options --filters \"Name=vpc-id,Values=$1\"" 
+    cmd[0]="$AWS ec2 describe-dhcp-options" 
 else
     cmd[0]="$AWS ec2 describe-dhcp-options"
 fi

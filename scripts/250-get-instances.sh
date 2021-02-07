@@ -1,8 +1,8 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS ec2 describe-instances --filters \"Name=vpc-id,Values=$1\""
+    cmd[0]="$AWS ec2 describe-instances --filters \"Name=vpc-id,Values=$1\" \"Name=instance-state-name,Values=running\""
 else
-    cmd[0]="$AWS ec2 describe-instances"
+    cmd[0]="$AWS ec2 describe-instances --filters \"Name=instance-state-name,Values=running\""
 fi
 
 cloud9s=`aws ec2 describe-instances --filters "Name=tag-key,Values=aws:cloud9*" | jq .Reservations[].Instances[].InstanceId`

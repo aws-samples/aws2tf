@@ -115,7 +115,12 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "subnet_id" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_subnet.%s.id" $tt1 $tt2`
-                    fi    
+                    fi  
+                    if [[ ${tt1} == "kms_key_id" ]]; then
+                        tt2=`echo $tt2 | cut -f2 -d'/' | tr -d '"'`
+                        t1=`printf "%s = data.aws_kms_key.k_%s.arn" $tt1 $tt2`
+                    fi   
+
                 else
                     if [[ "$t1" == *"subnet-"* ]]; then
                         t1=`echo $t1 | tr -d '"|,'`

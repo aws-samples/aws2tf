@@ -43,7 +43,15 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
                     if [[ ${tt1} == "endpoint" ]];then skip=1;fi
-                    if [[ ${tt1} == "replicas" ]];then skip=1;fi
+                    if [[ ${tt1} == "replicas" ]];then 
+                        tt2=`echo $tt2 | tr -d '"'` 
+                        skip=1
+                        while [ "$t1" != "]" ] && [ "$tt2" != "[]" ] ;do
+                            read line
+                            t1=`echo "$line"`
+                            #echo $t1
+                        done
+                    fi
                     if [[ ${tt1} == "address" ]];then skip=1;fi
                     if [[ ${tt1} == "hosted_zone_id" ]];then skip=1;fi
                     if [[ ${tt1} == "status" ]];then skip=1;fi

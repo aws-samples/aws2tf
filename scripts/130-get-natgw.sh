@@ -1,8 +1,8 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS ec2 describe-nat-gateways --filter \"Name=vpc-id,Values=$1\""
+    cmd[0]="$AWS ec2 describe-nat-gateways --filter \"Name=state,Values=available\" \"Name=vpc-id,Values=$1\""
 else
-    cmd[0]="$AWS ec2 describe-nat-gateways"
+    cmd[0]="$AWS ec2 describe-nat-gateways --filter \"Name=state,Values=available\""
 fi
 c=0
 cm=${cmd[$c]}

@@ -1,8 +1,13 @@
 #!/bin/bash
+echo "eks-launch-template.sh"
 if [ "$1" != "" ]; then
     cmd[0]="$AWS ec2 describe-launch-templates --launch-template-ids $1"
 else
     echo "launch template id not set exiting"
+    exit
+fi
+if [ "$1" == "null" ]; then
+    echo "passed null lt id - exiting"
     exit
 fi
 c=0
@@ -25,11 +30,14 @@ for c in `seq 0 0`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
             echo "$ttft $cname"
+            fn=`printf "%s__%s.tf" $ttft $cname`
+            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
             printf "}" $cname >> $ttft.$cname.tf
             terraform import $ttft.$cname "$cname" | grep Import
             terraform state show $ttft.$cname > t2.txt
             rm $ttft.$cname.tf
+
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             #	for k in `cat t1.txt`; do
             #		echo $k
@@ -37,6 +45,7 @@ for c in `seq 0 0`; do
             file="t1.txt"
             $AWS ec2 describe-launch-template-versions --launch-template-id $cname | jq .LaunchTemplateVersions[0].LaunchTemplateData.UserData | tr -d '"' | base64 --decode > $cname.sh
             fn=`printf "%s__%s.tf" $ttft $cname`
+            #echo "******* $fn"
             echo $aws2tfmess > $fn
             while IFS= read line
             do

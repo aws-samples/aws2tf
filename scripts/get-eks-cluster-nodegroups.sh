@@ -1,5 +1,5 @@
 #!/bin/bash
-echo $AWS
+#echo $AWS
 if [ "$1" != "" ]; then
     kcount=1
 else
@@ -20,10 +20,10 @@ if [ "$kcount" -gt "0" ]; then
                 
         #echo cluster name $cln
         cname=`echo $cln`
-
+        #rm -f ${tft[0]}_*.tf
         jcount=`$AWS eks list-nodegroups --cluster-name $cln | jq ".nodegroups | length"`
         
-        #echo jcount=$jcount
+        echo "Found $jcount node groups for cluster $cln"
         if [ "$jcount" -gt "0" ]; then
             jcount=`expr $jcount - 1`
             for j in `seq 0 $jcount`; do
@@ -32,10 +32,11 @@ if [ "$kcount" -gt "0" ]; then
                 cmd[0]=`echo "$AWS eks describe-nodegroup --cluster-name $cln --nodegroup-name $ng"`      
                 pref[0]="nodegroup"
                 tft[0]="aws_eks_node_group"
-                rm -f ${tft[0]}_*.tf
+                ## 
+
         
                 for c in `seq 0 0`; do
-                    rm -f ${tft[0]}*.tf
+                    #rm -f ${tft[0]}*.tf
                     cm=${cmd[$c]}
                     ttft=${tft[(${c})]}
                     #echo "inner command=$cm"
@@ -53,7 +54,9 @@ if [ "$kcount" -gt "0" ]; then
                             ocname=`printf "%s:%s" $cname $ngnam`
 
                             cname=${ocname//:/_}
-                            echo cname = $cname
+                           
+                            #echo "cname=$cname ngname=$ngnam ocname=$ocname"
+                            fn=`printf "%s__%s.tf" $ttft $cname`
 
                             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
                             printf "}" >> $ttft.$cname.tf
@@ -62,24 +65,23 @@ if [ "$kcount" -gt "0" ]; then
                             echo "Importing ....."
                             terraform import $ttft.$cname $ocname | grep Import
                             terraform state show $ttft.$cname > t2.txt
-                            tfa=`printf "data/%s.%s" $ttft $cname`
-                            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
-                            echo $tfa.json | jq .
-                  
-                            #ls -l *.tf
                             rm $ttft.$cname.tf
-                            #ls *.tf
                             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
                             mv="version"
                             file="t1.txt"
+                            
                             fn=`printf "%s__%s.tf" $ttft $cname`
+                
                             echo $aws2tfmess > $fn
                             iscust=0
+                            allowid=0
+  
                             while IFS= read line
                             do
                                 skip=0
                                 # display $line or do something with $line
                                 t1=`echo "$line"`
+                                if [[ ${t1} == "launch_template"* ]];then allowid=1; fi
                                 if [[ ${t1} == *"="* ]];then
                                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '`
                                     tt2=`echo "$line" | cut -f2- -d'='`
@@ -89,7 +91,16 @@ if [ "$kcount" -gt "0" ]; then
                                     if [[ ${tt1} == "arn" ]];then 
                                         t1=`printf "depends_on = [aws_eks_cluster.%s]\n" $cln`
                                     fi
-                                    if [[ ${tt1} == "id" ]];then skip=1; fi
+                                    if [[ ${tt1} == "id" ]];then 
+                                        if [[ ${allowid} == "0" ]];then
+                                            skip=1 
+                                        else
+                                            skip=0
+                                            ltid=`echo $tt2 | tr -d '"'`
+                                            t1=`printf "%s = aws_launch_template.%s.id" $tt1 $ltid`
+                                            allowid=0
+                                        fi
+                                    fi
                                     #if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                                     if [[ ${tt1} == "ami_type" ]];then 
                                         ## temp hack for AMI type
@@ -108,6 +119,7 @@ if [ "$kcount" -gt "0" ]; then
                             
                                     fi
                                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
+                                    if [[ ${tt1} == "name" ]];then skip=1;fi
                                     if [[ ${tt1} == "association_id" ]];then skip=1;fi
                                     if [[ ${tt1} == "unique_id" ]];then skip=1;fi
                                     if [[ ${tt1} == "create_date" ]];then skip=1;fi
@@ -122,32 +134,24 @@ if [ "$kcount" -gt "0" ]; then
                                             skip=1;
                                         fi
                                     fi
-                                    #if [[ ${tt1} == "certificate_authority" ]];then 
-                                    # skip the block
-                                    #    echo $SL
-                                    #    SL= read line
-                                    #    read line
-                                    #    read line
-                                    #    read line
-                                    #    skip=1
-                                    #fi
-                                    #if [[ ${tt1} == "private_ip" ]];then skip=1;fi
-                                    #if [[ ${tt1} == "accept_status" ]];then skip=1;fi
-                                    #if [[ ${tt1} == "created_at" ]];then skip=1;fi
-                                    #if [[ ${tt1} == "endpoint" ]];then skip=1;fi
-                                    #if [[ ${tt1} == "status" ]];then skip=1;fi
+
                                     if [[ ${tt1} == "resources" ]];then 
-                                        read line
+                                        #echo $t1
                                         skip=1
-                                        read line
-                                        read line
-                                        read line
-                                        read line
-                                        read line
-                                        read line
-                                        read line
-                                        read line
+                                        lbc=0
+                                        rbc=0
+                                        breq=0
+                                        while [[ $breq -eq 0 ]];do 
+                                            if [[ "${t1}" == *"["* ]]; then lbc=`expr $lbc + 1`; fi
+                                            if [[ "${t1}" == *"]"* ]]; then rbc=`expr $rbc + 1`; fi
+                                            #echo "$lbc $rbc $t1"
+                                            read line
+                                            t1=`echo "$line"`
+                                            if [[ $rbc -eq $lbc ]]; then breq=1; fi
+                                        done 
                                     fi
+
+
                                     #if [[ ${tt1} == "platform_version" ]];then skip=1;fi
                                     if [[ ${tt1} == "status" ]];then skip=1;fi
                                     #if [[ ${tt1} == "cluster_security_group_id" ]];then skip=1;fi
@@ -164,25 +168,19 @@ if [ "$kcount" -gt "0" ]; then
                                 fi
                                 
                             done <"$file"   # done while
-
+          
+                            ../../scripts/050-get-iam-roles.sh $rarn
+            
                             # pick up the launch template here
                             ltid=`echo $awsout | jq .nodegroup.launchTemplate.id | tr -d '"'`
-                            echo "ltid=$ltid"
+                            echo "ltid=$ltid calling eks-launch_template.sh "
                             ../../scripts/eks-launch_template.sh $ltid
                      
                         done # done for i
                     fi
                 done
             done
-            if [ "$1" != "" ]; then
-                # get other stuff
-                #terraform refresh > /dev/null
-                #echo "finish refresh"
-                rm -f t*.txt
 
-                #echo $rarn
-                ../../scripts/050-get-iam-roles.sh $rarn
-            fi
 
 
 
@@ -192,7 +190,7 @@ if [ "$kcount" -gt "0" ]; then
     done
 fi
 
-## Look for unmanaged Nodes vis autoscaling group
+echo "##### Look for unmanaged Nodes via autoscaling group"
 
 ../../scripts/eks-auto-scaling-groups.sh $cln
 

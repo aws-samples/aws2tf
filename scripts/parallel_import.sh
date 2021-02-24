@@ -38,12 +38,14 @@ printf "}" >> $ttft.$rname.tf
 terraform import $ttft.$rname "$cname" > /dev/null
 if [ $? -ne 0 ]; then
     echo "Import backoff & retry"
-    sleep 10
+    sl=`echo $((1 + $RANDOM % 10))`
+    sleep $sl
     terraform init -no-color > /dev/null
     terraform import $ttft.$rname "$cname" > /dev/null
     if [ $? -ne 0 ]; then
             echo "Import long backoff & retry with full errors"
-            sleep 20
+            sl=`echo $((2 + $RANDOM % 20))`
+            sleep $sl
             terraform init -no-color > /dev/null
             terraform import $ttft.$rname "$cname" > /dev/null
     fi
@@ -62,16 +64,20 @@ rm $ttft.$rname.tf
 #echo "attempting move"
 terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname &> /dev/null
 if [ $? -ne 0 ]; then
-    sleep 2
+    sl=`echo $((1 + $RANDOM % 10))`
+    sleep $sl
     echo "state mv retry"
     terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname  &> /dev/null
     if [ $? -ne 0 ]; then
         echo "state mv backoff & retry"
-        sleep 10
+        sl=`echo $((2 + $RANDOM % 15))`
+        sleep $sl
         terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname  &> /dev/null
         if [ $? -ne 0 ]; then
             echo "state mv long backoff & retry with full errors"
-            sleep 20
+            sl=`echo $((5 + $RANDOM % 15))`
+            sleep $sl
+            
             terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname 
     fi
     fi

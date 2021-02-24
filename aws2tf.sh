@@ -73,7 +73,7 @@ cd generated/tf.$mysub
 if [ "$f" = "no" ]; then
     if [ "$c" = "no" ]; then
         echo "Cleaning generated/tf.$mysub"
-        rm -f *.txt *.sh *.log *.sav
+        rm -f *.txt *.sh *.log *.sav *.zip
         rm -f *.tf *.json *.tmp 
         rm -f terraform.* tfplan 
         rm -rf .terraform data aws_*

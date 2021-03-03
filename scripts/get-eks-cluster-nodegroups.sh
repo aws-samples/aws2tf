@@ -81,7 +81,7 @@ if [ "$kcount" -gt "0" ]; then
                                 skip=0
                                 # display $line or do something with $line
                                 t1=`echo "$line"`
-                                if [[ ${t1} == "launch_template"* ]];then allowid=1; fi
+                                if [[ ${t1} == *"launch_template"* ]];then allowid=1; fi
                                 if [[ ${t1} == *"="* ]];then
                                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '`
                                     tt2=`echo "$line" | cut -f2- -d'='`

@@ -67,45 +67,6 @@ for c in `seq 0 0`; do
                         vpcid=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`
                     fi
-
-                    ### rules must be seperated out to aws_default_security_group
-                    if [[ ${tt1} == "ingress" ]];then 
-                        #echo $t1
-                        skip=1
-                        lbc=0
-                        rbc=0
-                        breq=0
-                        while [[ $breq -eq 0 ]];do 
-                            if [[ "${t1}" == *"["* ]]; then lbc=`expr $lbc + 1`; fi
-                            if [[ "${t1}" == *"]"* ]]; then rbc=`expr $rbc + 1`; fi
-                            #echo "$lbc $rbc $t1"
-                            read line
-                            t1=`echo "$line"`
-                            if [[ $rbc -eq $lbc ]]; then breq=1; fi
-                        done 
-                    fi
-
-                    ### rules must be seperated out to aws_default_security_group
-                    if [[ ${tt1} == "egress" ]];then 
-                        #echo $t1
-                        skip=1
-                        lbc=0
-                        rbc=0
-                        breq=0
-                        while [[ $breq -eq 0 ]];do 
-                            if [[ "${t1}" == *"["* ]]; then lbc=`expr $lbc + 1`; fi
-                            if [[ "${t1}" == *"]"* ]]; then rbc=`expr $rbc + 1`; fi
-                            #echo "$lbc $rbc $t1"
-                            read line
-                            t1=`echo "$line"`
-                            if [[ $rbc -eq $lbc ]]; then breq=1; fi
-                        done 
-                    fi
-
-
-
-
-
                 # else
                     #
                 fi

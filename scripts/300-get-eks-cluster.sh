@@ -28,8 +28,8 @@ if [ "$kcount" -gt "0" ]; then
         ../../scripts/100* $tcmd  # vpc
         ../../scripts/101* $tcmd  # vpc cidrs
         ../../scripts/105* $tcmd  # subnets
-            ## EKS creates it's own SG's - no it doesn't
-        ../../scripts/110*.sh $tcmd  # security groups
+            ## EKS creates it's own SG's with rules
+        ../../scripts/110*.sh $tcmd  # security groups - we don't want rules
             
             # don't keep eni's - created by nat gw and node group instances
             # still need to call as eip is nested from eni's

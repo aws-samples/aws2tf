@@ -130,9 +130,9 @@ if [ "$kcount" -gt "0" ]; then
                                         fi
                                     fi
                                     if [[ ${tt1} == "release_version" ]];then 
-                                        if [ "$iscust" == "1" ]; then
+                                        #if [ "$iscust" == "1" ]; then
                                             skip=1;
-                                        fi
+                                        #fi
                                     fi
 
                                     if [[ ${tt1} == "resources" ]];then 

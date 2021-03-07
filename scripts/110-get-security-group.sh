@@ -25,6 +25,10 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
+            sgname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].GroupName")
+            if [[ $sgname == "default" ]];then
+                continue
+            fi
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             echo "$ttft $cname import"
             fn=`printf "%s__%s.tf" $ttft $rname`
@@ -40,7 +44,11 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
+            sgname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].GroupName")
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            if [[ $sgname == "default" ]];then
+                continue
+            fi
             echo "$ttft $cname tf files"
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ]; then continue; fi

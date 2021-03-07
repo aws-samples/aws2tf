@@ -228,6 +228,16 @@ if [ "$kcount" -gt "0" ]; then
 
     ../../scripts/get-eks-cluster-nodegroups.sh $cln
     
+#### Fix up cluster security groups
+
+        #clsg=$(aws eks describe-cluster --name $cln --query cluster.resourcesVpcConfig.clusterSecurityGroupId | jq -r .)
+      
+        #echo "Cluster sg = $clsg"
+
+        #for z in `ls aws_security_group*$clsg*.tf`; do
+        #    mv $z $z.notused
+        #done
+
     done  # k  
 fi
 

@@ -102,10 +102,6 @@ for c in `seq 0 0`; do
                         done 
                     fi
 
-
-
-
-
                 # else
                     #
                 fi
@@ -119,6 +115,8 @@ for c in `seq 0 0`; do
             if [[ "$vpcid" != "" ]]; then
                 ../../scripts/100-get-vpc.sh $vpcid
             fi
+            ../../scripts/get-sg-rules.sh $cname ingress
+            ../../scripts/get-sg-rules.sh $cname egress
 
 
             dfn=`printf "data/data_%s__%s.tf" $ttft $rname`

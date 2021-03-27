@@ -85,14 +85,14 @@ To add App Mesh resources
 To get a selection of resources use the -t option 
 The currently supported types are:
 
-* tgw - Transit Gateway resources -t tgw -i `transit gateway id`
-* vpc - A VPC and it's related resources -t vpc -i `VPC id`
-* eks - An EKS cluster and it's related resources -t eks -i `Cluster Name`
-* ecs - An ECS cluster and it's related resources -t ecs -i `Cluster Name`
-* iam - All IAM related users, groups, policies & roles -t iam
-* kms - KMS keys and aliases -t kms
-* code - Code* resources -t code
-* appmesh - App Mesh resources -t appmesh
+* tgw - Transit Gateway resources `-t tgw -i transit-gateway-id`
+* vpc - A VPC and it's related resources `-t vpc -i VPC-id`
+* eks - An EKS cluster and it's related resources `-t eks -i Cluster-Name`
+* ecs - An ECS cluster and it's related resources `-t ecs -i Cluster-Name`
+* iam - All IAM related users, groups, policies & roles `-t iam`
+* kms - KMS keys and aliases `-t kms`
+* code - Code* resources `-t code`
+* appmesh - App Mesh resources `-t appmesh`
 
 
 To get all the VPC related resources in a particular VPC
@@ -106,8 +106,7 @@ To use a specific region and profile
 
 
 
-
-Using the cumulative mode
+#### Using the cumulative mode
 
 If for example you want to get several VPCs you can use the cumulative mode:
 

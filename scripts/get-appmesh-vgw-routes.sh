@@ -1,14 +1,14 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS appmesh list-virtual-routers --mesh-name $1" 
+    cmd[0]="$AWS appmesh list-gateway-routes --mesh-name $1 --virtual-gateway-name $2" 
 else
     echo "Mesh name must be set"
     exit
 fi
 
-pref[0]="virtualRouters"
-tft[0]="aws_appmesh_virtual_router"
-idfilt[0]="virtualRouterName"
+pref[0]="gatewayRoutes"
+tft[0]="aws_appmesh_gateway_route"
+idfilt[0]="gatewayRouteName"
 
 #rm -f ${tft[0]}.tf
 
@@ -30,20 +30,20 @@ for c in `seq 0 0`; do
             rname=${rname//\//_}
             echo $rname
 
-            fn=`printf "%s__%s__%s.tf" $ttft $1 $rname`
+            fn=`printf "%s__%s__%s__%s.tf" $ttft $1 $2 $rname`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
                 continue
             fi
-            printf "resource \"%s\" \"%s__%s\" {" $ttft $1 $rname > $ttft.$1__$rname.tf
-            printf "}" >> $ttft.$1__$rname.tf
-            printf "terraform import %s.%s__%s %s/%s" $ttft $1 $rname $1 $cname > import_$ttft_$1_$cname.sh
-            terraform import $ttft.$1__$rname $1/$cname | grep Import
-            terraform state show $ttft.$1__$rname > t2.txt
-            tfa=`printf "%s.%s__%s" $ttft $1 $rname`
+            printf "resource \"%s\" \"%s__%s__%s\" {" $ttft $1 $2 $rname > $ttft.$1__$2__$rname.tf
+            printf "}" >> $ttft.$1__$2__$rname.tf
+            printf "terraform import %s.%s__%s__%s %s/%s/%s" $ttft $1 $2 $rname $1 $2 $cname > import_$ttft_$1_$2_$cname.sh
+            terraform import $ttft.$1__$2__$rname $1/$2/$cname | grep Import
+            terraform state show $ttft.$1__$2__$rname > t2.txt
+            tfa=`printf "%s.%s__%s__%s" $ttft $1 $2 $rname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
             #echo $awsj | jq . 
-            rm $ttft.$1__$rname.tf
+            rm $ttft.$1__$2__$rname.tf
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             #	for k in `cat t1.txt`; do
             #		echo $k
@@ -78,7 +78,7 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-            ../../scripts/365-get-appmesh-r.sh $1 $cname
+
             
         done
 

@@ -1,13 +1,14 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS appmesh list-meshes --filters \"Name=vpc-id,Values=$1\"" 
+    cmd[0]="$AWS appmesh list-virtual-routers --mesh-name $1" 
 else
-    cmd[0]="$AWS appmesh list-meshes"
+    echo "Mesh name must be set"
+    exit
 fi
 
-pref[0]="meshes"
-tft[0]="aws_appmesh_mesh"
-idfilt[0]="meshName"
+pref[0]="virtualRouters"
+tft[0]="aws_appmesh_virtual_router"
+idfilt[0]="virtualRouterName"
 
 #rm -f ${tft[0]}.tf
 
@@ -24,20 +25,25 @@ for c in `seq 0 0`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
             echo "$ttft $cname"
-            fn=`printf "%s__%s.tf" $ttft $cname`
+            rname=${cname//:/_}
+            rname=${rname//./_}
+            rname=${rname//\//_}
+            echo $rname
+
+            fn=`printf "%s__%s__%s.tf" $ttft $1 $rname`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
                 continue
             fi
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" $cname >> $ttft.$cname.tf
-            printf "terraform import %s.%s %s" $ttft $cname $cname > data/import_$ttft_$cname.sh
-            terraform import $ttft.$cname "$cname" | grep Import
-            terraform state show $ttft.$cname > t2.txt
-            tfa=`printf "data/%s.%s" $ttft $cname`
+            printf "resource \"%s\" \"%s__%s\" {" $ttft $1 $rname > $ttft.$1__$rname.tf
+            printf "}" >> $ttft.$1__$rname.tf
+            printf "terraform import %s.%s__%s %s/%s" $ttft $1 $rname $1 $cname > import_$ttft_$1_$cname.sh
+            terraform import $ttft.$1__$rname $1/$cname | grep Import
+            terraform state show $ttft.$1__$rname > t2.txt
+            tfa=`printf "%s.%s__%s" $ttft $1 $rname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
             #echo $awsj | jq . 
-            rm $ttft.$cname.tf
+            rm $ttft.$1__$rname.tf
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             #	for k in `cat t1.txt`; do
             #		echo $k
@@ -57,7 +63,6 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "resource_owner" ]];then skip=1;fi
-                    if [[ ${tt1} == "mesh_owner" ]];then skip=1;fi
                     if [[ ${tt1} == "created_date" ]];then skip=1;fi
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
                     if [[ ${tt1} == "last_updated_date" ]];then skip=1;fi
@@ -73,12 +78,8 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-
-            # app mesh vs
-            ../../scripts/get-appmesh-vs.sh $cname
-            ../../scripts/get-appmesh-vr.sh $cname
-            ../../scripts/get-appmesh-no.sh $cname
-            ../../scripts/get-appmesh-vgw.sh $cname
+            ../../scripts/get-appmesh-r.sh $1 $cname
+            
         done
 
     fi

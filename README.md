@@ -249,8 +249,8 @@ The following terraform resource types are supported by this tool at this time:
 
 ## Planned Additions
 
-+ PaaS databases and other missing providers (feel free to contribute !)
-+ Other terraform providers as terraform supports
++ Managed databases and other missing providers (feel free to contribute !).
++ Other terraform providers as terraform supports.
 
 ----
 

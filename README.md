@@ -84,6 +84,7 @@ The currently supported types are:
 * iam - All IAM related users, groups, policies & roles
 * kms - KMS keys and aliases
 * code - Code* resources
+* appmesh - App Mesh resources
 
 
 To get all the VPC related resources in a particular VPC
@@ -131,6 +132,8 @@ The following terraform resource types are supported by this tool at this time:
 * aws_appmesh_virtual_service
 * aws_appmesh_virtual_node
 * aws_appmesh_virtual_route
+* aws_appmesh_virtual_gateway
+* aws_appmesh_gateway_route
 
 ### Athena
 * aws_athena_named_query

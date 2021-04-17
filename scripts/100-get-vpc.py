@@ -6,6 +6,11 @@ import json
 import argparse
 import sys
 
+pref="Vpcs"
+ttft="aws_vpc"
+idfilt="VpcId"
+
+
 if sys.version_info<(3,6,0):
   sys.stderr.write("You need python 3.6 or later to run this script\n")
   exit(1)
@@ -17,81 +22,87 @@ nargs=len(sys.argv)
 if nargs==1:
     cmd="$AWS ec2 describe-vpcs"
 elif nargs==2:
-    vpcid=str(sys.argv[1])
-    cmd="$AWS ec2 describe-vpcs --vpc-ids"
-    print(vpcid)
+    id=str(sys.argv[1])
+    cmd="$AWS ec2 describe-vpcs --vpc-ids "+ id
 else:
     print("error: too many args")
     exit()
 print(cmd)
-exit()
-print("ok")
+
+
 
 #out = subprocess.run('aws configure get region', shell=True, capture_output=True)
 #region=out.stdout.decode().rstrip()
 #print(region)
-cmd="$AWS ec2 describe-vpcs"
-print(cmd)
+
 out = subprocess.run(cmd, shell=True, capture_output=True)
-#print(out.stdout.decode().rstrip())
+ol=len(out.stdout.decode().rstrip())
+if ol==0:
+    print("No return from command exit ...")
+    exit()
+print("ol="+str(ol))
+print(out.stdout.decode().rstrip())
+
+
 js=json.loads(out.stdout.decode().rstrip())
 print(json.dumps(js, indent=4, separators=(',', ': ')))
+awsout=js[pref]
 
+print(json.dumps(awsout, indent=4, separators=(',', ': ')))
+count=len(awsout)
+print(count)
+if count > 0:
+    for i in range(0,count):
+        cname=awsout[i][idfilt]
+        print(cname)
+        rname=cname.replace(":","_")
+        rname=rname.replace(".","_")
+        rname=rname.replace("\\","_")
+        #print(rname)
+        fn=ttft+"__"+rname+".tf"
+        #print(fn)
+        if os.path.isfile(fn):
+            print(fn+" exists continuing..")
+            continue
+        print(ttft+" "+cname+" import")
 
+        
+        cmd ='terraform import '+ttft+'.'+rname+' "' + cname+ '" > /dev/null'
+        print(cmd)
+        out = subprocess.run(cmd, shell=True, capture_output=True)
+        ol=len(out.stdout.decode().rstrip())
+        if ol==0:
+            print("No return from command exit ...")
+            exit()
+        print("ol="+str(ol))
+        print(out.stdout.decode().rstrip())
+
+        cmd ='terraform state show '+ttft+'.'+rname+' > '+ttft+'-'+rname+'-2.txt'
+        print(cmd)
+        out = subprocess.run(cmd, shell=True, capture_output=True)
+        ol=len(out.stdout.decode().rstrip())
+        if ol==0:
+            print("No return from command exit ...")
+            exit()
+        print("ol="+str(ol))
+        print(out.stdout.decode().rstrip())
+
+        cmd ="cat "+ttft+"-"+rname+"-2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > "+ttft+"-"+rname+"-1.txt"
+        print(cmd)
+        out = subprocess.run(cmd, shell=True, capture_output=True)
+        ol=len(out.stdout.decode().rstrip())
+        if ol==0:
+            print("No return from command exit ...")
+            exit()
+        print("ol="+str(ol))
+        print(out.stdout.decode().rstrip())
+
+        file=ttft+'-'+rname+'-1.txt'
+        print(file)
+        
+
+exit()
 """
-#!/bin/bash
-if [ "$1" != "" ]; then
-    cmd[0]="$AWS ec2 describe-vpcs --vpc-ids $1"
-else
-    cmd[0]="$AWS ec2 describe-vpcs"
-fi
-pref[0]="Vpcs"
-tft[0]="aws_vpc"
-idfilt[0]="VpcId"
-
-for c in `seq 0 0`; do
-    
-    cm=${cmd[$c]}
-	ttft=${tft[(${c})]}
-	#echo $cm
-    awsout=`eval $cm`
-    count=`echo $awsout | jq ".${pref[(${c})]} | length"`
-    #echo $count
-    if [ "$count" -gt "0" ]; then
-        count=`expr $count - 1`
-        for i in `seq 0 $count`; do
-            #echo $i
-            cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
-            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-            
-            fn=`printf "%s__%s.tf" $ttft $rname`
-            if [ -f "$fn" ] ; then continue; fi
-            #echo "calling import sub"
-            #terraform state rm $ttft.$rname > /dev/null
-            echo "$ttft $cname import"
-            . ../../scripts/parallel_import.sh $ttft $cname &
-        done
-
-         
-        jc=`jobs -r | wc -l | tr -d ' '`
-        if [ $jc -gt 0 ];then
-            echo "Waiting for $jc Terraform imports"
-            wait
-            echo "Finished importing"
-        fi
-        
-        
-        
-        # tf files
-        for i in `seq 0 $count`; do
-            #echo $i
-            cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
-            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-            #echo "$ttft $cname tf files"
-            fn=`printf "%s__%s.tf" $ttft $rname`
-            if [ -f "$fn" ] ; then continue; fi
-
-            file=`printf "%s-%s-1.txt" $ttft $rname`
             
             echo $aws2tfmess > $fn
             while IFS= read line

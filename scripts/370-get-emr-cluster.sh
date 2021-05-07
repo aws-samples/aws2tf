@@ -43,17 +43,23 @@ for c in `seq 0 0`; do
             #		echo $k
             #	done
             file="t1.txt"
+            iddo=0
             echo $aws2tfmess > $fn
             while IFS= read line
             do
 				skip=0
                 # display $line or do something with $line
                 t1=`echo "$line"` 
+
                 if [[ ${t1} == *"="* ]];then
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
-                    if [[ ${tt1} == "id" ]];then skip=1; fi          
+  
+
+                    if [[ ${tt1} == "id" ]];then skip=1; fi
+
+
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "resource_owner" ]];then skip=1;fi
@@ -61,6 +67,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "master_public_dns" ]];then skip=1;fi
                     if [[ ${tt1} == "realm" ]];then 
                     echo "kdc_admin_password = \"CHANGE-ME\"" >> $fn
+
                     fi
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
                     if [[ ${tt1} == "last_updated_date" ]];then skip=1;fi
@@ -73,6 +80,11 @@ for c in `seq 0 0`; do
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
                     echo $t1 >> $fn
+                    if [[ ${t1} == "resource"* ]];then
+                        echo "lifecycle {" >> $fn
+                        echo "ignore_changes = [kerberos_attributes[0].kdc_admin_password]" >> $fn
+                        echo "}" >> $fn
+                    fi
                 fi
                 
             done <"$file"

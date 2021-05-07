@@ -45,6 +45,7 @@ for c in `seq 0 0`; do
             #	done
             file="t1.txt"
             echo $aws2tfmess > $fn
+            iddo=0
             while IFS= read line
             do
 				skip=0
@@ -54,15 +55,14 @@ for c in `seq 0 0`; do
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
-                    if [[ ${tt1} == "id" ]];then skip=1; fi          
+  
+                    if [[ ${tt1} == "id" ]];then skip=1; fi        
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "resource_owner" ]];then skip=1;fi
                     if [[ ${tt1} == "running_instance_count" ]];then skip=1;fi
                     if [[ ${tt1} == "status" ]];then skip=1;fi
-                    if [[ ${tt1} == "realm" ]];then 
-                    echo "kdc_admin_password = \"CHANGE-ME\"" >> $fn
-                    fi
+
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
                     if [[ ${tt1} == "last_updated_date" ]];then skip=1;fi
                     if [[ ${tt1} == "vpc_id" ]]; then

@@ -25,8 +25,9 @@ for c in `seq 0 0`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-        
+            sstring=`$AWS --profile CTDev1 --region eu-central-1 secretsmanager get-secret-value --secret-id $1 --version-id $cname --query SecretString`
             echo "$ttft $sname $rname"
+            echo $sstring
             rname=`printf "v-%s" $rname`
             fn=`printf "%s__%s__%s.tf" $ttft $sname $rname`
             if [ -f "$fn" ] ; then
@@ -72,15 +73,20 @@ for c in `seq 0 0`; do
   
 
                     if [[ ${tt1} == "id" ]];then skip=1; fi
-                    if [[ ${tt1} == "name" ]];then 
-                    echo "recovery_window_in_days = 30" >> $fn
-                    fi
+                    #if [[ ${tt1} == "name" ]];then 
+                    #echo "recovery_window_in_days = 30" >> $fn
+                    #fi
 
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "resource_owner" ]];then skip=1;fi
                     if [[ ${tt1} == "creation_date" ]];then skip=1;fi
                     if [[ ${tt1} == "rotation_enabled" ]];then skip=1;fi
+                    if [[ ${tt1} == "secret_string" ]];then 
+                    skip=0;
+                    t1=`printf "%s = %s" $tt1 $sstring`
+                    fi
+
 
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
                     if [[ ${tt1} == "version_id" ]];then skip=1;fi
@@ -93,7 +99,12 @@ for c in `seq 0 0`; do
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
                     echo $t1 >> $fn
-
+                    if [[ ${t1} == "resource"* ]];then
+                        echo "lifec"
+                        echo "lifecycle {" >> $fn
+                        echo "ignore_changes = [secret_string]" >> $fn
+                        echo "}" >> $fn
+                    fi
                 fi
                 
             done <"$file"

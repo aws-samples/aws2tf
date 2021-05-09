@@ -11,7 +11,7 @@ idfilt[0]="ARN"
 
 #rm -f ${tft[0]}.tf
 
-for c in `seq 0 0`; do
+for c in `seq 0 $count`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}

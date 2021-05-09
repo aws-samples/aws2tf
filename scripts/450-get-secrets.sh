@@ -1,14 +1,13 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS emr list-instances --cluster-id $1" 
+    cmd[0]="$AWS secretsmanager list-secrets" 
 else
-    echo "Must cpecify a cluster id"
-    exit
+    cmd[0]="$AWS secretsmanager list-secrets"
 fi
 
-pref[0]="Instances"
-tft[0]="aws_emr_instance_group"
-idfilt[0]="InstanceGroupId"
+pref[0]="SecretList"
+tft[0]="aws_secretsmanager_secret"
+idfilt[0]="ARN"
 
 #rm -f ${tft[0]}.tf
 
@@ -21,48 +20,55 @@ for c in `seq 0 0`; do
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
-        for i in `seq 0 $count`; do
+        for i in `seq 0 0`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
-            echo "$ttft $cname"
-            fn=`printf "%s__%s__%s.tf" $ttft $1 $cname`
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            echo "$ttft $cname import"
+            fn=`printf "%s__%s.tf" $ttft $rname`
+
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
                 continue
             fi
-            printf "resource \"%s\" \"%s__%s\" {" $ttft $1 $cname > $ttft.$1__$cname.tf
-            printf "}" $cname >> $ttft.$1__$cname.tf
-            printf "terraform import %s.%s__%s %s__%s" $ttft $1 $cname $1 $cname > data/import_$ttft_$1_$cname.sh
-            terraform import $ttft.$1__$cname "$1/$cname" | grep Import
-            
-            terraform state show $ttft.$1__$cname > t2.txt
-            tfa=`printf "data/%s.%s__%s" $ttft $1 $cname`
+            printf "resource \"%s\" \"%s\" {" $ttft $rname > $ttft.$rname.tf
+            printf "}"  >> $ttft.$rname.tf
+            printf "terraform import %s.%s %s" $ttft $rname "$cname" > data/import_$ttft_$rname.sh
+            terraform import $ttft.$rname "$cname" | grep Import
+            terraform state show $ttft.$rname > t2.txt
+            tfa=`printf "data/%s.%s" $ttft $rname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
             #echo $awsj | jq . 
-            rm $ttft.$1__$cname.tf
+            rm $ttft.$rname.tf
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             #	for k in `cat t1.txt`; do
             #		echo $k
             #	done
             file="t1.txt"
-            echo $aws2tfmess > $fn
             iddo=0
+            echo $aws2tfmess > $fn
             while IFS= read line
             do
 				skip=0
                 # display $line or do something with $line
                 t1=`echo "$line"` 
+
                 if [[ ${t1} == *"="* ]];then
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
   
-                    if [[ ${tt1} == "id" ]];then skip=1; fi        
+
+                    if [[ ${tt1} == "id" ]];then skip=1; fi
+                    if [[ ${tt1} == "name" ]];then 
+                    echo "recovery_window_in_days = 30" >> $fn
+                    fi
+
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "resource_owner" ]];then skip=1;fi
-                    if [[ ${tt1} == "running_instance_count" ]];then skip=1;fi
-                    if [[ ${tt1} == "status" ]];then skip=1;fi
+                    if [[ ${tt1} == "creation_date" ]];then skip=1;fi
+                    if [[ ${tt1} == "rotation_enabled" ]];then skip=1;fi
 
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
                     if [[ ${tt1} == "last_updated_date" ]];then skip=1;fi
@@ -75,10 +81,13 @@ for c in `seq 0 0`; do
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
                     echo $t1 >> $fn
+
                 fi
                 
             done <"$file"
-           
+
+            #../../scripts/get-secret-version.sh $cname
+
         done
 
     fi

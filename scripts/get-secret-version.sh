@@ -12,7 +12,7 @@ idfilt[0]="VersionId"
 sname=${1//:/_} && sname=${sname//./_} && sname=${sname//\//_}
 #rm -f ${tft[0]}.tf
 echo "get secret version ........"
-for c in `seq 0 0`; do
+for c in `seq 0 $count`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
@@ -100,7 +100,7 @@ for c in `seq 0 0`; do
                     #echo $skip $t1
                     echo $t1 >> $fn
                     if [[ ${t1} == "resource"* ]];then
-                        echo "lifec"
+                      
                         echo "lifecycle {" >> $fn
                         echo "ignore_changes = [secret_string]" >> $fn
                         echo "}" >> $fn

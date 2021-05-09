@@ -12,7 +12,7 @@ idfilt[0]="VersionId"
 sname=${1//:/_} && sname=${sname//./_} && sname=${sname//\//_}
 #rm -f ${tft[0]}.tf
 echo "get secret version ........"
-for c in `seq 0 $count`; do
+for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
@@ -21,13 +21,13 @@ for c in `seq 0 $count`; do
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
-        for i in `seq 0 0`; do
+        for i in `seq 0 $count`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             sstring=`$AWS --profile CTDev1 --region eu-central-1 secretsmanager get-secret-value --secret-id $1 --version-id $cname --query SecretString`
             echo "$ttft $sname $rname"
-            echo $sstring
+            
             rname=`printf "v-%s" $rname`
             fn=`printf "%s__%s__%s.tf" $ttft $sname $rname`
             if [ -f "$fn" ] ; then

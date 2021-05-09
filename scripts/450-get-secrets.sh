@@ -11,7 +11,7 @@ idfilt[0]="ARN"
 
 #rm -f ${tft[0]}.tf
 
-for c in `seq 0 $count`; do
+for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
@@ -20,7 +20,7 @@ for c in `seq 0 $count`; do
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
-        for i in `seq 0 0`; do
+        for i in `seq 0 $count`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
@@ -86,7 +86,7 @@ for c in `seq 0 $count`; do
                 
             done <"$file"
 
-            #../../scripts/get-secret-version.sh $cname
+            ../../scripts/get-secret-version.sh $cname
 
         done
 

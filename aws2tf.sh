@@ -92,7 +92,12 @@ rm -f import.log
 
 if [ ! -z ${AWS_DEFAULT_REGION+x} ];then
     r=`echo $AWS_DEFAULT_REGION`
-    echo "region set from env variables"
+    echo "region $AWS_DEFAULT_REGION set from env variables"
+fi
+
+if [ ! -z ${AWS_PROFILE+x} ];then
+    p=`echo $AWS_PROFILE`
+    echo "profile $AWS_PROFILE set from env variables"
 fi
 
 export AWS="aws --profile $p --region $r --output json "
@@ -179,7 +184,7 @@ if [ "$i" == "no" ]; then
 fi
 fi
 
-
+if [ "$t" == "org" ]; then pre="01*"; fi
 if [ "$t" == "code" ]; then pre="62*"; fi
 if [ "$t" == "appmesh" ]; then pre="360*"; fi
 if [ "$t" == "kms" ]; then pre="08*"; fi

@@ -13,11 +13,11 @@ And finally runs a
 
 "terraform plan ."  command
 
-There should hopefully be no subsequent additions or deletions reported by the terraform plan command as all the approriate terraform configuration files will have have automatically been created.
+There should hopefully be no subsequent additions or deletions reported by the terraform plan command as all the appropriate terraform configuration files will have have automatically been created.
 
 ## Requirements & Prerequisites
 + The tool is written for the bash shell script & Python3 and has been tested on macOS 10.15.7.
-+ AWS cli (v2) **version 2.1.15 or higher** needs to be installed and you need a login with at least "Read" priviledges.
++ AWS cli (v2) **version 2.1.15 or higher** needs to be installed and you need a login with at least "Read" privileges.
 + terraform **version v0.15.3** or higher needs to be installed.
 + jq **version 1.6 or higher**
 
@@ -59,7 +59,7 @@ Once the validation is ok you can use the tool in anger to not only generate the
 
 <br>
 
-To generate the terraform files for an entire AWS account, import the resourcs and perform a terraform plan:
+To generate the terraform files for an entire AWS account, import the resources and perform a terraform plan:
 ```
 ./aws2tf.sh 
 ```
@@ -93,7 +93,8 @@ The currently supported types are:
 * kms - KMS keys and aliases `-t kms`
 * code - Code* resources `-t code`
 * appmesh - App Mesh resources `-t appmesh`
-
+* org - AWS Organizations `-t org`
+  
 
 To get all the VPC related resources in a particular VPC
 ```

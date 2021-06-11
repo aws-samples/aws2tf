@@ -148,6 +148,12 @@ The following terraform resource types are supported by this tool at this time:
 ### Autoscaling
 * aws_autoscaling_group
 
+### Cloud9
+* aws_cloud9_environment_ec2
+
+### CloudFront
+* aws_cloudfront_distribution
+
 ### CloudTrail
 * aws_cloudtrail
 
@@ -166,8 +172,14 @@ The following terraform resource types are supported by this tool at this time:
 * aws_config_configuration_recorder_status
 * aws_config_rule
 
+### Database Migration Service (DMS)
+* aws_dms_replication_instance
+* aws_dms_endpoint
+* aws_dms_replication_task
+
 ### Directory Services
 * aws_directory_service_directory
+
 
 ### EC2
 * aws_ec2_client_vpn_endpoint
@@ -178,6 +190,9 @@ The following terraform resource types are supported by this tool at this time:
 * aws_eip
 * aws_instance
 * aws_launch_template
+
+### ECR
+* aws_ecr_repository
 
 ### ECS
 * aws_ecs_capacity_provider (tbd)
@@ -203,6 +218,7 @@ The following terraform resource types are supported by this tool at this time:
 
 ### Glue
 * aws_glue_job
+* aws_glue_crawler
 
 ### IAM
 * aws_iam_instance_profile
@@ -217,6 +233,7 @@ The following terraform resource types are supported by this tool at this time:
 
 ### Lambda
 * aws_lambda_function
+* aws_lambda_alias
 
 ### Organizations
 
@@ -239,13 +256,16 @@ The following terraform resource types are supported by this tool at this time:
 * aws_s3_bucket_policy
 
 ### Secrets Manager
-
 * aws_secretsmanager_secret
 * aws_secretsmanager_secret_version
 
 ### Service Discovery
-
+* aws_service_discovery_service
 * aws_service_discovery_private_dns_namespace
+
+### SSM
+* aws_ssm_document
+* aws_ssm_association
 
 ### VPC
 * aws_customer_gateway
@@ -257,9 +277,11 @@ The following terraform resource types are supported by this tool at this time:
 * aws_route_table_association
 * aws_subnet
 * aws_security_group
+* aws_security_group_rule
 * aws_vpc
 * aws_vpc_ipv4_cidr_block_association
 * aws_vpc_endpoint
+* aws_vpc_endpoint_service
 * aws_vpc_dhcp_options
 * aws_vpc_peering_connection
 * aws_vpn_connection

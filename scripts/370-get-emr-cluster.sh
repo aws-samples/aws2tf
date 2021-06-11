@@ -79,7 +79,7 @@ for c in `seq 0 0`; do
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
-                    echo $t1 >> $fn
+                    echo "$t1" >> $fn
                     if [[ ${t1} == "resource"* ]];then
                         echo "lifecycle {" >> $fn
                         echo "ignore_changes = [kerberos_attributes[0].kdc_admin_password]" >> $fn

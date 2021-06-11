@@ -100,7 +100,7 @@ if [ "$count" -gt "0" ]; then
 
 				#echo $skip $t1 $ttft
 
-				echo $t1 >> $fn
+				echo "$t1" >> $fn
 			fi
         done <"$file"      
         

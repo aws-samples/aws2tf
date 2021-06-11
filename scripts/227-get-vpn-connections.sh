@@ -68,7 +68,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "customer_gateway_configuration" ]];then skip=1;fi
                     #echo $tt1
                     if [[ ${tt1} == "type" ]];then
-                        echo $t1 >> $fn
+                        echo "$t1" >> $fn
                         echo "}" >> $fn
                         break
                     fi
@@ -95,7 +95,7 @@ for c in `seq 0 0`; do
                         #echo $t1
                     fi
                     #echo $skip $t1
-                    echo $t1 >> $fn
+                    echo "$t1" >> $fn
                 fi
                 
             done <"$file"

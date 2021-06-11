@@ -84,7 +84,7 @@ do
                                             if [[ ${tt2} == *"sg-"* ]];then 
                                                 tt2=`echo "$tt2" | tr -d ','`                
                                                 t1=$(printf "source_security_group_id = aws_security_group.%s.id" $tt2)
-                                                echo $t1 >> $fn
+                                                echo "$t1" >> $fn
                                                 skip=1
                                             fi
                                             read line
@@ -96,7 +96,7 @@ do
                                     fi
                                     if [[ ${tt2} == *"sg-"* ]];then
                                             t1=$(printf "source_security_group_id = aws_security_group.%s.id" $tt2)
-                                            echo $t1 >> $fn
+                                            echo "$t1" >> $fn
                                             skip=1
                                     fi
                                 fi
@@ -116,7 +116,7 @@ do
                                     
                                     echo "$lbc $rbc $tt1 $tt2"
                                     if [[ "$tt2" != *"[]"* ]]; then
-                                        echo $t1 >> $fn
+                                        echo "$t1" >> $fn
                                     fi
                                 fi
                                 
@@ -127,7 +127,7 @@ do
                                 
                             done 
                             
-                            #echo $t1 >> $fn
+                            #echo "$t1" >> $fn
                             
                         fi
 

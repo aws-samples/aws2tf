@@ -81,7 +81,7 @@ echo "# from aws_security_group_rule" > $fn
                                             if [[ ${tt2} == *"sg-"* ]];then 
                                                 tt2=`echo "$tt2" | tr -d ','`                
                                                 t1=$(printf "source_security_group_id = aws_security_group.%s.id" $tt2)
-                                                echo $t1 >> $fn
+                                                echo "$t1" >> $fn
                                                 skip=1
                                             fi
                                             read line
@@ -93,7 +93,7 @@ echo "# from aws_security_group_rule" > $fn
                                     fi
                                     if [[ ${tt2} == *"sg-"* ]];then
                                             t1=$(printf "source_security_group_id = aws_security_group.%s.id" $tt2)
-                                            echo $t1 >> $fn
+                                            echo "$t1" >> $fn
                                             skip=1
                                     fi
                                 fi
@@ -109,7 +109,7 @@ echo "# from aws_security_group_rule" > $fn
                                     #    t1=`printf "aws_security_group.%s.id," $t1`
                                     #    t1=`echo $t1 | tr -d '"|,'`
                                     #fi 
-                                    echo $t1 >> $fn
+                                    echo "$t1" >> $fn
                                 fi
                                 
                                 read line
@@ -118,7 +118,7 @@ echo "# from aws_security_group_rule" > $fn
                                 
                             done 
                             
-                            #echo $t1 >> $fn
+                            #echo "$t1" >> $fn
                             
                         fi
 
@@ -133,7 +133,7 @@ echo "# from aws_security_group_rule" > $fn
 
                     #if [ "$skip" == "0" ]; then
                         #echo $skip $t1
-                        #echo $t1 >> $fn
+                        #echo "$t1" >> $fn
                     #fi
                     
                 done <"$file"

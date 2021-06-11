@@ -126,7 +126,7 @@ printf "terraform { \n" > aws.tf
 printf "  required_providers {\n" >> aws.tf
 printf "   aws = {\n" >> aws.tf
 printf "     source  = \"hashicorp/aws\"\n" >> aws.tf
-printf "      version = \"= 3.29\"\n" >> aws.tf
+printf "      version = \"= 3.45.0\"\n" >> aws.tf
 printf "    }\n" >> aws.tf
 printf "  }\n" >> aws.tf
 printf "}\n" >> aws.tf

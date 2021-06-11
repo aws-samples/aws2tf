@@ -37,7 +37,7 @@ for i in `terraform state list | grep aws_s3_bucket_policy`; do
                             
         if [ "$skip" == "0" ];then
         #echo $skip $t1 $ttft
-        echo $t1 >> $fn
+        echo "$t1" >> $fn
         fi
                                    
     done <"$file" 

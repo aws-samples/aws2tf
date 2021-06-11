@@ -140,7 +140,7 @@ do
                                                 tt2=`echo "$tt2" | tr -d ','`  
                                                 sgimp=$(echo $tt2)              
                                                 t1=$(printf "source_security_group_id = aws_security_group.%s.id" $tt2)
-                                                echo $t1 >> $fn
+                                                echo "$t1" >> $fn
                                                 noself=1
                                                 skip=1
                                             fi
@@ -154,7 +154,7 @@ do
                                     if [[ ${tt2} == *"sg-"* ]];then
                                             
                                             t1=$(printf "source_security_group_id = aws_security_group.%s.id" $tt2)
-                                            echo $t1 >> $fn
+                                            echo "$t1" >> $fn
                                             noself=1
                                             skip=1
                                     fi
@@ -176,7 +176,7 @@ do
                                     #echo "$lbc $rbc $tt1 $tt2"
                                     #echo "$t1"
                                     if [[ "$tt2" != *"[]"* ]]; then
-                                        echo $t1 >> $fn
+                                        echo "$t1" >> $fn
                                     fi
                                 fi
                                 
@@ -188,7 +188,7 @@ do
                             done 
 
 
-                            #echo $t1 >> $fn
+                            #echo "$t1" >> $fn
                             
                         fi
 

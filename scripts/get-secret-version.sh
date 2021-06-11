@@ -98,7 +98,7 @@ for c in `seq 0 0`; do
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
-                    echo $t1 >> $fn
+                    echo "$t1" >> $fn
                     if [[ ${t1} == "resource"* ]];then
                       
                         echo "lifecycle {" >> $fn

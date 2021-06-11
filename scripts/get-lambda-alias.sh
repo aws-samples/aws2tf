@@ -20,7 +20,7 @@ for c in `seq 0 0`; do
     awsout=`eval $cm`
 
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
-    echo $count
+    #echo $count
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
@@ -83,7 +83,7 @@ for c in `seq 0 0`; do
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
-                    echo $t1 >> $fn
+                    echo "$t1" >> $fn
                 fi
                 
             done <"$file"

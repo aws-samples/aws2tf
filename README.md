@@ -241,6 +241,7 @@ The following terraform resource types are supported by this tool at this time:
 * aws_organizations_account
 * aws_organizations_organization
 * aws_organizations_organizational_unit
+* aws_organizations_policy
 
 ### Resource Groups
 * aws_resource_group

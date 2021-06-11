@@ -128,7 +128,7 @@ exit()
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
-                    echo $t1 >> $fn
+                    echo "$t1" >> $fn
                 fi
                 
             done <"$file"

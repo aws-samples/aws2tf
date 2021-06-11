@@ -238,7 +238,13 @@ The following terraform resource types are supported by this tool at this time:
 * aws_s3_bucket
 * aws_s3_bucket_policy
 
+### Secrets Manager
+
+* aws_secretsmanager_secret
+* aws_secretsmanager_secret_version
+
 ### Service Discovery
+
 * aws_service_discovery_private_dns_namespace
 
 ### VPC

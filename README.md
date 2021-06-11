@@ -18,7 +18,7 @@ There should hopefully be no subsequent additions or deletions reported by the t
 ## Requirements & Prerequisites
 + The tool is written for the bash shell script & Python3 and has been tested on macOS 10.15.7.
 + AWS cli (v2) **version 2.1.15 or higher** needs to be installed and you need a login with at least "Read" priviledges.
-+ terraform **version v0.14.3** or higher needs to be installed.
++ terraform **version v0.15.3** or higher needs to be installed.
 + jq **version 1.6 or higher**
 
 
@@ -195,6 +195,12 @@ The following terraform resource types are supported by this tool at this time:
 * aws_lb_listener
 * aws_lb_target_group
 
+### EMR
+
+* aws_emr_cluster
+* aws_emr_instance_group
+* aws_emr_security_configuration
+
 ### Glue
 * aws_glue_job
 
@@ -211,6 +217,12 @@ The following terraform resource types are supported by this tool at this time:
 
 ### Lambda
 * aws_lambda_function
+
+### Organizations
+
+* aws_organizations_account
+* aws_organizations_organization
+* aws_organizations_organizational_unit
 
 ### Resource Groups
 * aws_resource_group
@@ -249,7 +261,6 @@ The following terraform resource types are supported by this tool at this time:
 
 ## Planned Additions
 
-+ Managed databases and other missing providers (feel free to contribute !).
 + Other terraform providers as terraform supports.
 
 ----

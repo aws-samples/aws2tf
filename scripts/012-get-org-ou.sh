@@ -40,7 +40,6 @@ for root in ${roots[@]}; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-            rname=$(printf "a-%s" $rname)
 
             echo "$ttft $cname import"
             fn=`printf "%s__%s.tf" $ttft $rname`

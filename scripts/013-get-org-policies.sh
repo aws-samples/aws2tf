@@ -106,6 +106,8 @@ for root in ${roots[@]}; do
                 
             done <"$file"
 
+            ../../scripts/get-org-policy_attachment.sh $cname
+
         done
 
     fi

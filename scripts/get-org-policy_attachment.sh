@@ -34,25 +34,27 @@ c=0
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-            #rname=$(printf "a-%s" $rname)
-
+            rname=$(printf "att-%s" $rname)
 
             echo "$ttft $cname:$1 import"
-            fn=`printf "%s__%s.tf" $ttft $rname`
-
+            fn=`printf "%s__%s__%s.tf" $ttft $rname $1`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
                 continue
             fi
-            printf "resource \"%s\" \"%s\" {" $ttft $rname > $ttft.$rname.tf
-            printf "}"  >> $ttft.$rname.tf
-            printf "terraform import %s.%s %s" $ttft $rname "$cname" > data/import_$ttft_$rname.sh
-            terraform import $ttft.$rname "$cname" | grep Import
-            terraform state show $ttft.$rname > t2.txt
-            tfa=`printf "data/%s.%s" $ttft $rname`
+            printf "resource \"%s\" \"%s__%s\" {\n" $ttft $rname $1 > $fn
+            printf "}\n"  >> $fn
+            printf "terraform import %s.%s__%s %s" $ttft $rname $1 "$cname":$1 > data/import_$ttft_$rname_$1.sh
+            comm=`printf "terraform import %s.%s__%s \"%s:%s\"" $ttft $rname $1 $cname $1`
+            eval $comm | grep Import
+            #terraform import $ttft.$rname__$1 "$cname:$1" #| grep Import
+
+            terraform state show ${ttft}.${rname}__${1} > t2.txt
+            
+            tfa=`printf "data/%s.%s__%s" $ttft $rname $1`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
             #echo $awsj | jq . 
-            rm $ttft.$rname.tf
+            rm $fn
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             #	for k in `cat t1.txt`; do
             #		echo $k
@@ -73,15 +75,17 @@ c=0
                     
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
                     if [[ ${tt1} == "id" ]];then skip=1; fi
-                    if [[ ${tt1} == *":"* ]];then 
-                        t1=`printf "\"%s\"=%s" $tt1 "$tt2"`
-                    fi
-                    if [[ ${tt1} == *"@@"* ]];then
-                        #echo "$tt2" 
-                        printf "\"%s\" = %s" $tt1  "$tt2" > t1.tmp
-                        t1=`cat t1.tmp`
+                    if [[ ${tt1} == "policy_id" ]];then 
+                        pid=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_organizations_policy.%s.id" $tt1 $pid` 
                     fi
 
+                    if [[ ${tt1} == "target_id" ]];then 
+                        tid=`echo $tt2 | tr -d '"'`
+                        if [[ ${tid} == "ou-"* ]];then
+                            t1=`printf "%s = aws_organizations_organizational_unit.%s.id" $tt1 $tid` 
+                        fi
+                    fi
                
                 fi
                 if [ "$skip" == "0" ]; then

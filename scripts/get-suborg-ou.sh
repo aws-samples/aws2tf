@@ -1,6 +1,6 @@
 #!/bin/bash
 # $AWS  organizations list-organizational-units-for-parent --parent-id $root
-roots=()
+echo "*** sub org ou ***"
 if [ "$1" != "" ]; then
     cmd[0]="$AWS  organizations list-organizational-units-for-parent --parent-id $1" 
     
@@ -106,6 +106,9 @@ c=0
                 
             done <"$file"
 
+            if [[ "${cname}" != "" ]]; then
+                ../../scripts/get-suborg-ou.sh $cname
+            fi
         done
 
     fi

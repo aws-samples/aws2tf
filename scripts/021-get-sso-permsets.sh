@@ -1,25 +1,29 @@
 #!/bin/bash
-# $AWS  organizations list-organizational-units-for-parent --parent-id $root
-
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS  organizations list-targets-for-policy --policy-id $1" 
-    
+    cmd[0]="$AWS organizations list-accounts" 
 else
-    echo "must specify a policy id"
-    exit
+    cmd[0]="$AWS organizations list-accounts" 
 fi
 
-pref[0]="Targets"
-tft[0]="aws_organizations_policy_attachment"
-idfilt[0]="TargetId"
+pref[0]="Accounts"
+tft[0]="aws_organizations_account"
+idfilt[0]="Id"
 
-c=0
+#rm -f ${tft[0]}.tf
 
+
+# write the data files and refresh
+echo 'data "aws_ssoadmin_instances" "example" {}' > data__aws_ssoadmin_instances__sso.tf
+terraform refresh
+terraform state list
+exit
+
+
+for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
 	echo $cm
-       
     awsout=`eval $cm`
     if [ "$awsout" == "" ];then
         echo "This is not an AWS organizations account"
@@ -34,27 +38,24 @@ c=0
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-            rname=$(printf "att-%s" $rname)
+            rname=$(printf "a-%s" $rname)
 
-            echo "$ttft $cname:$1 import"
-            fn=`printf "%s__%s__%s.tf" $ttft $rname $1`
+            echo "$ttft $cname import"
+            fn=`printf "%s__%s.tf" $ttft $rname`
+
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
                 continue
             fi
-            printf "resource \"%s\" \"%s__%s\" {\n" $ttft $rname $1 > $fn
-            printf "}\n"  >> $fn
-            printf "terraform import %s.%s__%s %s" $ttft $rname $1 "$cname":$1 > data/import_$ttft_$rname_$1.sh
-            comm=`printf "terraform import %s.%s__%s \"%s:%s\"" $ttft $rname $1 $cname $1`
-            eval $comm | grep Import
-            #terraform import $ttft.$rname__$1 "$cname:$1" #| grep Import
-
-            terraform state show ${ttft}.${rname}__${1} > t2.txt
-            
-            tfa=`printf "data/%s.%s__%s" $ttft $rname $1`
+            printf "resource \"%s\" \"%s\" {" $ttft $rname > $ttft.$rname.tf
+            printf "}"  >> $ttft.$rname.tf
+            printf "terraform import %s.%s %s" $ttft $rname "$cname" > data/import_$ttft_$rname.sh
+            terraform import $ttft.$rname "$cname" | grep Import
+            terraform state show $ttft.$rname > t2.txt
+            tfa=`printf "data/%s.%s" $ttft $rname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
             #echo $awsj | jq . 
-            rm $fn
+            rm $ttft.$rname.tf
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             #	for k in `cat t1.txt`; do
             #		echo $k
@@ -75,22 +76,11 @@ c=0
                     
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
                     if [[ ${tt1} == "id" ]];then skip=1; fi
-                    if [[ ${tt1} == "policy_id" ]];then 
-                        pid=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_organizations_policy.%s.id" $tt1 $pid` 
-                    fi
 
-                    if [[ ${tt1} == "target_id" ]];then 
-                        tid=`echo $tt2 | tr -d '"'`
-                        if [[ ${tid} == "ou-"* ]];then
-                            t1=`printf "%s = aws_organizations_organizational_unit.%s.id" $tt1 $tid` 
-                        fi
-                        if [[ ${tid} =~ ^[0-9]+$ ]];then
-                            echo "tid=${tid}"
-                            t1=`printf "%s = aws_organizations_account.a-%s.id" $tt1 $tid`
-                        fi
+                    if [[ ${tt1} == "status" ]];then skip=1;fi
+                    if [[ ${tt1} == "joined_method" ]];then skip=1;fi
+                    if [[ ${tt1} == "joined_timestamp" ]];then skip=1;fi
 
-                    fi
                
                 fi
                 if [ "$skip" == "0" ]; then
@@ -104,7 +94,7 @@ c=0
         done
 
     fi
-
+done
 
 rm -f t*.txt
 

@@ -272,7 +272,7 @@ fi
 echo "Terraform Refresh ..."
 terraform refresh  -no-color
 echo "Terraform Plan ..."
-terraform plan . -no-color
+terraform plan -no-color
 
 echo "---------------------------------------------------------------------------"
 echo "aws2tf output files are in generated/tf.$mysub"

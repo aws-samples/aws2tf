@@ -2,10 +2,11 @@
 # $AWS  organizations list-organizational-units-for-parent --parent-id $root
 roots=()
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS  organizations list-organizational-units-for-parent --parent-id" 
+    cmd[0]="$AWS  organizations list-organizational-units-for-parent --parent-id $1" 
     
 else
-    cmd[0]="$AWS  organizations list-organizational-units-for-parent --parent-id" 
+    echo "must specify parent org"
+    exit 
 fi
 
 pref[0]="OrganizationalUnits"
@@ -13,16 +14,11 @@ tft[0]="aws_organizations_organizational_unit"
 idfilt[0]="Id"
 
 
-roots+=$($AWS organizations list-roots --query Roots[*].Id | jq -r .[])
-echo $roots
-
 c=0
 #rm -f ${tft[0]}.tf
-for root in ${roots[@]}; do
-    echo $root
+
     
     cm=${cmd[$c]}
-    cm=`echo "$cm $root"`
 	ttft=${tft[(${c})]}
 	echo $cm
     
@@ -109,11 +105,10 @@ for root in ${roots[@]}; do
                 fi
                 
             done <"$file"
-            ../../scripts/get-suborg-ou.sh $cname
+
         done
 
     fi
-done
 
 rm -f t*.txt
 

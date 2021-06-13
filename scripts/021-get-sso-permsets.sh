@@ -1,29 +1,45 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS organizations list-accounts" 
+    cmd[0]="$AWS sso-admin list-permission-sets --instance-arn" 
 else
-    cmd[0]="$AWS organizations list-accounts" 
+    cmd[0]="$AWS sso-admin list-permission-sets --instance-arn" 
 fi
 
-pref[0]="Accounts"
-tft[0]="aws_organizations_account"
-idfilt[0]="Id"
+pref[0]="PermissionSets"
+tft[0]="aws_ssoadmin_permission_set"
+idfilt[0]=""
 
 #rm -f ${tft[0]}.tf
 
 
 # write the data files and refresh
-echo 'data "aws_ssoadmin_instances" "example" {}' > data__aws_ssoadmin_instances__sso.tf
-terraform refresh
-terraform state list
-exit
+echo 'data "aws_ssoadmin_instances" "sso" {}' > data__aws_ssoadmin_instances__sso.tf
+#
+#echo 'data "aws_identitystore_group" "sso" {' >> data__aws_ssoadmin_idstore__sso.tf
+#echo '  identity_store_id = tolist(data.aws_ssoadmin_instances.sso.identity_store_ids)[0]' >> data__aws_ssoadmin_idstore__sso.tf
+
+#echo '  filter {' >> data__aws_ssoadmin_idstore__sso.tf
+#echo '    attribute_path  = "DisplayName"' >> data__aws_ssoadmin_idstore__sso.tf
+#echo '    attribute_value = "ExampleGroup"' >> data__aws_ssoadmin_idstore__sso.tf
+#echo '  }' >> data__aws_ssoadmin_idstore__sso.tf
+#echo '}' >> data__aws_ssoadmin_idstore__sso.tf
 
 
-for c in `seq 0 0`; do
+echo "Refresh .."
+terraform refresh -target=data.aws_ssoadmin_instances.sso> /dev/null
+#terraform refresh -target=data.aws_identitystore_group.sso> /dev/null
+ia=`terraform state show data.aws_ssoadmin_instances.sso | grep ':instance' | tr -d ',' | tr -d ' ' | jq -r `
+#echo $ia
+ria=${ia//:/_} && ria=${ria//./_} && ria=${ria//\//_}
+#echo $ria
+#terraform state show data.aws_identitystore_group.sso
+
+c=0
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	echo $cm
+    cm=`echo "$cm $ia"`
+	#echo $cm
     awsout=`eval $cm`
     if [ "$awsout" == "" ];then
         echo "This is not an AWS organizations account"
@@ -31,26 +47,29 @@ for c in `seq 0 0`; do
     fi
     count=1    
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
-    #echo $count
+    echo $count
+    
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
+            cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})]" | tr -d '"'`
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-            rname=$(printf "a-%s" $rname)
+            #rname=$(printf "%s" $rname)
+            rname=$(printf "%s__%s"  $rname $ria)
 
-            echo "$ttft $cname import"
+            echo "$ttft ${cname},${ia} import"
             fn=`printf "%s__%s.tf" $ttft $rname`
-
+            echo $fn
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
                 continue
             fi
+            
             printf "resource \"%s\" \"%s\" {" $ttft $rname > $ttft.$rname.tf
             printf "}"  >> $ttft.$rname.tf
-            printf "terraform import %s.%s %s" $ttft $rname "$cname" > data/import_$ttft_$rname.sh
-            terraform import $ttft.$rname "$cname" | grep Import
+            printf "terraform import %s.%s %s" $ttft $rname "${cname},${ia}" > data/import_$ttft_$rname.sh
+            terraform import $ttft.$rname "${cname},${ia}" | grep Import
             terraform state show $ttft.$rname > t2.txt
             tfa=`printf "data/%s.%s" $ttft $rname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
@@ -78,9 +97,8 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "id" ]];then skip=1; fi
 
                     if [[ ${tt1} == "status" ]];then skip=1;fi
-                    if [[ ${tt1} == "joined_method" ]];then skip=1;fi
-                    if [[ ${tt1} == "joined_timestamp" ]];then skip=1;fi
-
+                    if [[ ${tt1} == "created_date" ]];then skip=1;fi
+                
                
                 fi
                 if [ "$skip" == "0" ]; then
@@ -91,10 +109,49 @@ for c in `seq 0 0`; do
                 
             done <"$file"
 
+
+            # aws --profile awsandy-CTMaster sso-admin  list-managed-policies-in-permission-set
+            echo "../../scripts/get-sso-man-pol-attach.sh $ia $cname"
+
+            #resource "aws_ssoadmin_managed_policy_attachment" "example" {
+            #  instance_arn       = tolist(data.aws_ssoadmin_instances.example.arns)[0]
+            #  managed_policy_arn = "arn:aws:iam::aws:policy/AlexaForBusinessDeviceSetup"
+            #  permission_set_arn = aws_ssoadmin_permission_set.example.arn
+            #}
+
+
+# ------------------------------------------------------
+
+            echo "../../scripts/get-sso-acc-assignment.sh $ia $cname"
+            # aws sso-admin list-accounts-for-provisioned-permission-set --instance-arn $ia --permission-set-arn $cname 
+            # {
+            #    "AccountIds": [
+            #        "628794301331",
+            #        "433146468867",
+            #        "817339700138",
+            #        "915259118275"
+            #    ]
+            #}
+
+
+
+
+
+            # resource "aws_ssoadmin_account_assignment" "example" {
+            # instance_arn       = data.aws_ssoadmin_permission_set.example.instance_arn
+            # permission_set_arn = data.aws_ssoadmin_permission_set.example.arn
+
+            # principal_id   = data.aws_identitystore_group.example.group_id
+            # principal_type = "GROUP"
+
+             #target_id   = "012347678910"
+            # target_type = "AWS_ACCOUNT"
+             # }
+
         done
 
     fi
-done
+
 
 rm -f t*.txt
 

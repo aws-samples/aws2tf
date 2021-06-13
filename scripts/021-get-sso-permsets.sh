@@ -111,7 +111,7 @@ c=0
 
             echo "../../scripts/get-sso-man-pol-attach.sh $ia $cname"
             ../../scripts/get-sso-man-pol-attach.sh $ia $cname
-
+            echo "../../scripts/get-sso-inline-pol-attach.sh $ia $cname"
 
 
 

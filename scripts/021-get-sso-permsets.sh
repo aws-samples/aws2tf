@@ -47,7 +47,7 @@ c=0
     fi
     count=1    
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
-    echo $count
+    #echo $count
     
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
@@ -60,7 +60,7 @@ c=0
 
             echo "$ttft ${cname},${ia} import"
             fn=`printf "%s__%s.tf" $ttft $rname`
-            echo $fn
+            #echo $fn
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
                 continue
@@ -109,20 +109,15 @@ c=0
                 
             done <"$file"
 
-
-            # aws --profile awsandy-CTMaster sso-admin  list-managed-policies-in-permission-set
             echo "../../scripts/get-sso-man-pol-attach.sh $ia $cname"
+            ../../scripts/get-sso-man-pol-attach.sh $ia $cname
 
-            #resource "aws_ssoadmin_managed_policy_attachment" "example" {
-            #  instance_arn       = tolist(data.aws_ssoadmin_instances.example.arns)[0]
-            #  managed_policy_arn = "arn:aws:iam::aws:policy/AlexaForBusinessDeviceSetup"
-            #  permission_set_arn = aws_ssoadmin_permission_set.example.arn
-            #}
+
 
 
 # ------------------------------------------------------
 
-            echo "../../scripts/get-sso-acc-assignment.sh $ia $cname"
+            #echo "../../scripts/get-sso-acc-assignment.sh $ia $cname"
             # aws sso-admin list-accounts-for-provisioned-permission-set --instance-arn $ia --permission-set-arn $cname 
             # {
             #    "AccountIds": [

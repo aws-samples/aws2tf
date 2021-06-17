@@ -192,6 +192,9 @@ if [ "$t" == "lambda" ]; then pre="700*"; fi
 if [ "$t" == "rds" ]; then pre="60*"; fi
 if [ "$t" == "emr" ]; then pre="37*"; fi
 if [ "$t" == "secrets" ]; then pre="45*"; fi
+if [ "$t" == "lf" ]; then pre="63*"; fi
+if [ "$t" == "athena" ]; then pre="66*"; fi
+if [ "$t" == "glue" ]; then pre="65*"; fi
 
 pwd
 if [ "$c" == "no" ]; then

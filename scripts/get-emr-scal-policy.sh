@@ -1,13 +1,14 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS emr list-clusters --active" 
+    cmd[0]="$AWS emr get-managed-scaling-policy --cluster-id $1" 
 else
-    cmd[0]="$AWS emr list-clusters --active"
+    echo "Must cpecify a cluster id"
+    exit
 fi
 
-pref[0]="Clusters"
-tft[0]="aws_emr_cluster"
-idfilt[0]="Id"
+pref[0]="ManagedScalingPolicy"
+tft[0]="aws_emr_managed_scaling_policy"
+idfilt[0]="InstanceGroupId"
 
 #rm -f ${tft[0]}.tf
 
@@ -24,50 +25,46 @@ for c in `seq 0 0`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
             echo "$ttft $cname"
-            fn=`printf "%s__%s.tf" $ttft $cname`
+            fn=`printf "%s__%s__%s.tf" $ttft $1 $cname`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
                 continue
             fi
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" $cname >> $ttft.$cname.tf
-            printf "terraform import %s.%s %s" $ttft $cname $cname > data/import_$ttft_$cname.sh
-            terraform import $ttft.$cname "$cname" | grep Import
-            terraform state show $ttft.$cname > t2.txt
-            tfa=`printf "data/%s.%s" $ttft $cname`
+            printf "resource \"%s\" \"%s__%s\" {" $ttft $1 $cname > $ttft.$1__$cname.tf
+            printf "}" $cname >> $ttft.$1__$cname.tf
+            printf "terraform import %s.%s__%s %s__%s" $ttft $1 $cname $1 $cname > data/import_$ttft_$1_$cname.sh
+            terraform import $ttft.$1__$cname "$1" | grep Import
+            
+            terraform state show $ttft.$1__$cname > t2.txt
+            tfa=`printf "data/%s.%s__%s" $ttft $1 $cname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
             #echo $awsj | jq . 
-            rm $ttft.$cname.tf
+            rm $ttft.$1__$cname.tf
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             #	for k in `cat t1.txt`; do
             #		echo $k
             #	done
             file="t1.txt"
-            iddo=0
             echo $aws2tfmess > $fn
+            iddo=0
             while IFS= read line
             do
 				skip=0
                 # display $line or do something with $line
                 t1=`echo "$line"` 
-
                 if [[ ${t1} == *"="* ]];then
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
-
-                    if [[ ${tt1} == "id" ]];then skip=1; fi
-
+  
+                    if [[ ${tt1} == "id" ]];then skip=1; fi        
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "resource_owner" ]];then skip=1;fi
-                    if [[ ${tt1} == "cluster_state" ]];then skip=1;fi
-                    if [[ ${tt1} == "master_public_dns" ]];then skip=1;fi
-                    if [[ ${tt1} == "realm" ]];then 
-                        echo "kdc_admin_password = \"CHANGE-ME\"" >> $fn
+                    if [[ ${tt1} == "running_instance_count" ]];then skip=1;fi
+                    if [[ ${tt1} == "status" ]];then skip=1;fi
 
-                    fi
-            
+                    #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
                     if [[ ${tt1} == "last_updated_date" ]];then skip=1;fi
                     if [[ ${tt1} == "vpc_id" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
@@ -78,17 +75,10 @@ for c in `seq 0 0`; do
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
                     echo "$t1" >> $fn
-                    if [[ ${t1} == "resource"* ]];then
-                        echo "lifecycle {" >> $fn
-                        echo "ignore_changes = [kerberos_attributes[0].kdc_admin_password]" >> $fn
-                        echo "}" >> $fn
-                    fi
                 fi
                 
             done <"$file"
-
-            ../../scripts/get-emr-inst-group.sh $cname
-            #../../scripts/get-emr-scal-policy.sh $cname
+           
         done
 
     fi

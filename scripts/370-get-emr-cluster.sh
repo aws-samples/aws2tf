@@ -69,9 +69,34 @@ for c in `seq 0 0`; do
                     fi
             
                     if [[ ${tt1} == "last_updated_date" ]];then skip=1;fi
-                    if [[ ${tt1} == "vpc_id" ]]; then
+
+                    if [[ ${tt1} == "emr_managed_master_security_group" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
+                        t1=`printf "%s = aws_security_group.%s.id" $tt1 $tt2`
+                    fi
+                    if [[ ${tt1} == "emr_managed_slave_security_group" ]]; then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_security_group.%s.id" $tt1 $tt2`
+                    fi
+                    if [[ ${tt1} == "service_access_security_group" ]]; then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_security_group.%s.id" $tt1 $tt2`
+                    fi
+                    if [[ ${tt1} == "service_role" ]]; then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $tt2`
+                    fi
+
+
+                    if [[ ${tt1} == "subnet_id" ]]; then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_subnet.%s.id" $tt1 $tt2`
+                    fi
+
+
+                    if [[ ${tt1} == "vpc_id" ]]; then
+                        vpcid=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`
                     fi
                
                 fi
@@ -88,7 +113,11 @@ for c in `seq 0 0`; do
             done <"$file"
 
             ../../scripts/get-emr-inst-group.sh $cname
+            ../../scripts/100-get-vpc.sh $vpcid
+            ../../scripts/105-get-subnet.sh $vpcid
+            ../../scripts/110-get-security-group.sh $vpcid
             #../../scripts/get-emr-scal-policy.sh $cname
+
         done
 
     fi

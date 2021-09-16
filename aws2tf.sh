@@ -198,8 +198,8 @@ if [ "$t" == "glue" ]; then pre="65*"; fi
 
 pwd
 if [ "$c" == "no" ]; then
-    echo "terraform init"
-    terraform init -no-color 2>&1 | tee -a import.log
+    echo "terraform init -upgrade"
+    terraform init -upgrade -no-color 2>&1 | tee -a import.log
 fi
 
 exclude="iam"

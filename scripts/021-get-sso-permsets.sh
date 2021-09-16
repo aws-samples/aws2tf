@@ -9,6 +9,20 @@ pref[0]="PermissionSets"
 tft[0]="aws_ssoadmin_permission_set"
 idfilt[0]=""
 
+c=0
+    cm=${cmd[$c]}
+	ttft=${tft[(${c})]}
+    cm=`echo "$cm $ia"`
+	#echo $cm
+    awsout=`eval $cm 2> /dev/null`
+    if [ "$awsout" == "" ];then
+        echo "This is either not an AWS organizations account or you don't have access"
+        exit
+    fi
+
+
+
+
 #rm -f ${tft[0]}.tf
 
 
@@ -34,17 +48,9 @@ ria=${ia//:/_} && ria=${ria//./_} && ria=${ria//\//_}
 #echo $ria
 #terraform state show data.aws_identitystore_group.sso
 
-c=0
+
     
-    cm=${cmd[$c]}
-	ttft=${tft[(${c})]}
-    cm=`echo "$cm $ia"`
-	#echo $cm
-    awsout=`eval $cm`
-    if [ "$awsout" == "" ];then
-        echo "This is not an AWS organizations account"
-        exit
-    fi
+
     count=1    
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
     #echo $count

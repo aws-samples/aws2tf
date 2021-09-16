@@ -30,9 +30,9 @@ for root in ${roots[@]}; do
 	#echo $cm
     
     
-    awsout=`eval $cm`
+    awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
-        echo "This is not an AWS organizations account"
+        echo "This is either not an AWS organizations account or you don't have access"
         exit
     fi
     count=1    

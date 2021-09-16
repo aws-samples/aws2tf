@@ -57,8 +57,7 @@ echo "Region not specified - Getting region from aws cli ="
 r=`aws configure get region`
 echo $r
 fi
-
-if [ "$mysub" == "null" ]; then
+if [ "$mysub" == "null" ] || [ "$mysub" == "" ]; then
     echo "Account is null exiting"
     exit
 fi

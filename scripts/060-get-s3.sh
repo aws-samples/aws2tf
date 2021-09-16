@@ -25,8 +25,16 @@ for c in `seq 0 0`; do
     #echo "here"
     if [ "$1" != "" ]; then 
         awsout=`echo $cm | jq .`
+        if [ "$awsout" == "" ];then
+            echo "You don't have access for this resource"
+            exit
+        fi
     else
         awsout=`eval $cm 2> /dev/null`
+        if [ "$awsout" == "" ];then
+        echo "You don't have access for this resource"
+        exit
+        fi
     fi 
     #echo awsout=$awsout
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`

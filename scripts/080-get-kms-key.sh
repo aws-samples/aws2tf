@@ -18,6 +18,10 @@ for c in `seq 0 0`; do
 	ttft=${tft[(${c})]}
 	#echo $cm
     awsout=`eval $cm 2> /dev/null`
+    if [ "$awsout" == "" ];then
+        echo "You don't have access for this resource"
+        exit
+    fi
     if [ "$1" != "" ]; then
         count=1
     else
@@ -32,7 +36,12 @@ for c in `seq 0 0`; do
             else
                 cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             fi
-            keyd=`$AWS kms describe-key --key-id $cname`
+            keyd=`$AWS kms describe-key --key-id $cname 2> /dev/null`
+            if [ "$awsout" == "" ];then
+                echo "You don't have access for this resource"
+                break
+            fi
+
             keystate=$(echo $keyd | jq -r .KeyMetadata.KeyState)
             keyman=$(echo $keyd | jq -r .KeyMetadata.KeyManager)
             if [ "$keystate" == "Enabled" ] && [ "$keyman" != "AWS" ]; then
@@ -95,8 +104,8 @@ for c in `seq 0 0`; do
                     echo "Import Failed $ttft $cname"
                     mv $ttft.$cname.tf $ttft.$cname.tf.failed
                 fi 
-            else
-                echo "$ttft $cname key state = $keystate  key manager = $keyman"
+            #else
+             #   echo "$ttft $cname key state = $keystate  key manager = $keyman"
             fi  
             if [ "$keyman" == "AWS" ];then
                 dfn=`printf "data_%s__k_%s.tf" $ttft $cname`

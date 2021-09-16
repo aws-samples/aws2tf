@@ -26,7 +26,7 @@ for c in `seq 0 0`; do
     if [ "$1" != "" ]; then 
         awsout=`echo $cm | jq .`
     else
-        awsout=`eval $cm`
+        awsout=`eval $cm 2> /dev/null`
     fi 
     #echo awsout=$awsout
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`

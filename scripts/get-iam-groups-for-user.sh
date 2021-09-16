@@ -15,7 +15,7 @@ for c in `seq 0 0`; do
     #echo "role command = $cm"
     ttft=${tft[(${c})]}
     #echo $cm
-    awsout=`eval $cm`
+    awsout=`eval $cm 2> /dev/null`
 
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
     

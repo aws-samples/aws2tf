@@ -40,7 +40,7 @@ if [ "$kcount" -gt "0" ]; then
                     cm=${cmd[$c]}
                     ttft=${tft[(${c})]}
                     #echo "inner command=$cm"
-                    awsout=`eval $cm`
+                    awsout=`eval $cm 2> /dev/null`
                     #echo awsout
                     #echo $awsout | jq .
                     count=`echo $awsout | jq ".${pref[(${c})]} | length"`

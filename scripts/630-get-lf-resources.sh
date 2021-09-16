@@ -15,7 +15,7 @@ c=0
 	ttft=${tft[(${c})]}
     cm=`echo "$cm $ia"`
 	#echo $cm
-    awsout=`eval $cm`
+    awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "This is not an AWS organizations account"
         exit

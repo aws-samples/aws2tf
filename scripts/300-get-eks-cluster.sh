@@ -22,7 +22,7 @@ if [ "$kcount" -gt "0" ]; then
          
         cmd[0]=`echo "$AWS eks describe-cluster --name $cln"` 
         cm=${cmd[$c]}
-        awsout=`eval $cm`
+        awsout=`eval $cm 2> /dev/null`
             
         tcmd=`echo $awsout | jq ".${pref[(${c})]}.resourcesVpcConfig.vpcId" | tr -d '"'`
         ../../scripts/100* $tcmd  # vpc
@@ -111,7 +111,7 @@ if [ "$kcount" -gt "0" ]; then
             cm=${cmd[$c]}
             ttft=${tft[(${c})]}
             #echo $cm
-            awsout=`eval $cm`
+            awsout=`eval $cm 2> /dev/null`
             count=`echo $awsout | jq ".${pref[(${c})]} | length"`
             count=1 # one cluster at a time !
             if [ "$count" -gt "0" ]; then

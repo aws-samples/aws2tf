@@ -11,7 +11,7 @@ if [ "$kcount" -gt "0" ]; then
         echo cluster name $cln        
         cmd[0]=`echo "$AWS eks describe-cluster --name $cln"` 
         cm=${cmd[$c]}
-        awsout=`eval $cm`
+        awsout=`eval $cm 2> /dev/null`
         
         if [ "$1" != "" ]; then
             echo "get other stuff"
@@ -49,7 +49,7 @@ if [ "$kcount" -gt "0" ]; then
             cm=${cmd[$c]}
             ttft=${tft[(${c})]}
             #echo $cm
-            awsout=`eval $cm`
+            awsout=`eval $cm 2> /dev/null`
             count=`echo $awsout | jq ".${pref[(${c})]} | length"`
             count=1 # one cluster at a time !
             if [ "$count" -gt "0" ]; then

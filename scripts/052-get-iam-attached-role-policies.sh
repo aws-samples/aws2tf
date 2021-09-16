@@ -15,7 +15,7 @@ for c in `seq 0 0`; do
     cm=${cmd[$c]}
     ttft=${tft[(${c})]}
     #echo $cm
-    awsout=`eval $cm`
+    awsout=`eval $cm 2> /dev/null`
     #echo "awsout $awsout"
     if [ "$1" != "" ]; then
         count=1

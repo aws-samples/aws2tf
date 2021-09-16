@@ -33,7 +33,7 @@ for t in ${asgs[@]}; do
 
     ttft=${tft[(${c})]}
 	
-    awsout=`eval $cm`
+    awsout=`eval $cm 2> /dev/null`
     
 
     echo "$ttft $cname"

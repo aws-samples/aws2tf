@@ -12,7 +12,7 @@ for c in `seq 0 0`; do
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
 	#echo $cm
-    awsout=`eval $cm`
+    awsout=`eval $cm 2> /dev/null`
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`

@@ -1,5 +1,5 @@
 #!/bin/bash
-echo $AWS $1
+
 pref[0]="cluster"
 tft[0]="aws_eks_cluster"
 
@@ -7,6 +7,12 @@ c=0
 if [ "$1" != "" ]; then
     kcount=1
 else
+    cln=`$AWS eks list-clusters 2> /dev/null`
+    if [ "$cln" == "" ];then
+        echo "You don't have access for this resource"
+        exit
+    fi
+
     kcount=`$AWS eks list-clusters | jq ".clusters | length"`
 fi
 
@@ -16,6 +22,11 @@ if [ "$kcount" -gt "0" ]; then
         if [ "$1" != "" ]; then
             cln=`echo $1`
         else
+            cln=`$AWS eks list-clusters 2> /dev/null`
+            if [ "$cln" == "" ];then
+                echo "You don't have access for this resource"
+                exit
+            fi
             cln=`$AWS eks list-clusters  | jq ".clusters[(${k})]" | tr -d '"'`         
         fi
         #echo cluster name $cln  
@@ -24,8 +35,8 @@ if [ "$kcount" -gt "0" ]; then
         cm=${cmd[$c]}
         awsout=`eval $cm 2> /dev/null`
         if [ "$awsout" == "" ];then
-        echo "You don't have access for this resource"
-        exit
+            echo "You don't have access for this resource"
+            exit
         fi
             
         tcmd=`echo $awsout | jq ".${pref[(${c})]}.resourcesVpcConfig.vpcId" | tr -d '"'`

@@ -9,7 +9,7 @@ fi
 pref[0]="Aliases"
 tft[0]="aws_kms_alias"
 idfilt[0]="AliasName"
-
+c=0
 #rm -f ${tft[0]}.tf
 
 for c in `seq 0 0`; do
@@ -102,11 +102,19 @@ for c in `seq 0 0`; do
                     
                 done <"$file"
             else
-                dfn=`printf "data_%s__%s.tf" $ttft $rname`
-                echo "AWS managed key alias data $dfn"
-                printf "data \"%s\" \"%s\" {\n" $ttft $rname > $dfn
-                printf "name = \"%s\"\n" "$cname" >> $dfn
-                printf "}\n" >> $dfn
+                cmd2=`printf "$AWS kms list-aliases | jq -r '.Aliases[] | select(.AliasName==\"%s\").TargetKeyId'" $cname`
+                tgtid=$(eval $cmd2)
+                desc=`$AWS kms describe-key --key-id $tgtid 2>/dev/null`
+                if [ "$desc" != "" ]; then
+                    dfn=`printf "data_%s__%s.tf" $ttft $rname`
+                    echo "AWS managed key alias data $dfn"
+                    printf "data \"%s\" \"%s\" {\n" $ttft $rname > $dfn
+                    printf "name = \"%s\"\n" "$cname" >> $dfn
+                    printf "}\n" >> $dfn
+                else
+                    echo "You don't have access for this resource $cname"
+                fi
+
             fi
             
         done

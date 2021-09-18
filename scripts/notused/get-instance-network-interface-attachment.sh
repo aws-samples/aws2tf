@@ -19,6 +19,10 @@ for c in `seq 0 0`; do
 	ttft=${tft[(${c})]}
 	#echo $cm
     awsout=`eval $cm 2> /dev/null`
+    if [ "$awsout" == "" ];then
+        echo "You don't have access for this resource"
+        exit
+    fi
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`

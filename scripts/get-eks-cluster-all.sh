@@ -12,6 +12,10 @@ if [ "$kcount" -gt "0" ]; then
         cmd[0]=`echo "$AWS eks describe-cluster --name $cln"` 
         cm=${cmd[$c]}
         awsout=`eval $cm 2> /dev/null`
+        if [ "$awsout" == "" ];then
+            echo "You don't have access for this resource"
+            exit
+        fi
         
         if [ "$1" != "" ]; then
             echo "get other stuff"
@@ -50,6 +54,10 @@ if [ "$kcount" -gt "0" ]; then
             ttft=${tft[(${c})]}
             #echo $cm
             awsout=`eval $cm 2> /dev/null`
+            if [ "$awsout" == "" ];then
+                echo "You don't have access for this resource"
+                exit
+            fi
             count=`echo $awsout | jq ".${pref[(${c})]} | length"`
             count=1 # one cluster at a time !
             if [ "$count" -gt "0" ]; then

@@ -41,6 +41,10 @@ if [ "$kcount" -gt "0" ]; then
                     ttft=${tft[(${c})]}
                     #echo "inner command=$cm"
                     awsout=`eval $cm 2> /dev/null`
+                    if [ "$awsout" == "" ];then
+                        echo "You don't have access for this resource"
+                        exit
+                    fi
                     #echo awsout
                     #echo $awsout | jq .
                     count=`echo $awsout | jq ".${pref[(${c})]} | length"`

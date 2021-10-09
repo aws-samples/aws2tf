@@ -194,7 +194,7 @@ if [ "$t" == "secrets" ]; then pre="45*"; fi
 if [ "$t" == "lf" ]; then pre="63*"; fi
 if [ "$t" == "athena" ]; then pre="66*"; fi
 if [ "$t" == "glue" ]; then pre="65*"; fi
-if [ "$t" == "sagemaker" ]; then pre="681*"; fi
+if [ "$t" == "sagemaker" ]; then pre="68*"; fi
 
 pwd
 if [ "$c" == "no" ]; then

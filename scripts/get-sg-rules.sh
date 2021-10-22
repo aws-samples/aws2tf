@@ -222,7 +222,7 @@ chmod 755 $i
 echo $i
 ./$i
 done
-#rm -f imp_aws_security_group_rule*.sh
+rm -f imp_aws_security_group_rule*.sh
 
 #terraform fmt > /dev/null
 #terraform validate

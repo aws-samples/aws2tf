@@ -196,6 +196,7 @@ if [ "$t" == "athena" ]; then pre="66*"; fi
 if [ "$t" == "glue" ]; then pre="65*"; fi
 if [ "$t" == "sagemaker" ]; then pre="68*"; fi
 if [ "$t" == "eb" ]; then pre="71*"; fi
+if [ "$t" == "ec2" ]; then pre="25*"; fi
 
 pwd
 if [ "$c" == "no" ]; then

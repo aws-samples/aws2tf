@@ -76,6 +76,7 @@ for c in `seq 0 0`; do
                         fi
                         if [[ ${tt1} == "arn" ]];then skip=1; fi
                         if [[ ${tt1} == "id" ]];then skip=1; fi
+                         if [[ ${tt1} == "policy_id" ]];then skip=1; fi
                         if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                         if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                         if [[ ${tt1} == "association_id" ]];then skip=1;fi

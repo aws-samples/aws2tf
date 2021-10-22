@@ -95,17 +95,8 @@ for c in `seq 0 0`; do
                         fi
                         if [[ ${tt1} == "arn" ]];then skip=1; fi
                         if [[ ${tt1} == "id" ]];then skip=1; fi
+                        if [[ ${tt1} == "policy_id" ]];then skip=1; fi
                         if [[ ${tt1} == "role_arn" ]];then skip=1;fi
-                        if [[ ${tt1} == "owner_id" ]];then skip=1;fi
-                        if [[ ${tt1} == "association_id" ]];then skip=1;fi
-                        if [[ ${tt1} == "unique_id" ]];then skip=1;fi
-                        if [[ ${tt1} == "create_date" ]];then skip=1;fi
-                        #if [[ ${tt1} == "public_ip" ]];then skip=1;fi
-                        if [[ ${tt1} == "private_ip" ]];then skip=1;fi
-                        if [[ ${tt1} == "accept_status" ]];then skip=1;fi
-                        #if [[ ${tt1} == "default_network_acl_id" ]];then skip=1;fi
-                        #if [[ ${tt1} == "ipv6_association_id" ]];then skip=1;fi
-                        #if [[ ${tt1} == "ipv6_cidr_block" ]];then skip=1;fi
                     fi
                     if [ "$skip" == "0" ]; then
                         #echo $skip $t1

@@ -19,14 +19,14 @@ ttft="aws_security_group_rule"
 cname=`echo $1`
 cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
 file="t1.txt"
-ssg=0
-grep source_security_group_id t1.txt
-if [ $? -eq 0 ]; then
-    ssg=1
-fi
+#ssg=0
+#grep source_security_group_id t1.txt
+#if [ $? -eq 0 ]; then
+#    ssg=1
+#fi
 ir=1
 fn=`printf "%s__%s_%s_%s.tf" $ttft $cname $stype $ir`
-#echo $ssg
+
 #echo "$fn $ttft $cname"
 #echo "# from aws_security_group_rule" > $fn
 
@@ -41,14 +41,16 @@ do
         tt2=`echo "$line" | cut -f2- -d'='`
          
 
-                        #echo $tt1
+                       #echo $tt1
                         if [[ ${tt1} == "$stype" ]];then   
+                            # this is an ingress/egress rule
                             noself=0
                             skip=0
                             lbc=0
                             rbc=0
                             breq=0
                             while [[ $breq -eq 0 ]];do 
+                                # keep reading until [==]
                                 if [[ "${t1}" == *"["* ]]; then lbc=`expr $lbc + 1`; fi 
                                 if [[ "${t1}" == *"]"* ]]; then rbc=`expr $rbc + 1`; fi
                                
@@ -102,6 +104,14 @@ do
                                     self=$(echo $tt2)
                                 fi
 
+
+                                if [[ ${tt1} == "self" ]];then
+                                    if [ ${tt2} == "false" ]; then
+                                        skip=1
+                                    fi
+                                fi
+
+
                                 if [[ ${tt1} == "protocol" ]];then
                                     proto=$(echo $tt2)
                                     if [ ${proto} == "-1" ]; then
@@ -139,7 +149,7 @@ do
                                             if [[ ${tt2} == *"sg-"* ]];then 
                                                 tt2=`echo "$tt2" | tr -d ','`  
                                                 sgimp=$(echo $tt2)              
-                                                t1=$(printf "source_security_group_id = aws_security_group.%s.id" $tt2)
+                                                t1=$(printf "source_security_group_id = aws_security_group.%s.id" $sgimp)
                                                 echo "$t1" >> $fn
                                                 noself=1
                                                 skip=1
@@ -151,12 +161,15 @@ do
                                             if [[ "${t1}" == *"["* ]]; then lbc=`expr $lbc + 1`; fi  
                                             if [[ "${t1}" == *"]"* ]]; then rbc=`expr $rbc + 1`; fi
                                     fi
+                                    
                                     if [[ ${tt2} == *"sg-"* ]];then
-                                            
+                                        if [[ ${tt1} == *"source_security_group_id"* ]];then
                                             t1=$(printf "source_security_group_id = aws_security_group.%s.id" $tt2)
                                             echo "$t1" >> $fn
-                                            noself=1
+                                        
+                                            noself=0
                                             skip=1
+                                        fi
                                     fi
                                 fi
 
@@ -209,7 +222,7 @@ chmod 755 $i
 echo $i
 ./$i
 done
-rm -f imp_aws_security_group_rule*.sh
+#rm -f imp_aws_security_group_rule*.sh
 
 #terraform fmt > /dev/null
 #terraform validate

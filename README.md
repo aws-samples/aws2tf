@@ -191,6 +191,7 @@ The following terraform resource types are supported by this tool at this time:
 * aws_eip
 * aws_instance
 * aws_launch_template
+* aws_spot_fleet_request
 
 ### ECR
 * aws_ecr_repository
@@ -303,11 +304,11 @@ It can take a lot of time to loop around everything in large accounts, in partic
 
 ### KMS:
 
-Can fail if your login doesn't have acccess to KMS
+Can fail if your login doesn't have access to KMS
 
 ### S3 Buckets
 
-Can fail if you don't have acccess to the KMS key used for encryption.
+Can fail if you don't have access to the KMS key used for encryption.
 
 
 

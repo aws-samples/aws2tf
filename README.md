@@ -16,9 +16,9 @@ And finally runs a
 There should hopefully be no subsequent additions or deletions reported by the terraform plan command as all the appropriate terraform configuration files will have have automatically been created.
 
 ## Requirements & Prerequisites
-+ The tool is written for the bash shell script & Python3 and has been tested on macOS 10.15.7.
-+ AWS cli (v2) **version 2.1.15 or higher** needs to be installed and you need a login with at least "Read" privileges.
-+ terraform **version v0.15.3** or higher needs to be installed.
++ The tool is written for the bash shell script & Python3 and has been tested on macOS 11.6.
++ AWS cli (v2) **version 2.3.4 or higher** needs to be installed and you need a login with at least "Read" privileges.
++ terraform **version v1.0.6** or higher needs to be installed.
 + jq **version 1.6 or higher**
 
 
@@ -85,15 +85,22 @@ To add App Mesh resources
 To get a selection of resources use the -t option 
 The currently supported types are:
 
-* tgw - Transit Gateway resources `-t tgw -i transit-gateway-id`
-* vpc - A VPC and it's related resources `-t vpc -i VPC-id`
-* eks - An EKS cluster and it's related resources `-t eks -i Cluster-Name`
+* appmesh - App Mesh resources `-t appmesh`
+* code - Code* resources `-t code`
+* eb - EventBridge resources `-t eb`
 * ecs - An ECS cluster and it's related resources `-t ecs -i Cluster-Name`
+* eks - An EKS cluster and it's related resources `-t eks -i Cluster-Name`
 * iam - All IAM related users, groups, policies & roles `-t iam`
 * kms - KMS keys and aliases `-t kms`
-* code - Code* resources `-t code`
-* appmesh - App Mesh resources `-t appmesh`
+* lf - Lake Formation resources `-t lf`
+* lambda - Lambda resources `-t lambda`
 * org - AWS Organizations `-t org`
+* rds - RDS database resources `-t rds`
+* secrets - Secrets Manager secrets `-t secrets`
+* sagemaker - SageMaker resources `-t sagemaker`
+* spot - spot requests `-t spot`
+* tgw - Transit Gateway resources `-t tgw -i transit-gateway-id`
+* vpc - A VPC and it's related resources `-t vpc -i VPC-id`
   
 
 To get all the VPC related resources in a particular VPC
@@ -104,8 +111,6 @@ To use a specific region and profile
 ```
 ./aws2tf.sh -t vpc -i vpc-xxxxxxxxx -r eu-west-1 -p default
 ```
-
-
 
 #### Using the cumulative mode
 

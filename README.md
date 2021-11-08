@@ -217,13 +217,13 @@ The following terraform resource types are supported by this tool at this time:
 * aws_lb_listener
 * aws_lb_target_group
 
-### EMR
+### EMR (work in progress not de-referenced fully)
 
 * aws_emr_cluster
 * aws_emr_instance_group
 * aws_emr_security_configuration
 
-### Glue
+### Glue (needs updating)
 * aws_glue_job
 * aws_glue_crawler
 
@@ -262,6 +262,10 @@ The following terraform resource types are supported by this tool at this time:
 * aws_s3_access_point
 * aws_s3_bucket
 * aws_s3_bucket_policy
+
+### SageMaker
+* aws_sagemaker_domain
+* aws_sagemaker_user_profile
 
 ### Secrets Manager
 * aws_secretsmanager_secret

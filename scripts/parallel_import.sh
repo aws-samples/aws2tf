@@ -17,10 +17,16 @@ mkdir -p $ttft-$rname && cd $ttft-$rname
 
 cp ../aws.tf .
 #cp ../terraform.tfstate .
-#cp ../.terraform.lock.hcl .
-#cp -r ../.terraform .
+
+if [[ -f ../.terraform.lock.hcl && ! -f .terraform.lock.hcl ]]; then
+    cp ../.terraform.lock.hcl .
+fi
+if [[ -d ../.terraform && ! -d .terraform ]]; then
+    cp -r ../.terraform .
+fi
 #echo "TF Init..."
 terraform init -no-color > /dev/null
+
 if [ $? -ne 0 ]; then
     echo "init backoff & retry"
     sleep 10

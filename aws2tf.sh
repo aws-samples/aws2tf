@@ -224,10 +224,10 @@ fi
 
 # cache installed plugins for future
 
-if [ ! -d "../../cache/dot_terraform"]; then
+if [ ! -d "../../cache/dot_terraform" ]; then
     cp -a .terraform ../../cache/dot_terraform
 fi
-if [ ! -f "../../cache/dog_terraform.lock.hcl"]; then
+if [ ! -f "../../cache/dot_terraform.lock.hcl" ]; then
     cp -a .terraform.lock.hcl ../../cache/dot_terraform.lock.hcl
 fi
 

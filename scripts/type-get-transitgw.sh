@@ -2,6 +2,7 @@
 ../../scripts/get-transit-gateway-vpc-attachments.sh $1
 ../../scripts/get-transit-gateway-vpn-attachments.sh $1
 echo "post fix vpn"
+if compgen -G "aws_ec2_transit_gateway_vpn_attachment*.tf" > /dev/null; then
 for i in `ls aws_ec2_transit_gateway_vpn_attachment*.tf` ; do
 #echo $i
 tgatid=`echo $i | cut -f2 -d'.'`
@@ -19,5 +20,6 @@ fi
 #
 done
 done
+fi
 echo "**** Type Validate Call ****" 
 terraform validate

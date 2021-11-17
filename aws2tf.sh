@@ -200,15 +200,15 @@ if [ "$t" == "eb" ]; then pre="71*"; fi
 if [ "$t" == "ec2" ]; then pre="25*"; fi
 if [ "$t" == "spot" ]; then pre="25*"; fi
 
-pwd
+exclude="iam"
+
+if [ "$t" == "iam" ]; then pre="05*" && exclude="xxxxxxx"; fi
+
 if [ "$c" == "no" ]; then
     echo "terraform init -upgrade"
     terraform init -upgrade -no-color 2>&1 | tee -a import.log
 fi
-
-exclude="iam"
-
-if [ "$t" == "iam" ]; then pre="03*" && exclude="xxxxxxx"; fi
+pwd
 ls
 #############################################################################
 date

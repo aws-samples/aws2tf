@@ -40,18 +40,27 @@ for c in `seq 0 0`; do
             ocname=`echo $cname`
             cname=${cname//./_}
             cname=`printf "%s__%s" $1 $cname`
-            echo "$ttft $cname"
-            fn=`printf "%s__%s.tf" $ttft $cname`
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            
+            echo "$ttft $cname import"
+            fn=`printf "%s__%s.tf" $ttft $rname`
+
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
-                exit
+                continue
             fi
-
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
-            terraform import $ttft.$cname $1/$rarn | grep Import
-            terraform state show $ttft.$cname > t2.txt
-            rm $ttft.$cname.tf
+            printf "resource \"%s\" \"%s\" {" $ttft $rname > $ttft.$rname.tf
+            printf "}"  >> $ttft.$rname.tf
+            printf "terraform import %s.%s %s" $ttft $rname "$cname" > data/import_$ttft_$rname.sh
+            
+            terraform import $ttft.$rname $1/$rarn | grep Import
+            #terraform import $ttft.$rname "$cname" | grep Import
+            terraform state show $ttft.$rname > t2.txt
+            tfa=`printf "data/%s.%s" $ttft $rname`
+            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
+            #echo $awsj | jq . 
+            rm $ttft.$rname.tf
+            
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             #	for k in `cat t1.txt`; do
             #		echo $k
@@ -73,6 +82,7 @@ for c in `seq 0 0`; do
                     fi
                     if [[ ${tt1} == "role" ]];then 
                         tsel=`echo $tt2 |  tr -d '"'`
+                        tsel=${tsel//:/_} && tsel=${tsel//./_} && tsel=${tsel//\//_}
                         t1=`printf "%s = aws_iam_role.%s.id" $tt1 $tsel`
                         skip=0;
                     fi

@@ -67,6 +67,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "id" ]];then skip=1; fi
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
+                    if [[ ${tt1} == "unique_id" ]];then skip=1;fi
                     if [[ ${tt1} == "create_date" ]];then skip=1;fi
 
                 fi

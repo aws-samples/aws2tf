@@ -36,82 +36,85 @@ for c in `seq 0 0`; do
             #echo $i
             if [ "$1" != "" ]; then
                 cname=`echo $awsout | jq ".RoleName" | tr -d '"'` 
+                rpath=`echo $awsout | jq ".Path" | tr -d '"'` 
             else
                 cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].RoleName" | tr -d '"'`
+                rpath=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Path" | tr -d '"'`
             fi
-            ocname=`echo $cname`
+        
+                if [[ "$rpath" == *"service-role"* ]]; then continue; fi
+                ocname=`echo $cname`
+                cname=${cname//./_}
 
+                #temp                
 
-
-
-            cname=${cname//./_}
-            echo "$ttft $cname"
-            fn=`printf "%s__%s.tf" $ttft $cname`
-            if [ -f "$fn" ] ; then
-                echo "$fn exists already skipping"
-                continue
-            fi
-
-
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
-            #echo $ttft.$cname $ocname
-            terraform import $ttft.$cname $ocname | grep Import
-            terraform state show $ttft.$cname > t2.txt
-            rm $ttft.$cname.tf
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-            #	for k in `cat t1.txt`; do
-            #		echo $k
-            #	done
-            file="t1.txt"
-
-            echo $aws2tfmess > $fn
-            while IFS= read line
-            do
-                skip=0
-                # display $line or do something with $line
-                t1=`echo "$line"`
-                if [[ ${t1} == *"="* ]];then
-                    tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '`
-                    tt2=`echo "$line" | cut -f2- -d'='`
-                    if [[ ${tt1} == *":"* ]];then
-                        t1=`printf "\"%s\"=%s" $tt1 $tt2`
-                    fi
-                    if [[ ${tt1} == "arn" ]];then skip=1; fi
-                    if [[ ${tt1} == "id" ]];then skip=1; fi
-                    if [[ ${tt1} == "role_arn" ]];then skip=1;fi
-                    if [[ ${tt1} == "owner_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "association_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "unique_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "create_date" ]];then skip=1;fi
-                    #if [[ ${tt1} == "public_ip" ]];then skip=1;fi
-                    if [[ ${tt1} == "private_ip" ]];then skip=1;fi
-                    if [[ ${tt1} == "accept_status" ]];then skip=1;fi
-                    if [[ ${tt1} == *":"* ]];then 
-                        lh=`echo $tt1 | tr -d '"'`
-                        skip=0;
-                        t1=`printf "\"%s\"=%s" $lh $tt2`
-                        #echo $t1
-                    fi
-                    #if [[ ${tt1} == "default_network_acl_id" ]];then skip=1;fi
-                    #if [[ ${tt1} == "ipv6_association_id" ]];then skip=1;fi
-                    #if [[ ${tt1} == "ipv6_cidr_block" ]];then skip=1;fi
+                echo "$ttft $cname $rpath"
+                fn=`printf "%s__%s.tf" $ttft $cname`
+                if [ -f "$fn" ] ; then
+                    echo "$fn exists already skipping"
+                    continue
                 fi
-                if [ "$skip" == "0" ]; then
-                    #echo $skip $t1
-                    echo "$t1" >> $fn
-                fi
+
+
+                printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
+                printf "}" >> $ttft.$cname.tf
+                #echo $ttft.$cname $ocname
+                terraform import $ttft.$cname $ocname | grep Import
+                terraform state show $ttft.$cname > t2.txt
+                rm $ttft.$cname.tf
+                cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+                #	for k in `cat t1.txt`; do
+                #		echo $k
+                #	done
+                file="t1.txt"
+
+                echo $aws2tfmess > $fn
+                while IFS= read line
+                do
+                    skip=0
+                    # display $line or do something with $line
+                    t1=`echo "$line"`
+                    if [[ ${t1} == *"="* ]];then
+                        tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '`
+                        tt2=`echo "$line" | cut -f2- -d'='`
+                        if [[ ${tt1} == *":"* ]];then
+                            t1=`printf "\"%s\"=%s" $tt1 $tt2`
+                        fi
+                        if [[ ${tt1} == "arn" ]];then skip=1; fi
+                        if [[ ${tt1} == "id" ]];then skip=1; fi
+                        if [[ ${tt1} == "role_arn" ]];then skip=1;fi
+                        if [[ ${tt1} == "owner_id" ]];then skip=1;fi
+                        if [[ ${tt1} == "association_id" ]];then skip=1;fi
+                        if [[ ${tt1} == "unique_id" ]];then skip=1;fi
+                        if [[ ${tt1} == "create_date" ]];then skip=1;fi
+                        #if [[ ${tt1} == "public_ip" ]];then skip=1;fi
+                        if [[ ${tt1} == "private_ip" ]];then skip=1;fi
+                        if [[ ${tt1} == "accept_status" ]];then skip=1;fi
+                        if [[ ${tt1} == *":"* ]];then 
+                            lh=`echo $tt1 | tr -d '"'`
+                            skip=0;
+                            t1=`printf "\"%s\"=%s" $lh $tt2`
+                            #echo $t1
+                        fi
+                        #if [[ ${tt1} == "default_network_acl_id" ]];then skip=1;fi
+                        #if [[ ${tt1} == "ipv6_association_id" ]];then skip=1;fi
+                        #if [[ ${tt1} == "ipv6_cidr_block" ]];then skip=1;fi
+                    fi
+                    if [ "$skip" == "0" ]; then
+                        #echo $skip $t1
+                        echo "$t1" >> $fn
+                    fi
+                    
+                done <"$file"   # done while
+
+                # Get attached role policies
                 
-            done <"$file"   # done while
-
-            # Get attached role policies
-            
-            #echo "role policies $ocname"
-            ../../scripts/051-get-iam-role-policies.sh $ocname
-            #echo "attached role policies $ocname"
-            ../../scripts/052-get-iam-attached-role-policies.sh $ocname
-
-        done # done for i           
+                #echo "role policies $ocname"
+                ../../scripts/051-get-iam-role-policies.sh $ocname
+                #echo "attached role policies $ocname"
+                ../../scripts/052-get-iam-attached-role-policies.sh $ocname
+  
+        done    # done for i      
     fi
 done
 

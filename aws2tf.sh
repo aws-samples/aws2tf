@@ -1,18 +1,21 @@
 usage(){
-	echo "Usage: $0 [-p <profile>] [-c] [-v] [-r <region>] [-t <type>] [-h]"
+	echo "Usage: $0 [-p <profile>] [-c] [-v] [-r <region>] [-t <type>] [-h] [-d]"
   echo "       -p <profile> specify the AWS profile to use (Default=\"default\")"
   echo "       -c           continue from previous run (Default=\"no\")"
   echo "       -r <region>  specify the AWS region to use (Default=the aws command line setting)"
   echo "       -v           stop after terraform validate step"
   echo "       -h           Help - this message"
-  echo "       -d           Debug - ie. stop on error"
-  echo "       -t <type>    choose a sub-type of AWS resources to get"                
+  echo "       -d           Debug - lots of output"
+  echo "       -t <type>    choose a sub-type of AWS resources to get" 
+   echo "           iam"                
    echo "           org" 
    echo "           code"
    echo "           appmesh" 
    echo "           kms"
    echo "           lambda" 
    echo "           rds" 
+   echo "           ecs"
+   echo "           eks"
    echo "           emr"
    echo "           secrets" 
    echo "           lf" 
@@ -22,6 +25,8 @@ usage(){
    echo "           eb"
    echo "           ec2"
    echo "           spot"
+   echo "           tgw"
+   echo "           vpc"
 	exit 1
 }
 
@@ -33,6 +38,7 @@ f="no"
 v="no"
 r="no" # region
 c="no" # combine mode
+d="no"
 
 while getopts ":p:r:x:f:v:t:i:c:d:h:" o; do
     case "${o}" in
@@ -132,7 +138,6 @@ fi
 export AWS="aws --profile $p --region $r --output json "
 echo " "
 echo "Account ID = ${s}"
-echo "AWS Resource Group Filter = ${g}"
 echo "Region = ${r}"
 echo "AWS Profile = ${p}"
 echo "Extract KMS Secrets to .tf files (insecure) = ${x}"

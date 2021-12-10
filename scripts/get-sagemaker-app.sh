@@ -72,6 +72,23 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi   
                     if [[ ${tt1} == "url" ]];then skip=1;fi
                     if [[ ${tt1} == "home_efs_file_system_uid" ]];then skip=1;fi
+
+                    if [[ ${t1} == *"resource_spec"* ]];then 
+                        #echo $t1
+                        skip=1
+                        lbc=0
+                        rbc=0
+                        breq=0
+                        while [[ $breq -eq 0 ]];do 
+                            if [[ "${t1}" == *"{"* ]]; then lbc=`expr $lbc + 1`; fi
+                            if [[ "${t1}" == *"}"* ]]; then rbc=`expr $rbc + 1`; fi
+                            #echo "$lbc $rbc $t1"
+                            read line
+                            t1=`echo "$line"`
+                            if [[ $rbc -eq $lbc ]]; then breq=1; fi
+                        done 
+                    fi
+
                     if [[ ${tt1} == "domain_id" ]];then 
                                 skip=0;
                                 did=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`          

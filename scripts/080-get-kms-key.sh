@@ -54,7 +54,7 @@ for c in `seq 0 0`; do
                 printf "resource \"%s\" \"k_%s\" {" $ttft $cname > $ttft.$cname.tf
                 printf "}" $cname >> $ttft.$cname.tf
                 printf "terraform import %s.%s %s" $ttft $cname $cname > "data/import_$ttft_$cname.sh"
-                terraform import $ttft.k_$cname "$cname"
+                terraform import $ttft.k_$cname "$cname" | grep Import
                 if [ $? -eq 0 ]; then
             
                     
@@ -86,6 +86,10 @@ for c in `seq 0 0`; do
                             if [[ ${tt1} == "key_id" ]];then skip=1;fi
                             #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
                             if [[ ${tt1} == "kms:"* ]]; then
+                                tt2=`echo $tt2 | tr -d '"'`
+                                t1=`printf "\"%s\" = \"%s\"" $tt1 $tt2`
+                            fi
+                            if [[ ${tt1} == "aws:"* ]]; then
                                 tt2=`echo $tt2 | tr -d '"'`
                                 t1=`printf "\"%s\" = \"%s\"" $tt1 $tt2`
                             fi

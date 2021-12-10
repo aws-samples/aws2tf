@@ -96,6 +96,14 @@ for c in `seq 0 0`; do
             
                             t1=`printf "%s = aws_iam_policy.%s.arn" $tt1 $pnam`
                         fi
+                        if [[ "${tt2}" == *":policy/"* ]]; then
+                            pnam=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`
+                            parn=`echo $tt2 | tr -d '"'`
+                            #echo "parn=$parn"
+                            #echo "pnam=$pnam"
+            
+                            t1=`printf "%s = aws_iam_policy.%s.arn" $tt1 $pnam`
+                        fi
                         skip=0;
                     fi
 

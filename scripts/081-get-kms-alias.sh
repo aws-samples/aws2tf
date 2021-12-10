@@ -36,7 +36,7 @@ for c in `seq 0 0`; do
             rname=${cname//:/_}
             rname=${rname//./_}
             rname=${rname//\//_}
-            echo "$ttft $cname"
+            #echo "$ttft $cname"
             if [[ "$cname" != *"alias/aws/"* ]];then
                 echo "$ttft $cname"
                 fn=`printf "%s__%s.tf" $ttft $rname`

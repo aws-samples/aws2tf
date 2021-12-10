@@ -15,6 +15,7 @@ pref[0]="Buckets"
 tft[0]="aws_s3_bucket"
 idfilt[0]="Name"
 theregion=`cat aws.tf | grep region | awk '{print $3}' | tr -d '"'`
+keyid=""
 #theregion=`echo $AWS | cut -f5 -d ' '`
  
 for c in `seq 0 0`; do
@@ -79,6 +80,7 @@ for c in `seq 0 0`; do
                         flc=0
                         fd=0
                         acl=0
+                        keyid=""
                         echo $aws2tfmess > $fn
                         while IFS= read line
                         do
@@ -87,7 +89,7 @@ for c in `seq 0 0`; do
                             t1=`echo "$line"` 
                             if [[ ${t1} == *"="* ]];then
                                 tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
-                                    
+                                tt2=`echo "$line" | cut -f2- -d'='`  
                                 if [[ ${tt1} == "arn" ]];then	
                                     #printf "acl = \"private\" \n" >> $fn
                                     #printf "force_destroy = false \n" >> $fn
@@ -101,8 +103,11 @@ for c in `seq 0 0`; do
 
                                     skip=1
                                 fi
-                                if [[ ${tt1} == "region" ]];then
-                                    skip=1
+                                if [[ ${tt1} == "region" ]];then skip=1 ;fi
+                                if [[ ${tt1} == "kms_master_key_id" ]];then 
+                              
+                                    keyid=`echo $tt2 | tr -d '"'`
+                                    t1=`printf "%s = aws_kms_key.k_%s.id" $tt1 $keyid`
                                 fi
                                     
                                 if [[ ${tt1} == "role_arn" ]];then 
@@ -143,6 +148,11 @@ for c in `seq 0 0`; do
                             fi                
                         
                         done <"$file" 
+                        if [[ "$keyid" != "" ]]; then
+                            ../../scripts/080-get-kms-key.sh $keyid
+                            ../../scripts/081-get-kms-alias.sh $keyid
+                        fi 
+                        ../../scripts/get-s3-policy.sh $cname
                     fi
                 fi
             fi

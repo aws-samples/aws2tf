@@ -69,14 +69,53 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "home_efs_file_system_id" ]];then skip=1;fi
                     if [[ ${tt1} == "url" ]];then skip=1;fi
                     if [[ ${tt1} == "single_sign_on_managed_application_instance_id" ]];then skip=1;fi
+
+                    if [[ ${tt1} == "vpc_id" ]];then 
+                        vpcid=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`
+                    
+                    fi
+                    if [[ ${tt1} == "execution_role" ]];then 
+                        rarn=`echo $tt2 | tr -d '"'`
+                        trole=`echo "$tt2" | rev | cut -d'/' -f1 | rev | tr -d '"'`
+                        t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`                
+                    fi
+
+
+                else
+
+                    if [[ "$t1" == *"subnet-"* ]]; then
+                        t1=`echo $t1 | tr -d '"|,'`
+                        subnets+=`printf "\"%s\" " $t1`
+                        t1=`printf "aws_subnet.%s.id," $t1`
+                    fi
+                    if [[ "$t1" == *"sg-"* ]]; then
+                        t1=`echo $t1 | tr -d '"|,'`
+                        sgs+=`printf "\"%s\" " $t1`
+                        t1=`printf "aws_security_group.%s.id," $t1`
+                    fi
+
                 fi
+
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
                     echo "$t1" >> $fn
                 fi
                 
             done <"$file"
-   
+
+            echo "role  $rarn"
+            ../../scripts/050-get-iam-roles.sh $rarn
+            if [[ "$vpcid" != "" ]]; then
+                echo "vpcid=$vpcid"
+                echo "calling vpc"
+                ../../scripts/100-get-vpc.sh $vpcid  # vpc                
+                ../../scripts/105-get-subnet.sh $vpcid # subnets
+                ../../scripts/110-get-security-group.sh $vpcid 
+                ../../scripts/140-get-route-table.sh $vpcid
+                ../../scripts/141-get-route-table-associations.sh $vpcid
+                ../../scripts/161-get-vpce.sh $vpcid 
+            fi
 
             
         done

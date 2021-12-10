@@ -1,12 +1,18 @@
 #!/bin/bash
+if [ "$1" == "" ]; then
+    echo "domain must be set" 
+    exit
+fi
+if [ "$2" == "" ]; then
+    echo "user profile name must be set" 
+    exit
+fi
 
-cmd[0]="$AWS sagemaker list-user-profiles "
+cmd[0]="$AWS sagemaker list-apps --domain-id-equals $1 --user-profile-name-equals $2"
 
-pref[0]="UserProfiles"
-tft[0]="aws_sagemaker_user_profile"
-idfilt[0]="UserProfileName"
-
-
+pref[0]="Apps"
+tft[0]="aws_sagemaker_app"
+idfilt[0]="AppName"
 
 for c in `seq 0 0`; do
     
@@ -16,6 +22,7 @@ for c in `seq 0 0`; do
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "You don't have access for this resource"
+        echo $awsout
         exit
     fi
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
@@ -24,21 +31,23 @@ for c in `seq 0 0`; do
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            upn=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")    
+            appn=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")  
+            appt=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].AppType")             
             domid=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].DomainId")
-            cname=$($AWS sagemaker describe-user-profile --domain-id $domid --user-profile-name $upn  --query UserProfileArn | jq -r .)
+            upn=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].UserProfileName")
+            cname=$(aws sagemaker describe-app --domain-id $domid --user-profile-name $upn --app-type $appt --app-name $appn --query AppArn | jq -r .)
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+
          
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then continue; fi
 
             echo "$ttft $cname import"
 
-
-            printf "resource \"%s\" \"%s\" {" $ttft $upn > $fn
-            printf "}"  >> $fn
-            terraform import $ttft.$upn "$cname" | grep Import
-            terraform state show $ttft.$upn > t2.txt
+            printf "resource \"%s\" \"%s\" {" $ttft $rname > $fn
+            printf "}" >> $fn
+            terraform import $ttft.$rname "$cname" | grep Import
+            terraform state show $ttft.$rname > t2.txt
             rm $fn
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             #	for k in `cat t1.txt`; do
@@ -75,9 +84,7 @@ for c in `seq 0 0`; do
                     echo "$t1" >> $fn
                 fi
                 
-            done <"$file"
-            ../../scripts/get-sagemaker-app.sh $domid $upn
-            
+            done <"$file"            
         done
     fi
 done

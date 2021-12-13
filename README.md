@@ -266,6 +266,7 @@ The following terraform resource types are supported by this tool at this time:
 ### SageMaker
 * aws_sagemaker_domain
 * aws_sagemaker_user_profile
+* aws_sagemaker_app
 
 ### Secrets Manager
 * aws_secretsmanager_secret

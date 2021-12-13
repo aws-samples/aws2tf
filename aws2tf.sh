@@ -236,6 +236,7 @@ if [ "$t" == "eb" ]; then pre="71*"; fi
 if [ "$t" == "ec2" ]; then pre="25*"; fi
 if [ "$t" == "s3" ]; then pre="06*"; fi
 if [ "$t" == "spot" ]; then pre="25*"; fi
+if [ "$t" == "params" ]; then pre="445*"; fi
 
 exclude="iam"
 

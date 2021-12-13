@@ -94,6 +94,7 @@ The currently supported types are:
 * kms - KMS keys and aliases `-t kms`
 * lf - Lake Formation resources `-t lf`
 * lambda - Lambda resources `-t lambda`
+* params - SSM parameters `-t params`
 * org - AWS Organizations `-t org`
 * rds - RDS database resources `-t rds`
 * secrets - Secrets Manager secrets `-t secrets`
@@ -277,8 +278,9 @@ The following terraform resource types are supported by this tool at this time:
 * aws_service_discovery_private_dns_namespace
 
 ### SSM
-* aws_ssm_document
 * aws_ssm_association
+* aws_ssm_document
+* aws_ssm_parameter
 
 ### VPC
 * aws_customer_gateway

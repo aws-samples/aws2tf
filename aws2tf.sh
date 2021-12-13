@@ -21,6 +21,7 @@ usage(){
    echo "           lf" 
    echo "           athena" 
    echo "           glue" 
+   echo "           params"
    echo "           sagemaker" 
    echo "           eb"
    echo "           ec2"
@@ -237,6 +238,7 @@ if [ "$t" == "ec2" ]; then pre="25*"; fi
 if [ "$t" == "s3" ]; then pre="06*"; fi
 if [ "$t" == "spot" ]; then pre="25*"; fi
 if [ "$t" == "params" ]; then pre="445*"; fi
+if [ "$t" == "artifact" ]; then pre="627*"; fi
 
 exclude="iam"
 

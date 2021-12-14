@@ -127,6 +127,7 @@ for c in `seq 0 0`; do
                                 if [[ ${tt1} == "bucket_domain_name" ]];then skip=1;fi
                                 if [[ ${tt1} == "bucket_regional_domain_name" ]];then skip=1;fi
                                 if [[ ${tt1} == "allocated_capacity" ]];then skip=1;fi
+                                if [[ ${tt1} == "hosted_zone_id" ]];then skip=1;fi
                             fi
 
 

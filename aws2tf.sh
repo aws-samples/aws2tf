@@ -180,7 +180,7 @@ fi
 printf "}\n" >> aws.tf
 
 cat aws.tf
-#cp ../../stubs/*.tf .
+cp ../../stubs/data-aws.tf .
 
 if [ "$t" == "no" ]; then t="*"; fi
 

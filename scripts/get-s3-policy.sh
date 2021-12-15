@@ -8,33 +8,31 @@ rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
 echo "$ttft $rname"
             
 fn=`printf "%s__%s.tf" $ttft $rname`
-            if [ -f "$fn" ] ; then
+        if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
-                continue
-            fi
-            printf "resource \"%s\" \"%s\" {" $ttft $rname > $fn
-            printf "}" >> $fn
-            printf "terraform import %s.%s %s" $ttft $rname $cname > data/import_$ttft_$rname.sh
+                exit
+        fi
+        printf "resource \"%s\" \"%s\" {" $ttft $rname > $fn
+        printf "}" >> $fn
+        printf "terraform import %s.%s %s" $ttft $rname $cname > data/import_$ttft_$rname.sh
               
-            cmdi=`printf "terraform import %s.%s %s" $ttft $rname $cname`
-            echo $cmdi
-            eval $cmdi
+        cmdi=`printf "terraform import %s.%s %s" $ttft $rname $cname | grep Import`
+        eval $cmdi
             
-            cmds=`printf "terraform state show %s.%s > t2.txt" $ttft $rname`
-            eval $cmds
-            
-            #tfa=`printf "data/%s.%s" $ttft $rname`
-            #terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
-            #echo $awsj | jq . 
-            rm $fn
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-            #	for k in `cat t1.txt`; do
-            #		echo $k
-            #	done
-            file="t1.txt"
+        cmds=`printf "terraform state show %s.%s > t2.txt" $ttft $rname`
+        eval $cmds
+
+        rm $fn
+        cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+
+        file="t1.txt"
+        terraform state show aws_s3_bucket_policy.ds-data-lake-029e33c5a105 | grep = | grep policy > /dev/null
+        if [[ $? -eq 0 ]];then
+
+
             echo $aws2tfmess > $fn
 
-while IFS= read line
+            while IFS= read line
             do
 				skip=0
                 # display $line or do something with $line
@@ -66,11 +64,10 @@ while IFS= read line
                     echo "$t1" >> $fn
                 fi
                 
-done <"$file"
-
-        
-
-    
+            done <"$file"
+        else
+            echo "No bucket policy found for $1 skipping ..."
+        fi # grep
 
 
 rm -f t*.txt

@@ -95,6 +95,11 @@ for c in `seq 0 0`; do
                             tt2=${tt2//$/&} 
                             t1=`printf "\"%s\"=%s" $tt1 "$tt2"`
                         fi
+                        if [[ ${tt1} == "Resource" ]];then
+                            # check tt2 for $
+                            tt2=${tt2//$/&} 
+                            t1=`printf "\"%s\"=%s" $tt1 "$tt2"`
+                        fi
                         if [[ ${tt1} == "arn" ]];then skip=1; fi
                         if [[ ${tt1} == "id" ]];then skip=1; fi
                         if [[ ${tt1} == "policy_id" ]];then skip=1; fi

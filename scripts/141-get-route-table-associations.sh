@@ -1,6 +1,10 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS ec2 describe-route-tables --filters \"Name=vpc-id,Values=$1\""
+    if [[ "$1" == "rtb-"* ]]; then
+        cmd[0]="$AWS ec2 describe-route-tables --filters \"Name=association.route-table-association-id,Values=$1\""
+    else  
+        cmd[0]="$AWS ec2 describe-route-tables --filters \"Name=vpc-id,Values=$1\""
+    fi 
 else
     cmd[0]="$AWS ec2 describe-route-tables"
 fi

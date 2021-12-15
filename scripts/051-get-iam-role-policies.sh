@@ -73,6 +73,9 @@ for c in `seq 0 0`; do
                     #if [[ ${tt1} == "public_ip" ]];then skip=1;fi
                     if [[ ${tt1} == "private_ip" ]];then skip=1;fi
                     if [[ ${tt1} == "accept_status" ]];then skip=1;fi
+                    if [[ ${tt1} == "Resource" ]];then 
+                    echo $t1
+                    fi
                     #if [[ ${tt1} == "default_network_acl_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "ipv6_association_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "ipv6_cidr_block" ]];then skip=1;fi

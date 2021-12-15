@@ -6,6 +6,7 @@ usage(){
   echo "       -v           stop after terraform validate step"
   echo "       -h           Help - this message"
   echo "       -d           Debug - lots of output"
+  echo "       -s <stack name>  Traverse a Stack and import resources (experimental)"
   echo "       -t <type>    choose a sub-type of AWS resources to get" 
    echo "           iam"                
    echo "           org" 
@@ -41,8 +42,9 @@ v="no"
 r="no" # region
 c="no" # combine mode
 d="no"
+s="no"
 
-while getopts ":p:r:x:f:v:t:i:c:d:h:" o; do
+while getopts ":p:r:x:f:v:t:i:c:d:h:s:" o; do
     case "${o}" in
         h) usage
         ;;
@@ -63,6 +65,8 @@ while getopts ":p:r:x:f:v:t:i:c:d:h:" o; do
         c) c="yes"
         ;;
         d) d="yes"
+        ;;
+        s) s=${OPTARG}
         ;;
         
         *)
@@ -102,7 +106,7 @@ fi
 
 
 
-s=`echo $mysub`
+#s=`echo $mysub`
 mkdir -p  generated/tf.$mysub
 cd generated/tf.$mysub
 
@@ -139,7 +143,7 @@ fi
 
 export AWS="aws --profile $p --region $r --output json "
 echo " "
-echo "Account ID = ${s}"
+echo "Account ID = ${mysub}"
 echo "Region = ${r}"
 echo "AWS Profile = ${p}"
 echo "Extract KMS Secrets to .tf files (insecure) = ${x}"
@@ -163,7 +167,7 @@ printf "required_version = \"~> 1.0.6\"\n" >> aws.tf
 printf "  required_providers {\n" >> aws.tf
 printf "   aws = {\n" >> aws.tf
 printf "     source  = \"hashicorp/aws\"\n" >> aws.tf
-printf "      version = \"= 3.46.0\"\n" >> aws.tf
+printf "      version = \"= 3.69.0\"\n" >> aws.tf
 printf "    }\n" >> aws.tf
 printf "  }\n" >> aws.tf
 printf "}\n" >> aws.tf
@@ -253,6 +257,7 @@ ls
 #############################################################################
 date
 lc=0
+if [[ "$s" == "no" ]];then 
 echo "t=$t"
 echo "loop through providers"
 tstart=`date +%s`
@@ -298,6 +303,15 @@ for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do
     fi
     
 done
+else
+    echo "Stack set $s traverse - experimental"
+    ../../scripts/get-stack.sh $s
+    chmod 755 commands.sh
+    if [ "$v" = "yes" ]; then
+        exit
+    fi
+    ./commands.sh
+fi
 
 #########################################################################
 tend=`date +%s`

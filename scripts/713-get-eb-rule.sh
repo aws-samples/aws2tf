@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS events list-rules --event-bus-name $1" 
+    cmd[0]="$AWS events describe-rule --name $1" 
 else
     cmd[0]="$AWS events list-rules"
 fi
@@ -26,8 +26,13 @@ for c in `seq 0 0`; do
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
-            bus=`echo $awsout | jq ".${pref[(${c})]}[(${i})].EventBusName" | tr -d '"'`
+            if [[ "$1" != "" ]];then 
+                cname=`echo $awsout | jq -r ".${idfilt[(${c})]}"`
+                bus=`echo $awsout | jq -r ".EventBusName"`
+            else
+                cname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}"`
+                bus=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].EventBusName"`
+            fi
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $cname`
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf

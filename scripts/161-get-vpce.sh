@@ -1,6 +1,10 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS ec2 describe-vpc-endpoints --filters \"Name=vpc-id,Values=$1\"" 
+    if [[ "$1" == "vpce-"* ]]; then
+        cmd[0]="$AWS ec2 describe-vpc-endpoints --filters \"Name=vpc-endpoint-id,Values=$1\"" 
+    else
+        cmd[0]="$AWS ec2 describe-vpc-endpoints --filters \"Name=vpc-id,Values=$1\""
+    fi 
 else
     cmd[0]="$AWS ec2 describe-vpc-endpoints"
 fi
@@ -51,6 +55,9 @@ for c in `seq 0 0`; do
                 if [[ ${t1} == *"="* ]];then
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
+                    if [[ ${tt1} == *":"* ]];then 
+                        t1=`printf "\"%s\"=%s" $tt1 "$tt2"`
+                    fi
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi

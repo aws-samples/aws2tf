@@ -56,8 +56,7 @@ for c in `seq 0 0`; do
                 printf "terraform import %s.%s %s" $ttft $cname $cname > "data/import_$ttft_$cname.sh"
                 terraform import $ttft.k_$cname "$cname" | grep Import
                 if [ $? -eq 0 ]; then
-            
-                    
+               
                     #terraform state mv $ttft.$cname $ttft.k_$cname
                     terraform state show $ttft.k_$cname > t2.txt
                     tfa=`printf "%s.%s" $ttft k_$cname`
@@ -104,7 +103,9 @@ for c in `seq 0 0`; do
                         fi
                         
                     done <"$file"
-                else
+                    # get any alias
+                    ../../scripts/081-get-kms-alias.sh $cname
+                else # import failed
                     echo "Import Failed $ttft $cname"
                     mv $ttft.$cname.tf $ttft.$cname.tf.failed
                 fi 

@@ -1,8 +1,10 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS codeartifact list-domains" 
+    cmd[0]="$AWS codeartifact describe-domain --domain $1" 
+    pref[0]="domain"
 else
     cmd[0]="$AWS codeartifact list-domains"
+    pref[0]="domains"
 fi
 
 pref[0]="domains"
@@ -26,9 +28,13 @@ for c in `seq 0 0`; do
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
-            aarn=`echo $awsout | jq ".${pref[(${c})]}[(${i})].arn" | tr -d '"'`
-            
+            if [ "$1" != "" ]; then
+                cname=`echo $awsout | jq ".${pref[(${c})]}.${idfilt[(${c})]}" | tr -d '"'`
+                aarn=`echo $awsout | jq ".${pref[(${c})]}.arn" | tr -d '"'`
+            else
+                cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
+                aarn=`echo $awsout | jq ".${pref[(${c})]}[(${i})].arn" | tr -d '"'`
+            fi
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $cname`
             if [ -f "$fn" ] ; then

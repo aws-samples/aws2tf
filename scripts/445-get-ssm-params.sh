@@ -1,6 +1,10 @@
 #!/bin/bash
+if [ "$1" != "" ]; then
+    cmd[0]="$AWS ssm describe-parameters  --filters Key=Name,Values=$1" 
+else
+    cmd[0]="$AWS ssm describe-parameters"
+fi
 
-cmd[0]="$AWS ssm describe-parameters"
 
 tft[0]="aws_ssm_parameter"
 idfilt[0]="Name"

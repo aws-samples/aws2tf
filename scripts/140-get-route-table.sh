@@ -1,11 +1,18 @@
 #!/bin/bash
+echo $1
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS ec2 describe-route-tables --filters \"Name=vpc-id,Values=$1\""
+    if [[ "$1" == "rtb-"* ]]; then
+        cmd[0]="$AWS ec2 describe-route-tables --filters \"Name=route-table-id,Values=$1\""
+    else
+        cmd[0]="$AWS ec2 describe-route-tables --filters \"Name=vpc-id,Values=$1\""
+    fi
 else
     cmd[0]="$AWS ec2 describe-route-tables"
 fi
 c=0
 cm=${cmd[$c]}
+#echo $cm
+
 
 pref[0]="RouteTables"
 tft[0]="aws_route_table"
@@ -14,7 +21,7 @@ for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "You don't have access for this resource"
@@ -24,7 +31,7 @@ for c in `seq 0 0`; do
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
-            #echo $i
+            echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].RouteTableId" | tr -d '"'`
             echo "$ttft $cname"
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf

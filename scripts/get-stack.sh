@@ -26,13 +26,12 @@ fi
 }
 
 getstackresources () {
-#echo "Getting resources for stack $1"
 stackr=$(aws cloudformation describe-stack-resources --stack-name $1 --query StackResources)
 #echo $stackr | jq .
 count=`echo $stackr | jq ". | length"`
-echo $count
 if [ "$count" -gt "0" ]; then
     count=`expr $count - 1`
+    echo "Getting $count resources for stack $1"
         for i in `seq 0 $count`; do
             type=$(echo "$stackr" | jq  -r ".[(${i})].ResourceType")
             pid=$(echo "$stackr" | jq  -r ".[(${i})].PhysicalResourceId" | cut -f2 -d'/')
@@ -82,7 +81,6 @@ for nest in ${nested[@]}; do
 done
 
 for nest in ${nested[@]}; do
-    echo "*** Getting Resources for $nest"
     nest=`echo $nest | jq -r .`
     getstackresources $nest
 done

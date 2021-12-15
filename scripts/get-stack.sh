@@ -26,7 +26,7 @@ fi
 }
 
 getstackresources () {
-echo "Getting resources for stack $1"
+#echo "Getting resources for stack $1"
 stackr=$(aws cloudformation describe-stack-resources --stack-name $1 --query StackResources)
 #echo $stackr | jq .
 count=`echo $stackr | jq ". | length"`

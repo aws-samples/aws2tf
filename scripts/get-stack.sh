@@ -47,6 +47,7 @@ if [ "$count" -gt "0" ]; then
                 AWS::EC2::SubnetRouteTableAssociation) echo "../../scripts/141-get-route-table-associations.sh $pid" >> commands.sh ;;
                 AWS::S3::Bucket) echo "../../scripts/060-get-s3.sh $pid" >> commands.sh ;;
                 AWS::Lambda::Function) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/700-get-lambda-function.sh $pid"  >> commands.sh ;;
+                AWS::Lambda::Permission) ;; # fetched as part of function
                 AWS::SSM::Parameter) echo "../../scripts/445-get-ssm-params.sh $pid" >> commands.sh ;;
                 AWS::KMS::Key) echo "../../scripts/080-get-kms-key.sh $pid" >> commands.sh ;;
                 AWS::IAM::Role) echo "../../scripts/050-get-iam-roles.sh $pid" >> commands.sh ;;

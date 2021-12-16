@@ -1,6 +1,10 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS ec2 describe-nat-gateways --filter \"Name=state,Values=available\" \"Name=vpc-id,Values=$1\""
+    if [[ "$1" == "nat-"* ]]; then
+        cmd[0]="$AWS ec2 describe-nat-gateways --filter \"Name=state,Values=available\" \"Name=nat-gateway-id,Values=$1\""
+    else
+        cmd[0]="$AWS ec2 describe-nat-gateways --filter \"Name=state,Values=available\" \"Name=vpc-id,Values=$1\""
+    fi
 else
     cmd[0]="$AWS ec2 describe-nat-gateways --filter \"Name=state,Values=available\""
 fi

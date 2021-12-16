@@ -1,6 +1,10 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS ec2 describe-internet-gateways --filters \"Name=attachment.vpc-id,Values=$1\""
+    if [[ "$1" == "igw-"* ]]; then
+        cmd[0]="$AWS ec2 describe-internet-gateways --filters \"Name=internet-gateway-id,Values=$1\""
+    else
+        cmd[0]="$AWS ec2 describe-internet-gateways --filters \"Name=attachment.vpc-id,Values=$1\""
+    fi
 else
     cmd[0]="$AWS ec2 describe-internet-gateways"
 fi

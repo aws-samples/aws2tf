@@ -1,7 +1,11 @@
 #!/bin/bash
 
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS ec2 describe-addresses --allocation-ids $1"
+    if [[ "$1" == "eip-"* ]]; then
+        cmd[0]="$AWS ec2 describe-addresses --allocation-ids $1"
+    else
+        cmd[0]="$AWS ec2 describe-addresses --filters \"Name=public-ip,Values=$1\"""
+    fi
 else
     cmd[0]="$AWS ec2 describe-addresses"
 fi

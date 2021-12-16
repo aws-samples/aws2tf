@@ -1,5 +1,4 @@
 #!/bin/bash
-echo $1
 if [ "$1" != "" ]; then
     if [[ "$1" == "rtb-"* ]]; then
         cmd[0]="$AWS ec2 describe-route-tables --filters \"Name=route-table-id,Values=$1\""
@@ -12,7 +11,6 @@ fi
 c=0
 cm=${cmd[$c]}
 #echo $cm
-
 
 pref[0]="RouteTables"
 tft[0]="aws_route_table"
@@ -33,18 +31,20 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].RouteTableId" | tr -d '"'`
-            echo "$ttft $cname"
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" $cname >> $ttft.$cname.tf
-            terraform import $ttft.$cname "$cname" | grep Import
-            terraform state show $ttft.$cname > t2.txt
-            rm $ttft.$cname.tf
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            echo "$ttft $cname import"
+            fn=`printf "%s__%s.tf" $ttft $rname`
+            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
+            printf "resource \"%s\" \"%s\" {" $ttft $rname > $fn
+            printf "}" >> $fn
+            terraform import $ttft.$rname "$cname" | grep Import
+            terraform state show $ttft.$rname > t2.txt
+            rm $fn
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             #	for k in `cat t1.txt`; do
             #		echo $k
             #	done
             file="t1.txt"
-            fn=`printf "%s__%s.tf" $ttft $cname`
             pcxs=()
             echo $aws2tfmess > $fn
             while IFS= read line

@@ -78,6 +78,7 @@ if [ "$kcount" -gt "0" ]; then
         ../../scripts/135*.sh $tcmd  # TGW
 
             ## need these or will it do it's own ?
+        echo "EKS Route tables for $tcmd"    
         ../../scripts/140*.sh $tcmd  # route table
         ../../scripts/141*.sh $tcmd  # route table assoc
         ../../scripts/161*.sh $tcmd  # vpce

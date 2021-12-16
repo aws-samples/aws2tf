@@ -1,10 +1,9 @@
 #!/bin/bash
-
 if [ "$1" != "" ]; then
-    if [[ "$1" == "eip-"* ]]; then
+    if [[ "$1" == "eip"* ]]; then
         cmd[0]="$AWS ec2 describe-addresses --allocation-ids $1"
     else
-        cmd[0]="$AWS ec2 describe-addresses --filters \"Name=public-ip,Values=$1\"""
+        cmd[0]="$AWS ec2 describe-addresses --filters \"Name=public-ip,Values=$1\""
     fi
 else
     cmd[0]="$AWS ec2 describe-addresses"
@@ -39,7 +38,7 @@ for c in `seq 0 0`; do
             fi
             echo $aws2tfmess > $fn
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" $cname >> $ttft.$cname.tf
+            printf "}" >> $ttft.$cname.tf
             terraform import $ttft.$cname "$cname" | grep Import
             terraform state show $ttft.$cname > t2.txt
             rm $ttft.$cname.tf
@@ -63,6 +62,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "association_id" ]];then skip=1;fi
+                    if [[ ${tt1} == "allocation_id" ]];then skip=1;fi
                     if [[ ${tt1} == "public_dns" ]];then skip=1;fi
                     if [[ ${tt1} == "private_dns" ]];then skip=1;fi
                     if [[ ${tt1} == "public_ip" ]];then skip=1;fi

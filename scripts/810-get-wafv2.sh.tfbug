@@ -39,7 +39,7 @@ for c in `seq 0 0`; do
 
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
             #printf "region=\"us-est-1\"" >> $ttft.$cname.tf
-            printf "}" $cname >> $ttft.$cname.tf
+            printf "}" >> $ttft.$cname.tf
             
             ### apparent bug on import
             ## Error: WAFInvalidParameterException: Error reason: The scope is not valid., field: SCOPE_VALUE, parameter: CLOUDFRONT

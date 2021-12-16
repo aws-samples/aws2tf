@@ -41,7 +41,7 @@ for c in `seq 0 0`; do
                 continue
             fi
             printf "resource \"%s\" \"%s\" {" $ttft $rname > $ttft.$rname.tf
-            printf "}" $cname >> $ttft.$rname.tf
+            printf "}" >> $ttft.$rname.tf
             printf "terraform import %s.%s %s" $ttft $rname $cname > data/import_$ttft_$rname.sh
             terraform import $ttft.$rname "$cname" | grep Import
             terraform state show $ttft.$rname > t2.txt

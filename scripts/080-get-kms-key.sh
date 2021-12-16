@@ -52,7 +52,7 @@ for c in `seq 0 0`; do
                     continue
                 fi
                 printf "resource \"%s\" \"k_%s\" {" $ttft $cname > $ttft.$cname.tf
-                printf "}" $cname >> $ttft.$cname.tf
+                printf "}" >> $ttft.$cname.tf
                 printf "terraform import %s.%s %s" $ttft $cname $cname > "data/import_$ttft_$cname.sh"
                 terraform import $ttft.k_$cname "$cname" | grep Import
                 if [ $? -eq 0 ]; then

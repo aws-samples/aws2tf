@@ -33,7 +33,7 @@ for c in `seq 0 0`; do
         
             instroles=`echo $awsout | jq ".${pref[(${c})]}.Roles"`
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" $cname >> $ttft.$cname.tf
+            printf "}" >> $ttft.$cname.tf
             terraform import $ttft.$cname "$cname" | grep Import
             terraform state show $ttft.$cname > t2.txt
             rm $ttft.$cname.tf

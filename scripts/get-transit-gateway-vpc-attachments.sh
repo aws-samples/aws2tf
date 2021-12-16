@@ -47,7 +47,7 @@ for c in `seq 0 0`; do
             tgwid=`echo $awsout | jq ".${pref[(${c})]}[(${i})].TransitGatewayId" | tr -d '"'`
             echo "$ttft $cname" $tgwid
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" $cname >> $ttft.$cname.tf
+            printf "}" >> $ttft.$cname.tf
             terraform import $ttft.$cname "$cname" | grep Import
             terraform state show $ttft.$cname > t2.txt
             rm $ttft.$cname.tf

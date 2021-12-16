@@ -34,15 +34,15 @@ for c in `seq 0 0`; do
             echo "$ttft $cname"
             eipall=`echo $awsout | jq ".${pref[(${c})]}[(${i})].NatGatewayAddresses[0].AllocationId" | tr -d '"'`
             echo "eipall = $eipall"
+
             fn=`printf "%s__%s.tf" $ttft $cname`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
                 exit
             fi
-  
 
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" $cname >> $ttft.$cname.tf
+            printf "}" >> $ttft.$cname.tf
             terraform import $ttft.$cname "$cname" | grep Import
             terraform state show $ttft.$cname > t2.txt
             tfa=`printf "data/%s.%s" $ttft $cname`

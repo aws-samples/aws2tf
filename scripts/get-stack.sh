@@ -42,6 +42,7 @@ if [ "$count" -gt "0" ]; then
                 AWS::EC2::EIP) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/get-eip.sh $pid"  >> commands.sh ;;
                 AWS::EC2::NatGateway) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/130-get-natgw.sh $pid"  >> commands.sh ;;
                 AWS::EC2::InternetGateway) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/120-get-igw.sh $pid"  >> commands.sh ;;
+                AWS::EC2::LaunchTemplate) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/eks-launch_template.sh $pid"  >> commands.sh ;;
                 AWS::EC2::SecurityGroup) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/110-get-security-group.sh $pid"  >> commands.sh ;;
                 AWS::EC2::SecurityGroupIngress) ;; # fetched as part of Security Group
                 AWS::EC2::VPCEndpoint) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/161-get-vpce.sh $pid" >> commands.sh ;;
@@ -60,6 +61,8 @@ if [ "$count" -gt "0" ]; then
                 AWS::KMS::Alias) ;; # feteched as part of key
                 AWS::CodeArtifact::Domain)  echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/627-get-code-artifact-domain.sh $pid"  >> commands.sh ;;
                 AWS::CodeArtifact::Repository) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/627-get-code-artifact-repository.sh $pid"  >> commands.sh ;;
+                
+                AWS::EKS::Nodegroup) echo "$type $pid Should be fetched via the EKS Cluster Resource" ;;
                 AWS::CloudFormation::Stack) ;;
                 *) echo "--UNPROCESSED-- $type $pid" >> unprocessed.txt ;;
 esac

@@ -16,7 +16,7 @@ cm=${cmd[$c]}
 pref[0]="LaunchTemplates"
 tft[0]="aws_launch_template"
 idfilt[0]="LaunchTemplateId"
-
+sgs=()
 for c in `seq 0 0`; do
  
     cm=${cmd[$c]}
@@ -123,7 +123,9 @@ for c in `seq 0 0`; do
                 else
                     if [[ "$t1" == *"sg-"* ]]; then
                         t1=`echo $t1 | tr -d '"|,'`
+                        sgs+=$(echo $t1)
                         t1=`printf "aws_security_group.%s.id," $t1`
+                     
                     fi
                 fi
                 
@@ -133,6 +135,12 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
+
+            # get sg's
+            for sg in ${sgs[@]}; do
+                echo "Getting lt SG $sg"
+                ../../scripts/110-get-security-group.sh $sg
+            done
             
         done
     fi

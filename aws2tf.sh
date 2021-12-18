@@ -27,6 +27,7 @@ usage(){
    echo "           eb"
    echo "           ec2"
    echo "           s3"
+   echo "           s3"
    echo "           spot"
    echo "           tgw"
    echo "           vpc"
@@ -240,6 +241,7 @@ if [ "$t" == "sagemaker" ]; then pre="68*"; fi
 if [ "$t" == "eb" ]; then pre="71*"; fi
 if [ "$t" == "ec2" ]; then pre="25*"; fi
 if [ "$t" == "s3" ]; then pre="06*"; fi
+if [ "$t" == "sc" ]; then pre="81*"; fi
 if [ "$t" == "spot" ]; then pre="25*"; fi
 if [ "$t" == "params" ]; then pre="445*"; fi
 if [ "$t" == "artifact" ]; then pre="627*"; fi

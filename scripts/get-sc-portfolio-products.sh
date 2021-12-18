@@ -101,6 +101,10 @@ for c in `seq 0 0`; do
                                     printf "provisioning_artifact_parameters {\n" >> $fn 
                                     printf "template_url = %s\n" "$url" >> $fn
                                     printf "}\n"       >> $fn 
+                                    printf "lifecycle {\n" >> $fn
+                                    printf "   ignore_changes = [provisioning_artifact_parameters,accept_language]\n" >> $fn
+                                    printf "}\n" >> $fn
+                                    printf "accept_language=\"en\"\n" >> $fn
                                 fi
                                 if [[ ${tt1} == "created_time" ]];then skip=1;fi         
                                 if [[ ${tt1} == "status" ]];then skip=1; fi 

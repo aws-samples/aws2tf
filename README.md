@@ -99,6 +99,7 @@ The currently supported types are:
 * rds - RDS database resources `-t rds`
 * secrets - Secrets Manager secrets `-t secrets`
 * sagemaker - SageMaker resources `-t sagemaker`
+* sc - Service Catalog resources `-t sagemaker`
 * spot - spot requests `-t spot`
 * tgw - Transit Gateway resources `-t tgw -i transit-gateway-id`
 * vpc - A VPC and it's related resources `-t vpc -i VPC-id`
@@ -272,6 +273,14 @@ The following terraform resource types are supported by this tool at this time:
 ### Secrets Manager
 * aws_secretsmanager_secret
 * aws_secretsmanager_secret_version
+
+### Service Catalog
+* aws_servicecatalog_portfolio
+* aws_servicecatalog_product
+* aws_servicecatalog_product_portfolio_association
+* aws_servicecatalog_constraint
+* aws_servicecatalog_principal_portfolio_association
+
 
 ### Service Discovery
 * aws_service_discovery_service

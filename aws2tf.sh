@@ -8,7 +8,8 @@ usage(){
   echo "       -d           Debug - lots of output"
   echo "       -s <stack name>  Traverse a Stack and import resources (experimental)"
   echo "       -t <type>    choose a sub-type of AWS resources to get" 
-   echo "           iam"                
+   echo "           iam" 
+   echo "           cf"                
    echo "           org" 
    echo "           code"
    echo "           appmesh" 
@@ -228,6 +229,7 @@ fi
 
 if [ "$t" == "org" ]; then pre="01*"; fi
 if [ "$t" == "code" ]; then pre="62*"; fi
+if [ "$t" == "cf" ]; then pre="999*"; fi
 if [ "$t" == "appmesh" ]; then pre="360*"; fi
 if [ "$t" == "kms" ]; then pre="08*"; fi
 if [ "$t" == "lambda" ]; then pre="700*"; fi

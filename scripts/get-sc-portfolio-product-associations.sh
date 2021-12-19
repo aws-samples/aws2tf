@@ -1,31 +1,26 @@
 #!/bin/bash
-if [ "$1" != "" ]; then
-    if [[ "$1" == "port-"* ]]; then
-        cmd[0]="$AWS servicecatalog describe-portfolio --id $1"
-        pref[0]="PortfolioDetail"
+if [[ "$1" == "prod-"* ]]; then
+        cmd[0]="$AWS servicecatalog list-portfolios-for-product --product-id $1"
+        
 
     else
         echo "must pass a portfolio id"
         exit
     fi
-else
-    cmd[0]="$AWS servicecatalog list-portfolios"
-    pref[0]="PortfolioDetails"
-fi
+
 c=0
 cm=${cmd[$c]}
 
+tft[0]="aws_servicecatalog_product_portfolio_association"
+
 pref[0]="PortfolioDetails"
-tft[0]="aws_servicecatalog_portfolio"
 idfilt[0]="Id"
-
-
 
 for c in `seq 0 0`; do
  
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "You don't have access for this resource"
@@ -36,33 +31,29 @@ for c in `seq 0 0`; do
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            if [ "$1" != "" ]; then
-                cname=$(echo $awsout | jq -r ".${pref[(${c})]}.${idfilt[(${c})]}")
-            else
-                cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
-            fi
-            echo "$ttft $cname"
-            fn=`printf "%s__%s.tf" $ttft $cname`
+            cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            echo "$ttft $cname $1"
+            fn=`printf "%s__%s__%s.tf" $ttft $rname $1`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
                 exit
             fi
 
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
-            terraform import $ttft.$cname "$cname" | grep Import
-            terraform state show $ttft.$cname > t2.txt
-            tfa=`printf "data/%s.%s" $ttft $cname`
-            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
-            #cat $tfa.json | jq .
+            printf "resource \"%s\" \"%s__%s\" {" $ttft $rname $1 > $fn
+            printf "}" >> $fn
+            terraform import $ttft.${rname}__${1} "en:${cname}:${1}" | grep Import
+         
+            terraform state show $ttft.${rname}__${1} > t2.txt
 
-            rm $ttft.$cname.tf
+
+            rm -f $fn
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             #	for k in `cat t1.txt`; do
             #		echo $k
             #	done
             file="t1.txt"
-           
+
             echo $aws2tfmess > $fn
             while IFS= read line
             do
@@ -75,8 +66,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
                     if [[ ${tt1} == "created_time" ]];then skip=1;fi
-                        
-                    
+                                
 
                 fi
                 if [ "$skip" == "0" ]; then
@@ -85,12 +75,7 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-            echo "principals"
-            ../../scripts/get-sc-portfolio-principal.sh $cname
-            echo "constraints"
-            ../../scripts/get-sc-portfolio-constraints.sh $cname
-            echo "products"
-            ../../scripts/get-sc-portfolio-products.sh $cname
+            
         done # end for
 
     fi

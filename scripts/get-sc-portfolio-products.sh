@@ -25,6 +25,7 @@ for c in `seq 0 0`; do
         exit
     fi
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    echo "product count=$count"
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
@@ -118,6 +119,9 @@ for c in `seq 0 0`; do
                         done <"$file"
                 done # for j
             fi # if jcount
+        # get product assiciations
+        echo "Product $cname portfolio associations"
+        ../../scripts/get-sc-portfolio-product-associations.sh ${cname}
         done # end for i
 
     fi

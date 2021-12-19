@@ -74,9 +74,7 @@ for c in `seq 0 0`; do
                     tt2=`echo "$line" | cut -f2- -d'='`
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
-                    if [[ ${tt1} == "created_time" ]];then skip=1;fi
-                        
-                    
+                    if [[ ${tt1} == "created_time" ]];then skip=1;fi              
 
                 fi
                 if [ "$skip" == "0" ]; then

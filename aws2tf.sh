@@ -164,7 +164,7 @@ echo " "
 
 # write the aws.tf file
 printf "terraform { \n" > aws.tf
-printf "required_version = \"~> 1.0.6\"\n" >> aws.tf
+printf "required_version = \"~> 1.1.0\"\n" >> aws.tf
 printf "  required_providers {\n" >> aws.tf
 printf "   aws = {\n" >> aws.tf
 printf "     source  = \"hashicorp/aws\"\n" >> aws.tf

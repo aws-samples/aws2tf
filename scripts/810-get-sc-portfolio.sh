@@ -85,11 +85,11 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-            echo "principals"
+            echo "$cname principals"
             ../../scripts/get-sc-portfolio-principal.sh $cname
-            echo "constraints"
+            echo "$cname constraints"
             ../../scripts/get-sc-portfolio-constraints.sh $cname
-            echo "products"
+            echo "$cname products"
             ../../scripts/get-sc-portfolio-products.sh $cname
         done # end for
 

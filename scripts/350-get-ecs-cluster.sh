@@ -36,6 +36,8 @@ for c in `seq 0 0`; do
             fi
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $cname`
+            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
+
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
             printf "}" >> $ttft.$cname.tf
             terraform import $ttft.$cname "$cname" | grep Import
@@ -94,9 +96,9 @@ for c in `seq 0 0`; do
             done <"$file"
             echo "Getting Services $cname"
             ../../scripts/get-ecs-service.sh $cname
-        done
+        done  # for i
     fi
-done
+done #for c
 
 rm -f t*.txt
 

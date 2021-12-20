@@ -1,14 +1,26 @@
+#"arn:aws:ecs:eu-west-1:566972129213:service/ecsworkshop-test-Cluster-S3UTvvr2R84c/ecsworkshop-test-ecsdemo-frontend-Service-ZZiXDeNlGzCf"
 #!/bin/bash
-if [ "$1" != "" ]; then
-    cmd[0]="$AWS ecs list-services --cluster $1" 
+#echo "one=$1"
+if [[ "$1" != "" ]]; then
+    if [[ "$1" == *":"* ]]; then
+        #echo "## process arn"
+        cln=$(echo $1 | rev | cut -f2 -d "/" | rev | tr -d '"')
+        srv=$(echo $1 | rev | cut -f1 -d "/" | rev | tr -d '"')
+        cmd[0]="$AWS ecs describe-services --cluster $cln --services $srv"
+        pref[0]="services"
+        idfilt[0]="serviceArn"
+    else
+        cln=$(echo $1)
+        cmd[0]="$AWS ecs list-services --cluster $cln"
+        pref[0]="serviceArns" 
+        idfilt[0]=""
+    fi
 else
-    echo "Must provide a cluster name - exiting ..."
+    echo "Must provide a cluster name or arn - exiting ..."
     exit
 fi
 
 tft[0]="aws_ecs_service"
-pref[0]="serviceArns"
-idfilt[0]=""
 
 #rm -f ${tft[0]}.tf
 
@@ -27,24 +39,27 @@ for c in `seq 0 0`; do
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            arn=`echo $awsout | jq ".${pref[(${c})]}[(${i})]" | tr -d '"'`
+            if [ ${idfilt[0]} == "" ]; then
+                arn=`echo $awsout | jq ".${pref[(${c})]}[(${i})]" | tr -d '"'`
+                srv=$(echo $arn | rev | cut -f1 -d "/" | rev | tr -d '"')
+            else
+                arn=`echo $awsout | jq ".${pref[(${c})]}[(${i})].serviceArn" | tr -d '"'`
+            fi
             echo "ARN = $arn"
-            cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})]" | rev | cut -d'/' -f 1 | rev | tr -d '"'`
-            rname=${cname//:/_}
-            rname=${rname//\//_}
-            echo "rname=$rname cname=$cname"
-            fn=`printf "%s__%s.tf" $ttft $rname`
-            printf "resource \"%s\" \"%s\" {\n" $ttft $rname > $fn
+
+            cname=$(echo $srv)
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+
+            echo "rname=$rname cname=$cname cln=$cln"
+            fn=`printf "%s__%s__%s.tf" $ttft $cln $rname`
+            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
+            printf "resource \"%s\" \"%s__%s\" {\n" $ttft $cln $rname > $fn
             printf "}"  >> $fn
             #echo "terraform import $ttft.$rname $1/$cname"
-            terraform import $ttft.$rname "$1/$cname" 
-            terraform state show $ttft.$rname > t2.txt
+            terraform import ${ttft}.${cln}__${rname} "${cln}/${cname}" 
+            terraform state show ${ttft}.${cln}__${rname} > t2.txt
             
-            rm $fn
-
-            tfa=`printf "data/%s.%s" $ttft $rname`
-            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
-            #echo $awsj | jq . 
+            rm $fn 
            
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             #	for k in `cat t1.txt`; do
@@ -92,25 +107,34 @@ for c in `seq 0 0`; do
                     #echo $skip $t1
                     echo "$t1" >> $fn
                 fi
-                
+
             done <"$file"
-           
-            echo "get hostzone id"
-            comm=`printf "$AWS ecs describe-services --services %s --cluster %s | jq '.services[].serviceRegistries[0].registryArn' | tr -d '\"'" $arn $1`
-            #echo $comm
+
+            echo "get hostzone id for $cln $srv"
+            comm=`printf "$AWS ecs describe-services --services %s --cluster %s | jq '.services[].serviceRegistries[0].registryArn' | tr -d '\"'" $srv $cln`
             srvid=`eval $comm`
             srvid=`echo $srvid | cut -f2 -d'/'`
-            #echo "srvid = $srvid"
-            if [ "$srvid" != "null" ]; then
-                nsid=`$AWS servicediscovery get-service --id $srvid | jq .Service.NamespaceId | tr -d '\"'`
-                echo $nsid
-                # get zone id
-                hzid=`$AWS servicediscovery get-namespace --id $nsid | jq .Namespace.Properties.DnsProperties.HostedZoneId | tr -d '"'`
-                ../../scripts/get-priv-hzn.sh $hzid
+
+            echo "srvid = $srvid"
+            if [ "$srv" != "null" ]; then
+                    nsid=`$AWS servicediscovery get-service --id $srvid | jq .Service.NamespaceId | tr -d '\"'`
+                    echo $nsid
+                    # get zone id
+                    hzid=`$AWS servicediscovery get-namespace --id $nsid | jq .Namespace.Properties.DnsProperties.HostedZoneId | tr -d '"'`
+                    ../../scripts/get-priv-hzn.sh $hzid
             fi
-        done
+
+                # get cluster if needed
+            cfn=`printf "%s__%s.tf" $ttft $cln`
+            if [ -f "$cfn" ] ; then 
+                    echo "$cfn exists already skipping" 
+            else
+                    ../../scripts/350-get-ecs-cluster.sh $cln
+            fi
+
+        done # i
     fi
 done
 
-rm t*.txt
+rm -f t*.txt
 

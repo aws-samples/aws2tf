@@ -1,17 +1,18 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    arn=`echo $1`
-    arn="arn:aws:servicediscovery:eu-west-1:566972129213:service/srv-pdhsivbua7ukgz6i"
-    comm=`printf "$AWS servicediscovery list-services | jq '.Services[] | select(.Arn==\"%s\").Id' | tr -d '\"'" $arn`
-    srvid=`eval $comm`
-    nsid=`$AWS servicediscovery get-service --id $srvid | jq .Service.NamespaceId | tr -d '\"'`
-    echo $nsid
+    hzid=$(echo $1)
+    #arn=`echo $1`
+    #arn="arn:aws:servicediscovery:eu-west-1:566972129213:service/srv-pdhsivbua7ukgz6i"
+    #comm=`printf "$AWS servicediscovery list-services | jq '.Services[] | select(.Arn==\"%s\").Id' | tr -d '\"'" $arn`
+    #srvid=`eval $comm`
+    #nsid=`$AWS servicediscovery get-service --id $srvid | jq .Service.NamespaceId | tr -d '\"'`
+    #echo $nsid
     # get zone id
-    hzid=`$AWS servicediscovery get-namespace --id $nsid | jq .Namespace.Properties.DnsProperties.HostedZoneId | tr -d '"'`
+    #hzid=`$AWS servicediscovery get-namespace --id $nsid | jq .Namespace.Properties.DnsProperties.HostedZoneId | tr -d '"'`
     echo $hzid
     cmd[0]="$AWS route53 list-resource-record-sets --hosted-zone-id $hzid" 
 else
-    echo "Must provide a service Arn - exiting ..."
+    echo "Must provide a hosted zone id - exiting ..."
     exit
 fi
 
@@ -19,27 +20,23 @@ ttft="aws_route53_zone"
 
 
 #rm -f ${tft[0]}.tf
-
-
-            cname=`echo $hzid`
+cname=`echo $hzid`
             
-            rname=${cname//:/_}
-            rname=${rname//\//_}
-            echo "getting hostzone $rname"
-            fn=`printf "%s__%s.tf" $ttft $rname`
-            printf "resource \"%s\" \"%s\" {\n" $ttft $rname > $fn
-            printf "}"  >> $fn
-            
-            terraform import $ttft.$rname $rname | grep Import
-            terraform state show $ttft.$rname > t2.txt
-            
-            rm $fn
 
-            tfa=`printf "data/%s.%s" $ttft $rname`
-            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
-            #echo $awsj | jq . 
-           
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+echo "getting hostzone hzid=$cname"
+rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+fn=`printf "%s__%s.tf" $ttft $rname`
+if [ -f "$fn" ] ; then echo "$fn exists already skipping" && exit; fi
+
+printf "resource \"%s\" \"%s\" {\n" $ttft $rname > $fn
+printf "}"  >> $fn
+            
+terraform import $ttft.$rname "${cname}" | grep Import
+terraform state show $ttft.$rname > t2.txt
+            
+rm $fn
+
+cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             #	for k in `cat t1.txt`; do
             #		echo $k
             #	done

@@ -94,7 +94,7 @@ for nest in ${nested[@]}; do
     getstackresources $nest
 done
 
-echo "commands.sh"
-cat commands.sh
+#echo "commands.sh"
+#cat commands.sh
 cat unprocessed.txt
 

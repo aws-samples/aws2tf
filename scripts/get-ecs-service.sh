@@ -45,12 +45,12 @@ for c in `seq 0 0`; do
             else
                 arn=`echo $awsout | jq ".${pref[(${c})]}[(${i})].serviceArn" | tr -d '"'`
             fi
-            echo "ARN = $arn"
+            #echo "ARN = $arn"
 
             cname=$(echo $srv)
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
 
-            echo "rname=$rname cname=$cname cln=$cln"
+            echo "cname=$cname cln=$cln"
             fn=`printf "%s__%s__%s.tf" $ttft $cln $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
             printf "resource \"%s\" \"%s__%s\" {\n" $ttft $cln $rname > $fn

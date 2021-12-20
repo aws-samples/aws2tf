@@ -27,10 +27,8 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})]" | tr -d '"'`
-            
-            rname=${cname//:/_}
-            rname=${rname//\//_}
-            echo $rname
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+
             fn=`printf "%s__%s.tf" $ttft $rname`
             printf "resource \"%s\" \"%s\" {\n" $ttft $rname > $fn
             printf "}"  >> $fn

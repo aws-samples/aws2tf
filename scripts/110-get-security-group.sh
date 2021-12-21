@@ -53,7 +53,7 @@ for c in `seq 0 0`; do
             if [[ $sgname == "default" ]];then
                 continue
             fi
-            echo "$ttft $cname tf files"
+            echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ]; then continue; fi
 

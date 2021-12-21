@@ -1,6 +1,4 @@
-#"arn:aws:ecs:eu-west-1:566972129213:service/ecsworkshop-test-Cluster-S3UTvvr2R84c/ecsworkshop-test-ecsdemo-frontend-Service-ZZiXDeNlGzCf"
 #!/bin/bash
-#echo "one=$1"
 if [[ "$1" != "" ]]; then
     if [[ "$1" == *":"* ]]; then
         #echo "## process arn"
@@ -23,14 +21,14 @@ fi
 tft[0]="aws_ecs_service"
 
 #rm -f ${tft[0]}.tf
-
+echo "idfilt=${idfilt[0]}"
 for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
 	#echo $cm
     awsout=`eval $cm 2> /dev/null`
-    if [ "$awsout" == "" ];then
+    if [[ "$awsout" == "" ]];then
         echo "You don't have access for this resource"
         exit
     fi
@@ -39,7 +37,7 @@ for c in `seq 0 0`; do
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            if [ ${idfilt[0]} == "" ]; then
+            if [[ ${idfilt[0]} == "" ]]; then
                 arn=`echo $awsout | jq ".${pref[(${c})]}[(${i})]" | tr -d '"'`
                 srv=$(echo $arn | rev | cut -f1 -d "/" | rev | tr -d '"')
             else
@@ -56,10 +54,12 @@ for c in `seq 0 0`; do
             printf "resource \"%s\" \"%s__%s\" {\n" $ttft $cln $rname > $fn
             printf "}"  >> $fn
             #echo "terraform import $ttft.$rname $1/$cname"
-            terraform import ${ttft}.${cln}__${rname} "${cln}/${cname}" 
+            terraform import ${ttft}.${cln}__${rname} "${cln}/${cname}" | grep Import
             terraform state show ${ttft}.${cln}__${rname} > t2.txt
             
             rm $fn 
+            sgs=()
+            subs=()
            
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             #	for k in `cat t1.txt`; do
@@ -79,7 +79,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "propagate_tags" ]];then skip=1;fi
+                    #if [[ ${tt1} == "propagate_tags" ]];then skip=1;fi
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
                     if [[ ${tt1} == "availability_zone_id" ]];then skip=1;fi
                     if [[ ${tt1} == "state" ]];then skip=1;fi
@@ -101,7 +101,17 @@ for c in `seq 0 0`; do
                         tt2=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
                     fi
-               
+                else
+                    if [[ "$t1" == *"subnet-"* ]]; then
+                        t1=`echo $t1 | tr -d '"|,'`
+                        subs+=`printf "\"%s\" " $t1`
+                        t1=`printf "aws_subnet.%s.id," $t1`
+                    fi 
+                    if [[ "$t1" == *"sg-"* ]]; then
+                        t1=`echo $t1 | tr -d '"|,'`
+                        sgs+=`printf "\"%s\" " $t1`
+                        t1=`printf "aws_security_group.%s.id," $t1`
+                    fi    
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
@@ -131,6 +141,22 @@ for c in `seq 0 0`; do
             else
                     ../../scripts/350-get-ecs-cluster.sh $cln
             fi
+
+            for sub in ${subs[@]}; do
+                #echo "therole=$therole"
+                sub1=`echo $sub | tr -d '"'`
+                if [ "$sub1" != "" ]; then
+                    ../../scripts/105-get-subnet.sh $sub1
+                fi
+            done
+
+            for sg in ${sgs[@]}; do
+                sg1=`echo $sg | tr -d '"'`
+                if [ "$sg1" != "" ]; then
+                    ../../scripts/110-get-security-group.sh $sg1
+                fi
+            done
+
 
         done # i
     fi

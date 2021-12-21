@@ -1,11 +1,13 @@
 #!/bin/bash
+
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS servicediscovery list-services --filters \"Name=Name,Values=$1\"" 
+    cmd[0]="$AWS servicediscovery get-service --id $1" 
+    pref[0]="Service"
 else
     cmd[0]="$AWS servicediscovery list-services"
+    pref[0]="Services"
 fi
 
-pref[0]="Services"
 tft[0]="aws_service_discovery_service"
 idfilt[0]="Id"
 
@@ -21,26 +23,37 @@ for c in `seq 0 0`; do
         echo "You don't have access for this resource"
         exit
     fi
-    count=`echo $awsout | jq ".${pref[(${c})]} | length"`
-    if [ "$count" -gt "0" ]; then
+    if [[ "$1" != "" ]]; then
+        count=1
+    else
+        count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    fi
+    echo "$ttft count=$count"
+    if [[ "$count" -gt "0" ]]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
-            #echo $i
-            cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
-            echo "$ttft $cname"
-            fn=`printf "%s__%s.tf" $ttft $cname`
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
-            terraform import $ttft.$cname "$cname" | grep Import
-            terraform state show $ttft.$cname > t2.txt
-            tfa=`printf "data/%s.%s" $ttft $cname`
-            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
-            #echo $awsj | jq . 
-            rm $ttft.$cname.tf
+   
+            if [[ "$1" != "" ]]; then
+                cname=`echo $awsout | jq ".${pref[(${c})]}.${idfilt[(${c})]}" | tr -d '"'`
+            else
+                cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
+            fi
+            echo "cname=$cname"
+            
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            
+            fn=`printf "%s__%s.tf" $ttft $rname`
+            if [[ -f "$fn" ]] ; then echo "$fn exists already skipping" && continue; fi       
+            echo "$ttft $cname Import"
+
+
+            printf "resource \"%s\" \"%s\" {" $ttft $rname > $fn
+            printf "}" >> $fn
+            terraform import $ttft.$rname "$cname" | grep Import
+            terraform state show $ttft.$rname > t2.txt
+            
+            rm -f $fn
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-            #	for k in `cat t1.txt`; do
-            #		echo $k
-            #	done
             file="t1.txt"
             echo $aws2tfmess > $fn
             while IFS= read line
@@ -73,6 +86,9 @@ for c in `seq 0 0`; do
                         done
                     fi
                     if [[ ${tt1} == "network_interface_ids" ]];then skip=1;fi
+                    if [[ ${tt1} == "namespace_id" ]];then 
+                        nsid=$(echo $tt2 | tr -d '"')
+                    fi
                     if [[ ${tt1} == "vpc_id" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
@@ -85,10 +101,16 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
+            # get the namespace
+            if [[ "$nsid" != "" ]];then
+                echo "calling get priv dns ns for $nsid"
+                ../../scripts/get-sd-priv-dns-ns.sh $nsid
+            fi
             
         done
     fi
 done
 
-rm t*.txt
+rm -f t*.txt
+echo "exit $ttft"
 

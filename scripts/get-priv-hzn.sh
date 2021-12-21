@@ -59,7 +59,7 @@ cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
                     if [[ ${tt1} == "availability_zone_id" ]];then skip=1;fi
                     if [[ ${tt1} == "state" ]];then skip=1;fi
                     if [[ ${tt1} == "dns_entry" ]];then skip=1;fi
-
+                    if [[ ${tt1} == "zone_id" ]];then skip=1;fi
                     if [[ ${tt1} == "requester_managed" ]];then skip=1;fi
                     if [[ ${tt1} == "revision" ]];then skip=1;fi
                     if [[ ${tt1} == "cidr_blocks" ]];then
@@ -71,10 +71,29 @@ cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
                             echo $t1
                         done
                     fi
+                    if [[ ${tt1} == "name_servers" ]];then 
+                        #echo $t1
+                        skip=1
+                        lbc=0
+                        rbc=0
+                        breq=0
+                        while [[ $breq -eq 0 ]];do 
+                            if [[ "${t1}" == *"["* ]]; then lbc=`expr $lbc + 1`; fi
+                            if [[ "${t1}" == *"]"* ]]; then rbc=`expr $rbc + 1`; fi
+
+                            if [[ $rbc -eq $lbc ]]; then 
+                                breq=1; 
+                            else
+                                read line
+                                t1=`echo "$line"`
+                            fi
+                        done 
+                    fi
+
                     if [[ ${tt1} == "network_interface_ids" ]];then skip=1;fi
                     if [[ ${tt1} == "vpc_id" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
+                        vpcid=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`
                     fi
                
                 fi
@@ -84,15 +103,13 @@ cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
                 fi
                 
             done <"$file"
+            if [[ "$vpcid" != "" ]];then
+                 ../../scripts/100-get-vpc.sh $vpcid
+            fi
             
 
 rm t*.txt
-#$AWS route53 get-hosted-zone --id Z0956511MQ670ZMC5AV9
-# get vpc-id from above
-# resource "aws_service_discovery_private_dns_namespace" "example" {
-# name from   $AWS servicediscovery get-namespace --id $nsid
-# vpc =
-# }  
+
 
 
 

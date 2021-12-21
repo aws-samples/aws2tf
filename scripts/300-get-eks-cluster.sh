@@ -219,15 +219,7 @@ if [ "$kcount" -gt "0" ]; then
                             if [[ ${tt1} == "vpc_id" ]];then skip=1;fi
                             if [[ ${tt1} == "cluster_security_group_id" ]];then skip=1;fi
                             if [[ ${tt1} == "platform_version" ]];then skip=1;fi
-                        else
-                            if [[ "$t1" == *"subnet-"* ]]; then
-                                t1=`echo $t1 | tr -d '"|,'`
-                                t1=`printf "aws_subnet.%s.id," $t1`
-                            fi
-                            if [[ "$t1" == *"sg-"* ]]; then
-                                t1=`echo $t1 | tr -d '"|,'`
-                                t1=`printf "aws_security_group.%s.id," $t1`
-                            fi
+                  
                         fi
                         
                         if [ "$skip" == "0" ]; then

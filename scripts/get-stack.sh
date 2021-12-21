@@ -4,6 +4,7 @@ nested=()
 echo "#!/bin/bash" > commands.sh
 echo "Stack resources not yet implemented ...." > unprocessed.txt
 
+
 getstack () {
 
 stackr=$(aws cloudformation describe-stack-resources --stack-name $1 --query StackResources)
@@ -67,8 +68,9 @@ if [ "$count" -gt "0" ]; then
 
                 AWS::CodeArtifact::Domain)  echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/627-get-code-artifact-domain.sh $pid"  >> commands.sh ;;
                 AWS::CodeArtifact::Repository) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/627-get-code-artifact-repository.sh $pid"  >> commands.sh ;;
-                
+                AWS::ServiceDiscovery::Service)  echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/get-sd-service.sh $pid"  >> commands.sh ;;
                 AWS::EKS::Nodegroup) echo "$type $pid Should be fetched via the EKS Cluster Resource" ;;
+                AWS::CloudFormation::WaitCondition*) echo "skipping $type" ;;
                 AWS::CloudFormation::Stack) ;;
                 *) echo "--UNPROCESSED-- $type $pid" >> unprocessed.txt ;;
 esac

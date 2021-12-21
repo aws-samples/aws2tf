@@ -135,7 +135,6 @@ for c in `seq 0 0`; do
             done
 
             for sg in ${sgs[@]}; do
-                #echo "therole=$therole"
                 sg1=`echo $sg | tr -d '"'`
                 echo "calling for $sg1"
                 if [ "$sg1" != "" ]; then

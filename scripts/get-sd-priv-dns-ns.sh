@@ -100,6 +100,11 @@ for c in `seq 0 0`; do
                         done
                     fi
                     if [[ ${tt1} == "network_interface_ids" ]];then skip=1;fi
+
+                    if [[ ${tt1} == "vpc" ]]; then
+                        vpcid=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`
+                    fi
                
                 fi
                 if [ "$skip" == "0" ]; then
@@ -108,8 +113,10 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-            # get the namespace
-            
+            # get the namespace vpc
+            if [[ "$vpcid" != "" ]];then
+                 ../../scripts/100-get-vpc.sh $vpcid
+            fi
             
         done
     fi

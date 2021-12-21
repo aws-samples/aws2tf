@@ -1,12 +1,13 @@
 #!/bin/bash
-#!/bin/bash
-#if [ "$1" != "" ]; then
-#    cmd[0]="$AWS iam list-policies"
-#else
+if [ "$1" != "" ]; then
+    cmd[0]="$AWS iam get-policy --policy-arn $1"
+    pref[0]="Policy"
+else
     cmd[0]="$AWS iam list-policies --scope Local"
-#fi
+    pref[0]="Policies"
+fi
 
-pref[0]="Policies"
+
 tft[0]="aws_iam_policy"
 getp=0
 for c in `seq 0 0`; do
@@ -24,10 +25,17 @@ for c in `seq 0 0`; do
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Arn" | tr -d '"'`
+        
+            if [ "$1" != "" ]; then
+                pname=`echo $awsout | jq -r ".${pref[(${c})]}.PolicyName"`
+                cname=`echo $awsout | jq ".${pref[(${c})]}.Arn" | tr -d '"'`
+            else
+                pname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].PolicyName"`
+                cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Arn" | tr -d '"'`
+            fi
+
             ocname=`echo $cname`
             cname=`echo $cname | rev | cut -f1 -d'/' | rev `
-            pname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].PolicyName"`
 
             if [ "$1" != "" ]; then
               

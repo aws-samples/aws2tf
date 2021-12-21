@@ -64,7 +64,8 @@ if [ "$count" -gt "0" ]; then
                 AWS::SSM::Parameter) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/445-get-ssm-params.sh $pid" >> commands.sh ;;
 
                 AWS::IAM::Role) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/050-get-iam-roles.sh $pid" >> commands.sh ;;
-                AWS::Events::Rule) echo "../../scripts/713-get-eb-rule.sh $pid" >> commands.sh;;
+                AWS::IAM::ManagedPolicy) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;
+                AWS::Events::Rule) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/713-get-eb-rule.sh $pid" >> commands.sh;;
 
                 AWS::CodeArtifact::Domain)  echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/627-get-code-artifact-domain.sh $pid"  >> commands.sh ;;
                 AWS::CodeArtifact::Repository) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/627-get-code-artifact-repository.sh $pid"  >> commands.sh ;;

@@ -93,6 +93,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "subnet_id" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_subnet.%s.id" $tt1 $tt2`
+                    
                     fi
                     if [[ ${tt1} == "target_group_arn" ]]; then
                         tarn=`echo $tt2 | tr -d '"'`
@@ -100,12 +101,18 @@ for c in `seq 0 0`; do
                         t1=`printf "%s = aws_lb_target_group.%s.arn" $tt1 $tlarn`
                     fi
 
+                            
+                    if [[ ${tt1} == "load_balancer_arn" ]]; then
+                        lbarn=`echo $tt2 | tr -d '"'`
+                        tlbarn=${lbarn//:/_} && tlbarn=${tlbarn//./_} && tlbarn=${tlbarn//\//_}
+                        t1=`printf "%s = aws_lb.%s.arn" $tt1 $tlbarn`
+                    fi
+                else
+                    if [[ "$t1" == *"subnet-"* ]]; then
+                        t1=`echo $t1 | tr -d '"|,'`
+                        t1=`printf "aws_subnet.%s.id," $t1`
+                    fi
 
-                #else
-                #    if [[ "$t1" == *"sg-"* ]]; then
-                #        t1=`echo $t1 | tr -d '"|,'`
-                #        t1=`printf "aws_security_group.%s.id," $t1`
-                #    fi
                 fi
                 
                 if [ "$skip" == "0" ]; then
@@ -117,6 +124,11 @@ for c in `seq 0 0`; do
             if [[ "$tarn" != "" ]]; then
                 ../../scripts/elbv2-target-groups.sh $tarn
             fi
+            if [[ "$lbarn" != "" ]]; then
+                echo "lbarn=$lbarn"
+                ../../scripts/elbv2.sh $lbarn
+            fi
+
             
         done
     fi

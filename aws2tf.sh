@@ -109,13 +109,13 @@ fi
 
 
 #s=`echo $mysub`
-mkdir -p  generated/tf.$mysub
-cd generated/tf.$mysub
+mkdir -p  generated/tf.${mysub}-${r}
+cd generated/tf.${mysub}-${r}
 
 
 if [ "$f" = "no" ]; then
     if [ "$c" = "no" ]; then
-        echo "Cleaning generated/tf.$mysub"
+        echo "Cleaning generated/tf.${mysub}-${r}"
         rm -f *.txt *.sh *.log *.sav *.zip
         rm -f *.tf *.json *.tmp 
         rm -f terraform.* tfplan 
@@ -311,9 +311,7 @@ else
     echo "Stack set $s traverse - experimental"
     ../../scripts/get-stack.sh $s
     chmod 755 commands.sh
-    if [ "$v" = "yes" ]; then        
-        exit
-    fi
+    #if [ "$v" = "yes" ]; then  exit; fi
     ./commands.sh
 fi
 
@@ -340,7 +338,7 @@ echo "Terraform Plan ..."
 terraform plan -no-color
 
 echo "---------------------------------------------------------------------------"
-echo "aws2tf output files are in generated/tf.$mysub"
+echo "aws2tf output files are in generated/tf.${mysub}-${r}"
 echo "---------------------------------------------------------------------------"
 
 if [ "$t" == "eks" ]; then

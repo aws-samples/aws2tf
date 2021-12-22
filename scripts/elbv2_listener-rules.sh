@@ -104,11 +104,7 @@ for c in `seq 0 0`; do
                         t1=`printf "%s = aws_lb_target_group.%s.arn" $tt1 $tlarn`
                     fi
 
-                #else
-                #    if [[ "$t1" == *"sg-"* ]]; then
-                #        t1=`echo $t1 | tr -d '"|,'`
-                #        t1=`printf "aws_security_group.%s.id," $t1`
-                #    fi
+
                 fi
                 
                 if [ "$skip" == "0" ]; then

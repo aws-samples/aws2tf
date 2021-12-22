@@ -1,6 +1,10 @@
 #!/bin/bash
-if [ "$1" != "" ]; then
-    cmd[0]="$AWS elbv2 describe-listeners --load-balancer-arn \"$1\""
+if [[ "$1" != "" ]]; then
+    if [[ "$1" == *"listener"* ]];then
+        cmd[0]="$AWS elbv2 describe-listeners --listener-arns \"$1\""
+    else
+        cmd[0]="$AWS elbv2 describe-listeners --load-balancer-arn \"$1\""
+    fi
 else
     echo "must pass lb arn"
     exit
@@ -11,15 +15,15 @@ cm=${cmd[$c]}
 
 pref[0]="Listeners"
 tft[0]="aws_lb_listener"
-
 idfilt[0]="ListenerArn"
+
 rm -f ${tft[(${c})]}.*.tf
 
 for c in `seq 0 0`; do
  
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "You don't have access for this resource"
@@ -34,11 +38,10 @@ for c in `seq 0 0`; do
             echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
             echo "$ttft $cname"
-            rname=${cname//:/_}
-            rname=${rname//\//_}
-            echo $rname
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             fn=`printf "%s__%s.tf" $ttft $rname`
             #echo $fn
+            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
 
             printf "resource \"%s\" \"%s\" {\n" $ttft $rname > $fn
             printf "}"  >> $fn

@@ -56,6 +56,8 @@ if [ "$count" -gt "0" ]; then
                 AWS::ECS::TaskDefinition) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/351-get-ecs-task.sh $pid" >> commands.sh ;;
                 AWS::EKS::Cluster) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/300-get-eks-cluster.sh $pid" >> commands.sh ;;
                 AWS::EKS::Nodegroup) echo "$type $pid Should be fetched via the EKS Cluster Resource" ;;
+                AWS::ElasticLoadBalancingV2::ListenerRule) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/elbv2_listener-rules.sh $parn" >> commands.sh ;;
+                
                 AWS::KMS::Key) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/080-get-kms-key.sh $pid" >> commands.sh ;;                
                 AWS::KMS::Alias) ;; # feteched as part of key
                 AWS::Lambda::Function) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/700-get-lambda-function.sh $pid"  >> commands.sh ;;

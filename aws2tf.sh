@@ -311,9 +311,9 @@ else
     echo "Stack set $s traverse - experimental"
     ../../scripts/get-stack.sh $s
     chmod 755 commands.sh
-    #if [ "$v" = "yes" ]; then        
-    #    exit
-    #fi
+    if [ "$v" = "yes" ]; then        
+        exit
+    fi
     ./commands.sh
 fi
 

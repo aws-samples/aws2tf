@@ -17,7 +17,7 @@ for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	echo $cm
+	#echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "You don't have access for this resource"
@@ -36,7 +36,8 @@ for c in `seq 0 0`; do
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             echo "$ttft $cname import"
             fn=`printf "%s__%s.tf" $ttft $rname`
-            if [ -f "$fn" ]; then continue; fi
+            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
+           
             #echo "calling import sub"
             . ../../scripts/parallel_import.sh $ttft $cname &
         done

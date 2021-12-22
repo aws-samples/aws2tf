@@ -94,6 +94,11 @@ for c in `seq 0 0`; do
                         tt2=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_subnet.%s.id" $tt1 $tt2`
                     fi
+                    if [[ ${tt1} == "target_group_arn" ]]; then
+                        tarn=`echo $tt2 | tr -d '"'`
+                        tlarn=${tarn//:/_} && tlarn=${tlarn//./_} && tlarn=${tlarn//\//_}
+                        t1=`printf "%s = aws_lb_target_group.%s.arn" $tt1 $tlarn`
+                    fi
 
 
                 #else
@@ -109,6 +114,9 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
+            if [[ "$tarn" != "" ]]; then
+                ../../scripts/elbv2-target-groups.sh $tarn
+            fi
             
         done
     fi

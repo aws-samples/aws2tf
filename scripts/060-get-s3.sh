@@ -107,7 +107,18 @@ for c in `seq 0 0`; do
                                 if [[ ${tt1} == "kms_master_key_id" ]];then 
                               
                                     keyid=`echo $tt2 | tr -d '"'`
-                                    t1=`printf "%s = aws_kms_key.k_%s.id" $tt1 $keyid`
+                                    if [[ $keyid == *":"* ]]; then
+                                        keyid=$(echo $keyid | rev | cut -f1 -d'/' | rev)
+                                    fi
+                                    # quick check it exists
+
+                                    $AWS kms describe-key --key-id $keyid 2> /dev/null
+                                    if [[ $? -eq 0 ]];then
+                                        t1=`printf "%s = aws_kms_key.k_%s.id" $tt1 $keyid`
+                                    else
+                                        t1=`printf "# COMMENT THIS KEY DOESN'T EXIST %s = aws_kms_key.k_%s.id" $tt1 $keyid`
+                                        keyid=""
+                                    fi
                                 fi
                                     
                                 if [[ ${tt1} == "role_arn" ]];then 
@@ -150,11 +161,18 @@ for c in `seq 0 0`; do
                         
                         done <"$file" 
                         if [[ "$keyid" != "" ]]; then
+                            echo "*** key for $keyid"
                             ../../scripts/080-get-kms-key.sh $keyid
+                            echo "*** key alias for $keyid"
                             ../../scripts/081-get-kms-alias.sh $keyid
+
                         fi 
+
+                    echo "*** policy for $cname"
                         ../../scripts/get-s3-policy.sh $cname
                     fi
+                else
+                    echo "Bucket $cname not in current region $theregion skipped ..."
                 fi
             fi
         done

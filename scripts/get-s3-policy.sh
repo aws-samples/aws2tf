@@ -17,16 +17,26 @@ fn=`printf "%s__%s.tf" $ttft $rname`
         printf "terraform import %s.%s %s" $ttft $rname $cname > data/import_$ttft_$rname.sh
               
         cmdi=`printf "terraform import %s.%s %s" $ttft $rname $cname | grep Import`
+        echo "s3 policy import"
         eval $cmdi
-            
+        if [[ $? -ne 0 ]];then
+            echo "No bucket policy found for $cname exiting ..."
+            exit
+        fi
+        echo "s3 policy show"   
         cmds=`printf "terraform state show %s.%s > t2.txt" $ttft $rname`
-        eval $cmds
+
+        eval $cmds 2> /dev/null
+        if [[ $? -ne 0 ]];then
+            echo "No bucket policy found for $rname exiting ..."
+            rm -f $fn
+            exit
+        fi
 
         rm $fn
         cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
 
         file="t1.txt"
-        terraform state show aws_s3_bucket_policy.ds-data-lake-029e33c5a105 | grep = | grep policy > /dev/null
         if [[ $? -eq 0 ]];then
 
 

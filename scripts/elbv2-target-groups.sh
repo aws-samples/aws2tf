@@ -92,16 +92,10 @@ for c in `seq 0 0`; do
                         t1=`printf "%s = aws_subnet.%s.id" $tt1 $tt2`
                     fi
                     if [[ ${tt1} == "vpc_id" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
+                        vpcid=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`
                     fi
 
-
-                #else
-                #    if [[ "$t1" == *"sg-"* ]]; then
-                #        t1=`echo $t1 | tr -d '"|,'`
-                #        t1=`printf "aws_security_group.%s.id," $t1`
-                #    fi
                 fi
                 
                 if [ "$skip" == "0" ]; then
@@ -110,7 +104,10 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-            
+
+            if [[ "${vpcid}" != "" ]]; then
+                ../../scripts/100-get-vpc.sh $vpcid
+            fi
         done
     fi
 done

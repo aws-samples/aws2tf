@@ -98,7 +98,7 @@ for c in `seq 0 0`; do
                         rlarn=${larn//:/_} && rlarn=${rlarn//./_} && rlarn=${rlarn//\//_}
                         t1=`printf "%s = aws_lb_listener.%s.arn" $tt1 $rlarn`
                     fi
-                    if [[ ${tt1} == "terget_group_arn" ]]; then
+                    if [[ ${tt1} == "target_group_arn" ]]; then
                         tarn=`echo $tt2 | tr -d '"'`
                         tlarn=${tarn//:/_} && tlarn=${tlarn//./_} && tlarn=${tlarn//\//_}
                         t1=`printf "%s = aws_lb_target_group.%s.arn" $tt1 $tlarn`

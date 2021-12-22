@@ -160,12 +160,12 @@ for c in `seq 0 0`; do
                             fi                
                         
                         done <"$file" 
+                        
                         if [[ "$keyid" != "" ]]; then
                             echo "*** key for $keyid"
                             ../../scripts/080-get-kms-key.sh $keyid
                             echo "*** key alias for $keyid"
                             ../../scripts/081-get-kms-alias.sh $keyid
-
                         fi 
 
                     echo "*** policy for $cname"
@@ -173,17 +173,12 @@ for c in `seq 0 0`; do
                     fi
                 else
                     echo "Bucket $cname not in current region $theregion skipped ..."
-                fi
-            fi
-        done
+                fi # $br
+            fi # $cname
+        done # i
     else
         terraform state rm $ttft.$cname
     fi 
     #echo "Done $cname"
 done
-
-# get the policies that were pulled out:
-
-
 rm -f t*.txt
-exit

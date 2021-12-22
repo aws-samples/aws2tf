@@ -17,13 +17,13 @@ fn=`printf "%s__%s.tf" $ttft $rname`
         printf "terraform import %s.%s %s" $ttft $rname $cname > data/import_$ttft_$rname.sh
               
         cmdi=`printf "terraform import %s.%s %s" $ttft $rname $cname | grep Import`
-        echo "s3 policy import"
+        #echo "s3 policy import"
         eval $cmdi
         if [[ $? -ne 0 ]];then
             echo "No bucket policy found for $cname exiting ..."
             exit
         fi
-        echo "s3 policy show"   
+        #echo "s3 policy show"   
         cmds=`printf "terraform state show %s.%s > t2.txt" $ttft $rname`
 
         eval $cmds 2> /dev/null

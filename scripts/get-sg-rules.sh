@@ -427,3 +427,5 @@ for sg in ${sglist[@]}; do
         ../../scripts/110-get-security-group.sh $sg1
     fi
 done 
+
+rm -f $ttft*.txt

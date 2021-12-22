@@ -53,12 +53,14 @@ if [ "$count" -gt "0" ]; then
                 AWS::EC2::RouteTable) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/140-get-route-table.sh $pid" >> commands.sh ;;
                 AWS::EC2::SubnetRouteTableAssociation) echo "../../scripts/141-get-route-table-associations.sh $pid" >> commands.sh ;;
                 AWS::ECS::Service) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/get-ecs-service.sh $parn" >> commands.sh ;;
+                AWS::ECS::TaskDefinition) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/351-get-ecs-task.sh $pid" >> commands.sh ;;
                 AWS::EKS::Cluster) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/300-get-eks-cluster.sh $pid" >> commands.sh ;;
+                AWS::EKS::Nodegroup) echo "$type $pid Should be fetched via the EKS Cluster Resource" ;;
                 AWS::KMS::Key) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/080-get-kms-key.sh $pid" >> commands.sh ;;                
                 AWS::KMS::Alias) ;; # feteched as part of key
                 AWS::Lambda::Function) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/700-get-lambda-function.sh $pid"  >> commands.sh ;;
                 AWS::Lambda::Permission) ;; # fetched as part of function
-                AWS::Logs::LogGroup) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/070-get-cw-log-grp.sh $pid" >> commands.sh ;;
+                AWS::Logs::LogGroup) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/070-get-cw-log-grp.sh /$pid" >> commands.sh ;;
                 AWS::S3::Bucket) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/060-get-s3.sh $pid" >> commands.sh ;;
               
                 AWS::SSM::Parameter) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/445-get-ssm-params.sh $pid" >> commands.sh ;;
@@ -70,7 +72,7 @@ if [ "$count" -gt "0" ]; then
                 AWS::CodeArtifact::Domain)  echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/627-get-code-artifact-domain.sh $pid"  >> commands.sh ;;
                 AWS::CodeArtifact::Repository) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/627-get-code-artifact-repository.sh $pid"  >> commands.sh ;;
                 AWS::ServiceDiscovery::Service)  echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/get-sd-service.sh $pid"  >> commands.sh ;;
-                AWS::EKS::Nodegroup) echo "$type $pid Should be fetched via the EKS Cluster Resource" ;;
+
                 AWS::CloudFormation::WaitCondition*) echo "skipping $type" ;;
                 AWS::CloudFormation::Stack) ;;
                 *) echo "--UNPROCESSED-- $type $pid" >> unprocessed.txt ;;

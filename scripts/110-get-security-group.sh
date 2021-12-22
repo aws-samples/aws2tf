@@ -141,5 +141,5 @@ for c in `seq 0 0`; do
 done  # for c
 
 rm -f *.backup 
-
+rm -f $ttft*.txt
 

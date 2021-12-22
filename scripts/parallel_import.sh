@@ -18,7 +18,7 @@ mkdir -p $ttft-$rname && cd $ttft-$rname
 #cp ../aws.tf .
 ls ../.terraform > /dev/null
 if [[ $? -eq 0 ]];then 
-    ln -s ../aws.tf aws.tf
+    ln -s ../aws.tf aws.tf 
     ln -s ../.terraform .terraform
     ln -s ../.terraform.lock.hcl .terraform.lock.hcl
 else
@@ -87,8 +87,10 @@ if [ $? -ne 0 ]; then
 fi
 mv $ttft-$rname-1.txt ..
 cd .. 
-#rm -rf $ttft-$rname/*
-#rmdir $ttft-$rname
+rm -rf $ttft-$rname
+#rm -rf $ttft-$rname/.terraform*
+# rmdir $ttft-$rname
+#rm -f $ttft-$rname-1.txt
 #echo "top level state list"
 #terraform state list | grep $ttft.$rname
 #echo "exit parallel import"

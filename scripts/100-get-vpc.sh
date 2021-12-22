@@ -96,7 +96,7 @@ for c in `seq 0 0`; do
 done
 
 rm -f *.backup 
-
+rm -f $ttft*.txt
 
 
 #

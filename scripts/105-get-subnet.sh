@@ -103,5 +103,6 @@ done
 
 #rm -f $ttft-$rname-1.txt
 rm -f *.backup 
+rm -f $ttft*.txt
 
 

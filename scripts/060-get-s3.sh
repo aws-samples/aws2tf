@@ -70,7 +70,7 @@ for c in `seq 0 0`; do
             
                     terraform import $ttft.$cname "$cname" 2> /dev/null
                     if [[ $? -eq 1 ]];then
-                        echo "Can't access buck - continue"
+                        echo "Can't access bucket $cname - continue"
                         rm -f $fn
                         continue
                     fi

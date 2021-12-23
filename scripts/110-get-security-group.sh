@@ -60,6 +60,7 @@ for c in `seq 0 0`; do
 
             file=`printf "%s-%s-1.txt" $ttft $rname`
             if [ ! -f "$file" ] ; then echo "$file does not exist skipping" && continue; fi
+            echo "Generating $fn"
             echo $aws2tfmess > $fn
             while IFS= read line
             do
@@ -142,5 +143,5 @@ for c in `seq 0 0`; do
 done  # for c
 
 rm -f *.backup 
-rm -f $ttft*.txt
+
 

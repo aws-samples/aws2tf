@@ -100,7 +100,9 @@ else
     echo "State $ttft.$rname already exists skipping import ..."
     terraform state show $ttft.$rname > $ttft-$rname-2.txt
     cat $ttft-$rname-2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > $ttft-$rname-1.txt
-    rm -f $ttft-$rname-2.txt
+    #rm -f $ttft-$rname-2.txt
+    ls $ttft*-1.txt
+
 fi
 
 rm -f terr*.backup
@@ -109,4 +111,4 @@ rm -f terr*.backup
 #rm -f $ttft-$rname-1.txt
 #echo "top level state list"
 #terraform state list | grep $ttft.$rname
-#echo "exit parallel import"
+echo "exit parallel import $rname"

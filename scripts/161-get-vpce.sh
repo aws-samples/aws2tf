@@ -111,16 +111,16 @@ for c in `seq 0 0`; do
                     fi
                 else
                     if [[ "$t1" == *"subnet-"* ]]; then
-                        t1=`echo $t1 | tr -d '"|,'`
-                        t1=`printf "aws_subnet.%s.id," $t1`
+                        sbid=`echo $t1 | tr -d '"|,'`
+                        t1=`printf "aws_subnet.%s.id," $sbid`
                     fi 
                     if [[ "$t1" == *"sg-"* ]]; then
-                        t1=`echo $t1 | tr -d '"|,'`
-                        t1=`printf "aws_security_group.%s.id," $t1`
+                        sgid=`echo $t1 | tr -d '"|,'`
+                        t1=`printf "aws_security_group.%s.id," $sgid`
                     fi
                     if [[ "$t1" == *"rtb-"* ]]; then
-                        t1=`echo $t1 | tr -d '"|,'`
-                        t1=`printf "aws_route_table.%s.id," $t1`
+                        rtid=`echo $t1 | tr -d '"|,'`
+                        t1=`printf "aws_route_table.%s.id," $rtid`
                     fi
                
                 fi
@@ -130,6 +130,15 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
+            if [[ $sgid != "" ]];then
+                ../../scripts/110-get-security-group.sh $sgid
+            fi
+            if [[ $sbid != "" ]];then
+                ../../105-get-subnet.sh $sbid
+            fi
+            if [[ $rtid != "" ]];then
+                ../../scripts/140-get-route-table.sh $rtid
+            fi
             
         done
     fi 

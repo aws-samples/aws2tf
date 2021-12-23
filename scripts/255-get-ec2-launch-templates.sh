@@ -112,7 +112,7 @@ for c in `seq 0 0`; do
                 
             done <"$file"
             
-            if [[$sgid != "" ]];then
+            if [[ $sgid != "" ]];then
                 ../../scripts/110-get-security-group.sh $sgid
             fi
             

@@ -100,7 +100,7 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-            echo "role  $rarn"
+            #echo "role  $rarn"
             if [[ $rarn != "" ]];then
             ../../scripts/050-get-iam-roles.sh $rarn
             fi

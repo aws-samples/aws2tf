@@ -69,9 +69,9 @@ for c in `seq 0 0`; do
                     fi
                     if [[ ${tt1} == "description" ]]; then
                         tt2=`echo "$tt2" | tr -d '"'`
-                        echo $line
-                        echo "${tt2}"
-                        t1=`printf "%s = \"%s\"" $tt1 $tt2`
+                    
+                        echo "tt2=${tt2}"
+                        t1=`printf "%s = \"%s\"" $tt1 "$tt2"`
                         printf "lifecycle {\n" >> $fn
                         printf "   ignore_changes = [description]\n" >> $fn
                         printf "}\n" >> $fn

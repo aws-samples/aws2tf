@@ -10,8 +10,8 @@ fi
 ttft=`echo $1 | tr -d '"'`
 cname=`echo $2 | tr -d '"'`
 rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-
-terraform state list | grep ${ttft}.${rname} > /dev/null
+echo "parallel list check"
+terraform state list | grep ${ttft}.${rname} 
 if [[ $? -ne 0 ]];then
 
     #echo "Import $rname"
@@ -95,14 +95,15 @@ if [[ $? -ne 0 ]];then
     mv $ttft-$rname-1.txt ..
     cd .. 
     rm -rf $ttft-$rname
-    rm terr*.backup
 
 else
     echo "State $ttft.$rname already exists skipping import ..."
 fi
+
+rm terr*.backup
 #rm -rf $ttft-$rname/.terraform*
 # rmdir $ttft-$rname
 #rm -f $ttft-$rname-1.txt
 #echo "top level state list"
 #terraform state list | grep $ttft.$rname
-#echo "exit parallel import"
+echo "exit parallel import"

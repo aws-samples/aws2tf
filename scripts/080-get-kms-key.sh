@@ -51,9 +51,9 @@ for c in `seq 0 0`; do
                     echo "$fn exists already skipping"
                     continue
                 fi
-                printf "resource \"%s\" \"k_%s\" {" $ttft $cname > $ttft.$cname.tf
-                printf "}" >> $ttft.$cname.tf
-                printf "terraform import %s.%s %s" $ttft $cname $cname > "data/import_$ttft_$cname.sh"
+                printf "resource \"%s\" \"k_%s\" {" $ttft $cname > $fn
+                printf "}" >> $fn
+                printf "terraform import %s.k_%s %s" $ttft $cname $cname > "data/import_$ttft_$cname.sh"
                 terraform import $ttft.k_$cname "$cname" | grep Import
                 if [ $? -eq 0 ]; then
                
@@ -62,7 +62,7 @@ for c in `seq 0 0`; do
                     tfa=`printf "%s.%s" $ttft k_$cname`
                     terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
                     #echo $awsj | jq . 
-                    rm $ttft.$cname.tf
+                    rm -f $fn
                     # rename state to save problems later
                     cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
                     #	for k in `cat t1.txt`; do

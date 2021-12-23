@@ -60,8 +60,10 @@ for c in `seq 0 0`; do
                     ../../scripts/080-get-kms-key.sh $kmsid
                 fi
 
-                printf "resource \"%s\" \"%s\" {" $ttft $rname > $ttft.$rname.tf
-                printf "}" >> $ttft.$rname.tf
+                printf "resource \"%s\" \"%s\" {" $ttft $rname > $fn
+                printf "}" >> $fn
+
+
                 printf "terraform import %s.%s %s" $ttft $rname "$cname" > import_$ttft_$rname.sh
                 terraform import $ttft.$rname "$cname" | grep Import
                 
@@ -69,7 +71,7 @@ for c in `seq 0 0`; do
                 tfa=`printf "data/%s.%s" $ttft $rname`
                 terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
                 #echo $awsj | jq . 
-                rm $ttft.$rname.tf
+                rm -f $fn
                 # rename state to save problems later
                 cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
                 #	for k in `cat t1.txt`; do

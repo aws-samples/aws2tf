@@ -174,7 +174,7 @@ for c in `seq 0 0`; do
                             ../../scripts/081-get-kms-alias.sh $keyid
                         fi 
 
-                    echo "*** policy for $cname"
+                        echo "*** policy for $cname"
                         ../../scripts/get-s3-policy.sh $cname
                     fi
                 else

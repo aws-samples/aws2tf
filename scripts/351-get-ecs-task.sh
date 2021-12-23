@@ -81,6 +81,10 @@ for c in `seq 0 0`; do
                         tt2=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
                     fi
+                    if [[ ${tt1} == "@type" ]]; then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        t1=`printf type = \"%s\"" $tt2`
+                    fi
 
                     if [[ ${tt1} == "task_role_arn" ]];then 
                         trarn=`echo $tt2 | tr -d '"'` 

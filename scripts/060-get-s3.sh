@@ -65,11 +65,17 @@ for c in `seq 0 0`; do
                 if [ "$br" == "$theregion" ]; then
                              
                 
-                    printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-                    printf "}" >> $ttft.$cname.tf
-                    terraform import $ttft.$cname "$cname" | grep Import
+                    printf "resource \"%s\" \"%s\" {" $ttft $cname > $fn
+                    printf "}" >> $fn
+            
+                    terraform import $ttft.$cname "$cname" 2> /dev/null
+                    if [[ $? -eq 1 ]];then
+                        echo "Can't access buck - continue"
+                        rm -f $fn
+                        continue
+                    fi
                     terraform state show $ttft.$cname > t2.txt
-                    rm $ttft.$cname.tf
+                    rm -f $fn
                     cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
                     file="t1.txt"
                     fn=`printf "%s__%s.tf" $ttft $cname`

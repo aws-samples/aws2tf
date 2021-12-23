@@ -13,14 +13,15 @@ rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
 
 #echo "Import $rname"
 #terraform state rm $ttft.$rname > /dev/null
+rm -rf $ttft-$rname
 mkdir -p $ttft-$rname && cd $ttft-$rname
 
 #cp ../aws.tf .
 ls ../.terraform > /dev/null
 if [[ $? -eq 0 ]];then 
-    ln -s ../aws.tf aws.tf 
-    ln -s ../.terraform .terraform
-    ln -s ../.terraform.lock.hcl .terraform.lock.hcl
+    ln -s ../aws.tf aws.tf  2> /dev/null
+    ln -s ../.terraform .terraform 2> /dev/null
+    ln -s ../.terraform.lock.hcl .terraform.lock.hcl 2> /dev/null
 else
     terraform init -no-color > /dev/null
     if [ $? -ne 0 ]; then
@@ -37,6 +38,7 @@ fi
 
 printf "resource \"%s\" \"%s\" {" $ttft $rname > $ttft.$rname.tf
 printf "}" >> $ttft.$rname.tf
+
 #echo "Importing..."           
 terraform import $ttft.$rname "$cname" > /dev/null
 if [ $? -ne 0 ]; then

@@ -11,7 +11,7 @@ ttft=`echo $1 | tr -d '"'`
 cname=`echo $2 | tr -d '"'`
 rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
 
-terraform state list  -state=../terraform.tfstate  | grep ${ttft}.${rname} > /dev/null
+terraform state list | grep ${ttft}.${rname} > /dev/null
 if [[ $? -ne 0 ]];then
 
     #echo "Import $rname"

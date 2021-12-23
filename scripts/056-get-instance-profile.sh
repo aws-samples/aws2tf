@@ -81,8 +81,8 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "role" ]];then 
-                        tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_iam_role.%s.name" $tt1 $tt2`
+                        rarn2=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_iam_role.%s.name" $tt1 $rarn2`
                     fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "unique_id" ]];then skip=1;fi
@@ -101,7 +101,12 @@ for c in `seq 0 0`; do
                 
             done <"$file"
             echo "role  $rarn"
+            if [[ $rarn != "" ]];then
             ../../scripts/050-get-iam-roles.sh $rarn
+            fi
+            if [[ $rarn2 != "" ]];then
+            ../../scripts/050-get-iam-roles.sh $rarn2
+            fi
             
         done
    

@@ -42,7 +42,11 @@ for c in `seq 0 0`; do
                 rpath=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Path" | tr -d '"'`
             fi
         
-                if [[ "$rpath" == *"service-role"* ]]; then continue; fi
+                if [[ "$rpath" == *"service-role"* ]]; then 
+                    if [[ ${1} != "arn:aws:iam"* ]]; then
+                        continue
+                    fi
+                fi
                 ocname=`echo $cname`
                 cname=${cname//./_}
 

@@ -12,6 +12,10 @@ idfilt[0]="AliasName"
 c=0
 #rm -f ${tft[0]}.tf
 
+if [[ "$1" == "null" ]];then
+    echo "null key alias exiting ...."
+    exit
+fi
 for c in `seq 0 0`; do
     
     cm=${cmd[$c]}

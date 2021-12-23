@@ -124,6 +124,7 @@ if [ "$f" = "no" ]; then
 else
     sort -u data/processed.txt > data/pt.txt
     cp pt.txt data/processed.txt
+    rm -f terra*.backup
 fi
 
 mkdir -p data

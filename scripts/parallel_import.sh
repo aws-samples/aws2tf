@@ -10,7 +10,7 @@ fi
 ttft=`echo $1 | tr -d '"'`
 cname=`echo $2 | tr -d '"'`
 rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-echo "parallel list check"
+#echo "parallel list check"
 terraform state list | grep ${ttft}.${rname} 
 if [[ $? -ne 0 ]];then
 
@@ -109,4 +109,4 @@ rm -f terr*.backup
 #rm -f $ttft-$rname-1.txt
 #echo "top level state list"
 #terraform state list | grep $ttft.$rname
-echo "exit parallel import"
+#echo "exit parallel import"

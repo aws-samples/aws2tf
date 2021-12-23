@@ -43,6 +43,7 @@ for c in `seq 0 0`; do
             file="t1.txt"
             fn=`printf "%s__%s.tf" $ttft $cname`
             echo $aws2tfmess > $fn
+            sgid=""
             while IFS= read line
             do
 				skip=0
@@ -94,8 +95,8 @@ for c in `seq 0 0`; do
 
                 else
                     if [[ "$t1" == *"sg-"* ]]; then
-                        t1=`echo $t1 | tr -d '"|,'`
-                        t1=`printf "aws_security_group.%s.id," $t1`
+                        sgid=`echo $t1 | tr -d '"|,'`
+                        t1=`printf "aws_security_group.%s.id," $sgid`
                     fi
                 fi
                 
@@ -105,6 +106,10 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
+            
+            if [[$sgid != "" ]];then
+                ../../scripts/110-get-security-group.sh $sgid
+            fi
             
         done
     fi

@@ -28,11 +28,11 @@ if [[ $? -ne 0 ]];then
     else
         terraform init -no-color > /dev/null
         if [ $? -ne 0 ]; then
-            echo "init backoff & retry"
+            echo "init backoff & retry for $rname"
             sleep 10
             terraform init -no-color > /dev/null
             if [ $? -ne 0 ]; then
-                    echo "init long backoff & retry with full errors"
+                    echo "init long backoff & retry with full errors for $rname"
                     sleep 20
                     terraform init -no-color > /dev/null
             fi
@@ -46,13 +46,13 @@ if [[ $? -ne 0 ]];then
     #echo "Importing..."           
     terraform import $ttft.$rname "$cname" > /dev/null
     if [ $? -ne 0 ]; then
-        echo "Import backoff & retry"
+        echo "Import backoff & retry for $rname"
         sl=`echo $((1 + $RANDOM % 10))`
         sleep $sl
         terraform init -no-color > /dev/null
         terraform import $ttft.$rname "$cname" > /dev/null
         if [ $? -ne 0 ]; then
-                echo "Import long backoff & retry with full errors"
+                echo "Import long backoff & retry with full errors for $rname"
                 sl=`echo $((2 + $RANDOM % 20))`
                 sleep $sl
                 terraform init -no-color > /dev/null
@@ -76,15 +76,15 @@ if [[ $? -ne 0 ]];then
     if [ $? -ne 0 ]; then
         sl=`echo $((1 + $RANDOM % 10))`
         sleep $sl
-        echo "state mv retry"
+        echo "state mv retry for $rname"
         terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname  &> /dev/null
         if [ $? -ne 0 ]; then
-            echo "state mv backoff & retry"
+            echo "state mv backoff & retry for $rname"
             sl=`echo $((2 + $RANDOM % 15))`
             sleep $sl
             terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname  &> /dev/null
             if [ $? -ne 0 ]; then
-                echo "state mv long backoff & retry with full errors"
+                echo "state mv long backoff & retry with full errors for $rname"
                 sl=`echo $((5 + $RANDOM % 15))`
                 sleep $sl
                 

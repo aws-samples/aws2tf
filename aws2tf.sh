@@ -332,6 +332,9 @@ terraform validate -no-color
 if [ "$v" = "yes" ]; then
     exit
 fi
+if [ "$d" = "no" ]; then
+    rm -f *.txt imp*.sh
+fi
 
 echo "Terraform Refresh ..."
 terraform refresh  -no-color

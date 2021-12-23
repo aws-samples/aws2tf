@@ -40,6 +40,12 @@ for c in `seq 0 0`; do
             rname=${cname//:/_}
             rname=${rname//./_}
             rname=${rname//\//_}
+            if [[ "$cname" == "null" ]];then
+                echo "null key alias continue ...."
+                continue
+            fi
+            
+            
             #echo "$ttft $cname"
             if [[ "$cname" != *"alias/aws/"* ]];then
                 echo "$ttft $cname"

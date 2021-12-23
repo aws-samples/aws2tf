@@ -47,7 +47,13 @@ for c in `seq 0 0`; do
                     #echo "cname:$cname"
                     for y in $cname; do
                         #echo "ttft: $ttft cname:$y"
+                        if [[ $y == "null" ]];then
+                            echo "null value if vpc cidr block skipping"
+                            continue
+                        fi
                         fn=`printf "%s__%s.tf" $ttft $y`
+                        if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
+
                         printf "resource \"%s\" \"%s\" {" $ttft $y > $ttft.$y.tf
                         printf "}" $y >> $ttft.$y.tf
                         terraform import $ttft.$y "$y" | grep Import

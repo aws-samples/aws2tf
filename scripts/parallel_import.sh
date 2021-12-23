@@ -100,7 +100,7 @@ else
     echo "State $ttft.$rname already exists skipping import ..."
 fi
 
-rm terr*.backup
+rm -f terr*.backup
 #rm -rf $ttft-$rname/.terraform*
 # rmdir $ttft-$rname
 #rm -f $ttft-$rname-1.txt

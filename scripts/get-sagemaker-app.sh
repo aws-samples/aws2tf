@@ -40,7 +40,7 @@ for c in `seq 0 0`; do
 
          
             fn=`printf "%s__%s.tf" $ttft $rname`
-            if [ -f "$fn" ] ; then continue; fi
+            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
 
             echo "$ttft $cname import"
 

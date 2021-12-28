@@ -69,15 +69,20 @@ if [ "$count" -gt "0" ]; then
 
                 AWS::IAM::Role) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/050-get-iam-roles.sh $pid" >> commands.sh ;;
                 AWS::IAM::ManagedPolicy) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;
-                AWS::Events::Rule) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/713-get-eb-rule.sh $pid" >> commands.sh;;
+                AWS::IAM::Policy) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;
+                
+                AWS::Events::EventBus) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/712-get-eb-bus.sh $pid" >> commands.sh;;
+                AWS::Events::Rule) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/713-get-eb-rule.sh \"$pid\"" >> commands.sh;;
 
                 AWS::CodeArtifact::Domain)  echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/627-get-code-artifact-domain.sh $pid"  >> commands.sh ;;
                 AWS::CodeArtifact::Repository) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/627-get-code-artifact-repository.sh $pid"  >> commands.sh ;;
+
+                AWS::SecretsManager::Secret) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/450-get-secrets.sh $parn"  >> commands.sh ;;                
                 AWS::ServiceDiscovery::Service)  echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/get-sd-service.sh $pid"  >> commands.sh ;;
 
                 AWS::CloudFormation::WaitCondition*) echo "skipping $type" ;;
                 AWS::CloudFormation::Stack) ;;
-                *) echo "--UNPROCESSED-- $type $pid" >> unprocessed.txt ;;
+                *) echo "--UNPROCESSED-- $type $pid $parn" >> unprocessed.txt ;;
 esac
         done   
 fi

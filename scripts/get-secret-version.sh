@@ -29,7 +29,7 @@ for c in `seq 0 0`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-            sstring=`$AWS --profile CTDev1 --region eu-central-1 secretsmanager get-secret-value --secret-id $1 --version-id $cname --query SecretString`
+            sstring=`$AWS secretsmanager get-secret-value --secret-id $1 --version-id $cname --query SecretString`
             echo "$ttft $sname $rname"
             
             rname=`printf "v-%s" $rname`

@@ -293,8 +293,12 @@ for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do
                 if [[ "${line}" == *"Duplicate"* ]];then
                     echo "Ignoring $line"
                 else
-                    echo "Found Error: $line exiting .... (pass for now)"
-                    
+                    if [[ "$d" == "no" ]];then
+                        echo "Found Error: $line .... (pass for now)"
+                    else
+                        echo "Found Error: $line exiting ...."
+                        exit
+                    fi
                 fi
             fi
 

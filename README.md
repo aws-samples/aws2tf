@@ -135,11 +135,11 @@ Be patient - lots of output is given as aws2tf:
 + Performs the necessary 'terraform import' commands
 + And finally runs a 'terraform plan'
 
+
+
+
 ----
-
-## Supported Resource Types
-
-The following terraform resource types are supported by this tool at this time:
+## Terraform resources supported as of 29-Dec-2021
 
 * aws_appmesh_gateway_route
 * aws_appmesh_mesh
@@ -256,9 +256,42 @@ The following terraform resource types are supported by this tool at this time:
 * aws_vpc_peering_connection
 * aws_vpn_connection
 
+----
+## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 29-Dec-2021
 
+* AWS::CodeArtifact::Domain
+* AWS::CodeArtifact::Repository
+* AWS::EC2::EIP
+* AWS::EC2::InternetGateway
+* AWS::EC2::LaunchTemplate
+* AWS::EC2::NatGateway
+* AWS::EC2::RouteTable
+* AWS::EC2::SecurityGroup
+* AWS::EC2::Subnet
+* AWS::EC2::SubnetRouteTableAssociation
+* AWS::EC2::VPC
+* AWS::EC2::VPCEndpoint
+* AWS::ECR::Repository
+* AWS::ECS::Service
+* AWS::ECS::TaskDefinition
+* AWS::EKS::Cluster
+* AWS::ElasticLoadBalancingV2::ListenerRule
+* AWS::ElasticLoadBalancingV2::TargetGroup
+* AWS::Events::EventBus
+* AWS::Events::Rule
+* AWS::IAM::ManagedPolicy
+* AWS::IAM::Policy
+* AWS::IAM::Role
+* AWS::KMS::Key
+* AWS::Lambda::Function
+* AWS::Logs::LogGroup
+* AWS::S3::Bucket
+* AWS::SQS::Queue
+* AWS::SSM::Parameter
+* AWS::SecretsManager::Secret
+* AWS::ServiceDiscovery::Service
 
-
+----
 
 + Other terraform providers as terraform supports.
 

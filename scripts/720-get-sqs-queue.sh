@@ -47,6 +47,7 @@ for c in `seq 0 0`; do
 
             file="t1.txt"
             echo $aws2tfmess > $fn
+            tarn=""
             while IFS= read line
             do
 				skip=0
@@ -59,9 +60,34 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "url" ]];then skip=1;fi
-                    if [[ ${tt1} == *":"* ]];then 
-                        t1=`printf "\"%s\"=%s" $tt1 $tt2`
+                    if [[ ${tt1} == "url" ]];then 
+                        skip=1
+                        tt2=$(echo $tt2 | tr -d '"')
+                        qurl=${tt2//:/_} && rn=${rn//./_} && rn=${rn//\//_}
+                    fi
+                    if [[ ${tt1} == *":"* ]];then
+                        tt2=$(echo $tt2 | tr -d '"')
+                        if [[ ${tt1} == "aws:SourceArn" ]];then
+                            if [[ ${tt2} == *":aws:sns:"* ]];then
+                                tarn=$(echo $tt2)
+                                rn=${tt2//:/_} && rn=${rn//./_} && rn=${rn//\//_}
+                                t1=`printf "\"%s\" = aws_sns_topic.%s.arn" $tt1 $rn`
+                            else
+                                t1=`printf "\"%s\"=%s" $tt1 $tt2`
+                            fi
+                        else
+                            t1=`printf "\"%s\"=%s" $tt1 $tt2`
+                        fi
+                    fi
+                    if [[ ${tt1} == "Resource" ]];then 
+                        tt2=$(echo $tt2 | tr -d '"')
+                        if [[ "$tt2" == *":aws:sqs:"* ]];then
+                            qnam=$(echo $tt2 | rev | cut -f1 -d':' | rev)
+                            rurl=$(AWS sqs get-queue-url --queue-name $qnam | jq -r ".QueueUrl")
+                            rn=${rurl//:/_} && rn=${rn//./_} && rn=${rn//\//_}
+                            
+                            t1=`printf "%s = aws_sqs_queue.%s.arn" $tt1 $rn`
+                        fi
                     fi
                 fi
                 if [ "$skip" == "0" ]; then
@@ -70,7 +96,10 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-            
+
+            if [[ $tarn != "" ]];then
+                ../../scripts/730-get-sns-topic.sh $tarn
+            fi
         done
     fi 
 done

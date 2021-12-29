@@ -67,6 +67,26 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == *":"* ]];then 
                         t1=`printf "\"%s\"=%s" $tt1 $tt2`
                     fi
+                    if [[ ${tt1} == "topic_arn" ]];then 
+                        tt2=$(echo $tt2 | tr -d '"')
+                        if [[ "$tt2" == *":aws:sns:"* ]];then
+                            tarn=$(echo $tt2)
+                            rn=${tt2//:/_} && rn=${rn//./_} && rn=${rn//\//_}
+                            t1=`printf "%s = aws_sns_topic.%s.arn" $tt1 $rn`
+                        fi
+                    fi
+
+                    if [[ ${tt1} == "endpoint" ]];then 
+                        tt2=$(echo $tt2 | tr -d '"')
+                        if [[ "$tt2" == *":aws:sqs:"* ]];then
+                            qnam=$(echo $tt2 | rev | cut -f1 -d':' | rev)
+                            rurl=$(AWS sqs get-queue-url --queue-name $qnam | jq -r ".QueueUrl")
+                            rn=${rurl//:/_} && rn=${rn//./_} && rn=${rn//\//_}
+                            t1=`printf "%s = aws_sqs_queue.%s.arn" $tt1 $rn`
+                        fi
+                    fi
+
+
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1

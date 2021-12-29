@@ -69,6 +69,22 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == *":"* ]];then 
                         t1=`printf "\"%s\"=%s" $tt1 $tt2`
                     fi
+                    
+                    ## commented to stop - Error: Self-referential block
+                    
+                    if [[ ${tt1} == "Resource" ]];then 
+                        tt2=$(echo $tt2 | tr -d '"')
+                        if [[ "$tt2" == *":aws:sns:"* ]];then
+                            tarn=$(echo $tt2)
+                            rn=${tt2//:/_} && rn=${rn//./_} && rn=${rn//\//_}
+                            if [[ "$tarn" != "$cname" ]];then ## to stop - Error: Self-referential block
+                                t1=`printf "%s = aws_sns_topic.%s.arn" $tt1 $rn`
+                            fi
+                        fi
+                    fi
+
+
+
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
@@ -78,6 +94,7 @@ for c in `seq 0 0`; do
             done <"$file"
 
             ../../scripts/731-get-sns-subscriptions.sh $cname
+            ../../scripts/731-get-sns-subscriptions.sh $tarn
             
         done
     fi 

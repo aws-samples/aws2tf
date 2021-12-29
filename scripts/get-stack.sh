@@ -40,43 +40,53 @@ if [ "$count" -gt "0" ]; then
             parn=$(echo "$stackr" | jq  -r ".[(${i})].PhysicalResourceId" | tr -d '"')
             echo "--> $type $pid $parn"
             case $type in
-                AWS::ECR::Repository) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/get-ecr.sh $pid"  >> commands.sh ;;
+                AWS::CodeArtifact::Domain)  echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/627-get-code-artifact-domain.sh $pid"  >> commands.sh ;;
+                AWS::CodeArtifact::Repository) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/627-get-code-artifact-repository.sh $pid"  >> commands.sh ;;
+                
                 AWS::EC2::EIP) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/get-eip.sh $pid"  >> commands.sh ;;
                 AWS::EC2::NatGateway) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/130-get-natgw.sh $pid"  >> commands.sh ;;
                 AWS::EC2::InternetGateway) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/120-get-igw.sh $pid"  >> commands.sh ;;
                 AWS::EC2::LaunchTemplate) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/eks-launch_template.sh $pid"  >> commands.sh ;;
                 AWS::EC2::SecurityGroup) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/110-get-security-group.sh $pid"  >> commands.sh ;;
-                AWS::EC2::SecurityGroupIngress) ;; # fetched as part of Security Group
+                AWS::EC2::SecurityGroupIngress) echo "echo '# SecurityGroupIngress fetched as part of SecurityGroup..'" >> commands.sh ;; # fetched as part of Security Group
                 AWS::EC2::VPCEndpoint) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/161-get-vpce.sh $pid" >> commands.sh ;;
                 AWS::EC2::VPC) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/100-get-vpc.sh $pid" >> commands.sh ;;
                 AWS::EC2::Subnet) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/105-get-subnet.sh $pid" >> commands.sh ;;
                 AWS::EC2::RouteTable) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/140-get-route-table.sh $pid" >> commands.sh ;;
                 AWS::EC2::SubnetRouteTableAssociation) echo "../../scripts/141-get-route-table-associations.sh $pid" >> commands.sh ;;
+                
+                AWS::ECR::Repository) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/get-ecr.sh $pid"  >> commands.sh ;;
+
                 AWS::ECS::Service) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/get-ecs-service.sh $parn" >> commands.sh ;;
                 AWS::ECS::TaskDefinition) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/351-get-ecs-task.sh $pid" >> commands.sh ;;
+                
                 AWS::EKS::Cluster) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/300-get-eks-cluster.sh $pid" >> commands.sh ;;
                 AWS::EKS::Nodegroup) echo "$type $pid Should be fetched via the EKS Cluster Resource" ;;
+                
                 AWS::ElasticLoadBalancingV2::ListenerRule) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/elbv2_listener-rules.sh $parn" >> commands.sh ;;
                 AWS::ElasticLoadBalancingV2::TargetGroup) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/elbv2_target-groups.sh $parn" >> commands.sh ;;
-                AWS::KMS::Key) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/080-get-kms-key.sh $pid" >> commands.sh ;;                
-                AWS::KMS::Alias) ;; # feteched as part of key
-                AWS::Lambda::Function) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/700-get-lambda-function.sh $pid"  >> commands.sh ;;
-                AWS::Lambda::Permission) ;; # fetched as part of function
-                AWS::Logs::LogGroup) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/070-get-cw-log-grp.sh /$pid" >> commands.sh ;;
-                AWS::S3::Bucket) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/060-get-s3.sh $pid" >> commands.sh ;;
-                AWS::SQS::Queue) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/720-get-sqs-queue.sh $parn" >> commands.sh ;;
-                AWS::SSM::Parameter) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/445-get-ssm-params.sh $pid" >> commands.sh ;;
+
+                AWS::Events::EventBus) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/712-get-eb-bus.sh $pid" >> commands.sh;;
+                AWS::Events::Rule) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/713-get-eb-rule.sh \"$pid\"" >> commands.sh;;
 
                 AWS::IAM::Role) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/050-get-iam-roles.sh $pid" >> commands.sh ;;
                 AWS::IAM::ManagedPolicy) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;
                 AWS::IAM::Policy) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;
+
+                AWS::KMS::Key) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/080-get-kms-key.sh $pid" >> commands.sh ;;                
+                AWS::KMS::Alias) echo "echo '# AWS::Lambda::Alias fetched as part of function..'" >> commands.sh ;;  # fetched as part of function 
                 
-                AWS::Events::EventBus) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/712-get-eb-bus.sh $pid" >> commands.sh;;
-                AWS::Events::Rule) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/713-get-eb-rule.sh \"$pid\"" >> commands.sh;;
-
-                AWS::CodeArtifact::Domain)  echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/627-get-code-artifact-domain.sh $pid"  >> commands.sh ;;
-                AWS::CodeArtifact::Repository) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/627-get-code-artifact-repository.sh $pid"  >> commands.sh ;;
-
+                AWS::Lambda::Function) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/700-get-lambda-function.sh $pid"  >> commands.sh ;;
+                AWS::Lambda::Permission) echo "echo '# AWS::Lambda::Permission fetched as part of function..'" >> commands.sh ;; # fetched as part of function
+                
+                AWS::Logs::LogGroup) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/070-get-cw-log-grp.sh /$pid" >> commands.sh ;;
+                
+                AWS::S3::Bucket) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/060-get-s3.sh $pid" >> commands.sh ;;
+                AWS::SNS::Topic) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/730-get-sns-topic.sh $parn" >> commands.sh ;;
+                AWS::SQS::Queue) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/720-get-sqs-queue.sh $parn" >> commands.sh ;;
+                
+                AWS::SSM::Parameter) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/445-get-ssm-params.sh $pid" >> commands.sh ;;
+                
                 AWS::SecretsManager::Secret) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/450-get-secrets.sh $parn"  >> commands.sh ;;                
                 AWS::ServiceDiscovery::Service)  echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/get-sd-service.sh $pid"  >> commands.sh ;;
 

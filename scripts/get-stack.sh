@@ -38,7 +38,7 @@ if [ "$count" -gt "0" ]; then
             type=$(echo "$stackr" | jq  -r ".[(${i})].ResourceType")
             pid=$(echo "$stackr" | jq  -r ".[(${i})].PhysicalResourceId" | cut -f2 -d'/')
             parn=$(echo "$stackr" | jq  -r ".[(${i})].PhysicalResourceId" | tr -d '"')
-            #echo $type $pid
+            echo "--> $type $pid $parn"
             case $type in
                 AWS::ECR::Repository) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/get-ecr.sh $pid"  >> commands.sh ;;
                 AWS::EC2::EIP) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/get-eip.sh $pid"  >> commands.sh ;;
@@ -57,14 +57,14 @@ if [ "$count" -gt "0" ]; then
                 AWS::EKS::Cluster) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/300-get-eks-cluster.sh $pid" >> commands.sh ;;
                 AWS::EKS::Nodegroup) echo "$type $pid Should be fetched via the EKS Cluster Resource" ;;
                 AWS::ElasticLoadBalancingV2::ListenerRule) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/elbv2_listener-rules.sh $parn" >> commands.sh ;;
-                
+                AWS::ElasticLoadBalancingV2::TargetGroup) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/elbv2_target-groups.sh $parn" >> commands.sh ;;
                 AWS::KMS::Key) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/080-get-kms-key.sh $pid" >> commands.sh ;;                
                 AWS::KMS::Alias) ;; # feteched as part of key
                 AWS::Lambda::Function) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/700-get-lambda-function.sh $pid"  >> commands.sh ;;
                 AWS::Lambda::Permission) ;; # fetched as part of function
                 AWS::Logs::LogGroup) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/070-get-cw-log-grp.sh /$pid" >> commands.sh ;;
                 AWS::S3::Bucket) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/060-get-s3.sh $pid" >> commands.sh ;;
-              
+                AWS::SQS::Queue) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/720-get-sqs-queue.sh $parn" >> commands.sh ;;
                 AWS::SSM::Parameter) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/445-get-ssm-params.sh $pid" >> commands.sh ;;
 
                 AWS::IAM::Role) echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh && echo "../../scripts/050-get-iam-roles.sh $pid" >> commands.sh ;;

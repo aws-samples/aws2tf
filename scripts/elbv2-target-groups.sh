@@ -11,7 +11,6 @@ else
     exit
 fi
 
-
 c=0
 cm=${cmd[$c]}
 

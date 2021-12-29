@@ -1,4 +1,3 @@
-ttft="aws_s3_bucket_policy"
 acct=`$AWS sts get-caller-identity | jq .Account | tr -d '"'`
 cmd[0]="$AWS s3control list-access-points --account-id $acct"
 

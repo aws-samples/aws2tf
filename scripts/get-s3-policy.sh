@@ -1,6 +1,8 @@
 #!/bin/bash
 if [ "$1" == "" ]; then echo "must specify bucket name" && exit; fi
-ttft="aws_s3_bucket_policy"
+c=0
+tft[0]="aws_s3_bucket_policy"
+ttft=${tft[(${c})]}
 
 #echo $i
 cname=`echo $1`

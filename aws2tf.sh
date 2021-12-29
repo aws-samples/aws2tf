@@ -1,41 +1,40 @@
 usage(){
-	echo "Usage: $0 [-p <profile>] [-c] [-v] [-r <region>] [-t <type>] [-h] [-d]"
+	echo "Usage: $0 [-p <profile>] [-c] [-v] [-r <region>] [-t <type>] [-h] [-d] [-s] <stack name>"
   echo "       -p <profile> specify the AWS profile to use (Default=\"default\")"
-  echo "       -c           continue from previous run (Default=\"no\")"
+  echo "       -c <yes|no> (default=no) Continue from previous run"
   echo "       -r <region>  specify the AWS region to use (Default=the aws command line setting)"
-  echo "       -v           stop after terraform validate step"
+  echo "       -v <yes|no> (default=no) Stop after terraform validate step"
   echo "       -h           Help - this message"
-  echo "       -d           Debug - lots of output"
+  echo "       -d <yes|no|st> (default=no)   Debug - lots of output if yes"
   echo "       -s <stack name>  Traverse a Stack and import resources (experimental)"
-  echo "       -t <type>    choose a sub-type of AWS resources to get" 
-   echo "           iam" 
-   echo "           cf"                
-   echo "           org" 
-   echo "           code"
-   echo "           appmesh" 
-   echo "           kms"
-   echo "           lambda" 
-   echo "           rds" 
-   echo "           ecs"
-   echo "           eks"
-   echo "           emr"
-   echo "           secrets" 
-   echo "           lf" 
-   echo "           athena" 
-   echo "           glue" 
-   echo "           params"
-   echo "           sagemaker" 
-   echo "           eb"
-   echo "           ec2"
-   echo "           s3"
-   echo "           s3"
-   echo "           spot"
-   echo "           tgw"
-   echo "           vpc"
-	exit 1
+  echo "       -t <type>   choose a sub-type of AWS resources to get:" 
+    echo "           iam" 
+    echo "           cf"                
+    echo "           org" 
+    echo "           code"
+    echo "           appmesh" 
+    echo "           kms"
+    echo "           lambda" 
+    echo "           rds" 
+    echo "           ecs"
+    echo "           eks"
+    echo "           emr"
+    echo "           secrets" 
+    echo "           lf" 
+    echo "           athena" 
+    echo "           glue" 
+    echo "           params"
+    echo "           sagemaker" 
+    echo "           eb"
+    echo "           ec2"
+    echo "           s3"
+    echo "           sc"
+    echo "           spot"
+    echo "           sqs"
+    echo "           tgw"
+    echo "           vpc"
+   exit 1
 }
-
-
 
 x="no"
 p="default" # profile
@@ -66,7 +65,7 @@ while getopts ":p:r:x:f:v:t:i:c:d:h:s:" o; do
         ;;
         c) c="yes"
         ;;
-        d) d="yes"
+        d) d=${OPTARG}
         ;;
         s) s=${OPTARG}
         ;;
@@ -109,13 +108,13 @@ fi
 
 
 #s=`echo $mysub`
-mkdir -p  generated/tf.${mysub}-${r}
-cd generated/tf.${mysub}-${r}
+mkdir -p  generated/tf.${mysub}_${r}
+cd generated/tf.${mysub}_${r}
 
 
 if [ "$f" = "no" ]; then
     if [ "$c" = "no" ]; then
-        echo "Cleaning generated/tf.${mysub}-${r}"
+        echo "Cleaning generated/tf.${mysub}_${r}"
         rm -f *.txt *.sh *.log *.sav *.zip
         rm -f *.tf *.json *.tmp 
         rm -f terraform.* tfplan 
@@ -244,7 +243,8 @@ if [ "$t" == "sagemaker" ]; then pre="68*"; fi
 if [ "$t" == "eb" ]; then pre="71*"; fi
 if [ "$t" == "ec2" ]; then pre="25*"; fi
 if [ "$t" == "s3" ]; then pre="06*"; fi
-if [ "$t" == "sc" ]; then pre="81*"; fi
+if [ "$t" == "sc" ]; then pre="81*"; fi # service catalog
+if [ "$t" == "sqs" ]; then pre="72*"; fi # service catalog
 if [ "$t" == "spot" ]; then pre="25*"; fi
 if [ "$t" == "params" ]; then pre="445*"; fi
 if [ "$t" == "artifact" ]; then pre="627*"; fi
@@ -316,7 +316,7 @@ else
     echo "Stack set $s traverse - experimental"
     ../../scripts/get-stack.sh $s
     chmod 755 commands.sh
-    #if [ "$v" = "yes" ]; then  exit; fi
+        if [ "$d" = "st" ]; then  exit; fi
     ./commands.sh
 fi
 
@@ -346,7 +346,7 @@ echo "Terraform Plan ..."
 terraform plan -no-color
 
 echo "---------------------------------------------------------------------------"
-echo "aws2tf output files are in generated/tf.${mysub}-${r}"
+echo "aws2tf output files are in generated/tf.${mysub}_${r}"
 echo "---------------------------------------------------------------------------"
 
 if [ "$t" == "eks" ]; then

@@ -16,8 +16,9 @@ else
     exit
 fi
 
-ttft="aws_route53_zone"
-
+c=0
+tft[0]="aws_route53_zone"
+ttft=${tft[(${c})]}
 
 #rm -f ${tft[0]}.tf
 cname=`echo $hzid`

@@ -230,6 +230,7 @@ fi
 if [ "$t" == "org" ]; then pre="01*"; fi
 if [ "$t" == "code" ]; then pre="62*"; fi
 if [ "$t" == "cf" ]; then pre="999*"; fi
+if [ "$t" == "cognito" ]; then pre="77*"; fi
 if [ "$t" == "appmesh" ]; then pre="360*"; fi
 if [ "$t" == "kms" ]; then pre="08*"; fi
 if [ "$t" == "lambda" ]; then pre="700*"; fi

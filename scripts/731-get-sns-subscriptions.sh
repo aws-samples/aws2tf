@@ -1,6 +1,11 @@
 #!/bin/bash
 if [[ "$1" != "" ]]; then
-    cmd[0]="$AWS sns list-subscriptions-by-topic --topic-arn $1"
+    if [[ "$1" == "arn:aws:"* ]];then 
+        cmd[0]="$AWS sns list-subscriptions-by-topic --topic-arn $1"
+    else
+        echo "invalid topic arn exit ...."
+        exit
+    fi
 else
     cmd[0]="$AWS sns list-subscriptions"
     
@@ -20,11 +25,10 @@ for c in `seq 0 0`; do
         echo "You don't have access for this resource"
         exit
     fi
-    if [[ "$1" != "" ]]; then
-        count=1
-    else
-        count=`echo $awsout | jq ".${pref[(${c})]} | length"`
-    fi
+
+    count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    #echo $count
+
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do

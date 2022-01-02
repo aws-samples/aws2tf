@@ -1,13 +1,14 @@
 #!/bin/bash
 if [[ "$1" != "" ]]; then
-    cmd[0]="$AWS cognito-identity describe-identity-pool --identity-pool-id $1"
+    cmd[0]="$AWS cognito-idp describe-user-pool --user-pool-id $1"
+    pref[0]="UserPool"
 else
-    cmd[0]="$AWS cognito-identity list-identity-pools --max-results 60"
+    cmd[0]="$AWS cognito-idp list-user-pools --max-results 60"
+    pref[0]="UserPools"
 fi
 
-pref[0]="IdentityPools"
-tft[0]="aws_cognito_identity_pool"
-idfilt[0]="IdentityPoolId"
+tft[0]="aws_cognito_user_pool"
+idfilt[0]="Id"
 
 for c in `seq 0 0`; do
     
@@ -28,18 +29,13 @@ for c in `seq 0 0`; do
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            if [[ "$1" != "" ]];then
-                cname=`echo $awsout | jq -r ".${idfilt[(${c})]}"`
-                # get the user pool name
-                upn=`echo $awsout | jq -r ".CognitoIdentityProviders[0].ProviderName" | cut -f2 -d'/'`
+            if [[ "$1" != "" ]]; then
+                cname=`echo $awsout | jq -r ".${pref[(${c})]}.${idfilt[(${c})]}"`
             else
                 cname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}"`
-                # get the user pool name
-                upn=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].CognitoIdentityProviders[0].ProviderName" | cut -f2 -d'/'`
             fi
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             echo "$ttft $cname"
-            echo "User pool name 0 = $upn"
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
 
@@ -48,14 +44,13 @@ for c in `seq 0 0`; do
     
             terraform import $ttft.${rname} "${cname}" | grep Import
             terraform state show $ttft.${rname} > t2.txt
+
             rm -f $fn
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
 
             file="t1.txt"
             echo $aws2tfmess > $fn
-            upn=""
-      
-
+            tarn=""
             while IFS= read line
             do
 				skip=0
@@ -70,12 +65,8 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "creation_date" ]];then skip=1;fi
                     if [[ ${tt1} == "last_modified_date" ]];then skip=1;fi
                     if [[ ${tt1} == "endpoint" ]];then skip=1;fi
-                    if [[ ${tt1} == "estimated_number_of_users" ]];then skip=1;fi  
-                    if [[ ${tt1} == "client_id" ]];then 
-                        cid=$(echo $tt2 | tr -d '"')
-                        t1=`printf "%s = aws_cognito_user_pool_client.c_%s.id" $tt1 $cid`
-                    fi
-                                     
+                    if [[ ${tt1} == "estimated_number_of_users" ]];then skip=1;fi                  
+                    
 
                 fi
                 if [ "$skip" == "0" ]; then
@@ -85,17 +76,10 @@ for c in `seq 0 0`; do
                 
             done <"$file"
 
-            if [[ "$upn" != "" ]];then
-                if [[ "$cid" != "" ]];then
-                    ../../scripts/776-get-cognito-user-pool-client.sh $upn $cid
-                else
-                    ../../scripts/776-get-cognito-user-pool-client.sh $upn
-                fi
-            fi
 
         done
     fi 
 done
 
-rm -f t*.txt
+#rm -f t*.txt
 

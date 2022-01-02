@@ -36,6 +36,8 @@ for c in `seq 0 0`; do
             else
                 cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             fi
+            if [[ "$cname" == "null" ]];then "echo topic = $cname skipping..." && continue; fi
+            
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $rname`

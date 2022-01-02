@@ -52,6 +52,7 @@ for c in `seq 0 0`; do
             rm -f $fn
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
 
+            tarn=""
             file="t1.txt"
             echo $aws2tfmess > $fn
             while IFS= read line
@@ -96,7 +97,9 @@ for c in `seq 0 0`; do
             done <"$file"
 
             ../../scripts/731-get-sns-subscriptions.sh $cname
-            ../../scripts/731-get-sns-subscriptions.sh $tarn
+            if [[ "$tarn" != "" ]];then
+                ../../scripts/731-get-sns-subscriptions.sh $tarn
+            fi
             
         done
     fi 

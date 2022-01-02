@@ -35,7 +35,7 @@ for t in ${asgs[@]}; do
 	
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
-        echo "You don't have access for this resource"
+        echo "$cm : You don't have access for this resource"
         exit
     fi
     

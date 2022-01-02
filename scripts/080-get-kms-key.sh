@@ -38,7 +38,7 @@ for c in `seq 0 0`; do
             fi
             keyd=`$AWS kms describe-key --key-id $cname 2> /dev/null`
             if [ "$awsout" == "" ];then
-                echo "You don't have access for this resource"
+                echo "$cm : You don't have access for this resource"
                 break
             fi
 

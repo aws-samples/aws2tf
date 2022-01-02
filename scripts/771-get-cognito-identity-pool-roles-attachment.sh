@@ -1,45 +1,37 @@
 #!/bin/bash
 if [[ "$1" != "" ]]; then
-    cmd[0]="$AWS cognito-identity describe-identity-pool --identity-pool-id $1"
+    cmd[0]="$AWS cognito-identity get-identity-pool-roles --identity-pool-id $1"
 else
-    cmd[0]="$AWS cognito-identity list-identity-pools --max-results 60"
+    echo "must pass an identity pool id exiting ..."
+    exit
 fi
 
-pref[0]="IdentityPools"
-tft[0]="aws_cognito_identity_pool"
+pref[0]=""
+tft[0]="aws_cognito_identity_pool_roles_attachment"
 idfilt[0]="IdentityPoolId"
 
 for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
-        echo "$cm : You don't have access for this resource"
+        echo "$cm You don't have access for this resource"
         exit
     fi
-    if [[ "$1" != "" ]]; then
-        count=1
-    else
-        count=`echo $awsout | jq ".${pref[(${c})]} | length"`
-    fi
+    count=1
+
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            if [[ "$1" != "" ]];then
-                cname=`echo $awsout | jq -r ".${idfilt[(${c})]}"`
+            cname=`echo $awsout | jq -r ".${idfilt[(${c})]}"`
                 # get the user pool name
-                upn=`echo $awsout | jq -r ".CognitoIdentityProviders[0].ProviderName" | cut -f2 -d'/'`
-            else
-                cname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}"`
-                # get the user pool name
-                upn=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].CognitoIdentityProviders[0].ProviderName" | cut -f2 -d'/'`
-            fi
+
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             echo "$ttft $cname"
-            echo "User pool name 0 = $upn"
+
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
 
@@ -53,7 +45,7 @@ for c in `seq 0 0`; do
 
             file="t1.txt"
             echo $aws2tfmess > $fn
-            upn=""
+            tarn=""
       
 
             while IFS= read line
@@ -61,6 +53,7 @@ for c in `seq 0 0`; do
 				skip=0
                 # display $line or do something with $line
                 t1=`echo "$line"` 
+                echo $t1
                 if [[ ${t1} == *"="* ]];then
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
@@ -71,9 +64,10 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "last_modified_date" ]];then skip=1;fi
                     if [[ ${tt1} == "endpoint" ]];then skip=1;fi
                     if [[ ${tt1} == "estimated_number_of_users" ]];then skip=1;fi  
-                    if [[ ${tt1} == "client_id" ]];then 
-                        cid=$(echo $tt2 | tr -d '"')
-                        t1=`printf "%s = aws_cognito_user_pool_client.c_%s.id" $tt1 $cid`
+                    if [[ ${tt1} == *"authenticated"* ]];then 
+                        tarn=$(echo $tt2 | tr -d '"')
+                        tid=$(echo $tarn | rev | cut -f1 -d'/' | rev)
+                        t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $tid`
                     fi
                                      
 
@@ -85,14 +79,8 @@ for c in `seq 0 0`; do
                 
             done <"$file"
 
-            ../../scripts/771-get-cognito-identity-pool-roles-attachment.sh $cname
-
-            if [[ "$upn" != "" ]];then
-                if [[ "$cid" != "" ]];then
-                    ../../scripts/776-get-cognito-user-pool-client.sh $upn $cid
-                else
-                    ../../scripts/776-get-cognito-user-pool-client.sh $upn
-                fi
+            if [[ "$tarn" != "" ]];then
+                    ../../scripts/050-get-iam-roles.sh $tarn
             fi
 
         done

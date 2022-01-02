@@ -9,7 +9,7 @@ if [ "$1" != "" ]; then
 else
     cln=`$AWS eks list-clusters 2> /dev/null`
     if [ "$cln" == "" ];then
-        echo "You don't have access for this resource"
+        echo "$cm : You don't have access for this resource"
         exit
     fi
 
@@ -24,7 +24,7 @@ if [ "$kcount" -gt "0" ]; then
         else
             cln=`$AWS eks list-clusters 2> /dev/null`
             if [ "$cln" == "" ];then
-                echo "You don't have access for this resource"
+                echo "$cm : You don't have access for this resource"
                 exit
             fi
             cln=`$AWS eks list-clusters  | jq ".clusters[(${k})]" | tr -d '"'`         
@@ -35,7 +35,7 @@ if [ "$kcount" -gt "0" ]; then
         cm=${cmd[$c]}
         awsout=`eval $cm 2> /dev/null`
         if [ "$awsout" == "" ];then
-            echo "You don't have access for this resource"
+            echo "$cm : You don't have access for this resource"
             exit
         fi
             
@@ -129,7 +129,7 @@ if [ "$kcount" -gt "0" ]; then
             #echo $cm
             awsout=`eval $cm 2> /dev/null`
             if [ "$awsout" == "" ];then
-                echo "You don't have access for this resource"
+                echo "$cm : You don't have access for this resource"
                 exit
             fi
             count=`echo $awsout | jq ".${pref[(${c})]} | length"`

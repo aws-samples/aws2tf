@@ -14,7 +14,7 @@ for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	echo $cm
+	#echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm You don't have access for this resource"
@@ -53,7 +53,7 @@ for c in `seq 0 0`; do
 				skip=0
                 # display $line or do something with $line
                 t1=`echo "$line"` 
-                echo $t1
+                
                 if [[ ${t1} == *"="* ]];then
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
@@ -87,5 +87,5 @@ for c in `seq 0 0`; do
     fi 
 done
 
-rm -f t*.txt
+#rm -f t*.txt
 

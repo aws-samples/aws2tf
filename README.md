@@ -93,6 +93,8 @@ To get all the resources in a deployed Stack Set
 
 **Please PR any resources you see in the `unprocessed.txt` file and they'll get added to the stack processor**
 
+Or simply check back after some time to see if they are listed below.
+
 ----
 
 To get a selection of resources use the -t option 

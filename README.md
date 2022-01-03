@@ -53,7 +53,9 @@ Or there may be some kind of error as trying to test everyone's AWS combinations
 
 **If you happen to find one of these errors please open an issue here and paste in the error and it will get fixed.**
 
+
 Once the validation is ok you can remove the -v which then also runs the `terraform plan`.
+
 ---
 
 <br>

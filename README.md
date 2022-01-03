@@ -11,7 +11,7 @@ It also imports the terraform state using a
 
 And finally runs a
 
-"terraform plan ."  command
+"terraform plan"  command
 
 There should hopefully be no subsequent additions or deletions reported by the terraform plan command as all the appropriate terraform configuration files will have have automatically been created.
 
@@ -53,8 +53,7 @@ Or there may be some kind of error as trying to test everyone's AWS combinations
 
 **If you happen to find one of these errors please open an issue here and paste in the error and it will get fixed.**
 
-Once the validation is ok you can use the tool in anger to not only generate the terraform files (-v yes) but also import the resources and perform a terraform plan (see below)
-
+Once the validation is ok you can remove the -v which then also runs the `terraform plan`.
 ---
 
 <br>
@@ -90,7 +89,7 @@ The currently supported types are:
 * appmesh - App Mesh resources `-t appmesh`
 * code - Code* resources `-t code`
 * cognito - Cognito resources `-t cognito`
-* *cognito - AWS config resources `-t config`
+* config - AWS config resources `-t config`
 * eb - EventBridge resources `-t eb`
 * ecs - An ECS cluster and it's related resources `-t ecs -i Cluster-Name`
 * eks - An EKS cluster and it's related resources `-t eks -i Cluster-Name`
@@ -103,7 +102,7 @@ The currently supported types are:
 * rds - RDS database resources `-t rds`
 * secrets - Secrets Manager secrets `-t secrets`
 * sagemaker - SageMaker resources `-t sagemaker`
-* sc - Service Catalog resources `-t sagemaker`
+* sc - Service Catalog resources `-t sc`
 * sns - SNS resources `-t sns`
 * sqs - SQS queues `-t sqs`
 * spot - spot requests `-t spot`
@@ -150,7 +149,7 @@ To get all the resources in a deployed Stack Set
 ./aws2tf.sh -s <stack set name>
 ```
 
-**Please PR any resources you see in the `unprocessed.txt` file and they'll get added to the stack processor**
+*Please open an issue for any resources you see in the `unprocessed.txt` to help prioritize development*
 
 Or simply check back after some time to see if they are listed below.
 

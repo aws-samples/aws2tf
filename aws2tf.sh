@@ -315,10 +315,12 @@ for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do
 done
 else
     echo "Stack set $s traverse - experimental"
-    ../../scripts/get-stack.sh $s
+    . ../../scripts/get-stack.sh $s
     chmod 755 commands.sh
         if [ "$d" = "st" ]; then  exit; fi
-    ./commands.sh
+    . ./commands.sh
+    echo "commands done - was unable to process:"
+    cat unprocessed.txt
 fi
 
 #########################################################################

@@ -85,10 +85,33 @@ for c in `seq 0 0`; do
                             qnam=$(echo $tt2 | rev | cut -f1 -d':' | rev)
                             rurl=$(AWS sqs get-queue-url --queue-name $qnam | jq -r ".QueueUrl")
                             rn=${rurl//:/_} && rn=${rn//./_} && rn=${rn//\//_}
-                            
-                            t1=`printf "%s = aws_sqs_queue.%s.arn" $tt1 $rn`
+                            echo "In Resource cname=$cname rurl=$rurl"
+
+                            if [[ "$rurl" != "$cname" ]];then ## to stop - Error: Self-referential block
+                                t1=`printf "%s = aws_sqs_queue.%s.arn" $tt1 $rn`
+                            fi 
                         fi
                     fi
+
+                    if [[ ${tt1} == "Resource" ]];then 
+                        tt2=$(echo $tt2 | tr -d '"')
+                        if [[ "$tt2" == *":aws:sns:"* ]];then
+                            tarn=$(echo $tt2)
+                            rn=${tt2//:/_} && rn=${rn//./_} && rn=${rn//\//_}
+                            if [[ "$tarn" != "$cname" ]];then ## to stop - Error: Self-referential block
+                                t1=`printf "%s = aws_sns_topic.%s.arn" $tt1 $rn`
+                            fi
+                        fi
+                    fi
+
+
+
+
+
+
+
+
+
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1

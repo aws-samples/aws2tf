@@ -4,6 +4,7 @@ nested=()
 echo "#!/bin/bash" > commands.sh
 echo "Stack resources not yet implemented ...." > unprocessed.txt
 
+echo "d=$d"
 
 getstack () {
 
@@ -38,8 +39,10 @@ if [ "$count" -gt "0" ]; then
             type=$(echo "$stackr" | jq  -r ".[(${i})].ResourceType")
             pid=$(echo "$stackr" | jq  -r ".[(${i})].PhysicalResourceId" | cut -f2 -d'/')
             parn=$(echo "$stackr" | jq  -r ".[(${i})].PhysicalResourceId" | tr -d '"')
-            echo "--> $type $pid $parn"
-            echo "echo 'Stack $1 Importing $i of $count ..'"
+            if [[ "$d" == "st" ]];then 
+                echo "--> $type $pid $parn"
+            fi
+            echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh
             case $type in
                 AWS::CodeArtifact::Domain)  echo "../../scripts/627-get-code-artifact-domain.sh $pid"  >> commands.sh ;;
                 AWS::CodeArtifact::Repository)  echo "../../scripts/627-get-code-artifact-repository.sh $pid"  >> commands.sh ;;
@@ -79,13 +82,15 @@ if [ "$count" -gt "0" ]; then
                 AWS::IAM::ManagedPolicy) echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;
                 AWS::IAM::Policy)  echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;
 
+                AWS::KinesisFirehose::DeliveryStream) echo "../../scripts/740-get-kinesis-firehose-delivery-stream.sh $pid" >> commands.sh ;;
+
                 AWS::KMS::Key)  echo "../../scripts/080-get-kms-key.sh $pid" >> commands.sh ;;                
                 AWS::KMS::Alias) echo "echo '#  $type $pid  fetched as part of function..'" >> commands.sh ;;  # fetched as part of function 
                 
                 AWS::Lambda::Function)  echo "../../scripts/700-get-lambda-function.sh $pid"  >> commands.sh ;;
                 AWS::Lambda::Permission) echo "echo '# $type $pid fetched as part of function..'" >> commands.sh ;; # fetched as part of function
                 AWS::Lambda::EventInvokeConfig) echo "echo '# $type $pid fetched as part of function..'" >> commands.sh ;; # fetched as part of function
-                
+
                 AWS::Logs::LogGroup)  echo "../../scripts/070-get-cw-log-grp.sh /$parn" >> commands.sh ;;
                 
                 AWS::S3::Bucket)  echo "../../scripts/060-get-s3.sh $pid" >> commands.sh ;;
@@ -128,9 +133,10 @@ done
 for nest in ${nested[@]}; do
     nest=`echo $nest | jq -r .`
     getstackresources $nest
+    
 done
-
+echo "Commands Done .." >> commands.sh 
 #echo "commands.sh"
 #cat commands.sh
-cat unprocessed.txt
+
 

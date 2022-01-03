@@ -84,20 +84,6 @@ To add App Mesh resources
 ----
 
 
-###  Experimental - still under development
-
-To get all the resources in a deployed Stack Set
-
-```
-./aws2tf.sh -s <stack set name>
-```
-
-**Please PR any resources you see in the `unprocessed.txt` file and they'll get added to the stack processor**
-
-Or simply check back after some time to see if they are listed below.
-
-----
-
 To get a selection of resources use the -t option 
 The currently supported types are:
 
@@ -154,8 +140,23 @@ Be patient - lots of output is given as aws2tf:
 + Performs the necessary 'terraform import' commands
 + And finally runs a 'terraform plan'
 
+----
+
+###  Experimental - still under development
+
+To get all the resources in a deployed Stack Set
+
+```
+./aws2tf.sh -s <stack set name>
+```
+
+**Please PR any resources you see in the `unprocessed.txt` file and they'll get added to the stack processor**
+
+Or simply check back after some time to see if they are listed below.
+
 
 ----
+
 ## Terraform resources supported as of 03-Jan-2022
 
 * aws_appmesh_gateway_route

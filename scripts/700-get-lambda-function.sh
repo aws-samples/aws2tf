@@ -156,6 +156,7 @@ for c in `seq 0 0`; do
             if [ "$cname" != "" ]; then
                 ../../scripts/get-lambda-alias.sh $cname
                 ../../scripts/get-lambda-permission.sh $cname
+                ../../scripts/get-lambda-event-invoke-configs.sh $cname
             fi
         
         done

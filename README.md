@@ -282,7 +282,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_vpn_connection
 
 ----
-## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 03-Jan-2022
+## Resources within a Stack Set that can currently be converted to Terraform `(-s <stack set name>)` as of 03-Jan-2022
 
 * AWS::CodeArtifact::Domain
 * AWS::CodeArtifact::Repository

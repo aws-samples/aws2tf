@@ -81,6 +81,19 @@ To add App Mesh resources
 ./aws2tf.sh -t appmesh -c yes
 ```
 
+----
+
+### Experimental - still under development
+
+To get all the resources in a deployed Stack Set
+
+```
+./aws2tf.sh -s <stack set name>
+```
+
+**Please PR any resources you see in the `unprocessed.txt` file and they'll get added to the stack processor**
+
+----
 
 To get a selection of resources use the -t option 
 The currently supported types are:
@@ -88,6 +101,7 @@ The currently supported types are:
 * appmesh - App Mesh resources `-t appmesh`
 * code - Code* resources `-t code`
 * cognito - Cognito resources `-t cognito`
+* *cognito - AWS config resources `-t config`
 * eb - EventBridge resources `-t eb`
 * ecs - An ECS cluster and it's related resources `-t ecs -i Cluster-Name`
 * eks - An EKS cluster and it's related resources `-t eks -i Cluster-Name`

@@ -227,28 +227,32 @@ if [ "$i" == "no" ]; then
 fi
 fi
 
-if [ "$t" == "org" ]; then pre="01*"; fi
+if [ "$t" == "appmesh" ]; then pre="360*"; fi
+if [ "$t" == "artifact" ]; then pre="627*"; fi
+if [ "$t" == "athena" ]; then pre="66*"; fi
 if [ "$t" == "code" ]; then pre="62*"; fi
 if [ "$t" == "cf" ]; then pre="999*"; fi
 if [ "$t" == "cognito" ]; then pre="77*"; fi
-if [ "$t" == "appmesh" ]; then pre="360*"; fi
-if [ "$t" == "kms" ]; then pre="08*"; fi
-if [ "$t" == "lambda" ]; then pre="700*"; fi
-if [ "$t" == "rds" ]; then pre="60*"; fi
-if [ "$t" == "emr" ]; then pre="37*"; fi
-if [ "$t" == "secrets" ]; then pre="45*"; fi
-if [ "$t" == "lf" ]; then pre="63*"; fi
-if [ "$t" == "athena" ]; then pre="66*"; fi
-if [ "$t" == "glue" ]; then pre="65*"; fi
-if [ "$t" == "sagemaker" ]; then pre="68*"; fi
+if [ "$t" == "config" ]; then pre="41*"; fi
 if [ "$t" == "eb" ]; then pre="71*"; fi
 if [ "$t" == "ec2" ]; then pre="25*"; fi
+if [ "$t" == "emr" ]; then pre="37*"; fi
+if [ "$t" == "glue" ]; then pre="65*"; fi
+
+if [ "$t" == "kms" ]; then pre="08*"; fi
+if [ "$t" == "lambda" ]; then pre="700*"; fi
+if [ "$t" == "lf" ]; then pre="63*"; fi
+if [ "$t" == "org" ]; then pre="01*"; fi
+if [ "$t" == "params" ]; then pre="445*"; fi
+if [ "$t" == "rds" ]; then pre="60*"; fi
 if [ "$t" == "s3" ]; then pre="06*"; fi
+if [ "$t" == "sagemaker" ]; then pre="68*"; fi
+if [ "$t" == "secrets" ]; then pre="45*"; fi
+
 if [ "$t" == "sc" ]; then pre="81*"; fi # service catalog
 if [ "$t" == "sqs" ]; then pre="72*"; fi # service catalog
 if [ "$t" == "spot" ]; then pre="25*"; fi
-if [ "$t" == "params" ]; then pre="445*"; fi
-if [ "$t" == "artifact" ]; then pre="627*"; fi
+
 
 exclude="iam"
 

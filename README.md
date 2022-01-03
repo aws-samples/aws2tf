@@ -87,6 +87,7 @@ The currently supported types are:
 
 * appmesh - App Mesh resources `-t appmesh`
 * code - Code* resources `-t code`
+* cognito - Cognito resources `-t cognito`
 * eb - EventBridge resources `-t eb`
 * ecs - An ECS cluster and it's related resources `-t ecs -i Cluster-Name`
 * eks - An EKS cluster and it's related resources `-t eks -i Cluster-Name`
@@ -100,9 +101,11 @@ The currently supported types are:
 * secrets - Secrets Manager secrets `-t secrets`
 * sagemaker - SageMaker resources `-t sagemaker`
 * sc - Service Catalog resources `-t sagemaker`
+* sns - SNS resources `-t sns`
+* sqs - SQS queues `-t sqs`
 * spot - spot requests `-t spot`
-* tgw - Transit Gateway resources `-t tgw -i transit-gateway-id`
-* vpc - A VPC and it's related resources `-t vpc -i VPC-id`
+* tgw - Transit Gateway resources `-t tgw <-i transit-gateway-id>`
+* vpc - A VPC and it's related resources `-t vpc <-i VPC-id>`
   
 
 To get all the VPC related resources in a particular VPC
@@ -125,7 +128,6 @@ To get all the VPC related resources in a particular VPC
 ./aws2tf.sh -t vpc -i vpc-ccccccccc -c yes
 ```
 
-
 <br>
 
 Be patient - lots of output is given as aws2tf:
@@ -136,10 +138,8 @@ Be patient - lots of output is given as aws2tf:
 + And finally runs a 'terraform plan'
 
 
-
-
 ----
-## Terraform resources supported as of 29-Dec-2021
+## Terraform resources supported as of 03-Jan-2022
 
 * aws_appmesh_gateway_route
 * aws_appmesh_mesh
@@ -160,6 +160,10 @@ Be patient - lots of output is given as aws2tf:
 * aws_codeartifact_repository
 * aws_codebuild_project
 * aws_codepipeline
+* aws_cognito_identity_pool
+* aws_cognito_identity_pool_roles_attachment
+* aws_cognito_user_pool
+* aws_cognito_user_pool_client
 * aws_config_config_rule
 * aws_config_configuration_recorder
 * aws_config_configuration_recorder_status
@@ -199,11 +203,13 @@ Be patient - lots of output is given as aws2tf:
 * aws_iam_user_group_membership
 * aws_instance
 * aws_internet_gateway
+* aws_kinesis_firehose_delivery_stream
 * aws_kms_alias
 * aws_kms_key
 * aws_lakeformation_resource
 * aws_lambda_alias
 * aws_lambda_function
+* aws_lambda_function_event_invoke_config
 * aws_lambda_permission
 * aws_launch_template
 * aws_lb
@@ -257,16 +263,21 @@ Be patient - lots of output is given as aws2tf:
 * aws_vpn_connection
 
 ----
-## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 29-Dec-2021
+## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 03-Jan-2022
 
 * AWS::CodeArtifact::Domain
 * AWS::CodeArtifact::Repository
+* AWS::Cognito::IdentityPool
+* AWS::Cognito::IdentityPoolRoleAttachment
+* AWS::Cognito::UserPool
+* AWS::Cognito::UserPoolClient
 * AWS::EC2::EIP
 * AWS::EC2::InternetGateway
 * AWS::EC2::LaunchTemplate
 * AWS::EC2::NatGateway
 * AWS::EC2::RouteTable
 * AWS::EC2::SecurityGroup
+* AWS::EC2::SecurityGroupIngress
 * AWS::EC2::Subnet
 * AWS::EC2::SubnetRouteTableAssociation
 * AWS::EC2::VPC
@@ -275,6 +286,7 @@ Be patient - lots of output is given as aws2tf:
 * AWS::ECS::Service
 * AWS::ECS::TaskDefinition
 * AWS::EKS::Cluster
+* AWS::EKS::Nodegroup
 * AWS::ElasticLoadBalancingV2::ListenerRule
 * AWS::ElasticLoadBalancingV2::TargetGroup
 * AWS::Events::EventBus
@@ -282,15 +294,20 @@ Be patient - lots of output is given as aws2tf:
 * AWS::IAM::ManagedPolicy
 * AWS::IAM::Policy
 * AWS::IAM::Role
+* AWS::KMS::Alias
 * AWS::KMS::Key
+* AWS::KinesisFirehose::DeliveryStream
+* AWS::Lambda::EventInvokeConfig
 * AWS::Lambda::Function
+* AWS::Lambda::Permission
 * AWS::Logs::LogGroup
 * AWS::S3::Bucket
+* AWS::SNS::Topic
 * AWS::SQS::Queue
 * AWS::SSM::Parameter
 * AWS::SecretsManager::Secret
 * AWS::ServiceDiscovery::Service
-
+ 
 ----
 
 + Other terraform providers as terraform supports.

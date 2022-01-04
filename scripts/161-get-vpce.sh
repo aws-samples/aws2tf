@@ -134,7 +134,7 @@ for c in `seq 0 0`; do
                 ../../scripts/110-get-security-group.sh $sgid
             fi
             if [[ $sbid != "" ]];then
-                ../../105-get-subnet.sh $sbid
+                ../../scripts/105-get-subnet.sh $sbid
             fi
             if [[ $rtid != "" ]];then
                 ../../scripts/140-get-route-table.sh $rtid

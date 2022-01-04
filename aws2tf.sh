@@ -324,7 +324,7 @@ else
         if [ "$d" = "st" ]; then  exit; fi
     . ./commands.sh
     echo "commands done - was unable to process:"
-    cat unprocessed.txt
+    cat unprocessed.log
 fi
 
 #########################################################################

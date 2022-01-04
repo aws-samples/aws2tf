@@ -2,7 +2,7 @@
 if [ "$1" == "" ]; then echo "must specify a stack name" && exit; fi
 nested=() 
 echo "#!/bin/bash" > commands.sh
-echo "Stack resources not yet implemented ...." > unprocessed.txt
+echo "Stack resources not yet implemented ...." > unprocessed.log
 
 echo "d=$d"
 
@@ -105,7 +105,7 @@ if [ "$count" -gt "0" ]; then
                 AWS::CloudFormation::WaitCondition*) echo "skipping $type" ;;
                 AWS::CloudFormation::Stack) ;;
 
-                *) echo "--UNPROCESSED-- $type $pid $parn" >> unprocessed.txt ;;
+                *) echo "--UNPROCESSED-- $type $pid $parn" >> unprocessed.log ;;
 esac
         done   
 fi

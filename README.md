@@ -151,7 +151,7 @@ To get all the resources in a deployed Stack Set
 ./aws2tf.sh -s <stack set name>
 ```
 
-*Please open an issue for any resources you see in the `unprocessed.txt` to help prioritize development*
+*Please open an issue for any resources you see in the `unprocessed.log` to help prioritize development*
 
 Or simply check back after some time to see if they are listed below.
 

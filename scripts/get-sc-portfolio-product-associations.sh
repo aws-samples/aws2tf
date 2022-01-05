@@ -4,7 +4,7 @@ if [[ "$1" == "prod-"* ]]; then
         
 
     else
-        echo "must pass a portfolio id"
+        echo "must pass a product id"
         exit
     fi
 
@@ -67,6 +67,20 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
                     if [[ ${tt1} == "created_time" ]];then skip=1;fi
                                 
+                    if [[ ${tt1} == "portfolio_id" ]];then 
+                        tt2=$(echo $tt2 | tr -d '"')
+                        t1=$(printf "%s = aws_servicecatalog_portfolio.%s.id" $tt1 $tt2)
+                    fi 
+
+                    if [[ ${tt1} == "product_id" ]];then 
+                        tt2=$(echo $tt2 | tr -d '"')
+                        # .product__portfolio
+                        t1=$(printf "%s = aws_servicecatalog_product.%s__%s.id" $tt1 $tt2 $rname)
+                    fi 
+
+
+                    
+
 
                 fi
                 if [ "$skip" == "0" ]; then

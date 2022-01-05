@@ -53,7 +53,7 @@ for c in `seq 0 0`; do
             #		echo $k
             #	done
             file="t1.txt"
-
+            trole=""
             echo $aws2tfmess > $fn
             while IFS= read line
             do
@@ -68,6 +68,27 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "created_time" ]];then skip=1;fi
                     if [[ ${tt1} == "owner" ]];then skip=1; fi         
                     if [[ ${tt1} == "status" ]];then skip=1; fi 
+
+                    if [[ ${tt1} == "portfolio_id" ]];then 
+                        tt2=$(echo $tt2 | tr -d '"')
+                        t1=$(printf "%s = aws_servicecatalog_portfolio.%s.id" $tt1 $tt2)
+                    fi 
+
+                    if [[ ${tt1} == "product_id" ]];then 
+                        tt2=$(echo $tt2 | tr -d '"')
+                        t1=$(printf "%s = aws_servicecatalog_product.%s__%s.id" $tt1 $tt2 $1)
+                    fi
+
+                   if [[ ${tt1} == "RoleArn" ]];then 
+                        tt2=$(echo $tt2 | tr -d '"')
+                        if [[ "$tt2" == *":iam:"* ]]; then
+                            trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev)
+                            t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
+                        fi                 
+                    fi 
+
+
+
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
@@ -75,6 +96,10 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
+
+            if [[ "$trole" != "" ]];then
+                ../../scripts/050-get-iam-roles.sh $trole
+            fi
             
         done # end for
 

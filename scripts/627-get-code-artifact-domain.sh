@@ -7,7 +7,6 @@ else
     pref[0]="domains"
 fi
 
-pref[0]="domains"
 tft[0]="aws_codeartifact_domain"
 idfilt[0]="name"
 
@@ -17,13 +16,17 @@ for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
         exit
     fi
-    count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    if [ "$1" != "" ]; then
+        count=1
+    else
+        count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    fi
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do

@@ -58,6 +58,7 @@ for c in `seq 0 0`; do
 
             mv t1.txt.sav t1.txt
             file="t1.txt"
+            rdm=""
             while IFS= read line
             do
 				skip=0
@@ -81,7 +82,13 @@ for c in `seq 0 0`; do
                         if [[ "$accnt" == "$racc" ]];then
                             t1=`printf "%s=data.aws_caller_identity.current.account_id" $tt1`
                         fi
-                    fi       
+                    fi     
+
+                    if [[ ${tt1} == "domain" ]];then 
+                        rdm=$(echo $tt2 | tr -d '"')
+                        t1=`printf "%s=aws_codeartifact_domain.%s.domain" $tt1 $rdm`
+                        
+                    fi      
                
                 fi
                 if [ "$skip" == "0" ]; then
@@ -90,6 +97,11 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
+            echo "rdm=$rdm"
+            if [[ "$rdm" != "" ]];then
+                echo "rdm=$rdm"
+                ../../scripts/627-get-code-artifact-domain.sh $rdm
+            fi 
 
 
         done

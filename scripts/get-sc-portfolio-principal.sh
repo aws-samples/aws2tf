@@ -67,7 +67,20 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
                     if [[ ${tt1} == "created_time" ]];then skip=1;fi
-                                
+
+                    if [[ ${tt1} == "portfolio_id" ]];then 
+                        tt2=$(echo $tt2 | tr -d '"')
+                        t1=$(printf "%s = aws_servicecatalog_portfolio.%s.id" $tt1 $tt2)
+                    fi      
+
+                    if [[ ${tt1} == "principal_arn" ]];then 
+                        tt2=$(echo $tt2 | tr -d '"')
+                        if [[ "$tt2" == *":iam:"* ]]; then
+                            trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev)
+                            t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
+                        fi                 
+                    fi
+
 
                 fi
                 if [ "$skip" == "0" ]; then

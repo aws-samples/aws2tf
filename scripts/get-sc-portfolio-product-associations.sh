@@ -77,10 +77,7 @@ for c in `seq 0 0`; do
                         # .product__portfolio
                         t1=$(printf "%s = aws_servicecatalog_product.%s__%s.id" $tt1 $tt2 $rname)
                     fi 
-
-
-                    
-
+             
 
                 fi
                 if [ "$skip" == "0" ]; then

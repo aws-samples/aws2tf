@@ -54,7 +54,7 @@ for c in `seq 0 0`; do
             #		echo $k
             #	done
             file="t1.txt"
-
+            trole=""
             echo $aws2tfmess > $fn
             while IFS= read line
             do
@@ -89,6 +89,10 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
+
+            if [[ "$trole" != "" ]];then
+                ../../scripts/050-get-iam-roles.sh $trole
+            fi
             
         done # end for
 

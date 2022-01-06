@@ -1,6 +1,11 @@
 #!/bin/bash
-if [ "$1" != "" ]; then
-    cmd[0]=`printf "$AWS iam list-policies | jq '.Policies[] | select(.Arn==\"%s\")' | jq ." $1`
+if [[ "$1" != "" ]]; then
+    if [[ "$1" != *":aws:policy"* ]];then
+        cmd[0]=`printf "$AWS iam list-policies | jq '.Policies[] | select(.Arn==\"%s\")' | jq ." $1`
+    else
+        echo "skipping AWS managed policy $1"
+        exit
+    fi
 else
     cmd[0]="$AWS iam list-policies --scope Local"
 fi

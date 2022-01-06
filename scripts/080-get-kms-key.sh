@@ -114,10 +114,12 @@ for c in `seq 0 0`; do
             fi  
             if [ "$keyman" == "AWS" ];then
                 dfn=`printf "data_%s__k_%s.tf" $ttft $cname`
-                echo "AWS managed key data $dfn"
-                printf "data \"%s\" \"k_%s\" {\n" $ttft $cname > $dfn
-                printf "key_id = \"%s\"\n" $cname >> $dfn
-                printf "}\n" >> $dfn
+                # get alias
+                ../../scripts/081-get-kms-alias.sh $cname
+                #echo "AWS managed key data $dfn"
+                #printf "data \"%s\" \"k_%s\" {\n" $ttft $cname > $dfn
+                #printf "key_id = \"k_%s\"\n" $cname >> $dfn
+                #printf "}\n" >> $dfn
             fi
         done
 

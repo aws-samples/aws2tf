@@ -90,6 +90,13 @@ for c in `seq 0 0`; do
                         
                     fi      
                
+                    if [[ ${tt1} == "repository_name" ]];then 
+                        repn=$(echo $tt2 | tr -d '"')
+                        t1=`printf "%s=aws_codeartifact_repository.%s.repository" $tt1 $rdm`
+                        
+                    fi 
+
+
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1

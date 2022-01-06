@@ -80,6 +80,12 @@ for perm in ${perms[@]}; do
                         t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
                     fi
 
+                    if [[ ${tt1} == "function_name" ]];then 
+                        tfn=$(echo "$tt2" | rev | cut -d':' -f1 | rev | tr -d '"')
+                                                    
+                        t1=`printf "%s = aws_lambda_function.%s.arn" $tt1 $1`
+                    fi
+
 
 
                 # else

@@ -77,7 +77,8 @@ for c in `seq 0 0`; do
                         keyid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`
                         kt=$($AWS kms describe-key --key-id $keyid --query KeyMetadata.KeyManager | jq -r .)
                         if [[ "$kt" == "AWS" ]];then
-                            t1=`printf "%s = data.aws_kms_key.k_%s.arn" $tt1 $keyid`
+                            # AWS default managed key
+                            skip=1
                         else
                             t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $keyid`
                         fi

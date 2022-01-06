@@ -119,7 +119,7 @@ for c in `seq 0 0`; do
                 desc=`$AWS kms describe-key --key-id $tgtid 2>/dev/null`
                 if [ "$desc" != "" ]; then
                     dfn=`printf "data_%s__%s.tf" $ttft $rname`
-                    echo "AWS managed key alias data $dfn"
+                    echo "AWS managed key alias data $dfn $cname"
                     printf "data \"%s\" \"%s\" {\n" $ttft $rname > $dfn
                     printf "name = \"%s\"\n" "$cname" >> $dfn
                     printf "}\n" >> $dfn

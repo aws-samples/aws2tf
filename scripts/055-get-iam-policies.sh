@@ -1,7 +1,12 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS iam get-policy --policy-arn $1"
-    pref[0]="Policy"
+    if [[ "$1" != *":aws:policy"* ]];then
+        cmd[0]="$AWS iam get-policy --policy-arn $1"
+        pref[0]="Policy"
+    else
+        echo "skipping AWS managed policy $1"
+        exit
+    fi
 else
     cmd[0]="$AWS iam list-policies --scope Local"
     pref[0]="Policies"
@@ -25,7 +30,11 @@ for c in `seq 0 0`; do
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-        
+            # is it AWS Managed ?
+            awsm=
+
+
+
             if [ "$1" != "" ]; then
                 pname=`echo $awsout | jq -r ".${pref[(${c})]}.PolicyName"`
                 cname=`echo $awsout | jq ".${pref[(${c})]}.Arn" | tr -d '"'`

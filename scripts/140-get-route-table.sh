@@ -91,9 +91,9 @@ for c in `seq 0 0`; do
                         fi
                     fi
                     if [[ ${tt1} == "transit_gateway_id" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        if [ "$tt2" != "" ]; then
-                            t1=`printf "%s = aws_ec2_transit_gateway.%s.id" $tt1 $tt2`
+                        tgwid=`echo $tt2 | tr -d '"'`
+                        if [ "$tgwid" != "" ]; then
+                            t1=`printf "%s = aws_ec2_transit_gateway.%s.id" $tt1 $tgwid`
                         fi
                     fi
                     if [[ ${tt1} == "gateway_id" ]]; then
@@ -123,8 +123,9 @@ for c in `seq 0 0`; do
                 echo "calling for $pcx"
                 ../../scripts/210-get-vpcpeer.sh $pcx
             done
-
-                     
+            if [[ "$tgwid" != "" ]];then
+                ../../scripts/201-get-transit-gateway.sh $tgwid
+            fi                    
         done
     fi
 done

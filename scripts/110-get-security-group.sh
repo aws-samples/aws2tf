@@ -31,6 +31,7 @@ for c in `seq 0 0`; do
             echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             sgname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].GroupName")
+            sgvpcid=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].VpcId")
             echo "$ttft $cname import"
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             fn=`printf "%s__%s.tf" $ttft $rname`
@@ -39,10 +40,12 @@ for c in `seq 0 0`; do
 
             if [[ $sgname == "default" ]];then
                 echo "is default data..."
+                echo "${sgname}:${cname}:${vpcid}" >> data/def-sgs.dat
                 printf "data \"%s\" \"%s\" {\n" $ttft $rname > $fn
-                printf "id = \"%s\"\n" $cname >> $fn
+                printf "name = \"%s\"\n" $sgname >> $fn
+                printf "vpc_id = \"%s\"\n" $sgvpcid >> $fn
                 printf "}\n" >> $fn
-                continue
+                
             fi
            
             #echo "calling import sub"

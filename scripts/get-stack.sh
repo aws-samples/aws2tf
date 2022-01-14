@@ -9,11 +9,11 @@ echo "d=$d"
 
 getstack () {
 
-stackr=$(aws cloudformation describe-stack-resources --stack-name $1 --query StackResources)
-if [[  $? -eq 254 ]];then
-    echo "stack $1 not found exiting ..."
-    exit
-fi
+stackr=$($AWS cloudformation describe-stack-resources --stack-name $1 --query StackResources)
+#if [[  $? -eq 254 ]];then
+#    echo "stack $1 not found exiting ..."
+#    exit
+#fi
 
 #echo $stackr | jq .
 count=`echo $stackr | jq ". | length"`
@@ -31,16 +31,20 @@ if [ "$count" -gt "0" ]; then
                 fi        
             fi
         done   
+else
+    echo "found 0 stacks exit"
+    exit
 fi
 }
 
 getstackresources () {
-stackr=$(aws cloudformation describe-stack-resources --stack-name $1 --query StackResources)
+echo "get stack resources for $1"
+stackr=$($AWS cloudformation describe-stack-resources --stack-name $1 --query StackResources)
 #echo $stackr | jq .
 count=`echo $stackr | jq ". | length"`
-
+echo "stack resources $count"
 echo "---> Getting $count resources for stack $1"
-if [ "$count" -gt "0" ]; then
+if [ $count -gt 0 ]; then
     count=`expr $count - 1`
         for i in `seq 0 $count`; do
             type=$(echo "$stackr" | jq  -r ".[(${i})].ResourceType")
@@ -129,7 +133,6 @@ fi
 
 echo "level 1 nesting"
 getstack $1
-echo $?
 echo "level 2 nesting"
 for nest in ${nested[@]}; do
     nest=`echo $nest | jq -r .`

@@ -17,18 +17,18 @@ for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	echo $cm
+	#echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
         exit
     fi
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
-    echo "count=$count"
+    #echo "count=$count"
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
-            echo $i
+            #echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             sgname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].GroupName")
             sgvpcid=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].VpcId")
@@ -45,6 +45,7 @@ for c in `seq 0 0`; do
                 printf "name = \"%s\"\n" $sgname >> data-$fn
                 printf "vpc_id = aws_vpc.%s.id\n" $sgvpcid >> data-$fn
                 printf "}\n" >> data-$fn
+                terrafrom refresh
                 
             fi
            
@@ -146,14 +147,18 @@ for c in `seq 0 0`; do
             #echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             sgname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].GroupName")      
-
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            fn=`printf "%s__%s.tf" $ttft $rname`
+            if [ -f "$fn" ]; then echo "$fn exists continuing .." && continue; fi
             ../../scripts/get-sg-rules.sh $cname ingress
-            ../../scripts/get-sg-rules.sh $cname egress
-
-           
+            ../../scripts/get-sg-rules.sh $cname egress         
         done # for i
     fi
 done  # for c
+
+## fixup default SG's here
+
+
 
 rm -f *.backup 
 

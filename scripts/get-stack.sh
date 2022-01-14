@@ -10,6 +10,11 @@ echo "d=$d"
 getstack () {
 
 stackr=$(aws cloudformation describe-stack-resources --stack-name $1 --query StackResources)
+if [[  $? -eq 254 ]];then
+    echo "stack $1 not found exiting ..."
+    exit
+fi
+
 #echo $stackr | jq .
 count=`echo $stackr | jq ". | length"`
 #echo $count
@@ -124,7 +129,7 @@ fi
 
 echo "level 1 nesting"
 getstack $1
-
+echo $?
 echo "level 2 nesting"
 for nest in ${nested[@]}; do
     nest=`echo $nest | jq -r .`

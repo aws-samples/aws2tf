@@ -90,12 +90,6 @@ for c in `seq 0 0`; do
                         
                     fi      
                
-                    if [[ ${tt1} == "repository_name" ]];then 
-                        repn=$(echo $tt2 | tr -d '"')
-                        t1=`printf "%s=aws_codeartifact_repository.%s.repository" $tt1 $rdm`
-                        
-                    fi 
-
 
                 fi
                 if [ "$skip" == "0" ]; then
@@ -104,9 +98,8 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-            echo "rdm=$rdm"
             if [[ "$rdm" != "" ]];then
-                echo "rdm=$rdm"
+                #echo "rdm=$rdm"
                 ../../scripts/627-get-code-artifact-domain.sh $rdm
             fi 
 

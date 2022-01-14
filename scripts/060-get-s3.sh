@@ -103,12 +103,7 @@ for c in `seq 0 0`; do
                                     skip=1
                                 fi
                                     
-                                if [[ ${tt1} == "id" ]];then
-                                    #printf "acl = \"private\"\n" >> $fn
-                                    #printf "force_destroy = false \n" >> $fn
-
-                                    skip=1
-                                fi
+                                if [[ ${tt1} == "id" ]];then skip=1 ;fi
                                 if [[ ${tt1} == "region" ]];then skip=1 ;fi
                                 if [[ ${tt1} == "kms_master_key_id" ]];then 
                               

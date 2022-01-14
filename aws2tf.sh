@@ -96,16 +96,15 @@ else
     mysub=`aws sts get-caller-identity | jq .Account | tr -d '"'`
 fi
 if [ "$r" = "no" ]; then
-echo "Region not specified - Getting region from aws cli ="
-r=`aws configure get region`
-echo $r
+    echo "Region not specified - Getting region from aws cli ="
+    r=`aws configure get region`
+    echo $r
 fi
+
 if [ "$mysub" == "null" ] || [ "$mysub" == "" ]; then
     echo "Account is null exiting"
     exit
 fi
-
-
 
 #s=`echo $mysub`
 mkdir -p  generated/tf.${mysub}_${r}
@@ -184,6 +183,9 @@ else
     export AWS="aws --region $r --output json "
 fi
 printf "}\n" >> aws.tf
+
+export AWS2TF_REGION=`echo $r`
+export AWS2TF_ACCOUNT=`echo $mysub`
 
 cat aws.tf
 cp ../../stubs/data-aws.tf .
@@ -310,6 +312,7 @@ for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do
         done <"$file"
 
         echo "$docomm" >> data/processed.txt
+        terraform fmt
         terraform validate -no-color
         end=`date +%s`
         runtime=$((end-start))
@@ -321,7 +324,8 @@ else
     echo "Stack set $s traverse - experimental"
     . ../../scripts/get-stack.sh $s
     chmod 755 commands.sh
-        if [ "$d" = "st" ]; then  exit; fi
+  
+    if [ "$d" = "st" ]; then  exit; fi
     . ./commands.sh
     echo "commands done - was unable to process:"
     cat unprocessed.log

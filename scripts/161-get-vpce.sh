@@ -32,15 +32,19 @@ for c in `seq 0 0`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
             echo "$ttft $cname"
-            fn=`printf "%s__%s.tf" $ttft $cname`
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            fn=`printf "%s__%s.tf" $ttft $rname`
+            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
+
+            printf "resource \"%s\" \"%s\" {" $ttft $cname > $fn
+            printf "}" >> $fn
+
             terraform import $ttft.$cname "$cname" | grep Import
             terraform state show $ttft.$cname > t2.txt
             tfa=`printf "data/%s.%s" $ttft $cname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
             #echo $awsj | jq . 
-            rm $ttft.$cname.tf
+            rm -f $fn
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             #	for k in `cat t1.txt`; do
             #		echo $k

@@ -1,4 +1,7 @@
 #!/bin/bash
+mysub=`echo $AWS2TF_ACCOUNT`
+myreg=`echo $AWS2TF_REGION`
+#echo "globe vars $myreg $mysub"
 if [ "$1" != "" ]; then
     pat=$(aws lambda get-policy --function-name $1 | jq .Policy | tr -d '\\' | tr -d '"')
 else
@@ -86,7 +89,27 @@ for perm in ${perms[@]}; do
                         t1=`printf "%s = aws_lambda_function.%s.arn" $tt1 $1`
                     fi
 
+                    if [[ ${tt1} == "source_account" ]];then 
+                        tacc=`echo $tt2 | tr -d '"'` 
+                        tsub="%s"
+                        if [[ "$mysub" == "$tacc" ]];then
+                            t1=$(printf "%s = data.aws_caller_identity.current.account_id" $tt1)
+                        fi
+                    fi
 
+                    if [[ ${tt1} == "source_arn" ]]; then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        if [[ ${tt2} == "arn:aws:events:"* ]];then
+                                tstart=$(echo $tt2 | cut -f1-3 -d ':')
+                                treg=$(echo $tt2 | cut -f4 -d ':')
+                                tacc=$(echo $tt2 | cut -f5 -d ':')
+                                tend=$(echo $tt2 | cut -f6- -d ':')
+                                tsub="%s"
+                                if [[ "$mysub" == "$tacc" ]] && [[ "$mysub" == "$tacc" ]];then
+                                    t1=$(printf "%s = format(\"%s:%s:%s:%s\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tsub $tend)
+                                fi
+                            fi
+                        fi
 
                 # else
                     #

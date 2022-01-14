@@ -49,6 +49,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "dns_name" ]];then skip=1;fi
+                    if [[ ${tt1} == "status" ]];then skip=1;fi
                     if [[ ${tt1} == "availability_zone_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "default_route_table_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "owner_id" ]];then skip=1;fi

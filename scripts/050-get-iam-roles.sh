@@ -1,4 +1,7 @@
 #!/bin/bash
+mysub=`echo $AWS2TF_ACCOUNT`
+myreg=`echo $AWS2TF_REGION`
+#echo "globe vars $myreg $mysub"
 if [[ "$1" != "" ]]; then  
     if [[ ${1} == "arn:aws:iam"* ]]; then
         cmd[0]="$AWS iam list-roles | jq '.Roles[] | select(.Arn==\"${1}\")'"
@@ -100,9 +103,19 @@ for c in `seq 0 0`; do
                             t1=`printf "\"%s\"=%s" $lh $tt2`
                             #echo $t1
                         fi
-                        #if [[ ${tt1} == "default_network_acl_id" ]];then skip=1;fi
-                        #if [[ ${tt1} == "ipv6_association_id" ]];then skip=1;fi
-                        #if [[ ${tt1} == "ipv6_cidr_block" ]];then skip=1;fi
+                        if [[ ${tt1} == "AWS" ]]; then
+                            tt2=`echo $tt2 | tr -d '"'`
+                            if [[ ${tt2} == "arn:aws:iam::"* ]];then
+                                tstart=$(echo $tt2 | cut -f1-4 -d ':')
+                                tacc=$(echo $tt2 | cut -f5 -d ':')
+                                tend=$(echo $tt2 | cut -f6- -d ':')
+                                tsub="%s"
+                                if [[ "$mysub" == "$tacc" ]];then
+                                    t1=$(printf "\"%s\" = format(\"%s:%s:%s\",data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tend)
+                                fi
+                            fi
+                        fi
+
                     fi
                     if [ "$skip" == "0" ]; then
                         #echo $skip $t1
@@ -113,9 +126,9 @@ for c in `seq 0 0`; do
 
                 # Get attached role policies
                 
-                #echo "role policies $ocname"
+                echo "role policies $ocname"
                 ../../scripts/051-get-iam-role-policies.sh $ocname
-                #echo "attached role policies $ocname"
+                echo "attached role policies $ocname"
                 ../../scripts/052-get-iam-attached-role-policies.sh $ocname
   
         done    # done for i      

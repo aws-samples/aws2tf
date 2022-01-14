@@ -1,4 +1,7 @@
 #!/bin/bash
+mysub=`echo $AWS2TF_ACCOUNT`
+myreg=`echo $AWS2TF_REGION`
+#echo "globe vars $myreg $mysub"
 if [ "$1" != "" ]; then
     cmd[0]="$AWS kms describe-key --key-id $1"
     pref[0]="KeyMetadata"   
@@ -48,12 +51,13 @@ for c in `seq 0 0`; do
                 echo "$ttft $cname"
                 fn=`printf "%s__k_%s.tf" $ttft $cname`
                 if [ -f "$fn" ] ; then
-                    echo "$fn exists already skipping"
+                    echo "$fn exists already skipping ..."
                     continue
                 fi
                 printf "resource \"%s\" \"k_%s\" {" $ttft $cname > $fn
                 printf "}" >> $fn
                 printf "terraform import %s.k_%s %s" $ttft $cname $cname > "data/import_$ttft_$cname.sh"
+                echo "$cname import"
                 terraform import $ttft.k_$cname "$cname" | grep Import
                 if [ $? -eq 0 ]; then
                
@@ -93,6 +97,24 @@ for c in `seq 0 0`; do
                                 t1=`printf "\"%s\" = \"%s\"" $tt1 $tt2`
                             fi
 
+                            if [[ ${tt1} == "AWS" ]]; then
+                                tt2=`echo $tt2 | tr -d '"'`
+                                if [[ ${tt2} == "arn:aws:iam::"* ]];then
+                                    tstart=$(echo $tt2 | cut -f1-4 -d ':')
+                                    tacc=$(echo $tt2 | cut -f5 -d ':')
+                                    tend=$(echo $tt2 | cut -f6- -d ':')
+                                    tsub="%s"
+                                    if [[ "$mysub" == "$tacc" ]];then
+                                        t1=$(printf "\"%s\" = format(\"%s:%s:%s\",data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tend)
+                                    fi
+                                fi
+                            fi
+
+                            if [[ ${tt2} == "aws:SourceVpce" ]]; then
+                                tt2=`echo $tt2 | tr -d '"'`
+                                t1=$(printf "\"%s\" = \"aws_vpc_endpoint.%s.id\"" $tt1 $tt2)
+                            fi
+
                         # else
                             #              
                         fi
@@ -103,8 +125,10 @@ for c in `seq 0 0`; do
                         fi
                         
                     done <"$file"
+
                     # get any alias
                     ../../scripts/081-get-kms-alias.sh $cname
+
                 else # import failed
                     echo "Import Failed $ttft $cname"
                     mv $ttft.$cname.tf $ttft.$cname.tf.failed

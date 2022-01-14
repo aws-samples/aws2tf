@@ -110,6 +110,9 @@ for c in `seq 0 0`; do
                                 if [[ ${tt1} == "created_time" ]];then skip=1;fi         
                                 if [[ ${tt1} == "status" ]];then skip=1; fi 
                                 if [[ ${tt1} == "has_default_path" ]];then skip=1; fi
+                                if [[ ${tt1} == "template_url" ]];then 
+                                    echo "type = \"CLOUD_FORMATION_TEMPLATE\"" >> $fn
+                                fi
                             fi
                             if [ "$skip" == "0" ]; then
                                 #echo $skip $t1

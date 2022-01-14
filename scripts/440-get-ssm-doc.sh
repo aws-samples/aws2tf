@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS ssm list-documents --filters \"Key=Owner,Values=Self\""
-    pref[0]="environments"
+    cmd[0]=$(printf "$AWS ssm list-documents --filters \"Key=Owner,Values=Self\" | jq '. | select(.DocumentIdentifiers[].Name==\"%s\")'" $1)
+    pref[0]="DocumentIdentifiers"
 else
     cmd[0]="$AWS ssm list-documents --filters \"Key=Owner,Values=Self\""
     pref[0]="DocumentIdentifiers"
@@ -16,7 +16,7 @@ for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
@@ -81,6 +81,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "schema_version" ]];then skip=1;fi
                     if [[ ${tt1} == "hash" ]];then skip=1;fi
                     if [[ ${tt1} == "hash_type" ]];then skip=1;fi
+                    if [[ ${tt1} == "created_date" ]];then skip=1;fi
                     if [[ ${tt1} == "document_version" ]];then skip=1;fi
                     if [[ ${tt1} == "default_version" ]];then skip=1;fi
                     if [[ ${tt1} == "description" ]];then skip=1;fi
@@ -98,19 +99,16 @@ for c in `seq 0 0`; do
                         t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
                     fi
                     if [[ ${tt1} == "content" ]];then 
-                        #echo $t1
+                        
                         skip=1
-                        lbc=0
-                        rbc=0
-                        breq=0
-                        while [[ $breq -eq 0 ]];do 
-                            if [[ "${t1}" == *"("* ]]; then lbc=`expr $lbc + 1`; fi
-                            if [[ "${t1}" == *")"* ]]; then rbc=`expr $rbc + 1`; fi
-                            #echo "$lbc $rbc $t1"
-                            read line
-                            t1=`echo "$line"`
-                            if [[ $rbc -eq $lbc ]]; then breq=1; fi
+                        read line
+                        t1=`echo "$line" | tr -d ' '`
+                        while [[ "$t1" != "EOT" ]];do 
+                            read line  
+                            t1=`echo "$line" | tr -d ' '`
+                            echo $t1
                         done 
+
                         skip=0
                         t1=`printf "content = file(\"%s.json\")" $rname`
                         printf "lifecycle {\n" >> $fn

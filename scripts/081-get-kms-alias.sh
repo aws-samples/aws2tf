@@ -56,9 +56,9 @@ for c in `seq 0 0`; do
                 fi
 
                 kmsid=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].TargetKeyId")
-                if [ "$kmsid" != "" ]; then
-                    ../../scripts/080-get-kms-key.sh $kmsid
-                fi
+                #if [ "$kmsid" != "" ]; then
+                #    ../../scripts/080-get-kms-key.sh $kmsid
+                #fi
 
                 printf "resource \"%s\" \"%s\" {" $ttft $rname > $fn
                 printf "}" >> $fn
@@ -113,6 +113,12 @@ for c in `seq 0 0`; do
                     fi
                     
                 done <"$file"
+
+                if [ "$kmsid" != "" ]; then
+                    ../../scripts/080-get-kms-key.sh $kmsid
+                fi
+
+
             else
                 cmd2=`printf "$AWS kms list-aliases | jq -r '.Aliases[] | select(.AliasName==\"%s\").TargetKeyId'" $cname`
                 tgtid=$(eval $cmd2)

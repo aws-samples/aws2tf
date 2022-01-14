@@ -1,6 +1,9 @@
 #!/bin/bash
-
-cmd[0]="$AWS sagemaker list-domains"
+if [[ "$1" != "" ]];then
+    cmd[0]=$(printf "$AWS sagemaker list-domains | jq '. | select(.Domains[].DomainId==\"%s\")'" $1)
+else
+    cmd[0]="$AWS sagemaker list-domains"
+fi
 
 pref[0]="Domains"
 tft[0]="aws_sagemaker_domain"
@@ -11,6 +14,7 @@ for c in `seq 0 0`; do
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
 	#echo $cm
+    
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
@@ -53,7 +57,9 @@ for c in `seq 0 0`; do
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
 
             file=`printf "%s-%s-1.txt" $ttft $rname`
-            
+            keyid=""
+            imnam=""
+            aic=""
             echo $aws2tfmess > $fn
             while IFS= read line
             do
@@ -80,7 +86,26 @@ for c in `seq 0 0`; do
                         trole=`echo "$tt2" | rev | cut -d'/' -f1 | rev | tr -d '"'`
                         t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`                
                     fi
-
+                    if [[ ${tt1} == "kms_key_id" ]];then 
+                        keyid=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $keyid`
+                        printf "lifecycle {\n" >> $fn
+                        printf "   ignore_changes = [kms_key_id]\n" >> $fn
+                        printf "}\n" >> $fn
+                    fi
+                    if [[ ${tt1} == "image_name" ]];then 
+                        imnam=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_sagemaker_image.%s.id" $tt1 $imnam`
+                    fi
+                    if [[ ${tt1} == "sagemaker_image_arn" ]];then 
+                        imarn=`echo $tt2 | tr -d '"'`
+                        imnam2=`echo "$tt2" | rev | cut -d'/' -f1 | rev | tr -d '"'`
+                        t1=`printf "%s = aws_sagemaker_image.%s.arn" $tt1 $imnam2`
+                    fi
+                    if [[ ${tt1} == "app_image_config_name" ]];then 
+                        aic=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_sagemaker_app_image_config.%s.id" $tt1 $aic`
+                    fi
 
                 else
 
@@ -114,10 +139,26 @@ for c in `seq 0 0`; do
                 ../../scripts/110-get-security-group.sh $vpcid 
                 ../../scripts/140-get-route-table.sh $vpcid
                 ../../scripts/141-get-route-table-associations.sh $vpcid
-                ../../scripts/161-get-vpce.sh $vpcid 
+                ../../scripts/161-get-vpce.sh $vpcid   
+            fi
+            if [[ "$keyid" != "" ]];then
+                ../../scripts/080-get-kms-key.sh $keyid
             fi
 
-            
+            if [[ "$imnam" != "" ]];then
+                rimnam=${imnam//:/_} && rimnam=${rimnam//./_} && rimnam=${rimnam//\//_}
+                ../../scripts/get-sagemaker-image.sh $rimnam
+            fi
+            if [[ "$imnam2" != "" ]];then
+                rimnam2=${imnam2//:/_} && rimnam2=${rimnam2//./_} && rimnam2=${rimnam2//\//_}
+                ../../scripts/get-sagemaker-image.sh $rimnam2
+            fi
+
+            if [[ "$aic" != "" ]];then
+                ../../scripts/get-sagemaker-app-image-config.sh $aic
+            fi
+
+
         done
     fi
 done

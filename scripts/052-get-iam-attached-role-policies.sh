@@ -31,9 +31,7 @@ for c in `seq 0 0`; do
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            #echo $awsout | jq .
-            
-            
+            #echo $awsout | jq .          
             
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].PolicyName" | tr -d '"'`
             rarn=`echo $awsout | jq ".${pref[(${c})]}[(${i})].PolicyArn" | tr -d '"'`

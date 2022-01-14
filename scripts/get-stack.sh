@@ -1,4 +1,5 @@
 #!/bin/bash
+
 if [ "$1" == "" ]; then echo "must specify a stack name" && exit; fi
 nested=() 
 echo "#!/bin/bash" > commands.sh
@@ -32,7 +33,8 @@ getstackresources () {
 stackr=$(aws cloudformation describe-stack-resources --stack-name $1 --query StackResources)
 #echo $stackr | jq .
 count=`echo $stackr | jq ". | length"`
-echo "Getting $count resources for stack $1"
+
+echo "---> Getting $count resources for stack $1"
 if [ "$count" -gt "0" ]; then
     count=`expr $count - 1`
         for i in `seq 0 $count`; do
@@ -94,6 +96,12 @@ if [ "$count" -gt "0" ]; then
                 AWS::Logs::LogGroup)  echo "../../scripts/070-get-cw-log-grp.sh /$parn" >> commands.sh ;;
                 
                 AWS::S3::Bucket)  echo "../../scripts/060-get-s3.sh $pid" >> commands.sh ;;
+                
+                AWS::SageMaker::AppImageConfig) echo "../../scripts/get-sagemaker-app-image-config.sh $pid" >> commands.sh ;;
+                AWS::SageMaker::Domain) echo "../../scripts/680-get-sagemaker-domain.sh $parn" >> commands.sh ;;
+                AWS::SageMaker::Image) echo "../../scripts/get-sagemaker-image.sh $pid" >> commands.sh ;;
+                AWS::SageMaker::ImageVersion) echo "echo '# $type $pid fetched as part of SageMaker Image..'" >> commands.sh ;; # fetched as part of function
+
                 AWS::SNS::Topic)  echo "../../scripts/730-get-sns-topic.sh $parn" >> commands.sh ;;
                 AWS::SQS::Queue)  echo "../../scripts/720-get-sqs-queue.sh $parn" >> commands.sh ;;
                 
@@ -135,7 +143,7 @@ for nest in ${nested[@]}; do
     getstackresources $nest
     
 done
-echo "Commands Done .." >> commands.sh 
+echo "echo \"Commands Done ..\"" >> commands.sh 
 #echo "commands.sh"
 #cat commands.sh
 

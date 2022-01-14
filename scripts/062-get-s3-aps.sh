@@ -50,6 +50,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
+                    if [[ ${tt1} == "alias" ]];then skip=1;fi
                     if [[ ${tt1} == "network_origin" ]];then skip=1;fi
                     if [[ ${tt1} == "domain_name" ]];then skip=1;fi
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
@@ -58,6 +59,20 @@ for c in `seq 0 0`; do
                         tt2=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
                     fi
+                    # skip endpoints block
+                    if [[ ${tt1} == "endpoints" ]];then
+                        #echo "dns block" 
+                        tt2=`echo $tt2 | tr -d '"'` 
+                        skip=1
+                        while [ "$t1" != "}" ] && [ "$tt2" != "{}" ] ;do
+                            read line
+                            t1=`echo "$line"`
+                            #echo $t1
+                        done
+                    fi
+
+
+
                
                 fi
                 if [ "$skip" == "0" ]; then

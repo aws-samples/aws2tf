@@ -102,10 +102,10 @@ for c in `seq 0 0`; do
             done <"$file"
             #echo "role  $rarn"
             if [[ $rarn != "" ]];then
-            ../../scripts/050-get-iam-roles.sh $rarn
+                ../../scripts/050-get-iam-roles.sh $rarn
             fi
             if [[ $rarn2 != "" ]];then
-            ../../scripts/050-get-iam-roles.sh $rarn2
+                ../../scripts/050-get-iam-roles.sh $rarn2
             fi
             
         done

@@ -65,7 +65,7 @@ for c in `seq 0 0`; do
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ]; then echo "$fn exists continuing .." && continue; fi
-            if [[ $sgname == "default" ]];then echo "is default continue..." && continue; fi
+            #if [[ $sgname == "default" ]];then echo "is default continue..." ; fi
             
             file=`printf "%s-%s-1.txt" $ttft $rname`
             if [ ! -f "$file" ] ; then echo "$file does not exist skipping" && continue; fi

@@ -38,6 +38,7 @@ for c in `seq 0 0`; do
             #		echo $k
             #	done
             file="t1.txt"
+            vpcid=""
             echo $aws2tfmess > $fn
             while IFS= read line
             do
@@ -56,8 +57,8 @@ for c in `seq 0 0`; do
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
                     if [[ ${tt1} == "has_public_access_policy" ]];then skip=1;fi
                     if [[ ${tt1} == "vpc_id" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
+                        vpcid=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`
                     fi
                     # skip endpoints block
                     if [[ ${tt1} == "endpoints" ]];then
@@ -81,6 +82,10 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
+
+            if [ "$vpcid" != "" ]; then
+                ../../scripts/100-get-vpc.sh $vpcid
+            fi
             
         done
     fi

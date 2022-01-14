@@ -194,39 +194,39 @@ if [ "$t" == "no" ]; then t="*"; fi
 
 pre="*"
 if [ "$t" == "vpc" ]; then
-pre="1*"
-t="*"
-if [ "$i" == "no" ]; then
-    echo "VPC Id null exiting - specify with -i <vpc-id>"
-    exit
-fi
+    pre="1*"
+    t="*"
+    if [ "$i" == "no" ]; then
+        echo "VPC Id null exiting - specify with -i <vpc-id>"
+        exit
+    fi
 fi
 
 if [ "$t" == "tgw" ]; then
-pre="type"
-t="transitgw"
-if [ "$i" == "no" ]; then
-    echo "TGW Id null exiting - specify with -i <tgw-id>"
-    exiting
-fi
+    pre="type"
+    t="transitgw"
+    if [ "$i" == "no" ]; then
+        echo "TGW Id null exiting - specify with -i <tgw-id>"
+        exiting
+    fi
 fi
 
 
 if [ "$t" == "ecs" ]; then
-pre="3*"
-if [ "$i" == "no" ]; then
-    echo "Cluster Name null exiting - specify with -i <cluster-name>"
-    exit
-fi
+    pre="3*"
+    if [ "$i" == "no" ]; then
+        echo "Cluster Name null exiting - specify with -i <cluster-name>"
+        exit
+    fi
 fi
 
 
 if [ "$t" == "eks" ]; then
-pre="30*"
-if [ "$i" == "no" ]; then
-    echo "Cluster Name null exiting - specify with -i <cluster-name>"
-    exit
-fi
+    pre="30*"
+    if [ "$i" == "no" ]; then
+        echo "Cluster Name null exiting - specify with -i <cluster-name>"
+        exit
+    fi
 fi
 
 if [ "$t" == "appmesh" ]; then pre="360*"; fi

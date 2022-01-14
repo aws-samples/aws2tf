@@ -419,12 +419,12 @@ mv imp_aws_security_group_rule*.sh saved 2> /dev/null
 #terraform fmt > /dev/null
 #terraform validate
 #rm -f t*.txt tf1.tmp aws_security_group_rule__*.tmp
-for sg in ${sglist[@]}; do
-    sg1=`echo $sg | tr -d '"'`
-    echo "calling for $sg1"
-    if [ "$sg1" != "" ]; then
-        ../../scripts/110-get-security-group.sh $sg1
-    fi
-done 
+#for sg in ${sglist[@]}; do
+#    sg1=`echo $sg | tr -d '"'`
+#    echo "calling for $sg1"
+#    if [ "$sg1" != "" ]; then
+#        ../../scripts/110-get-security-group.sh $sg1
+#    fi
+#done 
 
 rm -f $ttft*.txt

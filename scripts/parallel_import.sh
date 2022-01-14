@@ -79,17 +79,28 @@ if [[ $? -ne 0 ]];then
         echo "state mv retry for $rname"
         terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname  &> /dev/null
         if [ $? -ne 0 ]; then
-            echo "state mv backoff & retry for $rname"
+            echo "1st state mv backoff & retry for $rname"
             sl=`echo $((2 + $RANDOM % 15))`
             sleep $sl
             terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname  &> /dev/null
             if [ $? -ne 0 ]; then
-                echo "state mv long backoff & retry with full errors for $rname"
+                echo "2nd state mv long backoff & retry for $rname"
                 sl=`echo $((5 + $RANDOM % 15))`
                 sleep $sl
-                
                 terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname 
-        fi
+                if [ $? -ne 0 ]; then
+                    echo "3rd state mv long backoff & retry for $rname"
+                    sl=`echo $((10 + $RANDOM % 30))`
+                    sleep $sl
+                    terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname 
+                    if [ $? -ne 0 ]; then
+                        echo "FINAL state mv long backoff & retry with full errors for $rname"
+                        sl=`echo $((10 + $RANDOM % 30))`
+                        sleep $sl
+                        terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname 
+                    i
+                fi
+            fi
         fi
     fi
     mv $ttft-$rname-1.txt ..

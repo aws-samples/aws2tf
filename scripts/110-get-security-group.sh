@@ -147,9 +147,7 @@ for c in `seq 0 0`; do
             #echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             sgname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].GroupName")      
-            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-            fn=`printf "%s__%s.tf" $ttft $rname`
-            if [ -f "$fn" ]; then echo "$fn exists continuing .." && continue; fi
+
             ../../scripts/get-sg-rules.sh $cname ingress
             ../../scripts/get-sg-rules.sh $cname egress         
         done # for i

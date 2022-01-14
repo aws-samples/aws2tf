@@ -98,7 +98,7 @@ if [[ $? -ne 0 ]];then
                         sl=`echo $((10 + $RANDOM % 30))`
                         sleep $sl
                         terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname 
-                    i
+                    fi
                 fi
             fi
         fi

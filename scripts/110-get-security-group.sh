@@ -40,11 +40,11 @@ for c in `seq 0 0`; do
 
             if [[ $sgname == "default" ]];then
                 echo "is default data..."
-                echo "${sgname}:${cname}:${vpcid}" >> data/def-sgs.dat
-                printf "data \"%s\" \"%s\" {\n" $ttft $rname > $fn
-                printf "name = \"%s\"\n" $sgname >> $fn
-                printf "vpc_id = \"%s\"\n" $sgvpcid >> $fn
-                printf "}\n" >> $fn
+                echo "${sgname}:${cname}:${sgvpcid}" >> data/def-sgs.dat
+                printf "data \"%s\" \"%s\" {\n" $ttft $rname > data-$fn
+                printf "name = \"%s\"\n" $sgname >> data-$fn
+                printf "vpc_id = \"%s\"\n" $sgvpcid >> data-$fn
+                printf "}\n" >> data-$fn
                 
             fi
            

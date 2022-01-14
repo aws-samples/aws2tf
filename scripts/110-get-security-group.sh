@@ -45,7 +45,7 @@ for c in `seq 0 0`; do
                 printf "name = \"%s\"\n" $sgname >> data-$fn
                 printf "vpc_id = aws_vpc.%s.id\n" $sgvpcid >> data-$fn
                 printf "}\n" >> data-$fn
-                terraform refresh
+                
                 
             fi
            
@@ -155,7 +155,7 @@ for c in `seq 0 0`; do
 done  # for c
 
 ## fixup default SG's here
-
+terraform refresh
 
 
 rm -f *.backup 

@@ -40,8 +40,8 @@ if [[ $? -ne 0 ]];then
     fi
     sl=`echo $((1 + $RANDOM % 4))`
     sleep $sl
-    printf "resource \"%s\" \"%s\" {" $ttft $rname > $ttft.$rname.tf
-    printf "}" >> $ttft.$rname.tf
+    printf "resource \"%s\" \"%s\" {}" $ttft $rname > $ttft.$rname.tf
+
 
     #echo "Importing..."           
     terraform import $ttft.$rname "$cname" > /dev/null

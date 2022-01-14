@@ -17,30 +17,38 @@ for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
         exit
     fi
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    echo "count=$count"
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
-            #echo $i
+            echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             sgname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].GroupName")
-            if [[ $sgname == "default" ]];then
-                continue
-            fi
-            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             echo "$ttft $cname import"
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
+
+
+            if [[ $sgname == "default" ]];then
+                echo "is default data..."
+                printf "data \"%s\" \"%s\" {\n" $ttft $rname > $fn
+                printf "id = \"%s\"\n" $cname >> $fn
+                printf "}\n" >> $fn
+                continue
+            fi
            
             #echo "calling import sub"
             . ../../scripts/parallel_import.sh $ttft $cname &
         done
+
         jc=`jobs -r | wc -l | tr -d ' '`
         echo "Waiting for $jc Terraform imports"
         wait
@@ -50,14 +58,12 @@ for c in `seq 0 0`; do
             #echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             sgname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].GroupName")
-            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-            if [[ $sgname == "default" ]];then
-                continue
-            fi
             echo "$ttft $cname"
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             fn=`printf "%s__%s.tf" $ttft $rname`
-            if [ -f "$fn" ]; then continue; fi
-
+            if [ -f "$fn" ]; then echo "$fn exists continuing .." && continue; fi
+            if [[ $sgname == "default" ]];then echo "is default continue..." && continue; fi
+            
             file=`printf "%s-%s-1.txt" $ttft $rname`
             if [ ! -f "$file" ] ; then echo "$file does not exist skipping" && continue; fi
             echo "Generating $fn"
@@ -126,17 +132,21 @@ for c in `seq 0 0`; do
                 
             done <"$file"
 
+
             if [[ "$vpcid" != "" ]]; then
                 ../../scripts/100-get-vpc.sh $vpcid
             fi
+
+        done # for i
+
+        for i in `seq 0 $count`; do
+            #echo $i
+            cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
+            sgname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].GroupName")      
+
             ../../scripts/get-sg-rules.sh $cname ingress
             ../../scripts/get-sg-rules.sh $cname egress
 
-
-            dfn=`printf "data/data_%s__%s.tf" $ttft $rname`
-            printf "data \"%s\" \"%s\" {\n" $ttft $rname > $dfn
-            printf "id = \"%s\"\n" "$cname" >> $dfn
-            printf "}\n" >> $dfn
            
         done # for i
     fi

@@ -47,6 +47,7 @@ for c in `seq 0 0`; do
                             sname=`echo $awsout2 | jq ".[(${j})].SubnetId" | tr -d '"'`
                             cname=`echo $awsout2 | jq ".[(${j})].RouteTableAssociationId" | tr -d '"'`
                             rtbid=`echo $awsout2 | jq ".[(${j})].RouteTableId" | tr -d '"'`
+                            
                             echo "$ttft $sname/$cname Import"
                             fn=`printf "%s__%s__%s.tf" $ttft $sname $cname`
                             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi

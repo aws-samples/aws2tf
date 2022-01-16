@@ -154,8 +154,7 @@ for c in `seq 0 0`; do
     fi
 done  # for c
 
-## fixup default SG's here
-terraform refresh
+
 
 
 rm -f *.backup 

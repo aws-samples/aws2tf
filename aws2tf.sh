@@ -340,6 +340,9 @@ date
 
 echo "terraform fmt > /dev/null ..."
 terraform fmt > /dev/null
+terraform refresh  -no-color
+echo "fix default SG's"
+. ../../scripts/fix-def-sgs.sh
 echo "Terraform validate ..."
 terraform validate -no-color
 
@@ -352,7 +355,8 @@ if [ "$d" = "no" ]; then
 fi
 
 echo "Terraform Refresh ..."
-terraform refresh  -no-color
+
+
 echo "Terraform Plan ..."
 terraform plan -no-color
 

@@ -11,7 +11,7 @@ ttft=`echo $1 | tr -d '"'`
 cname=`echo $2 | tr -d '"'`
 rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
 #echo "parallel list check"
-terraform state list | grep ${ttft}.${rname} 
+(terraform state list 2> /dev/null | grep ${ttft}.${rname}) > /dev/null 
 if [[ $? -ne 0 ]];then
 
     #echo "Import $rname"
@@ -87,17 +87,23 @@ if [[ $? -ne 0 ]];then
                 echo "2nd state mv long backoff & retry for $rname"
                 sl=`echo $((5 + $RANDOM % 15))`
                 sleep $sl
-                terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname 
+                terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname &> /dev/null
                 if [ $? -ne 0 ]; then
                     echo "3rd state mv long backoff & retry for $rname"
                     sl=`echo $((10 + $RANDOM % 30))`
                     sleep $sl
-                    terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname 
+                    terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname &> /dev/null
                     if [ $? -ne 0 ]; then
-                        echo "FINAL state mv long backoff & retry with full errors for $rname"
-                        sl=`echo $((10 + $RANDOM % 30))`
+                        echo "4th state mv long backoff & retry for $rname"
+                        sl=`echo $((10 + $RANDOM % 40))`
                         sleep $sl
-                        terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname 
+                        terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname &> /dev/null
+                        if [ $? -ne 0 ]; then
+                            echo "FINAL state mv long backoff & retry with full errors for $rname"
+                            sl=`echo $((10 + $RANDOM % 50))`
+                            sleep $sl
+                            terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname                       
+                        fi
                     fi
                 fi
             fi

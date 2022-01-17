@@ -66,7 +66,12 @@ for c in `seq 0 0`; do
                 if [[ ${t1} == *"="* ]];then
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
-                    if [[ ${tt1} == "arn" ]];then skip=1; fi                
+                    if [[ ${tt1} == "arn" ]];then 
+                        printf "lifecycle {\n" >> $fn
+                        printf "   ignore_changes = [attribute_name,read_capacity,write_capacity]\n" >> $fn
+                        printf "}\n" >> $fn
+                        skip=1
+                    fi                
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
@@ -83,9 +88,7 @@ for c in `seq 0 0`; do
                         if [[ "$tt2" == "false" ]];then                                                
                             if [[ "$doneatt" == "0" ]];then
                                 printf "attribute_name = \"TimeToExist\"\n" >> $fn
-                                printf "lifecycle {\n" >> $fn
-                                printf "   ignore_changes = [attribute_name]\n" >> $fn
-                                printf "}\n" >> $fn
+
                                 doneatt=1
                             fi
                         fi

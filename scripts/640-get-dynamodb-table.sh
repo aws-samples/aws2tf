@@ -83,6 +83,9 @@ for c in `seq 0 0`; do
                         if [[ "$tt2" == "false" ]];then                                                
                             if [[ "$doneatt" == "0" ]];then
                                 printf "attribute_name = \"TimeToExist\"\n" >> $fn
+                                printf "lifecycle {\n" >> $fn
+                                printf "   ignore_changes = [attribute_name]\n" >> $fn
+                                printf "}\n" >> $fn
                                 doneatt=1
                             fi
                         fi

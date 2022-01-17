@@ -54,6 +54,7 @@ for c in `seq 0 0`; do
             echo $aws2tfmess > $fn
             tarn=""
             inttl=0
+            doneatt=0
             while IFS= read line
             do
 				skip=0
@@ -80,7 +81,10 @@ for c in `seq 0 0`; do
                     if [[ "$tt1" == "enabled" ]];then
                         tt2=`echo $tt2 | tr -d '"'`
                         if [[ "$tt2" == "false" ]];then                                                
-                            printf "attribute_name = \"TimeToExist\"\n" >> $fn
+                            if [[ "$doneatt" == "0" ]];then
+                                printf "attribute_name = \"TimeToExist\"\n" >> $fn
+                                doneatt=1
+                            fi
                         fi
                     fi
                 fi

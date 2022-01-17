@@ -31,7 +31,11 @@ for c in `seq 0 0`; do
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            cname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})]"`
+            if [[ "$1" != "" ]]; then
+                cname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}"`
+            else
+                cname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})]"`
+            fi
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $rname`

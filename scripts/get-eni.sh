@@ -24,6 +24,8 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             cname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].NetworkInterfaceId"`
+            # is it the primary ?
+            
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $cname`
             if [ -f "$fn" ] ; then
@@ -84,6 +86,13 @@ for c in `seq 0 0`; do
                         fi
                     fi
 
+
+                    if [[ ${tt1} == "interface_type" ]]; then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        if [ "$tt2" == "interface" ];then
+                            skip=1
+                        fi
+                    fi
 
 
                     if [[ ${tt1} == "vpc_id" ]]; then

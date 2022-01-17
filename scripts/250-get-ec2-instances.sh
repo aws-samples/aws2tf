@@ -178,9 +178,10 @@ for c in `seq 0 0`; do
 
             nl=`echo $nets | jq ". | length"`
             echo "netifs= $nl"
-            if [ "$nl" != "0" ]; then
+            # don't get primary (0) interface as created by instance
+            if [ $nl -gt 1 ]; then
                 nl=`expr $nl - 1`
-                for ni in `seq 0 $nl`; do
+                for ni in `seq 1 $nl`; do
                     nif=`echo $nets | jq ".[(${ni})].NetworkInterfaceId" | tr -d '"'`
                     echo $ni $nif
                     ../../scripts/get-eni.sh $nif

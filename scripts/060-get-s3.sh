@@ -100,7 +100,6 @@ for c in `seq 0 0`; do
                             if [[ "$t1" == *"grant"* ]];then
                                     doacl=0
                                     doid=1
-                                    echo "Found Grant ... "
                             fi
 
                             if [[ ${t1} == *"="* ]];then
@@ -115,7 +114,13 @@ for c in `seq 0 0`; do
                                 fi
                                     
                                 if [[ ${tt1} == "id" ]];then 
-                                    if [[ "$doid" == "0" ]];then skip=1; fi 
+                                    if [[ "$doid" == "0" ]];then 
+                                    skip=1; 
+                                        printf "lifecycle {\n" >> $fn
+                                        printf "   ignore_changes = [acl,force_destroy]\n" >> $fn
+                                        printf "}\n" >> $fn
+                                    
+                                    fi 
                                 fi
 
                                 if [[ ${tt1} == "region" ]];then skip=1 ;fi
@@ -165,9 +170,7 @@ for c in `seq 0 0`; do
                                 if [[ $acl = 0 ]]; then
                                     if [[ "$doacl" == "1" ]]; then
                                         printf "acl = \"private\" \n" >> $fn
-                                        printf "lifecycle {\n" >> $fn
-                                        printf "   ignore_changes = [acl,force_destroy]\n" >> $fn
-                                        printf "}\n" >> $fn
+
                                     fi
                                 fi
                             fi

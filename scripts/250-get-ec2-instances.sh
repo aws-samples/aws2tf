@@ -103,6 +103,7 @@ for c in `seq 0 0`; do
                         printf "}\n" >> $fn
                         
                         if [[ -f ${cname}.sh ]];then 
+                            echo "use data via file ${cname}.sh"
                             t1=`printf "user_data_base64 = filebase64sha256(\"%s.sh\")" $cname`
                         else
                             t1=`printf "user_data_base64 = %s" $ud`

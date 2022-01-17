@@ -103,6 +103,7 @@ for c in `seq 0 0`; do
                                 if [[ "$t1" == *"grant"* ]];then
                                     doacl=0
                                     doid=1
+                                    echo "Found Grant ... "
                                 fi
 
 
@@ -144,8 +145,10 @@ for c in `seq 0 0`; do
                                 fd=1
                                 fi
                                 if [[ ${tt1} == "acl" ]];then
+                                    if [[ "$doacl" == "1" ]]; then
                                         skip=0
                                         acl=1
+                                    fi
                                 fi
                                 if [[ ${tt1} == "bucket_domain_name" ]];then skip=1;fi
                                 if [[ ${tt1} == "bucket_regional_domain_name" ]];then skip=1;fi

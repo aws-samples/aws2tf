@@ -128,7 +128,7 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-            echo "Listener ......."
+            #echo "Listener ......."
             ../../scripts/elbv2_listener.sh $lbarn
             echo "Target Group ......."
             ../../scripts/elbv2-target-groups.sh $lbarn

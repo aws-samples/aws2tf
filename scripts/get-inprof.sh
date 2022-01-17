@@ -80,12 +80,12 @@ for c in `seq 0 0`; do
             done <"$file"
 
             nl=`echo $instroles | jq ". | length"`
-            echo "num inst roles= $nl"
+            #echo "num inst roles= $nl"
             if [ "$nl" != "0" ]; then
                 nl=`expr $nl - 1`
                 for ni in `seq 0 $nl`; do
                     nif=`echo $instroles | jq ".[(${ni})].RoleName" | tr -d '"'`
-                    echo $ni $nif
+                    #echo $ni $nif
                     ../../scripts/050-get-iam-roles.sh $nif
                 done
             fi

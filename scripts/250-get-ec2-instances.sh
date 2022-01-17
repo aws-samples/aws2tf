@@ -131,6 +131,13 @@ for c in `seq 0 0`; do
                             skip=1;
                         fi
                     fi
+
+                    if [[ ${tt1} == "iam_instance_profile" ]];then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_iam_instance_profile.%s.id" $tt1 $tt2`
+                    fi
+
+
                     #if [[ ${tt1} == "ipv6_association_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "ipv6_cidr_block" ]];then skip=1;fi    
                     if [[ ${tt1} == "subnet_id" ]]; then
@@ -143,10 +150,7 @@ for c in `seq 0 0`; do
                     fi   
 
                 else
-                    if [[ "$t1" == *"subnet-"* ]]; then
-                        t1=`echo $t1 | tr -d '"|,'`
-                        t1=`printf "aws_subnet.%s.id," $t1`
-                    fi
+
                     if [[ "$t1" == *"sg-"* ]]; then
                         t1=`echo $t1 | tr -d '"|,'`
                         t1=`printf "aws_security_group.%s.id," $t1`
@@ -165,7 +169,7 @@ for c in `seq 0 0`; do
                 
             done <"$file"
             pfnm=`echo $awsout | jq ".${pref[(${c})]}[(${i})].Instances[].IamInstanceProfile.Arn" | cut -f2 -d'/' | tr -d '"'`
-            echo "------ $pfnm -------"
+            #echo "------ $pfnm -------"
             ../../scripts/get-inprof.sh $pfnm
 
             ## need the vpc

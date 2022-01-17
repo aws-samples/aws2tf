@@ -23,7 +23,7 @@ for c in `seq 0 0`; do
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].NetworkInterfaceId" | tr -d '"'`
+            cname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].NetworkInterfaceId"`
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $cname`
             if [ -f "$fn" ] ; then
@@ -69,6 +69,21 @@ for c in `seq 0 0`; do
                             skip=1
                         fi
                     fi
+                    
+                    if [[ ${tt1} == "ipv4_prefixes" ]]; then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        if [ "$tt2" == "[]" ];then
+                            skip=1
+                        fi
+                    fi
+
+                    if [[ ${tt1} == "ipv6_prefixes" ]]; then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        if [ "$tt2" == "[]" ];then
+                            skip=1
+                        fi
+                    fi
+
 
 
                     if [[ ${tt1} == "vpc_id" ]]; then

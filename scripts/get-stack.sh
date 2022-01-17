@@ -55,6 +55,8 @@ if [ $count -gt 0 ]; then
             fi
             echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh
             case $type in
+                AWS::Cloud9::EnvironmentEC2) echo "../../scripts/252-get-c9.sh $pid"  >> commands.sh ;;
+                
                 AWS::CodeArtifact::Domain)  echo "../../scripts/627-get-code-artifact-domain.sh $pid"  >> commands.sh ;;
                 AWS::CodeArtifact::Repository)  echo "../../scripts/627-get-code-artifact-repository.sh $pid"  >> commands.sh ;;
                 
@@ -73,17 +75,21 @@ if [ $count -gt 0 ]; then
                 AWS::EC2::VPC) echo "../../scripts/100-get-vpc.sh $pid" >> commands.sh ;;
                 AWS::EC2::Subnet) echo "../../scripts/105-get-subnet.sh $pid" >> commands.sh ;;
                 AWS::EC2::RouteTable)  echo "../../scripts/140-get-route-table.sh $pid" >> commands.sh ;;
+                AWS::EC2::Route) echo "echo '#  $type $pid  fetched as part of RouteTable..'" >> commands.sh ;;  # fetched as part of RouteTable
                 AWS::EC2::SubnetRouteTableAssociation) echo "../../scripts/141-get-route-table-associations.sh $pid" >> commands.sh ;;
                 
                 AWS::ECR::Repository)  echo "../../scripts/get-ecr.sh $pid"  >> commands.sh ;;
 
+                AWS::ECS::Cluster) echo "../../scripts/350-get-ecs-cluster.sh $pid" >> commands.sh ;;
                 AWS::ECS::Service)  echo "../../scripts/get-ecs-service.sh $parn" >> commands.sh ;;
                 AWS::ECS::TaskDefinition)  echo "../../scripts/351-get-ecs-task.sh $pid" >> commands.sh ;;
                 
                 AWS::EKS::Cluster) echo "../../scripts/300-get-eks-cluster.sh $pid" >> commands.sh ;;
                 AWS::EKS::Nodegroup) echo "# $type $pid Should be fetched via the EKS Cluster Resource" >> commands.sh ;;
                 
-                AWS::ElasticLoadBalancingV2::ListenerRule)  echo "../../scripts/elbv2_listener-rules.sh $parn" >> commands.sh ;;
+                AWS::ElasticLoadBalancingV2::LoadBalancer) echo "../../scripts/elbv2.sh $parn" >> commands.sh ;;
+                AWS::ElasticLoadBalancingV2::Listener) echo "../../scripts/elbv2_listener.sh $parn" >> commands.sh ;;
+                AWS::ElasticLoadBalancingV2::ListenerRule) echo "../../scripts/elbv2_listener-rules.sh $parn" >> commands.sh ;;
                 AWS::ElasticLoadBalancingV2::TargetGroup) echo "../../scripts/elbv2_target-groups.sh $parn" >> commands.sh ;;
 
                 AWS::Events::EventBus)  echo "../../scripts/712-get-eb-bus.sh $pid" >> commands.sh;;
@@ -92,6 +98,7 @@ if [ $count -gt 0 ]; then
                 AWS::IAM::Role)  echo "../../scripts/050-get-iam-roles.sh $pid" >> commands.sh ;;
                 AWS::IAM::ManagedPolicy) echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;
                 AWS::IAM::Policy)  echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;
+                AWS::IAM::InstanceProfile) echo "../../scripts/056-get-instance-profile.sh $pid" >> commands.sh ;;
 
                 AWS::KinesisFirehose::DeliveryStream) echo "../../scripts/740-get-kinesis-firehose-delivery-stream.sh $pid" >> commands.sh ;;
 

@@ -87,7 +87,9 @@ for c in `seq 0 0`; do
                         fd=0
                         acl=0
                         keyid=""
+                        doacl=1
                         echo $aws2tfmess > $fn
+
                         while IFS= read line
                         do
                             skip=0
@@ -96,6 +98,12 @@ for c in `seq 0 0`; do
                             if [[ ${t1} == *"="* ]];then
                                 tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                                 tt2=`echo "$line" | cut -f2- -d'='`  
+
+                                if [[ "$t1" == *"grant"*"{"*  ]];then
+                                    doacl=0
+                                fi
+
+
                                 if [[ ${tt1} == "arn" ]];then	
                                     #printf "acl = \"private\" \n" >> $fn
                                     #printf "force_destroy = false \n" >> $fn
@@ -131,10 +139,8 @@ for c in `seq 0 0`; do
                                 fd=1
                                 fi
                                 if [[ ${tt1} == "acl" ]];then
-                                    skip=0
-                                    acl=1
-
-                                    
+                                        skip=0
+                                        acl=1
                                 fi
                                 if [[ ${tt1} == "bucket_domain_name" ]];then skip=1;fi
                                 if [[ ${tt1} == "bucket_regional_domain_name" ]];then skip=1;fi
@@ -149,10 +155,12 @@ for c in `seq 0 0`; do
                                     echo "force_destroy=false" >> $fn
                                 fi
                                 if [[ $acl = 0 ]]; then
-                                    printf "acl = \"private\" \n" >> $fn
-                                    printf "lifecycle {\n" >> $fn
-                                    printf "   ignore_changes = [acl,force_destroy]\n" >> $fn
-                                    printf "}\n" >> $fn
+                                    if [[ $doacl -eq 1 ]]; then
+                                        printf "acl = \"private\" \n" >> $fn
+                                        printf "lifecycle {\n" >> $fn
+                                        printf "   ignore_changes = [acl,force_destroy]\n" >> $fn
+                                        printf "}\n" >> $fn
+                                    fi
                                 fi
                             fi
                             if [ "$skip" == "0" ];then

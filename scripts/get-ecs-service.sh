@@ -79,7 +79,12 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
-                    #if [[ ${tt1} == "propagate_tags" ]];then skip=1;fi
+                    if [[ ${tt1} == "propagate_tags" ]];then 
+                        tt2=`echo $tt2 | tr -d '"'`
+                        if [[ "$tt2" == "NONE" ]];then
+                            skip=1
+                        fi
+                    fi
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
                     if [[ ${tt1} == "availability_zone_id" ]];then skip=1;fi
                     if [[ ${tt1} == "state" ]];then skip=1;fi

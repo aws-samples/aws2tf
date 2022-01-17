@@ -88,6 +88,7 @@ for c in `seq 0 0`; do
                         acl=0
                         keyid=""
                         doacl=1
+                        doid=0
                         echo $aws2tfmess > $fn
 
                         while IFS= read line
@@ -99,8 +100,9 @@ for c in `seq 0 0`; do
                                 tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                                 tt2=`echo "$line" | cut -f2- -d'='`  
 
-                                if [[ "$t1" == *"grant"*"{"*  ]];then
+                                if [[ "$t1" == *"grant"* ]];then
                                     doacl=0
+                                    doid=1
                                 fi
 
 
@@ -111,7 +113,10 @@ for c in `seq 0 0`; do
                                     skip=1
                                 fi
                                     
-                                if [[ ${tt1} == "id" ]];then skip=1 ;fi
+                                if [[ ${tt1} == "id" ]];then 
+                                    if [[ "$doid" == "0" ]];then skip=1; fi 
+                                fi
+
                                 if [[ ${tt1} == "region" ]];then skip=1 ;fi
                                 if [[ ${tt1} == "kms_master_key_id" ]];then 
                               
@@ -155,7 +160,7 @@ for c in `seq 0 0`; do
                                     echo "force_destroy=false" >> $fn
                                 fi
                                 if [[ $acl = 0 ]]; then
-                                    if [[ $doacl -eq 1 ]]; then
+                                    if [[ "$doacl" == "1" ]]; then
                                         printf "acl = \"private\" \n" >> $fn
                                         printf "lifecycle {\n" >> $fn
                                         printf "   ignore_changes = [acl,force_destroy]\n" >> $fn

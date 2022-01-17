@@ -183,7 +183,7 @@ for c in `seq 0 0`; do
 
 
             nl=`echo $nets | jq ". | length"`
-            echo "netifs= $nl"
+            #echo "netifs= $nl"
             # don't get primary (0) interface as created by instance
             if [ $nl -gt 1 ]; then
                 nl=`expr $nl - 1`

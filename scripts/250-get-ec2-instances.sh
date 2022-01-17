@@ -101,7 +101,12 @@ for c in `seq 0 0`; do
                         printf "lifecycle {\n" >> $fn
                         printf "   ignore_changes = [user_data,user_data_base64]\n" >> $fn
                         printf "}\n" >> $fn
-                        t1=`printf "user_data_base64 = %s" $ud`
+                        
+                        if [[ -f ${cname}.sh ]];then 
+                            t1=`printf "user_data_base64 = filebase64sha256(\"%s.sh\")" $cname`
+                        else
+                            t1=`printf "user_data_base64 = %s" $ud`
+                        fi
                     fi          
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "primary_network_interface_id" ]];then skip=1;fi

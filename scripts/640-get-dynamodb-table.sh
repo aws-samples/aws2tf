@@ -68,7 +68,7 @@ for c in `seq 0 0`; do
                     tt2=`echo "$line" | cut -f2- -d'='`
                     if [[ ${tt1} == "arn" ]];then 
                         printf "lifecycle {\n" >> $fn
-                        printf "   ignore_changes = [attribute_name,read_capacity,write_capacity]\n" >> $fn
+                        printf "   ignore_changes = [ttl.attribute_name,read_capacity,write_capacity]\n" >> $fn
                         printf "}\n" >> $fn
                         skip=1
                     fi                

@@ -44,7 +44,7 @@ for c in `seq 0 0`; do
             rname=${rname//\//_}
             echo $rname
             fn=`printf "%s__%s.tf" $ttft $rname`
-            
+            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
 
             printf "resource \"%s\" \"%s\" {\n" $ttft $rname > $fn
             printf "}"  >> $fn

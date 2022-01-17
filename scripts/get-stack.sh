@@ -90,7 +90,7 @@ if [ $count -gt 0 ]; then
                 AWS::ElasticLoadBalancingV2::LoadBalancer) echo "../../scripts/elbv2.sh $parn" >> commands.sh ;;
                 AWS::ElasticLoadBalancingV2::Listener) echo "../../scripts/elbv2_listener.sh $parn" >> commands.sh ;;
                 AWS::ElasticLoadBalancingV2::ListenerRule) echo "../../scripts/elbv2_listener-rules.sh $parn" >> commands.sh ;;
-                AWS::ElasticLoadBalancingV2::TargetGroup) echo "../../scripts/elbv2_target-groups.sh $parn" >> commands.sh ;;
+                AWS::ElasticLoadBalancingV2::TargetGroup) echo "../../scripts/elbv2-target-groups.sh $parn" >> commands.sh ;;
 
                 AWS::Events::EventBus)  echo "../../scripts/712-get-eb-bus.sh $pid" >> commands.sh;;
                 AWS::Events::Rule)  echo "../../scripts/713-get-eb-rule.sh \"$pid\"" >> commands.sh;;

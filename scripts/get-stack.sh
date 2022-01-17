@@ -67,7 +67,7 @@ if [ $count -gt 0 ]; then
                       
                 AWS::DynamoDB::Table) echo "../../scripts/640-get-dynamodb-table.sh $pid"  >> commands.sh ;;
 
-
+                AWS::EC2::Instance) echo "../../scripts/250-get-ec2-instances.sh $pid"  >> commands.sh ;;
                 AWS::EC2::EIP)  echo "../../scripts/get-eip.sh $pid"  >> commands.sh ;;
                 AWS::EC2::NatGateway)  echo "../../scripts/130-get-natgw.sh $pid"  >> commands.sh ;;
                 AWS::EC2::InternetGateway)  echo "../../scripts/120-get-igw.sh $pid"  >> commands.sh ;;

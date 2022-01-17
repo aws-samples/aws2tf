@@ -1,10 +1,12 @@
 #!/bin/bash
+issingle=0
 if [ "$1" != "" ]; then
     if [[ "$1" == "vpc-"* ]];then
         cmd[0]="$AWS ec2 describe-instances --filters \"Name=vpc-id,Values=$1\" \"Name=instance-state-name,Values=running\""
     fi
     if [[ "$1" == "i-"* ]];then
         cmd[0]="$AWS ec2 describe-instances --instance-ids $1 --filters \"Name=instance-state-name,Values=running\""
+        issingle=1
     fi
 
 
@@ -41,8 +43,10 @@ for c in `seq 0 0`; do
             for ci in `echo $cloud9s`;do
                 c9=`echo $ci | tr -d '"'`
                 if [ "$c9" == "$cname" ]; then
-                    echo "Instance is cloud9 skipping ....."
-                    #skipit=1
+                    if [ "$issingle" == "0" ];then
+                        echo "Instance is cloud9 skipping ....."
+                        skipit=1
+                    fi
                 fi
             done
             for ci in `echo $asis`;do

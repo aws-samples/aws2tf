@@ -65,6 +65,9 @@ if [ $count -gt 0 ]; then
                 AWS::Cognito::UserPool) echo "../../scripts/775-get-cognito-user-pools.sh $pid"  >> commands.sh ;;
                 AWS::Cognito::UserPoolClient) echo "echo '# $type $pid fetched as part of User & Identity pool..' " >> commands.sh ;;
                       
+                AWS::DynamoDB::Table) echo "../../scripts/640-get-dynamodb-table.sh $pid"  >> commands.sh ;;
+
+
                 AWS::EC2::EIP)  echo "../../scripts/get-eip.sh $pid"  >> commands.sh ;;
                 AWS::EC2::NatGateway)  echo "../../scripts/130-get-natgw.sh $pid"  >> commands.sh ;;
                 AWS::EC2::InternetGateway)  echo "../../scripts/120-get-igw.sh $pid"  >> commands.sh ;;
@@ -77,7 +80,8 @@ if [ $count -gt 0 ]; then
                 AWS::EC2::RouteTable)  echo "../../scripts/140-get-route-table.sh $pid" >> commands.sh ;;
                 AWS::EC2::Route) echo "echo '#  $type $pid  fetched as part of RouteTable..'" >> commands.sh ;;  # fetched as part of RouteTable
                 AWS::EC2::SubnetRouteTableAssociation) echo "../../scripts/141-get-route-table-associations.sh $pid" >> commands.sh ;;
-                
+                AWS::EC2::VPCGatewayAttachment) echo "echo '#  $type $pid attached as part of IGW etc ..'" >> commands.sh ;; 
+
                 AWS::ECR::Repository)  echo "../../scripts/get-ecr.sh $pid"  >> commands.sh ;;
 
                 AWS::ECS::Cluster) echo "../../scripts/350-get-ecs-cluster.sh $pid" >> commands.sh ;;

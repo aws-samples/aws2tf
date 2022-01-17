@@ -1,4 +1,6 @@
 #!/bin/bash
+mysub=`echo $AWS2TF_ACCOUNT`
+myreg=`echo $AWS2TF_REGION`
 if [[ "$1" != "" ]]; then
     if [[ "$1" != *":aws:policy"* ]];then
         cmd[0]=`printf "$AWS iam list-policies | jq '.Policies[] | select(.Arn==\"%s\")' | jq ." $1`
@@ -86,6 +88,7 @@ for c in `seq 0 0`; do
                 #    echo "$fn exists already skipping"
                 #    exit
                 #fi
+                trole=""
                 echo $aws2tfmess > $fn
                 while IFS= read line
                 do
@@ -102,8 +105,16 @@ for c in `seq 0 0`; do
                         fi
                         if [[ ${tt1} == "Resource" ]];then
                             # check tt2 for $
-                            tt2=${tt2//$/&} 
-                            t1=`printf "\"%s\"=%s" $tt1 "$tt2"`
+
+                            if [[ "$tt2" == *"${mysub}:role/"* ]];then
+                                rarn=`echo $tt2 | tr -d '"'` 
+                                skip=0;
+                                trole=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`                       
+                                t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
+                            else
+                                tt2=${tt2//$/&} 
+                                t1=`printf "\"%s\"=%s" $tt1 "$tt2"`
+                            fi
                         fi
                         if [[ ${tt1} == "arn" ]];then skip=1; fi
                         if [[ ${tt1} == "id" ]];then skip=1; fi
@@ -116,6 +127,7 @@ for c in `seq 0 0`; do
                     fi
                     
                 done <"$file"   # done while
+                
             fi
         done # done for i
     fi

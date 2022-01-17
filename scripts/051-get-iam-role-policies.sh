@@ -1,4 +1,6 @@
 #!/bin/bash
+mysub=`echo $AWS2TF_ACCOUNT`
+myreg=`echo $AWS2TF_REGION`
 if [ "$1" != "" ]; then
     cmd[0]="$AWS iam list-role-policies --role-name $1"
 else

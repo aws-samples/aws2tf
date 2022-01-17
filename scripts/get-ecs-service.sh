@@ -1,4 +1,6 @@
 #!/bin/bash
+mysub=`echo $AWS2TF_ACCOUNT`
+myreg=`echo $AWS2TF_REGION`
 if [[ "$1" != "" ]]; then
     if [[ "$1" == *":"* ]]; then
         #echo "## process arn"
@@ -106,6 +108,16 @@ for c in `seq 0 0`; do
                         tt2=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
                     fi
+                    if [[ ${tt1} == "cluster" ]]; then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        if [[ "$tt2" == *":cluster/"* ]];then
+                            clnam=$(echo $tt2 | rev | cut -f1 -d'/' | rev)
+                            t1=`printf "%s = aws_ecs_cluster.%s.arn" $tt1 $clnam`
+                        fi
+                    fi
+
+
+
                 else
                     if [[ "$t1" == *"subnet-"* ]]; then
                         t1=`echo $t1 | tr -d '"|,'`

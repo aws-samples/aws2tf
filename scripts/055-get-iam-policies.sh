@@ -1,4 +1,6 @@
 #!/bin/bash
+mysub=`echo $AWS2TF_ACCOUNT`
+myreg=`echo $AWS2TF_REGION`
 if [ "$1" != "" ]; then
     if [[ "$1" != *":aws:policy"* ]];then
         cmd[0]="$AWS iam get-policy --policy-arn $1"
@@ -93,11 +95,13 @@ for c in `seq 0 0`; do
                             tt2=${tt2//$/&}     
                             t1=`printf "\"%s\"=%s" $tt1 "$tt2"`
                         fi
-                        if [[ ${tt1} == "Resource" ]];then
-                            # check tt2 for $
-                            tt2=${tt2//$/&} 
-                            t1=`printf "\"%s\"=%s" $tt1 "$tt2"`
+                        if [[ ${tt1} == "Resource" ]];then 
+                                tt2=${tt2//$/&} 
+                                t1=`printf "\"%s\"=%s" $tt1 "$tt2"`
                         fi
+
+
+
                         if [[ ${tt1} == "arn" ]];then skip=1; fi
                         if [[ ${tt1} == "id" ]];then skip=1; fi
                         if [[ ${tt1} == "policy_id" ]];then skip=1; fi

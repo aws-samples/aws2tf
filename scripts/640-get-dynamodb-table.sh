@@ -32,12 +32,8 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             echo $i
             if [[ "$1" != "" ]]; then
-                echo "1"
-                echo $awsout | jq -r "."
                 cname=`echo $awsout | jq -r ".${pref[(${c})]}.${idfilt[(${c})]}"`
-                echo $awsout | jq -r ".${pref[(${c})]}"
             else
-                echo "2"
                 cname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})]"`
             fi
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
@@ -57,11 +53,15 @@ for c in `seq 0 0`; do
             file="t1.txt"
             echo $aws2tfmess > $fn
             tarn=""
+            inttl=0
             while IFS= read line
             do
 				skip=0
                 # display $line or do something with $line
                 t1=`echo "$line"` 
+                if [[ "$t1" == *"ttl"* ]]; then inttl=1; fi
+                if [[ "$t1" == "}" ]]; then inttl=0; fi
+
                 if [[ ${t1} == *"="* ]];then
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
@@ -70,12 +70,24 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     
-
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
                     echo "$t1" >> $fn
                 fi
+
+                if [[ "$inttl" == "1" ]];then
+                    if [[ "$tt1" == "enabled" ]];then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        if [[ "$tt2" == "false" ]];then                                                
+                            printf "attribute_name = \"TimeToExist\"\n" >> $fn
+                        fi
+                    fi
+                fi
+
+
+
+
                 
             done <"$file"
 

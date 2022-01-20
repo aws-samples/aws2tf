@@ -157,8 +157,7 @@ Or simply check back after some time to see if they are listed below.
 
 
 ----
-
-## Terraform resources supported as of 03-Jan-2022
+## Terraform resources supported as of 20-Jan-2022
 
 * aws_appmesh_gateway_route
 * aws_appmesh_mesh
@@ -174,6 +173,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_cloudtrail
 * aws_cloudwatch_event_bus
 * aws_cloudwatch_event_rule
+* aws_cloudwatch_event_target
 * aws_cloudwatch_log_group
 * aws_codeartifact_domain
 * aws_codeartifact_repository
@@ -193,6 +193,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_dms_endpoint
 * aws_dms_replication_instance
 * aws_dms_replication_task
+* aws_dynamodb_table
 * aws_ec2_client_vpn_endpoint
 * aws_ec2_transit_gateway
 * aws_ec2_transit_gateway_route
@@ -249,7 +250,10 @@ Or simply check back after some time to see if they are listed below.
 * aws_s3_bucket
 * aws_s3_bucket_policy
 * aws_sagemaker_app
+* aws_sagemaker_app_image_config
 * aws_sagemaker_domain
+* aws_sagemaker_image
+* aws_sagemaker_image_version
 * aws_sagemaker_user_profile
 * aws_secretsmanager_secret
 * aws_secretsmanager_secret_version
@@ -282,18 +286,22 @@ Or simply check back after some time to see if they are listed below.
 * aws_vpn_connection
 
 ----
-## Resources within a Stack Set that can currently be converted to Terraform `(-s <stack set name>)` as of 03-Jan-2022
+## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 20-Jan-2022
 
+* AWS::Cloud9::EnvironmentEC2
 * AWS::CodeArtifact::Domain
 * AWS::CodeArtifact::Repository
 * AWS::Cognito::IdentityPool
 * AWS::Cognito::IdentityPoolRoleAttachment
 * AWS::Cognito::UserPool
 * AWS::Cognito::UserPoolClient
+* AWS::DynamoDB::Table
 * AWS::EC2::EIP
+* AWS::EC2::Instance
 * AWS::EC2::InternetGateway
 * AWS::EC2::LaunchTemplate
 * AWS::EC2::NatGateway
+* AWS::EC2::Route
 * AWS::EC2::RouteTable
 * AWS::EC2::SecurityGroup
 * AWS::EC2::SecurityGroupIngress
@@ -301,15 +309,20 @@ Or simply check back after some time to see if they are listed below.
 * AWS::EC2::SubnetRouteTableAssociation
 * AWS::EC2::VPC
 * AWS::EC2::VPCEndpoint
+* AWS::EC2::VPCGatewayAttachment
 * AWS::ECR::Repository
+* AWS::ECS::Cluster
 * AWS::ECS::Service
 * AWS::ECS::TaskDefinition
 * AWS::EKS::Cluster
 * AWS::EKS::Nodegroup
+* AWS::ElasticLoadBalancingV2::Listener
 * AWS::ElasticLoadBalancingV2::ListenerRule
+* AWS::ElasticLoadBalancingV2::LoadBalancer
 * AWS::ElasticLoadBalancingV2::TargetGroup
 * AWS::Events::EventBus
 * AWS::Events::Rule
+* AWS::IAM::InstanceProfile
 * AWS::IAM::ManagedPolicy
 * AWS::IAM::Policy
 * AWS::IAM::Role
@@ -324,10 +337,15 @@ Or simply check back after some time to see if they are listed below.
 * AWS::SNS::Topic
 * AWS::SQS::Queue
 * AWS::SSM::Parameter
+* AWS::SageMaker::AppImageConfig
+* AWS::SageMaker::Domain
+* AWS::SageMaker::Image
+* AWS::SageMaker::ImageVersion
 * AWS::SecretsManager::Secret
 * AWS::ServiceDiscovery::Service
  
 ----
+
 
 + Other terraform providers as terraform supports.
 

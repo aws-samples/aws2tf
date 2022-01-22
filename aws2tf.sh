@@ -170,6 +170,11 @@ printf "   aws = {\n" >> aws.tf
 printf "     source  = \"hashicorp/aws\"\n" >> aws.tf
 printf "      version = \"= 3.69.0\"\n" >> aws.tf
 printf "    }\n" >> aws.tf
+
+printf "       awscc = {\n" >> aws.tf
+printf "         source  = \"hashicorp/awscc\"\n" >> aws.tf
+printf "         version = \"~> 0.10.0\"\n" >> aws.tf
+printf "       }\n" >> aws.tf
 printf "  }\n" >> aws.tf
 printf "}\n" >> aws.tf
 printf "\n" >> aws.tf
@@ -182,6 +187,9 @@ if [ -z ${AWS_ACCESS_KEY_ID+x} ] && [ -z ${AWS_SECRET_ACCESS_KEY+x} ];then
 else
     export AWS="aws --region $r --output json "
 fi
+printf "}\n" >> aws.tf
+printf "provider \"awscc\" {\n" >> aws.tf
+printf " region = \"%s\" \n" $r >> aws.tf
 printf "}\n" >> aws.tf
 
 export AWS2TF_REGION=`echo $r`

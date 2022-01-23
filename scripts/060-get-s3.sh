@@ -14,9 +14,8 @@ fi
 pref[0]="Buckets"
 tft[0]="aws_s3_bucket"
 idfilt[0]="Name"
-theregion=`cat aws.tf | grep region | awk '{print $3}' | tr -d '"'`
+theregion=`grep region aws.tf | head -1 | cut -f2 -d'=' | tr -d '"' | tr -d ' '`
 keyid=""
-#theregion=`echo $AWS | cut -f5 -d ' '`
  
 for c in `seq 0 0`; do
    
@@ -61,22 +60,18 @@ for c in `seq 0 0`; do
                 else
                     br=`echo $br | jq .LocationConstraint | tr -d '"'`
                 fi
+                if [[ "$br" == "$theregion" ]]; then        
                 
-                if [ "$br" == "$theregion" ]; then
-                             
-                
-                    printf "resource \"%s\" \"%s\" {" $ttft $cname > $fn
-                    printf "}" >> $fn
-            
+                    printf "resource \"%s\" \"%s\" {}\n" $ttft $cname > $fn
+              
                     terraform import $ttft.$cname "$cname" 2> /dev/null
                     if [[ $? -eq 1 ]];then
                         echo "Can't access bucket $cname - continue"
                         rm -f $fn
                         continue
                     fi
-                    terraform state show $ttft.$cname > t2.txt
-                    rm -f $fn
-                    cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+                    terraform state show $ttft.$cname | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+                    rm -f $fn 
                     file="t1.txt"
                     fn=`printf "%s__%s.tf" $ttft $cname`
 

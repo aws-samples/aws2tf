@@ -116,6 +116,26 @@ for c in `seq 0 0`; do
                             fi
                         fi
 
+                        if [[ ${tt1} == "Resource" ]];then
+                            if [[ "$tt2" != *"*"* ]];then
+                                if [[ "$tt2" == *"${mysub}:role/"* ]];then
+                                    if [[ "$tt2" != *"${mysub}:role/aws-service-role"* ]];then
+                                        rarn=`echo $tt2 | tr -d '"'` 
+                                        trole=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`                       
+                                        t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
+                                    fi
+                                elif [[ "$tt2" == "arn:aws:sns:${myreg}:${mysub}:"* ]];then
+                                    rsns=`echo $tt2 | tr -d '"'` 
+                                    trole=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`                       
+                                    t1=`printf "%s = aws_sns_topic.%s.arn" $tt1 $trole`
+
+                                else   # check tt2 for $
+                                    tt2=${tt2//$/&} 
+                                    t1=`printf "\"%s\"=%s" $tt1 "$tt2"`
+                                fi
+                            fi
+                        fi                       
+
                     fi
                     if [ "$skip" == "0" ]; then
                         #echo $skip $t1

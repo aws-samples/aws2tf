@@ -1,4 +1,7 @@
 #!/bin/bash
+mysub=`echo $AWS2TF_ACCOUNT`
+myreg=`echo $AWS2TF_REGION`
+echo "globals = $mysub $myreg"
 bus="default"
 if [[ "$1" != "" ]]; then
     if [[ "$1" == *"|"* ]]; then
@@ -77,7 +80,13 @@ for c in `seq 0 0`; do
                         if [[ "$tt2" == *":lambda:"* ]]; then
                             lfn=$(echo $tt2 | rev | cut -f1 -d':' | rev)
                             t1=`printf "%s = aws_lambda_function.%s.arn" $tt1 $lfn`
-                        fi                 
+                        fi  
+                        if [[ "$tt2" == "arn:aws:sns:${myreg}:${mysub}:"* ]]; then
+                            rsns=`echo $tt2 | tr -d '"'` 
+                            trole=${rsns//:/_} && trole=${trole//./_} && trole=${trole//\//_} && trole=${trole/${mysub}/}                    
+                            t1=`printf "%s = aws_sns_topic.%s.arn" $tt1 $trole`
+
+                        fi             
                     fi     
 
                     if [[ ${tt1} == "id" ]];then 

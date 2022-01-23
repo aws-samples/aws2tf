@@ -1,4 +1,7 @@
 #!/bin/bash
+mysub=`echo $AWS2TF_ACCOUNT`
+myreg=`echo $AWS2TF_REGION`
+echo "globals = $mysub $myreg"
 if [[ "$1" != "" ]]; then
     cmd[0]="$AWS sns get-topic-attributes --topic-arn $1"
     pref[0]="Attributes"
@@ -38,7 +41,8 @@ for c in `seq 0 0`; do
             fi
             if [[ "$cname" == "null" ]];then "echo topic = $cname skipping..." && continue; fi
             
-            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_} && rname=${rname/${mysub}/}
+
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi

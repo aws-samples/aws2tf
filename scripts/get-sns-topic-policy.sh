@@ -1,15 +1,13 @@
 #!/bin/bash
-ttft="aws_network_acl"
-pref="NetworkAcls"
-idfilt="NetworkAclId"
+ttft="aws_sns_topic_policy"
 
-cm="$AWS ec2 describe-network-acls"
-if [[ "$1" != "" ]]; then
-    cm=`printf "$AWS ec2 describe-network-acls  | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $1`
+if [[ "$1" != "arn:"* ]]; then
+   echo "must pass topic arn"
 fi
+topnam=$(echo $1 | rev | cut -f1 -d':' | rev )
 
 count=1
-#echo $cm
+echo $cm
 awsout=`eval $cm 2> /dev/null`
 #echo $awsout | jq .
 
@@ -48,25 +46,13 @@ for i in `seq 0 $count`; do
             if [[ ${tt1} == "id" ]];then skip=1; fi  
             if [[ ${tt1} == "create_date" ]];then skip=1; fi  
             if [[ ${tt1} == "arn" ]];then skip=1;fi
-            if [[ ${tt1} == "owner_id" ]];then skip=1;fi 
-            if [[ ${tt1} == "vpc_id" ]]; then
-                vpcid=`echo $tt2 | tr -d '"'`
-                t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`
-            fi
-
-        else
-            if [[ "$t1" == *"subnet-"* ]]; then
-                t1=`echo $t1 | tr -d '"|,'`
-                t1=`printf "aws_subnet.%s.id," $t1`
-            fi
-
+            if [[ ${tt1} == "owner_id" ]];then skip=1;fi                   
         fi
 
         if [ "$skip" == "0" ]; then echo "$t1" >> $fn ;fi
                 
     done <"$file"
     # dependancies here
-
 done
 
 #rm -f t*.txt

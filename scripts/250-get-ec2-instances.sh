@@ -24,7 +24,7 @@ for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	echo $cm
+	#echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
@@ -103,7 +103,7 @@ for c in `seq 0 0`; do
                         printf "}\n" >> $fn
                         
                         if [[ -f ${cname}.sh ]];then 
-                            echo "user data via file ${cname}.sh"
+                            #echo "user data via file ${cname}.sh"
                             t1=`printf "user_data_base64 = filebase64sha256(\"%s.sh\")" $cname`
                         else
                             t1=`printf "user_data_base64 = %s" $ud`

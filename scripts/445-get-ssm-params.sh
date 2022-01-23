@@ -82,6 +82,9 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "value" ]];then 
                         tv=$($AWS ssm get-parameter --name $cname --query Parameter.Value)
                         t1=`printf "%s = %s" $tt1 "$tv"`
+                        printf "lifecycle {\n" >> $fn
+                        printf "   ignore_changes = [value]\n" >> $fn
+                        printf "}\n" >> $fn
                     fi
 
                 fi

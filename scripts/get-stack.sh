@@ -70,6 +70,9 @@ if [ $count -gt 0 ]; then
                 AWS::EC2::Instance) echo "../../scripts/250-get-ec2-instances.sh $pid"  >> commands.sh ;;
                 AWS::EC2::EIP)  echo "../../scripts/get-eip.sh $pid"  >> commands.sh ;;
                 AWS::EC2::NatGateway)  echo "../../scripts/130-get-natgw.sh $pid"  >> commands.sh ;;
+                AWS::EC2::NetworkAcl) echo "../../scripts/107-get-network-acl.sh $pid"  >> commands.sh ;;
+                AWS::EC2::NetworkAclEntry) echo "echo '# $type $pid fetched as part of NetworkAcl..'" >> commands.sh ;;
+                AWS::EC2::SubnetNetworkAclAssociation) echo "echo '# $type $pid fetched as part of NetworkAcl..'" >> commands.sh ;;
                 AWS::EC2::InternetGateway)  echo "../../scripts/120-get-igw.sh $pid"  >> commands.sh ;;
                 AWS::EC2::LaunchTemplate)  echo "../../scripts/eks-launch_template.sh $pid"  >> commands.sh ;;
                 AWS::EC2::SecurityGroup)  echo "../../scripts/110-get-security-group.sh $pid"  >> commands.sh ;;
@@ -105,6 +108,8 @@ if [ $count -gt 0 ]; then
                 AWS::IAM::ManagedPolicy) echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;
                 AWS::IAM::Policy)  echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;
                 AWS::IAM::InstanceProfile) echo "../../scripts/056-get-instance-profile.sh $pid" >> commands.sh ;;
+                AWS::IAM::User) echo "../../scripts/030-get-iam-users.sh $pid" >> commands.sh ;;
+                AWS::IAM::AccessKey) echo "../../scripts/057-get-iam-access-key.sh $pid" >> commands.sh ;;
 
                 AWS::KinesisFirehose::DeliveryStream) echo "../../scripts/740-get-kinesis-firehose-delivery-stream.sh $pid" >> commands.sh ;;
 
@@ -125,6 +130,7 @@ if [ $count -gt 0 ]; then
                 AWS::SageMaker::ImageVersion) echo "echo '# $type $pid fetched as part of SageMaker Image..'" >> commands.sh ;; # fetched as part of function
 
                 AWS::SNS::Topic)  echo "../../scripts/730-get-sns-topic.sh $parn" >> commands.sh ;;
+                AWS::SNS::TopicPolicy) echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;
                 AWS::SQS::Queue)  echo "../../scripts/720-get-sqs-queue.sh $parn" >> commands.sh ;;
                 
                 AWS::SSM::Parameter)  echo "../../scripts/445-get-ssm-params.sh $pid" >> commands.sh ;;

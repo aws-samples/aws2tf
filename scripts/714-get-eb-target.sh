@@ -80,9 +80,20 @@ for c in `seq 0 0`; do
                         fi                 
                     fi     
 
-                    if [[ ${tt1} == "id" ]];then skip=1; fi          
+                    if [[ ${tt1} == "id" ]];then 
+                        printf "lifecycle {\n" >> $fn
+                        printf "   ignore_changes = [input_transformer[0].input_template]\n" >> $fn
+                        printf "}\n" >> $fn
+                    skip=1; 
+                    fi          
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
+                    if [[ ${tt1} == "input_template" ]];then 
+                        itar==$(echo $tt2 | tr -d '"')
+                        #echo "input target=$itar"
+                        t1=`printf "%s = \"%s\"" $tt1 "$itar"`
+
+                    fi
 
                 fi
                 if [ "$skip" == "0" ]; then

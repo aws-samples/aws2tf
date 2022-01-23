@@ -1,5 +1,9 @@
 #!/bin/bash
-cmd[0]="$AWS iam list-users"
+if [[ "$1" != "" ]]; then  
+    cmd[0]="$AWS iam list-users | jq '.Users[] | select(.UserName==\"${1}\")'"
+else
+    cmd[0]="$AWS iam list-users"
+fi
 
 pref[0]="Users"
 tft[0]="aws_iam_user"
@@ -26,9 +30,9 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             if [ "$1" != "" ]; then
-                cname=`echo $awsout | jq ".UserName" | tr -d '"'` 
+                cname=`echo $awsout | jq -r ".UserName"` 
             else
-                cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].UserName" | tr -d '"'`
+                cname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].UserName"`
             fi
             ocname=`echo $cname`
             cname=${cname//./_}

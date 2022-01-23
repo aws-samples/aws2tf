@@ -2,10 +2,10 @@
 issingle=0
 if [ "$1" != "" ]; then
     if [[ "$1" == "vpc-"* ]];then
-        cmd[0]="$AWS ec2 describe-instances --filters \"Name=vpc-id,Values=$1\" \"Name=instance-state-name,Values=running\""
+        cmd[0]="$AWS ec2 describe-instances --filters \"Name=vpc-id,Values=$1\" \"Name=instance-state-name,Values=running,stopped\""
     fi
     if [[ "$1" == "i-"* ]];then
-        cmd[0]="$AWS ec2 describe-instances --instance-ids $1 --filters \"Name=instance-state-name,Values=running\""
+        cmd[0]="$AWS ec2 describe-instances --instance-ids $1 --filters \"Name=instance-state-name,Values=running,stopped\""
         issingle=1
     fi
 
@@ -24,7 +24,7 @@ for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
@@ -43,10 +43,10 @@ for c in `seq 0 0`; do
             for ci in `echo $cloud9s`;do
                 c9=`echo $ci | tr -d '"'`
                 if [ "$c9" == "$cname" ]; then
-                    if [ "$issingle" == "0" ];then
+                    #if [ "$issingle" == "0" ];then
                         echo "Instance is cloud9 skipping ....."
                         skipit=1
-                    fi
+                    #fi
                 fi
             done
             for ci in `echo $asis`;do
@@ -200,6 +200,8 @@ for c in `seq 0 0`; do
             fi
             
         done
+    else
+        echo "*** Found $count running instances skipping... ***"
     fi
 done
 

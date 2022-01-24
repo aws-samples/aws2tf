@@ -18,7 +18,7 @@ for c in `seq 0 0`; do
  
     cm=${cmd[$c]}
     ttft=${tft[(${c})]}
-    #echo $cm
+    echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
@@ -51,19 +51,20 @@ for c in `seq 0 0`; do
                 pname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].PolicyName"`
             fi
             
-            echo "$ttft $cname"
-
+            echo "$ttft $cname $ocname $parn $pname"
+            getp=1
             if [ "$1" != "" ]; then
               
-                getp=0
+                #getp=0
                 if [ $parn == $1 ]; then
-                    #echo "Match"
-                    getp=1
+                    echo "Match"
+                    #getp=1
                 fi
-            else
+            #else
                 #echo "not set dollar 1"
-                getp=0
+                #getp=0
             fi
+            echo $getp $1 $parn
             if [ "$getp" == "1" ]; then
                 fn=`printf "%s__%s.tf" $ttft $cname`
                 if [ -f "$fn" ] ; then
@@ -72,8 +73,8 @@ for c in `seq 0 0`; do
                 fi
 
                 #echo "cname=$cname"
-                printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-                printf "}" >> $ttft.$cname.tf
+                printf "resource \"%s\" \"%s\" {}\n" $ttft $cname > $ttft.$cname.tf
+    
                 terraform import $ttft.$cname $ocname | grep Import
                 terraform state show $ttft.$cname > t2.txt
                 rm $ttft.$cname.tf

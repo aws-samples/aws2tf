@@ -85,7 +85,7 @@ for c in `seq 0 0`; do
                         doacl=1
                         doid=0
                         echo $aws2tfmess > $fn
-
+                        lifec=0
                         while IFS= read line
                         do
                             skip=0
@@ -110,11 +110,13 @@ for c in `seq 0 0`; do
                                     
                                 if [[ ${tt1} == "id" ]];then 
                                     if [[ "$doid" == "0" ]];then 
-                                    skip=1; 
-                                        printf "lifecycle {\n" >> $fn
-                                        printf "   ignore_changes = [acl,force_destroy]\n" >> $fn
-                                        printf "}\n" >> $fn
-                                    
+                                        if [[ "$lifec" == "0" ]];then 
+                                            skip=1; 
+                                            printf "lifecycle {\n" >> $fn
+                                            printf "   ignore_changes = [acl,force_destroy]\n" >> $fn
+                                            printf "}\n" >> $fn
+                                            lifec=1
+                                        fi
                                     fi 
                                 fi
 

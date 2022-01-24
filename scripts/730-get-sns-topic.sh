@@ -1,7 +1,7 @@
 #!/bin/bash
 mysub=`echo $AWS2TF_ACCOUNT`
 myreg=`echo $AWS2TF_REGION`
-echo "globals = $mysub $myreg"
+#echo "globals = $mysub $myreg"
 if [[ "$1" != "" ]]; then
     cmd[0]="$AWS sns get-topic-attributes --topic-arn $1"
     pref[0]="Attributes"

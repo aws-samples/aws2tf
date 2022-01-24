@@ -1,43 +1,22 @@
 #!/bin/bash
 ttft="aws_sns_topic_policy"
 
-if [[ "$1" != "arn:"* ]]; then
-   echo "must pass topic arn"
-fi
-topnam=$(echo $1 | rev | cut -f1 -d':' | rev )
+if [[ "$1" != "arn:"* ]];then echo "must pass topic arn" && exit ;fi
+cname=$(echo $1 | rev | cut -f1 -d':' | rev )
+rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+echo "$ttft ${cname}"
+fn=`printf "%s__%s.tf" $ttft $rname`
+if [ -f "$fn" ] ; then echo "$fn exists already skipping" && exit; fi
 
-count=1
-echo $cm
-awsout=`eval $cm 2> /dev/null`
-#echo $awsout | jq .
-
-if [ "$awsout" == "" ];then echo "$cm : You don't have access for this resource" && exit; fi
-if [[ "$1" == "" ]]; then count=`echo $awsout | jq ".${pref} | length"`; fi   
-if [ "$count" -eq "0" ]; then echo "No resources found exiting .." && exit; fi
-count=`expr $count - 1`
-for i in `seq 0 $count`; do
-    #echo $i
-    if [[ "$1" != "" ]]; then
-        cname=`echo $awsout | jq -r ".${idfilt}"`
-    else
-        cname=`echo $awsout | jq -r ".${pref}[(${i})].${idfilt}"`
-    fi
-    rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-    echo "$ttft ${cname}"
-    
-    fn=`printf "%s__%s.tf" $ttft $rname`
-    if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
-
-    printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn   
-    terraform import $ttft.${rname} "${cname}" | grep Import
-    terraform state show $ttft.${rname} | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-
-    rm -f $fn
-    #cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-
-    file="t1.txt"
-    echo $aws2tfmess > $fn
-    while IFS= read t1
+printf "resource \"%s\" \"%s\" {}\n" $ttft $rname > $fn 
+echo ${1}  
+terraform import $ttft.${rname} ${1}
+exit
+terraform state show $ttft.${rname} | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+rm -f $fn
+file="t1.txt"
+echo $aws2tfmess > $fn
+while IFS= read t1
     do
 		skip=0
         if [[ ${t1} == *"="* ]];then
@@ -51,9 +30,9 @@ for i in `seq 0 $count`; do
 
         if [ "$skip" == "0" ]; then echo "$t1" >> $fn ;fi
                 
-    done <"$file"
-    # dependancies here
-done
+done <"$file"
+# dependancies here
+
 
 #rm -f t*.txt
 

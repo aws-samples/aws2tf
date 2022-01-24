@@ -1,4 +1,6 @@
 #!/bin/bash
+mysub=`echo $AWS2TF_ACCOUNT`
+myreg=`echo $AWS2TF_REGION`
 if [[ "$1" != "" ]]; then
     if [[ "$1" == "arn:aws:"* ]];then 
         cmd[0]="$AWS sns list-subscriptions-by-topic --topic-arn $1"
@@ -36,7 +38,7 @@ for c in `seq 0 0`; do
 
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
 
-            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_} && rname=${rname/${mysub}/}
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
@@ -61,7 +63,13 @@ for c in `seq 0 0`; do
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
-                    if [[ ${tt1} == "id" ]];then skip=1; fi          
+                    if [[ ${tt1} == "id" ]];then 
+                        skip=1; 
+                        printf "lifecycle {\n" >> $fn
+                        printf "   ignore_changes = [confirmation_timeout_in_minutes,endpoint_auto_confirms]\n" >> $fn
+                        printf "}\n" >> $fn
+                    fi  
+
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "url" ]];then skip=1;fi
@@ -75,7 +83,7 @@ for c in `seq 0 0`; do
                         tt2=$(echo $tt2 | tr -d '"')
                         if [[ "$tt2" == *":aws:sns:"* ]];then
                             tarn=$(echo $tt2)
-                            rn=${tt2//:/_} && rn=${rn//./_} && rn=${rn//\//_}
+                            rn=${tt2//:/_} && rn=${rn//./_} && rn=${rn//\//_} && rn=${rn/${mysub}/}
                             t1=`printf "%s = aws_sns_topic.%s.arn" $tt1 $rn`
                         fi
                     fi

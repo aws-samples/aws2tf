@@ -80,25 +80,25 @@ for c in `seq 0 0`; do
                         if [[ ${tt1} == "Resource" ]];then
                             tt2=`echo $tt2 | tr -d '"'`
                             if [[ "$tt2" != *"*"* ]];then
-                                echo "** in iam role policy WITH ARN: $tt2"
+                               
                                 
                                 if [[ "$tt2" == *"${mysub}:role/"* ]];then
                                     echo "in role/ match"
                                     if [[ "$tt2" != *"${mysub}:role/aws-service-role"* ]];then
-                                        echo "in arn (not service role)"
+                                        
                                         rarn=`echo $tt2 | tr -d '"'` 
                                         trole=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`                       
                                         t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
                                     fi
                                 elif [[ "$tt2" == "arn:aws:sns:${myreg}:${mysub}:"* ]];then
-                                    echo "in SNS"
+                                  
                                     rsns=`echo $tt2 | tr -d '"'` 
-                                    echo "SNS rsns=$rsns $mysub"
+                                   
                                     trole=${rsns//:/_} && trole=${trole//./_} && trole=${trole//\//_} && trole=${trole/${mysub}/}                    
-                                    echo "SNS trole=$trole"
+                                
                                     t1=`printf "%s = aws_sns_topic.%s.arn" $tt1 $trole`
                                 elif [[ "$tt2" == *"arn:aws:dynamodb:${myreg}:${mysub}:table/"* ]];then
-                                    echo "in dynamo"
+                                    
                                     rdyn=`echo $tt2 | rev | cut -f1 -d'/' | rev`
                                                       
                                     t1=`printf "%s = aws_dynamodb_table.%s.arn" $tt1 $rdyn`

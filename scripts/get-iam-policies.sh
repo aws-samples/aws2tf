@@ -1,8 +1,12 @@
 #!/bin/bash
 mysub=`echo $AWS2TF_ACCOUNT`
 myreg=`echo $AWS2TF_REGION`
+ttft="aws_iam_policy"
 if [[ "$1" != "" ]]; then
     if [[ "$1" != *":aws:policy"* ]];then
+        # fast fail
+        fn=`printf "%s__%s.tf" $ttft $1`
+        if [ -f "$fn" ] ; then echo "$fn exists already skipping" && exit; fi
         cmd[0]=`printf "$AWS iam list-policies | jq '.Policies[] | select(.PolicyName==\"%s\")' | jq ." $1`
     else
         cmd[0]=`printf "$AWS iam list-policies | jq '.Policies[] | select(.Arn==\"%s\")' | jq ." $1`
@@ -15,7 +19,6 @@ pref[0]="Policies"
 tft[0]="aws_iam_policy"
 getp=0
 for c in `seq 0 0`; do
- 
     cm=${cmd[$c]}
     ttft=${tft[(${c})]}
     echo $cm

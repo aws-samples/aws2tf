@@ -34,7 +34,7 @@ for c in `seq 0 0`; do
             if [ "$1" != "" ]; then
                 cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             else
-                cname=$(echo $awsout | jq -r ".${pref[(${c})]}[]")
+                cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})]")
             fi
             echo "$ttft $cname"
             rname=`printf "c9_%s" $cname`

@@ -98,17 +98,20 @@ for c in `seq 0 0`; do
                                                     
                         t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
                     fi
-                    if [[ ${tt1} == "content" ]];then 
-                        
+
+                   if [[ ${tt1} == "content" ]];then 
+                        #echo $t1
                         skip=1
-                        read line
-                        t1=`echo "$line" | tr -d ' '`
-                        echo "skipping ....$t1"
-                        while [[ "$t1" != "EOT" ]] || [[ "$t1" != ")" ]];do 
-                            read line  
-                            t1=`echo "$line" | tr -d ' '`
-                            if [[ "$t1" == ")" ]];then break ;fi
-                            echo "skipping ....$t1"
+                        lbc=0
+                        rbc=0
+                        breq=0
+                        while [[ $breq -eq 0 ]];do 
+                            if [[ "${t1}" == *"("* ]]; then lbc=`expr $lbc + 1`; fi
+                            if [[ "${t1}" == *")"* ]]; then rbc=`expr $rbc + 1`; fi
+                            #echo "$lbc $rbc $t1"
+                            read line
+                            t1=`echo "$line"`
+                            if [[ $rbc -eq $lbc ]]; then breq=1; fi
                         done 
                         echo "**** out of content"
                         skip=0
@@ -116,7 +119,12 @@ for c in `seq 0 0`; do
                         printf "lifecycle {\n" >> $fn
                         printf "   ignore_changes = [content]\n" >> $fn
                         printf "}\n" >> $fn
+
                     fi
+
+
+
+
                                                             
                     if [[ ${tt1} == "platform_types" ]];then 
                         #echo $t1
@@ -206,5 +214,5 @@ for c in `seq 0 0`; do
 done
 
 
-rm -f t*.txt
+#rm -f t*.txt
 

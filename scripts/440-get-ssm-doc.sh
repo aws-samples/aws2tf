@@ -103,11 +103,12 @@ for c in `seq 0 0`; do
                         skip=1
                         read line
                         t1=`echo "$line" | tr -d ' '`
+                        echo $t1
                         while [[ "$t1" != "EOT" ]] || [[ "$t1" != ")" ]];do 
                             read line  
                             t1=`echo "$line" | tr -d ' '`
                             if [[ "$t1" == ")" ]];then break ;fi
-                            #echo $t1
+                            echo $t1
                         done 
 
                         skip=0

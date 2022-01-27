@@ -100,6 +100,7 @@ for c in `seq 0 0`; do
                     fi
 
                    if [[ ${tt1} == "content" ]];then 
+                        tt2=`echo $tt2 | tr -d '"'`
                         if [[ "$tt2" == *"EOT"* ]];then
                             bs="EOT"
                             es="EOT"

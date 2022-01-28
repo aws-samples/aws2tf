@@ -101,6 +101,7 @@ for c in `seq 0 0`; do
 
                    if [[ ${tt1} == "content" ]];then 
                         tt2=`echo $tt2 | tr -d '"'`
+                        echo "tt2=$tt2"
                         if [[ "$tt2" == *"EOT"* ]];then
                             bs="EOT"
                             es="EOT"
@@ -108,7 +109,7 @@ for c in `seq 0 0`; do
                             bs="("
                             es=")"                           
                         fi
-
+                        echo "bs=$bs  es=$es"
                         #echo $t1
                         skip=1
                         lbc=0

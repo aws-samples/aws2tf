@@ -95,6 +95,7 @@ The currently supported types are:
 * eb - EventBridge resources `-t eb`
 * ecs - An ECS cluster and it's related resources `-t ecs -i Cluster-Name`
 * eks - An EKS cluster and it's related resources `-t eks -i Cluster-Name`
+* emr - get all active EMR clusters
 * iam - All IAM related users, groups, policies & roles `-t iam`
 * kms - KMS keys and aliases `-t kms`
 * lf - Lake Formation resources `-t lf`

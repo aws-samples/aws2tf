@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]=$(printf "$AWS ssm list-documents --filters \"Key=Owner,Values=Self\" | jq '. | select(.DocumentIdentifiers[].Name==\"%s\")'" $1)
+    cmd[0]=$(printf "$AWS ssm list-documents --filters \"Key=Owner,Values=Self\" | jq '.DocumentIdentifiers[] | select(.Name==\"%s\")'" $1)
     pref[0]="DocumentIdentifiers"
 else
     cmd[0]="$AWS ssm list-documents --filters \"Key=Owner,Values=Self\""
@@ -33,7 +33,7 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             if [ "$1" != "" ]; then
-                cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
+                cname=$(echo $awsout | jq -r ".${pref[(${c})]}.${idfilt[(${c})]}")
             else
                 cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             fi

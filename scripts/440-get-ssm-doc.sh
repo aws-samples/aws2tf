@@ -33,7 +33,7 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             if [ "$1" != "" ]; then
-                cname=$(echo $awsout | jq -r ".${pref[(${c})]}.${idfilt[(${c})]}")
+                cname=$(echo $awsout | jq -r ".${idfilt[(${c})]}")
             else
                 cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             fi

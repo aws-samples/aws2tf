@@ -118,7 +118,7 @@ for c in `seq 0 0`; do
                         while [[ $breq -eq 0 ]];do 
                             if [[ "${t1}" == *"${bs}"* ]]; then lbc=`expr $lbc + 1`; fi
                             if [[ "${t1}" == *"${es}"* ]]; then rbc=`expr $rbc + 1`; fi
-                            #echo "$lbc $rbc $t1"
+                            echo "$lbc $rbc $t1"
                             read line
                             t1=`echo "$line"`
                             if [[ $rbc -eq $lbc ]]; then breq=1; fi

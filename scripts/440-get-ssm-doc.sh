@@ -101,7 +101,7 @@ for c in `seq 0 0`; do
 
                    if [[ ${tt1} == "content" ]];then 
                         tt2=`echo $tt2 | tr -d '"'`
-                        echo "tt2=$tt2"
+                        #echo "tt2=$tt2"
                         if [[ "$tt2" == *"EOT"* ]];then
                             bs="EOT"
                             es="EOT"
@@ -118,7 +118,7 @@ for c in `seq 0 0`; do
                         while [[ $breq -eq 0 ]];do 
                             if [[ "${t1}" == *"${bs}"* ]]; then lbc=`expr $lbc + 1`; fi
                             if [[ "${t1}" == *"${es}"* ]]; then rbc=`expr $rbc + 1`; fi
-                            echo "$lbc $rbc $t1"
+                            #echo "$lbc $rbc $t1"
                             read line
                             t1=`echo "$line"`
                             if [[ ${bs} != "EOT" ]]; then
@@ -128,7 +128,7 @@ for c in `seq 0 0`; do
                             fi
 
                         done 
-                        echo "**** out of content"
+                        #echo "**** out of content"
                         skip=0
                         t1=`printf "content = file(\"%s.json\")" $rname`
                         printf "lifecycle {\n" >> $fn
@@ -136,9 +136,6 @@ for c in `seq 0 0`; do
                         printf "}\n" >> $fn
 
                     fi
-
-
-
 
                                                             
                     if [[ ${tt1} == "platform_types" ]];then 

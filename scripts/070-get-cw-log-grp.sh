@@ -32,13 +32,16 @@ for c in `seq 0 0`; do
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
             #echo "calling import sub"
-            . ../../scripts/parallel_import.sh $ttft $cname &
+            . ../../scripts/parallel_import2.sh $ttft $cname &
         done
 
         jc=`jobs -r | wc -l | tr -d ' '`
         echo "Waiting for $jc Terraform imports"
         wait
         echo "Finished importing"
+        echo "Starting state mv"
+        . ../../scripts/parallel_statemv.sh $ttft
+        ls pi2/*
         # tf files
 
 

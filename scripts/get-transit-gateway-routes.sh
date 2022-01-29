@@ -74,7 +74,13 @@ for c in `seq 0 0`; do
                         if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                         if [[ ${tt1} == "transit_gateway_attachment_id" ]];then 
                             tt2=`echo $tt2 | tr -d '"'`
-                            t1=`printf "%s = aws_ec2_transit_gateway_vpc_attachment.%s.id" ${tt1} ${tt2}`
+
+                            ttyp=$($AWS ec2 describe-transit-gateway-attachments --transit-gateway-attachment-ids $tt2 --query TransitGatewayAttachments[].ResourceType | jq -r .[])
+                            if [[ $ttyp == "vpn" ]];then
+                                t1=`printf "%s = aws_ec2_transit_gateway_vpn_attachment.%s.id" ${tt1} ${tt2}`
+                            else
+                                t1=`printf "%s = aws_ec2_transit_gateway_vpc_attachment.%s.id" ${tt1} ${tt2}`
+                            fi
                         fi
                         if [[ ${tt1} == "transit_gateway_route_table_id" ]];then 
                             tt2=`echo $tt2 | tr -d '"'`

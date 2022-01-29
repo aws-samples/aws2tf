@@ -70,7 +70,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "description" ]]; then
                         tt2=`echo "$tt2" | tr -d '"'`
                         dl=${#tt2}
-                        if [[ $dl -gt 256 ]];then tt2=${tt2:0:256}; fi
+                        if [[ $dl -gt 254 ]];then tt2=${tt2:0:256}; fi
                         #echo "tt2=${tt2}"
                         t1=`printf "%s = \"%s\"" $tt1 "$tt2"`
                         printf "lifecycle {\n" >> $fn

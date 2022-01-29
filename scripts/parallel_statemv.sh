@@ -4,8 +4,13 @@ if [ "$1" == "" ]; then
     exit
 fi
 for st in `ls pi2/$1__*.tfstate` 
+
 do
-echo "attempting move $st"
+    echo "attempting move $st"
+    ttft=$(echo $1)
+    rname=${st/pi2\/aws_cloudwatch_log_group__/}
+    rname=$(echo $rname | cut -f1 -d'.')
+    echo "moving $ttft $rname"
     sl=`echo $((1 + $RANDOM % 10))`
     terraform  state mv -state $st -lock=true $ttft.$rname $ttft.$rname &> /dev/null
     if [ $? -ne 0 ]; then

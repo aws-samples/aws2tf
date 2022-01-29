@@ -71,8 +71,12 @@ for c in `seq 0 0`; do
                         tt2=`echo "$tt2" | tr -d '"'`
                         dl=${#tt2}
                         echo $dl $tt2
-                        if [[ $dl -gt 254 ]];then tt2=${tt2:0:254}; fi
-                        #echo "tt2=${tt2}"
+                        if [[ $dl -gt 254 ]];then 
+                        tt2=${tt2:0:254}; 
+                        echo "shortened"
+                        fi
+                        dl=${#tt2}
+                        echo $dl $tt2
                         t1=`printf "%s = \"%s\"" $tt1 "$tt2"`
                         printf "lifecycle {\n" >> $fn
                         printf "   ignore_changes = [description]\n" >> $fn

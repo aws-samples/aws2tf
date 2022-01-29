@@ -7,12 +7,12 @@ for st in `ls pi2/$1__*.tfstate`
 do
 echo "attempting move $st"
     sl=`echo $((1 + $RANDOM % 10))`
-    terraform  state mv -state $st -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname &> /dev/null
+    terraform  state mv -state $st -lock=true $ttft.$rname $ttft.$rname &> /dev/null
     if [ $? -ne 0 ]; then
         sl=`echo $((1 + $RANDOM % 10))`
         sleep $sl
-        echo "state mv retry for $rname"
-        terraform  state mv -state $st -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname  &> /dev/null
+        echo "state mv retry for $st"
+        terraform  state mv -state $st -lock=true $ttft.$rname $ttft.$rname  &> /dev/null
         if [ $? -ne 0 ]; then
             echo "** error state mv $st"
         else
@@ -25,5 +25,5 @@ echo "attempting move $st"
     fi
 
 rm -f terr*.backup
-echo "state mv done for $st"
+echo "state mv done for $1"
 done

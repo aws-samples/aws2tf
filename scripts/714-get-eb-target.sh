@@ -46,7 +46,10 @@ for c in `seq 0 0`; do
             echo "$ttft $bus $ru $cname"
 
             fn=`printf "%s__%s__%s__%s.tf" $ttft $bus $ru $cname`
-
+            if [ -f "$fn" ] ; then
+                    echo "$fn exists already skipping"
+                    continue
+            fi
 
             printf "resource \"%s\" \"%s__%s__%s\" {" $ttft $bus $ru $cname > $fn
             printf "}" >> $fn

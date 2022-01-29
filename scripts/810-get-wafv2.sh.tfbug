@@ -48,7 +48,7 @@ for c in `seq 0 0`; do
             
             terraform import $ttft.$cname "$cname2"
             #terraform import $ttft.$cname "$cname2" | grep Import
-            exit
+            
             terraform state show $ttft.$cname > t2.txt
             tfa=`printf "data/%s.%s" $ttft $cname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json

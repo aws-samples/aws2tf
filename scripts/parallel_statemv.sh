@@ -12,9 +12,8 @@ do
     rname=$(echo $rname | cut -f1 -d'.')
     echo "moving $ttft $rname"
     sl=`echo $((1 + $RANDOM % 10))`
-    #terraform state mv -state $st -lock=true $ttft.$rname $ttft.$rname > /dev/null
     comm=$(printf "terraform state mv -state %s -state-out=terraform.tfstate -lock=true %s.%s %s.%s" $st $ttft $rname $ttft $rname)
-    echo $comm
+    #echo $comm
     eval $comm
     if [ $? -ne 0 ]; then
         sl=`echo $((1 + $RANDOM % 10))`
@@ -25,11 +24,11 @@ do
             echo "** error state mv $st"
         else
             echo "ok2 - rm state $st"
-            rm -f pi2/$st
+            rm -f $st
         fi
     else
-        echo "ok1 - rm state pi2/$st"
-        rm -f pi2/$st
+        echo "ok1 - rm state $st"
+        rm -f $st
     fi
 
 rm -f terr*.backup

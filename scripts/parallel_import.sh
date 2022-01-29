@@ -50,13 +50,13 @@ if [[ $? -ne 0 ]];then
         sl=`echo $((1 + $RANDOM % 10))`
         sleep $sl
         terraform init -no-color > /dev/null
-        terraform import $ttft.$rname "$cname" > /dev/null
+        nice -n $sl terraform import $ttft.$rname "$cname" > /dev/null
         if [ $? -ne 0 ]; then
                 echo "Import long backoff & retry with full errors for $rname"
                 sl=`echo $((2 + $RANDOM % 20))`
                 sleep $sl
                 terraform init -no-color > /dev/null
-                terraform import $ttft.$rname "$cname" > /dev/null
+                nice -n $sl terraform import $ttft.$rname "$cname" > /dev/null
         fi
     fi
     #echo "local state list"
@@ -71,18 +71,18 @@ if [[ $? -ne 0 ]];then
                 #echo $awsj | jq . 
     rm $ttft.$rname.tf
     #echo "attempting move"
-
-    terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname &> /dev/null
+    sl=`echo $((1 + $RANDOM % 10))`
+    nice -n $sl terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname &> /dev/null
     if [ $? -ne 0 ]; then
         sl=`echo $((1 + $RANDOM % 10))`
         sleep $sl
         echo "state mv retry for $rname"
-        terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname  &> /dev/null
+        nice -n $sl terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname  &> /dev/null
         if [ $? -ne 0 ]; then
             echo "1st state mv backoff & retry for $rname"
             sl=`echo $((2 + $RANDOM % 15))`
             sleep $sl
-            terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname  &> /dev/null
+            nice -n $sl terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname  &> /dev/null
             if [ $? -ne 0 ]; then
                 echo "2nd state mv long backoff & retry for $rname"
                 sl=`echo $((5 + $RANDOM % 15))`

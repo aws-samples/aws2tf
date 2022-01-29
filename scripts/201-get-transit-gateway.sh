@@ -75,6 +75,7 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
+            ../../scripts/get-transit-gateway-vpc-attachments.sh $cname
 
             dfn=`printf "data/data_%s__%s.tf" $ttft $cname`
             printf "data \"%s\" \"%s\" {\n" $ttft $cname > $dfn

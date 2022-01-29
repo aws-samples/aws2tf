@@ -24,13 +24,12 @@ do
             echo "** error state mv $st"
         else
             echo "ok2 - rm state $st"
-            rm -f $st
+            rm -f $st*
         fi
     else
         echo "ok1 - rm state $st"
-        rm -f $st
+        rm -f $st*
     fi
 
-rm -f terr*.backup
 echo "state mv done for $1"
 done

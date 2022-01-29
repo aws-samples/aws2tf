@@ -4,13 +4,11 @@ if [ "$1" == "" ]; then
     exit
 fi
 for st in `ls pi2/$1__*.tfstate` 
-
 do
-    echo "attempting move $st"
     ttft=$(echo $1)
-    rname=${st/pi2\/aws_cloudwatch_log_group__/}
+    rname=${st/pi2\/${1}__/}
     rname=$(echo $rname | cut -f1 -d'.')
-    echo "moving $ttft $rname"
+    echo "state move $ttft $rname"
     sl=`echo $((1 + $RANDOM % 10))`
     comm=$(printf "terraform state mv -state %s -state-out=terraform.tfstate -lock=true %s.%s %s.%s" $st $ttft $rname $ttft $rname)
     #echo $comm
@@ -23,13 +21,14 @@ do
         if [ $? -ne 0 ]; then
             echo "** error state mv $st"
         else
-            echo "ok2 - rm state $st"
+            #echo "ok2 - rm state $st"
             rm -f $st*
         fi
     else
-        echo "ok1 - rm state $st"
+        #echo "ok1 - rm state $st"
         rm -f $st*
     fi
 
 echo "state mv done for $1"
+rm -rf pi2
 done

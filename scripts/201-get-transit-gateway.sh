@@ -35,7 +35,7 @@ for c in `seq 0 0`; do
             fn=`printf "%s__%s.tf" $ttft $cname`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
-                exit
+                continue
             fi
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
             printf "}" >> $ttft.$cname.tf

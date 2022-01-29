@@ -69,12 +69,20 @@ for c in `seq 0 0`; do
                     fi
                     if [[ ${tt1} == "description" ]]; then
                         tt2=`echo "$tt2" | tr -d '"'`
-                    
-                        echo "tt2=${tt2}"
+                        dl=${#tt2}
+                        if [[ $dl -gt 256 ]];then tt2=${tt2:0:256} fi
+                        #echo "tt2=${tt2}"
                         t1=`printf "%s = \"%s\"" $tt1 "$tt2"`
                         printf "lifecycle {\n" >> $fn
                         printf "   ignore_changes = [description]\n" >> $fn
                         printf "}\n" >> $fn
+                    fi
+                    if [[ ${tt1} == "name" ]]; then
+                        tt2=`echo "$tt2" | tr -d '"'`
+                        nl=${#tt2}
+                        if [[ $nl -gt 64 ]];then tt2=${tt2:0:64} fi
+                        #echo "tt2=${tt2}"
+                        t1=`printf "%s = \"%s\"" $tt1 "$tt2"`
                     fi
                
                 fi

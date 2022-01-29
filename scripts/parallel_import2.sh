@@ -42,7 +42,7 @@ if [[ $? -ne 0 ]];then
     fi
     sl=`echo $((1 + $RANDOM % 4))`
     sleep $sl
-    printf "resource \"%s\" \"%s\" {}" $ttft $rname > $ttft.$rname.tf
+    printf "resource \"%s\" \"%s\" {}" $ttft $rname > $ttft__$rname.tf
 
 
     echo "Importing... pi2"
@@ -50,7 +50,11 @@ if [[ $? -ne 0 ]];then
      
     sl=`echo $((1 + $RANDOM % 15))` 
     echo "$st import"        
+    comm=$(printf "nice -n %s terraform import -state %s %s.%s \"%s\"" $sl $st $ttft $rname $cname)
+    echo $comm
+    exit
     nice -n $sl terraform import -state $st $ttft.$rname "$cname" > /dev/null
+
     if [ $? -ne 0 ]; then
         echo "Import backoff & retry for $rname"
         sl=`echo $((1 + $RANDOM % 10))`

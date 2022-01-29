@@ -46,10 +46,9 @@ if [[ $? -ne 0 ]];then
     fn=`printf "%s__%s.tf" $ttft $cname`
     printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
 
-    pwd
      
     sl=`echo $((1 + $RANDOM % 15))` 
-    echo "$st import"        
+    #echo "$st import"        
     comm=$(printf "nice -n %s terraform import -state %s %s.%s \"%s\"" $sl $st $ttft $rname $cname)
     #echo $comm
     eval $comm

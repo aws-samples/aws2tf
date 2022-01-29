@@ -51,7 +51,7 @@ if [[ $? -ne 0 ]];then
     sl=`echo $((1 + $RANDOM % 15))` 
     echo "$st import"        
     comm=$(printf "nice -n %s terraform import -state %s %s.%s \"%s\"" $sl $st $ttft $rname $cname)
-    echo $comm
+    #echo $comm
     eval $comm
 
     if [ $? -ne 0 ]; then
@@ -71,7 +71,7 @@ if [[ $? -ne 0 ]];then
 
     echo $comm > ../data/import_$ttft_$rname.sh
 
-    terraform state show -state $st $ttft.$rname
+    #terraform state show -state $st $ttft.$rname
 
     terraform state show -state $st $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > ../$ttft-$rname-1.txt 
     rm -r $fn

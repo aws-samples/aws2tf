@@ -52,25 +52,25 @@ if [[ $? -ne 0 ]];then
     pwd
     ls -l  
     sl=`echo $((1 + $RANDOM % 15))`         
-    nice -n $sl terraform import $ttft.$rname "$cname" -state $st > /dev/null
+    nice -n $sl terraform -state $st import $ttft.$rname "$cname" > /dev/null
     if [ $? -ne 0 ]; then
         echo "Import backoff & retry for $rname"
         sl=`echo $((1 + $RANDOM % 10))`
         sleep $sl
-        nice -n $sl terraform import $ttft.$rname "$cname" -state $st > /dev/null
+        nice -n $sl terraform  -state $st import $ttft.$rname "$cname" > /dev/null
         if [ $? -ne 0 ]; then
                 echo "Import long backoff & retry with full errors for $rname"
                 sl=`echo $((2 + $RANDOM % 20))`
                 sleep $sl
-                nice -n $sl terraform import $ttft.$rname "$cname" -state $st > /dev/null
+                nice -n $sl terraform  -state $st import $ttft.$rname "$cname" > /dev/null
         fi
     fi
     #echo "local state list"
     #terraform state list -no-color
 
-    printf "terraform import %s.%s %s" $ttft $rname "$cname" -state $st > ../data/import_$ttft_$rname.sh
+    printf "terraform  -state $st import %s.%s %s" $ttft $rname "$cname" > ../data/import_$ttft_$rname.sh
 
-    terraform state show $ttft.$rname  -state $st i | perl -pe 's/\x1b.*?[mGKH]//g' > $ttft-$rname-1.txt 
+    terraform  -state $st state show $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > $ttft-$rname-1.txt 
     rm $ttft.$rname.tf
 
 else

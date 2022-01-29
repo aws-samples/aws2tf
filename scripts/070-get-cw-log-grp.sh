@@ -41,7 +41,7 @@ for c in `seq 0 0`; do
         echo "Finished importing"
         echo "Starting state mv"
         . ../../scripts/parallel_statemv.sh $ttft
-        ls pi2/*
+        #ls pi2/*
         # tf files
 
 

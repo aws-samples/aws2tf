@@ -121,7 +121,12 @@ for c in `seq 0 0`; do
                             echo "$lbc $rbc $t1"
                             read line
                             t1=`echo "$line"`
-                            if [[ $rbc -eq $lbc ]]; then breq=1; fi
+                            if [[ ${bs} != "EOT" ]] then
+                                if [[ $rbc -eq $lbc ]]; then breq=1; fi
+                            else
+                                if [[ $lbc -eq 2 ]]; then breq=1; fi
+                            fi
+
                         done 
                         echo "**** out of content"
                         skip=0

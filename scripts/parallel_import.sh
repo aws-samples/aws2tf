@@ -26,7 +26,8 @@ if [[ $? -ne 0 ]];then
         ln -s ../.terraform .terraform 2> /dev/null
         ln -s ../.terraform.lock.hcl .terraform.lock.hcl 2> /dev/null
     else
-        terraform init -no-color > /dev/null
+        sl=`echo $((1 + $RANDOM % 15))`
+        nice -n $sl terraform init -no-color > /dev/null
         if [ $? -ne 0 ]; then
             echo "init backoff & retry for $rname"
             sleep 10
@@ -43,19 +44,18 @@ if [[ $? -ne 0 ]];then
     printf "resource \"%s\" \"%s\" {}" $ttft $rname > $ttft.$rname.tf
 
 
-    #echo "Importing..."           
-    terraform import $ttft.$rname "$cname" > /dev/null
+    #echo "Importing..."  
+    sl=`echo $((1 + $RANDOM % 15))`         
+    nice -n $sl terraform import $ttft.$rname "$cname" > /dev/null
     if [ $? -ne 0 ]; then
         echo "Import backoff & retry for $rname"
         sl=`echo $((1 + $RANDOM % 10))`
         sleep $sl
-        terraform init -no-color > /dev/null
         nice -n $sl terraform import $ttft.$rname "$cname" > /dev/null
         if [ $? -ne 0 ]; then
                 echo "Import long backoff & retry with full errors for $rname"
                 sl=`echo $((2 + $RANDOM % 20))`
                 sleep $sl
-                terraform init -no-color > /dev/null
                 nice -n $sl terraform import $ttft.$rname "$cname" > /dev/null
         fi
     fi
@@ -85,9 +85,9 @@ if [[ $? -ne 0 ]];then
             nice -n $sl terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname  &> /dev/null
             if [ $? -ne 0 ]; then
                 echo "2nd state mv long backoff & retry for $rname"
-                sl=`echo $((5 + $RANDOM % 15))`
+                sl=`echo $((3 + $RANDOM % 15))`
                 sleep $sl
-                terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname &> /dev/null
+                nice -n $sl terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname &> /dev/null
                 if [ $? -ne 0 ]; then
                     echo "3rd state mv long backoff & retry for $rname"
                     sl=`echo $((10 + $RANDOM % 30))`

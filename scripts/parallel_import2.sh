@@ -53,7 +53,6 @@ if [[ $? -ne 0 ]];then
     comm=$(printf "nice -n %s terraform import -state %s %s.%s \"%s\"" $sl $st $ttft $rname $cname)
     echo $comm
     eval $comm
-    #nice -n $sl terraform import -state $st $ttft.$rname "$cname" > /dev/null
 
     if [ $? -ne 0 ]; then
         echo "Import backoff & retry for $rname"
@@ -72,10 +71,10 @@ if [[ $? -ne 0 ]];then
 
     echo $comm > ../data/import_$ttft_$rname.sh
 
-    terraform  tate show -state $st $ttft.$rname
+    terraform state show -state $st $ttft.$rname
 
-    terraform  tate show -state $st $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > $ttft-$rname-1.txt 
-    rm $ttft.$rname.tf
+    terraform state show -state $st $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > ../$ttft-$rname-1.txt 
+    rm -r $ttft.$rname.tf
 
 else
     echo "State $ttft.$rname already exists skipping import ..."

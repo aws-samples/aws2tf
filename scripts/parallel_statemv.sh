@@ -14,7 +14,7 @@ echo "attempting move $st"
         echo "state mv retry for $rname"
         terraform  state mv -state $st -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname  &> /dev/null
         if [ $? -ne 0 ]; then
-            echo "error state mv $st"
+            echo "** error state mv $st"
         else
             echo "ok2 - rm state $st"
             rm -f pi2/$st
@@ -25,5 +25,5 @@ echo "attempting move $st"
     fi
 
 rm -f terr*.backup
-echo "state mv done for  $rname"
+echo "state mv done for $st"
 done

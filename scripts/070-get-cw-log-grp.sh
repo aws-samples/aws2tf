@@ -38,7 +38,6 @@ for c in `seq 0 0`; do
         jc=`jobs -r | wc -l | tr -d ' '`
         echo "Waiting for $jc Terraform imports"
         wait
-        exit
         echo "Finished importing"
         echo "Starting state mv"
         . ../../scripts/parallel_statemv.sh $ttft

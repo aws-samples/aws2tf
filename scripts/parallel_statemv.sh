@@ -13,7 +13,7 @@ do
     echo "moving $ttft $rname"
     sl=`echo $((1 + $RANDOM % 10))`
     #terraform state mv -state $st -lock=true $ttft.$rname $ttft.$rname > /dev/null
-    comm=$(printf "terraform state mv -state %s -lock=true %s.%s %s.%s" $st $ttft $rname $ttft $rname)
+    comm=$(printf "terraform state mv -state %s -state-out=terraform.tfstate -lock=true %s.%s %s.%s" $st $ttft $rname $ttft $rname)
     echo $comm
     eval $comm
     if [ $? -ne 0 ]; then

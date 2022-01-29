@@ -30,5 +30,5 @@ do
     fi
 
 echo "state mv done for $1"
-rm -rf pi2
 done
+rm -rf pi2

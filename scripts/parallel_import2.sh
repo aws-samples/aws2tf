@@ -8,6 +8,7 @@ ttft=`echo $1 | tr -d '"'`
 cname=`echo $2 | tr -d '"'`
 rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
 st=`printf "%s__%s.tfstate" $1 $rname`
+if [ -f "$st" ] ; then echo "$st exists already skipping" && exit; fi
 
 echo "parallel2 list check"
 (terraform state list 2> /dev/null | grep ${ttft}.${rname}) > /dev/null 
@@ -42,10 +43,9 @@ if [[ $? -ne 0 ]];then
     fi
     sl=`echo $((1 + $RANDOM % 4))`
     sleep $sl
-    printf "resource \"%s\" \"%s\" {}" $ttft $rname > $ttft__$rname.tf
+    fn=`printf "%s__%s.tf" $ttft $cname`
+    printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
 
-
-    echo "Importing... pi2"
     pwd
      
     sl=`echo $((1 + $RANDOM % 15))` 
@@ -74,19 +74,15 @@ if [[ $? -ne 0 ]];then
     terraform state show -state $st $ttft.$rname
 
     terraform state show -state $st $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > ../$ttft-$rname-1.txt 
-    rm -r $ttft.$rname.tf
+    rm -r $fn
 
 else
     echo "State $ttft.$rname already exists skipping import ..."
     terraform state show $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > $ttft-$rname-1.txt
-    ls $ttft*-1.txt
+
 
 fi
 
 rm -f terr*.backup
-#rm -rf $ttft-$rname/.terraform*
-# rmdir $ttft-$rname
-#rm -f $ttft-$rname-1.txt
-#echo "top level state list"
-#terraform state list | grep $ttft.$rname
+
 echo "exit parallel2 import $rname"

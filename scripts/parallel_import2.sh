@@ -3,16 +3,13 @@ if [ "$1" == "" ]; then
     echo "must specify resource type (ttft)"
     exit
 fi
-if [ "$2" == "" ]; then
-    echo "must specify resource name (cname)"
-    exit
-fi
+
 ttft=`echo $1 | tr -d '"'`
 cname=`echo $2 | tr -d '"'`
 rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
 st=`printf "%s__%s.tfstate" $1 $rname`
 
-#echo "parallel list check"
+echo "parallel2 list check"
 (terraform state list 2> /dev/null | grep ${ttft}.${rname}) > /dev/null 
 if [[ $? -ne 0 ]];then
 
@@ -50,8 +47,9 @@ if [[ $? -ne 0 ]];then
 
     echo "Importing... pi2"
     pwd
-    ls -l  
-    sl=`echo $((1 + $RANDOM % 15))`         
+     
+    sl=`echo $((1 + $RANDOM % 15))` 
+    echo "$st import"        
     nice -n $sl terraform import -state $st $ttft.$rname "$cname" > /dev/null
     if [ $? -ne 0 ]; then
         echo "Import backoff & retry for $rname"

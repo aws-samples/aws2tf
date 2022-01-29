@@ -72,7 +72,7 @@ for c in `seq 0 0`; do
                         dl=${#tt2}
                         echo $dl $tt2
                         if [[ $dl -gt 254 ]];then 
-                        tt2=${tt2:0:254}; 
+                        tt2=${tt2:0:252}; 
                         echo "shortened"
                         fi
                         dl=${#tt2}

@@ -29,7 +29,7 @@ for c in `seq 0 0`; do
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
-            #echo $i
+            echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].TransitGatewayId" | tr -d '"'`
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $cname`
@@ -75,6 +75,7 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
+            echo "vpc attachments"
             ../../scripts/get-transit-gateway-vpc-attachments.sh $cname
 
             dfn=`printf "data/data_%s__%s.tf" $ttft $cname`

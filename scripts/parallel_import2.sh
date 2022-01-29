@@ -10,14 +10,16 @@ fi
 ttft=`echo $1 | tr -d '"'`
 cname=`echo $2 | tr -d '"'`
 rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+st=`printf "%s__%s.tfstate" $1 $rname`
+
 #echo "parallel list check"
 (terraform state list 2> /dev/null | grep ${ttft}.${rname}) > /dev/null 
 if [[ $? -ne 0 ]];then
 
     #echo "Import $rname"
     #terraform state rm $ttft.$rname > /dev/null
-    rm -rf pi2
-    mkdir -p pi2 && cd pi2
+    mkdir -p pi2
+    cd pi2
 
     #cp ../aws.tf .
     ls ../.terraform > /dev/null
@@ -46,27 +48,29 @@ if [[ $? -ne 0 ]];then
     printf "resource \"%s\" \"%s\" {}" $ttft $rname > $ttft.$rname.tf
 
 
-    #echo "Importing..."  
+    echo "Importing... pi2"
+    pwd
+    ls -l  
     sl=`echo $((1 + $RANDOM % 15))`         
-    nice -n $sl terraform import $ttft.$rname "$cname" > /dev/null
+    nice -n $sl terraform import $ttft.$rname "$cname" -state $st > /dev/null
     if [ $? -ne 0 ]; then
         echo "Import backoff & retry for $rname"
         sl=`echo $((1 + $RANDOM % 10))`
         sleep $sl
-        nice -n $sl terraform -state $ttft.$rname.tfstate import $ttft.$rname "$cname" > /dev/null
+        nice -n $sl terraform import $ttft.$rname "$cname" -state $st > /dev/null
         if [ $? -ne 0 ]; then
                 echo "Import long backoff & retry with full errors for $rname"
                 sl=`echo $((2 + $RANDOM % 20))`
                 sleep $sl
-                nice -n $sl terraform -state $ttft.$rname.tfstate import $ttft.$rname "$cname" > /dev/null
+                nice -n $sl terraform import $ttft.$rname "$cname" -state $st > /dev/null
         fi
     fi
     #echo "local state list"
     #terraform state list -no-color
 
-    printf "terraform -state $ttft.$rname.tfstate import %s.%s %s" $ttft $rname "$cname" > ../data/import_$ttft_$rname.sh
+    printf "terraform import %s.%s %s" $ttft $rname "$cname" -state $st > ../data/import_$ttft_$rname.sh
 
-    terraform -state $ttft.$rname.tfstate state show $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > $ttft-$rname-1.txt 
+    terraform state show $ttft.$rname  -state $st i | perl -pe 's/\x1b.*?[mGKH]//g' > $ttft-$rname-1.txt 
     rm $ttft.$rname.tf
 
 else
@@ -82,4 +86,4 @@ rm -f terr*.backup
 #rm -f $ttft-$rname-1.txt
 #echo "top level state list"
 #terraform state list | grep $ttft.$rname
-echo "exit parallel import $rname"
+echo "exit parallel2 import $rname"

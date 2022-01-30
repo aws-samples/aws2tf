@@ -51,7 +51,7 @@ if [[ $? -ne 0 ]];then
      
     sl=`echo $((1 + $RANDOM % 15))` 
     #echo "$st import"        
-    comm=$(printf "nice -n %s terraform import -state %s %s.%s \"%s\"" $sl $st $ttft $rname $cname)
+    comm=$(printf "nice -n %s terraform import -state %s %s.%s \"%s\" | grep Import " $sl $st $ttft $rname $cname)
     echo $comm
     #eval $comm | grep Import
     eval $comm

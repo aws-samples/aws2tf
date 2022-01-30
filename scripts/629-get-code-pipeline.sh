@@ -121,7 +121,7 @@ for c in `seq 0 0`; do
             for therole in ${rarns[@]}; do
                 echo "therole=$therole"
                 trole1=`echo $therole | tr -d '"'`
-                #echo "calling for $trole1"
+                echo "calling for $trole1"
                 if [ "$trole1" != "" ]; then
                     ../../scripts/050-get-iam-roles.sh $trole1
                 fi

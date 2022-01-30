@@ -39,6 +39,7 @@ for c in `seq 0 0`; do
         echo "Waiting for $jc Terraform imports"
         wait
         echo "Starting state mv"
+        exit
         . ../../scripts/parallel_statemv.sh $ttft
 
         for i in `seq 0 $count`; do

@@ -66,7 +66,7 @@ for c in `seq 0 0`; do
                     tt1=""
                 fi
                 if [[ "$t1" == "}" ]]; then 
-                    
+                    inttl=0; 
                 fi
 
                 if [[ ${t1} == *"="* ]];then

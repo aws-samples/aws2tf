@@ -18,7 +18,7 @@ c=0
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	echo $cm
+	#echo $cm
        
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then

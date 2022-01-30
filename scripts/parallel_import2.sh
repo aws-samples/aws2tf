@@ -9,7 +9,7 @@ cname=`echo $2 | tr -d '"'`
 rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
 sl=`echo $((1 + $RANDOM % 15))` 
 
-echo "Importing $ttft $cname $rname"
+#echo "Importing $ttft $cname $rname"
 st=`printf "%s__%s.tfstate" $1 $rname`
 if [ -f "$st" ] ; then echo "$st exists already skipping" && exit; fi
 
@@ -50,11 +50,9 @@ if [[ $? -ne 0 ]];then
     sync && sync
 
     if [[ ! -f "$fn" ]]; then echo "Error: prototype $fn does not exist exiting..." && exit; fi
-    
-    #echo "$st import"        
+           
     comm=$(printf "nice -n %s terraform import -state %s %s.%s \"%s\" &> /dev/null" $sl $st $ttft $rname $cname)
     #echo $comm
-    #eval $comm | grep Import
     sleep $sl
     eval $comm
 

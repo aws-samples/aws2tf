@@ -3,7 +3,7 @@ if [ "$1" == "" ]; then
     echo "must specify resource type (ttft)"
     exit
 fi
-ls pi2/${1}*.tfstate 2&> /dev/null
+ls pi2/${1}*.tfstate &> /dev/null
 if [[ $? -ne 0 ]];then
     echo "No state files in pi2 skipping ..."
     exit

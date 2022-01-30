@@ -201,16 +201,15 @@ done <"$file"
 sglist=()
 #echo "imp files"
 #ls imp*.sh
-for i in `ls imp_aws_security_group_rule*.sh 2> /dev/null`; do
+for i in `ls imp_aws_security_group_rule_${1}_${2}*.sh 2> /dev/null`; do
 
     chmod 755 $i
     i1=$(echo $i | cut -f1 -d'.')
     sname=$(echo $i1 | cut -f6 -d'_')
     stype=$(echo $i1 | cut -f7 -d'_')
     ir=$(echo $i1 | cut -f8 -d'_')
-    #echo "$ttft $sname $cname $ir terraform file"
+    echo "$ttft $sname $cname $ir terraform file"
     fn=`printf "%s__%s_%s_%s.tf" $ttft $cname $stype $ir`
-
     if [ -f "$fn" ] ; then echo "$fn exists skipping" && continue; fi
    
     printf "resource \"%s\" \"%s_%s_%s\" {}\n" $ttft $cname $stype $ir > $fn

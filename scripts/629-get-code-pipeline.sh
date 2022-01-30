@@ -113,10 +113,10 @@ for c in `seq 0 0`; do
             #echo "rarns=$rarns"
             ## role arn
 
-            if [[ "$trole" != "" ]]; then
-                echo "call1 for $trole"
-                ../../scripts/050-get-iam-roles.sh $trole
-            fi
+            #if [[ "$trole" != "" ]]; then
+            #    echo "call1 for $trole"
+            #    ../../scripts/050-get-iam-roles.sh $trole
+            #fi
 
 
             for therole in ${rarns[@]}; do

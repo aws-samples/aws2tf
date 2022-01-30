@@ -47,7 +47,7 @@ for c in `seq 0 0`; do
         
                 if [[ "$rpath" == *"service-role"* ]]; then 
                     #if [[ ${1} != "arn:aws:iam"* ]]; then
-                    if [[ ${1} != "" ]]; then
+                    if [[ ${1} == "" ]]; then
                         echo "skipping a service_role ...."
                         continue
                     fi

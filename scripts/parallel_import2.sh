@@ -47,9 +47,9 @@ if [[ $? -ne 0 ]];then
 
     fn=`printf "%s__%s.tf" $ttft $rname`
     printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
+    sleep $sl
     if [ -f "$fn" ] ; then echo "Error: prototype $fn does not exist exiting..." && exit; fi
      
-
     #echo "$st import"        
     comm=$(printf "nice -n %s terraform import -state %s %s.%s \"%s\" | grep Import " $sl $st $ttft $rname $cname)
     echo $comm

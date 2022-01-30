@@ -36,6 +36,12 @@ do
     fi
 
 echo "moved state $ttft.$rname"
+cfile=`printf "%s-%s-1.txt" $ttft $rname`
+nl=$(wc -l $cfile)
+if [[ $nl -eq 0 ]];then
+    echo "--> redoing $cfile"
+    terraform state show $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > $cfile
+fi
 done
 rm -f terr*.backup
 #rm -rf pi2

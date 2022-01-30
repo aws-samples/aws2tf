@@ -130,12 +130,12 @@ for c in `seq 0 0`; do
             done <"$file"
 
 
-            if [ "$ecrr" != "" ]; then 
+            if [[ "$ecrr" != "" ]]; then 
                 ../../scripts/get-ecr.sh $ecrr
             fi
             ## role arn
 
-            if [ "$trole" != "" ]; then
+            if [[ "$trole" != "" ]]; then
                 ../../scripts/050-get-iam-roles.sh $trole
             fi
 

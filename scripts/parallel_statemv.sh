@@ -8,7 +8,7 @@ do
     ttft=$(echo $1)
     rname=${st/pi2\/${1}__/}
     rname=$(echo $rname | cut -f1 -d'.')
-    echo "state move $ttft $rname"
+    
     sl=`echo $((1 + $RANDOM % 10))`
     comm=$(printf "terraform state mv -state %s -state-out=terraform.tfstate -lock=true %s.%s %s.%s" $st $ttft $rname $ttft $rname)
     #echo $comm
@@ -29,6 +29,6 @@ do
         rm -f $st*
     fi
 
-echo "state mv done for $1"
+echo "moved state $ttft.$rname"
 done
 rm -rf pi2

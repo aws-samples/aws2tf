@@ -52,7 +52,7 @@ if [[ $? -ne 0 ]];then
     if [[ ! -f "$fn" ]]; then echo "Error: prototype $fn does not exist exiting..." && exit; fi
     
     #echo "$st import"        
-    comm=$(printf "nice -n %s terraform import -state %s %s.%s \"%s\" | grep Import " $sl $st $ttft $rname $cname)
+    comm=$(printf "nice -n %s terraform import -state %s %s.%s \"%s\" &> /dev/null" $sl $st $ttft $rname $cname)
     #echo $comm
     #eval $comm | grep Import
     sleep $sl
@@ -76,13 +76,19 @@ if [[ $? -ne 0 ]];then
                     if [ $? -ne 0 ]; then
                         echo "** ERROR ** $rname Import failed"
                     fi
+                else
+                    echo "Imported $ttft.$rname"
                 fi
+        else
+           echo "Imported $ttft.$rname"  
         fi
+    else
+       echo "Imported $ttft.$rname" 
     fi
     #echo "local state list"
     #terraform state list -no-color
 
-    echo $comm > ../data/import_$ttft_$rname.sh
+    #echo $comm > ../data/import_$ttft_$rname.sh
 
     #terraform state show -state $st $ttft.$rname
 

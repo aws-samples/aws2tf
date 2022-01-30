@@ -49,6 +49,7 @@ for c in `seq 0 0`; do
             #	done
             file="t1.txt"
             echo $aws2tfmess > $fn
+            trole=""
             rarns=()
             allowid=0
             doned=0
@@ -73,7 +74,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "role_arn" ]];then 
                                 skip=0;
                                 trole=`echo "$tt2" | rev | cut -d'/' -f 1 | rev | tr -d '"'`
-                                #echo "***trole=$trole"
+                                echo "***trole=$trole"
                                 rarns+=`printf "\"%s\" " $trole`
                                 if [ "$doned" == "0" ]; then
                                     echo "depends_on = [aws_iam_role.$trole]" >> $fn  
@@ -111,8 +112,14 @@ for c in `seq 0 0`; do
             done <"$file"
             #echo "rarns=$rarns"
             ## role arn
+
+            if [ "$trole" != "" ]; then
+                ../../scripts/050-get-iam-roles.sh $trole
+            fi
+
+
             for therole in ${rarns[@]}; do
-                #echo "therole=$therole"
+                echo "therole=$therole"
                 trole1=`echo $therole | tr -d '"'`
                 #echo "calling for $trole1"
                 if [ "$trole1" != "" ]; then

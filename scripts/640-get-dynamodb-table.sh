@@ -60,8 +60,14 @@ for c in `seq 0 0`; do
 				skip=0
                 # display $line or do something with $line
                 t1=`echo "$line"` 
-                if [[ "$t1" == *"ttl"* ]]; then inttl=1; fi
-                if [[ "$t1" == "}" ]]; then inttl=0; fi
+                if [[ "$t1" == *"ttl"* ]]; then 
+                    inttl=1; 
+                    tt2=""
+                    tt1=""
+                fi
+                if [[ "$t1" == "}" ]]; then 
+                    
+                fi
 
                 if [[ ${t1} == *"="* ]];then
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 

@@ -83,8 +83,8 @@ for c in `seq 0 0`; do
                     fi
                     if [[ ${tt1} == "execution_role" ]];then 
                         rarn=`echo $tt2 | tr -d '"'`
-                        trole=`echo "$tt2" | rev | cut -d'/' -f1 | rev | tr -d '"'`
-                        t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`                
+                        erole=`echo "$tt2" | rev | cut -d'/' -f1 | rev | tr -d '"'`
+                        t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $erole`                
                     fi
                     if [[ ${tt1} == "kms_key_id" ]];then 
                         keyid=`echo $tt2 | tr -d '"'`
@@ -156,6 +156,10 @@ for c in `seq 0 0`; do
 
             if [[ "$aic" != "" ]];then
                 ../../scripts/get-sagemaker-app-image-config.sh $aic
+            fi
+
+            if [[ "$erole" != "" ]];then
+                ../../scripts/050-get-iam-roles.sh $erole
             fi
 
 

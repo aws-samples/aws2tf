@@ -47,6 +47,7 @@ if [[ $? -ne 0 ]];then
 
     fn=`printf "%s__%s.tf" $ttft $rname`
     printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
+    sync
     sleep $sl
     pwd
     ls -l

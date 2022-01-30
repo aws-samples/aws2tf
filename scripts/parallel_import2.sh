@@ -48,6 +48,8 @@ if [[ $? -ne 0 ]];then
     fn=`printf "%s__%s.tf" $ttft $rname`
     printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
     sleep $sl
+    pwd
+    ls -l
     if [ -f "$fn" ] ; then echo "Error: prototype $fn does not exist exiting..." && exit; fi
      
     #echo "$st import"        

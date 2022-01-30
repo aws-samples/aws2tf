@@ -196,7 +196,7 @@ export AWS2TF_REGION=`echo $r`
 export AWS2TF_ACCOUNT=`echo $mysub`
 
 cat aws.tf
-cp ../../stubs/data-aws.tf .
+cp ../../stubs/data*.tf .
 
 if [ "$t" == "no" ]; then t="*"; fi
 

@@ -3,12 +3,16 @@ if [ "$1" == "" ]; then
     echo "must specify resource type (ttft)"
     exit
 fi
-for st in `ls pi2/$1__*.tfstate` 
+ls pi2/$1__*.tfstate 2&> /dev/null
+if [[ $? -ne 0 ]];then
+    echo "No state files in pi2 skilling ..."
+    exit
+fi
+for st in `ls pi2/$1__*.tfstate 2> /dev/null` 
 do
     ttft=$(echo $1)
     rname=${st/pi2\/${1}__/}
-    rname=$(echo $rname | cut -f1 -d'.')
-    
+    rname=$(echo $rname | cut -f1 -d'.')  
     sl=`echo $((1 + $RANDOM % 10))`
     comm=$(printf "terraform state mv -state %s -state-out=terraform.tfstate -lock=true %s.%s %s.%s" $st $ttft $rname $ttft $rname)
     #echo $comm

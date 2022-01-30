@@ -83,13 +83,13 @@ for c in `seq 0 0`; do
                 fi
 
                 if [[ "$inttl" == "1" ]];then
-                    echo $t1 $tt1 $tt2
+                    echo "--> $t1 $tt1 $tt2"
                     if [[ "$tt1" == "attribute_name" ]];then
                         doneatt=1
                     fi
                     if [[ "$tt1" == "enabled" ]];then
                         tt2=`echo $tt2 | tr -d '"'`
-                        echo "in enabled $tt2"
+                        echo "** in enabled $tt2"
                         if [[ "$tt2" == "false" ]];then                                                
                             if [[ "$doneatt" == "0" ]];then
                                 printf "attribute_name = \"TimeToExist\"\n" >> $fn

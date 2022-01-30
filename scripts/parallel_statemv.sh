@@ -37,7 +37,7 @@ do
 
 echo "moved state $ttft.$rname"
 cfile=`printf "%s-%s-1.txt" $ttft $rname`
-nl=$(wc -l $cfile)
+nl=$(cat $cfile | wc -l)
 if [[ $nl -eq 0 ]];then
     echo "--> redoing $cfile"
     terraform state show $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > $cfile

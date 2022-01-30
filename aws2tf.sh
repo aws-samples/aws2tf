@@ -117,7 +117,7 @@ if [ "$f" = "no" ]; then
         rm -f *.txt *.sh *.log *.sav *.zip
         rm -f *.tf *.json *.tmp 
         rm -f terraform.* tfplan 
-        rm -rf .terraform data aws_*
+        rm -rf .terraform data aws_* pi2
     fi
 else
     sort -u data/processed.txt > data/pt.txt

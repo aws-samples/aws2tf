@@ -78,7 +78,7 @@ for c in `seq 0 0`; do
                                 trole=`echo "$tt2" | rev | cut -d'/' -f 1 | rev | tr -d '"'`
                                 #echo $trole
                                 echo "depends_on = [aws_iam_role.$trole]" >> $fn              
-                                t1=`printf "%s = \"aws_iam_role.%s.arn\"" $tt1 $trole`
+                                t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
             
                     fi
                     if [[ ${tt2} == *"dkr.ecr"* ]]; then
@@ -103,7 +103,7 @@ for c in `seq 0 0`; do
                     
                     if [[ ${tt1} == "encryption_key" ]]; then                 
                         earn=`echo "$tt2" | rev | cut -d'/' -f 1 | rev | tr -d '"'`
-                        t1=`printf "%s = \"data.aws_kms_alias.%s.arn\"" $tt1 $earn`
+                        t1=`printf "%s = data.aws_kms_alias.%s.arn" $tt1 $earn`
                     fi                  
                     
                     if [[ ${tt1} == "vpc_id" ]]; then

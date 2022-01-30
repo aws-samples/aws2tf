@@ -62,7 +62,7 @@ for c in `seq 0 0`; do
 
             file="t1.txt"
             fl=$(cat $file | wc -l)
-            if [[ $fl -eq 0 ]]; then echo "Empty State show for $dbname $rname skipping" && continue; fi
+            if [[ $fl -eq 0 ]]; then echo "** Empty State show for $dbname $rname skipping" && continue; fi
             
             echo $aws2tfmess > $fn
             tarn=""

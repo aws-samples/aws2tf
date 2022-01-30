@@ -5,8 +5,10 @@ if [ "$1" == "" ]; then
 fi
 ls pi2/$1__*.tfstate 2&> /dev/null
 if [[ $? -ne 0 ]];then
-    echo "No state files in pi2 skilling ..."
+    echo "No state files in pi2 skipping ..."
     exit
+else
+    echo "Starting state mv for $1"
 fi
 for st in `ls pi2/$1__*.tfstate 2> /dev/null` 
 do

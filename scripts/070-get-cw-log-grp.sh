@@ -40,7 +40,7 @@ for c in `seq 0 0`; do
         wait       
         echo "Wait completed....."
         ../../scripts/parallel_statemv.sh $ttft
-        exit
+        
         for i in `seq 0 $count`; do
             #echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")

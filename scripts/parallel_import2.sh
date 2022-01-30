@@ -65,10 +65,19 @@ if [[ $? -ne 0 ]];then
         sleep $sl
         eval $comm
         if [ $? -ne 0 ]; then
-                echo "Import long backoff & retry with full errors for $rname"
+                echo "2nd Import backoff & retry with full errors for $rname"
                 sl=`echo $((2 + $RANDOM % 20))`
                 sleep $sl
                 eval $comm
+                if [ $? -ne 0 ]; then
+                    echo "3rd Import backoff & retry with full errors for $rname"
+                    sl=`echo $((2 + $RANDOM % 20))`
+                    sleep $sl
+                    eval $comm
+                    if [ $? -ne 0 ]; then
+                        echo "** ERROR ** $rname Import failed"
+                    fi
+                fi
         fi
     fi
     #echo "local state list"

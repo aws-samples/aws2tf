@@ -13,11 +13,16 @@ tft[0]="aws_security_group_rule"
 stype=`echo $2`
 cname=`echo $1`
 
-terraform state show aws_security_group.$1 > t2.txt
+#fn=`printf "%s__%s_%s_%s.tf" $ttft $cname $stype $ir`
+
+#if [ -f "$fn" ] ; then echo "$fn exists skipping" && continue; fi
+
+
+
+terraform state show aws_security_group.$1 | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
 c=0
 ttft=${tft[(${c})]}
 
-cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
 file="t1.txt"
 
 ir=1

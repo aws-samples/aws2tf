@@ -7,13 +7,14 @@ fi
 ttft=`echo $1 | tr -d '"'`
 cname=`echo $2 | tr -d '"'`
 rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+sl=`echo $((1 + $RANDOM % 15))` 
 
 echo "Importing $cname $rname"
 st=`printf "%s__%s.tfstate" $1 $rname`
 if [ -f "$st" ] ; then echo "$st exists already skipping" && exit; fi
 
 #echo "parallel2 list check"
-(terraform state list 2> /dev/null | grep ${ttft}.${rname}) > /dev/null 
+(nice -n $sl terraform state list 2> /dev/null | grep ${ttft}.${rname}) > /dev/null 
 if [[ $? -ne 0 ]];then
 
     #echo "Import $rname"
@@ -34,7 +35,7 @@ if [[ $? -ne 0 ]];then
         terraform init -no-color > /dev/null
         if [ $? -ne 0 ]; then
             echo "init backoff & retry for $rname"
-            sleep 10
+            sleep $sl
             terraform init -no-color > /dev/null
             if [ $? -ne 0 ]; then
                     echo "init long backoff & retry with full errors for $rname"
@@ -43,13 +44,12 @@ if [[ $? -ne 0 ]];then
             fi
         fi
     fi
-    sl=`echo $((1 + $RANDOM % 4))`
-    sleep $sl
+
     fn=`printf "%s__%s.tf" $ttft $rname`
     printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
 
      
-    sl=`echo $((1 + $RANDOM % 15))` 
+
     #echo "$st import"        
     comm=$(printf "nice -n %s terraform import -state %s %s.%s \"%s\" | grep Import " $sl $st $ttft $rname $cname)
     echo $comm
@@ -75,12 +75,12 @@ if [[ $? -ne 0 ]];then
 
     #terraform state show -state $st $ttft.$rname
 
-    terraform state show -state $st $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > ../$ttft-$rname-1.txt 
+    nice -n $sl terraform state show -state $st $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > ../$ttft-$rname-1.txt 
     #rm -f $fn
 
 else
     echo "State $ttft.$rname already exists skipping import ..."
-    terraform state show $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > $ttft-$rname-1.txt
+    nice -n $sl terraform state show $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > $ttft-$rname-1.txt
 
 
 fi

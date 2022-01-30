@@ -44,4 +44,4 @@ if [[ $nl -eq 0 ]];then
 fi
 done
 rm -f terr*.backup
-#rm -rf pi2
+rm -rf pi2

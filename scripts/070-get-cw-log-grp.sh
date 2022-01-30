@@ -86,7 +86,7 @@ for c in `seq 0 0`; do
     fi
 done
 
-#rm -f $ttft*.txt
+rm -f $ttft*.txt
 
 
 

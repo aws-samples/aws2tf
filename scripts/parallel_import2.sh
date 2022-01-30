@@ -51,7 +51,7 @@ if [[ $? -ne 0 ]];then
     #echo "$st import"        
     comm=$(printf "nice -n %s terraform import -state %s %s.%s \"%s\"" $sl $st $ttft $rname $cname)
     #echo $comm
-    eval $comm
+    eval $comm | grep Import
 
     if [ $? -ne 0 ]; then
         echo "Import backoff & retry for $rname"

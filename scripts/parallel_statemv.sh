@@ -12,7 +12,7 @@ do
     sl=`echo $((1 + $RANDOM % 10))`
     comm=$(printf "terraform state mv -state %s -state-out=terraform.tfstate -lock=true %s.%s %s.%s" $st $ttft $rname $ttft $rname)
     #echo $comm
-    eval $comm
+    eval $comm > /dev/null
     if [ $? -ne 0 ]; then
         sl=`echo $((1 + $RANDOM % 10))`
         sleep $sl

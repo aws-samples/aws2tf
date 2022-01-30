@@ -56,6 +56,7 @@ if [[ $? -ne 0 ]];then
     comm=$(printf "nice -n %s terraform import -state %s %s.%s \"%s\" | grep Import " $sl $st $ttft $rname $cname)
     #echo $comm
     #eval $comm | grep Import
+    sleep $sl
     eval $comm
 
     if [ $? -ne 0 ]; then

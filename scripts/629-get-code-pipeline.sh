@@ -128,7 +128,7 @@ for c in `seq 0 0`; do
                     ../../scripts/050-get-iam-roles.sh $trole1
                 fi
             done           
-            if [[] "$s3buck" != "" ]]; then
+            if [[ "$s3buck" != "" ]]; then
                 ../../scripts/060-get-s3.sh $s3buck
             fi
             

@@ -48,14 +48,13 @@ if [[ $? -ne 0 ]];then
     fn=`printf "%s__%s.tf" $ttft $rname`
     printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
     sync && sync
-    pwd
-    ls -l $fn
-    echo "looking for $fn"
+
+
     if [[ ! -f "$fn" ]]; then echo "Error: prototype $fn does not exist exiting..." && exit; fi
-    cat $fn
+    
     #echo "$st import"        
     comm=$(printf "nice -n %s terraform import -state %s %s.%s \"%s\" | grep Import " $sl $st $ttft $rname $cname)
-    echo $comm
+    #echo $comm
     #eval $comm | grep Import
     eval $comm
 

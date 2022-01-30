@@ -83,6 +83,7 @@ for c in `seq 0 0`; do
                 fi
 
                 if [[ "$inttl" == "1" ]];then
+                    echo $t1
                     if [[ "$tt1" == "attribute_name" ]];then
                         doneatt=1
                     fi

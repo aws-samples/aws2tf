@@ -93,7 +93,12 @@ for c in `seq 0 0`; do
 
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "rule_id" ]];then skip=1;fi
-                    #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
+                    if [[ ${tt1} == "concurrent_build_limit" ]];then 
+                        cbl=`echo $tt2 | tr -d '"'`
+                        if [[ "$cbl" == "0" ]];then
+                            skip=1;
+                        fi
+                    fi
                     if [[ ${tt1} == "availability_zone_id" ]];then skip=1;fi
                     
                     if [[ ${tt1} == "encryption_key" ]]; then                 

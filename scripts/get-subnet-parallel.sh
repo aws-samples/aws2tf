@@ -36,12 +36,14 @@ for c in `seq 0 0`; do
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
             #echo "calling import sub"
-            . ../../scripts/parallel_import.sh $ttft $cname &
+            . ../../scripts/parallel_import2.sh $ttft $cname &
         done
         jc=`jobs -r | wc -l`
         echo "waiting on $jc imports"
         wait
         echo "finished import subs"
+
+        ../../scripts/parallel_statemv.sh $ttft
         # tf files
         for i in `seq 0 $count`; do
             #echo $i

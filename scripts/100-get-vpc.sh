@@ -33,7 +33,7 @@ for c in `seq 0 0`; do
             #echo "calling import sub"
             #terraform state rm $ttft.$rname > /dev/null
             echo "$ttft $cname import"
-            . ../../scripts/parallel_import.sh $ttft $cname &
+            . ../../scripts/parallel_import2.sh $ttft $cname &
         done
 
          
@@ -43,7 +43,8 @@ for c in `seq 0 0`; do
             wait
             echo "Finished importing"
         fi
-        
+                
+        ../../scripts/parallel_statemv.sh $ttft
         
         
         # tf files

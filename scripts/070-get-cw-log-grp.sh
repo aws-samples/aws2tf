@@ -41,7 +41,7 @@ for c in `seq 0 0`; do
         . ../../scripts/parallel_statemv.sh $ttft
 
         for i in `seq 0 $count`; do
-            #echo $i
+            echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             echo "$ttft $cname tf files"

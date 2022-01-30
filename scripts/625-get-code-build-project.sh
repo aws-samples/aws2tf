@@ -33,10 +33,10 @@ for c in `seq 0 0`; do
                 echo "$fn exists already skipping"
                 continue
             fi
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
+            printf "resource \"%s\" \"%s\" {}\n" $ttft $cname > $ttft.$cname.tf
+           
             printf "terraform import %s.%s %s" $ttft $cname $cname > data/import_$ttft_$cname.sh
-            terraform import $ttft.$cname "$cname" | grep Import
+            terraform import $ttft.$cname "$cname" 2> /dev/null | grep Import
             terraform state show $ttft.$cname > t2.txt
             tfa=`printf "data/%s.%s" $ttft $cname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json

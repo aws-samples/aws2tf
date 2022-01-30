@@ -19,7 +19,7 @@ tft[0]="aws_iam_role"
 for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
-    #echo "role command = $cm"
+    echo "role command = $cm"
     ttft=${tft[(${c})]}
     #echo $cm
     awsout=`eval $cm 2> /dev/null`

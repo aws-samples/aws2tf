@@ -1,8 +1,8 @@
 #!/bin/bash
-if [[ "$1" != "" ]]; then
+if [[ "$1" == "" ]]; then
     echo "must specify catalog id"
 fi
-if [[ "$2" != "" ]]; then
+if [[ "$2" == "" ]]; then
     echo "must specify database name"
 fi
 

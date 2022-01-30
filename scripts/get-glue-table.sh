@@ -61,6 +61,9 @@ for c in `seq 0 0`; do
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
 
             file="t1.txt"
+            fl=$(cat $file | wc -l)
+            if [[ $fl -eq 0 ]]; then echo "Empty State show for $dbname $rname skipping" && continue; fi
+            
             echo $aws2tfmess > $fn
             tarn=""
             inttl=0

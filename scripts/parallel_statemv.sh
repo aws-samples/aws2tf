@@ -31,4 +31,5 @@ do
 
 echo "moved state $ttft.$rname"
 done
-rm -rf pi2
+rm -f terr*.backup
+#rm -rf pi2

@@ -9,7 +9,7 @@ cname=`echo $2 | tr -d '"'`
 rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
 sl=`echo $((1 + $RANDOM % 15))` 
 
-echo "Importing $cname $rname"
+echo "Importing $ttft $cname $rname"
 st=`printf "%s__%s.tfstate" $1 $rname`
 if [ -f "$st" ] ; then echo "$st exists already skipping" && exit; fi
 
@@ -47,7 +47,7 @@ if [[ $? -ne 0 ]];then
 
     fn=`printf "%s__%s.tf" $ttft $rname`
     printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
-
+    if [ -f "$fn" ] ; then echo "Error: prototype $fn does not exist exiting..." && exit; fi
      
 
     #echo "$st import"        

@@ -59,17 +59,17 @@ if [[ $? -ne 0 ]];then
     eval $comm
 
     if [ $? -ne 0 ]; then
-        echo "Import backoff & retry for $rname"
+        echo "--> 1st Import backoff & retry for $rname"
         sl=`echo $((1 + $RANDOM % 10))`
         sleep $sl
         eval $comm
         if [ $? -ne 0 ]; then
-                echo "2nd Import backoff & retry with full errors for $rname"
+                echo "--> 2nd Import backoff & retry with full errors for $rname"
                 sl=`echo $((2 + $RANDOM % 20))`
                 sleep $sl
                 eval $comm
                 if [ $? -ne 0 ]; then
-                    echo "3rd Import backoff & retry with full errors for $rname"
+                    echo "--> 3rd Import backoff & retry with full errors for $rname"
                     sl=`echo $((2 + $RANDOM % 20))`
                     sleep $sl
                     eval $comm
@@ -92,7 +92,6 @@ if [[ $? -ne 0 ]];then
 else
     echo "State $ttft.$rname already exists skipping import ..."
     nice -n $sl terraform state show $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > $ttft-$rname-1.txt
-
 
 fi
 

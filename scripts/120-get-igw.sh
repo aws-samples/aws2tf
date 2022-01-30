@@ -37,9 +37,7 @@ for c in `seq 0 0`; do
             echo "$ttft $cname import"
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
-
-            printf "resource \"%s\" \"%s\" {" $ttft $rname > $fn
-            printf "}" >> $fn
+            printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
             terraform import $ttft.$rname "$cname" | grep Import
             terraform state show $ttft.$rname > t2.txt
             rm $fn

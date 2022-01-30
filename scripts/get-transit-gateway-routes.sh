@@ -77,7 +77,7 @@ for c in `seq 0 0`; do
 
                             ttyp=$($AWS ec2 describe-transit-gateway-attachments --transit-gateway-attachment-ids $tt2 --query TransitGatewayAttachments[].ResourceType | jq -r .[])
                             if [[ $ttyp == "vpn" ]];then
-                                t1=`printf "%s = aws_ec2_transit_gateway_vpn_attachment.%s.id" ${tt1} ${tt2}`
+                                t1=`printf "%s = data.aws_ec2_transit_gateway_vpn_attachment.%s.id" ${tt1} ${tt2}`
                             else
                                 t1=`printf "%s = aws_ec2_transit_gateway_vpc_attachment.%s.id" ${tt1} ${tt2}`
                             fi

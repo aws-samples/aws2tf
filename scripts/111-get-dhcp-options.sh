@@ -25,18 +25,18 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].DhcpOptionsId" | tr -d '"'`
-            echo "$ttft $cname"
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
-            terraform import $ttft.$cname "$cname" | grep Import
-            terraform state show $ttft.$cname > t2.txt
-            rm $ttft.$cname.tf
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-            #	for k in `cat t1.txt`; do
-            #		echo $k
-            #	done
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            echo "$ttft $cname import"
+            fn=`printf "%s__%s.tf" $ttft $rname`
+            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi       
+            printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
+
+            terraform import $ttft.$rname "$cname" | grep Import
+            terraform state show $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+            rm -f $fn
+   
             file="t1.txt"
-            fn=`printf "%s__%s.tf" $ttft $cname`
+
             echo $aws2tfmess > $fn
             while IFS= read line
             do

@@ -144,21 +144,25 @@ if [ "$kcount" -gt "0" ]; then
                     cname=${cname//./_}
                     echo cname = $cname
 
-                    printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-                    printf "}" >> $ttft.$cname.tf
-                    terraform import $ttft.$cname $ocname | grep Import
-                    terraform state show $ttft.$cname > t2.txt
-                    tfa=`printf "data/%s.%s" $ttft $cname`
+                    rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+                    echo "$ttft $cname import"
+                    fn=`printf "%s__%s.tf" $ttft $rname`
+                    if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
+                    printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
+
+                    terraform import $ttft.$rname "$ocname" | grep Import
+                    terraform state show $ttft.$rname > t2.txt
+                    tfa=`printf "data/%s.%s" $ttft $rname`
                     terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
                     #cat $tfa.json | jq .
        
-                    rm $ttft.$cname.tf
+                    rm -f $fn
                     cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
                     #	for k in `cat t1.txt`; do
                     #		echo $k
                     #	done
                     file="t1.txt"
-                    fn=`printf "%s__%s.tf" $ttft $cname`
+        
                     echo $aws2tfmess > $fn
                     while IFS= read line
                     do

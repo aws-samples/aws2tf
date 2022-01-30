@@ -113,7 +113,8 @@ for c in `seq 0 0`; do
             #echo "rarns=$rarns"
             ## role arn
 
-            if [ "$trole" != "" ]; then
+            if [[ "$trole" != "" ]]; then
+                echo "call1 for $trole"
                 ../../scripts/050-get-iam-roles.sh $trole
             fi
 
@@ -121,12 +122,13 @@ for c in `seq 0 0`; do
             for therole in ${rarns[@]}; do
                 echo "therole=$therole"
                 trole1=`echo $therole | tr -d '"'`
-                echo "calling for $trole1"
-                if [ "$trole1" != "" ]; then
+                echo "for $trole1"
+                if [[ "$trole1" != "" ]]; then
+                    echo "calling for $trole1"
                     ../../scripts/050-get-iam-roles.sh $trole1
                 fi
             done           
-            if [ "$s3buck" != "" ]; then
+            if [[] "$s3buck" != "" ]]; then
                 ../../scripts/060-get-s3.sh $s3buck
             fi
             

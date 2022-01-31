@@ -44,8 +44,8 @@ for c in `seq 0 0`; do
             fi
 
 
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
+            printf "resource \"%s\" \"%s\" {}" $ttft $cname > $ttft.$cname.tf
+     
             terraform import $ttft.$cname $ocname | grep Import
             terraform state show $ttft.$cname > t2.txt
             rm $ttft.$cname.tf

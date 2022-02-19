@@ -19,7 +19,7 @@ for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "You don't have access for this resource or it doesn't exist"
@@ -47,6 +47,7 @@ for c in `seq 0 0`; do
 
             keystate=$(echo $keyd | jq -r .KeyMetadata.KeyState)
             keyman=$(echo $keyd | jq -r .KeyMetadata.KeyManager)
+            #echo "keystate=$keystate keyman=$keyman"
             if [ "$keystate" == "Enabled" ] && [ "$keyman" != "AWS" ]; then
                 echo "$ttft $cname"
                 fn=`printf "%s__k_%s.tf" $ttft $cname`
@@ -133,17 +134,18 @@ for c in `seq 0 0`; do
                     echo "Import Failed $ttft $cname"
                     mv $ttft.$cname.tf $ttft.$cname.tf.failed
                 fi 
-            #else
-             #   echo "$ttft $cname key state = $keystate  key manager = $keyman"
+            else
+                echo "$ttft $cname key state = $keystate  key manager = $keyman"
+
             fi  
             if [ "$keyman" == "AWS" ];then
                 dfn=`printf "data_%s__k_%s.tf" $ttft $cname`
                 # get alias
                 ../../scripts/081-get-kms-alias.sh $cname
-                #echo "AWS managed key data $dfn"
-                #printf "data \"%s\" \"k_%s\" {\n" $ttft $cname > $dfn
-                #printf "key_id = \"k_%s\"\n" $cname >> $dfn
-                #printf "}\n" >> $dfn
+                echo "AWS managed key data $dfn"
+                printf "data \"%s\" \"k_%s\" {\n" $ttft $cname > $dfn
+                printf "key_id = \"%s\"\n" $cname >> $dfn
+                printf "}\n" >> $dfn
             fi
         done
 

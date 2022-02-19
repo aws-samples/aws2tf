@@ -75,15 +75,26 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "kms_key_id" ]];then 
                         kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                            
                         kmsarn=$(echo $tt2 | tr -d '"')
+                        km=`$AWS kms describe-key --key-id $kid --query KeyMetadata.KeyManager | jq -r '.' 2>/dev/null`
                             #echo $t1
-                        t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid`                    
+                        if [[ $km == "AWS" ]];then
+                            t1=`printf "%s = data.aws_kms_key.k_%s.arn" $tt1 $kid`
+                        else
+                            t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid`
+                        fi 
+                                           
                     fi
 
                     if [[ ${tt1} == "performance_insights_kms_key_id" ]];then 
                         pkid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                            
                         pkmsarn=$(echo $tt2 | tr -d '"')
-                            #echo $t1
-                        t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $pkid`                    
+                        km=`$AWS kms describe-key --key-id $pkid --query KeyMetadata.KeyManager | jq -r '.' 2>/dev/null`
+                        if [[ $km == "AWS" ]];then
+                            t1=`printf "%s = data.aws_kms_key.k_%s.arn" $tt1 $pkid`
+                        else
+                            t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $pkid`
+                        fi 
+                 
                     fi
               
                 else
@@ -114,12 +125,19 @@ for c in `seq 0 0`; do
                 fi
             done 
 
+            if [ "$tarn" != "" ]; then
+                echo "getting role $tarn"
+                ../../scripts/050-get-iam-roles.sh $tarn
+            fi           
+
             if [ "$kmsarn" != "" ]; then
-                ../../scripts/080-get-kms-key.sh $kmsarn
+                echo "getting key $kid"
+                ../../scripts/080-get-kms-key.sh $kid
             fi
 
             if [ "$pkmsarn" != "" ]; then
-                ../../scripts/080-get-kms-key.sh $pkmsarn
+                echo "getting key $pkid"
+                ../../scripts/080-get-kms-key.sh $pkid
             fi
 
             

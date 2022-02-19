@@ -33,6 +33,7 @@ for c in `seq 0 0`; do
             file="t1.txt"
             fn=`printf "%s__%s.tf" $ttft $cname`
             echo $aws2tfmess > $fn
+            sgs=()
             while IFS= read line
             do
 				skip=0
@@ -62,13 +63,65 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "resource_id" ]];then skip=1;fi
                     if [[ ${tt1} == "latest_restorable_time" ]];then skip=1;fi
                     if [[ ${tt1} == "engine_version_actual" ]];then skip=1;fi
+
+                    if [[ ${tt1} == "monitoring_role_arn" ]]; then
+                        tarn=`echo $tt2 | tr -d '"'`
+                        tanam=$(echo $tarn | rev | cut -f1 -d'/' | rev)
+                        tlarn=${tarn//:/_} && tlarn=${tlarn//./_} && tlarn=${tlarn//\//_}
+                        t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $tanam`
+                    fi 
+
+
+                    if [[ ${tt1} == "kms_key_id" ]];then 
+                        kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                            
+                        kmsarn=$(echo $tt2 | tr -d '"')
+                            #echo $t1
+                        t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid`                    
+                    fi
+
+                    if [[ ${tt1} == "performance_insights_kms_key_id" ]];then 
+                        pkid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                            
+                        pkmsarn=$(echo $tt2 | tr -d '"')
+                            #echo $t1
+                        t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $pkid`                    
+                    fi
+              
+                else
+                    if [[ "$t1" == *"sg-"* ]]; then
+                        t1=`echo $t1 | tr -d '"|,'`
+                        sgs+=`printf "\"%s\" " $t1`
+                        t1=`printf "aws_security_group.%s.id," $t1`
+                    fi               
+                
                 fi
+
+
+
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
                     echo "$t1" >> $fn
                 fi
                 
             done <"$file"
+
+
+            for sg in ${sgs[@]}; do
+                #echo "therole=$therole"
+                sg1=`echo $sg | tr -d '"'`
+                echo "calling for $sg1"
+                if [ "$sg1" != "" ]; then
+                    ../../scripts/110-get-security-group.sh $sg1
+                fi
+            done 
+
+            if [ "$kmsarn" != "" ]; then
+                ../../scripts/080-get-kms-key.sh $kmsarn
+            fi
+
+            if [ "$pkmsarn" != "" ]; then
+                ../../scripts/080-get-kms-key.sh $pkmsarn
+            fi
+
             
         done
     fi

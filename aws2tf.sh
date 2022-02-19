@@ -248,7 +248,7 @@ if [ "$t" == "eb" ]; then pre="71*"; fi
 if [ "$t" == "ec2" ]; then pre="25*"; fi
 if [ "$t" == "emr" ]; then pre="37*"; fi
 if [ "$t" == "glue" ]; then pre="65*"; fi
-
+if [ "$t" == "kinesis" ]; then pre="74*"; fi
 if [ "$t" == "kms" ]; then pre="08*"; fi
 if [ "$t" == "lambda" ]; then pre="700*"; fi
 if [ "$t" == "lf" ]; then pre="63*"; fi

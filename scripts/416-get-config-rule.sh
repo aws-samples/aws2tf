@@ -86,7 +86,7 @@ for c in `seq 0 0`; do
                         tt2=`echo "$tt2" | tr -d '"'`
                         nl=${#tt2}
                         if [[ $nl -gt 64 ]];then tt2=${tt2:0:64}; fi
-                        #echo "tt2=${tt2}"
+                        tt2=$(echo $tt2 | tr -d ' ')
                         t1=`printf "%s = \"%s\"" $tt1 "$tt2"`
                     fi
                

@@ -64,6 +64,11 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "latest_restorable_time" ]];then skip=1;fi
                     if [[ ${tt1} == "engine_version_actual" ]];then skip=1;fi
 
+                    if [[ ${tt1} == "db_subnet_group_name" ]];then 
+                        dbsn=`echo $tt2 | tr -d '"'` 
+                        t1=`printf "%s = aws_db_subnet_group.%s.name" $tt1 $dbsn`
+                    fi
+
                     if [[ ${tt1} == "monitoring_role_arn" ]]; then
                         tarn=`echo $tt2 | tr -d '"'`
                         tanam=$(echo $tarn | rev | cut -f1 -d'/' | rev)

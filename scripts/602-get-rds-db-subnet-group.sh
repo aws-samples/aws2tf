@@ -1,52 +1,48 @@
 #!/bin/bash
-# describe-user-pool-client --user-pool-id, --client-id
-if [[ "$2" != "" ]]; then
-    cmd[0]="$AWS cognito-idp describe-user-pool-client --user-pool-id $1 --client-id $2"
-    pref[0]="UserPoolClient"
+if [ "$1" != "" ]; then
+    cmd[0]="$AWS rds describe-db-subnet-groups --db-subnet-group-name $1"
+
 else
-    if [[ "$1" != "" ]]; then
-        cmd[0]="$AWS cognito-idp list-user-pool-clients --user-pool-id $1"
-        pref[0]="UserPoolClients"
-    else
-        echo "must specify user pool id exiting ..."
-        exit
-    fi 
+    cmd[0]="$AWS rds describe-db-subnet-groups"
 fi
 
-tft[0]="aws_cognito_user_pool_client"
-idfilt[0]="ClientId"
+pref[0]="DBSubnetGroups"
+tft[0]="aws_db_subnet_group"
+idfilt[0]="DBSubnetGroupName"
+
 
 for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
         exit
     fi
-
-    count=`echo $awsout | jq ".${pref[(${c})]} | length"`
-    
+    if [ "$1" != "" ]; then
+        count=1
+    else
+        count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    fi
+    echo "count=$count"
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-
-            
-            cname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}"`
-            
+            cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")          
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             echo "$ttft $cname"
-            fn=`printf "%s__c_%s.tf" $ttft $rname`
+            if [[ "$cname" == "default" ]];then echo "skipping default" && continue;fi
+            
+            fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
 
-            printf "resource \"%s\" \"c_%s\" {" $ttft $rname > $fn
-            printf "}" >> $fn
+            printf "resource \"%s\" \"%s\" {}\n" $ttft $rname > $fn
     
-            terraform import $ttft.c_${rname} "${1}/${cname}" | grep Import
-            terraform state show $ttft.c_${rname} > t2.txt
+            terraform import $ttft.${rname} "${cname}" | grep Import
+            terraform state show $ttft.${rname} > t2.txt
 
             rm -f $fn
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
@@ -54,6 +50,7 @@ for c in `seq 0 0`; do
             file="t1.txt"
             echo $aws2tfmess > $fn
             tarn=""
+            s3buck=""
             while IFS= read line
             do
 				skip=0
@@ -67,11 +64,13 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "arn" ]];then skip=1;fi
                     if [[ ${tt1} == "creation_date" ]];then skip=1;fi
                     if [[ ${tt1} == "last_modified_date" ]];then skip=1;fi
-                    if [[ ${tt1} == "endpoint" ]];then skip=1;fi
-                    if [[ ${tt1} == "estimated_number_of_users" ]];then skip=1;fi                  
-                    
-
+                else
+                    if [[ "$t1" == *"subnet-"* ]]; then
+                        t1=`echo $t1 | tr -d '"|,'`
+                        t1=`printf "aws_subnet.%s.id," $t1`
+                    fi     
                 fi
+
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
                     echo "$t1" >> $fn
@@ -79,9 +78,12 @@ for c in `seq 0 0`; do
                 
             done <"$file"
 
+
         done
     fi 
 done
 
-rm -f t*.txt
+#rm -f t*.txt
+
+
 

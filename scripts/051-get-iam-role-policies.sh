@@ -77,7 +77,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "private_ip" ]];then skip=1;fi
                     if [[ ${tt1} == "accept_status" ]];then skip=1;fi
 
-                        if [[ ${tt1} == "Resource" ]];then
+                    if [[ ${tt1} == "Resource" ]];then
                             tt2=`echo $tt2 | tr -d '"'`
                             if [[ "$tt2" != *"*"* ]];then
                                
@@ -105,10 +105,14 @@ for c in `seq 0 0`; do
 
                                 else   # check tt2 for $
                                     tt2=${tt2//$/&} 
-                                    t1=`printf "%s=\"%s\"" $tt1 "$tt2"`
+                                    if [[ "$tt2" != "[" ]];then
+                                        t1=`printf "%s=\"%s\"" $tt1 "$tt2"`
+                                    else
+                                       t1=`printf "%s=%s" $tt1 "$tt2"` 
+                                    fi
                                 fi
                             fi
-                        fi
+                    fi
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1

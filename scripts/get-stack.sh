@@ -104,6 +104,7 @@ if [ $count -gt 0 ]; then
 
                 AWS::Glue::Database) echo "../../scripts/650-get-glue-database.sh \"$pid\"" >> commands.sh;;
                 AWS::Glue::Table) echo "# $type $pid Should be fetched via Glue Database Resource" >> commands.sh ;;
+                AWS::Glue::Partition) echo "# $type $pid Should be fetched via Glue Table Resource" >> commands.sh ;;
                 AWS::IAM::Role)  echo "../../scripts/050-get-iam-roles.sh $pid" >> commands.sh ;;
                 AWS::IAM::ManagedPolicy) echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;
                 AWS::IAM::Policy)  echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;

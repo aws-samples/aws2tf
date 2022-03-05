@@ -56,6 +56,8 @@ for c in `seq 0 0`; do
     
             terraform import $ttft.c__${catid}__${dbnam}__${rname} "${catid}:${dbnam}:${cname}" | grep Import
             terraform state show $ttft.c__${catid}__${dbnam}__${rname} > t2.txt
+            tfa=`printf "%s.c__%s__%s__%s" $ttft $catid $dbnam $rname`
+            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
 
             rm -f $fn
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
@@ -91,11 +93,25 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-        
 
-        done
+            # get the partitons
+             ../../scripts/get-glue-partition.sh $catid $dbnam $rname
+            
+            #pks=$(cat $tfa.json | jq .values.partition_keys)
+            #pcount=`echo $pks | jq ". | length"`
+            #if [ "$pcount" -gt "0" ]; then
+            #    pcount=`expr $pcount - 1`
+            #    for i in `seq 0 $pcount`; do
+            #        tp=`echo $pks | jq -r ".[(${i})].name"`
+            #        echo "partition=$tp"
+            #        ../../scripts/get-glue-partition.sh $catid $dbnam $rname $tp
+            #    done
+            #fi
+       
+
+        done # for i
     fi 
-done
+done # for c
 
 #rm -f t*.txt
 

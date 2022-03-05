@@ -158,7 +158,7 @@ Or simply check back after some time to see if they are listed below.
 
 
 ----
-## Terraform resources supported as of 20-Jan-2022
+## Terraform resources supported as of 05-Mar-2022
 
 * aws_appmesh_gateway_route
 * aws_appmesh_mesh
@@ -190,6 +190,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_config_delivery_channel
 * aws_customer_gateway
 * aws_db_instance
+* aws_db_subnet_group
 * aws_directory_service_directory
 * aws_dms_endpoint
 * aws_dms_replication_instance
@@ -213,7 +214,10 @@ Or simply check back after some time to see if they are listed below.
 * aws_emr_instance_group
 * aws_emr_managed_scaling_policy
 * aws_emr_security_configuration
+* aws_glue_catalog_database
+* aws_glue_catalog_table
 * aws_glue_crawler
+* aws_glue_partition
 * aws_iam_group
 * aws_iam_instance_profile
 * aws_iam_policy
@@ -225,6 +229,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_instance
 * aws_internet_gateway
 * aws_kinesis_firehose_delivery_stream
+* aws_kinesis_stream
 * aws_kms_alias
 * aws_kms_key
 * aws_lakeformation_resource
@@ -287,7 +292,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_vpn_connection
 
 ----
-## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 20-Jan-2022
+## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 05-Mar-2022
 
 * AWS::Cloud9::EnvironmentEC2
 * AWS::CodeArtifact::Domain
@@ -302,11 +307,14 @@ Or simply check back after some time to see if they are listed below.
 * AWS::EC2::InternetGateway
 * AWS::EC2::LaunchTemplate
 * AWS::EC2::NatGateway
+* AWS::EC2::NetworkAcl
+* AWS::EC2::NetworkAclEntry
 * AWS::EC2::Route
 * AWS::EC2::RouteTable
 * AWS::EC2::SecurityGroup
 * AWS::EC2::SecurityGroupIngress
 * AWS::EC2::Subnet
+* AWS::EC2::SubnetNetworkAclAssociation
 * AWS::EC2::SubnetRouteTableAssociation
 * AWS::EC2::VPC
 * AWS::EC2::VPCEndpoint
@@ -323,10 +331,15 @@ Or simply check back after some time to see if they are listed below.
 * AWS::ElasticLoadBalancingV2::TargetGroup
 * AWS::Events::EventBus
 * AWS::Events::Rule
+* AWS::Glue::Database
+* AWS::Glue::Partition
+* AWS::Glue::Table
+* AWS::IAM::AccessKey
 * AWS::IAM::InstanceProfile
 * AWS::IAM::ManagedPolicy
 * AWS::IAM::Policy
 * AWS::IAM::Role
+* AWS::IAM::User
 * AWS::KMS::Alias
 * AWS::KMS::Key
 * AWS::KinesisFirehose::DeliveryStream
@@ -336,6 +349,7 @@ Or simply check back after some time to see if they are listed below.
 * AWS::Logs::LogGroup
 * AWS::S3::Bucket
 * AWS::SNS::Topic
+* AWS::SNS::TopicPolicy
 * AWS::SQS::Queue
 * AWS::SSM::Parameter
 * AWS::SageMaker::AppImageConfig

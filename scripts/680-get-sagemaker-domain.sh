@@ -87,7 +87,7 @@ for c in `seq 0 0`; do
                         t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $erole`                
                     fi
                     if [[ ${tt1} == "kms_key_id" ]];then 
-                        keyid=`echo $tt2 | tr -d '"'`
+                        keyid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`
                         t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $keyid`
                         printf "lifecycle {\n" >> $fn
                         printf "   ignore_changes = [kms_key_id]\n" >> $fn

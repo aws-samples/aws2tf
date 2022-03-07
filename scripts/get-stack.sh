@@ -117,6 +117,7 @@ if [ $count -gt 0 ]; then
                 AWS::KMS::Key)  echo "../../scripts/080-get-kms-key.sh $pid" >> commands.sh ;;                
                 AWS::KMS::Alias) echo "echo '#  $type $pid  fetched as part of function..'" >> commands.sh ;;  # fetched as part of function 
                 
+                AWS::LakeFormation::DataLakeSettings) echo "../../scripts/630-get-lf-settings.sh $pid" >> commands.sh ;;
                 AWS::Lambda::Function)  echo "../../scripts/700-get-lambda-function.sh $pid"  >> commands.sh ;;
                 AWS::Lambda::Permission) echo "echo '# $type $pid fetched as part of function..'" >> commands.sh ;; # fetched as part of function
                 AWS::Lambda::EventInvokeConfig) echo "echo '# $type $pid fetched as part of function..'" >> commands.sh ;; # fetched as part of function

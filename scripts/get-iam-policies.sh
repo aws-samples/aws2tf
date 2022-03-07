@@ -9,7 +9,9 @@ if [[ "$1" != "" ]]; then
         if [ -f "$fn" ] ; then echo "$fn exists already skipping" && exit; fi
         cmd[0]=`printf "$AWS iam list-policies | jq '.Policies[] | select(.PolicyName==\"%s\")' | jq ." $1`
     else
-        cmd[0]=`printf "$AWS iam list-policies | jq '.Policies[] | select(.Arn==\"%s\")' | jq ." $1`
+        echo "skipping AWS managed policy $1"
+        exit
+        #cmd[0]=`printf "$AWS iam list-policies | jq '.Policies[] | select(.Arn==\"%s\")' | jq ." $1`
     fi
 else
     cmd[0]="$AWS iam list-policies --scope Local"

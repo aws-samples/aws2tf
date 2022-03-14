@@ -7,7 +7,7 @@ if [[ "$1" != "" ]]; then
         # fast fail
         fn=`printf "%s__%s.tf" $ttft $1`
         if [ -f "$fn" ] ; then echo "$fn exists already skipping" && exit; fi
-        cmd[0]=`printf "$AWS iam list-policies | jq '.Policies[] | select(.PolicyName==\"%s\")' | jq ." $1`
+        cmd[0]=`printf "$AWS iam list-policies | jq '.Policies[] | select(.Arn==\"%s\")' | jq ." $1`
     else
         echo "skipping AWS managed policy $1"
         exit
@@ -132,6 +132,9 @@ for c in `seq 0 0`; do
                     fi
                     
                 done <"$file"   # done while
+
+                # probably should be an array
+                ../../scripts/050-get-iam-roles.sh $rarn
                 
             fi
         done # done for i

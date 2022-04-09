@@ -55,6 +55,10 @@ if [ $count -gt 0 ]; then
             fi
             echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh
             case $type in
+                
+                
+                AWS::ApiGateway::RestApi) echo "../../scripts/750-get-apigw-restapi.sh $pid"  >> commands.sh ;;
+                
                 AWS::Cloud9::EnvironmentEC2) echo "../../scripts/252-get-c9.sh $pid"  >> commands.sh ;;
                 
                 AWS::CodeArtifact::Domain)  echo "../../scripts/627-get-code-artifact-domain.sh $pid"  >> commands.sh ;;

@@ -42,7 +42,7 @@ for c in `seq 0 0`; do
 
 
             echo "$ttft $cname"
-            rname=`printf "%s" $cname`
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
         
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then

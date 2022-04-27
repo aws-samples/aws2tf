@@ -73,9 +73,11 @@ for c in `seq 0 0`; do
                                 rn=${tt2//:/_} && rn=${rn//./_} && rn=${rn//\//_}
                                 t1=`printf "\"%s\" = aws_sns_topic.%s.arn" $tt1 $rn`
                             else
+                                tt1=`echo $tt1 | tr -d '"'`
                                 t1=`printf "\"%s\"=%s" $tt1 $tt2`
                             fi
                         else
+                            tt1=`echo $tt1 | tr -d '"'`
                             t1=`printf "\"%s\"=%s" $tt1 $tt2`
                         fi
                     fi

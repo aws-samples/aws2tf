@@ -88,6 +88,7 @@ for root in ${roots[@]}; do
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
                     if [[ ${tt1} == "id" ]];then skip=1; fi
                     if [[ ${tt1} == *":"* ]];then 
+                        tt1=`echo $tt1 | tr -d '"'`
                         t1=`printf "\"%s\"=%s" $tt1 "$tt2"`
                     fi
                     if [[ ${tt1} == *"@@"* ]];then

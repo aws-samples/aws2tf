@@ -56,9 +56,9 @@ if [ $count -gt 0 ]; then
             echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh
             case $type in
                 
-                
+                AWS::ApiGateway::Account) echo "echo 'Error: **Terraform does not support import of $type skipped**' " >> commands.sh ;; 
                 AWS::ApiGateway::RestApi) echo "../../scripts/750-get-apigw-restapi.sh $pid"  >> commands.sh ;;
-                
+                AWS::ApiGateway::Resource) echo "echo '# $type $pid fetched as part of RestApi..' " >> commands.sh ;;                
                 AWS::Cloud9::EnvironmentEC2) echo "../../scripts/252-get-c9.sh $pid"  >> commands.sh ;;
                 
                 AWS::CodeArtifact::Domain)  echo "../../scripts/627-get-code-artifact-domain.sh $pid"  >> commands.sh ;;
@@ -123,6 +123,7 @@ if [ $count -gt 0 ]; then
                 
                 AWS::LakeFormation::DataLakeSettings) echo "../../scripts/630-get-lf-settings.sh $pid" >> commands.sh ;;
                 AWS::Lambda::Function)  echo "../../scripts/700-get-lambda-function.sh $pid"  >> commands.sh ;;
+                AWS::Lambda::LayerVersion)  echo "../../scripts/702-get-lambda-layers.sh $pid"  >> commands.sh ;;
                 AWS::Lambda::Permission) echo "echo '# $type $pid fetched as part of function..'" >> commands.sh ;; # fetched as part of function
                 AWS::Lambda::EventInvokeConfig) echo "echo '# $type $pid fetched as part of function..'" >> commands.sh ;; # fetched as part of function
 

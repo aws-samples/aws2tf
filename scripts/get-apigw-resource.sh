@@ -1,14 +1,18 @@
 #!/bin/bash
 mysub=`echo $AWS2TF_ACCOUNT`
 myreg=`echo $AWS2TF_REGION`
-if [ "$1" != "" ]; then
-    cmd[0]="$AWS apigateway get-rest-api --rest-api-id $1"
+if [ "$1" == "" ]; then
+    echo "must pass rest api id exiting ..."
+    exit
+fi
+if [ "$2" != "" ]; then
+    cmd[0]="$AWS apigateway get-resource --rest-api-id $1 --resource-id $2"
 else
-    cmd[0]="$AWS apigateway get-rest-apis"
+    cmd[0]="$AWS apigateway get-resources --rest-api-id $1"
     pref[0]="items"
 fi
 
-tft[0]="aws_api_gateway_rest_api"
+tft[0]="aws_api_gateway_resource"
 getp=0
 for c in `seq 0 0`; do
  
@@ -20,40 +24,35 @@ for c in `seq 0 0`; do
         echo "$cm : You don't have access for this resource"
         exit
     fi
-    if [ "$1" != "" ]; then
-        count=1
-        
-    else
-        count=`echo $awsout | jq ".${pref[(${c})]} | length"`
-       
+    count=1
+    if [ "$2" != "" ]; then
+        count=`echo $awsout | jq ".${pref[(${c})]} | length"`       
     fi
-
+    echo "Count= $count"
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             echo $i
-            # is it AWS Managed ?
-
-            if [ "$1" != "" ]; then
-                #cname=`echo $awsout | jq -r ".${pref[(${c})]}.id"`
-                cname=`echo $awsout | jq -r ".id"`
-                
+            echo $awsout | jq .
+    
+            if [ "$2" != "" ]; then
+                cname=`echo $awsout | jq -r ".id"`             
             else
-                #cname=`echo $awsout | jq -r ".id"`
-                cname=`echo $awsout | jq -r ".${pref[(${c})]}.id"`
+                cname=`echo $awsout | jq -r ".${pref[(${c})]}[0].id"`
+                #cname=`echo $awsout | jq -r ".id"`     
             fi
 
-            fn=`printf "%s__%s.tf" $ttft $cname`
+            fn=`printf "%s__%s__%s.tf" $ttft $1 $cname`
             if [ -f "$fn" ] ; then
                     echo "$fn exists already skipping"
                     continue
             fi
 
-                echo "$ttft $cname"
-                printf "resource \"%s\" \"%s\" {}" $ttft $cname > $fn
+                echo "$ttft $1 $cname"
+                printf "resource \"%s\" \"%s__%s\" {}" $ttft $1 $cname > $fn
 
-                terraform import $ttft.$cname $cname | grep Import
-                terraform state show $ttft.$cname > t2.txt
+                terraform import $ttft.$1__$cname $1/$cname | grep Import
+                terraform state show $ttft.$1__$cname > t2.txt
                 rm -f $fn
                 cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
 
@@ -77,14 +76,12 @@ for c in `seq 0 0`; do
                         if [[ ${tt1} == "arn" ]];then skip=1; fi
                         if [[ ${tt1} == "id" ]];then skip=1; fi
                         if [[ ${tt1} == "created_date" ]];then skip=1; fi
-                        if [[ ${tt1} == "execution_arn" ]];then skip=1; fi
-                        if [[ ${tt1} == "root_resource_id" ]];then skip=1; fi
-                        if [[ ${tt1} == "vpc_endpoint_ids" ]];then 
-                            tt2=`echo $tt2 | tr -d '"'`
-                            if [[ ${tt2} == "[]" ]];then
-                                skip=1; 
-                            fi
-                        fi
+                        if [[ ${tt1} == "path" ]];then skip=1; fi
+                        #    tt2=`echo $tt2 | tr -d '"'`
+                        #    if [[ ${tt2} == "[]" ]];then
+                        #        skip=1; 
+                        #    fi
+                        #fi
                     fi
                     if [ "$skip" == "0" ]; then
                         #echo $skip $t1
@@ -93,7 +90,7 @@ for c in `seq 0 0`; do
                     
                 done <"$file"   # done while
                 # depoyments - no import support
-                #../../scripts/751-get-apigw-resource.sh $cname
+                #../../scripts/752-get-apigw-method.sh $1 $cname
         done # done for i
     fi
 done

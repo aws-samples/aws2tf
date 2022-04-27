@@ -100,6 +100,17 @@ if [ -z ${AWS_ACCESS_KEY_ID+x} ] && [ -z ${AWS_SECRET_ACCESS_KEY+x} ];then
 else
     mysub=`aws sts get-caller-identity | jq .Account | tr -d '"'`
 fi
+
+if [ ! -z ${AWS_DEFAULT_REGION+x} ];then
+    r=`echo $AWS_DEFAULT_REGION`
+    echo "region $AWS_DEFAULT_REGION set from env variables"
+fi
+
+if [ ! -z ${AWS_REGION+x} ];then
+    r=`echo $AWS_REGION`
+    echo "region $AWS_REGION set from env variables"
+fi
+
 if [ "$r" = "no" ]; then
     echo "Region not specified - Getting region from aws cli ="
     r=`aws configure get region`
@@ -137,12 +148,6 @@ rm -f import.log
 #    ../../scripts/resources.sh 2>&1 | tee -a import.log
 #fi
 
-if [ ! -z ${AWS_DEFAULT_REGION+x} ];then
-    r=`echo $AWS_DEFAULT_REGION`
-    echo "region $AWS_DEFAULT_REGION set from env variables"
-fi
-
-
 
 export AWS="aws --profile $p --region $r --output json "
 echo " "
@@ -170,12 +175,13 @@ printf "required_version = \"~> 1.1.0\"\n" >> aws.tf
 printf "  required_providers {\n" >> aws.tf
 printf "   aws = {\n" >> aws.tf
 printf "     source  = \"hashicorp/aws\"\n" >> aws.tf
-printf "      version = \"= 3.69.0\"\n" >> aws.tf
+printf "      version = \"= 4.11.0\"\n" >> aws.tf
+#printf "      version = \"= 3.75.1\"\n" >> aws.tf
 printf "    }\n" >> aws.tf
 
 printf "       awscc = {\n" >> aws.tf
 printf "         source  = \"hashicorp/awscc\"\n" >> aws.tf
-printf "         version = \"~> 0.10.0\"\n" >> aws.tf
+printf "         version = \"~> 0.19.0\"\n" >> aws.tf
 printf "       }\n" >> aws.tf
 printf "  }\n" >> aws.tf
 printf "}\n" >> aws.tf
@@ -183,7 +189,8 @@ printf "\n" >> aws.tf
 printf "provider \"aws\" {\n" >> aws.tf
 printf " region = \"%s\" \n" $r >> aws.tf
 if [ -z ${AWS_ACCESS_KEY_ID+x} ] && [ -z ${AWS_SECRET_ACCESS_KEY+x} ];then
-    printf " shared_credentials_file = \"~/.aws/credentials\" \n"  >> aws.tf
+    printf " shared_credentials_files = [\"~/.aws/credentials\"] \n"  >> aws.tf
+    #printf " shared_credentials_file = \"~/.aws/credentials\" \n"  >> aws.tf
     printf " profile = \"%s\" \n" $p >> aws.tf
     export AWS="aws --profile $p --region $r --output json "
 else
@@ -280,16 +287,16 @@ ls
 date
 lc=0
 if [[ "$s" == "no" ]];then 
-echo "t=$t"
+echo "t=$t pre=$pre i=$i exclude=$exclude"
 echo "loop through providers"
 tstart=`date +%s`
 for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do    
     start=`date +%s`
-    echo "$com" 
     if [[ "$com" == *"${exclude}"* ]]; then
         echo "skipping $com"
     else
         docomm=". ../../scripts/$com $i"
+        echo $docomm
         if [ "$f" = "no" ]; then
             eval $docomm 2>&1 | tee -a import.log
         else

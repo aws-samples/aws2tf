@@ -90,6 +90,7 @@ if [ "$kcount" -gt "0" ]; then
                                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '`
                                     tt2=`echo "$line" | cut -f2- -d'='`
                                     if [[ ${tt1} == *":"* ]];then
+                                        tt1=`echo $tt1 | tr -d '"'`
                                         t1=`printf "\"%s\"=%s" $tt1 $tt2`
                                     fi
                                     if [[ ${tt1} == "arn" ]];then 
@@ -187,9 +188,9 @@ if [ "$kcount" -gt "0" ]; then
                                 fi
                                 
                             done <"$file"   # done while
-          
-                            ../../scripts/050-get-iam-roles.sh $rarn
-            
+                            if [[ $rarn != "" ]];then
+                                ../../scripts/050-get-iam-roles.sh $rarn
+                            fi
                             # pick up the launch template here
                             ltid=`echo $awsout | jq .nodegroup.launchTemplate.id | tr -d '"'`
                             echo "ltid=$ltid calling eks-launch_template.sh "

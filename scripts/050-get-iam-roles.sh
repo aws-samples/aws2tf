@@ -87,6 +87,7 @@ for c in `seq 0 0`; do
                         tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '`
                         tt2=`echo "$line" | cut -f2- -d'='`
                         if [[ ${tt1} == *":"* ]];then
+                            tt1=`echo $tt1 | tr -d '"'`
                             t1=`printf "\"%s\"=%s" $tt1 $tt2`
                         fi
                         if [[ ${tt1} == "arn" ]];then skip=1; fi
@@ -133,6 +134,7 @@ for c in `seq 0 0`; do
 
                                 else   # check tt2 for $
                                     tt2=${tt2//$/&} 
+                                    tt1=`echo $tt1 | tr -d '"'`
                                     t1=`printf "\"%s\"=%s" $tt1 "$tt2"`
                                 fi
                             fi

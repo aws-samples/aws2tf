@@ -92,11 +92,13 @@ for c in `seq 0 0`; do
                         tt2=`echo "$line" | cut -f2- -d'='`
                         if [[ ${tt1} == *":"* ]];then
                             # check tt2 for $
-                            tt2=${tt2//$/&}     
+                            tt2=${tt2//$/&} 
+                            tt1=`echo $tt1 | tr -d '"'`    
                             t1=`printf "\"%s\"=%s" $tt1 "$tt2"`
                         fi
                         if [[ ${tt1} == "Resource" ]];then 
                                 tt2=${tt2//$/&} 
+                                tt1=`echo $tt1 | tr -d '"'`
                                 t1=`printf "\"%s\"=%s" $tt1 "$tt2"`
                         fi
 

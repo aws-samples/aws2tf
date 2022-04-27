@@ -103,8 +103,9 @@ for c in `seq 0 0`; do
                     ../../scripts/105-get-subnet.sh $sub1
                 fi
             done
-            ../../scripts/050-get-iam-roles.sh $rarn
-
+            if [[ $rarn != "" ]];then
+                ../../scripts/050-get-iam-roles.sh $rarn
+            fi 
             ## need the vpc
             #../../aws2tf.sh -t vpc -i $ivpc -c yes
             # instance profile, iam_fleet_role, launch_template

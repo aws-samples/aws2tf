@@ -86,7 +86,9 @@ for c in `seq 0 0`; do
                 for ni in `seq 0 $nl`; do
                     nif=`echo $instroles | jq ".[(${ni})].RoleName" | tr -d '"'`
                     #echo $ni $nif
-                    ../../scripts/050-get-iam-roles.sh $nif
+                    if [[ $nif != "" ]];then
+                        ../../scripts/050-get-iam-roles.sh $nif
+                    fi
                 done
             fi
 

@@ -77,6 +77,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "confirmation_was_authenticated" ]];then skip=1;fi
                     if [[ ${tt1} == "pending_confirmation" ]];then skip=1;fi
                     if [[ ${tt1} == *":"* ]];then 
+                        tt1=`echo $tt1 | tr -d '"'`
                         t1=`printf "\"%s\"=%s" $tt1 $tt2`
                     fi
                     if [[ ${tt1} == "topic_arn" ]];then 

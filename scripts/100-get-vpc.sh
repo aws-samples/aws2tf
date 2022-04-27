@@ -59,6 +59,7 @@ for c in `seq 0 0`; do
             file=`printf "%s-%s-1.txt" $ttft $rname`
             
             echo $aws2tfmess > $fn
+            skipipv6=0
             while IFS= read line
             do
 				skip=0
@@ -78,7 +79,21 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "default_network_acl_id" ]];then skip=1;fi
                     if [[ ${tt1} == "ipv6_association_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "ipv6_cidr_block" ]];then skip=1;fi
+                    if [[ ${tt1} == "assign_generated_ipv6_cidr_block" ]];then 
+                        tt2=`echo $tt2 | tr -d '"'`
+                        if [[ $tt2 == "true" ]];then
+                            skipipv6=1
+                        fi
+                    fi
+                    if [[ ${tt1} == "ipv6_cidr_block" ]];then 
+                        if [[ $skipipv6 == "1" ]];then
+                            skip=1;
+                        fi
+                    fi
+                    if [[ ${tt1} == "ipv6_netmask_length" ]];then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        if [[ "${tt2}" == "0" ]];then skip=1; fi
+                    fi
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
@@ -86,7 +101,6 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-   
 
             dfn=`printf "data/data_%s__%s.tf" $ttft $cname`
             printf "data \"%s\" \"%s\" {\n" $ttft $cname > $dfn

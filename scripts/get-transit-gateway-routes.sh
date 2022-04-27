@@ -45,18 +45,15 @@ for c in `seq 0 0`; do
             #echo "rexists = $rexists"
             if [[ "$rexists" == "no" ]]; then
 
-                printf "resource \"%s\" \"%s\" {" $ttft $rname > $ttft.$rname.tf
-                printf "}" >> $ttft.$rname.tf
+                printf "resource \"%s\" \"%s\" {}" $ttft $rname > $ttft.$rname.tf
                 echo "importing on  $ttft.$rname \"${tgwrtbid}_${cname}\""
                 terraform import $ttft.$rname "${tgwrtbid}_${cname}"
 
-                terraform state show $ttft.$rname > t2.txt
-                rm $ttft.$rname.tf
-                cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-                #	for k in `cat t1.txt`; do
-                #		echo $k
-                #	done
+                terraform state show $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+                rm -f $ttft.$rname.tf
+
                 file="t1.txt"
+                tgwvpcatt=""
                 echo $aws2tfmess > $fn
                 while IFS= read line
                 do
@@ -80,6 +77,7 @@ for c in `seq 0 0`; do
                                 t1=`printf "%s = data.aws_ec2_transit_gateway_vpn_attachment.%s.id" ${tt1} ${tt2}`
                             else
                                 t1=`printf "%s = aws_ec2_transit_gateway_vpc_attachment.%s.id" ${tt1} ${tt2}`
+                                tgwvpcatt=$(echo $tt2)
                             fi
                         fi
                         if [[ ${tt1} == "transit_gateway_route_table_id" ]];then 
@@ -96,6 +94,9 @@ for c in `seq 0 0`; do
                     fi
                     
                 done <"$file"
+                if [[ "$tgwvpcatt" != "" ]];then
+                    ../../scripts/get-transit-gateway-vpc-attachments.sh $tgwvpcatt
+                fi
             fi # if rexists
         done # for i
     fi

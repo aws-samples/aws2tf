@@ -125,6 +125,16 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "private_ip" ]];then skip=1;fi
                     if [[ ${tt1} == "public_ip" ]];then skip=1;fi
                     if [[ ${tt1} == "public_dns" ]];then skip=1;fi
+
+                    if [[ ${tt1} == "ipv6_address_count" ]];then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        if [[ "${tt2}" == "0" ]];then skip=1; fi
+                    fi
+                    if [[ ${tt1} == "ipv6_addresses" ]];then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        if [[ "${tt2}" == "[]" ]];then skip=1; fi
+                    fi
+
                     
                     if [[ ${tt1} == "device_name" ]];then 
                         if [ ${ebs} == "0" ]; then

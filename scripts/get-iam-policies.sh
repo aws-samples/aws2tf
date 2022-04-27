@@ -111,18 +111,29 @@ for c in `seq 0 0`; do
                         if [[ ${tt1} == *":"* ]];then
                             # check tt2 for $
                             tt2=${tt2//$/&} 
+                            tt1=`echo $tt1 | tr -d '"'` 
                             t1=`printf "\"%s\"=%s" $tt1 "$tt2"`
                         fi
                         if [[ ${tt1} == "Resource" ]];then
-                            # check tt2 for $
-
-                            if [[ "$tt2" == *"${mysub}:role/"* ]];then
+                            if [[ "$tt2" == *"${mysub}:role/aws-service-role"* ]];then
+                                tt2=${tt2//$/&} 
+                                tt1=`echo $tt1 | tr -d '"'` 
+                                t1=`printf "%s=%s" $tt1 "$tt2"`         
+                            
+                            elif [[ "$tt2" == *"${mysub}:role/"* ]];then
                                 rarn=`echo $tt2 | tr -d '"'` 
-                                skip=0;
-                                trole=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`                       
-                                t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
+                                # test if * in role
+                                if [[ "$tt2" == *"*"* ]];then
+                                    echo "--> Wildcard Role"
+                                    t1=`printf "%s = %s" $tt1 $tt2`
+                                else
+                                    
+                                    trole=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`                       
+                                    t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
+                                fi
                             else
                                 tt2=${tt2//$/&} 
+                                tt1=`echo $tt1 | tr -d '"'` 
                                 t1=`printf "\"%s\"=%s" $tt1 "$tt2"`
                             fi
                         fi
@@ -139,7 +150,9 @@ for c in `seq 0 0`; do
                 done <"$file"   # done while
 
                 # probably should be an array
-                ../../scripts/050-get-iam-roles.sh $rarn
+                if [[ $rarn != "" ]];then
+                    ../../scripts/050-get-iam-roles.sh $rarn
+                fi
                 
             fi
         done # done for i

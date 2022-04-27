@@ -106,6 +106,7 @@ for c in `seq 0 0`; do
 
                     if [[ ${tt1} == *":"* ]];then
                         tt2=${tt2//$/&} 
+                        tt1=`echo $tt1 | tr -d '"'`
                         echo "$tt1 --- $tt2"
                         t1=`printf "\"%s\"=%s" $tt1 "$tt2"`
                     fi

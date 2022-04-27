@@ -40,7 +40,7 @@ if [ "$kcount" -gt "0" ]; then
         fi
             
         tcmd=`echo $awsout | jq ".${pref[(${c})]}.resourcesVpcConfig.vpcId" | tr -d '"'`
-        ../../scripts/100* $tcmd  # vpc
+        ../../scripts/100-get-vpc.sh $tcmd  # vpc
         ../../scripts/101* $tcmd  # vpc cidrs
         ../../scripts/105* $tcmd  # subnets
             ## EKS creates it's own SG's with rules
@@ -85,7 +85,9 @@ if [ "$kcount" -gt "0" ]; then
 
         rarn=`echo $awsout | jq ".${pref[(${c})]}.roleArn" | tr -d '"'`
         #echo "rarn=$rarn"
-        ../../scripts/050-get-iam-roles.sh $rarn
+        if [[ $rarn != "" ]];then 
+            ../../scripts/050-get-iam-roles.sh $rarn
+        fi
         csg=`echo $awsout | jq ".${pref[(${c})]}.resourcesVpcConfig.clusterSecurityGroupId" | tr -d '"'`
             #../../scripts/103-get-security_group.sh $csg
 
@@ -103,15 +105,16 @@ if [ "$kcount" -gt "0" ]; then
                 np=`expr $np - 1`
                 for p in `seq 0 $np`; do
                     pname=`echo $fgp | jq ".fargateProfileNames[(${p})]" | tr -d '"'`
-                    echo "faregate profile = $pname"
+                    echo "Fargate profile = $pname"
                     fg=`$AWS eks describe-fargate-profile --cluster-name $cln --fargate-profile-name $pname`
                     #echo "fargate"
                     fgparn=`echo $fg | jq ".fargateProfile.fargateProfileArn" | tr -d '"'`
                     podarn=`echo $fg | jq ".fargateProfile.podExecutionRoleArn" | tr -d '"'`
                     echo "Fargate profile arn = $fgparn" 
-                    echo "Get Fargate Pod execution role arn = $podarn" 
-                    ../../scripts/050-get-iam-roles.sh $podarn
-
+                    echo "Get Fargate Pod execution role arn = $podarn"
+                    if [[ $podarn != "" ]];then
+                        ../../scripts/050-get-iam-roles.sh $podarn
+                    fi
                     # Get the fargate profile
                     #../../scripts/fargate_profile.sh $cname
 
@@ -173,6 +176,7 @@ if [ "$kcount" -gt "0" ]; then
                             tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '`
                             tt2=`echo "$line" | cut -f2- -d'='`
                             if [[ ${tt1} == *":"* ]];then
+                                tt1=`echo $tt1 | tr -d '"'`
                                 t1=`printf "\"%s\"=%s" $tt1 $tt2`
                             fi
                             #if [[ ${tt1} == "endpoint_public_access" ]];then

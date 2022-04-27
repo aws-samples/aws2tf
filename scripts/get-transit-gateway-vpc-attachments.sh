@@ -46,17 +46,16 @@ for c in `seq 0 0`; do
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].TransitGatewayAttachmentId" | tr -d '"'`
             tgwid=`echo $awsout | jq ".${pref[(${c})]}[(${i})].TransitGatewayId" | tr -d '"'`
             echo "$ttft $cname" $tgwid
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
-            terraform import $ttft.$cname "$cname" | grep Import
-            terraform state show $ttft.$cname > t2.txt
-            rm $ttft.$cname.tf
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-            #	for k in `cat t1.txt`; do
-            #		echo $k
-            #	done
-            file="t1.txt"
             fn=`printf "%s__%s.tf" $ttft $cname`
+            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
+            printf "resource \"%s\" \"%s\" {}" $ttft $cname > $fn
+
+            terraform import $ttft.$cname "$cname" | grep Import
+            terraform state show $ttft.$cname | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+            rm -f $fn
+
+            file="t1.txt"
+
             echo $aws2tfmess > $fn
             while IFS= read line
             do

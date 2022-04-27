@@ -67,6 +67,7 @@ fn=`printf "%s__%s.tf" $ttft $rname`
 
 
                     if [[ ${tt1} == *":"* ]];then
+                        tt1=`echo $tt1 | tr -d '"'`
                         t1=`printf "\"%s\"=%s" $tt1 $tt2`
                     fi
                

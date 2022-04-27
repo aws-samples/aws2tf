@@ -130,7 +130,9 @@ for c in `seq 0 0`; do
             done <"$file"
 
             echo "role  $rarn"
-            ../../scripts/050-get-iam-roles.sh $rarn
+            if [[ $rarn != "" ]];then
+                ../../scripts/050-get-iam-roles.sh $rarn
+            fi
             if [[ "$vpcid" != "" ]]; then
                 echo "vpcid=$vpcid"
                 echo "calling vpc"

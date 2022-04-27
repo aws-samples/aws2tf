@@ -49,7 +49,7 @@ if [[ $? -ne 0 ]];then
     printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
     sync && sync
 
-    if [[ ! -f "$fn" ]]; then echo "Error: prototype $fn does not exist exiting..." && exit; fi
+    if [[ ! -f "$fn" ]]; then echo "Error in pi2: prototype $fn does not exist exiting..." && exit; fi
            
     comm=$(printf "nice -n %s terraform import -state %s %s.%s \"%s\" &> /dev/null" $sl $st $ttft $rname $cname)
     #echo $comm

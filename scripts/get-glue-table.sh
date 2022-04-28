@@ -140,7 +140,7 @@ for c in `seq 0 0`; do
             done <"$file"
 
             # get the partitons
-             #../../scripts/get-glue-partition.sh $catid $dbnam $rname
+            ../../scripts/get-glue-partition.sh $catid $dbnam $rname
             
             #pks=$(cat $tfa.json | jq .values.partition_keys)
             #pcount=`echo $pks | jq ". | length"`

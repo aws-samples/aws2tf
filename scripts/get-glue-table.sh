@@ -86,7 +86,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     # these are difficult to process so skip for now
                     if [[ ${tt1} == *"grokPattern"* ]];then 
-                        tt2=`echo "$tt2" | tr -d '"'`
+                        #tt2=`echo "$tt2" | tr -d '"'`
                         tt2=${tt2//\\/\\\\}
                         tt2=${tt2//%\{/%%\{}
                         t1=`printf "\"grokPattern\" = \"%s\"" "$tt2"`
@@ -105,7 +105,7 @@ for c in `seq 0 0`; do
                         #printf "    default = \"%s\" \n" $tt2 >> $gn
                         #printf "}\n" >> $gn
                         #t1=`printf "type = var.g-%s" $r1`
-                        t1=`printf "type = \"%s\"/n" "$tt2"`
+                        t1=`printf "type = \"%s\"" "$tt2"`
                         fi
                     fi
                 fi

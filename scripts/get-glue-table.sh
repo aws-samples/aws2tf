@@ -88,6 +88,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == *"grokPattern"* ]];then 
                         tt2=`echo "$tt2" | tr -d '"'`
                         tt2=${tt2//\\/\\\\}
+                        tt2=${tt2//%{/%%{}}
                         t1=`printf "type = \"%s\"" $tt2`
                     fi
                     

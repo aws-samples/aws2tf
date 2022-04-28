@@ -90,7 +90,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == *"input.regex"* ]];then skip=1;fi
                     if [[ ${tt1} == "type" ]];then 
                         tt2=`echo "$tt2" | tr -d '"'`
-                        if [[ ${tt2} == *"struct"* ]];then   skip=1; fi
+                        #if [[ ${tt2} == *"struct"* ]];then   skip=1; fi
                     fi
                 fi
 

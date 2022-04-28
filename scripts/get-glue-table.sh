@@ -91,7 +91,7 @@ for c in `seq 0 0`; do
                         tt2=${tt2//\\/\\\\}
                         tt2=${tt2//%\{/%%\{}
                         echo tt2=$tt2
-                        t1=`printf "\"grokPattern\" = \"%s\"" "$tt2"`
+                        t1=`printf "\"grokPattern\" = %s\"" "$tt2"`
                     fi
                     
                     if [[ ${tt1} == *"input.format"* ]];then skip=1;fi

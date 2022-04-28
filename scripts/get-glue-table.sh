@@ -90,6 +90,7 @@ for c in `seq 0 0`; do
                         tt2=${tt2#\"}
                         tt2=${tt2//\\/\\\\}
                         tt2=${tt2//%\{/%%\{}
+                        echo tt2=$tt2
                         t1=`printf "\"grokPattern\" = \"%s\"" "$tt2"`
                     fi
                     

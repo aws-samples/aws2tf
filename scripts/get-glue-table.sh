@@ -46,7 +46,7 @@ for c in `seq 0 0`; do
                 catid=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].CatalogId"`
                 dbnam=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].DatabaseName"`
             fi
-            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_} && rname=${rname//&/_}
             echo "$ttft c__${catid}__${dbnam}__${cname}"
             fn=`printf "%s__c__%s__%s__%s.tf" $ttft $catid ${dbnam} $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
@@ -55,12 +55,12 @@ for c in `seq 0 0`; do
             
     
             terraform import $ttft.c__${catid}__${dbnam}__${rname} "${catid}:${dbnam}:${cname}" | grep Import
-            terraform state show $ttft.c__${catid}__${dbnam}__${rname} > t2.txt
+            terraform state show $ttft.c__${catid}__${dbnam}__${rname} | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             tfa=`printf "%s.c__%s__%s__%s" $ttft $catid $dbnam $rname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
 
             rm -f $fn
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+           
 
             file="t1.txt"
             fl=$(cat $file | wc -l)
@@ -84,7 +84,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
                     if [[ ${tt1} == "arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
-                    
+                    if [[ ${tt1} == *"grokPattern"* ]];then skip=1;fi
                 fi
 
                 if [ "$skip" == "0" ]; then

@@ -85,7 +85,12 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     # these are difficult to process so skip for now
-                    if [[ ${tt1} == *"grokPattern"* ]];then skip=0;fi
+                    if [[ ${tt1} == *"grokPattern"* ]];then 
+                        tt2=`echo "$tt2" | tr -d '"'`
+                        tt2=${tt2//\\/\\\\}
+                        t1=`printf "type = \"%s\"" $tt2`
+                    fi
+                    fi
                     if [[ ${tt1} == *"input.format"* ]];then skip=1;fi
                     if [[ ${tt1} == *"input.regex"* ]];then skip=1;fi
                     if [[ ${tt1} == "type" ]];then 

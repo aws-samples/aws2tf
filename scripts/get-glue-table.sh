@@ -90,7 +90,7 @@ for c in `seq 0 0`; do
                         tt2=${tt2//\\/\\\\}
                         t1=`printf "type = \"%s\"" $tt2`
                     fi
-                    fi
+                    
                     if [[ ${tt1} == *"input.format"* ]];then skip=1;fi
                     if [[ ${tt1} == *"input.regex"* ]];then skip=1;fi
                     if [[ ${tt1} == "type" ]];then 

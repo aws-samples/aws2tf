@@ -90,12 +90,12 @@ for c in `seq 0 0`; do
                         tt2=$(echo $tt2 | sed 's/^"//')
                         tt2=$(echo $tt2 | sed 's/"$//')
                    
-                        echo "tt2 pq=$tt2"
+                        #echo "tt2 pq=$tt2"
                         tt2=${tt2//\\/\\\\}
                         tt2=${tt2//%\{/%%\{}
                         tt2=$(echo $tt2 | sed 's/"/\\"/g')
                         echo tt2 q=$tt2
-                        skip=1
+                        
                         t1=`printf "\"grokPattern\" = %s\"" "$tt2"`
                     fi
                     

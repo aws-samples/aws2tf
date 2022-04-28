@@ -89,17 +89,23 @@ for c in `seq 0 0`; do
                        
                         tt2=$(echo $tt2 | sed 's/^"//')
                         tt2=$(echo $tt2 | sed 's/"$//')
-                   
-                        #echo "tt2 pq=$tt2"
                         tt2=${tt2//\\/\\\\}
                         tt2=${tt2//%\{/%%\{}
                         tt2=$(echo $tt2 | sed 's/"/\\"/g')
-                        echo tt2 q=$tt2
                         
                         t1=`printf "\"grokPattern\" = \"%s\"" "$tt2"`
                     fi
                     
-                    if [[ ${tt1} == *"input.format"* ]];then skip=1;fi
+                    if [[ ${tt1} == *"input.format"* ]];then 
+                    
+                        tt2=$(echo $tt2 | sed 's/^"//')
+                        tt2=$(echo $tt2 | sed 's/"$//')
+                        tt2=${tt2//\\/\\\\}
+                        tt2=${tt2//%\{/%%\{}
+                        tt2=$(echo $tt2 | sed 's/"/\\"/g')
+                        t1=`printf "\"input.format\" = \"%s\"" "$tt2"`
+                    
+                    fi
                     if [[ ${tt1} == *"input.regex"* ]];then skip=1;fi
                     if [[ ${tt1} == "type" ]];then 
                         tt2=`echo "$tt2" | tr -d '"'`

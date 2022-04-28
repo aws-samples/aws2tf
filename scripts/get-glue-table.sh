@@ -87,6 +87,7 @@ for c in `seq 0 0`; do
                     # these are difficult to process so skip for now
                     if [[ ${tt1} == *"grokPattern"* ]];then skip=1;fi
                     if [[ ${tt1} == *"input.format"* ]];then skip=1;fi
+                    if [[ ${tt1} == *"input.regex"* ]];then skip=1;fi
                 fi
 
                 if [ "$skip" == "0" ]; then

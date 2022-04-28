@@ -88,7 +88,10 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == *"grokPattern"* ]];then skip=1;fi
                     if [[ ${tt1} == *"input.format"* ]];then skip=1;fi
                     if [[ ${tt1} == *"input.regex"* ]];then skip=1;fi
-                    if [[ ${tt1} == "type" ]];then skip=1;fi
+                    if [[ ${tt1} == "type" ]];then 
+                        tt2=`echo "$tt2" | tr -d '"'`
+                        if [[ ${tt2} == *"struct"* ]];then   skip=1; fi
+                    fi
                 fi
 
                 if [ "$skip" == "0" ]; then

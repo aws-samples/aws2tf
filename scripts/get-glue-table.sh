@@ -119,15 +119,16 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "type" ]];then 
                         tt2=`echo "$tt2" | tr -d '"'`
                         tt2=${tt2//\\/\\\\}
-                        if [[ ${tt2} == *"struct"* ]];then   
-                        #r1=$(echo $RANDOM | md5sum | head -c 20; echo;)
-                        #gn=`printf "glue-var-%s.tf" $r1`
-                        #printf "variable \"g-%s\" {\n" $r1 > $gn
-                        #printf "    type = string \n" >> $gn
-                        #printf "    default = \"%s\" \n" $tt2 >> $gn
-                        #printf "}\n" >> $gn
-                        #t1=`printf "type = var.g-%s" $r1`
-                        t1=`printf "type = \"%s\"" "$tt2"`
+                        if [[ ${tt2} == *"struct"* ]];then 
+                            tt2=$(echo $tt2 | sed 's/^ //')
+                                #r1=$(echo $RANDOM | md5sum | head -c 20; echo;)
+                                #gn=`printf "glue-var-%s.tf" $r1`
+                                #printf "variable \"g-%s\" {\n" $r1 > $gn
+                                #printf "    type = string \n" >> $gn
+                                #printf "    default = \"%s\" \n" $tt2 >> $gn
+                                #printf "}\n" >> $gn
+                                #t1=`printf "type = var.g-%s" $r1`
+                            t1=`printf "type = \"%s\"" "$tt2"`
                         fi
                     fi
                 fi

@@ -120,6 +120,12 @@ for c in `seq 0 0`; do
                                     fi 
                                 fi
 
+                                if [[ ${tt1} == "s3:"* ]]; then
+                                    tt2=`echo $tt2 | tr -d '"'`
+                                    tt1=`echo $tt1 | tr -d '"'`
+                                    t1=`printf "\"%s\" = \"%s\"" $tt1 $tt2`
+                                fi
+
                                 if [[ ${tt1} == "region" ]];then skip=1 ;fi
                                 if [[ ${tt1} == "kms_master_key_id" ]];then 
                               

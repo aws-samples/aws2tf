@@ -66,7 +66,7 @@ for c in `seq 0 0`; do
             
  
             
-            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_} && rname=${rname//&/_}
             echo "$ttft c__${catid}__${dbnam}__${tbnam}__${cname}"
             fn=`printf "%s__c__%s__%s__%s__%s.tf" $ttft $catid ${dbnam} ${tbnam} $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
@@ -103,7 +103,8 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "creation_time" ]];then skip=1;fi
-                    
+                    if [[ ${tt1} == "last_accessed_time" ]];then skip=1;fi
+                    if [[ ${tt1} == *"grokPattern"* ]];then skip=1;fi
                 fi
 
                 if [ "$skip" == "0" ]; then

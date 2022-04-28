@@ -40,24 +40,21 @@ for c in `seq 0 0`; do
             echo "$ttft $cname"
             rname=`printf "%s" $cname`
             $AWS ssm get-document --name $rname > $rname.json
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
                 continue
             fi
-            printf "resource \"%s\" \"%s\" {" $ttft $rname > $ttft.$rname.tf
-            printf "}" >> $ttft.$rname.tf
+            printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
             printf "terraform import %s.%s %s" $ttft $rname $cname > data/import_$ttft_$rname.sh
             terraform import $ttft.$rname "$cname" | grep Import
-            terraform state show $ttft.$rname > t2.txt
+            terraform state show $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             tfa=`printf "data/%s.%s" $ttft $rname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
             #echo $awsj | jq . 
-            rm $ttft.$rname.tf
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-            #	for k in `cat t1.txt`; do
-            #		echo $k
-            #	done
+            rm -f $fn
+
             file="t1.txt"
             echo $aws2tfmess > $fn
             sgs=()
@@ -168,10 +165,6 @@ for c in `seq 0 0`; do
                             if [[ $rbc -eq $lbc ]]; then breq=1; fi
                         done 
                     fi
-
-
-
-
 
                 else
                     if [[ "$t1" == *"subnet-"* ]]; then

@@ -12,7 +12,6 @@ fi
 
 # check if related to a node group
 
-
 c=0
 cm=${cmd[$c]}
 #echo $cm
@@ -25,14 +24,13 @@ for t in ${asgs[@]}; do
     #echo "cname=$cname"
     cm=`echo "${AWS} autoscaling describe-auto-scaling-groups --auto-scaling-group-names ${cname}"`
 
-
     pref[0]="AutoScalingGroups"
     tft[0]="aws_autoscaling_group"
     idfilt[0]="AutoScalingGroupName"
     rm -f ${tft[(${c})]}.*.tf
 
     ttft=${tft[(${c})]}
-	
+
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
@@ -41,21 +39,22 @@ for t in ${asgs[@]}; do
     
 
     echo "$ttft $cname"
-         
-    printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-    printf "}" >> $ttft.$cname.tf
+    rname=$(echo $cname)
+    fn=`printf "%s__%s.tf" $ttft $rname`
+    if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
+    printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
+
             
-    terraform import $ttft.$cname "$cname" | grep Import
-    terraform state show $ttft.$cname > t2.txt
-    rm $ttft.$cname.tf
-    cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+    terraform import $ttft.$rname "$cname" | grep Import
+    terraform state show $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+    rm -f $fn
+
 
     file="t1.txt"
            
-            fn=`printf "%s__%s.tf" $ttft $cname`
-            #echo "#" > $fn
-            echo $aws2tfmess > $fn
-            while IFS= read line
+    #echo "#" > $fn
+    echo $aws2tfmess > $fn
+    while IFS= read line
             do
 				skip=0
                 # display $line or do something with $line

@@ -36,16 +36,12 @@ for c in `seq 0 0`; do
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $cname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
+            printf "resource \"%s\" \"%s\" {}" $ttft $cname > $ttft.$cname.tf
+
             terraform import $ttft.$cname "$cname" | grep Import
-            terraform state show $ttft.$cname > t2.txt
+            terraform state show $ttft.$cname | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             rm $ttft.$cname.tf
 
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-            #	for k in `cat t1.txt`; do
-            #		echo $k
-            #	done
             file="t1.txt"
             $AWS ec2 describe-launch-template-versions --launch-template-id $cname | jq .LaunchTemplateVersions[0].LaunchTemplateData.UserData | tr -d '"' | base64 --decode > $cname.sh
             fn=`printf "%s__%s.tf" $ttft $cname`

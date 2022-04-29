@@ -159,7 +159,7 @@ for c in `seq 0 0`; do
             if [[ "$aic" != "" ]];then
                 ../../scripts/get-sagemaker-app-image-config.sh $aic
             fi
-
+            echo "SM Execution role = $erole"
             if [[ "$erole" != "" ]];then
                 ../../scripts/050-get-iam-roles.sh $erole
             fi

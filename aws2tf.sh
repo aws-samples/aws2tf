@@ -245,12 +245,13 @@ if [ "$t" == "eks" ]; then
         exit
     fi
 fi
-
+if [ "$t" == "apigw" ]; then pre="75*"; fi
 if [ "$t" == "appmesh" ]; then pre="360*"; fi
 if [ "$t" == "artifact" ]; then pre="627*"; fi
 if [ "$t" == "athena" ]; then pre="66*"; fi
 if [ "$t" == "code" ]; then pre="62*"; fi
-if [ "$t" == "cf" ]; then pre="999*"; fi
+if [ "$t" == "cfront" ]; then pre="80*"; fi
+if [ "$t" == "cform" ]; then pre="999*"; fi
 if [ "$t" == "cognito" ]; then pre="77*"; fi
 if [ "$t" == "config" ]; then pre="41*"; fi
 if [ "$t" == "eb" ]; then pre="71*"; fi
@@ -267,9 +268,8 @@ if [ "$t" == "rds" ]; then pre="60*"; fi
 if [ "$t" == "s3" ]; then pre="06*"; fi
 if [ "$t" == "sagemaker" ]; then pre="68*"; fi
 if [ "$t" == "secrets" ]; then pre="45*"; fi
-
 if [ "$t" == "sc" ]; then pre="81*"; fi # service catalog
-if [ "$t" == "sqs" ]; then pre="72*"; fi # service catalog
+if [ "$t" == "sqs" ]; then pre="72*"; fi # SQS
 if [ "$t" == "spot" ]; then pre="25*"; fi
 
 

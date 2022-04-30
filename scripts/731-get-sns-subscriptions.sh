@@ -107,6 +107,9 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
+            if [[ $tarn != "" ]];then
+                ../../scripts/730-get-sns-topic.sh $tarn
+            fi
             
         done
     fi 

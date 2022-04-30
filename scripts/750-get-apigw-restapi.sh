@@ -21,8 +21,7 @@ for c in `seq 0 0`; do
         exit
     fi
     if [ "$1" != "" ]; then
-        count=1
-        
+        count=1      
     else
         count=`echo $awsout | jq ".${pref[(${c})]} | length"`
        
@@ -40,7 +39,7 @@ for c in `seq 0 0`; do
                 
             else
                 #cname=`echo $awsout | jq -r ".id"`
-                cname=`echo $awsout | jq -r ".${pref[(${c})]}.id"`
+                cname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].id"`
             fi
 
             fn=`printf "%s__%s.tf" $ttft $cname`

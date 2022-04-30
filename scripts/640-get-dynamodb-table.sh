@@ -95,7 +95,7 @@ for c in `seq 0 0`; do
                     fi
                     if [[ "$tt1" == "enabled" ]];then
                         tt2=`echo $tt2 | tr -d '"'`
-                        echo "** in enabled $tt2"
+                        #echo "** in enabled $tt2"
                         if [[ "$tt2" == "false" ]];then                                                
                             if [[ "$doneatt" == "0" ]];then
                                 printf "attribute_name = \"TimeToExist\"\n" >> $fn
@@ -105,10 +105,6 @@ for c in `seq 0 0`; do
                         fi
                     fi
                 fi
-
-
-
-
                 
             done <"$file"
 

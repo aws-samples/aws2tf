@@ -69,7 +69,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "last_modified_date" ]];then skip=1;fi
                     if [[ ${tt1} == "endpoint" ]];then skip=1;fi
                     if [[ ${tt1} == "estimated_number_of_users" ]];then skip=1;fi                  
-                    
+                    if [[ ${tt1} == "client_secret" ]];then skip=1;fi
 
                 fi
                 if [ "$skip" == "0" ]; then

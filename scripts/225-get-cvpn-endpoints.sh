@@ -78,7 +78,7 @@ for c in `seq 0 0`; do
             ttft2=${tft[(${d})]}
             echo command2 = $cm2 
             awsout2=`eval $cm2`
-            echo $awsout2 | jq .
+            #echo $awsout2 | jq .
             count2=`echo $awsout2 | jq ".${pref[(${d})]} | length"`
             count2=`expr $count2 - 1`
             for j in `seq 0 $count2`; do

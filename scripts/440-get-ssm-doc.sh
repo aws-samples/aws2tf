@@ -38,9 +38,9 @@ for c in `seq 0 0`; do
                 cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             fi
             echo "$ttft $cname"
-            rname=`printf "%s" $cname`
-            $AWS ssm get-document --name $rname > $rname.json
+            rnamec=`printf "%s" $cname`
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            $AWS ssm get-document --name $rnamec > $rname.json
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"

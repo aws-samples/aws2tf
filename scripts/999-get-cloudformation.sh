@@ -35,7 +35,6 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
-            $AWS cloudformation get-template --stack-name $cname > 
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             $AWS cloudformation get-template --stack-name $cname > cft__$ttft__$rname.json
             echo "$ttft $cname"

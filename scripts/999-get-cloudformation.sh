@@ -120,11 +120,12 @@ for c in `seq 0 0`; do
                         rbc=0
                         breq=0
                         while [[ $breq -eq 0 ]];do 
-                            if [[ "${t1}" == *"{"* ]]; then lbc=`expr $lbc + 1`; fi
-                            if [[ "${t1}" == *"}"* ]]; then rbc=`expr $rbc + 1`; fi
+                            if [[ "${t1}" == *"("* ]]; then lbc=`expr $lbc + 1`; fi
+                            if [[ "${t1}" == *")"* ]]; then rbc=`expr $rbc + 1`; fi
                             echo "tb=$lbc $rbc $t1"
                             if [[ $rbc -eq $lbc ]]; then 
                                 breq=1; 
+                                echo "breaking tb"
                             else
                                 read line
                                 t1=`echo "$line"`
@@ -134,12 +135,12 @@ for c in `seq 0 0`; do
 
 
 
-                    if [[ ${tt1} == *":"* ]];then
-                        tt2=${tt2//$/&} 
-                        tt1=`echo $tt1 | tr -d '"'`
-                        echo "$tt1 --- $tt2"
-                        t1=`printf "\"%s\"=%s" $tt1 "$tt2"`
-                    fi
+                    #if [[ ${tt1} == *":"* ]];then
+                    #    tt2=${tt2//$/&} 
+                    #    tt1=`echo $tt1 | tr -d '"'`
+                    #    echo "$tt1 --- $tt2"
+                    #    t1=`printf "\"%s\"=%s" $tt1 "$tt2"`
+                    #fi
                     if [[ ${tt1} == *"/"* ]];then
                         tt1=`echo $tt1 | tr -d '"'`
                         t1=`printf "\"%s\" = %s" $tt1 "$tt2"`

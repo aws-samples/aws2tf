@@ -18,7 +18,7 @@ for c in `seq 0 0`; do
  
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
@@ -29,7 +29,7 @@ for c in `seq 0 0`; do
     else
         count=`echo $awsout | jq ".${pref[(${c})]} | length"`        
     fi
-
+    echo $awsout | jq .
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
@@ -39,6 +39,7 @@ for c in `seq 0 0`; do
 
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $rname`
+            tfs=`printf "%s__%s.txt" $ttft $rname`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
                 continue
@@ -58,12 +59,12 @@ for c in `seq 0 0`; do
  
             terraform import $ttft.${rname} "${cname}" | grep Import
          
-            terraform state show $ttft.${rname} | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt 
+            terraform state show $ttft.${rname} | perl -pe 's/\x1b.*?[mGKH]//g' > $tfs 
 
 
             rm -f $fn
 
-            file="t1.txt"
+            file=$(echo $tfs)
 
             echo $aws2tfmess > $fn
             while IFS= read line
@@ -80,7 +81,16 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
                     if [[ ${tt1} == "created_time" ]];then skip=1;fi
-
+                    if [[ ${tt1} == "Description" ]];then 
+                        tt2=$(echo $tt2 | sed 's/^"//')
+                        tt2=$(echo $tt2 | sed 's/"$//')
+                        #tt2=${tt2//\\/\\\\}
+                        #tt2=${tt2//%\{/%%\{}
+                        tt2=$(echo $tt2 | sed 's/"/\\"/g')
+                        t1=`printf "%s = \"%s\"" $tt1 "$tt2"`
+                    tt2=$(echo $tt2 | sed 's/"/\\"/g')
+                    skip=1;
+                    fi
                     # skip block
                     if [[ ${tt1} == "outputs" ]];then 
                         #echo $t1
@@ -121,5 +131,5 @@ for c in `seq 0 0`; do
     fi
 done
 
-rm -f t*.txt
+#rm -f t*.txt
 

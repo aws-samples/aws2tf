@@ -103,7 +103,7 @@ for c in `seq 0 0`; do
                         while [[ $breq -eq 0 ]];do 
                             if [[ "${t1}" == *"{"* ]]; then lbc=`expr $lbc + 1`; fi
                             if [[ "${t1}" == *"}"* ]]; then rbc=`expr $rbc + 1`; fi
-                            #echo "$lbc $rbc $t1"
+                            echo "op=$lbc $rbc $t1"
                             if [[ $rbc -eq $lbc ]]; then 
                                 breq=1; 
                             else
@@ -122,7 +122,7 @@ for c in `seq 0 0`; do
                         while [[ $breq -eq 0 ]];do 
                             if [[ "${t1}" == *"{"* ]]; then lbc=`expr $lbc + 1`; fi
                             if [[ "${t1}" == *"}"* ]]; then rbc=`expr $rbc + 1`; fi
-                            #echo "$lbc $rbc $t1"
+                            echo "tb=$lbc $rbc $t1"
                             if [[ $rbc -eq $lbc ]]; then 
                                 breq=1; 
                             else

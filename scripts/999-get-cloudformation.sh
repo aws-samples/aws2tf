@@ -36,7 +36,7 @@ for c in `seq 0 0`; do
             echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-            $AWS cloudformation get-template --stack-name $cname > cft__$ttft__$rname.json
+            $AWS cloudformation get-template --stack-name $cname > cft__$rname.json
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $rname`
             tfs=`printf "%s__%s.txt" $ttft $rname`
@@ -80,7 +80,7 @@ for c in `seq 0 0`; do
                     tt2=`echo "$line" | cut -f2- -d'='`
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
                     if [[ ${tt1} == "id" ]];then 
-                        t1=`printf "template_url = file(\"cft__%s__%s.json\")" $ttft $rname`
+                        t1=`printf "template_url = file(\"cft__%s.json\")" $rname`
                     fi          
                     if [[ ${tt1} == "created_time" ]];then skip=1;fi
                     if [[ ${tt1} == "Description" ]];then 

@@ -117,6 +117,10 @@ for c in `seq 0 0`; do
                         echo "$tt1 --- $tt2"
                         t1=`printf "\"%s\"=%s" $tt1 "$tt2"`
                     fi
+                    if [[ ${tt1} == *"/"* ]];then
+                        tt1=`echo $tt1 | tr -d '"'`
+                        t1=`printf "\"%s\" = %s" $tt1 "$tt2"`
+                    fi
 
                 fi
                 if [ "$skip" == "0" ]; then

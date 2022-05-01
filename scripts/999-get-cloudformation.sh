@@ -29,11 +29,11 @@ for c in `seq 0 0`; do
     else
         count=`echo $awsout | jq ".${pref[(${c})]} | length"`        
     fi
-    echo $awsout | jq .
+    #echo $awsout | jq .
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
-            echo $i
+            #echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             $AWS cloudformation get-template --stack-name $cname > cft__$rname.json
@@ -103,7 +103,7 @@ for c in `seq 0 0`; do
                         while [[ $breq -eq 0 ]];do 
                             if [[ "${t1}" == *"{"* ]]; then lbc=`expr $lbc + 1`; fi
                             if [[ "${t1}" == *"}"* ]]; then rbc=`expr $rbc + 1`; fi
-                            echo "op=$lbc $rbc $t1"
+                            #echo "op=$lbc $rbc $t1"
                             if [[ $rbc -eq $lbc ]]; then 
                                 breq=1; 
                             else
@@ -122,10 +122,10 @@ for c in `seq 0 0`; do
                         while [[ $breq -eq 0 ]];do 
                             if [[ "${t1}" == *"("* ]]; then lbc=`expr $lbc + 1`; fi
                             if [[ "${t1}" == *")"* ]]; then rbc=`expr $rbc + 1`; fi
-                            echo "tb=$lbc $rbc $t1"
+                            #echo "tb=$lbc $rbc $t1"
                             if [[ $rbc -eq $lbc ]]; then 
                                 breq=1; 
-                                echo "breaking tb"
+                                #echo "breaking tb"
                             else
                                 read line
                                 t1=`echo "$line"`

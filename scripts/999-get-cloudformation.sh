@@ -3,7 +3,7 @@ if [[ "$1" != "" ]]; then
         cmd[0]="$AWS cloudformation describe-stack-resources --stack-name $1"
         pref[0]="StackResources"       
     else
-        cmd[0]="aws cloudformation list-stacks"
+        cmd[0]="$AWS cloudformation list-stacks"
         pref[0]="StackSummaries"
 fi
 
@@ -54,18 +54,15 @@ for c in `seq 0 0`; do
                 continue
             fi
 
-            printf "resource \"%s\" \"%s\" {" $ttft $rname > $fn
-            printf "}" >> $fn
+            printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
+ 
             terraform import $ttft.${rname} "${cname}" | grep Import
          
-            terraform state show $ttft.${rname} > t2.txt
+            terraform state show $ttft.${rname} | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt 
 
 
             rm -f $fn
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-            #	for k in `cat t1.txt`; do
-            #		echo $k
-            #	done
+
             file="t1.txt"
 
             echo $aws2tfmess > $fn

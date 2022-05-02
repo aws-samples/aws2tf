@@ -1,6 +1,7 @@
 # aws2tf
 
-**Work in progress - please report any issues you find.**
+**May 2022 - Updated to use 4.xx of the Terraform provider, testing still in progress - please report any issues you find.**
+
 
 This utility 'AWS to Terraform' (aws2tf)
 reads an AWS Account and generates all the required terraform configuration files (.tf) from each of the composite AWS resources
@@ -65,10 +66,11 @@ To generate the terraform files for an entire AWS account, import the resources 
 ./aws2tf.sh 
 ```
 
+*Note this will take some time*
 
-To include AWS account Policies and Roles:
+To extract all AWS account Policies and Roles:
 ```
-./aws2tf.sh -p yes
+./aws2tf.sh -t iam
 ```
 
 To generate the terraform files for an EKS cluster named "mycluster"
@@ -88,23 +90,33 @@ To add App Mesh resources
 To get a selection of resources use the -t option 
 The currently supported types are:
 
+* apigw - API GW restAPI resources `-t apigw`
 * appmesh - App Mesh resources `-t appmesh`
+* artifact - CodeArtifact resources
+* athena - Athena resources
 * code - Code* resources `-t code`
+* cfront - CloudFront resources
+* cloudform - CloudFormation Stacks
 * cognito - Cognito resources `-t cognito`
 * config - AWS config resources `-t config`
 * eb - EventBridge resources `-t eb`
+* ec2 - Instances (running state only)
 * ecs - An ECS cluster and it's related resources `-t ecs -i Cluster-Name`
 * eks - An EKS cluster and it's related resources `-t eks -i Cluster-Name`
 * emr - get all active EMR clusters
+* glue - Glue tables and partitions
 * iam - All IAM related users, groups, policies & roles `-t iam`
+* kinesis - Kinesis resources
 * kms - KMS keys and aliases `-t kms`
-* lf - Lake Formation resources `-t lf`
 * lambda - Lambda resources `-t lambda`
-* params - SSM parameters `-t params`
+* lf - Lake Formation resources `-t lf`
 * org - AWS Organizations `-t org`
+* params - SSM parameters `-t params`
 * rds - RDS database resources `-t rds`
+* s3 - s3 buckets and policies
+* sagemaker - SageMaker resources `-t 
 * secrets - Secrets Manager secrets `-t secrets`
-* sagemaker - SageMaker resources `-t sagemaker`
+sagemaker`
 * sc - Service Catalog resources `-t sc`
 * sns - SNS resources `-t sns`
 * sqs - SQS queues `-t sqs`
@@ -158,8 +170,10 @@ Or simply check back after some time to see if they are listed below.
 
 
 ----
-## Terraform resources supported as of 05-Mar-2022
+## Terraform resources supported as of 02-May-2022
 
+* aws_api_gateway_resource
+* aws_api_gateway_rest_api
 * aws_appmesh_gateway_route
 * aws_appmesh_mesh
 * aws_appmesh_route
@@ -232,10 +246,12 @@ Or simply check back after some time to see if they are listed below.
 * aws_kinesis_stream
 * aws_kms_alias
 * aws_kms_key
+* aws_lakeformation_data_lake_settings
 * aws_lakeformation_resource
 * aws_lambda_alias
 * aws_lambda_function
 * aws_lambda_function_event_invoke_config
+* aws_lambda_layer_version
 * aws_lambda_permission
 * aws_launch_template
 * aws_lb
@@ -292,8 +308,11 @@ Or simply check back after some time to see if they are listed below.
 * aws_vpn_connection
 
 ----
-## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 05-Mar-2022
+## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 02-May-2022
 
+* AWS::ApiGateway::Account
+* AWS::ApiGateway::Resource
+* AWS::ApiGateway::RestApi
 * AWS::Cloud9::EnvironmentEC2
 * AWS::CodeArtifact::Domain
 * AWS::CodeArtifact::Repository
@@ -343,8 +362,10 @@ Or simply check back after some time to see if they are listed below.
 * AWS::KMS::Alias
 * AWS::KMS::Key
 * AWS::KinesisFirehose::DeliveryStream
+* AWS::LakeFormation::DataLakeSettings
 * AWS::Lambda::EventInvokeConfig
 * AWS::Lambda::Function
+* AWS::Lambda::LayerVersion
 * AWS::Lambda::Permission
 * AWS::Logs::LogGroup
 * AWS::S3::Bucket
@@ -360,28 +381,4 @@ Or simply check back after some time to see if they are listed below.
 * AWS::ServiceDiscovery::Service
  
 ----
-
-
-+ Other terraform providers as terraform supports.
-
-----
-
-## Known problems
-
-### Speed
-
-It can take a lot of time to loop around everything in large accounts, in particular the importing of the resources.
-
-### KMS:
-
-Can fail if your login doesn't have access to KMS
-
-### S3 Buckets
-
-Can fail if you don't have access to the KMS key used for encryption.
-
-
-
-
-
 

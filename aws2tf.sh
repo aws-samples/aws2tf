@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 usage(){
 	echo "Usage: $0 [-p <profile>] [-c] [-v] [-r <region>] [-t <type>] [-h] [-d] [-s] <stack name>"
   echo "       -p <profile> specify the AWS profile to use (Default=\"default\")"

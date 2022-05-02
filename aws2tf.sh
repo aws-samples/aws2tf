@@ -86,6 +86,7 @@ function ctrl_c() {
 
 if [ "$d" = "yes" ]; then
     set -x
+    echo "CAUTION - lots of output, potentially including sensitive information"
 fi
 
 if [ ! -z ${AWS_PROFILE+x} ];then

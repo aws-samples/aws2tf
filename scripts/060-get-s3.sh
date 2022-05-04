@@ -120,6 +120,44 @@ for c in `seq 0 0`; do
                                     fi 
                                 fi
 
+                                if [[ ${tt1} == "versioning" ]];then 
+                                    #echo $t1
+                                    skip=1
+                                    lbc=0
+                                    rbc=0
+                                    breq=0
+                                    while [[ $breq -eq 0 ]];do 
+                                        if [[ "${t1}" == *"{"* ]]; then lbc=`expr $lbc + 1`; fi
+                                        if [[ "${t1}" == *"}"* ]]; then rbc=`expr $rbc + 1`; fi
+                                        #echo "op=$lbc $rbc $t1"
+                                        if [[ $rbc -eq $lbc ]]; then 
+                                            breq=1; 
+                                        else
+                                            read line
+                                            t1=`echo "$line"`
+                                        fi
+                                    done 
+                                fi
+
+                                if [[ ${tt1} == "grant" ]];then 
+                                    #echo $t1
+                                    skip=1
+                                    lbc=0
+                                    rbc=0
+                                    breq=0
+                                    while [[ $breq -eq 0 ]];do 
+                                        if [[ "${t1}" == *"{"* ]]; then lbc=`expr $lbc + 1`; fi
+                                        if [[ "${t1}" == *"}"* ]]; then rbc=`expr $rbc + 1`; fi
+                                        #echo "op=$lbc $rbc $t1"
+                                        if [[ $rbc -eq $lbc ]]; then 
+                                            breq=1; 
+                                        else
+                                            read line
+                                            t1=`echo "$line"`
+                                        fi
+                                    done 
+                                fi
+
                                 if [[ ${tt1} == "s3:"* ]]; then
                                     tt2=`echo $tt2 | tr -d '"'`
                                     tt1=`echo $tt1 | tr -d '"'`

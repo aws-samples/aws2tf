@@ -25,17 +25,22 @@ for c in `seq 0 0`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].VpcPeeringConnectionId" | tr -d '"'`
             echo "$ttft $cname"
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
+            fn=`printf "%s__%s.tf" $ttft $cname`
+            if [ -f "$fn" ] ; then
+                    echo "$fn exists already skipping"
+                    continue
+                fi
+            printf "resource \"%s\" \"%s\" {}" $ttft $cname > $fn
+      
             terraform import $ttft.$cname "$cname" | grep Import
             terraform state show $ttft.$cname > t2.txt
-            rm $ttft.$cname.tf
+            rm -f $fn
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             #	for k in `cat t1.txt`; do
             #		echo $k
             #	done
             file="t1.txt"
-            fn=`printf "%s__%s.tf" $ttft $cname`
+            
             echo $aws2tfmess > $fn
             while IFS= read line
             do

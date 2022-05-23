@@ -77,7 +77,7 @@ for c in `seq 0 0`; do
                         tt2=$(echo $tt2 | tr -d '"')
                         if [[ "$tt2" == *":iam:"* ]]; then
                             trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev)
-                            t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
+                            t1=`printf "%s = aws_iam_user.%s.arn" $tt1 $trole`
                         fi                 
                     fi
 
@@ -91,7 +91,7 @@ for c in `seq 0 0`; do
             done <"$file"
 
             if [[ "$trole" != "" ]];then
-                ../../scripts/050-get-iam-roles.sh $trole
+                ../../scripts/030-get-iam-users.sh $trole
             fi
             
         done # end for

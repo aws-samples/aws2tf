@@ -43,7 +43,6 @@ for c in `seq 0 0`; do
                 continue
             fi
             printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
-            printf "terraform import %s.%s %s" $ttft $rname "$cname" > data/import_$ttft_$cname.sh
             terraform import $ttft.$rname "$cname" | grep Import
             terraform state show $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             tfa=`printf "data/%s.%s" $ttft $rname`

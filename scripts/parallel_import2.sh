@@ -101,4 +101,4 @@ fi
 
 rm -f terr*.backup
 
-echo "exit parallel2 import $rname"
+#echo "exit parallel2 import $rname"

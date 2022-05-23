@@ -38,6 +38,7 @@ for c in `seq 0 0`; do
             #echo "calling import sub"
             . ../../scripts/parallel_import2.sh $ttft $cname &
         done
+
         jc=`jobs -r | wc -l | tr -d ' '`
         if [ $jc -gt 0 ];then
             echo "Waiting for $jc Terraform imports"

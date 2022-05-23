@@ -81,6 +81,7 @@ for c in `seq 0 0`; do
                 while IFS= read line
                 do
                     skip=0
+                    trole=""
                     # display $line or do something with $line
                     t1=`echo "$line"`
                     if [[ ${t1} == *"="* ]];then
@@ -129,8 +130,8 @@ for c in `seq 0 0`; do
                                     fi
                                 elif [[ "$tt2" == "arn:aws:sns:${myreg}:${mysub}:"* ]];then
                                     rsns=`echo $tt2 | tr -d '"'` 
-                                    trole=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`                       
-                                    t1=`printf "%s = aws_sns_topic.%s.arn" $tt1 $trole`
+                                    mtopic=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`                       
+                                    t1=`printf "%s = aws_sns_topic.%s.arn" $tt1 $mtopic`
 
                                 else   # check tt2 for $
                                     tt2=${tt2//$/&} 

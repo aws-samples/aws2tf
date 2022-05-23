@@ -104,20 +104,21 @@ else
     mysub=`aws sts get-caller-identity | jq .Account | tr -d '"'`
 fi
 
-if [ ! -z ${AWS_DEFAULT_REGION+x} ];then
-    r=`echo $AWS_DEFAULT_REGION`
-    echo "region $AWS_DEFAULT_REGION set from env variables"
-fi
-
-if [ ! -z ${AWS_REGION+x} ];then
-    r=`echo $AWS_REGION`
-    echo "region $AWS_REGION set from env variables"
-fi
-
 if [ "$r" = "no" ]; then
-    echo "Region not specified - Getting region from aws cli ="
-    r=`aws configure get region`
-    echo $r
+
+    if [ ! -z ${AWS_DEFAULT_REGION+x} ];then
+        r=`echo $AWS_DEFAULT_REGION`
+        echo "region $AWS_DEFAULT_REGION set from env variable AWS_DEFAULT_REGION"
+    fi
+
+    if [ ! -z ${AWS_REGION+x} ];then
+        r=`echo $AWS_REGION`
+        echo "region $AWS_REGION set from env variable AWS_REGION"
+    fi
+    if [ "$r" = "no" ]; then
+        r=`aws configure get region`
+        echo "Getting reegion from aws cli = $r"
+    fi
 fi
 
 if [ "$mysub" == "null" ] || [ "$mysub" == "" ]; then
@@ -178,14 +179,14 @@ printf "required_version = \"~> 1.1.0\"\n" >> aws.tf
 printf "  required_providers {\n" >> aws.tf
 printf "   aws = {\n" >> aws.tf
 printf "     source  = \"hashicorp/aws\"\n" >> aws.tf
-printf "      version = \"= 4.11.0\"\n" >> aws.tf
+printf "      version = \"= 4.13.0\"\n" >> aws.tf
 #printf "      version = \"= 3.75.1\"\n" >> aws.tf
 printf "    }\n" >> aws.tf
 
-printf "       awscc = {\n" >> aws.tf
-printf "         source  = \"hashicorp/awscc\"\n" >> aws.tf
-printf "         version = \"~> 0.19.0\"\n" >> aws.tf
-printf "       }\n" >> aws.tf
+#printf "       awscc = {\n" >> aws.tf
+#printf "         source  = \"hashicorp/awscc\"\n" >> aws.tf
+#printf "         version = \"~> 0.19.0\"\n" >> aws.tf
+#printf "       }\n" >> aws.tf
 printf "  }\n" >> aws.tf
 printf "}\n" >> aws.tf
 printf "\n" >> aws.tf
@@ -268,7 +269,7 @@ if [ "$t" == "lf" ]; then pre="63*"; fi
 if [ "$t" == "org" ]; then pre="01*"; fi
 if [ "$t" == "params" ]; then pre="445*"; fi
 if [ "$t" == "rds" ]; then pre="60*"; fi
-if [ "$t" == "s3" ]; then pre="06*"; fi
+if [ "$t" == "s3" ]; then pre="060*"; fi # change to 06*
 if [ "$t" == "sagemaker" ]; then pre="68*"; fi
 if [ "$t" == "secrets" ]; then pre="45*"; fi
 if [ "$t" == "sc" ]; then pre="81*"; fi # service catalog
@@ -371,7 +372,8 @@ if [ "$v" = "yes" ]; then
     exit
 fi
 if [ "$d" = "no" ]; then
-    rm -f *.txt imp*.sh
+    echo "skip clean"
+    #rm -f *.txt imp*.sh
 fi
 
 echo "Terraform Refresh ..."

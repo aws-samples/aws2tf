@@ -120,8 +120,9 @@ for c in `seq 0 0`; do
                         rbc=0
                         breq=0
                         while [[ $breq -eq 0 ]];do 
-                            if [[ "${t1}" == *"("* ]]; then lbc=`expr $lbc + 1`; fi
-                            if [[ "${t1}" == *")"* ]]; then rbc=`expr $rbc + 1`; fi
+                            if [[ "${t1}" == *"("* ]] || [[ "${t1}" == *"<<-EOT"* ]]; then lbc=`expr $lbc + 1`; fi
+                            t1=`echo $t1 | tr -d ' '`
+                            if [[ "${t1}" == *")"* ]] || [[ "${t1}" == "EOT" ]];then rbc=`expr $rbc + 1`; fi
                             #echo "tb=$lbc $rbc $t1"
                             if [[ $rbc -eq $lbc ]]; then 
                                 breq=1; 

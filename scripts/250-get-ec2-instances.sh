@@ -131,8 +131,33 @@ for c in `seq 0 0`; do
                         if [[ "${tt2}" == "0" ]];then skip=1; fi
                     fi
                     if [[ ${tt1} == "ipv6_addresses" ]];then
+
                         tt2=`echo $tt2 | tr -d '"'`
-                        if [[ "${tt2}" == "[]" ]];then skip=1; fi
+                        
+                        if [[ "${tt2}" == "[]" ]];then 
+                            skip=1
+                        else
+                                    skip=1
+                                    lbc=0
+                                    rbc=0
+                                    breq=0
+                                    dosse=1
+                                    while [[ $breq -eq 0 ]];do 
+                                        if [[ "${t1}" == *"["* ]]; then lbc=`expr $lbc + 1`; fi
+                                        if [[ "${t1}" == *"]"* ]]; then rbc=`expr $rbc + 1`; fi
+                                        #echo "op=$lbc $rbc $t1"
+                                        if [[ $rbc -eq $lbc ]]; then 
+                                            breq=1; 
+                                        else
+                                            read line
+                                            t1=`echo "$line"`
+
+
+                                        fi
+                                    done
+                        fi
+
+                        
                     fi
 
                     

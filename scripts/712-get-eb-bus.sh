@@ -32,15 +32,16 @@ for c in `seq 0 0`; do
                 cname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}"`
             fi
             if [[ "$cname" == "default" ]];then continue; fi
-            
-            echo "$ttft $cname"
-            fn=`printf "%s__%s.tf" $ttft $cname`
+
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            echo "$ttft $cname import"
+            fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
 
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $fn
-            printf "}" >> $fn
-            terraform import $ttft.$cname "$cname" | grep Import
-            terraform state show $ttft.$cname > t2.txt
+            printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
+          
+            terraform import $ttft.$rname "$cname" | grep Import
+            terraform state show $ttft.$rname > t2.txt
 
             #echo $awsj | jq . 
             rm -f $fn

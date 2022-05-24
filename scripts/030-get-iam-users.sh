@@ -36,19 +36,20 @@ for c in `seq 0 0`; do
             fi
             ocname=`echo $cname`
             cname=${cname//./_}
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             echo "$ttft $cname"
-            fn=`printf "%s__%s.tf" $ttft $cname`
+            fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
                 continue
             fi
 
 
-            printf "resource \"%s\" \"%s\" {}" $ttft $cname > $ttft.$cname.tf
+            printf "resource \"%s\" \"%s\" {}" $ttft $cname > $fn
      
-            terraform import $ttft.$cname $ocname | grep Import
-            terraform state show $ttft.$cname > t2.txt
-            rm $ttft.$cname.tf
+            terraform import $ttft.$rname $ocname | grep Import
+            terraform state show $ttft.$rname > t2.txt
+            rm -f $fn
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             #	for k in `cat t1.txt`; do
             #		echo $k

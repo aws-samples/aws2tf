@@ -77,6 +77,7 @@ for c in `seq 0 0`; do
                         tt2=$(echo $tt2 | tr -d '"')
                         if [[ "$tt2" == *":iam:"* ]]; then
                             trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev)
+                            trole=${trole//:/_} && trole=${trole//./_} && trole=${trole//\//_}
                             t1=`printf "%s = aws_iam_user.%s.arn" $tt1 $trole`
                         fi                 
                     fi

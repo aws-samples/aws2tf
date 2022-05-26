@@ -108,6 +108,7 @@ for c in `seq 0 0`; do
                 
             done <"$file"
             if [[ $tarn != "" ]];then
+                echo "$ttft getting topic arn: $tarn"
                 ../../scripts/730-get-sns-topic.sh $tarn
             fi
             

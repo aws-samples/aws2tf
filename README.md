@@ -19,7 +19,7 @@ There should hopefully be no subsequent additions or deletions reported by the t
 ## Requirements & Prerequisites
 + The tool is written for the bash shell script & Python3 and has been tested on macOS 11.6.
 + AWS cli (v2) **version 2.3.4 or higher** needs to be installed and you need a login with at least "Read" privileges.
-+ terraform **version v1.1.0** or higher needs to be installed.
++ terraform **version v1.2.0** or higher needs to be installed.
 + jq **version 1.6 or higher**
 
 
@@ -169,8 +169,9 @@ To get all the resources in a deployed Stack Set
 Or simply check back after some time to see if they are listed below.
 
 
+
 ----
-## Terraform resources supported as of 02-May-2022
+## Terraform resources supported as of 15-Jul-2022
 
 * aws_api_gateway_resource
 * aws_api_gateway_rest_api
@@ -211,6 +212,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_dms_replication_task
 * aws_dynamodb_table
 * aws_ec2_client_vpn_endpoint
+* aws_ec2_host
 * aws_ec2_transit_gateway
 * aws_ec2_transit_gateway_route
 * aws_ec2_transit_gateway_route_table
@@ -270,7 +272,12 @@ Or simply check back after some time to see if they are listed below.
 * aws_route_table_association
 * aws_s3_access_point
 * aws_s3_bucket
+* aws_s3_bucket_acl
+* aws_s3_bucket_lifecycle_configuration
 * aws_s3_bucket_policy
+* aws_s3_bucket_server_side_encryption_configuration
+* aws_s3_bucket_versioning
+* aws_s3_bucket_website_configuration
 * aws_sagemaker_app
 * aws_sagemaker_app_image_config
 * aws_sagemaker_domain
@@ -308,7 +315,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_vpn_connection
 
 ----
-## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 02-May-2022
+## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 15-Jul-2022
 
 * AWS::ApiGateway::Account
 * AWS::ApiGateway::Resource
@@ -381,4 +388,6 @@ Or simply check back after some time to see if they are listed below.
 * AWS::ServiceDiscovery::Service
  
 ----
+
+
 

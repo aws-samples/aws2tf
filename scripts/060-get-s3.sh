@@ -113,6 +113,7 @@ for c in `seq 0 0`; do
                         dosse=0
                         dover=0
                         dopol=0
+                        dolog=0
                         
                         echo $aws2tfmess > $fn
                         
@@ -169,6 +170,31 @@ for c in `seq 0 0`; do
                                         fi
                                     done 
                             fi
+
+                            if [[ "$t1" == *"logging"* ]];then 
+                                    #echo $t1
+                                    skip=1
+                                    lbc=0
+                                    rbc=0
+                                    breq=0
+                                    dolog=1
+                                    while [[ $breq -eq 0 ]];do 
+                                        if [[ "${t1}" == *"{"* ]]; then lbc=`expr $lbc + 1`; fi
+                                        if [[ "${t1}" == *"}"* ]]; then rbc=`expr $rbc + 1`; fi
+                                        #echo "op=$lbc $rbc $t1"
+                                        if [[ $rbc -eq $lbc ]]; then 
+                                            breq=1; 
+                                        else
+                                            read line
+                                            t1=`echo "$line"`
+                                        fi
+                                    done 
+                            fi
+
+
+
+
+
                             if [[ "$t1" == *"website"* ]];then 
                                     #echo $t1
                                     skip=1
@@ -339,6 +365,9 @@ for c in `seq 0 0`; do
 
 
                         #echo "Out: $dopol $dover $doacl2 $dosse $lifec $website"        
+                        if [[ $dolog -eq 1 ]];then
+                            ../../scripts/get-s3-logging.sh $cname & 
+                        fi
                         if [[ $dopol -eq 1 ]];then
                             ../../scripts/get-s3-policy.sh $cname & 
                         fi

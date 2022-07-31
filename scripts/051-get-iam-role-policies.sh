@@ -89,7 +89,9 @@ for c in `seq 0 0`; do
                                         
                                         rarn=`echo $tt2 | tr -d '"'` 
                                         trole=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`                       
-                                        t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
+                                        if [[ $trole != $cname ]];then  
+                                            t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
+                                        fi
                                     fi
                                 elif [[ "$tt2" == "arn:aws:sns:${myreg}:${mysub}:"* ]];then
                                   

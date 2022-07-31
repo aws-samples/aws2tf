@@ -47,7 +47,7 @@ do
                     rbc=0
                     breq=0
                     skipit=0
-
+                    ssgid=""
                     while [[ $breq -eq 0 ]];do 
                                 # keep reading until [==] ir incremented within for separate rules
                                 if [[ "${t1}" == *"["* ]]; then lbc=`expr $lbc + 1`; fi 
@@ -155,7 +155,7 @@ do
                                                 t1=$(printf "source_security_group_id = aws_security_group.%s.id" $sgimp)
                                                 if [[ ${tt1} == "source_security_group_id" ]];then
                                                     t1=$(printf "source_security_group_id = aws_security_group.%s.id" $tt2)
-       
+                                                    
                                                 fi
                                            
                                                 noself=1
@@ -333,7 +333,16 @@ for i in `ls imp_aws_security_group_rule_${1}_${2}*.sh 2> /dev/null`; do
                 fi
 
                 
-    done <"$file"    
+    done <"$file" 
+       
+    for sg1 in ${sglist[@]}; do
+                #echo "therole=$therole"
+                sg1=`echo $sg1 | tr -d '"'`
+                echo "calling SG rule embedded SG for $sg1"
+                if [[ "$sg1" != "" ]]; then
+                    ../../scripts/110-get-security-group.sh $sg1
+                fi
+    done 
     
 done  # done for import
 

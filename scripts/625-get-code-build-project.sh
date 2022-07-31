@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS codebuild list-projects" 
+    cmd[0]="$AWS codebuild list-projects | jq '.projects[] | select(.name==\"${1}\")'"  
 else
     cmd[0]="$AWS codebuild list-projects"
 fi

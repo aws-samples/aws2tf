@@ -92,6 +92,7 @@ The currently supported types are:
 
 * apigw - API GW restAPI resources `-t apigw`
 * appmesh - App Mesh resources `-t appmesh`
+* appstream - AppStream v2.0 resources `-t appstream`
 * artifact - CodeArtifact resources
 * athena - Athena resources
 * code - Code* resources `-t code`
@@ -168,10 +169,8 @@ To get all the resources in a deployed Stack Set
 
 Or simply check back after some time to see if they are listed below.
 
-
-
 ----
-## Terraform resources supported as of 15-Jul-2022
+## Terraform resources supported as of 31-Jul-2022
 
 * aws_api_gateway_resource
 * aws_api_gateway_rest_api
@@ -182,6 +181,11 @@ Or simply check back after some time to see if they are listed below.
 * aws_appmesh_virtual_node
 * aws_appmesh_virtual_router
 * aws_appmesh_virtual_service
+* aws_appstream_fleet
+* aws_appstream_image_builder
+* aws_appstream_stack
+* aws_appstream_user
+* aws_athena_named_query
 * aws_autoscaling_group
 * aws_cloud9_environment_ec2
 * aws_cloudformation_stack
@@ -206,12 +210,14 @@ Or simply check back after some time to see if they are listed below.
 * aws_customer_gateway
 * aws_db_instance
 * aws_db_subnet_group
+* aws_default_network_acl
 * aws_directory_service_directory
 * aws_dms_endpoint
 * aws_dms_replication_instance
 * aws_dms_replication_task
 * aws_dynamodb_table
 * aws_ec2_client_vpn_endpoint
+* aws_ec2_client_vpn_network_association
 * aws_ec2_host
 * aws_ec2_transit_gateway
 * aws_ec2_transit_gateway_route
@@ -234,6 +240,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_glue_catalog_table
 * aws_glue_crawler
 * aws_glue_partition
+* aws_iam_access_key
 * aws_iam_group
 * aws_iam_instance_profile
 * aws_iam_policy
@@ -261,6 +268,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_lb_listener_rule
 * aws_lb_target_group
 * aws_nat_gateway
+* aws_network_acl
 * aws_network_interface
 * aws_organizations_account
 * aws_organizations_organization
@@ -274,6 +282,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_s3_bucket
 * aws_s3_bucket_acl
 * aws_s3_bucket_lifecycle_configuration
+* aws_s3_bucket_logging
 * aws_s3_bucket_policy
 * aws_s3_bucket_server_side_encryption_configuration
 * aws_s3_bucket_versioning
@@ -296,6 +305,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_servicecatalog_product
 * aws_servicecatalog_product_portfolio_association
 * aws_sns_topic
+* aws_sns_topic_policy
 * aws_sns_topic_subscription
 * aws_spot_fleet_request
 * aws_sqs_queue
@@ -315,7 +325,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_vpn_connection
 
 ----
-## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 15-Jul-2022
+## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 31-Jul-2022
 
 * AWS::ApiGateway::Account
 * AWS::ApiGateway::Resource
@@ -323,6 +333,8 @@ Or simply check back after some time to see if they are listed below.
 * AWS::Cloud9::EnvironmentEC2
 * AWS::CodeArtifact::Domain
 * AWS::CodeArtifact::Repository
+* AWS::CodeBuild::Project
+* AWS::CodePipeline::Pipeline
 * AWS::Cognito::IdentityPool
 * AWS::Cognito::IdentityPoolRoleAttachment
 * AWS::Cognito::UserPool
@@ -376,6 +388,7 @@ Or simply check back after some time to see if they are listed below.
 * AWS::Lambda::Permission
 * AWS::Logs::LogGroup
 * AWS::S3::Bucket
+* AWS::S3::BucketPolicy
 * AWS::SNS::Topic
 * AWS::SNS::TopicPolicy
 * AWS::SQS::Queue
@@ -388,6 +401,4 @@ Or simply check back after some time to see if they are listed below.
 * AWS::ServiceDiscovery::Service
  
 ----
-
-
 

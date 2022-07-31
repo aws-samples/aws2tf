@@ -11,6 +11,7 @@ usage(){
     echo "       -s <stack name>  Traverse a Stack and import resources (experimental)"
     echo "       -t <type>   choose a sub-type of AWS resources to get:"
     echo "           appmesh"
+    echo "           appstream"
     echo "           athena"
     echo "           cf"
     echo "           org"
@@ -179,7 +180,7 @@ printf "required_version = \"~> 1.2.0\"\n" >> aws.tf
 printf "  required_providers {\n" >> aws.tf
 printf "   aws = {\n" >> aws.tf
 printf "     source  = \"hashicorp/aws\"\n" >> aws.tf
-printf "      version = \"= 4.13.0\"\n" >> aws.tf
+printf "      version = \"= 4.24.0\"\n" >> aws.tf
 #printf "      version = \"= 3.75.1\"\n" >> aws.tf
 printf "    }\n" >> aws.tf
 
@@ -201,9 +202,9 @@ else
     export AWS="aws --region $r --output json "
 fi
 printf "}\n" >> aws.tf
-printf "provider \"awscc\" {\n" >> aws.tf
-printf " region = \"%s\" \n" $r >> aws.tf
-printf "}\n" >> aws.tf
+#printf "provider \"awscc\" {\n" >> aws.tf
+#printf " region = \"%s\" \n" $r >> aws.tf
+#printf "}\n" >> aws.tf
 
 export AWS2TF_REGION=`echo $r`
 export AWS2TF_ACCOUNT=`echo $mysub`
@@ -251,6 +252,7 @@ if [ "$t" == "eks" ]; then
 fi
 if [ "$t" == "apigw" ]; then pre="75*"; fi
 if [ "$t" == "appmesh" ]; then pre="360*"; fi
+if [ "$t" == "appstream" ]; then pre="46*"; fi
 if [ "$t" == "artifact" ]; then pre="627*"; fi
 if [ "$t" == "athena" ]; then pre="66*"; fi
 if [ "$t" == "code" ]; then pre="62*"; fi

@@ -35,7 +35,15 @@ for c in `seq 0 0`; do
             echo "$ttft $cname import"
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             fn=`printf "%s__%s.tf" $ttft $rname`
-            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
+            if [ -f "$fn" ] ; then  
+                if [[ "$1" == "sg-"* ]]; then
+                    echo "$fn exists already exit ..."
+                    exit
+                else
+                    echo "$fn exists already skipping ..."
+                    continue
+                fi 
+            fi
 
 
             if [[ $sgname == "default" ]];then

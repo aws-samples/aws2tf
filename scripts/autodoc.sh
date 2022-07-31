@@ -3,7 +3,7 @@ echo ""
 echo "----"
 echo "## Terraform resources supported as of $docdate"
 echo ""
-for i in $(grep 'tft\[0\]=' *.sh | cut -f2 -d'=' | tr -d '"' | sort -u); do
+for i in $(grep 'tft' *.sh | grep aws_ | cut -f2 -d'=' | tr -d '"' | sort -u | grep -v '\$'); do
 echo "* $i"
 done
 echo ""

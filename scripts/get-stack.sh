@@ -63,7 +63,10 @@ if [ $count -gt 0 ]; then
                 
                 AWS::CodeArtifact::Domain)  echo "../../scripts/627-get-code-artifact-domain.sh $pid"  >> commands.sh ;;
                 AWS::CodeArtifact::Repository)  echo "../../scripts/627-get-code-artifact-repository.sh $pid"  >> commands.sh ;;
-                
+                AWS::CodePipeline::Pipeline)  echo "../../scripts/629-get-code-pipeline.sh $pid"  >> commands.sh ;;
+                AWS::CodeBuild::Project)  echo "../../scripts/625-get-code-build-project.sh $pid"  >> commands.sh ;;
+
+
                 AWS::Cognito::IdentityPool) echo "../../scripts/770-get-cognito-identity-pools.sh $pid"  >> commands.sh ;;
                 AWS::Cognito::IdentityPoolRoleAttachment) echo "echo '# $type $pid fetched as part of Identity pool..' " >> commands.sh ;;
                 AWS::Cognito::UserPool) echo "../../scripts/775-get-cognito-user-pools.sh $pid"  >> commands.sh ;;
@@ -130,7 +133,8 @@ if [ $count -gt 0 ]; then
                 AWS::Logs::LogGroup)  echo "../../scripts/070-get-cw-log-grp.sh /$parn" >> commands.sh ;;
                 
                 AWS::S3::Bucket)  echo "../../scripts/060-get-s3.sh $pid" >> commands.sh ;;
-                
+                AWS::S3::BucketPolicy) echo "echo '# $type $pid fetched as part of Bucket ..' " >> commands.sh ;;
+
                 AWS::SageMaker::AppImageConfig) echo "../../scripts/get-sagemaker-app-image-config.sh $pid" >> commands.sh ;;
                 AWS::SageMaker::Domain) echo "../../scripts/680-get-sagemaker-domain.sh $parn" >> commands.sh ;;
                 AWS::SageMaker::Image) echo "../../scripts/get-sagemaker-image.sh $pid" >> commands.sh ;;

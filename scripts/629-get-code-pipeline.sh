@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS codepipeline list-pipelines" 
+    cmd[0]="$AWS codepipeline list-pipelines | jq '.pipelines[] | select(.name==\"${1}\")'" 
 else
     cmd[0]="$AWS codepipeline list-pipelines"
 fi

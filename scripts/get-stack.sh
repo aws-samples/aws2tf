@@ -61,6 +61,7 @@ if [ $count -gt 0 ]; then
                 AWS::ApiGateway::Resource) echo "echo '# $type $pid fetched as part of RestApi..' " >> commands.sh ;;                
                 AWS::Cloud9::EnvironmentEC2) echo "../../scripts/252-get-c9.sh $pid"  >> commands.sh ;;
                 
+                AWS::CodeCommit::Repository)  echo "../../scripts/628-get-code-commit-repository.sh $pid"  >> commands.sh ;;
                 AWS::CodeArtifact::Domain)  echo "../../scripts/627-get-code-artifact-domain.sh $pid"  >> commands.sh ;;
                 AWS::CodeArtifact::Repository)  echo "../../scripts/627-get-code-artifact-repository.sh $pid"  >> commands.sh ;;
                 AWS::CodePipeline::Pipeline)  echo "../../scripts/629-get-code-pipeline.sh $pid"  >> commands.sh ;;

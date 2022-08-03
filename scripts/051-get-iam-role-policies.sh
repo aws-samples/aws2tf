@@ -50,6 +50,8 @@ for c in `seq 0 0`; do
             file="t1.txt"
             fn=`printf "%s__%s.tf" $ttft $cname`
             echo $aws2tfmess > $fn
+            echo "# $0" >> $fn
+            tl=()
             while IFS= read line
             do
                 skip=0
@@ -84,7 +86,7 @@ for c in `seq 0 0`; do
                                
                                 
                                 if [[ "$tt2" == *"${mysub}:role/"* ]];then
-                                    echo "in role/ match"
+                                    #echo "in role/ match"
                                     if [[ "$tt2" != *"${mysub}:role/aws-service-role"* ]];then
                                         
                                         rarn=`echo $tt2 | tr -d '"'` 
@@ -96,7 +98,8 @@ for c in `seq 0 0`; do
                                 elif [[ "$tt2" == "arn:aws:sns:${myreg}:${mysub}:"* ]];then
                                   
                                     rsns=`echo $tt2 | tr -d '"'` 
-                                   
+                                    echo $rsns
+                                    tl+=`printf "\"%s\" " $rsns`
                                     trole=${rsns//:/_} && trole=${trole//./_} && trole=${trole//\//_} && trole=${trole/${mysub}/}                    
                                 
                                     t1=`printf "%s = aws_sns_topic.%s.arn" $tt1 $trole`
@@ -123,10 +126,19 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"   # done while
+
+            #echo "--> TOPIC $tl"
+            for topic in ${tl[@]}; do
+                topic=`echo $topic | tr -d '"'`
+                #echo "***** calling for $topic"
+                if [[ "$topic" != "" ]]; then
+                    ../../scripts/730-get-sns-topic.sh $topic
+                fi
+            done 
             
         done # done for i
     fi
-done
+done # done for
 
 
 rm -f t*.txt

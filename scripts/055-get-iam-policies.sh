@@ -33,7 +33,7 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             # is it AWS Managed ?
-            awsm=
+            awsm=""
 
 
 
@@ -82,6 +82,7 @@ for c in `seq 0 0`; do
                 #    exit
                 #fi
                 echo $aws2tfmess > $fn
+                echo "# $0" >> $fn
                 while IFS= read line
                 do
                     skip=0

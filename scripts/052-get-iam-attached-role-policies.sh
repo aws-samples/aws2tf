@@ -66,6 +66,7 @@ for c in `seq 0 0`; do
             file="t1.txt"
             pnam=""
             echo $aws2tfmess > $fn
+            echo "# $0" >> $fn
             while IFS= read line
             do
                 skip=0

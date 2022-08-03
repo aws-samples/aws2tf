@@ -33,7 +33,7 @@ if [[ $? -ne 0 ]];then
             rm -f $fn
             exit
 fi
-echo "SSE Len=${#o1}"
+#echo "SSE Len=${#o1}"
 
 vl=${#o1}
 if [[ $vl -eq 0 ]];then

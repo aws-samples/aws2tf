@@ -74,7 +74,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "role_arn" ]];then 
                                 skip=0;
                                 trole=`echo "$tt2" | rev | cut -d'/' -f 1 | rev | tr -d '"'`
-                                echo "***trole=$trole"
+                                #echo "***trole=$trole"
                                 rarns+=`printf "\"%s\" " $trole`
                                 if [ "$doned" == "0" ]; then
                                     echo "depends_on = [aws_iam_role.$trole]" >> $fn  
@@ -120,11 +120,11 @@ for c in `seq 0 0`; do
 
 
             for therole in ${rarns[@]}; do
-                echo "therole=$therole"
+                #echo "therole=$therole"
                 trole1=`echo $therole | tr -d '"'`
                 echo "for $trole1"
                 if [[ "$trole1" != "" ]]; then
-                    echo "calling for $trole1"
+                    #echo "calling for $trole1"
                     ../../scripts/050-get-iam-roles.sh $trole1
                 fi
             done           

@@ -1,0 +1,191 @@
+{
+    "Description": "(SO0199-networkassociations) Landing Zone Accelerator on AWS. Version 1.1.0.",
+    "Resources": {
+     "SsmParamStackId521A78D3": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+       "Type": "String",
+       "Value": {
+        "Ref": "AWS::StackId"
+       },
+       "Name": "/accelerator/AWSAccelerator-NetworkAssociationsStack-915259118275-eu-west-1/stack-id"
+      }
+     },
+     "SsmParamAcceleratorVersionFF83282D": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+       "Type": "String",
+       "Value": "1.1.0",
+       "Name": "/accelerator/AWSAccelerator-NetworkAssociationsStack-915259118275-eu-west-1/version"
+      }
+     },
+     "AcceleratorKeyLookup0C18DA36": {
+      "Type": "Custom::SsmGetParameterValue",
+      "Properties": {
+       "ServiceToken": {
+        "Fn::GetAtt": [
+         "CustomSsmGetParameterValueCustomResourceProviderHandlerAAD0E7EE",  ## this is a Lambda
+         "Arn"
+        ]
+       },
+       "region": "eu-west-1",
+       "parameterAccountID": "353484875332",
+       "parameterName": "/accelerator/kms/key-arn", ## looking this up in other account
+       "assumeRoleArn": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":iam::353484875332:role/AWSAccelerator-CrossAccount-SsmParameter-Role"
+         ]
+        ]
+       },
+       "invokingAccountID": "915259118275",
+       "uuid": "1a6bb0c5-10d0-447e-844a-6c435b427384"
+      },
+      "DependsOn": [
+       "CustomSsmGetParameterValueCustomResourceProviderLogGroup780D220D"
+      ],
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete"
+     },
+     "CustomSsmGetParameterValueCustomResourceProviderRoleB3AFDDB2": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+       "AssumeRolePolicyDocument": {
+        "Version": "2012-10-17",
+        "Statement": [
+         {
+          "Action": "sts:AssumeRole",
+          "Effect": "Allow",
+          "Principal": {
+           "Service": "lambda.amazonaws.com"
+          }
+         }
+        ]
+       },
+       "ManagedPolicyArns": [
+        {
+         "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+        }
+       ],
+       "Policies": [
+        {
+         "PolicyName": "Inline",
+         "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+           {
+            "Sid": "SsmGetParameterActions",
+            "Effect": "Allow",
+            "Action": [
+             "ssm:GetParameters",
+             "ssm:GetParameter",
+             "ssm:DescribeParameters"
+            ],
+            "Resource": [
+             "*"
+            ]
+           },
+           {
+            "Sid": "StsAssumeRoleActions",
+            "Effect": "Allow",
+            "Action": [
+             "sts:AssumeRole"
+            ],
+            "Resource": [
+             {
+              "Fn::Join": [
+               "",
+               [
+                "arn:",
+                {
+                 "Ref": "AWS::Partition"
+                },
+                ":iam::353484875332:role/AWSAccelerator-CrossAccount-SsmParameter-Role"
+               ]
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        }
+       ]
+      }
+     },
+     "CustomSsmGetParameterValueCustomResourceProviderHandlerAAD0E7EE": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+       "Code": {
+        "S3Bucket": "cdk-accel-assets-915259118275-eu-west-1",
+        "S3Key": "1cd3b5004f506f3f38fb48c80c9b452b94c5e1b2f1e54f0ad99a27e8f47cbe49.zip"
+       },
+       "Timeout": 900,
+       "MemorySize": 128,
+       "Handler": "__entrypoint__.handler",
+       "Role": {
+        "Fn::GetAtt": [
+         "CustomSsmGetParameterValueCustomResourceProviderRoleB3AFDDB2",
+         "Arn"
+        ]
+       },
+       "Runtime": "nodejs14.x"
+      },
+      "DependsOn": [
+       "CustomSsmGetParameterValueCustomResourceProviderRoleB3AFDDB2"
+      ]
+     },
+     "CustomSsmGetParameterValueCustomResourceProviderLogGroup780D220D": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+       "LogGroupName": {
+        "Fn::Join": [
+         "",
+         [
+          "/aws/lambda/",
+          {
+           "Ref": "CustomSsmGetParameterValueCustomResourceProviderHandlerAAD0E7EE" ## calling lambda
+          }
+         ]
+        ]
+       },
+       "RetentionInDays": 3653
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete"
+     }
+    }
+   }
+
+
+---------------------------------------------------------------------------------------------------
+
+   CustomSsmGetParameterValueCustomResourceProviderHandlerAAD0E7EE
+
+   arn:aws:lambda:eu-west-1:915259118275:function:AWSAccelerator-NetworkAss-CustomSsmGetParameterVal-efrOdbCmRf14",
+
+   "ResourceType": "Custom::SsmGetParameterValue",
+   "ResourceProperties": {
+       "ServiceToken": "arn:aws:lambda:eu-west-1:915259118275:function:AWSAccelerator-NetworkAss-CustomSsmGetParameterVal-efrOdbCmRf14",
+       "invokingAccountID": "915259118275",
+       "assumeRoleArn": "arn:aws:iam::353484875332:role/AWSAccelerator-CrossAccount-SsmParameter-Role",
+       "parameterName": "/accelerator/kms/key-arn",
+       "region": "eu-west-1",
+       "parameterAccountID": "353484875332",
+       "uuid": "1a6bb0c5-10d0-447e-844a-6c435b427384"
+   }
+
+
+returns:
+
+arn:aws:kms:eu-west-1:353484875332:key/337b7c82-a7ba-4904-abf2-06db73ee4cc0
+
+PhysicalResourceId: 'arn:aws:kms:eu-west-1:353484875332:key/337b7c82-a7ba-4904-abf2-06db73ee4cc0',
+LogicalResourceId: 'AcceleratorKeyLookup0C18DA36',
+
+Log group: Ref: - name of Lambda : AWSAccelerator-NetworkAss-CustomSsmGetParameterVal-efrOdbCmRf14
+   /aws/lambda/AWSAccelerator-NetworkAss-CustomSsmGetParameterVal-efrOdbCmRf14

@@ -33,7 +33,7 @@ if [[ $? -ne 0 ]];then
             rm -f $fn
             exit
 fi
-echo "logging Len=${#o1}"
+#echo "logging Len=${#o1}"
 
 vl=${#o1}
 if [[ $vl -eq 0 ]];then
@@ -51,7 +51,7 @@ fi
 rm -f $fn
 skipid=1
 #echo $aws2tfmess > $fn
-
+tlp=0
 echo "$o1" | while IFS= read -r line
             do
 				skip=0
@@ -75,12 +75,22 @@ echo "$o1" | while IFS= read -r line
                     if [[ ${tt1} == "resource_owner" ]];then skip=1;fi
                     if [[ ${tt1} == "creation_date" ]];then skip=1;fi
                     if [[ ${tt1} == "rotation_enabled" ]];then skip=1;fi
+                    if [[ ${tt1} == "target_prefix" ]];then 
+                        tlp=1
+                    fi
 
                     if [[ ${tt1} == *":"* ]];then
                         tt1=`echo $tt1 | tr -d '"'`
                         t1=`printf "\"%s\"=%s" $tt1 $tt2`
                     fi
+
                
+                fi
+
+                if [[ ${t1} == "}" ]];then
+                    if [[ ${tlp} == "0" ]];then
+                        echo "target_prefix = \"\"" >> $fn
+                    fi
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1

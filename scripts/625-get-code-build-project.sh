@@ -36,7 +36,7 @@ for c in `seq 0 0`; do
             printf "resource \"%s\" \"%s\" {}\n" $ttft $cname > $ttft.$cname.tf
            
             printf "terraform import %s.%s %s" $ttft $cname $cname > data/import_$ttft_$cname.sh
-            terraform import $ttft.$cname "$cname" 2> /dev/null | grep Import
+            terraform import $ttft.$cname "$cname" 2> /dev/null | grep 'Import '
             terraform state show $ttft.$cname > t2.txt
             tfa=`printf "data/%s.%s" $ttft $cname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
@@ -62,6 +62,7 @@ for c in `seq 0 0`; do
 
             mv t1.txt.sav t1.txt
             file="t1.txt"
+            bspf=""
             while IFS= read line
             do
 				skip=0
@@ -70,6 +71,9 @@ for c in `seq 0 0`; do
                 if [[ ${t1} == *"="* ]];then
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
+
+
+
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
 
@@ -84,9 +88,36 @@ for c in `seq 0 0`; do
                     if [[ ${tt2} == *"dkr.ecr"* ]]; then
                         ecrr=`echo $tt2 | cut -f2 -d '/' | tr -d '"'`
                     fi
+
                     if [[ ${tt1} == "buildspec" ]]; then
                         if [[ ${tt2} == *"EOT"* ]]; then
                             t1="buildspec = <<EOT"
+                        fi
+                        tt2=`echo $tt2 | tr -d ' '`
+                        #echo "---> $tt2"
+
+                        if [[ "$tt2" == "jsonencode(" ]]; then
+                            #echo "--- HERE ----"
+                            
+                            t1t=`printf "buildspec = jsonencode(file(\"buildspec__%s__%s.txt\"))" $ttft $cname`
+                            echo $t1t >> $fn
+                            skip=1
+                            lbc=0
+                            rbc=0
+                            breq=0
+                            bspf=`printf "buildspec__%s__%s.txt" $ttft $cname`
+                            while [[ $breq -eq 0 ]];do 
+                                if [[ "${t1}" == *"("* ]]; then lbc=`expr $lbc + 1`; fi
+                                if [[ "${t1}" == *")"* ]]; then rbc=`expr $rbc + 1`; fi
+                                #echo "$lbc $rbc $t1"
+                                read line
+                                t1=`echo "$line"`
+                                if [[ $rbc -eq $lbc ]]; then 
+                                    breq=1
+                                else
+                                    echo "$t1" >> $bspf
+                                fi
+                            done
                         fi
                     fi
 
@@ -103,7 +134,8 @@ for c in `seq 0 0`; do
                     
                     if [[ ${tt1} == "encryption_key" ]]; then                 
                         earn=`echo "$tt2" | rev | cut -d'/' -f 1 | rev | tr -d '"'`
-                        t1=`printf "%s = data.aws_kms_alias.%s.arn" $tt1 $earn`
+                        #t1=`printf "%s = data.aws_kms_alias.%s.arn" $tt1 $earn`
+                        t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $earn`
                     fi                  
                     
                     if [[ ${tt1} == "vpc_id" ]]; then
@@ -124,20 +156,35 @@ for c in `seq 0 0`; do
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
+                    t1=${t1//$/&} 
                     echo "$t1" >> $fn
                 fi
                 
             done <"$file"
 
 
+            if [[ "$bspf" != "" ]]; then
+                echo "...here... $bspf"
+                c1=`wc -l $bspf | awk '{print $1}'`
+                c1=`expr $c1 - 1`
+                head -n $c1 $bspf > temp-bldspec.txt
+                cp temp-bldspec.txt $bspf
+            fi
+
             if [[ "$ecrr" != "" ]]; then 
                 ../../scripts/get-ecr.sh $ecrr
+            fi
+
+            if [[ "$earn" != "" ]]; then 
+                ../../scripts/080-get-kms-key.sh $earn
             fi
             ## role arn
 
             if [[ "$trole" != "" ]]; then
+                #echo "*** $trole - from codebuildprof"
                 ../../scripts/050-get-iam-roles.sh $trole
             fi
+
 
         done
         

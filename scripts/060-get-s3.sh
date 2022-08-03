@@ -357,9 +357,9 @@ for c in `seq 0 0`; do
                         done
                           
                         if [[ "$keyid" != "" ]]; then
-                            echo "*** key for $keyid"
+                            #echo "*** key for $keyid"
                             ../../scripts/080-get-kms-key.sh $keyid 
-                            echo "*** key alias for $keyid"
+                            #echo "*** key alias for $keyid"
                             ../../scripts/081-get-kms-alias.sh $keyid 
                         fi 
 

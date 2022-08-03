@@ -100,6 +100,7 @@ for c in `seq 0 0`; do
                 #fi
                 trole=""
                 echo $aws2tfmess > $fn
+                echo "# $0" >> $fn
                 while IFS= read line
                 do
                     skip=0
@@ -144,6 +145,7 @@ for c in `seq 0 0`; do
                     fi
                     if [ "$skip" == "0" ]; then
                         #echo $skip $t1
+                    
                         echo "$t1" >> $fn
                     fi
                     

@@ -129,6 +129,8 @@ for c in `seq 0 0`; do
                                         if [[ $trole != $cname ]];then                      
                                             t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
                                         fi
+                                    else
+                                        echo "Found Service Role $tt2"    
                                     fi
                                 elif [[ "$tt2" == "arn:aws:sns:${myreg}:${mysub}:"* ]];then
                                     rsns=`echo $tt2 | tr -d '"'` 

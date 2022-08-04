@@ -9,9 +9,9 @@ if [[ "$1" != "" ]]; then
         if [ -f "$fn" ] ; then echo "$fn exists already skipping" && exit; fi
         # is is an arn ?
         if [[ "$1" == "arn:"* ]];then
-        cmd[0]=`printf "$AWS iam list-policies | jq '.Policies[] | select(.Arn==\"%s\")' | jq ." $1`
+            cmd[0]=`printf "$AWS iam list-policies | jq '.Policies[] | select(.Arn==\"%s\")' | jq ." $1`
         else # assume it's a policy name
-        cmd[0]=`printf "$AWS iam list-policies | jq '.Policies[] | select(.PolicyName==\"%s\")' | jq ." $1`
+            cmd[0]=`printf "$AWS iam list-policies | jq '.Policies[] | select(.PolicyName==\"%s\")' | jq ." $1`
         fi
     else
         echo "skipping AWS managed policy $1"

@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS codebuild list-projects | jq '.projects[] | select(.name==\"${1}\")'"  
+    cmd[0]="$AWS codebuild list-projects | jq -r '.projects[] | select(.==\"${1}\")'"  
 else
     cmd[0]="$AWS codebuild list-projects"
 fi
@@ -15,18 +15,25 @@ for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
         exit
     fi
-    count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    count=1
+    if [ "$1" == "" ]; then
+        count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    fi
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            cname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})]"`
+            if [ "$1" == "" ]; then
+                cname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})]"`
+            else
+                cname=`echo $awsout`
+            fi
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $cname`
             if [ -f "$fn" ] ; then
@@ -43,11 +50,9 @@ for c in `seq 0 0`; do
             #
             #get the buildspec
             bspf=`printf "buildspec__%s__%s.json" $ttft $cname`
-            pwd
-            ls /data/*.json
-            echo "...1"
+            
             cat data/${tfa}.json | jq -r .values.source[].buildspec > $bspf
-            echo "...2"
+            
 
             rm $ttft.$cname.tf
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
@@ -60,7 +65,8 @@ for c in `seq 0 0`; do
             ecrr=""
             trole=""
             vpcid=""
-            vpcid=$(cat $tfa.json | jq -r .values.vpc_config[0].vpc_id) 
+            #echo "vpc cat"
+            vpcid=$(cat data/$tfa.json | jq -r .values.vpc_config[0].vpc_id) 
             if [ "$vpcid" != "" ] && [ "$vpcid" != "null" ]; then
                 ../../scripts/100-get-vpc.sh $vpcid
                 ../../scripts/105-get-subnet.sh $vpcid

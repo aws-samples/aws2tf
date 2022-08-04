@@ -50,8 +50,10 @@ if [ $count -gt 0 ]; then
             type=$(echo "$stackr" | jq  -r ".[(${i})].ResourceType")
             pid=$(echo "$stackr" | jq  -r ".[(${i})].PhysicalResourceId" | cut -f2 -d'/')
             parn=$(echo "$stackr" | jq  -r ".[(${i})].PhysicalResourceId" | tr -d '"')
+            lrid=$(echo "$stackr" | jq  -r ".[(${i})].LogicalResourceId" | tr -d '"')
+         
             if [[ "$d" == "st" ]];then 
-                echo "--> $type $pid $parn"
+                echo "--> $type $pid $parn $lrid"
             fi
             echo "echo 'Stack $1 Importing $i of $count ..'" >> commands.sh
             case $type in
@@ -61,13 +63,15 @@ if [ $count -gt 0 ]; then
                 AWS::ApiGateway::Resource) echo "echo '# $type $pid fetched as part of RestApi..' " >> commands.sh ;;                
                 AWS::Cloud9::EnvironmentEC2) echo "../../scripts/252-get-c9.sh $pid"  >> commands.sh ;;
                 
+                AWS::CloudWatch::Alarm) echo "../../scripts/760-get-cloudwatch-alarm.sh $pid"  >> commands.sh ;;
+
                 AWS::CodeCommit::Repository)  echo "../../scripts/628-get-code-commit-repository.sh $pid"  >> commands.sh ;;
                 AWS::CodeArtifact::Domain)  echo "../../scripts/627-get-code-artifact-domain.sh $pid"  >> commands.sh ;;
                 AWS::CodeArtifact::Repository)  echo "../../scripts/627-get-code-artifact-repository.sh $pid"  >> commands.sh ;;
                 AWS::CodePipeline::Pipeline)  echo "../../scripts/629-get-code-pipeline.sh $pid"  >> commands.sh ;;
                 AWS::CodeBuild::Project)  echo "../../scripts/625-get-code-build-project.sh $pid"  >> commands.sh ;;
-
-
+                AWS::CodeStarNotifications::NotificationRule) echo "../../scripts/623-get-code-star-notification.sh $parn"  >> commands.sh ;;
+                
                 AWS::Cognito::IdentityPool) echo "../../scripts/770-get-cognito-identity-pools.sh $pid"  >> commands.sh ;;
                 AWS::Cognito::IdentityPoolRoleAttachment) echo "echo '# $type $pid fetched as part of Identity pool..' " >> commands.sh ;;
                 AWS::Cognito::UserPool) echo "../../scripts/775-get-cognito-user-pools.sh $pid"  >> commands.sh ;;
@@ -119,6 +123,7 @@ if [ $count -gt 0 ]; then
                 AWS::IAM::InstanceProfile) echo "../../scripts/056-get-instance-profile.sh $pid" >> commands.sh ;;
                 AWS::IAM::User) echo "../../scripts/030-get-iam-users.sh $pid" >> commands.sh ;;
                 AWS::IAM::AccessKey) echo "../../scripts/057-get-iam-access-key.sh $pid" >> commands.sh ;;
+                AWS::IAM::ServiceLinkedRole) echo "../../scripts/get-iam-service-linked-role.sh $pid" >> commands.sh ;;
 
                 AWS::KinesisFirehose::DeliveryStream) echo "../../scripts/740-get-kinesis-firehose-delivery-stream.sh $pid" >> commands.sh ;;
 
@@ -141,10 +146,11 @@ if [ $count -gt 0 ]; then
                 AWS::SageMaker::Image) echo "../../scripts/get-sagemaker-image.sh $pid" >> commands.sh ;;
                 AWS::SageMaker::ImageVersion) echo "echo '# $type $pid fetched as part of SageMaker Image..'" >> commands.sh ;; # fetched as part of function
 
+                AWS::SNS::Subscription)  echo "../../scripts/731-get-sns-subscriptions.sh $parn" >> commands.sh ;;
                 AWS::SNS::Topic)  echo "../../scripts/730-get-sns-topic.sh $parn" >> commands.sh ;;
                 AWS::SNS::TopicPolicy) echo "../../scripts/get-sns-topic-policy.sh $parn" >> commands.sh ;;
                 AWS::SQS::Queue)  echo "../../scripts/720-get-sqs-queue.sh $parn" >> commands.sh ;;
-                
+           
                 AWS::SSM::Parameter)  echo "../../scripts/445-get-ssm-params.sh $pid" >> commands.sh ;;
                 
                 AWS::SecretsManager::Secret)  echo "../../scripts/450-get-secrets.sh $parn"  >> commands.sh ;;                

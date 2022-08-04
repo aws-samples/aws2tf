@@ -257,6 +257,7 @@ if [ "$t" == "artifact" ]; then pre="627*"; fi
 if [ "$t" == "athena" ]; then pre="66*"; fi
 if [ "$t" == "code" ]; then pre="62*"; fi
 if [ "$t" == "cfront" ]; then pre="80*"; fi
+if [ "$t" == "cloudwatch" ]; then pre="76*"; fi
 if [ "$t" == "cloudform" ]; then pre="999*"; fi
 if [ "$t" == "cognito" ]; then pre="77*"; fi
 if [ "$t" == "config" ]; then pre="41*"; fi
@@ -287,8 +288,8 @@ if [ "$c" == "no" ]; then
     echo "terraform init -upgrade"
     terraform init -upgrade -no-color 2>&1 | tee -a import.log
 fi
-pwd
-ls
+#pwd
+
 #############################################################################
 date
 lc=0

@@ -155,8 +155,8 @@ if [ "$kcount" -gt "0" ]; then
 
                     terraform import $ttft.$rname "$ocname" | grep Import
                     terraform state show $ttft.$rname > t2.txt
-                    tfa=`printf "data/%s.%s" $ttft $rname`
-                    terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
+                    tfa=`printf "%s.%s" $ttft $rname`
+                    terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
                     #cat $tfa.json | jq .
        
                     rm -f $fn

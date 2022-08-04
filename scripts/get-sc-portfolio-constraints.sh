@@ -44,7 +44,7 @@ for c in `seq 0 0`; do
          
             terraform state show $ttft.${cname}__${1} > t2.txt
             #tfa=`printf "data/%s.%s__%s" $ttft $rname $1`
-            #terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
+            #terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
             #cat $tfa.json | jq .
 
             rm -f $fn

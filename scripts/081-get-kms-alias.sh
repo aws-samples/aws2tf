@@ -68,8 +68,8 @@ for c in `seq 0 0`; do
                 terraform import $ttft.$rname "$cname" | grep Import
                 
                 terraform state show $ttft.$rname > t2.txt
-                tfa=`printf "data/%s.%s" $ttft $rname`
-                terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
+                tfa=`printf "%s.%s" $ttft $rname`
+                terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
                 #echo $awsj | jq . 
                 rm -f $fn
                 # rename state to save problems later

@@ -52,7 +52,7 @@ c=0
             terraform state show ${ttft}.${rname}__${1} > t2.txt
             
             tfa=`printf "data/%s.%s__%s" $ttft $rname $1`
-            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
+            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
             #echo $awsj | jq . 
             rm $fn
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt

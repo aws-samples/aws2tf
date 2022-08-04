@@ -57,7 +57,7 @@ for c in `seq 0 0`; do
             terraform import $ttft.c__${catid}__${dbnam}__${rname} "${catid}:${dbnam}:${cname}" | grep Import
             terraform state show $ttft.c__${catid}__${dbnam}__${rname} | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             tfa=`printf "%s.c__%s__%s__%s" $ttft $catid $dbnam $rname`
-            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
+            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
 
             rm -f $fn
            

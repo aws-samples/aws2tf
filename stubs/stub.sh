@@ -35,8 +35,7 @@ for i in `seq 0 $count`; do
     terraform state show $ttft.${rname} | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
 
     rm -f $fn
-    #cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-
+ 
     file="t1.txt"
     echo $aws2tfmess > $fn
     while IFS= read t1

@@ -42,8 +42,8 @@ for c in `seq 0 0`; do
             printf "terraform import %s.%s %s" $ttft $rname "$cname" > data/import_$ttft_$rname.sh
             terraform import $ttft.$rname "$cname" | grep Import
             terraform state show $ttft.$rname > t2.txt
-            tfa=`printf "data/%s.%s" $ttft $rname`
-            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
+            tfa=`printf "%s.%s" $ttft $rname`
+            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
             #echo $awsj | jq . 
             rm $ttft.$rname.tf
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt

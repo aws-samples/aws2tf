@@ -65,7 +65,7 @@ for c in `seq 0 0`; do
                     #terraform state mv $ttft.$cname $ttft.k_$cname
                     terraform state show $ttft.k_$cname > t2.txt
                     tfa=`printf "%s.%s" $ttft k_$cname`
-                    terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
+                    terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
                     #echo $awsj | jq . 
                     rm -f $fn
                     # rename state to save problems later

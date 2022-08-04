@@ -255,7 +255,7 @@ if [ "$t" == "appmesh" ]; then pre="360*"; fi
 if [ "$t" == "appstream" ]; then pre="46*"; fi
 if [ "$t" == "artifact" ]; then pre="627*"; fi
 if [ "$t" == "athena" ]; then pre="66*"; fi
-if [ "$t" == "code" ]; then pre="62*"; fi
+if [ "$t" == "code" ]; then pre="625*"; fi
 if [ "$t" == "cfront" ]; then pre="80*"; fi
 if [ "$t" == "cloudform" ]; then pre="999*"; fi
 if [ "$t" == "cognito" ]; then pre="77*"; fi

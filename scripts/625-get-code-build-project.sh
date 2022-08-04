@@ -40,8 +40,15 @@ for c in `seq 0 0`; do
             terraform state show $ttft.$cname > t2.txt
             tfa=`printf "%s.%s" $ttft $cname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
-            #echo $awsj | jq .
-            
+            #
+            #get the buildspec
+            bspf=`printf "buildspec__%s__%s.json" $ttft $cname`
+            pwd
+            ls /data/*.json
+            echo "...1"
+            cat data/${tfa}.json | jq -r .values.source[].buildspec > $bspf
+            echo "...2"
+
             rm $ttft.$cname.tf
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             mv t1.txt t1.txt.sav
@@ -97,30 +104,24 @@ for c in `seq 0 0`; do
                         #echo "---> $tt2"
 
                         if [[ "$tt2" == "jsonencode(" ]]; then
-                            #echo "--- HERE ----"
-                            
-                            t1t=`printf "buildspec = jsonencode(file(\"buildspec__%s__%s.txt\"))" $ttft $cname`
-                            echo $t1t >> $fn
+                            #echo "--- HERE ----"       
+                            printf "buildspec = file(\"buildspec__%s__%s.json\")\n" $ttft $cname >> $fn
+                     
                             skip=1
                             lbc=0
                             rbc=0
                             breq=0
-                            bspf=`printf "buildspec__%s__%s.txt" $ttft $cname`
+                            
                             while [[ $breq -eq 0 ]];do 
                                 if [[ "${t1}" == *"("* ]]; then lbc=`expr $lbc + 1`; fi
                                 if [[ "${t1}" == *")"* ]]; then rbc=`expr $rbc + 1`; fi
                                 #echo "$lbc $rbc $t1"
                                 read line
                                 t1=`echo "$line"`
-                                if [[ $rbc -eq $lbc ]]; then 
-                                    breq=1
-                                else
-                                    echo "$t1" >> $bspf
-                                fi
+                                if [[ $rbc -eq $lbc ]]; then breq=1; fi
                             done
                         fi
                     fi
-
 
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "rule_id" ]];then skip=1;fi
@@ -162,15 +163,6 @@ for c in `seq 0 0`; do
                 
             done <"$file"
 
-
-            if [[ "$bspf" != "" ]]; then
-                echo "...here... $bspf"
-                c1=`wc -l $bspf | awk '{print $1}'`
-                c1=`expr $c1 - 1`
-                head -n $c1 $bspf > temp-bldspec.txt
-                cp temp-bldspec.txt $bspf
-            fi
-
             if [[ "$ecrr" != "" ]]; then 
                 ../../scripts/get-ecr.sh $ecrr
             fi
@@ -184,7 +176,6 @@ for c in `seq 0 0`; do
                 #echo "*** $trole - from codebuildprof"
                 ../../scripts/050-get-iam-roles.sh $trole
             fi
-
 
         done
         

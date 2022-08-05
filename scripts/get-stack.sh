@@ -138,6 +138,12 @@ if [ $count -gt 0 ]; then
 
                 AWS::Logs::LogGroup)  echo "../../scripts/070-get-cw-log-grp.sh /$parn" >> commands.sh ;;
                 
+                AWS::ServiceCatalog::PortfolioPrincipalAssociation) 
+                    tarn=`echo $parn | cut -f1 -d'|'`
+                    echo "../../scripts/get-sc-portfolio-principal.sh $tarn" >> commands.sh 
+                    ;;
+
+
                 AWS::S3::Bucket)  echo "../../scripts/060-get-s3.sh $pid" >> commands.sh ;;
                 AWS::S3::BucketPolicy) echo "echo '# $type $pid fetched as part of Bucket ..' " >> commands.sh ;;
 
@@ -153,6 +159,8 @@ if [ $count -gt 0 ]; then
            
                 AWS::SSM::Parameter)  echo "../../scripts/445-get-ssm-params.sh $pid" >> commands.sh ;;
                 
+                AWS::StepFunctions::StateMachine) echo "../../scripts/780-get-sfn-state-machine.sh $pid" >> commands.sh ;;
+
                 AWS::SecretsManager::Secret)  echo "../../scripts/450-get-secrets.sh $parn"  >> commands.sh ;;                
                 AWS::ServiceDiscovery::Service)  echo "../../scripts/get-sd-service.sh $pid"  >> commands.sh ;;
 

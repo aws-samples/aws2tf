@@ -276,6 +276,7 @@ if [ "$t" == "s3" ]; then pre="060*"; fi # change to 06*
 if [ "$t" == "sagemaker" ]; then pre="68*"; fi
 if [ "$t" == "secrets" ]; then pre="45*"; fi
 if [ "$t" == "sc" ]; then pre="81*"; fi # service catalog
+if [ "$t" == "sfn" ]; then pre="78*"; fi # State machine
 if [ "$t" == "sqs" ]; then pre="72*"; fi # SQS
 if [ "$t" == "spot" ]; then pre="25*"; fi
 

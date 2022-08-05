@@ -169,8 +169,9 @@ To get all the resources in a deployed Stack Set
 
 Or simply check back after some time to see if they are listed below.
 
+
 ----
-## Terraform resources supported as of 31-Jul-2022
+## Terraform resources supported as of 05-Aug-2022
 
 * aws_api_gateway_resource
 * aws_api_gateway_rest_api
@@ -195,10 +196,13 @@ Or simply check back after some time to see if they are listed below.
 * aws_cloudwatch_event_rule
 * aws_cloudwatch_event_target
 * aws_cloudwatch_log_group
+* aws_cloudwatch_metric_alarm
 * aws_codeartifact_domain
 * aws_codeartifact_repository
 * aws_codebuild_project
+* aws_codecommit_repository
 * aws_codepipeline
+* aws_codestarnotifications_notification_rule
 * aws_cognito_identity_pool
 * aws_cognito_identity_pool_roles_attachment
 * aws_cognito_user_pool
@@ -247,6 +251,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_iam_role
 * aws_iam_role_policy
 * aws_iam_role_policy_attachment
+* aws_iam_service_linked_role
 * aws_iam_user
 * aws_iam_user_group_membership
 * aws_instance
@@ -304,6 +309,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_servicecatalog_principal_portfolio_association
 * aws_servicecatalog_product
 * aws_servicecatalog_product_portfolio_association
+* aws_sfn_state_machine
 * aws_sns_topic
 * aws_sns_topic_policy
 * aws_sns_topic_subscription
@@ -325,16 +331,19 @@ Or simply check back after some time to see if they are listed below.
 * aws_vpn_connection
 
 ----
-## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 31-Jul-2022
+## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 05-Aug-2022
 
 * AWS::ApiGateway::Account
 * AWS::ApiGateway::Resource
 * AWS::ApiGateway::RestApi
 * AWS::Cloud9::EnvironmentEC2
+* AWS::CloudWatch::Alarm
 * AWS::CodeArtifact::Domain
 * AWS::CodeArtifact::Repository
 * AWS::CodeBuild::Project
+* AWS::CodeCommit::Repository
 * AWS::CodePipeline::Pipeline
+* AWS::CodeStarNotifications::NotificationRule
 * AWS::Cognito::IdentityPool
 * AWS::Cognito::IdentityPoolRoleAttachment
 * AWS::Cognito::UserPool
@@ -377,6 +386,7 @@ Or simply check back after some time to see if they are listed below.
 * AWS::IAM::ManagedPolicy
 * AWS::IAM::Policy
 * AWS::IAM::Role
+* AWS::IAM::ServiceLinkedRole
 * AWS::IAM::User
 * AWS::KMS::Alias
 * AWS::KMS::Key
@@ -389,6 +399,7 @@ Or simply check back after some time to see if they are listed below.
 * AWS::Logs::LogGroup
 * AWS::S3::Bucket
 * AWS::S3::BucketPolicy
+* AWS::SNS::Subscription
 * AWS::SNS::Topic
 * AWS::SNS::TopicPolicy
 * AWS::SQS::Queue
@@ -399,6 +410,8 @@ Or simply check back after some time to see if they are listed below.
 * AWS::SageMaker::ImageVersion
 * AWS::SecretsManager::Secret
 * AWS::ServiceDiscovery::Service
+* AWS::StepFunctions::StateMachine
  
 ----
+
 

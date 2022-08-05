@@ -2,7 +2,6 @@
 if [[ "$1" == "port-"* ]]; then
         cmd[0]="$AWS servicecatalog list-principals-for-portfolio --portfolio-id $1"
         
-
     else
         echo "must pass a portfolio id"
         exit
@@ -41,12 +40,13 @@ for c in `seq 0 0`; do
 
             printf "resource \"%s\" \"%s__%s\" {" $ttft $rname $1 > $fn
             printf "}" >> $fn
+
+            #cname=principl, $1 = portfolioid
+
             terraform import $ttft.${rname}__${1} "en,${cname},${1}" | grep Import
          
             terraform state show $ttft.${rname}__${1} > t2.txt
-            #tfa=`printf "data/%s.%s__%s" $ttft $rname $1`
-            #terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
-            #cat $tfa.json | jq .
+
 
             rm -f $fn
             cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
@@ -76,9 +76,17 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "principal_arn" ]];then 
                         tt2=$(echo $tt2 | tr -d '"')
                         if [[ "$tt2" == *":iam:"* ]]; then
-                            trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev)
-                            trole=${trole//:/_} && trole=${trole//./_} && trole=${trole//\//_}
-                            t1=`printf "%s = aws_iam_user.%s.arn" $tt1 $trole`
+                            tarn=`echo $tt2 | tr -d '"'`
+                            if [[ "$tarn" == *":user"* ]];then
+                                trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev)
+                                trole=${trole//:/_} && trole=${trole//./_} && trole=${trole//\//_}
+                                t1=`printf "%s = aws_iam_user.%s.arn" $tt1 $trole`
+                            fi
+                            if [[ "$tarn" == *":role"* ]];then
+                                trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev)
+                                trole=${trole//:/_} && trole=${trole//./_} && trole=${trole//\//_}
+                                t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
+                            fi
                         fi                 
                     fi
 
@@ -92,8 +100,15 @@ for c in `seq 0 0`; do
             done <"$file"
 
             if [[ "$trole" != "" ]];then
-                ../../scripts/030-get-iam-users.sh $trole
+                if [[ "$tarn" == *":user"* ]];then
+                    ../../scripts/030-get-iam-users.sh $tarn
+                fi
+                if [[ "$tarn" == *":role"* ]];then
+                    ../../scripts/050-get-iam-roles.sh $tarn
+                fi
             fi
+
+            ../../scripts/810-get-sc-portfolio.sh $1
             
         done # end for
 

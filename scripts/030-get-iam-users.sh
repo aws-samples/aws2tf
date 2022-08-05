@@ -1,6 +1,10 @@
 #!/bin/bash
 if [[ "$1" != "" ]]; then  
-    cmd[0]="$AWS iam list-users | jq '.Users[] | select(.UserName==\"${1}\")'"
+    if [[ ${1} == "arn:aws:iam"* ]]; then
+        cmd[0]="$AWS iam list-users | jq '.Users[] | select(.Arn==\"${1}\")'"
+    else
+        cmd[0]="$AWS iam list-users | jq '.Users[] | select(.UserName==\"${1}\")'"
+    fi
 else
     cmd[0]="$AWS iam list-users"
 fi

@@ -1,9 +1,11 @@
 #!/bin/bash
 
 if [[ "$1" == "port-"* ]]; then
-        cmd[0]="$AWS servicecatalog search-products-as-admin --portfolio-id $1"
+    cmd[0]="$AWS servicecatalog search-products-as-admin --portfolio-id $1"
+#elif [[ "$1" == "prod-"* ]];then
+#    cmd[0]="$AWS servicecatalog search-products-as-admin | jq -r '. | select(.ProductViewDetails[].ProductViewSummary.ProductId==\"${1}\")'"
 else
-    echo "must pass a portfolio id"
+    echo "must pass a portfolio id or product id"
     exit
 fi
 
@@ -34,8 +36,8 @@ for c in `seq 0 0`; do
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}") # product id
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             echo "$ttft $cname $1"
- 
-            awsout2=$(aws servicecatalog  describe-product-as-admin --id ${cname} --source-portfolio-id $1)     
+     
+            awsout2=$($AWS servicecatalog  describe-product-as-admin --id ${cname} --source-portfolio-id $1)     
 
             paname=$(echo $awsout2 | jq -r .ProductViewDetail.ProductViewSummary.Name)
             paids=$(echo $awsout2 | jq .ProvisioningArtifactSummaries)
@@ -50,7 +52,7 @@ for c in `seq 0 0`; do
                         cname2=$(echo $paids | jq -r ".[(${j})].Id") # provisioning id
                         rname2=${cname2//:/_} && rname2=${rname2//./_} && rname2=${rname2//\//_}
                         #echo "cname2=$cname2"
-                        awsout3=$(aws servicecatalog describe-provisioning-artifact --provisioning-artifact-id $cname2 --product-name "${paname}")
+                        awsout3=$($AWS servicecatalog describe-provisioning-artifact --provisioning-artifact-id $cname2 --product-name "${paname}")
                         #echo "awsout3"
                         #echo $awsout3 | jq .
 

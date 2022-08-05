@@ -15,7 +15,7 @@ fi
 c=0
 cm=${cmd[$c]}
 
-pref[0]="PortfolioDetails"
+
 tft[0]="aws_servicecatalog_portfolio"
 idfilt[0]="Id"
 
@@ -25,7 +25,7 @@ for c in `seq 0 0`; do
  
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"

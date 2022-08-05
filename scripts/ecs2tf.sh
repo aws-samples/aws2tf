@@ -176,7 +176,7 @@ for file in $@; do
     FilesToExtarct+="$file.csv "
 done
 # NF - predefined awk number of fields - so just the last field - no timestamp,size
-fileList=$(aws s3 ls s3://$inputbucket/ | awk '{print $NF}')
+fileList=$($AWS s3 ls s3://$inputbucket/ | awk '{print $NF}')
 
 
 

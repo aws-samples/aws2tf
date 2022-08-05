@@ -35,7 +35,7 @@ for c in `seq 0 0`; do
             appt=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].AppType")             
             domid=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].DomainId")
             upn=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].UserProfileName")
-            cname=$(aws sagemaker describe-app --domain-id $domid --user-profile-name $upn --app-type $appt --app-name $appn --query AppArn | jq -r .)
+            cname=$($AWS sagemaker describe-app --domain-id $domid --user-profile-name $upn --app-type $appt --app-name $appn --query AppArn | jq -r .)
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
 
          

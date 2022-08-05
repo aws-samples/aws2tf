@@ -3,7 +3,7 @@ mysub=`echo $AWS2TF_ACCOUNT`
 myreg=`echo $AWS2TF_REGION`
 #echo "globe vars $myreg $mysub"
 if [ "$1" != "" ]; then
-    pat=$(aws lambda get-policy --function-name $1 | jq .Policy | tr -d '\\' | tr -d '"')
+    pat=$($AWS lambda get-policy --function-name $1 | jq .Policy | tr -d '\\' | tr -d '"')
 else
     echo "must supply a finction name"
     exit

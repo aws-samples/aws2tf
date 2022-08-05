@@ -250,7 +250,7 @@ if [ "$kcount" -gt "0" ]; then
     
 #### Fix up cluster security groups
 
-        #clsg=$(aws eks describe-cluster --name $cln --query cluster.resourcesVpcConfig.clusterSecurityGroupId | jq -r .)
+        #clsg=$($AWS eks describe-cluster --name $cln --query cluster.resourcesVpcConfig.clusterSecurityGroupId | jq -r .)
       
         #echo "Cluster sg = $clsg"
 

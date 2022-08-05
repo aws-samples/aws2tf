@@ -5,7 +5,7 @@ else
     cmd[0]="$AWS codeartifact list-repositories"
 fi
 
-accnt=$(aws sts get-caller-identity --query Account | jq -r .)
+accnt=$($AWS sts get-caller-identity --query Account | jq -r .)
 
 pref[0]="repositories"
 tft[0]="aws_codeartifact_repository"

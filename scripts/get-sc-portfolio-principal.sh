@@ -107,10 +107,14 @@ for c in `seq 0 0`; do
                     ../../scripts/050-get-iam-roles.sh $tarn
                 fi
             fi
+            
 
-            ../../scripts/810-get-sc-portfolio.sh $1
             
         done # end for
+        if [[ "$1" == *"port-"* ]]; then
+                #echo "--- HERE --- $1"
+                ../../scripts/810-get-sc-portfolio.sh $1
+        fi
 
     fi
 done

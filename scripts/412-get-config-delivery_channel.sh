@@ -1,13 +1,14 @@
 #!/bin/bash
+pref[0]="DeliveryChannels"
+tft[0]="aws_config_delivery_channel"
+idfilt[0]="name"
+
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS configservice describe-delivery-channels  --configuration-recorder-names $1" 
+    cmd[0]="$AWS configservice describe-delivery-channels --delivery-channel-names $1" 
 else
     cmd[0]="$AWS configservice describe-delivery-channels"
 fi
 
-pref[0]="DeliveryChannels"
-tft[0]="aws_config_delivery_channel"
-idfilt[0]="name"
 
 #rm -f ${tft[0]}.tf
 
@@ -15,7 +16,8 @@ for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
+    
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
@@ -63,10 +65,11 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "rule_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
                     if [[ ${tt1} == "availability_zone_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "vpc_id" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
-                    fi
+                    # not doing as buck may be elsewhere - ano region
+                    #if [[ ${tt1} == "s3_bucket_name" ]]; then
+                    #    buckn=`echo $tt2 | tr -d '"'`
+                    #    t1=`printf "%s = aws_s3_bucket.%s.id" $tt1 $tt2`
+                    #fi
                
                 fi
                 if [ "$skip" == "0" ]; then

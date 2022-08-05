@@ -77,6 +77,9 @@ if [ $count -gt 0 ]; then
                 AWS::Cognito::UserPool) echo "../../scripts/775-get-cognito-user-pools.sh $pid"  >> commands.sh ;;
                 AWS::Cognito::UserPoolClient) echo "echo '# $type $pid fetched as part of User & Identity pool..' " >> commands.sh ;;
                       
+                AWS::Config::ConfigurationRecorder) echo "../../scripts/410-get-config-recorder.sh $pid"  >> commands.sh ;;
+                AWS::Config::DeliveryChannel) echo "../../scripts/412-get-config-delivery_channel.sh $pid"  >> commands.sh ;;
+                
                 AWS::DynamoDB::Table) echo "../../scripts/640-get-dynamodb-table.sh $pid"  >> commands.sh ;;
 
                 AWS::EC2::Instance) echo "../../scripts/251-get-ec2-instances.sh $pid"  >> commands.sh ;;

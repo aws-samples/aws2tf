@@ -1,21 +1,25 @@
 #!/bin/bash
-if [ "$1" != "" ]; then
-    cmd[0]="$AWS configservice describe-config-rules  --configuration-recorder-names $1" 
-else
-    cmd[0]="$AWS configservice describe-configuration-recorders"
+
+tft[0]="aws_config_configuration_recorder"
+pref[0]="ConfigurationRecorders"
+idfilt[0]="name"
+c=0
+
+cm="$AWS configservice describe-configuration-recorders "
+if [[ "$1" != "" ]]; then
+    cm=`printf "$cm | jq '. | select(.ConfigurationRecorders[].name==\"%s\")'" $1`
 fi
 
-pref[0]="ConfigurationRecorders"
-tft[0]="aws_config_configuration_recorder"
-idfilt[0]="name"
+count=1
+trole=""
 
 #rm -f ${tft[0]}.tf
 
 for c in `seq 0 0`; do
     
-    cm=${cmd[$c]}
+    
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
@@ -63,9 +67,10 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "rule_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
                     if [[ ${tt1} == "availability_zone_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "vpc_id" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
+                    if [[ ${tt1} == "role_arn" ]]; then
+                        rarn=`echo $tt2 | tr -d '"'` 
+                        trole=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`
+                        t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
                     fi
                
                 fi
@@ -75,6 +80,10 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
+
+            if [ "$trole" != "" ]; then
+                ../../scripts/050-get-iam-roles.sh $trole
+            fi
             
         done
 

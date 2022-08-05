@@ -139,7 +139,7 @@ To use a specific region and profile
 
 If for example you want to get several VPCs you can use the cumulative mode:
 
-To get all the VPC related resources in a particular VPC
+To get all the VPC related resources in three particular VPC's
 ```
 ./aws2tf.sh -t vpc -i vpc-aaaaaaaaa 
 ./aws2tf.sh -t vpc -i vpc-bbbbbbbbb -c yes

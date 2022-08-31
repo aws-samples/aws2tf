@@ -146,7 +146,7 @@ else
     rm -f terra*.backup
 fi
 
-mkdir -p data
+mkdir -p data not-imported
 
 rm -f import.log
 #if [ "$f" = "no" ]; then

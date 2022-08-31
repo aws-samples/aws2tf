@@ -1,5 +1,9 @@
 #!/bin/bash
-cmd[0]="$AWS iam list-groups"
+if [[ "$1" != "" ]]; then  
+    cmd[0]="$AWS iam list-groups | jq '.Groups[] | select(.GroupName==\"${1}\")'"
+else
+    cmd[0]="$AWS iam list-groups"
+fi
 
 pref[0]="Groups"
 tft[0]="aws_iam_group"
@@ -11,6 +15,7 @@ for c in `seq 0 0`; do
     ttft=${tft[(${c})]}
     #echo $cm
     awsout=`eval $cm 2> /dev/null`
+    #echo $awsout | jq .
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
         exit
@@ -26,7 +31,7 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             if [ "$1" != "" ]; then
-                cname=`echo $awsout | jq ".RoleName" | tr -d '"'` 
+                cname=`echo $awsout | jq ".GroupName" | tr -d '"'` 
             else
                 cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].GroupName" | tr -d '"'`
             fi

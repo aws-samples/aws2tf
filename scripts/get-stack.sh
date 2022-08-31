@@ -127,6 +127,8 @@ if [ $count -gt 0 ]; then
                 AWS::IAM::User) echo "../../scripts/030-get-iam-users.sh $pid" >> commands.sh ;;
                 AWS::IAM::AccessKey) echo "../../scripts/057-get-iam-access-key.sh $pid" >> commands.sh ;;
                 AWS::IAM::ServiceLinkedRole) echo "../../scripts/get-iam-service-linked-role.sh $pid" >> commands.sh ;;
+                AWS::IAM::Group) echo "../../scripts/034-get-iam-groups.sh $pid" >> commands.sh ;;
+
 
                 AWS::KinesisFirehose::DeliveryStream) echo "../../scripts/740-get-kinesis-firehose-delivery-stream.sh $pid" >> commands.sh ;;
 
@@ -134,6 +136,8 @@ if [ $count -gt 0 ]; then
                 AWS::KMS::Alias) echo "echo '#  $type $pid  fetched as part of function..'" >> commands.sh ;;  # fetched as part of function 
                 
                 AWS::LakeFormation::DataLakeSettings) echo "../../scripts/630-get-lf-settings.sh $pid" >> commands.sh ;;
+                AWS::LakeFormation::Resource) echo "../../scripts/631-get-lf-resources.sh $pid" >> commands.sh ;;
+
                 AWS::Lambda::Function)  echo "../../scripts/700-get-lambda-function.sh $pid"  >> commands.sh ;;
                 AWS::Lambda::LayerVersion)  echo "../../scripts/702-get-lambda-layers.sh $pid"  >> commands.sh ;;
                 AWS::Lambda::Permission) echo "echo '# $type $pid fetched as part of function..'" >> commands.sh ;; # fetched as part of function

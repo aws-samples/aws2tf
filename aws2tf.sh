@@ -173,6 +173,15 @@ echo " "
 #rm -f terraform.tfstate
 #rm -f tf*.sh
 
+# write the main-vars.tf file
+printf "variable \"region\" {\n" > main-vars.tf
+printf "type = string \n" >> main-vars.tf
+printf "default = \"%s\" \n" $r >> main-vars.tf
+printf "}\n" >> main-vars.tf
+printf "variable \"profile\" {\n" >> main-vars.tf
+printf "type = string \n" >> main-vars.tf
+printf "default = \"%s\" \n" $p >> main-vars.tf
+printf "}\n" >> main-vars.tf
 
 # write the aws.tf file
 printf "terraform { \n" > aws.tf
@@ -192,18 +201,18 @@ printf "  }\n" >> aws.tf
 printf "}\n" >> aws.tf
 printf "\n" >> aws.tf
 printf "provider \"aws\" {\n" >> aws.tf
-printf " region = \"%s\" \n" $r >> aws.tf
+printf " region = var.region \n" >> aws.tf
 if [ -z ${AWS_ACCESS_KEY_ID+x} ] && [ -z ${AWS_SECRET_ACCESS_KEY+x} ];then
     printf " shared_credentials_files = [\"~/.aws/credentials\"] \n"  >> aws.tf
     #printf " shared_credentials_file = \"~/.aws/credentials\" \n"  >> aws.tf
-    printf " profile = \"%s\" \n" $p >> aws.tf
+    printf " profile = var.profile \n" >> aws.tf
     export AWS="aws --profile $p --region $r --output json "
 else
     export AWS="aws --region $r --output json "
 fi
 printf "}\n" >> aws.tf
 #printf "provider \"awscc\" {\n" >> aws.tf
-#printf " region = \"%s\" \n" $r >> aws.tf
+#printf " region = var.region \n" >> aws.tf
 #printf "}\n" >> aws.tf
 
 export AWS2TF_REGION=`echo $r`
@@ -385,6 +394,20 @@ echo "Terraform Refresh ..."
 
 echo "Terraform Plan ..."
 terraform plan -no-color
+
+which tfsec > /dev/null
+if [[ $? -eq 0 ]];then
+    ver=$(tfsec --version | tr -d -c 0-9)
+    if [[ $ver -ge 1275 ]];then
+        echo "tfsec security report" > security-report.txt
+        echo -n "CRITICAL - " >> security-report.txt
+        tfsec -f json | jq '.results[] | select(.severity=="CRITICAL") | [.resource, .description, .resolution]' 2> /dev/null || echo "No problems found" >> security-report.txt
+        echo -n "HIGH - " >> security-report.txt
+        tfsec -f json | jq '.results[] | select(.severity=="HIGH") | [.resource, .description, .resolution]' 2> /dev/null  || echo "No problems found" >> security-report.txt
+    else
+        echo "Please upgrade tfsec to version v1.27.5 or higher"
+    fi
+fi
 
 echo "---------------------------------------------------------------------------"
 echo "aws2tf output files are in generated/tf.${mysub}_${r}"

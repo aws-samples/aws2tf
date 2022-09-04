@@ -43,7 +43,7 @@ c=0
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
        
             rname=$(printf "data__%s__%s"  $tft $rname)
-            fn=`printf "data__%s__%s.tf" $ttft $rname`
+            fn=`printf "not-imported/%s__%s.tf" $ttft $rname`
             #echo $fn
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"

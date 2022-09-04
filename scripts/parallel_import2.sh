@@ -27,6 +27,8 @@ if [[ $? -ne 0 ]];then
     if [[ $? -eq 0 ]];then 
         #echo "pi2 using root provider"
         ln -s ../aws.tf aws.tf  2> /dev/null
+        ln -s ../main-vars.tf main-vars.tf  2> /dev/null
+        ln -s ../data-aws.tf data-aws.tf  2> /dev/null
         ln -s ../.terraform .terraform 2> /dev/null
         ln -s ../.terraform.lock.hcl .terraform.lock.hcl 2> /dev/null
     else

@@ -171,7 +171,7 @@ Or simply check back after some time to see if they are listed below.
 
 
 ----
-## Terraform resources supported as of 05-Aug-2022
+## Terraform resources supported as of 17-Sep-2022
 
 * aws_api_gateway_resource
 * aws_api_gateway_rest_api
@@ -261,6 +261,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_kms_alias
 * aws_kms_key
 * aws_lakeformation_data_lake_settings
+* aws_lakeformation_permissions
 * aws_lakeformation_resource
 * aws_lambda_alias
 * aws_lambda_function
@@ -297,6 +298,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_sagemaker_domain
 * aws_sagemaker_image
 * aws_sagemaker_image_version
+* aws_sagemaker_notebook_instance
 * aws_sagemaker_user_profile
 * aws_secretsmanager_secret
 * aws_secretsmanager_secret_version
@@ -331,7 +333,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_vpn_connection
 
 ----
-## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 05-Aug-2022
+## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 17-Sep-2022
 
 * AWS::ApiGateway::Account
 * AWS::ApiGateway::Resource
@@ -348,6 +350,8 @@ Or simply check back after some time to see if they are listed below.
 * AWS::Cognito::IdentityPoolRoleAttachment
 * AWS::Cognito::UserPool
 * AWS::Cognito::UserPoolClient
+* AWS::Config::ConfigurationRecorder
+* AWS::Config::DeliveryChannel
 * AWS::DynamoDB::Table
 * AWS::EC2::EIP
 * AWS::EC2::Instance
@@ -382,6 +386,7 @@ Or simply check back after some time to see if they are listed below.
 * AWS::Glue::Partition
 * AWS::Glue::Table
 * AWS::IAM::AccessKey
+* AWS::IAM::Group
 * AWS::IAM::InstanceProfile
 * AWS::IAM::ManagedPolicy
 * AWS::IAM::Policy
@@ -392,6 +397,8 @@ Or simply check back after some time to see if they are listed below.
 * AWS::KMS::Key
 * AWS::KinesisFirehose::DeliveryStream
 * AWS::LakeFormation::DataLakeSettings
+* AWS::LakeFormation::Permissions
+* AWS::LakeFormation::Resource
 * AWS::Lambda::EventInvokeConfig
 * AWS::Lambda::Function
 * AWS::Lambda::LayerVersion
@@ -408,10 +415,10 @@ Or simply check back after some time to see if they are listed below.
 * AWS::SageMaker::Domain
 * AWS::SageMaker::Image
 * AWS::SageMaker::ImageVersion
+* AWS::SageMaker::NotebookInstance
 * AWS::SecretsManager::Secret
 * AWS::ServiceDiscovery::Service
 * AWS::StepFunctions::StateMachine
  
 ----
-
 

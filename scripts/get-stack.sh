@@ -159,6 +159,7 @@ if [ $count -gt 0 ]; then
                 AWS::SageMaker::Domain) echo "../../scripts/680-get-sagemaker-domain.sh $parn" >> commands.sh ;;
                 AWS::SageMaker::Image) echo "../../scripts/get-sagemaker-image.sh $pid" >> commands.sh ;;
                 AWS::SageMaker::ImageVersion) echo "echo '# $type $pid fetched as part of SageMaker Image..'" >> commands.sh ;; # fetched as part of function
+                AWS::SageMaker::NotebookInstance) echo "../../scripts/682-get-sagemaker-notebook-instance.sh $pid" >> commands.sh ;;
 
                 AWS::SNS::Subscription)  echo "../../scripts/731-get-sns-subscriptions.sh $parn" >> commands.sh ;;
                 AWS::SNS::Topic)  echo "../../scripts/730-get-sns-topic.sh $parn" >> commands.sh ;;

@@ -394,22 +394,24 @@ echo "Terraform Refresh ..."
 
 echo "Terraform Plan ..."
 terraform plan -no-color
-
+echo " "
+echo "---------------------------------------------------------------------------"
 which tfsec > /dev/null
 if [[ $? -eq 0 ]];then
     ver=$(tfsec --version | tr -d -c 0-9)
     if [[ $ver -ge 1275 ]];then
         echo "tfsec security report" > security-report.txt
-        echo -n "CRITICAL - " >> security-report.txt
-        tfsec -f json | jq '.results[] | select(.severity=="CRITICAL") | [.resource, .description, .resolution]' 2> /dev/null || echo "No problems found" >> security-report.txt
-        echo -n "HIGH - " >> security-report.txt
-        tfsec -f json | jq '.results[] | select(.severity=="HIGH") | [.resource, .description, .resolution]' 2> /dev/null  || echo "No problems found" >> security-report.txt
+        echo "CRITICAL - " >> security-report.txt
+        tfsec -f json | jq '.results[] | select(.severity=="CRITICAL") | [.resource, .description, .resolution]' >> security-report.txt
+        echo "HIGH - " >> security-report.txt
+        tfsec -f json | jq '.results[] | select(.severity=="HIGH") | [.resource, .description, .resolution]' >> security-report.txt
+        echo "security report in generated/tf.${mysub}_${r}/security-report.txt"
     else
         echo "Please upgrade tfsec to version v1.27.5 or higher"
     fi
 fi
 
-echo "---------------------------------------------------------------------------"
+
 echo "aws2tf output files are in generated/tf.${mysub}_${r}"
 echo "---------------------------------------------------------------------------"
 

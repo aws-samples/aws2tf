@@ -421,4 +421,3 @@ Or simply check back after some time to see if they are listed below.
 * AWS::StepFunctions::StateMachine
  
 ----
-

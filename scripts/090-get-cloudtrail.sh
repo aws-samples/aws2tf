@@ -5,7 +5,7 @@ tft[0]="aws_cloudtrail"
 idfilt[0]="SubnetId"
 
 for c in `seq 0 0`; do
-    region=`cat aws.tf | grep region | awk '{print $3}' | tr -d '"'`
+    region=`echo "var.region" | terraform console | tr -d '"'`
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
 	#echo $cm

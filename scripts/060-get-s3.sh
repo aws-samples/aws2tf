@@ -14,7 +14,7 @@ fi
 pref[0]="Buckets"
 tft[0]="aws_s3_bucket"
 idfilt[0]="Name"
-theregion=`grep region aws.tf | head -1 | cut -f2 -d'=' | tr -d '"' | tr -d ' '`
+theregion=`echo "var.region" | terraform console | tr -d '"'`
 keyid=""
 doacl2=0
  

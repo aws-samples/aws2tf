@@ -67,8 +67,8 @@ for c in `seq 0 0`; do
 
                     if [[ ${tt1} == "requester_managed" ]];then skip=1;fi
                     if [[ ${tt1} == "manages_vpc_endpoints" ]];then skip=1;fi
-                    if [[ ${tt1} == "cidr_blocks" ]];then
-                        echo "matched cidr"  
+                    if [[ ${tt1} == "base_endpoint_dns_names" ]];then
+                        echo "base_endpoint_dns_names"  
                         skip=1
                         while [[ "$t1" != "]" ]] ;do
                             read line
@@ -76,6 +76,16 @@ for c in `seq 0 0`; do
                             echo $t1
                         done
                     fi
+                    if [[ ${tt1} == "gateway_load_balancer_arns" ]];then 
+                        if [[ ${tt2} == *"[]"* ]];then 
+                            skip=1
+                        fi
+                    fi
+
+
+
+
+
                     if [[ ${tt1} == "network_interface_ids" ]];then skip=1;fi
                     if [[ ${tt1} == "vpc_id" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`

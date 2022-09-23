@@ -149,5 +149,15 @@ for c in `seq 0 0`; do
     fi 
 done
 
+if [ "$1" != "" ]; then
+    if [[ "$1" == "vpc-"* ]]; then
+        ../../scripts/get-vpce-services.sh $1
+    fi 
+else
+    ../../scripts/get-vpce-services.sh
+fi
+
+
+
 rm -f t*.txt
 

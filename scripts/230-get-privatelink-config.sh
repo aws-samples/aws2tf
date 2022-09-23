@@ -103,9 +103,9 @@ for c in `seq 0 0`; do
                     fi
                 else
                     if [[ "$t1" == *"arn:aws:elasticloadbalancing:"* ]]; then
-                        echo "in arn"
+                        #echo "in arn"
                         lbarn=`echo $t1 | tr -d '"|,'`
-                        echo $lbarn
+                        #echo $lbarn
                         lbs+=`printf "\"%s\" " $lbarn`
                         #t1=`printf "aws_subnet.%s.id," $t1`
                     fi
@@ -118,6 +118,14 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
+
+            for lb in ${lbs[@]}; do
+                lb1=`echo $lb | tr -d '"'`
+                echo "calling for $lb1"
+                if [ "$lb1" != "" ]; then
+                    ../../scripts/elbv2.sh $lb1
+                fi
+            done
             
         done
     fi

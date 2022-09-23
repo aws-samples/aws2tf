@@ -79,6 +79,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "default_network_acl_id" ]];then skip=1;fi
                     if [[ ${tt1} == "ipv6_association_id" ]];then skip=1;fi
+                    if [[ ${tt1} == "enable_classiclink" ]];then skip=1;fi
                     if [[ ${tt1} == "assign_generated_ipv6_cidr_block" ]];then 
                         tt2=`echo $tt2 | tr -d '"'`
                         if [[ $tt2 == "true" ]];then

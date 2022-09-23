@@ -25,6 +25,7 @@ usage(){
     echo "           lf"
     echo "           glue"
     echo "           params"
+    echo "           privatelink"
     echo "           eb"
     echo "           ec2"
     echo "           rds"
@@ -280,6 +281,7 @@ if [ "$t" == "lambda" ]; then pre="700*"; fi
 if [ "$t" == "lf" ]; then pre="63*"; fi
 if [ "$t" == "org" ]; then pre="01*"; fi
 if [ "$t" == "params" ]; then pre="445*"; fi
+if [ "$t" == "privatelink" ]; then pre="230*"; fi
 if [ "$t" == "rds" ]; then pre="60*"; fi
 if [ "$t" == "s3" ]; then pre="060*"; fi # change to 06*
 if [ "$t" == "sagemaker" ]; then pre="68*"; fi

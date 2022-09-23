@@ -46,6 +46,7 @@ for c in `seq 0 0`; do
             #		echo $k
             #	done
             file="t1.txt"
+            lbs=()
             echo $aws2tfmess > $fn
             while IFS= read line
             do
@@ -90,7 +91,11 @@ for c in `seq 0 0`; do
                             skip=1
                         fi
                     fi
-
+                    if [[ ${tt1} == "network_load_balancer_arns" ]];then 
+                        if [[ ${tt2} == *"[]"* ]];then 
+                            skip=1
+                        fi
+                    fi
 
 
 
@@ -99,6 +104,13 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "vpc_id" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
+                    fi
+                else
+                    if [[ "$t1" == *"arn:aws:elasticloadbalancing:"* ]]; then
+                        t1=`echo $t1 | tr -d '"|,'`
+                        echo $t1
+                        lbs+=`printf "\"%s\" " $t1`
+                        #t1=`printf "aws_subnet.%s.id," $t1`
                     fi
                
                 fi

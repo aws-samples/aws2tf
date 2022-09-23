@@ -59,9 +59,9 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "ipv6_cidr_block_association_id" ]];then skip=1;fi
+                    if [[ ${tt1} == "service_type" ]];then skip=1;fi
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
-                    if [[ ${tt1} == "availability_zone_id" ]];then skip=1;fi
+                    if [[ ${tt1} == "state" ]];then skip=1;fi
                     if [[ ${tt1} == "private_dns_name_configuration" ]];then skip=1;fi
                     if [[ ${tt1} == "service_name" ]];then skip=1;fi
 

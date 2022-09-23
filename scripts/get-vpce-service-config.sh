@@ -1,11 +1,11 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS ec2 describe-vpc-endpoint-services --filters \"Name=vpc-id,Values=$1\"" 
+    cmd[0]="$AWS ec2 describe-vpc-endpoint-service-configurations --filters \"Name=service-id,Values=$1\"" 
 else
-    cmd[0]="$AWS ec2 describe-vpc-endpoint-services"
+    cmd[0]="$AWS ec2 describe-vpc-endpoint-service-configurations"
 fi
 
-pref[0]="ServiceDetails"
+pref[0]="ServiceConfigurations"
 tft[0]="aws_vpc_endpoint_service"
 idfilt[0]="ServiceId"
 
@@ -29,8 +29,12 @@ for c in `seq 0 0`; do
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $cname`
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
+            if [ -f "$fn" ] ; then
+                echo "$fn exists already skipping"
+                continue
+            fi
+            printf "resource \"%s\" \"%s\" {}" $ttft $cname > $ttft.$cname.tf
+            
             terraform import $ttft.$cname "$cname" | grep Import
             terraform state show $ttft.$cname > t2.txt
             tfa=`printf "%s.%s" $ttft $cname`

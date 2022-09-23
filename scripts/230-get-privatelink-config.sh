@@ -60,7 +60,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "service_type" ]];then skip=1;fi
-                    #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
+      
                     if [[ ${tt1} == "state" ]];then skip=1;fi
                     if [[ ${tt1} == "private_dns_name_configuration" ]];then skip=1;fi
                     if [[ ${tt1} == "service_name" ]];then skip=1;fi
@@ -69,6 +69,15 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "manages_vpc_endpoints" ]];then skip=1;fi
                     if [[ ${tt1} == "base_endpoint_dns_names" ]];then
                         echo "base_endpoint_dns_names"  
+                        skip=1
+                        while [[ "$t1" != "]" ]] ;do
+                            read line
+                            t1=`echo "$line"`
+                            echo $t1
+                        done
+                    fi
+                    if [[ ${tt1} == "availability_zones" ]];then
+                        echo "availability_zones"  
                         skip=1
                         while [[ "$t1" != "]" ]] ;do
                             read line

@@ -104,6 +104,7 @@ for c in `seq 0 0`; do
                     fi
                 else
                     if [[ "$t1" == *"arn:aws:elasticloadbalancing:"* ]]; then
+                        echo "in arn"
                         lbarn=`echo $t1 | tr -d '"|,'`
                         echo $lbarn
                         lbs+=`printf "\"%s\" " $lbarn`
@@ -111,6 +112,7 @@ for c in `seq 0 0`; do
                     fi
                
                 fi
+
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
                     echo "$t1" >> $fn

@@ -74,7 +74,7 @@ for c in `seq 0 0`; do
                         while [[ "$t1" != "]" ]] ;do
                             read line
                             t1=`echo "$line"`
-                            echo $t1
+                            #echo $t1
                         done
                     fi
                     if [[ ${tt1} == "availability_zones" ]];then
@@ -83,7 +83,6 @@ for c in `seq 0 0`; do
                         while [[ "$t1" != "]" ]] ;do
                             read line
                             t1=`echo "$line"`
-                            echo $t1
                         done
                     fi
                     if [[ ${tt1} == "gateway_load_balancer_arns" ]];then 

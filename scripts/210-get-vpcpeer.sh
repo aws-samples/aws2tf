@@ -56,7 +56,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "association_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "public_dns" ]];then skip=1;fi
-                    #if [[ ${tt1} == "private_dns" ]];then skip=1;fi
+                    if [[ ${tt1} == "allow_vpc_to_remote_classic_link" ]];then skip=1;fi
                     if [[ ${tt1} == "allow_classic_link_to_remote_vpc" ]];then skip=1;fi
                     if [[ ${tt1} == "private_ip" ]];then skip=1;fi
                     if [[ ${tt1} == "accept_status" ]];then skip=1;fi

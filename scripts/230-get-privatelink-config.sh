@@ -97,9 +97,6 @@ for c in `seq 0 0`; do
                         fi
                     fi
 
-
-
-
                     if [[ ${tt1} == "network_interface_ids" ]];then skip=1;fi
                     if [[ ${tt1} == "vpc_id" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
@@ -107,9 +104,9 @@ for c in `seq 0 0`; do
                     fi
                 else
                     if [[ "$t1" == *"arn:aws:elasticloadbalancing:"* ]]; then
-                        t1=`echo $t1 | tr -d '"|,'`
-                        echo $t1
-                        lbs+=`printf "\"%s\" " $t1`
+                        lbarn=`echo $t1 | tr -d '"|,'`
+                        echo $lbarn
+                        lbs+=`printf "\"%s\" " $lbarn`
                         #t1=`printf "aws_subnet.%s.id," $t1`
                     fi
                

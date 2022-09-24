@@ -21,3 +21,4 @@ clean*
 quotas
 boto3
 flip-eks.sh
+.DS_Store

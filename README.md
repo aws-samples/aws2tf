@@ -113,11 +113,11 @@ The currently supported types are:
 * lf - Lake Formation resources `-t lf`
 * org - AWS Organizations `-t org`
 * params - SSM parameters `-t params`
+* privatelink - Private Link resources
 * rds - RDS database resources `-t rds`
 * s3 - s3 buckets and policies
-* sagemaker - SageMaker resources `-t 
+* sagemaker - SageMaker resources `-t sagemaker`
 * secrets - Secrets Manager secrets `-t secrets`
-sagemaker`
 * sc - Service Catalog resources `-t sc`
 * sns - SNS resources `-t sns`
 * sqs - SQS queues `-t sqs`

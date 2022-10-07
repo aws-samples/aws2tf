@@ -98,7 +98,10 @@ for c in `seq 0 0`; do
                         printf "}\n" >> $fn
                     skip=1; 
                     fi          
-                    if [[ ${tt1} == "role_arn" ]];then skip=1;fi
+                    if [[ ${tt1} == "role_arn" ]];then 
+                        trarn=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`
+                        t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trarn`
+                    fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "input_template" ]];then 
                         itar==$(echo $tt2 | tr -d '"')
@@ -117,6 +120,9 @@ for c in `seq 0 0`; do
 
             if [[ "$lfn" != "" ]];then
                 ../../scripts/700-get-lambda-function.sh $lfn
+            fi
+            if [[ "$trarn" != "" ]];then
+                ../../scripts/050-get-iam-roles.sh $trarn
             fi
 
             

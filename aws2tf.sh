@@ -409,9 +409,9 @@ if [[ $? -eq 0 ]];then
     ver=$(tfsec --version | tr -d -c 0-9)
     if [[ $ver -ge 1275 ]];then
         echo "tfsec security report" > security-report.txt
-        echo "CRITICAL - " >> security-report.txt
+        echo "CRITICAL:" >> security-report.txt
         tfsec -f json | jq '.results[] | select(.severity=="CRITICAL") | [.resource, .description, .resolution]' >> security-report.txt
-        echo "HIGH - " >> security-report.txt
+        echo "HIGH:" >> security-report.txt
         tfsec -f json | jq '.results[] | select(.severity=="HIGH") | [.resource, .description, .resolution]' >> security-report.txt
         echo "security report in generated/tf.${mysub}_${r}/security-report.txt"
     else

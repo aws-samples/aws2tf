@@ -369,7 +369,7 @@ else
   
     if [ "$d" = "st" ]; then  exit; fi
     . ./commands.sh
-    echo "commands done - was unable to process:"
+    echo "commands done - unable to process:"
     cat unprocessed.log
 fi
 

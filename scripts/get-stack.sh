@@ -122,12 +122,13 @@ if [ $count -gt 0 ]; then
                 AWS::Glue::Partition) echo "# $type $pid Should be fetched via Glue Table Resource" >> commands.sh ;;
                 AWS::IAM::Role)  echo "../../scripts/050-get-iam-roles.sh $pid" >> commands.sh ;;
                 AWS::IAM::ManagedPolicy) echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;
-                AWS::IAM::Policy)  echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;
                 AWS::IAM::InstanceProfile) echo "../../scripts/056-get-instance-profile.sh $pid" >> commands.sh ;;
                 AWS::IAM::User) echo "../../scripts/030-get-iam-users.sh $pid" >> commands.sh ;;
                 AWS::IAM::AccessKey) echo "../../scripts/057-get-iam-access-key.sh $pid" >> commands.sh ;;
                 AWS::IAM::ServiceLinkedRole) echo "../../scripts/get-iam-service-linked-role.sh $pid" >> commands.sh ;;
                 AWS::IAM::Group) echo "../../scripts/034-get-iam-groups.sh $pid" >> commands.sh ;;
+                #AWS::IAM::Policy)  echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;
+                AWS::IAM::Policy)  echo "# $type $pid Should be fetched via Roles etc" >> commands.sh ;;
 
 
                 AWS::KinesisFirehose::DeliveryStream) echo "../../scripts/740-get-kinesis-firehose-delivery-stream.sh $pid" >> commands.sh ;;

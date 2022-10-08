@@ -9,7 +9,7 @@ if [[ "$1" != "" ]]; then
 fi
 
 count=1
-echo $cm
+#echo $cm
 awsout=`eval $cm 2> /dev/null`
 #echo $awsout | jq .
 

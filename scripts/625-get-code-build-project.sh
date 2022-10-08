@@ -15,7 +15,7 @@ for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	echo $cm
+	#echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
@@ -100,6 +100,7 @@ for c in `seq 0 0`; do
                     fi
                     if [[ ${tt2} == *"dkr.ecr"* ]]; then
                         ecrr=`echo $tt2 | cut -f2 -d '/' | tr -d '"'`
+                        ecrr=`echo $ecrr | cut -f1 -d ':'`
                     fi
 
                     if [[ ${tt1} == "buildspec" ]]; then

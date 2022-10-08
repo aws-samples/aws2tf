@@ -15,6 +15,7 @@ if [ -f "$fn" ] ; then echo "$fn exists already skipping" && exit; fi
 if [ -f "$st" ] ; then echo "$st exists already skipping" && exit; fi
 
 printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
+sync
 #echo "s3 $cname sse import"   
 
 cmdi=`printf "terraform import -state %s %s.%s %s &> /dev/null" $st $ttft $rname $cname `      
@@ -82,6 +83,11 @@ echo "$o1" | while IFS= read -r line
                     if [[ ${tt1} == *":"* ]];then
                         tt1=`echo $tt1 | tr -d '"'`
                         t1=`printf "\"%s\"=%s" $tt1 $tt2`
+                    fi
+                    if [[ ${tt1} == "bucket" ]];then
+                        tt1=`echo $tt1 | tr -d '"'`
+                        tt2=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s=aws_s3_bucket.%s.id" $tt1 $tt2`
                     fi
 
                

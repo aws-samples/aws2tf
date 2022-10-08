@@ -7,7 +7,7 @@ ttft=${tft[(${c})]}
 #echo $i
 cname=`echo $1`
 rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-echo "$ttft $rname"
+echo "SSE $ttft $rname"
             
 fn=`printf "%s__%s.tf" $ttft $rname`
 st=`printf "%s__%s.tfstate" $ttft $rname`
@@ -15,21 +15,31 @@ if [ -f "$fn" ] ; then echo "$fn exists already skipping" && exit; fi
 if [ -f "$st" ] ; then echo "$st exists already skipping" && exit; fi
 
 printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
+sync
 #echo "s3 $cname sse import"   
+#echo "pwd"
+#pwd
 
+#ls -l $fn
+#cat $fn
+#echo "-----"
 cmdi=`printf "terraform import -state %s %s.%s %s &> /dev/null" $st $ttft $rname $cname `      
-#echo $cmdi
+#cmdi=`printf "terraform import -state %s %s.%s %s" $st $ttft $rname $cname `      
+echo $cmdi
 eval $cmdi
 if [[ $? -ne 0 ]];then
-            echo "No bucket sse found for $cname exiting ..."
-            rm -f $fn
-            exit
+            eval $cmdi
+            if [[ $? -ne 0 ]];then
+                echo "Import Error: - No bucket sse found for $cname exiting ..."
+                rm -f $fn
+                exit
+            fi
 fi
 sleep 2
 rm -f $fn
 o1=$(terraform state show -state $st $ttft.$rname  2> /dev/null | perl -pe 's/\x1b.*?[mGKH]//g')
 if [[ $? -ne 0 ]];then
-            echo "No bucket sse found for $rname exiting ..."
+            echo "Show Error: No bucket sse found for $rname exiting ..."
             rm -f $fn
             exit
 fi
@@ -80,6 +90,20 @@ echo "$o1" | while IFS= read -r line
                         tt1=`echo $tt1 | tr -d '"'`
                         t1=`printf "\"%s\"=%s" $tt1 $tt2`
                     fi
+
+                    if [[ ${tt1} == "bucket" ]];then
+                        tt1=`echo $tt1 | tr -d '"'`
+                        tt2=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s=aws_s3_bucket.%s.id" $tt1 $tt2`
+                    fi
+
+                    if [[ ${tt1} == "kms_master_key_id" ]];then
+                        earn=`echo "$tt2" | rev | cut -d'/' -f 1 | rev | tr -d '"'`
+                        t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $earn`
+                    fi
+
+
+
                
                 fi
                 if [ "$skip" == "0" ]; then

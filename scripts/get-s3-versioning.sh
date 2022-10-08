@@ -17,10 +17,11 @@ if [ -f "$st" ] ; then echo "$st exists already skipping" && exit; fi
 terraform state list $ttft.$rname &> /dev/null
 if [[ $? -ne 0 ]];then
     printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
+    sync
     #echo "s3 $cname version import"
     terraform import -allow-missing-config -lock=false -state $st $ttft.$rname $cname &> /dev/null     
     if [[ $? -ne 0 ]];then
-        echo "No bucket versioning found for $cname exiting ..."
+        echo "Import Error: No bucket versioning found for $cname exiting ..."
         rm -f $fn
         exit
     fi
@@ -29,7 +30,7 @@ if [[ $? -ne 0 ]];then
     sleep 2
     o1=$(terraform state show -state $st $ttft.$rname 2> /dev/null | perl -pe 's/\x1b.*?[mGKH]//g')
     if [[ $? -ne 0 ]];then
-        echo "No bucket versioning found for $rname exiting ..."
+        echo "Show Error: No bucket versioning found for $rname exiting ..."
         rm -f $fn
         exit
     fi
@@ -73,7 +74,11 @@ echo "$o1" | while IFS= read -r line
                     if [[ ${tt1} == "creation_date" ]];then skip=1;fi
                     if [[ ${tt1} == "rotation_enabled" ]];then skip=1;fi
 
-
+                    if [[ ${tt1} == "bucket" ]];then
+                        tt1=`echo $tt1 | tr -d '"'`
+                        tt2=`echo $tt2 | tr -d '"'`
+                        t1=`printf "\"%s\"=aws_s3_bucket.%s.id" $tt1 $tt2`
+                    fi
                     if [[ ${tt1} == *":"* ]];then
                         tt1=`echo $tt1 | tr -d '"'`
                         t1=`printf "\"%s\"=%s" $tt1 $tt2`

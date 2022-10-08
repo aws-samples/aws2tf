@@ -67,16 +67,15 @@ for c in `seq 0 0`; do
                 printf "resource \"%s\" \"%s\" {}" $ttft $cname > $fn
                   
                 terraform import $ttft.$cname $ocname | grep Import
-                terraform state show $ttft.$cname | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+                terraform state show -no-color $ttft.$cname > t1.txt
                 rm -f $fn
   
- 
                 file="t1.txt"
                 nl=$(cat $file | wc -l)
                 if [[ $nl -eq 0 ]];then
                     echo "--> ERROR - state show empty for role $ocname"
                 fi
-
+                reps=()
                 echo $aws2tfmess > $fn
                 while IFS= read line
                 do
@@ -136,6 +135,25 @@ for c in `seq 0 0`; do
                                     rsns=`echo $tt2 | tr -d '"'` 
                                     mtopic=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`                       
                                     t1=`printf "%s = aws_sns_topic.%s.arn" $tt1 $mtopic`
+                                elif [[ "$tt2" == *"arn:aws:kms:${myreg}:${mysub}:key/"* ]];then
+                                    kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                                 
+                                    t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid`
+                                elif [[ "$tt2" == *"arn:aws:ecr:${myreg}:${mysub}:repository/"* ]];then
+                                    rep=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'` 
+                                    reps+=`printf "\"%s\" " $rep`                                
+                                    t1=`printf "%s = aws_ecr_repository.%s.arn" $tt1 $rep`
+                                elif [[ "$tt2" == *"arn:aws:codecommit:${myreg}:${mysub}:"* ]];then
+                                    ccid=`echo $tt2 | rev | cut -f1 -d':' | rev | tr -d '"'`                                 
+                                    t1=`printf "%s = aws_codecommit_repository.%s.arn" $tt1 $ccid`
+
+                                elif [[ "$tt2" == *"arn:aws:codepipeline:${myreg}:${mysub}:"* ]];then
+                                    cpid=`echo $tt2 | rev | cut -f1 -d':' | rev | tr -d '"'`                                 
+                                    t1=`printf "%s = aws_codepipeline.%s.arn" $tt1 $cpid`
+
+                                elif [[ "$tt2" == *"arn:aws:codebuild:${myreg}:${mysub}:project/"* ]];then
+                                    cbid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                                 
+                                    t1=`printf "%s = aws_codebuild_project.%s.arn" $tt1 $cbid`
+
 
                                 else   # check tt2 for $
                                     tt2=${tt2//$/&} 
@@ -160,6 +178,15 @@ for c in `seq 0 0`; do
                 echo "attached role policies $ocname"
                 ../../scripts/052-get-iam-attached-role-policies.sh $ocname
   
+                for rep in ${reps[@]}; do
+                    rep=`echo $rep | tr -d '"'`
+                    #echo "***** calling for $topic"
+                    if [[ "$rep" != "" ]]; then
+                        ../../scripts/get-ecr.sh $rep
+                    fi
+                done 
+
+
         done    # done for i      
     fi
 done

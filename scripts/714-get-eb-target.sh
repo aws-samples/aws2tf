@@ -88,6 +88,9 @@ for c in `seq 0 0`; do
                             rsns=`echo $tt2 | tr -d '"'` 
                             trole=${rsns//:/_} && trole=${trole//./_} && trole=${trole//\//_} && trole=${trole/${mysub}/}                    
                             t1=`printf "%s = aws_sns_topic.%s.arn" $tt1 $trole`
+                        elif [[ "$tt2" == *"arn:aws:codepipeline:${myreg}:${mysub}:"* ]];then
+                            cpid=`echo $tt2 | rev | cut -f1 -d':' | rev | tr -d '"'`                                 
+                            t1=`printf "%s = aws_codepipeline.%s.arn" $tt1 $cpid`
 
                         fi             
                     fi     

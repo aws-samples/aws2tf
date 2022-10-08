@@ -41,9 +41,9 @@ for c in `seq 0 0`; do
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
             printf "}" >> $ttft.$cname.tf
             terraform import $ttft.$cname $1:$pname | grep Import
-            terraform state show $ttft.$cname > t2.txt
+            terraform state show -no-color $ttft.$cname > t1.txt
             rm $ttft.$cname.tf
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+            #cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
             #	for k in `cat t1.txt`; do
             #		echo $k
             #	done
@@ -83,8 +83,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "Resource" ]];then
                             tt2=`echo $tt2 | tr -d '"'`
                             if [[ "$tt2" != *"*"* ]];then
-                               
-                                
+                                                           
                                 if [[ "$tt2" == *"${mysub}:role/"* ]];then
                                     #echo "in role/ match"
                                     if [[ "$tt2" != *"${mysub}:role/aws-service-role"* ]];then
@@ -98,16 +97,35 @@ for c in `seq 0 0`; do
                                 elif [[ "$tt2" == "arn:aws:sns:${myreg}:${mysub}:"* ]];then
                                   
                                     rsns=`echo $tt2 | tr -d '"'` 
-                                    echo $rsns
+                                    #echo $rsns
                                     tl+=`printf "\"%s\" " $rsns`
                                     trole=${rsns//:/_} && trole=${trole//./_} && trole=${trole//\//_} && trole=${trole/${mysub}/}                    
                                 
                                     t1=`printf "%s = aws_sns_topic.%s.arn" $tt1 $trole`
                                 elif [[ "$tt2" == *"arn:aws:dynamodb:${myreg}:${mysub}:table/"* ]];then
-                                    
-                                    rdyn=`echo $tt2 | rev | cut -f1 -d'/' | rev`
-                                                      
+                                    rdyn=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                                 
                                     t1=`printf "%s = aws_dynamodb_table.%s.arn" $tt1 $rdyn`
+                                elif [[ "$tt2" == *"arn:aws:kms:${myreg}:${mysub}:key/"* ]];then
+                                    kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                                 
+                                    t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid`
+                                elif [[ "$tt2" == *"arn:aws:s3:::"* ]];then
+                                    s3id=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                                 
+                                    t1=`printf "%s = aws_s3_bucket.%s.arn" $tt1 $s3id`
+                                elif [[ "$tt2" == *"arn:aws:ecr:${myreg}:${mysub}:repository/"* ]];then
+                                    rep=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'` 
+                                    #reps+=`printf "\"%s\" " $rep`                                
+                                    t1=`printf "%s = aws_ecr_repository.%s.arn" $tt1 $rep`
+                                elif [[ "$tt2" == *"arn:aws:codecommit:${myreg}:${mysub}:"* ]];then
+                                    ccid=`echo $tt2 | rev | cut -f1 -d':' | rev | tr -d '"'`                                 
+                                    t1=`printf "%s = aws_codecommit_repository.%s.arn" $tt1 $ccid`
+
+                                elif [[ "$tt2" == *"arn:aws:codepipeline:${myreg}:${mysub}:"* ]];then
+                                    cpid=`echo $tt2 | rev | cut -f1 -d':' | rev | tr -d '"'`                                 
+                                    t1=`printf "%s = aws_codepipeline.%s.arn" $tt1 $cpid`
+
+                                elif [[ "$tt2" == *"arn:aws:codebuild:${myreg}:${mysub}:project/"* ]];then
+                                    cbid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                                 
+                                    t1=`printf "%s = aws_codebuild_project.%s.arn" $tt1 $cbid`
 
                                 else   # check tt2 for $
                                     tt2=${tt2//$/&} 

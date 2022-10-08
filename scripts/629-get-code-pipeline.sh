@@ -75,8 +75,9 @@ for c in `seq 0 0`; do
                         if [ "$allowid" == "0" ]; then
                             skip=1
                         else
-                            skip=0      
-                        fi
+                            earn=`echo "$tt2" | rev | cut -d'/' -f 1 | rev | tr -d '"'`
+                            t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $earn`
+                        fi       
                     fi          
 
                     if [[ ${tt1} == "role_arn" ]];then 
@@ -94,9 +95,8 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "location" ]];then 
                                 skip=0;
                                 s3buck=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`
+                                t1=`printf "%s = aws_s3_bucket.%s.id" $tt1 $s3buck`
                     fi
-
-
                     
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "rule_id" ]];then skip=1;fi

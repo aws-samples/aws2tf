@@ -147,6 +147,9 @@ if [ $count -gt 0 ]; then
 
                 AWS::Logs::LogGroup)  echo "../../scripts/070-get-cw-log-grp.sh /$parn" >> commands.sh ;;
                 
+                AWS::Redshift::Cluster) echo "../../scripts/670-get-redshift-cluster.sh $pid"  >> commands.sh ;;
+                AWS::Redshift::ClusterSubnetGroup) echo "../../scripts/671-get-redshift-cluster-subnet.sh $pid"  >> commands.sh ;;
+
                 AWS::ServiceCatalog::PortfolioPrincipalAssociation) 
                     tarn=`echo $parn | cut -f1 -d'|'`
                     echo "../../scripts/get-sc-portfolio-principal.sh $tarn" >> commands.sh 

@@ -151,7 +151,7 @@ done
 #        ../../scripts/get-vpce-services.sh $1
 #    fi 
 #else
-../../scripts/get-vpce-service-config.sh
+#../../scripts/get-vpce-service-config.sh
 #fi
 
 rm -f t*.txt

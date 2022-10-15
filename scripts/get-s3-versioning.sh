@@ -21,7 +21,7 @@ if [[ $? -ne 0 ]];then
     #echo "s3 $cname version import"
     terraform import -allow-missing-config -lock=false -state $st $ttft.$rname $cname &> /dev/null     
     if [[ $? -ne 0 ]];then
-        echo "Import Error: No bucket versioning found for $cname exiting ..."
+        echo "Import: No bucket versioning found for $cname exiting ..."
         rm -f $fn
         exit
     fi
@@ -30,7 +30,7 @@ if [[ $? -ne 0 ]];then
     sleep 2
     o1=$(terraform state show -state $st $ttft.$rname 2> /dev/null | perl -pe 's/\x1b.*?[mGKH]//g')
     if [[ $? -ne 0 ]];then
-        echo "Show Error: No bucket versioning found for $rname exiting ..."
+        echo "Show: No bucket versioning found for $rname exiting ..."
         rm -f $fn
         exit
     fi

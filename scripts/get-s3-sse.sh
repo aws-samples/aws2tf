@@ -30,7 +30,7 @@ eval $cmdi
 if [[ $? -ne 0 ]];then
             eval $cmdi
             if [[ $? -ne 0 ]];then
-                echo "Import Error: - No bucket sse found for $cname exiting ..."
+                echo "Import: - No bucket sse found for $cname exiting ..."
                 rm -f $fn
                 exit
             fi
@@ -39,7 +39,7 @@ sleep 2
 rm -f $fn
 o1=$(terraform state show -state $st $ttft.$rname  2> /dev/null | perl -pe 's/\x1b.*?[mGKH]//g')
 if [[ $? -ne 0 ]];then
-            echo "Show Error: No bucket sse found for $rname exiting ..."
+            echo "Show: No bucket sse found for $rname exiting ..."
             rm -f $fn
             exit
 fi

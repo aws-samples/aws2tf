@@ -18,10 +18,12 @@ There should hopefully be no subsequent additions or deletions reported by the t
 
 ## Requirements & Prerequisites
 + The tool is written for the bash shell script & Python3 and has been tested on macOS 11.6.
-+ AWS cli (v2) **version 2.3.4 or higher** needs to be installed and you need a login with at least "Read" privileges.
-+ terraform **version v1.2.0** or higher needs to be installed.
++ AWS cli (v2) **version 2.7.0 or higher** needs to be installed and you need a login with at least "Read" privileges.
++ terraform **version v1.3.0** or higher needs to be installed.
 + jq **version 1.6 or higher**
 
+## Optional tooling for security reports
++ tfsec **version 1.27.5 or later**
 
 ## Quickstart guide to using the tool
 
@@ -171,7 +173,7 @@ Or simply check back after some time to see if they are listed below.
 
 
 ----
-## Terraform resources supported as of 17-Sep-2022
+## Terraform resources supported as of 15-Oct-2022
 
 * aws_api_gateway_resource
 * aws_api_gateway_rest_api
@@ -281,6 +283,8 @@ Or simply check back after some time to see if they are listed below.
 * aws_organizations_organizational_unit
 * aws_organizations_policy
 * aws_organizations_policy_attachment
+* aws_redshift_cluster
+* aws_redshift_subnet_group
 * aws_route53_zone
 * aws_route_table
 * aws_route_table_association
@@ -333,8 +337,9 @@ Or simply check back after some time to see if they are listed below.
 * aws_vpn_connection
 
 ----
-## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 17-Sep-2022
+## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 15-Oct-2022
 
+* #AWS::IAM::Policy
 * AWS::ApiGateway::Account
 * AWS::ApiGateway::Resource
 * AWS::ApiGateway::RestApi
@@ -404,6 +409,8 @@ Or simply check back after some time to see if they are listed below.
 * AWS::Lambda::LayerVersion
 * AWS::Lambda::Permission
 * AWS::Logs::LogGroup
+* AWS::Redshift::Cluster
+* AWS::Redshift::ClusterSubnetGroup
 * AWS::S3::Bucket
 * AWS::S3::BucketPolicy
 * AWS::SNS::Subscription

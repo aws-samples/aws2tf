@@ -1,6 +1,6 @@
 # aws2tf
 
-**October 2022 
+**October 2022**
 - Updated to use 4.xx of the Terraform provider, testing still in progress - please report any issues you find.**
 - Now optionally includes a security report: "tfsec" CRITICAL and HIGH issues 
 

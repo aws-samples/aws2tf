@@ -1,6 +1,8 @@
 # aws2tf
 
-**May 2022 - Updated to use 4.xx of the Terraform provider, testing still in progress - please report any issues you find.**
+**October 2022 
+- Updated to use 4.xx of the Terraform provider, testing still in progress - please report any issues you find.**
+- Now optionally includes a security report: "tfsec" CRITICAL and HIGH issues 
 
 
 This utility 'AWS to Terraform' (aws2tf)

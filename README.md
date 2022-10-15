@@ -22,8 +22,8 @@ There should hopefully be no subsequent additions or deletions reported by the t
 + terraform **version v1.3.0** or higher needs to be installed.
 + jq **version 1.6 or higher**
 
-## Optional tooling for security reports
-+ tfsec **version 1.27.5 or later**
+## Optional tooling for security reports (CRITICAL and HIGH issues)
++ tfsec **version 1.27.5 or later**  (https://github.com/aquasecurity/tfsec)
 
 ## Quickstart guide to using the tool
 

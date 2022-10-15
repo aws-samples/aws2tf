@@ -50,14 +50,14 @@ for c in `seq 0 0`; do
             eval $cmdi
             #terraform import $ttft.$sname__$rname '$1|$cname' | grep Import
             
-            cmds=`printf "terraform state show %s.%s__%s > t2.txt" $ttft $sname $rname`
+            cmds=`printf "terraform state show -no-color %s.%s__%s > t1.txt" $ttft $sname $rname`
             eval $cmds
             
             tfa=`printf "data/%s.%s__%s" $ttft $sname $rname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
             #echo $awsj | jq . 
-            rm $fn
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+            rm -f $fn
+           
             #	for k in `cat t1.txt`; do
             #		echo $k
             #	done

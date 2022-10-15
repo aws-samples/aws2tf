@@ -46,7 +46,7 @@ for t in ${asgs[@]}; do
 
             
     terraform import $ttft.$rname "$cname" | grep Import
-    terraform state show $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+    terraform state show  -no-color $ttft.$rname > t1.txt
     rm -f $fn
 
 

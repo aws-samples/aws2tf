@@ -45,14 +45,9 @@ for c in `seq 0 0`; do
 
             terraform import $ttft.${rname}__${1} "en,${cname},${1}" | grep Import
          
-            terraform state show $ttft.${rname}__${1} > t2.txt
-
-
+            terraform state show -no-color $ttft.${rname}__${1} > t1.txt
             rm -f $fn
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-            #	for k in `cat t1.txt`; do
-            #		echo $k
-            #	done
+ 
             file="t1.txt"
             trole=""
             echo $aws2tfmess > $fn

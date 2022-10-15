@@ -57,9 +57,8 @@ for c in `seq 0 0`; do
                 printf "resource \"%s\" \"%s__%s\" {}" $ttft $1 $cname > $fn
 
                 terraform import $ttft.$1__$cname $1/$cname | grep Import
-                terraform state show $ttft.$1__$cname > t2.txt
+                terraform state show -no-color $ttft.$1__$cname > t1.txt
                 rm -f $fn
-                cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
 
                 file="t1.txt"
 

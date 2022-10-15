@@ -92,12 +92,12 @@ if [[ $? -ne 0 ]];then
 
     #terraform state show -state $st $ttft.$rname
 
-    nice -n $sl terraform state show -state $st $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > ../$ttft-$rname-1.txt 
+    nice -n $sl terraform state show -no-color -state $st $ttft.$rname > ../$ttft-$rname-1.txt 
     #rm -f $fn
 
 else
     echo "State $ttft.$rname already exists skipping import ..."
-    nice -n $sl terraform state show $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > $ttft-$rname-1.txt
+    nice -n $sl terraform state show -no-color $ttft.$rname > $ttft-$rname-1.txt
 
 fi
 

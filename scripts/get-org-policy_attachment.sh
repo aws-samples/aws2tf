@@ -49,16 +49,13 @@ c=0
             eval $comm | grep Import
             #terraform import $ttft.$rname__$1 "$cname:$1" #| grep Import
 
-            terraform state show ${ttft}.${rname}__${1} > t2.txt
+            terraform state show -no-color ${ttft}.${rname}__${1} > t1.txt
             
             tfa=`printf "data/%s.%s__%s" $ttft $rname $1`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
             #echo $awsj | jq . 
-            rm $fn
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-            #	for k in `cat t1.txt`; do
-            #		echo $k
-            #	done
+            rm -f $fn
+    
             file="t1.txt"
             iddo=0
             echo $aws2tfmess > $fn

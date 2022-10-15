@@ -59,8 +59,7 @@ for c in `seq 0 0`; do
  
             terraform import $ttft.${rname} "${cname}" | grep Import
          
-            terraform state show $ttft.${rname} | perl -pe 's/\x1b.*?[mGKH]//g' > $tfs 
-
+            terraform state show -no-color $ttft.${rname} > $tfs 
 
             rm -f $fn
 

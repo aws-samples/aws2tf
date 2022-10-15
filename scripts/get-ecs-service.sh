@@ -57,16 +57,12 @@ for c in `seq 0 0`; do
             printf "}"  >> $fn
             #echo "terraform import $ttft.$rname $1/$cname"
             terraform import ${ttft}.${cln}__${rname} "${cln}/${cname}" | grep Import
-            terraform state show ${ttft}.${cln}__${rname} > t2.txt
+            terraform state show -no-color ${ttft}.${cln}__${rname} > t1.txt
             
-            rm $fn 
+            rm -f $fn 
             sgs=()
             subs=()
            
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-            #	for k in `cat t1.txt`; do
-            #		echo $k
-            #	done
             file="t1.txt"
             echo $aws2tfmess > $fn
             while IFS= read line

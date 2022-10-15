@@ -218,14 +218,11 @@ for i in `ls imp_aws_security_group_rule_${1}_${2}*.sh 2> /dev/null`; do
     ./$i
 
     file=`printf "%s__%s_%s_%s.txt" $ttft $cname $stype $ir`
-    terraform state show $ttft.${sname}_${stype}_${ir} > t2.txt
+    terraform state show -no-color $ttft.${sname}_${stype}_${ir} > $file
     rm -f $fn
-    cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > $file
-
+   
     if [ ! -f "$file" ] ; then echo "$file does not exist skipping" && continue; fi
-    
-  
-    
+     
     # Pass 1 - gather some info
 
     cidr=1

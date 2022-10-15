@@ -42,11 +42,8 @@ for c in `seq 0 0`; do
             printf "}" >> $ttft.$cname.tf
             terraform import $ttft.$cname $1:$pname | grep Import
             terraform state show -no-color $ttft.$cname > t1.txt
-            rm $ttft.$cname.tf
-            #cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-            #	for k in `cat t1.txt`; do
-            #		echo $k
-            #	done
+            rm -f $ttft.$cname.tf
+
             file="t1.txt"
             fn=`printf "%s__%s.tf" $ttft $cname`
             echo $aws2tfmess > $fn

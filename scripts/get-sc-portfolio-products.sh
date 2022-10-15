@@ -75,13 +75,13 @@ for c in `seq 0 0`; do
 
                         terraform import $ttft.${rname}__${1} "${cname}" | grep Import
                     
-                        terraform state show $ttft.${rname}__${1} > t2.txt
+                        terraform state show -no-color $ttft.${rname}__${1} > t1.txt
                         #tfa=`printf "data/%s.%s__%s" $ttft $rname $1`
                         #terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
                         #cat $tfa.json | jq .
 
                         rm -f $fn
-                        cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+                
                         #	for k in `cat t1.txt`; do
                         #		echo $k
                         #	done

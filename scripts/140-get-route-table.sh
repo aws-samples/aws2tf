@@ -38,12 +38,9 @@ for c in `seq 0 0`; do
             printf "resource \"%s\" \"%s\" {" $ttft $rname > $fn
             printf "}" >> $fn
             terraform import $ttft.$rname "$cname" | grep Import
-            terraform state show $ttft.$rname > t2.txt
+            terraform state show -no-color $ttft.$rname > t1.txt
             rm $fn
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-            #	for k in `cat t1.txt`; do
-            #		echo $k
-            #	done
+
             file="t1.txt"
             pcxs=()
             echo $aws2tfmess > $fn

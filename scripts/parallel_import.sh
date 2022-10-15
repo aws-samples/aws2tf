@@ -64,12 +64,12 @@ if [[ $? -ne 0 ]];then
 
     printf "terraform import %s.%s %s" $ttft $rname "$cname" > ../data/import_$ttft_$rname.sh
 
-    terraform state show $ttft.$rname > $ttft-$rname-2.txt
-    cat $ttft-$rname-2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > $ttft-$rname-1.txt
+    terraform state show -no-color $ttft.$rname > $ttft-$rname-1.txt
+ 
     tfa=`printf "%s.%s" $ttft $rname`
     #terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > ../data/$tfa.json
                 #echo $awsj | jq . 
-    rm $ttft.$rname.tf
+    rm -f $ttft.$rname.tf
     #echo "attempting move"
     sl=`echo $((1 + $RANDOM % 10))`
     nice -n $sl terraform state mv -state-out=../terraform.tfstate -lock=true $ttft.$rname $ttft.$rname &> /dev/null
@@ -115,8 +115,7 @@ if [[ $? -ne 0 ]];then
 
 else
     echo "State $ttft.$rname already exists skipping import ..."
-    terraform state show $ttft.$rname > $ttft-$rname-2.txt
-    cat $ttft-$rname-2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > $ttft-$rname-1.txt
+    terraform state show -no-color $ttft.$rname > $ttft-$rname-1.txt
     #rm -f $ttft-$rname-2.txt
     ls $ttft*-1.txt
 

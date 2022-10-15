@@ -70,9 +70,9 @@ if [ "$kcount" -gt "0" ]; then
                             #ls -l
                             echo "Importing ....."
                             terraform import $ttft.$cname $ocname | grep Import
-                            terraform state show $ttft.$cname > t2.txt
-                            rm $fn
-                            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+                            terraform state show -no-color $ttft.$cname > t1.txt
+                            rm -f $fn
+            
                             mv="version"
                             file="t1.txt"
                             

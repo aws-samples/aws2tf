@@ -47,7 +47,7 @@ for c in `seq 0 0`; do
             printf "}" >> $ttft.$cname.tf
             printf "terraform import %s.%s %s" $ttft $cname $cname > data/import_$ttft_$cname.sh
             terraform import $ttft.$cname "$cname" | grep Import
-            terraform state show $ttft.$cname > t2.txt
+            terraform state show -no-color $ttft.$cname > t1.txt
             tfa=`printf "%s.%s" $ttft $cname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
             #echo $awsj | jq . 
@@ -57,11 +57,8 @@ for c in `seq 0 0`; do
                 echo "Getting Lambda function code:  $cname.zip"
                 curl -s -o $cname.zip ${s3loc}
             fi 
-            rm $ttft.$cname.tf
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-            #	for k in `cat t1.txt`; do
-            #		echo $k
-            #	done
+            rm -f $ttft.$cname.tf
+
             file="t1.txt"
             echo $aws2tfmess > $fn
             sgs=()

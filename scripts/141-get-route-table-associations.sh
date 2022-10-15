@@ -59,14 +59,11 @@ for c in `seq 0 0`; do
                             #echo $comm
                             eval $comm
                             #echo "state show"
-                            comm=$(printf "terraform state show %s.%s__%s" $ttft $sname $cname) 
+                            comm=$(printf "terraform state show -no-color %s.%s__%s" $ttft $sname $cname) 
                             #echo $comm
-                            eval $comm > t2.txt
+                            eval $comm > t1.txt
                             rm $fn
-                            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-                            #	for k in `cat t1.txt`; do
-                            #		echo $k
-                            #	done
+
                             file="t1.txt"
                             
                             echo $aws2tfmess > $fn

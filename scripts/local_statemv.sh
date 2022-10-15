@@ -45,7 +45,7 @@ do
     #nl=$(cat $cfile | wc -l)
     #if [[ $nl -eq 0 ]];then
     #    echo "--> redoing $cfile"
-    #    terraform state show $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > $cfile
+    #    terraform state show -no-color $ttft.$rname > $cfile
     #   fi
 done
 rm -f terr*.backup

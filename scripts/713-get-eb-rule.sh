@@ -59,14 +59,10 @@ for c in `seq 0 0`; do
                 terraform import $ttft.${bus}__${cname} "${bus}/${cname}" | grep Import
             fi
             
-            terraform state show $ttft.${bus}__${cname} > t2.txt
+            terraform state show -no-color $ttft.${bus}__${cname} > t1.txt
 
-            #echo $awsj | jq . 
             rm -f $fn
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-            #	for k in `cat t1.txt`; do
-            #		echo $k
-            #	done
+  
             file="t1.txt"
             echo $aws2tfmess > $fn
             while IFS= read line

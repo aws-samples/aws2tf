@@ -12,7 +12,7 @@ printf "resource \"%s\" \"%s\" {}\n" $ttft $rname > $fn
 echo ${1}  
 terraform import $ttft.${rname} ${1}
 exit
-terraform state show $ttft.${rname} | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+terraform state show -no-color $ttft.${rname} > t1.txt
 rm -f $fn
 file="t1.txt"
 echo $aws2tfmess > $fn

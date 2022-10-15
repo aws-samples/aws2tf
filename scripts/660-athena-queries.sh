@@ -46,13 +46,11 @@ if [ "$count" -gt "0" ]; then
         if [ $? -ne 0 ]; then
             exit
         fi
-        terraform state show $ttft.$cname > t2.txt
+        terraform state show -no-color $ttft.$cname > t0.txt
         rm $cname.tf
-
-        cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t0.txt
         cat t0.txt | sed 's/\\n/ /g' > t1.txt
         echo "T1"
-        cat t1.txt
+        #cat t1.txt
         file="t1.txt"
         fn=`printf "%s__%s.tf" $ttft $cname`
         echo $aws2tfmess > $fn

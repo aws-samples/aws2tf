@@ -15,7 +15,7 @@ fi
 
 count=1
 
-echo $cm
+#echo $cm
 awsout=`eval $cm 2> /dev/null`
 #echo $awsout | jq .
 
@@ -41,10 +41,10 @@ for i in `seq 0 $count`; do
 
     printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn   
     terraform import $ttft.${rname} "${cname}" | grep Import
-    terraform state show $ttft.${rname} | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+    terraform state show -no-color $ttft.${rname} > t1.txt
 
     rm -f $fn
-    #cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+
     echo $isdef
     file="t1.txt"
     echo $aws2tfmess > $fn

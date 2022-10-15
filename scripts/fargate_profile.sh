@@ -34,9 +34,8 @@ for c in `seq 0 0`; do
             printf "}" $cname >> $of
             echo "$ttft.$cname $ren"
             terraform import $ttft.$cname $ren | grep Import
-            terraform state show $ttft.$cname > t2.txt
+            terraform state show -no-color $ttft.$cname > t1.txt
             rm -f $of
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
     
             file="t1.txt"
             fn=`printf "%s__%s__%s.tf" $ttft $cln $cname`

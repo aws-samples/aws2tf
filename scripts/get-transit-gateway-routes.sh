@@ -49,7 +49,7 @@ for c in `seq 0 0`; do
                 echo "importing on  $ttft.$rname \"${tgwrtbid}_${cname}\""
                 terraform import $ttft.$rname "${tgwrtbid}_${cname}"
 
-                terraform state show $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+                terraform state show -no-color $ttft.$rname > t1.txt
                 rm -f $ttft.$rname.tf
 
                 file="t1.txt"

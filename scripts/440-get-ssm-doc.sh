@@ -49,7 +49,7 @@ for c in `seq 0 0`; do
             printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
             printf "terraform import %s.%s %s" $ttft $rname $cname > data/import_$ttft_$rname.sh
             terraform import $ttft.$rname "$cname" | grep Import
-            terraform state show $ttft.$rname | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+            terraform state show -no-color $ttft.$rname > t1.txt
             tfa=`printf "%s.%s" $ttft $rname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
             #echo $awsj | jq . 

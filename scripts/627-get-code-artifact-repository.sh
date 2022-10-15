@@ -41,22 +41,14 @@ for c in `seq 0 0`; do
             printf "}" >> $ttft.$cname.tf
             printf "terraform import %s.%s %s" $ttft $cname $cname > data/import_$ttft_$cname.sh
             terraform import $ttft.$cname "$aarn" | grep Import
-            terraform state show $ttft.$cname > t2.txt
+            terraform state show -no-color $ttft.$cname > t1.txt
             tfa=`printf "%s.%s" $ttft $cname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
             #echo $awsj | jq .
             
-            rm $ttft.$cname.tf
-            cat t2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
-            mv t1.txt t1.txt.sav
-            #	for k in `cat t1.txt`; do
-            #		echo $k
-            #	done
-            
+            rm -f $ttft.$cname.tf
             echo $aws2tfmess > $fn
 
-
-            mv t1.txt.sav t1.txt
             file="t1.txt"
             rdm=""
             while IFS= read line

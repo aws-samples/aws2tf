@@ -7,7 +7,7 @@ ttft=${tft[(${c})]}
 #echo $i
 cname=`echo $1`
 rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-echo "SSE $ttft $rname"
+echo "$ttft $rname"
             
 fn=`printf "%s__%s.tf" $ttft $rname`
 st=`printf "%s__%s.tfstate" $ttft $rname`
@@ -23,24 +23,22 @@ sync
 #ls -l $fn
 #cat $fn
 #echo "-----"
-cmdi=`printf "terraform import -state %s %s.%s %s &> /dev/null" $st $ttft $rname $cname `      
-#cmdi=`printf "terraform import -state %s %s.%s %s" $st $ttft $rname $cname `      
-echo $cmdi
+cmdi=`printf "terraform import -state %s %s.%s %s &> /dev/null" $st $ttft $rname $cname`      
+#echo $cmdi
+#terraform import -allow-missing-config -lock=false -state $st $ttft.$rname $cname &> /dev/null     
 eval $cmdi
 if [[ $? -ne 0 ]];then
-            eval $cmdi
-            if [[ $? -ne 0 ]];then
-                echo "Import: - No bucket sse found for $cname exiting ..."
-                rm -f $fn
-                exit
-            fi
+    echo "** No bucket sse found for $cname exiting ..."
+    mv $fn data/$fn.notfound
+    exit
+    
 fi
 sleep 2
 rm -f $fn
 o1=$(terraform state show -state $st $ttft.$rname  2> /dev/null | perl -pe 's/\x1b.*?[mGKH]//g')
 if [[ $? -ne 0 ]];then
             echo "Show: No bucket sse found for $rname exiting ..."
-            rm -f $fn
+            mv $fn data/$fn.failed
             exit
 fi
 #echo "SSE Len=${#o1}"
@@ -60,15 +58,15 @@ if [[ $vl -eq 0 ]];then
 fi
 rm -f $fn
 skipid=1
+kmsarn=""
 #echo $aws2tfmess > $fn
 
-echo "$o1" | while IFS= read -r line
-            do
-				skip=0
-                # display $line or do something with $line
-                t1=`echo "$line"` 
+while IFS= read -r line
+do
+	skip=0
+    t1=`echo "$line"` 
 
-                if [[ ${t1} == *"="* ]];then
+    if [[ ${t1} == *"="* ]];then
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
@@ -97,19 +95,22 @@ echo "$o1" | while IFS= read -r line
                         t1=`printf "%s=aws_s3_bucket.%s.id" $tt1 $tt2`
                     fi
 
-                    if [[ ${tt1} == "kms_master_key_id" ]];then
-                        earn=`echo "$tt2" | rev | cut -d'/' -f 1 | rev | tr -d '"'`
-                        t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $earn`
-                    fi
-
-
-
+                    if [[ ${tt1} == "kms_master_key_id" ]];then 
+                            kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                            
+                            kmsarn=$(echo $tt2 | tr -d '"')
+                            t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid`                    
+                        fi
                
-                fi
-                if [ "$skip" == "0" ]; then
-                    #echo $skip $t1
-                    echo "$t1" >> $fn
-                fi
-                
-done
+    fi
+    if [ "$skip" == "0" ]; then
+        echo "$t1" >> $fn
+    fi
+              
+done <<< "$(echo -e "$o1")"
+
+if [ "$kmsarn" != "" ]; then
+    #echo $kmsarn
+    ../../scripts/080-get-kms-key.sh $kmsarn
+fi
+
 

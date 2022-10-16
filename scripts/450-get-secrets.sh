@@ -1,5 +1,6 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
+    # should be an arn
     cmd[0]="$AWS secretsmanager describe-secret --secret-id $1" 
 else
     cmd[0]="$AWS secretsmanager list-secrets"
@@ -97,6 +98,7 @@ for c in `seq 0 0`; do
             done <"$file"
 
             ../../scripts/get-secret-version.sh $cname
+            #../../scripts/get-secret-rotation.sh $cname
 
         done
 

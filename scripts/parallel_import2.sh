@@ -75,6 +75,7 @@ if [[ $? -ne 0 ]];then
                     eval $comm
                     if [ $? -ne 0 ]; then
                         echo "** ERROR ** $rname Import failed"
+                        mv $fn ../data/$fn.pi2
                     fi
                 else
                     echo "Imported $ttft.$rname"

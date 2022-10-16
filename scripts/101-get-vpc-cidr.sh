@@ -59,7 +59,7 @@ for c in `seq 0 0`; do
                         terraform import $ttft.$y "$y" | grep Import
                         terraform state show -no-color $ttft.$y > t1.txt
                         tfa=`printf "data/%s.%s" $ttft $y`
-                        terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
+                        terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
                         #echo $awsj | jq . 
                         rm $ttft.$y.tf
 

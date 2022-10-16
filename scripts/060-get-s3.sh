@@ -366,30 +366,30 @@ for c in `seq 0 0`; do
 
                         #echo "Out: $dopol $dover $doacl2 $dosse $lifec $website"        
                         if [[ $dolog -eq 1 ]];then
-                            ../../scripts/get-s3-logging.sh $cname & 
+                            ../../scripts/get-aws_s3_bucket_logging.sh $cname & 
                         fi
                         if [[ $dopol -eq 1 ]];then
-                            ../../scripts/get-s3-policy.sh $cname & 
+                            ../../scripts/get-aws_s3_bucket_policy.sh $cname & 
                         fi
                         if [[ $dover -eq 1 ]];then 
                             #echo "versioning job for $cname"
-                            ../../scripts/get-s3-versioning.sh $cname &
+                            ../../scripts/get-aws_s3_bucket_versioning.sh $cname &
                         fi
                         if [[ $doacl2 -eq 1 ]];then 
                             #echo "acl job for $cname"
-                            ../../scripts/get-s3-acl.sh $cname & 
+                            ../../scripts/get-aws_s3_bucket_acl.sh $cname & 
                         fi
                         if [[ $lifec -eq 1 ]];then 
                             #echo "lifecycle job for $cname"
-                            ../../scripts/get-s3-lifecycle.sh $cname &
+                            ../../scripts/get-aws_s3_bucket_lifecycle_configuration.sh $cname &
                         fi
                         if [[ $dosse -eq 1 ]];then 
                             #echo "sse job for $cname"
-                            ../../scripts/get-s3-sse.sh $cname &
+                            ../../scripts/get-aws_s3_bucket_server_side_encryption_configuration.sh $cname &
                         fi
                         if [[ $website -eq 1 ]];then
                             #echo "website job for $cname" 
-                            ../../scripts/get-s3-website.sh $cname &
+                            ../../scripts/get-aws_s3_bucket_website_configuration.sh $cname &
                         fi
                         jc=`jobs -r | wc -l | tr -d ' '`
                         echo "waiting for $jc jobs ....."
@@ -433,4 +433,5 @@ for c in `seq 0 0`; do
     fi 
     #echo "Done $cname"
 done # for c
-# run cross checker
+echo "run cross checker"
+../../scripts/cross-check-s3-all.sh

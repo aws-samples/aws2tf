@@ -54,7 +54,7 @@ for c in `seq 0 0`; do
             eval $cmds
             
             tfa=`printf "data/%s.%s__%s" $ttft $sname $rname`
-            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
+            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
             #echo $awsj | jq . 
             rm -f $fn
            

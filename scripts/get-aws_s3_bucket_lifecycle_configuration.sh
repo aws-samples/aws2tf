@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ "$1" == "" ]; then echo "must specify bucket name" && exit; fi
 c=0
-tft[0]="aws_s3_bucket_logging"
+tft[0]="aws_s3_bucket_lifecycle_configuration"
 ttft=${tft[(${c})]}
 
 #echo $i
@@ -14,34 +14,34 @@ st=`printf "%s__%s.tfstate" $ttft $rname`
 if [ -f "$fn" ] ; then echo "$fn exists already skipping" && exit; fi
 if [ -f "$st" ] ; then echo "$st exists already skipping" && exit; fi
 
+
 printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
 sync
-#echo "s3 $cname sse import"   
-
-cmdi=`printf "terraform import -state %s %s.%s %s &> /dev/null" $st $ttft $rname $cname `      
+#echo "s3 $cname lifecycle import"
+#terraform import -allow-missing-config -lock=false -state $st $ttft.$rname $cname &> /dev/null  
+cmdi=`printf "terraform import -state %s %s.%s %s &> /dev/null" $st $ttft $rname $cname`      
 #echo $cmdi
 eval $cmdi
 if [[ $? -ne 0 ]];then
-            echo "No bucket logging found for $cname exiting ..."
-            rm -f $fn
+            echo "** No bucket lifecycle found for $cname exiting ..."
+            mv $fn data/$fn.notfound
             exit
 fi
 sleep 2
 rm -f $fn
-o1=$(terraform state show -state $st $ttft.$rname  2> /dev/null | perl -pe 's/\x1b.*?[mGKH]//g')
+o1=$(terraform state show -state $st $ttft.$rname 2> /dev/null | perl -pe 's/\x1b.*?[mGKH]//g')
 if [[ $? -ne 0 ]];then
-            echo "No bucket logging found for $rname exiting ..."
-            rm -f $fn
+            echo "No bucket lifecycle found for $rname exiting ..."
+            mv $fn data/$fn.failed
             exit
 fi
-#echo "logging Len=${#o1}"
 
 vl=${#o1}
 if [[ $vl -eq 0 ]];then
     echo "sleep 5 & retry for $ttft $rname"
     sleep 5
     o1=$(terraform state show -state $st $ttft.$rname  2> /dev/null | perl -pe 's/\x1b.*?[mGKH]//g')
-    #echo "SSE Len=${#o1}"
+    #echo "Lifecycle Len=${#o1}"
     vl=${#o1}
     if [[ $vl -eq 0 ]];then
         echo "** Error Zero state $ttft $rname exiting...."
@@ -49,10 +49,11 @@ if [[ $vl -eq 0 ]];then
         exit
     fi
 fi
+
+
 rm -f $fn
 skipid=1
 #echo $aws2tfmess > $fn
-tlp=0
 echo "$o1" | while IFS= read -r line
             do
 				skip=0
@@ -63,6 +64,8 @@ echo "$o1" | while IFS= read -r line
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
+  
+
                    
                      if [[ ${tt1} == "id" ]];then 
                         if [[ "$skipid" == "1" ]];then
@@ -76,9 +79,7 @@ echo "$o1" | while IFS= read -r line
                     if [[ ${tt1} == "resource_owner" ]];then skip=1;fi
                     if [[ ${tt1} == "creation_date" ]];then skip=1;fi
                     if [[ ${tt1} == "rotation_enabled" ]];then skip=1;fi
-                    if [[ ${tt1} == "target_prefix" ]];then 
-                        tlp=1
-                    fi
+
 
                     if [[ ${tt1} == *":"* ]];then
                         tt1=`echo $tt1 | tr -d '"'`
@@ -89,19 +90,12 @@ echo "$o1" | while IFS= read -r line
                         tt2=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s=aws_s3_bucket.%s.id" $tt1 $tt2`
                     fi
-
                
-                fi
-
-                if [[ ${t1} == "}" ]];then
-                    if [[ ${tlp} == "0" ]];then
-                        echo "target_prefix = \"\"" >> $fn
-                    fi
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
                     echo "$t1" >> $fn
                 fi
                 
-done
+done 
 

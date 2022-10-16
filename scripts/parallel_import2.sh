@@ -69,13 +69,15 @@ if [[ $? -ne 0 ]];then
                 sleep $sl
                 eval $comm
                 if [ $? -ne 0 ]; then
-                    echo "--> 3rd Import backoff & retry with full errors for $rname"
+                    echo "--> ** 3rd (Final) Import backoff & retry with full errors for $rname"
                     sl=`echo $((2 + $RANDOM % 20))`
                     sleep $sl
                     eval $comm
                     if [ $? -ne 0 ]; then
                         echo "** ERROR ** $rname Import failed"
                         mv $fn ../data/$fn.pi2
+                    else
+                        echo "Imported $ttft.$rname"                    
                     fi
                 else
                     echo "Imported $ttft.$rname"

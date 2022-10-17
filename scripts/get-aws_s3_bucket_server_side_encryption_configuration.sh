@@ -96,10 +96,10 @@ do
                     fi
 
                     if [[ ${tt1} == "kms_master_key_id" ]];then 
-                            kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                            
-                            kmsarn=$(echo $tt2 | tr -d '"')
-                            t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid`                    
-                        fi
+                        kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                            
+                        kmsarn=$(echo $tt2 | tr -d '"')
+                        t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid`                    
+                    fi
                
     fi
     if [ "$skip" == "0" ]; then

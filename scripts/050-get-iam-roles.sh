@@ -127,6 +127,7 @@ for c in `seq 0 0`; do
                                         trole=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'` 
                                         if [[ $trole != $cname ]];then                      
                                             t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
+                                            getrole="echo $trole"
                                         fi
                                     else
                                         echo "Found Service Role $tt2"    
@@ -186,10 +187,15 @@ for c in `seq 0 0`; do
                     fi
                 done 
 
+                if [[ $getrole != "" ]];then
+                    ../../scripts/050-get-iam-roles.sh $getrole
+                fi
+
 
         done    # done for i      
     fi
 done
 
 rm -f t*.txt
+
 

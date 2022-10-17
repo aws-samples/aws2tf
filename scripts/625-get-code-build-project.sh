@@ -137,9 +137,16 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "availability_zone_id" ]];then skip=1;fi
                     
                     if [[ ${tt1} == "encryption_key" ]]; then                 
-                        earn=`echo "$tt2" | rev | cut -d'/' -f 1 | rev | tr -d '"'`
-                        #t1=`printf "%s = data.aws_kms_alias.%s.arn" $tt1 $earn`
-                        t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $earn`
+                        kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                            
+                        kmsarn=$(echo $tt2 | tr -d '"')
+                        km=`$AWS kms describe-key --key-id $kid --query KeyMetadata.KeyManager | jq -r '.' 2>/dev/null`
+                            #echo $t1
+                        if [[ $km == "AWS" ]];then
+                            t1=`printf "%s = data.aws_kms_key.k_%s.arn" $tt1 $kid`
+                        else
+                            t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid`
+                        fi 
+
                     fi                  
                     
                     if [[ ${tt1} == "vpc_id" ]]; then
@@ -171,7 +178,7 @@ for c in `seq 0 0`; do
             fi
 
             if [[ "$earn" != "" ]]; then 
-                ../../scripts/080-get-kms-key.sh $earn
+                ../../scripts/080-get-kms-key.sh $kmsarn
             fi
             ## role arn
 

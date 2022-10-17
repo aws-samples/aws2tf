@@ -196,7 +196,7 @@ printf "required_version = \"~> 1.3.0\"\n" >> aws.tf
 printf "  required_providers {\n" >> aws.tf
 printf "   aws = {\n" >> aws.tf
 printf "     source  = \"hashicorp/aws\"\n" >> aws.tf
-printf "      version = \"= 4.32.0\"\n" >> aws.tf
+printf "      version = \"= 4.34.0\"\n" >> aws.tf
 #printf "      version = \"= 3.75.1\"\n" >> aws.tf
 printf "    }\n" >> aws.tf
 

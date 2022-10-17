@@ -8,6 +8,9 @@ if [[ "$1" != "" ]]; then
     cm=`printf "$AWS appstream describe-image-builders  | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $1`
 fi
 
+echo "Problem for import with $ttft - skip for now "
+exit
+
 count=1
 echo $cm
 awsout=`eval $cm 2> /dev/null`
@@ -30,8 +33,13 @@ for i in `seq 0 $count`; do
     fn=`printf "%s__%s.tf" $ttft $rname`
     if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
 
-    printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn   
+    printf "resource \"%s\" \"%s\" {\n" $ttft $rname > $fn  
+    printf "domain_join_info {} \n" $ttft $rname >> $fn
+    printf "} \n" $ttft $rname >> $fn 
+    echo "Import"
     terraform import $ttft.${rname} "${cname}" | grep Import
+    exit
+    echo "Show"
     terraform state show -no-color $ttft.${rname}  > t1.txt
 
     rm -f $fn
@@ -71,7 +79,7 @@ for i in `seq 0 $count`; do
                 
     done <"$file"
     # dependancies here
-
+    
     for sub in ${subnets[@]}; do
                 #echo "therole=$therole"
                 sub1=`echo $sub | tr -d '"'`

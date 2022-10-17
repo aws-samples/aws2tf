@@ -47,7 +47,11 @@ for i in `seq 0 $count`; do
             if [[ ${tt1} == "id" ]];then skip=1; fi  
             if [[ ${tt1} == "create_date" ]];then skip=1; fi  
             if [[ ${tt1} == "arn" ]];then skip=1;fi
-            if [[ ${tt1} == "owner_id" ]];then skip=1;fi                   
+            if [[ ${tt1} == "owner_id" ]];then skip=1;fi  
+            if [[ ${tt1} == "datapoints_to_alarm" ]];then
+                tt2=`echo $tt2 | tr -d '"'` 
+                if [[ ${tt2} == "0" ]];then skip=1;fi
+            fi                 
         fi
 
         if [ "$skip" == "0" ]; then echo "$t1" >> $fn ;fi

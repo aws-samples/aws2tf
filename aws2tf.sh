@@ -273,6 +273,7 @@ if [ "$t" == "artifact" ]; then pre="627*"; fi
 if [ "$t" == "athena" ]; then pre="66*"; fi
 if [ "$t" == "code" ]; then pre="62*"; fi
 if [ "$t" == "cfront" ]; then pre="80*"; fi
+if [ "$t" == "cw-log" ]; then pre="070*"; fi
 if [ "$t" == "cloudwatch" ]; then pre="76*"; fi
 if [ "$t" == "cloudform" ]; then pre="999*"; fi
 if [ "$t" == "cognito" ]; then pre="77*"; fi
@@ -410,9 +411,9 @@ if [[ $? -eq 0 ]];then
     if [[ $ver -ge 1275 ]];then
         echo "tfsec security report" > security-report.txt
         echo "CRITICAL:" >> security-report.txt
-        tfsec -f json | jq '.results[] | select(.severity=="CRITICAL") | [.resource, .description, .resolution]' >> security-report.txt
+        tfsec -f json | jq '.results[] | select(.severity=="CRITICAL") | [.resource, .description, .resolution]' 2> /dev/null >> security-report.txt
         echo "HIGH:" >> security-report.txt
-        tfsec -f json | jq '.results[] | select(.severity=="HIGH") | [.resource, .description, .resolution]' >> security-report.txt
+        tfsec -f json | jq '.results[] | select(.severity=="HIGH") | [.resource, .description, .resolution]' 2> /dev/null >> security-report.txt
         echo "security report in generated/tf.${mysub}_${r}/security-report.txt"
     else
         echo "Please upgrade tfsec to version v1.27.5 or higher"

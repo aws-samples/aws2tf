@@ -22,6 +22,7 @@ for c in `seq 0 0`; do
     #echo $count
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
+
         for i in `seq 0 $count`; do
             #echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
@@ -34,6 +35,12 @@ for c in `seq 0 0`; do
             #terraform state rm $ttft.$rname > /dev/null
             echo "$ttft $cname import"
             . ../../scripts/parallel_import2.sh $ttft $cname &
+            jc=`jobs -r | wc -l | tr -d ' '`
+            while [ $jc -gt 15 ];do
+                echo "pausing $jc Terraform imports in progress"
+                sleep 10
+                jc=`jobs -r | wc -l | tr -d ' '`
+            done
         done
 
          
@@ -104,10 +111,10 @@ for c in `seq 0 0`; do
                 
             done <"$file"
 
-            dfn=`printf "data/data_%s__%s.tf" $ttft $cname`
-            printf "data \"%s\" \"%s\" {\n" $ttft $cname > $dfn
-            printf "id = \"%s\"\n" $cname >> $dfn
-            printf "}\n" $ttft $cname >> $dfn
+            #dfn=`printf "data/data_%s__%s.tf" $ttft $cname`
+            #printf "data \"%s\" \"%s\" {\n" $ttft $cname > $dfn
+            #printf "id = \"%s\"\n" $cname >> $dfn
+            #printf "}\n" $ttft $cname >> $dfn
             
         done
     fi

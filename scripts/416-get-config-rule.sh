@@ -27,23 +27,37 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
-            echo "$ttft $cname"
-            fn=`printf "%s__%s.tf" $ttft $cname`
-            if [ -f "$fn" ] ; then
-                echo "$fn exists already skipping"
-                continue
-            fi
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
-            printf "terraform import %s.%s %s" $ttft $cname $cname > data/import_$ttft_$cname.sh
-            terraform import $ttft.$cname "$cname" | grep Import
-            terraform state show -no-color $ttft.$cname > t1.txt
-            tfa=`printf "%s.%s" $ttft $cname`
-            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
-            #echo $awsj | jq . 
-            rm -f $ttft.$cname.tf
- 
-            file="t1.txt"
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            fn=`printf "%s__%s.tf" $ttft $rname`
+            if [ -f "$fn" ] ; then continue; fi
+
+            echo "$ttft $cname import"
+            . ../../scripts/parallel_import2.sh $ttft $cname &
+            jc=`jobs -r | wc -l | tr -d ' '`
+            while [ $jc -gt 15 ];do
+                echo "pausing $jc Terraform imports in progress"
+                sleep 10
+                jc=`jobs -r | wc -l | tr -d ' '`
+            done
+        done
+
+        jc=`jobs -r | wc -l | tr -d ' '`
+        if [ $jc -gt 0 ];then
+            echo "Waiting for $jc Terraform imports"
+            wait
+            echo "Finished importing"
+        fi
+                
+        ../../scripts/parallel_statemv.sh $ttft
+
+
+        for i in `seq 0 $count`; do
+            cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
+            rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            fn=`printf "%s__%s.tf" $ttft $rname`
+            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi          
+            file=`printf "%s-%s-1.txt" $ttft $rname`
+            
             echo $aws2tfmess > $fn
             while IFS= read line
             do
@@ -102,4 +116,4 @@ for c in `seq 0 0`; do
 done
 
 rm -f t*.txt
-
+rm -f $ttft*.txt

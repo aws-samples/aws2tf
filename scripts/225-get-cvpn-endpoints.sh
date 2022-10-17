@@ -36,7 +36,8 @@ for c in `seq 0 0`; do
 
             rm -f $fn
             file="t1.txt"
-
+            sgs=()
+            vpcs=()
             echo $aws2tfmess > $fn
             while IFS= read line
             do
@@ -59,14 +60,40 @@ for c in `seq 0 0`; do
                     #if [[ ${tt1} == "ipv6_association_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "ipv6_cidr_block" ]];then skip=1;fi
 
-                fi
-                if [ "$skip" == "0" ]; then
-                    #echo $skip $t1
-                    echo "$t1" >> $fn
+                else
+                    if [[ "$t1" == *"sg-"* ]]; then
+                        t1=`echo $t1 | tr -d '"|,'`
+                        sgs+=`printf "\"%s\" " $t1`
+                        t1=`printf "aws_security_group.%s.id," $t1`
+                    fi
+                    if [[ "$t1" == *"vpc-"* ]]; then
+                        t1=`echo $t1 | tr -d '"|,'`
+                        vpcs+=`printf "\"%s\" " $t1`
+                        t1=`printf "aws_vpc.%s.id," $t1`
+                    fi
 
                 fi
+
+                if [ "$skip" == "0" ]; then echo "$t1" >> $fn ;fi
                 
             done <"$file"
+
+
+            for sg in ${sgs[@]}; do
+                sg1=`echo $sg | tr -d '"'`
+                echo "calling for $sg1"
+                if [ "$sg1" != "" ]; then
+                    ../../scripts/110-get-security-group.sh $sg1
+                fi
+            done
+
+            for vpc in ${vpcs[@]}; do
+                vpc1=`echo $vpc | tr -d '"'`
+                echo "calling for $vpc1"
+                if [ "$vpc1" != "" ]; then
+                    ../../scripts/100-get-vpc.sh $vpc1
+                fi
+            done
             
         done
 

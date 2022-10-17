@@ -160,7 +160,8 @@ if [ "$kcount" -gt "0" ]; then
                     #cat $tfa.json | jq .
                     rm -f $fn
                     file="t1.txt"
-        
+                    sgs=()
+                    subnets=()
                     echo $aws2tfmess > $fn
                     while IFS= read line
                     do
@@ -223,18 +224,43 @@ if [ "$kcount" -gt "0" ]; then
                             if [[ ${tt1} == "cluster_security_group_id" ]];then skip=1;fi
                             if [[ ${tt1} == "platform_version" ]];then skip=1;fi
                   
+                        else
+                            if [[ "$t1" == *"subnet-"* ]]; then
+                                t1=`echo $t1 | tr -d '"|,'`
+                                subnets+=`printf "\"%s\" " $t1`
+                                t1=`printf "aws_subnet.%s.id," $t1`
+                            fi
+                            if [[ "$t1" == *"sg-"* ]]; then
+                                t1=`echo $t1 | tr -d '"|,'`
+                                sgs+=`printf "\"%s\" " $t1`
+                                t1=`printf "aws_security_group.%s.id," $t1`
+                            fi
+
                         fi
                         
-                        if [ "$skip" == "0" ]; then
-                            #echo $skip $t1
-                            echo "$t1" >> $fn
-                        fi
+                        if [ "$skip" == "0" ]; then  echo "$t1" >> $fn ;fi
                         
                     done <"$file"   # done while
 
                     # Get the fargate profile
                     ../../scripts/fargate_profile.sh $cname
 
+                    for sub in ${subnets[@]}; do
+                        #echo "therole=$therole"
+                        sub1=`echo $sub | tr -d '"'`
+                        echo "calling for $sub1"
+                        if [ "$sub1" != "" ]; then
+                            ../../scripts/105-get-subnet.sh $sub1
+                        fi
+                    done
+
+                    for sg in ${sgs[@]}; do
+                        sg1=`echo $sg | tr -d '"'`
+                        echo "calling for $sg1"
+                        if [ "$sg1" != "" ]; then
+                            ../../scripts/110-get-security-group.sh $sg1
+                        fi
+                    done
 
                 done # done for i
             fi

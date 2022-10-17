@@ -65,13 +65,12 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "last_modified_date" ]];then skip=1;fi
                     if [[ ${tt1} == "endpoint" ]];then skip=1;fi
                     if [[ ${tt1} == "estimated_number_of_users" ]];then skip=1;fi                  
-                    
+                    if [[ ${tt1} == "email_verification_message" ]];then skip=1;fi
+                    if [[ ${tt1} == "email_verification_subject" ]];then skip=1;fi
+                    if [[ ${tt1} == "sms_verification_message" ]];then skip=1;fi
+                fi
 
-                fi
-                if [ "$skip" == "0" ]; then
-                    #echo $skip $t1
-                    echo "$t1" >> $fn
-                fi
+                if [ "$skip" == "0" ]; then echo "$t1" >> $fn ;fi
                 
             done <"$file"
 

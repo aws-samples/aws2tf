@@ -37,12 +37,12 @@ for c in `seq 0 0`; do
             . ../../scripts/parallel_import2.sh $ttft $cname &
             jc=`jobs -r | wc -l | tr -d ' '`
             while [ $jc -gt 15 ];do
-                echo "pausing $jc Terraform imports in progress"
+                echo "Throttling - $jc Terraform imports in progress"
                 sleep 10
                 jc=`jobs -r | wc -l | tr -d ' '`
             done
         done
-        
+
         jc=`jobs -r | wc -l | tr -d ' '`
         echo "Waiting for $jc Terraform imports"
         wait

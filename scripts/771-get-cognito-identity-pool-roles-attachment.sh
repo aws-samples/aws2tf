@@ -79,7 +79,7 @@ for c in `seq 0 0`; do
             done <"$file"
 
             if [[ $tid != "" ]];then
-                    ../../scripts/050-get-iam-roles.sh $tid
+                    ../../scripts/050-get-iam-roles.sh $tarn
             fi
 
         done

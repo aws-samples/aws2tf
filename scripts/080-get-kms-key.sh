@@ -94,15 +94,16 @@ for c in `seq 0 0`; do
                                 t1=`printf "\"%s\" = \"%s\"" $tt1 $tt2`
                             fi
 
-                            if [[ ${tt1} == "Resource" ]]; then
-                                tt2=`echo $tt2 | tr -d '"'`
-                                if [[ "$tt2" != *"*"* ]];then
-                                    if [[ "$tt2" == *"arn:aws:kms:${myreg}:${mysub}:key/"* ]];then
-                                        kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                                 
-                                        t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid`
-                                    fi
-                                fi
-                            fi
+                            #if [[ ${tt1} == "Resource" ]]; then
+                            #    tt2=`echo $tt2 | tr -d '"'`
+                            #    if [[ "$tt2" != *"*"* ]];then
+                            #        if [[ "$tt2" == *"arn:aws:kms:${myreg}:${mysub}:key/"* ]];then
+                            #            kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`  
+                            #            # can't do this - self referential block error                               
+                            #            # t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid`
+                            #        fi
+                            #    fi
+                            #fi
 
                             if [[ ${tt1} == "AWS" ]]; then
                                 tt2=`echo $tt2 | tr -d '"'`

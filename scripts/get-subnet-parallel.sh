@@ -37,7 +37,14 @@ for c in `seq 0 0`; do
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
             #echo "calling import sub"
             . ../../scripts/parallel_import2.sh $ttft $cname &
+            jc=`jobs -r | wc -l | tr -d ' '`
+            while [ $jc -gt 15 ];do
+                echo "pausing $jc Terraform imports in progress"
+                sleep 10
+                jc=`jobs -r | wc -l | tr -d ' '`
+            done
         done
+        
         jc=`jobs -r | wc -l`
         echo "waiting on $jc imports"
         wait

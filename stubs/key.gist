@@ -1,0 +1,19 @@
+                    if [[ ${tt1} == "encryption_key" ]]; then    
+                        kmsarn=$(echo $tt2 | tr -d '"')            
+                        if [[ $tt2 != *":alias/aws/"* ]]; then
+                            kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`   
+                            km=`$AWS kms describe-key --key-id $kid --query KeyMetadata.KeyManager | jq -r '.' 2>/dev/null`
+                        else
+                            kid=`echo $tt2 | rev | cut -f1 -d':' | rev | tr -d '"'`
+                            kid=${kid//\//_}
+                            km="ALIAS"
+                        fi                         
+      
+                        if [[ $km == "AWS" ]];then
+                            t1=`printf "%s = data.aws_kms_key.k_%s.arn" $tt1 $kid`
+                        elif [[ $km == "ALIAS" ]];then               
+                            t1=`printf "%s = data.aws_kms_alias.%s.arn" $tt1 $kid`
+                        else
+                            t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid`
+                        fi 
+                    fi

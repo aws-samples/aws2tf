@@ -3,7 +3,6 @@ if [ "$1" != "" ]; then
     cmd[0]="$AWS kms list-aliases --key-id $1"  
 else
     cmd[0]="$AWS kms list-aliases"
-   
 fi
 
 pref[0]="Aliases"

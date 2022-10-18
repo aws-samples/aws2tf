@@ -136,17 +136,24 @@ for c in `seq 0 0`; do
                     fi
                     if [[ ${tt1} == "availability_zone_id" ]];then skip=1;fi
                     
-                    if [[ ${tt1} == "encryption_key" ]]; then                 
-                        kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                            
-                        kmsarn=$(echo $tt2 | tr -d '"')
-                        km=`$AWS kms describe-key --key-id $kid --query KeyMetadata.KeyManager | jq -r '.' 2>/dev/null`
-                            #echo $t1
+                    if [[ ${tt1} == "encryption_key" ]]; then    
+                        kmsarn=$(echo $tt2 | tr -d '"')            
+                        if [[ $tt2 != *":alias/aws/"* ]]; then
+                            kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`   
+                            km=`$AWS kms describe-key --key-id $kid --query KeyMetadata.KeyManager | jq -r '.' 2>/dev/null`
+                        else
+                            kid=`echo $tt2 | rev | cut -f1 -d':' | rev | tr -d '"'`
+                            kid=${kid//\//_}
+                            km="ALIAS"
+                        fi                         
+      
                         if [[ $km == "AWS" ]];then
                             t1=`printf "%s = data.aws_kms_key.k_%s.arn" $tt1 $kid`
+                        elif [[ $km == "ALIAS" ]];then               
+                            t1=`printf "%s = data.aws_kms_alias.%s.arn" $tt1 $kid`
                         else
                             t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid`
                         fi 
-
                     fi                  
                     
                     if [[ ${tt1} == "vpc_id" ]]; then
@@ -177,7 +184,7 @@ for c in `seq 0 0`; do
                 ../../scripts/get-ecr.sh $ecrr
             fi
 
-            if [[ "$earn" != "" ]]; then 
+            if [[ "$kmsarn" != "" ]]; then 
                 ../../scripts/080-get-kms-key.sh $kmsarn
             fi
             ## role arn

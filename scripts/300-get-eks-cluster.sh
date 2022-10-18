@@ -175,11 +175,6 @@ if [ "$kcount" -gt "0" ]; then
                                 tt1=`echo $tt1 | tr -d '"'`
                                 t1=`printf "\"%s\"=%s" $tt1 $tt2`
                             fi
-                            #if [[ ${tt1} == "endpoint_public_access" ]];then
-                            #    # must start public and flick over
-                            #    t1=`printf "\"%s\"= false" $tt1`
-                            #fi
-
 
                             if [[ ${tt1} == "arn" ]];then skip=1; fi
                             if [[ ${tt1} == "id" ]];then skip=1; fi

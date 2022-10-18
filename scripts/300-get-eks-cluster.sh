@@ -207,6 +207,7 @@ if [ "$kcount" -gt "0" ]; then
                             if [[ ${tt1} == "created_at" ]];then skip=1;fi
                             if [[ ${tt1} == "endpoint" ]];then skip=1;fi
                             if [[ ${tt1} == "status" ]];then skip=1;fi
+                            if [[ ${tt1} == "service_ipv6_cidr" ]];then skip=1;fi
                             if [[ ${tt1} == "identity" ]];then 
                                 skip=1
                                 read line

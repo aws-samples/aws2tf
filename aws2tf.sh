@@ -411,9 +411,9 @@ if [[ $? -eq 0 ]];then
     if [[ $ver -ge 1275 ]];then
         echo "tfsec security report" > security-report.txt
         echo "CRITICAL:" >> security-report.txt
-        tfsec -f json | jq '.results[] | select(.severity=="CRITICAL") | [.resource, .description, .resolution]' 2> /dev/null >> security-report.txt
+        tfsec -f json | jq '.results[] | select(.severity=="CRITICAL") | [.resource, .description, .resolution, .links[0]]]' 2> /dev/null >> security-report.txt
         echo "HIGH:" >> security-report.txt
-        tfsec -f json | jq '.results[] | select(.severity=="HIGH") | [.resource, .description, .resolution]' 2> /dev/null >> security-report.txt
+        tfsec -f json | jq '.results[] | select(.severity=="HIGH") | [.resource, .description, .resolution, .links[0]]]' 2> /dev/null >> security-report.txt
         echo "security report in generated/tf.${mysub}_${r}/security-report.txt"
     else
         echo "Please upgrade tfsec to version v1.27.5 or higher"

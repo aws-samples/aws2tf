@@ -5,22 +5,26 @@ if [ "$1" == "" ]; then
 else
     pref=$(echo $1)
 fi
+sync;sync
+echo "listing in local state move"
+#ls -l ${pref}*.tfstate
 ls ${pref}*.tfstate &> /dev/null
 if [[ $? -ne 0 ]];then
-    #echo "No ${pref} state files in skipping ..."
+    echo "No ${pref} state files exiting ..."
     exit
 else
     echo "Starting state mv for $pref"
 fi
-for st in `ls ${pref}*__*.tfstate 2> /dev/null` 
+for st in `ls ${pref}*.tfstate 2> /dev/null` 
 do
     ttft=${st%__*}
 
     #rname=${st#\/${1}__/}
     rname=${st#${ttft}__}
     rname=$(echo $rname | cut -f1 -d'.')  
-    #echo $st $ttft $rname
+    echo $st $ttft $rname
     sl=`echo $((1 + $RANDOM % 10))`
+    terraform state rm $ttft.$rname 2> /dev/null
     comm=$(printf "terraform state mv -state %s -state-out=terraform.tfstate -lock=true %s.%s %s.%s" $st $ttft $rname $ttft $rname)
     #echo $comm
     eval $comm > /dev/null

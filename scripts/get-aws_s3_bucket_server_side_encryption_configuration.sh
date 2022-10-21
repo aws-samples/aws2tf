@@ -23,7 +23,7 @@ sync
 #ls -l $fn
 #cat $fn
 #echo "-----"
-cmdi=`printf "terraform import -state %s %s.%s %s &> /dev/null" $st $ttft $rname $cname`      
+cmdi=`printf "terraform import -state %s %s.%s %s > /dev/null" $st $ttft $rname $cname`      
 #echo $cmdi
 #terraform import -allow-missing-config -lock=false -state $st $ttft.$rname $cname &> /dev/null     
 eval $cmdi

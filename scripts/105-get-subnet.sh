@@ -109,7 +109,7 @@ for c in `seq 0 0`; do
             
         done
     fi
-done
+done # for c
 
 #rm -f $ttft-$rname-1.txt
 rm -f *.backup 

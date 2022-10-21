@@ -17,14 +17,19 @@ if [ -f "$st" ] ; then echo "$st exists already skipping" && exit; fi
 printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
 sync
   
-cmdi=`printf "terraform import -state %s %s.%s %s &> /dev/null" $st $ttft $rname $cname`      
+cmdi=`printf "terraform import -state %s %s.%s %s > /dev/null" $st $ttft $rname $cname`      
 #echo $cmdi
     #terraform import -allow-missing-config -lock=false -state $st $ttft.$rname $cname &> /dev/null     
-eval $cmdi
+eval $cmdi 
 if [[ $? -ne 0 ]];then
+    echo "retry import"
+    sleep 1;sync
+    terraform import -state $st $ttft.$rname $cname
+    if [[ $? -ne 0 ]];then
         echo "** No bucket versioning found for $cname exiting ..."
         mv $fn data/$fn.notfound
         exit
+    fi
 fi
 
 rm -f $fn

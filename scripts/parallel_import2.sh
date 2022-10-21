@@ -48,7 +48,7 @@ if [[ $? -ne 0 ]];then
     fi
 
     fn=`printf "%s__%s.tf" $ttft $rname`
-    printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
+    printf "resource \"%s\" \"%s\" {}\n" $ttft $rname > $fn
     sync && sync
 
     if [[ ! -f "$fn" ]]; then echo "Error in pi2: prototype $fn does not exist exiting..." && exit; fi
@@ -59,6 +59,8 @@ if [[ $? -ne 0 ]];then
     eval $comm
 
     if [ $? -ne 0 ]; then
+        printf "resource \"%s\" \"%s\" {}\n" $ttft $rname > $fn
+        sync && sync
         echo "--> 1st Import backoff & retry for $rname"
         sl=`echo $((1 + $RANDOM % 10))`
         sleep $sl

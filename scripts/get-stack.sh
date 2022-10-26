@@ -61,6 +61,8 @@ if [ $count -gt 0 ]; then
                 AWS::ApiGateway::Account) echo "echo 'Error: **Terraform does not support import of $type skipped**' " >> commands.sh ;; 
                 AWS::ApiGateway::RestApi) echo "../../scripts/750-get-apigw-restapi.sh $pid"  >> commands.sh ;;
                 AWS::ApiGateway::Resource) echo "echo '# $type $pid fetched as part of RestApi..' " >> commands.sh ;;                
+                AWS::AutoScaling::AutoScalingGroup) echo "../../scripts/258-get-autoscaling-groups.sh $pid"  >> commands.sh ;;
+                
                 AWS::Cloud9::EnvironmentEC2) echo "../../scripts/252-get-c9.sh $pid"  >> commands.sh ;;
                 
                 AWS::CloudWatch::Alarm) echo "../../scripts/760-get-cloudwatch-alarm.sh $pid"  >> commands.sh ;;

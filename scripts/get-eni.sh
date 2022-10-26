@@ -57,7 +57,7 @@ for c in `seq 0 0`; do
                     #if [[ ${tt1} == "public_dns" ]];then skip=1;fi
                     if [[ ${tt1} == "private_dns_name" ]];then skip=1;fi
                     if [[ ${tt1} == "mac_address" ]];then skip=1;fi
-                    #if [[ ${tt1} == "private_ip" ]];then skip=1;fi
+                    if [[ ${tt1} == "private_ips_count" ]];then skip=1;fi
                     if [[ ${tt1} == "domain" ]];then skip=1;fi
                     if [[ ${tt1} == "attachment_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "default_network_acl_id" ]];then skip=1;fi
@@ -68,6 +68,13 @@ for c in `seq 0 0`; do
                             skip=1
                         fi
                     fi
+
+                    if [[ ${tt1} == "ipv6_address_list" ]];then 
+                        if [[ ${tt2} == *"[]"* ]];then
+                            skip=1
+                        fi
+                    fi
+                    
                     
                     if [[ ${tt1} == "ipv4_prefixes" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
@@ -81,6 +88,18 @@ for c in `seq 0 0`; do
                         if [ "$tt2" == "[]" ];then
                             skip=1
                         fi
+                    fi
+
+                    if [[ ${tt1} == "private_ip_list" ]];then 
+                        tt2=`echo $tt2 | tr -d '"'` 
+                        skip=1
+                        while [ "$t1" != "]" ] && [ "$tt2" != "[]" ] ;do
+                        #while [[ "$t1" != "]" ]] ;do
+
+                            read line
+                            t1=`echo "$line"`
+                            #echo $t1
+                        done
                     fi
 
 

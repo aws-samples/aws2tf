@@ -19,7 +19,7 @@ for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
@@ -29,19 +29,26 @@ for c in `seq 0 0`; do
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
-            #echo $i
+            
+            
+            echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].RouteTableId" | tr -d '"'`
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             echo "$ttft $cname import"
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
-            printf "resource \"%s\" \"%s\" {" $ttft $rname > $fn
-            printf "}" >> $fn
+            printf "resource \"%s\" \"%s\" {}\n" $ttft $rname > $fn
+            cat $fn
             terraform import $ttft.$rname "$cname" | grep Import
+            echo "done import"
+            
             terraform state show -no-color $ttft.$rname > t1.txt
-            rm $fn
+            terraform state show -no-color $ttft.$rname
+            cat t1.txt
+            rm -f $fn
 
             file="t1.txt"
+            cat $file
             pcxs=()
             echo $aws2tfmess > $fn
             while IFS= read line
@@ -80,9 +87,10 @@ for c in `seq 0 0`; do
                              
                     
                     if [[ ${tt1} == "network_interface_id" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        if [ "$tt2" != "" ]; then
-                            t1=`printf "%s = aws_network_interface.%s.id" $tt1 $tt2`
+                        nifid=`echo $tt2 | tr -d '"'`
+                        echo "__> $nifid"
+                        if [ "$nifid" != "" ]; then
+                            t1=`printf "%s = aws_network_interface.%s.id" $tt1 $nifid`
                         fi
                     fi     
                     # depreciated - but you have to have it anyway ?         
@@ -140,7 +148,10 @@ for c in `seq 0 0`; do
             done
             if [[ "$tgwid" != "" ]];then
                 ../../scripts/201-get-transit-gateway.sh $tgwid
-            fi                    
+            fi  
+            if [[ "$nifid" != "" ]];then
+                ../../scripts/get-eni.sh $nifid
+            fi                  
         done
     fi
 done

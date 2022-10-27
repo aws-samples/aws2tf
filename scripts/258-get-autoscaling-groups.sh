@@ -78,12 +78,12 @@ for i in $(seq 0 $count); do
         if [ "$skip" == "0" ]; then echo "$t1" >>$fn; fi
 
     done <"$file"
-
+    # dependancies here
     if [[ $lcn != "" ]];then
         ../../scripts/get-launch-configuration.sh $lcn
     fi
 
-    # dependancies here
+    ../../scripts/get-autoscaling-lifecycle-hook.sh $cname
 done
 
 #rm -f t*.txt

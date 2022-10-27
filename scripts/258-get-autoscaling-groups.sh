@@ -57,7 +57,10 @@ for i in $(seq 0 $count); do
             if [[ ${tt1} == "availability_zones" ]]; then
                 az=1
             fi
-
+            if [[ ${tt1} == "launch_configuration" ]]; then
+                lcn=`echo $tt2 | tr -d '"'`
+                t1=`printf "%s = aws_launch_configuration.%s.id" $tt1 $lcn`
+            fi
 
             if [[ ${tt1} == "vpc_zone_identifier" ]];then
                 if [[ ${az} == "1" ]];then
@@ -75,6 +78,11 @@ for i in $(seq 0 $count); do
         if [ "$skip" == "0" ]; then echo "$t1" >>$fn; fi
 
     done <"$file"
+
+    if [[ $lcn != "" ]];then
+        ../../scripts/get-launch-configuration.sh $lcn
+    fi
+
     # dependancies here
 done
 

@@ -57,7 +57,7 @@ for i in `seq 0 $count`; do
             if [[ ${tt1} == "vpc_classic_link_security_groups" ]];then skip=1;fi
             if [[ ${tt1} == "name" ]];then 
                 namp=`echo $tt2 | tr -d '"|,'`
-                t1=`printf "name_prefix = \"%s\"" $namp`
+                #t1=`printf "name_prefix = \"%s\"" $namp`
             fi  
 
             if [[ ${tt1} == "iam_instance_profile" ]];then 

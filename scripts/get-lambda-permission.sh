@@ -31,7 +31,7 @@ while [ $? -eq 0 ];do
 done
 c=0
 ttft=${tft[(${c})]}
-echo $count
+#echo $count
 
 for perm in ${perms[@]}; do
             cname=$(echo $perm | tr -d '"')          

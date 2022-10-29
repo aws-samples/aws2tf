@@ -10,10 +10,10 @@ echo "d=$d"
 getstack () {
 
 stackr=$($AWS cloudformation describe-stack-resources --stack-name $1 --query StackResources)
-#if [[  $? -eq 254 ]];then
-#    echo "stack $1 not found exiting ..."
-#    exit
-#fi
+if [[  $? -eq 254 ]];then
+    echo "stack $1 not found exiting ..."
+    exit
+fi
 
 #echo $stackr | jq .
 count=`echo $stackr | jq ". | length"`
@@ -66,7 +66,7 @@ if [ $count -gt 0 ]; then
                 AWS::AutoScaling::LifecycleHook) echo "echo '# $type $pid fetched as part of AutoScalingGroup..' " >> commands.sh ;;
                 AWS::Cloud9::EnvironmentEC2) echo "../../scripts/252-get-c9.sh $pid"  >> commands.sh ;;
                 
-                AWS::CloudWatch::Alarm) echo "../../scripts/760-get-cloudwatch-alarm.sh $pid"  >> commands.sh ;;
+                AWS::CloudWatch::Alarm) echo "../../scripts/760-get-cloudwatch-alarm.sh $parn"  >> commands.sh ;;
 
                 AWS::CodeCommit::Repository)  echo "../../scripts/628-get-code-commit-repository.sh $pid"  >> commands.sh ;;
                 AWS::CodeArtifact::Domain)  echo "../../scripts/627-get-code-artifact-domain.sh $pid"  >> commands.sh ;;

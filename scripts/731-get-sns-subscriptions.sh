@@ -1,44 +1,63 @@
 #!/bin/bash
 mysub=`echo $AWS2TF_ACCOUNT`
 myreg=`echo $AWS2TF_REGION`
+pref[0]="Subscriptions"
+tft[0]="aws_sns_topic_subscription"
+idfilt[0]="SubscriptionArn"
+count=1
+cc=1
 if [[ "$1" != "" ]]; then
-    if [[ "$1" == "arn:aws:"* ]];then 
-        cmd[0]="$AWS sns list-subscriptions-by-topic --topic-arn $1"
+    if [[ "$1" == "arn:aws:"* ]];then
+        cc=$(echo $1 | tr -d -c ':' | wc -m | tr -d ' ')
+        if [[ $cc == "5" ]];then 
+            cmd[0]="$AWS sns list-subscriptions-by-topic --topic-arn $1"
+        else
+            cmd[0]=`printf "$AWS sns list-subscriptions | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $1`
+        fi
+    
     else
         echo "invalid topic arn exit ...."
         exit
-    fi
+    fi  
+    
 else
     cmd[0]="$AWS sns list-subscriptions"
     
 fi
 
-pref[0]="Subscriptions"
-tft[0]="aws_sns_topic_subscription"
-idfilt[0]="SubscriptionArn"
+
 
 for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
         exit
     fi
-
-    count=`echo $awsout | jq ".${pref[(${c})]} | length"`
-    #echo $count
+    if [[ "$1" == "" ]];then
+        count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    fi
+    echo $count
 
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-
-            cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
-
+            if [[ "$1" == "" ]];then
+                cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
+            elif [[ $cc == "6" ]];then 
+                cname=$(echo $awsout | jq -r ".${idfilt[(${c})]}")
+            else
+                cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
+            fi
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_} && rname=${rname/${mysub}/}
+            if [[ $cname == "null" ]];then
+                echo "null cname exit ... cc=$cc"
+                exit
+            fi
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi

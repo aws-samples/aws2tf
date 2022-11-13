@@ -63,15 +63,22 @@ for c in `seq 0 0`; do
             echo $aws2tfmess > $fn
             sgs=()
             subnets=()
+            doarn=0
             while IFS= read line
             do
 				skip=0
                 # display $line or do something with $line
                 t1=`echo "$line"` 
+                if [[ ${t1} == *"file_system_config"* ]];then doarn=1 ;fi
                 if [[ ${t1} == *"="* ]];then
+
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
-                    if [[ ${tt1} == "arn" ]];then skip=1; fi                
+                    if [[ ${tt1} == "arn" ]];then 
+                        if [[ $doarn == "0" ]];then 
+                            skip=1;
+                        fi 
+                    fi                
                     if [[ ${tt1} == "id" ]];then
                         if [ -f "$cname.zip" ]; then 
                             t1=`printf "filename = \"%s.zip\"" $cname`

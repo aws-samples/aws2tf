@@ -22,6 +22,7 @@ usage(){
     echo "           eb"
     echo "           ec2"
     echo "           ecs"
+    echo "           efs"
     echo "           eks"
     echo "           emr"
     echo "           glue"
@@ -280,6 +281,7 @@ if [ "$t" == "cognito" ]; then pre="77*"; fi
 if [ "$t" == "config" ]; then pre="41*"; fi
 if [ "$t" == "eb" ]; then pre="71*"; fi
 if [ "$t" == "ec2" ]; then pre="25*"; fi
+if [ "$t" == "efs" ]; then pre="27*"; fi
 if [ "$t" == "emr" ]; then pre="37*"; fi
 if [ "$t" == "glue" ]; then pre="65*"; fi
 if [ "$t" == "kinesis" ]; then pre="74*"; fi

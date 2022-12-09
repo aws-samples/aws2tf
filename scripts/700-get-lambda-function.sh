@@ -77,6 +77,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "arn" ]];then 
                         if [[ $doarn == "0" ]];then 
                             skip=1;
+                            efsarn=`echo "$tt2"` 
                         fi 
                     fi                
                     if [[ ${tt1} == "id" ]];then

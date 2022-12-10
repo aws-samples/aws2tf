@@ -12,7 +12,7 @@ if [[ "$1" != "" ]]; then
 fi
 idfilt="FileSystemId"
 
-
+fsid=()
 count=1
 #echo $cm
 
@@ -30,6 +30,7 @@ for i in `seq 0 $count`; do
     else
         cname=`echo $awsout | jq -r ".${pref}[(${i})].${idfilt}"`
     fi
+    fsid+=$(echo "$cname ")
     rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
     echo "$ttft ${cname}"
     
@@ -102,8 +103,16 @@ for i in `seq 0 $count`; do
     if [[ "$kmsarn" != "" ]]; then 
                 ../../scripts/080-get-kms-key.sh $kmsarn
     fi
+
+    ../../scripts/get-efs-ap-fsid.sh $cname
+    ../../scripts/get-efs-mt.sh $cname
+
     # dependancies here
 done
+#for fsi in ${fsid[@]}; do
+#    echo $fsi
+#    ../../scripts/get-efs-ap-fsid.sh $fsi
+#done
 
 #rm -f t*.txt
 

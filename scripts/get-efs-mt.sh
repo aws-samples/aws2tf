@@ -26,16 +26,16 @@ awsout=`eval $cm 2> /dev/null`
 if [ "$awsout" == "" ];then echo "$cm : You don't have access for this resource" && exit; fi
 count=`echo $awsout | jq ".${pref} | length"`  
 if [ "$count" -eq "0" ]; then echo "No resources found exiting .." && exit; fi
-echo $count
+#echo $count
 
 count=`expr $count - 1`
 for i in `seq 0 $count`; do
 
     cname=`echo $awsout | jq -r ".${pref}[(${i})].${idfilt}"`
     rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-    echo "$ttft ${cname} $rname"
-    echo $ttft
-    echo $rname
+    echo "$ttft ${cname}"
+    #echo $ttft
+    #echo $rname
 
     fn=`printf "%s__%s.tf" $ttft $rname`
 
@@ -50,7 +50,8 @@ for i in `seq 0 $count`; do
     rm -f $fn
  
     file="t1.txt"
-    
+    sgs=()
+    subnets=()
     echo $aws2tfmess > $fn
     while IFS= read t1
     do
@@ -75,12 +76,42 @@ for i in `seq 0 $count`; do
                 t1=`printf "%s = aws_efs_file_system.%s.id" $tt1 $tt2`
             fi
 
+        else
+            if [[ "$t1" == *"subnet-"* ]]; then
+                        t1=`echo $t1 | tr -d '"|,'`
+                        subnets+=`printf "\"%s\" " $t1`
+                        t1=`printf "aws_subnet.%s.id," $t1`
+            fi
+            if [[ "$t1" == *"sg-"* ]]; then
+                        t1=`echo $t1 | tr -d '"|,'`
+                        sgs+=`printf "\"%s\" " $t1`
+                        t1=`printf "aws_security_group.%s.id," $t1`
+            fi
+
+
 
         fi
 
         if [ "$skip" == "0" ]; then echo "$t1" >> $fn ;fi
                 
     done <"$file"
+
+    for sub in ${subnets[@]}; do
+                #echo "therole=$therole"
+                sub1=`echo $sub | tr -d '"'`
+                echo "calling for $sub1"
+                if [ "$sub1" != "" ]; then
+                    ../../scripts/105-get-subnet.sh $sub1
+                fi
+    done
+
+    for sg in ${sgs[@]}; do
+                sg1=`echo $sg | tr -d '"'`
+                echo "calling for $sg1"
+                if [ "$sg1" != "" ]; then
+                    ../../scripts/110-get-security-group.sh $sg1
+                fi
+    done
 
     # dependancies here
 done

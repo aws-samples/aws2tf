@@ -104,8 +104,10 @@ for i in `seq 0 $count`; do
                 ../../scripts/080-get-kms-key.sh $kmsarn
     fi
 
-    ../../scripts/get-efs-ap-fsid.sh $cname
-    ../../scripts/get-efs-mt.sh $cname
+    ../../scripts/get-efs-policy.sh $cname
+#    ../../scripts/get-efs-ap-fsid.sh $cname
+#    ../../scripts/get-efs-mt.sh $cname
+
 
     # dependancies here
 done

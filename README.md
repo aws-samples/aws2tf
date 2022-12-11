@@ -1,6 +1,6 @@
 # aws2tf
 
-**October 2022**
+**December 2022**
 - Updated to use 4.xx of the Terraform provider, testing still in progress - please report any issues you find.**
 - Now optionally includes a security report: "tfsec" CRITICAL and HIGH issues 
 
@@ -107,6 +107,7 @@ The currently supported types are:
 * eb - EventBridge resources `-t eb`
 * ec2 - Instances (running state only)
 * ecs - An ECS cluster and it's related resources `-t ecs -i Cluster-Name`
+* efs - EFS file systems - individual filesystems with `-t efs -i fs-xxxxxxxx`
 * eks - An EKS cluster and it's related resources `-t eks -i Cluster-Name`
 * emr - get all active EMR clusters
 * glue - Glue tables and partitions
@@ -175,7 +176,7 @@ Or simply check back after some time to see if they are listed below.
 
 
 ----
-## Terraform resources supported as of 15-Oct-2022
+## Terraform resources supported as of 11-Dec-2022
 
 * aws_api_gateway_resource
 * aws_api_gateway_rest_api
@@ -192,6 +193,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_appstream_user
 * aws_athena_named_query
 * aws_autoscaling_group
+* aws_autoscaling_lifecycle_hook
 * aws_cloud9_environment_ec2
 * aws_cloudformation_stack
 * aws_cloudfront_distribution
@@ -236,6 +238,10 @@ Or simply check back after some time to see if they are listed below.
 * aws_ecs_cluster
 * aws_ecs_service
 * aws_ecs_task_definition
+* aws_efs_access_point
+* aws_efs_file_system
+* aws_efs_file_system_policy
+* aws_efs_mount_target
 * aws_eip
 * aws_eks_cluster
 * aws_eks_fargate_profile
@@ -272,6 +278,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_lambda_function_event_invoke_config
 * aws_lambda_layer_version
 * aws_lambda_permission
+* aws_launch_configuration
 * aws_launch_template
 * aws_lb
 * aws_lb_listener
@@ -339,12 +346,15 @@ Or simply check back after some time to see if they are listed below.
 * aws_vpn_connection
 
 ----
-## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 15-Oct-2022
+## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 11-Dec-2022
 
 * #AWS::IAM::Policy
 * AWS::ApiGateway::Account
 * AWS::ApiGateway::Resource
 * AWS::ApiGateway::RestApi
+* AWS::AutoScaling::AutoScalingGroup
+* AWS::AutoScaling::LaunchConfiguration
+* AWS::AutoScaling::LifecycleHook
 * AWS::Cloud9::EnvironmentEC2
 * AWS::CloudWatch::Alarm
 * AWS::CodeArtifact::Domain

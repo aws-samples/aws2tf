@@ -391,6 +391,9 @@ Or simply check back after some time to see if they are listed below.
 * AWS::ECS::Cluster
 * AWS::ECS::Service
 * AWS::ECS::TaskDefinition
+* AWS::EFS::FileSystem
+* AWS::EFS::MountTarget 
+* AWS::EFS::AccessPoint
 * AWS::EKS::Cluster
 * AWS::EKS::Nodegroup
 * AWS::ElasticLoadBalancingV2::Listener

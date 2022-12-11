@@ -109,6 +109,10 @@ if [ $count -gt 0 ]; then
                 AWS::ECS::Service)  echo "../../scripts/get-ecs-service.sh $parn" >> commands.sh ;;
                 AWS::ECS::TaskDefinition)  echo "../../scripts/351-get-ecs-task.sh $pid" >> commands.sh ;;
                 
+                AWS::EFS::FileSystem) echo "../../scripts/270-get-efs.sh $pid" >> commands.sh ;;
+                AWS::EFS::MountTarget) echo "echo '#  $type $pid attached as part of EFS::FileSystem ..'" >> commands.sh ;; 
+                AWS::EFS::AccessPoint) echo "echo '#  $type $pid attached as part of EFS::FileSystem ..'" >> commands.sh ;; 
+
                 AWS::EKS::Cluster) echo "../../scripts/300-get-eks-cluster.sh $pid" >> commands.sh ;;
                 AWS::EKS::Nodegroup) echo "# $type $pid Should be fetched via the EKS Cluster Resource" >> commands.sh ;;
                 

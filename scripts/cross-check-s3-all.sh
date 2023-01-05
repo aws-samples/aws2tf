@@ -15,8 +15,9 @@ for cmd in `ls ../../scripts/*get-aws_*.sh | rev | cut -f1 -d'/' | rev`;do
         f1=`printf "%s__%s.tf" $tft $rname`
         #echo $f1
         if [[ ! -f $f1 ]];then
-            echo "State missing - $tft.$rname for $f1 not found - getting $rname"
-            ../../scripts/$cmd $rname
+            cname=$(echo $rname | cut -f2 -d'_')
+            echo "State missing - $tft.$rname for $f1 not found - getting $cname"
+            ../../scripts/$cmd $cname
             ../../scripts/local_statemv.sh $tft__$rname
         fi 
 
@@ -28,8 +29,9 @@ for cmd in `ls ../../scripts/*get-aws_*.sh | rev | cut -f1 -d'/' | rev`;do
         bc2=${bc#"${tft}__"}
         f1=`printf "%s__%s.tf" $tft $bc2`
         if [[ ! -f $f1 ]];then
-            echo "HCL missing for - $f1 getting $bc2"
-            ../../scripts/$cmd $bc2
+            cname=$(echo $bc2 | cut -f2 -d'_')
+            echo "HCL missing for - $f1 getting $cname"
+            ../../scripts/$cmd $cname
             ../../scripts/local_statemv.sh $tft__$bc2
         fi
     done

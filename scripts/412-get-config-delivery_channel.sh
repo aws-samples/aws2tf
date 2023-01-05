@@ -65,7 +65,7 @@ for c in `seq 0 0`; do
                     # not doing as buck may be elsewhere - ano region
                     #if [[ ${tt1} == "s3_bucket_name" ]]; then
                     #    buckn=`echo $tt2 | tr -d '"'`
-                    #    t1=`printf "%s = aws_s3_bucket.%s.id" $tt1 $tt2`
+                    #    t1=`printf "%s = aws_s3_bucket.b_%s.id" $tt1 $tt2`
                     #fi
                
                 fi

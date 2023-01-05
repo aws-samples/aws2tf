@@ -107,7 +107,7 @@ for c in `seq 0 0`; do
                                     t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid`
                                 elif [[ "$tt2" == *"arn:aws:s3:::"* ]];then
                                     s3id=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                                 
-                                    t1=`printf "%s = aws_s3_bucket.%s.arn" $tt1 $s3id`
+                                    t1=`printf "%s = aws_s3_bucket.b_%s.arn" $tt1 $s3id`
                                 elif [[ "$tt2" == *"arn:aws:ecr:${myreg}:${mysub}:repository/"* ]];then
                                     rep=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'` 
                                     #reps+=`printf "\"%s\" " $rep`                                

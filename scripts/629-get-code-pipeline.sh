@@ -92,7 +92,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "location" ]];then 
                                 skip=0;
                                 s3buck=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`
-                                t1=`printf "%s = aws_s3_bucket.%s.id" $tt1 $s3buck`
+                                t1=`printf "%s = aws_s3_bucket.b_%s.id" $tt1 $s3buck`
                     fi
                     
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi

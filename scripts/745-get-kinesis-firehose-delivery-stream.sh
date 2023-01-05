@@ -84,7 +84,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "bucket_arn" ]]; then
                         tarn=`echo $tt2 | tr -d '"'`
                         s3buck=$(echo $tarn | rev | cut -f1 -d':' | rev)
-                        t1=`printf "%s = aws_s3_bucket.%s.arn" $tt1 $s3buck`
+                        t1=`printf "%s = aws_s3_bucket.b_%s.arn" $tt1 $s3buck`
                     fi               
                     
 

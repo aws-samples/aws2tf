@@ -7,6 +7,7 @@ ttft=${tft[(${c})]}
 #echo $i
 cname=`echo $1`
 rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+rname=`printf "b_%s" $rname`
 echo "$ttft $rname"
             
 fn=`printf "%s__%s.tf" $ttft $rname`
@@ -88,7 +89,7 @@ echo "$o1" | while IFS= read -r line
                     if [[ ${tt1} == "bucket" ]];then
                         tt1=`echo $tt1 | tr -d '"'`
                         tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s=aws_s3_bucket.%s.id" $tt1 $tt2`
+                        t1=`printf "%s=aws_s3_bucket.b_%s.id" $tt1 $tt2`
                     fi
 
                

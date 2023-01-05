@@ -8,6 +8,10 @@ ttft=`echo $1 | tr -d '"'`
 cname=`echo $2 | tr -d '"'`
 rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
 sl=`echo $((1 + $RANDOM % 15))` 
+# override rname for aws_s3_bucket
+if [[ $ttft == "aws_s3_bucket" ]];then
+  rname=`printf "b_%s" $rname`
+fi
 
 #echo "Importing $ttft $cname $rname"
 st=`printf "%s__%s.tfstate" $1 $rname`
@@ -36,11 +40,11 @@ if [[ $? -ne 0 ]];then
         sl=`echo $((1 + $RANDOM % 15))`
         terraform init -no-color > /dev/null
         if [ $? -ne 0 ]; then
-            echo "init backoff & retry for $rname"
+            echo "init backoff & retry for $cname"
             sleep $sl
             terraform init -no-color > /dev/null
             if [ $? -ne 0 ]; then
-                    echo "init long backoff & retry with full errors for $rname"
+                    echo "init long backoff & retry with full errors for $cname"
                     sleep 20
                     terraform init -no-color > /dev/null
             fi
@@ -62,18 +66,20 @@ if [[ $? -ne 0 ]];then
         printf "resource \"%s\" \"%s\" {}\n" $ttft $rname > $fn
         sync && sync
         echo "--> 1st Import backoff & retry for $rname"
-        sl=`echo $((1 + $RANDOM % 10))`
+        sl=`echo $((4 + $RANDOM % 10))`
         sleep $sl
         eval $comm
         if [ $? -ne 0 ]; then
-                echo "--> 2nd Import backoff & retry with full errors for $rname"
-                sl=`echo $((2 + $RANDOM % 20))`
+                echo "--> 2nd Import backoff & retry for $rname"
+                sl=`echo $((8 + $RANDOM % 20))`
                 sleep $sl
+                sync;sync
                 eval $comm
                 if [ $? -ne 0 ]; then
                     echo "--> ** 3rd (Final) Import backoff & retry with full errors for $rname"
-                    sl=`echo $((2 + $RANDOM % 20))`
+                    sl=`echo $((16 + $RANDOM % 40))`
                     sleep $sl
+                    sync;sync
                     eval $comm
                     if [ $? -ne 0 ]; then
                         echo "** ERROR ** $rname Import failed"

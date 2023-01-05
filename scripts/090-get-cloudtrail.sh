@@ -45,7 +45,7 @@ for c in `seq 0 0`; do
                         if [[ ${tt1} == "home_region" ]];then skip=1;fi
                         if [[ ${tt1} == "s3_bucket_name" ]];then                             
                             s3buck=$(echo $tt2 | tr -d '"')
-                            t1=`printf "%s = aws_s3_bucket.%s.bucket" $tt1 $s3buck`                    
+                            t1=`printf "%s = b_%s.bucket" $tt1 $s3buck`                    
                         fi
                         if [[ ${tt1} == "cloud_watch_logs_group_arn" ]];then 
                             cwarn=`echo $tt2 | tr -d '"'`

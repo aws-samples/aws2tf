@@ -10,6 +10,7 @@ usage(){
     echo "       -d <yes|no|st> (default=no)   Debug - lots of output if yes"
     echo "       -s <stack name>  Traverse a Stack and import resources (experimental)"
     echo "       -t <type>   choose a sub-type of AWS resources to get:"
+    echo "           acm"
     echo "           apigw"
     echo "           appmesh"
     echo "           appstream"
@@ -267,7 +268,8 @@ if [ "$t" == "eks" ]; then
         exit
     fi
 fi
-if [ "$t" == "apigw" ]; then pre="75*"; fi
+
+if [ "$t" == "acm" ]; then pre="28*"; fi
 if [ "$t" == "appmesh" ]; then pre="360*"; fi
 if [ "$t" == "appstream" ]; then pre="46*"; fi
 if [ "$t" == "artifact" ]; then pre="627*"; fi

@@ -15,6 +15,11 @@ ttft="aws_s3_bucket"
 theregion=$(echo "var.region" | terraform console | tr -d '"')
 keyid=""
 doacl2=0
+ncpu=$(getconf _NPROCESSORS_ONLN)
+ncpu=`expr $ncpu \* 2`
+echo "ncpu=$ncpu"
+skipbucks=()
+bucklist=()
 
 for cname in ${bucks[@]}; do
     #echo $cname
@@ -22,7 +27,8 @@ for cname in ${bucks[@]}; do
     doacl2=0
 
     if [ "$cname" != "null" ]; then
-        fn=$(printf "%s__%s.tf" $ttft $cname)
+        rname=$(printf "b_%s" $cname)
+        fn=`printf "%s__b_%s.tf" $ttft $cname`
         if [ -f "$fn" ]; then echo "$fn exists already skipping" && continue; fi
 
         # check region & access
@@ -36,19 +42,22 @@ for cname in ${bucks[@]}; do
         fi
 
         if [[ "$br" == "$theregion" ]]; then
+
             echo "$ttft $cname Import"
+            bucklist+=$(echo "$cname ")
             #terraform state list $ttft.$cname &> /dev/null
             #if [[ $? -ne 0 ]];then
             . ../../scripts/parallel_import2.sh $ttft $cname &
             #fi
             jc=$(jobs -r | wc -l | tr -d ' ')
-            while [ $jc -gt 15 ]; do
+            while [ $jc -gt $ncpu ]; do
                 echo "Throttling - $jc Terraform imports in progress"
                 sleep 10
                 jc=$(jobs -r | wc -l | tr -d ' ')
             done
         else
             echo "Bucket $cname is not in region $theregion skipping ...."
+            skipbucks+=(echo "$cname ")
         fi #in region
 
     fi # cname is not null
@@ -63,20 +72,22 @@ fi
 
 ../../scripts/parallel_statemv.sh $ttft
 
-for cname in ${bucks[@]}; do
+
+for cname in ${bucklist[@]}; do
     cname=$(echo $cname | tr -d '"')
     echo $cname
 
     #s3b=$(terraform state show -no-color $ttft.$cname 2> /dev/null)
     #echo "s3b==$s3b"
     echo "$ttft $cname tf files"
-    fn=$(printf "%s__%s.tf" $ttft $cname)
+    #fn=$(printf "%s__%s.tf" $ttft $cname)
+    fn=`printf "%s__b_%s.tf" $ttft $cname`
     if [ -f "$fn" ]; then echo "$fn exists already skipping" && continue; fi
 
-    file=$(printf "%s-%s-1.txt" $ttft $cname)
+    file=$(printf "%s-b_%s-1.txt" $ttft $cname)
     if [ ! -f "$file" ]; then echo "$file does not exist skipping" && continue; fi
 
-    fn=$(printf "%s__%s.tf" $ttft $cname)
+    #fn=$(printf "%s__%s.tf" $ttft $cname)
 
     #flines=`echo "$s3b" | wc -l | awk '{ print $1 }'`
     flines=$(cat $file | wc -l | awk '{ print $1 }')
@@ -372,7 +383,7 @@ for cname in ${bucks[@]}; do
 
     # Parallel job throttle
     jc=$(jobs -r | wc -l | tr -d ' ')
-    while [ $jc -gt 15 ]; do
+    while [ $jc -gt $ncpu ]; do
         echo "Throttling - $jc Terraform imports in progress"
         sleep 10
         jc=$(jobs -r | wc -l | tr -d ' ')

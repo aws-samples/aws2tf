@@ -94,6 +94,7 @@ To add App Mesh resources
 To get a selection of resources use the -t option 
 The currently supported types are:
 
+* acm - ACM resources `-t acm`
 * apigw - API GW restAPI resources `-t apigw`
 * appmesh - App Mesh resources `-t appmesh`
 * appstream - AppStream v2.0 resources `-t appstream`
@@ -159,6 +160,7 @@ Be patient - lots of output is given as aws2tf:
 + Creates the requited *.tf configuration files in the "generated" directory
 + Performs the necessary 'terraform import' commands
 + And finally runs a 'terraform plan'
++ Optionally if tfsec is installed - produces a security report
 
 ----
 

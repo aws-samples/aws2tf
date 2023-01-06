@@ -4,6 +4,7 @@ usage(){
     echo "Usage: $0 [-p <profile>] [-c] [-v] [-r <region>] [-t <type>] [-h] [-d] [-s] <stack name>"
     echo "       -p <profile> specify the AWS profile to use (Default=\"default\")"
     echo "       -c <yes|no> (default=no) Continue from previous run"
+    echo "       -f <yes|no> (default=no) fast forward, use with -c"
     echo "       -r <region>  specify the AWS region to use (Default=the aws command line setting)"
     echo "       -v <yes|no> (default=no) Stop after terraform validate step"
     echo "       -h           Help - this message"
@@ -158,6 +159,7 @@ fi
 mkdir -p data not-imported
 
 rm -f import.log
+touch import.log
 #if [ "$f" = "no" ]; then
 #    ../../scripts/resources.sh 2>&1 | tee -a import.log
 #fi
@@ -327,10 +329,11 @@ for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do
     else
         docomm=". ../../scripts/$com $i"
         echo $docomm
+        
         if [ "$f" = "no" ]; then
             eval $docomm 2>&1 | tee -a import.log
         else
-            grep "$docomm" data/processed.txt
+            grep "$docomm" data/processed.txt > /dev/null
             if [ $? -eq 0 ]; then
                 echo "skipping $docomm"
             else

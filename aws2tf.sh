@@ -8,7 +8,7 @@ usage(){
     echo "       -r <region>  specify the AWS region to use (Default=the aws command line setting)"
     echo "       -v <yes|no> (default=no) Stop after terraform validate step"
     echo "       -h           Help - this message"
-    echo "       -d <yes|no|st> (default=no)   Debug - lots of output if yes"
+    echo "       -d <yes|no|st|info> (default=no)   Debug - lots of output if info"
     echo "       -s <stack name>  Traverse a Stack and import resources (experimental)"
     echo "       -t <type>   choose a sub-type of AWS resources to get:"
     echo "           acm"
@@ -97,7 +97,7 @@ function ctrl_c() {
         exit 1
 }
 
-if [ "$d" = "yes" ]; then
+if [ "$d" = "info" ]; then
     set -x
     echo "CAUTION - lots of output, potentially including sensitive information"
 fi
@@ -338,6 +338,7 @@ for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do
                 echo "skipping $docomm"
             else
                 eval $docomm 2>&1 | tee -a import.log
+                echo "$docomm" >> data/processed.txt
             fi
         fi
         lc=`expr $lc + 1`
@@ -361,7 +362,7 @@ for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do
 
         done <"$file"
 
-        echo "$docomm" >> data/processed.txt
+        
         terraform fmt
         terraform validate -no-color
         end=`date +%s`

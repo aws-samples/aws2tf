@@ -339,7 +339,7 @@ for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do
                 continue
             else
                 eval $docomm 2>&1 | tee -a import.log
-                echo "$docomm" >> data/processed.txt
+                
             fi
         fi
         lc=`expr $lc + 1`
@@ -363,7 +363,7 @@ for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do
 
         done <"$file"
 
-        
+        echo "$docomm" >> data/processed.txt
         terraform fmt
         terraform validate -no-color
         end=`date +%s`

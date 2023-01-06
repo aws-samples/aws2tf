@@ -336,6 +336,7 @@ for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do
             grep "$docomm" data/processed.txt > /dev/null
             if [ $? -eq 0 ]; then
                 echo "skipping $docomm"
+                continue
             else
                 eval $docomm 2>&1 | tee -a import.log
                 echo "$docomm" >> data/processed.txt

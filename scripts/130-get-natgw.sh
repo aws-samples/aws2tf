@@ -50,7 +50,8 @@ for c in `seq 0 0`; do
             #cat $tfa.json | jq .
             rm -f $ttft.$cname.tf
 
-            file="t1.txt"         
+            file="t1.txt"        
+            subnets=() 
             echo $aws2tfmess > $fn
             while IFS= read line
             do
@@ -77,6 +78,8 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "subnet_id" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_subnet.%s.id" $tt1 $tt2`
+                        subnets+=`printf "\"%s\" " $tt2`
+
                     fi
                     if [[ ${tt1} == "allocation_id" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
@@ -92,6 +95,15 @@ for c in `seq 0 0`; do
                 
             done <"$file"
             ../../scripts/get-eip.sh $eipall
+            for sub in ${subnets[@]}; do
+                #echo "therole=$therole"
+                sub1=`echo $sub | tr -d '"'`
+                echo "calling for $sub1"
+                if [ "$sub1" != "" ]; then
+                    ../../scripts/105-get-subnet.sh $sub1
+                fi
+            done
+
             
         done
 

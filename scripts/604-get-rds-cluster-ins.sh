@@ -1,11 +1,12 @@
 #!/bin/bash
 cmd[0]="$AWS rds describe-db-instances"
 pref[0]="DBInstances"
-tft[0]="aws_db_instance"
+tft[0]="aws_rds_cluster_instance"
 
 
 for c in `seq 0 0`; do
    
+
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
 	#echo $cm
@@ -14,7 +15,7 @@ for c in `seq 0 0`; do
         echo "$cm : You don't have access for this resource"
         exit
     fi
-    awsout=`echo $awsout | jq "select(.${pref[(${c})]}[].StorageType != \"aurora\")"`
+    awsout=`echo $awsout | jq "select(.${pref[(${c})]}[].StorageType = \"aurora\")"`
 
     if [ "$awsout" == "" ];then
         echo "No resources found exiting .."
@@ -35,6 +36,7 @@ for c in `seq 0 0`; do
             rm -f $ttft.$cname.tf
 
             file="t1.txt"
+
             fn=`printf "%s__%s.tf" $ttft $cname`
             echo $aws2tfmess > $fn
             sgs=()
@@ -42,34 +44,30 @@ for c in `seq 0 0`; do
             do
 				skip=0
                 # display $line or do something with $line
-                t1=`echo "$line"` 
+                t1=`echo "$line"`
                 if [[ ${t1} == *"="* ]];then
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
-                    if [[ ${tt1} == "owner_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
+                    if [[ ${tt1} == "writer" ]];then skip=1;fi
                     if [[ ${tt1} == "endpoint" ]];then skip=1;fi
-                    if [[ ${tt1} == "replicas" ]];then 
-                        tt2=`echo $tt2 | tr -d '"'` 
-                        skip=1
-                        while [ "$t1" != "]" ] && [ "$tt2" != "[]" ] ;do
-                            read line
-                            t1=`echo "$line"`
-                            #echo $t1
-                        done
-                    fi
                     if [[ ${tt1} == "address" ]];then skip=1;fi
-                    if [[ ${tt1} == "hosted_zone_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "status" ]];then skip=1;fi
-                    if [[ ${tt1} == "resource_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "latest_restorable_time" ]];then skip=1;fi
+                    if [[ ${tt1} == "port" ]];then skip=1;fi
                     if [[ ${tt1} == "engine_version_actual" ]];then skip=1;fi
+                    if [[ ${tt1} == "dbi_resource_id" ]];then skip=1;fi
+                    if [[ ${tt1} == "storage_encrypted" ]];then skip=1;fi
+                    if [[ ${tt1} == "performance_insights_retention_period" ]];then skip=1;fi
+                    if [[ ${tt1} == "network_type" ]];then skip=1;fi
 
-                    if [[ ${tt1} == "db_subnet_group_name" ]];then 
-                        dbsn=`echo $tt2 | tr -d '"'` 
+                    if [[ ${tt1} == "cluster_identifier" ]];then
+                        clusterid=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s =  aws_rds_cluster.%s.id" $tt1 $clusterid`
+                    fi
+
+                    if [[ ${tt1} == "db_subnet_group_name" ]];then
+                        dbsn=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_db_subnet_group.%s.name" $tt1 $dbsn`
                     fi
 
@@ -78,11 +76,10 @@ for c in `seq 0 0`; do
                         tanam=$(echo $tarn | rev | cut -f1 -d'/' | rev)
                         tlarn=${tarn//:/_} && tlarn=${tlarn//./_} && tlarn=${tlarn//\//_}
                         t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $tanam`
-                    fi 
+                    fi
 
-
-                    if [[ ${tt1} == "kms_key_id" ]];then 
-                        kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                            
+                    if [[ ${tt1} == "kms_key_id" ]];then
+                        kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`
                         kmsarn=$(echo $tt2 | tr -d '"')
                         km=`$AWS kms describe-key --key-id $kid --query KeyMetadata.KeyManager | jq -r '.' 2>/dev/null`
                             #echo $t1
@@ -90,22 +87,22 @@ for c in `seq 0 0`; do
                             t1=`printf "%s = data.aws_kms_key.k_%s.arn" $tt1 $kid`
                         else
                             t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid`
-                        fi 
-                                           
+                        fi
+
                     fi
 
-                    if [[ ${tt1} == "performance_insights_kms_key_id" ]];then 
-                        pkid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`                            
+                    if [[ ${tt1} == "performance_insights_kms_key_id" ]];then
+                        pkid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`
                         pkmsarn=$(echo $tt2 | tr -d '"')
                         km=`$AWS kms describe-key --key-id $pkid --query KeyMetadata.KeyManager | jq -r '.' 2>/dev/null`
                         if [[ $km == "AWS" ]];then
                             t1=`printf "%s = data.aws_kms_key.k_%s.arn" $tt1 $pkid`
                         else
                             t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $pkid`
-                        fi 
-                 
+                        fi
+
                     fi
-              
+
                 else
                     if [[ "$t1" == *"sg-"* ]]; then
                         t1=`echo $t1 | tr -d '"|,'`

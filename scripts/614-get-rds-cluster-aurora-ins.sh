@@ -60,6 +60,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "storage_encrypted" ]];then skip=1;fi
                     if [[ ${tt1} == "performance_insights_retention_period" ]];then skip=1;fi
                     if [[ ${tt1} == "network_type" ]];then skip=1;fi
+                    if [[ ${tt1} == "kms_key_id" ]];then skip=1;fi
 
                     if [[ ${tt1} == "cluster_identifier" ]];then
                         clusterid=`echo $tt2 | tr -d '"'`
@@ -78,18 +79,17 @@ for c in `seq 0 0`; do
                         t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $tanam`
                     fi
 
-                    if [[ ${tt1} == "kms_key_id" ]];then
-                        kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`
-                        kmsarn=$(echo $tt2 | tr -d '"')
-                        km=`$AWS kms describe-key --key-id $kid --query KeyMetadata.KeyManager | jq -r '.' 2>/dev/null`
-                            #echo $t1
-                        if [[ $km == "AWS" ]];then
-                            t1=`printf "%s = data.aws_kms_key.k_%s.arn" $tt1 $kid`
-                        else
-                            t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid`
-                        fi
-
-                    fi
+                    #if [[ ${tt1} == "kms_key_id" ]];then
+                    #    kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`
+                    #    kmsarn=$(echo $tt2 | tr -d '"')
+                    #    km=`$AWS kms describe-key --key-id $kid --query KeyMetadata.KeyManager | jq -r '.' 2>/dev/null`
+                    #        #echo $t1
+                    #    if [[ $km == "AWS" ]];then
+                    #        t1=`printf "%s = data.aws_kms_key.k_%s.arn" $tt1 $kid`
+                    #    else
+                    #        t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid`
+                    #    fi
+                    #fi
 
                     if [[ ${tt1} == "performance_insights_kms_key_id" ]];then
                         pkid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`

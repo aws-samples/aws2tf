@@ -108,6 +108,11 @@ for c in `seq 0 0`; do
                 ../../scripts/080-get-kms-key.sh $pkid
             fi
 
+            if [ "$dbsn" != "" ]; then
+                echo "getting db subnet group $dbsn"
+                ../../scripts/602-get-rds-db-subnet-group.sh $dbsn
+            fi
+
 
         done
     fi

@@ -221,6 +221,8 @@ Or simply check back after some time to see if they are listed below.
 * aws_config_delivery_channel
 * aws_customer_gateway
 * aws_db_instance
+* aws_rds_cluster
+* aws_rds_cluster_instance
 * aws_db_subnet_group
 * aws_default_network_acl
 * aws_directory_service_directory

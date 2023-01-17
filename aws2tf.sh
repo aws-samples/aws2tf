@@ -325,65 +325,65 @@ else
         exit
     fi  
 fi
-#pwd
+pwd
 
 #############################################################################
 date
 lc=0
 if [[ "$s" == "no" ]];then 
-echo "t=$t pre=$pre i=$i exclude=$exclude"
-echo "loop through providers"
-tstart=`date +%s`
-for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do    
-    start=`date +%s`
-    if [[ "$com" == *"${exclude}"* ]]; then
-        echo "skipping $com"
-    else
-        docomm=". ../../scripts/$com $i"
-        echo $docomm
-        
-        if [ "$f" = "no" ]; then
-            eval $docomm 2>&1 | tee -a import.log
+    echo "t=$t pre=$pre i=$i exclude=$exclude"
+    echo "loop through providers"
+    tstart=`date +%s`
+    for com in `ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g`; do    
+        start=`date +%s`
+        if [[ "$com" == *"${exclude}"* ]]; then
+            echo "skipping $com"
         else
-            grep "$docomm" data/processed.txt > /dev/null
-            if [ $? -eq 0 ]; then
-                echo "skipping $docomm"
-                continue
-            else
+            docomm=". ../../scripts/$com $i"
+            echo $docomm
+            
+            if [ "$f" = "no" ]; then
                 eval $docomm 2>&1 | tee -a import.log
-                
-            fi
-        fi
-        lc=`expr $lc + 1`
-
-        file="import.log"
-        while IFS= read -r line
-        do
-            if [[ "${line}" == *"Error"* ]];then
-          
-                if [[ "${line}" == *"Duplicate"* ]];then
-                    echo "Ignoring $line"
+            else
+                grep "$docomm" data/processed.txt > /dev/null
+                if [ $? -eq 0 ]; then
+                    echo "skipping $docomm"
+                    continue
                 else
-                    if [[ "$d" == "no" ]];then
-                        echo "Found Error: $line .... (pass for now)"
-                    else
-                        echo "Found Error: $line exiting ...."
-                        exit
-                    fi
+                    eval $docomm 2>&1 | tee -a import.log
+                    
                 fi
             fi
+            lc=`expr $lc + 1`
 
-        done <"$file"
+            file="import.log"
+            while IFS= read -r line
+            do
+                if [[ "${line}" == *"Error"* ]];then
+            
+                    if [[ "${line}" == *"Duplicate"* ]];then
+                        echo "Ignoring $line"
+                    else
+                        if [[ "$d" == "no" ]];then
+                            echo "Found Error: $line .... (pass for now)"
+                        else
+                            echo "Found Error: $line exiting ...."
+                            exit
+                        fi
+                    fi
+                fi
 
-        echo "$docomm" >> data/processed.txt
-        terraform fmt
-        terraform validate -no-color
-        end=`date +%s`
-        runtime=$((end-start))
-        echo "$com runtime $runtime seconds"
-    fi
-    
-done
+            done <"$file"
+
+            echo "$docomm" >> data/processed.txt
+            terraform fmt
+            terraform validate -no-color
+            end=`date +%s`
+            runtime=$((end-start))
+            echo "$com runtime $runtime seconds"
+        fi
+        
+    done
 else
     echo "Stack set $s traverse - experimental"
     . ../../scripts/get-stack.sh $s

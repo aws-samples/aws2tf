@@ -316,6 +316,14 @@ if [ "$t" == "iam" ]; then pre="05*" && exclude="xxxxxxx"; fi
 if [ "$c" == "no" ]; then
     echo "terraform init -upgrade"
     terraform init -upgrade -no-color 2>&1 | tee -a import.log
+else
+    if [[ ! -d .terraform ]]; then
+        echo ""
+        echo "There doesn't appear to be a previous run for aws2tf"
+        echo "missing .terraform directory in $mysub"
+        echo "exiting ....."
+        exit
+    fi  
 fi
 #pwd
 

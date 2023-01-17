@@ -143,6 +143,8 @@ To use a specific region and profile
 
 #### Using the cumulative mode
 
+Cumulative mode allows you to add additional state & terraform files form a previous aws2tf run
+
 If for example you want to get several VPCs you can use the cumulative mode:
 
 To get all the VPC related resources in three particular VPC's
@@ -161,6 +163,17 @@ Be patient - lots of output is given as aws2tf:
 + Performs the necessary 'terraform import' commands
 + And finally runs a 'terraform plan'
 + Optionally if tfsec is installed - produces a security report
+
+#### Terraform State
+
+aws2tf maintains state in it's own local directory:
+
+generated/tf.<account-number>.<region>/
+
+When using cumulative mode this same state file is used / added to.
+
+It is not possibel at this time to use your own state location (eg. on s3)
+
 
 ----
 

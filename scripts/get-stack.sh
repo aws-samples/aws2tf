@@ -25,10 +25,10 @@ if [ "$count" -gt "0" ]; then
             stat=$(echo "$stackr" | jq  -r ".[(${i})].ResourceStatus")
             
             if [[ "$type" == "AWS::CloudFormation::Stack" ]];then
-                if [[ "$stat" == "CREATE_COMPLETE" ]];then 
+                #if [[ "$stat" == "CREATE_COMPLETE" ]];then 
                     as=$(echo "$stackr" | jq  -r ".[(${i})].PhysicalResourceId" | cut -f2 -d'/')
                     nested+=$(printf "\"%s\" " $as)    
-                fi        
+                #fi        
             fi
         done   
 else
@@ -208,7 +208,6 @@ echo "Stacks Found:"
 for nest in ${nested[@]}; do
     nest=`echo $nest | jq -r .`
     echo "$nest"
-
 done
 
 for nest in ${nested[@]}; do

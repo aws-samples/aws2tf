@@ -61,7 +61,7 @@ for c in `seq 0 0`; do
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             #echo "$ttft $cname tf files"
             fn=`printf "%s__%s.tf" $ttft $rname`
-            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
+            if [ -f "$fn" ] ; then continue; fi
 
             file=`printf "%s-%s-1.txt" $ttft $rname`
             

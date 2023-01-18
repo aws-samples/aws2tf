@@ -30,6 +30,8 @@ for c in `seq 0 0`; do
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             sstring=`$AWS secretsmanager get-secret-value --secret-id $1 --version-id $cname --query SecretString`
+
+                    
             echo "$ttft $sname $rname"
             
             rname=`printf "v-%s" $rname`
@@ -90,9 +92,10 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "version_id" ]];then skip=1;fi
                     if [[ ${tt1} == "secret_string" ]];then 
                         skip=0;
-                        t1=`printf "%s = %s" $tt1 $sstring`
-                    fi
+                
+                        t1=`printf "%s = %s" "$tt1" "$sstring"`
 
+                    fi
                
                 fi
                 if [ "$skip" == "0" ]; then
@@ -101,7 +104,7 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"           
-            cp t1.txt data/$tfa.txt
+            cp t1.txt $tfa.txt
         done
 
     fi

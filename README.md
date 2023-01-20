@@ -369,7 +369,6 @@ Or simply check back after some time to see if they are listed below.
 ----
 ## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 20-Jan-2023
 
-* #AWS::IAM::Policy
 * AWS::ApiGateway::Account
 * AWS::ApiGateway::Resource
 * AWS::ApiGateway::RestApi
@@ -377,6 +376,8 @@ Or simply check back after some time to see if they are listed below.
 * AWS::AutoScaling::LaunchConfiguration
 * AWS::AutoScaling::LifecycleHook
 * AWS::Cloud9::EnvironmentEC2
+* AWS::CloudFormation::Stack
+* AWS::CloudFormation::WaitCondition*
 * AWS::CloudWatch::Alarm
 * AWS::CodeArtifact::Domain
 * AWS::CodeArtifact::Repository
@@ -446,7 +447,9 @@ Or simply check back after some time to see if they are listed below.
 * AWS::Lambda::LayerVersion
 * AWS::Lambda::Permission
 * AWS::Logs::LogGroup
+* AWS::RDS::DBCluster
 * AWS::RDS::DBClusterParameterGroup
+* AWS::RDS::DBInstance
 * AWS::RDS::DBParameterGroup
 * AWS::RDS::DBSubnetGroup
 * AWS::RDS::EventSubscription
@@ -465,6 +468,7 @@ Or simply check back after some time to see if they are listed below.
 * AWS::SageMaker::ImageVersion
 * AWS::SageMaker::NotebookInstance
 * AWS::SecretsManager::Secret
+* AWS::ServiceCatalog::PortfolioPrincipalAssociation
 * AWS::ServiceDiscovery::Service
 * AWS::StepFunctions::StateMachine
  

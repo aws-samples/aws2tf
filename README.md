@@ -191,8 +191,9 @@ Or simply check back after some time to see if they are listed below.
 
 
 ----
-## Terraform resources supported as of 11-Dec-2022
+## Terraform resources supported as of 20-Jan-2023
 
+* aws_acm_certificate
 * aws_api_gateway_resource
 * aws_api_gateway_rest_api
 * aws_appmesh_gateway_route
@@ -233,9 +234,9 @@ Or simply check back after some time to see if they are listed below.
 * aws_config_configuration_recorder_status
 * aws_config_delivery_channel
 * aws_customer_gateway
+* aws_db_event_subscription
 * aws_db_instance
-* aws_rds_cluster
-* aws_rds_cluster_instance
+* aws_db_parameter_group
 * aws_db_subnet_group
 * aws_default_network_acl
 * aws_directory_service_directory
@@ -309,6 +310,9 @@ Or simply check back after some time to see if they are listed below.
 * aws_organizations_organizational_unit
 * aws_organizations_policy
 * aws_organizations_policy_attachment
+* aws_rds_cluster
+* aws_rds_cluster_instance
+* aws_rds_cluster_parameter_group
 * aws_redshift_cluster
 * aws_redshift_subnet_group
 * aws_route53_zone
@@ -363,7 +367,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_vpn_connection
 
 ----
-## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 11-Dec-2022
+## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 20-Jan-2023
 
 * #AWS::IAM::Policy
 * AWS::ApiGateway::Account
@@ -387,6 +391,7 @@ Or simply check back after some time to see if they are listed below.
 * AWS::Config::ConfigurationRecorder
 * AWS::Config::DeliveryChannel
 * AWS::DynamoDB::Table
+* AWS::EC2::DHCPOptions
 * AWS::EC2::EIP
 * AWS::EC2::Instance
 * AWS::EC2::InternetGateway
@@ -408,9 +413,9 @@ Or simply check back after some time to see if they are listed below.
 * AWS::ECS::Cluster
 * AWS::ECS::Service
 * AWS::ECS::TaskDefinition
-* AWS::EFS::FileSystem
-* AWS::EFS::MountTarget 
 * AWS::EFS::AccessPoint
+* AWS::EFS::FileSystem
+* AWS::EFS::MountTarget
 * AWS::EKS::Cluster
 * AWS::EKS::Nodegroup
 * AWS::ElasticLoadBalancingV2::Listener
@@ -441,6 +446,10 @@ Or simply check back after some time to see if they are listed below.
 * AWS::Lambda::LayerVersion
 * AWS::Lambda::Permission
 * AWS::Logs::LogGroup
+* AWS::RDS::DBClusterParameterGroup
+* AWS::RDS::DBParameterGroup
+* AWS::RDS::DBSubnetGroup
+* AWS::RDS::EventSubscription
 * AWS::Redshift::Cluster
 * AWS::Redshift::ClusterSubnetGroup
 * AWS::S3::Bucket

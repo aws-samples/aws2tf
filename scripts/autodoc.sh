@@ -1,4 +1,4 @@
-cp README.md README.md.sav
+cp ../README.md README.md.sav
 docdate=$(date +%d-%b-%Y)
 echo ""
 echo "----"

@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS ec2 describe-dhcp-options" 
+    cmd[0]="$AWS ec2 describe-dhcp-options --dhcp-options-ids $1" 
 else
     cmd[0]="$AWS ec2 describe-dhcp-options"
 fi

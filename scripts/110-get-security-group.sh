@@ -14,7 +14,6 @@ tft[0]="aws_security_group"
 idfilt[0]="GroupId"
 ncpu=$(getconf _NPROCESSORS_ONLN)
 ncpu=`expr $ncpu - 1`
-echo "ncpu=$ncpu"
 
 for c in `seq 0 0`; do
     

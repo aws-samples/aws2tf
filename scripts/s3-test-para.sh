@@ -16,6 +16,8 @@ ttft="aws_s3_bucket"
 theregion=`echo "var.region" | terraform console | tr -d '"'`
 keyid=""
 doacl2=0
+ncpu=$(getconf _NPROCESSORS_ONLN)
+ncpu=`expr $ncpu - 1`
 
 for cname in ${bucks[@]}; do
     #echo $cname
@@ -42,7 +44,7 @@ for cname in ${bucks[@]}; do
                         . ../../scripts/parallel_import2.sh $ttft $cname &
                         #fi
                         jc=`jobs -r | wc -l | tr -d ' '`
-                        while [ $jc -gt 15 ];do
+                        while [ $jc -gt $ncpu ];do
                             echo "Throttling - $jc Terraform imports in progress"
                             sleep 10
                             jc=`jobs -r | wc -l | tr -d ' '`
@@ -366,7 +368,7 @@ for cname in ${bucks[@]}; do
                         
                         # Parallel job throttle
                         jc=`jobs -r | wc -l | tr -d ' '`
-                        while [ $jc -gt 15 ];do
+                        while [ $jc -gt $ncpu ];do
                             echo "Throttling - $jc Terraform imports in progress"
                             sleep 10
                             jc=`jobs -r | wc -l | tr -d ' '`

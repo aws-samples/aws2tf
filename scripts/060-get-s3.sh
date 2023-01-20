@@ -17,7 +17,7 @@ keyid=""
 doacl2=0
 ncpu=$(getconf _NPROCESSORS_ONLN)
 ncpu=`expr $ncpu - 1`
-echo "ncpu=$ncpu"
+
 skipbucks=()
 bucklist=()
 

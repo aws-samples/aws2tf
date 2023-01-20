@@ -13,7 +13,8 @@ pref[0]="Subnets"
 tft[0]="aws_subnet"
 idfilt[0]="SubnetId"
 ncpu=$(getconf _NPROCESSORS_ONLN)
-echo "ncpu=$ncpu"
+ncpu=`expr $ncpu - 1`
+
 
 #rm -f ${tft[0]}.tf
 

@@ -7,7 +7,8 @@ fi
 pref[0]="Vpcs"
 tft[0]="aws_vpc"
 idfilt[0]="VpcId"
-
+ncpu=$(getconf _NPROCESSORS_ONLN)
+ncpu=`expr $ncpu - 1`
 for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
@@ -36,7 +37,7 @@ for c in `seq 0 0`; do
             echo "$ttft $cname import"
             . ../../scripts/parallel_import2.sh $ttft $cname &
             jc=`jobs -r | wc -l | tr -d ' '`
-            while [ $jc -gt 15 ];do
+            while [ $jc -gt $ncpu ];do
                 echo "Throttling - $jc Terraform imports in progress"
                 sleep 10
                 jc=`jobs -r | wc -l | tr -d ' '`

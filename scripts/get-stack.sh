@@ -86,6 +86,7 @@ if [ $count -gt 0 ]; then
                 AWS::DynamoDB::Table) echo "../../scripts/640-get-dynamodb-table.sh $pid"  >> commands.sh ;;
 
                 AWS::EC2::Instance) echo "../../scripts/251-get-ec2-instances.sh $pid"  >> commands.sh ;;
+                AWS::EC2::DHCPOptions) echo "../../scripts/111-get-dhcp-option.sh $pid"  >> commands.sh ;;
                 AWS::EC2::EIP)  echo "../../scripts/get-eip.sh $pid"  >> commands.sh ;;
                 AWS::EC2::NatGateway)  echo "../../scripts/130-get-natgw.sh $pid"  >> commands.sh ;;
                 AWS::EC2::NetworkAcl) echo "../../scripts/107-get-network-acl.sh $pid"  >> commands.sh ;;
@@ -154,6 +155,20 @@ if [ $count -gt 0 ]; then
 
                 AWS::Logs::LogGroup)  echo "../../scripts/070-get-cw-log-grp.sh /$parn" >> commands.sh ;;
                 
+                AWS::RDS::DBCluster) 
+                    echo "../../scripts/613-get-rds-aurora-cluster.sh $pid" >> commands.sh 
+                    ;;
+                AWS::RDS::DBSubnetGroup) echo "../../scripts/602-get-rds-db-subnet-group.sh $pid" >> commands.sh ;;
+                AWS::RDS::DBInstance) 
+                    echo "echo '# standard $type $pid' " >> commands.sh 
+                    echo "../../scripts/601-get-rds-ins.sh $pid" >> commands.sh
+                    echo "echo '# aurora $type $pid' " >> commands.sh 
+                    echo "../../scripts/614-get-rds-cluster-aurora-ins.sh $pid" >> commands.sh
+                    ;;
+                AWS::RDS::DBParameterGroup) echo "../../scripts/603-get-rds-db-parameter-group.sh $pid" >> commands.sh;;
+                AWS::RDS::EventSubscription) echo "../../scripts/604-get-rds-db-event-sub.sh $pid" >> commands.sh;;
+                AWS::RDS::DBClusterParameterGroup) echo "../../scripts/612-get-rds-db-cluster-parameter-group.sh $pid" >> commands.sh;;
+
                 AWS::Redshift::Cluster) echo "../../scripts/670-get-redshift-cluster.sh $pid"  >> commands.sh ;;
                 AWS::Redshift::ClusterSubnetGroup) echo "../../scripts/671-get-redshift-cluster-subnet.sh $pid"  >> commands.sh ;;
 
@@ -180,7 +195,7 @@ if [ $count -gt 0 ]; then
                 AWS::SSM::Parameter)  echo "../../scripts/445-get-ssm-params.sh $pid" >> commands.sh ;;
                 
                 AWS::StepFunctions::StateMachine) echo "../../scripts/780-get-sfn-state-machine.sh $pid" >> commands.sh ;;
-
+                #AWS::SecretsManager::SecretTargetAttachment ;;
                 AWS::SecretsManager::Secret)  echo "../../scripts/450-get-secrets.sh $parn"  >> commands.sh ;;                
                 AWS::ServiceDiscovery::Service)  echo "../../scripts/get-sd-service.sh $pid"  >> commands.sh ;;
 

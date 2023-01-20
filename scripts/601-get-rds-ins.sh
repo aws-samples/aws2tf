@@ -2,7 +2,9 @@
 cmd[0]="$AWS rds describe-db-instances"
 pref[0]="DBInstances"
 tft[0]="aws_db_instance"
-
+if [ "$1" != "" ]; then
+    cmd[0]="$AWS rds describe-db-instances --db-instance-identifier $1"
+fi
 
 for c in `seq 0 0`; do
    
@@ -10,32 +12,44 @@ for c in `seq 0 0`; do
 	ttft=${tft[(${c})]}
 	#echo $cm
     awsout=`eval $cm 2> /dev/null`
+    #echo $awsout | jq .
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
         exit
     fi
     awsout=`echo $awsout | jq "select(.${pref[(${c})]}[].StorageType != \"aurora\")"`
-
+    #echo $awsout | jq .
+    
     if [ "$awsout" == "" ];then
         echo "No resources found exiting .."
         exit
     fi
+    
 
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    echo $count
+    
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].DBInstanceIdentifier" | tr -d '"'`
             echo "$ttft $cname"
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
+            fn=`printf "%s__%s.tf" $ttft $cname`
+            if [ -f "$fn" ] ; then
+                echo "$fn exists already skipping"
+                continue
+            fi
+
+
+            printf "resource \"%s\" \"%s\" {}\n" $ttft $cname > $fn
+   
             terraform import $ttft.$cname "$cname" | grep Import
             terraform state show -no-color $ttft.$cname > t1.txt
-            rm -f $ttft.$cname.tf
+            rm -f $fn
 
             file="t1.txt"
-            fn=`printf "%s__%s.tf" $ttft $cname`
+
             echo $aws2tfmess > $fn
             sgs=()
             while IFS= read line
@@ -67,6 +81,12 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "resource_id" ]];then skip=1;fi
                     if [[ ${tt1} == "latest_restorable_time" ]];then skip=1;fi
                     if [[ ${tt1} == "engine_version_actual" ]];then skip=1;fi
+
+                    if [[ ${tt1} == "db_parameter_group_name" ]];then
+                        paramid=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s =  aws_db_parameter_group.%s.name" $tt1 $paramid`
+                    fi
+
 
                     if [[ ${tt1} == "db_subnet_group_name" ]];then 
                         dbsn=`echo $tt2 | tr -d '"'` 

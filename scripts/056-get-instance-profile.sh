@@ -10,7 +10,8 @@ fi
 
 tft[0]="aws_iam_instance_profile"
 idfilt[0]="InstanceProfileName"
-
+ncpu=$(getconf _NPROCESSORS_ONLN)
+ncpu=`expr $ncpu - 1`
 #rm -f ${tft[0]}.tf
 
 for c in `seq 0 0`; do
@@ -47,7 +48,7 @@ for c in `seq 0 0`; do
             #echo "calling import sub"
             . ../../scripts/parallel_import2.sh $ttft $cname &
             jc=`jobs -r | wc -l | tr -d ' '`
-            while [ $jc -gt 15 ];do
+            while [ $jc -gt $ncpu ];do
                 echo "Throttling - $jc Terraform imports in progress"
                 sleep 10
                 jc=`jobs -r | wc -l | tr -d ' '`

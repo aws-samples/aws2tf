@@ -29,11 +29,16 @@ for c in `seq 0 0`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].DBInstanceIdentifier" | tr -d '"'`
             echo "$ttft $cname"
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
+            fn=`printf "%s__%s.tf" $ttft $cname`
+            if [ -f "$fn" ] ; then
+                echo "$fn exists already skipping"
+                continue
+            fi
+            printf "resource \"%s\" \"%s\" {}\n" $ttft $cname > $fn
+
             terraform import $ttft.$cname "$cname" | grep Import
             terraform state show -no-color $ttft.$cname > t1.txt
-            rm -f $ttft.$cname.tf
+            rm -f $fn
 
             file="t1.txt"
 
@@ -61,6 +66,11 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "performance_insights_retention_period" ]];then skip=1;fi
                     if [[ ${tt1} == "network_type" ]];then skip=1;fi
                     if [[ ${tt1} == "kms_key_id" ]];then skip=1;fi
+
+                    if [[ ${tt1} == "db_parameter_group_name" ]];then
+                        paramid=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s =  aws_db_parameter_group.%s.name" $tt1 $paramid`
+                    fi
 
                     if [[ ${tt1} == "cluster_identifier" ]];then
                         clusterid=`echo $tt2 | tr -d '"'`

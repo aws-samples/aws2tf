@@ -22,8 +22,8 @@ for c in `seq 0 0`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].DBClusterIdentifier" | tr -d '"'`
             echo "$ttft $cname"
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
+            printf "resource \"%s\" \"%s\" {}\n" $ttft $cname > $ttft.$cname.tf
+  
             terraform import $ttft.$cname "$cname" | grep Import
             terraform state show -no-color $ttft.$cname > t1.txt
             rm -f $ttft.$cname.tf
@@ -55,6 +55,11 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "db_subnet_group_name" ]];then
                         dbsn=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_db_subnet_group.%s.name" $tt1 $dbsn`
+                    fi
+
+                    if [[ ${tt1} == "db_cluster_parameter_group_name" ]];then
+                        paramid=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_rds_cluster_parameter_group.%s.name" $tt1 $paramid`
                     fi
 
                     if [[ ${tt1} == "kms_key_id" ]];then

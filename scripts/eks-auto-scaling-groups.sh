@@ -103,9 +103,11 @@ for t in ${asgs[@]}; do
                         done
                     fi
 
+                    #  hmm needed ?
                     if [[ ${tt2} == *"eks:nodegroup-name"* ]];then 
-                        echo $tt2
-                        killer=1
+                        echo " --> $tt2"
+                        killer=0
+                        #killer=1
                     fi
 
                 #
@@ -131,8 +133,12 @@ for t in ${asgs[@]}; do
         # get the launch template
 
         if [ "$killer" == "0" ]; then
+            echo $awsout | jq .
             ltid=`echo $awsout | jq .AutoScalingGroups[0].LaunchTemplate.LaunchTemplateId | tr -d '"'`
-            echo "ltid=$ltid"
+            if [[ $ltid == "null" ]];then
+                ltid=`echo $awsout | jq .AutoScalingGroups[0].MixedInstancesPolicy.LaunchTemplate.LaunchTemplateSpecification.LaunchTemplateId | tr -d '"'`
+            fi
+            echo "--> ltid=$ltid"
             ../../scripts/eks-launch_template.sh $ltid
         else
             rm -f $fn

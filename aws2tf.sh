@@ -271,6 +271,8 @@ if [ "$t" == "eks" ]; then
     if [ "$i" == "no" ]; then
         echo "Cluster Name null exiting - specify with -i <cluster-name>"
         exit
+    else
+        ekscl=$(echo $i)
     fi
 fi
 
@@ -448,5 +450,5 @@ echo "aws2tf output files are in generated/tf.${mysub}_${r}"
 echo "---------------------------------------------------------------------------"
 
 if [ "$t" == "eks" ]; then
-echo "aws eks update-kubeconfig --name $i"
+    echo "aws eks update-kubeconfig --name $ekscl"
 fi

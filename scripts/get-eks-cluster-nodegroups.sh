@@ -64,8 +64,8 @@ if [ "$kcount" -gt "0" ]; then
                             echo "$ttft $cname import"
                             if [ -f "$fn" ]; then continue; fi
 
-                            printf "resource \"%s\" \"%s\" {" $ttft $cname > $fn
-                            printf "}" >> $fn
+                            printf "resource \"%s\" \"%s\" {}\n" $ttft $cname > $fn
+                
                             #echo "pre-import"
                             #ls -l
                             echo "Importing ....."

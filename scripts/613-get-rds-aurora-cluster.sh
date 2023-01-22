@@ -57,10 +57,10 @@ for c in `seq 0 0`; do
                         t1=`printf "%s = aws_db_subnet_group.%s.name" $tt1 $dbsn`
                     fi
 
-                    if [[ ${tt1} == "db_cluster_parameter_group_name" ]];then
-                        paramid=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_rds_cluster_parameter_group.%s.name" $tt1 $paramid`
-                    fi
+                    #if [[ ${tt1} == "db_cluster_parameter_group_name" ]];then
+                    #    paramid=`echo $tt2 | tr -d '"'`
+                    #    t1=`printf "%s = aws_rds_cluster_parameter_group.%s.name" $tt1 $paramid`
+                    #fi
 
                     if [[ ${tt1} == "kms_key_id" ]];then
                         kid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`

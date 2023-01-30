@@ -34,7 +34,7 @@ for c in `seq 0 0`; do
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")          
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             echo "$ttft $cname"
-            if [[ "$cname" == "default" ]];then echo "skipping default" && continue;fi
+            if [[ "$cname" == "default"* ]];then echo "skipping a default param group" && continue;fi
             
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi

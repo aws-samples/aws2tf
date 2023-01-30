@@ -9,7 +9,7 @@ fi
 pref[0]="DBSubnetGroups"
 tft[0]="aws_db_subnet_group"
 idfilt[0]="DBSubnetGroupName"
-
+subnets=()
 
 for c in `seq 0 0`; do
     

@@ -14,8 +14,8 @@ else
     cmd[0]="$AWS ec2 describe-instances --filters \"Name=instance-state-name,Values=running\""
 fi
 
-cloud9s=`aws ec2 describe-instances --filters "Name=tag-key,Values=aws:cloud9*" | jq .Reservations[].Instances[].InstanceId`
-asis=`aws ec2 describe-instances --filters "Name=tag-key,Values=aws:autoscaling*" | jq .Reservations[].Instances[].InstanceId`
+cloud9s=`$AWS ec2 describe-instances --filters "Name=tag-key,Values=aws:cloud9*" | jq .Reservations[].Instances[].InstanceId`
+asis=`$AWS ec2 describe-instances --filters "Name=tag-key,Values=aws:autoscaling*" | jq .Reservations[].Instances[].InstanceId`
 
 pref[0]="Reservations"
 tft[0]="aws_instance"

@@ -115,7 +115,14 @@ for c in `seq 0 0`; do
 
             if [ "$dbsn" != "" ]; then
                 echo "getting db subnet group $dbsn"
-                ../../scripts/602-get-rds-db-subnet-group.sh $dbsn
+                ../../scripts/get-rds-db-subnet-group.sh $dbsn
+                if [[ $? -eq 199 ]];then
+                        echo "WARNING: Problems in dependant db subnet group $dbsn"
+                        echo "Removing $ttft $cname resources to prevent validation errors"
+                        rm -f $fn
+                        terraform state rm $ttft.${cname}
+                        exit
+                    fi
             fi
 
 

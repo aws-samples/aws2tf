@@ -82,10 +82,10 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "latest_restorable_time" ]];then skip=1;fi
                     if [[ ${tt1} == "engine_version_actual" ]];then skip=1;fi
 
-                    if [[ ${tt1} == "db_parameter_group_name" ]];then
-                        paramid=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s =  aws_db_parameter_group.%s.name" $tt1 $paramid`
-                    fi
+                    #if [[ ${tt1} == "db_parameter_group_name" ]];then
+                    #    paramid=`echo $tt2 | tr -d '"'`
+                    #    t1=`printf "%s =  aws_db_parameter_group.%s.name" $tt1 $paramid`
+                    #fi
 
 
                     if [[ ${tt1} == "db_subnet_group_name" ]];then 
@@ -167,6 +167,18 @@ for c in `seq 0 0`; do
             if [ "$pkmsarn" != "" ]; then
                 echo "getting key $pkid"
                 ../../scripts/080-get-kms-key.sh $pkid
+            fi
+
+            if [ "$dbsn" != "" ]; then
+                echo "getting db subnet group $dbsn"
+                ../../scripts/get-rds-db-subnet-group.sh $dbsn
+                if [[ $? -eq 199 ]];then
+                        echo "WARNING: Problems in dependant db subnet group $dbsn"
+                        echo "Removing $ttft $cname resources to prevent validation errors"
+                        rm -f $fn
+                        terraform state rm $ttft.${cname}
+                        exit
+                    fi
             fi
 
             

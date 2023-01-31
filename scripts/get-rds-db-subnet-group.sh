@@ -94,6 +94,13 @@ for c in `seq 0 0`; do
                 echo "calling for $sub1"
                 if [ "$sub1" != "" ]; then
                     ../../scripts/105-get-subnet.sh $sub1
+                    if [[ $? -eq 199 ]];then
+                        echo "WARNING: Could not find depandant subnet $sub1"
+                        echo "Removing $ttft $cname resources to prevent validation errors"
+                        rm -f $fn
+                        terraform state rm $ttft.${rname}
+                        exit 199
+                    fi
                 fi
             done
         done

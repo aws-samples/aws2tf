@@ -26,7 +26,11 @@ for c in `seq 0 0`; do
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
-        exit
+        if [ "$1" != "" ]; then
+            exit 199
+        else
+            exit
+        fi
     fi
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
     if [ "$count" -gt "0" ]; then
@@ -117,5 +121,5 @@ done # for c
 #rm -f $ttft-$rname-1.txt
 rm -f *.backup 
 rm -f $ttft*.txt
-
+exit 0
 

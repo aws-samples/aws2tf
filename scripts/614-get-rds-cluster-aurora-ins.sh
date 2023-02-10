@@ -156,7 +156,11 @@ for c in `seq 0 0`; do
                 ../../scripts/080-get-kms-key.sh $pkid
             fi
 
-            
+            if [ "$paramid" != "" ]; then
+                echo "getting db parameter group $paramid"
+                ../../scripts/603-get-rds-db-parameter-group.sh $paramid
+            fi
+
         done
     fi
 done

@@ -83,7 +83,10 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "engine_version_actual" ]];then skip=1;fi
                     # name is depreciated for db_name
                     if [[ ${tt1} == "name" ]];then skip=1;fi
+                    # also depreciated
+                    if [[ ${tt1} == "security_group_names" ]];then skip=1;fi
 
+                    
                     #if [[ ${tt1} == "db_parameter_group_name" ]];then
                     #    paramid=`echo $tt2 | tr -d '"'`
                     #    t1=`printf "%s =  aws_db_parameter_group.%s.name" $tt1 $paramid`

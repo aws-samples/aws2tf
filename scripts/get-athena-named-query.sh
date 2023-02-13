@@ -1,11 +1,14 @@
 #!/bin/bash
-ttft="aws_glue_crawler"
-pref="Crawlers"
-idfilt="Name"
+ttft="aws_athena_named_query"
+pref="NamedQuery"
+idfilt="NamedQueryId"
 
-cm="$AWS glue get-crawlers"
-if [[ "$1" != "" ]]; then
-    cm=`printf "$AWS glue get-crawlers  | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $1`
+
+if [[ "$1" == "" ]]; then
+    echo "Must specify query id exiting ..."
+    exit
+else
+    cm=`printf "$AWS athena get-named-query --named-query-id $1`
 fi
 
 count=1
@@ -14,16 +17,12 @@ awsout=`eval $cm 2> /dev/null`
 #echo $awsout | jq .
 
 if [ "$awsout" == "" ];then echo "$cm : You don't have access for this resource" && exit; fi
-if [[ "$1" == "" ]]; then count=`echo $awsout | jq ".${pref} | length"`; fi   
-if [ "$count" -eq "0" ]; then echo "No resources found exiting .." && exit; fi
+ 
 count=`expr $count - 1`
 for i in `seq 0 $count`; do
     #echo $i
-    if [[ "$1" != "" ]]; then
-        cname=`echo $awsout | jq -r ".${idfilt}"`
-    else
-        cname=`echo $awsout | jq -r ".${pref}[(${i})].${idfilt}"`
-    fi
+    cname=`echo $awsout | jq -r ".${pref}.${idfilt}"`
+
     rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
     echo "$ttft ${cname}"
     
@@ -49,12 +48,22 @@ for i in `seq 0 $count`; do
             if [[ ${tt1} == "arn" ]];then skip=1;fi
             if [[ ${tt1} == "owner_id" ]];then skip=1;fi  
 
-            if [[ ${tt1} == "sample_size" ]];then 
-                tt2=`echo $tt2 | tr -d '"'`
-                if [[ ${tt2} == "0" ]];then 
-                    skip=1;
-                fi      
-            fi 
+                if [[ ${tt1} == "query" ]];then
+                    #echo "tt2="
+                    #echo $tt2
+                    echo query=$tt2 | sed 's/",/\\",/g' | sed 's/,"/,\\"/g' > t5.txt
+                    tt5=`echo $tt2 | sed 's/",/\\",/g' | sed 's/,"/,\\"/g'`
+                    #echo "part1="$tt1
+                    #echo "part2="$tt5
+                    
+                    t1=`printf "%s=%s" "$tt1" "$tt5"`
+                    t1=`cat t5.txt`
+                    #echo "query="
+                    #echo $t1
+                             
+                fi
+
+
 
         fi
 

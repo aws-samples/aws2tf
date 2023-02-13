@@ -60,7 +60,10 @@ if [ $count -gt 0 ]; then
                 
                 AWS::ApiGateway::Account) echo "echo 'Error: **Terraform does not support import of $type skipped**' " >> commands.sh ;; 
                 AWS::ApiGateway::RestApi) echo "../../scripts/750-get-apigw-restapi.sh $pid"  >> commands.sh ;;
-                AWS::ApiGateway::Resource) echo "echo '# $type $pid fetched as part of RestApi..' " >> commands.sh ;;                
+                AWS::ApiGateway::Resource) echo "echo '# $type $pid fetched as part of RestApi..' " >> commands.sh ;;   
+
+                AWS::Athena::NamedQuery) echo "../../scripts/get-athena-named-query.sh $pid"  >> commands.sh ;;
+
                 AWS::AutoScaling::AutoScalingGroup) echo "../../scripts/258-get-autoscaling-groups.sh $pid"  >> commands.sh ;;
                 AWS::AutoScaling::LaunchConfiguration) echo "../../scripts/get-launch-configuration.sh $pid"  >> commands.sh ;;
                 AWS::AutoScaling::LifecycleHook) echo "echo '# $type $pid fetched as part of AutoScalingGroup..' " >> commands.sh ;;
@@ -125,6 +128,7 @@ if [ $count -gt 0 ]; then
                 AWS::Events::EventBus)  echo "../../scripts/712-get-eb-bus.sh $pid" >> commands.sh;;
                 AWS::Events::Rule)  echo "../../scripts/713-get-eb-rule.sh \"$pid\"" >> commands.sh;;
 
+                AWS::Glue::Crawler) echo "../../scripts/651-get-glue-crawlers.sh \"$pid\"" >> commands.sh;;
                 AWS::Glue::Database) echo "../../scripts/650-get-glue-database.sh \"$pid\"" >> commands.sh;;
                 AWS::Glue::Table) echo "# $type $pid Should be fetched via Glue Database Resource" >> commands.sh ;;
                 AWS::Glue::Partition) echo "# $type $pid Should be fetched via Glue Table Resource" >> commands.sh ;;

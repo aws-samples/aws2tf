@@ -62,12 +62,8 @@ if [ "$count" -gt "0" ]; then
             if [[ ${t1} == *"="* ]];then
                 tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                 tt2=`echo "$line" | cut -f2- -d'='`  
-                if [[ ${tt1} == "arn" ]];then	
-                	#printf "acl = \"private\" \n" >> $fn
-                    #printf "force_destroy = false \n" >> $fn
-
-                    skip=1
-                fi
+                if [[ ${tt1} == "arn" ]];then skip=1; fi
+            
                 if [[ ${tt1} == "query" ]];then
                     #echo "tt2="
                     #echo $tt2
@@ -85,12 +81,9 @@ if [ "$count" -gt "0" ]; then
 
 
                     
-                if [[ ${tt1} == "id" ]];then
-                    #printf "acl = \"private\"\n" >> $fn
-                    #printf "force_destroy = false \n" >> $fn
-
-                    skip=1
-                fi
+                if [[ ${tt1} == "id" ]];then skip=1;fi
+                if [[ ${tt1} == "arn" ]];then skip=1; fi
+           
                     
                 if [[ ${tt1} == "role_arn" ]];then skip=0;fi
                 if [[ ${tt1} == "force_destroy" ]];then skip=1;fi

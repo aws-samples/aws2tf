@@ -35,7 +35,8 @@ for i in `seq 0 $count`; do
     terraform state show -no-color $ttft.${rname} > t1.txt
 
     rm -f $fn
- 
+    mc=0
+    nw=0
     file="t1.txt"
     echo $aws2tfmess > $fn
     while IFS= read t1
@@ -49,12 +50,34 @@ for i in `seq 0 $count`; do
             if [[ ${tt1} == "arn" ]];then skip=1;fi
             if [[ ${tt1} == "owner_id" ]];then skip=1;fi     
 
-            if [[ ${tt1} == "number_of_workers" ]];then 
-                tt2=`echo $tt2 | tr -d '"'` 
-                if [[ ${tt2} == "0" ]];then
+            if [[ ${tt1} == "max_capacity" ]];then 
+                mc=`echo $tt2 | tr -d '"'` 
+                if [[ ${mc} == "0" ]];then
                     skip=1;
                 fi    
             fi 
+
+
+            if [[ ${tt1} == "number_of_workers" ]];then 
+                if [[ $mc == "0" ]];then 
+                    nw=`echo $tt2 | tr -d '"'` 
+                    if [[ ${nw} == "0" ]];then
+                        skip=1;
+                    fi  
+                else # max capacity is not 0 so skip number_of workers
+                    skip=1  
+                fi
+            fi 
+
+            if [[ ${tt1} == "worker_type" ]];then 
+                if [[ $mc == "0" ]];then 
+                    skip=0;  
+                else # max capacity is not 0 so skip number_of workers
+                    skip=1  
+                fi
+            fi 
+
+
 
         fi
 

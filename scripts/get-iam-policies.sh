@@ -139,6 +139,12 @@ for c in `seq 0 0`; do
                         if [[ ${tt1} == "id" ]];then skip=1; fi
                         if [[ ${tt1} == "policy_id" ]];then skip=1; fi
                         if [[ ${tt1} == "role_arn" ]];then skip=1;fi
+                    else
+
+                        if [[ "$t1" == *"\${aws:"* ]]; then
+                            t1=${t1//$/&}
+                        fi
+                    
                     fi
                     if [ "$skip" == "0" ]; then
                         #echo $skip $t1
@@ -151,6 +157,9 @@ for c in `seq 0 0`; do
                 # probably should be an array
                 if [[ $rarn != "" ]];then
                     ../../scripts/050-get-iam-roles.sh $rarn
+                fi
+                if [[ $trole != "" ]];then
+                    ../../scripts/050-get-iam-roles.sh $trole
                 fi
                 
             fi

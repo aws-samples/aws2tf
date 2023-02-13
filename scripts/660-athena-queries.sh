@@ -4,8 +4,8 @@ tft[0]="aws_glue_crawler"
 cmd[1]="$AWS athena get-named-query --named-query-id"
 pref[1]="NamedQuery"
 tft[1]="aws_athena_named_query"
-
-# get number of query ids
+qids=()
+# get number & list of query ids
 for c in `seq 0 0`; do
     cm=${cmd[$c]}
     ttft=${tft[(${c})]}
@@ -17,6 +17,7 @@ for c in `seq 0 0`; do
     fi
     #echo $awsout
     count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    
     echo $count
 done
 

@@ -8,7 +8,7 @@ if [[ "$1" == "" ]]; then
     echo "Must specify query id exiting ..."
     exit
 else
-    cm=`printf "$AWS athena get-named-query --named-query-id $1`
+    cm=`printf "$AWS athena get-named-query --named-query-id $1"`
 fi
 
 count=1

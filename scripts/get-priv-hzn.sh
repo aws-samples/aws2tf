@@ -105,7 +105,7 @@ rm -f $fn
             fi
             
 
-rm t*.txt
+rm -f t*.txt
 
 
 

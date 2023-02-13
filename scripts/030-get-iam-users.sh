@@ -85,9 +85,11 @@ for c in `seq 0 0`; do
                 
             done <"$file"   # done while
             ##../../scripts/get-iam-groups-for-user.sh $cname
+             # Get attached role policies per user
+            ../../scripts/get-iam-attached-user-policies.sh "$ocname"
             
         done # done for i
-        # Get attached role policies       
+              
         
     fi
 done

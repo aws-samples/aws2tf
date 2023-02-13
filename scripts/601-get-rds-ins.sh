@@ -81,6 +81,8 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "resource_id" ]];then skip=1;fi
                     if [[ ${tt1} == "latest_restorable_time" ]];then skip=1;fi
                     if [[ ${tt1} == "engine_version_actual" ]];then skip=1;fi
+                    # name is depreciated for db_name
+                    if [[ ${tt1} == "name" ]];then skip=1;fi
 
                     #if [[ ${tt1} == "db_parameter_group_name" ]];then
                     #    paramid=`echo $tt2 | tr -d '"'`

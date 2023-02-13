@@ -430,7 +430,7 @@ echo "Terraform Plan ..."
 terraform plan -no-color
 echo " "
 echo "---------------------------------------------------------------------------"
-which tfsec > /dev/null
+which tfsec 2> /dev/null
 if [[ $? -eq 0 ]];then
     ver=$(tfsec --version | tr -d -c 0-9)
     if [[ $ver -ge 1275 ]];then

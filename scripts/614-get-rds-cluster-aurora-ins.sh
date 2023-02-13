@@ -2,7 +2,9 @@
 cmd[0]="$AWS rds describe-db-instances"
 pref[0]="DBInstances"
 tft[0]="aws_rds_cluster_instance"
-
+if [ "$1" != "" ]; then
+    cmd[0]="$AWS rds describe-db-instances --db-instance-identifier $1"
+fi
 
 for c in `seq 0 0`; do
    
@@ -15,7 +17,7 @@ for c in `seq 0 0`; do
         echo "$cm : You don't have access for this resource"
         exit
     fi
-    awsout=`echo $awsout | jq "select(.${pref[(${c})]}[].StorageType = \"aurora\")"`
+    awsout=`echo $awsout | jq "select(.${pref[(${c})]}[].StorageType == \"aurora\")"`
 
     if [ "$awsout" == "" ];then
         echo "No resources found exiting .."

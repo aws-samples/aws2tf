@@ -128,6 +128,7 @@ if [ $count -gt 0 ]; then
                 AWS::Events::EventBus)  echo "../../scripts/712-get-eb-bus.sh $pid" >> commands.sh;;
                 AWS::Events::Rule)  echo "../../scripts/713-get-eb-rule.sh \"$pid\"" >> commands.sh;;
 
+                AWS::Glue::Connection) echo "../../scripts/653-get-glue-connections.sh \"$pid\"" >> commands.sh;;
                 AWS::Glue::Crawler) echo "../../scripts/651-get-glue-crawlers.sh \"$pid\"" >> commands.sh;;
                 AWS::Glue::Database) echo "../../scripts/650-get-glue-database.sh \"$pid\"" >> commands.sh;;
                 AWS::Glue::Job) echo "../../scripts/652-get-glue-jobs.sh \"$pid\"" >> commands.sh;;

@@ -60,7 +60,7 @@ for i in `seq 0 $count`; do
 
             if [[ ${tt1} == "role_arn" ]];then 
                 rarn=`echo $tt2 | tr -d '"'`
-                t1=`printf "%s = aws_iam_role.%s.name" $tt1 $rarn2`
+                t1=`printf "%s = aws_iam_role.%s.name" $tt1 $rarn`
 
             fi
 

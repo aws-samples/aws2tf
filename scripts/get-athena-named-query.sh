@@ -26,12 +26,12 @@ for i in `seq 0 $count`; do
     rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
     echo "$ttft ${cname}"
     
-    fn=`printf "%s__%s.tf" $ttft $rname`
+    fn=`printf "%s__a_%s.tf" $ttft $rname`
     if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
 
-    printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn   
-    terraform import $ttft.${rname} "${cname}" | grep Import
-    terraform state show -no-color $ttft.${rname} > t1.txt
+    printf "resource \"%s\" \"a_%s\" {}" $ttft $rname > $fn   
+    terraform import $ttft.a_${rname} "${cname}" | grep Import
+    terraform state show -no-color $ttft.a_${rname} > t1.txt
 
     rm -f $fn
  

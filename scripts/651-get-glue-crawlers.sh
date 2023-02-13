@@ -5,7 +5,7 @@ idfilt="Name"
 
 cm="$AWS glue get-crawlers"
 if [[ "$1" != "" ]]; then
-    cm=`printf "$AWS glue get-crawlers  | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $1`
+    cm=`printf "$AWS glue get-crawlers  | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." "$1"`
 fi
 
 count=1

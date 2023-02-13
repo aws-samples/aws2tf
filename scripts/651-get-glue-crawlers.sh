@@ -24,7 +24,7 @@ for i in `seq 0 $count`; do
     else
         cname=`echo $awsout | jq -r ".${pref}[(${i})].${idfilt}"`
     fi
-    rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+    rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_} && rname=${rname// /_}
     echo "$ttft ${cname}"
     
     fn=`printf "%s__%s.tf" $ttft $rname`

@@ -1,4 +1,6 @@
 #!/bin/bash
+mysub=`echo $AWS2TF_ACCOUNT`
+myreg=`echo $AWS2TF_REGION`
 ttft="aws_glue_connection"
 pref="ConnectionList"
 idfilt="Name"
@@ -31,7 +33,7 @@ for i in `seq 0 $count`; do
     if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
 
     printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn   
-    terraform import $ttft.${rname} data.aws_caller_identity.current.account_id:${cname} | grep Import
+    terraform import $ttft.${rname} "${mysub}:${cname}" | grep Import
     terraform state show -no-color $ttft.${rname} > t1.txt
 
     rm -f $fn

@@ -37,6 +37,7 @@ for i in `seq 0 $count`; do
     rm -f $fn
     mc=0
     nw=0
+    rarn=""
     file="t1.txt"
     echo $aws2tfmess > $fn
     while IFS= read t1
@@ -56,6 +57,12 @@ for i in `seq 0 $count`; do
                     skip=1;
                 fi    
             fi 
+
+            if [[ ${tt1} == "role_arn" ]];then 
+                rarn=`echo $tt2 | tr -d '"'`
+                t1=`printf "%s = aws_iam_role.%s.name" $tt1 $rarn2`
+
+            fi
 
 
             if [[ ${tt1} == "number_of_workers" ]];then 
@@ -84,6 +91,10 @@ for i in `seq 0 $count`; do
         if [ "$skip" == "0" ]; then echo "$t1" >> $fn ;fi
                 
     done <"$file"
+    
+    if [[ $rarn != "" ]];then
+        ../../scripts/050-get-iam-roles.sh $rarn
+    fi
     # dependancies here
 done
 

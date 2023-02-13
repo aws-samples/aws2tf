@@ -131,7 +131,7 @@ if [ "$r" = "no" ]; then
     fi
     if [ "$r" = "no" ]; then
         r=`aws configure get region`
-        echo "Getting reegion from aws cli = $r"
+        echo "Getting region from aws cli = $r"
     fi
 fi
 

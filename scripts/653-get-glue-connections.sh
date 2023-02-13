@@ -49,7 +49,18 @@ for i in `seq 0 $count`; do
             if [[ ${tt1} == "id" ]];then skip=1; fi  
             if [[ ${tt1} == "create_date" ]];then skip=1; fi  
             if [[ ${tt1} == "arn" ]];then skip=1;fi
-            if [[ ${tt1} == "owner_id" ]];then skip=1;fi                   
+            if [[ ${tt1} == "owner_id" ]];then skip=1;fi  
+
+            if [[ ${tt1} == "connection_properties" ]];then
+                        tt2=`echo $tt2 | tr -d '"'` 
+                        skip=1
+                        while [ "$t1" != "}" ] && [ "$tt2" != "{}" ] ;do
+                            read line
+                            t1=`echo "$line"`
+                            #echo $t1
+                        done
+            fi
+
         fi
 
         if [ "$skip" == "0" ]; then echo "$t1" >> $fn ;fi

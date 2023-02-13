@@ -130,6 +130,7 @@ if [ $count -gt 0 ]; then
 
                 AWS::Glue::Crawler) echo "../../scripts/651-get-glue-crawlers.sh \"$pid\"" >> commands.sh;;
                 AWS::Glue::Database) echo "../../scripts/650-get-glue-database.sh \"$pid\"" >> commands.sh;;
+                AWS::Glue::Job) echo "../../scripts/652-get-glue-jobs.sh \"$pid\"" >> commands.sh;;
                 AWS::Glue::Table) echo "# $type $pid Should be fetched via Glue Database Resource" >> commands.sh ;;
                 AWS::Glue::Partition) echo "# $type $pid Should be fetched via Glue Table Resource" >> commands.sh ;;
                 AWS::IAM::Role)  echo "../../scripts/050-get-iam-roles.sh $pid" >> commands.sh ;;

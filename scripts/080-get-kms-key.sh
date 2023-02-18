@@ -47,9 +47,11 @@ for c in `seq 0 0`; do
 
             keystate=$(echo $keyd | jq -r .KeyMetadata.KeyState)
             keyman=$(echo $keyd | jq -r .KeyMetadata.KeyManager)
+            keyarn=$(echo $keyd | jq -r .KeyMetadata.KeyArn)
             #echo "keystate=$keystate keyman=$keyman"
             if [ "$keystate" == "Enabled" ] && [ "$keyman" != "AWS" ]; then
                 echo "$ttft $cname"
+                echo "$ttft,$keyarn,$cname" >> data/arn-map.txt
                 fn=`printf "%s__k_%s.tf" $ttft $cname`
                 if [ -f "$fn" ] ; then
                     echo "$fn exists already skipping ..."

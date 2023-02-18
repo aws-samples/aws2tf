@@ -79,7 +79,7 @@ for c in `seq 0 0`; do
 
                     if [[ ${tt1} == "role_arn" ]];then 
                                 skip=0;
-                                trole=`echo "$tt2" | rev | cut -d'/' -f 1 | rev | tr -d '"'`
+                                trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')
                                 #echo "***trole=$trole"
                                 rarns+=`printf "\"%s\" " $trole`
                                 if [ "$doned" == "0" ]; then

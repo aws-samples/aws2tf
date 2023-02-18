@@ -76,18 +76,18 @@ for c in `seq 0 0`; do
             fi
             echo $getp $1 $parn
             if [ "$getp" == "1" ]; then
-                fn=`printf "%s__%s.tf" $ttft $cname`
+                fn=`printf "%s__p_%s.tf" $ttft $cname`
                 if [ -f "$fn" ] ; then
                     echo "$fn exists already skipping"
                     continue
                 fi
 
                 #echo "cname=$cname"
-                printf "resource \"%s\" \"%s\" {}\n" $ttft $cname > $ttft.$cname.tf
+                printf "resource \"%s\" \"p_%s\" {}\n" $ttft $cname > $fn
     
-                terraform import $ttft.$cname $ocname | grep Import
-                terraform state show -no-color $ttft.$cname > t1.txt
-                rm -f $ttft.$cname.tf
+                terraform import $ttft.p_$cname $ocname | grep Import
+                terraform state show -no-color $ttft.p_$cname > t1.txt
+                rm -f $fn
 
                 file="t1.txt"
                 #fn=`printf "%s__%s.tf" $ttft $cname`
@@ -125,8 +125,7 @@ for c in `seq 0 0`; do
                                     echo "--> Wildcard Role"
                                     t1=`printf "%s = %s" $tt1 $tt2`
                                 else
-                                    
-                                    trole=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`                       
+                                    trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')                      
                                     t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
                                 fi
                             else

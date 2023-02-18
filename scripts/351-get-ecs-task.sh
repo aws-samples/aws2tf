@@ -85,14 +85,14 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "task_role_arn" ]];then 
                         trarn=`echo $tt2 | tr -d '"'` 
                         skip=0;
-                        trole=`echo "$tt2" | rev | cut -d'/' -f1 | rev | tr -d '"'`                     
+                        trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')                    
                         t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
                     fi
 
                     if [[ ${tt1} == "execution_role_arn" ]];then 
                         erarn=`echo $tt2 | tr -d '"'` 
                         skip=0;
-                        trole=`echo "$tt2" | rev | cut -d'/' -f1 | rev | tr -d '"'`                     
+                        trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')                   
                         t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
                     fi
 

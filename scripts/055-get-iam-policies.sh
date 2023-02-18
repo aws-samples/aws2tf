@@ -59,25 +59,19 @@ for c in `seq 0 0`; do
                 getp=1
             fi
             if [ "$getp" == "1" ]; then
-                fn=`printf "%s__%s.tf" $ttft $cname`
+                fn=`printf "%s__%s.tf" $ttft p_$cname`
                 if [ -f "$fn" ] ; then
                     echo "$fn exists already skipping"
                     continue
                 fi
 
                 echo "$ttft $cname"
-                printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-                printf "}" >> $ttft.$cname.tf
-                terraform import $ttft.$cname $ocname | grep Import
-                terraform state show -no-color $ttft.$cname > t1.txt
-                rm -f $ttft.$cname.tf
+                printf "resource \"%s\" \"%s\" {}\n" $ttft $cname > $fn
+                terraform import $ttft.p_$cname $ocname | grep Import
+                terraform state show -no-color $ttft.p_$cname > t1.txt
+                rm -f $fn
 
                 file="t1.txt"
-                #fn=`printf "%s__%s.tf" $ttft $cname`
-                #if [ -f "$fn" ] ; then
-                #    echo "$fn exists already skipping"
-                #    exit
-                #fi
                 echo $aws2tfmess > $fn
                 echo "# $0" >> $fn
                 while IFS= read line

@@ -44,12 +44,12 @@ for c in `seq 0 0`; do
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_} && rname=${rname/${mysub}/}
 
             echo "$ttft $cname"
+            echo "$ttft,$cname,$rname" >> data/arn-map.dat
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
 
-            printf "resource \"%s\" \"%s\" {" $ttft $rname > $fn
-            printf "}" >> $fn
-    
+            printf "resource \"%s\" \"%s\" {}\n" $ttft $rname > $fn
+           
             terraform import $ttft.${rname} "${cname}" | grep Import
             terraform state show -no-color $ttft.${rname} > t1.txt
 

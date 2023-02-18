@@ -73,12 +73,12 @@ for c in `seq 0 0`; do
                         if [[ "$tt2" == *":iam:"* ]]; then
                             tarn=`echo $tt2 | tr -d '"'`
                             if [[ "$tarn" == *":user"* ]];then
-                                trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev)
+                                trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')
                                 trole=${trole//:/_} && trole=${trole//./_} && trole=${trole//\//_}
                                 t1=`printf "%s = aws_iam_user.%s.arn" $tt1 $trole`
                             fi
                             if [[ "$tarn" == *":role"* ]];then
-                                trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev)
+                                trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')
                                 trole=${trole//:/_} && trole=${trole//./_} && trole=${trole//\//_}
                                 t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
                             fi

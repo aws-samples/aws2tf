@@ -138,8 +138,8 @@ for c in `seq 0 0`; do
             srvid=`eval $comm`
             srvid=`echo $srvid | cut -f2 -d'/'`
 
-            echo "srvid = $srvid"
-            if [ "$srv" != "null" ]; then
+            echo "--> srvid=$srvid  cln=$cln"
+            if [ "$srvid" != "null" ]; then
                     nsid=`$AWS servicediscovery get-service --id $srvid | jq .Service.NamespaceId | tr -d '\"'`
                     echo $nsid
                     # get zone id

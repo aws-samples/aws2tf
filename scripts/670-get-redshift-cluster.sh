@@ -72,7 +72,7 @@ for i in `seq 0 $count`; do
             if [[ ${tt1} == "default_iam_role_arn" ]];then 
                 rarn=`echo $tt2 | tr -d '"'` 
                 skip=0;
-                trole=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`
+                trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')
                                                     
                 t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
             fi 

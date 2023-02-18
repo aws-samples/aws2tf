@@ -143,6 +143,7 @@ fi
 #s=`echo $mysub`
 mkdir -p  generated/tf.${mysub}_${r}
 cd generated/tf.${mysub}_${r}
+mkdir -p data not-imported
 
 
 if [ "$f" = "no" ]; then
@@ -152,6 +153,7 @@ if [ "$f" = "no" ]; then
         rm -f *.tf *.json *.tmp 
         rm -f terraform.* tfplan 
         rm -rf .terraform data aws_* pi2
+        mkdir -p data not-imported
     fi
 else
     sort -u data/processed.txt > data/pt.txt
@@ -159,7 +161,7 @@ else
     rm -f terra*.backup
 fi
 
-mkdir -p data not-imported
+
 
 rm -f import.log
 touch import.log
@@ -380,8 +382,9 @@ if [[ "$s" == "no" ]];then
             done <"$file"
 
             echo "$docomm" >> data/processed.txt
-            terraform fmt
-            terraform validate -no-color
+            terraform validate -no-color -json > validate.json
+            ../../scripts/fix-undec.sh
+            terraform validate
             end=`date +%s`
             runtime=$((end-start))
             echo "$com runtime $runtime seconds"
@@ -412,6 +415,9 @@ terraform refresh  -no-color
 echo "fix default SG's"
 . ../../scripts/fix-def-sgs.sh
 echo "Terraform validate ..."
+terraform validate -no-color -json > validate.json
+ # look for undeclared resources other fixable errors
+
 terraform validate -no-color
 
 

@@ -54,8 +54,8 @@ for c in `seq 0 0`; do
             terraform import $ttft.$rname $1/$rarn | grep Import
             #terraform import $ttft.$rname "$cname" | grep Import
             terraform state show -no-color $ttft.$rname > t1.txt
-            tfa=`printf "%s.%s" $ttft $rname`
-            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
+            #tfa=`printf "%s_%s" $ttft $rname`
+            #terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
             #echo $awsj | jq . 
             rm $ttft.$rname.tf
             
@@ -99,7 +99,7 @@ for c in `seq 0 0`; do
                             if [[ "$parn" == *":aws:policy"* ]];then
                                 t1=`printf "%s = \"%s\"" $tt1 $parn`
                             else
-                                t1=`printf "%s = aws_iam_policy.%s.arn" $tt1 $pnam`
+                                t1=`printf "%s = aws_iam_policy.p_%s.arn" $tt1 $pnam`
                             fi
 
                         fi

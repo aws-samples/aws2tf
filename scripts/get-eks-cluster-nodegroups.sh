@@ -118,7 +118,7 @@ if [ "$kcount" -gt "0" ]; then
                                     if [[ ${tt1} == "node_role_arn" ]];then 
                                         rarn=`echo $tt2 | tr -d '"'` 
                                         skip=0;
-                                        trole=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`
+                                        trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')
                                         #echo "depends_on = [aws_iam_role.$trole]" >> $fn              
                                         t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
                             

@@ -79,7 +79,7 @@ for c in `seq 0 0`; do
                     fi
                     if [[ ${tt1} == "iam_fleet_role" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
-                        trole=`echo "$tt2" | rev | cut -d'/' -f1 | rev | tr -d '"'`
+                        trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')
                         t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
                         rarn=`printf "%s" $tt2`
                     fi

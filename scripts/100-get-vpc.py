@@ -11,8 +11,8 @@ ttft="aws_vpc"
 idfilt="VpcId"
 
 
-if sys.version_info<(3,6,0):
-  sys.stderr.write("You need python 3.6 or later to run this script\n")
+if sys.version_info<(3,7,0):
+  sys.stderr.write("You need python 3.7 or later to run this script\n")
   exit(1)
 
 
@@ -38,7 +38,7 @@ print(cmd)
 out = subprocess.run(cmd, shell=True, capture_output=True)
 ol=len(out.stdout.decode().rstrip())
 if ol==0:
-    print("No return from command exit ...")
+    print("No return from command " + str(cmd) + "exit ...")
     exit()
 print("ol="+str(ol))
 print(out.stdout.decode().rstrip())
@@ -72,27 +72,17 @@ if count > 0:
         out = subprocess.run(cmd, shell=True, capture_output=True)
         ol=len(out.stdout.decode().rstrip())
         if ol==0:
-            print("No return from command exit ...")
+            print("No return from command " + str(cmd) + "exit ...")
             exit()
         print("ol="+str(ol))
         print(out.stdout.decode().rstrip())
 
-        cmd ='terraform state show '+ttft+'.'+rname+' > '+ttft+'-'+rname+'-2.txt'
+        cmd ='terraform state show -no-color '+ttft+'.'+rname+' > '+ttft+'-'+rname+'-1.txt'
         print(cmd)
         out = subprocess.run(cmd, shell=True, capture_output=True)
         ol=len(out.stdout.decode().rstrip())
         if ol==0:
-            print("No return from command exit ...")
-            exit()
-        print("ol="+str(ol))
-        print(out.stdout.decode().rstrip())
-
-        cmd ="cat "+ttft+"-"+rname+"-2.txt | perl -pe 's/\x1b.*?[mGKH]//g' > "+ttft+"-"+rname+"-1.txt"
-        print(cmd)
-        out = subprocess.run(cmd, shell=True, capture_output=True)
-        ol=len(out.stdout.decode().rstrip())
-        if ol==0:
-            print("No return from command exit ...")
+            print("No return from command " + str(cmd) + "exit ...")
             exit()
         print("ol="+str(ol))
         print(out.stdout.decode().rstrip())

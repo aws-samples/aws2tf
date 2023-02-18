@@ -69,8 +69,8 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "url" ]];then skip=1;fi
                     if [[ ${tt1} == "availability_zone_id" ]];then skip=1;fi
                     if [[ ${tt1} == "role_arn" ]]; then
-                        rarn=`echo $tt2 | tr -d '"'` 
-                        trole=`echo "$tt2" | rev | cut -f1 -d'/' | rev | tr -d '"'`
+                        rarn=`echo $tt2 | tr -d '"'`
+                        trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"') 
                         t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
                     fi
                     if [[ ${tt1} == "security_groups" ]];then 

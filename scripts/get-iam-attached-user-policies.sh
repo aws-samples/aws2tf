@@ -30,7 +30,7 @@ for i in $(seq 0 $count); do
     fn=$(printf "%s__%s__%s.tf" $ttft $1 $rname)
     if [ -f "$fn" ]; then echo "$fn exists already skipping" && continue; fi
 
-    printf "resource \"%s\" \"%s__%s\" {}" $ttft $1 $rname >$fn
+    printf "resource \"%s\" \"%s__%s\" {}\n" $ttft $1 $rname >$fn
     terraform import $ttft.$1__${rname} "${1}/${cname}" | grep Import
     terraform state show -no-color $ttft.${1}__${rname} >t1.txt
 
@@ -65,7 +65,7 @@ for i in $(seq 0 $count); do
                     if [[ "$parn" == *":aws:policy"* ]]; then
                         t1=$(printf "%s = \"%s\"" $tt1 $parn)
                     else
-                        t1=$(printf "%s = aws_iam_policy.%s.arn" $tt1 $pnam)
+                        t1=$(printf "%s = aws_iam_policy.p_%s.arn" $tt1 $pnam)
                     fi
 
                 fi

@@ -283,8 +283,8 @@ fi
 
 
 rm -f t*.txt
-echo "run command ....."
-echo "$AWS eks update-kubeconfig --name $cname"
+#echo "run command ....."
+#echo "$AWS eks update-kubeconfig --name $cname"
 
 
 

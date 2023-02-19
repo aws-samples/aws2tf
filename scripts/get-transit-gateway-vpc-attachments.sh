@@ -57,6 +57,7 @@ for c in `seq 0 0`; do
             file="t1.txt"
 
             echo $aws2tfmess > $fn
+            subnets=()
             while IFS= read line
             do
 				skip=0
@@ -87,6 +88,7 @@ for c in `seq 0 0`; do
                 else
                     if [[ "$t1" == *"subnet-"* ]]; then
                         t1=`echo $t1 | tr -d '"|,'`
+                        subnets+=`printf "\"%s\" " $t1`
                         t1=`printf "aws_subnet.%s.id," $t1`
                     fi
 
@@ -102,6 +104,13 @@ for c in `seq 0 0`; do
                 ../../scripts/100-get-vpc.sh $vpcid
             fi
             # get the TGW itself
+            for sub in ${subnets[@]}; do
+                sub1=`echo $sub | tr -d '"'`
+                echo "calling for $sub1"
+                if [ "$sub1" != "" ]; then
+                    ../../scripts/105-get-subnet.sh $sub1
+                fi
+            done
 
         done
 
@@ -112,6 +121,7 @@ for c in `seq 0 0`; do
             ../../scripts/201-get-transit-gateway.sh $tgwi
             ../../scripts/202-get-transit-gateway-route-tables.sh $tgwi
         done
+
 
     fi
 done

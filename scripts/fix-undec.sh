@@ -28,6 +28,11 @@ for c in $(seq 0 $count); do
                 eval $cmd
             fi
         fi
+        if [[ $tft == "aws_vpc" ]] || [[ $tft == "aws_subnet" ]]; then
+                cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $addr)
+                echo "Undeclared Fix --> $res"
+                eval $cmd
+        fi
 
         if [[ $tft == "aws_sns_topic" ]]; then
             addr=$(echo $addr | cut -f2 -d'_')

@@ -40,7 +40,7 @@ for c in `seq 0 0`; do
     if [[ "$1" == "" ]];then
         count=`echo $awsout | jq ".${pref[(${c})]} | length"`
     fi
-    echo $count
+    #echo $count
 
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`

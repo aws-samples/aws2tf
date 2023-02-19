@@ -18,11 +18,11 @@ echo $awsout | jq .
 if [ "$awsout" == "" ];then echo "$cm : You don't have access for this resource" && exit; fi
     
 count=`echo $awsout | jq ".${pref} | length"`
-echo $count
+#echo $count
 if [ "$count" -eq "0" ];then echo "Zero count" && exit ; fi
 if [ "$1" != "" ]; then count=1; fi
 count=`expr $count - 1`
-echo $count
+#echo $count
 for i in `seq 0 $count`; do
             echo "in loop $i"
             if [ "$1" != "" ]; then

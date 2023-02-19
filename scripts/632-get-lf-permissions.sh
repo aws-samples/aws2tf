@@ -18,14 +18,14 @@ fi
 cm=${cmd[$c]}
 ppls=()
 ppls+=`eval $cm`
-echo $ppls
+#echo $ppls
 
 c=0
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
     cm=`echo "$cm $ia"`
-	echo $cm
+	#echo $cm
     awsout=`eval $cm`
     if [ "$awsout" == "" ];then
         echo "This is not an AWS organizations account"
@@ -37,7 +37,7 @@ c=0
         count=`echo $awsout | jq ".${pref[(${c})]} | length"`
     fi
 
-    echo $count
+    #echo $count
     
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`

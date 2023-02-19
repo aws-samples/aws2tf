@@ -45,7 +45,7 @@ print(out.stdout.decode().rstrip())
 
 
 js=json.loads(out.stdout.decode().rstrip())
-print(json.dumps(js, indent=4, separators=(',', ': ')))
+#print(json.dumps(js, indent=4, separators=(',', ': ')))
 awsout=js[pref]
 
 print(json.dumps(awsout, indent=4, separators=(',', ': ')))
@@ -67,22 +67,28 @@ if count > 0:
         print(ttft+" "+cname+" import")
 
         
-        cmd ='terraform import '+ttft+'.'+rname+' "' + cname+ '" > /dev/null'
+        cmd ='terraform import '+ttft+'.'+rname+' "' + cname+ '"'
         print(cmd)
         out = subprocess.run(cmd, shell=True, capture_output=True)
         ol=len(out.stdout.decode().rstrip())
+        el=len(out.stderr.decode().rstrip())
+        if el!=0:
+            print("Error from command " + str(cmd))
+            print(out.stderr.decode().rstrip())   
         if ol==0:
-            print("No return from command " + str(cmd) + "exit ...")
+            print("No return from command " + str(cmd) + " exit ...")
             exit()
-        print("ol="+str(ol))
         print(out.stdout.decode().rstrip())
 
         cmd ='terraform state show -no-color '+ttft+'.'+rname+' > '+ttft+'-'+rname+'-1.txt'
         print(cmd)
         out = subprocess.run(cmd, shell=True, capture_output=True)
         ol=len(out.stdout.decode().rstrip())
+        el=len(out.stderr.decode().rstrip())
         if ol==0:
-            print("No return from command " + str(cmd) + "exit ...")
+            print("No return from command " + str(cmd) + " exit ...")
+            print("ol="+str(ol)+" el="+str(el))
+            print(out.stderr.decode().rstrip())
             exit()
         print("ol="+str(ol))
         print(out.stdout.decode().rstrip())

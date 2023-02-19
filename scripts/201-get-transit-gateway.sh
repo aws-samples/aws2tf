@@ -37,11 +37,10 @@ for c in `seq 0 0`; do
                 echo "$fn exists already skipping"
                 continue
             fi
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
+            printf "resource \"%s\" \"%s\" {}\n" $ttft $cname > $fn
             terraform import $ttft.$cname "$cname" | grep Import
             terraform state show -no-color $ttft.$cname > t1.txt
-            rm -f $ttft.$cname.tf
+            rm -f $fn
      
             file="t1.txt"
             fn=`printf "%s__%s.tf" $ttft $cname`

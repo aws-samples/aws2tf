@@ -85,17 +85,22 @@ for c in $(seq 0 $count); do
 
 done
 
-
+adj=0
 for c in $(seq 0 $count); do
     #echo $c
     fil=$(echo $undec | jq ".[(${c})] | select(.summary==\"Value for unconfigurable attribute\")" | jq -r '.range.filename')
+    
     res=$(echo $undec | jq ".[${c}] | select(.summary==\"Value for unconfigurable attribute\")" | jq -r '.snippet.code' | tr -d ' ' | cut -f1 -d'=')
     line=$(echo $undec | jq ".[${c}] | select(.summary==\"Value for unconfigurable attribute\")" | jq -r '.range.start.line')
+    line=$(expr $line - $adj)
     if [[ $line != "" ]];then
         cmd=$(printf "sed -i'.orig' -e '%sd' ${fil}" $line)
-        echo "Unconfigurable attribute fix --> $res"
+        echo "Unconfigurable attribute fix --> $res $line $adj"
         echo $cmd
-        #eval $cmd
+        eval $cmd
+        if [[ $? -eq 0 ]];then
+            adj=$(expr $adj + 1)
+        fi
 
     fi
 

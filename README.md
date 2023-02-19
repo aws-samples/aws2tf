@@ -177,7 +177,7 @@ It is not possibel at this time to use your own state location (eg. on s3)
 
 ----
 
-###  Experimental - still under development
+### Still under development
 
 To get all the resources in a deployed Stack Set
 
@@ -191,7 +191,7 @@ Or simply check back after some time to see if they are listed below.
 
 
 ----
-## Terraform resources supported as of 20-Jan-2023
+## Terraform resources supported as of 19-Feb-2023
 
 * aws_acm_certificate
 * aws_api_gateway_resource
@@ -270,7 +270,9 @@ Or simply check back after some time to see if they are listed below.
 * aws_emr_security_configuration
 * aws_glue_catalog_database
 * aws_glue_catalog_table
+* aws_glue_connection
 * aws_glue_crawler
+* aws_glue_job
 * aws_glue_partition
 * aws_iam_access_key
 * aws_iam_group
@@ -282,6 +284,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_iam_service_linked_role
 * aws_iam_user
 * aws_iam_user_group_membership
+* aws_iam_user_policy_attachment
 * aws_instance
 * aws_internet_gateway
 * aws_kinesis_firehose_delivery_stream
@@ -310,6 +313,8 @@ Or simply check back after some time to see if they are listed below.
 * aws_organizations_organizational_unit
 * aws_organizations_policy
 * aws_organizations_policy_attachment
+* aws_ram_principal_association
+* aws_ram_resource_share
 * aws_rds_cluster
 * aws_rds_cluster_instance
 * aws_rds_cluster_parameter_group
@@ -367,17 +372,17 @@ Or simply check back after some time to see if they are listed below.
 * aws_vpn_connection
 
 ----
-## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 20-Jan-2023
+## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 19-Feb-2023
 
+* #AWS::IAM::Policy
 * AWS::ApiGateway::Account
 * AWS::ApiGateway::Resource
 * AWS::ApiGateway::RestApi
+* AWS::Athena::NamedQuery
 * AWS::AutoScaling::AutoScalingGroup
 * AWS::AutoScaling::LaunchConfiguration
 * AWS::AutoScaling::LifecycleHook
 * AWS::Cloud9::EnvironmentEC2
-* AWS::CloudFormation::Stack
-* AWS::CloudFormation::WaitCondition*
 * AWS::CloudWatch::Alarm
 * AWS::CodeArtifact::Domain
 * AWS::CodeArtifact::Repository
@@ -425,7 +430,10 @@ Or simply check back after some time to see if they are listed below.
 * AWS::ElasticLoadBalancingV2::TargetGroup
 * AWS::Events::EventBus
 * AWS::Events::Rule
+* AWS::Glue::Connection
+* AWS::Glue::Crawler
 * AWS::Glue::Database
+* AWS::Glue::Job
 * AWS::Glue::Partition
 * AWS::Glue::Table
 * AWS::IAM::AccessKey
@@ -447,9 +455,7 @@ Or simply check back after some time to see if they are listed below.
 * AWS::Lambda::LayerVersion
 * AWS::Lambda::Permission
 * AWS::Logs::LogGroup
-* AWS::RDS::DBCluster
 * AWS::RDS::DBClusterParameterGroup
-* AWS::RDS::DBInstance
 * AWS::RDS::DBParameterGroup
 * AWS::RDS::DBSubnetGroup
 * AWS::RDS::EventSubscription
@@ -468,8 +474,8 @@ Or simply check back after some time to see if they are listed below.
 * AWS::SageMaker::ImageVersion
 * AWS::SageMaker::NotebookInstance
 * AWS::SecretsManager::Secret
-* AWS::ServiceCatalog::PortfolioPrincipalAssociation
 * AWS::ServiceDiscovery::Service
 * AWS::StepFunctions::StateMachine
  
 ----
+

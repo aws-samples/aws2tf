@@ -9,21 +9,21 @@ count=$(expr $count - 1)
 
 for c in $(seq 0 $count); do
     summ=$(echo $undec | jq ".[(${c})].summary")
-    echo $summ
+    #echo $summ
     if [[ "$summ" == *"Reference to undeclared resource"* ]]; then
         fil=$(echo $undec | jq -r ".[(${c})].range.filename")
         code=$(echo $undec | jq -r ".[${c}].snippet.code" | tr -d ' ')
-        echo "code snip=$code"
+        #echo "code snip=$code"
         if [[ $code == *"="* ]];then
             res=$(echo $code | cut -f2 -d'=')
         else
             res=$(echo $code)
         fi
-        echo "res=$res"
+        #echo "res=$res"
         if [[ $fil != "" ]]; then
             addr=$(echo $res | cut -f2 -d'.')
             tft=$(echo $res | cut -f1 -d'.' | tr -d '"')
-            echo "ttft=$tft  addr=$addr"
+            #echo "ttft=$tft  addr=$addr"
 
             if [[ $tft == "aws_s3_bucket" ]]; then
                 addr=$(echo $addr | cut -f2 -d'_')

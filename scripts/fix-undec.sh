@@ -15,7 +15,7 @@ for c in $(seq 0 $count); do
         res=$(echo $undec | jq ".[${c}].snippet.code" | tr -d ' ' | cut -f1 -d'=')
         if [[ $fil != "" ]]; then
             addr=$(echo $res | cut -f2 -d'.')
-            tft=$(echo $res | cut -f1 -d'.')
+            tft=$(echo $res | cut -f1 -d'.' | tr -d '"')
             echo $tft
             if [[ $tft == "aws_s3_bucket" ]]; then
                 addr=$(echo $addr | cut -f2 -d'_')

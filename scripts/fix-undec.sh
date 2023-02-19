@@ -1,3 +1,4 @@
+echo "--> Validate Fixer"
 vl=$(cat validate.json | jq '.diagnostics | length')
 #echo $vl
 if [[ $vl -eq 0 ]]; then exit; fi

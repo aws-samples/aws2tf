@@ -12,11 +12,18 @@ for c in $(seq 0 $count); do
     echo $summ
     if [[ "$summ" == *"Reference to undeclared resource"* ]]; then
         fil=$(echo $undec | jq ".[(${c})].range.filename")
-        res=$(echo $undec | jq ".[${c}].snippet.code" | tr -d ' ' | cut -f1 -d'=')
+        code=$(echo $undec | jq ".[${c}].snippet.code" | tr -d ' ')
+        echo $code
+        if [[ $code == *"="* ]];then
+            res=$(echo $code | cut -f2 -d'=')
+        else
+            res=$(echo $code)
+        fi
         if [[ $fil != "" ]]; then
             addr=$(echo $res | cut -f2 -d'.')
             tft=$(echo $res | cut -f1 -d'.' | tr -d '"')
             echo $tft
+            
             if [[ $tft == "aws_s3_bucket" ]]; then
                 addr=$(echo $addr | cut -f2 -d'_')
                 cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $addr)

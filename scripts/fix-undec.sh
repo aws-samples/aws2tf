@@ -28,7 +28,7 @@ for c in $(seq 0 $count); do
                 eval $cmd
             fi
         fi
-        if [[ $tft == "aws_vpc" ]] || [[ $tft == "aws_subnet" ]]; then
+        if [[ $tft == "aws_vpc" ]] || [[ $tft == "aws_subnet" ]] || [[ $tft == "aws_ec2_transit_gateway_vpc_attachment" ]]; then
                 cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $addr)
                 echo "Undeclared Fix --> $res"
                 eval $cmd

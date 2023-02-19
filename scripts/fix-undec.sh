@@ -23,7 +23,7 @@ for c in $(seq 0 $count); do
             addr=$(echo $res | cut -f2 -d'.')
             tft=$(echo $res | cut -f1 -d'.' | tr -d '"')
             echo $tft
-            
+
             if [[ $tft == "aws_s3_bucket" ]]; then
                 addr=$(echo $addr | cut -f2 -d'_')
                 cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $addr)
@@ -36,7 +36,7 @@ for c in $(seq 0 $count); do
                 tarn=$(grep $addr data/arn-map.txt | cut -f2 -d',')
                 if [[ $tarn != "null" ]]; then
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
-                    #echo " " ;echo $cmd
+                    echo " " ;echo $cmd
                     echo "Undeclared Fix --> $res"
                     eval $cmd
                 fi
@@ -54,7 +54,7 @@ for c in $(seq 0 $count); do
                 if [[ $ttyp == "aws_sns_topic" ]]; then
                     if [[ $tarn != "null" ]]; then
                         cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
-                        #echo " " ;echo $cmd
+                        echo " " ;echo $cmd
                         echo "Undeclared Fix --> $res"
                         eval $cmd
 

@@ -11,8 +11,8 @@ for c in $(seq 0 $count); do
     summ=$(echo $undec | jq ".[(${c})].summary")
     echo $summ
     if [[ "$summ" == *"Reference to undeclared resource"* ]]; then
-        fil=$(echo $undec | jq ".[(${c})].range.filename")
-        code=$(echo $undec | jq ".[${c}].snippet.code" | tr -d ' ')
+        fil=$(echo $undec | jq -r ".[(${c})].range.filename")
+        code=$(echo $undec | jq -r ".[${c}].snippet.code" | tr -d ' ')
         echo "code snip =$code"
         if [[ $code == *"="* ]];then
             res=$(echo $code | cut -f2 -d'=')

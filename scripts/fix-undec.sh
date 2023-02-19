@@ -75,10 +75,10 @@ for c in $(seq 0 $count); do
     det=$(echo $undec | jq ".[${c}] | select(.summary==\"Conflicting configuration arguments\")" | jq -r '.detail' | tr -d ' ')
     line=$(echo $undec | jq ".[${c}] | select(.summary==\"Conflicting configuration arguments\")" | jq -r '.range.start.line')
     if [[ $det == *"name_prefix"* ]];then
-        cmd=$(printf "sed -i'.orig' -e '%sd' ${fil}" $li)
+        cmd=$(printf "sed -i'.orig' -e '%sd' ${fil}" $line)
         echo "Deleted conflicting name fix --> $res"
         echo $cmd
-        eval $cmd
+        #eval $cmd
 
     fi
 
@@ -89,12 +89,12 @@ for c in $(seq 0 $count); do
     #echo $c
     fil=$(echo $undec | jq ".[(${c})] | select(.summary==\"Value for unconfigurable attribute\")" | jq -r '.range.filename')
     res=$(echo $undec | jq ".[${c}] | select(.summary==\"Value for unconfigurable attribute\")" | jq -r '.snippet.code' | tr -d ' ' | cut -f1 -d'=')
-    line=$(echo $undec | jq ".[${c}] | select(.summary==\"Conflicting configuration arguments\")" | jq -r '.range.start.line')
-    if [[ $det == *"name_prefix"* ]];then
-        cmd=$(printf "sed -i'.orig' -e '%sd' ${fil}" $li)
+    line=$(echo $undec | jq ".[${c}] | select(.summary==\"Value for unconfigurable attribute\")" | jq -r '.range.start.line')
+    if [[ $line != "" ]];then
+        cmd=$(printf "sed -i'.orig' -e '%sd' ${fil}" $line)
         echo "Unconfigurable attribute fix --> $res"
         echo $cmd
-        eval $cmd
+        #eval $cmd
 
     fi
 

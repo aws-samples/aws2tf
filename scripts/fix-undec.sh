@@ -74,6 +74,7 @@ for c in $(seq 0 $count); do
     res=$(echo $undec | jq ".[${c}] | select(.summary==\"Conflicting configuration arguments\")" | jq -r '.snippet.code' | tr -d ' ' | cut -f1 -d'=')
     det=$(echo $undec | jq ".[${c}] | select(.summary==\"Conflicting configuration arguments\")" | jq -r '.detail' | tr -d ' '  | cut -f2 -d':')
     line=$(echo $undec | jq ".[${c}] | select(.summary==\"Conflicting configuration arguments\")" | jq -r '.range.start.line')
+    
     if [[ $det == *"name_prefix"* ]];then
         cmd=$(printf "sed -i'.orig' -e '%sd' ${fil}" $line)
         echo "Deleted conflicting name fix --> $res"

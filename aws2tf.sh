@@ -22,7 +22,8 @@ usage(){
     echo "           code"
     echo "           cognito"
     echo "           config"
-    echo "           dms"   
+    echo "           dms"  
+    echo "           dynamodb" 
     echo "           eb"
     echo "           ec2"
     echo "           ecs"
@@ -292,6 +293,7 @@ if [ "$t" == "cloudform" ]; then pre="999*"; fi
 if [ "$t" == "cognito" ]; then pre="77*"; fi
 if [ "$t" == "config" ]; then pre="41*"; fi
 if [ "$t" == "dms" ]; then pre="69*"; fi
+if [ "$t" == "dynamodb" ]; then pre="64*"; fi
 if [ "$t" == "eb" ]; then pre="71*"; fi
 if [ "$t" == "ec2" ]; then pre="25*"; fi
 if [ "$t" == "efs" ]; then pre="27*"; fi

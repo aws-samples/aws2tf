@@ -9,6 +9,7 @@ count=$(expr $count - 1)
 
 for c in $(seq 0 $count); do
     summ=$(echo $undec | jq ".[(${c})].summary")
+    echo $summ
     if [[ "$summ" == *"Reference to undeclared resource"* ]]; then
         fil=$(echo $undec | jq ".[(${c})].range.filename")
         res=$(echo $undec | jq ".[${c}].snippet.code" | tr -d ' ' | cut -f1 -d'=')

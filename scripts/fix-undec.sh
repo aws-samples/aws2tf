@@ -16,7 +16,7 @@ for c in $(seq 0 $count); do
         if [[ $fil != "" ]]; then
             addr=$(echo $res | cut -f2 -d'.')
             tft=$(echo $res | cut -f1 -d'.')
-
+            echo $tft
             if [[ $tft == "aws_s3_bucket" ]]; then
                 addr=$(echo $addr | cut -f2 -d'_')
                 cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $addr)

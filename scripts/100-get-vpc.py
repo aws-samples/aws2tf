@@ -19,7 +19,7 @@ def rc(cmd):
             exit() 
         else:
             print(errm)
-            
+
     # could be > /dev/null
     #if ol==0:
     #    print("No return from command " + str(cmd) + " exit ...")
@@ -33,8 +33,8 @@ ttft="aws_vpc"
 idfilt="VpcId"
 
 
-if sys.version_info<(3,7,0):
-  sys.stderr.write("You need python 3.7 or later to run this script\n")
+if sys.version_info<(3,8,0):
+  sys.stderr.write("You need python 3.8 or later to run this script\n")
   exit(1)
 
 
@@ -66,6 +66,7 @@ if count > 0:
         rname=cname.replace(":","_")
         rname=rname.replace(".","_")
         rname=rname.replace("\\","_")
+        rname=rname.replace(" ","_")
         #print(rname)
         fn=ttft+"__"+rname+".tf"
         #print(fn)
@@ -86,18 +87,18 @@ if count > 0:
         rc(cmd)
 
         fnt=ttft+'__'+rname+'.txt'
-        cmd ='terraform state show -no-color '+ttft+'.'+rname+' > '+fnt
+        cmd ='terraform state show -no-color '+ttft+'.'+rname+' > '+fn
         rc(cmd)
 
         print(fn)
-        fr=open(fn, 'w')
+        #fr=open(fn, 'w')
 
-        with open(fnt) as file:
-            while (line := file.readline().rstrip()):
-                print(line)
+        #with open(fnt) as file:
+        #    while (line := file.readline().rstrip()):
+        #        print(line)
 
 
-        fr.close()
+        #fr.close()
 
         
 
@@ -132,12 +133,7 @@ exit()
                 fi
                 
             done <"$file"
-   
-
-            dfn=`printf "data/data_%s__%s.tf" $ttft $cname`
-            printf "data \"%s\" \"%s\" {\n" $ttft $cname > $dfn
-            printf "id = \"%s\"\n" $cname >> $dfn
-            printf "}\n" $ttft $cname >> $dfn
+  
             
         done
     fi

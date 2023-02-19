@@ -6,6 +6,28 @@ import json
 import argparse
 import sys
 
+
+def rc(cmd):
+    out = subprocess.run(cmd, shell=True, capture_output=True)
+    ol=len(out.stdout.decode().rstrip())
+    el=len(out.stderr.decode().rstrip())
+    if el!=0:
+        errm=out.stderr.decode().rstrip()
+        if "Resource already managed by Terraform" not in errm:
+            print("Error from command " + str(cmd))
+            print(errm)  
+            exit() 
+        else:
+            print(errm)
+            
+    # could be > /dev/null
+    #if ol==0:
+    #    print("No return from command " + str(cmd) + " exit ...")
+    
+    #print(out.stdout.decode().rstrip())
+    return out
+
+
 pref="Vpcs"
 ttft="aws_vpc"
 idfilt="VpcId"
@@ -28,29 +50,15 @@ else:
     print("error: too many args")
     exit()
 print(cmd)
-
-
-
-#out = subprocess.run('aws configure get region', shell=True, capture_output=True)
-#region=out.stdout.decode().rstrip()
-#print(region)
-
-out = subprocess.run(cmd, shell=True, capture_output=True)
-ol=len(out.stdout.decode().rstrip())
-if ol==0:
-    print("No return from command " + str(cmd) + "exit ...")
-    exit()
-print("ol="+str(ol))
-print(out.stdout.decode().rstrip())
-
+out=rc(cmd)
 
 js=json.loads(out.stdout.decode().rstrip())
 #print(json.dumps(js, indent=4, separators=(',', ': ')))
 awsout=js[pref]
 
-print(json.dumps(awsout, indent=4, separators=(',', ': ')))
+#print(json.dumps(awsout, indent=4, separators=(',', ': ')))
 count=len(awsout)
-print(count)
+#print(count)
 if count > 0:
     for i in range(0,count):
         cname=awsout[i][idfilt]
@@ -66,35 +74,31 @@ if count > 0:
             continue
         print(ttft+" "+cname+" import")
 
+
+# exists ?
+       
+
+        fr=open(fn, 'w')
+        fr.write('resource ' + ttft + ' "' + rname  + '" {}\n')
+        fr.close()
         
         cmd ='terraform import '+ttft+'.'+rname+' "' + cname+ '"'
-        print(cmd)
-        out = subprocess.run(cmd, shell=True, capture_output=True)
-        ol=len(out.stdout.decode().rstrip())
-        el=len(out.stderr.decode().rstrip())
-        if el!=0:
-            print("Error from command " + str(cmd))
-            print(out.stderr.decode().rstrip())   
-        if ol==0:
-            print("No return from command " + str(cmd) + " exit ...")
-            exit()
-        print(out.stdout.decode().rstrip())
+        rc(cmd)
 
-        cmd ='terraform state show -no-color '+ttft+'.'+rname+' > '+ttft+'-'+rname+'-1.txt'
-        print(cmd)
-        out = subprocess.run(cmd, shell=True, capture_output=True)
-        ol=len(out.stdout.decode().rstrip())
-        el=len(out.stderr.decode().rstrip())
-        if ol==0:
-            print("No return from command " + str(cmd) + " exit ...")
-            print("ol="+str(ol)+" el="+str(el))
-            print(out.stderr.decode().rstrip())
-            exit()
-        print("ol="+str(ol))
-        print(out.stdout.decode().rstrip())
+        fnt=ttft+'__'+rname+'.txt'
+        cmd ='terraform state show -no-color '+ttft+'.'+rname+' > '+fnt
+        rc(cmd)
 
-        file=ttft+'-'+rname+'-1.txt'
-        print(file)
+        print(fn)
+        fr=open(fn, 'w')
+
+        with open(fnt) as file:
+            while (line := file.readline().rstrip()):
+                print(line)
+
+
+        fr.close()
+
         
 
 exit()

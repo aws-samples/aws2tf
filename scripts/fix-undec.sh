@@ -13,13 +13,13 @@ for c in $(seq 0 $count); do
     if [[ "$summ" == *"Reference to undeclared resource"* ]]; then
         fil=$(echo $undec | jq -r ".[(${c})].range.filename")
         code=$(echo $undec | jq -r ".[${c}].snippet.code" | tr -d ' ')
-        echo "code snip =$code"
+        echo "code snip=$code"
         if [[ $code == *"="* ]];then
             res=$(echo $code | cut -f2 -d'=')
         else
             res=$(echo $code)
         fi
-        echo "res =$res"
+        echo "res=$res"
         if [[ $fil != "" ]]; then
             addr=$(echo $res | cut -f2 -d'.')
             tft=$(echo $res | cut -f1 -d'.' | tr -d '"')

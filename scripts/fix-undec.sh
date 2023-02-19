@@ -79,7 +79,7 @@ for c in $(seq 0 $count); do
         cmd=$(printf "sed -i'.orig' -e '%sd' ${fil}" $line)
         echo "Deleted conflicting name fix --> $res"
         echo $cmd
-        #eval $cmd
+        eval $cmd
 
     fi
 

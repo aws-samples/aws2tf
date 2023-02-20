@@ -81,12 +81,39 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "creation_date" ]];then skip=1;fi
                     if [[ ${tt1} == "rotation_enabled" ]];then skip=1;fi
 
+                    if [[ ${tt1} == "rotation_lambda_arn" ]];then skip=1;fi
+
+
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
                     if [[ ${tt1} == "last_updated_date" ]];then skip=1;fi
                     if [[ ${tt1} == "vpc_id" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
                     fi
+
+                    # rotation rule skip
+
+
+                    if [[ "$t1" == *"rotation_rules"* ]]; then
+                        #echo $t1
+                        skip=1
+                        lbc=0
+                        rbc=0
+                        breq=0
+                        dover=1
+                        while [[ $breq -eq 0 ]]; do
+                            if [[ "${t1}" == *"{"* ]]; then lbc=$(expr $lbc + 1); fi
+                            if [[ "${t1}" == *"}"* ]]; then rbc=$(expr $rbc + 1); fi
+                            #echo "op=$lbc $rbc $t1"
+                            if [[ $rbc -eq $lbc ]]; then
+                                breq=1
+                            else
+                                read line
+                                t1=$(echo "$line")
+                            fi
+                        done
+                    fi
+
                
                 fi
                 if [ "$skip" == "0" ]; then

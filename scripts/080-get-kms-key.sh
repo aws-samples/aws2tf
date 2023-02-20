@@ -51,7 +51,7 @@ for c in `seq 0 0`; do
             #echo "keystate=$keystate keyman=$keyman"
             if [ "$keystate" == "Enabled" ] && [ "$keyman" != "AWS" ]; then
                 echo "$ttft $cname"
-                echo "$ttft,$keyarn,$cname" >> data/arn-map.txt
+                echo "$ttft,$keyarn,$cname" >> data/arn-map.dat
                 fn=`printf "%s__k_%s.tf" $ttft $cname`
                 if [ -f "$fn" ] ; then
                     echo "$fn exists already skipping ..."

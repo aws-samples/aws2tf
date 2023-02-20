@@ -34,7 +34,7 @@ for c in $(seq 0 $count); do
             fi
             if [[ $tft == "aws_kms_key" ]]; then
                 addr=$(echo $addr | cut -f2 -d'_')
-                tarn=$(grep $addr data/arn-map.txt | cut -f2 -d',')
+                tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
                 if [[ $tarn != "null" ]]; then
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
                     echo " " ;echo $cmd
@@ -44,9 +44,9 @@ for c in $(seq 0 $count); do
             fi
             if [[ $tft == "aws_iam_role" ]]; then
                 addr=$(echo $addr | cut -f2 -d'_')
-                tarn=$(grep $addr data/arn-map.txt | cut -f2 -d',')
+                tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1 )
                 tarn=${tarn//\//\\/}
-                echo "role tarn = $tarn"
+                echo "role tarn = $tarn $res"
                 if [[ $tarn != "null" ]]; then
                     cmd=$(printf "sed -i'.orig' -e 's/%s/%s/g' ${fil}" $res $tarn)
                     echo " " ;echo $cmd
@@ -66,9 +66,9 @@ for c in $(seq 0 $count); do
 
             if [[ $tft == "aws_sns_topic" ]]; then
                 addr=$(echo $addr | cut -f2 -d'_')
-                tarn=$(grep $addr data/arn-map.txt | cut -f2 -d',')
-                ttyp=$(grep $addr data/arn-map.txt | cut -f1 -d',')
-                if [[ $ttyp == "aws_sns_topic" ]]; then
+                tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
+                ttyp=$(grep $addr data/arn-map.dat | cut -f1 -d',' | head -1)
+                if [[ $ttyp == *"aws_sns_topic"* ]]; then
                     if [[ $tarn != "null" ]]; then
                         cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
                         echo " " ;echo $cmd

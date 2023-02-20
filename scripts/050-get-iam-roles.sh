@@ -7,7 +7,7 @@ if [[ "$1" != "" ]]; then
     if [[ ${1} == "arn:aws:iam"* ]]; then
         cmd[0]="$AWS iam list-roles | jq '.Roles[] | select(.Arn==\"${1}\")'"
         rn=$(echo $1 | rev | cut -f1 -d'/' | rev | tr -d '"')
-        echo "$tft[0],$1,$rn" >> data/arn-map.txt
+        echo "$tft[0],$1,$rn" >> data/arn-map.dat
     else
         cmd[0]="$AWS iam list-roles | jq '.Roles[] | select(.RoleName==\"${1}\")'"
     fi

@@ -48,7 +48,7 @@ for c in $(seq 0 $count); do
                 tarn=${tarn//\//\\/}
                 echo "role tarn = $tarn"
                 if [[ $tarn != "null" ]]; then
-                    cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
+                    cmd=$(printf "sed -i'.orig' -e 's/%s/%s/g' ${fil}" $res $tarn)
                     echo " " ;echo $cmd
                     echo "** Undeclared Fix: $res --> $addr"
                     eval $cmd

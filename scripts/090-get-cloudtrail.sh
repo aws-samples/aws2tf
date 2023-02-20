@@ -76,6 +76,18 @@ for c in `seq 0 0`; do
                             t1=`printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid`                    
                         fi
 
+                        if [[ ${tt1} == "equals" ]] || [[ ${tt1} == "ends_with" ]] || [[ ${tt1} == "not_ends_with" ]] || [[ ${tt1} == "not_equals" ]] || [[ ${tt1} == "not_starts_with" ]] || [[ ${tt1} == "starts_with" ]];then 
+                            tt2=`echo $tt2 | tr -d '"'`
+                            if [[ $tt2 == "[]" ]];then
+                                skip=1
+                            fi
+                        fi
+
+
+
+
+
+
                     fi
                     if [ "$skip" == "0" ]; then
                         #echo $skip $t1

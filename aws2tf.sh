@@ -17,7 +17,8 @@ usage(){
     echo "           appstream"
     echo "           artifact"
     echo "           athena"
-    echo "           aurora"   
+    echo "           aurora"  
+    echo "           cloudtrail" 
     echo "           cfront"
     echo "           code"
     echo "           cognito"
@@ -287,11 +288,12 @@ if [ "$t" == "athena" ]; then pre="66*"; fi
 if [ "$t" == "aurora" ]; then pre="61*"; fi
 if [ "$t" == "code" ]; then pre="62*"; fi
 if [ "$t" == "cfront" ]; then pre="80*"; fi
-if [ "$t" == "cw-log" ]; then pre="070*"; fi
+if [ "$t" == "cloudtrail" ]; then pre="090*"; fi
 if [ "$t" == "cloudwatch" ]; then pre="76*"; fi
 if [ "$t" == "cloudform" ]; then pre="999*"; fi
 if [ "$t" == "cognito" ]; then pre="77*"; fi
 if [ "$t" == "config" ]; then pre="41*"; fi
+if [ "$t" == "cw-log" ]; then pre="070*"; fi
 if [ "$t" == "dms" ]; then pre="69*"; fi
 if [ "$t" == "dynamodb" ]; then pre="64*"; fi
 if [ "$t" == "eb" ]; then pre="71*"; fi

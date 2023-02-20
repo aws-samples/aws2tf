@@ -42,7 +42,21 @@ for c in $(seq 0 $count); do
                     eval $cmd
                 fi
             fi
-            if [[ $tft == "aws_iam_role" ]] || [[ $tft == "aws_vpc" ]] || [[ $tft == "aws_subnet" ]] || [[ $tft == "aws_security_group" ]] || [[ $tft == "aws_ec2_transit_gateway_vpc_attachment" ]] || [[ $tft == "aws_vpc_peering_connection" ]]; then
+            if [[ $tft == "aws_iam_role" ]]; then
+                addr=$(echo $addr | cut -f2 -d'_')
+                tarn=$(grep $addr data/arn-map.txt | cut -f2 -d',')
+                if [[ $tarn != "null" ]]; then
+                    cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
+                    echo " " ;echo $cmd
+                    echo "** Undeclared Fix: $res --> $addr"
+                    eval $cmd
+                fi
+            fi
+
+
+
+
+            if [[ $tft == "aws_vpc" ]] || [[ $tft == "aws_subnet" ]] || [[ $tft == "aws_security_group" ]] || [[ $tft == "aws_ec2_transit_gateway_vpc_attachment" ]] || [[ $tft == "aws_vpc_peering_connection" ]]; then
                 cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $addr)
                 echo "** Undeclared Fix: $res --> $addr"
                 eval $cmd

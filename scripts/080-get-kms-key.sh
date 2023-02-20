@@ -47,7 +47,7 @@ for c in `seq 0 0`; do
 
             keystate=$(echo $keyd | jq -r .KeyMetadata.KeyState)
             keyman=$(echo $keyd | jq -r .KeyMetadata.KeyManager)
-            keyarn=$(echo $keyd | jq -r .KeyMetadata.KeyArn)
+            keyarn=$(echo $keyd | jq -r .KeyMetadata.Arn)
             #echo "keystate=$keystate keyman=$keyman"
             if [ "$keystate" == "Enabled" ] && [ "$keyman" != "AWS" ]; then
                 echo "$ttft $cname"

@@ -1,10 +1,13 @@
 #!/bin/bash
 mysub=`echo $AWS2TF_ACCOUNT`
 myreg=`echo $AWS2TF_REGION`
+tft[0]="aws_iam_role"
 #echo "globe vars $myreg $mysub"
 if [[ "$1" != "" ]]; then  
     if [[ ${1} == "arn:aws:iam"* ]]; then
         cmd[0]="$AWS iam list-roles | jq '.Roles[] | select(.Arn==\"${1}\")'"
+        rn=$(echo $1 | rev | cut -f1 -d'/' | rev | tr -d '"')
+        echo "$tft[0],$1,$rn" >> data/arn-map.txt
     else
         cmd[0]="$AWS iam list-roles | jq '.Roles[] | select(.RoleName==\"${1}\")'"
     fi
@@ -14,7 +17,7 @@ fi
 
 
 pref[0]="Roles"
-tft[0]="aws_iam_role"
+
 
 for c in `seq 0 0`; do
     

@@ -45,6 +45,8 @@ for c in $(seq 0 $count); do
             if [[ $tft == "aws_iam_role" ]]; then
                 addr=$(echo $addr | cut -f2 -d'_')
                 tarn=$(grep $addr data/arn-map.txt | cut -f2 -d',')
+                tarn=${tarn//\//\\/}
+                echo "role tarn = $tarn"
                 if [[ $tarn != "null" ]]; then
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
                     echo " " ;echo $cmd

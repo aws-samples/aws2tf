@@ -11,6 +11,7 @@ usage(){
     echo "       -d <yes|no|st|info> (default=no)   Debug - lots of output if info"
     echo "       -s <stack name>  Traverse a Stack and import resources (experimental)"
     echo "       -t <type>   choose a sub-type of AWS resources to get:"
+    echo "       -i <address> used with -t aalows you to specify a specific resource - like a vpc id"
     echo "           acm"
     echo "           apigw"
     echo "           appmesh"
@@ -50,6 +51,7 @@ usage(){
     echo "           sns"
     echo "           sqs"
     echo "           tgw"
+    echo "           users"
     echo "           vpc"
     exit 1
 }
@@ -317,6 +319,7 @@ if [ "$t" == "sc" ]; then pre="81*"; fi # service catalog
 if [ "$t" == "sfn" ]; then pre="78*"; fi # State machine
 if [ "$t" == "sqs" ]; then pre="72*"; fi # SQS
 if [ "$t" == "spot" ]; then pre="25*"; fi
+if [ "$t" == "users" ]; then pre="03*"; fi # users and groups
 
 
 exclude="iam"

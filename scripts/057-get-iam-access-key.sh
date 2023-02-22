@@ -5,7 +5,13 @@ idfilt="AccessKeyId"
 
 cm="$AWS iam list-access-keys"
 if [[ "$1" != "" ]]; then
-    cm=`printf "$AWS iam list-access-keys  | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $1`
+    # simple validation
+    if [[ $1 == "A"* ]];then
+        cm=`printf "$AWS iam list-access-keys  | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $1`
+    else
+        echo "you must pass an access key id as a paameter"
+        exit
+    fi
 fi
 
 count=1

@@ -2,11 +2,16 @@
 mysub=`echo $AWS2TF_ACCOUNT`
 myreg=`echo $AWS2TF_REGION`
 if [ "$1" != "" ]; then
-    if [[ "$1" != *":aws:policy"* ]];then
-        cmd[0]="$AWS iam get-policy --policy-arn $1"
-        pref[0]="Policy"
+    if [[ "$1" == *"arn:"* ]];then
+        if [[ "$1" != *":aws:policy"* ]];then
+            cmd[0]="$AWS iam get-policy --policy-arn $1"
+            pref[0]="Policy"
+        else
+            echo "skipping AWS managed policy $1"
+            exit
+        fi
     else
-        echo "skipping AWS managed policy $1"
+        echo "must pass an arn as a parameter"
         exit
     fi
 else

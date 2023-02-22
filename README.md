@@ -129,6 +129,7 @@ The currently supported types are:
 * sqs - SQS queues `-t sqs`
 * spot - spot requests `-t spot`
 * tgw - Transit Gateway resources `-t tgw <-i transit-gateway-id>`
+* users - IAM Users and Groups
 * vpc - A VPC and it's related resources `-t vpc <-i VPC-id>`
   
 
@@ -191,7 +192,7 @@ Or simply check back after some time to see if they are listed below.
 
 
 ----
-## Terraform resources supported as of 19-Feb-2023
+## Terraform resources supported as of 22-Feb-2023
 
 * aws_acm_certificate
 * aws_api_gateway_resource
@@ -372,7 +373,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_vpn_connection
 
 ----
-## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 19-Feb-2023
+## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 22-Feb-2023
 
 * #AWS::IAM::Policy
 * AWS::ApiGateway::Account

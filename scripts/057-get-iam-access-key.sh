@@ -9,7 +9,7 @@ if [[ "$1" != "" ]]; then
     if [[ $1 == "A"* ]];then
         cm=`printf "$AWS iam list-access-keys  | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $1`
     else
-        echo "you must pass an access key id as a paameter"
+        echo "you must pass an access key id as a parameter"
         exit
     fi
 fi

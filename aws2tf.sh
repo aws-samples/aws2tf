@@ -395,6 +395,7 @@ if [[ "$s" == "no" ]];then
             end=`date +%s`
             runtime=$((end-start))
             echo "$com runtime $runtime seconds"
+            echo "-------------------------------------------------------------------"
         fi
         
     done

@@ -1,9 +1,9 @@
 echo "--> Validate Fixer"
 vl=$(cat validate.json | jq '.diagnostics | length')
 #echo $vl
-if [[ $vl -eq 0 ]]; then 
-#    echo "No validation errors"
-    exit 
+if [[ $vl -eq 0 ]]; then
+    #    echo "No validation errors"
+    exit
 fi
 undec=$(cat validate.json | jq '.diagnostics')
 count=$(echo $undec | jq '. | length' | tail -1)
@@ -17,7 +17,7 @@ for c in $(seq 0 $count); do
         fil=$(echo $undec | jq -r ".[(${c})].range.filename")
         code=$(echo $undec | jq -r ".[${c}].snippet.code" | tr -d ' ')
         #echo "code snip=$code"
-        if [[ $code == *"="* ]];then
+        if [[ $code == *"="* ]]; then
             res=$(echo $code | cut -f2 -d'=')
         else
             res=$(echo $code)
@@ -30,9 +30,16 @@ for c in $(seq 0 $count); do
 
             if [[ $tft == "aws_s3_bucket" ]]; then
                 addr=$(echo $addr | cut -f2 -d'_')
-                cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $addr)
-                #echo " " ;echo $cmd
-                echo "** Undeclared Fix: $res --> $addr"
+                tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
+                if [[ $tarn != "null" ]]; then
+                    cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
+                    echo "** Undeclared Fix: $res --> $tarn"
+                else
+                    cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $addr)
+                    echo "** Undeclared Fix: $res --> $addr"
+                fi
+                #echo " "
+                #echo $cmd
                 eval $cmd
             fi
             if [[ $tft == "aws_kms_key" ]]; then
@@ -40,24 +47,25 @@ for c in $(seq 0 $count); do
                 tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
                 if [[ $tarn != "null" ]]; then
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
-                    echo " " ;echo $cmd
+                    #echo " "
+                    #echo $cmd
                     echo "** Undeclared Fix: $res --> $addr"
                     eval $cmd
                 fi
             fi
             if [[ $tft == "aws_iam_role" ]]; then
                 addr=$(echo $addr | cut -f2 -d'_')
-                tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1 )
+                tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
                 tarn=${tarn//\//\\/}
                 echo "role tarn = $tarn $res"
                 if [[ $tarn != "null" ]]; then
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
-                    echo " " ;"echo --$cmd"
+                    #echo " "
+                    #"echo --$cmd"
                     echo "** Undeclared Fix: $res --> $addr"
                     eval $cmd
                 fi
             fi
-
 
             if [[ $tft == "aws_vpc" ]] || [[ $tft == "aws_subnet" ]] || [[ $tft == "aws_security_group" ]] || [[ $tft == "aws_ec2_transit_gateway_vpc_attachment" ]] || [[ $tft == "aws_vpc_peering_connection" ]]; then
                 cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $addr)
@@ -72,7 +80,8 @@ for c in $(seq 0 $count); do
                 if [[ $ttyp == "aws_sns_topic" ]]; then
                     if [[ $tarn != "null" ]]; then
                         cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
-                        echo " " ;echo $cmd
+                        #echo " "
+                        #echo $cmd
                         echo "** Undeclared Fix: $res --> $addr"
                         eval $cmd
 

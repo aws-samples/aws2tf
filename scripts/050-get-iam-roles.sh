@@ -106,8 +106,17 @@ for c in `seq 0 0`; do
                         if [[ ${tt1} == *":"* ]];then 
                             lh=`echo $tt1 | tr -d '"'`
                             skip=0;
-                            t1=`printf "\"%s\"=%s" $lh $tt2`
-                            #echo $t1
+                            # check $tt2 for '"'
+                            tt2=$(echo $tt2 | sed 's/"//')
+                            tt2=$(echo $tt2 | rev | sed 's/"//' | rev )
+                            tt2=$(echo $tt2 | sed 's/"/\\"/g')
+                            echo "-1-> $lh - $tt2"
+                            if [[ $tt2 == "[" ]] || [[ $tt2 == "]" ]];then
+                                t1=`printf "\"%s\"=%s" $lh "$tt2"`
+                            else
+                                t1=`printf "\"%s\"=\"%s\"" $lh "$tt2"`
+                            fi
+                            echo "-2->$t1"
                         fi
                         if [[ ${tt1} == "AWS" ]]; then
                             tt2=`echo $tt2 | tr -d '"'`
@@ -159,7 +168,7 @@ for c in `seq 0 0`; do
                                     t1=`printf "%s = aws_codebuild_project.%s.arn" $tt1 $cbid`
 
 
-                                else   # check tt2 for $
+                                else   # check tt2 for $ and '"'
                                     tt2=${tt2//$/&} 
                                     tt1=`echo $tt1 | tr -d '"'`
                                     t1=`printf "\"%s\"=%s" $tt1 "$tt2"`

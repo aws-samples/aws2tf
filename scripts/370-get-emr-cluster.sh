@@ -1,13 +1,14 @@
 #!/bin/bash
+pref[0]="Clusters"
+tft[0]="aws_emr_cluster"
+idfilt[0]="Id"
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS emr list-clusters --active" 
+    cmd[0]=`printf "$AWS emr list-clusters --active  | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $1`
 else
     cmd[0]="$AWS emr list-clusters --active"
 fi
 
-pref[0]="Clusters"
-tft[0]="aws_emr_cluster"
-idfilt[0]="Id"
+
 
 #rm -f ${tft[0]}.tf
 

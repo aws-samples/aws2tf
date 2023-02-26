@@ -1,12 +1,13 @@
 #!/bin/bash
-
-cmd[0]="$AWS sagemaker list-user-profiles "
-
 pref[0]="UserProfiles"
 tft[0]="aws_sagemaker_user_profile"
 idfilt[0]="UserProfileName"
 
-
+if [ "$1" != "" ]; then
+    cmd[0]=`printf "$AWS sagemaker list-user-profiles | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $1`
+else
+    cmd[0]="$AWS sagemaker list-user-profiles"
+fi
 
 for c in `seq 0 0`; do
     

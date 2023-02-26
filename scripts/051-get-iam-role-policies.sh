@@ -116,7 +116,11 @@ for c in $(seq 0 0); do
                                     s3id=$(echo $tt2 | rev | cut -f1 -d':' | rev | tr -d '"')
                                     echo "aws_s3_bucket,$s3arn,$s3id" >> data/arn-map.dat
                                     echo "**> s3id=$s3id"
-                                    t1=$(printf "%s = aws_s3_bucket.b_%s.arn" $tt1 $s3id)
+                                    if [[ $s3id == "*" ]];then
+                                        t1=$(printf "%s = \"arn:aws:s3:::*\"" $tt1)
+                                    else
+                                        t1=$(printf "%s = aws_s3_bucket.b_%s.arn" $tt1 $s3id)
+                                    fi
                                 fi
                             elif [[ "$tt2" == *"arn:aws:ecr:${myreg}:${mysub}:repository/"* ]]; then
                                 rep=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')

@@ -1,7 +1,9 @@
 #!/bin/bash
 bucks=()
 if [ "$1" != "" ]; then
-    bucks+=$($AWS s3api list-buckets --query Buckets[*].Name | jq -r .[] | grep $1)
+    if [[ $1 != "*" ]];then
+        bucks+=$($AWS s3api list-buckets --query Buckets[*].Name | jq -r .[] | grep $1)
+    fi
 else
     bucks+=$($AWS s3api list-buckets --query Buckets[*].Name | jq -r .[])
 fi

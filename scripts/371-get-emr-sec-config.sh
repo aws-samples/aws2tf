@@ -1,13 +1,14 @@
 #!/bin/bash
+pref[0]="SecurityConfigurations"
+tft[0]="aws_emr_security_configuration"
+idfilt[0]="Name"
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS emr list-security-configurations" 
+    cmd[0]=`printf "$AWS emr list-security-configurations  | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $1`
 else
     cmd[0]="$AWS emr list-security-configurations"
 fi
 
-pref[0]="SecurityConfigurations"
-tft[0]="aws_emr_security_configuration"
-idfilt[0]="Name"
+
 
 #rm -f ${tft[0]}.tf
 

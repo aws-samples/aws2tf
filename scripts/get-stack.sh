@@ -125,6 +125,9 @@ if [ $count -gt 0 ]; then
                 AWS::ElasticLoadBalancingV2::ListenerRule) echo "../../scripts/elbv2_listener-rules.sh $parn" >> commands.sh ;;
                 AWS::ElasticLoadBalancingV2::TargetGroup) echo "../../scripts/elbv2-target-groups.sh $parn" >> commands.sh ;;
 
+                AWS::EMR::Cluster) echo "../../scripts/370-get-emr-cluster.sh $pid" >> commands.sh ;;
+                AWS::EMR::SecurityConfiguration) "../../scripts/371-get-emr-sec-config.sh $pid" >> commands.sh ;;
+
                 AWS::Events::EventBus)  echo "../../scripts/712-get-eb-bus.sh $pid" >> commands.sh;;
                 AWS::Events::Rule)  echo "../../scripts/713-get-eb-rule.sh \"$pid\"" >> commands.sh;;
 
@@ -192,6 +195,8 @@ if [ $count -gt 0 ]; then
                 AWS::SageMaker::Image) echo "../../scripts/get-sagemaker-image.sh $pid" >> commands.sh ;;
                 AWS::SageMaker::ImageVersion) echo "echo '# $type $pid fetched as part of SageMaker Image..'" >> commands.sh ;; # fetched as part of function
                 AWS::SageMaker::NotebookInstance) echo "../../scripts/682-get-sagemaker-notebook-instance.sh $pid" >> commands.sh ;;
+                AWS::SageMaker::UserProfile) echo "../../scripts/681-get-sagemaker-user-profile.sh $pid" >> commands.sh ;;
+
 
                 AWS::SNS::Subscription)  echo "../../scripts/731-get-sns-subscriptions.sh $parn" >> commands.sh ;;
                 AWS::SNS::Topic)  echo "../../scripts/730-get-sns-topic.sh $parn" >> commands.sh ;;

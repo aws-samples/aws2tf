@@ -111,9 +111,10 @@ for c in `seq 0 0`; do
                         fi
                     fi
                     if [[ ${tt1} == "nat_gateway_id" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        if [ "$tt2" != "" ]; then
-                            t1=`printf "%s = aws_nat_gateway.%s.id" $tt1 $tt2`
+                        ngid=`echo $tt2 | tr -d '"'`
+
+                        if [ "$ngid" != "" ]; then
+                            t1=`printf "%s = aws_nat_gateway.%s.id" $tt1 $ngid`
                         fi
                     fi
                     if [[ ${tt1} == "transit_gateway_id" ]]; then
@@ -154,7 +155,10 @@ for c in `seq 0 0`; do
             fi  
             if [[ "$nifid" != "" ]];then
                 ../../scripts/get-eni.sh $nifid
-            fi                  
+            fi    
+            if [[ "$ngid" != "" ]];then
+                ../../scripts/130-get-natgw.sh $ngid
+            fi               
         done
     fi
 done

@@ -19,10 +19,11 @@ for c in $(seq 0 $count); do
         #echo "code snip=$code"
         if [[ $code == *"="* ]]; then
             res=$(echo $code | cut -f2 -d'=')
+            lhs=$(echo $code | cut -f1 -d'=')
         else
             res=$(echo $code)
         fi
-        #echo "res=$res"
+        #echo "res=$res lhs=$lhs =$fil"
         if [[ $fil != "" ]]; then
             addr=$(echo $res | cut -f2 -d'.')
             tft=$(echo $res | cut -f1 -d'.' | tr -d '"')
@@ -67,12 +68,6 @@ for c in $(seq 0 $count); do
                 fi
             fi
 
-            if [[ $tft == "aws_vpc" ]] || [[ $tft == "aws_subnet" ]] || [[ $tft == "aws_security_group" ]] || [[ $tft == "aws_ec2_transit_gateway_vpc_attachment" ]] || [[ $tft == "aws_vpc_peering_connection" ]]; then
-                cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $addr)
-                echo "** Undeclared Fix: $res --> $addr"
-                eval $cmd
-            fi
-
             if [[ $tft == "aws_sns_topic" ]]; then
                 addr=$(echo $addr | cut -f2 -d'_')
                 tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
@@ -88,6 +83,54 @@ for c in $(seq 0 $count); do
                     fi
                 fi
             fi
+
+            #special case in cludtrail
+            if [[ $fil == "aws_cloudtrail"* ]];then
+                #echo "in file"
+                if [[ $tft == *"aws_cloudwatch_log_group"* ]];then
+                    #echo "in cwl file"
+                    if [[ $lhs="cloud_watch_logs_group_arn" ]];then
+                        #addr=$(echo $addr | cut -f2 -d'_')
+                  
+                        tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
+                        ttyp=$(grep $addr data/arn-map.dat | cut -f1 -d',' | head -1)
+                        line=$(echo $undec | jq -r ".[${c}].range.start.line")
+                        if [[ $ttyp == "aws_cloudwatch_log_group" ]]; then
+                            if [[ $tarn != "null" ]]; then
+                              
+                                #res2=$(echo $res | sed 's/"/\\\"/g')
+                                #echo $res2
+
+                                #cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s:*\"/g' ${fil}" $res2 $tarn)
+                                cmd=$(printf "sed -i -e '%ss/.*/%s=\"%s:*\"/' ${fil}" $line $lhs $tarn)
+                                #echo " "
+                                #echo $cmd
+                                echo "** Undeclared Fix: Cloudtrail, Cloudwatch log group $res --> $tarn:*"
+                                eval $cmd
+
+                            fi
+                        fi
+
+
+
+
+
+
+                    fi               
+                fi      
+            fi
+
+            # drop in id's - ie. no ARN replacement
+
+            if [[ $tft == "aws_nat_gateway" ]] || [[ $tft == "aws_vpc" ]] || [[ $tft == "aws_subnet" ]] || [[ $tft == "aws_security_group" ]] || [[ $tft == "aws_ec2_transit_gateway_vpc_attachment" ]] || [[ $tft == "aws_vpc_peering_connection" ]]; then
+                cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $addr)
+                echo "** Undeclared Fix: $res --> $addr"
+                eval $cmd
+            fi
+
+
+
+
         fi
     fi
 done

@@ -3,10 +3,19 @@ pref[0]="PrincipalResourcePermissions"
 tft[0]="aws_lakeformation_permissions"
 idfilt[0]="DataLakePrincipalIdentifier"
 c=0
-
+echo "--> LF arg1 = $1"
 # on input:
-prin=`echo $1 | awk -F'LakeFormation-' '{print $2}' | awk -F'::arn:' '{print $1}'`
-#
+if [[ $1 == "LakeFormation-"* ]];then
+    prin=`echo $1 | awk -F'LakeFormation-' '{print $2}' | awk -F'::arn:' '{print $1}'`
+    echo "--> LF prin = $prin"
+elif [[ $1 == *"::arn:"* ]];then
+    prin=`echo $1 | awk -F'::arn:' '{print $1}'`
+    echo "--> LF arn prin = $prin"
+else
+    echo "--> LF 1 = $1"
+fi
+
+echo "--> LF prin = $prin"
 
 if [ "$1" != "" ]; then
     cmd[0]="$AWS lakeformation list-permissions | jq '.PrincipalResourcePermissions[] | select(.Principal.${idfilt[(${c})]}==\"${prin}\")'" 

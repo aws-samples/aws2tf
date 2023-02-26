@@ -2,6 +2,7 @@
 mysub=`echo $AWS2TF_ACCOUNT`
 myreg=`echo $AWS2TF_REGION`
 #echo "globe vars $myreg $mysub"
+
 if [ "$1" != "" ]; then
     pat=$($AWS lambda get-policy --function-name $1 | jq .Policy | tr -d '\\' | tr -d '"')
 else
@@ -41,15 +42,12 @@ for perm in ${perms[@]}; do
                 echo "$fn exists already skipping"
                 continue
             fi
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
-            printf "terraform import %s.%s %s" $ttft $cname $cname > data/import_$ttft_$cname.sh
-            terraform import $ttft.$cname "$1/$cname" | grep Import
-            terraform state show -no-color $ttft.$cname > t1.txt
-            tfa=`printf "%s.%s" $ttft $cname`
-            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
+            printf "resource \"%s\" \"r_%s\" {}\n" $ttft $cname > $fn
+            terraform import $ttft.r_$cname "$1/$cname" | grep Import
+            terraform state show -no-color $ttft.r_$cname > t1.txt
+
             #echo $awsj | jq . 
-            rm -f $ttft.$cname.tf
+            rm -f $fn
             file="t1.txt"
             echo $aws2tfmess > $fn
             while IFS= read line

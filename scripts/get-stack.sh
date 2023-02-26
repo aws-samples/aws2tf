@@ -155,7 +155,10 @@ if [ $count -gt 0 ]; then
                 
                 AWS::LakeFormation::DataLakeSettings) echo "../../scripts/630-get-lf-settings.sh $pid" >> commands.sh ;;
                 AWS::LakeFormation::Resource) echo "../../scripts/631-get-lf-resources.sh $pid" >> commands.sh ;;
-                AWS::LakeFormation::Permissions) echo "../../scripts/632-get-lf-permissions.sh $parn" >> commands.sh ;;
+                # pid pard can be json structures for this one
+                AWS::LakeFormation::Permissions) echo "../../scripts/632-get-lf-permissions.sh $pid" >> commands.sh ;;
+                AWS::LakeFormation::PrincipalPermissions) echo "../../scripts/632-get-lf-permissions.sh $lrid" >> commands.sh ;;
+
 
                 AWS::Lambda::Function)  echo "../../scripts/700-get-lambda-function.sh $pid"  >> commands.sh ;;
                 AWS::Lambda::LayerVersion)  echo "../../scripts/702-get-lambda-layers.sh $pid"  >> commands.sh ;;

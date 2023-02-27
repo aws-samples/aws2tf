@@ -1,7 +1,7 @@
 #!/bin/bash
 mysub=`echo $AWS2TF_ACCOUNT`
 myreg=`echo $AWS2TF_REGION`
-echo "globals = $mysub $myreg"
+#echo "globals = $mysub $myreg"
 bus="default"
 if [[ "$1" != "" ]]; then
     if [[ "$1" == *"|"* ]]; then
@@ -103,10 +103,18 @@ for c in `seq 0 0`; do
                         t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trarn`
                     fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "input_template" ]];then 
-                        itar==$(echo $tt2 | tr -d '"')
+                    if [[ ${tt1} == "input_template" ]];then
+                        # check $tt2 for '"'
+                        tt2=$(echo $tt2 | sed 's/"//')
+                        tt2=$(echo $tt2 | rev | sed 's/"//' | rev )
+                        tt2=$(echo $tt2 | sed 's/"/\\"/g') 
+                        itar==$(echo $tt2)
                         #echo "input target=$itar"
-                        t1=`printf "%s = \"%s\"" $tt1 "$itar"`
+                        if [[ $itar == *"<<-EOT" ]];then
+                            t1=`printf "%s = <<-EOT" $tt1 `
+                        else
+                            t1=`printf "%s = \"%s\"" $tt1 "$itar"`
+                        fi
 
                     fi
 
@@ -117,7 +125,7 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-
+            echo "--> lfn = $lfn"
             if [[ "$lfn" != "" ]];then
                 ../../scripts/700-get-lambda-function.sh $lfn
             fi

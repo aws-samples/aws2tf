@@ -110,7 +110,7 @@ for c in `seq 0 0`; do
                             tt2=$(echo $tt2 | sed 's/"//')
                             tt2=$(echo $tt2 | rev | sed 's/"//' | rev )
                             tt2=$(echo $tt2 | sed 's/"/\\"/g')
-                            echo "-1-> $lh - $tt2"
+                            #echo "-1-> $lh - $tt2"
                             if [[ $tt2 == "[" ]] || [[ $tt2 == "]" ]];then
                                 t1=`printf "\"%s\"=%s" $lh "$tt2"`
                             else

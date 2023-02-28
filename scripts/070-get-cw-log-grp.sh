@@ -10,6 +10,22 @@ tft[0]="aws_cloudwatch_log_group"
 idfilt[0]="logGroupName"
 ncpu=$(getconf _NPROCESSORS_ONLN)
 ncpu=`expr $ncpu - 1`
+if [[ $ncpu -lt 3 ]];then
+    ncpu=1
+fi
+
+if [[ $ncpu -gt 4 ]];then
+    ncpu=`expr $ncpu - 1`
+fi
+
+if [[ $ncpu -gt 8 ]];then
+    ncpu=`expr $ncpu - 2`
+fi
+
+if [[ $ncpu -gt 16 ]];then
+    ncpu=`expr $ncpu - 4`
+fi
+echo "ncpu=$ncpu"
 
 #rm -f ${tft[0]}.tf
 

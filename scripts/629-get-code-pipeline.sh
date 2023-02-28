@@ -42,15 +42,13 @@ for c in `seq 0 0`; do
                 echo "$fn exists already skipping"
                 continue
             fi
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
-            printf "terraform import %s.%s %s" $ttft $cname $cname > data/import_$ttft_$cname.sh
+            printf "resource \"%s\" \"%s\" {}\n" $ttft $cname > $fn
+         
             terraform import $ttft.$cname "$cname" | grep Import
             terraform state show -no-color $ttft.$cname > t1.txt
-            tfa=`printf "%s.%s" $ttft $cname`
-            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
+
             #echo $awsj | jq . 
-            rm -f $ttft.$cname.tf
+            rm -f $fn
 
             file="t1.txt"
             echo $aws2tfmess > $fn
@@ -67,7 +65,11 @@ for c in `seq 0 0`; do
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
                     #echo $tt2
-                    if [[ ${tt1} == "arn" ]];then skip=1; fi                
+                    if [[ ${tt1} == "arn" ]];then 
+                        tt2=`echo $tt2 | tr -d '"'`
+                        echo "$ttft,$tt2,$cname" >> data/arn-map.dat
+                        skip=1
+                    fi                
                     if [[ ${tt1} == "id" ]];then 
                         if [ "$allowid" == "0" ]; then
                             skip=1

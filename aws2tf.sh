@@ -24,6 +24,7 @@ usage(){
     echo "           code"
     echo "           cognito"
     echo "           config"
+    echo "           cw-log"
     echo "           dms"  
     echo "           dynamodb" 
     echo "           eb"

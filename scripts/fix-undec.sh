@@ -54,16 +54,16 @@ for c in $(seq 0 $count); do
                     eval $cmd
                 fi
             fi
-            if [[ $tft == "aws_iam_role" ]]; then
+            if [[ $tft == "aws_iam_role" ]] || [[ $tft == "aws_codepipeline" ]]; then
                 addr=$(echo $addr | cut -f2 -d'_')
                 tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
                 tarn=${tarn//\//\\/}
-                echo "role tarn = $tarn $res"
-                if [[ $tarn != "null" ]]; then
+                echo "**-->role tarn = $tarn $res"
+                if [[ $tarn != "null" ]] && [[ $tarn != "" ]] ; then
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
                     #echo " "
                     #"echo --$cmd"
-                    echo "** Undeclared Fix: $res --> $addr"
+                    echo "** Undeclared Fix: $res --> $tarn"
                     eval $cmd
                 fi
             fi

@@ -99,7 +99,7 @@ for c in `seq 0 0`; do
                     skip=1; 
                     fi          
                     if [[ ${tt1} == "role_arn" ]];then 
-                        trarn=`echo "$tt2" | cut -f2- -d'/' | tr -d '"'`
+                        trarn=`echo "$tt2" | rev | cut -f1 -d'/' | rev | tr -d '"'`
                         t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trarn`
                     fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
@@ -125,12 +125,16 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-            echo "--> lfn = $lfn"
+            #echo "--> lfn = $lfn"
             if [[ "$lfn" != "" ]];then
                 ../../scripts/700-get-lambda-function.sh $lfn
             fi
             if [[ "$trarn" != "" ]];then
                 ../../scripts/050-get-iam-roles.sh $trarn
+            fi
+
+            if [[ "$cpid" != "" ]];then
+                ../../scripts/629-get-code-pipeline.sh $cpid
             fi
 
             

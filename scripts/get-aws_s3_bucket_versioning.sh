@@ -50,7 +50,7 @@ if [[ $vl -eq 0 ]];then
         #echo "Vers Len=${#o1}"
     vl=${#o1}
     if [[ $vl -eq 0 ]];then
-        echo "** Error: Zero state $ttft $rname exiting...."
+        echo "** Info: Zero state $ttft $rname exiting...."
         exit
     fi
 fi

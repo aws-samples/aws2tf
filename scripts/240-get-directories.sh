@@ -30,7 +30,7 @@ for c in `seq 0 0`; do
             rm -f $fn
 
             file="t1.txt"
-
+            subnets=() 
             echo $aws2tfmess > $fn
             while IFS= read line
             do
@@ -77,13 +77,15 @@ for c in `seq 0 0`; do
                     #if [[ ${tt1} == "ipv6_association_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "ipv6_cidr_block" ]];then skip=1;fi
                     if [[ ${tt1} == "vpc_id" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
+                        vpcid=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`
                     fi
                 else
-                    if [[ "$t1" == *"subnet-"* ]]; then
-                        t1=`echo $t1 | tr -d '"|,'`
-                        t1=`printf "aws_subnet.%s.id," $t1`
+                    if [[ ${tt1} == *"subnet-"*  ]]; then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_subnet.%s.id" $tt1 $tt2`
+                        subnets+=`printf "\"%s\" " $tt2`
+
                     fi
                 fi
                 if [ "$skip" == "0" ]; then
@@ -92,6 +94,15 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
+
+            for sub in ${subnets[@]}; do
+                #echo "therole=$therole"
+                sub1=`echo $sub | tr -d '"'`
+                echo "calling for $sub1"
+                if [ "$sub1" != "" ]; then
+                    ../../scripts/105-get-subnet.sh $sub1
+                fi
+            done
             
         done
     fi

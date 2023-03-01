@@ -1,13 +1,18 @@
 #!/bin/bash
+pref[0]="logGroups"
+tft[0]="aws_cloudwatch_log_group"
+idfilt[0]="logGroupName"
 if [ "$1" != "" ]; then
-    cmd[0]="$AWS logs describe-log-groups --log-group-name-prefix \"$1\"" 
+    if [[ "$1" == "arn:"* ]];then
+        cmd[0]=`printf "$AWS logs describe-log-groups  | jq '.logGroups | select(.arn==\"%s\")' | jq ." $1`
+    else
+        cmd[0]="$AWS logs describe-log-groups --log-group-name-prefix \"$1\"" 
+    fi
 else
     cmd[0]="$AWS logs describe-log-groups"
 fi
 
-pref[0]="logGroups"
-tft[0]="aws_cloudwatch_log_group"
-idfilt[0]="logGroupName"
+
 ncpu=$(getconf _NPROCESSORS_ONLN)
 ncpu=`expr $ncpu - 1`
 if [[ $ncpu -lt 3 ]];then
@@ -33,7 +38,7 @@ for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"

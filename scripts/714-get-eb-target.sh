@@ -104,19 +104,20 @@ for c in `seq 0 0`; do
                     fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "input_template" ]];then
-                        if [[ $tt2 == *"EOT"* ]];then
-                            # check $tt2 for '"'
-   
-                            #echo "input target=$itar"
+                        echo "--> $tt2"
+                        if [[ "$tt2" == *"EOT"* ]];then
                             if [[ $itar == *"<<-EOT" ]];then
                                 tt2=$(echo $tt2 | sed 's/"//')
                                 tt2=$(echo $tt2 | rev | sed 's/"//' | rev )
                                 tt2=$(echo $tt2 | sed 's/"/\\"/g') 
                                 itar==$(echo $tt2)
                                 t1=`printf "%s = <<-EOT" $tt1 `
-                            else
-                                t1=`printf "%s = jsonencode(%s)" $tt1 "$tt2"`
+
                             fi
+                        else
+                                tt2=$(echo $tt2 | sed 's/"//')
+                                tt2=$(echo $tt2 | rev | sed 's/"//' | rev )
+                                t1=`printf "%s = jsonencode(%s)" $tt1 "$tt2"`
                         fi
 
                     fi

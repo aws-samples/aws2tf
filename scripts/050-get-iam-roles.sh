@@ -116,7 +116,7 @@ for c in `seq 0 0`; do
                             else
                                 t1=`printf "\"%s\"=\"%s\"" $lh "$tt2"`
                             fi
-                            echo "-2->$t1"
+                            #echo "-2->$t1"
                         fi
                         if [[ ${tt1} == "AWS" ]]; then
                             tt2=`echo $tt2 | tr -d '"'`

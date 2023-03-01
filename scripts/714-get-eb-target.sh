@@ -104,7 +104,7 @@ for c in `seq 0 0`; do
                     fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "input_template" ]];then
-                        echo "--> $tt2"
+                        #echo "--> $tt2"
                         if [[ "$tt2" == *"EOT"* ]];then
                             if [[ $itar == *"<<-EOT" ]];then
                                 tt2=$(echo $tt2 | sed 's/"//')

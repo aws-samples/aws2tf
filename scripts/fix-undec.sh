@@ -19,7 +19,7 @@ for c in $(seq 0 $count); do
         #echo "code snip=$code"
         if [[ $code == *"="* ]]; then
             res=$(echo $code | cut -f2 -d'=')
-            lhs=$(echo $code | cut -f1 -d'=')
+            lhs=$(echo $code | cut -f1 -d'=' | tr -d ' |"')
         else
             res=$(echo $code)
         fi
@@ -84,7 +84,7 @@ for c in $(seq 0 $count); do
                 fi
             fi
 
-            #special case in cludtrail
+            #special case in cloudtrail
             if [[ $fil == "aws_cloudtrail"* ]];then
                 #echo "in file"
                 if [[ $tft == *"aws_cloudwatch_log_group"* ]];then

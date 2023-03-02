@@ -132,7 +132,7 @@ for c in $(seq 0 0); do
 
                             elif [[ "$tt2" == *"arn:aws:codepipeline:${myreg}:${mysub}:"* ]]; then
                                 cpid=$(echo $tt2 | rev | cut -f1 -d':' | rev | tr -d '"')
-                                t1=$(printf "%s = aws_codepipeline.%s.arn" $tt1 $cpid)
+                                t1=$(printf "%s = aws_codepipeline.r-%s.arn" $tt1 $cpid)
 
                             elif [[ "$tt2" == *"arn:aws:codebuild:${myreg}:${mysub}:project/"* ]]; then
                                 cbid=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')

@@ -37,15 +37,15 @@ for c in `seq 0 0`; do
                 cname=`echo $awsout | jq -r ".${idfilt[(${c})]}"`
             fi
             echo "$ttft $cname"
-            fn=`printf "%s__%s.tf" $ttft $cname`
+            fn=`printf "%s__r-%s.tf" $ttft $cname`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
                 continue
             fi
-            printf "resource \"%s\" \"%s\" {}\n" $ttft $cname > $fn
+            printf "resource \"%s\" \"r-%s\" {}\n" $ttft $cname > $fn
          
-            terraform import $ttft.$cname "$cname" | grep Import
-            terraform state show -no-color $ttft.$cname > t1.txt
+            terraform import $ttft.r-$cname "$cname" | grep Import
+            terraform state show -no-color $ttft.r-$cname > t1.txt
 
             #echo $awsj | jq . 
             rm -f $fn

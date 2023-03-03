@@ -68,7 +68,13 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "resource_owner" ]];then skip=1;fi
-                    if [[ ${tt1} == "creation_date" ]];then skip=1;fi
+                    if [[ ${tt1} == "creation_date" ]];then 
+                        # json whitespace non-sense
+                        printf "lifecycle {\n" >> $fn
+                        printf "   ignore_changes = [configuration]\n" >> $fn
+                        printf "}\n" >> $fn
+                        skip=1;
+                    fi
                     if [[ ${tt1} == "master_public_dns" ]];then skip=1;fi
                     if [[ ${tt1} == "realm" ]];then 
                     echo "kdc_admin_password = \"CHANGE-ME\"" >> $fn

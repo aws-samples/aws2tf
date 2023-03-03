@@ -56,14 +56,27 @@ for c in `seq 0 0`; do
                 if [[ ${t1} == *"="* ]];then
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
-                    if [[ ${tt1} == "arn" ]];then skip=1; fi                
+                    if [[ ${tt1} == "arn" ]];then 
+                        # probably safe as cluster_id is dereferenced
+                        printf "lifecycle {\n" >> $fn
+                        printf "   ignore_changes = [cluster_id]\n" >> $fn
+                        printf "}\n" >> $fn
+                        skip=1 
+                    
+                    fi                
   
                     if [[ ${tt1} == "id" ]];then skip=1; fi        
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "resource_owner" ]];then skip=1;fi
                     if [[ ${tt1} == "running_instance_count" ]];then skip=1;fi
-                    if [[ ${tt1} == "status" ]];then skip=1;fi
+                    if [[ ${tt1} == "status" ]];then 
+                        printf "lifecycle {\n" >> $fn
+                        printf "   ignore_changes = [cluster_id]\n" >> $fn
+                        printf "}\n" >> $fn
+                        skip=1 
+                    
+                    fi
 
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
                     if [[ ${tt1} == "last_updated_date" ]];then skip=1;fi

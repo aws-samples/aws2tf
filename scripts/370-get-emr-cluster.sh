@@ -61,13 +61,11 @@ for c in `seq 0 0`; do
                 # display $line or do something with $line
                 t1=`echo "$line"` 
 
-                if [[ ${t1} == *"="* ]];then
+                if [[ ${t1} == *"="* ]];then 
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
-                    if [[ ${tt1} == "arn" ]];then skip=1; fi                
-
-                    if [[ ${tt1} == "id" ]];then skip=1; fi
-
+                    if [[ ${tt1} == "arn" ]];then skip=1; fi 
+                    if [[ ${tt1} == "id" ]];then skip=1; fi       
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "resource_owner" ]];then skip=1;fi
@@ -82,7 +80,12 @@ for c in `seq 0 0`; do
 
                     fi
             
-                    if [[ ${tt1} == "last_updated_date" ]];then skip=1;fi
+                    if [[ ${tt1} == "last_updated_date" ]];then 
+                        printf "lifecycle {\n" >> $fn
+                        printf "   ignore_changes = [security_configuration]\n" >> $fn
+                        printf "}\n" >> $fn
+                        skip=1
+                    fi
 
                     if [[ ${tt1} == "emr_managed_master_security_group" ]]; then
                         mmsg=`echo $tt2 | tr -d '"'`
@@ -119,7 +122,7 @@ for c in `seq 0 0`; do
                     fi
 
                     if [[ ${tt1} == "subnet_ids" ]]; then
-                        echo "-5- $donesub"
+                  
                         if [[ $donesub == "1" ]];then
                             # skip the block 
                             tt2=`echo $tt2 | tr -d '"'` 

@@ -9,7 +9,6 @@ if [ "$1" != "" ]; then
         issingle=1
     fi
 
-
 else
     cmd[0]="$AWS ec2 describe-instances --filters \"Name=instance-state-name,Values=running\""
 fi
@@ -57,7 +56,7 @@ for c in `seq 0 0`; do
                 fi
             done
             if [[ $skipit -eq 1 ]];then
-                echo "breaking ..."
+                echo "breaking from ec2 ..."
                 continue 
             fi
 

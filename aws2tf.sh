@@ -381,7 +381,8 @@ if [[ "$s" == "no" ]];then
                         if [[ "$d" == "no" ]];then
                             echo "Found Error: $line .... (pass for now)"
                         else
-                            echo "Found Error: $line exiting ...."
+                            echo "Found Error: $line"
+                            echo "debug flag is on so exiting ...."
                             exit
                         fi
                     fi

@@ -162,7 +162,7 @@ for c in `seq 0 0`; do
             fi
             if [[ "$imnam2" != "" ]];then
                 rimnam2=${imnam2//:/_} && rimnam2=${rimnam2//./_} && rimnam2=${rimnam2//\//_}
-                echo "**-3-> $rimnam2"
+                #echo "**-3-> $rimnam2"
                 ../../scripts/get-sagemaker-image.sh $rimnam2
             fi
 
@@ -173,6 +173,8 @@ for c in `seq 0 0`; do
             if [[ "$erole" != "" ]];then
                 ../../scripts/050-get-iam-roles.sh $erole
             fi
+
+            ../../scripts/get-sagemaker-studio-lifecycle-config.sh
 
 
         done

@@ -1,10 +1,9 @@
                     if [[ ${tt1} == "dns_entry" ]];then
-                        #echo "dns block" 
+                        # skip the block 
                         tt2=`echo $tt2 | tr -d '"'` 
                         skip=1
                         while [ "$t1" != "]" ] && [ "$tt2" != "[]" ] ;do
                             read line
                             t1=`echo "$line"`
-                            #echo $t1
                         done
                     fi

@@ -53,6 +53,7 @@ for c in `seq 0 0`; do
             iddo=0
             subnets=()
             sgs=()
+            donesub=0
             echo $aws2tfmess > $fn
             while IFS= read line
             do
@@ -97,7 +98,7 @@ for c in `seq 0 0`; do
                     fi
                     if [[ ${tt1} == "service_role" ]]; then
                         srvrole=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $srvrole`
+                        t1=`printf "%s = aws_iam_role.%s.name" $tt1 $srvrole`
                     fi
 
                     #if [[ ${tt1} == "autoscaling_role" ]]; then
@@ -107,14 +108,32 @@ for c in `seq 0 0`; do
 
                     if [[ ${tt1} == "instance_profile" ]]; then
                         instp=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_iam_instance_profile.%s.arn" $tt1 $instp`
+                        t1=`printf "%s = aws_iam_instance_profile.%s.name" $tt1 $instp`
                     fi
 
 
                     if [[ ${tt1} == "subnet_id" ]]; then
                         subid=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_subnet.%s.id" $tt1 $subid`
+                        donesub=1
                     fi
+
+                    if [[ ${tt1} == "subnet_ids" ]]; then
+                        echo "-5- $donesub"
+                        if [[ $donesub == "1" ]];then
+                            # skip the block 
+                            tt2=`echo $tt2 | tr -d '"'` 
+                            skip=1
+                            while [ "$t1" != "]" ] && [ "$tt2" != "[]" ] ;do
+                                read line
+                                t1=`echo "$line"`
+                              
+                            done
+                        fi
+                    fi
+
+
+
 
                     if [[ ${tt1} == "vpc_id" ]]; then
                         vpcid=`echo $tt2 | tr -d '"'`

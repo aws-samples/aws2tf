@@ -409,6 +409,9 @@ else
     . ./commands.sh
     echo "commands done - unable to process:"
     cat unprocessed.log
+    terraform validate -no-color -json > validate.json
+    ../../scripts/fix-undec.sh
+    terraform validate
 fi
 
 #########################################################################

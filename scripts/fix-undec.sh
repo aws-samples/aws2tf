@@ -10,6 +10,10 @@ count=$(echo $undec | jq '. | length' | tail -1)
 count=$(expr $count - 1)
 #echo $count
 
+
+#
+# Reference to undeclared resource
+#
 for c in $(seq 0 $count); do
     summ=$(echo $undec | jq -r ".[(${c})].summary")
     #echo $summ
@@ -50,7 +54,7 @@ for c in $(seq 0 $count); do
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
                     #echo " "
                     #echo $cmd
-                    echo "** Undeclared Fix: $res --> $addr"
+                    echo "** Undeclared Fix: $res --> $tarn"
                     eval $cmd
                 fi
             fi
@@ -71,13 +75,34 @@ for c in $(seq 0 $count); do
             if [[ $tft == "aws_sns_topic" ]]; then
                 addr=$(echo $addr | cut -f2 -d'_')
                 tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
+                tarn=${tarn//\//\\/}
                 ttyp=$(grep $addr data/arn-map.dat | cut -f1 -d',' | head -1)
                 if [[ $ttyp == "aws_sns_topic" ]]; then
                     if [[ $tarn != "null" ]]; then
                         cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
                         #echo " "
                         #echo $cmd
-                        echo "** Undeclared Fix: $res --> $addr"
+                        echo "** Undeclared Fix: $res --> $tarn"
+                        eval $cmd
+
+                    fi
+                fi
+            fi
+            echo $tft
+            if [[ $tft == "aws_sagemaker_image" ]]; then
+                addr=$(echo $addr | cut -f2 -d'_')
+                tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
+                tarn=${tarn//\//\\/}
+                ttyp=$(grep $addr data/arn-map.dat | cut -f1 -d',' | head -1)
+      
+                if [[ $ttyp == "aws_sagemaker_image" ]]; then
+                 
+                    if [[ $tarn != "null" ]]; then
+                        
+                        cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
+                        echo " "
+                        echo $cmd
+                        echo "** Undeclared Fix: $res --> $tarn"
                         eval $cmd
 
                     fi
@@ -110,12 +135,6 @@ for c in $(seq 0 $count); do
 
                             fi
                         fi
-
-
-
-
-
-
                     fi               
                 fi      
             fi
@@ -134,8 +153,9 @@ for c in $(seq 0 $count); do
         fi
     fi
 done
-
+#
 # enable_classiclink
+#
 for c in $(seq 0 $count); do
     #echo $c
     summ=$(echo $undec | jq -r ".[(${c})].summary")
@@ -151,8 +171,9 @@ for c in $(seq 0 $count); do
         fi
     fi
 done
-
+#
 # name_prefix conflict
+#
 for c in $(seq 0 $count); do
     summ=$(echo $undec | jq -r ".[(${c})].summary")
     #echo $c $summ
@@ -172,8 +193,9 @@ for c in $(seq 0 $count); do
     fi
 done
 ofil=""
-
+#
 # unconfig attribute
+#
 for c in $(seq 0 $count); do
     summ=$(echo $undec | jq -r ".[(${c})].summary")
     if [[ $summ == "Value for unconfigurable attribute" ]]; then
@@ -194,6 +216,9 @@ for c in $(seq 0 $count); do
     fi
 done
 
+#
+## Invalid or unknown key
+#
 for c in $(seq 0 $count); do
     summ=$(echo $undec | jq -r ".[(${c})].summary")
     if [[ $summ == "Invalid or unknown key" ]]; then
@@ -214,6 +239,9 @@ for c in $(seq 0 $count); do
     fi
 done
 
+#
+## Missing required argument
+#
 for c in $(seq 0 $count); do
     summ=$(echo $undec | jq -r ".[(${c})].summary")
     if [[ $summ == "Missing required argument" ]]; then

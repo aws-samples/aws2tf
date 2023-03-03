@@ -9,9 +9,6 @@ else
 fi
 
 
-
-#rm -f ${tft[0]}.tf
-
 for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
@@ -22,27 +19,33 @@ for c in `seq 0 0`; do
         echo "$cm : You don't have access for this resource"
         exit
     fi
-    count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    if [ "$1" != "" ]; then
+        count=1
+    else
+        count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    fi
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
+            if [ "$1" != "" ]; then
+                cname=`echo $awsout | jq ".${idfilt[(${c})]}" | tr -d '"'`
+            else
+                cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
+            fi
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $cname`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
                 continue
             fi
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
-            printf "terraform import %s.%s %s" $ttft $cname $cname > data/import_$ttft_$cname.sh
+            printf "resource \"%s\" \"%s\" {}\n" $ttft $cname > $fn
+
             terraform import $ttft.$cname "$cname" | grep Import
             terraform state show -no-color $ttft.$cname > t1.txt
-            tfa=`printf "%s.%s" $ttft $cname`
-            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
+
             #echo $awsj | jq . 
-            rm -f $ttft.$cname.tf
+            rm -f $fn
 
             file="t1.txt"
             iddo=0
@@ -87,7 +90,7 @@ for c in `seq 0 0`; do
                 
             done <"$file"
 
-            ../../scripts/get-emr-inst-group.sh $cname
+          
 
         done
 

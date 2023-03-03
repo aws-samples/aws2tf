@@ -9,43 +9,50 @@ else
 fi
 
 
-
-#rm -f ${tft[0]}.tf
-
 for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
         exit
     fi
-    count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    if [[ $1 != "" ]]; then
+        count=1
+    else
+        count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    fi
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
+            if [ "$1" != "" ]; then
+                cname=`echo $awsout | jq ".${idfilt[(${c})]}" | tr -d '"'`
+            else
+                cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
+            fi
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $cname`
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
                 continue
             fi
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
-            printf "terraform import %s.%s %s" $ttft $cname $cname > data/import_$ttft_$cname.sh
+            printf "resource \"%s\" \"%s\" {}\n" $ttft $cname > $fn
+
             terraform import $ttft.$cname "$cname" | grep Import
             terraform state show -no-color $ttft.$cname > t1.txt
             tfa=`printf "%s.%s" $ttft $cname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
             #echo $awsj | jq . 
-            rm -f $ttft.$cname.tf
+            rm -f $fn
+            
 
             file="t1.txt"
             iddo=0
+            subnets=()
+            sgs=()
             echo $aws2tfmess > $fn
             while IFS= read line
             do
@@ -64,6 +71,10 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "resource_owner" ]];then skip=1;fi
                     if [[ ${tt1} == "cluster_state" ]];then skip=1;fi
+                    if [[ ${tt1} == "security_configuration" ]];then
+                        scon=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_emr_security_configuration.%s.id" $tt1 $scon`
+                    fi
                     if [[ ${tt1} == "master_public_dns" ]];then skip=1;fi
                     if [[ ${tt1} == "realm" ]];then 
                         echo "kdc_admin_password = \"CHANGE-ME\"" >> $fn
@@ -73,33 +84,49 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "last_updated_date" ]];then skip=1;fi
 
                     if [[ ${tt1} == "emr_managed_master_security_group" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_security_group.%s.id" $tt1 $tt2`
+                        mmsg=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_security_group.%s.id" $tt1 $mmsg`
                     fi
                     if [[ ${tt1} == "emr_managed_slave_security_group" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_security_group.%s.id" $tt1 $tt2`
+                        mssg=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_security_group.%s.id" $tt1 $mssg`
                     fi
                     if [[ ${tt1} == "service_access_security_group" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_security_group.%s.id" $tt1 $tt2`
+                        sasg=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_security_group.%s.id" $tt1 $sasg`
                     fi
                     if [[ ${tt1} == "service_role" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $tt2`
+                        srvrole=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $srvrole`
+                    fi
+
+                    #if [[ ${tt1} == "autoscaling_role" ]]; then
+                    #    asrole=`echo $tt2 | tr -d '"'`
+                    #    t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $asrole`
+                    #fi
+
+                    if [[ ${tt1} == "instance_profile" ]]; then
+                        instp=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_iam_instance_profile.%s.arn" $tt1 $instp`
                     fi
 
 
                     if [[ ${tt1} == "subnet_id" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_subnet.%s.id" $tt1 $tt2`
+                        subid=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_subnet.%s.id" $tt1 $subid`
                     fi
-
 
                     if [[ ${tt1} == "vpc_id" ]]; then
                         vpcid=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`
                     fi
+                else
+                    if [[ "$t1" == *"subnet-"* ]]; then
+                        t1=`echo $t1 | tr -d '"|,'`
+                        subnets+=`printf "\"%s\" " $t1`
+                        t1=`printf "aws_subnet.%s.id," $t1`
+                    fi
+
                
                 fi
                 if [ "$skip" == "0" ]; then
@@ -115,11 +142,50 @@ for c in `seq 0 0`; do
             done <"$file"
 
             ../../scripts/get-emr-inst-group.sh $cname
-            ../../scripts/100-get-vpc.sh $vpcid
-            ../../scripts/105-get-subnet.sh $vpcid
-            ../../scripts/110-get-security-group.sh $vpcid
-            #../../scripts/get-emr-scal-policy.sh $cname
+            
+            if [[ $vpcid != "" ]];then
+                ../../scripts/100-get-vpc.sh $vpcid
+            fi
+  
+            for sub in ${subnets[@]}; do
+                sub1=`echo $sub | tr -d '"'`
+                if [ "$sub1" != "" ]; then
+                    ../../scripts/105-get-subnet.sh $sub1
+                fi
+            done
 
+            if [[ $subid != "" ]];then
+                ../../scripts/105-get-subnet.sh $subid
+            fi
+
+            if [[ $mmsg != "" ]];then
+                ../../scripts/110-get-security-group.sh $mmsg
+            fi
+            if [[ $mmsg != "" ]];then
+                ../../scripts/110-get-security-group.sh $mssg
+            fi
+            if [[ $sasg != "" ]];then
+                ../../scripts/110-get-security-group.sh $sasg
+            fi
+
+            if [[ $scon != "" ]];then
+                ../../scripts/371-get-emr-sec-config.sh $scon
+            fi
+
+            if [[ $srvrole != "" ]];then
+                ../../scripts/050-get-iam-roles.sh $srvrole
+            fi
+
+            if [[ $asrole != "" ]];then
+                echo "-4- $asrole"
+                ../../scripts/050-get-iam-roles.sh $asrole
+            fi
+
+            if [[ $instp != "" ]];then
+                ../../scripts/056-get-instance-profile.sh $instp
+            fi
+
+       
         done
 
     fi

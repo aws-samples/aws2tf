@@ -41,7 +41,7 @@ for c in `seq 0 0`; do
             
             terraform state show -no-color $ttft.$1__$cname > t1.txt
             tfa=`printf "data/%s.%s__%s" $ttft $1 $cname`
-            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
+            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > $tfa.json
             #echo $awsj | jq . 
             rm -f $ttft.$1__$cname.tf
  
@@ -67,9 +67,9 @@ for c in `seq 0 0`; do
 
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
                     if [[ ${tt1} == "last_updated_date" ]];then skip=1;fi
-                    if [[ ${tt1} == "vpc_id" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
+                    if [[ ${tt1} == "cluster_id" ]]; then
+                        cid=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_emr_cluster.%s.id" $tt1 $cid`
                     fi
                
                 fi

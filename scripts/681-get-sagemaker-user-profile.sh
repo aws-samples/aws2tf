@@ -4,7 +4,13 @@ tft[0]="aws_sagemaker_user_profile"
 idfilt[0]="UserProfileName"
 
 if [ "$1" != "" ]; then
-    cmd[0]=`printf "$AWS sagemaker list-user-profiles | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $1`
+    if [[ $1 == *"|"* ]];then 
+        domid=$(echo $1 | cut -f2 -d'|')
+        up=$(echo $1 | cut -f1 -d'|')
+        cmd[0]=`printf "$AWS sagemaker list-user-profiles --domain-id-equals $domid | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $up`
+    else
+        cmd[0]=`printf "$AWS sagemaker list-user-profiles | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $1`
+    fi
 else
     cmd[0]="$AWS sagemaker list-user-profiles"
 fi
@@ -13,20 +19,30 @@ for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
         exit
     fi
-    count=`echo $awsout | jq ".${pref[(${c})]} | length"`
-    #echo $count
+    if [ "$1" != "" ]; then
+        count=1
+    else
+        count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+    fi
+    #echo "count=$count"
+    #echo $awsout | jq .
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
             #echo $i
-            upn=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")    
-            domid=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].DomainId")
+            if [ "$1" != "" ]; then
+                upn=$(echo $awsout | jq -r ".${idfilt[(${c})]}")    
+                domid=$(echo $awsout | jq -r ".DomainId")
+            else
+                upn=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")    
+                domid=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].DomainId")
+            fi
             cname=$($AWS sagemaker describe-user-profile --domain-id $domid --user-profile-name $upn  --query UserProfileArn | jq -r .)
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
          
@@ -36,8 +52,7 @@ for c in `seq 0 0`; do
             echo "$ttft $cname import"
 
 
-            printf "resource \"%s\" \"%s\" {" $ttft $upn > $fn
-            printf "}"  >> $fn
+            printf "resource \"%s\" \"%s\" {}\n" $ttft $upn > $fn
             terraform import $ttft.$upn "$cname" | grep Import
             terraform state show -no-color $ttft.$upn > t1.txt
             rm -f $fn

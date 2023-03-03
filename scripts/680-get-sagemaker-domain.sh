@@ -107,6 +107,8 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "sagemaker_image_arn" ]];then 
                         imarn=`echo $tt2 | tr -d '"'`
                         imnam2=`echo "$tt2" | rev | cut -d'/' -f1 | rev | tr -d '"'`
+                        echo "aws_sagemaker_image,$imarn,$imnam2" >> data/arn-map.dat
+
                         t1=`printf "%s = aws_sagemaker_image.%s.arn" $tt1 $imnam2`
                     fi
                     if [[ ${tt1} == "app_image_config_name" ]];then 
@@ -160,6 +162,7 @@ for c in `seq 0 0`; do
             fi
             if [[ "$imnam2" != "" ]];then
                 rimnam2=${imnam2//:/_} && rimnam2=${rimnam2//./_} && rimnam2=${rimnam2//\//_}
+                echo "**-3-> $rimnam2"
                 ../../scripts/get-sagemaker-image.sh $rimnam2
             fi
 

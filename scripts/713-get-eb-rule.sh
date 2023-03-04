@@ -49,10 +49,12 @@ for c in `seq 0 0`; do
             echo "$ttft $bus $cname"
 
             fn=`printf "%s__%s__%s.tf" $ttft $bus $cname`
+            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
 
 
-            printf "resource \"%s\" \"%s__%s\" {" $ttft $bus $cname > $fn
-            printf "}" >> $fn
+
+            printf "resource \"%s\" \"%s__%s\" {}\n" $ttft $bus $cname > $fn
+      
             if [[ "$bus" == "default" ]];then
                 terraform import $ttft.${bus}__${cname} "${cname}" | grep Import
             else

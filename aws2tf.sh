@@ -375,12 +375,13 @@ if [[ "$s" == "no" ]];then
             do
                 if [[ "${line}" == *"Error"* ]];then
             
-                    if [[ "${line}" == *"Duplicate"* ]];then
+                    if [[ "${line}" == *"Duplicate"* ]] || [[ "${line}" == *"Resource already managed"* ]];then
                         echo "Ignoring $line"
                     else
                         if [[ "$d" == "no" ]];then
                             echo "Found Error: $line .... (pass for now)"
                         else
+                            # check if any are not Resource already managed by Terraform
                             echo "Found Error: $line"
                             echo "debug flag is on so exiting ...."
                             exit

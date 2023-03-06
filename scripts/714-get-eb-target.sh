@@ -117,7 +117,7 @@ for c in `seq 0 0`; do
                         else
                                 tt2=$(echo $tt2 | sed 's/"//')
                                 tt2=$(echo $tt2 | rev | sed 's/"//' | rev )
-                                t1=`printf "%s = jsonencode(%s)" $tt1 "$tt2"`
+                                t1=`printf "%s = jsonencode(\"%s\")" $tt1 "$tt2"`
                         fi
 
                     fi

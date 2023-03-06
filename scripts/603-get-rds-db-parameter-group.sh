@@ -10,82 +10,76 @@ pref[0]="DBParameterGroups"
 tft[0]="aws_db_parameter_group"
 idfilt[0]="DBParameterGroupName"
 
+for c in $(seq 0 0); do
 
-for c in `seq 0 0`; do
-    
     cm=${cmd[$c]}
-	ttft=${tft[(${c})]}
-	echo $cm
-    awsout=`eval $cm 2> /dev/null`
-    if [ "$awsout" == "" ];then
+    ttft=${tft[(${c})]}
+    echo $cm
+    awsout=$(eval $cm 2>/dev/null)
+    if [ "$awsout" == "" ]; then
         echo "$cm : You don't have access for this resource"
         exit
     fi
     if [ "$1" != "" ]; then
         count=1
     else
-        count=`echo $awsout | jq ".${pref[(${c})]} | length"`
+        count=$(echo $awsout | jq ".${pref[(${c})]} | length")
     fi
     echo "count=$count"
     if [ "$count" -gt "0" ]; then
-        count=`expr $count - 1`
-        for i in `seq 0 $count`; do
+        count=$(expr $count - 1)
+        for i in $(seq 0 $count); do
             #echo $i
-            cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")          
+            cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             echo "$ttft $cname"
-            if [[ "$cname" == "default"* ]];then echo "skipping default parameter group" && continue;fi
-            
-            fn=`printf "%s__%s.tf" $ttft $rname`
-            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
+            if [[ "$cname" == "default"* ]]; then echo "skipping default parameter group" && continue; fi
 
-            printf "resource \"%s\" \"%s\" {}\n" $ttft $rname > $fn
-    
+            fn=$(printf "%s__%s.tf" $ttft $rname)
+            if [ -f "$fn" ]; then echo "$fn exists already skipping" && continue; fi
+
+            printf "resource \"%s\" \"%s\" {}\n" $ttft $rname >$fn
+
             terraform import $ttft.${rname} "${cname}" | grep Import
-            terraform state show -no-color $ttft.${rname} > t1.txt
+            terraform state show -no-color $ttft.${rname} >t1.txt
 
             rm -f $fn
 
             file="t1.txt"
-            echo $aws2tfmess > $fn
+            echo $aws2tfmess >$fn
             tarn=""
             s3buck=""
             subnets=()
-            while IFS= read line
-            do
-				skip=0
+            while IFS= read line; do
+                skip=0
                 # display $line or do something with $line
-                t1=`echo "$line"` 
-                if [[ ${t1} == *"="* ]];then
-                    tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
-                    tt2=`echo "$line" | cut -f2- -d'='`
-         
-                    if [[ ${tt1} == "id" ]];then skip=1;fi
-                    if [[ ${tt1} == "arn" ]];then skip=1;fi
-                    if [[ ${tt1} == "creation_date" ]];then skip=1;fi
-                    if [[ ${tt1} == "last_modified_date" ]];then skip=1;fi 
-                    if [[ ${tt1} == "name" ]];then 
-                        skip=0;
+                t1=$(echo "$line")
+                if [[ ${t1} == *"="* ]]; then
+                    tt1=$(echo "$line" | cut -f1 -d'=' | tr -d ' ')
+                    tt2=$(echo "$line" | cut -f2- -d'=')
+
+                    if [[ ${tt1} == "id" ]]; then skip=1; fi
+                    if [[ ${tt1} == "arn" ]]; then skip=1; fi
+                    if [[ ${tt1} == "creation_date" ]]; then skip=1; fi
+                    if [[ ${tt1} == "last_modified_date" ]]; then skip=1; fi
+                    if [[ ${tt1} == "name" ]]; then
+                        skip=0
                         nt1=$(echo $t1)
                     fi
-                    if [[ ${tt1} == "name_prefix" ]];then 
+                    if [[ ${tt1} == "name_prefix" ]]; then
                         skip=1
                     fi
 
                 fi
                 if [ "$skip" == "0" ]; then
-                        #echo $skip $t1
-                        echo "$t1" >> $fn
+                    #echo $skip $t1
+                    echo "$t1" >>$fn
                 fi
-            
+
             done <"$file"
-            
             # get subnetss
         done
-    fi 
+    fi
 done
 
 #rm -f t*.txt
-
-
-

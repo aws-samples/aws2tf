@@ -65,15 +65,19 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "creation_date" ]];then skip=1;fi
                     if [[ ${tt1} == "last_modified_date" ]];then skip=1;fi 
                     if [[ ${tt1} == "name" ]];then 
-                        skip=1;
+                        skip=0;
                         nt1=$(echo $t1)
                     fi
                     if [[ ${tt1} == "name_prefix" ]];then 
-
+                        skip=1
+                    fi
 
                 fi
-
-                if [ "$skip" == "0" ]; then echo "$t1" >> $fn;fi               
+                if [ "$skip" == "0" ]; then
+                        #echo $skip $t1
+                        echo "$t1" >> $fn
+                fi
+            
             done <"$file"
             
             # get subnetss

@@ -36,7 +36,7 @@ for c in `seq 0 0`; do
             #echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-            $AWS cloudformation get-template --stack-name $cname > cft__$rname.json
+            
             echo "$ttft $cname"
             fn=`printf "%s__%s.tf" $ttft $rname`
             tfs=`printf "%s__%s.txt" $ttft $rname`
@@ -54,11 +54,16 @@ for c in `seq 0 0`; do
                 echo "Stack $cname status=$sstatus skipping ..."
                 continue
             fi
+            
+
+            ($AWS cloudformation get-template --stack-name $cname > cft__$rname.json) 2> /dev/null
+            if [[ $? -ne 0 ]];then
+                echo "Problem getting stack $cname - skipping"
+                continue
+            fi
 
             printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
- 
             terraform import $ttft.${rname} "${cname}" | grep Import
-         
             terraform state show -no-color $ttft.${rname} > $tfs 
 
             rm -f $fn

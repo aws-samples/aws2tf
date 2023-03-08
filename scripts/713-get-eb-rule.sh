@@ -88,7 +88,7 @@ for c in `seq 0 0`; do
                 
             done <"$file"
             
-            ../../scripts/714-get-eb-target.sh "${bus}|${cname}"
+            ../../scripts/get-eb-target.sh "${bus}|${cname}"
             
         done
     fi 

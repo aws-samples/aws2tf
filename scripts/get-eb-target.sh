@@ -9,8 +9,9 @@ if [[ "$1" != "" ]]; then
         ru=$(echo $1 | cut -f2 -d '|')      
         cmd[0]="$AWS events list-targets-by-rule --rule $ru --event-bus-name $bus" 
     else
-        echo "invalid format should be bus|rulename exiting .."
-        exit
+        echo "invalid format should be bus|rulename try with default .."
+        cmd[0]="$AWS events list-targets-by-rule --rule $1 --event-bus-name default"
+        ru=$(echo $1)
     fi
 else
     echo "must pass bus|rulename as parameter exiting .."
@@ -115,8 +116,16 @@ for c in `seq 0 0`; do
 
                             fi
                         else
+                                echo "-1-> $tt2"
                                 tt2=$(echo $tt2 | sed 's/"//')
                                 tt2=$(echo $tt2 | rev | sed 's/"//' | rev )
+                                tt2=$(echo $tt2 | sed 's/"//')
+                                tt2=$(echo $tt2 | rev | sed 's/"//' | rev )
+                                echo "-2-> $tt2"
+                                if [[ "$tt2" == /"/"* ]];then
+                                    echo "--> double quote $tt2"
+                                fi
+
                                 t1=`printf "%s = jsonencode(\"%s\")" $tt1 "$tt2"`
                         fi
 

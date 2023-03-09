@@ -206,7 +206,7 @@ printf "}\n" >> main-vars.tf
 
 # write the aws.tf file
 printf "terraform { \n" > aws.tf
-printf "required_version = \"~> 1.3.0\"\n" >> aws.tf
+printf "required_version = \"> 1.3.5\"\n" >> aws.tf
 printf "  required_providers {\n" >> aws.tf
 printf "   aws = {\n" >> aws.tf
 printf "     source  = \"hashicorp/aws\"\n" >> aws.tf

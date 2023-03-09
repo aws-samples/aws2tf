@@ -20,9 +20,10 @@ There should hopefully be no subsequent additions or deletions reported by the t
 
 ## Requirements & Prerequisites
 + The tool is written for the bash shell script & Python3 and has been tested on macOS 11.6.
-+ AWS cli (v2) **version 2.7.0 or higher** needs to be installed and you need a login with at least "Read" privileges.
-+ terraform **version v1.3.0** or higher needs to be installed.
++ AWS cli (v2) **version 2.9.0 or higher** needs to be installed and you need a login with at least "Read" privileges.
++ terraform **version v1.3.7** or higher needs to be installed.
 + jq **version 1.6 or higher**
++ *yq optional for advanced stack processing*
 
 ## Optional tooling for security reports (CRITICAL and HIGH issues)
 + tfsec **version 1.27.5 or later**  (https://github.com/aquasecurity/tfsec)

@@ -81,9 +81,10 @@ for c in `seq 0 0`; do
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`
                     fi
                 else
-                    if [[ ${tt1} == *"subnet-"*  ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_subnet.%s.id" $tt1 $tt2`
+                    if [[ ${t1} == *"subnet-"*  ]]; then
+                        #echo "-1-> $t1"
+                        tt2=`echo $t1 | tr -d '"|,'`
+                        t1=`printf "aws_subnet.%s.id," $tt2`
                         subnets+=`printf "\"%s\" " $tt2`
 
                     fi

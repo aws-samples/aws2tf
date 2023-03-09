@@ -142,8 +142,13 @@ for c in $(seq 0 $count); do
             # drop in id's - ie. no ARN replacement
 
             if [[ $tft == "aws_nat_gateway" ]] || [[ $tft == "aws_vpc" ]] || [[ $tft == "aws_subnet" ]] || [[ $tft == "aws_security_group" ]] || [[ $tft == "aws_ec2_transit_gateway_vpc_attachment" ]] || [[ $tft == "aws_vpc_peering_connection" ]]; then
-                cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $addr)
-                echo "** Undeclared Fix: $res --> $addr"
+                if [[ $res == *"," ]];then
+                    cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\",/g' ${fil}" $res $addr)
+                    echo "** Undeclared Fix: $res --> $addr,"
+                else
+                    cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $addr)
+                    echo "** Undeclared Fix: $res --> $addr"
+                fi
                 eval $cmd
             fi
 

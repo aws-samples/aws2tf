@@ -18,8 +18,8 @@ cname=`echo $1`
 #if [ -f "$fn" ] ; then echo "$fn exists skipping" && continue; fi
 
 
-
-terraform state show aws_security_group.$1 | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
+terraform state show -no-color aws_security_group.$1 > t1.txt
+#terraform state show aws_security_group.$1 | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
 c=0
 ttft=${tft[(${c})]}
 

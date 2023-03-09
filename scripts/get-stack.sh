@@ -40,6 +40,9 @@ fi
 getstackresources () {
 echo "get stack resources for $1"
 stackr=$($AWS cloudformation describe-stack-resources --stack-name $1 --query StackResources)
+rname=${1//:/_} && rname=${rname//./_} && rname=${rname//\//_} && rname=${rname//\ /_}
+($AWS cloudformation get-template --stack-name $1 > data/cft__$rname.json) 2> /dev/null
+
 #echo $stackr | jq .
 count=`echo $stackr | jq ". | length"`
 echo "stack resources $count"

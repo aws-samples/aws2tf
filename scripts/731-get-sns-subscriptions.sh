@@ -65,7 +65,7 @@ for c in `seq 0 0`; do
 
             printf "resource \"%s\" \"%s\" {}\n" $ttft $rname > $fn
     
-            terraform import $ttft.${rname} "${cname}" | grep Import
+            terraform import $ttft.${rname} "${cname}" | grep Importing
             terraform state show -no-color $ttft.${rname} > t1.txt
 
             rm -f $fn

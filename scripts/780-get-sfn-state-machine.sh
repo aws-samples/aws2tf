@@ -31,7 +31,7 @@ for i in `seq 0 $count`; do
     if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
 
     printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn   
-    terraform import $ttft.${rname} "${cname}" | grep Import
+    terraform import $ttft.${rname} "${cname}" | grep Importing
     terraform state show -no-color $ttft.${rname} > t1.txt
     tfa=`printf "%s.%s" $ttft $cname`
     terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json

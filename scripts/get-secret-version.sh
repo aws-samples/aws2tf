@@ -47,7 +47,7 @@ for c in `seq 0 0`; do
          
           
             eval $cmdi
-            #terraform import $ttft.$sname__$rname '$1|$cname' | grep Import
+            #terraform import $ttft.$sname__$rname '$1|$cname' | grep Importing
             
             cmds=`printf "terraform state show -no-color %s.%s__%s > t1.txt" $ttft $sname $rname`
             eval $cmds

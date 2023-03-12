@@ -57,7 +57,7 @@ if [[ $? -ne 0 ]];then
 
     if [[ ! -f "$fn" ]]; then echo "Error in pi2: prototype $fn does not exist exiting..." && exit; fi
            
-    comm=$(printf "nice -n %s terraform import -state %s %s.%s \"%s\" &> /dev/null" $sl $st $ttft $rname $cname)
+    comm=$(printf "nice -n %s terraform import -no-color -state %s %s.%s \"%s\" &> imp-%s-%s.log" $sl $st $ttft $rname $cname $ttft $rname)
     #echo $comm
     sleep $sl
     eval $comm

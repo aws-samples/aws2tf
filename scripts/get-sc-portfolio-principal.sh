@@ -43,7 +43,7 @@ for c in `seq 0 0`; do
 
             #cname=principl, $1 = portfolioid
 
-            terraform import $ttft.${rname}__${1} "en,${cname},${1}" | grep Import
+            terraform import $ttft.${rname}__${1} "en,${cname},${1}" | grep Importing
          
             terraform state show -no-color $ttft.${rname}__${1} > t1.txt
             rm -f $fn

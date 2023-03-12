@@ -37,7 +37,7 @@ for i in `seq 0 $count`; do
     printf "domain_join_info {} \n" $ttft $rname >> $fn
     printf "} \n" $ttft $rname >> $fn 
     echo "Import"
-    terraform import $ttft.${rname} "${cname}" | grep Import
+    terraform import $ttft.${rname} "${cname}" | grep Importing
     exit
     echo "Show"
     terraform state show -no-color $ttft.${rname}  > t1.txt

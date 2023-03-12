@@ -19,7 +19,6 @@ cname=`echo $1`
 
 
 terraform state show -no-color aws_security_group.$1 > t1.txt
-#terraform state show aws_security_group.$1 | perl -pe 's/\x1b.*?[mGKH]//g' > t1.txt
 c=0
 ttft=${tft[(${c})]}
 
@@ -63,24 +62,24 @@ do
 
                                 if [[ ${tt1} == *"}"* ]];then  # end of an egress / ingress individual rule
                                     if [[ ${self} == "true" ]]; then
-                                        cmd=$(printf "terraform import aws_security_group_rule.%s_%s_%s %s_%s_%s_%s_%s_self | grep Import" $cname $stype $ir $cname $stype $proto $fromp $top)
+                                        cmd=$(printf "terraform import aws_security_group_rule.%s_%s_%s %s_%s_%s_%s_%s_self | grep Importing" $cname $stype $ir $cname $stype $proto $fromp $top)
                                         impfn=$(printf "imp_%s_%s_%s_%s.sh" $ttft $cname $stype $ir)
                                         echo $cmd > $impfn
                                         #echo  ""
                                     elif [[ ${sgimp} != "" ]]; then
-                                        cmd=$(printf "terraform import aws_security_group_rule.%s_%s_%s %s_%s_%s_%s_%s_%s | grep Import" $cname $stype $ir $cname $stype $proto $fromp $top $sgimp)
+                                        cmd=$(printf "terraform import aws_security_group_rule.%s_%s_%s %s_%s_%s_%s_%s_%s | grep Importing" $cname $stype $ir $cname $stype $proto $fromp $top $sgimp)
                                         impfn=$(printf "imp_%s_%s_%s_%s.sh" $ttft $cname $stype $ir)
                                         #echo "in cmd2=$cmd"
                                         echo $cmd > $impfn
                                         #echo  ""
                                     elif [[ ${cidr} != "" ]]; then
-                                        cmd=$(printf "terraform import aws_security_group_rule.%s_%s_%s %s_%s_%s_%s_%s_%s | grep Import" $cname $stype $ir $cname $stype $proto $fromp $top $cidr)
+                                        cmd=$(printf "terraform import aws_security_group_rule.%s_%s_%s %s_%s_%s_%s_%s_%s | grep Importing" $cname $stype $ir $cname $stype $proto $fromp $top $cidr)
                                         impfn=$(printf "imp_%s_%s_%s_%s.sh" $ttft $cname $stype $ir)
                                         #echo "in cmd3=$cmd"
                                         echo $cmd > $impfn
                                         #echo  ""
                                     else
-                                        cmd=$(printf "terraform import aws_security_group_rule.%s_%s_%s %s_%s_%s_%s_%s | grep Import" $cname $stype $ir $cname $stype $proto $fromp $top)
+                                        cmd=$(printf "terraform import aws_security_group_rule.%s_%s_%s %s_%s_%s_%s_%s | grep Importing" $cname $stype $ir $cname $stype $proto $fromp $top)
                                         echo "in cmd4=$cmd"
                                         echo $cmd
                                         #echo  "" 

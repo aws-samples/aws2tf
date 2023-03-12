@@ -47,7 +47,7 @@ for c in `seq 0 0`; do
             printf "resource \"%s\" \"%s\" {" $ttft $rname > $ttft.$rname.tf
             printf "}" >> $ttft.$rname.tf
             printf "terraform import %s.%s %s" $ttft $rname $cname > data/import_$ttft_$rname.sh
-            terraform import $ttft.$rname "$cname" | grep Import
+            terraform import $ttft.$rname "$cname" | grep Importing
             terraform state show -no-color $ttft.$rname > t1.txt
             tfa=`printf "%s.%s" $ttft $rname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
@@ -73,6 +73,13 @@ for c in `seq 0 0`; do
 
                     if [[ ${tt1} == "association_id" ]];then skip=1;fi
                     if [[ ${tt1} == "description" ]];then skip=1;fi
+                    if [[ ${tt1} == "instance_id" ]];then 
+                        skip=1
+                        printf "lifecycle {\n" >>$fn
+                        printf "   ignore_changes = [instance_id]\n" >>$fn
+                        printf "}\n" >>$fn
+                    
+                    fi
                     if [[ ${tt1} == "vpc_id" ]]; then
                         vpcid=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`

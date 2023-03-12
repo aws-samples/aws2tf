@@ -45,7 +45,7 @@ for c in `seq 0 0`; do
                 continue
             fi
             printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
-            terraform import $ttft.$rname "$cname" | grep Import
+            terraform import $ttft.$rname "$cname" | grep Importing
             terraform state show -no-color $ttft.$rname > t1.txt
             tfa=`printf "%s.%s" $ttft $rname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
@@ -93,7 +93,7 @@ for c in `seq 0 0`; do
 
                     # rotation rule skip
 
-
+                else
                     if [[ "$t1" == *"rotation_rules"* ]]; then
                         #echo $t1
                         skip=1

@@ -43,7 +43,7 @@ for perm in ${perms[@]}; do
                 continue
             fi
             printf "resource \"%s\" \"r_%s\" {}\n" $ttft $cname > $fn
-            terraform import $ttft.r_$cname "$1/$cname" | grep Import
+            terraform import $ttft.r_$cname "$1/$cname" | grep Importing
             terraform state show -no-color $ttft.r_$cname > t1.txt
 
             #echo $awsj | jq . 

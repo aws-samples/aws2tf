@@ -106,7 +106,7 @@ if [ "$kcount" -gt "0" ]; then
 
                     printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
                     printf "}" >> $ttft.$cname.tf
-                    terraform import $ttft.$cname $ocname | grep Import
+                    terraform import $ttft.$cname $ocname | grep Importing
                     terraform state show -no-color $ttft.$cname > t1.txt
                     rm -f $ttft.$cname.tf
 

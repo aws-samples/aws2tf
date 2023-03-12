@@ -32,7 +32,7 @@ if [ -f "$fn" ] ; then echo "$fn exists already skipping" && exit; fi
 printf "resource \"%s\" \"%s\" {\n" $ttft $rname > $fn
 printf "}"  >> $fn
             
-terraform import $ttft.$rname "${cname}" | grep Import
+terraform import $ttft.$rname "${cname}" | grep Importing
 terraform state show -no-color $ttft.$rname > t1.txt
             
 rm -f $fn

@@ -54,7 +54,7 @@ for c in `seq 0 0`; do
             printf "resource \"%s\" \"c__%s__%s__%s\" {}" $ttft $catid $dbnam $rname > $fn
             
     
-            terraform import $ttft.c__${catid}__${dbnam}__${rname} "${catid}:${dbnam}:${cname}" | grep Import
+            terraform import $ttft.c__${catid}__${dbnam}__${rname} "${catid}:${dbnam}:${cname}" | grep Importing
             terraform state show -no-color $ttft.c__${catid}__${dbnam}__${rname} > t1.txt
             tfa=`printf "%s.c__%s__%s__%s" $ttft $catid $dbnam $rname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json

@@ -39,7 +39,7 @@ for c in `seq 0 0`; do
             echo $aws2tfmess > $fn
             printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
             printf "}" >> $ttft.$cname.tf
-            terraform import $ttft.$cname "$cname" | grep Import
+            terraform import $ttft.$cname "$cname" | grep Importing
             terraform state show -no-color $ttft.$cname > t1.txt
             rm -f $ttft.$cname.tf
 

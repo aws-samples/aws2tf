@@ -44,7 +44,7 @@ for c in `seq 0 0`; do
             fi
             printf "resource \"%s\" \"r-%s\" {}\n" $ttft $cname > $fn
          
-            terraform import $ttft.r-$cname "$cname" | grep Import
+            terraform import $ttft.r-$cname "$cname" | grep Importing
             terraform state show -no-color $ttft.r-$cname > t1.txt
 
             #echo $awsj | jq . 

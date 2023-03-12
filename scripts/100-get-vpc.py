@@ -70,13 +70,14 @@ if count > 0:
         #print(rname)
         fn=ttft+"__"+rname+".tf"
         #print(fn)
+# exists ?
         if os.path.isfile(fn):
             print(fn+" exists continuing..")
             continue
         print(ttft+" "+cname+" import")
 
 
-# exists ?
+
        
 
         fr=open(fn, 'w')
@@ -87,10 +88,10 @@ if count > 0:
         rc(cmd)
 
         fnt=ttft+'__'+rname+'.txt'
-        cmd ='terraform state show -no-color '+ttft+'.'+rname+' > '+fn
-        rc(cmd)
-
-        print(fn)
+        cmd ='terraform state show -no-color '+ttft+'.'+rname+' > '+fnt
+        state=rc(cmd)
+        print(state)
+        print(fnt)
         #fr=open(fn, 'w')
 
         #with open(fnt) as file:

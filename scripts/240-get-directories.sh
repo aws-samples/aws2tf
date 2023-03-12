@@ -25,7 +25,7 @@ for c in `seq 0 0`; do
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
             printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
 
-            terraform import $ttft.$rname "$cname" | grep Import
+            terraform import $ttft.$rname "$cname" | grep Importing
             terraform state show -no-color $ttft.$rname > t1.txt 
             rm -f $fn
 
@@ -40,7 +40,10 @@ for c in `seq 0 0`; do
                 if [[ ${t1} == *"="* ]];then
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
-                    if [[ ${tt1} == "arn" ]];then skip=1; fi                
+                    if [[ ${tt1} == "arn" ]];then 
+                    skip=1 
+  
+                    fi                
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
@@ -48,6 +51,10 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "availability_zone_id" ]];then skip=1;fi
                     if [[ ${tt1} == "access_url" ]];then
                         t1="password = \"set me\""
+                        printf "lifecycle {\n" >>$fn
+                        printf "   ignore_changes = [password]\n" >>$fn
+                        printf "}\n" >>$fn
+                    
                     fi
                     if [[ ${tt1} == "security_group_id" ]];then skip=1;fi
                     if [[ ${tt1} == "dns_ip_addresses" ]];then 

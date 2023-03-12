@@ -55,7 +55,7 @@ for c in `seq 0 0`; do
                             printf "resource \"%s\" \"%s__%s\" {\n" $ttft $sname $cname > $fn
                             printf "}\n" >> $fn
                             #cat $fn
-                            comm=$(printf "terraform import %s.%s__%s %s/%s | grep Import" $ttft $sname $cname $sname $rtbid) 
+                            comm=$(printf "terraform import %s.%s__%s %s/%s | grep Importing" $ttft $sname $cname $sname $rtbid) 
                             #echo $comm
                             eval $comm
                             #echo "state show"

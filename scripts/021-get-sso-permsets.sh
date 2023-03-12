@@ -75,7 +75,7 @@ ria=${ia//:/_} && ria=${ria//./_} && ria=${ria//\//_}
             printf "resource \"%s\" \"%s\" {" $ttft $rname > $ttft.$rname.tf
             printf "}"  >> $ttft.$rname.tf
             printf "terraform import %s.%s %s" $ttft $rname "${cname},${ia}" > data/import_$ttft_$rname.sh
-            terraform import $ttft.$rname "${cname},${ia}" | grep Import
+            terraform import $ttft.$rname "${cname},${ia}" | grep Importing
             terraform state show -no-color $ttft.$rname > t1.txt
             tfa=`printf "%s.%s" $ttft $rname`
             terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json

@@ -210,8 +210,8 @@ printf "required_version = \"> 1.3.5\"\n" >> aws.tf
 printf "  required_providers {\n" >> aws.tf
 printf "   aws = {\n" >> aws.tf
 printf "     source  = \"hashicorp/aws\"\n" >> aws.tf
-printf "      version = \"= 4.34.0\"\n" >> aws.tf
-#printf "      version = \"= 3.75.1\"\n" >> aws.tf
+printf "      version = \"= 4.58.0\"\n" >> aws.tf
+#printf "      version = \"= 4.34.0\"\n" >> aws.tf
 printf "    }\n" >> aws.tf
 
 #printf "       awscc = {\n" >> aws.tf
@@ -429,13 +429,14 @@ terraform refresh  -no-color
 echo "fix default SG's"
 . ../../scripts/fix-def-sgs.sh
 echo "Terraform validate ..."
-terraform validate -no-color -json > validate.json
+#terraform validate -no-color -json > validate.json
  # look for undeclared resources other fixable errors
-
-terraform validate -no-color
+echo "Terraform validate 2 ..."
+terraform validate 2> /dev/null
 
 
 if [ "$v" = "yes" ]; then
+    echo "Validate only (-v yes) - exiting ...."
     exit
 fi
 if [ "$d" = "no" ]; then

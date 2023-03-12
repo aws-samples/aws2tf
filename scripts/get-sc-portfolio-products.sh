@@ -20,7 +20,7 @@ for c in `seq 0 0`; do
  
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
@@ -73,7 +73,7 @@ for c in `seq 0 0`; do
 
                         #echo "# import product=$cname portfolio=$1 prodName=$paname"
 
-                        terraform import $ttft.${rname}__${1} "${cname}" | grep Import
+                        terraform import $ttft.${rname}__${1} "${cname}" | grep Importing
                     
                         terraform state show -no-color $ttft.${rname}__${1} > t1.txt
                         #tfa=`printf "data/%s.%s__%s" $ttft $rname $1`

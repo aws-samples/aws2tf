@@ -51,8 +51,8 @@ for c in `seq 0 0`; do
             printf "}"  >> $ttft.$rname.tf
             printf "terraform import %s.%s %s" $ttft $rname "$cname" > data/import_$ttft_$rname.sh
             
-            terraform import $ttft.$rname $1/$rarn | grep Import
-            #terraform import $ttft.$rname "$cname" | grep Import
+            terraform import $ttft.$rname $1/$rarn | grep Importing
+            #terraform import $ttft.$rname "$cname" | grep Importing
             terraform state show -no-color $ttft.$rname > t1.txt
             #tfa=`printf "%s_%s" $ttft $rname`
             #terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json

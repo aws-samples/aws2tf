@@ -56,9 +56,9 @@ for c in `seq 0 0`; do
             printf "resource \"%s\" \"%s__%s\" {}\n" $ttft $bus $cname > $fn
       
             if [[ "$bus" == "default" ]];then
-                terraform import $ttft.${bus}__${cname} "${cname}" | grep Import
+                terraform import $ttft.${bus}__${cname} "${cname}" | grep Importing
             else
-                terraform import $ttft.${bus}__${cname} "${bus}/${cname}" | grep Import
+                terraform import $ttft.${bus}__${cname} "${bus}/${cname}" | grep Importing
             fi
             
             terraform state show -no-color $ttft.${bus}__${cname} > t1.txt

@@ -21,7 +21,7 @@ if [ -f "$fsg" ] ; then
         cp aws_security_group__${sgn}.tf saved 2&> /dev/null
         rm -f aws_security_group__${sgn}.tf > /dev/null
         echo "remove tf state for default security group aws_security_group.${sgn}"
-        terraform state rm aws_security_group.${sgn}
+        terraform state rm aws_security_group.${sgn} 2& > /dev/null
     done
 fi
 

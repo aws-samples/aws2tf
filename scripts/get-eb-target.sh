@@ -55,9 +55,9 @@ for c in `seq 0 0`; do
             printf "resource \"%s\" \"%s__%s__%s\" {" $ttft $bus $ru $cname > $fn
             printf "}" >> $fn
             if [[ "$bus" == "default" ]];then
-                terraform import $ttft.${bus}__${ru}__${cname} "${ru}/${cname}" | grep Import
+                terraform import $ttft.${bus}__${ru}__${cname} "${ru}/${cname}" | grep Importing
             else
-                terraform import $ttft.${bus}__${ru}__${cname} "${bus}/${ru}/${cname}" | grep Import
+                terraform import $ttft.${bus}__${ru}__${cname} "${bus}/${ru}/${cname}" | grep Importing
             fi
             
             terraform state show -no-color $ttft.${bus}__${ru}__${cname} > t1.txt
@@ -105,26 +105,28 @@ for c in `seq 0 0`; do
                     fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "input_template" ]];then
+                        #tt2=$(echo $tt2 | tr -d '"| ')
                         #echo "--> $tt2"
                         if [[ "$tt2" == *"EOT"* ]];then
                             if [[ $itar == *"<<-EOT" ]];then
-                                tt2=$(echo $tt2 | sed 's/"//')
-                                tt2=$(echo $tt2 | rev | sed 's/"//' | rev )
+                                tt2="${tt2%\"}"
+                                tt2="${tt2#\"}"
                                 tt2=$(echo $tt2 | sed 's/"/\\"/g') 
                                 itar==$(echo $tt2)
                                 t1=`printf "%s = <<-EOT" $tt1 `
 
                             fi
                         else
-                                echo "-1-> $tt2"
-                                tt2=$(echo $tt2 | sed 's/"//')
-                                tt2=$(echo $tt2 | rev | sed 's/"//' | rev )
-                                tt2=$(echo $tt2 | sed 's/"//')
-                                tt2=$(echo $tt2 | rev | sed 's/"//' | rev )
-                                echo "-2-> $tt2"
-                                if [[ "$tt2" == /"/"* ]];then
-                                    echo "--> double quote $tt2"
-                                fi
+                               # echo "-1-> $tt2"
+                                tt2=$(sed -e 's/^ //' <<<"$tt2")
+                                tt2=$(sed -e 's/^"//' -e 's/"$//' <<<"$tt2")
+                                tt2=$(sed -e 's/^"//' -e 's/"$//' <<<"$tt2")
+                                #tt2="${tt2%\"}"
+                                #tt2="${tt2#\"}"
+                                #echo "-2->$tt2"
+                                #if [[ "$tt2" == "/"* ]];then
+                                #    echo "--> double quote $tt2"
+                                #fi
 
                                 t1=`printf "%s = jsonencode(\"%s\")" $tt1 "$tt2"`
                         fi

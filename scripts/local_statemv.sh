@@ -6,23 +6,24 @@ else
     pref=$(echo $1)
 fi
 sync;sync
-echo "listing in local state move"
+myd=`pwd`
+echo "listing in local state move $myd  $pref"
 #ls -l ${pref}*.tfstate
-ls ${pref}*.tfstate &> /dev/null
+ls *${pref}*.tfstate &> /dev/null
 if [[ $? -ne 0 ]];then
-    echo "No ${pref} state files exiting ..."
+    echo "No ${pref} state files in $myd exiting ..."
     exit
 else
     echo "Starting state mv for $pref"
 fi
-for st in `ls ${pref}*.tfstate 2> /dev/null` 
+for st in `ls *${pref}*.tfstate 2> /dev/null` 
 do
     ttft=${st%__*}
 
     #rname=${st#\/${1}__/}
     rname=${st#${ttft}__}
     rname=$(echo $rname | cut -f1 -d'.')  
-    echo $st $ttft $rname
+    #echo $st $ttft $rname
     sl=`echo $((1 + $RANDOM % 10))`
     terraform state rm $ttft.$rname 2> /dev/null
     comm=$(printf "terraform state mv -state %s -state-out=terraform.tfstate -lock=true %s.%s %s.%s" $st $ttft $rname $ttft $rname)
@@ -53,4 +54,4 @@ do
     #   fi
 done
 rm -f terr*.backup
-rm -rf pi2
+#rm -rf pi2

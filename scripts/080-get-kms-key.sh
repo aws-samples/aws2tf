@@ -61,7 +61,7 @@ for c in `seq 0 0`; do
                 printf "}" >> $fn
                 printf "terraform import %s.k_%s %s" $ttft $cname $cname > "data/import_$ttft_$cname.sh"
                 echo "$cname import"
-                terraform import $ttft.k_$cname "$cname" | grep Import
+                terraform import $ttft.k_$cname "$cname" | grep Importing
                 if [ $? -eq 0 ]; then
                
                     #terraform state mv $ttft.$cname $ttft.k_$cname

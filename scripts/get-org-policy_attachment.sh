@@ -46,8 +46,8 @@ c=0
             printf "}\n"  >> $fn
             printf "terraform import %s.%s__%s %s" $ttft $rname $1 "$cname":$1 > data/import_$ttft_$rname_$1.sh
             comm=`printf "terraform import %s.%s__%s \"%s:%s\"" $ttft $rname $1 $cname $1`
-            eval $comm | grep Import
-            #terraform import $ttft.$rname__$1 "$cname:$1" #| grep Import
+            eval $comm | grep Importing
+            #terraform import $ttft.$rname__$1 "$cname:$1" #| grep Importing
 
             terraform state show -no-color ${ttft}.${rname}__${1} > t1.txt
             

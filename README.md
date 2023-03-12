@@ -44,7 +44,8 @@ To generate the terraform files for an account and stop after a "terraform valid
 ./aws2tf.sh -v yes
 ```
 
-or if your interested in a type or group for example: Transit Gateway resources:
+Or if you have a lot of resources in your accoutn try using -t to restrict the number of resources you scan. 
+So if your interested in a type or group for example: Transit Gateway resources:
 ```
 ./aws2tf.sh -v yes -t tgw
 ```
@@ -71,7 +72,7 @@ To generate the terraform files for an entire AWS account, import the resources 
 ./aws2tf.sh 
 ```
 
-*Note this will take some time*
+*Note this will take some time - consider using a `-t` filter instead - and the adding resources with a subsequent run using -c and -f - see below.
 
 To extract all AWS account Policies and Roles:
 ```
@@ -86,8 +87,14 @@ To generate the terraform files for an EKS cluster named "mycluster"
 To add App Mesh resources
 
 ```
-./aws2tf.sh -t appmesh -c yes
+./aws2tf.sh -t appmesh -c yes -f yes
 ```
+
+The `-c yes` is used to "continue" from where we left off, 
+The `-f yes` is the "fast forward" action it skips past blocks of resources that were completed during the last run.
+
+The two used in combination should quickly have your run progressing from where you left off
+
 
 ----
 
@@ -192,8 +199,9 @@ To get all the resources in a deployed Stack Set
 Or simply check back after some time to see if they are listed below.
 
 
+
 ----
-## Terraform resources supported as of 22-Feb-2023
+## Terraform resources supported as of 12-Mar-2023
 
 * aws_acm_certificate
 * aws_api_gateway_resource
@@ -255,7 +263,9 @@ Or simply check back after some time to see if they are listed below.
 * aws_ec2_transit_gateway_vpc_attachment
 * aws_ec2_transit_gateway_vpn_attachment
 * aws_ecr_repository
+* aws_ecs_capacity_provider
 * aws_ecs_cluster
+* aws_ecs_cluster_capacity_providers
 * aws_ecs_service
 * aws_ecs_task_definition
 * aws_efs_access_point
@@ -340,6 +350,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_sagemaker_image
 * aws_sagemaker_image_version
 * aws_sagemaker_notebook_instance
+* aws_sagemaker_studio_lifecycle_config
 * aws_sagemaker_user_profile
 * aws_secretsmanager_secret
 * aws_secretsmanager_secret_version
@@ -374,7 +385,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_vpn_connection
 
 ----
-## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 22-Feb-2023
+## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 12-Mar-2023
 
 * #AWS::IAM::Policy
 * AWS::ApiGateway::Account
@@ -426,6 +437,8 @@ Or simply check back after some time to see if they are listed below.
 * AWS::EFS::MountTarget
 * AWS::EKS::Cluster
 * AWS::EKS::Nodegroup
+* AWS::EMR::Cluster
+* AWS::EMR::SecurityConfiguration
 * AWS::ElasticLoadBalancingV2::Listener
 * AWS::ElasticLoadBalancingV2::ListenerRule
 * AWS::ElasticLoadBalancingV2::LoadBalancer
@@ -451,6 +464,7 @@ Or simply check back after some time to see if they are listed below.
 * AWS::KinesisFirehose::DeliveryStream
 * AWS::LakeFormation::DataLakeSettings
 * AWS::LakeFormation::Permissions
+* AWS::LakeFormation::PrincipalPermissions
 * AWS::LakeFormation::Resource
 * AWS::Lambda::EventInvokeConfig
 * AWS::Lambda::Function
@@ -475,9 +489,9 @@ Or simply check back after some time to see if they are listed below.
 * AWS::SageMaker::Image
 * AWS::SageMaker::ImageVersion
 * AWS::SageMaker::NotebookInstance
+* AWS::SageMaker::UserProfile
 * AWS::SecretsManager::Secret
 * AWS::ServiceDiscovery::Service
 * AWS::StepFunctions::StateMachine
  
 ----
-

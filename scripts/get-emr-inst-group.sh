@@ -37,7 +37,7 @@ for c in `seq 0 0`; do
             printf "resource \"%s\" \"%s__%s\" {" $ttft $1 $cname > $ttft.$1__$cname.tf
             printf "}" $cname >> $ttft.$1__$cname.tf
             printf "terraform import %s.%s__%s %s__%s" $ttft $1 $cname $1 $cname > data/import_$ttft_$1_$cname.sh
-            terraform import $ttft.$1__$cname "$1/$cname" | grep Import
+            terraform import $ttft.$1__$cname "$1/$cname" | grep Importing
             
             terraform state show -no-color $ttft.$1__$cname > t1.txt
             tfa=`printf "data/%s.%s__%s" $ttft $1 $cname`

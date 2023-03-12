@@ -56,7 +56,7 @@ for c in `seq 0 0`; do
                 echo "$ttft $cname"
                 printf "resource \"%s\" \"%s__%s\" {}" $ttft $1 $cname > $fn
 
-                terraform import $ttft.$1__$cname $1/$cname | grep Import
+                terraform import $ttft.$1__$cname $1/$cname | grep Importing
                 terraform state show -no-color $ttft.$1__$cname > t1.txt
                 rm -f $fn
 

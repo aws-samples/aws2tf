@@ -1,4 +1,9 @@
+echo "import.log adjust"
+cat import.log | perl -pe 's/\x1b.*?[mGKH]//g' > imp.log
+sed -i'.orig' -e 's/Error: Resource already managed by Terraform//g' imp.log
+cp imp.log import.log
 echo "--> Validate Fixer"
+
 vl=$(cat validate.json | jq '.diagnostics | length')
 #echo $vl
 if [[ $vl -eq 0 ]]; then
@@ -9,7 +14,6 @@ undec=$(cat validate.json | jq '.diagnostics')
 count=$(echo $undec | jq '. | length' | tail -1)
 count=$(expr $count - 1)
 #echo $count
-
 
 #
 # Reference to undeclared resource
@@ -63,7 +67,7 @@ for c in $(seq 0 $count); do
                 tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
                 tarn=${tarn//\//\\/}
                 echo "**-->role tarn = $tarn $res"
-                if [[ $tarn != "null" ]] && [[ $tarn != "" ]] ; then
+                if [[ $tarn != "null" ]] && [[ $tarn != "" ]]; then
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
                     #echo " "
                     #"echo --$cmd"
@@ -88,17 +92,34 @@ for c in $(seq 0 $count); do
                     fi
                 fi
             fi
-            echo $tft
+
+            if [[ $tft == "aws_dynamodb_table" ]]; then
+                addr=$(echo $addr | cut -f2 -d'_')
+                tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
+                tarn=${tarn//\//\\/}
+                ttyp=$(grep $addr data/arn-map.dat | cut -f1 -d',' | head -1)
+                if [[ $ttyp == "aws_dynamodb_table" ]]; then
+                    if [[ $tarn != "null" ]]; then
+                        cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
+                        #echo " "
+                        #echo $cmd
+                        echo "** Undeclared Fix: $res --> $tarn"
+                        eval $cmd
+
+                    fi
+                fi
+            fi
+
             if [[ $tft == "aws_sagemaker_image" ]]; then
                 addr=$(echo $addr | cut -f2 -d'_')
                 tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
                 tarn=${tarn//\//\\/}
                 ttyp=$(grep $addr data/arn-map.dat | cut -f1 -d',' | head -1)
-      
+
                 if [[ $ttyp == "aws_sagemaker_image" ]]; then
-                 
+
                     if [[ $tarn != "null" ]]; then
-                        
+
                         cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
                         echo " "
                         echo $cmd
@@ -110,19 +131,19 @@ for c in $(seq 0 $count); do
             fi
 
             #special case in cloudtrail
-            if [[ $fil == "aws_cloudtrail"* ]];then
+            if [[ $fil == "aws_cloudtrail"* ]]; then
                 #echo "in file"
-                if [[ $tft == *"aws_cloudwatch_log_group"* ]];then
+                if [[ $tft == *"aws_cloudwatch_log_group"* ]]; then
                     #echo "in cwl file"
-                    if [[ $lhs="cloud_watch_logs_group_arn" ]];then
+                    if [[ $lhs="cloud_watch_logs_group_arn" ]]; then
                         #addr=$(echo $addr | cut -f2 -d'_')
-                  
+
                         tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
                         ttyp=$(grep $addr data/arn-map.dat | cut -f1 -d',' | head -1)
                         line=$(echo $undec | jq -r ".[${c}].range.start.line")
                         if [[ $ttyp == "aws_cloudwatch_log_group" ]]; then
                             if [[ $tarn != "null" ]]; then
-                              
+
                                 #res2=$(echo $res | sed 's/"/\\\"/g')
                                 #echo $res2
 
@@ -135,14 +156,14 @@ for c in $(seq 0 $count); do
 
                             fi
                         fi
-                    fi               
-                fi      
+                    fi
+                fi
             fi
 
             # drop in id's - ie. no ARN replacement
 
-            if [[ $tft == "aws_nat_gateway" ]] || [[ $tft == "aws_vpc" ]] || [[ $tft == "aws_subnet" ]] || [[ $tft == "aws_security_group" ]] || [[ $tft == "aws_ec2_transit_gateway_vpc_attachment" ]] || [[ $tft == "aws_vpc_peering_connection" ]]; then
-                if [[ $res == *"," ]];then
+            if [[ $tft == "aws_iam_instance_profile" ]] || [[ $tft == "aws_nat_gateway" ]] || [[ $tft == "aws_vpc" ]] || [[ $tft == "aws_subnet" ]] || [[ $tft == "aws_security_group" ]] || [[ $tft == "aws_ec2_transit_gateway_vpc_attachment" ]] || [[ $tft == "aws_vpc_peering_connection" ]]; then
+                if [[ $res == *"," ]]; then
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\",/g' ${fil}" $res $addr)
                     echo "** Undeclared Fix: $res --> $addr,"
                 else
@@ -152,9 +173,14 @@ for c in $(seq 0 $count); do
                 eval $cmd
             fi
 
-
-
-
+            if [[ $tft == "aws_servicecatalog_product" ]]; then
+                addr=$(echo $res | cut -f2 -d'.' | cut -f1 -d'_')
+                if [[ $addr == "prod"* ]]; then
+                    cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $addr)
+                    eval $cmd
+                    echo "** Undeclared Fix: $res --> $addr"
+                fi
+            fi
         fi
     fi
 done
@@ -177,7 +203,7 @@ for c in $(seq 0 $count); do
     fi
 done
 #
-# name_prefix conflict
+# name_prefix conflict Conflicting configuration argument
 #
 for c in $(seq 0 $count); do
     summ=$(echo $undec | jq -r ".[(${c})].summary")
@@ -188,9 +214,9 @@ for c in $(seq 0 $count); do
         res=$(echo $undec | jq -r ".[${c}].snippet.code" | tr -d ' ' | cut -f1 -d'=')
         line=$(echo $undec | jq -r ".[${c}].range.start.line")
         #echo $res
-        if [[ $res == "name_prefix" ]]; then
+        if [[ $res == "name_prefix" ]] || [[ $res == "node_group_name_prefix" ]]; then
             cmd=$(printf "sed -i -e '%ss/.*/\#/' ${fil}" $line)
-            echo "Deleted conflicting name fix --> $res"
+            echo "Deleted conflicting name fix --> $res" | tee -a data/val-fixed.log
             #echo $cmd
             eval $cmd
 
@@ -269,3 +295,29 @@ for c in $(seq 0 $count); do
         fi
     fi
 done
+
+#
+## Unclosed configuration block
+#
+
+for c in $(seq 0 $count); do
+    summ=$(echo $undec | jq -r ".[(${c})].summary")
+    if [[ $summ == "Unclosed configuration block" ]]; then
+        echo "-1-> "
+        #echo $undec | jq -r ".[(${c})]"
+        detl=$(echo $undec | jq -r ".[(${c})].detail")
+        fil=$(echo $undec | jq -r ".[(${c})].range.filename")
+        res=$(echo $undec | jq -r ".[${c}].snippet.code" | tr -d ' ' | cut -f1 -d'=')
+        line=$(echo $undec | jq -r ".[${c}].range.start.line")
+        code=$(echo $undec | jq -r ".[${c}].snippet.code" | tr -d ' ')
+
+        if [[ $detl == *"There is no closing brace for this block before the end of the file"* ]];then
+            echo "Appending } to --> $fil"
+            echo "}" >> $fil
+        fi
+
+ 
+    fi
+done
+
+

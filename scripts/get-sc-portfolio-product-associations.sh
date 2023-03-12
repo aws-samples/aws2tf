@@ -42,7 +42,7 @@ for c in `seq 0 0`; do
 
             printf "resource \"%s\" \"%s__%s\" {" $ttft $rname $1 > $fn
             printf "}" >> $fn
-            terraform import $ttft.${rname}__${1} "en:${cname}:${1}" | grep Import
+            terraform import $ttft.${rname}__${1} "en:${cname}:${1}" | grep Importing
          
             terraform state show -no-color $ttft.${rname}__${1} > t1.txt
 

@@ -1,4 +1,6 @@
 #!/bin/bash
+mysub=$(echo $AWS2TF_ACCOUNT)
+myreg=$(echo $AWS2TF_REGION)
 pref[0]="Trails"
 tft[0]="aws_cloudtrail"
 idfilt[0]="Name"
@@ -19,7 +21,7 @@ if [ "$count" -eq "0" ]; then echo "No resources found exiting .." && exit; fi
 count=$(expr $count - 1)
 
 c=0
-region=$(echo "var.region" | terraform console | tr -d '"')
+region=$(echo $myreg)
 
 ttft=${tft[(${c})]}
 
@@ -50,8 +52,8 @@ for i in $(seq 0 $count); do
         if [ -f "$fn" ]; then echo "$fn exists already skipping" && continue; fi
 
         echo "$ttft $cname"
-        printf "resource \"%s\" \"%s\" {}\n" $ttft $cname >$fn
-        terraform import $ttft.$cname "$cname" | grep Import
+        printf "resource \"%s\" \"%s\" {}\n" $ttft $cname > $fn
+        terraform import $ttft.$cname "$cname" | grep Importing
         terraform state show -no-color $ttft.$cname >t1.txt
         rm -f $fn
 

@@ -38,7 +38,7 @@ for i in `seq 0 $count`; do
 
     printf "resource \"%s\" \"%s__%s\" {}\n" $ttft $rname $rname2 > $fn  
     
-    #terraform import $ttft.${rname}__${rname2} "${cname}","${rarn}" | grep Import
+    #terraform import $ttft.${rname}__${rname2} "${cname}","${rarn}" | grep Importing
     cmd=$(echo "terraform import $ttft.${rname}__${rname2} ${cname},${rarn}")
     eval $cmd
     terraform state show -no-color $ttft.${rname}__${rname2} > t1.txt

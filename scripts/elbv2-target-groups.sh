@@ -45,7 +45,7 @@ for c in `seq 0 0`; do
             printf "resource \"%s\" \"%s\" {\n" $ttft $rname > $fn
             printf "}"  >> $fn
             
-            terraform import $ttft.$rname "$cname" | grep Import
+            terraform import $ttft.$rname "$cname" | grep Importing
             terraform state show -no-color $ttft.$rname > t1.txt
             
             rm -f $fn
@@ -91,7 +91,11 @@ for c in `seq 0 0`; do
                         vpcid=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`
                     fi
-
+                
+                else
+                    if [[ ${t1} == *"target_failover {}"* ]]; then
+                        skip=1
+                    fi
                 fi
                 
                 if [ "$skip" == "0" ]; then

@@ -74,7 +74,7 @@ for c in `seq 0 0`; do
             printf "resource \"%s\" \"c__%s__%s__%s__%s\" {}" $ttft $catid $dbnam ${tbnam} $rname > $fn
             
     
-            terraform import $ttft.c__${catid}__${dbnam}__${tbnam}__${rname} "${catid}:${dbnam}:${tbnam}:${cname}" | grep Import
+            terraform import $ttft.c__${catid}__${dbnam}__${tbnam}__${rname} "${catid}:${dbnam}:${tbnam}:${cname}" | grep Importing
             terraform state show -no-color $ttft.c__${catid}__${dbnam}__${tbnam}__${rname} > t1.txt
 
             rm -f $fn

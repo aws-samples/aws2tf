@@ -45,7 +45,7 @@ for c in $(seq 0 0); do
             echo "$ttft $cname"
 
             printf "resource \"%s\" \"%s\" {}\n" $ttft $cname >$fn
-            terraform import $ttft.$cname $1:$pname | grep Import
+            terraform import $ttft.$cname $1:$pname | grep Importing
             terraform state show -no-color $ttft.$cname >t1.txt
             rm -f $fn
 
@@ -107,6 +107,7 @@ for c in $(seq 0 0); do
                             elif [[ "$tt2" == *"arn:aws:dynamodb:${myreg}:${mysub}:table/"* ]]; then
                                 rdyn=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')
                                 t1=$(printf "%s = aws_dynamodb_table.%s.arn" $tt1 $rdyn)
+                                echo "aws_dynamodb_table,$tt2,$rdyn" >> data/arn-map.dat
                             elif [[ "$tt2" == *"arn:aws:kms:${myreg}:${mysub}:key/"* ]]; then
                                 kid=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')
                                 t1=$(printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid)

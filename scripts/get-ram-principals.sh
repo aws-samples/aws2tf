@@ -37,7 +37,7 @@ for i in `seq 0 $count`; do
 
     printf "resource \"%s\" \"%s__%s\" {}\n" $ttft $rname $prinid > $fn  
     
-    terraform import $ttft.${rname}__${prinid} "${cname}","${prinid}" | grep Import
+    terraform import $ttft.${rname}__${prinid} "${cname}","${prinid}" | grep Importing
     terraform state show -no-color $ttft.${rname}__${prinid} > t1.txt
 
     rm -f $fn

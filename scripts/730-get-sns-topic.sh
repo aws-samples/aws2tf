@@ -50,7 +50,7 @@ for c in `seq 0 0`; do
 
             printf "resource \"%s\" \"%s\" {}\n" $ttft $rname > $fn
            
-            terraform import $ttft.${rname} "${cname}" | grep Import
+            terraform import $ttft.${rname} "${cname}" | grep Importing
             terraform state show -no-color $ttft.${rname} > t1.txt
 
             rm -f $fn
@@ -75,6 +75,13 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == *":"* ]];then 
                         tt1=`echo $tt1 | tr -d '"'`
                         t1=`printf "\"%s\"=%s" $tt1 $tt2`
+                    fi
+
+                    if [[ ${tt1} == "signature_version" ]];then 
+                        tt2=`echo $tt2 | tr -d '"'`
+                        if [[ $tt2 == "0" ]];then
+                            skip=1
+                        fi
                     fi
                     
                     ## commented to stop - Error: Self-referential block

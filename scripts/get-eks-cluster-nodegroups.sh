@@ -69,7 +69,7 @@ if [ "$kcount" -gt "0" ]; then
                             #echo "pre-import"
                             #ls -l
                             echo "Importing ....."
-                            terraform import $ttft.$cname $ocname | grep Import
+                            terraform import $ttft.$cname $ocname | grep Importing
                             terraform state show -no-color $ttft.$cname > t1.txt
                             rm -f $fn
             

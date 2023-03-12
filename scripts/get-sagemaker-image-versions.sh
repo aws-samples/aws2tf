@@ -40,7 +40,7 @@ for c in `seq 0 0`; do
             echo "$ttft $cname import"
             printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
             printf "terraform import %s.%s %s" $ttft $rname $cname > import_$ttft_$rname.sh
-            terraform import $ttft.$rname $cname | grep Import
+            terraform import $ttft.$rname $cname | grep Importing
             terraform state show -no-color $ttft.$rname > t1.txt
    
             rm -f $fn

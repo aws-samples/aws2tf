@@ -60,7 +60,10 @@ for c in `seq 0 0`; do
                             skip=1
                         else
                             skip=0; 
-                        fi
+                        fi                       
+                        printf "lifecycle {\n" >>$fn
+                        printf "   ignore_changes = [latest_version]\n" >>$fn
+                        printf "}\n" >>$fn
                     fi                
                     if [[ ${tt1} == "id" ]];then skip=1; fi          
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi

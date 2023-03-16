@@ -37,9 +37,15 @@ for i in $(seq 0 $count); do
     rm -f $fn
 
     file="t1.txt"
+    isw=0
+    isfd=0
+    isfdwp=0
+    lc=$(wc -l t1.txt | awk '{print $1}')
+    li=0
     echo $aws2tfmess >$fn
     while IFS= read t1; do
         skip=0
+        li=$(expr $li + 1)
         if [[ ${t1} == *"="* ]]; then
             tt1=$(echo "$t1" | cut -f1 -d'=' | tr -d ' ')
             tt2=$(echo "$t1" | cut -f2- -d'=')
@@ -54,6 +60,13 @@ for i in $(seq 0 $count); do
 
             if [[ ${tt1} == "volume_id" ]]; then skip=1; fi
             if [[ ${tt1} == "user_data" ]]; then skip=1; fi
+            
+            if [[ ${tt1} == "force_delete" ]]; then isfd=1; fi
+            if [[ ${tt1} == "force_delete_warm_pool" ]]; then isfdwp=1; fi
+            if [[ ${tt1} == "wait_for_capacity_timeout" ]]; then isw=1; fi
+            
+            
+            
             if [[ ${tt1} == "availability_zones" ]]; then
                 az=1
             fi
@@ -72,11 +85,15 @@ for i in $(seq 0 $count); do
                         done
                 fi
             fi
+        
+
 
         fi
 
         if [ "$skip" == "0" ]; then echo "$t1" >>$fn; fi
-
+        if [[ $li == $lc ]];then
+            echo "last line ? = $t1"
+        fi
     done <"$file"
     # dependancies here
     if [[ $lcn != "" ]];then

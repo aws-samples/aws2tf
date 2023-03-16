@@ -44,7 +44,7 @@ for c in `seq 0 0`; do
             #echo $i
             cname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}"`
 
-            echo "$ttft $bus $ru $cname"
+            #echo "$ttft $bus $ru $cname"
 
             fn=`printf "%s__%s__%s__%s.tf" $ttft $bus $ru $cname`
             if [ -f "$fn" ] ; then
@@ -52,13 +52,18 @@ for c in `seq 0 0`; do
                     continue
             fi
 
-            printf "resource \"%s\" \"%s__%s__%s\" {" $ttft $bus $ru $cname > $fn
-            printf "}" >> $fn
+            printf "resource \"%s\" \"%s__%s__%s\" {}\n" $ttft $bus $ru $cname > $fn
+
             if [[ "$bus" == "default" ]];then
                 terraform import $ttft.${bus}__${ru}__${cname} "${ru}/${cname}" | grep Importing
             else
                 terraform import $ttft.${bus}__${ru}__${cname} "${bus}/${ru}/${cname}" | grep Importing
             fi
+            
+# get input_template to file
+            
+            echo $awsout | jq ".${pref[(${c})]}[(${i})].InputTransformer.InputTemplate" > data/it_${bus}_${ru}_${cname}.json
+            inpt=$(echo $awsout | jq ".${pref[(${c})]}[(${i})].InputTransformer.InputTemplate")
             
             terraform state show -no-color $ttft.${bus}__${ru}__${cname} > t1.txt
 
@@ -105,30 +110,17 @@ for c in `seq 0 0`; do
                     fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "input_template" ]];then
-                        #tt2=$(echo $tt2 | tr -d '"| ')
-                        #echo "--> $tt2"
+                        t1=`printf "input_template = jsonencode(file(\"data/it_%s_%s_%s.json\"))" $bus $ru $cname`
+                        
                         if [[ "$tt2" == *"EOT"* ]];then
-                            if [[ $itar == *"<<-EOT" ]];then
-                                tt2="${tt2%\"}"
-                                tt2="${tt2#\"}"
-                                tt2=$(echo $tt2 | sed 's/"/\\"/g') 
-                                itar==$(echo $tt2)
-                                t1=`printf "%s = <<-EOT" $tt1 `
-
-                            fi
-                        else
-                               # echo "-1-> $tt2"
-                                tt2=$(sed -e 's/^ //' <<<"$tt2")
-                                tt2=$(sed -e 's/^"//' -e 's/"$//' <<<"$tt2")
-                                tt2=$(sed -e 's/^"//' -e 's/"$//' <<<"$tt2")
-                                #tt2="${tt2%\"}"
-                                #tt2="${tt2#\"}"
-                                #echo "-2->$tt2"
-                                #if [[ "$tt2" == "/"* ]];then
-                                #    echo "--> double quote $tt2"
-                                #fi
-
-                                t1=`printf "%s = jsonencode(\"%s\")" $tt1 "$tt2"`
+                            read line
+                            ts1=`echo "$line"`
+                            echo "EOT ts1 = $ts1"
+                            while [[ $ts1 != *"EOT"* ]];do
+                                read line
+                                ts1=`echo "$line"`
+                            done
+                            
                         fi
 
                     fi

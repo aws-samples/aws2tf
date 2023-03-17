@@ -58,6 +58,7 @@ if [[ $? -ne 0 ]];then
     if [[ ! -f "$fn" ]]; then echo "Error in pi2: prototype $fn does not exist exiting..." && exit; fi
            
     comm=$(printf "nice -n %s terraform import -no-color -state %s %s.%s \"%s\" &> imp-%s-%s.log" $sl $st $ttft $rname $cname $ttft $rname)
+    comm2=$(printf "nice -n %s terraform import -no-color -state %s %s.%s \"%s\" > imp-%s-%s.log" $sl $st $ttft $rname $cname $ttft $rname)
     #echo $comm
     sleep $sl
     eval $comm
@@ -80,7 +81,7 @@ if [[ $? -ne 0 ]];then
                     sl=`echo $((16 + $RANDOM % 40))`
                     sleep $sl
                     sync;sync
-                    eval $comm
+                    eval $comm2
                     if [ $? -ne 0 ]; then
                         echo "** ERROR ** $rname Import failed"
                         mv $fn ../data/$fn.pi2

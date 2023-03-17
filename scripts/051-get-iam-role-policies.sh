@@ -68,6 +68,7 @@ for c in $(seq 0 0); do
                     if [[ ${tt1} == "role_arn" ]]; then skip=1; fi
                     if [[ ${tt1} == "role" ]]; then
                         tsel=$(echo $tt2 | tr -d '"')
+                        echo "tsel = $tsel"
                         t1=$(printf "%s = aws_iam_role.%s.id" $tt1 $tsel)
                         skip=0
                     fi
@@ -117,8 +118,11 @@ for c in $(seq 0 0); do
                                     s3id=$(echo $tt2 | rev | cut -f1 -d':' | rev | tr -d '"')
                                     echo "aws_s3_bucket,$s3arn,$s3id" >> data/arn-map.dat
                                     echo "**> s3id=$s3id"
+                                    s3len=$(echo $s3id | wc -c)
                                     if [[ $s3id == "*" ]];then
                                         t1=$(printf "%s = \"arn:aws:s3:::*\"" $tt1)
+                                    elif  [[ $s3id == *"*" ]];then
+                                        t1=$(printf "%s = \"arn:aws:s3:::%s\"" $tt1 $s3id)
                                     else
                                         t1=$(printf "%s = aws_s3_bucket.b_%s.arn" $tt1 $s3id)
                                     fi

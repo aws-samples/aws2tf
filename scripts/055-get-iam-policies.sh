@@ -40,8 +40,6 @@ for c in `seq 0 0`; do
             # is it AWS Managed ?
             awsm=""
 
-
-
             if [ "$1" != "" ]; then
                 pname=`echo $awsout | jq -r ".${pref[(${c})]}.PolicyName"`
                 cname=`echo $awsout | jq ".${pref[(${c})]}.Arn" | tr -d '"'`
@@ -60,18 +58,19 @@ for c in `seq 0 0`; do
                     getp=1
                 fi
             else
-                echo "not set"
+                #echo "not set"
                 getp=1
             fi
             if [ "$getp" == "1" ]; then
-                fn=`printf "%s__%s.tf" $ttft p_$cname`
+                fn=`printf "%s__p_%s.tf" $ttft $cname`
                 if [ -f "$fn" ] ; then
                     echo "$fn exists already skipping"
                     continue
                 fi
 
                 echo "$ttft $cname"
-                printf "resource \"%s\" \"%s\" {}\n" $ttft $cname > $fn
+                echo "aws_iam_policy,$ocname,$cname" >>data/arn-map.dat
+                printf "resource \"%s\" \"p_%s\" {}\n" $ttft $cname > $fn
                 terraform import $ttft.p_$cname $ocname | grep Importing
                 terraform state show -no-color $ttft.p_$cname > t1.txt
                 rm -f $fn
@@ -105,7 +104,16 @@ for c in `seq 0 0`; do
                         if [[ ${tt1} == "id" ]];then skip=1; fi
                         if [[ ${tt1} == "policy_id" ]];then skip=1; fi
                         if [[ ${tt1} == "role_arn" ]];then skip=1;fi
+                    else
+                    
+                        if [[ $t1 == *"\${"* ]];then
+                            t1=${t1//$/&} 
+                        fi
+                    
                     fi
+                    
+
+
                     if [ "$skip" == "0" ]; then
                         #echo $skip $t1
                         echo "$t1" >> $fn

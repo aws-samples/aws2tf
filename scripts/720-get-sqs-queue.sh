@@ -1,4 +1,6 @@
 #!/bin/bash
+mysub=`echo $AWS2TF_ACCOUNT`
+myreg=`echo $AWS2TF_REGION`
 if [[ "$1" != "" ]]; then
     pref=$(echo $1 | rev | cut -f1 -d'/' | rev)
     cmd[0]="$AWS sqs list-queues --queue-name-prefix $pref"
@@ -36,8 +38,8 @@ for c in `seq 0 0`; do
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
 
-            printf "resource \"%s\" \"%s\" {" $ttft $rname > $fn
-            printf "}" >> $fn
+            printf "resource \"%s\" \"%s\" {}\n" $ttft $rname > $fn
+     
     
             terraform import $ttft.${rname} "${cname}" | grep Importing
             terraform state show -no-color $ttft.${rname} > t1.txt
@@ -65,15 +67,20 @@ for c in `seq 0 0`; do
                         qurl=${tt2//:/_} && rn=${rn//./_} && rn=${rn//\//_}
                     fi
                     if [[ ${tt1} == *":"* ]];then
+
                         tt2=$(echo $tt2 | tr -d '"')
-                        if [[ ${tt1} == "aws:SourceArn" ]];then
+                        #echo "-1->> $tt1 $tt2"
+                        if [[ ${tt1} == *"aws:SourceArn"* ]];then
+                            #echo "-2->> $tt2"
                             if [[ ${tt2} == *":aws:sns:"* ]];then
                                 tarn=$(echo $tt2)
-                                rn=${tt2//:/_} && rn=${rn//./_} && rn=${rn//\//_}
-                                t1=`printf "\"%s\" = aws_sns_topic.%s.arn" $tt1 $rn`
+                                #echo "-3->> $tarn"
+                                #rn=${tt2//:/_} && rn=${rn//./_} && rn=${rn//\//_}
+                                rn=${tt2//:/_} && rn=${rn//./_} && rn=${rn//\//_} && rn=${rn/${mysub}/}
+                                t1=`printf "%s = aws_sns_topic.%s.arn" $tt1 $rn`
                             else
                                 tt1=`echo $tt1 | tr -d '"'`
-                                t1=`printf "\"%s\"=%s" $tt1 $tt2`
+                                t1=`printf "\"%s\"=\"%s\"" $tt1 $tt2`
                             fi
                         else
                             tt1=`echo $tt1 | tr -d '"'`
@@ -97,20 +104,13 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "Resource" ]];then 
                         tt2=$(echo $tt2 | tr -d '"')
                         if [[ "$tt2" == *":aws:sns:"* ]];then
-                            tarn=$(echo $tt2)
+                            tarn2=$(echo $tt2)
                             rn=${tt2//:/_} && rn=${rn//./_} && rn=${rn//\//_}
-                            if [[ "$tarn" != "$cname" ]];then ## to stop - Error: Self-referential block
+                            if [[ "$tarn2" != "$cname" ]];then ## to stop - Error: Self-referential block
                                 t1=`printf "%s = aws_sns_topic.%s.arn" $tt1 $rn`
                             fi
                         fi
                     fi
-
-
-
-
-
-
-
 
 
                 fi
@@ -122,7 +122,12 @@ for c in `seq 0 0`; do
             done <"$file"
 
             if [[ $tarn != "" ]];then
+                #echo "-4- >> $tarn"
                 ../../scripts/730-get-sns-topic.sh $tarn
+            fi
+            if [[ $tarn2 != "" ]];then
+                #echo "-5- >> $tarn2"
+                ../../scripts/730-get-sns-topic.sh $tarn2
             fi
         done
     fi 

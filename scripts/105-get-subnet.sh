@@ -13,7 +13,7 @@ pref[0]="Subnets"
 tft[0]="aws_subnet"
 idfilt[0]="SubnetId"
 ncpu=$(getconf _NPROCESSORS_ONLN)
-ncpu=`expr $ncpu - 1`
+ncpu=`expr $ncpu \* 2`
 
 
 #rm -f ${tft[0]}.tf
@@ -39,11 +39,11 @@ for c in `seq 0 0`; do
             #echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-            echo "$ttft $cname import"
+            #echo "$ttft $cname import"
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
             #echo "calling import sub"
-            . ../../scripts/parallel_import2.sh $ttft $cname &
+            . ../../scripts/parallel_import3.sh $ttft $cname &
             jc=`jobs -r | wc -l | tr -d ' '`
             while [ $jc -gt $ncpu ];do
                 echo "Throttling - $jc Terraform imports in progress"
@@ -59,7 +59,7 @@ for c in `seq 0 0`; do
             echo "Finished importing"
         fi
 
-        ../../scripts/parallel_statemv.sh $ttft
+
 
         # tf files
         for i in `seq 0 $count`; do
@@ -117,7 +117,7 @@ for c in `seq 0 0`; do
         done
     fi
 done # for c
-
+../../scripts/parallel_statemv.sh $ttft
 #rm -f $ttft-$rname-1.txt
 rm -f *.backup 
 rm -f $ttft*.txt

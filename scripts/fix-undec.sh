@@ -16,7 +16,7 @@ count=$(expr $count - 1)
 #echo $count
 
 #
-# Reference to undeclared resource
+echo "Reference to undeclared resource"
 #
 for c in $(seq 0 $count); do
     summ=$(echo $undec | jq -r ".[(${c})].summary")
@@ -185,7 +185,7 @@ for c in $(seq 0 $count); do
     fi
 done
 #
-# enable_classiclink
+echo "enable_classiclink"
 #
 for c in $(seq 0 $count); do
     #echo $c
@@ -203,7 +203,7 @@ for c in $(seq 0 $count); do
     fi
 done
 #
-# name_prefix conflict Conflicting configuration argument
+echo "Conflicting configuration argument"
 #
 for c in $(seq 0 $count); do
     summ=$(echo $undec | jq -r ".[(${c})].summary")
@@ -225,7 +225,7 @@ for c in $(seq 0 $count); do
 done
 ofil=""
 #
-# unconfig attribute
+#echo "unconfigurable attributes"
 #
 for c in $(seq 0 $count); do
     summ=$(echo $undec | jq -r ".[(${c})].summary")
@@ -234,10 +234,10 @@ for c in $(seq 0 $count); do
         fil=$(echo $undec | jq -r ".[(${c})].range.filename")
         res=$(echo $undec | jq -r ".[${c}].snippet.code" | tr -d ' ' | cut -f1 -d'=')
         line=$(echo $undec | jq -r ".[${c}].range.start.line")
-        #code=$(echo $undec | jq -r ".[${c}].snippet.code")
+        code=$(echo $undec | jq -r ".[${c}].snippet.code")
         if [[ $line != "" ]]; then
             cmd=$(printf "sed -i -e '%ss/.*//' ${fil}" $line)
-            echo "Unconfigurable attribute fix --> $res"
+            echo "Unconfigurable attribute fix --> $res deleted $code"
             #echo $cmd
             eval $cmd
         else
@@ -248,7 +248,7 @@ for c in $(seq 0 $count); do
 done
 
 #
-## Invalid or unknown key
+echo "Invalid or unknown key"
 #
 for c in $(seq 0 $count); do
     summ=$(echo $undec | jq -r ".[(${c})].summary")
@@ -271,7 +271,7 @@ for c in $(seq 0 $count); do
 done
 
 #
-## Missing required argument
+echo "Missing required argument"
 #
 for c in $(seq 0 $count); do
     summ=$(echo $undec | jq -r ".[(${c})].summary")
@@ -297,7 +297,7 @@ for c in $(seq 0 $count); do
 done
 
 #
-## Unclosed configuration block
+echo "Unclosed configuration block"
 #
 
 for c in $(seq 0 $count); do

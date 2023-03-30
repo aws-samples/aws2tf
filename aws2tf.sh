@@ -20,7 +20,7 @@ usage(){
     echo "           athena"
     echo "           aurora"  
     echo "           cloudtrail" 
-    echo "           cfront"
+    echo "           cloudfront"
     echo "           code"
     echo "           cognito"
     echo "           config"
@@ -283,6 +283,8 @@ if [ "$t" == "eks" ]; then
     fi
 fi
 
+exclude="iam"
+
 if [ "$t" == "acm" ]; then pre="28*"; fi
 if [ "$t" == "appmesh" ]; then pre="360*"; fi
 if [ "$t" == "appstream" ]; then pre="46*"; fi
@@ -290,7 +292,7 @@ if [ "$t" == "artifact" ]; then pre="627*"; fi
 if [ "$t" == "athena" ]; then pre="66*"; fi
 if [ "$t" == "aurora" ]; then pre="61*"; fi
 if [ "$t" == "code" ]; then pre="62*"; fi
-if [ "$t" == "cfront" ]; then pre="80*"; fi
+if [ "$t" == "cloudfront" ]; then pre="80*"; fi
 if [ "$t" == "cloudtrail" ]; then pre="090*"; fi
 if [ "$t" == "cloudwatch" ]; then pre="76*"; fi
 if [ "$t" == "cloudform" ]; then pre="999*"; fi
@@ -318,14 +320,10 @@ if [ "$t" == "sagemaker" ]; then pre="68*"; fi
 if [ "$t" == "secrets" ]; then pre="45*"; fi
 if [ "$t" == "sc" ]; then pre="81*"; fi # service catalog
 if [ "$t" == "sfn" ]; then pre="78*"; fi # State machine
+if [ "$t" == "security-group" ]; then pre="110"; fi # security group
 if [ "$t" == "sqs" ]; then pre="72*"; fi # SQS
 if [ "$t" == "spot" ]; then pre="25*"; fi
-if [ "$t" == "users" ]; then pre="03*"; fi # users and groups
-
-
-exclude="iam"
-
-if [ "$t" == "iam" ]; then pre="05*" && exclude="xxxxxxx"; fi
+if [ "$t" == "users" ]; then pre="03*" && exclude="xxxxxxx"; fi
 
 if [ "$c" == "no" ]; then
     echo "terraform init -upgrade"
@@ -391,6 +389,7 @@ if [[ "$s" == "no" ]];then
 
             done <"$file"
 
+            #../../scripts/parallel_statemv.sh aws
             echo "$docomm" >> data/processed.txt
             terraform validate -no-color -json > validate.json
             ../../scripts/fix-undec.sh
@@ -401,7 +400,7 @@ if [[ "$s" == "no" ]];then
             echo "-------------------------------------------------------------------"
         fi
         
-    done
+    done # $com
 else
     echo "Stack set $s traverse - experimental"
     . ../../scripts/get-stack.sh $s
@@ -425,7 +424,7 @@ date
 
 echo "terraform fmt > /dev/null ..."
 terraform fmt > /dev/null
-terraform refresh  -no-color
+#terraform refresh  -no-color
 echo "fix default SG's"
 . ../../scripts/fix-def-sgs.sh
 echo "Terraform validate ..."

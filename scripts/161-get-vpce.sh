@@ -19,7 +19,7 @@ for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	echo $cm
+	#echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
@@ -31,22 +31,24 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
-            echo "$ttft $cname"
+            #echo "$ttft $cname"
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
 
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $fn
-            printf "}" >> $fn
 
-            terraform import $ttft.$cname "$cname" | grep Importing
-            terraform state show -no-color $ttft.$cname > t1.txt
-            tfa=`printf "%s.%s" $ttft $cname`
-            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
-            #echo $awsj | jq . 
-            rm -f $fn
+            #echo "$ttft $cname $rname state get ..."
+            ../../scripts/parallel_import3.sh $ttft ${cname} $rname
+            #echo "$ttft $rname move"
 
-            file="t1.txt"
+            file=$(printf "%s-%s-1.txt" $ttft $rname)
+
+
+            #printf "resource \"%s\" \"%s\" {}\n" $ttft $cname > $fn
+            #terraform import $ttft.$cname "$cname" | grep Importing
+            #terraform state show -no-color $ttft.$cname > t1.txt
+            #rm -f $fn
+            #file="t1.txt"
             echo $aws2tfmess > $fn
             while IFS= read line
             do
@@ -145,7 +147,7 @@ for c in `seq 0 0`; do
         done
     fi 
 done
-
+../../scripts/parallel_statemv.sh $ttft
 #if [ "$1" != "" ]; then
 #    if [[ "$1" == "vpc-"* ]]; then
 #        ../../scripts/get-vpce-services.sh $1

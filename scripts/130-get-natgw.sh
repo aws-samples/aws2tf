@@ -31,9 +31,9 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].NatGatewayId" | tr -d '"'`
-            echo "$ttft $cname"
+            #echo "$ttft $cname"
             eipall=`echo $awsout | jq ".${pref[(${c})]}[(${i})].NatGatewayAddresses[0].AllocationId" | tr -d '"'`
-            echo "eipall = $eipall"
+            #echo "eipall = $eipall"
 
             fn=`printf "%s__%s.tf" $ttft $cname`
             if [ -f "$fn" ] ; then
@@ -41,16 +41,21 @@ for c in `seq 0 0`; do
                 continue
             fi
 
-            printf "resource \"%s\" \"%s\" {" $ttft $cname > $ttft.$cname.tf
-            printf "}" >> $ttft.$cname.tf
-            terraform import $ttft.$cname "$cname" | grep Importing
-            terraform state show -no-color $ttft.$cname > t1.txt
-            tfa=`printf "%s.%s" $ttft $cname`
-            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
-            #cat $tfa.json | jq .
-            rm -f $ttft.$cname.tf
 
-            file="t1.txt"        
+
+            #echo "$ttft $cname $rname state get ..."
+            ../../scripts/parallel_import3.sh $ttft ${cname} $cname
+            #echo "$ttft $rname move"
+
+            file=$(printf "%s-%s-1.txt" $ttft $cname)
+
+            #printf "resource \"%s\" \"%s\" {}\n" $ttft $cname > $ttft.$cname.tf
+            #terraform import $ttft.$cname "$cname" | grep Importing
+            #terraform state show -no-color $ttft.$cname > t1.txt
+            #rm -f $ttft.$cname.tf
+            #file="t1.txt"        
+
+
             subnets=() 
             echo $aws2tfmess > $fn
             while IFS= read line
@@ -109,6 +114,6 @@ for c in `seq 0 0`; do
 
     fi
 done
-
+../../scripts/parallel_statemv.sh $ttft
 rm -f t*.txt
 

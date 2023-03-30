@@ -2,10 +2,10 @@
 bucks=()
 if [ "$1" != "" ]; then
     if [[ $1 != "*" ]];then
-        bucks+=$(AWS s3api list-buckets --query Buckets[*].Name | jq -r .[] | grep $1)
+        bucks+=$($AWS s3api list-buckets --query Buckets[*].Name | jq -r .[] | grep $1)
     fi
 else
-    bucks+=$(AWS s3api list-buckets --query Buckets[*].Name | jq -r .[])
+    bucks+=$($AWS s3api list-buckets --query Buckets[*].Name | jq -r .[])
 fi
 
 if [ "$bucks" == "" ]; then
@@ -18,7 +18,7 @@ theregion=$(echo "var.region" | terraform console | tr -d '"')
 keyid=""
 doacl2=0
 ncpu=$(getconf _NPROCESSORS_ONLN)
-ncpu=`expr $ncpu - 1`
+ncpu=`expr $ncpu \* 2`
 
 skipbucks=()
 bucklist=()
@@ -34,7 +34,7 @@ for cname in ${bucks[@]}; do
         if [ -f "$fn" ]; then echo "$fn exists already skipping" && continue; fi
 
         # check region & access
-        br=$(AWS s3api get-bucket-location --bucket ${cname})
+        br=$($AWS s3api get-bucket-location --bucket ${cname})
         if [ $? -ne 0 ]; then
             br="none"
             echo "Cannot access buck $cname - skipping ..."
@@ -45,11 +45,11 @@ for cname in ${bucks[@]}; do
 
         if [[ "$br" == "$theregion" ]] || [[ $br == "null"  &&  "$theregion" == "us-east-1" ]]; then
 
-            echo "$ttft $cname Import"
+            #echo "$ttft $cname Import"
             bucklist+=$(echo "$cname ")
             #terraform state list $ttft.$cname &> /dev/null
             #if [[ $? -ne 0 ]];then
-            . ../../scripts/parallel_import2.sh $ttft $cname &
+            . ../../scripts/parallel_import3.sh $ttft $cname &
             #fi
             jc=$(jobs -r | wc -l | tr -d ' ')
             while [ $jc -gt $ncpu ]; do
@@ -72,12 +72,12 @@ if [ $jc -gt 0 ]; then
     echo "Finished importing"
 fi
 
-../../scripts/parallel_statemv.sh $ttft
+
 
 
 for cname in ${bucklist[@]}; do
     cname=$(echo $cname | tr -d '"')
-    echo $cname
+    #echo $cname
 
     #s3b=$(terraform state show -no-color $ttft.$cname 2> /dev/null)
     #echo "s3b==$s3b"
@@ -408,7 +408,7 @@ echo "state move ...."
 sync
 sleep 1
 sync
-../../scripts/local_statemv.sh aws_s3
+../../scripts/parallel_statemv.sh aws_s3
 
 
 echo "run cross checker"

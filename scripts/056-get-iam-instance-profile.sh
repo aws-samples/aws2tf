@@ -46,7 +46,7 @@ for c in `seq 0 0`; do
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
             #echo "calling import sub"
-            . ../../scripts/parallel_import2.sh $ttft $cname &
+            . ../../scripts/parallel_import3.sh $ttft $cname &
             jc=`jobs -r | wc -l | tr -d ' '`
             while [ $jc -gt $ncpu ];do
                 echo "Throttling - $jc Terraform imports in progress"
@@ -60,7 +60,7 @@ for c in `seq 0 0`; do
         echo "Waiting for $jc Terraform imports"
         wait
         echo "Finished importing"
-        ../../scripts/parallel_statemv.sh $ttft
+
 
         for i in `seq 0 $count`; do
             #echo $i
@@ -122,6 +122,6 @@ for c in `seq 0 0`; do
    
     fi
 done
-
+../../scripts/parallel_statemv.sh $ttft
 rm -f t*.txt
 

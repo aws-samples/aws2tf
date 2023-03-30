@@ -287,7 +287,8 @@ for i in `ls imp_aws_security_group_rule_${1}_${2}*.sh 2> /dev/null`; do
                     tt2=`echo "$line" | cut -f2- -d'='`
                     
                     if [[ ${tt1} == "arn" ]];then skip=1; fi                
-                    if [[ ${tt1} == "id" ]];then skip=1; fi          
+                    if [[ ${tt1} == "id" ]];then skip=1; fi  
+                    if [[ ${tt1} == "security_group_rule_id" ]];then skip=1; fi        
 
                     if [[ ${tt1} == "cidr_blocks" ]];then 
                         if [ "${cidr}" == "0" ];then

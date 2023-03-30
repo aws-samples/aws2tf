@@ -26,17 +26,24 @@ for i in $(seq 0 $count); do
     cname=$(echo $awsout | jq -r ".${pref}[(${i})].${idfilt}")
     echo "$ttft ${cname}"
     rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-
-    fn=$(printf "%s__%s__%s.tf" $ttft $1 $rname)
+    rname=$(echo $1__$rname)
+    fn=$(printf "%s__%s.tf" $ttft $rname)
     if [ -f "$fn" ]; then echo "$fn exists already skipping" && continue; fi
 
-    printf "resource \"%s\" \"%s__%s\" {}\n" $ttft $1 $rname >$fn
-    terraform import $ttft.$1__${rname} "${1}/${cname}" | grep Importing
-    terraform state show -no-color $ttft.${1}__${rname} >t1.txt
 
-    rm -f $fn
+    #echo "$ttft $cname $rname state get ..."
+    ../../scripts/parallel_import3.sh $ttft ${cname} $rname "user=${1}" 
+    #echo "$ttft $rname move"
+    ../../scripts/parallel_statemv.sh $ttft
+    file=`printf "%s-%s-1.txt" $ttft $rname`
+
+    #printf "resource \"%s\" \"%s__%s\" {}\n" $ttft $1 $rname >$fn
+    #terraform import $ttft.$1__${rname} "${1}/${cname}" | grep Importing
+    #terraform state show -no-color $ttft.${1}__${rname} >t1.txt
+    #rm -f $fn
+    #file="t1.txt"
+
     parn=""
-    file="t1.txt"
     echo $aws2tfmess >$fn
     while IFS= read t1; do
         skip=0

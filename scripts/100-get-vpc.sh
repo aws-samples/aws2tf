@@ -34,8 +34,8 @@ for c in `seq 0 0`; do
             
             #echo "calling import sub"
             #terraform state rm $ttft.$rname > /dev/null
-            echo "$ttft $cname import"
-            . ../../scripts/parallel_import2.sh $ttft $cname &
+            #echo "$ttft $cname import"
+            . ../../scripts/parallel_import3.sh $ttft $cname &
             jc=`jobs -r | wc -l | tr -d ' '`
             while [ $jc -gt $ncpu ];do
                 echo "Throttling - $jc Terraform imports in progress"
@@ -51,9 +51,7 @@ for c in `seq 0 0`; do
             wait
             echo "Finished importing"
         fi
-                
-        ../../scripts/parallel_statemv.sh $ttft
-        
+                        
         
         # tf files
         for i in `seq 0 $count`; do
@@ -120,7 +118,7 @@ for c in `seq 0 0`; do
         done
     fi
 done
-
+../../scripts/parallel_statemv.sh $ttft
 rm -f *.backup 
 rm -f $ttft*.txt
 

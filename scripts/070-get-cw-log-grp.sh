@@ -14,25 +14,9 @@ fi
 
 
 ncpu=$(getconf _NPROCESSORS_ONLN)
-ncpu=`expr $ncpu - 1`
-if [[ $ncpu -lt 3 ]];then
-    ncpu=1
-fi
+ncpu=`expr $ncpu \* 2`
 
-if [[ $ncpu -gt 4 ]];then
-    ncpu=`expr $ncpu - 1`
-fi
-
-if [[ $ncpu -gt 8 ]];then
-    ncpu=`expr $ncpu - 2`
-fi
-
-if [[ $ncpu -gt 16 ]];then
-    ncpu=`expr $ncpu - 4`
-fi
 echo "ncpu=$ncpu"
-
-#rm -f ${tft[0]}.tf
 
 for c in `seq 0 0`; do
     
@@ -51,15 +35,15 @@ for c in `seq 0 0`; do
             #echo $i
             cname=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}")
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
-            echo "$ttft $cname import"
+            #echo "$ttft $cname import"
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
             #echo "calling import sub"
-            ../../scripts/parallel_import2.sh $ttft $cname &
+            ../../scripts/parallel_import3.sh $ttft $cname &
             jc=`jobs -r | wc -l | tr -d ' '`
             while [ $jc -gt $ncpu ];do
                 echo "Throttling - $jc Terraform imports in progress"
-                sleep 10
+                sleep 5
                 jc=`jobs -r | wc -l | tr -d ' '`
             done
 
@@ -69,7 +53,7 @@ for c in `seq 0 0`; do
         echo "Waiting for $jc Terraform imports"
         wait       
         echo "Wait completed ..... imported $count"
-        ../../scripts/parallel_statemv.sh $ttft
+  
         
         for i in `seq 0 $count`; do
             #echo $i
@@ -119,7 +103,7 @@ for c in `seq 0 0`; do
 
     fi
 done
-
+../../scripts/parallel_statemv.sh $ttft
 rm -f $ttft*.txt
 
 

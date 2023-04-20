@@ -36,7 +36,7 @@ for c in $(seq 0 0); do
             ocname=$(echo $cname)
             cname=${cname//./_}
             cname=$(printf "%s__%s" $1 $cname)
-            fn=$(printf "%s__%s.tf" $ttft $cname)
+            fn=$(printf "%s__r-%s.tf" $ttft $cname)
             if [ -f "$fn" ]; then
                 echo "$fn exists already skipping"
                 continue
@@ -44,9 +44,9 @@ for c in $(seq 0 0); do
 
             echo "$ttft $cname"
 
-            printf "resource \"%s\" \"%s\" {}\n" $ttft $cname >$fn
-            terraform import $ttft.$cname $1:$pname | grep Importing
-            terraform state show -no-color $ttft.$cname >t1.txt
+            printf "resource \"%s\" \"r-%s\" {}\n" $ttft $cname >$fn
+            terraform import $ttft.r-$cname $1:$pname | grep Importing
+            terraform state show -no-color $ttft.r-$cname >t1.txt
             rm -f $fn
 
             file="t1.txt"

@@ -119,7 +119,7 @@ if [ "$kcount" -gt "0" ]; then
                                         rarn=`echo $tt2 | tr -d '"'` 
                                         skip=0;
                                         trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')
-                                        #echo "depends_on = [aws_iam_role.$trole]" >> $fn              
+                                        #echo "depends_on = [aws_iam_role.r-$trole]" >> $fn              
                                         t1=`printf "%s = aws_iam_role.r-%s.arn" $tt1 $trole`
                             
                                     fi

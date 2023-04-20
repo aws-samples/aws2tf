@@ -85,7 +85,7 @@ for c in `seq 0 0`; do
                                 #echo "***trole=$trole"
                                 rarns+=`printf "\"%s\" " $trole`
                                 if [ "$doned" == "0" ]; then
-                                    echo "depends_on = [aws_iam_role.$trole]" >> $fn  
+                                    echo "depends_on = [aws_iam_role.r-$trole]" >> $fn  
                                     doned=1 
                                 fi           
                                 t1=`printf "%s = aws_iam_role.r-%s.arn" $tt1 $trole`

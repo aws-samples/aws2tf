@@ -57,7 +57,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "pod_execution_role_arn" ]];then 
                         trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')
                     
-                        t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
+                        t1=`printf "%s = aws_iam_role.r-%s.arn" $tt1 $trole`
                         skip=0;
                     fi
 

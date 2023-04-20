@@ -68,7 +68,7 @@ for c in `seq 0 0`; do
                         tarn=`echo $tt2 | tr -d '"'`
                         tanam=$(echo $tarn | rev | cut -f1 -d'/' | rev)
                         tlarn=${tarn//:/_} && tlarn=${tlarn//./_} && tlarn=${tlarn//\//_}
-                        t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $tanam`
+                        t1=`printf "%s = aws_iam_role.r-%s.arn" $tt1 $tanam`
                     fi
               
                 fi

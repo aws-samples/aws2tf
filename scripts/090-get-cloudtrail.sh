@@ -98,7 +98,7 @@ for i in $(seq 0 $count); do
                     skip=0
                     trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')
 
-                    t1=$(printf "%s = aws_iam_role.%s.arn" $tt1 $trole)
+                    t1=$(printf "%s = aws_iam_role.r-%s.arn" $tt1 $trole)
                 fi
                 if [[ ${tt1} == "kms_key_id" ]]; then
                     kid=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')

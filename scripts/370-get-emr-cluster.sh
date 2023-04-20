@@ -101,12 +101,12 @@ for c in `seq 0 0`; do
                     fi
                     if [[ ${tt1} == "service_role" ]]; then
                         srvrole=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_iam_role.%s.name" $tt1 $srvrole`
+                        t1=`printf "%s = aws_iam_role.r-%s.name" $tt1 $srvrole`
                     fi
 
                     #if [[ ${tt1} == "autoscaling_role" ]]; then
                     #    asrole=`echo $tt2 | tr -d '"'`
-                    #    t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $asrole`
+                    #    t1=`printf "%s = aws_iam_role.r-%s.arn" $tt1 $asrole`
                     #fi
 
                     if [[ ${tt1} == "instance_profile" ]]; then

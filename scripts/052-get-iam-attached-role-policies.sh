@@ -79,7 +79,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "role" ]];then 
                         tsel=`echo $tt2 |  tr -d '"'`
                         tsel=${tsel//:/_} && tsel=${tsel//./_} && tsel=${tsel//\//_}
-                        t1=`printf "%s = aws_iam_role.%s.id" $tt1 $tsel`
+                        t1=`printf "%s = aws_iam_role.r-%s.id" $tt1 $tsel`
                         skip=0;
                     fi
                     if [[ ${tt1} == "policy_arn" ]];then 

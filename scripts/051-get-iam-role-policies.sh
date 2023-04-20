@@ -69,7 +69,7 @@ for c in $(seq 0 0); do
                     if [[ ${tt1} == "role" ]]; then
                         tsel=$(echo $tt2 | tr -d '"')
                         echo "tsel = $tsel"
-                        t1=$(printf "%s = aws_iam_role.%s.id" $tt1 $tsel)
+                        t1=$(printf "%s = aws_iam_role.r-%s.id" $tt1 $tsel)
                         skip=0
                     fi
                     if [[ ${tt1} == "owner_id" ]]; then skip=1; fi
@@ -94,7 +94,7 @@ for c in $(seq 0 0); do
                                     trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')
 
                                     if [[ $trole != $cname ]]; then
-                                        t1=$(printf "%s = aws_iam_role.%s.arn" $tt1 $trole)
+                                        t1=$(printf "%s = aws_iam_role.r-%s.arn" $tt1 $trole)
                                     fi
                                 fi
                             elif [[ "$tt2" == "arn:aws:sns:${myreg}:${mysub}:"* ]]; then

@@ -80,7 +80,7 @@ for c in `seq 0 0`; do
                         tt2=$(echo $tt2 | tr -d '"')
                         if [[ "$tt2" == *":iam:"* ]]; then
                             trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')
-                            t1=`printf "%s = aws_iam_role.%s.arn" $tt1 $trole`
+                            t1=`printf "%s = aws_iam_role.r-%s.arn" $tt1 $trole`
                         fi                 
                     fi 
 

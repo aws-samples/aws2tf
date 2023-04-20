@@ -208,6 +208,7 @@ if [ $count -gt 0 ]; then
                 AWS::SNS::Topic)  echo "../../scripts/730-get-sns-topic.sh $parn" >> commands.sh ;;
                 AWS::SNS::TopicPolicy) echo "../../scripts/get-sns-topic-policy.sh $parn" >> commands.sh ;;
                 AWS::SQS::Queue)  echo "../../scripts/720-get-sqs-queue.sh $parn" >> commands.sh ;;
+                AWS::SQS::QueuePolicy) echo "echo '# $type $pid fetched as part of SQS Queue ..' " >> commands.sh ;;
            
                 AWS::SSM::Parameter)  echo "../../scripts/445-get-ssm-params.sh $pid" >> commands.sh ;;
                 

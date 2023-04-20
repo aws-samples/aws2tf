@@ -262,6 +262,7 @@ if [ "$kcount" -gt "0" ]; then
             fi
         done # done for c
     # address supporting eks cluster resources
+    ../../scripts/get-eks-oidc.sh $cln
 
     ../../scripts/get-eks-cluster-nodegroups.sh $cln
     

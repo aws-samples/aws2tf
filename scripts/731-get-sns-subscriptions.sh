@@ -113,7 +113,9 @@ for c in `seq 0 0`; do
                             qnam=$(echo $tt2 | rev | cut -f1 -d':' | rev)
                             rurl=$($AWS sqs get-queue-url --queue-name $qnam | jq -r ".QueueUrl")
                             rn=${rurl//:/_} && rn=${rn//./_} && rn=${rn//\//_}
-                            t1=`printf "%s = aws_sqs_queue.%s.arn" $tt1 $rn`
+                            if [[ $rn != "" ]];then
+                                t1=`printf "%s = aws_sqs_queue.%s.arn" $tt1 $rn`
+                            fi
                         fi
                     fi
 

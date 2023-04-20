@@ -42,10 +42,10 @@ for c in $(seq 0 $count); do
                 tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
                 if [[ $tarn != "null" ]]; then
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
-                    echo "** Undeclared Fix: $res --> $tarn"
+                    echo "** Undeclared Fix: ${res} -- $tarn"
                 else
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $addr)
-                    echo "** Undeclared Fix: $res --> $addr"
+                    echo "** Undeclared Fix: ${res} -- $addr"
                 fi
                 #echo " "
                 #echo $cmd
@@ -58,7 +58,7 @@ for c in $(seq 0 $count); do
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
                     #echo " "
                     #echo $cmd
-                    echo "** Undeclared Fix: $res --> $tarn"
+                    echo "** Undeclared Fix: ${res} -- $tarn"
                     eval $cmd
                 fi
             fi
@@ -71,7 +71,7 @@ for c in $(seq 0 $count); do
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
                     #echo " "
                     #"echo --$cmd"
-                    echo "** Undeclared Fix: $res --> $tarn"
+                    echo "** Undeclared Fix: ${res} -- ${tarn}"
                     eval $cmd
                 fi
             fi
@@ -86,7 +86,7 @@ for c in $(seq 0 $count); do
                         cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
                         #echo " "
                         #echo $cmd
-                        echo "** Undeclared Fix: $res --> $tarn"
+                        echo "** Undeclared Fix: ${res} -- ${tarn}"
                         eval $cmd
 
                     fi
@@ -103,7 +103,7 @@ for c in $(seq 0 $count); do
                         cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
                         #echo " "
                         #echo $cmd
-                        echo "** Undeclared Fix: $res --> $tarn"
+                        echo "** Undeclared Fix: ${res} -- ${tarn}"
                         eval $cmd
 
                     fi
@@ -123,7 +123,7 @@ for c in $(seq 0 $count); do
                         cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
                         echo " "
                         echo $cmd
-                        echo "** Undeclared Fix: $res --> $tarn"
+                        echo "** Undeclared Fix: ${res} -- ${tarn}"
                         eval $cmd
 
                     fi
@@ -165,10 +165,10 @@ for c in $(seq 0 $count); do
             if [[ $tft == "aws_iam_instance_profile" ]] || [[ $tft == "aws_nat_gateway" ]] || [[ $tft == "aws_vpc" ]] || [[ $tft == "aws_subnet" ]] || [[ $tft == "aws_security_group" ]] || [[ $tft == "aws_ec2_transit_gateway_vpc_attachment" ]] || [[ $tft == "aws_vpc_peering_connection" ]]; then
                 if [[ $res == *"," ]]; then
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\",/g' ${fil}" $res $addr)
-                    echo "** Undeclared Fix: $res --> $addr,"
+                    echo "** Undeclared Fix: ${res} --> $addr,"
                 else
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $addr)
-                    echo "** Undeclared Fix: $res --> $addr"
+                    echo "** Undeclared Fix: ${res} --> $addr"
                 fi
                 eval $cmd
             fi
@@ -178,7 +178,7 @@ for c in $(seq 0 $count); do
                 if [[ $addr == "prod"* ]]; then
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $addr)
                     eval $cmd
-                    echo "** Undeclared Fix: $res --> $addr"
+                    echo "** Undeclared Fix: ${res} --> $addr"
                 fi
             fi
         fi

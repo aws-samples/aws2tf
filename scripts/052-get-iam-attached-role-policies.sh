@@ -41,23 +41,22 @@ for c in `seq 0 0`; do
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             
             echo "$ttft $cname import"
-            fn=`printf "%s__%s.tf" $ttft $rname`
+            fn=`printf "%s__r-%s.tf" $ttft $rname`
 
             if [ -f "$fn" ] ; then
                 echo "$fn exists already skipping"
                 continue
             fi
-            printf "resource \"%s\" \"%s\" {" $ttft $rname > $ttft.$rname.tf
-            printf "}"  >> $ttft.$rname.tf
-            printf "terraform import %s.%s %s" $ttft $rname "$cname" > data/import_$ttft_$rname.sh
+            printf "resource \"%s\" \"r-%s\" {}\n" $ttft $rname > $fn
+      
+            printf "terraform import %s.r-%s %s" $ttft $rname "$cname" > data/import_$ttft_$rname.sh
             
-            terraform import $ttft.$rname $1/$rarn | grep Importing
-            #terraform import $ttft.$rname "$cname" | grep Importing
-            terraform state show -no-color $ttft.$rname > t1.txt
-            #tfa=`printf "%s_%s" $ttft $rname`
-            #terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
+            terraform import $ttft.r-$rname $1/$rarn | grep Importing
+            #terraform import $ttft.r-$rname "$cname" | grep Importing
+            terraform state show -no-color $ttft.r-$rname > t1.txt
+
             #echo $awsj | jq . 
-            rm $ttft.$rname.tf
+            rm $fn
             
             file="t1.txt"
             pnam=""

@@ -1,17 +1,22 @@
 #!/bin/bash
+pref[0]="Subnets"
+ttft="aws_subnet"
+idfilt[0]="SubnetId"
+
 if [ "$1" != "" ]; then
     if [[ "$1" == "vpc-"* ]]; then
         cmd[0]="$AWS ec2 describe-subnets --filters \"Name=vpc-id,Values=$1\"" 
     else
+        ## fast out:
+        fn=$(printf "%s__%s.tf" $ttft $1)
+        if [ -f "$fn" ]; then exit; fi
         cmd[0]="$AWS ec2 describe-subnets --subnet-ids $1"
     fi
 else
     cmd[0]="$AWS ec2 describe-subnets"
 fi
 
-pref[0]="Subnets"
-tft[0]="aws_subnet"
-idfilt[0]="SubnetId"
+
 ncpu=$(getconf _NPROCESSORS_ONLN)
 ncpu=`expr $ncpu \* 2`
 
@@ -21,7 +26,6 @@ ncpu=`expr $ncpu \* 2`
 for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
-	ttft=${tft[(${c})]}
 	#echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then

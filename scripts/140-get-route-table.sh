@@ -1,6 +1,12 @@
 #!/bin/bash
+pref[0]="RouteTables"
+ttft="aws_route_table"
+
 if [ "$1" != "" ]; then
     if [[ "$1" == "rtb-"* ]]; then
+        ## fast out:
+        fn=$(printf "%s__%s.tf" $ttft $1)
+        if [ -f "$fn" ]; then exit; fi
         cmd[0]="$AWS ec2 describe-route-tables --filters \"Name=route-table-id,Values=$1\""
     else
         cmd[0]="$AWS ec2 describe-route-tables --filters \"Name=vpc-id,Values=$1\""
@@ -12,13 +18,10 @@ c=0
 cm=${cmd[$c]}
 #echo $cm
 
-pref[0]="RouteTables"
-tft[0]="aws_route_table"
-
 for c in $(seq 0 0); do
 
     cm=${cmd[$c]}
-    ttft=${tft[(${c})]}
+
     #echo $cm
     awsout=$(eval $cm 2>/dev/null)
     if [ "$awsout" == "" ]; then

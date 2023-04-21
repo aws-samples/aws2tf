@@ -1,24 +1,27 @@
 #!/bin/bash
+pref[0]="SecurityGroups"
+ttft="aws_security_group"
+idfilt[0]="GroupId"
 if [ "$1" != "" ]; then
     if [[ "$1" == "vpc-"* ]]; then
         cmd[0]="$AWS ec2 describe-security-groups --filters \"Name=vpc-id,Values=$1\"" 
     else
+        ## fast out:
+        fn=$(printf "%s__%s.tf" $ttft $1)
+        if [ -f "$fn" ]; then exit; fi
         cmd[0]="$AWS ec2 describe-security-groups --group-ids $1" 
     fi
 else
     cmd[0]="$AWS ec2 describe-security-groups"
 fi
 c=0
-pref[0]="SecurityGroups"
-tft[0]="aws_security_group"
-idfilt[0]="GroupId"
+
 ncpu=$(getconf _NPROCESSORS_ONLN)
 ncpu=`expr $ncpu - 1`
 
 for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
-	ttft=${tft[(${c})]}
 	#echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then

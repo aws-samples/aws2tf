@@ -133,7 +133,7 @@ for t in ${asgs[@]}; do
         # get the launch template
 
         if [ "$killer" == "0" ]; then
-            echo $awsout | jq .
+            #echo $awsout | jq .
             ltid=`echo $awsout | jq .AutoScalingGroups[0].LaunchTemplate.LaunchTemplateId | tr -d '"'`
             if [[ $ltid == "null" ]];then
                 ltid=`echo $awsout | jq .AutoScalingGroups[0].MixedInstancesPolicy.LaunchTemplate.LaunchTemplateSpecification.LaunchTemplateId | tr -d '"'`

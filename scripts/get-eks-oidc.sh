@@ -46,7 +46,8 @@ for i in `seq 0 $count`; do
             if [[ ${tt1} == "id" ]];then skip=1; fi  
             if [[ ${tt1} == "create_date" ]];then skip=1; fi  
             if [[ ${tt1} == "arn" ]];then skip=1;fi
-            if [[ ${tt1} == "owner_id" ]];then skip=1;fi                   
+            if [[ ${tt1} == "owner_id" ]];then skip=1;fi    
+            if [[ ${tt1} == "status" ]];then skip=1;fi                 
         fi
 
         if [ "$skip" == "0" ]; then echo "$t1" >> $fn ;fi

@@ -68,7 +68,7 @@ for c in $(seq 0 0); do
                     if [[ ${tt1} == "role_arn" ]]; then skip=1; fi
                     if [[ ${tt1} == "role" ]]; then
                         tsel=$(echo $tt2 | tr -d '"')
-                        echo "tsel = $tsel"
+                        #echo "tsel = $tsel"
                         t1=$(printf "%s = aws_iam_role.r-%s.id" $tt1 $tsel)
                         skip=0
                     fi

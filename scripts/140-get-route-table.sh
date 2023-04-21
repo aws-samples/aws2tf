@@ -54,6 +54,7 @@ for c in $(seq 0 0); do
 
 
             ../../scripts/parallel_import3.sh $ttft ${cname} $rname
+            ../../scripts/parallel_statemv.sh $ttft
             file=$(printf "%s-%s-1.txt" $ttft $rname)
 
             pcxs=()

@@ -63,7 +63,7 @@ for c in `seq 0 0`; do
             echo "Finished importing"
         fi
 
-
+        ../../scripts/parallel_statemv.sh $ttft
 
         # tf files
         for i in `seq 0 $count`; do

@@ -198,10 +198,8 @@ To get all the resources in a deployed Stack Set
 
 Or simply check back after some time to see if they are listed below.
 
-
-
 ----
-## Terraform resources supported as of 12-Mar-2023
+## Terraform resources supported as of 28-Apr-2023
 
 * aws_acm_certificate
 * aws_api_gateway_resource
@@ -275,6 +273,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_eip
 * aws_eks_cluster
 * aws_eks_fargate_profile
+* aws_eks_identity_provider_config
 * aws_eks_node_group
 * aws_emr_cluster
 * aws_emr_instance_group
@@ -385,7 +384,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_vpn_connection
 
 ----
-## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 12-Mar-2023
+## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 28-Apr-2023
 
 * #AWS::IAM::Policy
 * AWS::ApiGateway::Account
@@ -483,6 +482,7 @@ Or simply check back after some time to see if they are listed below.
 * AWS::SNS::Topic
 * AWS::SNS::TopicPolicy
 * AWS::SQS::Queue
+* AWS::SQS::QueuePolicy
 * AWS::SSM::Parameter
 * AWS::SageMaker::AppImageConfig
 * AWS::SageMaker::Domain

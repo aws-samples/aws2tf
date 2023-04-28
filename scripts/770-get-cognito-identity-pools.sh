@@ -72,9 +72,9 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "estimated_number_of_users" ]];then skip=1;fi  
                     if [[ ${tt1} == "client_id" ]];then 
                         cid=$(echo $tt2 | tr -d '"')
+                        echo "$ttft,c_$cid,$cid" >> data/arn-map.dat
                         t1=`printf "%s = aws_cognito_user_pool_client.c_%s.id" $tt1 $cid`
-                    fi
-                                     
+                    fi                        
 
                 fi
                 if [ "$skip" == "0" ]; then

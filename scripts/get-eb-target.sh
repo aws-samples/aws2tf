@@ -84,7 +84,9 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "arn" ]];then 
                         tt2=$(echo $tt2 | tr -d '"')
                         if [[ "$tt2" == *":lambda:"* ]]; then
+                            echo "aws_iam_role,$marn,$rn" >>data/arn-map.dat
                             lfn=$(echo $tt2 | rev | cut -f1 -d':' | rev)
+                            echo "aws_lambda_function,$tt2,$lfn" >>data/arn-map.dat
                             t1=`printf "%s = aws_lambda_function.%s.arn" $tt1 $lfn`
                         fi  
                         if [[ "$tt2" == "arn:aws:sns:${myreg}:${mysub}:"* ]]; then

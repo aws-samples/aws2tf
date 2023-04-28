@@ -1,5 +1,5 @@
 echo "import.log adjust"
-cat import.log | perl -pe 's/\x1b.*?[mGKH]//g' > imp.log
+cat import.log | perl -pe 's/\x1b.*?[mGKH]//g' >imp.log
 sed -i'.orig' -e 's/Error: Resource already managed by Terraform//g' imp.log
 cp imp.log import.log
 echo "--> Validate Fixer"
@@ -16,14 +16,20 @@ count=$(expr $count - 1)
 #echo $count
 
 #
-echo "Reference to undeclared resource"
-#
 for c in $(seq 0 $count); do
     summ=$(echo $undec | jq -r ".[(${c})].summary")
+    detl=$(echo $undec | jq -r ".[(${c})].detail")
+    fil=$(echo $undec | jq -r ".[(${c})].range.filename")
+    res=$(echo $undec | jq -r ".[${c}].snippet.code" | tr -d ' ' | cut -f1 -d'=')
+    line=$(echo $undec | jq -r ".[${c}].range.start.line")
+    code=$(echo $undec | jq -r ".[${c}].snippet.code" | tr -d ' ')
     #echo $summ
+    #
+    #
+    #echo "Reference to undeclared resource"
+    # swapping a terraform resource for a arn
     if [[ $summ == "Reference to undeclared resource" ]]; then
-        fil=$(echo $undec | jq -r ".[(${c})].range.filename")
-        code=$(echo $undec | jq -r ".[${c}].snippet.code" | tr -d ' ')
+
         #echo "code snip=$code"
         if [[ $code == *"="* ]]; then
             res=$(echo $code | cut -f2 -d'=')
@@ -35,10 +41,10 @@ for c in $(seq 0 $count); do
         if [[ $fil != "" ]]; then
             addr=$(echo $res | cut -f2 -d'.')
             tft=$(echo $res | cut -f1 -d'.' | tr -d '"')
-            #echo "ttft=$tft  addr=$addr"
+            #echo "tft=$tft  res=$res addr=$addr (for grep)"
 
             if [[ $tft == "aws_s3_bucket" ]]; then
-                addr=$(echo $addr | cut -f2 -d'_')
+                #addr=$(echo $addr | cut -f2 -d'_')
                 tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
                 if [[ $tarn != "null" ]]; then
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
@@ -52,7 +58,7 @@ for c in $(seq 0 $count); do
                 eval $cmd
             fi
             if [[ $tft == "aws_kms_key" ]]; then
-                addr=$(echo $addr | cut -f2 -d'_')
+                #addr=$(echo $addr | cut -f2 -d'.')
                 tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
                 if [[ $tarn != "null" ]]; then
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
@@ -62,73 +68,38 @@ for c in $(seq 0 $count); do
                     eval $cmd
                 fi
             fi
-            if [[ $tft == "aws_iam_role" ]] || [[ $tft == "aws_codepipeline" ]]; then
-                addr=$(echo $addr | cut -f2 -d'_')
-                tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
+
+
+            if [[ $tft == "aws_sagemaker_image" ]] || [[ $tft == "aws_lambda_function" ]] || [[ $tft == "aws_dynamodb_table" ]] || [[ $tft == "aws_sns_topic" ]] [[ $tft == "aws_iam_role" ]] || [[ $tft == "aws_codepipeline" ]]; then
+                tarn=$(grep $addr data/arn-map.dat | grep $tft | cut -f2 -d',' | head -1)
                 tarn=${tarn//\//\\/}
-                echo "**-->role tarn = $tarn $res"
                 if [[ $tarn != "null" ]] && [[ $tarn != "" ]]; then
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
-                    #echo " "
-                    #"echo --$cmd"
+             
+                    echo " "
+                    #echo $cmd
                     echo "** Undeclared Fix: ${res} -- ${tarn}"
                     eval $cmd
                 fi
+
             fi
 
-            if [[ $tft == "aws_sns_topic" ]]; then
-                addr=$(echo $addr | cut -f2 -d'_')
-                tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
-                tarn=${tarn//\//\\/}
-                ttyp=$(grep $addr data/arn-map.dat | cut -f1 -d',' | head -1)
-                if [[ $ttyp == "aws_sns_topic" ]]; then
-                    if [[ $tarn != "null" ]]; then
-                        cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
-                        #echo " "
-                        #echo $cmd
-                        echo "** Undeclared Fix: ${res} -- ${tarn}"
-                        eval $cmd
+            #if [[ $tft == "aws_cloudwatch_log_group" ]]; then
+            #    addr=$(echo $addr | cut -f2 -d'_')
+            #    tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
+            #    tarn=${tarn//\//\\/}
+            #    ttyp=$(grep $addr data/arn-map.dat | cut -f1 -d',' | head -1)
+            #    if [[ $ttyp == "aws_cloudwatch_log_group" ]]; then
+            #        if [[ $tarn != "null" ]]; then
+            #            cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
+            #            echo " "
+            #            echo $cmd
+            #            echo "** Undeclared Fix: ${res} -- ${tarn}"
+            #            eval $cmd
+            #        fi
+            #    fi
+            #fi
 
-                    fi
-                fi
-            fi
-
-            if [[ $tft == "aws_dynamodb_table" ]]; then
-                addr=$(echo $addr | cut -f2 -d'_')
-                tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
-                tarn=${tarn//\//\\/}
-                ttyp=$(grep $addr data/arn-map.dat | cut -f1 -d',' | head -1)
-                if [[ $ttyp == "aws_dynamodb_table" ]]; then
-                    if [[ $tarn != "null" ]]; then
-                        cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
-                        #echo " "
-                        #echo $cmd
-                        echo "** Undeclared Fix: ${res} -- ${tarn}"
-                        eval $cmd
-
-                    fi
-                fi
-            fi
-
-            if [[ $tft == "aws_sagemaker_image" ]]; then
-                addr=$(echo $addr | cut -f2 -d'_')
-                tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
-                tarn=${tarn//\//\\/}
-                ttyp=$(grep $addr data/arn-map.dat | cut -f1 -d',' | head -1)
-
-                if [[ $ttyp == "aws_sagemaker_image" ]]; then
-
-                    if [[ $tarn != "null" ]]; then
-
-                        cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
-                        echo " "
-                        echo $cmd
-                        echo "** Undeclared Fix: ${res} -- ${tarn}"
-                        eval $cmd
-
-                    fi
-                fi
-            fi
 
             #special case in cloudtrail
             if [[ $fil == "aws_cloudtrail"* ]]; then
@@ -140,7 +111,7 @@ for c in $(seq 0 $count); do
 
                         tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
                         ttyp=$(grep $addr data/arn-map.dat | cut -f1 -d',' | head -1)
-                        line=$(echo $undec | jq -r ".[${c}].range.start.line")
+
                         if [[ $ttyp == "aws_cloudwatch_log_group" ]]; then
                             if [[ $tarn != "null" ]]; then
 
@@ -181,17 +152,21 @@ for c in $(seq 0 $count); do
                     echo "** Undeclared Fix: ${res} --> $addr"
                 fi
             fi
+
+            if [[ $tft == "aws_cognito_user_pool_client" ]]; then
+                # res is the code line after the = if it's there
+                addr=$(echo $res | cut -f2 -d'.' | cut -f2 -d'_')
+                cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $addr)
+                eval $cmd
+                echo "** Undeclared Fix: ${res} --> $addr"
+
+            fi
         fi
-    fi
-done
-#
-echo "enable_classiclink"
-#
-for c in $(seq 0 $count); do
-    #echo $c
-    summ=$(echo $undec | jq -r ".[(${c})].summary")
+    fi # undeclated resource
+    #
+    #
+    #echo "enable_classiclink"
     if [[ $summ == "Argument is deprecated" ]]; then
-        fil=$(echo $undec | jq -r ".[(${c})].range.filename")
         res=$(echo $undec | jq -r ".[(${c})].snippet.code" | tr -d ' ' | cut -f1 -d'=')
 
         if [[ $res == "enable_classiclink" ]]; then
@@ -200,19 +175,12 @@ for c in $(seq 0 $count); do
             #echo $cmd
             eval $cmd
         fi
-    fi
-done
-#
-echo "Conflicting configuration argument"
-#
-for c in $(seq 0 $count); do
-    summ=$(echo $undec | jq -r ".[(${c})].summary")
-    #echo $c $summ
+    fi # argument is depreciated
+    #
+    #
+    #echo "Conflicting configuration argument"
     if [[ $summ == "Conflicting configuration arguments" ]]; then
         #echo $c
-        fil=$(echo $undec | jq -r ".[(${c})].range.filename")
-        res=$(echo $undec | jq -r ".[${c}].snippet.code" | tr -d ' ' | cut -f1 -d'=')
-        line=$(echo $undec | jq -r ".[${c}].range.start.line")
         #echo $res
         if [[ $res == "name_prefix" ]] || [[ $res == "node_group_name_prefix" ]]; then
             cmd=$(printf "sed -i -e '%ss/.*/\#/' ${fil}" $line)
@@ -221,19 +189,13 @@ for c in $(seq 0 $count); do
             eval $cmd
 
         fi
-    fi
-done
-ofil=""
-#
-#echo "unconfigurable attributes"
-#
-for c in $(seq 0 $count); do
-    summ=$(echo $undec | jq -r ".[(${c})].summary")
+    fi # conflicting configuration argument
+    ofil=""
+    #
+    #
+    #echo "unconfigurable attributes"
     if [[ $summ == "Value for unconfigurable attribute" ]]; then
         #echo $undec | jq -r ".[(${c})]"
-        fil=$(echo $undec | jq -r ".[(${c})].range.filename")
-        res=$(echo $undec | jq -r ".[${c}].snippet.code" | tr -d ' ' | cut -f1 -d'=')
-        line=$(echo $undec | jq -r ".[${c}].range.start.line")
         code=$(echo $undec | jq -r ".[${c}].snippet.code")
         if [[ $line != "" ]]; then
             cmd=$(printf "sed -i -e '%ss/.*//' ${fil}" $line)
@@ -244,19 +206,12 @@ for c in $(seq 0 $count); do
             echo "skipping $summ"
 
         fi
-    fi
-done
-
-#
-echo "Invalid or unknown key"
-#
-for c in $(seq 0 $count); do
-    summ=$(echo $undec | jq -r ".[(${c})].summary")
+    fi # unconfigurable attributes
+    #
+    #
+    #echo "Invalid or unknown key"
     if [[ $summ == "Invalid or unknown key" ]]; then
         #echo $undec | jq -r ".[(${c})]"
-        fil=$(echo $undec | jq -r ".[(${c})].range.filename")
-        res=$(echo $undec | jq -r ".[${c}].snippet.code" | tr -d ' ' | cut -f1 -d'=')
-        line=$(echo $undec | jq -r ".[${c}].range.start.line")
         #code=$(echo $undec | jq -r ".[${c}].snippet.code")
         if [[ $line != "" ]]; then
             cmd=$(printf "sed -i -e '%ss/.*/ /' ${fil}" $line)
@@ -267,21 +222,12 @@ for c in $(seq 0 $count); do
             echo "skipping $summ"
 
         fi
-    fi
-done
-
-#
-echo "Missing required argument"
-#
-for c in $(seq 0 $count); do
-    summ=$(echo $undec | jq -r ".[(${c})].summary")
+    fi # Invalid or unknown key
+    #
+    #
+    #echo "Missing required argument"
     if [[ $summ == "Missing required argument" ]]; then
-        #echo $undec | jq -r ".[(${c})]"
-        fil=$(echo $undec | jq -r ".[(${c})].range.filename")
-        res=$(echo $undec | jq -r ".[${c}].snippet.code" | tr -d ' ' | cut -f1 -d'=')
-        line=$(echo $undec | jq -r ".[${c}].range.start.line")
-        code=$(echo $undec | jq -r ".[${c}].snippet.code" | tr -d ' ')
-
+        #echo $undec | jq -r ".[(${c})]
         if [[ $line != "" ]]; then
             if [[ $code == "ipv6_netmask_length=0" ]]; then
                 cmd=$(printf "sed -i -e '%ss/.*/ /' ${fil}" $line)
@@ -293,31 +239,19 @@ for c in $(seq 0 $count); do
             echo "skipping $summ"
 
         fi
-    fi
-done
-
-#
-echo "Unclosed configuration block"
-#
-
-for c in $(seq 0 $count); do
-    summ=$(echo $undec | jq -r ".[(${c})].summary")
+    fi # Missing required argument
+    #
+    #
+    #echo "Unclosed configuration block"
     if [[ $summ == "Unclosed configuration block" ]]; then
         echo "-1-> "
         #echo $undec | jq -r ".[(${c})]"
-        detl=$(echo $undec | jq -r ".[(${c})].detail")
-        fil=$(echo $undec | jq -r ".[(${c})].range.filename")
-        res=$(echo $undec | jq -r ".[${c}].snippet.code" | tr -d ' ' | cut -f1 -d'=')
-        line=$(echo $undec | jq -r ".[${c}].range.start.line")
-        code=$(echo $undec | jq -r ".[${c}].snippet.code" | tr -d ' ')
-
-        if [[ $detl == *"There is no closing brace for this block before the end of the file"* ]];then
+        if [[ $detl == *"There is no closing brace for this block before the end of the file"* ]]; then
             echo "Appending } to --> $fil"
-            echo "}" >> $fil
+            echo "}" >>$fil
         fi
 
- 
     fi
+
 done
-
-
+#

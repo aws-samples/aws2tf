@@ -29,8 +29,6 @@ for c in $(seq 0 $count); do
     #echo "Reference to undeclared resource"
     # swapping a terraform resource for a arn
     if [[ $summ == "Reference to undeclared resource" ]]; then
-
-        #echo "code snip=$code"
         if [[ $code == *"="* ]]; then
             res=$(echo $code | cut -f2 -d'=')
             lhs=$(echo $code | cut -f1 -d'=' | tr -d ' |"')
@@ -44,7 +42,7 @@ for c in $(seq 0 $count); do
             #echo "tft=$tft  res=$res addr=$addr (for grep)"
 
             if [[ $tft == "aws_s3_bucket" ]]; then
-                #addr=$(echo $addr | cut -f2 -d'_')
+    
                 tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
                 if [[ $tarn != "null" ]]; then
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
@@ -58,7 +56,7 @@ for c in $(seq 0 $count); do
                 eval $cmd
             fi
             if [[ $tft == "aws_kms_key" ]]; then
-                #addr=$(echo $addr | cut -f2 -d'.')
+
                 tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
                 if [[ $tarn != "null" ]]; then
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
@@ -70,7 +68,7 @@ for c in $(seq 0 $count); do
             fi
 
 
-            if [[ $tft == "aws_sagemaker_image" ]] || [[ $tft == "aws_lambda_function" ]] || [[ $tft == "aws_dynamodb_table" ]] || [[ $tft == "aws_sns_topic" ]] [[ $tft == "aws_iam_role" ]] || [[ $tft == "aws_codepipeline" ]]; then
+            if [[ $tft == "aws_sagemaker_image" ]] || [[ $tft == "aws_lambda_function" ]] || [[ $tft == "aws_dynamodb_table" ]] || [[ $tft == "aws_sns_topic" ]] || [[ $tft == "aws_iam_role" ]] || [[ $tft == "aws_codepipeline" ]]; then
                 tarn=$(grep $addr data/arn-map.dat | grep $tft | cut -f2 -d',' | head -1)
                 tarn=${tarn//\//\\/}
                 if [[ $tarn != "null" ]] && [[ $tarn != "" ]]; then
@@ -180,8 +178,6 @@ for c in $(seq 0 $count); do
     #
     #echo "Conflicting configuration argument"
     if [[ $summ == "Conflicting configuration arguments" ]]; then
-        #echo $c
-        #echo $res
         if [[ $res == "name_prefix" ]] || [[ $res == "node_group_name_prefix" ]]; then
             cmd=$(printf "sed -i -e '%ss/.*/\#/' ${fil}" $line)
             echo "Deleted conflicting name fix --> $res" | tee -a data/val-fixed.log
@@ -195,8 +191,6 @@ for c in $(seq 0 $count); do
     #
     #echo "unconfigurable attributes"
     if [[ $summ == "Value for unconfigurable attribute" ]]; then
-        #echo $undec | jq -r ".[(${c})]"
-        code=$(echo $undec | jq -r ".[${c}].snippet.code")
         if [[ $line != "" ]]; then
             cmd=$(printf "sed -i -e '%ss/.*//' ${fil}" $line)
             echo "Unconfigurable attribute fix --> $res deleted $code"
@@ -211,8 +205,6 @@ for c in $(seq 0 $count); do
     #
     #echo "Invalid or unknown key"
     if [[ $summ == "Invalid or unknown key" ]]; then
-        #echo $undec | jq -r ".[(${c})]"
-        #code=$(echo $undec | jq -r ".[${c}].snippet.code")
         if [[ $line != "" ]]; then
             cmd=$(printf "sed -i -e '%ss/.*/ /' ${fil}" $line)
             echo "Unconfigurable attribute fix --> $res"
@@ -227,7 +219,6 @@ for c in $(seq 0 $count); do
     #
     #echo "Missing required argument"
     if [[ $summ == "Missing required argument" ]]; then
-        #echo $undec | jq -r ".[(${c})]
         if [[ $line != "" ]]; then
             if [[ $code == "ipv6_netmask_length=0" ]]; then
                 cmd=$(printf "sed -i -e '%ss/.*/ /' ${fil}" $line)
@@ -245,7 +236,6 @@ for c in $(seq 0 $count); do
     #echo "Unclosed configuration block"
     if [[ $summ == "Unclosed configuration block" ]]; then
         echo "-1-> "
-        #echo $undec | jq -r ".[(${c})]"
         if [[ $detl == *"There is no closing brace for this block before the end of the file"* ]]; then
             echo "Appending } to --> $fil"
             echo "}" >>$fil

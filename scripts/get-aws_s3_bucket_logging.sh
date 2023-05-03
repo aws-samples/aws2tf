@@ -17,6 +17,7 @@ if [ -f "$fn" ]; then echo "$fn exists already skipping" && exit; fi
 ../../scripts/parallel_import3.sh $ttft ${cname} $rname "user=${1}"
 #echo "$ttft $rname move"
 #../../scripts/parallel_statemv.sh $ttft
+tlp=0
 file=$(printf "%s-%s-1.txt" $ttft $rname)
 
 while IFS= read t1; do
@@ -41,6 +42,7 @@ while IFS= read t1; do
         if [[ ${tt1} == "resource_owner" ]]; then skip=1; fi
         if [[ ${tt1} == "creation_date" ]]; then skip=1; fi
         if [[ ${tt1} == "rotation_enabled" ]]; then skip=1; fi
+        if [[ ${tt1} == "id" ]]; then skip=1; fi
         if [[ ${tt1} == "target_prefix" ]]; then
             tlp=1
         fi
@@ -56,7 +58,7 @@ while IFS= read t1; do
         fi
 
     fi
-
+    #echo "t1=$t1 tlp=$tlp"
     if [[ ${t1} == "}" ]]; then
         if [[ ${tlp} == "0" ]]; then
             echo "target_prefix = \"\"" >>$fn

@@ -58,7 +58,7 @@ for i in $(seq 0 $count); do
         rm -f $fn
 
         file="t1.txt"
-        fn=$(printf "%s__%s.tf" $ttft $cname)
+
         echo $aws2tfmess >$fn
         while IFS= read line; do
             skip=0

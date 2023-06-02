@@ -212,11 +212,11 @@ printf "}\n" >>main-vars.tf
 
 # write the aws.tf file
 printf "terraform { \n" >aws.tf
-printf "required_version = \"> 1.3.5\"\n" >>aws.tf
+printf "required_version = \"> 1.4.5\"\n" >>aws.tf
 printf "  required_providers {\n" >>aws.tf
 printf "   aws = {\n" >>aws.tf
 printf "     source  = \"hashicorp/aws\"\n" >>aws.tf
-printf "      version = \"= 4.58.0\"\n" >>aws.tf
+printf "      version = \"= 4.67\"\n" >>aws.tf
 #printf "      version = \"= 4.34.0\"\n" >> aws.tf
 printf "    }\n" >>aws.tf
 
@@ -327,6 +327,7 @@ if [ "$t" == "sfn" ]; then pre="78*"; fi            # State machine
 if [ "$t" == "security-group" ]; then pre="110"; fi # security group
 if [ "$t" == "sqs" ]; then pre="72*"; fi            # SQS
 if [ "$t" == "spot" ]; then pre="25*"; fi
+if [ "$t" == "vpclattice" ]; then pre="17*"; fi
 if [ "$t" == "users" ]; then pre="03*" && exclude="xxxxxxx"; fi
 
 if [ "$c" == "no" ]; then

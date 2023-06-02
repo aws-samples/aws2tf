@@ -204,7 +204,7 @@ for c in `seq 0 0`; do
             fi
 
             if [[ $instp != "" ]];then
-                ../../scripts/056-get-instance-profile.sh $instp
+                ../../scripts/056-get-iam-instance-profile.sh $instp
             fi
 
        

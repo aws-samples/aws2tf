@@ -92,7 +92,7 @@ for i in `seq 0 $count`; do
         ../../scripts/110-get-security-group.sh $sgid
     fi
      if [[ $iip != "" ]];then
-        ../../scripts/056-get-instance-profile.sh $iip
+        ../../scripts/056-get-iam-instance-profile.sh $iip
     fi   
 
 done

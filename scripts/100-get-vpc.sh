@@ -1,12 +1,19 @@
 #!/bin/bash
+pref[0]="Vpcs"
+tft[0]="aws_vpc"
+idfilt[0]="VpcId"
+c=0
+ttft=${tft[(${c})]}
+
 if [ "$1" != "" ]; then
+    # fast exit path
+    fn=`printf "%s__%s.tf" $ttft $1`
+    if [ -f "$fn" ] ; then exit; fi
     cmd[0]="$AWS ec2 describe-vpcs --vpc-ids $1"
 else
     cmd[0]="$AWS ec2 describe-vpcs"
 fi
-pref[0]="Vpcs"
-tft[0]="aws_vpc"
-idfilt[0]="VpcId"
+
 ncpu=$(getconf _NPROCESSORS_ONLN)
 ncpu=`expr $ncpu - 1`
 for c in `seq 0 0`; do

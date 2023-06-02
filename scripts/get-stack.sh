@@ -3,7 +3,7 @@
 if [ "$1" == "" ]; then echo "must specify a stack name" && exit; fi
 nested=() 
 echo "#!/bin/bash" > commands.sh
-echo "Stack resources not yet implemented ...." > unprocessed.log
+echo "Stack resources not yet supported by aws2tf ...." > unprocessed.log
 
 echo "d=$d"
 
@@ -92,6 +92,7 @@ if [ $count -gt 0 ]; then
                 AWS::DynamoDB::Table) echo "../../scripts/640-get-dynamodb-table.sh $pid"  >> commands.sh ;;
 
                 AWS::EC2::Instance) echo "../../scripts/251-get-ec2-instances.sh $pid"  >> commands.sh ;;
+                AWS::EC2::KeyPair) echo "../../scripts/253-get-key-pairs.sh $pid"  >> commands.sh ;;
                 AWS::EC2::DHCPOptions) echo "../../scripts/111-get-dhcp-option.sh $pid"  >> commands.sh ;;
                 AWS::EC2::EIP)  echo "../../scripts/get-eip.sh $pid"  >> commands.sh ;;
                 AWS::EC2::NatGateway)  echo "../../scripts/130-get-natgw.sh $pid"  >> commands.sh ;;
@@ -142,14 +143,13 @@ if [ $count -gt 0 ]; then
                 AWS::Glue::Partition) echo "# $type $pid Should be fetched via Glue Table Resource" >> commands.sh ;;
                 AWS::IAM::Role)  echo "../../scripts/050-get-iam-roles.sh $pid" >> commands.sh ;;
                 AWS::IAM::ManagedPolicy) echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;
-                AWS::IAM::InstanceProfile) echo "../../scripts/056-get-instance-profile.sh $pid" >> commands.sh ;;
+                AWS::IAM::InstanceProfile) echo "../../scripts/056-get-iam-instance-profile.sh $pid" >> commands.sh ;;
                 AWS::IAM::User) echo "../../scripts/030-get-iam-users.sh $pid" >> commands.sh ;;
                 AWS::IAM::AccessKey) echo "../../scripts/057-get-iam-access-key.sh $pid" >> commands.sh ;;
                 AWS::IAM::ServiceLinkedRole) echo "../../scripts/get-iam-service-linked-role.sh $pid" >> commands.sh ;;
                 AWS::IAM::Group) echo "../../scripts/034-get-iam-groups.sh $pid" >> commands.sh ;;
                 #AWS::IAM::Policy)  echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;
                 AWS::IAM::Policy)  echo "# $type $pid Should be fetched via Roles etc" >> commands.sh ;;
-
 
                 AWS::KinesisFirehose::DeliveryStream) echo "../../scripts/740-get-kinesis-firehose-delivery-stream.sh $pid" >> commands.sh ;;
 

@@ -57,6 +57,7 @@ for c in `seq 0 0`; do
 
 
             subnets=() 
+            eipa=""
             echo $aws2tfmess > $fn
             while IFS= read line
             do
@@ -87,8 +88,8 @@ for c in `seq 0 0`; do
 
                     fi
                     if [[ ${tt1} == "allocation_id" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_eip.%s.id" $tt1 $tt2`
+                        eipa=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_eip.%s.id" $tt1 $eipa`
                         
                     fi
 
@@ -99,7 +100,7 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
-            ../../scripts/get-eip.sh $eipall
+            ../../scripts/get-eip.sh $eipa
             for sub in ${subnets[@]}; do
                 #echo "therole=$therole"
                 sub1=`echo $sub | tr -d '"'`
@@ -115,5 +116,6 @@ for c in `seq 0 0`; do
     fi
 done
 ../../scripts/parallel_statemv.sh $ttft
+
 rm -f t*.txt
 

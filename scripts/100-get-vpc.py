@@ -80,7 +80,7 @@ if count > 0:
 
        
 
-        fr=open(fn, 'w')
+        fr=open(fn, 'w', closefd=True)
         fr.write('resource ' + ttft + ' "' + rname  + '" {}\n')
         fr.close()
         
@@ -92,53 +92,44 @@ if count > 0:
         state=rc(cmd)
         print(state)
         print(fnt)
-        #fr=open(fn, 'w')
+        fr=open(fn, 'w')
 
-        #with open(fnt) as file:
-        #    while (line := file.readline().rstrip()):
-        #        print(line)
+        with open(fnt) as file:
+            while (line := file.readline().rstrip()):
+                skip=0
+                #print(line)
+                if "=" in line:
+                    tt1=line.split("=")[0].replace('"','').strip()
+         
+                    tt2=line.split("=")[1].strip()
+                    #print(tt1+"/"+tt2)
+                    if tt1=="arn": skip=1
+                    if tt1=="id": skip=1
+                    if tt1=="role_arn": skip=1
+                    if tt1=="allocated_capacity": skip=1
+                    if tt1=="dhcp_options_id": skip=1
+                    if tt1=="main_route_table_id": skip=1
+                    if tt1=="default_security_group_id": skip=1
+                    if tt1=="default_route_table_id": skip=1
+                    if tt1=="owner_id": skip=1
+                    if tt1=="default_network_acl_id": skip=1
+                    if tt1=="ipv6_association_id": skip=1
+                    if tt1=="ipv6_cidr_block": skip=1
+                    if tt1 == "enable_classiclink": skip=1
+                    if tt1 == "enable_classiclink_dns_support":skip=1
 
+                    if tt1 == "ipv6_netmask_length":
+                        tt2=tt2.replace('"','')
+                        if tt2 == "0": skip=1
 
-        #fr.close()
+                #print("skip="+str(skip))
+                if skip==0:
+                    fr.write(line+'\n')
+            # end while
+        # end with
+        fr.close()
+        file.close()
 
         
 
 exit()
-"""
-            
-            echo $aws2tfmess > $fn
-            while IFS= read line
-            do
-				skip=0
-                # display $line or do something with $line
-                t1=`echo "$line"`
-                if [[ ${t1} == *"="* ]];then
-                    tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
-                    tt2=`echo "$line" | cut -f2- -d'='`
-                    if [[ ${tt1} == "arn" ]];then skip=1; fi                
-                    if [[ ${tt1} == "id" ]];then skip=1; fi          
-                    if [[ ${tt1} == "role_arn" ]];then skip=1;fi
-                    if [[ ${tt1} == "allocated_capacity" ]];then skip=1;fi
-                    if [[ ${tt1} == "dhcp_options_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "main_route_table_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "default_security_group_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "default_route_table_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "owner_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "default_network_acl_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "ipv6_association_id" ]];then skip=1;fi
-                    if [[ ${tt1} == "ipv6_cidr_block" ]];then skip=1;fi
-                fi
-                if [ "$skip" == "0" ]; then
-                    #echo $skip $t1
-                    echo "$t1" >> $fn
-                fi
-                
-            done <"$file"
-  
-            
-        done
-    fi
-done
-
-rm -f *.backup
-"""

@@ -41,7 +41,7 @@ while IFS= read t1; do
         if [[ ${tt1} == "owner_id" ]]; then skip=1; fi
         if [[ ${tt1} == "resource_owner" ]]; then skip=1; fi
         if [[ ${tt1} == "creation_date" ]]; then skip=1; fi
-        if [[ ${tt1} == "rotation_enabled" ]]; then skip=1; fi
+        if [[ ${tt1} == "rotation_enabled" ]]; then skip=1; fi 
         if [[ ${tt1} == "id" ]]; then skip=1; fi
         if [[ ${tt1} == "target_prefix" ]]; then
             tlp=1

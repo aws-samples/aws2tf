@@ -65,7 +65,8 @@ for i in $(seq 0 $count); do
             if [[ ${tt1} == "force_delete_warm_pool" ]]; then isfdwp=1; fi
             if [[ ${tt1} == "wait_for_capacity_timeout" ]]; then isw=1; fi
             
-            
+            if [[ ${tt1} == "warm_pool_size" ]]; then skip=1; fi
+            if [[ ${tt1} == "predicted_capacity" ]]; then skip=1; fi
             
             if [[ ${tt1} == "availability_zones" ]]; then
                 az=1

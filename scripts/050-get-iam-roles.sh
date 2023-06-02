@@ -1,3 +1,4 @@
+# CodeWhisperer convert the following bash script to a python script
 #!/bin/bash
 mysub=$(echo $AWS2TF_ACCOUNT)
 myreg=$(echo $AWS2TF_REGION)
@@ -104,6 +105,19 @@ for c in $(seq 0 0); do
                     #if [[ ${tt1} == "public_ip" ]];then skip=1;fi
                     if [[ ${tt1} == "private_ip" ]]; then skip=1; fi
                     if [[ ${tt1} == "accept_status" ]]; then skip=1; fi
+
+                    if [[ ${tt1} == "role_last_used" ]];then
+                        # skip the block 
+                        tt2=`echo $tt2 | tr -d '"'` 
+                        skip=1
+                        while [ "$t1" != "]" ] && [ "$tt2" != "[]" ] ;do
+                            read line
+                            t1=`echo "$line"`
+                        done
+                    fi
+
+
+
                     if [[ ${tt1} == *":"* ]]; then
                         lh=$(echo $tt1 | tr -d '"')
                         skip=0

@@ -193,7 +193,7 @@ for c in $(seq 0 $count); do
     if [[ $summ == "Value for unconfigurable attribute" ]]; then
         if [[ $line != "" ]]; then
             cmd=$(printf "sed -i -e '%ss/.*//' ${fil}" $line)
-            echo "Unconfigurable attribute fix --> $res deleted $code"
+            echo "Unconfigurable attribute fix --> $res deleted $code in $fil"
             #echo $cmd
             eval $cmd
         else
@@ -207,7 +207,7 @@ for c in $(seq 0 $count); do
     if [[ $summ == "Invalid or unknown key" ]]; then
         if [[ $line != "" ]]; then
             cmd=$(printf "sed -i -e '%ss/.*/ /' ${fil}" $line)
-            echo "Unconfigurable attribute fix --> $res"
+            echo "Unconfigurable attribute fix --> $res in $fil"
             #echo $cmd
             eval $cmd
         else

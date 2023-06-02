@@ -97,6 +97,13 @@ for c in `seq 0 0`; do
                         vpcid=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`
                     fi
+                    if [[ ${tt1} == "enable_lni_at_device_index" ]]; then
+                        lni=`echo $tt2 | tr -d '"'`
+                        if [[ "$lni" == "0" ]]; then
+                             skip=1
+                        fi
+                   
+                    fi
                 # else
                     #
                 fi

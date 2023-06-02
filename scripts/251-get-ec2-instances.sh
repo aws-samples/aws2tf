@@ -69,7 +69,7 @@ for c in $(seq 0 0); do
             nets=$(echo $awsout | jq ".${pref[(${c})]}[(${i})].Instances[].NetworkInterfaces")
 
             fn=$(printf "%s__%s.tf" $ttft $cname)
-            echo $aws2tfmess >$fn
+           
             printf "resource \"%s\" \"%s\" {" $ttft $cname >$ttft.$cname.tf
             printf "}" >>$ttft.$cname.tf
             terraform import $ttft.$cname "$cname" | grep Importing
@@ -77,11 +77,15 @@ for c in $(seq 0 0); do
             rm -f $ttft.$cname.tf
 
             ebs=0
+            udrc=0
             file="t1.txt"
-            fn=$(printf "%s__%s.tf" $ttft $cname)
+            fc=$(cat $file | wc -l)
+            fc=$(expr $fc - 1)
+            fcl=0
             echo $aws2tfmess >$fn
             while IFS= read line; do
                 skip=0
+                fcl=$(expr $fcl + 1)
                 # display $line or do something with $line
                 t1=$(echo "$line")
                 if [[ ${t1} == *"="* ]]; then
@@ -93,7 +97,7 @@ for c in $(seq 0 0); do
                     if [[ ${tt1} == "user_data" ]]; then
                         skip=0
                         printf "lifecycle {\n" >>$fn
-                        printf "   ignore_changes = [user_data,user_data_base64]\n" >>$fn
+                        printf "   ignore_changes = [user_data_replace_on_change,associate_public_ip_address, user_data,user_data_base64]\n" >>$fn
                         printf "}\n" >>$fn
 
                         if [[ -f ${cname}.sh ]]; then
@@ -107,6 +111,7 @@ for c in $(seq 0 0); do
                     if [[ ${tt1} == "primary_network_interface_id" ]]; then skip=1; fi
                     if [[ ${tt1} == "instance_state" ]]; then skip=1; fi
                     if [[ ${tt1} == "private_dns" ]]; then skip=1; fi
+                    if [[ ${tt1} == "user_data_replace_on_change" ]]; then udrc=1 ; fi
 
                     if [[ ${tt1} == "volume_id" ]]; then skip=1; fi
                     #if [[ ${tt1} == "user_data" ]];then
@@ -191,6 +196,12 @@ for c in $(seq 0 0); do
                     #echo $skip $t1
                     echo "$t1" >>$fn
                 fi
+                if [ $fcl -eq $fc ]; then
+                    echo "last line $t1 $fcl"
+                    if [[ "$udrc" == "0" ]]; then
+                        echo "user_data_replace_on_change = false" >>$fn
+                    fi
+                fi
 
             done <"$file"
             #pfnm=$(echo $awsout | jq ".${pref[(${c})]}[(${i})].Instances[].IamInstanceProfile.Arn" | cut -f2 -d'/' | tr -d '"')
@@ -205,7 +216,7 @@ for c in $(seq 0 0); do
             ../../scripts/110-get-security-group.sh $ivpc
 
             if [[ $iip != "" ]]; then
-                ../../scripts/056-get-instance-profile.sh $iip
+                ../../scripts/056-get-iam-instance-profile.sh $iip
             fi
 
             nl=$(echo $nets | jq ". | length")

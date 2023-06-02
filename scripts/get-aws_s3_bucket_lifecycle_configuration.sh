@@ -18,7 +18,8 @@ if [ -f "$fn" ]; then echo "$fn exists already skipping" && exit; fi
 #echo "$ttft $rname move"
 #../../scripts/parallel_statemv.sh $ttft
 file=$(printf "%s-%s-1.txt" $ttft $rname)
-
+bn=$(echo $1)
+haveid=0
 while IFS= read t1; do
 
     skip=0
@@ -36,10 +37,14 @@ while IFS= read t1; do
         fi
 
         if [[ ${tt1} == "id" ]]; then
-            idv=$(echo $tt2 | tr -d '"')
-            if [[ "$idv" == "$bn" ]]; then
-                skip=1
-            fi
+             if [[ "$haveid" == "0" ]];then
+               skip=1
+               haveid=1
+             fi
+            #idv=$(echo $tt2 | tr -d '"')
+            #if [[ "$idv" == "$bn" ]]; then
+            #    skip=1
+            #fi
         fi
 
         if [[ ${tt1} == "role_arn" ]]; then skip=1; fi

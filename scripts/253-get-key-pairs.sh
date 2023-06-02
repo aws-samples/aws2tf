@@ -50,7 +50,7 @@ for i in $(seq 0 $count); do
             tt1=$(echo "$t1" | cut -f1 -d'=' | tr -d ' ')
             tt2=$(echo "$t1" | cut -f2- -d'=')
             if [[ ${tt1} == "id" ]]; then 
-                printf "public_key = data.%s.%s.public_key\n" $ttft $cname >>$fn
+                printf "public_key = data.%s.%s.public_key\n" $ttft $rname >>$fn
                 printf "lifecycle {\n" >>$fn
                 printf "   ignore_changes = [public_key]\n" >>$fn
                 printf "}\n" >>$fn

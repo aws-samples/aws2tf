@@ -316,6 +316,11 @@ for cname in ${bucklist[@]}; do
                     acl=1
                 fi
             fi
+#
+#
+            if [[ ${tt1} == "bucket_prefix" ]]; then skip=1; fi
+#
+#
             if [[ ${tt1} == "bucket_domain_name" ]]; then skip=1; fi
             if [[ ${tt1} == "bucket_regional_domain_name" ]]; then skip=1; fi
             if [[ ${tt1} == "allocated_capacity" ]]; then skip=1; fi

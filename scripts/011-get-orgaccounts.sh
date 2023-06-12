@@ -44,15 +44,15 @@ for c in $(seq 0 0); do
                 echo "$fn exists already skipping"
                 continue
             fi
-            printf "resource \"%s\" \"%s\" {" $ttft $rname >$ttft.$rname.tf
-            printf "}" >>$ttft.$rname.tf
+
+            printf "resource \"%s\" \"%s\" {}\n" $ttft $rname > $fn
             printf "terraform import %s.%s %s" $ttft $rname "$cname" >data/import_$ttft_$rname.sh
             terraform import $ttft.$rname "$cname" | grep Importing
             terraform state show -no-color $ttft.$rname >t1.txt
-            tfa=$(printf "%s.%s" $ttft $rname)
-            terraform show -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' >data/$tfa.json
+            #tfa=$(printf "%s.%s" $ttft $rname)
+            #terraform show -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' >data/$tfa.json
             #echo $awsj | jq .
-            rm $ttft.$rname.tf
+            rm -f $fn
 
             file="t1.txt"
             iddo=0

@@ -16,7 +16,7 @@ c=0
 	#echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
-        echo "This is either not an AWS organizations account or you don't have access"
+        echo "$cm - 021 This is either not an AWS organizations account or you don't have access"
         exit
     fi
 

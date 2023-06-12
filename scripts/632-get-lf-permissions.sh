@@ -37,7 +37,7 @@ c=0
 	#echo $cm
     awsout=`eval $cm`
     if [ "$awsout" == "" ];then
-        echo "This is not an AWS organizations account"
+        echo "$cm : You don't have access for this resource"
         exit
     fi
     if [ "$1" != "" ]; then

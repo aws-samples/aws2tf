@@ -359,7 +359,7 @@ if [[ "$s" == "no" ]]; then
     for com in $(ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g); do
         start=$(date +%s)
         if [[ "$com" == *"${exclude}"* ]]; then
-            echo "skipping $com"
+            echo "exclude = ${exclude} - skipping $com"
         else
             docomm=". ../../scripts/$com $i"
             echo $docomm
@@ -369,7 +369,7 @@ if [[ "$s" == "no" ]]; then
             else
                 grep "$docomm" data/processed.txt >/dev/null
                 if [ $? -eq 0 ]; then
-                    echo "skipping $docomm"
+                    echo "fast forward - skipping $docomm"
                     continue
                 else
                     eval $docomm 2>&1 | tee -a import.log

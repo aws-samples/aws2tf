@@ -336,8 +336,8 @@ for cname in ${bucklist[@]}; do
             fi
             if [[ $acl = 0 ]]; then
                 if [[ "$doacl" == "1" ]]; then
-                    printf "acl = \"private\" \n" >>$fn
-
+                    #printf "acl = \"private\" \n" >>$fn
+                    echo "depreciated acl = private"
                 fi
             fi
         fi

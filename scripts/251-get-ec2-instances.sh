@@ -69,16 +69,18 @@ for c in $(seq 0 0); do
             nets=$(echo $awsout | jq ".${pref[(${c})]}[(${i})].Instances[].NetworkInterfaces")
 
             fn=$(printf "%s__%s.tf" $ttft $cname)
-           
-            printf "resource \"%s\" \"%s\" {" $ttft $cname >$ttft.$cname.tf
-            printf "}" >>$ttft.$cname.tf
+            if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
+
+            printf "resource \"%s\" \"%s\" {}\n" $ttft $cname > $fn
             terraform import $ttft.$cname "$cname" | grep Importing
-            terraform state show -no-color $ttft.$cname >t1.txt
-            rm -f $ttft.$cname.tf
+
+            file="${ttft}__${cname}.txt"
+            terraform state show -no-color $ttft.$cname > $file
+            rm -f $fn
 
             ebs=0
             udrc=0
-            file="t1.txt"
+            
             fc=$(cat $file | wc -l)
             fc=$(expr $fc - 1)
             fcl=0
@@ -204,6 +206,7 @@ for c in $(seq 0 0); do
                 fi
 
             done <"$file"
+
             #pfnm=$(echo $awsout | jq ".${pref[(${c})]}[(${i})].Instances[].IamInstanceProfile.Arn" | cut -f2 -d'/' | tr -d '"')
             #echo "------ $pfnm -------"
             #../../scripts/get-inprof.sh $pfnm

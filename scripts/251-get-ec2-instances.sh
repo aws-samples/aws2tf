@@ -10,7 +10,7 @@ if [ "$1" != "" ]; then
     fi
 
 else
-    cmd[0]="$AWS ec2 describe-instances --filters \"Name=instance-state-name,Values=running\""
+    cmd[0]="$AWS ec2 describe-instances --filters \"Name=instance-state-name,Values=running,stopped\""
 fi
 
 cloud9s=$($AWS ec2 describe-instances --filters "Name=tag-key,Values=aws:cloud9*" | jq .Reservations[].Instances[].InstanceId)
@@ -197,7 +197,7 @@ for c in $(seq 0 0); do
                     echo "$t1" >>$fn
                 fi
                 if [ $fcl -eq $fc ]; then
-                    echo "last line $t1 $fcl"
+                    #echo "last line $t1 $fcl"
                     if [[ "$udrc" == "0" ]]; then
                         echo "user_data_replace_on_change = false" >>$fn
                     fi

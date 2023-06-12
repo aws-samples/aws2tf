@@ -61,11 +61,14 @@ for c in `seq 0 0`; do
                         else
                             skip=0; 
                         fi                       
+
+                    fi                
+                    if [[ ${tt1} == "id" ]];then 
                         printf "lifecycle {\n" >>$fn
                         printf "   ignore_changes = [latest_version]\n" >>$fn
                         printf "}\n" >>$fn
-                    fi                
-                    if [[ ${tt1} == "id" ]];then skip=1; fi          
+                        skip=1; 
+                    fi          
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "association_id" ]];then skip=1;fi

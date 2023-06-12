@@ -246,7 +246,12 @@ export AWS2TF_REGION=$(echo $r)
 export AWS2TF_ACCOUNT=$(echo $mysub)
 
 cat aws.tf
-cp ../../stubs/data*.tf .
+cp ../../stubs/data-aws.tf .
+
+$AWS kms list-aliases &> /dev/null
+if [[ $? -eq 0 ]]; then
+    cp ../../stubs/data_kms_alias_s3.tf .
+fi
 
 if [ "$t" == "no" ]; then t="*"; fi
 

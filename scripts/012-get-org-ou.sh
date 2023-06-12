@@ -1,5 +1,12 @@
 #!/bin/bash
 # $AWS  organizations list-organizational-units-for-parent --parent-id $root
+$AWS organizations list-roots --query Roots[*].Id &> /dev/null
+if [[ $? -ne 0 ]]; then
+    echo "This is either not an AWS organizations account or you don't have access"
+    exit
+fi
+
+
 roots=()
 if [ "$1" != "" ]; then
     cmd[0]="$AWS  organizations list-organizational-units-for-parent --parent-id" 

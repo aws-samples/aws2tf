@@ -1,4 +1,10 @@
 #!/bin/bash
+$AWS organizations describe-organization &> /dev/null
+if [[ $? -ne 0 ]]; then
+    echo "This is either not an AWS organizations account or you don't have access"
+    exit
+fi
+
 if [ "$1" != "" ]; then
     cmd[0]="$AWS organizations describe-organization" 
 else
@@ -43,7 +49,7 @@ for c in `seq 0 0`; do
             terraform import $ttft.$rname "$cname" | grep Importing
             terraform state show -no-color $ttft.$rname > t1.txt
             tfa=`printf "%s.%s" $ttft $rname`
-            terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
+            #terraform show  -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' > data/$tfa.json
             #echo $awsj | jq . 
             rm -f $ttft.$rname.tf
 

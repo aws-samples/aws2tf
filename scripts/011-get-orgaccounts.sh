@@ -46,7 +46,7 @@ for c in $(seq 0 0); do
             fi
 
             printf "resource \"%s\" \"%s\" {}\n" $ttft $rname > $fn
-            printf "terraform import %s.%s %s" $ttft $rname "$cname" >data/import_$ttft_$rname.sh
+            #printf "terraform import %s.%s %s" $ttft $rname "$cname" >data/import_$ttft_$rname.sh
             terraform import $ttft.$rname "$cname" | grep Importing
             terraform state show -no-color $ttft.$rname >t1.txt
             #tfa=$(printf "%s.%s" $ttft $rname)

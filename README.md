@@ -201,6 +201,9 @@ Or simply check back after some time to see if they are listed below.
 ----
 ## Terraform resources supported as of 28-Apr-2023
 
+----
+## Terraform resources supported as of 25-Jun-2023
+
 * aws_acm_certificate
 * aws_api_gateway_resource
 * aws_api_gateway_rest_api
@@ -298,6 +301,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_iam_user_policy_attachment
 * aws_instance
 * aws_internet_gateway
+* aws_key_pair
 * aws_kinesis_firehose_delivery_stream
 * aws_kinesis_stream
 * aws_kms_alias
@@ -348,6 +352,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_sagemaker_domain
 * aws_sagemaker_image
 * aws_sagemaker_image_version
+* aws_sagemaker_model
 * aws_sagemaker_notebook_instance
 * aws_sagemaker_studio_lifecycle_config
 * aws_sagemaker_user_profile
@@ -381,10 +386,19 @@ Or simply check back after some time to see if they are listed below.
 * aws_vpc_endpoint_service
 * aws_vpc_ipv4_cidr_block_association
 * aws_vpc_peering_connection
+* aws_vpclattice_auth_policy
+* aws_vpclattice_listener
+* aws_vpclattice_listener_rule
+* aws_vpclattice_resource_policy
+* aws_vpclattice_service
+* aws_vpclattice_service_network
+* aws_vpclattice_service_network_service_association
+* aws_vpclattice_service_network_vpc_association
+* aws_vpclattice_target_group
 * aws_vpn_connection
 
 ----
-## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 28-Apr-2023
+## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 25-Jun-2023
 
 * #AWS::IAM::Policy
 * AWS::ApiGateway::Account
@@ -413,6 +427,7 @@ Or simply check back after some time to see if they are listed below.
 * AWS::EC2::EIP
 * AWS::EC2::Instance
 * AWS::EC2::InternetGateway
+* AWS::EC2::KeyPair
 * AWS::EC2::LaunchTemplate
 * AWS::EC2::NatGateway
 * AWS::EC2::NetworkAcl

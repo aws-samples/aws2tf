@@ -104,6 +104,13 @@ for c in `seq 0 0`; do
                         tt2=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
                     fi
+                    if [[ ${tt1} == "task_definition" ]]; then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        td=`echo $tt2 | rev | cut -f1 -d':' | rev`
+                        t1=`printf "%s = aws_ecs_task_definition.%s.id" $tt1 $td`
+                    fi
+
+
                     if [[ ${tt1} == "cluster" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
                         if [[ "$tt2" == *":cluster/"* ]];then
@@ -138,6 +145,8 @@ for c in `seq 0 0`; do
             srvid=`eval $comm`
             srvid=`echo $srvid | cut -f2 -d'/'`
 
+            echo "get task definition for $cln $srv $td"
+            ../../scripts/get-ecs-tak.sh $td
 
             ## get any app autoscaling targets
             echo "get any app autoscaling targets for $cln $srv"

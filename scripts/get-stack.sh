@@ -120,7 +120,7 @@ if [ $count -gt 0 ]; then
 
                 AWS::ECS::Cluster) echo "../../scripts/350-get-ecs-cluster.sh $pid" >> commands.sh ;;
                 AWS::ECS::Service)  echo "../../scripts/get-ecs-service.sh $parn" >> commands.sh ;;
-                AWS::ECS::TaskDefinition)  echo "../../scripts/351-get-ecs-task.sh $pid" >> commands.sh ;;
+                AWS::ECS::TaskDefinition)  echo "../../scripts/get-ecs-task.sh $pid" >> commands.sh ;;
                 
                 AWS::EFS::FileSystem) echo "../../scripts/270-get-efs.sh $pid" >> commands.sh ;;
                 AWS::EFS::MountTarget) echo "echo '#  $type $pid attached as part of EFS::FileSystem ..'" >> commands.sh ;; 

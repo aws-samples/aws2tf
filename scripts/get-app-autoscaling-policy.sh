@@ -81,6 +81,7 @@ for i in $(seq 0 $count); do
             if [[ ${tt1} == "create_date" ]]; then skip=1; fi
             if [[ ${tt1} == "arn" ]]; then skip=1; fi
             if [[ ${tt1} == "owner_id" ]]; then skip=1; fi
+            if [[ ${tt1} == "policy_type" ]]; then skip=1; fi
 
 
 

@@ -3,7 +3,8 @@ if [ "$1" != "" ]; then
     fp=$(echo $1 | cut -f1 -d ':')
     cmd[0]="$AWS ecs list-task-definitions --family-prefix $fp" 
 else
-    cmd[0]="$AWS ecs list-task-definitions"
+    echo "Usage: $0 <family-prefix>"
+    exit
 fi
 
 tft[0]="aws_ecs_task_definition"

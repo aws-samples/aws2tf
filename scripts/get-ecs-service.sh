@@ -146,7 +146,7 @@ for c in `seq 0 0`; do
             srvid=`echo $srvid | cut -f2 -d'/'`
 
             echo "get task definition for $cln $srv $td"
-            ../../scripts/get-ecs-tak.sh $td
+            ../../scripts/get-ecs-task.sh $td
 
             ## get any app autoscaling targets
             echo "get any app autoscaling targets for $cln $srv"

@@ -9,7 +9,7 @@ if [[ "$1" == "" ]]; then
 fi
 
 if [[ "$2" == "" ]]; then
-    echo "must pass service id as first parameter"
+    echo "must pass service id as second parameter"
     exit
 fi
 
@@ -25,7 +25,7 @@ count=1
 
 
 awsout=`eval $cm 2> /dev/null`
-echo $awsout | jq .
+#echo $awsout | jq .
 
 
 if [ "$awsout" == "" ];then echo "$cm : You don't have access for this resource" && exit; fi
@@ -37,7 +37,7 @@ for i in `seq 0 $count`; do
 
     cname=`echo $awsout | jq -r ".${idfilt}"`
     sd=`echo $awsout | jq -r ".ScalableDimension"`
-    pn=`echo $awsout | jq -r ".PolicyName"
+    pn=$(echo $awsout | jq -r ".PolicyName")
   
     rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
     rname2=${sd//:/_} && rname2=${rname2//./_} && rname2=${rname2//\//_}

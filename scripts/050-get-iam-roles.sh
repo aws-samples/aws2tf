@@ -82,6 +82,7 @@ for c in $(seq 0 0); do
             fi
             reps=()
             getrole=()
+            ccid=""
             echo $aws2tfmess >$fn
             while IFS= read line; do
                 skip=0
@@ -173,6 +174,7 @@ for c in $(seq 0 0); do
                                 t1=$(printf "%s = aws_ecr_repository.%s.arn" $tt1 $rep)
                             elif [[ "$tt2" == *"arn:aws:codecommit:${myreg}:${mysub}:"* ]]; then
                                 ccid=$(echo $tt2 | rev | cut -f1 -d':' | rev | tr -d '"')
+                                echo "ccid=$ccid"
                                 t1=$(printf "%s = aws_codecommit_repository.%s.arn" $tt1 $ccid)
 
                             elif [[ "$tt2" == *"arn:aws:codepipeline:${myreg}:${mysub}:"* ]]; then
@@ -222,6 +224,10 @@ for c in $(seq 0 0); do
                     ../../scripts/050-get-iam-roles.sh $sub1
                 fi
             done
+
+            if [[ $ccid != "" ]]; then
+                ../../scripts/628-get-code-commit-repository.sh $ccid $ccid  # pass same param twice deliberately
+            fi
 
             #if [[ $getrole != "" ]]; then
             #    ../../scripts/050-get-iam-roles.sh $getrole

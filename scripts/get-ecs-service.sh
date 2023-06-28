@@ -138,6 +138,13 @@ for c in `seq 0 0`; do
             srvid=`eval $comm`
             srvid=`echo $srvid | cut -f2 -d'/'`
 
+
+            ## get any app autoscaling targets
+
+            ../../scripts/get-app-autoscaling-target.sh "ecs" "service/$cln/$srv"
+
+            exit
+
             echo "--> srvid=$srvid  cln=$cln"
             if [ "$srvid" != "null" ]; then
                     nsid=`$AWS servicediscovery get-service --id $srvid | jq .Service.NamespaceId | tr -d '\"'`

@@ -1,19 +1,15 @@
 #!/bin/bash
-ttft="aws_codecommit_repository"
-pref="repositories"
-idfilt="repositoryName"
+ttft="aws_flow_log"
+pref="FlowLogs"
+idfilt="FlowLogId"
 
-cm="$AWS codecommit list-repositories"
+cm="$AWS ec2 describe-flow-logs"
 if [[ "$1" != "" ]]; then
-    if [[ "$2" != "" ]]; then
-        cm=$(printf "$AWS codecommit list-repositories  | jq '.${pref}[] | select(.repositoryName==\"%s\")' | jq ." $1)
-    else
-        cm=$(printf "$AWS codecommit list-repositories  | jq '.${pref}[] | select(.repositoryId==\"%s\")' | jq ." $1)
-    fi
+    cm=$(printf "$AWS ec2 describe-flow-logs  | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $1)
 fi
 
 count=1
-#echo $cm
+echo $cm
 awsout=$(eval $cm 2>/dev/null)
 #echo $awsout | jq .
 
@@ -41,9 +37,8 @@ for i in $(seq 0 $count); do
     rm -f $fn
 
     file="t1.txt"
+    lgd=0
     echo $aws2tfmess >$fn
-    sgs=()
-    subnets=()
     while IFS= read t1; do
         skip=0
         if [[ ${t1} == *"="* ]]; then
@@ -53,11 +48,27 @@ for i in $(seq 0 $count); do
             if [[ ${tt1} == "create_date" ]]; then skip=1; fi
             if [[ ${tt1} == "arn" ]]; then skip=1; fi
             if [[ ${tt1} == "owner_id" ]]; then skip=1; fi
-            if [[ ${tt1} == "created_time" ]]; then skip=1; fi
-            if [[ ${tt1} == "state" ]]; then skip=1; fi
-            if [[ ${tt1} == "repository_id" ]]; then skip=1; fi
-            if [[ ${tt1} == "clone_url_ssh" ]]; then skip=1; fi
-            if [[ ${tt1} == "clone_url_http" ]]; then skip=1; fi
+            if [[ ${tt1} == "log_group_name" ]]; then skip=1; fi
+            if [[ ${tt1} == "log_destination" ]]; then
+                lgd=1
+                rarn=$(echo $tt2 | tr -d '"')
+                if [[ $rarn == *"*" ]]; then
+                    trole=$(echo $tt2 | rev | cut -f2 -d':' | rev | tr -d '"')
+                else
+                    trole=$(echo $tt2 | rev | cut -f1 -d':' | rev | tr -d '"')
+                fi
+                skip=1
+                t1=$(printf "%s = aws_cloudwatch_log_group.%s.arn" $tt1 $trole)
+
+            fi
+            if [[ ${tt1} == "log_format" ]]; then
+
+                if [[ $t1 == *"\${"* ]]; then
+                    t1=${t1//$/&}
+                fi
+
+            fi
+
         fi
 
         if [ "$skip" == "0" ]; then echo "$t1" >>$fn; fi

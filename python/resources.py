@@ -42,168 +42,179 @@ def get_all_s3_buckets():
   for buck in buckets: 
    
      bucket_name=buck.name
-     
+     fn="data/s3-"+str(bucket_name)+".json"
+     print(fn)
+     with open(fn, "w") as f:
+   
+   
+      print("Bucket: "+bucket_name + '  ----------------------------------------------------------------')
 
-
-     print("Bucket: "+bucket_name + '  ----------------------------------------------------------------')
-  
-     try:
-        print('location')
-        location = s3.get_bucket_location(Bucket=bucket_name)
-        
-        bl=location['LocationConstraint']
-        if bl != my_region:
-           print('continuing on non default location '+ bl)
-           continue
-        if bl is None:  
-            print('continuing on None location .......')
+      try:
+         print('location')
+         location = s3.get_bucket_location(Bucket=bucket_name)
+         
+         bl=location['LocationConstraint']
+         if bl != my_region:
+            print('continuing on non default location '+ bl)
             continue
-        elif bl == 'null':  
-            print('continuing on null location .......')
-            continue
-        else:
-           print(bl)
-           
-     except:
-        print('continuing on exception to location .......')
-        continue
+         if bl is None:  
+               print('continuing on None location .......')
+               continue
+         elif bl == 'null':  
+               print('continuing on null location .......')
+               continue
+         else:
+            print(bl)
+            
+      except:
+         print('continuing on exception to location .......')
+         continue
 
-     #print(bucket)
-     try:
-        print('analytics')
-        analytics = s3.get_bucket_analytics(Bucket=bucket_name)
-        print(json.dumps(analytics, indent=4, default=str))
-     except:
-        analytics = None 
+      f.write("{\n")
+      f.write("name: '" + "bucket_name" + "'\n")
+      f.write("{\n")
 
-     try:
-        print('accelerate')
-        accelerate = s3.get_accelerate_configuration(Bucket=bucket_name)
-        print(json.dumps(accelerate, indent=4, default=str))
-     except:
-        accelerate = None
+      #print(bucket)
+      try:
+         print('analytics')
+         analytics = s3.get_bucket_analytics(Bucket=bucket_name)
+         json.dump(analytics, f,indent=4, default=str)
+      except:
+         analytics = None 
 
-     try:  
-        #print('acl')
-        acl=s3.get_bucket_acl(Bucket=bucket_name)
-        #print(json.dumps(acl, indent=4, default=str))
-     except:
-        acl=None
+      try:
+         print('accelerate')
+         accelerate = s3.get_accelerate_configuration(Bucket=bucket_name)
+         print(json.dumps(accelerate, indent=4, default=str))
+      except:
+         accelerate = None
 
-     try:
-        print('cors')
-        cors=s3.get_bucket_cors(Bucket=bucket_name)
-        print(json.dumps(cors, indent=4, default=str))
-     except:
-        cors=None   
+      try:  
+         #print('acl')
+         acl=s3.get_bucket_acl(Bucket=bucket_name)
+         #print(json.dumps(acl, indent=4, default=str))
+         f.write("acl: '" + json.dumps(acl, indent=4, default=str) + "'\n")
+      except:
+         acl=None
 
-     try:
-        print('tiering')
-        intelligent_tiering_configuration = s3.get_bucket_intelligent_tiering_configuration(Bucket=bucket_name)
-        print(json.dumps(intelligent_tiering_configuration, indent=4, default=str))
-     except:
-        intelligent_tiering_configuration = None
+      try:
+         print('cors')
+         cors=s3.get_bucket_cors(Bucket=bucket_name)
+         print(json.dumps(cors, indent=4, default=str))
+      except:
+         cors=None   
 
-     try:   
-        #print('crypto')
-        encryption = s3.get_bucket_encryption(Bucket=bucket_name)
-        #print(json.dumps(encryption, indent=4, default=str))
-     except:
-        encryption = None
+      try:
+         print('tiering')
+         intelligent_tiering_configuration = s3.get_bucket_intelligent_tiering_configuration(Bucket=bucket_name)
+         print(json.dumps(intelligent_tiering_configuration, indent=4, default=str))
+      except:
+         intelligent_tiering_configuration = None
 
-     try:
-        print('inventory')  
-        inventory = s3.get_inventory_configuration(Bucket=bucket_name)
-        print(json.dumps(inventory, indent=4, default=str))
-     except:
-        inventory = None
+      try:   
+         #print('crypto')
+         encryption = s3.get_bucket_encryption(Bucket=bucket_name)
+         #print(json.dumps(encryption, indent=4, default=str))
+      except:
+         encryption = None
 
-     try:   
-        print('lifecycle')
-        lifecycle = s3.get_bucket_lifecycle(Bucket=bucket_name)
-        print(json.dumps(lifecycle, indent=4, default=str))
-     except:
-        lifecycle = None
+      try:
+         print('inventory')  
+         inventory = s3.get_inventory_configuration(Bucket=bucket_name)
+         print(json.dumps(inventory, indent=4, default=str))
+      except:
+         inventory = None
 
-     try:
-        #print('location')
-        location = s3.get_bucket_location(Bucket=bucket_name)
-        #print(json.dumps(location, indent=4, default=str))
-     except:
-        location = None
-     try:   
-        print('logging')
-        logging = s3.get_bucket_logging(Bucket=bucket_name)
-        print(json.dumps(logging, indent=4, default=str))
+      try:   
+         print('lifecycle')
+         lifecycle = s3.get_bucket_lifecycle(Bucket=bucket_name)
+         print(json.dumps(lifecycle, indent=4, default=str))
+      except:
+         lifecycle = None
+
+      try:
+         #print('location')
+         location = s3.get_bucket_location(Bucket=bucket_name)
+         #print(json.dumps(location, indent=4, default=str))
+      except:
+         location = None
+      try:   
+         print('logging')
+         logging = s3.get_bucket_logging(Bucket=bucket_name)
+         print(json.dumps(logging, indent=4, default=str))
+         
+      except:
+         logging = None
+
+      try:   
+         print('metrics')
+         metrics = s3.get_bucket_metrics(Bucket=bucket_name)
+         print(json.dumps(metrics, indent=4, default=str))
+      except:
+         metrics = None
+
+      try:
+         notification = s3.Notification()
+      except:
+         notification = None
+
+      try: 
+         object_lock_configuration = s3.get_bucket_object_lock_configuration(Bucket=bucket_name)
+      except:
+         object_lock_configuration = None
+
+      try:
+         object_ownership = s3.get_bucket_object_ownership(Bucket=bucket_name)
+      except:
+         object_ownership = None
+
+      try:
+         #print('policy')
+         policy = s3.get_bucket_policy(Bucket=bucket_name)
+         #print(json.dumps(policy, indent=4))
+      except:
+         policy = None
+
+      try:
+         print('replic')
+         replication = s3.get_bucket_replication(Bucket=bucket_name)
+         print(json.dumps(replication, indent=4, default=str))
+      except:
+         replication = None
+
+      try:
+         #print('request')
+         request_payer = s3.get_bucket_request_payment(Bucket=bucket_name)
+         #print(json.dumps(request_payer, indent=4, default=str))
+
+      except:
+         request_payment = None
+
+      try:
+         #print('tagging')
+         tagging = s3.get_bucket_tagging(Bucket=bucket_name)
+         #print(json.dumps(tagging, indent=4, default=str))
+      except:
+         tagging = None
+
+      try:
+         print('vers')
+         versioning = s3.get_bucket_versioning(Bucket=bucket_name)
+         print(json.dumps(versioning, indent=4, default=str))
+         
+      except:
+         versioning = None
       
-     except:
-        logging = None
+      try:   
+         #print('website')
+         website = s3.get_bucket_website(Bucket=bucket_name)
+         #print(json.dumps(website, indent=4, default=str))  
+      except:
+         website = None
 
-     try:   
-        print('metrics')
-        metrics = s3.get_bucket_metrics(Bucket=bucket_name)
-        print(json.dumps(metrics, indent=4, default=str))
-     except:
-        metrics = None
-
-     try:
-        notification = s3.Notification()
-     except:
-        notification = None
-
-     try: 
-        object_lock_configuration = s3.get_bucket_object_lock_configuration(Bucket=bucket_name)
-     except:
-        object_lock_configuration = None
-
-     try:
-        object_ownership = s3.get_bucket_object_ownership(Bucket=bucket_name)
-     except:
-        object_ownership = None
-
-     try:
-        #print('policy')
-        policy = s3.get_bucket_policy(Bucket=bucket_name)
-        #print(json.dumps(policy, indent=4))
-     except:
-        policy = None
-
-     try:
-        print('replic')
-        replication = s3.get_bucket_replication(Bucket=bucket_name)
-        print(json.dumps(replication, indent=4, default=str))
-     except:
-        replication = None
-
-     try:
-        #print('request')
-        request_payer = s3.get_bucket_request_payment(Bucket=bucket_name)
-        #print(json.dumps(request_payer, indent=4, default=str))
-
-     except:
-        request_payment = None
-
-     try:
-        #print('tagging')
-        tagging = s3.get_bucket_tagging(Bucket=bucket_name)
-        #print(json.dumps(tagging, indent=4, default=str))
-     except:
-        tagging = None
-
-     try:
-        print('vers')
-        versioning = s3.get_bucket_versioning(Bucket=bucket_name)
-        print(json.dumps(versioning, indent=4, default=str))
-      
-     except:
-        versioning = None
-     
-     try:   
-        #print('website')
-        website = s3.get_bucket_website(Bucket=bucket_name)
-        #print(json.dumps(website, indent=4, default=str))  
-     except:
-        website = None
+      f.write("}\n")
+      f.write("}\n")
+      f.close()
 
   #with open("s3.json", "w") as f:
   #  json.dump(buckets, f)

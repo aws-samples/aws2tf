@@ -44,20 +44,19 @@ for i in `seq 0 $count`; do
     rname3=${pn//:/_} && rname3=${rname3//./_} && rname3=${rname3//\//_}
    
     echo "$ttft $1 ${cname} $sd $pn"
-    echo "$rname $rname2 $rname3"
+    #echo "$rname $rname2 $rname3"
     
     fn=`printf "%s__%s__%s__%s__%s.tf" $ttft $1 $rname $rname2 $rname3`
     if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
-    echo $fn
+    #echo $fn
 
     printf "resource \"%s\" \"%s__%s__%s__%s\" {}\n" $ttft $1 $rname $rname2 $rname3 > $fn  
-    cat $fn
+    #cat $fn
     terraform import $ttft.${1}__${rname}__${rname2}__${rname3} "$1/${cname}/$sd/$pn"
     if [ "$?" != "0" ]; then 
         echo "Error importing $1/${cname}/$sd/$pn" && exit; 
     fi
-    echo "show"
-
+    
     terraform state show -no-color $ttft.${1}__${rname}__${rname2}__${rname3} > t1.txt
 
     rm -f $fn

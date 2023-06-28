@@ -143,7 +143,7 @@ for c in `seq 0 0`; do
 
             ../../scripts/get-app-autoscaling-target.sh "ecs" "service/$cln/$srv"
 
-            exit
+            
 
             echo "--> srvid=$srvid  cln=$cln"
             if [ "$srvid" != "null" ]; then

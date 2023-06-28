@@ -13,8 +13,7 @@ if [[ "$2" == "" ]]; then
     exit
 fi
 
-echo "1=$1"
-echo "2=$2"
+
 
 cm="$AWS application-autoscaling describe-scalable-targets"
 if [[ "$1" != "" ]]; then
@@ -26,7 +25,7 @@ count=1
 
 
 awsout=`eval $cm 2> /dev/null`
-echo $awsout | jq .
+#echo $awsout | jq .
 
 
 if [ "$awsout" == "" ];then echo "$cm : You don't have access for this resource" && exit; fi
@@ -41,8 +40,6 @@ for i in `seq 0 $count`; do
     rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
     rname2=${sd//:/_} && rname2=${rname2//./_} && rname2=${rname2//\//_}
    
-
-
     echo "$ttft $1 ${cname} $sd"
     
     fn=`printf "%s__%s__%s__%s.tf" $ttft $1 $rname $rname2`

@@ -29,14 +29,15 @@ for c in `seq 0 0`; do
         for i in `seq 0 $count`; do
             #echo $i
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})]" | tr -d '"'`
-            tname=$(echo $cname | cut -f6-10 -d':')
+            tname=$(echo $cname | cut -f2 -d'/')
+            echo $tname
             rname=${tname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
 
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
 
-            printf "resource \"%s\" \"%s\" {\n" $ttft $rname > $fn
-            printf "}"  >> $fn
+            printf "resource \"%s\" \"%s\" {}\n" $ttft $rname > $fn
+   
             terraform import $ttft.$rname "$cname" | grep Importing
             terraform state show -no-color $ttft.$rname > t1.txt
             

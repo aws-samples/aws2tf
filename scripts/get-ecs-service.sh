@@ -107,7 +107,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "task_definition" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
                         td=`echo $tt2 | cut -f1 -d':'`
-                        tv=`echo $tt2 | cut -f1 -d':'`
+                        tv=`echo $tt2 | cut -f2 -d':'`
                         t1=`printf "%s = aws_ecs_task_definition.%s_%s.id" $tt1 $td $tv`
                     fi
 

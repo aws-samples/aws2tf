@@ -140,9 +140,11 @@ for c in `seq 0 0`; do
 
 
             ## get any app autoscaling targets
-
+            echo "get any app autoscaling targets for $cln $srv"
             ../../scripts/get-app-autoscaling-target.sh "ecs" "service/$cln/$srv"
 
+            echo "get any app autoscaling policies for $cln $srv"
+            ../../scripts/get-app-autoscaling-policy.sh "ecs" "service/$cln/$srv"
             
 
             echo "--> srvid=$srvid  cln=$cln"

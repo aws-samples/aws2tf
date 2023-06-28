@@ -52,7 +52,7 @@ for i in `seq 0 $count`; do
 
     printf "resource \"%s\" \"%s__%s__%s__%s\" {}\n" $ttft $1 $rname $rname2 $rname3 > $fn  
     cat $fn
-    terraform import $ttft.${1}__${rname}__${rname2}__{$rname3} "$1/${cname}/$sd/$pn"
+    terraform import $ttft.${1}__${rname}__${rname2}__${rname3} "$1/${cname}/$sd/$pn"
     if [ "$?" != "0" ]; then 
         echo "Error importing $1/${cname}/$sd/$pn" && exit; 
     fi

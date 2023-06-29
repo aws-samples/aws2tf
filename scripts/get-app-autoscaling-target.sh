@@ -65,9 +65,9 @@ for i in $(seq 0 $count); do
 
             if [[ ${tt1} == "role_arn" ]]; then
                 tt2=$(echo $tt2 | tr -d '"')
-                tstart=$(echo $tt2 | cut -f1-3 -d ':')
-                tacc=$(echo $tt2 | cut -f4 -d ':')
-                tend=$(echo $tt2 | cut -f5- -d ':')
+                tstart=$(echo $tt2 | cut -f1-4 -d ':')
+                tacc=$(echo $tt2 | cut -f5 -d ':')
+                tend=$(echo $tt2 | cut -f6- -d ':')
                 tsub="%s"
                 t1=$(printf "%s = format(\"%s:%s:%s\",data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tend)
                 # don't get target group - as ecs servioce creates this for us

@@ -188,7 +188,7 @@ for c in $(seq 0 0); do
                             else # check tt2 for $ and '"'
                                 # arn catch all
                                 
-                                if [[ "$tt2" ==*"arn:aws:"*":$myreg:$mysub:"* ]];then
+                                if [[ "$tt2" == *"arn:aws:"*":$myreg:$mysub:"* ]];then
                                     echo $t1
                                     echo $tt2
                                     tstart=$(echo $tt2 | cut -f1-3 -d ':')

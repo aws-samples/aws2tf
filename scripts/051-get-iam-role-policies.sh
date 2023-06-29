@@ -82,7 +82,7 @@ for c in $(seq 0 0); do
 
                     if [[ ${tt1} == "Resource" ]]; then
                         tt2=$(echo $tt2 | tr -d '"| ')
-                        if [[ "$tt2" != "*" ]]; then
+                        if [[ "$tt2" != *"*"* ]]; then
                             echo "no star $t1"
                             if [[ "$tt2" == *"["* ]]; then
                                 t1=$(echo $t1)

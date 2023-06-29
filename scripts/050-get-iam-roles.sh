@@ -204,7 +204,7 @@ for c in $(seq 0 0); do
                                 fi
                             fi
                         else
-                            tstart=${tt2:0:8}
+                            tstart=${tt2:1:7}
                             echo "is star $t1 $tstart"
                             if [[ "$tstart" == "arn:aws:" ]];then
 

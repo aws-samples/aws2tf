@@ -107,17 +107,15 @@ for c in $(seq 0 0); do
                     if [[ ${tt1} == "private_ip" ]]; then skip=1; fi
                     if [[ ${tt1} == "accept_status" ]]; then skip=1; fi
 
-                    if [[ ${tt1} == "role_last_used" ]];then
-                        # skip the block 
-                        tt2=`echo $tt2 | tr -d '"'` 
+                    if [[ ${tt1} == "role_last_used" ]]; then
+                        # skip the block
+                        tt2=$(echo $tt2 | tr -d '"')
                         skip=1
-                        while [ "$t1" != "]" ] && [ "$tt2" != "[]" ] ;do
+                        while [ "$t1" != "]" ] && [ "$tt2" != "[]" ]; do
                             read line
-                            t1=`echo "$line"`
+                            t1=$(echo "$line")
                         done
                     fi
-
-
 
                     if [[ ${tt1} == *":"* ]]; then
                         lh=$(echo $tt1 | tr -d '"')
@@ -187,8 +185,8 @@ for c in $(seq 0 0); do
 
                             else # check tt2 for $ and '"'
                                 # arn catch all
-                                
-                                if [[ "$tt2" == *"arn:aws:"*":$myreg:$mysub:"* ]];then
+
+                                if [[ "$tt2" == *"arn:aws:"*":$myreg:$mysub:"* ]]; then
                                     echo $t1
                                     echo $tt2
                                     tstart=$(echo $tt2 | cut -f1-3 -d ':')
@@ -196,7 +194,7 @@ for c in $(seq 0 0); do
                                     tacc=$(echo $tt2 | cut -f5 -d ':')
                                     tend=$(echo $tt2 | cut -f6- -d ':')
                                     tsub="%s"
-                                    if [[ "$mysub" == "$tacc" ]];then
+                                    if [[ "$mysub" == "$tacc" ]]; then
                                         t1=$(printf "%s = format(\"%s:%s:%s:%s\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tsub $tend)
                                     fi
                                 else
@@ -206,28 +204,27 @@ for c in $(seq 0 0); do
                                 fi
                             fi
                         else
-                            echo "is star $t1"
-                            if [[ "$tt2" == *"arn:aws:"* ]] && [[ "$tt2" == *":$myreg:$mysub:"* ]];then
-                                    
-                                    echo $tt2
-                                    tstart=$(echo $tt2 | cut -f1-3 -d ':')
-                                    treg=$(echo $tt2 | cut -f4 -d ':')
-                                    tacc=$(echo $tt2 | cut -f5 -d ':')
-                                    tend=$(echo $tt2 | cut -f6- -d ':')
-                                    tsub="%s"
-                                    if [[ "$mysub" == "$tacc" ]];then
-                                        t1=$(printf "%s = format(\"%s:%s:%s:%s\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tsub $tend)
-                                    fi
-                                else
-                                    tt2=${tt2//$/&}
-                                    tt1=$(echo $tt1 | tr -d '"')
-                                    t1=$(printf "\"%s\"=%s" $tt1 "$tt2")
+                            echo "is star $t1 $tt2"
+                            if [[ "$tt2" == "arn:aws:"* ]];then
+
+                                echo "inside $tt2"
+                                tstart=$(echo $tt2 | cut -f1-3 -d ':')
+                                treg=$(echo $tt2 | cut -f4 -d ':')
+                                tacc=$(echo $tt2 | cut -f5 -d ':')
+                                tend=$(echo $tt2 | cut -f6- -d ':')
+                                tsub="%s"
+                                if [[ "$mysub" == "$tacc" ]]; then
+                                    t1=$(printf "%s = format(\"%s:%s:%s:%s\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tsub $tend)
                                 fi
-                        
-                        
+                            else
+                                tt2=${tt2//$/&}
+                                tt1=$(echo $tt1 | tr -d '"')
+                                t1=$(printf "\"%s\"=%s" $tt1 "$tt2")
+                            fi
+
                         fi # if no stars
 
-                    fi  # end Resource
+                    fi # end Resource
 
                 fi
                 if [ "$skip" == "0" ]; then
@@ -262,7 +259,7 @@ for c in $(seq 0 0); do
             done
 
             if [[ $ccid != "" ]]; then
-                ../../scripts/628-get-code-commit-repository.sh $ccid $ccid  # pass same param twice deliberately
+                ../../scripts/628-get-code-commit-repository.sh $ccid $ccid # pass same param twice deliberately
             fi
 
             #if [[ $getrole != "" ]]; then

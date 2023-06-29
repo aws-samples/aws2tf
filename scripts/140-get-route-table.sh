@@ -8,8 +8,10 @@ if [ "$1" != "" ]; then
         fn=$(printf "%s__%s.tf" $ttft $1)
         if [ -f "$fn" ]; then exit; fi
         cmd[0]="$AWS ec2 describe-route-tables --filters \"Name=route-table-id,Values=$1\""
-    else
+    elif [[ "$1" == "rtb-"* ]]; then
         cmd[0]="$AWS ec2 describe-route-tables --filters \"Name=vpc-id,Values=$1\""
+    elif [[ "$1" == "subnet-"* ]]; then
+        cmd[0]="$AWS ec2 describe-route-tables --filters \"Name=association.subnet-id,Values=$1\""
     fi
 else
     cmd[0]="$AWS ec2 describe-route-tables"

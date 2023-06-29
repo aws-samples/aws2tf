@@ -232,9 +232,9 @@ for c in $(seq 0 0); do
 
                 fi
                 if [ "$skip" == "0" ]; then
-                    echo $t1
-
-                    if [[ $t1 == "arn:aws:"* ]];then
+                    at1=$(echo $t1 | tr -d ' |"')
+                    echo $at1
+                    if [[ "$at1" == "arn:aws:"* ]];then
                         echo "in $t1"
 
                     fi

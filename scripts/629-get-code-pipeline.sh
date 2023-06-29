@@ -96,7 +96,7 @@ for c in $(seq 0 0); do
                         t1=$(printf "%s = aws_s3_bucket.b_%s.id" $tt1 $s3buck)
                     fi
 
-                    if [[ ${tt1} == "ServiceName" ]]; then
+                    if [[ "${tt1}" == "ServiceName" ]]; then
                         skip=0
                         tt2=$(echo $tt2 | tr -d '"')
                         tstart=$(echo ${tt2:0:8})

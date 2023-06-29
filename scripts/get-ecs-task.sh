@@ -109,12 +109,13 @@ for c in `seq 0 0`; do
 
                     if [[ ${tt1} == "image" ]]; then
                         tt2=$(echo $tt2 | tr -d '"')
-                        if [[ ${tt2} == "arn:aws:iam::"* ]]; then
+                        if [[ ${tt2} == *"$tsub.dkr.ecr"* ]]; then
                             tacc=$(echo $tt2 | cut -f1 -d '.')
                             tstart=$(echo $tt2 | cut -f2-3 -d '.')
                             treg=$(echo $tt2 | cut -f4 -d '.')
                             tend=$(echo $tt2 | cut -f5- -d '.')
                             tsub="%s"
+
                             if [[ "$mysub" == "$tacc" ]]; then
                                 t1=$(printf "%s = format(\"%s.%s.%s.%s\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tt1 $tsub $tstart $tsub $tend)
                             fi

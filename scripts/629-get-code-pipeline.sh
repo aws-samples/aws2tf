@@ -1,4 +1,6 @@
 #!/bin/bash
+mysub=$(echo $AWS2TF_ACCOUNT)
+myreg=$(echo $AWS2TF_REGION)
 if [ "$1" != "" ]; then
     cmd[0]="$AWS codepipeline list-pipelines | jq '.pipelines[] | select(.name==\"${1}\")'"
 else
@@ -100,7 +102,7 @@ for c in $(seq 0 0); do
                         skip=0
                         tt2=$(echo $tt2 | tr -d '"')
                         tstart=$(echo ${tt2:0:8})
-                        echo $tstart
+                        echo "tstart=$tstart"
                         if [[ "$tstart" == "arn:aws:" ]]; then
 
                             #echo "inside $tt2"

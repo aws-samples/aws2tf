@@ -1,4 +1,6 @@
 #!/bin/bash
+mysub=$(echo $AWS2TF_ACCOUNT)
+myreg=$(echo $AWS2TF_REGION)
 bus="default"
 if [[ "$1" != "" ]]; then
     if [[ "$1" == *"|"* ]]; then

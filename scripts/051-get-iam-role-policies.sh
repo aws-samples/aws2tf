@@ -108,7 +108,7 @@ for c in $(seq 0 0); do
                             elif [[ "$tt2" == *"arn:aws:dynamodb:${myreg}:${mysub}:table/"* ]]; then
                                 rdyn=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')
                                 t1=$(printf "%s = aws_dynamodb_table.%s.arn" $tt1 $rdyn)
-                                echo "aws_dynamodb_table,$tt2,$rdyn" >> data/arn-map.dat
+                                echo "aws_dynamodb_table,$tt2,$rdyn" >>data/arn-map.dat
                             elif [[ "$tt2" == *"arn:aws:kms:${myreg}:${mysub}:key/"* ]]; then
                                 kid=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')
                                 t1=$(printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid)
@@ -116,12 +116,12 @@ for c in $(seq 0 0); do
                                 s3arn=$(echo $tt2)
                                 if [[ "$tt2" != *"/"* ]]; then
                                     s3id=$(echo $tt2 | rev | cut -f1 -d':' | rev | tr -d '"')
-                                    echo "aws_s3_bucket,$s3arn,$s3id" >> data/arn-map.dat
+                                    echo "aws_s3_bucket,$s3arn,$s3id" >>data/arn-map.dat
                                     echo "**> s3id=$s3id"
                                     s3len=$(echo $s3id | wc -c)
-                                    if [[ $s3id == "*" ]];then
+                                    if [[ $s3id == "*" ]]; then
                                         t1=$(printf "%s = \"arn:aws:s3:::*\"" $tt1)
-                                    elif  [[ $s3id == *"*" ]];then
+                                    elif [[ $s3id == *"*" ]]; then
                                         t1=$(printf "%s = \"arn:aws:s3:::%s\"" $tt1 $s3id)
                                     else
                                         t1=$(printf "%s = aws_s3_bucket.b_%s.arn" $tt1 $s3id)
@@ -151,7 +151,31 @@ for c in $(seq 0 0); do
                                     t1=$(printf "%s=%s" $tt1 "$tt2")
                                 fi
                             fi
-                        fi
+
+                        else
+                            tt2=$(echo $tt2 | tr -d '"')
+                            tt2=$(echo ${tt2:0:-1}) # chop off the star
+                            tstart=$(echo ${tt2:0:8})
+                            #echo $tstart
+                            if [[ "$tstart" == "arn:aws:" ]]; then
+
+                                #echo "inside $tt2"
+                                tstart=$(echo $tt2 | cut -f1-3 -d ':')
+                                treg=$(echo $tt2 | cut -f4 -d ':')
+                                tacc=$(echo $tt2 | cut -f5 -d ':')
+                                tend=$(echo $tt2 | cut -f6- -d ':')
+                                tsub="%s"
+                                if [[ "$mysub" == "$tacc" ]]; then
+                                    t1=$(printf "%s = format(\"%s:%s:%s:%s*\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tsub $tend)
+                                fi
+                                #echo "t1=$t1"
+                            #else
+                            #    tt2=${tt2//$/&}
+                            #    tt1=$(echo $tt1 | tr -d '"')
+                            #    t1=$(printf "\"%s\"=%s" $tt1 "$tt2")
+                            fi
+
+                        fi # end star
                     fi
                 fi
                 if [ "$skip" == "0" ]; then echo "$t1" >>$fn; fi

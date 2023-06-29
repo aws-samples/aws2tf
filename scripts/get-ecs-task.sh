@@ -1,4 +1,6 @@
 #!/bin/bash
+mysub=$(echo $AWS2TF_ACCOUNT)
+myreg=$(echo $AWS2TF_REGION)
 if [ "$1" != "" ]; then
     fp=$(echo $1 | cut -f1 -d ':')
     cmd[0]="$AWS ecs list-task-definitions --family-prefix $fp" 
@@ -104,6 +106,25 @@ for c in `seq 0 0`; do
                         cwln=${cwl//\//_}
                         t1=`printf "%s = aws_cloudwatch_log_group.%s.name" $tt1 $cwln`
                     fi
+
+                    if [[ ${tt1} == "image" ]]; then
+                        tt2=$(echo $tt2 | tr -d '"')
+                        if [[ ${tt2} == "arn:aws:iam::"* ]]; then
+                            tacc=$(echo $tt2 | cut -f1 -d '.')
+                            tstart=$(echo $tt2 | cut -f2-3 -d '.')
+                            treg=$(echo $tt2 | cut -f4 -d '.')
+                            tend=$(echo $tt2 | cut -f5- -d '.')
+                            tsub="%s"
+                            if [[ "$mysub" == "$tacc" ]]; then
+                                t1=$(printf "%s = format(\"%s.%s.%s.%s\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tt1 $tsub $tstart $tsub $tend)
+                            fi
+                        fi
+                    fi
+
+
+
+
+
                
                 fi
                 if [ "$skip" == "0" ]; then

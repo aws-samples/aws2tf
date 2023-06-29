@@ -153,14 +153,14 @@ for c in $(seq 0 0); do
                             fi
 
                         else
-                            echo "in star $t1"
+                            #echo "in star $t1"
                             tt2=$(echo $tt2 | tr -d '"')
                             tt2=$(echo ${tt2:0:-1}) # chop off the star
                             tstart=$(echo ${tt2:0:8})
-                            echo $tstart
+                            #echo $tstart
                             if [[ "$tstart" == "arn:aws:" ]]; then
 
-                                echo "inside $tt2"
+                                #echo "inside $tt2"
                                 tstart=$(echo $tt2 | cut -f1-3 -d ':')
                                 treg=$(echo $tt2 | cut -f4 -d ':')
                                 tacc=$(echo $tt2 | cut -f5 -d ':')
@@ -193,7 +193,7 @@ for c in $(seq 0 0); do
                             tend=$(echo ${tend:0:-1})
                         fi
                         if [[ "$mysub" == "$tacc" ]]; then
-                            t1=$(printf "format(\"%s:%s:%s:%s,\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tstart $tsub $tsub "$tend")
+                            t1=$(printf "format(\"%s:%s:%s:%s\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)," $tstart $tsub $tsub "$tend")
                         fi
 
                     fi

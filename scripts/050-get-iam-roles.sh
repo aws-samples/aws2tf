@@ -241,12 +241,13 @@ for c in $(seq 0 0); do
                         tacc=$(echo $at1 | cut -f5 -d ':')
                         tend=$(echo $at1 | cut -f6- -d ':')
                         tsub="%s"
+                        tcomm=","
                         if [[ "$tend" == *"," ]];then
                             echo "has comma"
                             tend=$(echo ${tend:0:-1})
                         fi
                         if [[ "$mysub" == "$tacc" ]]; then
-                            t1=$(printf "%s = format(\"%s:%s:%s:%s\,\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tsub "$tend")
+                            t1=$(printf "%s = format(\"%s:%s:%s:%s%s\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tsub "$tend" $tcomm)
                         fi
 
                     fi

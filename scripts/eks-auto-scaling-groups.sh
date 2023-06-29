@@ -107,6 +107,20 @@ for t in ${asgs[@]}; do
                 done
             fi
 
+            if [[ ${tt1} == "service_linked_role_arn" ]]; then
+                tt2=$(echo $tt2 | tr -d '"')
+                if [[ ${tt2} == "arn:aws:iam::"* ]]; then
+                    tstart=$(echo $tt2 | cut -f1-4 -d ':')
+                    tacc=$(echo $tt2 | cut -f5 -d ':')
+                    tend=$(echo $tt2 | cut -f6- -d ':')
+                    tsub="%s"
+                    if [[ "$mysub" == "$tacc" ]]; then
+                        t1=$(printf "\"%s\" = format(\"%s:%s:%s\",data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tend)
+                    fi
+                fi
+
+            fi
+
             #  hmm needed ?
             if [[ ${tt2} == *"eks:nodegroup-name"* ]]; then
                 echo " --> $tt2"

@@ -113,7 +113,7 @@ if [ $count -gt 0 ]; then
                 AWS::EC2::Route) echo "echo '#  $type $pid  fetched as part of RouteTable..'" >> commands.sh ;;  # fetched as part of RouteTable
                 AWS::EC2::SubnetRouteTableAssociation) echo "../../scripts/141-get-route-table-associations.sh $pid" >> commands.sh ;;
                 AWS::EC2::VPCGatewayAttachment) echo "echo '#  $type $pid attached as part of IGW etc ..'" >> commands.sh ;; 
-                AWS::EC2::VPCEndpointService) echo "../../scripts/230-get-private-link-config.sh $pid" >> commands.sh ;;
+                AWS::EC2::VPCEndpointService) echo "../../scripts/230-get-privatelink-config.sh $pid" >> commands.sh ;;
                 AWS::EC2::FlowLog) echo "../../scripts/162-get-vpc-flowlog.sh $pid" >> commands.sh ;;
 
                 AWS::ECR::Repository)  echo "../../scripts/get-ecr.sh $pid"  >> commands.sh ;;

@@ -89,7 +89,8 @@ for c in $(seq 0 0); do
                         tacc=$(echo $tt2 | cut -f5 -d ':')
                         tend=$(echo $tt2 | cut -f6 -d ':')
                         t1=$(printf "%s = format(\"%s:%s:%s:%s\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tsub $tend)
-                        tgarn=$(echo $tt2)
+                        # don't get target group - as ecs servioce creates this for us
+                        #tgarn=$(echo $tt2)
                     fi
                     if [[ ${tt1} == "availability_zone_id" ]]; then skip=1; fi
                     if [[ ${tt1} == "state" ]]; then skip=1; fi
@@ -169,9 +170,7 @@ for c in $(seq 0 0); do
                 ../../scripts/get-priv-hzn.sh $hzid
             fi
 
-            if [[ "$tgarn" != "" ]]; then
-                ../../scripts/elbv2-target-groups.sh $tgarn
-            fi
+
 
             # get cluster if needed
             cfn=$(printf "%s__%s.tf" $ttft $cln)

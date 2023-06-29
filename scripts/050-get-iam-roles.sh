@@ -204,8 +204,9 @@ for c in $(seq 0 0); do
                                 fi
                             fi
                         else
+                            tt2=$(echo $tt2 | tr -d '"')
                             tstart=$(echo ${tt2:0:8})
-                            echo "is star $t1 $tstart"
+                            echo $tstart
                             if [[ "$tstart" == "arn:aws:" ]];then
 
                                 echo "inside $tt2"

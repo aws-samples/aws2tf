@@ -118,10 +118,10 @@ for c in $(seq 0 0); do
                             t1=$(printf "%s = aws_vpc.%s.id" $tt1 $tt2)
                         fi
                     fi
-                    echo "-$tt1-"
+                    #echo "-$tt1-"
                     if [[ ${tt1} == "nat_gateway_id" ]]; then
                         ngid=$(echo $tt2 | tr -d '"')
-                        echo $ngid
+                        #echo $ngid
 
                         if [[ "$ngid" != "" ]]; then
                             t1=$(printf "%s = aws_nat_gateway.%s.id" $tt1 $ngid)

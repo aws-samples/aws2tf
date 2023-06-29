@@ -63,8 +63,11 @@ while IFS= read t1; do
             tt2=$(echo $tt2 | tr -d '"')
             echo $tt1 $tt2 $mysub
             if [[ "$tt2" != "$mysub" ]]; then
-                echo "a"
-                t1=$(printf "\"%s\"=%s" $tt1 $tt2)
+                if [[ ${tt2} == *":"* ]]; then
+                    t1=$(printf "\"%s\"=\"%s\"" $tt1 $tt2)
+                else
+                    t1=$(printf "\"%s\"=%s" $tt1 $tt2)
+                fi
             else
                 t1=$(printf "\"%s\" = data.aws_caller_identity.current.account_id" $tt1)
                 echo "b"

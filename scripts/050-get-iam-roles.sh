@@ -233,6 +233,12 @@ for c in $(seq 0 0); do
                 fi
                 if [ "$skip" == "0" ]; then
                     #echo $skip $t1
+
+                    if [[ "$t1" == "arn:aws:"* ]];then
+                        echo $t1
+
+                    fi
+
                     echo "$t1" >>$fn
                 fi
 

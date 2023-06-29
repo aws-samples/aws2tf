@@ -100,7 +100,7 @@ for c in $(seq 0 0); do
                         skip=0
                         tt2=$(echo $tt2 | tr -d '"')
                         tstart=$(echo ${tt2:0:8})
-                        #echo $tstart
+                        echo $tstart
                         if [[ "$tstart" == "arn:aws:" ]]; then
 
                             #echo "inside $tt2"

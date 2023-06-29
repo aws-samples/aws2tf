@@ -82,7 +82,7 @@ for c in $(seq 0 0); do
                     if [[ ${tt1} == "arn" ]]; then
                         skip=1
                         printf "lifecycle {\n" >>$fn
-                        printf "   ignore_changes = [buildspec]\n" >>$fn
+                        printf "   ignore_changes = [source]\n" >>$fn
                         printf "}\n" >>$fn
                     fi
                     if [[ ${tt1} == "id" ]]; then skip=1; fi

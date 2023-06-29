@@ -57,7 +57,7 @@ for st in $(ls pi2/$1_*.tfstate 2>/dev/null); do
     done
     if [[ $sl -le 3 ]];then
         echo "Consolidated state $tfaddr"
-        #rm -f $st
+        rm -f $st
     fi
     #cfile=$(printf "%s-%s-1.txt" $ttft $rname)
     #nl=$(cat $cfile | wc -l)
@@ -67,10 +67,9 @@ for st in $(ls pi2/$1_*.tfstate 2>/dev/null); do
     #fi
 done
 
-#rm -f *.backup
 rm -f pi2/*.backup
 #rm -f pi2/*.log
 #rm -f pi2/*.json
-rm -f pi2/*.tfstate
+#rm -f pi2/${1}*.tfstate
 
 

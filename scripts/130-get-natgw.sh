@@ -115,7 +115,7 @@ for c in `seq 0 0`; do
 
     fi
 done
-../../scripts/parallel_statemv.sh $ttft
+../../scripts/parallel_statemv.sh aws_nat_gateway
 
 rm -f t*.txt
 

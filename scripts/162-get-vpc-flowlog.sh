@@ -1,4 +1,6 @@
 #!/bin/bash
+mysub=$(echo $AWS2TF_ACCOUNT)
+myreg=$(echo $AWS2TF_REGION)
 ttft="aws_flow_log"
 pref="FlowLogs"
 idfilt="FlowLogId"
@@ -70,6 +72,17 @@ for i in $(seq 0 $count); do
                 printf "   ignore_changes = [log_format]\n" >>$fn
                 printf "}\n" >>$fn
 
+            fi
+
+            if [[ ${tt1} == "iam_role_arn" ]]; then
+                tt2=$(echo $tt2 | tr -d '"')
+                if [[ "$tt2" == *"$mysub"* ]]; then
+                    tstart=$(echo $tt2 | cut -f1-4 -d ':')
+                    tacc=$(echo $tt2 | cut -f5 -d ':')
+                    tend=$(echo $tt2 | cut -f6- -d ':')
+                    tsub="%s"
+                    t1=$(printf "%s = format(\"%s:%s:%s\",data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tend)
+                fi
             fi
 
         fi

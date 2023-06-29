@@ -208,7 +208,7 @@ for c in $(seq 0 0); do
                             tt2=$(echo ${tt2:0:-1}) # chop off the star
                             tstart=$(echo ${tt2:0:8})
                             #echo $tstart
-                            if [[ "$tstart" == "arn:aws:" ]];then
+                            if [[ "$tstart" == "arn:aws:" ]]; then
 
                                 #echo "inside $tt2"
                                 tstart=$(echo $tt2 | cut -f1-3 -d ':')
@@ -233,9 +233,17 @@ for c in $(seq 0 0); do
                 fi
                 if [ "$skip" == "0" ]; then
                     at1=$(echo $t1 | tr -d ' |"')
-                    echo $at1
-                    if [[ "$at1" == "arn:aws:"* ]];then
+                    if [[ "$at1" == "arn:aws:"* ]]; then
                         echo "in $t1"
+                        
+                        tstart=$(echo $at1 | cut -f1-3 -d ':')
+                        treg=$(echo $at1 | cut -f4 -d ':')
+                        tacc=$(echo $at1 | cut -f5 -d ':')
+                        tend=$(echo $at1 | cut -f6- -d ':')
+                        tsub="%s"
+                        if [[ "$mysub" == "$tacc" ]]; then
+                            t1=$(printf "%s = format(\"%s:%s:%s:%s,\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tsub "$tend")
+                        fi
 
                     fi
 

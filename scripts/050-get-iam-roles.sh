@@ -241,7 +241,7 @@ for c in $(seq 0 0); do
                         tacc=$(echo $at1 | cut -f5 -d ':')
                         tend=$(echo $at1 | cut -f6- -d ':')
                         tsub="%s"
-                        if [[ "$tend" == *","]];then
+                        if [[ "$tend" == *"," ]];then
                             echo "has comma"
                             tend=$(echo ${tend:0:-1})
                         fi

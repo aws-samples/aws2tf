@@ -1,4 +1,6 @@
 #!/bin/bash
+mysub=$(echo $AWS2TF_ACCOUNT)
+myreg=$(echo $AWS2TF_REGION)
 if [ "$1" == "" ]; then echo "must specify bucket name" && exit; fi
 c=0
 tft[0]="aws_s3_bucket_policy"
@@ -58,7 +60,13 @@ while IFS= read t1; do
 
         if [[ ${tt1} == *":"* ]]; then
             tt1=$(echo $tt1 | tr -d '"')
-            t1=$(printf "\"%s\"=%s" $tt1 $tt2)
+            tt2=$(echo $tt2 | tr -d '"')
+            if [[ "$tt2" != " $myreg" ]]; then
+                t1=$(printf "\"%s\"=%s" $tt1 $tt2)
+            else
+                t1=$(printf "\"%s\" = data.aws_caller_identity.current.account_id" $tt1)
+            fi
+
         fi
 
     fi

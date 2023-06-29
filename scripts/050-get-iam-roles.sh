@@ -206,9 +206,9 @@ for c in $(seq 0 0); do
                                 fi
                             fi
                         else
-                            echo "no star $t1"
-                            if [[ "$tt2" == *"arn:aws:"*":$myreg:$mysub:"* ]];then
-                                    echo $t1
+                            echo "is star $t1"
+                            if [[ "$tt2" == *"arn:aws:"* ]] && [[ "$tt2" == *":$myreg:$mysub:"* ]];then
+                                    
                                     echo $tt2
                                     tstart=$(echo $tt2 | cut -f1-3 -d ':')
                                     treg=$(echo $tt2 | cut -f4 -d ':')

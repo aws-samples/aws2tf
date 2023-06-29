@@ -61,8 +61,8 @@ while IFS= read t1; do
         if [[ ${tt1} == *":"* ]]; then
             tt1=$(echo $tt1 | tr -d '"')
             tt2=$(echo $tt2 | tr -d '"')
-            #echo $tt1 $tt2 $myacc
-            if [[ "$tt2" != "$myacc" ]]; then
+            echo $tt1 $tt2 $mysub
+            if [[ "$tt2" != "$mysub" ]]; then
                 echo "a"
                 t1=$(printf "\"%s\"=%s" $tt1 $tt2)
             else

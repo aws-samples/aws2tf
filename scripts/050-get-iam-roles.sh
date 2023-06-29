@@ -219,10 +219,11 @@ for c in $(seq 0 0); do
                                 if [[ "$mysub" == "$tacc" ]]; then
                                     t1=$(printf "%s = format(\"%s:%s:%s:%s*\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tsub $tend)
                                 fi
-                            else
-                                tt2=${tt2//$/&}
-                                tt1=$(echo $tt1 | tr -d '"')
-                                t1=$(printf "\"%s\"=%s" $tt1 "$tt2")
+                                echo "t1=$t1"
+                            #else
+                            #    tt2=${tt2//$/&}
+                            #    tt1=$(echo $tt1 | tr -d '"')
+                            #    t1=$(printf "\"%s\"=%s" $tt1 "$tt2")
                             fi
 
                         fi # if no stars

@@ -234,8 +234,6 @@ for c in $(seq 0 0); do
                 if [ "$skip" == "0" ]; then
                     at1=$(echo $t1 | tr -d ' |"')
                     if [[ "$at1" == "arn:aws:"* ]]; then
-                        echo "in $t1"
-                        
                         tstart=$(echo $at1 | cut -f1-3 -d ':')
                         treg=$(echo $at1 | cut -f4 -d ':')
                         tacc=$(echo $at1 | cut -f5 -d ':')
@@ -243,7 +241,7 @@ for c in $(seq 0 0); do
                         tsub="%s"
                         tcomm=","
                         if [[ "$tend" == *"," ]];then
-                            echo "has comma"
+                            
                             tend=$(echo ${tend:0:-1})
                         fi
                         if [[ "$mysub" == "$tacc" ]]; then

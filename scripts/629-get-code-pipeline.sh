@@ -95,7 +95,7 @@ for c in $(seq 0 0); do
                         s3buck=$(echo "$tt2" | cut -f2- -d'/' | tr -d '"')
                         t1=$(printf "%s = aws_s3_bucket.b_%s.id" $tt1 $s3buck)
                     fi
-
+                    echo $tt1
                     if [[ "${tt1}" == "ServiceName" ]]; then
                         skip=0
                         tt2=$(echo $tt2 | tr -d '"')

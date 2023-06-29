@@ -66,7 +66,7 @@ for c in `seq 0 0`; do
                     #if [[ ${tt1} == "dns_entry" ]];then skip=1;fi
 
                     #if [[ ${tt1} == "requester_managed" ]];then skip=1;fi
-                    #if [[ ${tt1} == "revision" ]];then skip=1;fi
+                    if [[ ${tt1} == "arn_without_revision" ]];then skip=1;fi
                     if [[ ${tt1} == "cidr_blocks" ]];then
                         echo "matched cidr"  
                         skip=1

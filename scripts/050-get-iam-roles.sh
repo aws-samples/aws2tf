@@ -204,8 +204,9 @@ for c in $(seq 0 0); do
                                 fi
                             fi
                         else
-                            echo "is star $t1 $tt2"
-                            if [[ "$tt2" == "arn:aws:"* ]];then
+                            tstart=${tt2:0:8}
+                            echo "is star $t1 $start"
+                            if [[ "$start" == "arn:aws:" ]];then
 
                                 echo "inside $tt2"
                                 tstart=$(echo $tt2 | cut -f1-3 -d ':')

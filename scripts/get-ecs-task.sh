@@ -117,7 +117,7 @@ for c in `seq 0 0`; do
                             tsub="%s"
 
                             if [[ "$mysub" == "$tacc" ]]; then
-                                t1=$(printf "%s = format(\"%s.%s.%s.%s\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tt1 $tsub $tstart $tsub $tend)
+                                t1=$(printf "%s = format(\"%s.%s.%s.%s\",data.aws_caller_identity.current.account_id,data.aws_region.current.name)" $tt1 $tsub $tstart $tsub $tend)
                             fi
                         fi
                     fi

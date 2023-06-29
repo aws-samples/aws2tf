@@ -186,12 +186,27 @@ for c in $(seq 0 0); do
                                 t1=$(printf "%s = aws_codebuild_project.%s.arn" $tt1 $cbid)
 
                             else # check tt2 for $ and '"'
-                                tt2=${tt2//$/&}
-                                tt1=$(echo $tt1 | tr -d '"')
-                                t1=$(printf "\"%s\"=%s" $tt1 "$tt2")
+                                # arn catch all
+                                
+                                if [[ "$tt2" ==*"arn:aws:"*":$myreg:$mysub:"* ]];then
+                                    echo $t1
+                                    echo $tt2
+                                    tstart=$(echo $tt2 | cut -f1-3 -d ':')
+                                    treg=$(echo $tt2 | cut -f4 -d ':')
+                                    tacc=$(echo $tt2 | cut -f5 -d ':')
+                                    tend=$(echo $tt2 | cut -f6- -d ':')
+                                    tsub="%s"
+                                    if [[ "$mysub" == "$tacc" ]];then
+                                        t1=$(printf "%s = format(\"%s:%s:%s:%s\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tsub $tend)
+                                    fi
+                                else
+                                    tt2=${tt2//$/&}
+                                    tt1=$(echo $tt1 | tr -d '"')
+                                    t1=$(printf "\"%s\"=%s" $tt1 "$tt2")
+                                fi
                             fi
-                        fi
-                    fi
+                        fi # if no stars
+                    fi  # end Resource
 
                 fi
                 if [ "$skip" == "0" ]; then

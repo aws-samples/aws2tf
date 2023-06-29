@@ -66,6 +66,9 @@ for i in $(seq 0 $count); do
                 if [[ $t1 == *"\${"* ]]; then
                     t1=${t1//$/&}
                 fi
+                printf "lifecycle {\n" >>$fn
+                printf "   ignore_changes = [log_format]\n" >>$fn
+                printf "}\n" >>$fn
 
             fi
 

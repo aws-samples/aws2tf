@@ -119,13 +119,13 @@ for c in $(seq 0 0); do
                     if [[ ${tt1} == "nat_gateway_id" ]]; then
                         ngid=$(echo $tt2 | tr -d '"')
 
-                        if [ "$ngid" != "" ]; then
+                        if [[ "$ngid" != "" ]]; then
                             t1=$(printf "%s = aws_nat_gateway.%s.id" $tt1 $ngid)
                         fi
                     fi
                     if [[ ${tt1} == "transit_gateway_id" ]]; then
                         tgwid=$(echo $tt2 | tr -d '"')
-                        if [ "$tgwid" != "" ]; then
+                        if [[ "$tgwid" != "" ]]; then
                             t1=$(printf "%s = aws_ec2_transit_gateway.%s.id" $tt1 $tgwid)
                         fi
                     fi
@@ -137,7 +137,7 @@ for c in $(seq 0 0); do
                     fi
                     if [[ ${tt1} == "vpc_peering_connection_id" ]]; then
                         ttt2=$(echo $tt2 | tr -d '"')
-                        if [ "$ttt2" != "" ]; then
+                        if [[ "$ttt2" != "" ]]; then
                             t1=$(printf "%s = aws_vpc_peering_connection.%s.id" $tt1 $ttt2)
                             echo "adding $tt2"
                             pcxs+=$tt2

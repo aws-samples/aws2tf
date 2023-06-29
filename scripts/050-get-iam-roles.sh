@@ -205,6 +205,7 @@ for c in $(seq 0 0); do
                             fi
                         else
                             tt2=$(echo $tt2 | tr -d '"')
+                            tt2=$(echo ${tt2:0:-1}) # chop off the star
                             tstart=$(echo ${tt2:0:8})
                             echo $tstart
                             if [[ "$tstart" == "arn:aws:" ]];then
@@ -216,7 +217,7 @@ for c in $(seq 0 0); do
                                 tend=$(echo $tt2 | cut -f6- -d ':')
                                 tsub="%s"
                                 if [[ "$mysub" == "$tacc" ]]; then
-                                    t1=$(printf "%s = format(\"%s:%s:%s:%s\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tsub $tend)
+                                    t1=$(printf "%s = format(\"%s:%s:%s:%s*\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tsub $tend)
                                 fi
                             else
                                 tt2=${tt2//$/&}

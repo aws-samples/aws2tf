@@ -70,7 +70,6 @@ while IFS= read t1; do
                 #fi
             else
                 t1=$(printf "\"%s\" = data.aws_caller_identity.current.account_id" $tt1)
-                echo "b"
             fi
 
         fi

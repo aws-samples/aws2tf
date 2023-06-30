@@ -100,7 +100,7 @@ for c in $(seq 0 0); do
                     if [[ ${tt2} == *"dkr.ecr"* ]]; then
                         ecrr=$(echo $tt2 | cut -f2 -d '/' | tr -d '"')
                         ecrr=$(echo $ecrr | cut -f1 -d ':')
-                        
+
                     fi
 
                     if [[ ${tt1} == "value" ]]; then
@@ -111,15 +111,18 @@ for c in $(seq 0 0); do
                             treg=$(echo $tt2 | cut -f4 -d '.')
                             tend=$(echo $tt2 | cut -f5- -d '.')
                             tsub="%s"
+                            if [[ "$treg" != "" ]] || [[ "$tacc" != "" ]]; then
+                                if [[ "$mysub" == "$tacc" ]]; then
+                                    if [[ "$treg" != "" ]]; then
+                                        t1=$(printf "%s = format(\"%s.%s.%s.%s\",data.aws_caller_identity.current.account_id,data.aws_region.current.name)" $tt1 $tsub $tstart $tsub $tend)
+                                    else
+                                        t1=$(printf "%s = format(\"%s.%s.%s.%s\",data.aws_caller_identity.current.account_id,data.aws_region.current.name)" $tt1 $tstart $tsub $tend)
+                                    fi
+                                fi
 
-                            if [[ "$mysub" == "$tacc" ]]; then
-                                t1=$(printf "%s = format(\"%s.%s.%s.%s\",data.aws_caller_identity.current.account_id,data.aws_region.current.name)" $tt1 $tsub $tstart $tsub $tend)
                             fi
                         fi
                     fi
-
-
-
 
                     if [[ ${tt1} == "buildspec" ]]; then
                         if [[ ${tt2} == *"EOT"* ]]; then

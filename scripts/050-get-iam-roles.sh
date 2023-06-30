@@ -216,11 +216,13 @@ for c in $(seq 0 0); do
                                 tacc=$(echo $tt2 | cut -f5 -d ':')
                                 tend=$(echo $tt2 | cut -f6- -d ':')
                                 tsub="%s"
-                                if [[ "$mysub" == "$tacc" ]]; then
-                                    if [[ "$treg" != "" ]]; then
-                                        t1=$(printf "%s = format(\"%s:%s:%s:%s*\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tsub $tend)
-                                    else
-                                        t1=$(printf "%s = format(\"%s::%s:%s*\",data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tend)
+                                if [[ "$treg" != "" ]] || [[ "$tacc" != "" ]]; then
+                                    if [[ "$mysub" == "$tacc" ]]; then
+                                        if [[ "$treg" != "" ]]; then
+                                            t1=$(printf "%s = format(\"%s:%s:%s:%s*\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tsub $tend)
+                                        else
+                                            t1=$(printf "%s = format(\"%s::%s:%s*\",data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tend)
+                                        fi
                                     fi
                                 fi
 
@@ -240,8 +242,8 @@ for c in $(seq 0 0); do
                         tend=$(echo $at1 | cut -f6- -d ':')
                         tsub="%s"
                         tcomm=","
-                 
-                        if [[ "$treg" != "" ]] || [[ "$tacc" != "" ]]; then       
+
+                        if [[ "$treg" != "" ]] || [[ "$tacc" != "" ]]; then
                             if [[ "$tend" == *"," ]]; then
                                 tend=$(echo ${tend:0:-1})
                             fi

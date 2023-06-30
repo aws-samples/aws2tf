@@ -64,9 +64,6 @@ for c in `seq 0 0`; do
 
                     fi                
                     if [[ ${tt1} == "id" ]];then 
-                        printf "lifecycle {\n" >>$fn
-                        printf "   ignore_changes = [latest_version]\n" >>$fn
-                        printf "}\n" >>$fn
                         skip=1; 
                     fi          
                     if [[ ${tt1} == "role_arn" ]];then skip=1;fi

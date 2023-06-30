@@ -241,7 +241,7 @@ for c in $(seq 0 0); do
                         tsub="%s"
                         tcomm=","
                  
-                        if [[ "$treg" == "" ]] || [[ "$tacc" == "" ]]; then       
+                        if [[ "$treg" != "" ]] || [[ "$tacc" != "" ]]; then       
                             if [[ "$tend" == *"," ]]; then
                                 tend=$(echo ${tend:0:-1})
                             fi

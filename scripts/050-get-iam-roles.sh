@@ -209,8 +209,6 @@ for c in $(seq 0 0); do
                             tstart=$(echo ${tt2:0:8})
                             #echo $tstart
                             if [[ "$tstart" == "arn:aws:" ]]; then
-
-                                #echo "inside $tt2"
                                 tstart=$(echo $tt2 | cut -f1-3 -d ':')
                                 treg=$(echo $tt2 | cut -f4 -d ':')
                                 tacc=$(echo $tt2 | cut -f5 -d ':')
@@ -225,7 +223,6 @@ for c in $(seq 0 0); do
                                         fi
                                     fi
                                 fi
-
                             fi
 
                         fi # if no stars

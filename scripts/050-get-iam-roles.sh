@@ -240,11 +240,9 @@ for c in $(seq 0 0); do
                         tend=$(echo $at1 | cut -f6- -d ':')
                         tsub="%s"
                         tcomm=","
-                        echo $treg $tacc
-                        if [[ "$treg" != "" ]] && [[ "$tacc" != "" ]]; then
-                        echo "-->"
+                 
+                        if [[ "$treg" == "" ]] || [[ "$tacc" == "" ]]; then       
                             if [[ "$tend" == *"," ]]; then
-
                                 tend=$(echo ${tend:0:-1})
                             fi
                             if [[ "$mysub" == "$tacc" ]]; then

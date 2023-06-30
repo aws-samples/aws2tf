@@ -46,8 +46,7 @@ for c in `seq 0 0`; do
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
 
-            printf "resource \"%s\" \"%s\" {\n" $ttft $rname > $fn
-            printf "}"  >> $fn
+            printf "resource \"%s\" \"%s\" {}\n" $ttft $rname > $fn
             
             terraform import $ttft.$rname "$cname" | grep Importing
             terraform state show -no-color $ttft.$rname > t1.txt
@@ -72,7 +71,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "arn" ]];then
                         if [[ ${tt2} == *"loadbalancer"* ]];then
                             lbarn=`echo ${tt2}`
-                            printf "#%s\n" $lbarn >> $fn
+                            #printf "#%s\n" $lbarn >> $fn
                             skip=1
                         else
                             skip=0; 

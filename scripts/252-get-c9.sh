@@ -94,7 +94,7 @@ for c in $(seq 0 0); do
 
                     if [[ ${tt1} == "owner_arn" ]]; then
                         rnam=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')
-                        rarn=$(echo $tt2 | tr -d '"')
+                        orarn=$(echo $tt2 | tr -d '"')
                         t1=$(printf "%s = aws_iam_role.%s.arn" $tt1 $rnam)
                     fi
 
@@ -125,8 +125,8 @@ for c in $(seq 0 0); do
                 ../../scripts/100-get-vpc.sh $vpcid
             fi
 
-            if [[ "$rarn" != "" ]]; then
-                ../../scripts/050-get-iam-roles.sh $rarn
+            if [[ "$orarn" != "" ]]; then
+                ../../scripts/050-get-iam-roles.sh $orarn
             fi
 
             for sub in ${subnets[@]}; do

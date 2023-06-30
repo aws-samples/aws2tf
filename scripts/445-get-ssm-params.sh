@@ -95,12 +95,13 @@ for c in $(seq 0 0); do
                                     fi
                                 fi
                             fi
-                        fi
+                        else
 
-                        t1=$(printf "%s = %s" $tt1 "$tv")
-                        printf "lifecycle {\n" >>$fn
-                        printf "   ignore_changes = [value]\n" >>$fn
-                        printf "}\n" >>$fn
+                            t1=$(printf "%s = %s" $tt1 "$tv")
+                            printf "lifecycle {\n" >>$fn
+                            printf "   ignore_changes = [value]\n" >>$fn
+                            printf "}\n" >>$fn
+                        fi
                     fi
 
                 fi

@@ -240,16 +240,18 @@ for c in $(seq 0 0); do
                         tend=$(echo $at1 | cut -f6- -d ':')
                         tsub="%s"
                         tcomm=","
-                        if [[ "$tend" == *"," ]];then
-                            
-                            tend=$(echo ${tend:0:-1})
-                        fi
-                        if [[ "$mysub" == "$tacc" ]]; then
-                            if [[ "$treg" != "" ]]; then
-                                t1=$(printf "format(\"%s:%s:%s:%s\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)," $tstart $tsub $tsub "$tend")
-                            else
-                                t1=$(printf "format(\"%s::%s:%s\",data.aws_caller_identity.current.account_id)," $tstart $tsub "$tend")
+                        if [[ "$treg" != "" ]] && [[ "$tacc" != "" ]]; then
+                            if [[ "$tend" == *"," ]]; then
 
+                                tend=$(echo ${tend:0:-1})
+                            fi
+                            if [[ "$mysub" == "$tacc" ]]; then
+                                if [[ "$treg" != "" ]]; then
+                                    t1=$(printf "format(\"%s:%s:%s:%s\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)," $tstart $tsub $tsub "$tend")
+                                else
+                                    t1=$(printf "format(\"%s::%s:%s\",data.aws_caller_identity.current.account_id)," $tstart $tsub "$tend")
+
+                                fi
                             fi
                         fi
 

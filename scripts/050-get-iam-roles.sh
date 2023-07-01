@@ -1,6 +1,7 @@
 # CodeWhisperer convert the following bash script to a python script
 #!/bin/bash
-source $(dirname "$0")/functions.sh
+#source $(dirname "$0")/functions.sh
+source ../../scripts/functions.sh
 #mysub=$(echo $AWS2TF_ACCOUNT)
 #myreg=$(echo $AWS2TF_REGION)
 tft[0]="aws_iam_role"
@@ -205,7 +206,7 @@ for c in $(seq 0 0); do
                                 fi
                             fi
                         else
-                            echo "--> $tt2"
+                            #echo "--> $tt2"
 
                             tt2=$(echo $tt2 | tr -d '"')
 

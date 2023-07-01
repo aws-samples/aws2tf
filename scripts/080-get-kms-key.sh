@@ -1,6 +1,7 @@
 #!/bin/bash
-mysub=`echo $AWS2TF_ACCOUNT`
-myreg=`echo $AWS2TF_REGION`
+source ../../scripts/functions.sh
+#mysub=`echo $AWS2TF_ACCOUNT`
+#myreg=`echo $AWS2TF_REGION`
 #echo "globe vars $myreg $mysub"
 if [ "$1" != "" ]; then
     cmd[0]="$AWS kms describe-key --key-id $1"
@@ -130,10 +131,7 @@ for c in `seq 0 0`; do
                             #              
                         fi
 
-                        if [ "$skip" == "0" ]; then
-                            #echo $skip $t1
-                            echo "$t1" >> $fn
-                        fi
+                        if [ "$skip" == "0" ]; then wtf "$t1" "$fn"; fi
                         
                     done <"$file"
 

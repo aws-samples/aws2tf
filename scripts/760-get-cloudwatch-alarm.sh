@@ -67,7 +67,7 @@ for i in $(seq 0 $count); do
 
                 if [[ "$treg" != "" ]] || [[ "$tacc" != "" ]]; then
                     if [[ "$tend" == *"," ]]; then
-                        tend=$(echo ${tend:0:-1})
+                        tend=$(echo ${tend%?})
                     fi
                     if [[ "$mysub" == "$tacc" ]]; then
                         if [[ "$treg" != "" ]]; then

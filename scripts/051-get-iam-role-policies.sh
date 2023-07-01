@@ -155,7 +155,7 @@ for c in $(seq 0 0); do
                         else
                             #echo "in star $t1"
                             tt2=$(echo $tt2 | tr -d '"')
-                            tt2=$(echo ${tt2:0:-1}) # chop off the star
+                            tt2=$(echo ${tt2%?}) # chop off the star
                             tstart=$(echo ${tt2:0:8})
                             #echo $tstart
                             if [[ "$tstart" == "arn:aws:" ]]; then
@@ -193,7 +193,7 @@ for c in $(seq 0 0); do
                         if [[ "$treg" != "" ]] || [[ "$tacc" != "" ]]; then
                             if [[ "$tend" == *"," ]]; then
 
-                                tend=$(echo ${tend:0:-1})
+                                tend=$(echo ${tend%?})
                             fi
                             if [[ "$mysub" == "$tacc" ]]; then
                                 if [[ "$treg" != "" ]]; then

@@ -156,7 +156,7 @@ for c in $(seq 0 0); do
                             tcomm=","
                             if [[ "$treg" != "" ]] || [[ "$tacc" != "" ]]; then
                                 if [[ "$tend" == *"," ]]; then
-                                    tend=$(echo ${tend:0:-1})
+                                    tend=$(echo ${tend%?})
                                 fi
                                 if [[ "$mysub" == "$tacc" ]]; then
                                     if [[ "$treg" != "" ]]; then

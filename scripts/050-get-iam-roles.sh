@@ -1,7 +1,8 @@
 # CodeWhisperer convert the following bash script to a python script
 #!/bin/bash
-mysub=$(echo $AWS2TF_ACCOUNT)
-myreg=$(echo $AWS2TF_REGION)
+source $(dirname "$0")/functions.sh
+#mysub=$(echo $AWS2TF_ACCOUNT)
+#myreg=$(echo $AWS2TF_REGION)
 tft[0]="aws_iam_role"
 #echo "globe vars $myreg $mysub"
 if [[ "$1" != "" ]]; then
@@ -204,11 +205,14 @@ for c in $(seq 0 0); do
                                 fi
                             fi
                         else
+                            echo "--> $tt2"
+
                             tt2=$(echo $tt2 | tr -d '"')
-                            tt2=$(echo ${tt2:0:-1}) # chop off the star
+
                             tstart=$(echo ${tt2:0:8})
                             #echo $tstart
                             if [[ "$tstart" == "arn:aws:" ]]; then
+                                tt2=$(echo ${tt2%?}) # chop off the star
                                 tstart=$(echo $tt2 | cut -f1-3 -d ':')
                                 treg=$(echo $tt2 | cut -f4 -d ':')
                                 tacc=$(echo $tt2 | cut -f5 -d ':')
@@ -230,7 +234,11 @@ for c in $(seq 0 0); do
                     fi # end Resource
 
                 fi
+
+                if [ "$skip" == "0" ]; then wtf "$t1" "$fn"; fi
+                : <<'END'
                 if [ "$skip" == "0" ]; then
+
                     at1=$(echo $t1 | tr -d ' |"')
                     if [[ "$at1" == "arn:aws:"* ]]; then
                         tstart=$(echo $at1 | cut -f1-3 -d ':')
@@ -242,7 +250,7 @@ for c in $(seq 0 0); do
 
                         if [[ "$treg" != "" ]] || [[ "$tacc" != "" ]]; then
                             if [[ "$tend" == *"," ]]; then
-                                tend=$(echo ${tend:0:-1})
+                                tend=$(echo ${tend%?})
                             fi
                             if [[ "$mysub" == "$tacc" ]]; then
                                 if [[ "$treg" != "" ]]; then
@@ -258,6 +266,7 @@ for c in $(seq 0 0); do
 
                     echo "$t1" >>$fn
                 fi
+END
 
             done <"$file" # done while
 

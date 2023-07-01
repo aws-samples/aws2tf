@@ -121,7 +121,7 @@ for c in $(seq 0 0); do
                         tcomm=","
                         if [[ "$tend" == *"," ]]; then
 
-                            tend=$(echo ${tend:0:-1})
+                            tend=$(echo ${tend%?})
                         fi
                         if [[ "$mysub" == "$tacc" ]]; then
                             t1=$(printf "format(\"%s:%s:%s:%s\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)," $tstart $tsub $tsub "$tend")

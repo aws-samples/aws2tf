@@ -23,3 +23,5 @@ quotas
 boto3
 flip-eks.sh
 .DS_Store
+*.json
+*.lock.hcl

@@ -9,9 +9,65 @@ import os
 import subprocess
 
 
+def rc(cmd):
+    out = subprocess.run(cmd, shell=True, capture_output=True)
+    ol=len(out.stdout.decode('utf-8').rstrip())    
+    el=len(out.stderr.decode().rstrip())
+    if el!=0:
+         errm=out.stderr.decode().rstrip()
+         print(errm)
+
+    # could be > /dev/null
+    #if ol==0:
+    #    print("No return from command " + str(cmd) + " exit ...")
+    
+    #print(out.stdout.decode().rstrip())
+    return out
+
+
 def ctrl_c_handler(signum, frame):
   print("Ctrl-C pressed.")
   exit()
+
+def start_state(sf):
+   print("start state")
+       #echo $tsf
+   sf.write('{\n')
+   sf.write('  "version": 4,\n')
+   sf.write('  "resources\": [ \n')
+
+def end_state(sf):
+   print("end state")
+   sf.write('  ]\n')
+   sf.write('}\n')
+
+def res_head(sf,ttft,rname):
+   #print("res head")
+   sf.write('    {\n')
+   sf.write('      "mode": "managed",\n')
+   sf.write('      "type": "'+ ttft + '",\n')
+   sf.write('      "name": "' + rname + '",\n')
+   sf.write('      "provider": "provider[\\"registry.terraform.io/hashicorp/aws\\"]",\n')
+   sf.write('      "instances": [ \n')
+   sf.write('        {\n')
+   sf.write('          "attributes": {\n') 
+
+
+def res_tail(sf):
+   #print("res tail")
+   sf.write('          }\n')
+   sf.write('        }\n')
+   sf.write('      ]\n')
+   sf.write('    },\n')
+
+def s3_state(sf,ttft,bucket_name):
+   rname="b_"+bucket_name
+   res_head(sf,ttft,rname)
+   sf.write('            "bucket": "' + bucket_name +'",\n')
+   sf.write('            "id": "' + bucket_name +'"\n')
+   res_tail(sf)
+
+
 
 
 def check_python_version():
@@ -30,27 +86,67 @@ def is_pool_running(pool):
     return True
 
 
-def get_all_s3_buckets():
+def get_s3(sf,f,s3_fields,type,bucket_name):
+   try:
+      #print("in get_s3 type=" + type)
+      response=s3_fields[type](Bucket=bucket_name)
+      print("resp done" + type)
+      s3_state(sf,type,bucket_name)
+      print("state done" + type)
+      f.write('"' + type + '": ' + json.dumps(response, indent=4, default=str) + "\n")
+   except:
+      print("err: " + type)
+      pass
+
+
+def get_all_s3_buckets(sf):
   """Gets all the AWS S3 buckets and saves them to a file."""
   s3a = boto3.resource("s3")
   s3 = boto3.client("s3")
+  s3_fields = {
+      'aws_s3_bucket_accelerate_configuration': s3.get_bucket_accelerate_configuration,
+      'aws_s3_bucket_acl': s3.get_bucket_acl,
+      'aws_s3_bucket_analytics': s3.get_bucket_analytics_configuration,
+      'aws_s3_bucket_cors_configuration': s3.get_bucket_cors,
+      'aws_s3_bucket_intelligent_tiering_configuration': s3.get_bucket_intelligent_tiering_configuration,
+      'aws_s3_bucket_inventory': s3.get_bucket_inventory_configuration,
+      'aws_s3_bucket_lifecycle_configuration': s3.get_bucket_lifecycle_configuration,  ##   ?
+      'aws_s3_bucket_logging': s3.get_bucket_logging,
+      'aws_s3_bucket_metric': s3.get_bucket_metrics_configuration,
+      'aws_s3_bucket_notification': s3.get_bucket_notification,
+      #  no terraform resource ': s3.get_bucket_notification_configuration,
+      'aws_s3_bucket_object_lock_configuration': s3.get_object_lock_configuration,
+      'aws_s3_bucket_ownership_controls': s3.get_bucket_ownership_controls,
+      'aws_s3_bucket_policy': s3.get_bucket_policy,
+      #  no terraform resource ': s3.get_bucket_policy_status,
+      'aws_s3_bucket_replication_configuration': s3.get_bucket_replication,
+      'aws_s3_bucket_request_payment_configuration': s3.get_bucket_request_payment,
+      'aws_s3_bucket_server_side_encryption_configuration': s3.get_bucket_encryption,
+      #: no terraform resource s3.get_bucket_tagging,
+      'aws_s3_bucket_versioning': s3.get_bucket_versioning,
+      'aws_s3_bucket_website_configuration': s3.get_bucket_website
+   }
 
   buckets = s3a.buckets.all()
 
-  
+
 
   for buck in buckets: 
    
      bucket_name=buck.name
+     if bucket_name not in 'at-dwp':
+        continue
+
      fn="data/s3-"+str(bucket_name)+".json"
-     print(fn)
+
+     #print(fn)
      with open(fn, "w") as f:
    
    
       print("Bucket: "+bucket_name + '  ----------------------------------------------------------------')
 
       try:
-         print('location')
+         #print('location')
          location = s3.get_bucket_location(Bucket=bucket_name)
          
          bl=location['LocationConstraint']
@@ -64,99 +160,35 @@ def get_all_s3_buckets():
                print('continuing on null location .......')
                continue
          else:
-            print(bl)
+            pass
+            #print(bl)
             
       except:
          print('continuing on exception to location .......')
          continue
 
       f.write("{\n")
-      f.write("name: '" + "bucket_name" + "'\n")
-      f.write("{\n")
+      f.write('"name": "' + bucket_name + '",\n')
+      #f.write("{\n")
+
+      s3_state(sf,"aws_s3_bucket",bucket_name)
 
       #print(bucket)
-      try:
-         print('analytics')
-         analytics = s3.get_bucket_analytics(Bucket=bucket_name)
-         json.dump(analytics, f,indent=4, default=str)
-      except:
-         analytics = None 
+      for key in s3_fields:
+         print("key="+key)
+         print("outside get_s3 type=" + key)
+         get_s3(sf,f,s3_fields,key,bucket_name)
+      
+      continue
+     
 
-      try:
-         print('accelerate')
-         accelerate = s3.get_accelerate_configuration(Bucket=bucket_name)
-         print(json.dumps(accelerate, indent=4, default=str))
-      except:
-         accelerate = None
 
-      try:  
-         #print('acl')
-         acl=s3.get_bucket_acl(Bucket=bucket_name)
-         #print(json.dumps(acl, indent=4, default=str))
-         f.write("acl: '" + json.dumps(acl, indent=4, default=str) + "'\n")
-      except:
-         acl=None
 
-      try:
-         print('cors')
-         cors=s3.get_bucket_cors(Bucket=bucket_name)
-         print(json.dumps(cors, indent=4, default=str))
-      except:
-         cors=None   
 
-      try:
-         print('tiering')
-         intelligent_tiering_configuration = s3.get_bucket_intelligent_tiering_configuration(Bucket=bucket_name)
-         print(json.dumps(intelligent_tiering_configuration, indent=4, default=str))
-      except:
-         intelligent_tiering_configuration = None
 
-      try:   
-         #print('crypto')
-         encryption = s3.get_bucket_encryption(Bucket=bucket_name)
-         #print(json.dumps(encryption, indent=4, default=str))
-      except:
-         encryption = None
 
-      try:
-         print('inventory')  
-         inventory = s3.get_inventory_configuration(Bucket=bucket_name)
-         print(json.dumps(inventory, indent=4, default=str))
-      except:
-         inventory = None
 
-      try:   
-         print('lifecycle')
-         lifecycle = s3.get_bucket_lifecycle(Bucket=bucket_name)
-         print(json.dumps(lifecycle, indent=4, default=str))
-      except:
-         lifecycle = None
 
-      try:
-         #print('location')
-         location = s3.get_bucket_location(Bucket=bucket_name)
-         #print(json.dumps(location, indent=4, default=str))
-      except:
-         location = None
-      try:   
-         print('logging')
-         logging = s3.get_bucket_logging(Bucket=bucket_name)
-         print(json.dumps(logging, indent=4, default=str))
-         
-      except:
-         logging = None
-
-      try:   
-         print('metrics')
-         metrics = s3.get_bucket_metrics(Bucket=bucket_name)
-         print(json.dumps(metrics, indent=4, default=str))
-      except:
-         metrics = None
-
-      try:
-         notification = s3.Notification()
-      except:
-         notification = None
 
       try: 
          object_lock_configuration = s3.get_bucket_object_lock_configuration(Bucket=bucket_name)
@@ -176,9 +208,9 @@ def get_all_s3_buckets():
          policy = None
 
       try:
-         print('replic')
+         #print('replic')
          replication = s3.get_bucket_replication(Bucket=bucket_name)
-         print(json.dumps(replication, indent=4, default=str))
+         #print(json.dumps(replication, indent=4, default=str))
       except:
          replication = None
 
@@ -198,9 +230,10 @@ def get_all_s3_buckets():
          tagging = None
 
       try:
-         print('vers')
-         versioning = s3.get_bucket_versioning(Bucket=bucket_name)
-         print(json.dumps(versioning, indent=4, default=str))
+         #print('vers')
+         #versioning = s3.get_bucket_versioning(Bucket=bucket_name)
+         s3_state(sf,"aws_s3_bucket_versioning",bucket_name)
+         #print(json.dumps(versioning, indent=4, default=str))
          
       except:
          versioning = None
@@ -212,7 +245,7 @@ def get_all_s3_buckets():
       except:
          website = None
 
-      f.write("}\n")
+      #f.write("}\n")
       f.write("}\n")
       f.close()
 
@@ -230,26 +263,79 @@ def get_resource(fields,type):
     with open(filename, 'w') as f:
         json.dump(awsout, f, indent=4, default=str)
 
+####################################################
+
+
 if __name__ == '__main__':
-    check_python_version()
-    signal.signal(signal.SIGINT, ctrl_c_handler)
+   statefile='data/terraform.tfstate'
+   check_python_version()
+   signal.signal(signal.SIGINT, ctrl_c_handler)
 
 # get the current region
-    my_session = boto3.session.Session()
-    my_region = my_session.region_name
+   my_session = boto3.session.Session()
+   my_region = my_session.region_name
 
-    print(my_region)
+   print(my_region)
    
-    ec2client = boto3.client('ec2')
-    cpus=multiprocessing.cpu_count()
-    print("cpus="+str(cpus))
-    
-    get_all_s3_buckets()
-    exit()
+   ec2client = boto3.client('ec2')
+   cpus=multiprocessing.cpu_count()
+   print("cpus="+str(cpus))
+   stf="data/terraform.tfstate"
+   print(stf)
+   with open(stf, "w") as sf:
+      start_state(sf)
+      get_all_s3_buckets(sf)
+      end_state(sf)
+   
 
+   sf.close()
+   with open(r"data/terraform.tfstate", 'r') as fp:
+     for count, line in enumerate(fp):
+         pass
+   print('Total Lines', count + 1)
+   el=count-2
+   print('toedit=' + str(el))
+   fp.close()
+
+
+      # with is like your try .. finally block in this case
+   with open(statefile, 'r') as file:
+      # read a list of lines into data
+      data = file.readlines()
+
+
+   # now change the 2nd line, note that you have to add a newline
+   data[el] = '    }\n'
+
+   # and write everything back
+   with open(statefile, 'w') as file:
+      file.writelines( data )
+   file.close()
+
+
+
+   f = open(statefile, 'r')
+   data = json.load(f)
+   f.close()
+   
+   com="cd data && terraform refresh -no-color -lock=false"
+   rout=rc(com)
+   print(rout)
+
+
+   for i in data['resources']:
+      #print(json.dumps(i, indent=4, default=str)) 
+      ttft=i['type']
+      rname=i['name']
+      com="terraform state show -no-color -state " + statefile + " " + ttft + "." + rname + " > data/" + ttft + "-" + rname + ".txt"
+      print(com)
+      rout=rc(com)
+      #print(rout)
+
+   exit()
 
     # comma lists are required to create a dictionary
-    fields = {
+   fields = {
               'Vpcs':ec2client.describe_vpcs,
               'Subnets':ec2client.describe_subnets,
               'SecurityGroups':ec2client.describe_security_groups,
@@ -288,7 +374,7 @@ if __name__ == '__main__':
               'DhcpOptions':ec2client.describe_dhcp_options,
               'NetworkAcls':ec2client.describe_network_acls,
               }  
-    
+       
 
     #response=ec2client.describe_instances()
     #awsout = response['Reservations']
@@ -298,7 +384,7 @@ if __name__ == '__main__':
     #exit()
 
 
-    for key in fields:
+   for key in fields:
         print(key)
         #
         get_resource(fields,key)
@@ -307,14 +393,15 @@ if __name__ == '__main__':
         #get_resource(fields,key)
         # Wait for all tasks to complete
 
-    print("closing ....")
+   print("closing ....")
     #pool.close()
-    print("Waiting for all tasks to complete...")
+   print("Waiting for all tasks to complete...")
     #pool.join()  
 
     
 
-    print("Done")
+   print("Done")
+   exit()
 
 
 

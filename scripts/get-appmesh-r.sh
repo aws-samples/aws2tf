@@ -84,11 +84,13 @@ for c in `seq 0 0`; do
                     fi
                     if [[ ${tt1} == "virtual_node" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
+                        rtt2=${tt2//:/_} && rtt2=${rtt2//./_} && rtt2=${rtt2//\//_}
                         t1=`printf "%s = aws_appmesh_virtual_node.%s__%s.id" $tt1 $1 $tt2`
                     fi
                     if [[ ${tt1} == "virtual_router_name" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_appmesh_virtual_router.%s__%s.id" $tt1 $1 $tt2`
+                        rtt2=${tt2//:/_} && rtt2=${rtt2//./_} && rtt2=${rtt2//\//_}
+                        t1=`printf "%s = aws_appmesh_virtual_router.%s__%s.name" $tt1 $1 $rtt2`
                     fi
                     if [[ ${tt1} == "mesh_owner" ]]; then
                     skip=1

@@ -73,11 +73,13 @@ for c in `seq 0 0`; do
                     fi
                     if [[ ${tt1} == "mesh_name" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
+
                         t1=`printf "%s = aws_appmesh_mesh.%s.id" $tt1 $tt2`
                     fi
                     if [[ ${tt1} == "virtual_service_name" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_appmesh_virtual_service.%s__%s.id" $tt1 $1 $tt2`
+                        rtt2=${tt2//:/_} && rtt2=${rtt2//./_} && rtt2=${rtt2//\//_}
+                        t1=`printf "%s = aws_appmesh_virtual_service.%s__%s.name" $tt1 $1 $rtt2`
                     fi
                
                 fi

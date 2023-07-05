@@ -85,6 +85,7 @@ for c in $(seq 0 0); do
                     if [[ ${tt1} == "network_interface_ids" ]]; then skip=1; fi
                     if [[ ${tt1} == "namespace_id" ]]; then
                         nsid=$(echo $tt2 | tr -d '"')
+                        t1=$(printf "%s = aws_service_discovery_private_dns_namespace.%s.id" $tt1 $nsid)
                     fi
                     if [[ ${tt1} == "vpc_id" ]]; then
                         tt2=$(echo $tt2 | tr -d '"')

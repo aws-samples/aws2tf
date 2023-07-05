@@ -76,6 +76,10 @@ for c in $(seq 0 0); do
                             skip=1
                         fi
                     fi
+                    if [[ ${tt1} == "mesh_name" ]]; then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_appesh_mesh.%s.id" $tt1 $tt2`
+                    fi
 
                 fi
                 if [ "$skip" == "0" ]; then

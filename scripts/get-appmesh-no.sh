@@ -75,6 +75,10 @@ for c in `seq 0 0`; do
                         tt2=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_appmesh_mesh.%s.id" $tt1 $tt2`
                     fi
+                    if [[ ${tt1} == "virtual_service_name" ]]; then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_appmesh_virtual_service.%s.id" $tt1 $tt2`
+                    fi
                
                 fi
                 if [ "$skip" == "0" ]; then

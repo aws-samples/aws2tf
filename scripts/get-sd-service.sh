@@ -107,7 +107,7 @@ for c in $(seq 0 0); do
             # get the namespace
             if [[ "$nsid" != "" ]]; then
                 echo "calling get priv dns ns for $nsid"
-                #../../scripts/get-sd-priv-dns-ns.sh $nsid
+                ../../scripts/get-sd-priv-dns-ns.sh $nsid
             fi
 
         done

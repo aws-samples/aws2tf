@@ -103,6 +103,15 @@ for c in `seq 0 0`; do
                     fi
 
 
+                    if [[ ${tt1} == " subnet_mapping" ]];then
+                        # skip the block 
+                        tt2=`echo $tt2 | tr -d '"'` 
+                        skip=1
+                        while [ "$t1" != "}" ] && [ "$tt2" != "{}" ] ;do
+                            read line
+                            t1=`echo "$line"`
+                        done
+                    fi
 
 
 

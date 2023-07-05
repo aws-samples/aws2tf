@@ -60,7 +60,7 @@ function fixarn {
         fi
         t1=$(printf "%s = %s" $tt1 $tt2)
     elif [[ "$tt2" == "$myreg" ]]; then
-        t1=$(printf "%s = data.aws_caller_identity.current.account_id" $tt1)
+        t1=$(printf "%s = data.aws_region.current.name" $tt1)
     fi
 }
 

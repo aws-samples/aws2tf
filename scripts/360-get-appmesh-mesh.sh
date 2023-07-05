@@ -53,7 +53,7 @@ for c in $(seq 0 0); do
             rm -f $fn
 
             file="t1.txt"
-            echo $aws2tfmess >$fn
+            #echo $aws2tfmess >$fn
             while IFS= read line; do
                 skip=0
                 # display $line or do something with $line

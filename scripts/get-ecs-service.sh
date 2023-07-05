@@ -84,15 +84,13 @@ for c in $(seq 0 0); do
                         fi
                     fi
                     if [[ ${tt1} == "target_group_arn" ]]; then
-                        tt2=$(echo $tt2 | tr -d '"')
-                        tstart=$(echo $tt2 | cut -f1-3 -d ':')
-                        treg=$(echo $tt2 | cut -f4 -d ':')
-                        tacc=$(echo $tt2 | cut -f5 -d ':')
-                        tend=$(echo $tt2 | cut -f6- -d ':')
-                        tsub="%s"
-                        t1=$(printf "%s = format(\"%s:%s:%s:%s\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tsub $tend)
-                        # don't get target group - as ecs servioce creates this for us
-                        #tgarn=$(echo $tt2)
+                        tt2=$(echo $tt2 | tr -d ' |"')
+                        if [[ "$tt2" == *"arn:aws:elasticloadbalancing:"* ]]; then
+                            rtgarn=${tt2//:/_} && rtgarn=${rtgarn//./_} && rtgarn=${rtgarn//\//_}
+                            t1=$(printf "%s = aws_lb_target_group.%s.arn" $tt1 "$rtgarn")
+                        else
+                            fixarn "$tt2"
+                        fi
                     fi
                     if [[ ${tt1} == "availability_zone_id" ]]; then skip=1; fi
                     if [[ ${tt1} == "state" ]]; then skip=1; fi
@@ -139,7 +137,13 @@ for c in $(seq 0 0); do
                     fi
 
                     if [[ ${tt1} == "registry_arn" ]]; then
-                        fixarn "$tt2"
+                        tt2=$(echo $tt2 | tr -d ' |"')
+                        if [[ "$tt2" == *"arn:aws:servicediscovery"* ]]; then
+                            srvn=$(echo $tt2 | rev | cut -f1 -d'/' | rev)
+                            t1=$(printf "%s = aws_service_discovery_service.%s.arn" $tt1 $srvn)
+                        else
+                            fixarn "$tt2"
+                        fi
                     fi
 
                 else
@@ -178,7 +182,13 @@ for c in $(seq 0 0); do
             echo "get any app autoscaling policies for $cln $srv"
             ../../scripts/get-app-autoscaling-policy.sh "ecs" "service/$cln/$srv"
 
+            if [[ $srvn != "" ]];then
+                ../../scripts/get-sd-service.sh $srvn
+            fi
+
+
             echo "--> srvid=$srvid  cln=$cln"
+            # don't do this as service doiscovery sets phz up itself
             if [ "$srvid" != "null" ]; then
                 nsid=$($AWS servicediscovery get-service --id $srvid | jq .Service.NamespaceId | tr -d '\"')
                 echo $nsid

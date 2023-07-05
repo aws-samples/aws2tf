@@ -66,6 +66,8 @@ for c in $(seq 0 0); do
                     if [[ ${tt1} == "created_date" ]]; then skip=1; fi
                     #if [[ ${tt1} == "availability_zone" ]];then skip=1;fi
                     if [[ ${tt1} == "last_updated_date" ]]; then skip=1; fi
+                    if [[ ${tt1} == "mesh_owner" ]]; then skip=1; fi
+
                     if [[ ${tt1} == "vpc_id" ]]; then
                         tt2=$(echo $tt2 | tr -d '"')
                         t1=$(printf "%s = aws_vpc.%s.id" $tt1 $tt2)
@@ -77,8 +79,20 @@ for c in $(seq 0 0); do
                         fi
                     fi
                     if [[ ${tt1} == "mesh_name" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_appmesh_mesh.%s.id" $tt1 $tt2`
+                        tt2=$(echo $tt2 | tr -d '"')
+                        t1=$(printf "%s = aws_appmesh_mesh.%s.id" $tt1 $tt2)
+                    fi
+
+                    if [[ ${tt1} == "virtual_gateway_name" ]]; then
+                        tt2=$(echo $tt2 | tr -d '"')
+                        rtt2=${tt2//:/_} && rtt2=${rtt2//./_} && rtt2=${rtt2//\//_}
+                        t1=$(printf "%s = aws_appmesh_virtual_gateway.%s__%s.name" $tt1 $1 $rtt2)
+                    fi
+
+                    if [[ ${tt1} == "virtual_service_name" ]]; then
+                        tt2=$(echo $tt2 | tr -d '"')
+                        rtt2=${tt2//:/_} && rtt2=${rtt2//./_} && rtt2=${rtt2//\//_}
+                        t1=$(printf "%s = aws_appmesh_virtual_service.%s__%s.name" $tt1 $1 $rtt2)
                     fi
 
                 fi

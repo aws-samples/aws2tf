@@ -1,6 +1,7 @@
 #!/bin/bash
-mysub=$(echo $AWS2TF_ACCOUNT)
-myreg=$(echo $AWS2TF_REGION)
+#mysub=$(echo $AWS2TF_ACCOUNT)
+#myreg=$(echo $AWS2TF_REGION)
+source ../../scripts/functions.sh
 if [[ "$1" != "" ]]; then
     if [[ "$1" == *":"* ]]; then
         #echo "## process arn"
@@ -28,7 +29,7 @@ for c in $(seq 0 0); do
 
     cm=${cmd[$c]}
     ttft=${tft[(${c})]}
-    #echo $cm
+    echo $cm
     awsout=$(eval $cm 2>/dev/null)
     if [[ "$awsout" == "" ]]; then
         echo "$cm : You don't have access for this resource"
@@ -113,11 +114,20 @@ for c in $(seq 0 0); do
                         tt2=$(echo $tt2 | tr -d '"')
                         t1=$(printf "%s = aws_vpc.%s.id" $tt1 $tt2)
                     fi
+
+                    if [[ ${tt1} == "iam_role" ]]; then
+                        tt2=$(echo $tt2 | tr -d '"')
+                        if [[ "$tt2" == *"aws-service-role/"* ]]; then
+                            skip=1
+                        fi
+                    fi
+
                     if [[ ${tt1} == "task_definition" ]]; then
                         tt2=$(echo $tt2 | tr -d '"')
                         td=$(echo $tt2 | cut -f1 -d':')
                         tv=$(echo $tt2 | cut -f2 -d':')
-                        t1=$(printf "%s = \"%s:%s\"" $tt1 $td $tv)
+                        #t1=$(printf "%s = \"%s:%s\"" $tt1 $td $tv)
+                        t1=$(printf "%s = aws_ecs_task_definition.%s_%s.arn" $tt1 $td $tv)
                     fi
 
                     if [[ ${tt1} == "cluster" ]]; then
@@ -126,6 +136,10 @@ for c in $(seq 0 0); do
                             clnam=$(echo $tt2 | rev | cut -f1 -d'/' | rev)
                             t1=$(printf "%s = aws_ecs_cluster.%s.arn" $tt1 $clnam)
                         fi
+                    fi
+
+                    if [[ ${tt1} == "registry_arn" ]]; then
+                        fixarn "$tt2"
                     fi
 
                 else
@@ -140,10 +154,12 @@ for c in $(seq 0 0); do
                         t1=$(printf "aws_security_group.%s.id," $t1)
                     fi
                 fi
-                if [ "$skip" == "0" ]; then
-                    #echo $skip $t1
-                    echo "$t1" >>$fn
-                fi
+
+                if [ "$skip" == "0" ]; then wtf "$t1" "$fn"; fi
+                #if [ "$skip" == "0" ]; then
+                #    #echo $skip $t1
+                #    echo "$t1" >>$fn
+                #fi
 
             done <"$file"
 
@@ -170,8 +186,6 @@ for c in $(seq 0 0); do
                 hzid=$($AWS servicediscovery get-namespace --id $nsid | jq .Namespace.Properties.DnsProperties.HostedZoneId | tr -d '"')
                 ../../scripts/get-priv-hzn.sh $hzid
             fi
-
-
 
             # get cluster if needed
             cfn=$(printf "%s__%s.tf" $ttft $cln)

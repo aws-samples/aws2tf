@@ -1,4 +1,5 @@
 #!/bin/bash
+source ../../scripts/functions.sh
 ttft="aws_ecs_capacity_provider"
 pref="capacityProviders"
 idfilt="name"
@@ -61,7 +62,11 @@ for i in `seq 0 $count`; do
             if [[ ${tt1} == "id" ]];then skip=1; fi  
             if [[ ${tt1} == "create_date" ]];then skip=1; fi  
             if [[ ${tt1} == "arn" ]];then skip=1;fi
-            if [[ ${tt1} == "owner_id" ]];then skip=1;fi                   
+            if [[ ${tt1} == "owner_id" ]];then skip=1;fi  
+            if [[ ${tt1} == "auto_scaling_group_arn " ]];then 
+                fixarn "$tt2"
+            fi
+                            
         fi
 
         if [ "$skip" == "0" ]; then echo "$t1" >> $fn ;fi

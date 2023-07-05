@@ -1,6 +1,5 @@
 #!/bin/bash
-mysub=$(echo $AWS2TF_ACCOUNT)
-myreg=$(echo $AWS2TF_REGION)
+source ../../scripts/functions.sh
 if [ "$1" != "" ]; then
     fp=$(echo $1 | cut -f1 -d ':')
     cmd[0]="$AWS ecs list-task-definitions --family-prefix $fp" 
@@ -77,16 +76,20 @@ for c in `seq 0 0`; do
                         done
                     fi
                     if [[ ${tt1} == "revision" ]];then skip=1;fi
+
                     if [[ ${tt1} == "vpc_id" ]]; then
                         tt2=`echo $tt2 | tr -d '"'`
                         t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
-                    fi
-                    if [[ ${tt1} == "@type" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf type = \"%s\"" $tt2`
+                    
                     fi
 
-                    if [[ ${tt1} == "task_role_arn" ]];then 
+                    if [[ ${tt1} == "type" ]]; then
+                        tt2=`echo $tt2 | tr -d '"'`
+                        t1=`printf "type = \"%s\"" $tt2`
+                    fi
+                    
+                    
+                    if [[ ${tt1} == "task_role_arn" ]]; then 
                         trarn=`echo $tt2 | tr -d '"'` 
                         skip=0;
                         trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')                    
@@ -123,15 +126,15 @@ for c in `seq 0 0`; do
                     fi
 
 
-
-
+                    if [[ ${tt1} == "value" ]] || [[ ${tt1} == "awslogs-region" ]]; then
+                        fixarn "$tt2"
+                    fi
 
                
                 fi
-                if [ "$skip" == "0" ]; then
-                    #echo $skip $t1
-                    echo "$t1" >> $fn
-                fi
+
+                if [ "$skip" == "0" ]; then wtf "$t1" "$fn"; fi
+  
                 
             done <"$file"
             if [[ "$trarn" != "" ]];then

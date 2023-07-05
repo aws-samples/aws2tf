@@ -1,12 +1,13 @@
 #!/bin/bash
 mysub=$(echo $AWS2TF_ACCOUNT)
 myreg=$(echo $AWS2TF_REGION)
+#echo "functions ....."
 
 function wtf {
     t1="$1"
     fn="$2"
     at1=$(echo $t1 | tr -d ' |"')
-    #echo "at1=$at1"
+
     if [[ "$at1" == "arn:aws:"* ]]; then
         tstart=$(echo $at1 | cut -f1-3 -d ':')
         treg=$(echo $at1 | cut -f4 -d ':')
@@ -37,10 +38,12 @@ function wtf {
 }
 
 function fixarn {
-    tt2="$1"
+    tt2=$(echo $1 | tr -d ' |"')
+    #echo "fixarn tt2=$tt2 myreg=$myreg"
     #if is arn change
-    if [[ "$tt2" == "arn:aws:"*":$myreg:$mysub:"* ]]; then
-        echo $tt2
+    if [[ "$tt2" == *"arn:aws:"*":$myreg:$mysub:"* ]]; then
+        tt2=$(echo $1 | tr -d ' |"')
+        #echo $tt2
         tstart=$(echo $tt2 | cut -f1-3 -d ':')
         treg=$(echo $tt2 | cut -f4 -d ':')
         tacc=$(echo $tt2 | cut -f5 -d ':')
@@ -49,14 +52,15 @@ function fixarn {
         if [[ "$treg" != "" ]] || [[ "$tacc" != "" ]]; then
             if [[ "$mysub" == "$tacc" ]]; then
                 if [[ "$treg" != "" ]]; then
-                    tt2=$(printf "format(\"%s:%s:%s:%s*\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tstart $tsub $tsub $tend)
+                    tt2=$(printf "format(\"%s:%s:%s:%s\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tstart $tsub $tsub $tend)
                 else
-                    tt2=$(printf "format(\"%s::%s:%s*\",data.aws_caller_identity.current.account_id)" $tstart $tsub $tend)
+                    tt2=$(printf "format(\"%s::%s:%s\",data.aws_caller_identity.current.account_id)" $tstart $tsub $tend)
                 fi
             fi
         fi
+        t1=$(printf "%s = %s" $tt1 $tt2)
+    elif [[ "$tt2" == "$myreg" ]]; then
+        t1=$(printf "%s = data.aws_caller_identity.current.account_id" $tt1)
     fi
 }
 
-# fixarn "$tt2"
-# tt2=$(echo $fixarn)

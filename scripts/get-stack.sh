@@ -68,11 +68,21 @@ if [ $count -gt 0 ]; then
                 AWS::ApplicationAutoScaling::ScalableTarget) echo "echo '# $type $pid fetched as part of parent recources ' " >> commands.sh ;;
                 AWS::ApplicationAutoScaling::ScalingPolicy) echo "echo '# $type $pid fetched as part of parent recources ' " >> commands.sh ;;
 
+                AWS::AppMesh::Mesh) echo "../../scripts/360-get-appmesh-mesh.sh $pid"  >> commands.sh ;;
+                AWS::AppMesh::VirtualGateway) echo "echo '# $type $pid fetched as part of parent mesh ' " >> commands.sh ;;
+                AWS::AppMesh::VirtualNode) echo "echo '# $type $pid fetched as part of parent mesh ' " >> commands.sh ;;
+                AWS::AppMesh::VirtualRouter) echo "echo '# $type $pid fetched as part of parent mesh ' " >> commands.sh ;;
+                AWS::AppMesh::VirtualService) echo "echo '# $type $pid fetched as part of parent mesh ' " >> commands.sh ;;
+
+
                 AWS::Athena::NamedQuery) echo "../../scripts/get-athena-named-query.sh $pid"  >> commands.sh ;;
 
                 AWS::AutoScaling::AutoScalingGroup) echo "../../scripts/258-get-autoscaling-groups.sh $pid"  >> commands.sh ;;
                 AWS::AutoScaling::LaunchConfiguration) echo "../../scripts/get-launch-configuration.sh $pid"  >> commands.sh ;;
                 AWS::AutoScaling::LifecycleHook) echo "echo '# $type $pid fetched as part of AutoScalingGroup..' " >> commands.sh ;;
+                
+                AWS::CDK::Metadata) echo "echo '# $type $pid skipped only relevant to CDK ..' " >> commands.sh ;;
+                
                 AWS::Cloud9::EnvironmentEC2) echo "../../scripts/252-get-c9.sh $pid"  >> commands.sh ;;
                 
                 AWS::CloudWatch::Alarm) echo "../../scripts/760-get-cloudwatch-alarm.sh $parn"  >> commands.sh ;;
@@ -216,7 +226,7 @@ if [ $count -gt 0 ]; then
                 AWS::SQS::QueuePolicy) echo "echo '# $type $pid fetched as part of SQS Queue ..' " >> commands.sh ;;
            
                 AWS::SSM::Parameter)  echo "../../scripts/445-get-ssm-params.sh $pid" >> commands.sh ;;
-                
+                AWS::ServiceDiscovery::PrivateDnsNamespace) echo "echo '# $type $pid fetched as part srv discovery ? ..' " >> commands.sh ;;
                 AWS::StepFunctions::StateMachine) echo "../../scripts/780-get-sfn-state-machine.sh $pid" >> commands.sh ;;
                 #AWS::SecretsManager::SecretTargetAttachment ;;
                 AWS::SecretsManager::Secret)  echo "../../scripts/450-get-secrets.sh $parn"  >> commands.sh ;;                

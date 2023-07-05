@@ -25,3 +25,4 @@ flip-eks.sh
 .DS_Store
 *.json
 *.lock.hcl
+__pycache__

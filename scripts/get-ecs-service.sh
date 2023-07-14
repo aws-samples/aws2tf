@@ -3,7 +3,7 @@
 #myreg=$(echo $AWS2TF_REGION)
 source ../../scripts/functions.sh
 if [[ "$1" != "" ]]; then
-    if [[ "$1" == *":"* ]]; then
+    if [[ "$1" == *"/"* ]]; then
         #echo "## process arn"
         cln=$(echo $1 | rev | cut -f2 -d "/" | rev | tr -d '"')
         srv=$(echo $1 | rev | cut -f1 -d "/" | rev | tr -d '"')

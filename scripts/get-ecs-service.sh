@@ -171,13 +171,6 @@ for c in $(seq 0 0); do
 
             done <"$file"
 
-            if [[ "$lbarn" != "" ]]; then
-                echo "--> elbv2 lbarn=$lbarn"
-                ../../scripts/elbv2.sh $lbarn
-            fi
-
-            
-
             echo "get hostzone id for $cln $srv"
             comm=$(printf "$AWS ecs describe-services --services %s --cluster %s | jq '.services[].serviceRegistries[0].registryArn' | tr -d '\"'" $srv $cln)
             srvid=$(eval $comm)
@@ -187,8 +180,7 @@ for c in $(seq 0 0); do
             ../../scripts/get-ecs-task.sh $td
 
             if [[ "$lbarn" != "" ]]; then
-                echo "--> elbv2 lbarn=$lbarn"
-                ../../scripts/elbv2.sh $lbarn
+                ../../scripts/elbv2-target-groups.sh $lbarn
             fi
 
             ## get any app autoscaling targets

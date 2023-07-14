@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
-    if [[ "$1" == *"loadbalancer"* ]];then
+    if [[ "$1" == *"arn:aws:elasticloadbalancing"* ]];then
         cmd[0]="$AWS elbv2 describe-load-balancers --load-balancer-arns $1"
     else
         cmd[0]="$AWS elbv2 describe-load-balancers --query \"LoadBalancers[?Type=='application']|[?VpcId=='$1']\""

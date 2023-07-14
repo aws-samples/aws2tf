@@ -93,7 +93,7 @@ for i in $(seq 0 $count); do
             if [[ ${tt1} == "owner_id" ]]; then skip=1; fi
 
             if [[ ${tt1} == "resource_id" ]]; then
-                t1=$(printf "%s = service/${aws_ecs_cluster.%s.name}/${aws_ecs_service.%s.name}" $tt1 $t2 $t3)
+                t1=$(printf "%s = service/${aws_ecs_cluster.%s.name}/${aws_ecs_service.%s.name}" $tt1 $2 $3)
             fi
 
         fi

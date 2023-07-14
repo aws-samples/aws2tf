@@ -90,7 +90,8 @@ for i in $(seq 0 $count); do
             if [[ ${tt1} == "resource_id" ]]; then
                 #t1=$(printf "%s = service/\${aws_ecs_cluster.%s.name}/\${aws_ecs_service.%s.name}" $tt1 $2 $3)
                 percs="%s"
-                t1=$(printf "%s = format(\"service/%s/%s\",aws_ecs_cluster.%s.name,aws_ecs_service.%s.name)" $tt1 $percs $percs $2 $3)
+                t1=$(printf "%s = format(\"service/%s/%s\",aws_ecs_cluster.%s.name,aws_ecs_service.%s__%s.name)" $tt1 $percs $percs $2 $2 $3)
+    
             fi
 
         fi

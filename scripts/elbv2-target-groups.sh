@@ -36,6 +36,10 @@ for c in `seq 0 0`; do
             cname=`echo $awsout | jq ".${pref[(${c})]}[(${i})].${idfilt[(${c})]}" | tr -d '"'`
             echo "$ttft $cname"
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+            #
+            # should get them all really 
+            #
+            lbarn=$(echo $awsout | jq ".${pref[(${c})]}[(${i})].LoadBalancerArns[0]" | tr -d '"')
             fn=`printf "%s__%s.tf" $ttft $rname`
             #echo $fn
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
@@ -107,6 +111,9 @@ for c in `seq 0 0`; do
 
             if [[ "${vpcid}" != "" ]]; then
                 ../../scripts/100-get-vpc.sh $vpcid
+            fi
+            if [[ "${lbarn}" != "" ]]; then
+                ../../scripts/elbv2.sh $lbarn
             fi
         done
     fi

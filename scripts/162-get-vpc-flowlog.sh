@@ -75,14 +75,10 @@ for i in $(seq 0 $count); do
             fi
 
             if [[ ${tt1} == "iam_role_arn" ]]; then
-                tt2=$(echo $tt2 | tr -d '"')
-                if [[ "$tt2" == *"$mysub"* ]]; then
-                    tstart=$(echo $tt2 | cut -f1-4 -d ':')
-                    tacc=$(echo $tt2 | cut -f5 -d ':')
-                    tend=$(echo $tt2 | cut -f6- -d ':')
-                    tsub="%s"
-                    t1=$(printf "%s = format(\"%s:%s:%s\",data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tend)
-                fi
+                rarn=$(echo $tt2 | tr -d '"')
+                rname=$(echo $rarn | rev | cut -f1 -d'/' | rev )
+                t1=$(printf "%s = aws_iam_role.%s.arn", $tt1 $rname)
+                
             fi
 
         fi
@@ -90,6 +86,9 @@ for i in $(seq 0 $count); do
         if [ "$skip" == "0" ]; then echo "$t1" >>$fn; fi
 
     done <"$file"
+    if [[ $rarn != "" ]]; then
+        ../../scripts/050-get-iam-roles.sh $rarn
+    fi
     # dependancies here
 done
 

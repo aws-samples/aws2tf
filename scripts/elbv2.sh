@@ -22,6 +22,7 @@ for c in `seq 0 0`; do
 	ttft=${tft[(${c})]}
 	echo $cm
     awsout=`eval $cm 2> /dev/null`
+    echo $awsout | jq "."
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
         exit

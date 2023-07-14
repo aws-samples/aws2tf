@@ -2,8 +2,9 @@
 #mysub=$(echo $AWS2TF_ACCOUNT)
 #myreg=$(echo $AWS2TF_REGION)
 source ../../scripts/functions.sh
+echo "ecs service param = $1"
 if [[ "$1" != "" ]]; then
-    if [[ "$1" == *"/"* ]]; then
+    if [[ "$1" == *"/"* ]] || [[ "$1" == *":"* ]] ; then
         #echo "## process arn"
         cln=$(echo $1 | rev | cut -f2 -d "/" | rev | tr -d '"')
         srv=$(echo $1 | rev | cut -f1 -d "/" | rev | tr -d '"')

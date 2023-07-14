@@ -63,6 +63,7 @@ for c in $(seq 0 0); do
             rm -f $fn
             sgs=()
             subs=()
+            lbarn=""
 
             file="t1.txt"
             echo $aws2tfmess >$fn
@@ -86,6 +87,7 @@ for c in $(seq 0 0); do
                     if [[ ${tt1} == "target_group_arn" ]]; then
                         tt2=$(echo $tt2 | tr -d ' |"')
                         if [[ "$tt2" == *"arn:aws:elasticloadbalancing:"* ]]; then
+                            lbarn=$(echo $tt2)
                             rtgarn=${tt2//:/_} && rtgarn=${rtgarn//./_} && rtgarn=${rtgarn//\//_}
                             t1=$(printf "%s = aws_lb_target_group.%s.arn" $tt1 "$rtgarn")
                         else
@@ -175,6 +177,10 @@ for c in $(seq 0 0); do
             echo "get task definition for $cln $srv $td"
             ../../scripts/get-ecs-task.sh $td
 
+            if [[ $lbarn != "" ]]; then
+                ../../scripts/elbv2.sh $lbarn
+            fi
+
             ## get any app autoscaling targets
             echo "get any app autoscaling targets for $cln $srv"
             ../../scripts/get-app-autoscaling-target.sh "ecs" $cln $srv
@@ -182,10 +188,9 @@ for c in $(seq 0 0); do
             echo "get any app autoscaling policies for $cln $srv"
             ../../scripts/get-app-autoscaling-policy.sh "ecs" $cln $srv
 
-            if [[ $srvn != "" ]];then
+            if [[ $srvn != "" ]]; then
                 ../../scripts/get-sd-service.sh $srvn
             fi
-
 
             echo "--> srvid=$srvid  cln=$cln"
             # don't do this as service doiscovery sets phz up itself

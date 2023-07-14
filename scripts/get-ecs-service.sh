@@ -88,6 +88,7 @@ for c in $(seq 0 0); do
                         tt2=$(echo $tt2 | tr -d ' |"')
                         if [[ "$tt2" == *"arn:aws:elasticloadbalancing:"* ]]; then
                             lbarn=$(echo $tt2)
+                            echo "--> lbarn=$lbarn"
                             rtgarn=${tt2//:/_} && rtgarn=${rtgarn//./_} && rtgarn=${rtgarn//\//_}
                             t1=$(printf "%s = aws_lb_target_group.%s.arn" $tt1 "$rtgarn")
                         else
@@ -177,7 +178,8 @@ for c in $(seq 0 0); do
             echo "get task definition for $cln $srv $td"
             ../../scripts/get-ecs-task.sh $td
 
-            if [[ $lbarn != "" ]]; then
+            if [[ "$lbarn" != "" ]]; then
+                echo "--> elbv2 lbarn=$lbarn"
                 ../../scripts/elbv2.sh $lbarn
             fi
 

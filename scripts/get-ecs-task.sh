@@ -128,6 +128,9 @@ for c in `seq 0 0`; do
 
                     if [[ ${tt1} == "value" ]] || [[ ${tt1} == "awslogs-region" ]]; then
                         fixarn "$tt2"
+                        if [[ $tt2 == "arn:aws:appmesh"* ]];then
+                            meshn=$(echo $tt2 | cut -f2 -d'/')
+                        fi
                     fi
 
                
@@ -147,6 +150,11 @@ for c in `seq 0 0`; do
                 ../../scripts/070-get-cw-log-grp.sh $cwl
             fi
             
+            if [[ "$meshn" != "" ]];then
+                ../../scripts/360-get-appmesh-mesh.sh $meshn
+            fi
+
+
         done
     fi
 done

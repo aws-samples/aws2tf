@@ -22,7 +22,7 @@ else
     exit
 fi
 
-ss=printf("service/%s/%s", $1, $2)
+ss=$(printf("service/%s/%s", $1, $2))
 
 
 cm="$AWS application-autoscaling describe-scaling-policies"

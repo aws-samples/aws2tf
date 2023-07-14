@@ -23,7 +23,7 @@ else
     exit
 fi
 
-ss=$(printf "service/%s/%s" $1 $2)
+ss=$(printf "service/%s/%s" $2 $3)
 
 
 cm="$AWS application-autoscaling describe-scalable-targets"

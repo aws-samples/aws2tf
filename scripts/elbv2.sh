@@ -15,12 +15,13 @@ pref[0]="LoadBalancers"
 tft[0]="aws_lb"
 idfilt[0]="LoadBalancerArn"
 rm -f ${tft[(${c})]}.*.tf
-
+echo "--> 1"
 for c in `seq 0 0`; do
  
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
 	echo $cm
+    echo "--> 2"
     awsout=`eval $cm 2> /dev/null`
     echo $awsout | jq "."
     if [ "$awsout" == "" ];then

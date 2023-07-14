@@ -1,15 +1,15 @@
 #!/bin/bash
 if [ "$1" != "" ]; then
     if [[ "$1" == *"arn:aws:elasticloadbalancing"* ]];then
-        cmd[0]="$AWS elbv2 describe-load-balancers --load-balancer-arns $1"
+        cm="$AWS elbv2 describe-load-balancers --load-balancer-arns $1"
     else
-        cmd[0]="$AWS elbv2 describe-load-balancers --query \"LoadBalancers[?Type=='application']|[?VpcId=='$1']\""
+        cm="$AWS elbv2 describe-load-balancers --query \"LoadBalancers[?Type=='application']|[?VpcId=='$1']\""
     fi
 else
-    cmd[0]="$AWS elbv2 describe-load-balancers --query \"LoadBalancers[?Type=='application']\""
+    cm="$AWS elbv2 describe-load-balancers --query \"LoadBalancers[?Type=='application']\""
 fi
 c=0
-cm=${cmd[$c]}
+
 
 pref[0]="LoadBalancers"
 tft[0]="aws_lb"
@@ -18,11 +18,11 @@ rm -f ${tft[(${c})]}.*.tf
 echo "--> 1"
 for c in `seq 0 0`; do
  
-    cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	echo $cm
+	echo "cm1=$cm"
     echo "--> 2"
     awsout=`eval $cm 2> /dev/null`
+    awsout=`eval $cm`
     echo $awsout | jq "."
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"

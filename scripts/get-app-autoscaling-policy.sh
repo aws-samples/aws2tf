@@ -8,14 +8,26 @@ if [[ "$1" == "" ]]; then
     exit
 fi
 
-if [[ "$2" == "" ]]; then
-    echo "must pass service id as second parameter"
+if [[ "$1" == "ecs" ]]; then
+    if [[ "$2" == "" ]]; then
+        echo "must pass cluster name as second parameter"
+        exit
+    fi
+    if [[ "$2" == "" ]]; then
+        echo "must pass ecs service name as second parameter"
+        exit
+    fi
+else
+    echo "must pass ecs as first parameter - only ecs supported for now"
     exit
 fi
 
+ss=printf("service/%s/%s", $1, $2)
+
+
 cm="$AWS application-autoscaling describe-scaling-policies"
 if [[ "$1" != "" ]]; then
-    cm=$(printf "$AWS application-autoscaling describe-scaling-policies  --service-namespace %s | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $1 $2)
+    cm=$(printf "$AWS application-autoscaling describe-scaling-policies  --service-namespace %s | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $1 $ss)
 fi
 
 count=1
@@ -65,7 +77,6 @@ for i in $(seq 0 $count); do
             tt1=$(echo "$t1" | cut -f1 -d'=' | tr -d ' ')
             tt2=$(echo "$t1" | cut -f2- -d'=')
 
-
             if [[ ${tt1} == "alarm_arns" ]]; then
                 # skip the block
                 tt2=$(echo $tt2 | tr -d '"')
@@ -76,12 +87,14 @@ for i in $(seq 0 $count); do
                 done
             fi
 
-
             if [[ ${tt1} == "id" ]]; then skip=1; fi
             if [[ ${tt1} == "create_date" ]]; then skip=1; fi
             if [[ ${tt1} == "arn" ]]; then skip=1; fi
             if [[ ${tt1} == "owner_id" ]]; then skip=1; fi
-           
+
+            if [[ ${tt1} == "resource_id" ]]; then
+                t1=$(printf "%s = service/${aws_ecs_cluster.%s.name}/${aws_ecs_service.%s.name}" $tt1 $t2 $t3)
+            fi
 
         fi
 

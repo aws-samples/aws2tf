@@ -5,7 +5,10 @@ pref="capacityProviders"
 idfilt="name"
 
 cm="$AWS ecs describe-capacity-providers"
-#if [[ "$1" != "" ]]; then
+if [[ "$1" == "" ]]; then
+    echo "Usage: $0 <cluster-name>"
+    exit
+fi
 #    cm=`printf "$AWS ecs describe-capacity-providers  | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $1`
 #fi
 
@@ -66,7 +69,9 @@ for i in `seq 0 $count`; do
             if [[ ${tt1} == "auto_scaling_group_arn " ]];then 
                 fixarn "$tt2"
             fi
-                            
+            if [[ ${tt1} == "cluster_name" ]];then
+                t1=$(printf "%s = aws_ecs_cluster.%s.name\n" $tt1 $1)
+            fi
         fi
 
         if [ "$skip" == "0" ]; then echo "$t1" >> $fn ;fi

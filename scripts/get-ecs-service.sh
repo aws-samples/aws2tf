@@ -177,10 +177,10 @@ for c in $(seq 0 0); do
 
             ## get any app autoscaling targets
             echo "get any app autoscaling targets for $cln $srv"
-            ../../scripts/get-app-autoscaling-target.sh "ecs" "service/$cln/$srv"
+            ../../scripts/get-app-autoscaling-target.sh "ecs" $cln $srv
 
             echo "get any app autoscaling policies for $cln $srv"
-            ../../scripts/get-app-autoscaling-policy.sh "ecs" "service/$cln/$srv"
+            ../../scripts/get-app-autoscaling-policy.sh "ecs" $cln $srv
 
             if [[ $srvn != "" ]];then
                 ../../scripts/get-sd-service.sh $srvn

@@ -8,14 +8,27 @@ if [[ "$1" == "" ]]; then
     exit
 fi
 
-if [[ "$2" == "" ]]; then
-    echo "must pass service id as first parameter"
+
+if [[ "$1" == "ecs" ]]; then
+    if [[ "$2" == "" ]]; then
+        echo "must pass cluster name as second parameter"
+        exit
+    fi
+    if [[ "$2" == "" ]]; then
+        echo "must pass ecs service name as second parameter"
+        exit
+    fi
+else
+    echo "must pass ecs as first parameter - only ecs supported for now"
     exit
 fi
 
+ss=printf("service/%s/%s", $1, $2)
+
+
 cm="$AWS application-autoscaling describe-scalable-targets"
 if [[ "$1" != "" ]]; then
-    cm=$(printf "$AWS application-autoscaling describe-scalable-targets  --service-namespace %s | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $1 $2)
+    cm=$(printf "$AWS application-autoscaling describe-scalable-targets  --service-namespace %s | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $1 $ss)
 fi
 
 count=1
@@ -72,6 +85,10 @@ for i in $(seq 0 $count); do
                 t1=$(printf "%s = format(\"%s:%s:%s\",data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tend)
                 # don't get target group - as ecs servioce creates this for us
                 #tgarn=$(echo $tt2)
+            fi
+
+            if [[ ${tt1} == "resource_id" ]]; then
+                t1=$(printf "%s = service/${aws_ecs_cluster.%s.name}/${aws_ecs_service.%s.name}" $tt1 $t2 $t3)
             fi
 
         fi

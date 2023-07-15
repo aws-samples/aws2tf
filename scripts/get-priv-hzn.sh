@@ -59,6 +59,7 @@ rm -f $fn
                     if [[ ${tt1} == "zone_id" ]];then skip=1;fi
                     if [[ ${tt1} == "requester_managed" ]];then skip=1;fi
                     if [[ ${tt1} == "revision" ]];then skip=1;fi
+                    if [[ ${tt1} == "primary_name_server" ]];then skip=1;fi
                     if [[ ${tt1} == "cidr_blocks" ]];then
                         echo "matched cidr"  
                         skip=1

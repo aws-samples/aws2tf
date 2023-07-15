@@ -1,24 +1,24 @@
 #!/bin/bash
+pref[0]="RouteTables"
+ttft="aws_route_table_association"
+
+cm="$AWS ec2 describe-route-tables"
+c=0
+
 if [ "$1" != "" ]; then
     if [[ "$1" == "rtb"* ]]; then
-        cmd[0]="$AWS ec2 describe-route-tables --filters \"Name=association.route-table-association-id,Values=$1\""
-    else
-        cmd[0]="$AWS ec2 describe-route-tables --filters \"Name=vpc-id,Values=$1\""
+        fn=$(printf "%s__%s.tf" $ttft $1)
+        if [ -f "$fn" ]; then exit; fi
+        cm="$AWS ec2 describe-route-tables --filters \"Name=association.route-table-association-id,Values=$1\""
+    elif [[ "$1" == "vpc-"* ]]; then
+        cm="$AWS ec2 describe-route-tables --filters \"Name=vpc-id,Values=$1\""
+    elif [[ "$1" == "subnet-"* ]]; then
+        cm="$AWS ec2 describe-route-tables --filters \"Name=association.subnet-id,Values=$1\""
     fi
-else
-    cmd[0]="$AWS ec2 describe-route-tables"
 fi
-c=0
-cm=${cmd[$c]}
-
-pref[0]="RouteTables"
-tft[0]="aws_route_table_association"
 
 for c in $(seq 0 0); do
 
-    cm=${cmd[$c]}
-    ttft=${tft[(${c})]}
-    #echo $cm
     awsout=$(eval $cm 2>/dev/null)
     if [ "$awsout" == "" ]; then
         echo "$cm : You don't have access for this resource"

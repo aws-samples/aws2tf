@@ -1,6 +1,11 @@
 #!/bin/bash
+pref[0]="NatGateways"
+ttft="aws_nat_gateway"
+
 if [ "$1" != "" ]; then
     if [[ "$1" == "nat-"* ]]; then
+        fn=$(printf "%s__%s.tf" $ttft $1)
+        if [ -f "$fn" ]; then exit; fi
         cmd[0]="$AWS ec2 describe-nat-gateways --filter \"Name=state,Values=available\" \"Name=nat-gateway-id,Values=$1\""
     else
         cmd[0]="$AWS ec2 describe-nat-gateways --filter \"Name=state,Values=available\" \"Name=vpc-id,Values=$1\""
@@ -11,14 +16,10 @@ fi
 c=0
 cm=${cmd[$c]}
 
-pref[0]="NatGateways"
-tft[0]="aws_nat_gateway"
-
 
 for c in `seq 0 0`; do
  
     cm=${cmd[$c]}
-	ttft=${tft[(${c})]}
 	#echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then

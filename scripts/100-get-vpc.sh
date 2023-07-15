@@ -1,9 +1,9 @@
 #!/bin/bash
 pref[0]="Vpcs"
-tft[0]="aws_vpc"
+ttft="aws_vpc"
 idfilt[0]="VpcId"
 c=0
-ttft=${tft[(${c})]}
+
 
 if [ "$1" != "" ]; then
     # fast exit path
@@ -19,7 +19,6 @@ ncpu=`expr $ncpu - 1`
 for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
-	ttft=${tft[(${c})]}
 	#echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then

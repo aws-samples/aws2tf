@@ -118,6 +118,9 @@ for c in `seq 0 0`; do
                 #echo "subnet vpc call with vpcid=$vpcid"
                 ../../scripts/100-get-vpc.sh $vpcid
             fi
+            # route tables
+            ../../scripts/140-get-route-table.sh $cname
+            ../../scripts/141-get-route-table-associations.sh $cname
 
 
             dfn=`printf "data/data_%s__%s.tf" $ttft $rname`

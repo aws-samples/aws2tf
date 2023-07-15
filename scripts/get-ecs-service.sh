@@ -2,7 +2,7 @@
 #mysub=$(echo $AWS2TF_ACCOUNT)
 #myreg=$(echo $AWS2TF_REGION)
 source ../../scripts/functions.sh
-echo "ecs service param = $1"
+#echo "ecs service param = $1"
 if [[ "$1" != "" ]]; then
     if [[ "$1" == *"/"* ]] || [[ "$1" == *":"* ]] ; then
         #echo "## process arn"
@@ -201,7 +201,7 @@ for c in $(seq 0 0); do
                 echo $nsid
                 # get zone id
                 hzid=$($AWS servicediscovery get-namespace --id $nsid | jq .Namespace.Properties.DnsProperties.HostedZoneId | tr -d '"')
-                ../../scripts/get-priv-hzn.sh $hzid
+                #../../scripts/get-priv-hzn.sh $hzid
             fi
 
             # get cluster if needed

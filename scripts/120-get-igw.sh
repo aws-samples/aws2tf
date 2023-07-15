@@ -1,6 +1,12 @@
 #!/bin/bash
+
+pref[0]="InternetGateways"
+ttft="aws_internet_gateway"
+
 if [ "$1" != "" ]; then
     if [[ "$1" == "igw-"* ]]; then
+        fn=$(printf "%s__%s.tf" $ttft $1)
+        if [ -f "$fn" ]; then exit; fi
         cmd[0]="$AWS ec2 describe-internet-gateways --filters \"Name=internet-gateway-id,Values=$1\""
     else
         cmd[0]="$AWS ec2 describe-internet-gateways --filters \"Name=attachment.vpc-id,Values=$1\""
@@ -13,14 +19,12 @@ cm=${cmd[$c]}
 
 #cmd[0]="$AWS ec2 describe-internet-gateways"
 
-pref[0]="InternetGateways"
-tft[0]="aws_internet_gateway"
+
 
 
 for c in `seq 0 0`; do
 
     cm=${cmd[$c]}
-	ttft=${tft[(${c})]}
 	#echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
@@ -37,7 +41,7 @@ for c in `seq 0 0`; do
             echo "$ttft $cname import"
             fn=`printf "%s__%s.tf" $ttft $rname`
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
-            printf "resource \"%s\" \"%s\" {}" $ttft $rname > $fn
+            printf "resource \"%s\" \"%s\" {}\n" $ttft $rname > $fn
             terraform import $ttft.$rname "$cname" | grep Importing
             terraform state show -no-color $ttft.$rname > t1.txt
             rm -f $fn

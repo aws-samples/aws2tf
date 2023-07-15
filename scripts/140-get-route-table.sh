@@ -8,7 +8,7 @@ if [ "$1" != "" ]; then
         fn=$(printf "%s__%s.tf" $ttft $1)
         if [ -f "$fn" ]; then exit; fi
         cmd[0]="$AWS ec2 describe-route-tables --filters \"Name=route-table-id,Values=$1\""
-    elif [[ "$1" == "rtb-"* ]]; then
+    elif [[ "$1" == "vpc-"* ]]; then
         cmd[0]="$AWS ec2 describe-route-tables --filters \"Name=vpc-id,Values=$1\""
     elif [[ "$1" == "subnet-"* ]]; then
         cmd[0]="$AWS ec2 describe-route-tables --filters \"Name=association.subnet-id,Values=$1\""
@@ -134,9 +134,9 @@ for c in $(seq 0 0); do
                         fi
                     fi
                     if [[ ${tt1} == "gateway_id" ]]; then
-                        tt2=$(echo $tt2 | tr -d '"')
-                        if [ "$tt2" != "" ]; then
-                            t1=$(printf "%s = aws_internet_gateway.%s.id" $tt1 $tt2)
+                        gwid=$(echo $tt2 | tr -d '"')
+                        if [ "$gwid" != "" ]; then
+                            t1=$(printf "%s = aws_internet_gateway.%s.id" $tt1 $gwid)
                         fi
                     fi
                     if [[ ${tt1} == "vpc_peering_connection_id" ]]; then
@@ -168,6 +168,10 @@ for c in $(seq 0 0); do
             fi
             if [[ "$ngid" != "" ]]; then
                 ../../scripts/130-get-natgw.sh $ngid
+            fi
+
+            if [[ "$gwid" != "" ]]; then
+                ../../scripts/120-get-igw.sh $gwid
             fi
         done
     fi

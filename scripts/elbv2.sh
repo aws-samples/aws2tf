@@ -103,15 +103,6 @@ for c in `seq 0 0`; do
                     fi
 
 
-                    if [[ ${tt1} == " subnet_mapping" ]];then
-                        # skip the block 
-                        tt2=`echo $tt2 | tr -d '"'` 
-                        skip=1
-                        while [ "$t1" != "}" ] && [ "$tt2" != "{}" ] ;do
-                            read line
-                            t1=`echo "$line"`
-                        done
-                    fi
 
 
 
@@ -125,6 +116,16 @@ for c in `seq 0 0`; do
                         t1=`echo $t1 | tr -d '"|,'`
                         t1=`printf "aws_subnet.%s.id," $t1`
                     fi
+                    if [[ ${t1} == *"subnet_mapping"* ]];then
+                        # skip the block 
+                        t1=`echo $t1 | tr -d '"'` 
+                        skip=1
+                        while [ "$t1" != "}" ] && [ "$t1" != "{}" ] ;do
+                            read line
+                            t1=`echo "$line"`
+                        done
+                    fi
+
 
                 fi
                 

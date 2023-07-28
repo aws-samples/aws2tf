@@ -16,10 +16,11 @@ def rc(cmd):
     if el!=0:
          errm=out.stderr.decode().rstrip()
          print(errm)
+         exit(1)
 
     # could be > /dev/null
     #if ol==0:
-    #    print("No return from command " + str(cmd) + " exit ...")
+    #    print("No return from command " + str(cmd))
     
     #print(out.stdout.decode().rstrip())
     return out
@@ -76,18 +77,18 @@ def is_pool_running(pool):
 
 
 def finish_state(statefile):
-   print("finishing state file")
+   #print("finishing state file")
    with open(statefile, 'r') as fp:
         for count, line in enumerate(fp):
             pass
-   print('Total Lines', count + 1)
+   #print('Total Lines', count + 1)
    if count <= 5 :
       print("empty state exiting")
       exit()
 
 
    el=count-2
-   print('toedit=' + str(el))
+   #print('toedit=' + str(el))
    fp.close()
 
    with open(statefile, 'r') as file:
@@ -102,15 +103,30 @@ def finish_state(statefile):
    data = json.load(f)
    f.close()
    
-   com="cd data && terraform refresh -no-color -lock=false"
+   #print("skipping refesh etc ...")
+
+   #return
+
+   com="terraform refresh -no-color -lock=false -state " + statefile
+   #print(com)
    rout=rc(com)
    #print(rout)
 
    for i in data['resources']:
-      #print(json.dumps(i, indent=4, default=str)) 
+
       ttft=i['type']
       rname=i['name']
-      com="terraform state show -no-color -state " + statefile + " " + ttft + "." + rname + " > data/" + ttft + "-" + rname + "-1.txt"
-      print(ttft + " " + rname)
+      com="terraform state show -no-color -state " + statefile + " " + ttft + "." + rname + " > " + ttft + "-" + rname + "-1.txt"
+      #print("show for " +ttft + " " + rname)
+#      print(com)
       rout=rc(com)
-      #print(rout) 
+#      print(rout)
+      # state move
+
+      com="terraform state mv -state " + statefile + " -state-out=terraform.tfstate -lock=true " + ttft + "." + rname + " " + ttft + "." + rname
+      #com="terraform state mv -state " + statefile + " -state-out=terraform.tfstate -lock=true " + ttft +  " " + ttft 
+
+      print("move for " +ttft + " " + rname)
+#      print(com)
+      rout=rc(com)
+#      print(rout) 

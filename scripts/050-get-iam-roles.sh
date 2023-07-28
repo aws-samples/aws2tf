@@ -5,7 +5,7 @@ source ../../scripts/functions.sh
 #mysub=$(echo $AWS2TF_ACCOUNT)
 #myreg=$(echo $AWS2TF_REGION)
 tft[0]="aws_iam_role"
-#echo "globe vars $myreg $mysub"
+
 if [[ "$1" != "" ]]; then
     if [[ ${1} == "arn:aws:iam"* ]]; then
         cmd[0]="$AWS iam list-roles | jq '.Roles[] | select(.Arn==\"${1}\")'"
@@ -148,7 +148,9 @@ for c in $(seq 0 0); do
                     fi
 
                     if [[ ${tt1} == "Resource" ]]; then
+                        tt2=$(echo $tt2 | tr -d '"')
                         if [[ "$tt2" != *"*"* ]]; then
+                            #echo "not star tt2 $tt2   $myreg $mysub"
                             if [[ "$tt2" == *"${mysub}:role/"* ]]; then
                                 if [[ "$tt2" != *"${mysub}:role/aws-service-role"* ]]; then
                                     rarn=$(echo $tt2 | tr -d '"')
@@ -163,8 +165,18 @@ for c in $(seq 0 0); do
                                 fi
                             elif [[ "$tt2" == "arn:aws:sns:${myreg}:${mysub}:"* ]]; then
                                 rsns=$(echo $tt2 | tr -d '"')
-                                mtopic=$(echo "$tt2" | cut -f2- -d'/' | tr -d '"')
-                                t1=$(printf "%s = aws_sns_topic.%s.arn" $tt1 $mtopic)
+                                # modified arn is used for sns topic terraform name account id is removed
+                                rrsns=${rsns//:/_} && rrsns=${rrsns//./_} && rrsns=${rrsns//\//_} && rrsns=${rrsns/${mysub}/}
+                                #mtopic=$(echo "$tt2" | rev | cut -f1 -d':' | rev)
+                                t1=$(printf "%s = aws_sns_topic.%s.arn" $tt1 $rrsns)
+                            elif [[ "$tt2" == "arn:aws:sqs:${myreg}:${mysub}:"* ]]; then
+                                rsqs=$(echo $tt2 | tr -d '"')
+                                qnam=$(echo "$tt2" | rev | cut -f1 -d':' | rev)
+                                # modified sqs url is use for sqs queue
+                                # aws_sqs_queue.https___sqs_us-east-1_amazonaws_com_817339700138_lf-automation
+                                qnam2=$(printf "https___sqs_%s_amazonaws_com_%s_%s" $myreg $mysub $qnam)
+                                echo "qnam=$qnam2"
+                                t1=$(printf "%s = aws_sqs_queue.%s.arn" $tt1 $qnam2)
                             elif [[ "$tt2" == *"arn:aws:kms:${myreg}:${mysub}:key/"* ]]; then
                                 kid=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')
                                 t1=$(printf "%s = aws_kms_key.k_%s.arn" $tt1 $kid)
@@ -189,12 +201,12 @@ for c in $(seq 0 0); do
                                 # arn catch all
 
                                 if [[ "$tt2" == *"arn:aws:"*":$myreg:$mysub:"* ]]; then
-                                    echo $t1
-                                    echo $tt2
-                                    tstart=$(echo $tt2 | cut -f1-3 -d ':')
+                                    echo "Arn Catch all $t1"
+                                    echo "ArnCatch all $tt2"
+                                    tstart=$(echo $tt2 | cut -f1-3 -d ':' | tr -d '"')
                                     treg=$(echo $tt2 | cut -f4 -d ':')
                                     tacc=$(echo $tt2 | cut -f5 -d ':')
-                                    tend=$(echo $tt2 | cut -f6- -d ':')
+                                    tend=$(echo $tt2 | cut -f6- -d ':' | tr -d '"')
                                     tsub="%s"
                                     if [[ "$mysub" == "$tacc" ]]; then
                                         t1=$(printf "%s = format(\"%s:%s:%s:%s\",data.aws_region.current.name,data.aws_caller_identity.current.account_id)" $tt1 $tstart $tsub $tsub $tend)
@@ -214,10 +226,10 @@ for c in $(seq 0 0); do
                             #echo $tstart
                             if [[ "$tstart" == "arn:aws:" ]]; then
                                 tt2=$(echo ${tt2%?}) # chop off the star
-                                tstart=$(echo $tt2 | cut -f1-3 -d ':')
+                                tstart=$(echo $tt2 | cut -f1-3 -d ':' | tr -d '"')
                                 treg=$(echo $tt2 | cut -f4 -d ':')
                                 tacc=$(echo $tt2 | cut -f5 -d ':')
-                                tend=$(echo $tt2 | cut -f6- -d ':')
+                                tend=$(echo $tt2 | cut -f6- -d ':' | tr -d '"')
                                 tsub="%s"
                                 if [[ "$treg" != "" ]] || [[ "$tacc" != "" ]]; then
                                     if [[ "$mysub" == "$tacc" ]]; then
@@ -280,7 +292,6 @@ END
 
             for rep in ${reps[@]}; do
                 rep=$(echo $rep | tr -d '"')
-                #echo "***** calling for $topic"
                 if [[ "$rep" != "" ]]; then
                     ../../scripts/get-ecr.sh $rep
                 fi

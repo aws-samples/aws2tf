@@ -76,6 +76,8 @@ if [ $count -gt 0 ]; then
 
 
                 AWS::Athena::NamedQuery) echo "../../scripts/get-athena-named-query.sh $pid"  >> commands.sh ;;
+                AWS::Athena::WorkGroup) echo "../../scripts/get-athena-workgroup.sh $pid"  >> commands.sh ;;
+
 
                 AWS::AutoScaling::AutoScalingGroup) echo "../../scripts/258-get-autoscaling-groups.sh $pid"  >> commands.sh ;;
                 AWS::AutoScaling::LaunchConfiguration) echo "../../scripts/get-launch-configuration.sh $pid"  >> commands.sh ;;
@@ -182,6 +184,9 @@ if [ $count -gt 0 ]; then
                 AWS::Lambda::LayerVersion)  echo "../../scripts/702-get-lambda-layers.sh $pid"  >> commands.sh ;;
                 AWS::Lambda::Permission) echo "echo '# $type $pid fetched as part of function..'" >> commands.sh ;; # fetched as part of function
                 AWS::Lambda::EventInvokeConfig) echo "echo '# $type $pid fetched as part of function..'" >> commands.sh ;; # fetched as part of function
+                AWS::Lambda::EventSourceMapping) echo "echo '# $type $pid fetched as part of function..'" >> commands.sh ;; # fetched as part of function
+
+
 
                 AWS::Logs::LogGroup)  echo "../../scripts/070-get-cw-log-grp.sh /$parn" >> commands.sh ;;
                 

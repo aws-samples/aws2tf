@@ -1,6 +1,4 @@
 #!/bin/bash
-#mysub=$(echo $AWS2TF_ACCOUNT)
-#myreg=$(echo $AWS2TF_REGION)
 source ../../scripts/functions.sh
 #echo "ecs service param = $1"
 if [[ "$1" != "" ]]; then

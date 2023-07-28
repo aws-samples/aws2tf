@@ -1,11 +1,13 @@
 #!/bin/bash
 mysub=$(echo $AWS2TF_ACCOUNT)
 myreg=$(echo $AWS2TF_REGION)
-if [ "$1" != "" ]; then
+echo $1
+if [[ "$1" != "" ]]; then
     if [[ "$1" == *"arn:"* ]]; then
         if [[ "$1" != *":aws:policy"* ]]; then
             cmd[0]="$AWS iam get-policy --policy-arn $1"
             pref[0]="Policy"
+            count=1
         else
             echo "skipping AWS managed policy $1"
             exit
@@ -18,24 +20,27 @@ else
     cmd[0]="$AWS iam list-policies --scope Local"
     pref[0]="Policies"
 fi
-
+echo "ready"
 tft[0]="aws_iam_policy"
 getp=0
 for c in $(seq 0 0); do
 
     cm=${cmd[$c]}
     ttft=${tft[(${c})]}
-    #echo $cm
+    echo $cm
     awsout=$(eval $cm 2>/dev/null)
     if [ "$awsout" == "" ]; then
         echo "$cm : You don't have access for this resource"
         exit
     fi
-    count=$(echo $awsout | jq ".${pref[(${c})]} | length")
+    if [[ "$1" == "" ]]; then
+        count=$(echo $awsout | jq ".${pref[(${c})]} | length")
+    fi
+    echo $count
     if [ "$count" -gt "0" ]; then
         count=$(expr $count - 1)
         for i in $(seq 0 $count); do
-            #echo $i
+            echo "i=$i"
             # is it AWS Managed ?
             awsm=""
 
@@ -49,17 +54,8 @@ for c in $(seq 0 0); do
 
             ocname=$(echo $cname)
             cname=$(echo $cname | rev | cut -f1 -d'/' | rev)
-
-            if [ "$1" != "" ]; then
-
-                getp=0
-                if [ $cname == $1 ]; then
-                    getp=1
-                fi
-            else
-                #echo "not set"
-                getp=1
-            fi
+            echo "__> $cname $pname"
+            getp=1
             if [ "$getp" == "1" ]; then
                 fn=$(printf "%s__p_%s.tf" $ttft $cname)
                 if [ -f "$fn" ]; then
@@ -105,6 +101,10 @@ for c in $(seq 0 0); do
                         if [[ $t1 == *"\${"* ]]; then
                             t1=${t1//$/&}
                         fi
+                        if [[ $t1 == *"\"\","* ]]; then
+                            echo "Found \"\", in policy"
+                            t1=${t1//\"\"/\"}
+                        fi
 
                     fi
 
@@ -134,7 +134,7 @@ for c in $(seq 0 0); do
                             fi
 
                         fi
-
+                        
                         echo "$t1" >>$fn
                     fi
 
@@ -144,4 +144,4 @@ for c in $(seq 0 0); do
     fi
 done
 
-rm -f t*.txt
+#rm -f t*.txt

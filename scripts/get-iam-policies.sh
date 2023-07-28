@@ -74,7 +74,7 @@ for c in $(seq 0 0); do
                 #echo "not set dollar 1"
                 #getp=0
             fi
-            echo $getp $1 $parn
+            #echo $getp $1 $parn
             if [ "$getp" == "1" ]; then
                 fn=$(printf "%s__p_%s.tf" $ttft $cname)
                 if [ -f "$fn" ]; then
@@ -142,6 +142,11 @@ for c in $(seq 0 0); do
                         if [[ "$t1" == *"\${aws:"* ]]; then
                             t1=${t1//$/&}
                         fi
+                        if [[ $t1 == *"\"\","* ]]; then
+                            echo "Found \"\", in get-iam-policies"
+                            t1=${t1//\"\"/\"}
+                        fi
+
 
                     fi
                     if [ "$skip" == "0" ]; then

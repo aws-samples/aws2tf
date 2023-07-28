@@ -63,8 +63,6 @@ for i in `seq 0 $count`; do
                              
                 fi
 
-
-
         fi
 
         if [ "$skip" == "0" ]; then echo "$t1" >> $fn ;fi

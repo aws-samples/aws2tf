@@ -1,6 +1,6 @@
 #!/bin/bash
-mysub=$(echo $AWS2TF_ACCOUNT)
-myreg=$(echo $AWS2TF_REGION)
+source ../../scripts/functions.sh
+
 if [ "$1" == "" ]; then echo "must specify bucket name" && exit; fi
 c=0
 tft[0]="aws_s3_bucket_policy"
@@ -73,10 +73,10 @@ while IFS= read t1; do
             fi
 
         fi
+    fixarn "$tt2"
+    fi
 
-    fi
-    if [ "$skip" == "0" ]; then
-        #echo $skip $t1
-        echo "$t1" >>$fn
-    fi
+  
+    if [ "$skip" == "0" ]; then wtf "$t1" "$fn"; fi
+
 done <"$file"

@@ -207,6 +207,11 @@ for c in $(seq 0 0); do
 
                     fi
 
+                    if [[ $t1 == *"\"\","* ]]; then
+                            echo "Found \"\", in role policy"
+                            t1=${t1//\"\"/\"}
+                    fi
+
                     echo "$t1" >>$fn
 
                 fi

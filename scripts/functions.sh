@@ -89,7 +89,7 @@ function fixarn {
                     fi
                 fi
             fi
-            if [[ $tt1 == *":"* ]]then
+            if [[ $tt1 == *":"* ]]; then
                 t1=$(printf "\"%s\" = %s" $tt1 $tt2)
             else
                 t1=$(printf "%s = %s" $tt1 $tt2)

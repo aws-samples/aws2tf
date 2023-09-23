@@ -75,6 +75,12 @@ for i in $(seq 0 $count); do
                 lcn=`echo $tt2 | tr -d '"'`
                 t1=`printf "%s = aws_launch_configuration.%s.id" $tt1 $lcn`
             fi
+            if [[ ${tt1} == "load_balancers" ]]; then
+                lbn=`echo $tt2 | tr -d '"'`
+                if [[ $lbn = "[]" ]]; then
+                    skip=1
+                fi       
+            fi
             if [[ ${tt1} == "name" ]]; then
                 tt2=`echo $tt2 | tr -d '"'`
                 if [[ $tt2 == "lt-"* ]];then

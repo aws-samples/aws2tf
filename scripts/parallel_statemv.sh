@@ -38,7 +38,7 @@ for st in $(ls pi2/$1_*.tfstate 2>/dev/null); do
     while [[ $stat -ne 0 ]]; do
         sl=`expr $sl + 1`
         #echo "$sl move $ttft $rname"
-        if [[ $sl -gt 3 ]];then
+        if [[ $sl -gt 4 ]];then
             echo "**> State move $ttft $rname failed"
             echo $comm
             break

@@ -87,6 +87,7 @@ for i in $(seq 0 $count); do
 
     done <"$file"
     if [[ $rarn != "" ]]; then
+        echo "--> importing role $rarn"
         ../../scripts/050-get-iam-roles.sh $rarn
     fi
     # dependancies here

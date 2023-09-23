@@ -89,7 +89,11 @@ function fixarn {
                     fi
                 fi
             fi
-            t1=$(printf "%s = %s" $tt1 $tt2)
+            if [[ $tt1 = *":"* ]]then
+                t1=$(printf "\"%s\" = %s" $tt1 $tt2)
+            else
+                t1=$(printf "%s = %s" $tt1 $tt2)
+            fi
         fi
 
     elif [[ "$tt2" == "$myreg" ]]; then

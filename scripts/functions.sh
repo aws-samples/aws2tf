@@ -97,15 +97,27 @@ function fixarn {
         fi
 
     elif [[ "$tt2" == "$myreg" ]]; then
-        t1=$(printf "%s = data.aws_region.current.name" $tt1)
+        if [[ $tt1 == *":"* ]]; then
+            t1=$(printf "\"%s\" = data.aws_region.current.name" $tt1)
+        else
+            t1=$(printf "%s = data.aws_region.current.name" $tt1)
+        fi
 
     elif [[ "$tt2" == "$mysub" ]]; then
-        t1=$(printf "%s = data.aws_caller_identity.current.account_id" $tt1)
+        if [[ $tt1 == *":"* ]]; then
+            t1=$(printf "\"%s\" = data.aws_caller_identity.current.account_id" $tt1)
+        else
+            t1=$(printf "%s = data.aws_caller_identity.current.account_id" $tt1)
+        fi
 
     elif [[ "$tt2" == "arn:aws:iam::${mysub}:root" ]]; then
         tsub="%s"
-        t1=$(printf "%s = format(\"arn:aws:iam::%s:root\",data.aws_caller_identity.current.account_id)" $tt1 $tsub)
+        if [[ $tt1 == *":"* ]]; then
+            t1=$(printf "\"%s\" = format(\"arn:aws:iam::%s:root\",data.aws_caller_identity.current.account_id)" $tt1 $tsub)
+        else
+            t1=$(printf "%s = format(\"arn:aws:iam::%s:root\",data.aws_caller_identity.current.account_id)" $tt1 $tsub)
 
+        fi
     fi
 
 }

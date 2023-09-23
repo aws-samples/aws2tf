@@ -1,16 +1,12 @@
 #!/bin/bash
-ttft="aws_vpclattice_target_group"
+ttft="aws_vpclattice_target_group_attachment"
 pref="items"
 idfilt="id"
+ncpu=2
 
-cm="$AWS vpc-lattice list-target-groups"
 if [[ "$1" != "" ]]; then
     if [[ "$1" == "tg-"* ]]; then
-        # fast out
-        fn=$(printf "%s__%s.tf" $ttft $1)
-        if [ -f "$fn" ]; then echo "$fn exists already skipping" && exit;fi
-
-        cm=$(printf "$AWS vpc-lattice list-target-groups | jq '.${pref}[] | select(.${idfilt}==\"%s\")' | jq ." $1)
+        cm=$(printf "$AWS vpc-lattice list-targets  --target-group-identifier %s | jq ." $1)
     fi
 else
     echo "must pass target identifier tg-* as a parameter"
@@ -27,27 +23,48 @@ if [[ "$1" == "" ]]; then count=$(echo $awsout | jq ".${pref} | length"); fi
 if [ "$count" -eq "0" ]; then echo "No resources found exiting .." && exit; fi
 count=$(expr $count - 1)
 for i in $(seq 0 $count); do
-    #echo $i
+    echo "i=$i"
 
-    if [[ "$1" != "" ]]; then
-        cname=$(echo $awsout | jq -r ".${idfilt}")
-    else
-        cname=$(echo $awsout | jq -r ".${pref}[(${i})].${idfilt}")
-    fi
 
+    cname=$(echo $awsout | jq -r ".${pref}[(${i})].${idfilt}")
     rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
     echo "$ttft ${cname}"
 
     fn=$(printf "%s__%s.tf" $ttft $rname)
     if [ -f "$fn" ]; then echo "$fn exists already skipping" && continue; fi
 
-    printf "resource \"%s\" \"%s\" {}" $ttft $rname >$fn
-    terraform import $ttft.${rname} "${cname}" | grep Importing
-    terraform state show -no-color $ttft.${rname} >t1.txt
+    echo "--> Calling parallel import3 sub $ttft $1"
+    . ../../scripts/parallel_import3.sh $ttft $1
+    jc=$(jobs -r | wc -l | tr -d ' ')
+    while [ $jc -gt $ncpu ]; do
+        echo "Throttling - $jc Terraform imports in progress"
+        sleep 10
+        jc=$(jobs -r | wc -l | tr -d ' ')
+    done
+
+    jc=$(jobs -r | wc -l | tr -d ' ')
+    echo "Waiting for $jc Terraform imports"
+    wait
+    echo "Finished importing"
+done
+
+for i in $(seq 0 $count); do
+
+
+    cname=$(echo $awsout | jq -r ".${pref}[(${i})].${idfilt}")
+    rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
+
+    echo "$ttft ${cname}"
+
+    echo "$ttft $cname tf files"
+    fn=$(printf "%s__%s.tf" $ttft $rname)
+    if [ -f "$fn" ]; then echo "$fn exists already skipping" && continue; fi
+
+    file=$(printf "%s-%s-1.txt" $ttft $rname)
+    if [ ! -f "$file" ]; then echo "$file does not exist" && continue; fi
 
     rm -f $fn
 
-    file="t1.txt"
     islambda=0
     echo $aws2tfmess >$fn
     while IFS= read t1; do
@@ -71,57 +88,16 @@ for i in $(seq 0 $count); do
                 fi
             fi
 
-            #if [[ ${tt1} == "protocol_version" ]]; then
-            #    pv=$(echo $tt2 | tr -d '"')
-            #    echo ">> $pv"
-            #    if [[ "$pv" == "HTTP1" ]];then
-            #        echo ">> skipping $pv"
-            #        skip=1;
-            #    fi
-            #fi
-
-            if [[ ${tt1} == "type" ]]; then
-                ty=$(echo $tt2 | tr -d '"')
-                if [[ $ty == *"LAMBDA"* ]]; then
-                    islambda=1
-                fi
-            fi
-
-            if [[ ${tt1} == "vpc_identifier" ]]; then
-                vpcid=$(echo $tt2 | tr -d '"')
-                t1=$(printf "%s = aws_vpc.%s.id" $tt1 $vpcid)
-            fi
-
             if [[ ${tt1} == "target_group_identifier" ]]; then
                 tgi=$(echo $tt2 | tr -d '"')
                 t1=$(printf "$tt1 = aws_vpclattice_target_group.%s.id" $tgi)
             fi
-
-        else
-            if [[ ${islambda} == "1" ]]; then
-                if [[ ${t1} == *"config {"* ]]; then
-                    # skip the block
-                    echo "skip block"
-                    skip=1
-                    while [ "$t1" != "}" ]; do
-                        read line
-                        t1=$(echo "$line")
-                    done
-                fi
-            fi
-
         fi
 
         if [ "$skip" == "0" ]; then echo "$t1" >>$fn; fi
 
     done <"$file"
     # dependancies here
-    # get listener rules
-    if [[ $vpcid != "" ]]; then
-        ../../scripts/100-get-vpc.sh $vpcid
-    fi
-    # get target group attachments - can't be imported
-    #../../scripts/get-vpclattice-target-group-attachments.sh $1
 
 done
 

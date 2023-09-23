@@ -75,6 +75,12 @@ for i in $(seq 0 $count); do
                 lcn=`echo $tt2 | tr -d '"'`
                 t1=`printf "%s = aws_launch_configuration.%s.id" $tt1 $lcn`
             fi
+            if [[ ${tt1} == "name" ]]; then
+                tt2=`echo $tt2 | tr -d '"'`
+                if [[ $tt2 == "lt-"* ]];then
+                    t1=`printf "%s = aws_launch_tmplate.%s.name" $tt1 $tt2`
+                fi
+            fi
 
             if [[ ${tt1} == "vpc_zone_identifier" ]];then
                 if [[ ${az} == "1" ]];then

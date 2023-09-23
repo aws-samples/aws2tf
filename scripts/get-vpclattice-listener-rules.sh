@@ -85,6 +85,16 @@ for i in $(seq 0 $count); do
                 done
             fi
 
+            if [[ ${tt1} == "target_group_identifier" ]]; then
+                tgi=$(echo $tt2 | tr -d '"')
+                t1=$(printf "$tt1 = aws_vpclattice_target_group.%s.id" $tgi)
+            fi
+
+            if [[ ${tt1} == "listener_identifier" ]]; then
+                li=$(echo $tt2 | tr -d '"')
+                t1=$(printf "$tt1 = aws_vpclattice_listener.%s__%s.listener_id" $1 $li)
+            fi
+
             if [[ ${tt1} == "service_identifier" ]]; then
                 si=$(echo $tt2 | tr -d '"')
                 t1=$(printf "$tt1 = aws_vpclattice_service.%s.id" $si)
@@ -100,6 +110,9 @@ for i in $(seq 0 $count); do
         if [ "$skip" == "0" ]; then echo "$t1" >>$fn; fi
 
     done <"$file"
+    if [[ $tgi != "" ]]; then
+        ../../scripts/get-vpclattice-target-group.sh $tgi
+    fi
     # dependancies here
     # get listener rules
 done

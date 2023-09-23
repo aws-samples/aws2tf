@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 import boto3
 import json
-import aws2tf
+import common
 
 
 def s3_state(sf,ttft,bucket_name):
    rname="b_"+bucket_name
-   aws2tf.res_head(sf,ttft,rname)
+   common.res_head(sf,ttft,rname)
    sf.write('            "bucket": "' + bucket_name +'",\n')
    sf.write('            "id": "' + bucket_name +'"\n')
-   aws2tf.res_tail(sf)
+   common.res_tail(sf)
 
 def get_s3(sf,f,s3_fields,type,bucket_name):
    try:

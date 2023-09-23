@@ -75,6 +75,7 @@ for i in $(seq 0 $count); do
     ../../scripts/get-vpclattice-auth-policy.sh $cname
     ../../scripts/get-vpclattice-resource-policy.sh $rarn
     ../../scripts/get-vpclattice-listeners.sh $cname
+    #../../scripts/get-vpclattice-access-log-subscription.sh $cname
    
 done
 

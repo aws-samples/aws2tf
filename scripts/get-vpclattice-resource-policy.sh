@@ -1,14 +1,14 @@
 #!/bin/bash
 ttft="aws_vpclattice_resource_policy"
 pref="items"
-idfilt="policy"
+idfilt="id"
 
 if [[ "$1" != "" ]]; then
     if [[ "$1" == "s"* ]]; then
-        cm=$(printf "$AWS vpc-lattice get-resource-policy  --resource-identifier $1")
+        cm=$(printf "$AWS vpc-lattice get-auth-policy  --resource-identifier $1")
     fi
 else
-    echo "must pass identifier svc-* or sn-* as a parameter"
+    echo "must pass service identifier svc-* or sn-* as a parameter"
     exit
 fi
 
@@ -48,9 +48,14 @@ for i in $(seq 0 $count); do
             if [[ ${tt1} == "id" ]]; then skip=1; fi
             if [[ ${tt1} == "create_date" ]]; then skip=1; fi
             if [[ ${tt1} == "arn" ]]; then skip=1; fi
-  
+            if [[ ${tt1} == "owner_id" ]]; then skip=1; fi
+            if [[ ${tt1} == "status" ]]; then skip=1; fi
+            if [[ ${tt1} == "listener_id" ]]; then skip=1; fi
+            if [[ ${tt1} == "created_at" ]]; then skip=1; fi
+            if [[ ${tt1} == "last_updated_at" ]]; then skip=1; fi
 
-            if [[ ${tt1} == "resource_arn" ]]; then
+
+            if [[ ${tt1} == "resource_identifier" ]]; then
                 ri=$(echo $tt2 | tr -d '"')
                 if [[ "$ri" == "svc-"* ]];then
                     t1=$(printf "$tt1 = aws_vpclattice_service.%s.arn" $ri)

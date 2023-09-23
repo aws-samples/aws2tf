@@ -69,9 +69,7 @@ if [[ $? -ne 0 ]]; then
         fi
     fi
 
-    comm=$(printf "nice -n %s terraform refresh -no-color -state %s &> imp1-%s-%s.log" $sl $st $ttft $rname)
-    comm2=$(printf "nice -n %s terraform refresh -no-color -state %s > imp2-%s-%s.log" $sl $st $ttft $rname)
-    #echo $comm
+
 
     tsf=$(printf "%s__%s.json" $ttft $rname)
 
@@ -88,7 +86,22 @@ if [[ $? -ne 0 ]]; then
     printf "       {\n" >>$tsf
     printf "         \"attributes\": {\n" >>$tsf
 
-    if [[ $ttft == "aws_iam_user_policy_attachment" ]]; then
+    if [[ $ttft == "aws_vpclattice_target_group_attachment" ]]; then
+        tid=$(aws vpc-lattice list-targets --target-group-identifier tg-0c6f94c4ae7a3b620 --query 'items[0].id' --output text)
+        pt=$(aws vpc-lattice list-targets --target-group-identifier tg-0c6f94c4ae7a3b620 --query 'items[].port' --output text)
+        if [[ $pt == "" ]]; then pt=0; fi
+
+        #printf "         \"target\": [\n" >>$tsf
+        #printf "           {\n" >>$tsf
+        #printf "             \"id\": \"%s\",\n" $tid >>$tsf
+        #printf "             \"port\": %s\n" $pt >>$tsf
+        #printf "           }\n" >>$tsf
+        #printf "         ],\n" >>$tsf
+        printf "         \"target_group_identifier\": \"%s\",\n" $cname >>$tsf
+        printf "         \"id\": \"%s/%s/%s\"\n" $cname $tid $pt >>$tsf
+
+
+    elif [[ $ttft == "aws_iam_user_policy_attachment" ]]; then
         printf "         \"%s\": \"%s\",\n" $lhs $rhs >>$tsf
         printf "         \"policy_arn\": \"%s\",\n" $cname >>$tsf
         printf "         \"id\": \"%s\"\n" ${rhs}-${cname} >>$tsf
@@ -133,9 +146,13 @@ if [[ $? -ne 0 ]]; then
 
     cat $tsf | jq . >$st
 
-#cat $st
+    echo $tsf
+    echo $st
 
-    #echo $comm
+    comm=$(printf "nice -n %s terraform refresh -no-color -state %s &> imp1-%s-%s.log" $sl $st $ttft $rname)
+    comm2=$(printf "nice -n %s terraform refresh -no-color -state %s > imp2-%s-%s.log" $sl $st $ttft $rname)
+    
+    echo $comm
     eval $comm
     if [ $? -ne 0 ]; then
         echo "--> 2nd Refesh backoff & retry for $rname"
@@ -157,5 +174,4 @@ fi
 
 rm -f terr*.backup
 
-
-#echo "exit parallel2 import $rname"
+echo "exit parallel3 import $rname"

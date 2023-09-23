@@ -66,10 +66,10 @@ for i in $(seq 0 $count); do
     ../../scripts/get-vpclattice-resource-policy.sh $rarn
     ../../scripts/get-vpclattice-service-network-service-associations.sh $cname
     ../../scripts/get-vpclattice-service-network-vpc-association.sh $cname
+    #../../scripts/get-vpclattice-access-log-subscription.sh $cname
+    ../../scripts/get-vpclattice-services.sh $cname
 
     # resource policy
-
-    # access log subscriptions
 
 
 done

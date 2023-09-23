@@ -1,7 +1,7 @@
 #!/bin/bash
 ttft="aws_vpclattice_auth_policy"
 pref="items"
-idfilt="policy"
+idfilt="id"
 
 if [[ "$1" != "" ]]; then
     if [[ "$1" == "s"* ]]; then

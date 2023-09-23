@@ -64,7 +64,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "private_dns" ]];then skip=1;fi
                     if [[ ${tt1} == "public_ip" ]];then skip=1;fi
                     if [[ ${tt1} == "private_ip" ]];then skip=1;fi
-                    if [[ ${tt1} == "domain" ]];then skip=1;fi
+                    if [[ ${tt1} == "vpc" ]];then skip=1;fi
                     #if [[ ${tt1} == "default_network_acl_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "ipv6_association_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "ipv6_cidr_block" ]];then skip=1;fi

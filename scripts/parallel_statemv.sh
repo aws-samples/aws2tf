@@ -50,8 +50,8 @@ for st in $(ls pi2/$1_*.tfstate 2>/dev/null); do
             break 
         fi
         sleep $sl
+        echo "retrying state move - $sl"
         eval $comm >/dev/null
-        
         stat=$(echo $?)
         #echo "-4-> $stat"
     done

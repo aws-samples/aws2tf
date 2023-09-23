@@ -146,13 +146,13 @@ if [[ $? -ne 0 ]]; then
 
     cat $tsf | jq . >$st
 
-    echo $tsf
-    echo $st
+    #echo $tsf
+    #echo $st
 
     comm=$(printf "nice -n %s terraform refresh -no-color -state %s &> imp1-%s-%s.log" $sl $st $ttft $rname)
     comm2=$(printf "nice -n %s terraform refresh -no-color -state %s > imp2-%s-%s.log" $sl $st $ttft $rname)
     
-    echo $comm
+    #echo $comm
     eval $comm
     if [ $? -ne 0 ]; then
         echo "--> 2nd Refesh backoff & retry for $rname"

@@ -14,7 +14,8 @@ def ec2_resources(type,id):   # state file, aws_vpc , vpc-xxxxxxxxx called from 
    # call with statefile, ec2client fn, type,
    ec2fn = getattr(ec2client, clfn)
 ## overrides here - eg use vpcid to filter subnets - rather than default subnet-id
-   if type in "aws_subnet" and id in "vpc-":
+  
+   if type in "aws_subnet" and id is not None and id in "vpc-":
       print(type+' '+id)
       get_resource(type,id,botokey,ec2fn,jsonid,"vpc-id")
    else: 
@@ -66,10 +67,11 @@ def get_resource(type,id,botokey,ec2fn,jsonid,filterid):
 
    #gr=getfn(type)
    print("calling fixtf "+ type)
-   getfn = getattr(fixtf, type)
-   gr=getfn()
-   #
-   # Save output
+   fixtf.fixtf(type)
+
+   # dependancy logic here:
+
+
 
 
 def resource_data(type,ec2client):
@@ -80,17 +82,18 @@ def resource_data(type,ec2client):
    #if type == "aws_dhcp_options": return 'DhcpOptions', ec2client.describe_dhcp_options, "DhcpOptionsId"
    #if type == "aws_elastic_load_balancer": return 'ElasticLoadBalancers', ec2client.describe_load_balancers, "LoadBalancerName"
 
-   #if type == "aws_internet_gateway": return 'InternetGateways', ec2client.describe_internet_gateways, "InternetGatewayId"
+   if type == "aws_internet_gateway": return 'InternetGateways', "describe_internet_gateways", "InternetGatewayId","internet-gateway-id"
    #if type == "aws_instance": return 'Reservations', ec2client.describe_instances, "InstanceId"
    #if type == "aws_image": return 'Images', ec2client.describe_images, "ImageId"
 
    #if type == "aws_key_pair": return 'KeyPairs', ec2client.describe_key_pairs, "KeyName"
 
    #if type == "aws_load_balancer": return 'LoadBalancers', ec2client.describe_load_balancers, "LoadBalancerName"
+   if type == "aws_nat_gateway": return 'NatGateways', "describe_nat_gateways", "NatGatewayId","nat-gateway-id"
    #if type == "aws_network_acl": return 'NetworkAcls', ec2client.describe_network_acls, "NetworkAclId"
    #if type == "aws_network_interface": return 'NetworkInterfaces', ec2client.describe_network_interfaces, "NetworkInterfaceId"
 
-   #if type == "aws_route_table": return 'RouteTables', ec2client.describe_route_tables, "RouteTableId"
+   if type == "aws_route_table": return 'RouteTables', "describe_route_tables", "RouteTableId","route-table-id"
    #if type == "aws_route": return 'Routes', ec2client.describe_route_tables, "RouteTableId"
 
    if type == "aws_security_group": return 'SecurityGroups', "describe_security_groups", "GroupId","group-id"

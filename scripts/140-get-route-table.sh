@@ -14,7 +14,7 @@ if [ "$1" != "" ]; then
         cmd[0]="$AWS ec2 describe-route-tables --filters \"Name=association.subnet-id,Values=$1\""
     fi
 else
-    cmd[0]="$AWS ec2 describe-route-tables"
+    cmd[0]="$AWS ec2 describe-route-tables" 
 fi
 c=0
 cm=${cmd[$c]}

@@ -17,6 +17,7 @@ if __name__ == '__main__':
     argParser.add_argument("-t", "--type", help="resource type aws_s3, ec2 aws_vpc etc")
     argParser.add_argument("-r", "--region", help="region")
     argParser.add_argument("-i", "--id", help="resource id")
+    argParser.add_argument("-m", "--merge", help="merge [False]|True")
     args = argParser.parse_args()
     #print("args=%s" % args)
 
@@ -28,19 +29,29 @@ if __name__ == '__main__':
         exit()
 
     if args.region is None:
-        print("region is required eg:  -r eu-west-1")
-        exit()
+        print("region is required eg:  -r eu-west-1  [using eu-west-1 as default]")
+        region="eu-west-1"
+    else:
+        region=args.region   
 
     com="rm -f data/*.txt data/*.json"
     rout=common.rc(com)
 
+    mg=False
+    if args.merge is not None:
+        mg=args.merge
+
+    if mg is False:
+        print("removing terraform.tfstate*")
+        com="rm -f terraform.tfstate* aws_*.tf"
+        rout=common.rc(com)
 
     fb=args.bucket  
     id=args.id
     #print("id="+str(id))
 
     type=args.type
-    region=args.region
+    
 
 
     signal.signal(signal.SIGINT, common.ctrl_c_handler)
@@ -64,10 +75,6 @@ if __name__ == '__main__':
     else:
         print("calling ec2.ec2_resources with type="+type+" id="+str(id))
         ec2.ec2_resources(type,id)
-
-
-
-
 
     
     common.wrapup()

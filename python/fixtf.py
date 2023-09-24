@@ -2,38 +2,37 @@
 import json
 import argparse
 import common
+import fixtf2
 
-def  aws_vpc():
-    ttft="aws_vpc"
-  ## VPC specific 
+
+def fixtf(ttft):
+
+    print(ttft+" fixtf")  
     rf=ttft+"_resources.out"
     tf2=ttft+".tf"
-    skipipv6=False
     print("rw tf")
     f1 = open(rf, 'r')
     Lines = f1.readlines()
     with open(tf2, "w") as f2:
+        skip=0
+        flag1=False
+        flag2=False
         for t1 in Lines:
             tt1=t1.split("=")[0].strip()
             try:
                 tt2=t1.split("=")[1].strip()
             except:
                 tt2=""
-            if tt1 in "assign_generated_ipv6_cidr_block":
-                if tt2 in "true": skipipv6=True
-            if tt1 in "ipv6_cidr_block":
-                if skipipv6: continue
-            if tt1 in "ipv6_ipam_pool_id":
-                if skipipv6: continue
-            if tt1 in "ipv6_netmask_length":
-                if skipipv6: continue
-            f2.write(t1)
+            getfn = getattr(fixtf2, ttft)
+            
+            skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
+            if skip == 0:
+                f2.write(t1)
     f1.close()
     f2.close()
-    
-def aws_subnet():
-    ttft="aws_aubnet"
-    print(ttft+" fixtf")  
+
+
+
 
 
 

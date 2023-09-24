@@ -10,15 +10,24 @@ import subprocess
 
 def wrapup():
    print("wrap up")
-
+   print("format")
+   com="terraform fmt -no-color"
+   rout=rc(com) 
+   print("validate")
    com="terraform validate -no-color"
    rout=rc(com)
+   el=len(rout.stderr.decode().rstrip())
+   if el!=0:
+      errm=rout.stderr.decode().rstrip()
+      print(errm)
+   
+
    print(str(rout.stdout.decode().rstrip()))
    # do the import via apply
    print("terraform import via apply....")
    com="terraform apply -no-color -auto-approve"
    rout=rc(com)
-   #print(str(rout.stdout.decode().rstrip()))
+   print(str(rout.stdout.decode().rstrip()))
 
 
 def rc(cmd):
@@ -27,7 +36,7 @@ def rc(cmd):
     el=len(out.stderr.decode().rstrip())
     if el!=0:
          errm=out.stderr.decode().rstrip()
-         print(errm)
+         #print(errm)
          #exit(1)
 
     # could be > /dev/null

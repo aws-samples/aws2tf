@@ -82,11 +82,8 @@ for i in `seq 0 $count`; do
             fi
             if [[ ${tt1} == "validation_method" ]];then 
                 tt2=`echo $tt2 | tr -d '"'` 
-                if [ $tt2 == "NONE" ] ;then skip=1  fi
+                if [[ $tt2 == "NONE" ]] ;then skip=1  ;fi
             fi
-
-
-
 
         fi
 

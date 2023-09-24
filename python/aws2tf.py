@@ -58,6 +58,7 @@ if __name__ == '__main__':
         net_types=resources.resource_types()
         for i in net_types:
             print("calling "+i)
+            ec2.ec2_resources(i,None)
 
 
     else:

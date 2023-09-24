@@ -1,0 +1,888 @@
+# __generated__ by Terraform
+# Please review these resources and move them into your main configuration files.
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0f76b08afab213fa1" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1a"
+  availability_zone_id                           = "euw1-az3"
+  cidr_block                                     = "10.0.0.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                  = "LatticeWorkshop Public Subnet Client"
+    "platform:visibility" = "public"
+  }
+  tags_all = {
+    Name                  = "LatticeWorkshop Public Subnet Client"
+    "platform:visibility" = "public"
+  }
+  vpc_id = "vpc-0fcd130e46ccecf4c"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-03342b7ddd476a14e" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1b"
+  availability_zone_id                           = "euw1-az1"
+  cidr_block                                     = "10.0.4.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                  = "LatticeWorkshop Private Subnet"
+    "platform:visibility" = "private"
+  }
+  tags_all = {
+    Name                  = "LatticeWorkshop Private Subnet"
+    "platform:visibility" = "private"
+  }
+  vpc_id = "vpc-05e85738351f4b792"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0aa062c5e2aced2e2" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1b"
+  availability_zone_id                           = "euw1-az1"
+  cidr_block                                     = "10.0.1.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "LatticeWorkshop Public Subnet2 Payments"
+  }
+  tags_all = {
+    Name = "LatticeWorkshop Public Subnet2 Payments"
+  }
+  vpc_id = "vpc-0c3e932ea11ae7449"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-03115823fcae3f209" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1c"
+  availability_zone_id                           = "euw1-az2"
+  cidr_block                                     = "100.64.2.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name        = "sub-p3"
+    subnet-type = "private"
+  }
+  tags_all = {
+    Name        = "sub-p3"
+    subnet-type = "private"
+  }
+  vpc_id = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0a6ef2808431c9da6" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1a"
+  availability_zone_id                           = "euw1-az3"
+  cidr_block                                     = "10.0.0.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "LatticeWorkshop Public Subnet1 Payments"
+  }
+  tags_all = {
+    Name = "LatticeWorkshop Public Subnet1 Payments"
+  }
+  vpc_id = "vpc-0c3e932ea11ae7449"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-052a7fbce504754be" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1a"
+  availability_zone_id                           = "euw1-az3"
+  cidr_block                                     = "10.0.3.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                  = "LatticeWorkshop Private Subnet Client"
+    "platform:visibility" = "private"
+  }
+  tags_all = {
+    Name                  = "LatticeWorkshop Private Subnet Client"
+    "platform:visibility" = "private"
+  }
+  vpc_id = "vpc-0fcd130e46ccecf4c"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-06a0ac40d625e7c32" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1b"
+  availability_zone_id                           = "euw1-az1"
+  cidr_block                                     = "10.1.0.32/27"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                  = "ecsworkshop-base/BaseVPC/PublicSubnet2"
+    "aws-cdk:subnet-name" = "Public"
+    "aws-cdk:subnet-type" = "Public"
+  }
+  tags_all = {
+    Name                  = "ecsworkshop-base/BaseVPC/PublicSubnet2"
+    "aws-cdk:subnet-name" = "Public"
+    "aws-cdk:subnet-type" = "Public"
+  }
+  vpc_id = "vpc-0fe42a48edcb93a28"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-097d87726c39478c0" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1a"
+  availability_zone_id                           = "euw1-az3"
+  cidr_block                                     = "10.0.3.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                  = "LatticeWorkshop Private Subnet"
+    "platform:visibility" = "private"
+  }
+  tags_all = {
+    Name                  = "LatticeWorkshop Private Subnet"
+    "platform:visibility" = "private"
+  }
+  vpc_id = "vpc-05e85738351f4b792"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-7faf2225" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1a"
+  availability_zone_id                           = "euw1-az3"
+  cidr_block                                     = "172.31.32.0/20"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "pub-default2"
+  }
+  tags_all = {
+    Name = "pub-default2"
+  }
+  vpc_id = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-10dd9d76" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1b"
+  availability_zone_id                           = "euw1-az1"
+  cidr_block                                     = "172.31.0.0/20"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "pub-default1"
+  }
+  tags_all = {
+    Name = "pub-default1"
+  }
+  vpc_id = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0385f19700049e07f" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1b"
+  availability_zone_id                           = "euw1-az1"
+  cidr_block                                     = "10.0.4.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                  = "LatticeWorkshop Private Subnet Client"
+    "platform:visibility" = "private"
+  }
+  tags_all = {
+    Name                  = "LatticeWorkshop Private Subnet Client"
+    "platform:visibility" = "private"
+  }
+  vpc_id = "vpc-0fcd130e46ccecf4c"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0bc8d6de2053daf70" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1a"
+  availability_zone_id                           = "euw1-az3"
+  cidr_block                                     = "10.1.0.0/27"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                  = "ecsworkshop-base/BaseVPC/PublicSubnet1"
+    "aws-cdk:subnet-name" = "Public"
+    "aws-cdk:subnet-type" = "Public"
+  }
+  tags_all = {
+    Name                  = "ecsworkshop-base/BaseVPC/PublicSubnet1"
+    "aws-cdk:subnet-name" = "Public"
+    "aws-cdk:subnet-type" = "Public"
+  }
+  vpc_id = "vpc-0fe42a48edcb93a28"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0c0444bc7c9afabc2" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1b"
+  availability_zone_id                           = "euw1-az1"
+  cidr_block                                     = "100.64.1.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name        = "sub-p2"
+    subnet-type = "private"
+  }
+  tags_all = {
+    Name        = "sub-p2"
+    subnet-type = "private"
+  }
+  vpc_id = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-03a1b2f4850bba231" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1c"
+  availability_zone_id                           = "euw1-az2"
+  cidr_block                                     = "10.0.5.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                  = "LatticeWorkshop Private Subnet"
+    "platform:visibility" = "private"
+  }
+  tags_all = {
+    Name                  = "LatticeWorkshop Private Subnet"
+    "platform:visibility" = "private"
+  }
+  vpc_id = "vpc-05e85738351f4b792"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-8c6e3dc4" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1c"
+  availability_zone_id                           = "euw1-az2"
+  cidr_block                                     = "172.31.16.0/20"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "pub-default3"
+  }
+  tags_all = {
+    Name = "pub-default3"
+  }
+  vpc_id = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-011f61047764d1a5a" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1c"
+  availability_zone_id                           = "euw1-az2"
+  cidr_block                                     = "10.0.2.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                  = "LatticeWorkshop Public Subnet3 Rates"
+    "platform:visibility" = "public"
+  }
+  tags_all = {
+    Name                  = "LatticeWorkshop Public Subnet3 Rates"
+    "platform:visibility" = "public"
+  }
+  vpc_id = "vpc-05e85738351f4b792"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0a82df395af4f5181" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1c"
+  availability_zone_id                           = "euw1-az2"
+  cidr_block                                     = "10.0.5.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                  = "LatticeWorkshop Private Subnet Client"
+    "platform:visibility" = "private"
+  }
+  tags_all = {
+    Name                  = "LatticeWorkshop Private Subnet Client"
+    "platform:visibility" = "private"
+  }
+  vpc_id = "vpc-0fcd130e46ccecf4c"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0df410c038106cda9" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1c"
+  availability_zone_id                           = "euw1-az2"
+  cidr_block                                     = "10.2.3.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "ds-subnet-c-DSSharedServices"
+  }
+  tags_all = {
+    Name = "ds-subnet-c-DSSharedServices"
+  }
+  vpc_id = "vpc-02dd2936ab232ef7e"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0828c1d4c4a82e60f" {
+  assign_ipv6_address_on_creation                = true
+  availability_zone                              = "eu-west-1a"
+  availability_zone_id                           = "euw1-az3"
+  cidr_block                                     = null
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = true
+  ipv6_cidr_block                                = "2a05:d018:12fa:4b00::/64"
+  ipv6_native                                    = true
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "resource-name"
+  tags = {
+    Name = "mysubipv6-1"
+  }
+  tags_all = {
+    Name = "mysubipv6-1"
+  }
+  vpc_id = "vpc-0cd3d5fd5e121e4a0"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0f552346313e6306f" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1b"
+  availability_zone_id                           = "euw1-az1"
+  cidr_block                                     = "10.0.1.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                  = "LatticeWorkshop Public Subnet2 Rates"
+    "platform:visibility" = "public"
+  }
+  tags_all = {
+    Name                  = "LatticeWorkshop Public Subnet2 Rates"
+    "platform:visibility" = "public"
+  }
+  vpc_id = "vpc-05e85738351f4b792"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-06ee014cd590e62c4" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1a"
+  availability_zone_id                           = "euw1-az3"
+  cidr_block                                     = "10.1.0.96/27"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                  = "ecsworkshop-base/BaseVPC/PrivateSubnet1"
+    "aws-cdk:subnet-name" = "Private"
+    "aws-cdk:subnet-type" = "Private"
+  }
+  tags_all = {
+    Name                  = "ecsworkshop-base/BaseVPC/PrivateSubnet1"
+    "aws-cdk:subnet-name" = "Private"
+    "aws-cdk:subnet-type" = "Private"
+  }
+  vpc_id = "vpc-0fe42a48edcb93a28"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-07245bd98645a7770" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1c"
+  availability_zone_id                           = "euw1-az2"
+  cidr_block                                     = "10.1.0.160/27"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                  = "ecsworkshop-base/BaseVPC/PrivateSubnet3"
+    "aws-cdk:subnet-name" = "Private"
+    "aws-cdk:subnet-type" = "Private"
+  }
+  tags_all = {
+    Name                  = "ecsworkshop-base/BaseVPC/PrivateSubnet3"
+    "aws-cdk:subnet-name" = "Private"
+    "aws-cdk:subnet-type" = "Private"
+  }
+  vpc_id = "vpc-0fe42a48edcb93a28"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-07206213109d0518b" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1c"
+  availability_zone_id                           = "euw1-az2"
+  cidr_block                                     = "10.0.2.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                  = "LatticeWorkshop Public Subnet Client"
+    "platform:visibility" = "public"
+  }
+  tags_all = {
+    Name                  = "LatticeWorkshop Public Subnet Client"
+    "platform:visibility" = "public"
+  }
+  vpc_id = "vpc-0fcd130e46ccecf4c"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0cf4c6f7fdfa888ad" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1b"
+  availability_zone_id                           = "euw1-az1"
+  cidr_block                                     = "10.1.0.128/27"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                  = "ecsworkshop-base/BaseVPC/PrivateSubnet2"
+    "aws-cdk:subnet-name" = "Private"
+    "aws-cdk:subnet-type" = "Private"
+  }
+  tags_all = {
+    Name                  = "ecsworkshop-base/BaseVPC/PrivateSubnet2"
+    "aws-cdk:subnet-name" = "Private"
+    "aws-cdk:subnet-type" = "Private"
+  }
+  vpc_id = "vpc-0fe42a48edcb93a28"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-05a180294ca109595" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1b"
+  availability_zone_id                           = "euw1-az1"
+  cidr_block                                     = "10.2.2.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "ds-subnet-b-DSSharedServices"
+  }
+  tags_all = {
+    Name = "ds-subnet-b-DSSharedServices"
+  }
+  vpc_id = "vpc-02dd2936ab232ef7e"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-029d60fa79cdb1380" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1b"
+  availability_zone_id                           = "euw1-az1"
+  cidr_block                                     = "10.0.1.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                  = "LatticeWorkshop Public Subnet Client"
+    "platform:visibility" = "public"
+  }
+  tags_all = {
+    Name                  = "LatticeWorkshop Public Subnet Client"
+    "platform:visibility" = "public"
+  }
+  vpc_id = "vpc-0fcd130e46ccecf4c"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-025daba223195049c" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1a"
+  availability_zone_id                           = "euw1-az3"
+  cidr_block                                     = "10.2.1.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "ds-subnet-a-DSSharedServices"
+  }
+  tags_all = {
+    Name = "ds-subnet-a-DSSharedServices"
+  }
+  vpc_id = "vpc-02dd2936ab232ef7e"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-09c34702be259d430" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1a"
+  availability_zone_id                           = "euw1-az3"
+  cidr_block                                     = "100.64.0.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name        = "sub-p1"
+    subnet-type = "private"
+  }
+  tags_all = {
+    Name        = "sub-p1"
+    subnet-type = "private"
+  }
+  vpc_id = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-053c639be701e3309" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1a"
+  availability_zone_id                           = "euw1-az3"
+  cidr_block                                     = "10.0.0.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                  = "LatticeWorkshop Public Subnet1 Rates"
+    "platform:visibility" = "public"
+  }
+  tags_all = {
+    Name                  = "LatticeWorkshop Public Subnet1 Rates"
+    "platform:visibility" = "public"
+  }
+  vpc_id = "vpc-05e85738351f4b792"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0f95fc86cfedcc308" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1c"
+  availability_zone_id                           = "euw1-az2"
+  cidr_block                                     = "10.1.0.64/27"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                  = "ecsworkshop-base/BaseVPC/PublicSubnet3"
+    "aws-cdk:subnet-name" = "Public"
+    "aws-cdk:subnet-type" = "Public"
+  }
+  tags_all = {
+    Name                  = "ecsworkshop-base/BaseVPC/PublicSubnet3"
+    "aws-cdk:subnet-name" = "Public"
+    "aws-cdk:subnet-type" = "Public"
+  }
+  vpc_id = "vpc-0fe42a48edcb93a28"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-00ce7efb88d0372fe" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1a"
+  availability_zone_id                           = "euw1-az3"
+  cidr_block                                     = "10.0.0.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "LatticeWorkshop Public Subnet1 Reservation"
+  }
+  tags_all = {
+    Name = "LatticeWorkshop Public Subnet1 Reservation"
+  }
+  vpc_id = "vpc-06e9c4980d3f59ba4"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-025969a8f66109bc5" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1b"
+  availability_zone_id                           = "euw1-az1"
+  cidr_block                                     = "10.0.1.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "LatticeWorkshop Public Subnet2 REservation"
+  }
+  tags_all = {
+    Name = "LatticeWorkshop Public Subnet2 REservation"
+  }
+  vpc_id = "vpc-06e9c4980d3f59ba4"
+}

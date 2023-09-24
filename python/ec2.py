@@ -53,6 +53,10 @@ def get_resource(type,id,botokey,ec2fn,jsonid,filterid):
    rf=type+"_resources.out"
    com="terraform plan -generate-config-out="+rf
    rout=common.rc(com)
+   el=len(rout.stderr.decode().rstrip())
+   if el!=0: print(rout.stderr.decode().rstrip())
+
+
 
    
   
@@ -90,7 +94,7 @@ def resource_data(type,ec2client):
 
    #if type == "aws_load_balancer": return 'LoadBalancers', ec2client.describe_load_balancers, "LoadBalancerName"
    if type == "aws_nat_gateway": return 'NatGateways', "describe_nat_gateways", "NatGatewayId","nat-gateway-id"
-   #if type == "aws_network_acl": return 'NetworkAcls', ec2client.describe_network_acls, "NetworkAclId"
+   if type == "aws_network_acl": return 'NetworkAcls', "describe_network_acls", "NetworkAclId","network-acl-id"
    #if type == "aws_network_interface": return 'NetworkInterfaces', ec2client.describe_network_interfaces, "NetworkInterfaceId"
 
    if type == "aws_route_table": return 'RouteTables', "describe_route_tables", "RouteTableId","route-table-id"
@@ -120,7 +124,6 @@ def resource_data(type,ec2client):
    #if type == "aws_transit_gateway_route_table": return 'TransitGatewayRouteTables', ec2client.describe_transit_gateway_route_tables, "TransitGatewayRouteTableId"
       
    #if type == "aws_volume": return 'VolumeAttachments', ec2client.describe_volumes, "VolumeId"
-   #if type == "aws_vpc": return 'Vpcs', ec2client.describe_vpcs, "VpcId", "vpc-id", aws_vpc.get_vpc
    if type == "aws_vpc": return 'Vpcs', "describe_vpcs", "VpcId", "vpc-id"
    #if type == "aws_vpn_gateway": return 'VpnGateways', ec2client.describe_vpn_gateways, "VpnGatewayId"
    #if type == "aws_vpn_connection": return 'VpnConnections', ec2client.describe_vpn_connections, "VpnConnectionId", "vpc-id"

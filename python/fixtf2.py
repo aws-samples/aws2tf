@@ -72,7 +72,7 @@ def  aws_security_group(t1,tt1,tt2,flag1,flag2):
 
 def  aws_route_table(t1,tt1,tt2,flag1,flag2):
     skip=0
-    print(tt1 + " " + tt2)
+    #print(tt1 + " " + tt2)
     if tt1 == "vpc_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
@@ -84,15 +84,28 @@ def  aws_route_table(t1,tt1,tt2,flag1,flag2):
 
 def  aws_internet_gateway(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "vpc_id":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
 
     return skip,t1,flag1,flag2
 
 def  aws_nat_gateway(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if "secondary_private_ip_address_count" in tt1:
+        tt2=tt2.strip('\"')
+        if tt2 == "0": skip=1
+    if tt1 == "subnet_id":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
 
     return skip,t1,flag1,flag2 
 
 
+def  network_acl(t1,tt1,tt2,flag1,flag2):
+    skip=0
+
+    return skip,t1,flag1,flag2
 
 def  aws_resource(t1,tt1,tt2,flag1,flag2):
     skip=0

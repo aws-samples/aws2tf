@@ -15,6 +15,7 @@ def wrapup():
    rout=rc(com)
    print(str(rout.stdout.decode().rstrip()))
    # do the import via apply
+   printf("terraform import via apply....")
    com="terraform apply -no-color -auto-approve"
    rout=rc(com)
    #print(str(rout.stdout.decode().rstrip()))

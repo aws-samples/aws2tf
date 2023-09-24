@@ -7,6 +7,7 @@ import s3
 import ec2
 import os
 import common
+import resources
 
 if __name__ == '__main__':
     common.check_python_version()
@@ -52,9 +53,21 @@ if __name__ == '__main__':
     #cpus=multiprocessing.cpu_count()
     #print("cpus="+str(cpus))
 
+    if type=="net":
+        print("loop_net")
+        net_types=resources.resource_types()
+        for i in net_types:
+            print("calling "+i)
 
-    print("calling ec2.ec2_resources ...")
-    ec2.ec2_resources(type,id)
+
+    else:
+        print("calling ec2.ec2_resources with type="+type+" id="+str(id))
+        ec2.ec2_resources(type,id)
+
+
+
+
+
     
     common.wrapup()
     print("Python done - exiting")

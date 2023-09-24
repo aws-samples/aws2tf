@@ -81,6 +81,17 @@ for i in $(seq 0 $count); do
                     skip=1
                 fi       
             fi
+# assuming traffic_source instaad
+            if [[ ${tt1} == "target_group_arns" ]]; then
+                        # skip the block 
+                        tt2=`echo $tt2 | tr -d '"'` 
+                        skip=1
+                        while [ "$t1" != "]" ] && [ "$tt2" != "[]" ] ;do
+                            read line
+                            t1=`echo "$line"`
+                        done    
+            fi
+
             if [[ ${tt1} == "name" ]]; then
                 tt2=`echo $tt2 | tr -d '"'`
                 if [[ $tt2 == "lt-"* ]];then

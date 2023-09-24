@@ -6,6 +6,7 @@ import os
 import common
 import fixtf
 
+# called by aws2tf.py
 def ec2_resources(type,id):   # state file, aws_vpc , vpc-xxxxxxxxx called from main.py
    ec2client = boto3.client('ec2')   
    botokey,clfn,jsonid,filterid=resource_data(type,ec2client)
@@ -17,6 +18,7 @@ def ec2_resources(type,id):   # state file, aws_vpc , vpc-xxxxxxxxx called from 
       print(type+' '+id)
       get_resource(type,id,botokey,ec2fn,jsonid,"vpc-id")
    else: 
+      # generic call
       get_resource(type,id,botokey,ec2fn,jsonid,filterid)
    #print("Done ec2_resources")
 

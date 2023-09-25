@@ -315,7 +315,11 @@ if [ "$t" == "eks" ]; then
     fi
 fi
 
-exclude="iam"
+if [ "$t" != "iam" ]; then
+    exclude="iam"
+else
+    exclude="zzzzzz"
+fi
 
 if [ "$t" == "acm" ]; then pre="28*"; fi
 if [ "$t" == "appmesh" ]; then pre="360*"; fi
@@ -338,6 +342,7 @@ if [ "$t" == "ec2" ]; then pre="25*"; fi
 if [ "$t" == "efs" ]; then pre="27*"; fi
 if [ "$t" == "emr" ]; then pre="37*"; fi
 if [ "$t" == "glue" ]; then pre="65*"; fi
+if [ "$t" == "iam" ]; then pre="05*"; fi
 if [ "$t" == "kinesis" ]; then pre="74*"; fi
 if [ "$t" == "kms" ]; then pre="08*"; fi
 if [ "$t" == "lambda" ]; then pre="700*"; fi

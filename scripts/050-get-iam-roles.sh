@@ -214,12 +214,15 @@ for c in $(seq 0 0); do
                                 else
                                     tt2=${tt2//$/&}
                                     tt1=$(echo $tt1 | tr -d '"')
-                                    t1=$(printf "\"%s\"=%s" $tt1 "$tt2")
+                                    if [[ "$tt2" != *":"* ]]; then
+                                        t1=$(printf "\"%s\"=%s" $tt1 "$tt2")
+                                    else
+                                        t1=$(printf "\"%s\"=\"%s\"" $tt1 "$tt2")
+                                    fi
                                 fi
                             fi
                         else
-                            #echo "--> $tt2"
-
+                
                             tt2=$(echo $tt2 | tr -d '"')
 
                             tstart=$(echo ${tt2:0:8})

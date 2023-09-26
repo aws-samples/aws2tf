@@ -78,6 +78,9 @@ if __name__ == '__main__':
         rout=common.rc(com)
         s3.get_all_s3_buckets(fb,region)
 
+    elif:
+        cwlogs(type,id,"logGroups","logGroupName","logGroupNamePrefix"):
+
     else:
         print("calling ec2.ec2_resources with type="+type+" id="+str(id))
         ec2.ec2_resources(type,id)

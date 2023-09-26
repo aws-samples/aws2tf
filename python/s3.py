@@ -2,38 +2,13 @@
 import boto3
 import json
 import common
+import os
 
-
-def s3_state(sf,ttft,bucket_name):
-   rname="b_"+bucket_name
-   common.res_head(sf,ttft,rname)
-   sf.write('            "bucket": "' + bucket_name +'",\n')
-   sf.write('            "id": "' + bucket_name +'"\n')
-   common.res_tail(sf)
-
-def get_s3(sf,f,s3_fields,type,bucket_name):
-   try:
-      #print("in get_s3 type=" + type)
-      response=s3_fields[type](Bucket=bucket_name)
-      rl=len(response)
-      if rl > 1 :
-         #print("resp done " + type + " rl=" + str(rl))
-         s3_state(sf,type,bucket_name)
-         #print("state done " + type)
-         f.write('"' + type + '": ' + json.dumps(response, indent=4, default=str) + "\n")
-         #if 'logging' in type:
-         #   print(json.dumps(response, indent=4, default=str))
-         
-
-   except:
-      #print("No " + type + " config for bucket " + bucket_name)
-      pass
-
-
-def get_all_s3_buckets(sf,fb):
+def get_all_s3_buckets(fb,my_region):
   """Gets all the AWS S3 buckets and saves them to a file."""
-  s3a = boto3.resource("s3")
-  s3 = boto3.client("s3")
+  boto3.setup_default_session(region_name=my_region)
+  s3a = boto3.resource("s3",region_name=my_region) 
+  s3 = boto3.client("s3",region_name=my_region)
   s3_fields = {
       'aws_s3_bucket_accelerate_configuration': s3.get_bucket_accelerate_configuration,
       'aws_s3_bucket_acl': s3.get_bucket_acl,
@@ -69,51 +44,94 @@ def get_all_s3_buckets(sf,fb):
   for buck in buckets: 
    
      bucket_name=buck.name
+     # jump if bucket name does not match
      if fb is not None:
          if fb not in bucket_name:
             continue
 
-     fn="data/s3-"+str(bucket_name)+".json"
-     with open(fn, "w") as f:
-   
-      print("Bucket: "+bucket_name + '  ----------------------------------------------------------------')
+     fn="s3-"+str(bucket_name)+"_import.tf"
 
-      try:
+   
+     #print("Bucket: "+bucket_name + '  ------------------------------')
+
+     try:
          #print('location')
          location = s3.get_bucket_location(Bucket=bucket_name)
          
          bl=location['LocationConstraint']
+         #print ("bucket: " +  bucket_name + "location="+bl)
          if bl != my_region:
-            print('continuing on non default location '+ bl)
+            #print('continuing on non default location '+ bl)
             continue
          if bl is None:  
-               print('continuing on None location .......')
+               #print('continuing on None location .......')
                continue
          elif bl == 'null':  
-               print('continuing on null location .......')
+               #print('continuing on null location .......')
                continue
          else:
             pass
             #print(bl)
             
-      except:
+     except:
          print('continuing on exception to location .......')
          continue
+     
 
-      f.write("{\n")
-      f.write('"name": "' + bucket_name + '",\n')
+     #try:
+     #    mp="s3://"+buck.name+"/"
+     #    objects = list(buck.objects.all(mp))
+     #except:
+     #    print("failed to access bucket " +bucket_name + " " + bl +" skipping ..")
+     #    continue
+     print("Bucket: "+bucket_name)
+     with open(fn, "w") as f:
+         tb="to = aws_s3_bucket.b-" + bucket_name + "\n"
+         #print(tb)
+         f.write('import {\n')
+         f.write(tb)
+         f.write('id = "' + bucket_name + '"\n')
+         f.write("}\n")
 
-
-      s3_state(sf,"aws_s3_bucket",bucket_name)
-
-
-      for key in s3_fields:
-         #print("outside get_s3 type=" + key)
-         get_s3(sf,f,s3_fields,key,bucket_name)
+         for key in s3_fields:
+            #print("outside get_s3 type=" + key)
+            get_s3(f,s3_fields,key,bucket_name)
       
-      f.write("}\n")
-      f.close()
+     f.close()
+
+# terraform plan
+  common.tfplan("aws_s3_bucket")
+     
+  rf="aws_s3_bucket_resources.out"
+
+  if os.path.isfile("tfplan"):
+         com="cp " + rf + " aws_s3.tf"
+         rout=common.rc(com)
+
+  else:
+         print("could not find expected tfplan file - exiting")
+         exit()
+         
+
+
+
+
 
 ####################################################
 
+def get_s3(f,s3_fields,type,bucket_name):
+   try:
+      #print("in get_s3 type=" + type)
+      response=s3_fields[type](Bucket=bucket_name)
+      rl=len(response)
+      if rl > 1 :
+         #print("resp done " + type + " rl=" + str(rl))
 
+         f.write('import {\n')
+         f.write("to = " + type + ".b-" + bucket_name + "\n")
+         f.write('id = "' + bucket_name + '"\n')
+         f.write("}\n")
+  
+   except:
+      #print("No " + type + " config for bucket " + bucket_name)
+      pass

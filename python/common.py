@@ -7,27 +7,57 @@ import sys
 import subprocess
 #import aws2tf
 
+def tfplan(type):
+   print("tf plan")
+   rf=str(type) + "_resources.out"
+   com="terraform plan -generate-config-out="+ rf + " -out tfplan"
+   print("comm = "+ com)
+   rout=rc(com)
+   el=len(rout.stderr.decode().rstrip())
+   if el!=0: print(rout.stderr.decode().rstrip())
+   
+   if "0 to destroy" not in str(rout.stdout.decode().rstrip()):
+      print("--> plan warning destroy - existing state ?")
+      print(str(rout.stdout.decode().rstrip()))
+      print("--> plan warning destroy - existing state ?")
+
+      #exit()
+   print("gen complete")
+
+
 
 def wrapup():
-   print("wrap up")
-   print("format")
+   #print("wrap up")
+   print("Format")
    com="terraform fmt -no-color"
    rout=rc(com) 
-   print("validate")
+   print("Validate")
    com="terraform validate -no-color"
    rout=rc(com)
    el=len(rout.stderr.decode().rstrip())
    if el!=0:
       errm=rout.stderr.decode().rstrip()
       print(errm)
+   if "Success! The configuration is valid" not in str(rout.stdout.decode().rstrip()):
+      print(str(rout.stdout.decode().rstrip()))
+   else: 
+      print("Valid Configuration.")
    
 
-   print(str(rout.stdout.decode().rstrip()))
+   #print(str(rout.stdout.decode().rstrip()))
    # do the import via apply
-   print("terraform import via apply....")
-   com="terraform apply -no-color -auto-approve"
+   print("terraform import via apply of tfplan....")
+   com="terraform apply -no-color tfplan"
    rout=rc(com)
    print(str(rout.stdout.decode().rstrip()))
+   print("Final Plan check .....")
+   com="terraform plan -no-color"
+   rout=rc(com)
+   if "No changes. Your infrastructure matches the configuration" not in str(rout.stdout.decode().rstrip()):
+      print(str(rout.stdout.decode().rstrip()))
+   else: 
+      print("No changes in plan")
+
 
 
 def rc(cmd):
@@ -151,3 +181,24 @@ def finish_state(statefile):
 #      print(com)
       rout=rc(com)
 #      print(rout) 
+
+
+def aws_tf(region):
+   
+   with open("aws.tf", 'w') as f3: 
+      f3.write('terraform {\n')
+      f3.write('  required_version = "> 1.5.6"\n')
+      f3.write('  required_providers {\n')
+      f3.write('    aws = {\n')
+      f3.write('      source  = "hashicorp/aws"\n')
+      f3.write('      version = "> 5.16"\n')
+      f3.write('    }\n')
+      f3.write('  }\n')
+      f3.write('}\n')
+      f3.write('provider "aws" {\n')
+      f3.write('  region                   = "' + region +'"\n')
+      f3.write('  shared_credentials_files = ["~/.aws/credentials"]\n')
+      #f3.write('  profile                  = var.profile\n')
+      f3.write('}\n')
+
+   f3.close()

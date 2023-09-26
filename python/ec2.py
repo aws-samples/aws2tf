@@ -48,27 +48,8 @@ def get_resource(type,id,botokey,ec2fn,jsonid,filterid):
                f.write('}\n')
    f.close()
 
-   print("tf plan")
-   
-   rf=type+"_resources.out"
-   com="terraform plan -generate-config-out="+rf
-   rout=common.rc(com)
-   el=len(rout.stderr.decode().rstrip())
-   if el!=0: print(rout.stderr.decode().rstrip())
-
-
-
-   
-  
-   if "0 to destroy" not in str(rout.stdout.decode().rstrip()):
-      print("--> plan warning destroy - existing state ?")
-      print(str(rout.stdout.decode().rstrip()))
-      print("--> plan warning destroy - existing state ?")
-
-      #exit()
-   print("gen complete")
-
-
+   common.tfplan(type)
+ 
    #gr=getfn(type)
    print("calling fixtf "+ type)
    fixtf.fixtf(type)

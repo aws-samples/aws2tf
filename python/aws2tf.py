@@ -12,6 +12,7 @@ import resources
 if __name__ == '__main__':
     common.check_python_version()
     #print("cwd=%s" % os.getcwd())
+    signal.signal(signal.SIGINT, common.ctrl_c_handler)
     argParser = argparse.ArgumentParser()
     argParser.add_argument("-b", "--bucket", help="bucket name or matching sting")
     argParser.add_argument("-t", "--type", help="resource type aws_s3, ec2 aws_vpc etc")
@@ -26,7 +27,10 @@ if __name__ == '__main__':
     #print("args.id=%s" % args.id)
     if args.type is None:
         print("type is required eg:  -t aws_vpc")
-        exit()
+        print("setting to all")
+        args.type="all"
+    else:
+        type=args.type
 
     if args.region is None:
         print("region is required eg:  -r eu-west-1  [using eu-west-1 as default]")
@@ -46,31 +50,33 @@ if __name__ == '__main__':
         com="rm -f terraform.tfstate* aws_*.tf"
         rout=common.rc(com)
 
-    fb=args.bucket  
     id=args.id
-    #print("id="+str(id))
+    if args.bucket is None:
+        fb=id
+    else:
+        fb=args.bucket  
 
-    type=args.type
-    
-
-
-    signal.signal(signal.SIGINT, common.ctrl_c_handler)
+    common.aws_tf(region)
 
 # get the current
     my_session = boto3.setup_default_session(region_name=region) 
  
-    #print('Boto Region = '+ my_region + " region passed ="+region)
+    print('region passed ='+region)
    
     #cpus=multiprocessing.cpu_count()
     #print("cpus="+str(cpus))
 
     if type=="net":
-        print("loop_net")
-        net_types=resources.resource_types()
+        net_types=resources.resource_types(type)
         for i in net_types:
-            print("calling "+i)
+            #print("calling "+i)
             ec2.ec2_resources(i,None)
 
+
+    elif type=="s3":
+        com="rm -f s3-*.tf s3.tf tfplan *.out"
+        rout=common.rc(com)
+        s3.get_all_s3_buckets(fb,region)
 
     else:
         print("calling ec2.ec2_resources with type="+type+" id="+str(id))
@@ -78,6 +84,6 @@ if __name__ == '__main__':
 
     
     common.wrapup()
-    print("Python done - exiting")
+    print("Done - exiting")
     exit(0)
 

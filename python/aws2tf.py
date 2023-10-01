@@ -8,8 +8,10 @@ import ec2
 import os
 import common
 import resources
+import cw
 
 if __name__ == '__main__':
+    global processed
     common.check_python_version()
     #print("cwd=%s" % os.getcwd())
     signal.signal(signal.SIGINT, common.ctrl_c_handler)
@@ -21,7 +23,9 @@ if __name__ == '__main__':
     argParser.add_argument("-m", "--merge", help="merge [False]|True")
     args = argParser.parse_args()
     #print("args=%s" % args)
-
+    processed = []
+    dependancies = []
+    
     #print("args.bucket=%s" % args.bucket)
     #print("args.type=%s" % args.type)
     #print("args.id=%s" % args.id)
@@ -38,7 +42,7 @@ if __name__ == '__main__':
     else:
         region=args.region   
 
-    com="rm -f data/*.txt data/*.json"
+    com="rm -f *.txt *.json"
     rout=common.rc(com)
 
     mg=False
@@ -74,12 +78,12 @@ if __name__ == '__main__':
 
 
     elif type=="s3":
-        com="rm -f s3-*.tf s3.tf tfplan *.out"
+        com="rm -f s3-*.tf s3.tf tfplan *s3*.out"
         rout=common.rc(com)
         s3.get_all_s3_buckets(fb,region)
 
-    elif:
-        cwlogs(type,id,"logGroups","logGroupName","logGroupNamePrefix"):
+    elif type=="cw":
+        cw.cwlogs(type,id,"logGroups","logGroupName","logGroupNamePrefix")
 
     else:
         print("calling ec2.ec2_resources with type="+type+" id="+str(id))
@@ -87,6 +91,7 @@ if __name__ == '__main__':
 
     
     common.wrapup()
+    print(processed)
     print("Done - exiting")
     exit(0)
 

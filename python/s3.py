@@ -3,13 +3,18 @@ import boto3
 import json
 import common
 import os
+import fixtf
 
 def get_all_s3_buckets(fb,my_region):
-  """Gets all the AWS S3 buckets and saves them to a file."""
-  boto3.setup_default_session(region_name=my_region)
-  s3a = boto3.resource("s3",region_name=my_region) 
-  s3 = boto3.client("s3",region_name=my_region)
-  s3_fields = {
+   processed=[]
+   #global processed
+   type="aws_s3_bucket"
+   print("processed=" + str(processed))
+   """Gets all the AWS S3 buckets and saves them to a file."""
+   boto3.setup_default_session(region_name=my_region)
+   s3a = boto3.resource("s3",region_name=my_region) 
+   s3 = boto3.client("s3",region_name=my_region)
+   s3_fields = {
       'aws_s3_bucket_accelerate_configuration': s3.get_bucket_accelerate_configuration,
       'aws_s3_bucket_acl': s3.get_bucket_acl,
       'aws_s3_bucket_analytics': s3.get_bucket_analytics_configuration,
@@ -33,15 +38,15 @@ def get_all_s3_buckets(fb,my_region):
       'aws_s3_bucket_website_configuration': s3.get_bucket_website
    }
   
-  s3_fields2 = {
+   s3_fields2 = {
       'aws_s3_bucket_acl': s3.get_bucket_acl
    }
   
 
 
-  buckets = s3a.buckets.all()
+   buckets = s3a.buckets.all()
 
-  for buck in buckets: 
+   for buck in buckets: 
    
      bucket_name=buck.name
      # jump if bucket name does not match
@@ -93,33 +98,30 @@ def get_all_s3_buckets(fb,my_region):
          f.write('id = "' + bucket_name + '"\n')
          f.write("}\n")
 
+
          for key in s3_fields:
             #print("outside get_s3 type=" + key)
             get_s3(f,s3_fields,key,bucket_name)
       
-     f.close()
+     processed=processed+[type+","+bucket_name]
+   print("processed=" + str(processed))
+   
 
 # terraform plan
-  common.tfplan("aws_s3_bucket")
-     
-  rf="aws_s3_bucket_resources.out"
-
-  if os.path.isfile("tfplan"):
-         com="cp " + rf + " aws_s3.tf"
-         rout=common.rc(com)
-
-  else:
+   type="aws_s3_bucket"
+   common.tfplan(type)
+   # and fix it
+   if os.path.isfile("tfplan"):
+      print("calling fixtf "+ type)
+      fixtf.fixtf(type)
+   else:
          print("could not find expected tfplan file - exiting")
          exit()
          
-
-
-
-
-
 ####################################################
 
 def get_s3(f,s3_fields,type,bucket_name):
+   global processed
    try:
       #print("in get_s3 type=" + type)
       response=s3_fields[type](Bucket=bucket_name)
@@ -131,7 +133,8 @@ def get_s3(f,s3_fields,type,bucket_name):
          f.write("to = " + type + ".b-" + bucket_name + "\n")
          f.write('id = "' + bucket_name + '"\n')
          f.write("}\n")
-  
+
+      #print("processed=" + str(processed))
    except:
       #print("No " + type + " config for bucket " + bucket_name)
       pass

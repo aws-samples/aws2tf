@@ -36,7 +36,7 @@ def cwlogs(type,id,botokey,jsonid,filterid):
     rf=type+"_resources.out"
 
     if os.path.isfile("tfplan"):
-         com="cp " + rf + " aws_s3.tf"
+         com="cp " + rf + " aws_logs.tf"
          rout=common.rc(com)
 
     else:

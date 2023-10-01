@@ -11,12 +11,17 @@ def fixtf(ttft):
     rf=ttft+"_resources.out"
     tf2=ttft+".tf"
     print("rw tf")
-    f1 = open(rf, 'r')
+    try:
+        f1 = open(rf, 'r')
+    except:
+        print("no "+rf)
+        return
     Lines = f1.readlines()
     with open(tf2, "w") as f2:
         skip=0
         flag1=False
         flag2=False
+        f2.write("##START,"+ttft+"\n")
         for t1 in Lines:
             tt1=t1.split("=")[0].strip()
             try:
@@ -28,8 +33,9 @@ def fixtf(ttft):
             skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
             if skip == 0:
                 f2.write(t1)
-    f1.close()
-    f2.close()
+                
+    with open(tf2, "a") as f2:
+        f2.write("##END,"+ttft+"\n")
 
 
 

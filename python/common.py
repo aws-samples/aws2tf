@@ -1,20 +1,18 @@
-
 import json
-#import multiprocessing
 import sys
-#import signal
-#import os
 import subprocess
 #import aws2tf
 
 def tfplan(type):
    print("tf plan")
    rf=str(type) + "_resources.out"
-   com="terraform plan -generate-config-out="+ rf + " -out tfplan"
+   com="terraform plan -generate-config-out="+ rf + " -out tfplan -json | jq . > plan.json"
    print("comm = "+ com)
    rout=rc(com)
    el=len(rout.stderr.decode().rstrip())
-   if el!=0: print(rout.stderr.decode().rstrip())
+   if el!=0: 
+      print(rout.stderr.decode().rstrip())
+      print("--> plan errors  ?")
    
    if "0 to destroy" not in str(rout.stdout.decode().rstrip()):
       print("--> plan warning destroy - existing state ?")
@@ -22,8 +20,41 @@ def tfplan(type):
       print("--> plan warning destroy - existing state ?")
 
       #exit()
-   print("gen complete")
+   print("gen1 complete")
 
+   com="cat plan.json | jq '.diagnostic | select(.severity==\"error\").summary' | cut -f3 -d'(' | cut -f1 -d')'"
+   #print(com)
+   rout=rc(com)
+   el=len(rout.stdout.decode().rstrip())
+   if el!=0:
+      td=rout.stdout.decode().rstrip()
+      for i in td.split("\n"):
+         if i.strip() != "":
+            print(i)
+            com="rm -f s3-*"+ i + "*_import.tf"
+            print("comm = "+ com)
+            rout=rc(com)
+      # redo plan
+      com="rm -f aws_s3_bucket_resources.out aws_s3*.tf"
+      #print("comm = "+ com)
+      rout=rc(com)
+      com="terraform plan -generate-config-out="+ rf + " -out tfplan -json | jq . > plan.json"
+      #print("comm = "+ com)
+      rout=rc(com)
+      el=len(rout.stderr.decode().rstrip())
+      if el!=0: 
+         print(rout.stderr.decode().rstrip())
+         print("--> plan errors exiting  ?")
+         exit()
+   
+      if "0 to destroy" not in str(rout.stdout.decode().rstrip()):
+         print("--> plan warning destroy - existing state ?")
+         print(str(rout.stdout.decode().rstrip()))
+         print("--> plan warning destroy - existing state ?")
+
+         #exit()
+      print("gen2 complete")
+         
 
 
 def wrapup():
@@ -31,6 +62,9 @@ def wrapup():
    print("Format")
    com="terraform fmt -no-color"
    rout=rc(com) 
+   print("Validate json")
+   com="terraform validate -no-color -json > validate.json"
+   rout=rc(com)
    print("Validate")
    com="terraform validate -no-color"
    rout=rc(com)

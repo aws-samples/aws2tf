@@ -102,10 +102,48 @@ def  aws_nat_gateway(t1,tt1,tt2,flag1,flag2):
     return skip,t1,flag1,flag2 
 
 
-def  network_acl(t1,tt1,tt2,flag1,flag2):
+def  aws_network_acl(t1,tt1,tt2,flag1,flag2):
     skip=0
 
     return skip,t1,flag1,flag2
+
+
+def  aws_s3_bucket(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    if "resource":
+        if  "aws_s3_bucket_request_payment_configuration" in tt1 or \
+            "aws_s3_bucket_accelerate_configuration" in tt1 or \
+            "aws_s3_bucket_acl" in tt1 or \
+            "aws_s3_bucket_analytics" in tt1 or \
+            "aws_s3_bucket_cors_configuration" in tt1 or \
+            "aws_s3_bucket_intelligent_tiering_configuration" in tt1 or \
+            "aws_s3_bucket_inventory" in tt1 or \
+            "aws_s3_bucket_lifecycle_configuration" in tt1 or \
+            "aws_s3_bucket_logging" in tt1  or \
+            "aws_s3_bucket_metric" in tt1 or \
+            "aws_s3_bucket_notification" in tt1 or \
+            "aws_s3_bucket_object_lock_configuration" in tt1 or \
+            "aws_s3_bucket_ownership_controls" in tt1 or \
+            "aws_s3_bucket_policy" in tt1 or \
+            "aws_s3_bucket_replication_configuration" in tt1 or \
+            "aws_s3_bucket_request_payment_configuration" in tt1 or \
+            "aws_s3_bucket_replication_configuration" in tt1 or \
+            "aws_s3_bucket_server_side_encryption_configuration" in tt1 or \
+            "aws_s3_bucket_versioning" in tt1 or \
+            "aws_s3_bucket_website_configuration"in tt1 :
+            flag2=True
+        else:
+            flag2=False
+    if tt1 == "bucket" and flag2 is True:
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
+        flag2=False
+    
+
+
+    return skip,t1,flag1,flag2
+
+
 
 def  aws_resource(t1,tt1,tt2,flag1,flag2):
     skip=0

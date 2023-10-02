@@ -6,7 +6,7 @@ import subprocess
 def tfplan(type):
    print("tf plan")
    rf=str(type) + "_resources.out"
-   com="terraform plan -generate-config-out="+ rf + " -out tfplan -json | jq . > plan.json"
+   com="terraform plan -generate-config-out="+ rf + " -out tfplan -json | jq . > plan1.json"
    print("comm = "+ com)
    rout=rc(com)
    el=len(rout.stderr.decode().rstrip())
@@ -22,7 +22,7 @@ def tfplan(type):
       #exit()
    print("gen1 complete")
 
-   com="cat plan.json | jq '.diagnostic | select(.severity==\"error\").summary' | cut -f3 -d'(' | cut -f1 -d')'"
+   com="cat plan1.json | jq '.diagnostic | select(.severity==\"error\").summary' | cut -f3 -d'(' | cut -f1 -d')'"
    #print(com)
    rout=rc(com)
    el=len(rout.stdout.decode().rstrip())
@@ -38,7 +38,7 @@ def tfplan(type):
       com="rm -f aws_s3_bucket_resources.out aws_s3*.tf"
       #print("comm = "+ com)
       rout=rc(com)
-      com="terraform plan -generate-config-out="+ rf + " -out tfplan -json | jq . > plan.json"
+      com="terraform plan -generate-config-out="+ rf + " -out tfplan"
       #print("comm = "+ com)
       rout=rc(com)
       el=len(rout.stderr.decode().rstrip())

@@ -7,53 +7,51 @@ def tfplan(type):
    print("tf plan")
    rf=str(type) + "_resources.out"
    com="terraform plan -generate-config-out="+ rf + " -out tfplan -json | jq . > plan1.json"
-   print("comm = "+ com)
+   print(com)
    rout=rc(com)
-   el=len(rout.stderr.decode().rstrip())
-   if el!=0: 
-      print(rout.stderr.decode().rstrip())
-      print("--> plan errors  ?")
-   
-   if "0 to destroy" not in str(rout.stdout.decode().rstrip()):
-      print("--> plan warning destroy - existing state ?")
-      print(str(rout.stdout.decode().rstrip()))
-      print("--> plan warning destroy - existing state ?")
 
-      #exit()
-   print("gen1 complete")
+   file="plan1.json"
+   f2=open(file, "r")
+   plan2=False
+   while True:
+      line = f2.readline()
+      if not line:
+         break
+      #print(line)
+      if '@level": "error"' in line:
+         #print("Error" + line)
+         try:
+               mess=f2.readline()
+               i=mess.split('(')[2].split(')')[0]
+               print("Removing "+i+" files - plan errors see plan1.json")
+               com="rm -f s3-*"+ i + "*_import.tf aws_s3_*__b-"+ i +".tf"
+               rout=rc(com)
+               plan2=True
+         except:
+               print("Error - no error message")
+               continue
 
-   com="cat plan1.json | jq '.diagnostic | select(.severity==\"error\").summary' | cut -f3 -d'(' | cut -f1 -d')'"
-   #print(com)
-   rout=rc(com)
-   el=len(rout.stdout.decode().rstrip())
-   if el!=0:
-      td=rout.stdout.decode().rstrip()
-      for i in td.split("\n"):
-         if i.strip() != "":
-            print("Removing "+i+" files - Access problems on bucket")
-            com="rm -f s3-*"+ i + "*_import.tf aws_s3_*__b-"+ i +".tf"
-            #print("comm = "+ com)
-            rout=rc(com)
+   print("Plan 1 complete")
+   if plan2:
+      
+      print("Plan 2 ... ")
       # redo plan
       com="rm -f aws_s3_bucket_resources.out aws_s3*.tf"
-      #print("comm = "+ com)
+      print("comm = "+ com)
       rout=rc(com)
       com="terraform plan -generate-config-out="+ rf + " -out tfplan"
-      #print("comm = "+ com)
+      print(com)
       rout=rc(com)
       el=len(rout.stderr.decode().rstrip())
       if el!=0: 
-         print(rout.stderr.decode().rstrip())
-         print("--> plan errors exiting  ?")
-         exit()
-   
+            print(rout.stderr.decode().rstrip())
+            print("--> plan errors exiting  ?")
+            exit()
       if "0 to destroy" not in str(rout.stdout.decode().rstrip()):
-         print("--> plan warning destroy - existing state ?")
-         print(str(rout.stdout.decode().rstrip()))
-         print("--> plan warning destroy - existing state ?")
-
-         #exit()
-      print("gen2 complete")
+            print(str(rout.stdout.decode().rstrip()))
+            print("--> plan warning destroy - existing state ?")
+            exit()
+      print("Plan 2 complete")
          
 
 

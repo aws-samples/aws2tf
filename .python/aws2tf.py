@@ -68,7 +68,7 @@ if __name__ == '__main__':
 # get the current
     my_session = boto3.setup_default_session(region_name=region) 
  
-    print('region passed ='+region)
+    print('Using region: '+region)
    
     #cpus=multiprocessing.cpu_count()
     #print("cpus="+str(cpus))
@@ -94,7 +94,7 @@ if __name__ == '__main__':
 
     
     common.wrapup()
-    print(processed)
-    print("Done - exiting")
+    print("processed="+processed)
+
     exit(0)
 

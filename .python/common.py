@@ -30,9 +30,9 @@ def tfplan(type):
       td=rout.stdout.decode().rstrip()
       for i in td.split("\n"):
          if i.strip() != "":
-            print(i)
-            com="rm -f s3-*"+ i + "*_import.tf"
-            print("comm = "+ com)
+            print("Removing "+i+" files - Access problems on bucket")
+            com="rm -f s3-*"+ i + "*_import.tf aws_s3_*__b-"+ i +".tf"
+            #print("comm = "+ com)
             rout=rc(com)
       # redo plan
       com="rm -f aws_s3_bucket_resources.out aws_s3*.tf"

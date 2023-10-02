@@ -9,6 +9,7 @@ import os
 import common
 import resources
 import cw
+import fixtf
 
 if __name__ == '__main__':
     global processed
@@ -42,15 +43,12 @@ if __name__ == '__main__':
     else:
         region=args.region   
 
-    com="rm -f *.txt *.json"
-    rout=common.rc(com)
-
     mg=False
     if args.merge is not None:
         mg=args.merge
 
     if mg is False:
-        print("removing terraform.tfstate*")
+        print("No merge - removing terraform.tfstate* and aws_*.tf")
         com="rm -f terraform.tfstate* aws_*.tf"
         rout=common.rc(com)
 
@@ -59,6 +57,11 @@ if __name__ == '__main__':
         fb=id
     else:
         fb=args.bucket  
+
+
+    com="rm -f *.txt *.json"
+    rout=common.rc(com)
+
 
     common.aws_tf(region)
 

@@ -74,7 +74,8 @@ if __name__ == '__main__':
     #print("cpus="+str(cpus))
     if type=="all":
         type="net"
-    if type=="aws_vpc":
+    if type=="aws_vpc" or type=="vpc":
+        type="aws_vpc"
         ec2.ec2_resources(type,id)
         
     if type=="net":

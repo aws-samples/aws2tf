@@ -7,7 +7,7 @@ import common
 import fixtf
 
 # called by aws2tf.py
-def ec2_resources(type,id):   # state file, aws_vpc , vpc-xxxxxxxxx called from main.py
+def ec2_resources(type,id):   # aws_vpc , vpc-xxxxxxxxx called from main.py
    ec2client = boto3.client('ec2')   
    botokey,clfn,jsonid,filterid=resource_data(type,ec2client)
    print("calling get_resource with id="+str(id))
@@ -83,6 +83,7 @@ def resource_data(type,ec2client):
 
    if type == "aws_security_group": return 'SecurityGroups', "describe_security_groups", "GroupId","group-id"
    if type == "aws_subnet": return 'Subnets', "describe_subnets", "SubnetId","subnet-id"
+
    
    #if type == "aws_snapshot": return 'Snapshots', ec2client.describe_snapshots, "SnapshotId"
    #if type == "aws_target_group": return 'TargetGroups', ec2client.describe_target_groups, "TargetGroupName"

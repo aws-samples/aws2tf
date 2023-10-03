@@ -76,6 +76,12 @@ def wrapup():
       print(str(rout.stdout.decode().rstrip()))
    else: 
       print("Valid Configuration.")
+
+
+   fl=open("validate.json", "r")
+   data=json.load(fl)
+   fl.close()
+   
    
 
    #print(str(rout.stdout.decode().rstrip()))

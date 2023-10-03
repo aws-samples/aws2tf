@@ -94,7 +94,7 @@ if __name__ == '__main__':
 
     
     common.wrapup()
-    print("processed="+processed)
+    print("processed="+str(processed))
 
     exit(0)
 

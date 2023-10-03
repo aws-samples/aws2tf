@@ -72,7 +72,11 @@ if __name__ == '__main__':
    
     #cpus=multiprocessing.cpu_count()
     #print("cpus="+str(cpus))
-
+    if type=="all":
+        type="net"
+    if type=="aws_vpc":
+        ec2.ec2_resources(type,id)
+        
     if type=="net":
         net_types=resources.resource_types(type)
         for i in net_types:

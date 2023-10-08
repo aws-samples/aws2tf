@@ -26,8 +26,9 @@ def cwlogs(type,id,botokey,jsonid,filterid):
     with open(fn, "w") as f:
             for item in response[botokey]:
                 theid=item[jsonid]
+                tfid=theid.replace("/","_")
                 f.write('import {\n')
-                f.write('  to = ' +type + '.' + theid + '\n')
+                f.write('  to = ' +type + '.' + tfid + '\n')
                 f.write('  id = "'+ theid + '"\n')
                 f.write('}\n')
     f.close()
@@ -36,7 +37,7 @@ def cwlogs(type,id,botokey,jsonid,filterid):
     rf=type+"_resources.out"
 
     if os.path.isfile("tfplan"):
-         com="cp " + rf + " aws_logs.tf"
+         com="cp " + rf + " "+ type + ".tf"
          rout=common.rc(com)
 
     else:

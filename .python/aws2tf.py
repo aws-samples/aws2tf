@@ -49,7 +49,7 @@ if __name__ == '__main__':
 
     if mg is False:
         print("No merge - removing terraform.tfstate* and aws_*.tf")
-        com="rm -f terraform.tfstate* aws_*.tf"
+        com="rm -f terraform.tfstate* aws_*.tf s3-*.tf tfplan *.out *import.tf"
         rout=common.rc(com)
 
     id=args.id
@@ -90,7 +90,8 @@ if __name__ == '__main__':
         rout=common.rc(com)
         s3.get_all_s3_buckets(fb,region)
 
-    elif type=="cw":
+    elif type=="cw" or type=="cloudwatch" or type=="logs":
+        type="aws_cloudwatch_log_group"
         cw.cwlogs(type,id,"logGroups","logGroupName","logGroupNamePrefix")
 
     else:

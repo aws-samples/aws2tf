@@ -51,8 +51,8 @@ def get_resource(type,id,botokey,ec2fn,jsonid,filterid):
    common.tfplan(type)
  
    #gr=getfn(type)
-   print("calling fixtf "+ type)
-   fixtf.fixtf(type)
+   #print("calling fixtf "+ type)
+   #fixtf.fixtf(type)
 
    # dependancy logic here:
 

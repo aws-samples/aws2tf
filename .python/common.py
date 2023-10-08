@@ -1,6 +1,8 @@
 import json
 import sys
 import subprocess
+import fixtf
+import os
 #import aws2tf
 
 def tfplan(type):
@@ -13,6 +15,7 @@ def tfplan(type):
    file="plan1.json"
    f2=open(file, "r")
    plan2=False
+
    while True:
       line = f2.readline()
       if not line:
@@ -52,6 +55,13 @@ def tfplan(type):
             print("--> plan warning destroy - existing state ?")
             exit()
       print("Plan 2 complete")
+   
+   if os.path.isfile("tfplan"):
+         print("calling fixtf "+ type)
+         fixtf.fixtf(type)
+   else:
+         print("could not find expected tfplan file - exiting")
+         exit()
          
 
 

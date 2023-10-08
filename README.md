@@ -20,8 +20,8 @@ There should hopefully be no subsequent additions or deletions reported by the t
 
 ## Requirements & Prerequisites
 + The tool is written for the bash shell script & Python3 and has been tested on macOS 11.6.
-+ AWS cli (v2) **version 2.9.0 or higher** needs to be installed and you need a login with at least "Read" privileges.
-+ terraform **version v1.3.7** or higher needs to be installed.
++ AWS cli (v2) **version 2.13.0 or higher** needs to be installed and you need a login with at least "Read" privileges.
++ terraform **version v1.5.5** or higher needs to be installed.
 + jq **version 1.6 or higher**
 + *yq optional for advanced stack processing*
 
@@ -199,14 +199,13 @@ To get all the resources in a deployed Stack Set
 Or simply check back after some time to see if they are listed below.
 
 ----
-## Terraform resources supported as of 28-Apr-2023
-
-----
-## Terraform resources supported as of 25-Jun-2023
+## Terraform resources supported as of 08-Oct-2023
 
 * aws_acm_certificate
 * aws_api_gateway_resource
 * aws_api_gateway_rest_api
+* aws_appautoscaling_policy
+* aws_appautoscaling_target
 * aws_appmesh_gateway_route
 * aws_appmesh_mesh
 * aws_appmesh_route
@@ -219,6 +218,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_appstream_stack
 * aws_appstream_user
 * aws_athena_named_query
+* aws_athena_workgroup
 * aws_autoscaling_group
 * aws_autoscaling_lifecycle_hook
 * aws_cloud9_environment_ec2
@@ -282,6 +282,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_emr_instance_group
 * aws_emr_managed_scaling_policy
 * aws_emr_security_configuration
+* aws_flow_log
 * aws_glue_catalog_database
 * aws_glue_catalog_table
 * aws_glue_connection
@@ -310,6 +311,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_lakeformation_permissions
 * aws_lakeformation_resource
 * aws_lambda_alias
+* aws_lambda_event_source_mapping
 * aws_lambda_function
 * aws_lambda_function_event_invoke_config
 * aws_lambda_layer_version
@@ -386,6 +388,7 @@ Or simply check back after some time to see if they are listed below.
 * aws_vpc_endpoint_service
 * aws_vpc_ipv4_cidr_block_association
 * aws_vpc_peering_connection
+* aws_vpclattice_access_log_subscription
 * aws_vpclattice_auth_policy
 * aws_vpclattice_listener
 * aws_vpclattice_listener_rule
@@ -395,19 +398,29 @@ Or simply check back after some time to see if they are listed below.
 * aws_vpclattice_service_network_service_association
 * aws_vpclattice_service_network_vpc_association
 * aws_vpclattice_target_group
+* aws_vpclattice_target_group_attachment
 * aws_vpn_connection
 
 ----
-## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 25-Jun-2023
+## Resources within a Stack Set that can currently be converted to Terraform (-s <stack set name>) as of 08-Oct-2023
 
 * #AWS::IAM::Policy
 * AWS::ApiGateway::Account
 * AWS::ApiGateway::Resource
 * AWS::ApiGateway::RestApi
+* AWS::AppMesh::Mesh
+* AWS::AppMesh::VirtualGateway
+* AWS::AppMesh::VirtualNode
+* AWS::AppMesh::VirtualRouter
+* AWS::AppMesh::VirtualService
+* AWS::ApplicationAutoScaling::ScalableTarget
+* AWS::ApplicationAutoScaling::ScalingPolicy
 * AWS::Athena::NamedQuery
+* AWS::Athena::WorkGroup
 * AWS::AutoScaling::AutoScalingGroup
 * AWS::AutoScaling::LaunchConfiguration
 * AWS::AutoScaling::LifecycleHook
+* AWS::CDK::Metadata
 * AWS::Cloud9::EnvironmentEC2
 * AWS::CloudWatch::Alarm
 * AWS::CodeArtifact::Domain
@@ -425,6 +438,7 @@ Or simply check back after some time to see if they are listed below.
 * AWS::DynamoDB::Table
 * AWS::EC2::DHCPOptions
 * AWS::EC2::EIP
+* AWS::EC2::FlowLog
 * AWS::EC2::Instance
 * AWS::EC2::InternetGateway
 * AWS::EC2::KeyPair
@@ -441,6 +455,7 @@ Or simply check back after some time to see if they are listed below.
 * AWS::EC2::SubnetRouteTableAssociation
 * AWS::EC2::VPC
 * AWS::EC2::VPCEndpoint
+* AWS::EC2::VPCEndpointService
 * AWS::EC2::VPCGatewayAttachment
 * AWS::ECR::Repository
 * AWS::ECS::Cluster
@@ -481,6 +496,7 @@ Or simply check back after some time to see if they are listed below.
 * AWS::LakeFormation::PrincipalPermissions
 * AWS::LakeFormation::Resource
 * AWS::Lambda::EventInvokeConfig
+* AWS::Lambda::EventSourceMapping
 * AWS::Lambda::Function
 * AWS::Lambda::LayerVersion
 * AWS::Lambda::Permission
@@ -506,6 +522,7 @@ Or simply check back after some time to see if they are listed below.
 * AWS::SageMaker::NotebookInstance
 * AWS::SageMaker::UserProfile
 * AWS::SecretsManager::Secret
+* AWS::ServiceDiscovery::PrivateDnsNamespace
 * AWS::ServiceDiscovery::Service
 * AWS::StepFunctions::StateMachine
  

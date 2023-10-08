@@ -145,6 +145,12 @@ def  aws_s3_bucket(t1,tt1,tt2,flag1,flag2):
 
 
 
+def aws_cloudwatch_log_group(t1,tt1,tt2,flag1,flag2):
+    skip=0
+
+    return skip,t1,flag1,flag2 
+
+
 def  aws_resource(t1,tt1,tt2,flag1,flag2):
     skip=0
 

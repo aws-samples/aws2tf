@@ -1,32 +1,10 @@
 # __generated__ by Terraform
 # Please review these resources and move them into your main configuration files.
 
-# __generated__ by Terraform from "/aws/apprunner/gotty/c054ef3695234c70a64a5091b49ffc11/service"
-resource "aws_cloudwatch_log_group" "_aws_apprunner_gotty_c054ef3695234c70a64a5091b49ffc11_service" {
+# __generated__ by Terraform from "/aws/containerinsights/mycluster1/performance"
+resource "aws_cloudwatch_log_group" "_aws_containerinsights_mycluster1_performance" {
   kms_key_id        = null
-  name              = "/aws/apprunner/gotty/c054ef3695234c70a64a5091b49ffc11/service"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/lambda/ecsworkshop-test-ecsdemo-fro-EnvControllerFunction-sJXYUet9f4tT"
-resource "aws_cloudwatch_log_group" "_aws_lambda_ecsworkshop-test-ecsdemo-fro-EnvControllerFunction-sJXYUet9f4tT" {
-  kms_key_id        = null
-  name              = "/aws/lambda/ecsworkshop-test-ecsdemo-fro-EnvControllerFunction-sJXYUet9f4tT"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/containerinsights/eksworkshop-eksctl/performance"
-resource "aws_cloudwatch_log_group" "_aws_containerinsights_eksworkshop-eksctl_performance" {
-  kms_key_id        = null
-  name              = "/aws/containerinsights/eksworkshop-eksctl/performance"
+  name              = "/aws/containerinsights/mycluster1/performance"
   name_prefix       = null
   retention_in_days = 14
   skip_destroy      = null
@@ -45,10 +23,109 @@ resource "aws_cloudwatch_log_group" "_aws_codebuild_sagemaker-test-p-v5ex8oomns1
   tags_all          = {}
 }
 
-# __generated__ by Terraform from "/aws/apigateway/welcome"
-resource "aws_cloudwatch_log_group" "_aws_apigateway_welcome" {
+# __generated__ by Terraform from "/aws/codebuild/sagemaker-test2-p-lkzs8xe3oxlm-modelbuild"
+resource "aws_cloudwatch_log_group" "_aws_codebuild_sagemaker-test2-p-lkzs8xe3oxlm-modelbuild" {
   kms_key_id        = null
-  name              = "/aws/apigateway/welcome"
+  name              = "/aws/codebuild/sagemaker-test2-p-lkzs8xe3oxlm-modelbuild"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/lambda/LatticeReservationLambda"
+resource "aws_cloudwatch_log_group" "_aws_lambda_LatticeReservationLambda" {
+  kms_key_id        = null
+  name              = "/aws/lambda/LatticeReservationLambda"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/lambda/ecsworkshop-test-ecsdemo-fro-EnvControllerFunction-sJXYUet9f4tT"
+resource "aws_cloudwatch_log_group" "_aws_lambda_ecsworkshop-test-ecsdemo-fro-EnvControllerFunction-sJXYUet9f4tT" {
+  kms_key_id        = null
+  name              = "/aws/lambda/ecsworkshop-test-ecsdemo-fro-EnvControllerFunction-sJXYUet9f4tT"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/apprunner/gotty/c054ef3695234c70a64a5091b49ffc11/service"
+resource "aws_cloudwatch_log_group" "_aws_apprunner_gotty_c054ef3695234c70a64a5091b49ffc11_service" {
+  kms_key_id        = null
+  name              = "/aws/apprunner/gotty/c054ef3695234c70a64a5091b49ffc11/service"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/lambda/TfCodeBuild"
+resource "aws_cloudwatch_log_group" "_aws_lambda_TfCodeBuild" {
+  kms_key_id        = null
+  name              = "/aws/lambda/TfCodeBuild"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/containerinsights/eksworkshop-eksctl/host"
+resource "aws_cloudwatch_log_group" "_aws_containerinsights_eksworkshop-eksctl_host" {
+  kms_key_id        = null
+  name              = "/aws/containerinsights/eksworkshop-eksctl/host"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/events/orders"
+resource "aws_cloudwatch_log_group" "_aws_events_orders" {
+  kms_key_id        = null
+  name              = "/aws/events/orders"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws-glue/testconnection/output/mysql-connector"
+resource "aws_cloudwatch_log_group" "_aws-glue_testconnection_output_mysql-connector" {
+  kms_key_id        = null
+  name              = "/aws-glue/testconnection/output/mysql-connector"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/sagemaker/Endpoints/SageMakerEndpoint-UAxkStuDcjun"
+resource "aws_cloudwatch_log_group" "_aws_sagemaker_Endpoints_SageMakerEndpoint-UAxkStuDcjun" {
+  kms_key_id        = null
+  name              = "/aws/sagemaker/Endpoints/SageMakerEndpoint-UAxkStuDcjun"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/lambda/SecretsManageraurora-rotation"
+resource "aws_cloudwatch_log_group" "_aws_lambda_SecretsManageraurora-rotation" {
+  kms_key_id        = null
+  name              = "/aws/lambda/SecretsManageraurora-rotation"
   name_prefix       = null
   retention_in_days = 14
   skip_destroy      = null
@@ -60,6 +137,61 @@ resource "aws_cloudwatch_log_group" "_aws_apigateway_welcome" {
 resource "aws_cloudwatch_log_group" "_aws_eks_mycluster1_cluster" {
   kms_key_id        = null
   name              = "/aws/eks/mycluster1/cluster"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/kendra/be971a80-95df-4350-b11d-f3eed968dd71"
+resource "aws_cloudwatch_log_group" "_aws_kendra_be971a80-95df-4350-b11d-f3eed968dd71" {
+  kms_key_id        = null
+  name              = "/aws/kendra/be971a80-95df-4350-b11d-f3eed968dd71"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/kendra/5ed4a42c-e169-4ab3-8f67-5c1c81993a3a"
+resource "aws_cloudwatch_log_group" "_aws_kendra_5ed4a42c-e169-4ab3-8f67-5c1c81993a3a" {
+  kms_key_id        = null
+  name              = "/aws/kendra/5ed4a42c-e169-4ab3-8f67-5c1c81993a3a"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws-glue/jobs/output"
+resource "aws_cloudwatch_log_group" "_aws-glue_jobs_output" {
+  kms_key_id        = null
+  name              = "/aws-glue/jobs/output"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/apigateway/welcome"
+resource "aws_cloudwatch_log_group" "_aws_apigateway_welcome" {
+  kms_key_id        = null
+  name              = "/aws/apigateway/welcome"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws-glue/python-jobs/output"
+resource "aws_cloudwatch_log_group" "_aws-glue_python-jobs_output" {
+  kms_key_id        = null
+  name              = "/aws-glue/python-jobs/output"
   name_prefix       = null
   retention_in_days = 14
   skip_destroy      = null
@@ -82,380 +214,6 @@ resource "aws_cloudwatch_log_group" "_aws_containerinsights_eksworkshop-eksctl_d
 resource "aws_cloudwatch_log_group" "_aws_lambda_aws-event-driven-architectures--CreateUserFunction-7AviItzSUvbP" {
   kms_key_id        = null
   name              = "/aws/lambda/aws-event-driven-architectures--CreateUserFunction-7AviItzSUvbP"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/sagemaker/Endpoints/SageMakerEndpoint-X3g6VppLg8R2"
-resource "aws_cloudwatch_log_group" "_aws_sagemaker_Endpoints_SageMakerEndpoint-X3g6VppLg8R2" {
-  kms_key_id        = null
-  name              = "/aws/sagemaker/Endpoints/SageMakerEndpoint-X3g6VppLg8R2"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/containerinsights/mycluster1/prometheus"
-resource "aws_cloudwatch_log_group" "_aws_containerinsights_mycluster1_prometheus" {
-  kms_key_id        = null
-  name              = "/aws/containerinsights/mycluster1/prometheus"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/codebuild/eks-cicd-build-app"
-resource "aws_cloudwatch_log_group" "_aws_codebuild_eks-cicd-build-app" {
-  kms_key_id        = null
-  name              = "/aws/codebuild/eks-cicd-build-app"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/lambda/squid-AlarmLambdaFunction-y2WzJh0QZLdq"
-resource "aws_cloudwatch_log_group" "_aws_lambda_squid-AlarmLambdaFunction-y2WzJh0QZLdq" {
-  kms_key_id        = null
-  name              = "/aws/lambda/squid-AlarmLambdaFunction-y2WzJh0QZLdq"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws-glue/testconnection/output/mysql-connector"
-resource "aws_cloudwatch_log_group" "_aws-glue_testconnection_output_mysql-connector" {
-  kms_key_id        = null
-  name              = "/aws-glue/testconnection/output/mysql-connector"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/events/inventory"
-resource "aws_cloudwatch_log_group" "_aws_events_inventory" {
-  kms_key_id        = null
-  name              = "/aws/events/inventory"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/containerinsights/eksworkshop-eksctl/host"
-resource "aws_cloudwatch_log_group" "_aws_containerinsights_eksworkshop-eksctl_host" {
-  kms_key_id        = null
-  name              = "/aws/containerinsights/eksworkshop-eksctl/host"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws-glue/jobs/output"
-resource "aws_cloudwatch_log_group" "_aws-glue_jobs_output" {
-  kms_key_id        = null
-  name              = "/aws-glue/jobs/output"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/lambda/TfCodeBuild"
-resource "aws_cloudwatch_log_group" "_aws_lambda_TfCodeBuild" {
-  kms_key_id        = null
-  name              = "/aws/lambda/TfCodeBuild"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/lambda/squid-S3PutLambdaFunction-HJrTOGdfUVF7"
-resource "aws_cloudwatch_log_group" "_aws_lambda_squid-S3PutLambdaFunction-HJrTOGdfUVF7" {
-  kms_key_id        = null
-  name              = "/aws/lambda/squid-S3PutLambdaFunction-HJrTOGdfUVF7"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/kendra/4ba049b8-99c2-4877-9e5e-bb776641f758"
-resource "aws_cloudwatch_log_group" "_aws_kendra_4ba049b8-99c2-4877-9e5e-bb776641f758" {
-  kms_key_id        = null
-  name              = "/aws/kendra/4ba049b8-99c2-4877-9e5e-bb776641f758"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/kendra/5ed4a42c-e169-4ab3-8f67-5c1c81993a3a"
-resource "aws_cloudwatch_log_group" "_aws_kendra_5ed4a42c-e169-4ab3-8f67-5c1c81993a3a" {
-  kms_key_id        = null
-  name              = "/aws/kendra/5ed4a42c-e169-4ab3-8f67-5c1c81993a3a"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/containerinsights/mycluster1/host"
-resource "aws_cloudwatch_log_group" "_aws_containerinsights_mycluster1_host" {
-  kms_key_id        = null
-  name              = "/aws/containerinsights/mycluster1/host"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/containerinsights/eksworkshop-eksctl/application"
-resource "aws_cloudwatch_log_group" "_aws_containerinsights_eksworkshop-eksctl_application" {
-  kms_key_id        = null
-  name              = "/aws/containerinsights/eksworkshop-eksctl/application"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/lambda/ecsworkshop-test-ecsdemo-fron-RulePriorityFunction-Z4obD2wohB0h"
-resource "aws_cloudwatch_log_group" "_aws_lambda_ecsworkshop-test-ecsdemo-fron-RulePriorityFunction-Z4obD2wohB0h" {
-  kms_key_id        = null
-  name              = "/aws/lambda/ecsworkshop-test-ecsdemo-fron-RulePriorityFunction-Z4obD2wohB0h"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/eks/eksworkshop-eksctl/cluster"
-resource "aws_cloudwatch_log_group" "_aws_eks_eksworkshop-eksctl_cluster" {
-  kms_key_id        = null
-  name              = "/aws/eks/eksworkshop-eksctl/cluster"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/sagemaker/Endpoints/SageMakerEndpoint-2hRQLhhHyv3h"
-resource "aws_cloudwatch_log_group" "_aws_sagemaker_Endpoints_SageMakerEndpoint-2hRQLhhHyv3h" {
-  kms_key_id        = null
-  name              = "/aws/sagemaker/Endpoints/SageMakerEndpoint-2hRQLhhHyv3h"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/containerinsights/mycluster1/dataplane"
-resource "aws_cloudwatch_log_group" "_aws_containerinsights_mycluster1_dataplane" {
-  kms_key_id        = null
-  name              = "/aws/containerinsights/mycluster1/dataplane"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/lambda/sagemaker-soln-fdml-js-s18swr-solution-assistant"
-resource "aws_cloudwatch_log_group" "_aws_lambda_sagemaker-soln-fdml-js-s18swr-solution-assistant" {
-  kms_key_id        = null
-  name              = "/aws/lambda/sagemaker-soln-fdml-js-s18swr-solution-assistant"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/apprunner/invest1/69c4048c0af2443b8436e0f92bcd540c/service"
-resource "aws_cloudwatch_log_group" "_aws_apprunner_invest1_69c4048c0af2443b8436e0f92bcd540c_service" {
-  kms_key_id        = null
-  name              = "/aws/apprunner/invest1/69c4048c0af2443b8436e0f92bcd540c/service"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/ecs/containerinsights/container-demo/performance"
-resource "aws_cloudwatch_log_group" "_aws_ecs_containerinsights_container-demo_performance" {
-  kms_key_id        = null
-  name              = "/aws/ecs/containerinsights/container-demo/performance"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws-glue/jobs/logs-v2"
-resource "aws_cloudwatch_log_group" "_aws-glue_jobs_logs-v2" {
-  kms_key_id        = null
-  name              = "/aws-glue/jobs/logs-v2"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/lambda/SageMakerVPCEnforcer"
-resource "aws_cloudwatch_log_group" "_aws_lambda_SageMakerVPCEnforcer" {
-  kms_key_id        = null
-  name              = "/aws/lambda/SageMakerVPCEnforcer"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/codebuild/ee-tf-eks"
-resource "aws_cloudwatch_log_group" "_aws_codebuild_ee-tf-eks" {
-  kms_key_id        = null
-  name              = "/aws/codebuild/ee-tf-eks"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/containerinsights/mycluster1/performance"
-resource "aws_cloudwatch_log_group" "_aws_containerinsights_mycluster1_performance" {
-  kms_key_id        = null
-  name              = "/aws/containerinsights/mycluster1/performance"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/codebuild/sagemaker-test2-p-lkzs8xe3oxlm-modelbuild"
-resource "aws_cloudwatch_log_group" "_aws_codebuild_sagemaker-test2-p-lkzs8xe3oxlm-modelbuild" {
-  kms_key_id        = null
-  name              = "/aws/codebuild/sagemaker-test2-p-lkzs8xe3oxlm-modelbuild"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/sagemaker/Endpoints/SageMakerEndpoint-UAxkStuDcjun"
-resource "aws_cloudwatch_log_group" "_aws_sagemaker_Endpoints_SageMakerEndpoint-UAxkStuDcjun" {
-  kms_key_id        = null
-  name              = "/aws/sagemaker/Endpoints/SageMakerEndpoint-UAxkStuDcjun"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/codebuild/sagemaker-test2-p-lkzs8xe3oxlm-modeldeploy"
-resource "aws_cloudwatch_log_group" "_aws_codebuild_sagemaker-test2-p-lkzs8xe3oxlm-modeldeploy" {
-  kms_key_id        = null
-  name              = "/aws/codebuild/sagemaker-test2-p-lkzs8xe3oxlm-modeldeploy"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/kendra/be971a80-95df-4350-b11d-f3eed968dd71"
-resource "aws_cloudwatch_log_group" "_aws_kendra_be971a80-95df-4350-b11d-f3eed968dd71" {
-  kms_key_id        = null
-  name              = "/aws/kendra/be971a80-95df-4350-b11d-f3eed968dd71"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws-glue/python-jobs/output"
-resource "aws_cloudwatch_log_group" "_aws-glue_python-jobs_output" {
-  kms_key_id        = null
-  name              = "/aws-glue/python-jobs/output"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws-glue/testconnection/error/mysql-connector"
-resource "aws_cloudwatch_log_group" "_aws-glue_testconnection_error_mysql-connector" {
-  kms_key_id        = null
-  name              = "/aws-glue/testconnection/error/mysql-connector"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws-glue/python-jobs/error"
-resource "aws_cloudwatch_log_group" "_aws-glue_python-jobs_error" {
-  kms_key_id        = null
-  name              = "/aws-glue/python-jobs/error"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/containerinsights/mycluster1/application"
-resource "aws_cloudwatch_log_group" "_aws_containerinsights_mycluster1_application" {
-  kms_key_id        = null
-  name              = "/aws/containerinsights/mycluster1/application"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/lambda/container-ex1"
-resource "aws_cloudwatch_log_group" "_aws_lambda_container-ex1" {
-  kms_key_id        = null
-  name              = "/aws/lambda/container-ex1"
   name_prefix       = null
   retention_in_days = 14
   skip_destroy      = null
@@ -496,10 +254,10 @@ resource "aws_cloudwatch_log_group" "_aws_codebuild" {
   tags_all          = {}
 }
 
-# __generated__ by Terraform from "/aws/lambda/SecretsManageraurora-rotation"
-resource "aws_cloudwatch_log_group" "_aws_lambda_SecretsManageraurora-rotation" {
+# __generated__ by Terraform from "/aws/kendra/4ba049b8-99c2-4877-9e5e-bb776641f758"
+resource "aws_cloudwatch_log_group" "_aws_kendra_4ba049b8-99c2-4877-9e5e-bb776641f758" {
   kms_key_id        = null
-  name              = "/aws/lambda/SecretsManageraurora-rotation"
+  name              = "/aws/kendra/4ba049b8-99c2-4877-9e5e-bb776641f758"
   name_prefix       = null
   retention_in_days = 14
   skip_destroy      = null
@@ -507,21 +265,10 @@ resource "aws_cloudwatch_log_group" "_aws_lambda_SecretsManageraurora-rotation" 
   tags_all          = {}
 }
 
-# __generated__ by Terraform from "/aws/events/orders"
-resource "aws_cloudwatch_log_group" "_aws_events_orders" {
+# __generated__ by Terraform from "/aws-glue/testconnection/error/mysql-connector"
+resource "aws_cloudwatch_log_group" "_aws-glue_testconnection_error_mysql-connector" {
   kms_key_id        = null
-  name              = "/aws/events/orders"
-  name_prefix       = null
-  retention_in_days = 14
-  skip_destroy      = null
-  tags              = {}
-  tags_all          = {}
-}
-
-# __generated__ by Terraform from "/aws/lambda/delete-SageMaker-endpoints"
-resource "aws_cloudwatch_log_group" "_aws_lambda_delete-SageMaker-endpoints" {
-  kms_key_id        = null
-  name              = "/aws/lambda/delete-SageMaker-endpoints"
+  name              = "/aws-glue/testconnection/error/mysql-connector"
   name_prefix       = null
   retention_in_days = 14
   skip_destroy      = null
@@ -540,10 +287,263 @@ resource "aws_cloudwatch_log_group" "_aws-glue_crawlers" {
   tags_all          = {}
 }
 
-# __generated__ by Terraform from "/aws/lambda/LatticeReservationLambda"
-resource "aws_cloudwatch_log_group" "_aws_lambda_LatticeReservationLambda" {
+# __generated__ by Terraform from "/aws/containerinsights/mycluster1/host"
+resource "aws_cloudwatch_log_group" "_aws_containerinsights_mycluster1_host" {
   kms_key_id        = null
-  name              = "/aws/lambda/LatticeReservationLambda"
+  name              = "/aws/containerinsights/mycluster1/host"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/ecs/containerinsights/container-demo/performance"
+resource "aws_cloudwatch_log_group" "_aws_ecs_containerinsights_container-demo_performance" {
+  kms_key_id        = null
+  name              = "/aws/ecs/containerinsights/container-demo/performance"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/events/inventory"
+resource "aws_cloudwatch_log_group" "_aws_events_inventory" {
+  kms_key_id        = null
+  name              = "/aws/events/inventory"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/containerinsights/mycluster1/dataplane"
+resource "aws_cloudwatch_log_group" "_aws_containerinsights_mycluster1_dataplane" {
+  kms_key_id        = null
+  name              = "/aws/containerinsights/mycluster1/dataplane"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws-glue/jobs/logs-v2"
+resource "aws_cloudwatch_log_group" "_aws-glue_jobs_logs-v2" {
+  kms_key_id        = null
+  name              = "/aws-glue/jobs/logs-v2"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/codebuild/eks-cicd-build-app"
+resource "aws_cloudwatch_log_group" "_aws_codebuild_eks-cicd-build-app" {
+  kms_key_id        = null
+  name              = "/aws/codebuild/eks-cicd-build-app"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/lambda/ecsworkshop-test-ecsdemo-fron-RulePriorityFunction-Z4obD2wohB0h"
+resource "aws_cloudwatch_log_group" "_aws_lambda_ecsworkshop-test-ecsdemo-fron-RulePriorityFunction-Z4obD2wohB0h" {
+  kms_key_id        = null
+  name              = "/aws/lambda/ecsworkshop-test-ecsdemo-fron-RulePriorityFunction-Z4obD2wohB0h"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/sagemaker/Endpoints/SageMakerEndpoint-2hRQLhhHyv3h"
+resource "aws_cloudwatch_log_group" "_aws_sagemaker_Endpoints_SageMakerEndpoint-2hRQLhhHyv3h" {
+  kms_key_id        = null
+  name              = "/aws/sagemaker/Endpoints/SageMakerEndpoint-2hRQLhhHyv3h"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws-glue/python-jobs/error"
+resource "aws_cloudwatch_log_group" "_aws-glue_python-jobs_error" {
+  kms_key_id        = null
+  name              = "/aws-glue/python-jobs/error"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/containerinsights/mycluster1/prometheus"
+resource "aws_cloudwatch_log_group" "_aws_containerinsights_mycluster1_prometheus" {
+  kms_key_id        = null
+  name              = "/aws/containerinsights/mycluster1/prometheus"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/sagemaker/Endpoints/SageMakerEndpoint-X3g6VppLg8R2"
+resource "aws_cloudwatch_log_group" "_aws_sagemaker_Endpoints_SageMakerEndpoint-X3g6VppLg8R2" {
+  kms_key_id        = null
+  name              = "/aws/sagemaker/Endpoints/SageMakerEndpoint-X3g6VppLg8R2"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/lambda/squid-S3PutLambdaFunction-HJrTOGdfUVF7"
+resource "aws_cloudwatch_log_group" "_aws_lambda_squid-S3PutLambdaFunction-HJrTOGdfUVF7" {
+  kms_key_id        = null
+  name              = "/aws/lambda/squid-S3PutLambdaFunction-HJrTOGdfUVF7"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/containerinsights/eksworkshop-eksctl/performance"
+resource "aws_cloudwatch_log_group" "_aws_containerinsights_eksworkshop-eksctl_performance" {
+  kms_key_id        = null
+  name              = "/aws/containerinsights/eksworkshop-eksctl/performance"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/lambda/delete-SageMaker-endpoints"
+resource "aws_cloudwatch_log_group" "_aws_lambda_delete-SageMaker-endpoints" {
+  kms_key_id        = null
+  name              = "/aws/lambda/delete-SageMaker-endpoints"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/codebuild/ee-tf-eks"
+resource "aws_cloudwatch_log_group" "_aws_codebuild_ee-tf-eks" {
+  kms_key_id        = null
+  name              = "/aws/codebuild/ee-tf-eks"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/lambda/sagemaker-soln-fdml-js-s18swr-solution-assistant"
+resource "aws_cloudwatch_log_group" "_aws_lambda_sagemaker-soln-fdml-js-s18swr-solution-assistant" {
+  kms_key_id        = null
+  name              = "/aws/lambda/sagemaker-soln-fdml-js-s18swr-solution-assistant"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/eks/eksworkshop-eksctl/cluster"
+resource "aws_cloudwatch_log_group" "_aws_eks_eksworkshop-eksctl_cluster" {
+  kms_key_id        = null
+  name              = "/aws/eks/eksworkshop-eksctl/cluster"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/lambda/squid-AlarmLambdaFunction-y2WzJh0QZLdq"
+resource "aws_cloudwatch_log_group" "_aws_lambda_squid-AlarmLambdaFunction-y2WzJh0QZLdq" {
+  kms_key_id        = null
+  name              = "/aws/lambda/squid-AlarmLambdaFunction-y2WzJh0QZLdq"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/containerinsights/eksworkshop-eksctl/application"
+resource "aws_cloudwatch_log_group" "_aws_containerinsights_eksworkshop-eksctl_application" {
+  kms_key_id        = null
+  name              = "/aws/containerinsights/eksworkshop-eksctl/application"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/lambda/SageMakerVPCEnforcer"
+resource "aws_cloudwatch_log_group" "_aws_lambda_SageMakerVPCEnforcer" {
+  kms_key_id        = null
+  name              = "/aws/lambda/SageMakerVPCEnforcer"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/lambda/container-ex1"
+resource "aws_cloudwatch_log_group" "_aws_lambda_container-ex1" {
+  kms_key_id        = null
+  name              = "/aws/lambda/container-ex1"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/containerinsights/mycluster1/application"
+resource "aws_cloudwatch_log_group" "_aws_containerinsights_mycluster1_application" {
+  kms_key_id        = null
+  name              = "/aws/containerinsights/mycluster1/application"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/codebuild/sagemaker-test2-p-lkzs8xe3oxlm-modeldeploy"
+resource "aws_cloudwatch_log_group" "_aws_codebuild_sagemaker-test2-p-lkzs8xe3oxlm-modeldeploy" {
+  kms_key_id        = null
+  name              = "/aws/codebuild/sagemaker-test2-p-lkzs8xe3oxlm-modeldeploy"
+  name_prefix       = null
+  retention_in_days = 14
+  skip_destroy      = null
+  tags              = {}
+  tags_all          = {}
+}
+
+# __generated__ by Terraform from "/aws/apprunner/invest1/69c4048c0af2443b8436e0f92bcd540c/service"
+resource "aws_cloudwatch_log_group" "_aws_apprunner_invest1_69c4048c0af2443b8436e0f92bcd540c_service" {
+  kms_key_id        = null
+  name              = "/aws/apprunner/invest1/69c4048c0af2443b8436e0f92bcd540c/service"
   name_prefix       = null
   retention_in_days = 14
   skip_destroy      = null

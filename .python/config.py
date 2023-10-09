@@ -7,14 +7,14 @@ import os
 # no filters on this describe so use name prefix
 
 
-def cwlogs(type,id,botokey,jsonid,filterid):
-    client = boto3.client('logs')   
+def rules(type,id,botokey,jsonid,filterid):
+    client = boto3.client('config')   
     print("doing "+ type + ' with id ' + str(id))
     if id is None:
-      response=client.describe_log_groups()  
+      response=client.describe_config_rules()  
     else:
-        print("calling with filter id="+filterid + " and id=" + id)
-        response=client.describe_log_groups(logGroupNamePrefix=id) 
+      print("calling with filter id="+filterid + " and id=" + id)
+      response=client.describe_config_rules(ConfigRuleNames=[id])
  
     fn=type+"_import.tf"
     with open(fn, "w") as f:

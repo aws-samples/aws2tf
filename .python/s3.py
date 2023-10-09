@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
 import boto3
-import json
 import common
-import os
-import fixtf
+
 
 def get_all_s3_buckets(fb,my_region):
-   processed=[]
-   #global processed
+   print("fb="+fb)
    type="aws_s3_bucket"
-   print("processed=" + str(processed))
+   print("processed=" + str(common.processed))
    """Gets all the AWS S3 buckets and saves them to a file."""
    boto3.setup_default_session(region_name=my_region)
    s3a = boto3.resource("s3",region_name=my_region) 
@@ -49,9 +46,15 @@ def get_all_s3_buckets(fb,my_region):
    for buck in buckets: 
    
      bucket_name=buck.name
+     if "aws_s3_bucket,"+bucket_name in common.processed:
+        print("Already processed skipping bucket " + bucket_name)
+        continue
      # jump if bucket name does not match
      if fb is not None:
+         #print("fb="+fb+" bucket_name="+bucket_name)
          if fb not in bucket_name:
+            #print("skipping bucket " + bucket_name)
+            
             continue
 
      fn="s3-"+str(bucket_name)+"_import.tf"
@@ -64,7 +67,7 @@ def get_all_s3_buckets(fb,my_region):
          location = s3.get_bucket_location(Bucket=bucket_name)
          
          bl=location['LocationConstraint']
-         #print ("bucket: " +  bucket_name + "location="+bl)
+         #print ("bucket: " +  bucket_name + " location="+bl)
          if bl != my_region:
             #print('continuing on non default location '+ bl)
             continue
@@ -103,8 +106,8 @@ def get_all_s3_buckets(fb,my_region):
             #print("outside get_s3 type=" + key)
             get_s3(f,s3_fields,key,bucket_name)
       
-     processed=processed+[type+","+bucket_name]
-   print("processed=" + str(processed))
+     common.processed=common.processed+[type+","+bucket_name]
+   print("processed=" + str(common.processed))
    
 
 # terraform plan
@@ -121,7 +124,6 @@ def get_all_s3_buckets(fb,my_region):
 ####################################################
 
 def get_s3(f,s3_fields,type,bucket_name):
-   global processed
    try:
       #print("in get_s3 type=" + type)
       response=s3_fields[type](Bucket=bucket_name)
@@ -134,7 +136,6 @@ def get_s3(f,s3_fields,type,bucket_name):
          f.write('id = "' + bucket_name + '"\n')
          f.write("}\n")
 
-      #print("processed=" + str(processed))
    except:
       #print("No " + type + " config for bucket " + bucket_name)
       pass

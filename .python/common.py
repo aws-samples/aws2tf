@@ -5,6 +5,11 @@ import fixtf
 import os
 #import aws2tf
 
+# global variables initailsed in commomn:
+processed=[]
+dependancies = []
+
+
 def tfplan(type):
    print("tf plan")
    rf=str(type) + "_resources.out"

@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 import boto3
-import multiprocessing
 import signal
 import argparse
 import s3
 import ec2
-import os
 import common
 import resources
 import cw
-import fixtf
+import config
+
+
 
 if __name__ == '__main__':
-    global processed
+   
+    common.processed=[]
     common.check_python_version()
     #print("cwd=%s" % os.getcwd())
     signal.signal(signal.SIGINT, common.ctrl_c_handler)
@@ -24,8 +25,7 @@ if __name__ == '__main__':
     argParser.add_argument("-m", "--merge", help="merge [False]|True")
     args = argParser.parse_args()
     #print("args=%s" % args)
-    processed = []
-    dependancies = []
+
     
     #print("args.bucket=%s" % args.bucket)
     #print("args.type=%s" % args.type)
@@ -45,14 +45,28 @@ if __name__ == '__main__':
 
     mg=False
     if args.merge is not None:
-        mg=args.merge
+        mg=True
+        print("Merging "+str(mg))
+        file = open('processed.txt', 'r')
+        while True:
+            line = file.readline()
+            if not line:
+                break
+            line=line.strip()
+            common.processed=common.processed+[line]
+       
 
     if mg is False:
         print("No merge - removing terraform.tfstate* and aws_*.tf")
         com="rm -f terraform.tfstate* aws_*.tf s3-*.tf tfplan *.out *import.tf"
         rout=common.rc(com)
 
+    print("Pre Processed:")
+    for i in common.processed:
+        print(i)
+
     id=args.id
+
     if args.bucket is None:
         fb=id
     else:
@@ -84,7 +98,6 @@ if __name__ == '__main__':
             #print("calling "+i)
             ec2.ec2_resources(i,None)
 
-
     elif type=="s3":
         com="rm -f s3-*.tf s3.tf tfplan *s3*.out"
         rout=common.rc(com)
@@ -94,13 +107,32 @@ if __name__ == '__main__':
         type="aws_cloudwatch_log_group"
         cw.cwlogs(type,id,"logGroups","logGroupName","logGroupNamePrefix")
 
+    elif type=="config":
+        type="aws_config_config_rule"
+        config.rules(type,id,"ConfigRules","ConfigRuleName","ConfigRuleNames")
+
+
     else:
         print("calling ec2.ec2_resources with type="+type+" id="+str(id))
         ec2.ec2_resources(type,id)
 
     
     common.wrapup()
-    print("processed="+str(processed))
+    print("Processed:")
+    if mg is True:
+        with open("processed.txt","a") as f:
+            for i in common.processed:
+                f.write(i+"\n")
+                print(i)
+    else:
+        with open("processed.txt","w") as f:
+            for i in common.processed:
+                f.write(i+"\n")
+                print(i)
+
+    com="sort -u processed.txt -o processed.txt"
+    rout=common.rc(com)
+
 
     exit(0)
 

@@ -1,6 +1,5 @@
-import ec2
-import common
-import subprocess
+import globals
+
 def  aws_vpc(t1,tt1,tt2,skipipv6,flag2):
     skip = 0
     #print(t1)
@@ -36,7 +35,7 @@ def aws_subnet(t1,tt1,tt2,flag1,flag2):
         #print("--> plan warning destroy - existing state ?")
         #exit()
         #print("gen complete")
-        common.dependancies=common.dependancies + ["aws_vpc." + tt2 + "\n"]   
+        globals.dependancies=globals.dependancies + ["aws_vpc." + tt2 + "\n"]   
 
        
         #ec2.ec2_resources("aws_vpc",tt2)

@@ -8,19 +8,18 @@ import fixtf
 
 # called by aws2tf.py
 def ec2_resources(type,id):   # aws_vpc , vpc-xxxxxxxxx called from main.py
-   ec2client = boto3.client('ec2')   
-   botokey,clfn,jsonid,filterid=resource_data(type,ec2client)
-   print("calling get_resource with id="+str(id))
+   #ec2client = boto3.client('ec2')   
+   botokey,clfn,jsonid,filterid=resource_data(type)
+   print("calling getresource with type="+type+" id="+str(id)+" botokey="+botokey+" clfn="+clfn+" jsonid="+jsonid+" filterid="+filterid)
    # call with statefile, ec2client fn, type,
-   ec2fn = getattr(ec2client, clfn)
+   #ec2fn = getattr(ec2client, clfn)
 ## overrides here - eg use vpcid to filter subnets - rather than default subnet-id
   
    if type in "aws_subnet" and id is not None and id in "vpc-":
-      print(type+' '+id)
-      get_resource(type,id,botokey,ec2fn,jsonid,"vpc-id")
+      common.getresource(type,id,"ec2",clfn,botokey,jsonid,"vpc-id")
    else: 
       # generic call
-      get_resource(type,id,botokey,ec2fn,jsonid,filterid)
+      common.getresource(type,id,"ec2",clfn,botokey,jsonid,filterid)
    #print("Done ec2_resources")
 
 
@@ -59,7 +58,7 @@ def get_resource(type,id,botokey,ec2fn,jsonid,filterid):
 
 
 
-def resource_data(type,ec2client):
+def resource_data(type):
 
    # tf_type   toplevel from cli describe - id field from awc cli, --filter field for cli, ec2 fn client call, fn call to filter tf
 
@@ -109,6 +108,7 @@ def resource_data(type,ec2client):
    if type == "aws_vpc": return 'Vpcs', "describe_vpcs", "VpcId", "vpc-id"
    #if type == "aws_vpn_gateway": return 'VpnGateways', ec2client.describe_vpn_gateways, "VpnGatewayId"
    #if type == "aws_vpn_connection": return 'VpnConnections', ec2client.describe_vpn_connections, "VpnConnectionId", "vpc-id"
+   if type == "aws_vpn_connection": return 'VpcEndpoints', "describe-vpc-endpoints", "VpcEndpointId", "vpc-id"
 
    return None, None, None, None, None
 

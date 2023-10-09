@@ -59,7 +59,7 @@ if __name__ == '__main__':
 
     if mg is False:
         print("No merge - removing terraform.tfstate* and aws_*.tf")
-        com="rm -f terraform.tfstate* aws_*.tf s3-*.tf tfplan *.out *import.tf"
+        com="rm -f terraform.tfstate* aws_*.tf s3-*.tf tfplan *.out *import.tf imported/*.tf"
         rout=common.rc(com)
 
     print("Pre Processed:")
@@ -119,7 +119,7 @@ if __name__ == '__main__':
         print("calling ec2.ec2_resources with type="+type+" id="+str(id))
         ec2.ec2_resources(type,id)
 
-    
+ 
     common.wrapup()
     print("Processed:")
     if mg is True:

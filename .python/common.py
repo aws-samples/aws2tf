@@ -13,13 +13,14 @@ import globals
 def tfplan(type):
    print("tf plan")
    rf=str(type) + "_resources.out"
-   com="terraform plan -generate-config-out="+ rf + " -out tfplan -json | jq . > plan1.json"
+   com="terraform plan -generate-config-out="+ rf + " -json | jq . > plan1.json"
    print(com)
    rout=rc(com)
+   
 
    file="plan1.json"
    f2=open(file, "r")
-   plan2=False
+   plan2=True
 
    while True:
       line = f2.readline()
@@ -30,21 +31,30 @@ def tfplan(type):
          #print("Error" + line)
          try:
                mess=f2.readline()
-               i=mess.split('(')[2].split(')')[0]
-               print("Removing "+i+" files - plan errors see plan1.json")
-               com="rm -f s3-*"+ i + "*_import.tf aws_s3_*__b-"+ i +".tf main.tf"
-               rout=rc(com)
-               plan2=True
+               try:
+                  i=mess.split('(')[2].split(')')[0]
+                  print("Removing "+i+" files - plan errors see plan1.json")
+                  com="rm -f s3-*"+ i + "s3-*_import.tf aws_s3_*__b-"+ i +".tf main.tf"
+                  rout=rc(com)
+                  plan2=True
+               except:
+                  print(mess.strip())
+                  plan2=True
          except:
                print("Error - no error message, check plan1.json")
-               continue
+               #continue
+               exit()
 
    print("Plan 1 complete")
+   print("calling fixtf "+ type)
+   fixtf.fixtf(type)
+   
+
    if plan2:
       
       print("Plan 2 ... ")
       # redo plan
-      com="rm -f aws_s3_bucket_resources.out aws_s3*.tf"
+      com="rm -f " +type +"_resources.out tfplan"
       print(com)
       rout=rc(com)
       com="terraform plan -generate-config-out="+ rf + " -out tfplan"
@@ -61,10 +71,7 @@ def tfplan(type):
             exit()
       print("Plan 2 complete")
    
-   if os.path.isfile("tfplan"):
-         print("calling fixtf "+ type)
-         fixtf.fixtf(type)
-   else:
+   if not os.path.isfile("tfplan"):
          print("could not find expected tfplan file - exiting")
          exit()
          
@@ -127,7 +134,6 @@ def rc(cmd):
 def ctrl_c_handler(signum, frame):
   print("Ctrl-C pressed.")
   exit()
-
 
 
 def check_python_version():
@@ -218,7 +224,7 @@ def getresource(type,id,boto3client,descfn,botokey,jsonid,filterid):
     
     client = boto3.client(boto3client)   
     dfn = getattr(client, descfn)
-    print("doing "+ type + ' with id ' + str(id))
+    print("--> In getresource doing "+ type + ' with id ' + str(id))
     if id is None:
       response=dfn() 
     else:   
@@ -245,6 +251,5 @@ def getresource(type,id,boto3client,descfn,botokey,jsonid,filterid):
                 f.write('}\n')
                 globals.processed=globals.processed+[type+","+theid]
   
-
     tfplan(type)
 

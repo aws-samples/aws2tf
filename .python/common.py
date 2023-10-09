@@ -3,11 +3,11 @@ import sys
 import subprocess
 import fixtf
 import os
+import globals
 #import aws2tf
 
 # global variables initailsed in commomn:
-processed=[]
-dependancies = []
+
 
 
 def tfplan(type):
@@ -215,21 +215,24 @@ def splitf(file):
 # aws_logs_log_group id  "logs"  "describe_log_groups"
 
 def getresource(type,id,boto3client,descfn,botokey,jsonid,filterid):
+    
     client = boto3.client(boto3client)   
     dfn = getattr(client, descfn)
     print("doing "+ type + ' with id ' + str(id))
     if id is None:
       response=dfn() 
-    else:
-      
-      if filterid == "logGroupNamePrefix":
-         print("calling with filter logGroupNamePrefix="+id)
-         response=dfn(logGroupNamePrefix=id)
+    else:   
+      if filterid == "logGroupNamePattern":
+         print("calling with filter logGroupNamePattern="+id)
+         response=dfn(logGroupNamePattern=id)
+      elif filterid == "ConfigRuleNames":
+         print("calling with filter ConfigRuleNames="+id)
+         response=dfn(ConfigRuleNames=[id])
       else:
          print("calling with filter id="+filterid + " and id=" + id)
          response=dfn(Filters=[{'Name': filterid, 'Values': [id]}])
        
-    print("response="+str(response[botokey]))
+    #print("response="+str(response[botokey]))
     if str(response[botokey]) != "[]":
       fn=type+"_import.tf"
       with open(fn, "w") as f:
@@ -240,6 +243,7 @@ def getresource(type,id,boto3client,descfn,botokey,jsonid,filterid):
                 f.write('  to = ' +type + '.' + tfid + '\n')
                 f.write('  id = "'+ theid + '"\n')
                 f.write('}\n')
+                globals.processed=globals.processed+[type+","+theid]
   
 
     tfplan(type)

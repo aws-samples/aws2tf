@@ -8,12 +8,13 @@ import common
 import resources
 import cw
 import config
+import globals
 
 
 
 if __name__ == '__main__':
    
-    common.processed=[]
+    globals.processed=[]
     common.check_python_version()
     #print("cwd=%s" % os.getcwd())
     signal.signal(signal.SIGINT, common.ctrl_c_handler)
@@ -53,7 +54,7 @@ if __name__ == '__main__':
             if not line:
                 break
             line=line.strip()
-            common.processed=common.processed+[line]
+            globals.processed=globals.processed+[line]
        
 
     if mg is False:
@@ -62,7 +63,7 @@ if __name__ == '__main__':
         rout=common.rc(com)
 
     print("Pre Processed:")
-    for i in common.processed:
+    for i in globals.processed:
         print(i)
 
     id=args.id
@@ -106,11 +107,12 @@ if __name__ == '__main__':
     elif type=="cw" or type=="cloudwatch" or type=="logs":
         type="aws_cloudwatch_log_group"
         #cw.cwlogs(type,id,"logGroups","logGroupName","logGroupNamePrefix")
-        common.getresource(type,id,"logs","describe_log_groups","logGroups","logGroupName","logGroupNamePrefix")
+        common.getresource(type,id,"logs","describe_log_groups","logGroups","logGroupName","logGroupNamePattern")
 
     elif type=="config":
         type="aws_config_config_rule"
-        config.rules(type,id,"ConfigRules","ConfigRuleName","ConfigRuleNames")
+        #config.rules(type,id,"ConfigRules","ConfigRuleName","ConfigRuleNames")
+        common.getresource(type,id,"config","describe_config_rules","ConfigRules","ConfigRuleName","ConfigRuleNames")
 
 
     else:
@@ -122,12 +124,12 @@ if __name__ == '__main__':
     print("Processed:")
     if mg is True:
         with open("processed.txt","a") as f:
-            for i in common.processed:
+            for i in globals.processed:
                 f.write(i+"\n")
                 print(i)
     else:
         with open("processed.txt","w") as f:
-            for i in common.processed:
+            for i in globals.processed:
                 f.write(i+"\n")
                 print(i)
 

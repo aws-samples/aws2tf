@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 import boto3
 import common
+import globals
 
 
 def get_all_s3_buckets(fb,my_region):
-   print("fb="+fb)
+   print("fb="+str(fb))
    type="aws_s3_bucket"
-   print("processed=" + str(common.processed))
+   print("processed=" + str(globals.processed))
    """Gets all the AWS S3 buckets and saves them to a file."""
    boto3.setup_default_session(region_name=my_region)
    s3a = boto3.resource("s3",region_name=my_region) 
@@ -46,7 +47,7 @@ def get_all_s3_buckets(fb,my_region):
    for buck in buckets: 
    
      bucket_name=buck.name
-     if "aws_s3_bucket,"+bucket_name in common.processed:
+     if "aws_s3_bucket,"+bucket_name in globals.processed:
         print("Already processed skipping bucket " + bucket_name)
         continue
      # jump if bucket name does not match
@@ -106,8 +107,8 @@ def get_all_s3_buckets(fb,my_region):
             #print("outside get_s3 type=" + key)
             get_s3(f,s3_fields,key,bucket_name)
       
-     common.processed=common.processed+[type+","+bucket_name]
-   print("processed=" + str(common.processed))
+     globals.processed=globals.processed+[type+","+bucket_name]
+   print("processed=" + str(globals.processed))
    
 
 # terraform plan

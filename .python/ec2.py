@@ -108,7 +108,7 @@ def resource_data(type):
    if type == "aws_vpc": return 'Vpcs', "describe_vpcs", "VpcId", "vpc-id"
    #if type == "aws_vpn_gateway": return 'VpnGateways', ec2client.describe_vpn_gateways, "VpnGatewayId"
    #if type == "aws_vpn_connection": return 'VpnConnections', ec2client.describe_vpn_connections, "VpnConnectionId", "vpc-id"
-   if type == "aws_vpn_connection": return 'VpcEndpoints', "describe-vpc-endpoints", "VpcEndpointId", "vpc-id"
+   if type == "aws_vpc_endpoint": return 'VpcEndpoints', "describe_vpc_endpoints", "VpcEndpointId", "vpc-id"
 
    return None, None, None, None, None
 

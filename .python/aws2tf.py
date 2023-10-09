@@ -105,7 +105,8 @@ if __name__ == '__main__':
 
     elif type=="cw" or type=="cloudwatch" or type=="logs":
         type="aws_cloudwatch_log_group"
-        cw.cwlogs(type,id,"logGroups","logGroupName","logGroupNamePrefix")
+        #cw.cwlogs(type,id,"logGroups","logGroupName","logGroupNamePrefix")
+        common.getresource(type,id,"logs","describe_log_groups","logGroups","logGroupName","logGroupNamePrefix")
 
     elif type=="config":
         type="aws_config_config_rule"

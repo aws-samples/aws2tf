@@ -1,6 +1,5 @@
 import boto3
 import common
-import os
 
 #                                        botokey                                jsonid          filterid
 #if type == "aws_nat_gateway": return 'NatGateways', "describe_nat_gateways", "NatGatewayId","nat-gateway-id"
@@ -8,13 +7,15 @@ import os
 
 
 def cwlogs(type,id,botokey,jsonid,filterid):
+    clfn="describe_log_groups"
     client = boto3.client('logs')   
+    dfn = getattr(client, clfn)
     print("doing "+ type + ' with id ' + str(id))
     if id is None:
-      response=client.describe_log_groups()  
+      response=dfn() 
     else:
         print("calling with filter id="+filterid + " and id=" + id)
-        response=client.describe_log_groups(logGroupNamePrefix=id) 
+        response=dfn(logGroupNamePrefix=id) 
  
     fn=type+"_import.tf"
     with open(fn, "w") as f:

@@ -9,7 +9,8 @@ def fixtf(ttft):
 
     print(ttft+" fixtf")  
     rf=ttft+"_resources.out"
-    tf2=ttft+".tf"
+    #tf2=ttft+".tf"
+    tf2="main.tf"
     print("rw tf")
     try:
         f1 = open(rf, 'r')
@@ -17,7 +18,7 @@ def fixtf(ttft):
         print("no "+rf)
         return
     Lines = f1.readlines()
-    with open(tf2, "w") as f2:
+    with open(tf2, "a") as f2:
         skip=0
         flag1=False
         flag2=False
@@ -34,9 +35,9 @@ def fixtf(ttft):
             if skip == 0:
                 f2.write(t1)
                 
-    with open(tf2, "a") as f2:
-        f2.write("##END,"+ttft+"\n")
-    splitf(tf2)
+    #with open(tf2, "a") as f2:
+    #    f2.write("##END,"+ttft+"\n")
+    #splitf(tf2)
 
 
 def splitf(file):

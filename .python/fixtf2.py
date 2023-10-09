@@ -36,7 +36,8 @@ def aws_subnet(t1,tt1,tt2,flag1,flag2):
         #print("--> plan warning destroy - existing state ?")
         #exit()
         #print("gen complete")
-            
+        common.dependancies=common.dependancies + ["aws_vpc." + tt2 + "\n"]   
+
        
         #ec2.ec2_resources("aws_vpc",tt2)
 

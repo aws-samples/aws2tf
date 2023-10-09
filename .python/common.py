@@ -1,4 +1,4 @@
-import json
+import boto3
 import sys
 import subprocess
 import fixtf
@@ -32,11 +32,11 @@ def tfplan(type):
                mess=f2.readline()
                i=mess.split('(')[2].split(')')[0]
                print("Removing "+i+" files - plan errors see plan1.json")
-               com="rm -f s3-*"+ i + "*_import.tf aws_s3_*__b-"+ i +".tf"
+               com="rm -f s3-*"+ i + "*_import.tf aws_s3_*__b-"+ i +".tf main.tf"
                rout=rc(com)
                plan2=True
          except:
-               print("Error - no error message")
+               print("Error - no error message, check plan1.json")
                continue
 
    print("Plan 1 complete")
@@ -71,10 +71,8 @@ def tfplan(type):
 
 
 def wrapup():
-   #print("wrap up")
-   print("Format")
-   com="terraform fmt -no-color"
-   rout=rc(com) 
+   print("split main.tf")
+   splitf("main.tf")
    print("Validate json")
    com="terraform validate -no-color -json > validate.json"
    rout=rc(com)
@@ -104,6 +102,9 @@ def wrapup():
       print(str(rout.stdout.decode().rstrip()))
    else: 
       print("No changes in plan")
+      com="mv *_import.tf imported"
+      rout=rc(com)
+
 
 
 
@@ -127,35 +128,6 @@ def ctrl_c_handler(signum, frame):
   print("Ctrl-C pressed.")
   exit()
 
-def start_state(sf):
-   #print("start state")
-       #echo $tsf
-   sf.write('{\n')
-   sf.write('  "version": 4,\n')
-   sf.write('  "resources\": [ \n')
-
-def end_state(sf):
-   #print("end state")
-   sf.write('  ]\n')
-   sf.write('}\n')
-
-def res_head(sf,ttft,rname):
-   #print("res head")
-   sf.write('    {\n')
-   sf.write('      "mode": "managed",\n')
-   sf.write('      "type": "'+ ttft + '",\n')
-   sf.write('      "name": "' + rname + '",\n')
-   sf.write('      "provider": "provider[\\"registry.terraform.io/hashicorp/aws\\"]",\n')
-   sf.write('      "instances": [ \n')
-   sf.write('        {\n')
-   sf.write('          "attributes": {\n') 
-
-def res_tail(sf):
-   #print("res tail")
-   sf.write('          }\n')
-   sf.write('        }\n')
-   sf.write('      ]\n')
-   sf.write('    },\n')
 
 
 def check_python_version():
@@ -166,68 +138,6 @@ def check_python_version():
     print("This program requires Python 3.7 or later.")
     sys.exit(1)
 
-def is_pool_running(pool):
-    """Check if a multiprocessing pool is running."""
-
-    if pool is None:
-        return False
-    return True
-
-
-def finish_state(statefile):
-   #print("finishing state file")
-   with open(statefile, 'r') as fp:
-        for count, line in enumerate(fp):
-            pass
-   #print('Total Lines', count + 1)
-   if count <= 5 :
-      print("empty state exiting")
-      exit()
-
-
-   el=count-2
-   #print('toedit=' + str(el))
-   fp.close()
-
-   with open(statefile, 'r') as file:
-      data = file.readlines()
-   data[el] = '    }\n'
-
-   with open(statefile, 'w') as file:
-      file.writelines( data )
-      file.close()
-
-   f = open(statefile, 'r')
-   data = json.load(f)
-   f.close()
-   
-   #print("skipping refesh etc ...")
-
-   #return
-
-   com="terraform refresh -no-color -lock=false -state " + statefile
-   #print(com)
-   rout=rc(com)
-   #print(rout)
-
-   for i in data['resources']:
-
-      ttft=i['type']
-      rname=i['name']
-      com="terraform state show -no-color -state " + statefile + " " + ttft + "." + rname + " > " + ttft + "-" + rname + "-1.txt"
-      #print("show for " +ttft + " " + rname)
-#      print(com)
-      rout=rc(com)
-#      print(rout)
-      # state move
-
-      com="terraform state mv -state " + statefile + " -state-out=terraform.tfstate -lock=true " + ttft + "." + rname + " " + ttft + "." + rname
-      #com="terraform state mv -state " + statefile + " -state-out=terraform.tfstate -lock=true " + ttft +  " " + ttft 
-
-      print("move for " +ttft + " " + rname)
-#      print(com)
-      rout=rc(com)
-#      print(rout) 
 
 
 def aws_tf(region):
@@ -249,3 +159,88 @@ def aws_tf(region):
       f3.write('}\n')
 
    f3.close()
+
+
+
+def splitf(file):
+   lhs=0
+   rhs=0
+   if os.path.isfile(file):
+      print("split file:"+ file)
+      with open(file, "r") as f:
+         Lines = f.readlines()
+      for tt1 in Lines:
+         #print(tt1)
+         if "{" in tt1: lhs=lhs+1
+         if "}" in tt1: rhs=rhs+1
+         if lhs > 1:
+               if lhs == rhs:
+                  try:
+                     f2.write(tt1+"\n")
+                     f2.close()
+                     lhs=0
+                     rhs=0
+                     continue
+                  except:
+                     pass
+
+         if tt1.startswith("resource"):
+               #print("resource: " + tt1)
+               ttft=tt1.split('"')[1]
+               taddr=tt1.split('"')[3]
+      
+               f2=open(ttft+"__"+taddr+".tf","w")
+               f2.write(tt1)
+
+         elif tt1.startswith("#"):
+               continue
+         elif tt1=="" or tt1=="\n":
+               continue
+         else:
+               try:
+                  f2.write(tt1)
+               except:
+                  print("tried to write to closed file: >"+ tt1 + "<")
+   else:
+      print("could not find expected main.tf file")
+      
+        
+   com="mv "+file +" imported/" +file
+   rout=rc(com)  
+   com="terraform fmt"
+   rout=rc(com) 
+
+#
+#  boto3.client("logs")
+# aws_logs_log_group id  "logs"  "describe_log_groups"
+
+def getresource(type,id,boto3client,descfn,botokey,jsonid,filterid):
+    client = boto3.client(boto3client)   
+    dfn = getattr(client, descfn)
+    print("doing "+ type + ' with id ' + str(id))
+    if id is None:
+      response=dfn() 
+    else:
+      
+      if filterid == "logGroupNamePrefix":
+         print("calling with filter logGroupNamePrefix="+id)
+         response=dfn(logGroupNamePrefix=id)
+      else:
+         print("calling with filter id="+filterid + " and id=" + id)
+         response=dfn(Filters=[{'Name': filterid, 'Values': [id]}])
+       
+    print("response="+str(response[botokey]))
+    if str(response[botokey]) != "[]":
+      fn=type+"_import.tf"
+      with open(fn, "w") as f:
+            for item in response[botokey]:
+                theid=item[jsonid]
+                tfid=theid.replace("/","_")
+                f.write('import {\n')
+                f.write('  to = ' +type + '.' + tfid + '\n')
+                f.write('  id = "'+ theid + '"\n')
+                f.write('}\n')
+  
+
+    tfplan(type)
+

@@ -11,7 +11,7 @@ import globals
 
 
 def tfplan(type):
-   print("tf plan")
+   print("Plan 1 ... ")
    rf=str(type) + "_resources.out"
    com="terraform plan -generate-config-out="+ rf + " -json | jq . > plan1.json"
    print(com)
@@ -28,7 +28,8 @@ def tfplan(type):
          break
       #print(line)
       if '@level": "error"' in line:
-         #print("Error" + line)
+         if globals.debug is True:
+            print("Error" + line)
          try:
                mess=f2.readline()
                try:
@@ -38,7 +39,8 @@ def tfplan(type):
                   rout=rc(com)
                   plan2=True
                except:
-                  print(mess.strip())
+                  if globals.debug is True:
+                     print(mess.strip())
                   plan2=True
          except:
                print("Error - no error message, check plan1.json")
@@ -57,13 +59,13 @@ def tfplan(type):
       com="rm -f " +type +"_resources.out tfplan"
       print(com)
       rout=rc(com)
-      com="terraform plan -generate-config-out="+ rf + " -out tfplan"
+      com="terraform plan -generate-config-out="+ rf + " -out tfplan -json > plan2.json"
       print(com)
       rout=rc(com)
       el=len(rout.stderr.decode().rstrip())
       if el!=0: 
             print(rout.stderr.decode().rstrip())
-            print("--> plan errors exiting  ?")
+            print("--> Plan 2 errors exiting - check plan2.json ?")
             exit()
       if "0 to destroy" not in str(rout.stdout.decode().rstrip()):
             print(str(rout.stdout.decode().rstrip()))
@@ -221,7 +223,7 @@ def splitf(file):
 # aws_logs_log_group id  "logs"  "describe_log_groups"
 
 def getresource(type,id,boto3client,descfn,botokey,jsonid,filterid):
-    
+    globals.types=globals.types+[type]
     client = boto3.client(boto3client)   
     dfn = getattr(client, descfn)
     print("--> In getresource doing "+ type + ' with id ' + str(id))

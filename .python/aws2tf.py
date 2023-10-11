@@ -24,6 +24,7 @@ if __name__ == '__main__':
     argParser.add_argument("-r", "--region", help="region")
     argParser.add_argument("-i", "--id", help="resource id")
     argParser.add_argument("-m", "--merge", help="merge [False]|True")
+    argParser.add_argument("-d", "--debug", help="debug [False]|True")
     args = argParser.parse_args()
     #print("args=%s" % args)
 
@@ -59,7 +60,7 @@ if __name__ == '__main__':
 
     if mg is False:
         print("No merge - removing terraform.tfstate* and aws_*.tf")
-        com="rm -f terraform.tfstate* aws_*.tf s3-*.tf tfplan *.out *import.tf imported/*.tf"
+        com="rm -f terraform.tfstate* aws_*.tf s3-*.tf tfplan *.out *import.tf imported/*.tf main.tf"
         rout=common.rc(com)
 
     print("Pre Processed:")
@@ -73,10 +74,13 @@ if __name__ == '__main__':
     else:
         fb=args.bucket  
 
+  
+    if args.debug is not None:
+        globals.debug=True
+ 
 
     com="rm -f *.txt *.json"
     rout=common.rc(com)
-
 
     common.aws_tf(region)
 
@@ -119,6 +123,9 @@ if __name__ == '__main__':
         print("calling ec2.ec2_resources with type="+type+" id="+str(id))
         ec2.ec2_resources(type,id)
 
+    # loop through globals.type and call tfplan(type)
+    for type in globals.types:
+        print(str(type))
  
     common.wrapup()
     print("Processed:")
@@ -126,16 +133,20 @@ if __name__ == '__main__':
         with open("processed.txt","a") as f:
             for i in globals.processed:
                 f.write(i+"\n")
-                print(i)
+                if globals.debug is True:
+                    print(i)
     else:
         with open("processed.txt","w") as f:
             for i in globals.processed:
                 f.write(i+"\n")
-                print(i)
+                if globals.debug is True:
+                    print(i)
 
     com="sort -u processed.txt -o processed.txt"
     rout=common.rc(com)
 
+    if globals.debug is True:
+        print(globals.types)
 
     exit(0)
 

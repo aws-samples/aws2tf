@@ -7,6 +7,7 @@ import globals
 def get_all_s3_buckets(fb,my_region):
    print("fb="+str(fb))
    type="aws_s3_bucket"
+   
    print("processed=" + str(globals.processed))
    """Gets all the AWS S3 buckets and saves them to a file."""
    boto3.setup_default_session(region_name=my_region)
@@ -41,8 +42,9 @@ def get_all_s3_buckets(fb,my_region):
    }
   
 
-
+   globals.types=globals.types+[type]
    buckets = s3a.buckets.all()
+   
 
    for buck in buckets: 
    
@@ -102,12 +104,13 @@ def get_all_s3_buckets(fb,my_region):
          f.write('id = "' + bucket_name + '"\n')
          f.write("}\n")
 
-
+         globals.processed=globals.processed+[type+","+bucket_name]
          for key in s3_fields:
             #print("outside get_s3 type=" + key)
+            globals.types=globals.types+[type]
             get_s3(f,s3_fields,key,bucket_name)
       
-     globals.processed=globals.processed+[type+","+bucket_name]
+     
    print("processed=" + str(globals.processed))
    
 
@@ -136,6 +139,7 @@ def get_s3(f,s3_fields,type,bucket_name):
          f.write("to = " + type + ".b-" + bucket_name + "\n")
          f.write('id = "' + bucket_name + '"\n')
          f.write("}\n")
+         globals.processed=globals.processed+[type+","+bucket_name]
 
    except:
       #print("No " + type + " config for bucket " + bucket_name)

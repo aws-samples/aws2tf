@@ -35,7 +35,7 @@ def aws_subnet(t1,tt1,tt2,flag1,flag2):
         #print("--> plan warning destroy - existing state ?")
         #exit()
         #print("gen complete")
-        globals.dependancies=globals.dependancies + ["aws_vpc." + tt2 + "\n"]   
+        #globals.dependancies=globals.dependancies + ["aws_vpc." + tt2 + "\n"]   
 
        
         #ec2.ec2_resources("aws_vpc",tt2)
@@ -153,6 +153,50 @@ def aws_cloudwatch_log_group(t1,tt1,tt2,flag1,flag2):
 
 def aws_config_config_rule(t1,tt1,tt2,flag1,flag2):
     skip=0
+
+    return skip,t1,flag1,flag2
+
+
+def aws_vpc_endpoint(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    #print("tt1="+tt1)
+    if tt1 == "vpc_id":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
+    if tt1 == "subnet_ids":
+        tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
+        cc=tt2.count(',')
+        if globals.debug is True: 
+            print(tt1 + ": "  + tt2 + " count=" + str(cc))
+        if cc == 0 and "subnet-" in tt2: cc=1
+        if cc > 0:
+            subs=""
+            if cc == 1: 
+                subs=subs + "aws_subnet." + tt2 + ".id,"
+            else:
+                for i in range(cc+1):
+                    subn=tt2.split(',')[i]
+                    subs=subs + "aws_subnet." + subn + ".id,"
+            t1=tt1 + " = [" + subs + "]\n"
+            t1=t1.replace(',]',']')
+    if tt1 == "security_group_ids":
+        tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
+        cc=tt2.count(',')
+        if globals.debug is True: 
+            print(tt1 + ": "  + tt2 + " count=" + str(cc))
+        if cc == 0 and "sg-" in tt2: cc=1
+        if cc > 0:
+            subs=""
+            if cc == 1: 
+                subs=subs + "aws_security_group." + tt2 + ".id,"
+            else:
+                for i in range(cc+1):
+                    subn=tt2.split(',')[i]
+                    subs=subs + "aws_security_group." + subn + ".id,"
+            t1=tt1 + " = [" + subs + "]\n"
+            t1=t1.replace(',]',']')
+
+
 
     return skip,t1,flag1,flag2
 

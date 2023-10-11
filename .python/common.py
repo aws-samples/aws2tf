@@ -62,15 +62,23 @@ def tfplan(type):
       com="terraform plan -generate-config-out="+ rf + " -out tfplan -json > plan2.json"
       print(com)
       rout=rc(com)
-      el=len(rout.stderr.decode().rstrip())
-      if el!=0: 
-            print(rout.stderr.decode().rstrip())
-            print("--> Plan 2 errors exiting - check plan2.json ?")
-            exit()
-      if "0 to destroy" not in str(rout.stdout.decode().rstrip()):
-            print(str(rout.stdout.decode().rstrip()))
-            print("--> plan warning destroy - existing state ?")
-            exit()
+      zerod=False
+      with open('plan2.json', 'r') as f:
+         for line in f.readlines():
+            #print(line)
+            if '0 to destroy' in line:
+              zerod=True
+            if '@level":"error"' in line:
+              if globals.debug is True:
+                 print("Error" + line)
+              print("-->> Plan 2 errors exiting - check plan2.json - or run terraform plan")
+              exit()
+
+      if not zerod:
+         print("-->> plan will destroy - unexpected, is there existing state ?")
+         print("-->> look at plan2.json - or run terraform plan")
+         exit()
+
       print("Plan 2 complete")
    
    if not os.path.isfile("tfplan"):

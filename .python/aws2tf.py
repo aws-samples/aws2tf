@@ -10,8 +10,6 @@ import cw
 import config
 import globals
 
-
-
 if __name__ == '__main__':
    
     globals.processed=[]

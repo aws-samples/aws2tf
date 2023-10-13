@@ -1,7 +1,6 @@
 def resource_types(type):
     if type == "net":
-        #net=["aws_vpc","aws_subnet","aws_security_group","aws_internet_gateway","aws_nat_gateway","aws_route_table","aws_vpc_endpoint"]
-        net=["aws_vpc","aws_subnet"]
+        net=["aws_vpc","aws_subnet","aws_security_group","aws_internet_gateway","aws_nat_gateway","aws_route_table","aws_vpc_endpoint"]
         return net
     else:
         same=[type]
@@ -44,7 +43,6 @@ def resource_data(type,id):
         key="VpcEndpointId"
         filterid="vpc-endpoint-id"
         if id is not None and "vpc-" in id: filterid="vpc-id"
-
     
     elif type in "aws_subnet":
         clfn="ec2"
@@ -53,35 +51,56 @@ def resource_data(type,id):
         key="SubnetId"
         filterid="subnet-id"
         if id is not None and "vpc-" in id: filterid="vpc-id"
-   # tf_type   toplevel from cli describe - id field from awc cli, --filter field for cli, ec2 fn client call, fn call to filter tf
+
+    elif type == "aws_security_group": 
+        clfn="ec2"
+        descfn="describe_security_groups"
+        topkey="SecurityGroups"
+        key="GroupId"
+        filterid="group-id"
+        if id is not None and "vpc-" in id: filterid="vpc-id"         
+
+    elif type == "aws_internet_gateway": 
+        clfn="ec2"
+        descfn="describe_internet_gateways"
+        topkey="InternetGateways"
+        key="InternetGatewayId"
+        filterid="internet-gateway-id"
+        if id is not None and "vpc-" in id: filterid="vpc-id"    
+
+    elif type == "aws_nat_gateway": 
+        clfn="ec2"
+        descfn="describe_nat_gateways"
+        topkey="NatGateways"
+        key="NatGatewayId"
+        filterid="nat-gateway-id"
+        if id is not None and "vpc-" in id: filterid="vpc-id"           
+
+    elif type == "aws_network_acl": 
+        clfn="ec2"
+        descfn="describe_network_acls"
+        topkey="NetworkAcls"
+        key="NetworkAclId"
+        filterid="network-acl-id"
+        if id is not None and "vpc-" in id: filterid="vpc-id" 
+
+    elif type == "aws_route_table": 
+        clfn="ec2"
+        descfn="describe_route_tables"
+        topkey="RouteTables"
+        key="RouteTableId"
+        filterid="route-table-id"
+        if id is not None and "vpc-" in id: filterid="vpc-id"            
 
    #if type == "aws_availability_zone": return 'AvailabilityZones', ec2client.describe_availability_zones, "ZoneName"
    #if type == "aws_dhcp_options": return 'DhcpOptions', ec2client.describe_dhcp_options, "DhcpOptionsId"
    #if type == "aws_elastic_load_balancer": return 'ElasticLoadBalancers', ec2client.describe_load_balancers, "LoadBalancerName"
-
-    elif type == "aws_internet_gateway": 
-            return "ec2","describe_internet_gateways", "InternetGatewayId","internet-gateway-id"
    #if type == "aws_instance": return 'Reservations', ec2client.describe_instances, "InstanceId"
    #if type == "aws_image": return 'Images', ec2client.describe_images, "ImageId"
 
    #if type == "aws_key_pair": return 'KeyPairs', ec2client.describe_key_pairs, "KeyName"
 
    #if type == "aws_load_balancer": return 'LoadBalancers', ec2client.describe_load_balancers, "LoadBalancerName"
-    elif type == "aws_nat_gateway": 
-            return "ec2","describe_nat_gateways",   'NatGateways', "NatGatewayId","nat-gateway-id"
-    elif type == "aws_network_acl": 
-            return "ec2","describe_network_acls",   'NetworkAcls',  "NetworkAclId","network-acl-id"
-   #if type == "aws_network_interface": return 'NetworkInterfaces', ec2client.describe_network_interfaces, "NetworkInterfaceId"
-
-    elif type == "aws_route_table": 
-            return "ec2","describe_route_tables",'RouteTables',  "RouteTableId","route-table-id"
-   #if type == "aws_route": return 'Routes', ec2client.describe_route_tables, "RouteTableId"
-
-    elif type == "aws_security_group": 
-          return "ec2","describe_security_groups",'SecurityGroups',  "GroupId","group-id"
-
-
-
    
    #if type == "aws_snapshot": return 'Snapshots', ec2client.describe_snapshots, "SnapshotId"
    #if type == "aws_target_group": return 'TargetGroups', ec2client.describe_target_groups, "TargetGroupName"
@@ -109,7 +128,6 @@ def resource_data(type,id):
    #if type == "aws_vpn_connection": return 'VpnConnections', ec2client.describe_vpn_connections, "VpnConnectionId", "vpc-id"
 
     
-        
     return clfn,descfn,topkey,key,filterid
 
 

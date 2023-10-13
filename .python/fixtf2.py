@@ -166,19 +166,19 @@ def aws_vpc_endpoint(t1,tt1,tt2,flag1,flag2):
     if tt1 == "subnet_ids":
         tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
         cc=tt2.count(',')
+        subs=""
         if globals.debug is True: 
             print(tt1 + ": "  + tt2 + " count=" + str(cc))
-        if cc == 0 and "subnet-" in tt2: cc=1
-        if cc > 0:
-            subs=""
-            if cc == 1: 
-                subs=subs + "aws_subnet." + tt2 + ".id,"
-            else:
+        if cc == 0 and "subnet-" in tt2: 
+            subs=subs + "aws_subnet." + tt2 + ".id,"
+        else: 
+            if cc > 0:
                 for i in range(cc+1):
                     subn=tt2.split(',')[i]
                     subs=subs + "aws_subnet." + subn + ".id,"
             t1=tt1 + " = [" + subs + "]\n"
             t1=t1.replace(',]',']')
+
     if tt1 == "security_group_ids":
         tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
         cc=tt2.count(',')

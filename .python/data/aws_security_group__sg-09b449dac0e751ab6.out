@@ -1,0 +1,36 @@
+resource "aws_security_group" "sg-09b449dac0e751ab6" {
+  description = "Allow HTTP for VPC Endpoint"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 80
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-02fc8b58ffb52ffb0"]
+    self             = false
+    to_port          = 80
+  }]
+  name                   = "secure-ds-shared-service-SharedSageMakerNetwork-16N9A7MKFQVIP-SharedServicesVPCEndpointSecurityGroup-IR5JM95A41BZ"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "ds-vpc-http-ingress-sg-DSSharedServices"
+  }
+  tags_all = {
+    Name = "ds-vpc-http-ingress-sg-DSSharedServices"
+  }
+  vpc_id = "vpc-02dd2936ab232ef7e"
+}
+

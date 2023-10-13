@@ -64,7 +64,7 @@ def resource_data(type,id):
         topkey="InternetGateways"
         key="InternetGatewayId"
         filterid="internet-gateway-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id"    
+        if id is not None and "vpc-" in id: filterid="attachment.vpc-id"    
 
     elif type == "aws_nat_gateway": 
         clfn="ec2"

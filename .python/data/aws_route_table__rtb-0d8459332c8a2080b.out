@@ -1,0 +1,8 @@
+resource "aws_route_table" "rtb-0d8459332c8a2080b" {
+  propagating_vgws = []
+  route            = []
+  tags             = {}
+  tags_all         = {}
+  vpc_id           = "vpc-02dd2936ab232ef7e"
+}
+

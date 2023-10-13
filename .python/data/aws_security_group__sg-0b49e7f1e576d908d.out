@@ -1,0 +1,36 @@
+resource "aws_security_group" "sg-0b49e7f1e576d908d" {
+  description = "Allow TLS for VPC Endpoint"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 443
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-02fc8b58ffb52ffb0"]
+    self             = false
+    to_port          = 443
+  }]
+  name                   = "secure-ds-shared-service-SharedSageMakerNetwork-16N9A7MKFQVIP-VPCEndpointSecurityGroup-HPV0OEJ2U8S"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "ds-vpc-https-ingress-sg-DSSharedServices"
+  }
+  tags_all = {
+    Name = "ds-vpc-https-ingress-sg-DSSharedServices"
+  }
+  vpc_id = "vpc-02dd2936ab232ef7e"
+}
+

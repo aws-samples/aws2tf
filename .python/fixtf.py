@@ -6,12 +6,12 @@ import fixtf2
 import globals
 
 
-def fixtf(ttft,rf):
+def fixtf(ttft,tf):
 
     if globals.debug:
         print(ttft+" fixtf "+rf+".out")   
-    rf=rf+".out"
-    tf2=rf+".tf"
+    rf=tf+".out"
+    tf2=tf+".tf"
    
     try:
         f1 = open(rf, 'r')
@@ -82,8 +82,8 @@ def splitf(file):
             except:
                 print("tried to write to closed file: >"+ tt1 + "<")
         
-    com="rm -f "+file
-    rout=common.rc(com)  
+    #com="rm -f "+file
+    #rout=common.rc(com)  
    
  
     

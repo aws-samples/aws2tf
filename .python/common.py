@@ -61,6 +61,7 @@ def tfplan(type):
       x=glob.glob(type+"*.out")
       for fil in x:
          tf=fil.split('.')[0]
+         print("tf="+tf)
          fixtf.fixtf(type,tf)
    
  

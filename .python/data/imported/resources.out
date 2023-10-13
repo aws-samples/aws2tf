@@ -2,37 +2,11 @@
 # Please review these resources and move them into your main configuration files.
 
 # __generated__ by Terraform
-resource "aws_subnet" "subnet-025daba223195049c" {
-  assign_ipv6_address_on_creation                = false
-  availability_zone                              = "eu-west-1a"
-  availability_zone_id                           = "euw1-az3"
-  cidr_block                                     = "10.2.1.0/24"
-  customer_owned_ipv4_pool                       = null
-  enable_dns64                                   = false
-  enable_lni_at_device_index                     = 0
-  enable_resource_name_dns_a_record_on_launch    = false
-  enable_resource_name_dns_aaaa_record_on_launch = false
-  ipv6_cidr_block                                = null
-  ipv6_native                                    = false
-  map_customer_owned_ip_on_launch                = false
-  map_public_ip_on_launch                        = false
-  outpost_arn                                    = null
-  private_dns_hostname_type_on_launch            = "ip-name"
-  tags = {
-    Name = "ds-subnet-a-DSSharedServices"
-  }
-  tags_all = {
-    Name = "ds-subnet-a-DSSharedServices"
-  }
-  vpc_id = "vpc-02dd2936ab232ef7e"
-}
-
-# __generated__ by Terraform
-resource "aws_subnet" "subnet-0c0444bc7c9afabc2" {
+resource "aws_subnet" "subnet-05a180294ca109595" {
   assign_ipv6_address_on_creation                = false
   availability_zone                              = "eu-west-1b"
   availability_zone_id                           = "euw1-az1"
-  cidr_block                                     = "100.64.1.0/24"
+  cidr_block                                     = "10.2.2.0/24"
   customer_owned_ipv4_pool                       = null
   enable_dns64                                   = false
   enable_lni_at_device_index                     = 0
@@ -45,14 +19,12 @@ resource "aws_subnet" "subnet-0c0444bc7c9afabc2" {
   outpost_arn                                    = null
   private_dns_hostname_type_on_launch            = "ip-name"
   tags = {
-    Name        = "sub-p2"
-    subnet-type = "private"
+    Name = "ds-subnet-b-DSSharedServices"
   }
   tags_all = {
-    Name        = "sub-p2"
-    subnet-type = "private"
+    Name = "ds-subnet-b-DSSharedServices"
   }
-  vpc_id = "vpc-d16a7cb7"
+  vpc_id = "vpc-02dd2936ab232ef7e"
 }
 
 # __generated__ by Terraform
@@ -82,117 +54,11 @@ resource "aws_subnet" "subnet-0df410c038106cda9" {
 }
 
 # __generated__ by Terraform
-resource "aws_subnet" "subnet-03115823fcae3f209" {
-  assign_ipv6_address_on_creation                = false
-  availability_zone                              = "eu-west-1c"
-  availability_zone_id                           = "euw1-az2"
-  cidr_block                                     = "100.64.2.0/24"
-  customer_owned_ipv4_pool                       = null
-  enable_dns64                                   = false
-  enable_lni_at_device_index                     = 0
-  enable_resource_name_dns_a_record_on_launch    = false
-  enable_resource_name_dns_aaaa_record_on_launch = false
-  ipv6_cidr_block                                = null
-  ipv6_native                                    = false
-  map_customer_owned_ip_on_launch                = false
-  map_public_ip_on_launch                        = false
-  outpost_arn                                    = null
-  private_dns_hostname_type_on_launch            = "ip-name"
-  tags = {
-    Name        = "sub-p3"
-    subnet-type = "private"
-  }
-  tags_all = {
-    Name        = "sub-p3"
-    subnet-type = "private"
-  }
-  vpc_id = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform
-resource "aws_subnet" "subnet-7faf2225" {
+resource "aws_subnet" "subnet-025daba223195049c" {
   assign_ipv6_address_on_creation                = false
   availability_zone                              = "eu-west-1a"
   availability_zone_id                           = "euw1-az3"
-  cidr_block                                     = "172.31.32.0/20"
-  customer_owned_ipv4_pool                       = null
-  enable_dns64                                   = false
-  enable_lni_at_device_index                     = 0
-  enable_resource_name_dns_a_record_on_launch    = false
-  enable_resource_name_dns_aaaa_record_on_launch = false
-  ipv6_cidr_block                                = null
-  ipv6_native                                    = false
-  map_customer_owned_ip_on_launch                = false
-  map_public_ip_on_launch                        = true
-  outpost_arn                                    = null
-  private_dns_hostname_type_on_launch            = "ip-name"
-  tags = {
-    Name = "pub-default2"
-  }
-  tags_all = {
-    Name = "pub-default2"
-  }
-  vpc_id = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform
-resource "aws_subnet" "subnet-10dd9d76" {
-  assign_ipv6_address_on_creation                = false
-  availability_zone                              = "eu-west-1b"
-  availability_zone_id                           = "euw1-az1"
-  cidr_block                                     = "172.31.0.0/20"
-  customer_owned_ipv4_pool                       = null
-  enable_dns64                                   = false
-  enable_lni_at_device_index                     = 0
-  enable_resource_name_dns_a_record_on_launch    = false
-  enable_resource_name_dns_aaaa_record_on_launch = false
-  ipv6_cidr_block                                = null
-  ipv6_native                                    = false
-  map_customer_owned_ip_on_launch                = false
-  map_public_ip_on_launch                        = true
-  outpost_arn                                    = null
-  private_dns_hostname_type_on_launch            = "ip-name"
-  tags = {
-    Name = "pub-default1"
-  }
-  tags_all = {
-    Name = "pub-default1"
-  }
-  vpc_id = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform
-resource "aws_subnet" "subnet-8c6e3dc4" {
-  assign_ipv6_address_on_creation                = false
-  availability_zone                              = "eu-west-1c"
-  availability_zone_id                           = "euw1-az2"
-  cidr_block                                     = "172.31.16.0/20"
-  customer_owned_ipv4_pool                       = null
-  enable_dns64                                   = false
-  enable_lni_at_device_index                     = 0
-  enable_resource_name_dns_a_record_on_launch    = false
-  enable_resource_name_dns_aaaa_record_on_launch = false
-  ipv6_cidr_block                                = null
-  ipv6_native                                    = false
-  map_customer_owned_ip_on_launch                = false
-  map_public_ip_on_launch                        = true
-  outpost_arn                                    = null
-  private_dns_hostname_type_on_launch            = "ip-name"
-  tags = {
-    Name = "pub-default3"
-  }
-  tags_all = {
-    Name = "pub-default3"
-  }
-  vpc_id = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform
-resource "aws_subnet" "subnet-05a180294ca109595" {
-  assign_ipv6_address_on_creation                = false
-  availability_zone                              = "eu-west-1b"
-  availability_zone_id                           = "euw1-az1"
-  cidr_block                                     = "10.2.2.0/24"
+  cidr_block                                     = "10.2.1.0/24"
   customer_owned_ipv4_pool                       = null
   enable_dns64                                   = false
   enable_lni_at_device_index                     = 0
@@ -205,110 +71,12 @@ resource "aws_subnet" "subnet-05a180294ca109595" {
   outpost_arn                                    = null
   private_dns_hostname_type_on_launch            = "ip-name"
   tags = {
-    Name = "ds-subnet-b-DSSharedServices"
+    Name = "ds-subnet-a-DSSharedServices"
   }
   tags_all = {
-    Name = "ds-subnet-b-DSSharedServices"
+    Name = "ds-subnet-a-DSSharedServices"
   }
   vpc_id = "vpc-02dd2936ab232ef7e"
-}
-
-# __generated__ by Terraform
-resource "aws_subnet" "subnet-0828c1d4c4a82e60f" {
-  assign_ipv6_address_on_creation                = true
-  availability_zone                              = "eu-west-1a"
-  availability_zone_id                           = "euw1-az3"
-  cidr_block                                     = null
-  customer_owned_ipv4_pool                       = null
-  enable_dns64                                   = false
-  enable_lni_at_device_index                     = 0
-  enable_resource_name_dns_a_record_on_launch    = false
-  enable_resource_name_dns_aaaa_record_on_launch = true
-  ipv6_cidr_block                                = "2a05:d018:12fa:4b00::/64"
-  ipv6_native                                    = true
-  map_customer_owned_ip_on_launch                = false
-  map_public_ip_on_launch                        = false
-  outpost_arn                                    = null
-  private_dns_hostname_type_on_launch            = "resource-name"
-  tags = {
-    Name = "mysubipv6-1"
-  }
-  tags_all = {
-    Name = "mysubipv6-1"
-  }
-  vpc_id = "vpc-0cd3d5fd5e121e4a0"
-}
-
-# __generated__ by Terraform
-resource "aws_subnet" "subnet-09c34702be259d430" {
-  assign_ipv6_address_on_creation                = false
-  availability_zone                              = "eu-west-1a"
-  availability_zone_id                           = "euw1-az3"
-  cidr_block                                     = "100.64.0.0/24"
-  customer_owned_ipv4_pool                       = null
-  enable_dns64                                   = false
-  enable_lni_at_device_index                     = 0
-  enable_resource_name_dns_a_record_on_launch    = false
-  enable_resource_name_dns_aaaa_record_on_launch = false
-  ipv6_cidr_block                                = null
-  ipv6_native                                    = false
-  map_customer_owned_ip_on_launch                = false
-  map_public_ip_on_launch                        = false
-  outpost_arn                                    = null
-  private_dns_hostname_type_on_launch            = "ip-name"
-  tags = {
-    Name        = "sub-p1"
-    subnet-type = "private"
-  }
-  tags_all = {
-    Name        = "sub-p1"
-    subnet-type = "private"
-  }
-  vpc_id = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform
-resource "aws_vpc" "vpc-08226808095e0f3f3" {
-  assign_generated_ipv6_cidr_block     = false
-  cidr_block                           = "10.80.0.0/26"
-  enable_dns_hostnames                 = false
-  enable_dns_support                   = true
-  enable_network_address_usage_metrics = false
-  instance_tenancy                     = "default"
-  ipv4_ipam_pool_id                    = null
-  ipv4_netmask_length                  = null
-  ipv6_cidr_block                      = null
-  ipv6_cidr_block_network_border_group = null
-  ipv6_ipam_pool_id                    = null
-  ipv6_netmask_length                  = 0
-  tags = {
-    Name = "tf-codebuild"
-  }
-  tags_all = {
-    Name = "tf-codebuild"
-  }
-}
-
-# __generated__ by Terraform
-resource "aws_vpc" "vpc-d16a7cb7" {
-  assign_generated_ipv6_cidr_block     = false
-  cidr_block                           = "172.31.0.0/16"
-  enable_dns_hostnames                 = true
-  enable_dns_support                   = true
-  enable_network_address_usage_metrics = false
-  instance_tenancy                     = "default"
-  ipv4_ipam_pool_id                    = null
-  ipv4_netmask_length                  = null
-  ipv6_cidr_block                      = null
-  ipv6_cidr_block_network_border_group = null
-  ipv6_ipam_pool_id                    = null
-  ipv6_netmask_length                  = 0
-  tags = {
-    Name = "default"
-  }
-  tags_all = {
-    Name = "default"
-  }
 }
 
 # __generated__ by Terraform
@@ -330,27 +98,5 @@ resource "aws_vpc" "vpc-02dd2936ab232ef7e" {
   }
   tags_all = {
     Name = "ds-vpc-DSSharedServices"
-  }
-}
-
-# __generated__ by Terraform
-resource "aws_vpc" "vpc-0cd3d5fd5e121e4a0" {
-  assign_generated_ipv6_cidr_block     = true
-  cidr_block                           = "10.0.0.0/24"
-  enable_dns_hostnames                 = false
-  enable_dns_support                   = true
-  enable_network_address_usage_metrics = false
-  instance_tenancy                     = "default"
-  ipv4_ipam_pool_id                    = null
-  ipv4_netmask_length                  = null
-  ipv6_cidr_block                      = "2a05:d018:12fa:4b00::/56"
-  ipv6_cidr_block_network_border_group = "eu-west-1"
-  ipv6_ipam_pool_id                    = null
-  ipv6_netmask_length                  = 0
-  tags = {
-    Name = "ipv6-only"
-  }
-  tags_all = {
-    Name = "ipv6-only"
   }
 }

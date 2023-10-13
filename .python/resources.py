@@ -47,8 +47,8 @@ def resource_data(type,id):
 
     
     elif type in "aws_subnet":
-        if id is not None and id in "vpc-":
-            return "ec2","describe_subnets",        'Subnets',"VpcId","subnet-id"
+        if id is not None and "vpc-" in id:
+            return "ec2","describe_subnets",        'Subnets',"SubnetId","vpc-id"
         else:
             return "ec2", "describe_subnets",       'Subnets', "SubnetId","subnet-id"
 

@@ -101,7 +101,7 @@ if __name__ == '__main__':
         for i in net_types:
             print("calling "+i)
             clfn,descfn,topkey,key,filterid=resources.resource_data(i,id)
-            print("calling getresource with type="+type+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
+            print("calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
             common.getresource(i,id,clfn,descfn,topkey,key,filterid)
             
 

@@ -8,10 +8,11 @@ import globals
 
 def fixtf(ttft,tf):
 
-    if globals.debug:
-        print(ttft+" fixtf "+rf+".out")   
+  
     rf=tf+".out"
     tf2=tf+".tf"
+    if globals.debug:
+        print(ttft+" fixtf "+tf+".out") 
    
     try:
         f1 = open(rf, 'r')

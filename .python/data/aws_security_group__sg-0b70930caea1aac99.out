@@ -1,0 +1,86 @@
+resource "aws_security_group" "sg-0b70930caea1aac99" {
+  description = "Amazon WorkSpaces Security Group"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "icmp"
+    security_groups  = []
+    self             = false
+    to_port          = -1
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 22
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 22
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 3389
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 3389
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 4172
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 4172
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 4172
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "udp"
+    security_groups  = []
+    self             = false
+    to_port          = 4172
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 443
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 443
+  }]
+  name                   = "d-9c67238930_workspacesMembers"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    "Created by Amazon WorkSpaces" = "Amazon WorkSpaces"
+  }
+  tags_all = {
+    "Created by Amazon WorkSpaces" = "Amazon WorkSpaces"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+

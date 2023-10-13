@@ -1,8 +1,8 @@
-resource "aws_subnet" "subnet-05a180294ca109595" {
+resource "aws_subnet" "subnet-0c10d3be79fdc7576" {
   assign_ipv6_address_on_creation                = false
-  availability_zone                              = "eu-west-1b"
-  availability_zone_id                           = "euw1-az1"
-  cidr_block                                     = "10.2.2.0/24"
+  availability_zone                              = "eu-west-2c"
+  availability_zone_id                           = "euw2-az1"
+  cidr_block                                     = "100.64.3.0/24"
   customer_owned_ipv4_pool                       = null
   enable_dns64                                   = false
   enable_lni_at_device_index                     = 0
@@ -15,11 +15,11 @@ resource "aws_subnet" "subnet-05a180294ca109595" {
   outpost_arn                                    = null
   private_dns_hostname_type_on_launch            = "ip-name"
   tags = {
-    Name = "ds-subnet-b-DSSharedServices"
+    Name = "subnet-isol3"
   }
   tags_all = {
-    Name = "ds-subnet-b-DSSharedServices"
+    Name = "subnet-isol3"
   }
-  vpc_id = "vpc-02dd2936ab232ef7e"
+  vpc_id = "vpc-0d18b88f8596b92c3"
 }
 

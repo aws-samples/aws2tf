@@ -1,0 +1,16 @@
+resource "aws_nat_gateway" "nat-0c7b691eca5219301" {
+  allocation_id                      = "eipalloc-0903b0e7e2014c99b"
+  connectivity_type                  = "public"
+  private_ip                         = "10.1.0.27"
+  secondary_allocation_ids           = []
+  secondary_private_ip_address_count = 0
+  secondary_private_ip_addresses     = []
+  subnet_id                          = "subnet-03ed208e3161f9ec9"
+  tags = {
+    Name = "natgw-workspaces"
+  }
+  tags_all = {
+    Name = "natgw-workspaces"
+  }
+}
+

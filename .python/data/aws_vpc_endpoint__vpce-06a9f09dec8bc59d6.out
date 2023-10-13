@@ -1,0 +1,23 @@
+resource "aws_vpc_endpoint" "vpce-06a9f09dec8bc59d6" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}]}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-02a6a6ac17f6bfa87"]
+  service_name        = "com.amazonaws.eu-west-2.appstream.streaming"
+  subnet_ids          = ["subnet-0ec3f52feec87b364"]
+  tags = {
+    Name = "appstream"
+  }
+  tags_all = {
+    Name = "appstream"
+  }
+  vpc_endpoint_type = "Interface"
+  vpc_id            = "vpc-0d18b88f8596b92c3"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+

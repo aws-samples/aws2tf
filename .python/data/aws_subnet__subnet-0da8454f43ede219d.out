@@ -1,0 +1,25 @@
+resource "aws_subnet" "subnet-0da8454f43ede219d" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2b"
+  availability_zone_id                           = "euw2-az3"
+  cidr_block                                     = "10.1.0.64/27"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "subnet-pub2"
+  }
+  tags_all = {
+    Name = "subnet-pub2"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+

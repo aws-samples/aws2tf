@@ -1,0 +1,15 @@
+resource "aws_vpc_endpoint" "vpce-0bfceefc9a3c85400" {
+  auto_accept         = null
+  ip_address_type     = null
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}],\"Version\":\"2008-10-17\"}"
+  private_dns_enabled = false
+  route_table_ids     = ["rtb-02055fcf137b43efb", "rtb-052c9afa41f934515", "rtb-07628e6b0055dd992"]
+  security_group_ids  = []
+  service_name        = "com.amazonaws.eu-west-2.s3"
+  subnet_ids          = []
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Gateway"
+  vpc_id              = "vpc-0d18b88f8596b92c3"
+}
+

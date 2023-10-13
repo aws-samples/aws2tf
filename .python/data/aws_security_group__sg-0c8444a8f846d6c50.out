@@ -1,0 +1,56 @@
+resource "aws_security_group" "sg-0c8444a8f846d6c50" {
+  description = "default VPC security group"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 5000
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 5000
+    }, {
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = ["sg-00be273af6047769f"]
+    self             = true
+    to_port          = 0
+    }, {
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 2049
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-0581e8343af7a9120", "sg-0b70930caea1aac99"]
+    self             = false
+    to_port          = 2049
+  }]
+  name                   = "default"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "cvpn-sg"
+  }
+  tags_all = {
+    Name = "cvpn-sg"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+

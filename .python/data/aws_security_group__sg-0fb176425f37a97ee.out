@@ -1,0 +1,76 @@
+resource "aws_security_group" "sg-0fb176425f37a97ee" {
+  description = "launch-wizard-3 created 2020-02-27T08:44:21.309+00:00"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = -1
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "icmp"
+    security_groups  = []
+    self             = false
+    to_port          = -1
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 2049
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 2049
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 22
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 22
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 443
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 443
+    }, {
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = true
+    to_port          = 0
+  }]
+  name                   = "launch-wizard-3"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "HMRC test"
+  }
+  tags_all = {
+    Name = "HMRC test"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+

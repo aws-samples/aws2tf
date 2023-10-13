@@ -56,7 +56,7 @@ if __name__ == '__main__':
             print(i)
 
     if mg is False:
-        print("No merge - removing terraform.tfstate* and aws_*.tf")
+        print("No merge - removing terraform.tfstate* and aws_*.tf *.out")
         com="rm -f terraform.tfstate* aws_*.tf s3-*.tf tfplan *.out *import.tf imported/*.tf main.tf"
         rout=common.rc(com)
 

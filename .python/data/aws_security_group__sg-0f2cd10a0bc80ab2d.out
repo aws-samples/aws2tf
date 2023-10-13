@@ -1,6 +1,17 @@
-resource "aws_security_group" "sg-0b44c8f8d0a838403" {
-  description = "default VPC security group"
+resource "aws_security_group" "sg-0f2cd10a0bc80ab2d" {
+  description = "servcat-endpoint"
   egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
     cidr_blocks      = ["0.0.0.0/0"]
     description      = ""
     from_port        = 0
@@ -11,22 +22,11 @@ resource "aws_security_group" "sg-0b44c8f8d0a838403" {
     self             = false
     to_port          = 0
   }]
-  ingress = [{
-    cidr_blocks      = []
-    description      = ""
-    from_port        = 0
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "-1"
-    security_groups  = []
-    self             = true
-    to_port          = 0
-  }]
-  name                   = "default"
+  name                   = "servcat-endpoint"
   name_prefix            = null
   revoke_rules_on_delete = null
   tags                   = {}
   tags_all               = {}
-  vpc_id                 = "vpc-02dd2936ab232ef7e"
+  vpc_id                 = "vpc-0d18b88f8596b92c3"
 }
 

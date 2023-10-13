@@ -1,0 +1,46 @@
+resource "aws_security_group" "sg-02a6a6ac17f6bfa87" {
+  description = "appstream ports"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 1400
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 1499
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 443
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 443
+  }]
+  name                   = "appstream"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "appstream"
+  }
+  tags_all = {
+    Name = "appstream"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+

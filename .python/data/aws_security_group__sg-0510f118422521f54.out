@@ -1,0 +1,56 @@
+resource "aws_security_group" "sg-0510f118422521f54" {
+  description = "Created by RDS management console"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["35.177.218.0/27"]
+    description      = "Quicksight London"
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+    }, {
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = true
+    to_port          = 0
+    }, {
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 5432
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-0a67d4d889051720b", "sg-0c8444a8f846d6c50"]
+    self             = false
+    to_port          = 5432
+  }]
+  name                   = "dbsg"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "dbsg"
+  }
+  tags_all = {
+    Name = "dbsg"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+

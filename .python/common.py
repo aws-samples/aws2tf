@@ -51,19 +51,21 @@ def tfplan(type):
    print("Plan 1 complete -- resources.out generated")
 
    if not os.path.isfile("resources.out"):
-         print("could not find expected resources.out file after fixit - exiting")
+         print("could not find expected resources.out file after Plan 1 - exiting")
          exit()
 
    print("split resources.out")
    splitf("resources.out")
    
    for type in globals.types:
-      x=glob.glob(type+"*.out")
+      x=glob.glob(type+"__*.out")
       for fil in x:
          tf=fil.split('.')[0]
          print("tf="+tf)
          fixtf.fixtf(type,tf)
    
+   com="terraform fmt"
+   rout=rc(com)
  
    com="terraform validate -no-color"
    rout=rc(com)
@@ -78,8 +80,7 @@ def tfplan(type):
    else: 
       print("Valid Configuration.")
 
-   com="terraform fmt"
-   rout=rc(com)
+
 
 
 

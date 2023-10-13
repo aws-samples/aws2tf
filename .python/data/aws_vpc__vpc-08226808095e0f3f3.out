@@ -1,0 +1,21 @@
+resource "aws_vpc" "vpc-08226808095e0f3f3" {
+  assign_generated_ipv6_cidr_block     = false
+  cidr_block                           = "10.80.0.0/26"
+  enable_dns_hostnames                 = false
+  enable_dns_support                   = true
+  enable_network_address_usage_metrics = false
+  instance_tenancy                     = "default"
+  ipv4_ipam_pool_id                    = null
+  ipv4_netmask_length                  = null
+  ipv6_cidr_block                      = null
+  ipv6_cidr_block_network_border_group = null
+  ipv6_ipam_pool_id                    = null
+  ipv6_netmask_length                  = 0
+  tags = {
+    Name = "tf-codebuild"
+  }
+  tags_all = {
+    Name = "tf-codebuild"
+  }
+}
+

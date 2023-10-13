@@ -4,6 +4,7 @@ import subprocess
 import fixtf
 import os
 import globals
+import glob
 #import aws2tf
 
 # global variables initailsed in commomn:
@@ -12,7 +13,7 @@ import globals
 
 def tfplan(type):
    print("Plan 1 ... ")
-   rf=str(type) + "_resources.out"
+   rf="resources.out"
    com="terraform plan -generate-config-out="+ rf + " -json | jq . > plan1.json"
    print(com)
    rout=rc(com)
@@ -47,16 +48,45 @@ def tfplan(type):
                #continue
                exit()
 
-   print("Plan 1 complete")
-   print("calling fixtf "+ type)
-   fixtf.fixtf(type)
+   print("Plan 1 complete -- resources.out generated")
+
+   if not os.path.isfile("resources.out"):
+         print("could not find expected resources.out file after fixit - exiting")
+         exit()
+
+   print("split resources.out")
+   splitf("resources.out")
    
+   for type in globals.types:
+      x=glob.glob(type+"*.out")
+      for fil in x:
+         tf=fil.split('.')[0]
+         fixtf.fixtf(type,tf)
+   
+ 
+   com="terraform validate -no-color"
+   rout=rc(com)
+   el=len(rout.stderr.decode().rstrip())
+   if el!=0:
+      errm=rout.stderr.decode().rstrip()
+      print(errm)
+   if "Success! The configuration is valid" not in str(rout.stdout.decode().rstrip()):
+      print(str(rout.stdout.decode().rstrip()))
+      print("Validation after fix failed - exiting")
+      exit()
+   else: 
+      print("Valid Configuration.")
+
+   com="terraform fmt"
+   rout=rc(com)
+
+
 
    if plan2:
       
       print("Plan 2 ... ")
       # redo plan
-      com="rm -f " +type +"_resources.out tfplan"
+      com="rm -f resources.out tfplan"
       print(com)
       rout=rc(com)
       com="terraform plan -generate-config-out="+ rf + " -out tfplan -json > plan2.json"
@@ -88,8 +118,8 @@ def tfplan(type):
 
 
 def wrapup():
-   print("split main.tf")
-   splitf("main.tf")
+   #print("split main.tf")
+   #splitf("main.tf")
    print("Validate json")
    com="terraform validate -no-color -json > validate.json"
    rout=rc(com)
@@ -205,7 +235,7 @@ def splitf(file):
                ttft=tt1.split('"')[1]
                taddr=tt1.split('"')[3]
       
-               f2=open(ttft+"__"+taddr+".tf","w")
+               f2=open(ttft+"__"+taddr+".out","w")
                f2.write(tt1)
 
          elif tt1.startswith("#"):
@@ -223,16 +253,19 @@ def splitf(file):
         
    com="mv "+file +" imported/" +file
    rout=rc(com)  
-   com="terraform fmt"
-   rout=rc(com) 
+   #com="terraform fmt"
+   #rout=rc(com) 
 
 #
 #  boto3.client("logs")
 # aws_logs_log_group id  "logs"  "describe_log_groups"
 
-def getresource(type,id,boto3client,descfn,botokey,jsonid,filterid):
+
+# if type == "aws_vpc_endpoint": return "ec2","describe_vpc_endpoints","VpcEndpoints","VpcEndpointId","vpc-id"
+
+def getresource(type,id,clfn,descfn,topkey,key,filterid):
     globals.types=globals.types+[type]
-    client = boto3.client(boto3client)   
+    client = boto3.client(clfn)   
     dfn = getattr(client, descfn)
     print("--> In getresource doing "+ type + ' with id ' + str(id))
     if id is None:
@@ -244,16 +277,17 @@ def getresource(type,id,boto3client,descfn,botokey,jsonid,filterid):
       elif filterid == "ConfigRuleNames":
          print("calling with filter ConfigRuleNames="+id)
          response=dfn(ConfigRuleNames=[id])
+      ## standard call --filter
       else:
          print("calling with filter id="+filterid + " and id=" + id)
          response=dfn(Filters=[{'Name': filterid, 'Values': [id]}])
        
     #print("response="+str(response[botokey]))
-    if str(response[botokey]) != "[]":
+    if str(response[topkey]) != "[]":
       fn=type+"_import.tf"
       with open(fn, "w") as f:
-            for item in response[botokey]:
-                theid=item[jsonid]
+            for item in response[topkey]:
+                theid=item[key]
                 tfid=theid.replace("/","_")
                 f.write('import {\n')
                 f.write('  to = ' +type + '.' + tfid + '\n')
@@ -261,5 +295,5 @@ def getresource(type,id,boto3client,descfn,botokey,jsonid,filterid):
                 f.write('}\n')
                 globals.processed=globals.processed+[type+","+theid]
   
-    tfplan(type)
+    #tfplan(type)
 

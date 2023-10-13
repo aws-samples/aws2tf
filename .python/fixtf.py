@@ -3,15 +3,16 @@ import json
 import argparse
 import common
 import fixtf2
+import globals
 
 
-def fixtf(ttft):
+def fixtf(ttft,rf):
 
-    print(ttft+" fixtf")  
-    rf=ttft+"_resources.out"
-    #tf2=ttft+".tf"
-    tf2="main.tf"
-    print("rw tf")
+    if globals.debug:
+        print(ttft+" fixtf "+rf+".out")   
+    rf=rf+".out"
+    tf2=rf+".tf"
+   
     try:
         f1 = open(rf, 'r')
     except:
@@ -83,8 +84,7 @@ def splitf(file):
         
     com="rm -f "+file
     rout=common.rc(com)  
-    com="terraform fmt"
-    rout=common.rc(com)    
+   
  
     
 

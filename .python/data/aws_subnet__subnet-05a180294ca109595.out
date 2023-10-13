@@ -1,0 +1,25 @@
+resource "aws_subnet" "subnet-05a180294ca109595" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1b"
+  availability_zone_id                           = "euw1-az1"
+  cidr_block                                     = "10.2.2.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "ds-subnet-b-DSSharedServices"
+  }
+  tags_all = {
+    Name = "ds-subnet-b-DSSharedServices"
+  }
+  vpc_id = "vpc-02dd2936ab232ef7e"
+}
+

@@ -1,0 +1,25 @@
+resource "aws_subnet" "subnet-0828c1d4c4a82e60f" {
+  assign_ipv6_address_on_creation                = true
+  availability_zone                              = "eu-west-1a"
+  availability_zone_id                           = "euw1-az3"
+  cidr_block                                     = null
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = true
+  ipv6_cidr_block                                = "2a05:d018:12fa:4b00::/64"
+  ipv6_native                                    = true
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "resource-name"
+  tags = {
+    Name = "mysubipv6-1"
+  }
+  tags_all = {
+    Name = "mysubipv6-1"
+  }
+  vpc_id = "vpc-0cd3d5fd5e121e4a0"
+}
+

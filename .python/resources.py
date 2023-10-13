@@ -10,8 +10,6 @@ def resource_types(type):
 # problematic: "aws_network_acl"
 # Error: use the `aws_default_network_acl` resource instead
 
-
-
 # 5x returns:
 # boto3.client('ec2') - so for example ec2
 # the describe function - like describe-vpcs

@@ -41,17 +41,18 @@ def resource_data(type,id):
         clfn="ec2"
         descfn="describe_vpc_endpoints"
         topkey="VpcEndpoints"
-        filterid="VpcEndpointIds"
-        jsonid="vpc-endpoint-id"
-        if id is not None and id in "vpc-": filterid="VpcId"
+        key="VpcEndpointId"
+        filterid="vpc-endpoint-id"
+        if id is not None and "vpc-" in id: filterid="vpc-id"
 
     
     elif type in "aws_subnet":
-        if id is not None and "vpc-" in id:
-            return "ec2","describe_subnets",        'Subnets',"SubnetId","vpc-id"
-        else:
-            return "ec2", "describe_subnets",       'Subnets', "SubnetId","subnet-id"
-
+        clfn="ec2"
+        descfn="describe_subnets"
+        topkey="Subnets"
+        key="SubnetId"
+        filterid="subnet-id"
+        if id is not None and "vpc-" in id: filterid="vpc-id"
    # tf_type   toplevel from cli describe - id field from awc cli, --filter field for cli, ec2 fn client call, fn call to filter tf
 
    #if type == "aws_availability_zone": return 'AvailabilityZones', ec2client.describe_availability_zones, "ZoneName"

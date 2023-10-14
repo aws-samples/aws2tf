@@ -110,8 +110,15 @@ if __name__ == '__main__':
             #print("calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
             common.getresource(i,id,clfn,descfn,topkey,key,filterid)
         
-    else:        
-        clfn,descfn,topkey,key,filterid=resources.resource_data(type,id)
+    else:  
+        clfn,descfn,topkey,key,filterid=resources.resource_data(type,id)  
+        try:
+            print("Try calling common.get_"+type)
+            get_fn = getattr(common, "get_"+type)
+            get_fn(type,id,clfn,descfn,topkey,key,filterid)
+        except:
+            pass
+
         if clfn is not None:
             #print("calling getresource with type="+type+" id="+str(id)+" -- clfn="+clfn + " descfn="+descfn+  "topkey="+topkey + "key="+key +"filterid="+filterid)
             common.getresource(type,id,clfn,descfn,topkey,key,filterid)

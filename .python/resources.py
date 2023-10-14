@@ -1,7 +1,7 @@
 def resource_types(type):
     if type == "net":
         #net=["aws_vpc","aws_subnet","aws_security_group","aws_internet_gateway","aws_nat_gateway","aws_route_table","aws_vpc_endpoint"]
-        net=["aws_vpc","aws_subnet","aws_internet_gateway","aws_nat_gateway","aws_route_table","aws_vpc_endpoint","aws_security_group","aws_route_table_association"]
+        net=["aws_vpc","aws_subnet","aws_internet_gateway","aws_nat_gateway","aws_route_table","aws_vpc_endpoint","aws_security_group"]
         return net
     else:
         same=[type]

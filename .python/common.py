@@ -330,6 +330,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                   print("filt1="+filt1+" filt2="+filt2)
                   dotc=len(item[filt1])
                   print("dotc="+str(dotc))
+
                   for j in range(0,dotc):
                      print(str(item[filt1][j]))
                      try:
@@ -337,6 +338,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                         print("val="+val)
                         if id == val:
                            theid=item[key]
+                           if dotc>1: theid=id+"/"+item[key]
                            tfid=theid.replace("/","_")
                            f.write('import {\n')
                            f.write('  to = ' +type + '.' + tfid + '\n')
@@ -352,4 +354,10 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                   
   
     #tfplan(type)
+
+
+def get_test(type,id,clfn,descfn,topkey,key,filterid):
+   print("in get_test")
+   print("--> In get_test doing "+ type + ' with id ' + str(id))   
+   return
 

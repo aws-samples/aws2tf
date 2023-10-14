@@ -262,50 +262,58 @@ def splitf(file):
 
 
 # if type == "aws_vpc_endpoint": return "ec2","describe_vpc_endpoints","VpcEndpoints","VpcEndpointId","vpc-id"
+
+
+#https://www.packetswitch.co.uk/how-to-use-nexttoken-in-boto3-aws-api-calls/
+
+#client = boto3.client(clfn) 
+#paginator = client.get_paginator(descfn)
+
+#all_topics = []
+#for page in paginator.paginate():
+#    all_topics.extend(page['Topics'])
+
+#print(len(all_topics))
+#
+
+
 def getresource(type,id,clfn,descfn,topkey,key,filterid):
-    globals.types=globals.types+[type]
-    client = boto3.client(clfn)   
-    dfn = getattr(client, descfn)
-    print("--> In getresource doing "+ type + ' with id ' + str(id))
-    if id is None:
-      response=dfn() 
-    else:   
-      if filterid == "logGroupNamePattern":
-         print("calling with filter logGroupNamePattern="+id)
-         response=dfn(logGroupNamePattern=id)
-      elif filterid == "ConfigRuleNames":
-         print("calling with filter ConfigRuleNames="+id)
-         response=dfn(ConfigRuleNames=[id])
-      elif "." in filterid:
-         print("calling with filter id="+filterid + " and id=" + id)
-         response=dfn()
-      else:
-         print("calling with filter id="+filterid + " and id=" + id)
-         response=dfn(Filters=[{'Name': filterid, 'Values': [id]}])
-       
-    #print(json.dumps(response, indent=4, sort_keys=True))
-    #print(str(response[topkey]))
-    print(filterid)
-         
-    #print("response="+str(response[botokey]))
-    if str(response[topkey]) != "[]":
+   globals.types=globals.types+[type]
+   print("--> In getresource doing "+ type + ' with id ' + str(id))
+   response = []
+   client = boto3.client(clfn) 
+   paginator = client.get_paginator(descfn)
+   for page in paginator.paginate():
+      response.extend(page[topkey])
+   print(len(response))
+   #for item in response:
+   #   print(item)
+   #   print("--------------------------------------")
+
+   print(filterid)
+
+   if str(response) != "[]":
       fn=type+"_import.tf"
       with open(fn, "w") as f:
-            for item in response[topkey]:
-               
-               if "." not in filterid: # do it all
-                  print(str(item))
+         for item in response:
+            if id is None: # do it all
+               #print(str(item))
+               try:
                   if "/service-role/" in str(item["Path"]): continue
-                  theid=item[key]
-                  tfid=theid.replace("/","__").replace(".","__")
-                  f.write('import {\n')
-                  f.write('  to = ' +type + '.' + tfid + '\n')
-                  f.write('  id = "'+ theid + '"\n')
-                  f.write('}\n')
-                  globals.processed=globals.processed+[type+","+theid]
-               else:
-                  tfil=filterid.split('.')[1]
-                  if id == str(item[tfil]):
+               except:
+                  pass
+               theid=item[key]
+               tfid=theid.replace("/","__").replace(".","__")
+               f.write('import {\n')
+               f.write('  to = ' +type + '.' + tfid + '\n')
+               f.write('  id = "'+ theid + '"\n')
+               f.write('}\n')
+               globals.processed=globals.processed+[type+","+theid]
+            else:
+               if "." not in filterid:
+                  #print("item=" + str(item) + " id=" + id + " filterid=" + filterid)
+                  if id == str(item[filterid]):
+                     #print(str(item))
                      theid=item[key]
                      tfid=theid.replace("/","_")
                      f.write('import {\n')
@@ -313,7 +321,35 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                      f.write('  id = "'+ theid + '"\n')
                      f.write('}\n')
                      globals.processed=globals.processed+[type+","+theid]
-
+               else:
+                  ### There's a dot in the filterid so we need to dig deeper
+                  print(str(item))
+                  print("id="+id+" filterid="+filterid)
+                  filt1=filterid.split('.')[1]
+                  filt2=filterid.split('.')[3]
+                  print("filt1="+filt1+" filt2="+filt2)
+                  dotc=len(item[filt1])
+                  print("dotc="+str(dotc))
+                  for j in range(0,dotc):
+                     print(str(item[filt1][j]))
+                     try:
+                        val=str(item[filt1][j][filt2])
+                        print("val="+val)
+                        if id == val:
+                           theid=item[key]
+                           tfid=theid.replace("/","_")
+                           f.write('import {\n')
+                           f.write('  to = ' +type + '.' + tfid + '\n')
+                           f.write('  id = "'+ theid + '"\n')
+                           f.write('}\n')
+                           globals.processed=globals.processed+[type+","+theid]
+                     except:
+                        print("-------- error on processing")
+                        print(str(item))
+                        print("filterid="+filterid)
+                        print("----------------------------")
+                        pass
+                  
   
     #tfplan(type)
 

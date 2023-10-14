@@ -1,6 +1,7 @@
 def resource_types(type):
     if type == "net":
-        net=["aws_vpc","aws_subnet","aws_security_group","aws_internet_gateway","aws_nat_gateway","aws_route_table","aws_vpc_endpoint"]
+        #net=["aws_vpc","aws_subnet","aws_security_group","aws_internet_gateway","aws_nat_gateway","aws_route_table","aws_vpc_endpoint"]
+        net=["aws_vpc","aws_subnet","aws_internet_gateway","aws_nat_gateway","aws_route_table","aws_vpc_endpoint","aws_security_group","aws_route_table_association"]
         return net
     else:
         same=[type]
@@ -32,109 +33,119 @@ def resource_data(type,id):
             descfn="describe_vpcs"
             topkey='Vpcs' 
             key="VpcId" 
-            filterid="vpc-id"
+            filterid=key
 
     elif type == "aws_vpc_endpoint": 
         clfn="ec2"
         descfn="describe_vpc_endpoints"
         topkey="VpcEndpoints"
         key="VpcEndpointId"
-        filterid="vpc-endpoint-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id"
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"
     
     elif type in "aws_subnet":
         clfn="ec2"
         descfn="describe_subnets"
         topkey="Subnets"
         key="SubnetId"
-        filterid="subnet-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id"
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"
 
     elif type == "aws_security_group": 
         clfn="ec2"
         descfn="describe_security_groups"
         topkey="SecurityGroups"
         key="GroupId"
-        filterid="group-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id"         
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"         
 
     elif type == "aws_internet_gateway": 
         clfn="ec2"
         descfn="describe_internet_gateways"
         topkey="InternetGateways"
         key="InternetGatewayId"
-        filterid="internet-gateway-id"
-        if id is not None and "vpc-" in id: filterid="attachment.vpc-id"    
+        filterid=key
+        if id is not None and "vpc-" in id: filterid=".Attachments.0.VpcId"    
 
     elif type == "aws_nat_gateway": 
         clfn="ec2"
         descfn="describe_nat_gateways"
         topkey="NatGateways"
         key="NatGatewayId"
-        filterid="nat-gateway-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id"           
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"           
 
     elif type == "aws_network_acl": 
         clfn="ec2"
         descfn="describe_network_acls"
         topkey="NetworkAcls"
         key="NetworkAclId"
-        filterid="network-acl-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id" 
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId" 
 
     elif type == "aws_route_table": 
         clfn="ec2"
         descfn="describe_route_tables"
         topkey="RouteTables"
         key="RouteTableId"
-        filterid="route-table-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id"     
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"    
+
+
+    elif type == "aws_route_table_association":
+        clfn="ec2"
+        descfn="describe_route_tables"
+        topkey="RouteTables"
+        key=".Associations.0.SubnetId"
+        filterid=key
+        if id is not None and "vpc-" in id: filterid=".Associations.0.SubnetId" 
+        if id is not None and "subnet-" in id: filterid=".Associations.0.SubnetId" 
 
     elif type == "aws_default_network_acl": 
         clfn="ec2"
         descfn="describe_network_acls"
         topkey="NetworkAcls"
         key="NetworkAclId"
-        filterid="network-acl-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id"
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"
 
     elif type == "aws_default_route_table":
         clfn="ec2"
         descfn="describe_route_tables"
         topkey="RouteTables"
         key="RouteTableId"
-        filterid="route-table-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id"
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"
 
     elif type == "aws_default_security_group":
         clfn="ec2"
         descfn="describe_security_groups"
         topkey="SecurityGroups"
         key="GroupId"
-        filterid="group-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id"
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"
 
     elif type == "aws_default_subnet":
         clfn="ec2"
         descfn="describe_subnets"
         topkey="Subnets"
         key="SubnetId"
-        filterid="subnet-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id"
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"
 
     elif type == "aws_default_vpc":
         clfn="ec2"
         descfn="describe_vpcs"
         topkey="Vpcs"
         key="VpcId"
-        filterid="vpc-id"
+        filterid=KeyError
 
     elif type == "aws_default_internet_gateway":
         clfn="ec2"
         descfn="describe_internet_gateways"
         topkey="InternetGateways"
         key="InternetGatewayId"
-        filterid="internet-gateway-id"
+        filterid=key
         if id is not None and "vpc-" in id: filterid="attachment.vpc-id"
 
     elif type == "aws_dhcp_options":
@@ -142,101 +153,89 @@ def resource_data(type,id):
         descfn="describe_dhcp_options"
         topkey="DhcpOptions"
         key="DhcpOptionsId"
-        filterid="dhcp-options-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id"
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"
 
     elif type == "aws_image":
         clfn="ec2"
         descfn="describe_images"
         topkey="Images"
         key="ImageId"
-        filterid="image-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id"
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"
 
     elif type == "aws_key_pair":
         clfn="ec2"
         descfn="describe_key_pairs"
         topkey="KeyPairs"
         key="KeyName"
-        filterid="key-name"
-        if id is not None and "vpc-" in id: filterid="vpc-id"
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"
 
     elif type == "aws_launch_configuration":
         clfn="autoscaling"
         descfn="describe_launch_configurations"
         topkey="LaunchConfigurations"
         key="LaunchConfigurationName"
-        filterid="launch-configuration-name"
-        if id is not None and "vpc-" in id: filterid="vpc-id"
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"
 
     elif type == "aws_launch_template":
         clfn="ec2"
         descfn="describe_launch_templates"
         topkey="LaunchTemplates"
         key="LaunchTemplateId"
-        filterid="launch-template-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id"
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"
 
     elif type == "aws_load_balancer":
         clfn="elb"
         descfn="describe_load_balancers"
         topkey="LoadBalancerDescriptions"
         key="LoadBalancerName"
-        filterid="load-balancer-name"
-        if id is not None and "vpc-" in id: filterid="vpc-id"
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"
 
     elif type == "aws_transit_gateway_vpc_attachment":
         clfn="ec2"
         descfn="describe_transit_gateway_vpc_attachments"
         topkey="TransitGatewayVpcAttachments"
         key="TransitGatewayAttachmentId"
-        filterid="transit-gateway-attachment-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id"
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"
 
     elif type == "aws_transit_gateway_route_table_vpc_association":
         clfn="ec2"
         descfn="describe_transit_gateway_route_table_vpc_associations"
         topkey="TransitGatewayRouteTableVpcAssociations"
         key="TransitGatewayAttachmentId"
-        filterid="transit-gateway-attachment-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id"
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"
     
     elif type == "aws_transit_gateway_route_table_propagation":
         clfn="ec2"
         descfn="describe_transit_gateway_route_table_propagations"
         topkey="TransitGatewayRouteTablePropagations"
         key="TransitGatewayAttachmentId"
-        filterid="transit-gateway-attachment-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id"
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"
 
     elif type == "aws_vpc_ipv4_cidr_block_association":
         clfn="ec2"
         descfn="describe_vpc_cidr_block_association_sets"
         topkey="VpcId"
         key="AssociationId"
-        filterid="association-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id"
-
-    elif type == "aws_route_table_association":
-        clfn="ec2"
-        descfn="describe_route_table_associations"
-        topkey="RouteTableAssociations"
-        key="AssociationId"
-        filterid="association-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id"
-
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"
 
     elif type == "aws_iam_role":
         clfn="iam"
         descfn="list_roles"
         topkey="Roles"
         key="RoleName"
-        filterid="RoleName"  # no filter on list-roles so use jq like filter
-        if id is not None and "arn:aws:iam::" in id: 
-            filterid=".Arn"
-        else:
-            if id is not None:
-                filterid=".RoleName"
+        filterid=key
+        if id is not None and "arn:aws:iam::" in id: filterid="Arn"
+
 
 
     elif type == "aws_iam_policy":
@@ -244,26 +243,25 @@ def resource_data(type,id):
         descfn="list_policies"
         topkey="Policies"
         key="PolicyName"
-        filterid=".PolicyName"  # no filter on list-policies so use jq like filter
-        if id is not None and "arn:aws:iam::" in id: 
-            filterid=".Arn"
+        filterid=key  # no filter on list-policies so use jq like filter
+        if id is not None and "arn:aws:iam::" in id: filterid="Arn"
+
 
     elif type == "aws_iam_user":
         clfn="iam"
         descfn="list_users"
         topkey="Users"
         key="UserName"
-        filterid=".UserName"  # no filter on list-users so use jq like filter
-        if id is not None and "arn:aws:iam::" in id: 
-            filterid=".Arn"
+        filterid=key  # no filter on list-users so use jq like filter
+        if id is not None and "arn:aws:iam::" in id: filterid="Arn"
 
     elif type == "aws_flow_log":
         clfn="ec2"
         descfn="describe_flow_logs"
         topkey="FlowLogs"
         key="FlowLogId"
-        filterid="flow-log-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id"
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"
 
 
    #if type == "aws_availability_zone": return 'AvailabilityZones', ec2client.describe_availability_zones, "ZoneName"

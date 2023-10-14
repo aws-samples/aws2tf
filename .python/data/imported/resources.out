@@ -1,36 +1,36 @@
 # __generated__ by Terraform
 # Please review these resources and move them into your main configuration files.
 
-# __generated__ by Terraform
-resource "aws_route_table" "rtb-00b5307f6a6a57106" {
-  propagating_vgws = []
-  route = [{
-    carrier_gateway_id         = ""
-    cidr_block                 = "0.0.0.0/0"
-    core_network_arn           = ""
-    destination_prefix_list_id = ""
-    egress_only_gateway_id     = ""
-    gateway_id                 = ""
-    ipv6_cidr_block            = ""
-    local_gateway_id           = ""
-    nat_gateway_id             = "nat-0f8988fe7af3828f7"
-    network_interface_id       = ""
-    transit_gateway_id         = ""
-    vpc_endpoint_id            = ""
-    vpc_peering_connection_id  = ""
+# __generated__ by Terraform from "sg-0d973ba3cbf43974d"
+resource "aws_security_group" "sg-0d973ba3cbf43974d" {
+  description = "Security group for AWS Cloud9 environment aws-cloud9-ecr-sign-ea29311879824fa993341b6b1f16494d"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
   }]
+  ingress                = []
+  name                   = "aws-cloud9-ecr-sign-ea29311879824fa993341b6b1f16494d-InstanceSecurityGroup-14QIVSI12YSAG"
+  name_prefix            = null
+  revoke_rules_on_delete = null
   tags = {
-    Name = "def-priv"
+    Name = "aws-cloud9-ecr-sign-ea29311879824fa993341b6b1f16494d"
   }
   tags_all = {
-    Name = "def-priv"
+    Name = "aws-cloud9-ecr-sign-ea29311879824fa993341b6b1f16494d"
   }
   vpc_id = "vpc-d16a7cb7"
 }
 
-# __generated__ by Terraform from "sg-0e49847b1788bdc1e"
-resource "aws_security_group" "sg-0e49847b1788bdc1e" {
-  description = "[DO NOT DELETE] Security Group that allows outbound NFS traffic for SageMaker Notebooks Domain [d-hhrxgyjoezog]"
+# __generated__ by Terraform from "sg-0d9bebdba9356a2d5"
+resource "aws_security_group" "sg-0d9bebdba9356a2d5" {
+  description = "[DO NOT DELETE] Security Group that allows outbound NFS traffic for SageMaker Notebooks Domain [d-hm3bgqzqwysg]"
   egress = [{
     cidr_blocks      = []
     description      = ""
@@ -38,39 +38,118 @@ resource "aws_security_group" "sg-0e49847b1788bdc1e" {
     ipv6_cidr_blocks = []
     prefix_list_ids  = []
     protocol         = "tcp"
-    security_groups  = ["sg-0cc13753231633739"]
+    security_groups  = ["sg-0345e2f63cf1b7640"]
     self             = false
     to_port          = 2049
   }]
   ingress                = []
-  name                   = "security-group-for-outbound-nfs-d-hhrxgyjoezog"
+  name                   = "security-group-for-outbound-nfs-d-hm3bgqzqwysg"
   name_prefix            = null
   revoke_rules_on_delete = null
   tags = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-hhrxgyjoezog"
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-hm3bgqzqwysg"
   }
   tags_all = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-hhrxgyjoezog"
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-hm3bgqzqwysg"
   }
   vpc_id = "vpc-d16a7cb7"
 }
 
-# __generated__ by Terraform from "sg-0a95692fb9e4baa8a"
-resource "aws_security_group" "sg-0a95692fb9e4baa8a" {
-  description = "[DO NOT DELETE] Security Group that allows inbound NFS traffic for SageMaker Notebooks Domain [d-p9uargalovio]"
-  egress      = []
-  ingress = [{
+# __generated__ by Terraform
+resource "aws_route_table" "rtb-abe7ded2" {
+  propagating_vgws = []
+  route = [{
+    carrier_gateway_id         = ""
+    cidr_block                 = "0.0.0.0/0"
+    core_network_arn           = ""
+    destination_prefix_list_id = ""
+    egress_only_gateway_id     = ""
+    gateway_id                 = "igw-5b6b683c"
+    ipv6_cidr_block            = ""
+    local_gateway_id           = ""
+    nat_gateway_id             = ""
+    network_interface_id       = ""
+    transit_gateway_id         = ""
+    vpc_endpoint_id            = ""
+    vpc_peering_connection_id  = ""
+  }]
+  tags = {
+    Name = "rtb-vpc-default"
+  }
+  tags_all = {
+    Name = "rtb-vpc-default"
+  }
+  vpc_id = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-10dd9d76" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1b"
+  availability_zone_id                           = "euw1-az1"
+  cidr_block                                     = "172.31.0.0/20"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "pub-default1"
+  }
+  tags_all = {
+    Name = "pub-default1"
+  }
+  vpc_id = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-8c6e3dc4" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1c"
+  availability_zone_id                           = "euw1-az2"
+  cidr_block                                     = "172.31.16.0/20"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "pub-default3"
+  }
+  tags_all = {
+    Name = "pub-default3"
+  }
+  vpc_id = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform from "sg-01c8b3e4e3e4153b6"
+resource "aws_security_group" "sg-01c8b3e4e3e4153b6" {
+  description = "[DO NOT DELETE] Security Group that allows outbound NFS traffic for SageMaker Notebooks Domain [d-p9uargalovio]"
+  egress = [{
     cidr_blocks      = []
     description      = ""
     from_port        = 2049
     ipv6_cidr_blocks = []
     prefix_list_ids  = []
     protocol         = "tcp"
-    security_groups  = ["sg-01c8b3e4e3e4153b6"]
+    security_groups  = ["sg-0a95692fb9e4baa8a"]
     self             = false
     to_port          = 2049
   }]
-  name                   = "security-group-for-inbound-nfs-d-p9uargalovio"
+  ingress                = []
+  name                   = "security-group-for-outbound-nfs-d-p9uargalovio"
   name_prefix            = null
   revoke_rules_on_delete = null
   tags = {
@@ -115,26 +194,9 @@ resource "aws_security_group" "sg-00e5d0dd7ae31550b" {
   vpc_id                 = "vpc-d16a7cb7"
 }
 
-# __generated__ by Terraform
-resource "aws_nat_gateway" "nat-0f8988fe7af3828f7" {
-  allocation_id                      = "eipalloc-09735ea054256a0bf"
-  connectivity_type                  = "public"
-  private_ip                         = "172.31.14.32"
-  secondary_allocation_ids           = []
-  secondary_private_ip_address_count = 0
-  secondary_private_ip_addresses     = []
-  subnet_id                          = "subnet-10dd9d76"
-  tags = {
-    Name = "my-defvpc-nat"
-  }
-  tags_all = {
-    Name = "my-defvpc-nat"
-  }
-}
-
-# __generated__ by Terraform from "sg-0fb48f75ebc7f7bd5"
-resource "aws_security_group" "sg-0fb48f75ebc7f7bd5" {
-  description = "Security group for AWS Cloud9 environment aws-cloud9-eksworkshop2-5f490f0940024ca8b107816eb8e23748"
+# __generated__ by Terraform from "sg-00377366a0b52c74b"
+resource "aws_security_group" "sg-00377366a0b52c74b" {
+  description = "Grafana SG"
   egress = [{
     cidr_blocks      = ["0.0.0.0/0"]
     description      = ""
@@ -147,44 +209,7 @@ resource "aws_security_group" "sg-0fb48f75ebc7f7bd5" {
     to_port          = 0
   }]
   ingress                = []
-  name                   = "aws-cloud9-eksworkshop2-5f490f0940024ca8b107816eb8e23748-InstanceSecurityGroup-IJ856DV4N69D"
-  name_prefix            = null
-  revoke_rules_on_delete = null
-  tags = {
-    Name = "aws-cloud9-eksworkshop2-5f490f0940024ca8b107816eb8e23748"
-  }
-  tags_all = {
-    Name = "aws-cloud9-eksworkshop2-5f490f0940024ca8b107816eb8e23748"
-  }
-  vpc_id = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform from "sg-0a3cf43961d051d6e"
-resource "aws_security_group" "sg-0a3cf43961d051d6e" {
-  description = "launch-wizard-3 created 2022-11-30T16:08:55.684Z"
-  egress = [{
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = ""
-    from_port        = 0
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "-1"
-    security_groups  = []
-    self             = false
-    to_port          = 0
-  }]
-  ingress = [{
-    cidr_blocks      = ["81.96.210.11/32"]
-    description      = ""
-    from_port        = 22
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "tcp"
-    security_groups  = []
-    self             = false
-    to_port          = 22
-  }]
-  name                   = "launch-wizard-3"
+  name                   = "Grafana-sg-default"
   name_prefix            = null
   revoke_rules_on_delete = null
   tags                   = {}
@@ -192,214 +217,9 @@ resource "aws_security_group" "sg-0a3cf43961d051d6e" {
   vpc_id                 = "vpc-d16a7cb7"
 }
 
-# __generated__ by Terraform
-resource "aws_subnet" "subnet-8c6e3dc4" {
-  assign_ipv6_address_on_creation                = false
-  availability_zone                              = "eu-west-1c"
-  availability_zone_id                           = "euw1-az2"
-  cidr_block                                     = "172.31.16.0/20"
-  customer_owned_ipv4_pool                       = null
-  enable_dns64                                   = false
-  enable_lni_at_device_index                     = 0
-  enable_resource_name_dns_a_record_on_launch    = false
-  enable_resource_name_dns_aaaa_record_on_launch = false
-  ipv6_cidr_block                                = null
-  ipv6_native                                    = false
-  map_customer_owned_ip_on_launch                = false
-  map_public_ip_on_launch                        = true
-  outpost_arn                                    = null
-  private_dns_hostname_type_on_launch            = "ip-name"
-  tags = {
-    Name = "pub-default3"
-  }
-  tags_all = {
-    Name = "pub-default3"
-  }
-  vpc_id = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform
-resource "aws_subnet" "subnet-09c34702be259d430" {
-  assign_ipv6_address_on_creation                = false
-  availability_zone                              = "eu-west-1a"
-  availability_zone_id                           = "euw1-az3"
-  cidr_block                                     = "100.64.0.0/24"
-  customer_owned_ipv4_pool                       = null
-  enable_dns64                                   = false
-  enable_lni_at_device_index                     = 0
-  enable_resource_name_dns_a_record_on_launch    = false
-  enable_resource_name_dns_aaaa_record_on_launch = false
-  ipv6_cidr_block                                = null
-  ipv6_native                                    = false
-  map_customer_owned_ip_on_launch                = false
-  map_public_ip_on_launch                        = false
-  outpost_arn                                    = null
-  private_dns_hostname_type_on_launch            = "ip-name"
-  tags = {
-    Name        = "sub-p1"
-    subnet-type = "private"
-  }
-  tags_all = {
-    Name        = "sub-p1"
-    subnet-type = "private"
-  }
-  vpc_id = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform from "sg-021bee5af01e26a5a"
-resource "aws_security_group" "sg-021bee5af01e26a5a" {
-  description = "This security group was generated by AWS Marketplace and is based on recommended settings for Amazon Linux 2 AMI with Amazon Inspector Agent version 1.0 provided by Amazon Web Services"
-  egress = [{
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = ""
-    from_port        = 0
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "-1"
-    security_groups  = []
-    self             = false
-    to_port          = 0
-  }]
-  ingress = [{
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = ""
-    from_port        = 22
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "tcp"
-    security_groups  = []
-    self             = false
-    to_port          = 22
-    }, {
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = ""
-    from_port        = 80
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "tcp"
-    security_groups  = []
-    self             = false
-    to_port          = 80
-  }]
-  name                   = "Amazon Linux 2 AMI with Amazon Inspector Agent-1-0-AutogenByAWSMP-"
-  name_prefix            = null
-  revoke_rules_on_delete = null
-  tags                   = {}
-  tags_all               = {}
-  vpc_id                 = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform
-resource "aws_route_table" "rtb-abe7ded2" {
-  propagating_vgws = []
-  route = [{
-    carrier_gateway_id         = ""
-    cidr_block                 = "0.0.0.0/0"
-    core_network_arn           = ""
-    destination_prefix_list_id = ""
-    egress_only_gateway_id     = ""
-    gateway_id                 = "igw-5b6b683c"
-    ipv6_cidr_block            = ""
-    local_gateway_id           = ""
-    nat_gateway_id             = ""
-    network_interface_id       = ""
-    transit_gateway_id         = ""
-    vpc_endpoint_id            = ""
-    vpc_peering_connection_id  = ""
-  }]
-  tags = {
-    Name = "rtb-vpc-default"
-  }
-  tags_all = {
-    Name = "rtb-vpc-default"
-  }
-  vpc_id = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform from "sg-0f878e5791439c940"
-resource "aws_security_group" "sg-0f878e5791439c940" {
-  description = "[DO NOT DELETE] Security Group that allows outbound NFS traffic for SageMaker Notebooks Domain [d-draaek9gx0qg]"
-  egress = [{
-    cidr_blocks      = []
-    description      = ""
-    from_port        = 2049
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "tcp"
-    security_groups  = ["sg-0ae02282d6e846ce7"]
-    self             = false
-    to_port          = 2049
-  }]
-  ingress                = []
-  name                   = "security-group-for-outbound-nfs-d-draaek9gx0qg"
-  name_prefix            = null
-  revoke_rules_on_delete = null
-  tags = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-draaek9gx0qg"
-  }
-  tags_all = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-draaek9gx0qg"
-  }
-  vpc_id = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform from "sg-01c8b3e4e3e4153b6"
-resource "aws_security_group" "sg-01c8b3e4e3e4153b6" {
-  description = "[DO NOT DELETE] Security Group that allows outbound NFS traffic for SageMaker Notebooks Domain [d-p9uargalovio]"
-  egress = [{
-    cidr_blocks      = []
-    description      = ""
-    from_port        = 2049
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "tcp"
-    security_groups  = ["sg-0a95692fb9e4baa8a"]
-    self             = false
-    to_port          = 2049
-  }]
-  ingress                = []
-  name                   = "security-group-for-outbound-nfs-d-p9uargalovio"
-  name_prefix            = null
-  revoke_rules_on_delete = null
-  tags = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-p9uargalovio"
-  }
-  tags_all = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-p9uargalovio"
-  }
-  vpc_id = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform from "sg-031d35a4adfd833e1"
-resource "aws_security_group" "sg-031d35a4adfd833e1" {
-  description = "Security group for AWS Cloud9 environment aws-cloud9-latticeC9-7c0193e6032147389175c3ae44502418"
-  egress = [{
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = ""
-    from_port        = 0
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "-1"
-    security_groups  = []
-    self             = false
-    to_port          = 0
-  }]
-  ingress                = []
-  name                   = "aws-cloud9-latticeC9-7c0193e6032147389175c3ae44502418-InstanceSecurityGroup-FMJNFL83XT9Q"
-  name_prefix            = null
-  revoke_rules_on_delete = null
-  tags = {
-    Name = "aws-cloud9-latticeC9-7c0193e6032147389175c3ae44502418"
-  }
-  tags_all = {
-    Name = "aws-cloud9-latticeC9-7c0193e6032147389175c3ae44502418"
-  }
-  vpc_id = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform from "sg-0ae02282d6e846ce7"
-resource "aws_security_group" "sg-0ae02282d6e846ce7" {
-  description = "[DO NOT DELETE] Security Group that allows inbound NFS traffic for SageMaker Notebooks Domain [d-draaek9gx0qg]"
+# __generated__ by Terraform from "sg-00e1779fed4725350"
+resource "aws_security_group" "sg-00e1779fed4725350" {
+  description = "[DO NOT DELETE] Security Group that allows inbound NFS traffic for SageMaker Notebooks Domain [d-rxwdhk4uxg9w]"
   egress      = []
   ingress = [{
     cidr_blocks      = []
@@ -408,135 +228,11 @@ resource "aws_security_group" "sg-0ae02282d6e846ce7" {
     ipv6_cidr_blocks = []
     prefix_list_ids  = []
     protocol         = "tcp"
-    security_groups  = ["sg-0f878e5791439c940"]
+    security_groups  = ["sg-06bd201e736d2b3b7"]
     self             = false
     to_port          = 2049
   }]
-  name                   = "security-group-for-inbound-nfs-d-draaek9gx0qg"
-  name_prefix            = null
-  revoke_rules_on_delete = null
-  tags = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-draaek9gx0qg"
-  }
-  tags_all = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-draaek9gx0qg"
-  }
-  vpc_id = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform from "sg-0ad16cd9808b468df"
-resource "aws_security_group" "sg-0ad16cd9808b468df" {
-  description = "This security group was generated by AWS Marketplace and is based on recommended settings for Amazon Linux 2 AMI with Amazon Inspector Agent version 1.0 provided by Amazon Web Services"
-  egress = [{
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = ""
-    from_port        = 0
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "-1"
-    security_groups  = []
-    self             = false
-    to_port          = 0
-  }]
-  ingress = [{
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = ""
-    from_port        = 22
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "tcp"
-    security_groups  = []
-    self             = false
-    to_port          = 22
-    }, {
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = ""
-    from_port        = 80
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "tcp"
-    security_groups  = []
-    self             = false
-    to_port          = 80
-  }]
-  name                   = "Amazon Linux 2 AMI with Amazon Inspector Agent-1-0-AutogenByAWSMP-1"
-  name_prefix            = null
-  revoke_rules_on_delete = null
-  tags                   = {}
-  tags_all               = {}
-  vpc_id                 = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform from "sg-0347e007a39664254"
-resource "aws_security_group" "sg-0347e007a39664254" {
-  description = "[DO NOT DELETE] Security Group that allows outbound NFS traffic for SageMaker Notebooks Domain [d-m9yvrgodylyf]"
-  egress = [{
-    cidr_blocks      = []
-    description      = ""
-    from_port        = 2049
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "tcp"
-    security_groups  = ["sg-0925b07f6871c4c52"]
-    self             = false
-    to_port          = 2049
-  }]
-  ingress                = []
-  name                   = "security-group-for-outbound-nfs-d-m9yvrgodylyf"
-  name_prefix            = null
-  revoke_rules_on_delete = null
-  tags = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-m9yvrgodylyf"
-  }
-  tags_all = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-m9yvrgodylyf"
-  }
-  vpc_id = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform from "sg-0415addcd3ada9f27"
-resource "aws_security_group" "sg-0415addcd3ada9f27" {
-  description = "[DO NOT DELETE] Security Group that allows outbound NFS traffic for SageMaker Notebooks Domain [d-sbktdptyz37x]"
-  egress = [{
-    cidr_blocks      = []
-    description      = ""
-    from_port        = 2049
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "tcp"
-    security_groups  = ["sg-07fd426eb23b040c7"]
-    self             = false
-    to_port          = 2049
-  }]
-  ingress                = []
-  name                   = "security-group-for-outbound-nfs-d-sbktdptyz37x"
-  name_prefix            = null
-  revoke_rules_on_delete = null
-  tags = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-sbktdptyz37x"
-  }
-  tags_all = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-sbktdptyz37x"
-  }
-  vpc_id = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform from "sg-06bd201e736d2b3b7"
-resource "aws_security_group" "sg-06bd201e736d2b3b7" {
-  description = "[DO NOT DELETE] Security Group that allows outbound NFS traffic for SageMaker Notebooks Domain [d-rxwdhk4uxg9w]"
-  egress = [{
-    cidr_blocks      = []
-    description      = ""
-    from_port        = 2049
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "tcp"
-    security_groups  = ["sg-00e1779fed4725350"]
-    self             = false
-    to_port          = 2049
-  }]
-  ingress                = []
-  name                   = "security-group-for-outbound-nfs-d-rxwdhk4uxg9w"
+  name                   = "security-group-for-inbound-nfs-d-rxwdhk4uxg9w"
   name_prefix            = null
   revoke_rules_on_delete = null
   tags = {
@@ -548,9 +244,9 @@ resource "aws_security_group" "sg-06bd201e736d2b3b7" {
   vpc_id = "vpc-d16a7cb7"
 }
 
-# __generated__ by Terraform from "sg-0345e2f63cf1b7640"
-resource "aws_security_group" "sg-0345e2f63cf1b7640" {
-  description = "[DO NOT DELETE] Security Group that allows inbound NFS traffic for SageMaker Notebooks Domain [d-hm3bgqzqwysg]"
+# __generated__ by Terraform from "sg-07fd426eb23b040c7"
+resource "aws_security_group" "sg-07fd426eb23b040c7" {
+  description = "[DO NOT DELETE] Security Group that allows inbound NFS traffic for SageMaker Notebooks Domain [d-sbktdptyz37x]"
   egress      = []
   ingress = [{
     cidr_blocks      = []
@@ -559,52 +255,25 @@ resource "aws_security_group" "sg-0345e2f63cf1b7640" {
     ipv6_cidr_blocks = []
     prefix_list_ids  = []
     protocol         = "tcp"
-    security_groups  = ["sg-0d9bebdba9356a2d5"]
+    security_groups  = ["sg-0415addcd3ada9f27"]
     self             = false
     to_port          = 2049
   }]
-  name                   = "security-group-for-inbound-nfs-d-hm3bgqzqwysg"
+  name                   = "security-group-for-inbound-nfs-d-sbktdptyz37x"
   name_prefix            = null
   revoke_rules_on_delete = null
   tags = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-hm3bgqzqwysg"
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-sbktdptyz37x"
   }
   tags_all = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-hm3bgqzqwysg"
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-sbktdptyz37x"
   }
   vpc_id = "vpc-d16a7cb7"
 }
 
-# __generated__ by Terraform from "sg-0925b07f6871c4c52"
-resource "aws_security_group" "sg-0925b07f6871c4c52" {
-  description = "[DO NOT DELETE] Security Group that allows inbound NFS traffic for SageMaker Notebooks Domain [d-m9yvrgodylyf]"
-  egress      = []
-  ingress = [{
-    cidr_blocks      = []
-    description      = ""
-    from_port        = 2049
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "tcp"
-    security_groups  = ["sg-0347e007a39664254"]
-    self             = false
-    to_port          = 2049
-  }]
-  name                   = "security-group-for-inbound-nfs-d-m9yvrgodylyf"
-  name_prefix            = null
-  revoke_rules_on_delete = null
-  tags = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-m9yvrgodylyf"
-  }
-  tags_all = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-m9yvrgodylyf"
-  }
-  vpc_id = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform from "sg-c20e17b5"
-resource "aws_security_group" "sg-c20e17b5" {
-  description = "default VPC security group"
+# __generated__ by Terraform from "sg-0b2532b833faa985a"
+resource "aws_security_group" "sg-0b2532b833faa985a" {
+  description = "Default Fargate CLI SG"
   egress = [{
     cidr_blocks      = ["0.0.0.0/0"]
     description      = ""
@@ -619,35 +288,15 @@ resource "aws_security_group" "sg-c20e17b5" {
   ingress = [{
     cidr_blocks      = ["0.0.0.0/0"]
     description      = ""
-    from_port        = 80
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "tcp"
-    security_groups  = []
-    self             = false
-    to_port          = 80
-    }, {
-    cidr_blocks      = ["54.239.6.184/32"]
-    description      = ""
-    from_port        = 22
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "tcp"
-    security_groups  = []
-    self             = false
-    to_port          = 22
-    }, {
-    cidr_blocks      = ["81.96.210.11/32"]
-    description      = ""
     from_port        = 0
     ipv6_cidr_blocks = []
     prefix_list_ids  = []
     protocol         = "-1"
     security_groups  = []
-    self             = true
+    self             = false
     to_port          = 0
   }]
-  name                   = "default"
+  name                   = "fargate-default"
   name_prefix            = null
   revoke_rules_on_delete = null
   tags                   = {}
@@ -683,39 +332,37 @@ resource "aws_subnet" "subnet-0c0444bc7c9afabc2" {
   vpc_id = "vpc-d16a7cb7"
 }
 
-# __generated__ by Terraform from "igw-5b6b683c"
-resource "aws_internet_gateway" "igw-5b6b683c" {
-  tags     = {}
-  tags_all = {}
-  vpc_id   = "vpc-d16a7cb7"
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-09c34702be259d430" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1a"
+  availability_zone_id                           = "euw1-az3"
+  cidr_block                                     = "100.64.0.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name        = "sub-p1"
+    subnet-type = "private"
+  }
+  tags_all = {
+    Name        = "sub-p1"
+    subnet-type = "private"
+  }
+  vpc_id = "vpc-d16a7cb7"
 }
 
-# __generated__ by Terraform from "sg-00377366a0b52c74b"
-resource "aws_security_group" "sg-00377366a0b52c74b" {
-  description = "Grafana SG"
-  egress = [{
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = ""
-    from_port        = 0
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "-1"
-    security_groups  = []
-    self             = false
-    to_port          = 0
-  }]
-  ingress                = []
-  name                   = "Grafana-sg-default"
-  name_prefix            = null
-  revoke_rules_on_delete = null
-  tags                   = {}
-  tags_all               = {}
-  vpc_id                 = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform from "sg-0d9bebdba9356a2d5"
-resource "aws_security_group" "sg-0d9bebdba9356a2d5" {
-  description = "[DO NOT DELETE] Security Group that allows outbound NFS traffic for SageMaker Notebooks Domain [d-hm3bgqzqwysg]"
+# __generated__ by Terraform from "sg-0e49847b1788bdc1e"
+resource "aws_security_group" "sg-0e49847b1788bdc1e" {
+  description = "[DO NOT DELETE] Security Group that allows outbound NFS traffic for SageMaker Notebooks Domain [d-hhrxgyjoezog]"
   egress = [{
     cidr_blocks      = []
     description      = ""
@@ -723,19 +370,19 @@ resource "aws_security_group" "sg-0d9bebdba9356a2d5" {
     ipv6_cidr_blocks = []
     prefix_list_ids  = []
     protocol         = "tcp"
-    security_groups  = ["sg-0345e2f63cf1b7640"]
+    security_groups  = ["sg-0cc13753231633739"]
     self             = false
     to_port          = 2049
   }]
   ingress                = []
-  name                   = "security-group-for-outbound-nfs-d-hm3bgqzqwysg"
+  name                   = "security-group-for-outbound-nfs-d-hhrxgyjoezog"
   name_prefix            = null
   revoke_rules_on_delete = null
   tags = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-hm3bgqzqwysg"
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-hhrxgyjoezog"
   }
   tags_all = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-hm3bgqzqwysg"
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-hhrxgyjoezog"
   }
   vpc_id = "vpc-d16a7cb7"
 }
@@ -803,56 +450,222 @@ resource "aws_security_group" "sg-0d8d91367b1a377e7" {
   vpc_id                 = "vpc-d16a7cb7"
 }
 
-# __generated__ by Terraform
-resource "aws_subnet" "subnet-10dd9d76" {
-  assign_ipv6_address_on_creation                = false
-  availability_zone                              = "eu-west-1b"
-  availability_zone_id                           = "euw1-az1"
-  cidr_block                                     = "172.31.0.0/20"
-  customer_owned_ipv4_pool                       = null
-  enable_dns64                                   = false
-  enable_lni_at_device_index                     = 0
-  enable_resource_name_dns_a_record_on_launch    = false
-  enable_resource_name_dns_aaaa_record_on_launch = false
-  ipv6_cidr_block                                = null
-  ipv6_native                                    = false
-  map_customer_owned_ip_on_launch                = false
-  map_public_ip_on_launch                        = true
-  outpost_arn                                    = null
-  private_dns_hostname_type_on_launch            = "ip-name"
+# __generated__ by Terraform from "sg-0cc13753231633739"
+resource "aws_security_group" "sg-0cc13753231633739" {
+  description = "[DO NOT DELETE] Security Group that allows inbound NFS traffic for SageMaker Notebooks Domain [d-hhrxgyjoezog]"
+  egress      = []
+  ingress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 2049
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-0e49847b1788bdc1e"]
+    self             = false
+    to_port          = 2049
+  }]
+  name                   = "security-group-for-inbound-nfs-d-hhrxgyjoezog"
+  name_prefix            = null
+  revoke_rules_on_delete = null
   tags = {
-    Name = "pub-default1"
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-hhrxgyjoezog"
   }
   tags_all = {
-    Name = "pub-default1"
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-hhrxgyjoezog"
+  }
+  vpc_id = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform from "sg-0347e007a39664254"
+resource "aws_security_group" "sg-0347e007a39664254" {
+  description = "[DO NOT DELETE] Security Group that allows outbound NFS traffic for SageMaker Notebooks Domain [d-m9yvrgodylyf]"
+  egress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 2049
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-0925b07f6871c4c52"]
+    self             = false
+    to_port          = 2049
+  }]
+  ingress                = []
+  name                   = "security-group-for-outbound-nfs-d-m9yvrgodylyf"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-m9yvrgodylyf"
+  }
+  tags_all = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-m9yvrgodylyf"
   }
   vpc_id = "vpc-d16a7cb7"
 }
 
 # __generated__ by Terraform
-resource "aws_subnet" "subnet-7faf2225" {
-  assign_ipv6_address_on_creation                = false
-  availability_zone                              = "eu-west-1a"
-  availability_zone_id                           = "euw1-az3"
-  cidr_block                                     = "172.31.32.0/20"
-  customer_owned_ipv4_pool                       = null
-  enable_dns64                                   = false
-  enable_lni_at_device_index                     = 0
-  enable_resource_name_dns_a_record_on_launch    = false
-  enable_resource_name_dns_aaaa_record_on_launch = false
-  ipv6_cidr_block                                = null
-  ipv6_native                                    = false
-  map_customer_owned_ip_on_launch                = false
-  map_public_ip_on_launch                        = true
-  outpost_arn                                    = null
-  private_dns_hostname_type_on_launch            = "ip-name"
+resource "aws_route_table" "rtb-00b5307f6a6a57106" {
+  propagating_vgws = []
+  route = [{
+    carrier_gateway_id         = ""
+    cidr_block                 = "0.0.0.0/0"
+    core_network_arn           = ""
+    destination_prefix_list_id = ""
+    egress_only_gateway_id     = ""
+    gateway_id                 = ""
+    ipv6_cidr_block            = ""
+    local_gateway_id           = ""
+    nat_gateway_id             = "nat-0f8988fe7af3828f7"
+    network_interface_id       = ""
+    transit_gateway_id         = ""
+    vpc_endpoint_id            = ""
+    vpc_peering_connection_id  = ""
+  }]
   tags = {
-    Name = "pub-default2"
+    Name = "def-priv"
   }
   tags_all = {
-    Name = "pub-default2"
+    Name = "def-priv"
   }
   vpc_id = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform from "sg-0925b07f6871c4c52"
+resource "aws_security_group" "sg-0925b07f6871c4c52" {
+  description = "[DO NOT DELETE] Security Group that allows inbound NFS traffic for SageMaker Notebooks Domain [d-m9yvrgodylyf]"
+  egress      = []
+  ingress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 2049
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-0347e007a39664254"]
+    self             = false
+    to_port          = 2049
+  }]
+  name                   = "security-group-for-inbound-nfs-d-m9yvrgodylyf"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-m9yvrgodylyf"
+  }
+  tags_all = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-m9yvrgodylyf"
+  }
+  vpc_id = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform from "sg-0a3cf43961d051d6e"
+resource "aws_security_group" "sg-0a3cf43961d051d6e" {
+  description = "launch-wizard-3 created 2022-11-30T16:08:55.684Z"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["81.96.210.11/32"]
+    description      = ""
+    from_port        = 22
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 22
+  }]
+  name                   = "launch-wizard-3"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform from "sg-0345e2f63cf1b7640"
+resource "aws_security_group" "sg-0345e2f63cf1b7640" {
+  description = "[DO NOT DELETE] Security Group that allows inbound NFS traffic for SageMaker Notebooks Domain [d-hm3bgqzqwysg]"
+  egress      = []
+  ingress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 2049
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-0d9bebdba9356a2d5"]
+    self             = false
+    to_port          = 2049
+  }]
+  name                   = "security-group-for-inbound-nfs-d-hm3bgqzqwysg"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-hm3bgqzqwysg"
+  }
+  tags_all = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-hm3bgqzqwysg"
+  }
+  vpc_id = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform from "igw-5b6b683c"
+resource "aws_internet_gateway" "igw-5b6b683c" {
+  tags     = {}
+  tags_all = {}
+  vpc_id   = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform from "sg-021bee5af01e26a5a"
+resource "aws_security_group" "sg-021bee5af01e26a5a" {
+  description = "This security group was generated by AWS Marketplace and is based on recommended settings for Amazon Linux 2 AMI with Amazon Inspector Agent version 1.0 provided by Amazon Web Services"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 22
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 22
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 80
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 80
+  }]
+  name                   = "Amazon Linux 2 AMI with Amazon Inspector Agent-1-0-AutogenByAWSMP-"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-d16a7cb7"
 }
 
 # __generated__ by Terraform
@@ -879,6 +692,169 @@ resource "aws_subnet" "subnet-03115823fcae3f209" {
   tags_all = {
     Name        = "sub-p3"
     subnet-type = "private"
+  }
+  vpc_id = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform from "dopt-ee743588"
+resource "aws_vpc_dhcp_options" "dopt-ee743588" {
+  domain_name          = "eu-west-1.compute.internal"
+  domain_name_servers  = ["AmazonProvidedDNS"]
+  netbios_name_servers = []
+  netbios_node_type    = null
+  ntp_servers          = []
+  tags                 = {}
+  tags_all             = {}
+}
+
+# __generated__ by Terraform from "sg-06bd201e736d2b3b7"
+resource "aws_security_group" "sg-06bd201e736d2b3b7" {
+  description = "[DO NOT DELETE] Security Group that allows outbound NFS traffic for SageMaker Notebooks Domain [d-rxwdhk4uxg9w]"
+  egress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 2049
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-00e1779fed4725350"]
+    self             = false
+    to_port          = 2049
+  }]
+  ingress                = []
+  name                   = "security-group-for-outbound-nfs-d-rxwdhk4uxg9w"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-rxwdhk4uxg9w"
+  }
+  tags_all = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-rxwdhk4uxg9w"
+  }
+  vpc_id = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform from "sg-031d35a4adfd833e1"
+resource "aws_security_group" "sg-031d35a4adfd833e1" {
+  description = "Security group for AWS Cloud9 environment aws-cloud9-latticeC9-7c0193e6032147389175c3ae44502418"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress                = []
+  name                   = "aws-cloud9-latticeC9-7c0193e6032147389175c3ae44502418-InstanceSecurityGroup-FMJNFL83XT9Q"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "aws-cloud9-latticeC9-7c0193e6032147389175c3ae44502418"
+  }
+  tags_all = {
+    Name = "aws-cloud9-latticeC9-7c0193e6032147389175c3ae44502418"
+  }
+  vpc_id = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform
+resource "aws_nat_gateway" "nat-0f8988fe7af3828f7" {
+  allocation_id                      = "eipalloc-09735ea054256a0bf"
+  connectivity_type                  = "public"
+  private_ip                         = "172.31.14.32"
+  secondary_allocation_ids           = []
+  secondary_private_ip_address_count = 0
+  secondary_private_ip_addresses     = []
+  subnet_id                          = "subnet-10dd9d76"
+  tags = {
+    Name = "my-defvpc-nat"
+  }
+  tags_all = {
+    Name = "my-defvpc-nat"
+  }
+}
+
+# __generated__ by Terraform from "sg-0fb48f75ebc7f7bd5"
+resource "aws_security_group" "sg-0fb48f75ebc7f7bd5" {
+  description = "Security group for AWS Cloud9 environment aws-cloud9-eksworkshop2-5f490f0940024ca8b107816eb8e23748"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress                = []
+  name                   = "aws-cloud9-eksworkshop2-5f490f0940024ca8b107816eb8e23748-InstanceSecurityGroup-IJ856DV4N69D"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "aws-cloud9-eksworkshop2-5f490f0940024ca8b107816eb8e23748"
+  }
+  tags_all = {
+    Name = "aws-cloud9-eksworkshop2-5f490f0940024ca8b107816eb8e23748"
+  }
+  vpc_id = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform from "sg-0415addcd3ada9f27"
+resource "aws_security_group" "sg-0415addcd3ada9f27" {
+  description = "[DO NOT DELETE] Security Group that allows outbound NFS traffic for SageMaker Notebooks Domain [d-sbktdptyz37x]"
+  egress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 2049
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-07fd426eb23b040c7"]
+    self             = false
+    to_port          = 2049
+  }]
+  ingress                = []
+  name                   = "security-group-for-outbound-nfs-d-sbktdptyz37x"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-sbktdptyz37x"
+  }
+  tags_all = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-sbktdptyz37x"
+  }
+  vpc_id = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform from "sg-0ae02282d6e846ce7"
+resource "aws_security_group" "sg-0ae02282d6e846ce7" {
+  description = "[DO NOT DELETE] Security Group that allows inbound NFS traffic for SageMaker Notebooks Domain [d-draaek9gx0qg]"
+  egress      = []
+  ingress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 2049
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-0f878e5791439c940"]
+    self             = false
+    to_port          = 2049
+  }]
+  name                   = "security-group-for-inbound-nfs-d-draaek9gx0qg"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-draaek9gx0qg"
+  }
+  tags_all = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-draaek9gx0qg"
   }
   vpc_id = "vpc-d16a7cb7"
 }
@@ -920,36 +896,9 @@ resource "aws_security_group" "sg-02bba0b75f7648d3d" {
   vpc_id = "vpc-d16a7cb7"
 }
 
-# __generated__ by Terraform from "sg-0cc13753231633739"
-resource "aws_security_group" "sg-0cc13753231633739" {
-  description = "[DO NOT DELETE] Security Group that allows inbound NFS traffic for SageMaker Notebooks Domain [d-hhrxgyjoezog]"
-  egress      = []
-  ingress = [{
-    cidr_blocks      = []
-    description      = ""
-    from_port        = 2049
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "tcp"
-    security_groups  = ["sg-0e49847b1788bdc1e"]
-    self             = false
-    to_port          = 2049
-  }]
-  name                   = "security-group-for-inbound-nfs-d-hhrxgyjoezog"
-  name_prefix            = null
-  revoke_rules_on_delete = null
-  tags = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-hhrxgyjoezog"
-  }
-  tags_all = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-hhrxgyjoezog"
-  }
-  vpc_id = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform from "sg-0b2532b833faa985a"
-resource "aws_security_group" "sg-0b2532b833faa985a" {
-  description = "Default Fargate CLI SG"
+# __generated__ by Terraform from "sg-0ad16cd9808b468df"
+resource "aws_security_group" "sg-0ad16cd9808b468df" {
+  description = "This security group was generated by AWS Marketplace and is based on recommended settings for Amazon Linux 2 AMI with Amazon Inspector Agent version 1.0 provided by Amazon Web Services"
   egress = [{
     cidr_blocks      = ["0.0.0.0/0"]
     description      = ""
@@ -964,6 +913,38 @@ resource "aws_security_group" "sg-0b2532b833faa985a" {
   ingress = [{
     cidr_blocks      = ["0.0.0.0/0"]
     description      = ""
+    from_port        = 22
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 22
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 80
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 80
+  }]
+  name                   = "Amazon Linux 2 AMI with Amazon Inspector Agent-1-0-AutogenByAWSMP-1"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform from "sg-c20e17b5"
+resource "aws_security_group" "sg-c20e17b5" {
+  description = "default VPC security group"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
     from_port        = 0
     ipv6_cidr_blocks = []
     prefix_list_ids  = []
@@ -972,7 +953,38 @@ resource "aws_security_group" "sg-0b2532b833faa985a" {
     self             = false
     to_port          = 0
   }]
-  name                   = "fargate-default"
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 80
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 80
+    }, {
+    cidr_blocks      = ["54.239.6.184/32"]
+    description      = ""
+    from_port        = 22
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 22
+    }, {
+    cidr_blocks      = ["81.96.210.11/32"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = true
+    to_port          = 0
+  }]
+  name                   = "default"
   name_prefix            = null
   revoke_rules_on_delete = null
   tags                   = {}
@@ -1013,83 +1025,82 @@ resource "aws_security_group" "sg-0724f1dddc5ef2dba" {
   vpc_id                 = "vpc-d16a7cb7"
 }
 
-# __generated__ by Terraform from "sg-00e1779fed4725350"
-resource "aws_security_group" "sg-00e1779fed4725350" {
-  description = "[DO NOT DELETE] Security Group that allows inbound NFS traffic for SageMaker Notebooks Domain [d-rxwdhk4uxg9w]"
-  egress      = []
-  ingress = [{
-    cidr_blocks      = []
-    description      = ""
-    from_port        = 2049
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "tcp"
-    security_groups  = ["sg-06bd201e736d2b3b7"]
-    self             = false
-    to_port          = 2049
-  }]
-  name                   = "security-group-for-inbound-nfs-d-rxwdhk4uxg9w"
-  name_prefix            = null
-  revoke_rules_on_delete = null
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-7faf2225" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-1a"
+  availability_zone_id                           = "euw1-az3"
+  cidr_block                                     = "172.31.32.0/20"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
   tags = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-rxwdhk4uxg9w"
+    Name = "pub-default2"
   }
   tags_all = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-rxwdhk4uxg9w"
+    Name = "pub-default2"
   }
   vpc_id = "vpc-d16a7cb7"
 }
 
-# __generated__ by Terraform from "sg-07fd426eb23b040c7"
-resource "aws_security_group" "sg-07fd426eb23b040c7" {
-  description = "[DO NOT DELETE] Security Group that allows inbound NFS traffic for SageMaker Notebooks Domain [d-sbktdptyz37x]"
-  egress      = []
-  ingress = [{
-    cidr_blocks      = []
-    description      = ""
-    from_port        = 2049
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    protocol         = "tcp"
-    security_groups  = ["sg-0415addcd3ada9f27"]
-    self             = false
-    to_port          = 2049
-  }]
-  name                   = "security-group-for-inbound-nfs-d-sbktdptyz37x"
-  name_prefix            = null
-  revoke_rules_on_delete = null
-  tags = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-sbktdptyz37x"
-  }
-  tags_all = {
-    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-sbktdptyz37x"
-  }
-  vpc_id = "vpc-d16a7cb7"
-}
-
-# __generated__ by Terraform from "sg-0d973ba3cbf43974d"
-resource "aws_security_group" "sg-0d973ba3cbf43974d" {
-  description = "Security group for AWS Cloud9 environment aws-cloud9-ecr-sign-ea29311879824fa993341b6b1f16494d"
+# __generated__ by Terraform from "sg-0f878e5791439c940"
+resource "aws_security_group" "sg-0f878e5791439c940" {
+  description = "[DO NOT DELETE] Security Group that allows outbound NFS traffic for SageMaker Notebooks Domain [d-draaek9gx0qg]"
   egress = [{
-    cidr_blocks      = ["0.0.0.0/0"]
+    cidr_blocks      = []
     description      = ""
-    from_port        = 0
+    from_port        = 2049
     ipv6_cidr_blocks = []
     prefix_list_ids  = []
-    protocol         = "-1"
-    security_groups  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-0ae02282d6e846ce7"]
     self             = false
-    to_port          = 0
+    to_port          = 2049
   }]
   ingress                = []
-  name                   = "aws-cloud9-ecr-sign-ea29311879824fa993341b6b1f16494d-InstanceSecurityGroup-14QIVSI12YSAG"
+  name                   = "security-group-for-outbound-nfs-d-draaek9gx0qg"
   name_prefix            = null
   revoke_rules_on_delete = null
   tags = {
-    Name = "aws-cloud9-ecr-sign-ea29311879824fa993341b6b1f16494d"
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-draaek9gx0qg"
   }
   tags_all = {
-    Name = "aws-cloud9-ecr-sign-ea29311879824fa993341b6b1f16494d"
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-draaek9gx0qg"
+  }
+  vpc_id = "vpc-d16a7cb7"
+}
+
+# __generated__ by Terraform from "sg-0a95692fb9e4baa8a"
+resource "aws_security_group" "sg-0a95692fb9e4baa8a" {
+  description = "[DO NOT DELETE] Security Group that allows inbound NFS traffic for SageMaker Notebooks Domain [d-p9uargalovio]"
+  egress      = []
+  ingress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 2049
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-01c8b3e4e3e4153b6"]
+    self             = false
+    to_port          = 2049
+  }]
+  name                   = "security-group-for-inbound-nfs-d-p9uargalovio"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-p9uargalovio"
+  }
+  tags_all = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-1:566972129213:domain/d-p9uargalovio"
   }
   vpc_id = "vpc-d16a7cb7"
 }

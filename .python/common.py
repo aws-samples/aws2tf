@@ -296,7 +296,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
       fn=type+"_import.tf"
       with open(fn, "w") as f:
          for item in response:
-            if id is None: # do it all
+            if id is None or filterid=="": # do it all
                #print(str(item))
                try:
                   if "/service-role/" in str(item["Path"]): continue
@@ -357,6 +357,11 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
 
 
 def get_test(type,id,clfn,descfn,topkey,key,filterid):
+   print("in get_test")
+   print("--> In get_test doing "+ type + ' with id ' + str(id))   
+   return
+
+def get_aws_vpc_dhcp_options(type,id,clfn,descfn,topkey,key,filterid):
    print("in get_test")
    print("--> In get_test doing "+ type + ' with id ' + str(id))   
    return

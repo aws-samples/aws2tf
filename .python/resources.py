@@ -1,7 +1,8 @@
 def resource_types(type):
     if type == "net":
         #net=["aws_vpc","aws_subnet","aws_security_group","aws_internet_gateway","aws_nat_gateway","aws_route_table","aws_vpc_endpoint"]
-        net=["aws_vpc","aws_subnet","aws_internet_gateway","aws_nat_gateway","aws_route_table","aws_vpc_endpoint","aws_security_group"]
+        net=["aws_vpc","aws_vpc_dhcp_options","aws_subnet","aws_internet_gateway","aws_nat_gateway","aws_route_table","aws_vpc_endpoint","aws_security_group"]
+        # call aws_route_table_association from subnet and igw
         return net
     else:
         same=[type]
@@ -148,13 +149,13 @@ def resource_data(type,id):
         filterid=key
         if id is not None and "vpc-" in id: filterid="attachment.vpc-id"
 
-    elif type == "aws_dhcp_options":
+    elif type == "aws_vpc_dhcp_options":
         clfn="ec2"
         descfn="describe_dhcp_options"
         topkey="DhcpOptions"
         key="DhcpOptionsId"
-        filterid=key
-        if id is not None and "vpc-" in id: filterid="VpcId"
+        filterid=""
+
 
     elif type == "aws_image":
         clfn="ec2"

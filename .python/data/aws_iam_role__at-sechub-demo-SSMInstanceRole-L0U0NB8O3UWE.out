@@ -1,0 +1,18 @@
+resource "aws_iam_role" "at-sechub-demo-SSMInstanceRole-L0U0NB8O3UWE" {
+  assume_role_policy    = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":[\"ssm.amazonaws.com\",\"ec2.amazonaws.com\"]}}],\"Version\":\"2012-10-17\"}"
+  description           = null
+  force_detach_policies = false
+  managed_policy_arns   = []
+  max_session_duration  = 3600
+  name                  = "at-sechub-demo-SSMInstanceRole-L0U0NB8O3UWE"
+  name_prefix           = null
+  path                  = "/"
+  permissions_boundary  = null
+  tags                  = {}
+  tags_all              = {}
+  inline_policy {
+    name   = "S3andSSMAccess"
+    policy = "{\"Statement\":[{\"Action\":[\"ssm:DescribeAssociation\",\"ssm:GetDeployablePatchSnapshotForInstance\",\"ssm:GetDocument\",\"ssm:DescribeDocument\",\"ssm:GetManifest\",\"ssm:GetParameters\",\"ssm:GetParameter\",\"ssm:ListAssociations\",\"ssm:ListInstanceAssociations\",\"ssm:PutInventory\",\"ssm:PutComplianceItems\",\"ssm:PutConfigurePackageResult\",\"ssm:UpdateAssociationStatus\",\"ssm:UpdateInstanceAssociationStatus\",\"ssm:UpdateInstanceInformation\"],\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":[\"ssmmessages:CreateControlChannel\",\"ssmmessages:CreateDataChannel\",\"ssmmessages:OpenControlChannel\",\"ssmmessages:OpenDataChannel\"],\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":[\"ec2messages:AcknowledgeMessage\",\"ec2messages:DeleteMessage\",\"ec2messages:FailMessage\",\"ec2messages:GetEndpoint\",\"ec2messages:GetMessages\",\"ec2messages:SendReply\"],\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":[\"cloudwatch:PutMetricData\"],\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":[\"ec2:DescribeInstanceStatus\"],\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":[\"ds:CreateComputer\",\"ds:DescribeDirectories\"],\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":[\"logs:CreateLogGroup\",\"logs:CreateLogStream\",\"logs:DescribeLogGroups\",\"logs:DescribeLogStreams\",\"logs:PutLogEvents\"],\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":[\"s3:GetBucketLocation\",\"s3:PutObject\",\"s3:GetObject\",\"s3:GetEncryptionConfiguration\",\"s3:AbortMultipartUpload\",\"s3:ListMultipartUploadParts\",\"s3:ListBucket\",\"s3:ListBucketMultipartUploads\"],\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":[\"s3:ListAllMyBuckets\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::*\",\"Sid\":\"S3ListBuckets\"},{\"Action\":[\"s3:ListBucket\",\"s3:GetBucketLocation\",\"s3:GetObject\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::agentbucket-566972129213/*\",\"Sid\":\"S3GetObjects\"}]}"
+  }
+}
+

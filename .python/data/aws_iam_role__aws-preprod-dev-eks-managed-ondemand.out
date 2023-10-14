@@ -1,0 +1,30 @@
+resource "aws_iam_role" "aws-preprod-dev-eks-managed-ondemand" {
+  assume_role_policy    = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"},\"Sid\":\"EKSWorkerAssumeRole\"}],\"Version\":\"2012-10-17\"}"
+  description           = "EKS Managed Node group IAM Role"
+  force_detach_policies = false
+  managed_policy_arns   = ["arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly", "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy", "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy", "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
+  max_session_duration  = 3600
+  name                  = "aws-preprod-dev-eks-managed-ondemand"
+  name_prefix           = null
+  path                  = "/"
+  permissions_boundary  = null
+  tags = {
+    created-by  = "Terraform"
+    environment = "preprod"
+    name        = "aws-preprod-dev-eks"
+    org         = ""
+    resource    = "eks"
+    tenant      = "aws"
+    zone        = "dev"
+  }
+  tags_all = {
+    created-by  = "Terraform"
+    environment = "preprod"
+    name        = "aws-preprod-dev-eks"
+    org         = ""
+    resource    = "eks"
+    tenant      = "aws"
+    zone        = "dev"
+  }
+}
+

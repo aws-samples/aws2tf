@@ -1,0 +1,14 @@
+resource "aws_iam_role" "aws-elasticbeanstalk-service-role" {
+  assume_role_policy    = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Condition\":{\"StringEquals\":{\"sts:ExternalId\":\"elasticbeanstalk\"}},\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"elasticbeanstalk.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}"
+  description           = null
+  force_detach_policies = false
+  managed_policy_arns   = ["arn:aws:iam::aws:policy/service-role/AWSElasticBeanstalkEnhancedHealth", "arn:aws:iam::aws:policy/service-role/AWSElasticBeanstalkService"]
+  max_session_duration  = 3600
+  name                  = "aws-elasticbeanstalk-service-role"
+  name_prefix           = null
+  path                  = "/"
+  permissions_boundary  = null
+  tags                  = {}
+  tags_all              = {}
+}
+

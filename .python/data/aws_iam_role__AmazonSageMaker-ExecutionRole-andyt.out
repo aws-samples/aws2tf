@@ -1,0 +1,18 @@
+resource "aws_iam_role" "AmazonSageMaker-ExecutionRole-andyt" {
+  assume_role_policy    = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"sagemaker.amazonaws.com\"},\"Sid\":\"\"}],\"Version\":\"2012-10-17\"}"
+  description           = "Allows SageMaker notebook instances, training jobs, and models to access S3, ECR, and CloudWatch on your behalf."
+  force_detach_policies = false
+  managed_policy_arns   = ["arn:aws:iam::aws:policy/AdministratorAccess", "arn:aws:iam::aws:policy/AmazonSageMakerFullAccess", "arn:aws:iam::aws:policy/CloudWatchFullAccess"]
+  max_session_duration  = 3600
+  name                  = "AmazonSageMaker-ExecutionRole-andyt"
+  name_prefix           = null
+  path                  = "/"
+  permissions_boundary  = null
+  tags                  = {}
+  tags_all              = {}
+  inline_policy {
+    name   = "sm-inline-s3"
+    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject\",\"s3:PutObject\",\"s3:DeleteObject\",\"s3:ListBucket\"],\"Effect\":\"Allow\",\"Resource\":[\"arn:aws:s3:::*\"]}]}"
+  }
+}
+

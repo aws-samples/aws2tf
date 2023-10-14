@@ -231,9 +231,12 @@ def resource_data(type,id):
         descfn="list_roles"
         topkey="Roles"
         key="RoleName"
-        filterid=".RoleName"  # no filter on list-roles so use jq like filter
+        filterid="RoleName"  # no filter on list-roles so use jq like filter
         if id is not None and "arn:aws:iam::" in id: 
             filterid=".Arn"
+        else:
+            if id is not None:
+                filterid=".RoleName"
 
 
     elif type == "aws_iam_policy":

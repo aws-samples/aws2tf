@@ -1,0 +1,14 @@
+resource "aws_iam_role" "ATElasticBean" {
+  assume_role_policy    = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Condition\":{\"StringEquals\":{\"sts:ExternalId\":\"elasticbeanstalk\"}},\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"elasticbeanstalk.amazonaws.com\"},\"Sid\":\"\"}],\"Version\":\"2012-10-17\"}"
+  description           = "Allows Elastic Beanstalk to create and manage AWS resources on your behalf."
+  force_detach_policies = false
+  managed_policy_arns   = ["arn:aws:iam::aws:policy/service-role/AWSElasticBeanstalkEnhancedHealth", "arn:aws:iam::aws:policy/service-role/AWSElasticBeanstalkService"]
+  max_session_duration  = 3600
+  name                  = "ATElasticBean"
+  name_prefix           = null
+  path                  = "/"
+  permissions_boundary  = null
+  tags                  = {}
+  tags_all              = {}
+}
+

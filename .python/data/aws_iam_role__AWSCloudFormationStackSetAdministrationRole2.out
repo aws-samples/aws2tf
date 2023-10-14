@@ -1,0 +1,18 @@
+resource "aws_iam_role" "AWSCloudFormationStackSetAdministrationRole2" {
+  assume_role_policy    = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"cloudformation.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}"
+  description           = null
+  force_detach_policies = false
+  managed_policy_arns   = []
+  max_session_duration  = 3600
+  name                  = "AWSCloudFormationStackSetAdministrationRole2"
+  name_prefix           = null
+  path                  = "/"
+  permissions_boundary  = null
+  tags                  = {}
+  tags_all              = {}
+  inline_policy {
+    name   = "AssumeRole-AWSCloudFormationStackSetExecutionRole2"
+    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sts:AssumeRole\"],\"Effect\":\"Allow\",\"Resource\":[\"arn:aws:iam::*:role/AWSCloudFormationStackSetExecutionRole2\"]}]}"
+  }
+}
+

@@ -1,0 +1,18 @@
+resource "aws_iam_role" "at-sechub-demo-IsolateInstanceLambdaRole-1NHTWU5PCIBKR" {
+  assume_role_policy    = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}"
+  description           = null
+  force_detach_policies = false
+  managed_policy_arns   = []
+  max_session_duration  = 3600
+  name                  = "at-sechub-demo-IsolateInstanceLambdaRole-1NHTWU5PCIBKR"
+  name_prefix           = null
+  path                  = "/"
+  permissions_boundary  = null
+  tags                  = {}
+  tags_all              = {}
+  inline_policy {
+    name   = "LambdaPolicyName"
+    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"logs:CreateLogGroup\",\"Effect\":\"Allow\",\"Resource\":\"arn:aws:logs:eu-west-2:566972129213:*\"},{\"Action\":[\"logs:CreateLogStream\",\"logs:PutLogEvents\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:logs:eu-west-2:566972129213:log-group:/aws/lambda/isolate-ec2-security-group:*\"},{\"Action\":[\"ec2:Describe*\",\"ec2:ModifyInstanceAttribute\",\"ec2:CreateSecurityGroup\",\"ec2:AuthorizeSecurityGroupIngress\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}]}"
+  }
+}
+

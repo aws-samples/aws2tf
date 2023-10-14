@@ -1,0 +1,14 @@
+resource "aws_iam_role" "ack-s3-controller-production-n1" {
+  assume_role_policy    = "{\"Statement\":[{\"Action\":\"sts:AssumeRoleWithWebIdentity\",\"Condition\":{\"StringEquals\":{\"oidc.eks.eu-west-2.amazonaws.com/id/396AD637998A7E9A00E04F03FEE30CB1:sub\":\"system:serviceaccount:production-n1:ack-s3-controller\"}},\"Effect\":\"Allow\",\"Principal\":{\"Federated\":\"arn:aws:iam::566972129213:oidc-provider/oidc.eks.eu-west-2.amazonaws.com/id/396AD637998A7E9A00E04F03FEE30CB1\"}}],\"Version\":\"2012-10-17\"}"
+  description           = "IRSA role for ACK $SERVICE controller deployment on EKS cluster in $ACK_WATCH_NAMESPACE namespace"
+  force_detach_policies = false
+  managed_policy_arns   = ["arn:aws:iam::aws:policy/AmazonS3FullAccess"]
+  max_session_duration  = 3600
+  name                  = "ack-s3-controller-production-n1"
+  name_prefix           = null
+  path                  = "/"
+  permissions_boundary  = null
+  tags                  = {}
+  tags_all              = {}
+}
+

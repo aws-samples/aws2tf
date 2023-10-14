@@ -1,0 +1,18 @@
+resource "aws_iam_role" "AccessAnalyzerTrustedService" {
+  assume_role_policy    = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Condition\":{\"StringEquals\":{\"sts:ExternalId\":\"AccessAnalyzerTrustedService7OucgmbmU0j0\"}},\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::121925031476:root\"},\"Sid\":\"\"}],\"Version\":\"2012-10-17\"}"
+  description           = null
+  force_detach_policies = false
+  managed_policy_arns   = []
+  max_session_duration  = 3600
+  name                  = "AccessAnalyzerTrustedService"
+  name_prefix           = null
+  path                  = "/"
+  permissions_boundary  = null
+  tags                  = {}
+  tags_all              = {}
+  inline_policy {
+    name   = "AccessAnalyzerTrustedServicePolicy"
+    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"access-analyzer:ListAnalyzers\",\"access-analyzer:GetAnalyzer\",\"access-analyzer:CreateAnalyzer\",\"ec2:DescribeRegions\"],\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"A2CreateAnalyzer\"},{\"Action\":\"iam:CreateServiceLinkedRole\",\"Condition\":{\"StringEquals\":{\"iam:AWSServiceName\":\"access-analyzer.amazonaws.com\"}},\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"CreateSLR\"}]}"
+  }
+}
+

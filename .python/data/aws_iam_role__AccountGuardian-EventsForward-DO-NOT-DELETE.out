@@ -1,0 +1,24 @@
+resource "aws_iam_role" "AccountGuardian-EventsForward-DO-NOT-DELETE" {
+  assume_role_policy    = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"events.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}"
+  description           = "AccountGuardian role used by EventBridge events forwarding rule"
+  force_detach_policies = false
+  managed_policy_arns   = []
+  max_session_duration  = 3600
+  name                  = "AccountGuardian-EventsForward-DO-NOT-DELETE"
+  name_prefix           = null
+  path                  = "/"
+  permissions_boundary  = null
+  tags = {
+    App     = "AccountGuardian"
+    Segment = "AccountManager"
+  }
+  tags_all = {
+    App     = "AccountGuardian"
+    Segment = "AccountManager"
+  }
+  inline_policy {
+    name   = "ForwardPolicy"
+    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"events:PutEvents\",\"Effect\":\"Allow\",\"Resource\":\"arn:aws:events:us-west-2:427677067146:event-bus/ComplianceEventBus-16\"}]}"
+  }
+}
+

@@ -276,33 +276,44 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
       elif filterid == "ConfigRuleNames":
          print("calling with filter ConfigRuleNames="+id)
          response=dfn(ConfigRuleNames=[id])
-      ## standard call --filter
+      elif "." in filterid:
+         print("calling with filter id="+filterid + " and id=" + id)
+         response=dfn()
       else:
          print("calling with filter id="+filterid + " and id=" + id)
          response=dfn(Filters=[{'Name': filterid, 'Values': [id]}])
        
+    #print(json.dumps(response, indent=4, sort_keys=True))
+    #print(str(response[topkey]))
+    print(filterid)
+         
     #print("response="+str(response[botokey]))
     if str(response[topkey]) != "[]":
       fn=type+"_import.tf"
       with open(fn, "w") as f:
-         if "." not in filterid:
             for item in response[topkey]:
+               
                if "." not in filterid: # do it all
+                  print(str(item))
+                  if "/service-role/" in str(item["Path"]): continue
                   theid=item[key]
-                  tfid=theid.replace("/","_")
+                  tfid=theid.replace("/","__").replace(".","__")
                   f.write('import {\n')
                   f.write('  to = ' +type + '.' + tfid + '\n')
                   f.write('  id = "'+ theid + '"\n')
                   f.write('}\n')
                   globals.processed=globals.processed+[type+","+theid]
                else:
-                  print("doing jq like filter")
-                  print(json.dumps(item, indent=4, sort_keys=True))
-                  print("filterid="+filterid)
-                  #print(item[filterid])
-                  #print(item[filterid])
-                  #print(item[filterid].split('/'))
-                  # do jq like filter
+                  tfil=filterid.split('.')[1]
+                  if id == str(item[tfil]):
+                     theid=item[key]
+                     tfid=theid.replace("/","_")
+                     f.write('import {\n')
+                     f.write('  to = ' +type + '.' + tfid + '\n')
+                     f.write('  id = "'+ theid + '"\n')
+                     f.write('}\n')
+                     globals.processed=globals.processed+[type+","+theid]
+
   
     #tfplan(type)
 

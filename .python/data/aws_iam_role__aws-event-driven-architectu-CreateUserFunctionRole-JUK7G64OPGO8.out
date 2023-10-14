@@ -1,0 +1,22 @@
+resource "aws_iam_role" "aws-event-driven-architectu-CreateUserFunctionRole-JUK7G64OPGO8" {
+  assume_role_policy    = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}"
+  description           = null
+  force_detach_policies = false
+  managed_policy_arns   = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"]
+  max_session_duration  = 3600
+  name                  = "aws-event-driven-architectu-CreateUserFunctionRole-JUK7G64OPGO8"
+  name_prefix           = null
+  path                  = "/"
+  permissions_boundary  = null
+  tags = {
+    "lambda:createdBy" = "SAM"
+  }
+  tags_all = {
+    "lambda:createdBy" = "SAM"
+  }
+  inline_policy {
+    name   = "CreateUserFunctionRolePolicy0"
+    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"cognito-idp:AdminConfirmSignUp\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:cognito-idp:eu-west-1:566972129213:userpool/eu-west-1_1aKJgfDfM\"},{\"Action\":[\"cognito-idp:SignUp\"],\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":[\"secretsmanager:GetSecretValue\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:secretsmanager:eu-west-1:566972129213:secret:aws-event-driven-architectures-workshop-CognitoUserPool-20O4WECFBXLV-event-generator-credentials-eFpA9A\"}]}"
+  }
+}
+

@@ -1,0 +1,18 @@
+resource "aws_iam_role" "at_assume_test_role" {
+  assume_role_policy    = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Condition\":{},\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::566972129213:root\"}}],\"Version\":\"2012-10-17\"}"
+  description           = null
+  force_detach_policies = false
+  managed_policy_arns   = ["arn:aws:iam::566972129213:policy/at_assume_role_test_star", "arn:aws:iam::aws:policy/AdministratorAccess"]
+  max_session_duration  = 3600
+  name                  = "at_assume_test_role"
+  name_prefix           = null
+  path                  = "/"
+  permissions_boundary  = null
+  tags                  = {}
+  tags_all              = {}
+  inline_policy {
+    name   = "AWSRevokeOlderSessions"
+    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"*\"],\"Condition\":{\"DateLessThan\":{\"aws:TokenIssueTime\":\"2020-11-13T15:30:18.061Z\"}},\"Effect\":\"Deny\",\"Resource\":[\"*\"]}]}"
+  }
+}
+

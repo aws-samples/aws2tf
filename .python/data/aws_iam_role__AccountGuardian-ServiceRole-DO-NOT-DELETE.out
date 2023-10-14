@@ -1,0 +1,22 @@
+resource "aws_iam_role" "AccountGuardian-ServiceRole-DO-NOT-DELETE" {
+  assume_role_policy    = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Condition\":{},\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::067057439974:root\"}}],\"Version\":\"2012-10-17\"}"
+  description           = null
+  force_detach_policies = false
+  managed_policy_arns   = ["arn:aws:iam::aws:policy/ReadOnlyAccess"]
+  max_session_duration  = 3600
+  name                  = "AccountGuardian-ServiceRole-DO-NOT-DELETE"
+  name_prefix           = null
+  path                  = "/"
+  permissions_boundary  = null
+  tags                  = {}
+  tags_all              = {}
+  inline_policy {
+    name   = "Config"
+    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"config:*\"],\"Effect\":\"Allow\",\"Resource\":[\"*\"],\"Sid\":\"Monitor\"}]}"
+  }
+  inline_policy {
+    name   = "PitbullMonitor"
+    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"config:*\",\"ce:GetCostAndUsage\",\"iam:List*\",\"iam:Get*\"],\"Effect\":\"Allow\",\"Resource\":[\"*\"],\"Sid\":\"Monitor\"}]}"
+  }
+}
+

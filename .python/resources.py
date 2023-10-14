@@ -209,6 +209,23 @@ def resource_data(type,id):
         filterid="transit-gateway-attachment-id"
         if id is not None and "vpc-" in id: filterid="vpc-id"
 
+    elif type == "aws_vpc_ipv4_cidr_block_association":
+        clfn="ec2"
+        descfn="describe_vpc_cidr_block_association_sets"
+        topkey="VpcId"
+        key="AssociationId"
+        filterid="association-id"
+        if id is not None and "vpc-" in id: filterid="vpc-id"
+
+    elif type == "aws_route_table_association":
+        clfn="ec2"
+        descfn="describe_route_table_associations"
+        topkey="RouteTableAssociations"
+        key="AssociationId"
+        filterid="association-id"
+        if id is not None and "vpc-" in id: filterid="vpc-id"
+
+
     elif type == "aws_iam_role":
         clfn="iam"
         descfn="list_roles"
@@ -217,6 +234,33 @@ def resource_data(type,id):
         filterid=".RoleName"  # no filter on list-roles so use jq like filter
         if id is not None and "arn:aws:iam::" in id: 
             filterid=".Arn"
+
+
+    elif type == "aws_iam_policy":
+        clfn="iam"
+        descfn="list_policies"
+        topkey="Policies"
+        key="PolicyName"
+        filterid=".PolicyName"  # no filter on list-policies so use jq like filter
+        if id is not None and "arn:aws:iam::" in id: 
+            filterid=".Arn"
+
+    elif type == "aws_iam_user":
+        clfn="iam"
+        descfn="list_users"
+        topkey="Users"
+        key="UserName"
+        filterid=".UserName"  # no filter on list-users so use jq like filter
+        if id is not None and "arn:aws:iam::" in id: 
+            filterid=".Arn"
+
+    elif type == "aws_flow_log":
+        clfn="ec2"
+        descfn="describe_flow_logs"
+        topkey="FlowLogs"
+        key="FlowLogId"
+        filterid="flow-log-id"
+        if id is not None and "vpc-" in id: filterid="vpc-id"
 
 
    #if type == "aws_availability_zone": return 'AvailabilityZones', ec2client.describe_availability_zones, "ZoneName"
@@ -253,6 +297,3 @@ def resource_data(type,id):
 
     
     return clfn,descfn,topkey,key,filterid
-
-
-

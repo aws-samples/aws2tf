@@ -88,15 +88,141 @@ def resource_data(type,id):
         topkey="RouteTables"
         key="RouteTableId"
         filterid="route-table-id"
-        if id is not None and "vpc-" in id: filterid="vpc-id"            
+        if id is not None and "vpc-" in id: filterid="vpc-id"     
+
+    elif type == "aws_default_network_acl": 
+        clfn="ec2"
+        descfn="describe_network_acls"
+        topkey="NetworkAcls"
+        key="NetworkAclId"
+        filterid="network-acl-id"
+        if id is not None and "vpc-" in id: filterid="vpc-id"
+
+    elif type == "aws_default_route_table":
+        clfn="ec2"
+        descfn="describe_route_tables"
+        topkey="RouteTables"
+        key="RouteTableId"
+        filterid="route-table-id"
+        if id is not None and "vpc-" in id: filterid="vpc-id"
+
+    elif type == "aws_default_security_group":
+        clfn="ec2"
+        descfn="describe_security_groups"
+        topkey="SecurityGroups"
+        key="GroupId"
+        filterid="group-id"
+        if id is not None and "vpc-" in id: filterid="vpc-id"
+
+    elif type == "aws_default_subnet":
+        clfn="ec2"
+        descfn="describe_subnets"
+        topkey="Subnets"
+        key="SubnetId"
+        filterid="subnet-id"
+        if id is not None and "vpc-" in id: filterid="vpc-id"
+
+    elif type == "aws_default_vpc":
+        clfn="ec2"
+        descfn="describe_vpcs"
+        topkey="Vpcs"
+        key="VpcId"
+        filterid="vpc-id"
+
+    elif type == "aws_default_internet_gateway":
+        clfn="ec2"
+        descfn="describe_internet_gateways"
+        topkey="InternetGateways"
+        key="InternetGatewayId"
+        filterid="internet-gateway-id"
+        if id is not None and "vpc-" in id: filterid="attachment.vpc-id"
+
+    elif type == "aws_dhcp_options":
+        clfn="ec2"
+        descfn="describe_dhcp_options"
+        topkey="DhcpOptions"
+        key="DhcpOptionsId"
+        filterid="dhcp-options-id"
+        if id is not None and "vpc-" in id: filterid="vpc-id"
+
+    elif type == "aws_image":
+        clfn="ec2"
+        descfn="describe_images"
+        topkey="Images"
+        key="ImageId"
+        filterid="image-id"
+        if id is not None and "vpc-" in id: filterid="vpc-id"
+
+    elif type == "aws_key_pair":
+        clfn="ec2"
+        descfn="describe_key_pairs"
+        topkey="KeyPairs"
+        key="KeyName"
+        filterid="key-name"
+        if id is not None and "vpc-" in id: filterid="vpc-id"
+
+    elif type == "aws_launch_configuration":
+        clfn="autoscaling"
+        descfn="describe_launch_configurations"
+        topkey="LaunchConfigurations"
+        key="LaunchConfigurationName"
+        filterid="launch-configuration-name"
+        if id is not None and "vpc-" in id: filterid="vpc-id"
+
+    elif type == "aws_launch_template":
+        clfn="ec2"
+        descfn="describe_launch_templates"
+        topkey="LaunchTemplates"
+        key="LaunchTemplateId"
+        filterid="launch-template-id"
+        if id is not None and "vpc-" in id: filterid="vpc-id"
+
+    elif type == "aws_load_balancer":
+        clfn="elb"
+        descfn="describe_load_balancers"
+        topkey="LoadBalancerDescriptions"
+        key="LoadBalancerName"
+        filterid="load-balancer-name"
+        if id is not None and "vpc-" in id: filterid="vpc-id"
+
+    elif type == "aws_transit_gateway_vpc_attachment":
+        clfn="ec2"
+        descfn="describe_transit_gateway_vpc_attachments"
+        topkey="TransitGatewayVpcAttachments"
+        key="TransitGatewayAttachmentId"
+        filterid="transit-gateway-attachment-id"
+        if id is not None and "vpc-" in id: filterid="vpc-id"
+
+    elif type == "aws_transit_gateway_route_table_vpc_association":
+        clfn="ec2"
+        descfn="describe_transit_gateway_route_table_vpc_associations"
+        topkey="TransitGatewayRouteTableVpcAssociations"
+        key="TransitGatewayAttachmentId"
+        filterid="transit-gateway-attachment-id"
+        if id is not None and "vpc-" in id: filterid="vpc-id"
+    
+    elif type == "aws_transit_gateway_route_table_propagation":
+        clfn="ec2"
+        descfn="describe_transit_gateway_route_table_propagations"
+        topkey="TransitGatewayRouteTablePropagations"
+        key="TransitGatewayAttachmentId"
+        filterid="transit-gateway-attachment-id"
+        if id is not None and "vpc-" in id: filterid="vpc-id"
+
+    elif type == "aws_iam_role":
+        clfn="iam"
+        descfn="list_roles"
+        topkey="Roles"
+        key="RoleName"
+        filterid=".RoleName"  # no filter on list-roles so use jq like filter
+        if id is not None and "arn:aws:iam::" in id: 
+            filterid=".Arn"
+
 
    #if type == "aws_availability_zone": return 'AvailabilityZones', ec2client.describe_availability_zones, "ZoneName"
-   #if type == "aws_dhcp_options": return 'DhcpOptions', ec2client.describe_dhcp_options, "DhcpOptionsId"
+
    #if type == "aws_elastic_load_balancer": return 'ElasticLoadBalancers', ec2client.describe_load_balancers, "LoadBalancerName"
    #if type == "aws_instance": return 'Reservations', ec2client.describe_instances, "InstanceId"
-   #if type == "aws_image": return 'Images', ec2client.describe_images, "ImageId"
-
-   #if type == "aws_key_pair": return 'KeyPairs', ec2client.describe_key_pairs, "KeyName"
 
    #if type == "aws_load_balancer": return 'LoadBalancers', ec2client.describe_load_balancers, "LoadBalancerName"
    

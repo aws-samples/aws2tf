@@ -20,6 +20,7 @@ if __name__ == '__main__':
     argParser.add_argument("-i", "--id", help="resource id")
     argParser.add_argument("-m", "--merge", help="merge [False]|True")
     argParser.add_argument("-d", "--debug", help="debug [False]|True")
+    argParser.add_argument("-v", "--validate", help="validate [False]|True")
     args = argParser.parse_args()
     #print("args=%s" % args)
 
@@ -27,6 +28,11 @@ if __name__ == '__main__':
     #print("args.bucket=%s" % args.bucket)
     #print("args.type=%s" % args.type)
     #print("args.id=%s" % args.id)
+
+    if args.validate is not None:
+        globals.validate=True
+
+
     if args.type is None:
         print("type is required eg:  -t aws_vpc")
         print("setting to all")
@@ -99,16 +105,15 @@ if __name__ == '__main__':
     elif type=="net":
         net_types=resources.resource_types(type)
         for i in net_types:
-            print("calling "+i)
+            #print("calling "+i)
             clfn,descfn,topkey,key,filterid=resources.resource_data(i,id)
-            print("calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
+            #print("calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
             common.getresource(i,id,clfn,descfn,topkey,key,filterid)
-            
-
+        
     else:        
         clfn,descfn,topkey,key,filterid=resources.resource_data(type,id)
         if clfn is not None:
-            print("calling getresource with type="+type+" id="+str(id)+" -- clfn="+clfn + " descfn="+descfn+  "topkey="+topkey + "key="+key +"filterid="+filterid)
+            #print("calling getresource with type="+type+" id="+str(id)+" -- clfn="+clfn + " descfn="+descfn+  "topkey="+topkey + "key="+key +"filterid="+filterid)
             common.getresource(type,id,clfn,descfn,topkey,key,filterid)
         else:
             print("Error on calling resources with type="+type+" id="+str(id) + "  exiting...")

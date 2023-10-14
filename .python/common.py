@@ -5,6 +5,7 @@ import fixtf
 import os
 import globals
 import glob
+import json
 #import aws2tf
 
 # global variables initailsed in commomn:
@@ -61,7 +62,7 @@ def tfplan(type):
       x=glob.glob(type+"__*.out")
       for fil in x:
          tf=fil.split('.')[0]
-         print("tf="+tf)
+         #print("tf="+tf)
          fixtf.fixtf(type,tf)
    
    com="terraform fmt"
@@ -79,6 +80,7 @@ def tfplan(type):
       exit()
    else: 
       print("Valid Configuration.")
+      if globals.validate: exit()
 
 
 
@@ -258,13 +260,8 @@ def splitf(file):
    #com="terraform fmt"
    #rout=rc(com) 
 
-#
-#  boto3.client("logs")
-# aws_logs_log_group id  "logs"  "describe_log_groups"
-
 
 # if type == "aws_vpc_endpoint": return "ec2","describe_vpc_endpoints","VpcEndpoints","VpcEndpointId","vpc-id"
-
 def getresource(type,id,clfn,descfn,topkey,key,filterid):
     globals.types=globals.types+[type]
     client = boto3.client(clfn)   
@@ -288,14 +285,24 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
     if str(response[topkey]) != "[]":
       fn=type+"_import.tf"
       with open(fn, "w") as f:
+         if "." not in filterid:
             for item in response[topkey]:
-                theid=item[key]
-                tfid=theid.replace("/","_")
-                f.write('import {\n')
-                f.write('  to = ' +type + '.' + tfid + '\n')
-                f.write('  id = "'+ theid + '"\n')
-                f.write('}\n')
-                globals.processed=globals.processed+[type+","+theid]
+               if "." not in filterid: # do it all
+                  theid=item[key]
+                  tfid=theid.replace("/","_")
+                  f.write('import {\n')
+                  f.write('  to = ' +type + '.' + tfid + '\n')
+                  f.write('  id = "'+ theid + '"\n')
+                  f.write('}\n')
+                  globals.processed=globals.processed+[type+","+theid]
+               else:
+                  print("doing jq like filter")
+                  print(json.dumps(item, indent=4, sort_keys=True))
+                  print("filterid="+filterid)
+                  #print(item[filterid])
+                  #print(item[filterid])
+                  #print(item[filterid].split('/'))
+                  # do jq like filter
   
     #tfplan(type)
 

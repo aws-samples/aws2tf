@@ -1,0 +1,3292 @@
+# __generated__ by Terraform
+# Please review these resources and move them into your main configuration files.
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-05758d4ca6b654b2d" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2b"
+  availability_zone_id                           = "euw2-az3"
+  cidr_block                                     = "100.64.2.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "subnet-isol2"
+  }
+  tags_all = {
+    Name = "subnet-isol2"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform from "sg-04a42b2b1de775e99"
+resource "aws_security_group" "sg-04a42b2b1de775e99" {
+  description = "ad rdp group"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 3389
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 3389
+  }]
+  name                   = "ad rdp group"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform from "sg-042bc7787529cd58c"
+resource "aws_security_group" "sg-042bc7787529cd58c" {
+  description = "GlobalAccelerator configured SecurityGroup"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress                = []
+  name                   = "GlobalAccelerator"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    AWSServiceName = "GlobalAccelerator"
+  }
+  tags_all = {
+    AWSServiceName = "GlobalAccelerator"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform from "sg-01cd7d5b1d7acd95b"
+resource "aws_security_group" "sg-01cd7d5b1d7acd95b" {
+  description = "launch-wizard-16 created 2020-05-12T11:35:27.462+01:00"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 3389
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 3389
+  }]
+  name                   = "launch-wizard-16"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform from "sg-07f39414cb61a17e2"
+resource "aws_security_group" "sg-07f39414cb61a17e2" {
+  description = "[DO NOT DELETE] Security Group that allows outbound NFS traffic for SageMaker Notebooks Domain [d-rhkssn1clgpv]"
+  egress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 2049
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-0463e5acdc7cfe0b0"]
+    self             = false
+    to_port          = 2049
+  }]
+  ingress                = []
+  name                   = "security-group-for-outbound-nfs-d-rhkssn1clgpv"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-2:566972129213:domain/d-rhkssn1clgpv"
+  }
+  tags_all = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-2:566972129213:domain/d-rhkssn1clgpv"
+  }
+  vpc_id = "vpc-0efb22ad9c5f12548"
+}
+
+# __generated__ by Terraform from "sg-0fb176425f37a97ee"
+resource "aws_security_group" "sg-0fb176425f37a97ee" {
+  description = "launch-wizard-3 created 2020-02-27T08:44:21.309+00:00"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = -1
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "icmp"
+    security_groups  = []
+    self             = false
+    to_port          = -1
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 2049
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 2049
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 22
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 22
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 443
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 443
+    }, {
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = true
+    to_port          = 0
+  }]
+  name                   = "launch-wizard-3"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "HMRC test"
+  }
+  tags_all = {
+    Name = "HMRC test"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform from "sg-0db9c2f39e7535c1d"
+resource "aws_security_group" "sg-0db9c2f39e7535c1d" {
+  description = "2021-10-07T16:39:51.901Z"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 80
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 80
+  }]
+  name                   = "ecs-pr-4879"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0ca6ebea205222018" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2b"
+  availability_zone_id                           = "euw2-az3"
+  cidr_block                                     = "100.67.1.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "def-priv-02"
+  }
+  tags_all = {
+    Name = "def-priv-02"
+  }
+  vpc_id = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform
+resource "aws_security_group" "sg-0163910f67c272447" {
+  description = "Security Group for SageMaker Studio Notebook, Training Job and Hosting Endpoint"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = true
+    to_port          = 0
+  }]
+  name                   = "terraform-2023101312503836070000000f"
+  name_prefix            = "terraform-"
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "ds-sagemaker-vpc-sg-DSSharedServices"
+  }
+  tags_all = {
+    Name = "ds-sagemaker-vpc-sg-DSSharedServices"
+  }
+  vpc_id = "vpc-0efb22ad9c5f12548"
+}
+
+# __generated__ by Terraform from "sg-08024501a8dc1de4d"
+resource "aws_security_group" "sg-08024501a8dc1de4d" {
+  description = "Security group for AWS Cloud9 environment aws-cloud9-aws2tf-v5-9b79a5bdc8d447da871af19315385f1a"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress                = []
+  name                   = "aws-cloud9-aws2tf-v5-9b79a5bdc8d447da871af19315385f1a-InstanceSecurityGroup-FE2K6QK2ZYF6"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "aws-cloud9-aws2tf-v5-9b79a5bdc8d447da871af19315385f1a"
+  }
+  tags_all = {
+    Name = "aws-cloud9-aws2tf-v5-9b79a5bdc8d447da871af19315385f1a"
+  }
+  vpc_id = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform from "vpce-03336e28a9c84389f"
+resource "aws_vpc_endpoint" "vpce-03336e28a9c84389f" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-09d1b2c33025d7dc2"]
+  service_name        = "com.amazonaws.eu-west-2.kms"
+  subnet_ids          = ["subnet-01bc6f5d3731fd1d3", "subnet-0804a4e80680cc94f", "subnet-0f25c75642a0e6807"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0efb22ad9c5f12548"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "vpce-0f7f171130851e923"
+resource "aws_vpc_endpoint" "vpce-0f7f171130851e923" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-09d1b2c33025d7dc2"]
+  service_name        = "com.amazonaws.eu-west-2.ecr.dkr"
+  subnet_ids          = ["subnet-01bc6f5d3731fd1d3", "subnet-0804a4e80680cc94f", "subnet-0f25c75642a0e6807"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0efb22ad9c5f12548"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "vpce-045505f6f9f43a81a"
+resource "aws_vpc_endpoint" "vpce-045505f6f9f43a81a" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}]}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-0c8444a8f846d6c50"]
+  service_name        = "com.amazonaws.eu-west-2.sts"
+  subnet_ids          = ["subnet-05758d4ca6b654b2d", "subnet-0b2a0b457b139cd85", "subnet-0c10d3be79fdc7576"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0d18b88f8596b92c3"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "vpce-067052960fc086ec4"
+resource "aws_vpc_endpoint" "vpce-067052960fc086ec4" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-09d1b2c33025d7dc2"]
+  service_name        = "com.amazonaws.eu-west-2.sts"
+  subnet_ids          = ["subnet-01bc6f5d3731fd1d3", "subnet-0804a4e80680cc94f", "subnet-0f25c75642a0e6807"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0efb22ad9c5f12548"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "sg-0e36bbde1501462ae"
+resource "aws_security_group" "sg-0e36bbde1501462ae" {
+  description = "RDS security group 1"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["192.168.0.0/16"]
+    description      = ""
+    from_port        = 5432
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 5432
+  }]
+  name                   = "rds-sec-grp1"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-00c85f1e05ed48015"
+}
+
+# __generated__ by Terraform from "sg-038283a35e1954752"
+resource "aws_security_group" "sg-038283a35e1954752" {
+  description = "Security group for AWS Cloud9 environment aws-cloud9-korifi-1d5a695b707d4418b0ab88c857d38af2"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress                = []
+  name                   = "aws-cloud9-korifi-1d5a695b707d4418b0ab88c857d38af2-InstanceSecurityGroup-17QEHSST0CPS"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "aws-cloud9-korifi-1d5a695b707d4418b0ab88c857d38af2"
+  }
+  tags_all = {
+    Name = "aws-cloud9-korifi-1d5a695b707d4418b0ab88c857d38af2"
+  }
+  vpc_id = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform from "sg-0c8444a8f846d6c50"
+resource "aws_security_group" "sg-0c8444a8f846d6c50" {
+  description = "default VPC security group"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 5000
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 5000
+    }, {
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = ["sg-00be273af6047769f"]
+    self             = true
+    to_port          = 0
+    }, {
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 2049
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-0581e8343af7a9120", "sg-0b70930caea1aac99"]
+    self             = false
+    to_port          = 2049
+  }]
+  name                   = "default"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "cvpn-sg"
+  }
+  tags_all = {
+    Name = "cvpn-sg"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform from "sg-0873956f061061fba"
+resource "aws_security_group" "sg-0873956f061061fba" {
+  description = "Enable SSH access via port 22 for testing"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 22
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 22
+  }]
+  name                   = "at-sechub-demo-CloudCustodianTemplate-VLA8C3X2L8MH-CloudCustodianSG-1W102OWAO0J96"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform from "sg-00be273af6047769f"
+resource "aws_security_group" "sg-00be273af6047769f" {
+  description = "sg-lb-atasg"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 5000
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 5000
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 80
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 80
+  }]
+  name                   = "sglbatasg"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform from "sg-0d38be64861959b75"
+resource "aws_security_group" "sg-0d38be64861959b75" {
+  description = "Security group for AWS Cloud9 environment aws-cloud9-secure-ds-sage-95e72012b43944308d4f96af9fb5493d"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress                = []
+  name                   = "aws-cloud9-secure-ds-sage-95e72012b43944308d4f96af9fb5493d-InstanceSecurityGroup-470FSSPSVBW7"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "aws-cloud9-secure-ds-sage-95e72012b43944308d4f96af9fb5493d"
+  }
+  tags_all = {
+    Name = "aws-cloud9-secure-ds-sage-95e72012b43944308d4f96af9fb5493d"
+  }
+  vpc_id = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform
+resource "aws_route_table" "rtb-02055fcf137b43efb" {
+  propagating_vgws = []
+  route = [{
+    carrier_gateway_id         = ""
+    cidr_block                 = "0.0.0.0/0"
+    core_network_arn           = ""
+    destination_prefix_list_id = ""
+    egress_only_gateway_id     = ""
+    gateway_id                 = ""
+    ipv6_cidr_block            = ""
+    local_gateway_id           = ""
+    nat_gateway_id             = "nat-0c7b691eca5219301"
+    network_interface_id       = ""
+    transit_gateway_id         = ""
+    vpc_endpoint_id            = ""
+    vpc_peering_connection_id  = ""
+  }]
+  tags = {
+    Name = "route-table-priv1"
+  }
+  tags_all = {
+    Name = "route-table-priv1"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform from "vpce-025512858628d616d"
+resource "aws_vpc_endpoint" "vpce-025512858628d616d" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}]}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-0c8444a8f846d6c50"]
+  service_name        = "com.amazonaws.eu-west-2.ecr.api"
+  subnet_ids          = ["subnet-05758d4ca6b654b2d", "subnet-0b2a0b457b139cd85", "subnet-0c10d3be79fdc7576"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0d18b88f8596b92c3"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "sg-0491d0311d0d310d0"
+resource "aws_security_group" "sg-0491d0311d0d310d0" {
+  description = "oracle privatelink"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 1521
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 1521
+  }]
+  name                   = "oracle-vpc-endp"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform from "vpce-012807a4a37236889"
+resource "aws_vpc_endpoint" "vpce-012807a4a37236889" {
+  auto_accept         = null
+  ip_address_type     = null
+  policy              = "{\"Statement\":[{\"Action\":[\"s3:GetObject\",\"s3:PutObject\",\"s3:ListBucket\"],\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":[\"arn:aws:s3:::ds-model-bucket-*\",\"arn:aws:s3:::ds-data-bucket-*\",\"arn:aws:s3:::ds-model-bucket-*/*\",\"arn:aws:s3:::ds-data-bucket-*/*\",\"arn:aws:s3:::*ds-data-lake*\",\"arn:aws:s3:::*ds-data-lake*/*\"]},{\"Action\":\"s3:GetObject\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"arn:aws:s3:::assets-438097961670-eu-west-2/*\",\"Sid\":\"S3PolicyForCodeArtifact\"},{\"Action\":\"s3:GetObject\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"arn:aws:s3:::prod-eu-west-2-starport-layer-bucket/*\",\"Sid\":\"S3AccessToEcrSpecificBucket\"}],\"Version\":\"2012-10-17\"}"
+  private_dns_enabled = false
+  route_table_ids     = ["rtb-03d9a42ae14e118a4"]
+  security_group_ids  = []
+  service_name        = "com.amazonaws.eu-west-2.s3"
+  subnet_ids          = []
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Gateway"
+  vpc_id              = "vpc-0efb22ad9c5f12548"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0f25c75642a0e6807" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2b"
+  availability_zone_id                           = "euw2-az3"
+  cidr_block                                     = "10.2.2.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "ds-subnet-b-DSSharedServices"
+  }
+  tags_all = {
+    Name = "ds-subnet-b-DSSharedServices"
+  }
+  vpc_id = "vpc-0efb22ad9c5f12548"
+}
+
+# __generated__ by Terraform from "sg-0e548897048219381"
+resource "aws_security_group" "sg-0e548897048219381" {
+  description = "SSH Only"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = -1
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "icmp"
+    security_groups  = []
+    self             = false
+    to_port          = -1
+    }, {
+    cidr_blocks      = ["54.240.197.235/32", "81.96.210.11/32", "54.239.6.0/24", "0.0.0.0/0"]
+    description      = ""
+    from_port        = 22
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 22
+  }]
+  name                   = "SSH-Only"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform from "vpce-06e7f93e11085e9c8"
+resource "aws_vpc_endpoint" "vpce-06e7f93e11085e9c8" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-09d1b2c33025d7dc2"]
+  service_name        = "com.amazonaws.eu-west-2.sagemaker.api"
+  subnet_ids          = ["subnet-01bc6f5d3731fd1d3", "subnet-0804a4e80680cc94f", "subnet-0f25c75642a0e6807"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0efb22ad9c5f12548"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "sg-02a6a6ac17f6bfa87"
+resource "aws_security_group" "sg-02a6a6ac17f6bfa87" {
+  description = "appstream ports"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 1400
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 1499
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 443
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 443
+  }]
+  name                   = "appstream"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "appstream"
+  }
+  tags_all = {
+    Name = "appstream"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0804a4e80680cc94f" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2a"
+  availability_zone_id                           = "euw2-az2"
+  cidr_block                                     = "10.2.1.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "ds-subnet-a-DSSharedServices"
+  }
+  tags_all = {
+    Name = "ds-subnet-a-DSSharedServices"
+  }
+  vpc_id = "vpc-0efb22ad9c5f12548"
+}
+
+# __generated__ by Terraform
+resource "aws_security_group" "sg-09d1b2c33025d7dc2" {
+  description = "Allow TLS for VPC Endpoint"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 443
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-0163910f67c272447"]
+    self             = false
+    to_port          = 443
+  }]
+  name                   = "terraform-2023101312503789830000000d"
+  name_prefix            = "terraform-"
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "ds-vpc-https-ingress-sg-DSSharedServices"
+  }
+  tags_all = {
+    Name = "ds-vpc-https-ingress-sg-DSSharedServices"
+  }
+  vpc_id = "vpc-0efb22ad9c5f12548"
+}
+
+# __generated__ by Terraform from "sg-0581e8343af7a9120"
+resource "aws_security_group" "sg-0581e8343af7a9120" {
+  description = "HMRC EFS SG "
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = ["sg-0a67d4d889051720b", "sg-0fb176425f37a97ee"]
+    self             = false
+    to_port          = 0
+  }]
+  name                   = "HMRC EFS"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0fc60375ee1d8a076" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2b"
+  availability_zone_id                           = "euw2-az3"
+  cidr_block                                     = "192.168.193.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = "2a05:d01c:27c:2907::/64"
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "eks-ipv6-db2"
+  }
+  tags_all = {
+    Name = "eks-ipv6-db2"
+  }
+  vpc_id = "vpc-00c85f1e05ed48015"
+}
+
+# __generated__ by Terraform from "vpce-0bfceefc9a3c85400"
+resource "aws_vpc_endpoint" "vpce-0bfceefc9a3c85400" {
+  auto_accept         = null
+  ip_address_type     = null
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}],\"Version\":\"2008-10-17\"}"
+  private_dns_enabled = false
+  route_table_ids     = ["rtb-02055fcf137b43efb", "rtb-052c9afa41f934515", "rtb-07628e6b0055dd992"]
+  security_group_ids  = []
+  service_name        = "com.amazonaws.eu-west-2.s3"
+  subnet_ids          = []
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Gateway"
+  vpc_id              = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform from "vpce-047b734dfc40d654e"
+resource "aws_vpc_endpoint" "vpce-047b734dfc40d654e" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-09d1b2c33025d7dc2"]
+  service_name        = "com.amazonaws.eu-west-2.monitoring"
+  subnet_ids          = ["subnet-01bc6f5d3731fd1d3", "subnet-0804a4e80680cc94f", "subnet-0f25c75642a0e6807"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0efb22ad9c5f12548"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-34c57e4e" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2a"
+  availability_zone_id                           = "euw2-az2"
+  cidr_block                                     = "172.31.16.0/20"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags                                           = {}
+  tags_all                                       = {}
+  vpc_id                                         = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform from "igw-7f362a16"
+resource "aws_internet_gateway" "igw-7f362a16" {
+  tags     = {}
+  tags_all = {}
+  vpc_id   = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform from "sg-0a67d4d889051720b"
+resource "aws_security_group" "sg-0a67d4d889051720b" {
+  description = "Managed by Terraform"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = -1
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "icmp"
+    security_groups  = []
+    self             = false
+    to_port          = -1
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 443
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 443
+    }, {
+    cidr_blocks      = ["10.16.16.0/24", "54.240.197.0/24"]
+    description      = ""
+    from_port        = 3389
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 3389
+    }, {
+    cidr_blocks      = ["100.64.0.0/16"]
+    description      = ""
+    from_port        = 2049
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 2049
+    }, {
+    cidr_blocks      = ["54.240.197.0/24", "81.96.210.11/32"]
+    description      = ""
+    from_port        = 22
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 22
+    }, {
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = ["sg-0c8444a8f846d6c50"]
+    self             = false
+    to_port          = 0
+    }, {
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 80
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-00be273af6047769f"]
+    self             = false
+    to_port          = 80
+  }]
+  name                   = "allow-at-sg"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "allow-at-sg"
+  }
+  tags_all = {
+    Name = "allow-at-sg"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-07d02c78ade6a9916" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2a"
+  availability_zone_id                           = "euw2-az2"
+  cidr_block                                     = "10.1.1.0/27"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "subnet-priv-db1"
+  }
+  tags_all = {
+    Name = "subnet-priv-db1"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform from "sg-02172903712da81f5"
+resource "aws_security_group" "sg-02172903712da81f5" {
+  description = "Security group for AWS Cloud9 environment aws-cloud9-eks-terraform-5ee09645a9c04854852692f76ffacd13"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress                = []
+  name                   = "aws-cloud9-eks-terraform-5ee09645a9c04854852692f76ffacd13-InstanceSecurityGroup-UJC5MMWTLEYK"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "aws-cloud9-eks-terraform-5ee09645a9c04854852692f76ffacd13"
+  }
+  tags_all = {
+    Name = "aws-cloud9-eks-terraform-5ee09645a9c04854852692f76ffacd13"
+  }
+  vpc_id = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform from "sg-0b62df338fe6bdd2f"
+resource "aws_security_group" "sg-0b62df338fe6bdd2f" {
+  description = "Security group for AWS Cloud9 environment aws-cloud9-dvsa-d2383a0be5824cc9a4d293481d918657"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress                = []
+  name                   = "aws-cloud9-dvsa-d2383a0be5824cc9a4d293481d918657-InstanceSecurityGroup-1R59C2FRYX9BC"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "aws-cloud9-dvsa-d2383a0be5824cc9a4d293481d918657"
+  }
+  tags_all = {
+    Name = "aws-cloud9-dvsa-d2383a0be5824cc9a4d293481d918657"
+  }
+  vpc_id = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform from "sg-04bb249fe4ac250ea"
+resource "aws_security_group" "sg-04bb249fe4ac250ea" {
+  description = "default VPC security group"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = true
+    to_port          = 0
+  }]
+  name                   = "default"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-00c85f1e05ed48015"
+}
+
+# __generated__ by Terraform from "vpce-0bbf3b443045c9697"
+resource "aws_vpc_endpoint" "vpce-0bbf3b443045c9697" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-09d1b2c33025d7dc2"]
+  service_name        = "com.amazonaws.eu-west-2.git-codecommit"
+  subnet_ids          = ["subnet-01bc6f5d3731fd1d3", "subnet-0804a4e80680cc94f", "subnet-0f25c75642a0e6807"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0efb22ad9c5f12548"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "vpce-0fa8bbec6338bf00a"
+resource "aws_vpc_endpoint" "vpce-0fa8bbec6338bf00a" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}]}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-0c8444a8f846d6c50"]
+  service_name        = "com.amazonaws.eu-west-2.ecs"
+  subnet_ids          = ["subnet-05758d4ca6b654b2d", "subnet-0b2a0b457b139cd85", "subnet-0c10d3be79fdc7576"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0d18b88f8596b92c3"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "sg-090ec083da79f7217"
+resource "aws_security_group" "sg-090ec083da79f7217" {
+  description = "This security group was generated by AWS Marketplace and is based on recommended settings for CIS Red Hat Enterprise Linux 7 Benchmark - Level 2 version 3.1.1.0 provided by Center for Internet Security"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["31.55.128.190/32"]
+    description      = ""
+    from_port        = 22
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 22
+  }]
+  name                   = "CIS Red Hat Enterprise Linux 7 Benchmark - Level 2-3-1-1-0-AutogenByAWSMP-"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform from "vpce-02b1f0eda733c63da"
+resource "aws_vpc_endpoint" "vpce-02b1f0eda733c63da" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-09d1b2c33025d7dc2"]
+  service_name        = "aws.sagemaker.eu-west-2.notebook"
+  subnet_ids          = ["subnet-01bc6f5d3731fd1d3", "subnet-0804a4e80680cc94f", "subnet-0f25c75642a0e6807"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0efb22ad9c5f12548"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-01bc6f5d3731fd1d3" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2c"
+  availability_zone_id                           = "euw2-az1"
+  cidr_block                                     = "10.2.3.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "ds-subnet-c-DSSharedServices"
+  }
+  tags_all = {
+    Name = "ds-subnet-c-DSSharedServices"
+  }
+  vpc_id = "vpc-0efb22ad9c5f12548"
+}
+
+# __generated__ by Terraform from "sg-0f2cd10a0bc80ab2d"
+resource "aws_security_group" "sg-0f2cd10a0bc80ab2d" {
+  description = "servcat-endpoint"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  name                   = "servcat-endpoint"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0b2b7d7e3b5104652" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2a"
+  availability_zone_id                           = "euw2-az2"
+  cidr_block                                     = "100.67.0.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "def-priv-01"
+  }
+  tags_all = {
+    Name = "def-priv-01"
+  }
+  vpc_id = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0c10d3be79fdc7576" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2c"
+  availability_zone_id                           = "euw2-az1"
+  cidr_block                                     = "100.64.3.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "subnet-isol3"
+  }
+  tags_all = {
+    Name = "subnet-isol3"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-f835fbb4" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2b"
+  availability_zone_id                           = "euw2-az3"
+  cidr_block                                     = "172.31.32.0/20"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags                                           = {}
+  tags_all                                       = {}
+  vpc_id                                         = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0c862d2d7b7db35ba" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2c"
+  availability_zone_id                           = "euw2-az1"
+  cidr_block                                     = "192.168.194.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = "2a05:d01c:27c:2908::/64"
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "eks-ipv6-db3"
+  }
+  tags_all = {
+    Name = "eks-ipv6-db3"
+  }
+  vpc_id = "vpc-00c85f1e05ed48015"
+}
+
+# __generated__ by Terraform from "rtb-03d9a42ae14e118a4"
+resource "aws_route_table" "rtb-03d9a42ae14e118a4" {
+  propagating_vgws = []
+  route            = []
+  tags = {
+    Name = "ds-vpc-rt-DSSharedServices"
+  }
+  tags_all = {
+    Name = "ds-vpc-rt-DSSharedServices"
+  }
+  vpc_id = "vpc-0efb22ad9c5f12548"
+}
+
+# __generated__ by Terraform from "rtb-04a036cea99077955"
+resource "aws_route_table" "rtb-04a036cea99077955" {
+  propagating_vgws = []
+  route            = []
+  tags             = {}
+  tags_all         = {}
+  vpc_id           = "vpc-0efb22ad9c5f12548"
+}
+
+# __generated__ by Terraform from "sg-01c95e5db53bed53a"
+resource "aws_security_group" "sg-01c95e5db53bed53a" {
+  description = "This security group was generated by AWS Marketplace and is based on recommended settings for Red Hat Enterprise Linux (RHEL) 7 (HVM) version 7.7_HVM provided by Amazon Web Services"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 22
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 22
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 80
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 80
+  }]
+  name                   = "Red Hat Enterprise Linux -RHEL- 7 -HVM--7-7_HVM-AutogenByAWSMP-"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform from "igw-082b7aaa6d6c243fc"
+resource "aws_internet_gateway" "igw-082b7aaa6d6c243fc" {
+  tags     = {}
+  tags_all = {}
+  vpc_id   = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-03ed208e3161f9ec9" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2a"
+  availability_zone_id                           = "euw2-az2"
+  cidr_block                                     = "10.1.0.0/27"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "subnet-pub1"
+  }
+  tags_all = {
+    Name = "subnet-pub1"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0da8454f43ede219d" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2b"
+  availability_zone_id                           = "euw2-az3"
+  cidr_block                                     = "10.1.0.64/27"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "subnet-pub2"
+  }
+  tags_all = {
+    Name = "subnet-pub2"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform from "vpce-06a9f09dec8bc59d6"
+resource "aws_vpc_endpoint" "vpce-06a9f09dec8bc59d6" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}]}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-02a6a6ac17f6bfa87"]
+  service_name        = "com.amazonaws.eu-west-2.appstream.streaming"
+  subnet_ids          = ["subnet-0ec3f52feec87b364"]
+  tags = {
+    Name = "appstream"
+  }
+  tags_all = {
+    Name = "appstream"
+  }
+  vpc_endpoint_type = "Interface"
+  vpc_id            = "vpc-0d18b88f8596b92c3"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-05f3f2c5cd1cec2f9" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2c"
+  availability_zone_id                           = "euw2-az1"
+  cidr_block                                     = "10.1.1.64/27"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "subnet-priv-db3"
+  }
+  tags_all = {
+    Name = "subnet-priv-db3"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0705354ce7413ed4e" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2b"
+  availability_zone_id                           = "euw2-az3"
+  cidr_block                                     = "10.1.1.32/27"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "subnet-priv-db2"
+  }
+  tags_all = {
+    Name = "subnet-priv-db2"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0d2199e15465dc544" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2c"
+  availability_zone_id                           = "euw2-az1"
+  cidr_block                                     = "10.1.0.160/27"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "subnet-priv3"
+    RG   = "asgweb1"
+    Tier = "priv"
+  }
+  tags_all = {
+    Name = "subnet-priv3"
+    RG   = "asgweb1"
+    Tier = "priv"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-034be581cc73dcad8" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2c"
+  availability_zone_id                           = "euw2-az1"
+  cidr_block                                     = "10.1.0.32/27"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "subnet-pub3"
+  }
+  tags_all = {
+    Name = "subnet-pub3"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform from "vpce-08d6e39ce01399c38"
+resource "aws_vpc_endpoint" "vpce-08d6e39ce01399c38" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":[\"codeartifact:Describe*\",\"codeartifact:Get*\",\"codeartifact:List*\",\"codeartifact:ReadFromRepository\"],\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"},{\"Action\":\"sts:GetServiceBearerToken\",\"Condition\":{\"StringEquals\":{\"sts:AWSServiceName\":\"codeartifact.amazonaws.com\"}},\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}"
+  private_dns_enabled = false
+  route_table_ids     = []
+  security_group_ids  = ["sg-09d1b2c33025d7dc2"]
+  service_name        = "com.amazonaws.eu-west-2.codeartifact.api"
+  subnet_ids          = ["subnet-01bc6f5d3731fd1d3", "subnet-0804a4e80680cc94f", "subnet-0f25c75642a0e6807"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0efb22ad9c5f12548"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "vpce-0678b944401414ae3"
+resource "aws_vpc_endpoint" "vpce-0678b944401414ae3" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}]}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-0c8444a8f846d6c50", "sg-0fb176425f37a97ee"]
+  service_name        = "com.amazonaws.eu-west-2.datasync"
+  subnet_ids          = ["subnet-08a73bc6c48ac8e79", "subnet-0d2199e15465dc544", "subnet-0ec3f52feec87b364"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0d18b88f8596b92c3"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "vpce-0266c766a5d4aae05"
+resource "aws_vpc_endpoint" "vpce-0266c766a5d4aae05" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-09d1b2c33025d7dc2"]
+  service_name        = "com.amazonaws.eu-west-2.logs"
+  subnet_ids          = ["subnet-01bc6f5d3731fd1d3", "subnet-0804a4e80680cc94f", "subnet-0f25c75642a0e6807"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0efb22ad9c5f12548"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "sg-0586247ebc5f63f83"
+resource "aws_security_group" "sg-0586247ebc5f63f83" {
+  description = "allow 5432"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 5432
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 5432
+  }]
+  name                   = "mypostgres"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform
+resource "aws_vpc" "vpc-0efb22ad9c5f12548" {
+  assign_generated_ipv6_cidr_block     = false
+  cidr_block                           = "10.2.0.0/16"
+  enable_dns_hostnames                 = true
+  enable_dns_support                   = true
+  enable_network_address_usage_metrics = false
+  instance_tenancy                     = "default"
+  ipv4_ipam_pool_id                    = null
+  ipv4_netmask_length                  = null
+  ipv6_cidr_block                      = null
+  ipv6_cidr_block_network_border_group = null
+  ipv6_ipam_pool_id                    = null
+  ipv6_netmask_length                  = 0
+  tags = {
+    Name = "ds-vpc-DSSharedServices"
+  }
+  tags_all = {
+    Name = "ds-vpc-DSSharedServices"
+  }
+}
+
+# __generated__ by Terraform from "vpce-0f689a2b3fcd24f7c"
+resource "aws_vpc_endpoint" "vpce-0f689a2b3fcd24f7c" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}]}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-09d1b2c33025d7dc2"]
+  service_name        = "com.amazonaws.eu-west-2.servicecatalog"
+  subnet_ids          = ["subnet-01bc6f5d3731fd1d3", "subnet-0804a4e80680cc94f", "subnet-0f25c75642a0e6807"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0efb22ad9c5f12548"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0b2a0b457b139cd85" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2a"
+  availability_zone_id                           = "euw2-az2"
+  cidr_block                                     = "100.64.1.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "subnet-isol1"
+  }
+  tags_all = {
+    Name = "subnet-isol1"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform
+resource "aws_route_table" "rtb-61e4c209" {
+  propagating_vgws = []
+  route = [{
+    carrier_gateway_id         = ""
+    cidr_block                 = "0.0.0.0/0"
+    core_network_arn           = ""
+    destination_prefix_list_id = ""
+    egress_only_gateway_id     = ""
+    gateway_id                 = "igw-7f362a16"
+    ipv6_cidr_block            = ""
+    local_gateway_id           = ""
+    nat_gateway_id             = ""
+    network_interface_id       = ""
+    transit_gateway_id         = ""
+    vpc_endpoint_id            = ""
+    vpc_peering_connection_id  = ""
+  }]
+  tags = {
+    Name = "def-main"
+  }
+  tags_all = {
+    Name = "def-main"
+  }
+  vpc_id = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform from "sg-09d00a056fea3bcfc"
+resource "aws_security_group" "sg-09d00a056fea3bcfc" {
+  description = "This security group was generated by AWS Marketplace and is based on recommended settings for Microsoft Windows Server 2016 Base version 2021.01.13 provided by Amazon Web Services"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 3389
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 3389
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 80
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 80
+  }]
+  name                   = "Microsoft Windows Server 2016 Base-2021-01-13-AutogenByAWSMP-"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-063b3d03fcd360b0e" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2c"
+  availability_zone_id                           = "euw2-az1"
+  cidr_block                                     = "100.67.2.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "def-priv-03"
+  }
+  tags_all = {
+    Name = "def-priv-03"
+  }
+  vpc_id = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform from "sg-004d5a3344fe6ec77"
+resource "aws_security_group" "sg-004d5a3344fe6ec77" {
+  description = "launch-wizard-4 created 2020-02-29T18:57:56.162+00:00"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 22
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 22
+    }, {
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 2049
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-0581e8343af7a9120"]
+    self             = false
+    to_port          = 2049
+  }]
+  name                   = "hmrc-ec2"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform from "vpce-01c8d3b805d7760ff"
+resource "aws_vpc_endpoint" "vpce-01c8d3b805d7760ff" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}]}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-0f2cd10a0bc80ab2d"]
+  service_name        = "com.amazonaws.eu-west-2.servicecatalog"
+  subnet_ids          = ["subnet-05758d4ca6b654b2d", "subnet-0b2a0b457b139cd85", "subnet-0c10d3be79fdc7576"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0d18b88f8596b92c3"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform
+resource "aws_vpc" "vpc-db7c09b3" {
+  assign_generated_ipv6_cidr_block     = false
+  cidr_block                           = "172.31.0.0/16"
+  enable_dns_hostnames                 = true
+  enable_dns_support                   = true
+  enable_network_address_usage_metrics = false
+  instance_tenancy                     = "default"
+  ipv4_ipam_pool_id                    = null
+  ipv4_netmask_length                  = null
+  ipv6_cidr_block                      = null
+  ipv6_cidr_block_network_border_group = null
+  ipv6_ipam_pool_id                    = null
+  ipv6_netmask_length                  = 0
+  tags = {
+    Name = "DefaultVPC"
+  }
+  tags_all = {
+    Name = "DefaultVPC"
+  }
+}
+
+# __generated__ by Terraform from "rtb-05b14bc4524c33f7d"
+resource "aws_route_table" "rtb-05b14bc4524c33f7d" {
+  propagating_vgws = []
+  route            = []
+  tags             = {}
+  tags_all         = {}
+  vpc_id           = "vpc-00c85f1e05ed48015"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0a8651c294ab14032" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2a"
+  availability_zone_id                           = "euw2-az2"
+  cidr_block                                     = "192.168.192.0/24"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = "2a05:d01c:27c:2906::/64"
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "eks-ipv6-db1"
+  }
+  tags_all = {
+    Name = "eks-ipv6-db1"
+  }
+  vpc_id = "vpc-00c85f1e05ed48015"
+}
+
+# __generated__ by Terraform from "vpce-009c2b822d5a122c3"
+resource "aws_vpc_endpoint" "vpce-009c2b822d5a122c3" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}]}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-0fb176425f37a97ee"]
+  service_name        = "com.amazonaws.eu-west-2.elasticfilesystem"
+  subnet_ids          = ["subnet-08a73bc6c48ac8e79", "subnet-0d2199e15465dc544", "subnet-0ec3f52feec87b364"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0d18b88f8596b92c3"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-08a73bc6c48ac8e79" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2b"
+  availability_zone_id                           = "euw2-az3"
+  cidr_block                                     = "10.1.0.192/27"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "subnet-priv2"
+    RG   = "asgweb1"
+    Tier = "priv"
+  }
+  tags_all = {
+    Name = "subnet-priv2"
+    RG   = "asgweb1"
+    Tier = "priv"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform from "rtb-052c9afa41f934515"
+resource "aws_route_table" "rtb-052c9afa41f934515" {
+  propagating_vgws = []
+  route            = []
+  tags             = {}
+  tags_all         = {}
+  vpc_id           = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform from "vpce-0fc0ec2775af1387a"
+resource "aws_vpc_endpoint" "vpce-0fc0ec2775af1387a" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}]}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-0f2cd10a0bc80ab2d"]
+  service_name        = "com.amazonaws.eu-west-2.ec2"
+  subnet_ids          = ["subnet-05758d4ca6b654b2d", "subnet-0b2a0b457b139cd85", "subnet-0c10d3be79fdc7576"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0d18b88f8596b92c3"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "sg-0e785f18b6d793e82"
+resource "aws_security_group" "sg-0e785f18b6d793e82" {
+  description = "[DO NOT DELETE] Security Group that allows outbound NFS traffic for SageMaker Notebooks Domain [d-7xvjufon9ene]"
+  egress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 2049
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-051bf45e8ddb0aac3"]
+    self             = false
+    to_port          = 2049
+  }]
+  ingress                = []
+  name                   = "security-group-for-outbound-nfs-d-7xvjufon9ene"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-2:566972129213:domain/d-7xvjufon9ene"
+  }
+  tags_all = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-2:566972129213:domain/d-7xvjufon9ene"
+  }
+  vpc_id = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform from "vpce-0bb8fc67a330f1e78"
+resource "aws_vpc_endpoint" "vpce-0bb8fc67a330f1e78" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}]}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-0c8444a8f846d6c50"]
+  service_name        = "com.amazonaws.eu-west-2.logs"
+  subnet_ids          = ["subnet-05758d4ca6b654b2d", "subnet-0b2a0b457b139cd85", "subnet-0c10d3be79fdc7576"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0d18b88f8596b92c3"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "vpce-02042c6b4a709bbae"
+resource "aws_vpc_endpoint" "vpce-02042c6b4a709bbae" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-09d1b2c33025d7dc2"]
+  service_name        = "com.amazonaws.eu-west-2.codecommit"
+  subnet_ids          = ["subnet-01bc6f5d3731fd1d3", "subnet-0804a4e80680cc94f", "subnet-0f25c75642a0e6807"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0efb22ad9c5f12548"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform
+resource "aws_nat_gateway" "nat-0c7b691eca5219301" {
+  allocation_id                      = "eipalloc-0903b0e7e2014c99b"
+  connectivity_type                  = "public"
+  private_ip                         = "10.1.0.27"
+  secondary_allocation_ids           = []
+  secondary_private_ip_address_count = 0
+  secondary_private_ip_addresses     = []
+  subnet_id                          = "subnet-03ed208e3161f9ec9"
+  tags = {
+    Name = "natgw-workspaces"
+  }
+  tags_all = {
+    Name = "natgw-workspaces"
+  }
+}
+
+# __generated__ by Terraform from "sg-01ce0f6df19bbb9b6"
+resource "aws_security_group" "sg-01ce0f6df19bbb9b6" {
+  description = "default VPC security group"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = true
+    to_port          = 0
+  }]
+  name                   = "default"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-0efb22ad9c5f12548"
+}
+
+# __generated__ by Terraform from "sg-051bf45e8ddb0aac3"
+resource "aws_security_group" "sg-051bf45e8ddb0aac3" {
+  description = "[DO NOT DELETE] Security Group that allows inbound NFS traffic for SageMaker Notebooks Domain [d-7xvjufon9ene]"
+  egress      = []
+  ingress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 2049
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-0e785f18b6d793e82"]
+    self             = false
+    to_port          = 2049
+  }]
+  name                   = "security-group-for-inbound-nfs-d-7xvjufon9ene"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-2:566972129213:domain/d-7xvjufon9ene"
+  }
+  tags_all = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-2:566972129213:domain/d-7xvjufon9ene"
+  }
+  vpc_id = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform from "sg-03ef2234013b05f2c"
+resource "aws_security_group" "sg-03ef2234013b05f2c" {
+  description = "sg for mysql lambda test"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress                = []
+  name                   = "dbmysql"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "dbsg-mysql"
+  }
+  tags_all = {
+    Name = "dbsg-mysql"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform
+resource "aws_security_group" "sg-0065b59e40abb6a9b" {
+  description = "Allow HTTP for VPC Endpoint"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 80
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-0163910f67c272447"]
+    self             = false
+    to_port          = 80
+  }]
+  name                   = "terraform-2023101312503790680000000e"
+  name_prefix            = "terraform-"
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "ds-vpc-http-ingress-sg-DSSharedServices"
+  }
+  tags_all = {
+    Name = "ds-vpc-http-ingress-sg-DSSharedServices"
+  }
+  vpc_id = "vpc-0efb22ad9c5f12548"
+}
+
+# __generated__ by Terraform from "sg-0463e5acdc7cfe0b0"
+resource "aws_security_group" "sg-0463e5acdc7cfe0b0" {
+  description = "[DO NOT DELETE] Security Group that allows inbound NFS traffic for SageMaker Notebooks Domain [d-rhkssn1clgpv]"
+  egress      = []
+  ingress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 2049
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-07f39414cb61a17e2"]
+    self             = false
+    to_port          = 2049
+  }]
+  name                   = "security-group-for-inbound-nfs-d-rhkssn1clgpv"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-2:566972129213:domain/d-rhkssn1clgpv"
+  }
+  tags_all = {
+    ManagedByAmazonSageMakerResource = "arn:aws:sagemaker:eu-west-2:566972129213:domain/d-rhkssn1clgpv"
+  }
+  vpc_id = "vpc-0efb22ad9c5f12548"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0ec3f52feec87b364" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2a"
+  availability_zone_id                           = "euw2-az2"
+  cidr_block                                     = "10.1.0.128/27"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name = "subnet-priv1"
+    RG   = "asgweb1"
+    Tier = "priv"
+  }
+  tags_all = {
+    Name = "subnet-priv1"
+    RG   = "asgweb1"
+    Tier = "priv"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform from "vpce-047d9c9655e5c90fd"
+resource "aws_vpc_endpoint" "vpce-047d9c9655e5c90fd" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-09d1b2c33025d7dc2"]
+  service_name        = "com.amazonaws.eu-west-2.sagemaker.runtime"
+  subnet_ids          = ["subnet-01bc6f5d3731fd1d3", "subnet-0804a4e80680cc94f", "subnet-0f25c75642a0e6807"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0efb22ad9c5f12548"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "sg-0aa2cd28fed522988"
+resource "aws_security_group" "sg-0aa2cd28fed522988" {
+  description = "AWS created security group for d-9c67238930 directory controllers"
+  egress = [{
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = true
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = -1
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "icmp"
+    security_groups  = []
+    self             = false
+    to_port          = -1
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 1024
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 65535
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 123
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "udp"
+    security_groups  = []
+    self             = false
+    to_port          = 123
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 135
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 135
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 138
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "udp"
+    security_groups  = []
+    self             = false
+    to_port          = 138
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 3268
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 3269
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 389
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 389
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 389
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "udp"
+    security_groups  = []
+    self             = false
+    to_port          = 389
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 445
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 445
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 445
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "udp"
+    security_groups  = []
+    self             = false
+    to_port          = 445
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 464
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 464
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 464
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "udp"
+    security_groups  = []
+    self             = false
+    to_port          = 464
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 53
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 53
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 53
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "udp"
+    security_groups  = []
+    self             = false
+    to_port          = 53
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 636
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 636
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 88
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 88
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 88
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "udp"
+    security_groups  = []
+    self             = false
+    to_port          = 88
+    }, {
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = true
+    to_port          = 0
+  }]
+  name                   = "d-9c67238930_controllers"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-4367182a" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-west-2c"
+  availability_zone_id                           = "euw2-az1"
+  cidr_block                                     = "172.31.0.0/20"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags                                           = {}
+  tags_all                                       = {}
+  vpc_id                                         = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform from "vpce-0041a2c3b66568634"
+resource "aws_vpc_endpoint" "vpce-0041a2c3b66568634" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":[\"codeartifact:Describe*\",\"codeartifact:Get*\",\"codeartifact:List*\",\"codeartifact:ReadFromRepository\"],\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-09d1b2c33025d7dc2"]
+  service_name        = "com.amazonaws.eu-west-2.codeartifact.repositories"
+  subnet_ids          = ["subnet-01bc6f5d3731fd1d3", "subnet-0804a4e80680cc94f", "subnet-0f25c75642a0e6807"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0efb22ad9c5f12548"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "sg-0b70930caea1aac99"
+resource "aws_security_group" "sg-0b70930caea1aac99" {
+  description = "Amazon WorkSpaces Security Group"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "icmp"
+    security_groups  = []
+    self             = false
+    to_port          = -1
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 22
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 22
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 3389
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 3389
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 4172
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 4172
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 4172
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "udp"
+    security_groups  = []
+    self             = false
+    to_port          = 4172
+    }, {
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 443
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 443
+  }]
+  name                   = "d-9c67238930_workspacesMembers"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    "Created by Amazon WorkSpaces" = "Amazon WorkSpaces"
+  }
+  tags_all = {
+    "Created by Amazon WorkSpaces" = "Amazon WorkSpaces"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform
+resource "aws_vpc" "vpc-0d18b88f8596b92c3" {
+  assign_generated_ipv6_cidr_block     = true
+  cidr_block                           = "10.1.0.0/24"
+  enable_dns_hostnames                 = true
+  enable_dns_support                   = true
+  enable_network_address_usage_metrics = false
+  instance_tenancy                     = "default"
+  ipv4_ipam_pool_id                    = null
+  ipv4_netmask_length                  = null
+  ipv6_cidr_block                      = "2a05:d01c:873:4c00::/56"
+  ipv6_cidr_block_network_border_group = "eu-west-2"
+  ipv6_ipam_pool_id                    = null
+  ipv6_netmask_length                  = 0
+  tags = {
+    Name = "vpc-andy1"
+    RG   = "asgweb1"
+  }
+  tags_all = {
+    Name = "vpc-andy1"
+    RG   = "asgweb1"
+  }
+}
+
+# __generated__ by Terraform from "sg-307a915e"
+resource "aws_security_group" "sg-307a915e" {
+  description = "default VPC security group"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 443
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 443
+    }, {
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = ["sg-0e548897048219381"]
+    self             = true
+    to_port          = 0
+  }]
+  name                   = "default"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform from "sg-0510f118422521f54"
+resource "aws_security_group" "sg-0510f118422521f54" {
+  description = "Created by RDS management console"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["35.177.218.0/27"]
+    description      = "Quicksight London"
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+    }, {
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = true
+    to_port          = 0
+    }, {
+    cidr_blocks      = []
+    description      = ""
+    from_port        = 5432
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = ["sg-0a67d4d889051720b", "sg-0c8444a8f846d6c50"]
+    self             = false
+    to_port          = 5432
+  }]
+  name                   = "dbsg"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name = "dbsg"
+  }
+  tags_all = {
+    Name = "dbsg"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform
+resource "aws_vpc" "vpc-00c85f1e05ed48015" {
+  assign_generated_ipv6_cidr_block     = true
+  cidr_block                           = "192.168.0.0/16"
+  enable_dns_hostnames                 = true
+  enable_dns_support                   = true
+  enable_network_address_usage_metrics = false
+  instance_tenancy                     = "default"
+  ipv4_ipam_pool_id                    = null
+  ipv4_netmask_length                  = null
+  ipv6_cidr_block                      = "2a05:d01c:27c:2900::/56"
+  ipv6_cidr_block_network_border_group = "eu-west-2"
+  ipv6_ipam_pool_id                    = null
+  ipv6_netmask_length                  = 0
+  tags = {
+    Name                                          = "eksctl-eks-ipv6-cluster/VPC"
+    "alpha.eksctl.io/cluster-name"                = "eks-ipv6"
+    "alpha.eksctl.io/eksctl-version"              = "0.87.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "eks-ipv6"
+  }
+  tags_all = {
+    Name                                          = "eksctl-eks-ipv6-cluster/VPC"
+    "alpha.eksctl.io/cluster-name"                = "eks-ipv6"
+    "alpha.eksctl.io/eksctl-version"              = "0.87.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "eks-ipv6"
+  }
+}
+
+# __generated__ by Terraform
+resource "aws_route_table" "rtb-0949c5903722ad341" {
+  propagating_vgws = []
+  route = [{
+    carrier_gateway_id         = ""
+    cidr_block                 = "0.0.0.0/0"
+    core_network_arn           = ""
+    destination_prefix_list_id = ""
+    egress_only_gateway_id     = ""
+    gateway_id                 = "igw-082b7aaa6d6c243fc"
+    ipv6_cidr_block            = ""
+    local_gateway_id           = ""
+    nat_gateway_id             = ""
+    network_interface_id       = ""
+    transit_gateway_id         = ""
+    vpc_endpoint_id            = ""
+    vpc_peering_connection_id  = ""
+  }]
+  tags = {
+    Name = "route-table-pub"
+  }
+  tags_all = {
+    Name = "route-table-pub"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform from "vpce-049541a5314ade22b"
+resource "aws_vpc_endpoint" "vpce-049541a5314ade22b" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}]}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-0c8444a8f846d6c50"]
+  service_name        = "com.amazonaws.eu-west-2.ecr.dkr"
+  subnet_ids          = ["subnet-05758d4ca6b654b2d", "subnet-0b2a0b457b139cd85", "subnet-0c10d3be79fdc7576"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0d18b88f8596b92c3"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "sg-046816932ca539c69"
+resource "aws_security_group" "sg-046816932ca539c69" {
+  description = "This security group was generated by AWS Marketplace and is based on recommended settings for CIS Microsoft Windows Server 2016 Benchmark - Level 2 version 1.1.0.12 provided by Center for Internet Security"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 3389
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 3389
+  }]
+  name                   = "CIS Microsoft Windows Server 2016 Benchmark - Level 2-1-1-0-12-AutogenByAWSMP-1"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform from "sg-0671b53aec12b68d9"
+resource "aws_security_group" "sg-0671b53aec12b68d9" {
+  description = "RH-Oracle"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress = [{
+    cidr_blocks      = ["54.239.6.0/24", "81.96.210.11/32"]
+    description      = ""
+    from_port        = 22
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 22
+    }, {
+    cidr_blocks      = ["54.239.6.0/24"]
+    description      = ""
+    from_port        = 80
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 80
+    }, {
+    cidr_blocks      = ["81.96.210.11/32"]
+    description      = "rdp to home"
+    from_port        = 3389
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 3389
+  }]
+  name                   = "RH-Oracle"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform from "vpce-0d489256afa55cc3b"
+resource "aws_vpc_endpoint" "vpce-0d489256afa55cc3b" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}]}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-0f2cd10a0bc80ab2d"]
+  service_name        = "com.amazonaws.eu-west-2.ssm"
+  subnet_ids          = ["subnet-05758d4ca6b654b2d", "subnet-0b2a0b457b139cd85", "subnet-0c10d3be79fdc7576"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0d18b88f8596b92c3"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "vpce-00911a4ddb39369db"
+resource "aws_vpc_endpoint" "vpce-00911a4ddb39369db" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}]}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-0f2cd10a0bc80ab2d"]
+  service_name        = "com.amazonaws.eu-west-2.ec2messages"
+  subnet_ids          = ["subnet-05758d4ca6b654b2d", "subnet-0b2a0b457b139cd85", "subnet-0c10d3be79fdc7576"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0d18b88f8596b92c3"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "rtb-07628e6b0055dd992"
+resource "aws_route_table" "rtb-07628e6b0055dd992" {
+  propagating_vgws = []
+  route            = []
+  tags = {
+    Name = "route-table-priv2"
+  }
+  tags_all = {
+    Name = "route-table-priv2"
+  }
+  vpc_id = "vpc-0d18b88f8596b92c3"
+}
+
+# __generated__ by Terraform from "vpce-06f5dc284605688ea"
+resource "aws_vpc_endpoint" "vpce-06f5dc284605688ea" {
+  auto_accept         = null
+  ip_address_type     = null
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}],\"Version\":\"2008-10-17\"}"
+  private_dns_enabled = false
+  route_table_ids     = ["rtb-61e4c209"]
+  security_group_ids  = []
+  service_name        = "com.amazonaws.eu-west-2.s3"
+  subnet_ids          = []
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Gateway"
+  vpc_id              = "vpc-db7c09b3"
+}
+
+# __generated__ by Terraform from "vpce-0aeab11a8a1b0afa6"
+resource "aws_vpc_endpoint" "vpce-0aeab11a8a1b0afa6" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}]}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-0f2cd10a0bc80ab2d"]
+  service_name        = "com.amazonaws.eu-west-2.ssmmessages"
+  subnet_ids          = ["subnet-05758d4ca6b654b2d", "subnet-0b2a0b457b139cd85", "subnet-0c10d3be79fdc7576"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0d18b88f8596b92c3"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "vpce-09a767f5afc031789"
+resource "aws_vpc_endpoint" "vpce-09a767f5afc031789" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}]}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-0c8444a8f846d6c50"]
+  service_name        = "com.amazonaws.eu-west-2.ecs-agent"
+  subnet_ids          = ["subnet-05758d4ca6b654b2d", "subnet-0b2a0b457b139cd85", "subnet-0c10d3be79fdc7576"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0d18b88f8596b92c3"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "vpce-0cc3833049555ce44"
+resource "aws_vpc_endpoint" "vpce-0cc3833049555ce44" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}]}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-09d1b2c33025d7dc2"]
+  service_name        = "com.amazonaws.eu-west-2.ssm"
+  subnet_ids          = ["subnet-01bc6f5d3731fd1d3", "subnet-0804a4e80680cc94f", "subnet-0f25c75642a0e6807"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0efb22ad9c5f12548"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}
+
+# __generated__ by Terraform from "vpce-098f4393d6e5bee5a"
+resource "aws_vpc_endpoint" "vpce-098f4393d6e5bee5a" {
+  auto_accept         = null
+  ip_address_type     = "ipv4"
+  policy              = "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}"
+  private_dns_enabled = true
+  route_table_ids     = []
+  security_group_ids  = ["sg-09d1b2c33025d7dc2"]
+  service_name        = "com.amazonaws.eu-west-2.ecr.api"
+  subnet_ids          = ["subnet-01bc6f5d3731fd1d3", "subnet-0804a4e80680cc94f", "subnet-0f25c75642a0e6807"]
+  tags                = {}
+  tags_all            = {}
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = "vpc-0efb22ad9c5f12548"
+  dns_options {
+    dns_record_ip_type                             = "ipv4"
+    private_dns_only_for_inbound_resolver_endpoint = false
+  }
+}

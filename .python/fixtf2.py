@@ -65,6 +65,9 @@ def  aws_security_group(t1,tt1,tt2,flag1,flag2):
         tt2=tt2.strip('\"')
         if len(tt2) > 0: flag1=True
 
+    #CIRCULAR reference problems:
+    #if tt1 == "security_groups": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+
     if tt1 == "name_prefix" and flag1 is True: skip=1
        
     #            
@@ -163,37 +166,9 @@ def aws_vpc_endpoint(t1,tt1,tt2,flag1,flag2):
     if tt1 == "vpc_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
-    if tt1 == "subnet_ids":
-        tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
-        cc=tt2.count(',')
-        subs=""
-        if globals.debug is True: 
-            print(tt1 + ": "  + tt2 + " count=" + str(cc))
-        if cc == 0 and "subnet-" in tt2: 
-            subs=subs + "aws_subnet." + tt2 + ".id,"
-        else: 
-            if cc > 0:
-                for i in range(cc+1):
-                    subn=tt2.split(',')[i]
-                    subs=subs + "aws_subnet." + subn + ".id,"
-            t1=tt1 + " = [" + subs + "]\n"
-            t1=t1.replace(',]',']')
 
-    if tt1 == "security_group_ids":
-        tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
-        cc=tt2.count(',')
-        subs=""
-        if globals.debug is True: 
-            print(tt1 + ": "  + tt2 + " count=" + str(cc))
-        if cc == 0 and "sg-" in tt2: 
-            subs=subs + "aws_security_group." + tt2 + ".id,"
-        else: 
-            if cc > 0:
-                for i in range(cc+1):
-                    subn=tt2.split(',')[i]
-                    subs=subs + "aws_security_group." + subn + ".id,"
-            t1=tt1 + " = [" + subs + "]\n"
-            t1=t1.replace(',]',']')
+    if tt1 == "subnet_ids":  t1,skip = deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
+    if tt1 == "security_group_ids": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
 
     return skip,t1,flag1,flag2
 
@@ -201,3 +176,24 @@ def  aws_resource(t1,tt1,tt2,flag1,flag2):
     skip=0
 
     return skip,t1,flag1,flag2 
+
+
+
+
+
+def deref_array(t1,tt1,tt2,ttft,prefix,skip):
+    tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
+    cc=tt2.count(',')
+    subs=""
+    #if globals.debug: 
+    #print("-->> " + tt1 + ": "  + tt2 + " count=" + str(cc))
+    if cc > 0:
+        for i in range(cc+1):
+            subn=tt2.split(',')[i]
+            subs=subs + ttft + "." + subn + ".id,"
+            
+    if cc == 0 and prefix in tt2: subs=subs + ttft + "." + tt2 + ".id,"
+             
+    t1=tt1 + " = [" + subs + "]\n"
+    t1=t1.replace(',]',']')
+    return t1,skip

@@ -58,6 +58,7 @@ def tfplan(type):
    print("split resources.out")
    splitf("resources.out")
    
+
    for type in globals.types:
       x=glob.glob(type+"__*.out")
       for fil in x:
@@ -323,6 +324,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                   f.write('  id = "'+ theid + '"\n')
                   f.write('}\n')
                   globals.processed=globals.processed+[type+"."+theid]
+                  special_deps(type,theid)
                else:
                   print("Found "+pt+"in processed skipping ...") 
                   continue
@@ -349,10 +351,10 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                   print("dotc="+str(dotc))
 
                   for j in range(0,dotc):
-                     print(str(item[filt1][j]))
+                     #print(str(item[filt1][j]))
                      try:
                         val=str(item[filt1][j][filt2])
-                        print("val="+val)
+                        print("val="+val + " id=" + id)
                         if id == val:
                            theid=item[key]
                            if dotc>1: theid=id+"/"+item[key]
@@ -371,6 +373,11 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                   
   
     #tfplan(type)
+
+def special_deps(ttft,taddr):
+   if ttft == "aws_subnet": 
+      globals.dependancies=globals.dependancies + ["aws_route_table_association."+taddr]
+      return
 
 
 def get_test(type,id,clfn,descfn,topkey,key,filterid):

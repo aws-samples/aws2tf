@@ -26,22 +26,6 @@ def aws_subnet(t1,tt1,tt2,flag1,flag2):
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
 
-        #dep call ?
-        #com="./aws2tf.py -t aws_vpc -r eu-west-1 -i " + tt2
-        #print("running: "+com)
-        #rout=common.rc(com)
-        #print(str(rout.stdout.decode().rstrip()))
-        #subprocess.call(com, shell=True)
-        #print("--> plan warning destroy - existing state ?")
-        #exit()
-        #print("gen complete")
-        #globals.dependancies=globals.dependancies + ["aws_vpc." + tt2 + "\n"]   
-
-       
-        #ec2.ec2_resources("aws_vpc",tt2)
-
-
-
     if tt1 == "enable_lni_at_device_index":
         if tt2 == "0": skip=1
     if tt1 == "availability_zone_id": skip=1

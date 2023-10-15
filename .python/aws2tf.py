@@ -139,6 +139,23 @@ if __name__ == '__main__':
 
     # loop through globals.type and call tfplan(type)
 
+    print("Dependancies")
+    for ti in globals.dependancies:
+        if "aws_route_table_association" in i and "subnet-" in i:
+            type=ti.split(".")[0]
+            id=ti.split(".")[1]
+            print("type="+type+" id="+id)
+            clfn="ec2"
+            descfn="describe_route_tables"
+            topkey="RouteTables"
+            key=".Associations.0.SubnetId"
+            filterid=key
+            if id is not None and "vpc-" in id: filterid=".Associations.0.SubnetId" 
+            if id is not None and "subnet-" in id: filterid=".Associations.0.SubnetId"
+            #common.getresource(type,id,clfn,descfn,topkey,key,filterid)
+
+    exit()
+
     common.tfplan(type)
  
     common.wrapup()

@@ -1,5 +1,5 @@
 processed=[]
-dependancies = []
+dependancies=[]
 types=[]
 debug=False
 validate=False

@@ -1,10 +1,6 @@
 #!/usr/bin/python3
-import json
-import argparse
-import common
 import fixtf2
 import globals
-
 
 def fixtf(ttft,tf):
 
@@ -43,8 +39,6 @@ def fixtf(ttft,tf):
 
 
 def splitf(file):
-    ttft="test1"
-    taddr="test2"
     lhs=0
     rhs=0
     print("split file:"+ file)
@@ -86,7 +80,8 @@ def splitf(file):
     #com="rm -f "+file
     #rout=common.rc(com)  
    
- 
+
+
     
 
 

@@ -50,16 +50,20 @@ if __name__ == '__main__':
     if args.merge is not None:
         mg=True
         print("Merging "+str(mg))
-        file = open('processed.txt', 'r')
-        while True:
-            line = file.readline()
-            if not line:
-                break
-            line=line.strip()
-            globals.processed=globals.processed+[line]
-        print("Pre Processed:")
-        for i in globals.processed:
-            print(i)
+        try:
+            file = open('processed.txt', 'r')     
+            while True:
+                line = file.readline()
+                if not line:
+                    break
+                line=line.strip()
+                globals.processed=globals.processed+[line]
+            print("Pre Processed:")
+            for i in globals.processed:
+                print(i)
+        except:
+            print("No processed.txt found")
+            pass
 
     if mg is False:
         print("No merge - removing terraform.tfstate* and aws_*.tf *.out")
@@ -103,13 +107,20 @@ if __name__ == '__main__':
         s3.get_all_s3_buckets(fb,region)  
         
     elif type=="net":
-        net_types=resources.resource_types(type)
-        for i in net_types:
+        all_types=resources.resource_types(type)
+        for i in all_types:
             #print("calling "+i)
             clfn,descfn,topkey,key,filterid=resources.resource_data(i,id)
             #print("calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
             common.getresource(i,id,clfn,descfn,topkey,key,filterid)
-        
+
+    elif type=="iam":
+        all_types=resources.resource_types(type)
+        for i in all_types:
+            #print("calling "+i)
+            clfn,descfn,topkey,key,filterid=resources.resource_data(i,id)
+            #print("calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
+            common.getresource(i,id,clfn,descfn,topkey,key,filterid) 
     else:  
         clfn,descfn,topkey,key,filterid=resources.resource_data(type,id)  
         try:
@@ -150,8 +161,13 @@ if __name__ == '__main__':
     com="sort -u processed.txt -o processed.txt"
     rout=common.rc(com)
 
-    if globals.debug is True:
-        print(globals.types)
+    #if globals.debug is True:
+    print(globals.types)
+
+    print(globals.processed)
+    
+    for i in globals.processed:
+        print(i)
 
     exit(0)
 

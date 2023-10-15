@@ -174,6 +174,10 @@ def aws_vpc_endpoint(t1,tt1,tt2,flag1,flag2):
 
 def  aws_iam_role(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "name":
+        tt2=tt2.strip('\"')
+        if len(tt2) > 0: flag1=True
+    if tt1 == "name_prefix" and flag1 is True: skip=1
     return skip,t1,flag1,flag2
 
 def aws_vpc_dhcp_options(t1,tt1,tt2,flag1,flag2):

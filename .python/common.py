@@ -278,19 +278,28 @@ def splitf(file):
 
 
 def getresource(type,id,clfn,descfn,topkey,key,filterid):
+   if type in globals.types: return
+   
    globals.types=globals.types+[type]
+   if id is not None:
+      pt=type+"."+id
+      
+      if pt in globals.processed:
+         print("Found "+pt+"in processed skipping ...") 
+         return 
+   
    print("--> In getresource doing "+ type + ' with id ' + str(id))
    response = []
    client = boto3.client(clfn) 
    paginator = client.get_paginator(descfn)
    for page in paginator.paginate():
       response.extend(page[topkey])
-   print(len(response))
+   print("response length="+str(len(response)))
    #for item in response:
    #   print(item)
    #   print("--------------------------------------")
 
-   print(filterid)
+   print("filterid="+filterid)
 
    if str(response) != "[]":
       fn=type+"_import.tf"
@@ -299,16 +308,24 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
             if id is None or filterid=="": # do it all
                #print(str(item))
                try:
-                  if "/service-role/" in str(item["Path"]): continue
+                  if "aws-service-role" in str(item["Path"]): 
+                     print("Skipping service role" + str(item[key])) 
+                     continue
                except:
                   pass
+               
                theid=item[key]
-               tfid=theid.replace("/","__").replace(".","__")
-               f.write('import {\n')
-               f.write('  to = ' +type + '.' + tfid + '\n')
-               f.write('  id = "'+ theid + '"\n')
-               f.write('}\n')
-               globals.processed=globals.processed+[type+","+theid]
+               pt=type+"."+theid
+               if pt not in globals.processed:
+                  tfid=theid.replace("/","__").replace(".","__")
+                  f.write('import {\n')
+                  f.write('  to = ' +type + '.' + tfid + '\n')
+                  f.write('  id = "'+ theid + '"\n')
+                  f.write('}\n')
+                  globals.processed=globals.processed+[type+"."+theid]
+               else:
+                  print("Found "+pt+"in processed skipping ...") 
+                  continue
             else:
                if "." not in filterid:
                   #print("item=" + str(item) + " id=" + id + " filterid=" + filterid)
@@ -320,7 +337,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                      f.write('  to = ' +type + '.' + tfid + '\n')
                      f.write('  id = "'+ theid + '"\n')
                      f.write('}\n')
-                     globals.processed=globals.processed+[type+","+theid]
+                     globals.processed=globals.processed+[type+"."+theid]
                else:
                   ### There's a dot in the filterid so we need to dig deeper
                   print(str(item))
@@ -344,7 +361,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                            f.write('  to = ' +type + '.' + tfid + '\n')
                            f.write('  id = "'+ theid + '"\n')
                            f.write('}\n')
-                           globals.processed=globals.processed+[type+","+theid]
+                           globals.processed=globals.processed+[type+"."+theid]
                      except:
                         print("-------- error on processing")
                         print(str(item))
@@ -361,8 +378,8 @@ def get_test(type,id,clfn,descfn,topkey,key,filterid):
    print("--> In get_test doing "+ type + ' with id ' + str(id))   
    return
 
-def get_aws_vpc_dhcp_options(type,id,clfn,descfn,topkey,key,filterid):
-   print("in get_test")
-   print("--> In get_test doing "+ type + ' with id ' + str(id))   
-   return
+#def get_aws_vpc_dhcp_options(type,id,clfn,descfn,topkey,key,filterid):
+#   print("in get_aws_vpc_dhcp_options")
+#   print("--> In get_test doing "+ type + ' with id ' + str(id))   
+#   return
 

@@ -104,7 +104,7 @@ def get_all_s3_buckets(fb,my_region):
          f.write('id = "' + bucket_name + '"\n')
          f.write("}\n")
 
-         globals.processed=globals.processed+[type+","+bucket_name]
+         globals.processed=globals.processed+[type+"."+bucket_name]
          for key in s3_fields:
             #print("outside get_s3 type=" + key)
             globals.types=globals.types+[type]
@@ -139,7 +139,7 @@ def get_s3(f,s3_fields,type,bucket_name):
          f.write("to = " + type + ".b-" + bucket_name + "\n")
          f.write('id = "' + bucket_name + '"\n')
          f.write("}\n")
-         globals.processed=globals.processed+[type+","+bucket_name]
+         globals.processed=globals.processed+[type+"."+bucket_name]
 
    except:
       #print("No " + type + " config for bucket " + bucket_name)

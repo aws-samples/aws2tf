@@ -131,19 +131,6 @@ def  aws_s3_bucket(t1,tt1,tt2,flag1,flag2):
     return skip,t1,flag1,flag2
 
 
-
-def aws_cloudwatch_log_group(t1,tt1,tt2,flag1,flag2):
-    skip=0
-
-    return skip,t1,flag1,flag2 
-
-
-def aws_config_config_rule(t1,tt1,tt2,flag1,flag2):
-    skip=0
-
-    return skip,t1,flag1,flag2
-
-
 def aws_vpc_endpoint(t1,tt1,tt2,flag1,flag2):
     skip=0
     #print("tt1="+tt1)
@@ -169,12 +156,16 @@ def aws_vpc_dhcp_options(t1,tt1,tt2,flag1,flag2):
     return skip,t1,flag1,flag2
 
 
-def  aws_resource(t1,tt1,tt2,flag1,flag2):
+def aws_route_table_association(t1,tt1,tt2,flag1,flag2):
     skip=0
-    return skip,t1,flag1,flag2 
-
-
-
+    if tt1 == "subnet_id":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
+    if tt1 == "route_table_id":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_route_table." + tt2 + ".id\n"
+    
+    return skip,t1,flag1,flag2
 
 
 def deref_array(t1,tt1,tt2,ttft,prefix,skip):
@@ -193,3 +184,18 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
     t1=tt1 + " = [" + subs + "]\n"
     t1=t1.replace(',]',']')
     return t1,skip
+
+def aws_cloudwatch_log_group(t1,tt1,tt2,flag1,flag2):
+    skip=0
+
+    return skip,t1,flag1,flag2 
+
+
+def aws_config_config_rule(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    return skip,t1,flag1,flag2
+
+
+def  aws_resource(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    return skip,t1,flag1,flag2 

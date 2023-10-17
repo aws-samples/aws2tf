@@ -116,7 +116,7 @@ def get_all_s3_buckets(fb,my_region):
 
 # terraform plan
    type="aws_s3_bucket"
-   common.tfplan(type)
+   common.tfplan()
    # and fix it
    #if os.path.isfile("tfplan"):
    #   print("calling fixtf "+ type)

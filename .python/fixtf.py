@@ -27,9 +27,15 @@ def fixtf(ttft,tf):
                 tt2=t1.split("=")[1].strip()
             except:
                 tt2=""
+                
             getfn = getattr(fixtf2, ttft)
             
-            skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
+            try:
+                skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
+            except:
+                print("no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
+                skip,t1,flag1,flag2=fixtf2.aws_resource(t1,tt1,tt2,flag1,flag2)
+
             if skip == 0:
                 f2.write(t1)
                 

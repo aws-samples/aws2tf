@@ -61,6 +61,7 @@ if __name__ == '__main__':
             print("Pre Processed:")
             for i in globals.processed:
                 print(i)
+
         except:
             print("No processed.txt found")
             pass
@@ -90,8 +91,8 @@ if __name__ == '__main__':
 
 # get the current
     my_session = boto3.setup_default_session(region_name=region) 
- 
-    print('Using region: '+region)
+    globals.acc=boto3.client('sts').get_caller_identity().get('Account')
+    print('Using region: '+region + ' account: ' + globals.acc)
    
     if type=="all": type="net"
  
@@ -113,6 +114,16 @@ if __name__ == '__main__':
             clfn,descfn,topkey,key,filterid=resources.resource_data(i,id)
             #print("calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
             common.getresource(i,id,clfn,descfn,topkey,key,filterid)
+        clfn="ec2"
+        descfn="describe_route_tables"
+        topkey="RouteTables"
+        key="Associations"
+        filterid=key
+        if id is not None and "vpc-" in id: filterid=".Associations.0.SubnetId" 
+        if id is not None and "subnet-" in id: filterid=".Associations.0.SubnetId"
+        # call s special: once (if subnet in processed or igw)
+        i="aws_route_table_association"
+        common.get_aws_route_table_association(i,id,clfn,descfn,topkey,key,filterid) 
 
     elif type=="iam":
         all_types=resources.resource_types(type)
@@ -121,6 +132,7 @@ if __name__ == '__main__':
             clfn,descfn,topkey,key,filterid=resources.resource_data(i,id)
             #print("calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
             common.getresource(i,id,clfn,descfn,topkey,key,filterid) 
+     
     else:  
         clfn,descfn,topkey,key,filterid=resources.resource_data(type,id)  
         try:
@@ -139,25 +151,12 @@ if __name__ == '__main__':
 
     # loop through globals.type and call tfplan(type)
 
-    print("Dependancies")
-    for ti in globals.dependancies:
-        if "aws_route_table_association" in i and "subnet-" in i:
-            type=ti.split(".")[0]
-            id=ti.split(".")[1]
-            print("type="+type+" id="+id)
-            clfn="ec2"
-            descfn="describe_route_tables"
-            topkey="RouteTables"
-            key=".Associations.0.SubnetId"
-            filterid=key
-            if id is not None and "vpc-" in id: filterid=".Associations.0.SubnetId" 
-            if id is not None and "subnet-" in id: filterid=".Associations.0.SubnetId"
-            #common.getresource(type,id,clfn,descfn,topkey,key,filterid)
+    #print("Dependancies out")
+    #for ti in globals.dependancies:
+    #    print(ti)
 
-    exit()
-
-    common.tfplan(type)
- 
+    common.tfplan()
+    
     common.wrapup()
    
     if mg is True:
@@ -178,13 +177,13 @@ if __name__ == '__main__':
     com="sort -u processed.txt -o processed.txt"
     rout=common.rc(com)
 
-    #if globals.debug is True:
-    print(globals.types)
+    if globals.debug is True:
+        print(globals.types)
 
-    print(globals.processed)
+        #print(globals.processed)
     
-    for i in globals.processed:
-        print(i)
+        for i in globals.processed:
+            print(i)
 
     exit(0)
 

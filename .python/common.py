@@ -5,21 +5,15 @@ import fixtf
 import os
 import globals
 import glob
-import json
-#import aws2tf
-
-# global variables initailsed in commomn:
 
 
-
-def tfplan(type):
+def tfplan():
    print("Plan 1 ... ")
    rf="resources.out"
    com="terraform plan -generate-config-out="+ rf + " -json | jq . > plan1.json"
    print(com)
    rout=rc(com)
    
-
    file="plan1.json"
    f2=open(file, "r")
    plan2=True
@@ -57,14 +51,26 @@ def tfplan(type):
 
    print("split resources.out")
    splitf("resources.out")
-   
 
-   for type in globals.types:
-      x=glob.glob(type+"__*.out")
-      for fil in x:
-         tf=fil.split('.')[0]
+   print("fix tf files.....") 
+   
+   
+# change this so don't reply on type - get it from file name
+
+   x=glob.glob("aws_*_import.tf")
+   for fil in x:
+         tf=fil.split('_import')[0]
          #print("tf="+tf)
+         globals.types=globals.types+[tf]
+        
+   x=glob.glob("aws_*__*.out")
+   for fil in x:
+         type=fil.split('__')[0]
+         tf=fil.split('.')[0]
+         #print("type="+type+" tf="+tf)
+         globals.types=globals.types+[type]             
          fixtf.fixtf(type,tf)
+
    
    com="terraform fmt"
    rout=rc(com)
@@ -82,9 +88,6 @@ def tfplan(type):
    else: 
       print("Valid Configuration.")
       if globals.validate: exit()
-
-
-
 
 
    if plan2:
@@ -154,7 +157,7 @@ def wrapup():
       print(str(rout.stdout.decode().rstrip()))
    else: 
       print("No changes in plan")
-      com="mv *_import.tf imported"
+      com="mv *_import.tf *.out *.json imported"
       rout=rc(com)
 
 
@@ -265,31 +268,21 @@ def splitf(file):
 # if type == "aws_vpc_endpoint": return "ec2","describe_vpc_endpoints","VpcEndpoints","VpcEndpointId","vpc-id"
 
 
-#https://www.packetswitch.co.uk/how-to-use-nexttoken-in-boto3-aws-api-calls/
-
-#client = boto3.client(clfn) 
-#paginator = client.get_paginator(descfn)
-
-#all_topics = []
-#for page in paginator.paginate():
-#    all_topics.extend(page['Topics'])
-
-#print(len(all_topics))
-#
-
-
 def getresource(type,id,clfn,descfn,topkey,key,filterid):
-   if type in globals.types: return
+   print("--> In getresource doing "+ type + ' with id ' + str(id))
+   if type in str(globals.types): 
+      print("Found "+type+"in types skipping ...")
+      return
+   fn=type+"_import.tf"
    
-   globals.types=globals.types+[type]
    if id is not None:
       pt=type+"."+id
-      
-      if pt in globals.processed:
+      fn=type+"_"+id+"_import.tf"
+      if pt in str(globals.processed):
          print("Found "+pt+"in processed skipping ...") 
          return 
    
-   print("--> In getresource doing "+ type + ' with id ' + str(id))
+   
    response = []
    client = boto3.client(clfn) 
    paginator = client.get_paginator(descfn)
@@ -303,8 +296,6 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
    print("filterid="+filterid)
 
    if str(response) != "[]":
-      fn=type+"_import.tf"
-      with open(fn, "w") as f:
          for item in response:
             if id is None or filterid=="": # do it all
                #print(str(item))
@@ -317,14 +308,16 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                
                theid=item[key]
                pt=type+"."+theid
-               if pt not in globals.processed:
+               if pt not in str(globals.processed):
                   tfid=theid.replace("/","__").replace(".","__")
-                  f.write('import {\n')
-                  f.write('  to = ' +type + '.' + tfid + '\n')
-                  f.write('  id = "'+ theid + '"\n')
-                  f.write('}\n')
+                  fn=type+"_"+tfid+"_import.tf"
+                  with open(fn, "a") as f:
+                     f.write('import {\n')
+                     f.write('  to = ' +type + '.' + tfid + '\n')
+                     f.write('  id = "'+ theid + '"\n')
+                     f.write('}\n')
                   globals.processed=globals.processed+[type+"."+theid]
-                  special_deps(type,theid)
+                  #special_deps(type,theid)
                else:
                   print("Found "+pt+"in processed skipping ...") 
                   continue
@@ -335,10 +328,12 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                      #print(str(item))
                      theid=item[key]
                      tfid=theid.replace("/","_")
-                     f.write('import {\n')
-                     f.write('  to = ' +type + '.' + tfid + '\n')
-                     f.write('  id = "'+ theid + '"\n')
-                     f.write('}\n')
+                     fn=type+"_"+tfid+"_import.tf"
+                     with open(fn, "a") as f:
+                        f.write('import {\n')
+                        f.write('  to = ' +type + '.' + tfid + '\n')
+                        f.write('  id = "'+ theid + '"\n')
+                        f.write('}\n')
                      globals.processed=globals.processed+[type+"."+theid]
                else:
                   ### There's a dot in the filterid so we need to dig deeper
@@ -359,10 +354,12 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                            theid=item[key]
                            if dotc>1: theid=id+"/"+item[key]
                            tfid=theid.replace("/","_")
-                           f.write('import {\n')
-                           f.write('  to = ' +type + '.' + tfid + '\n')
-                           f.write('  id = "'+ theid + '"\n')
-                           f.write('}\n')
+                           fn=type+"_"+tfid+"_import.tf"
+                           with open(fn, "a") as f:
+                              f.write('import {\n')
+                              f.write('  to = ' +type + '.' + tfid + '\n')
+                              f.write('  id = "'+ theid + '"\n')
+                              f.write('}\n')
                            globals.processed=globals.processed+[type+"."+theid]
                      except:
                         print("-------- error on processing")
@@ -375,7 +372,9 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
     #tfplan(type)
 
 def special_deps(ttft,taddr):
+   #print("In special deps"+ttft+"  "+taddr)
    if ttft == "aws_subnet": 
+      #print("In special deps")
       globals.dependancies=globals.dependancies + ["aws_route_table_association."+taddr]
       return
 
@@ -389,4 +388,56 @@ def get_test(type,id,clfn,descfn,topkey,key,filterid):
 #   print("in get_aws_vpc_dhcp_options")
 #   print("--> In get_test doing "+ type + ' with id ' + str(id))   
 #   return
+
+def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
+   print("--> In get_aws_route_table_association doing "+ type + ' with id ' + str(id))
+   if type in globals.types: 
+      print("Found "+type+"in types skipping ...")
+      return
+   fn=type+"_import.tf"
+   
+   if id is not None:
+      pt=type+"."+id
+      fn=type+"_"+id+"_import.tf"
+      if pt in globals.processed:
+         print("Found "+pt+"in processed skipping ...") 
+         return 
+   
+   
+   response = []
+   client = boto3.client(clfn) 
+   paginator = client.get_paginator(descfn)
+   for page in paginator.paginate():
+      response.extend(page[topkey])
+   print("response length="+str(len(response)))
+   if str(response) != "[]": 
+      with open(fn, "a") as f:
+         for item in response:
+            il=len(item['Associations'])
+            for r in range(0,il):
+               #print(str(r))
+               #print(str(item['Associations'][r]))
+               rtid=(str(item['Associations'][r]['RouteTableId']))
+               try:
+                  #print(str(item['Associations'][r]['SubnetId']))
+                  subid=str(item['Associations'][r]['SubnetId'])
+                  if subid in str(globals.processed):
+                     #print(subid+"in processed...."+fn)
+                     theid=subid+"/"+rtid
+                     tfid=theid.replace("/","__").replace(".","__")
+                     fn=type+"_"+tfid+"_import.tf"
+                     with open(fn, "a") as f:
+                        f.write('import {\n')
+                        f.write('  to = ' +type + '.' + tfid + '\n')
+                        f.write('  id = "'+ theid + '"\n')
+                        f.write('}\n')
+                     globals.processed=globals.processed+[type+"."+theid]
+                  
+               except:
+                  pass
+   return
+
+
+
+
 

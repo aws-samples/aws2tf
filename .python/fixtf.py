@@ -28,7 +28,12 @@ def fixtf(ttft,tf):
             except:
                 tt2=""
                 
-            getfn = getattr(fixtf2, ttft)
+            try:
+                getfn = getattr(fixtf2, ttft)
+            except:
+                print("** no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
+                getfn = getattr(fixtf2, "aws_resource")
+
             
             try:
                 skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)

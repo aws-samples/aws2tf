@@ -267,9 +267,25 @@ def splitf(file):
 
 # if type == "aws_vpc_endpoint": return "ec2","describe_vpc_endpoints","VpcEndpoints","VpcEndpointId","vpc-id"
 
+def write_import(type,theid):
+   tfid=theid.replace("/","__").replace(".","__").replace(":","__")
+   fn=type+"_"+tfid+"_import.tf"
+   with open(fn, "a") as f:
+      f.write('import {\n')
+      f.write('  to = ' +type + '.' + tfid + '\n')
+      f.write('  id = "'+ theid + '"\n')
+      f.write('}\n')
+   globals.processed=globals.processed+[type+"."+theid]  
+   return
+
+
 
 def getresource(type,id,clfn,descfn,topkey,key,filterid):
-   print("--> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+"filterid="+filterid)
+   print("--> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   for j in globals.specials:
+      if type == j: 
+         print(type + " in specials list returning ..")
+         return
    if type in str(globals.types): 
       print("Found "+type+"in types skipping ...")
       return
@@ -309,15 +325,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                theid=item[key]
                pt=type+"."+theid
                if pt not in str(globals.processed):
-                  tfid=theid.replace("/","__").replace(".","__")
-                  fn=type+"_"+tfid+"_import.tf"
-                  with open(fn, "a") as f:
-                     f.write('import {\n')
-                     f.write('  to = ' +type + '.' + tfid + '\n')
-                     f.write('  id = "'+ theid + '"\n')
-                     f.write('}\n')
-                  globals.processed=globals.processed+[type+"."+theid]
-                  #special_deps(type,theid)
+                  write_import(type,theid)
                else:
                   print("Found "+pt+"in processed skipping ...") 
                   continue
@@ -327,14 +335,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                   if id == str(item[filterid]):
                      #print(str(item))
                      theid=item[key]
-                     tfid=theid.replace("/","_")
-                     fn=type+"_"+tfid+"_import.tf"
-                     with open(fn, "a") as f:
-                        f.write('import {\n')
-                        f.write('  to = ' +type + '.' + tfid + '\n')
-                        f.write('  id = "'+ theid + '"\n')
-                        f.write('}\n')
-                     globals.processed=globals.processed+[type+"."+theid]
+                     write_import(type,theid)
                else:
                   ### There's a dot in the filterid so we need to dig deeper
                   print(str(item))
@@ -353,14 +354,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                         if id == val:
                            theid=item[key]
                            if dotc>1: theid=id+"/"+item[key]
-                           tfid=theid.replace("/","_")
-                           fn=type+"_"+tfid+"_import.tf"
-                           with open(fn, "a") as f:
-                              f.write('import {\n')
-                              f.write('  to = ' +type + '.' + tfid + '\n')
-                              f.write('  id = "'+ theid + '"\n')
-                              f.write('}\n')
-                           globals.processed=globals.processed+[type+"."+theid]
+                           write_import(type,theid)
                      except:
                         print("-------- error on processing")
                         print(str(item))
@@ -424,15 +418,7 @@ def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
                   if subid in str(globals.processed):
                      #print(subid+"in processed...."+fn)
                      theid=subid+"/"+rtid
-                     tfid=theid.replace("/","__").replace(".","__")
-                     fn=type+"_"+tfid+"_import.tf"
-                     with open(fn, "a") as f:
-                        f.write('import {\n')
-                        f.write('  to = ' +type + '.' + tfid + '\n')
-                        f.write('  id = "'+ theid + '"\n')
-                        f.write('}\n')
-                     globals.processed=globals.processed+[type+"."+theid]
-                  
+                     write_import(type,theid)        
                except:
                   pass
    return
@@ -460,6 +446,10 @@ def get_aws_iam_role_policy(type,id,clfn,descfn,topkey,key,filterid):
                if j not in str(globals.policies):
                   print("adding "+j+" to policies for role " + rn)
                   globals.policies = globals.policies + [j]
+                  theid=rn+":"+j
+                  write_import(type,theid)
+
+
    else:
       response=[]
       paginator = client.get_paginator(descfn)
@@ -471,6 +461,8 @@ def get_aws_iam_role_policy(type,id,clfn,descfn,topkey,key,filterid):
          if j not in str(globals.policies):
             print("adding "+j+" to policies for role " + rn)
             globals.policies = globals.policies + [j]
+            theid=rn+":"+j
+            write_import(type,theid) 
    
    return
 

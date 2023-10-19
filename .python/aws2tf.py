@@ -140,13 +140,13 @@ if __name__ == '__main__':
                 getfn(i,id,clfn,descfn,topkey,key,filterid)
             except:
                 pass
-        clfn="iam"
-        descfn="list_role_policies"
-        topkey="PolicyNames"
-        key="PolicyNames"
-        filterid="RoleName"
+        #clfn="iam"
+        #descfn="list_role_policies"
+        #topkey="PolicyNames"
+        #key="PolicyNames"
+        #filterid="RoleName"
 
-        common.get_aws_iam_role_policy(i,id,clfn,descfn,topkey,key,filterid) 
+        #common.get_aws_iam_role_policy(i,id,clfn,descfn,topkey,key,filterid) 
      
     else:  
         clfn,descfn,topkey,key,filterid=resources.resource_data(type,id)  

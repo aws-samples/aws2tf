@@ -129,9 +129,24 @@ if __name__ == '__main__':
         all_types=resources.resource_types(type)
         for i in all_types:
             #print("calling "+i)
-            clfn,descfn,topkey,key,filterid=resources.resource_data(i,id)
+            try:
+                clfn,descfn,topkey,key,filterid=resources.resource_data(i,id)
             #print("calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
-            common.getresource(i,id,clfn,descfn,topkey,key,filterid) 
+                common.getresource(i,id,clfn,descfn,topkey,key,filterid) 
+            except:
+                pass
+            try:
+                getfn = getattr(common, "get_"+i)
+                getfn(i,id,clfn,descfn,topkey,key,filterid)
+            except:
+                pass
+        clfn="iam"
+        descfn="list_role_policies"
+        topkey="PolicyNames"
+        key="PolicyNames"
+        filterid="RoleName"
+
+        common.get_aws_iam_role_policy(i,id,clfn,descfn,topkey,key,filterid) 
      
     else:  
         clfn,descfn,topkey,key,filterid=resources.resource_data(type,id)  

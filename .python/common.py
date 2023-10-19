@@ -269,7 +269,7 @@ def splitf(file):
 
 
 def getresource(type,id,clfn,descfn,topkey,key,filterid):
-   print("--> In getresource doing "+ type + ' with id ' + str(id))
+   print("--> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+"filterid="+filterid)
    if type in str(globals.types): 
       print("Found "+type+"in types skipping ...")
       return
@@ -390,8 +390,8 @@ def get_test(type,id,clfn,descfn,topkey,key,filterid):
 #   return
 
 def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
-   print("--> In get_aws_route_table_association doing "+ type + ' with id ' + str(id))
-   if type in globals.types: 
+   print("--> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+"filterid="+filterid)
+   if type in str(globals.types): 
       print("Found "+type+"in types skipping ...")
       return
    fn=type+"_import.tf"
@@ -399,7 +399,7 @@ def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
    if id is not None:
       pt=type+"."+id
       fn=type+"_"+id+"_import.tf"
-      if pt in globals.processed:
+      if pt in str(globals.processed):
          print("Found "+pt+"in processed skipping ...") 
          return 
    
@@ -437,7 +437,42 @@ def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
                   pass
    return
 
+def get_aws_iam_role_policy(type,id,clfn,descfn,topkey,key,filterid):
+   print("--> In get_aws_iam_role_policy doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   
+   client = boto3.client(clfn) 
+   response=[]
+   rn=id
+   if id is None:
+      for j in globals.processed:
+         if "aws_iam_role" in j:
+            response=[]
+            dotc=j.count('.')
+            rn=j.split(".")[1]
+            if dotc > 1: rn=rn +"." + j.split(".")[2]         
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate(RoleName=rn):
+               response.extend(page[topkey])
+            if response == []: 
+               continue
+            #print("--RoleName="+rn+" response="+str(response))
+            for j in response: 
+               if j not in str(globals.policies):
+                  print("adding "+j+" to policies for role " + rn)
+                  globals.policies = globals.policies + [j]
+   else:
+      response=[]
+      paginator = client.get_paginator(descfn)
+      for page in paginator.paginate(RoleName=rn):
+         response.extend(page[topkey])
+      print("RoleName="+rn+" response="+str(response))
 
+      for j in response: 
+         if j not in str(globals.policies):
+            print("adding "+j+" to policies for role " + rn)
+            globals.policies = globals.policies + [j]
+   
+   return
 
 
 

@@ -4,8 +4,8 @@ def resource_types(type):
         net=["aws_vpc","aws_vpc_dhcp_options","aws_subnet","aws_internet_gateway","aws_nat_gateway","aws_route_table","aws_vpc_endpoint","aws_security_group"]
         # call aws_route_table_association from subnet and igw
         return net
-    #elif type == "iam": return ["aws_iam_role","aws_iam_policy","aws_iam_user"]
-    elif type == "iam": return ["aws_iam_role"]
+    elif type == "iam": return ["aws_iam_role","aws_iam_role_policy"]
+    #elif type == "iam": return ["aws_iam_role","aws_iam_role_policy","aws_iam_policy","aws_iam_role_policy_attachment"]
 
     else:
         same=[type]
@@ -232,6 +232,14 @@ def resource_data(type,id):
         filterid=key
         if id is not None and "vpc-" in id: filterid="VpcId"
 
+    elif type == "aws_flow_log":
+        clfn="ec2"
+        descfn="describe_flow_logs"
+        topkey="FlowLogs"
+        key="FlowLogId"
+        filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId"
+
     elif type == "aws_iam_role":
         clfn="iam"
         descfn="list_roles"
@@ -239,8 +247,6 @@ def resource_data(type,id):
         key="RoleName"
         filterid=key
         if id is not None and "arn:aws:iam::" in id: filterid="Arn"
-
-
 
     elif type == "aws_iam_policy":
         clfn="iam"
@@ -250,6 +256,20 @@ def resource_data(type,id):
         filterid=key  # no filter on list-policies so use jq like filter
         if id is not None and "arn:aws:iam::" in id: filterid="Arn"
 
+    elif type == "aws_iam_role_policy":
+        clfn="iam"
+        descfn="list_role_policies"
+        topkey="PolicyNames"
+        key="PolicyNames"
+        filterid="RoleName" # no filter you jst get a list of policy names 
+
+    elif type == "aws_iam_role_policy_attachment":
+        clfn="iam"
+        descfn="list-attached-role-policies"
+        topkey="AttachedPolicies"
+        key="PolicyName"
+        filterid=key  # no filter on list-policies so use jq like filter
+        if id is not None and "arn:aws:iam::" in id: filterid="PolicyArn"
 
     elif type == "aws_iam_user":
         clfn="iam"
@@ -259,17 +279,7 @@ def resource_data(type,id):
         filterid=key  # no filter on list-users so use jq like filter
         if id is not None and "arn:aws:iam::" in id: filterid="Arn"
 
-    elif type == "aws_flow_log":
-        clfn="ec2"
-        descfn="describe_flow_logs"
-        topkey="FlowLogs"
-        key="FlowLogId"
-        filterid=key
-        if id is not None and "vpc-" in id: filterid="VpcId"
-
-
    #if type == "aws_availability_zone": return 'AvailabilityZones', ec2client.describe_availability_zones, "ZoneName"
-
    #if type == "aws_elastic_load_balancer": return 'ElasticLoadBalancers', ec2client.describe_load_balancers, "LoadBalancerName"
    #if type == "aws_instance": return 'Reservations', ec2client.describe_instances, "InstanceId"
 

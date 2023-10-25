@@ -133,7 +133,7 @@
          "Arn"
         ]
        },
-       "Runtime": "nodejs14.x"
+       "Runtime": "nodejs16.x"
       },
       "DependsOn": [
        "CustomSsmGetParameterValueCustomResourceProviderRoleB3AFDDB2"

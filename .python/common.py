@@ -281,11 +281,12 @@ def write_import(type,theid):
 
 
 def getresource(type,id,clfn,descfn,topkey,key,filterid):
-   print("--> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    for j in globals.specials:
       if type == j: 
          print(type + " in specials list returning ..")
          return
+   print("--> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
    if type in str(globals.types): 
       print("Found "+type+"in types skipping ...")
       return
@@ -423,6 +424,10 @@ def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
                   pass
    return
 
+
+##
+## hmm inline policies are in the aws_iam_role  anyway !
+##
 def get_aws_iam_role_policy(type,id,clfn,descfn,topkey,key,filterid):
    print("--> In get_aws_iam_role_policy doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    
@@ -464,6 +469,39 @@ def get_aws_iam_role_policy(type,id,clfn,descfn,topkey,key,filterid):
             theid=rn+":"+j
             write_import(type,theid) 
    
+   return
+
+
+
+##
+## special due to scope local
+##
+def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
+   print("--> In get_aws_iam_policy doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   
+   client = boto3.client(clfn) 
+   response=[]
+   paginator = client.get_paginator(descfn)
+   for page in paginator.paginate(Scope='Local'):
+      response.extend(page[topkey])
+   #print("response="+str(response))
+   if response == []: 
+      print("empty response returning") 
+      return   
+   for j in response: 
+            theid=j[key]
+            retid=j["Arn"]
+            if id is None:
+               if theid not in str(globals.policies):
+                  print("adding "+theid+" to policies")
+                  globals.policies = globals.policies + [theid]
+                  write_import(type,retid) 
+            else:
+               if retid == id:
+                  if theid not in str(globals.policies):
+                     print("adding "+theid+" to policies")
+                     globals.policies = globals.policies + [theid]
+                     write_import(type,retid)
    return
 
 

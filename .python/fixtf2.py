@@ -143,13 +143,6 @@ def aws_vpc_endpoint(t1,tt1,tt2,flag1,flag2):
 
     return skip,t1,flag1,flag2
 
-def  aws_iam_role(t1,tt1,tt2,flag1,flag2):
-    skip=0
-    if tt1 == "name":
-        tt2=tt2.strip('\"')
-        if len(tt2) > 0: flag1=True
-    if tt1 == "name_prefix" and flag1 is True: skip=1
-    return skip,t1,flag1,flag2
 
 def aws_vpc_dhcp_options(t1,tt1,tt2,flag1,flag2):
     skip=0
@@ -196,6 +189,35 @@ def aws_config_config_rule(t1,tt1,tt2,flag1,flag2):
     return skip,t1,flag1,flag2
 
 
+## iam
+
+def  aws_iam_role(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    if tt1 == "name":
+        tt2=tt2.strip('\"')
+        if len(tt2) > 0: flag1=True
+    if tt1 == "name_prefix" and flag1 is True: skip=1
+    return skip,t1,flag1,flag2
+
+def  aws_iam_role_policy(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    if tt1 == "subnet_id":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
+  
+    return skip,t1,flag1,flag2
+
+def  aws_iam_policy(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    if tt1 == "name":
+        tt2=tt2.strip('\"')
+        if len(tt2) > 0: flag1=True
+    if tt1 == "name_prefix" and flag1 is True: skip=1
+  
+    return skip,t1,flag1,flag2
+
+
+# -----------------------
 def  aws_resource(t1,tt1,tt2,flag1,flag2):
     skip=0
     return skip,t1,flag1,flag2 

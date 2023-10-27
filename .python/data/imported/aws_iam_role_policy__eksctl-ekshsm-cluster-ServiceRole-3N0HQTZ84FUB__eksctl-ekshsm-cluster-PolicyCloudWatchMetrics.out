@@ -1,7 +1,0 @@
-resource "aws_iam_role_policy" "eksctl-ekshsm-cluster-ServiceRole-3N0HQTZ84FUB__eksctl-ekshsm-cluster-PolicyCloudWatchMetrics" {
-  name        = "eksctl-ekshsm-cluster-PolicyCloudWatchMetrics"
-  name_prefix = null
-  policy      = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"cloudwatch:PutMetricData\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}]}"
-  role        = "eksctl-ekshsm-cluster-ServiceRole-3N0HQTZ84FUB"
-}
-

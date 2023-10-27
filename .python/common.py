@@ -49,7 +49,7 @@ def tfplan():
          print("could not find expected resources.out file after Plan 1 - exiting")
          exit()
 
-   print("split resources.out")
+   #print("split resources.out")
    splitf("resources.out")
 
    print("fix tf files.....") 
@@ -211,11 +211,14 @@ def aws_tf(region):
       f3.write('  shared_credentials_files = ["~/.aws/credentials"]\n')
       #f3.write('  profile                  = var.profile\n')
       f3.write('}\n')
+      f3.write('data "aws_region" "current" {}\n')
+      f3.write('data "aws_caller_identity" "current" {}\n')
+      f3.write('data "aws_availability_zones" "az" {\n')
+      f3.write('state = "available"\n')
+      f3.write('}\n')
 
-   f3.close()
 
-
-
+# split resources.out
 def splitf(file):
    lhs=0
    rhs=0
@@ -242,6 +245,10 @@ def splitf(file):
                #print("resource: " + tt1)
                ttft=tt1.split('"')[1]
                taddr=tt1.split('"')[3]
+               if globals.acc in taddr:
+                  a1=taddr.find(globals.acc)
+                  taddr=taddr[:a1]+taddr[a1+12:]
+                  print("taddr="+taddr)
       
                f2=open(ttft+"__"+taddr+".out","w")
                f2.write(tt1)
@@ -493,13 +500,13 @@ def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
             retid=j["Arn"]
             if id is None:
                if theid not in str(globals.policies):
-                  print("adding "+theid+" to policies")
+                  #print("adding "+theid+" to policies")
                   globals.policies = globals.policies + [theid]
                   write_import(type,retid) 
             else:
                if retid == id:
                   if theid not in str(globals.policies):
-                     print("adding "+theid+" to policies")
+                     #print("adding "+theid+" to policies")
                      globals.policies = globals.policies + [theid]
                      write_import(type,retid)
    return

@@ -199,7 +199,7 @@ def  aws_iam_role(t1,tt1,tt2,flag1,flag2):
     if tt1 == "name_prefix" and flag1 is True: skip=1
     return skip,t1,flag1,flag2
 
-def  aws_iam_role_policy(t1,tt1,tt2,flag1,flag2):
+def aws_iam_role_policy(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "subnet_id":
         tt2=tt2.strip('\"')
@@ -207,12 +207,24 @@ def  aws_iam_role_policy(t1,tt1,tt2,flag1,flag2):
   
     return skip,t1,flag1,flag2
 
-def  aws_iam_policy(t1,tt1,tt2,flag1,flag2):
+def aws_iam_policy(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "name":
         tt2=tt2.strip('\"')
         if len(tt2) > 0: flag1=True
     if tt1 == "name_prefix" and flag1 is True: skip=1
+    if tt1 == "policy":
+        print("policy " + globals.acc + " "+ tt2)
+        ends=""
+        while globals.acc in tt2:
+            print("--> 5")
+            ends=ends+",data.aws_caller_identity.current.account_id"
+            a1=tt2.find(":"+globals.acc+":")
+            tt2=tt2[:a1]+":%s:"+tt2[a1+14:]
+            print("tt2="+tt2)
+            t1 = tt1+" = format("+tt2+ends+")\n"
+            print("t1= "+t1)
+
   
     return skip,t1,flag1,flag2
 

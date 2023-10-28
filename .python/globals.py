@@ -4,5 +4,7 @@ types=[]
 debug=False
 validate=False
 acc="xxxxxxxxxxxx"
+region="xx-xxxx-x"
+regionl=0
 policies=[]
 specials=["aws_iam_role_policy","aws_route_table_association","aws_iam_policy"]

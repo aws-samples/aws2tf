@@ -214,20 +214,24 @@ def aws_iam_policy(t1,tt1,tt2,flag1,flag2):
         if len(tt2) > 0: flag1=True
     if tt1 == "name_prefix" and flag1 is True: skip=1
     if tt1 == "policy":
-        print("policy " + globals.acc + " "+ tt2)
+        #print("policy " + globals.acc + " "+ tt2)
         ends=""
         while ":"+globals.acc+":" in tt2:
-            print("--> 5")
-            ends=ends+",data.aws_caller_identity.current.account_id"
-            #print("--> 6a")
+            #print("--> 5")
+            r1=tt2.find(":"+globals.region+":")
             a1=tt2.find(":"+globals.acc+":")
-            #print("--> 6b")
-            print("--> "+ str(a1) + " ")
-            tt2=tt2[:a1]+":%s:"+tt2[a1+14:]
-            #print("tt2="+tt2)
-            t1 = tt1+" = format("+tt2+ends+")\n"
-            #print("t1= "+t1)
+            #print("--> r1="+ str(r1) + " ")
+            #print("--> a1="+ str(a1) + " ")
+            if r1>0 and r1 < a1:
+                    #print("--> 6a")
+                    ends=ends+",data.aws_region.current.name"
+                    tt2=tt2[:r1]+":%s:"+tt2[r1+globals.regionl+2:]
 
+            a1=tt2.find(":"+globals.acc+":")
+            tt2=tt2[:a1]+":%s:"+tt2[a1+14:]
+            ends=ends+",data.aws_caller_identity.current.account_id"
+         
+            t1 = tt1+" = format("+tt2+ends+")\n"
   
     return skip,t1,flag1,flag2
 

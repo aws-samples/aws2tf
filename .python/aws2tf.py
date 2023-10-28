@@ -41,11 +41,23 @@ if __name__ == '__main__':
         type=args.type
 
     if args.region is None:
-        print("region is required eg:  -r eu-west-1  [using eu-west-1 as default]")
-        region="eu-west-1"
+        com="aws configure get region"
+        rout=common.rc(com)
+        el=len(rout.stderr.decode().rstrip())
+        if el!=0:
+            print("region is required eg:  -r eu-west-1  [using eu-west-1 as default]")
+            region="eu-west-1"
+        else:
+            region=rout.stdout.decode().rstrip()
+            print("region set from aws cli as "+region)
     else:
-        region=args.region   
+        region=args.region 
+ 
 
+
+    globals.region=region
+    globals.regionl=len(region)
+    
     mg=False
     if args.merge is not None:
         mg=True

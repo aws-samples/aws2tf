@@ -333,7 +333,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                #print(str(item))
                try:
                   if "aws-service-role" in str(item["Path"]): 
-                     print("Skipping service role" + str(item[key])) 
+                     print("Skipping service role " + str(item[key])) 
                      continue
                except:
                   pass

@@ -16,7 +16,7 @@ def fixtf(ttft,tf):
         print("no "+rf)
         return
     Lines = f1.readlines()
-    print("getfn for fixtf2."+ttft+" "+tf2)
+    #print("getfn for fixtf2."+ttft+" "+tf2)
     with open(tf2, "a") as f2:
         skip=0
         flag1=False

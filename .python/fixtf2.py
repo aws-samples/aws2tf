@@ -197,6 +197,40 @@ def  aws_iam_role(t1,tt1,tt2,flag1,flag2):
         tt2=tt2.strip('\"')
         if len(tt2) > 0: flag1=True
     if tt1 == "name_prefix" and flag1 is True: skip=1
+    if tt1 == "policy":
+        t1=globals_replace(t1,tt1,tt2)
+    if tt1 == "assume_role_policy":
+        t1=globals_replace(t1,tt1,tt2)
+    if tt1 == "managed_policy_arns":   
+        if tt2 == "[]": 
+            skip=1
+        elif ":"+globals.acc+":" in tt2:
+            fs=""
+            ends=",data.aws_caller_identity.current.account_id"
+            tt2=tt2.replace("[","").replace("]","")
+            cc=tt2.count(",")
+            #print(str(tt2)+"cc="+str(cc))
+            pt1=tt1+" = ["
+            for j in range(0,cc+1):
+                #print("-- tt2 "+str(j)+" split ="+tt2.split(",")[j])
+                #print("-- tt2 "+j+" split ="+tt2.split(",")[j])
+                ps=tt2.split(",")[j]
+                if ":"+globals.acc+":" in ps:
+                    #print("ps1="+ps)
+                    a1=ps.find(":"+globals.acc+":")
+                    #print("a1="+str(a1))
+                    ps=ps[:a1]+":%s:"+ps[a1+14:]
+                    #print("ps2="+ps)
+                    ps = 'format('+ps+ends+')'
+                    #print("ps3="+ps)         
+                pt1=pt1+ps+","
+            pt1=pt1+"]\n"
+            t1=pt1.replace(",]","]")
+            #print("--pt1="+pt1)
+        else:
+            pass
+    #    else:
+    #        t1=globals_replace(t1,tt1,tt2)
     return skip,t1,flag1,flag2
 
 def aws_iam_role_policy(t1,tt1,tt2,flag1,flag2):
@@ -214,9 +248,20 @@ def aws_iam_policy(t1,tt1,tt2,flag1,flag2):
         if len(tt2) > 0: flag1=True
     if tt1 == "name_prefix" and flag1 is True: skip=1
     if tt1 == "policy":
-        #print("policy " + globals.acc + " "+ tt2)
-        ends=""
-        while ":"+globals.acc+":" in tt2:
+        t1=globals_replace(t1,tt1,tt2)
+  
+    return skip,t1,flag1,flag2
+
+
+# -----------------------
+def  aws_resource(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    return skip,t1,flag1,flag2 
+
+def globals_replace(t1,tt1,tt2):
+    #print("policy " + globals.acc + " "+ tt2)
+    ends=""
+    while ":"+globals.acc+":" in tt2:
             #print("--> 5")
             r1=tt2.find(":"+globals.region+":")
             a1=tt2.find(":"+globals.acc+":")
@@ -232,11 +277,9 @@ def aws_iam_policy(t1,tt1,tt2,flag1,flag2):
             ends=ends+",data.aws_caller_identity.current.account_id"
          
             t1 = tt1+" = format("+tt2+ends+")\n"
-  
-    return skip,t1,flag1,flag2
-
-
-# -----------------------
-def  aws_resource(t1,tt1,tt2,flag1,flag2):
-    skip=0
-    return skip,t1,flag1,flag2 
+    if tt1 == "managed_policy_arns":
+        tt2=tt2.replace('[','')
+        tt2=tt2.replace(']','')
+        tt2=tt2.replace('"','')
+        t1 = tt1+' = [format("'+tt2+'"'+ends+')]\n'
+    return t1

@@ -256,7 +256,7 @@ def splitf(file):
                if globals.acc in taddr:
                   a1=taddr.find(globals.acc)
                   taddr=taddr[:a1]+taddr[a1+12:]
-                  print("taddr="+taddr)
+                  #print("taddr="+taddr)
       
                f2=open(ttft+"__"+taddr+".out","w")
                f2.write(tt1)

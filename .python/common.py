@@ -101,11 +101,14 @@ def tfplan():
       print(com)
       rout=rc(com)
       zerod=False
+      zeroc=False
       with open('plan2.json', 'r') as f:
          for line in f.readlines():
             #print(line)
             if '0 to destroy' in line:
               zerod=True
+            if '0 to change' in line:
+              zeroc=True
             if '@level":"error"' in line:
               if globals.debug is True:
                  print("Error" + line)
@@ -114,6 +117,11 @@ def tfplan():
 
       if not zerod:
          print("-->> plan will destroy - unexpected, is there existing state ?")
+         print("-->> look at plan2.json - or run terraform plan")
+         exit()
+
+      if not zeroc:
+         print("-->> plan will change resources - unexpected, is there existing state ?")
          print("-->> look at plan2.json - or run terraform plan")
          exit()
 

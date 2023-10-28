@@ -16,6 +16,7 @@ def fixtf(ttft,tf):
         print("no "+rf)
         return
     Lines = f1.readlines()
+    print("getfn for fixtf2."+ttft+" "+tf2)
     with open(tf2, "a") as f2:
         skip=0
         flag1=False
@@ -28,16 +29,14 @@ def fixtf(ttft,tf):
             except:
                 tt2=""
                 
-            try:
-                print("getfn for fixtf2."+ttft)
+            try:              
                 getfn = getattr(fixtf2, ttft)
             except:
                 print("** no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
                 getfn = getattr(fixtf2, "aws_resource")
-
-            
+          
             try:
-                print("calling fixtf2."+ttft)
+                #print("calling fixtf2."+ttft+" "+tf2)
                 skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
             except:
                 print("no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")

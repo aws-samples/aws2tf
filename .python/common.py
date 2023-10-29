@@ -43,7 +43,7 @@ def tfplan():
                #continue
                exit()
 
-   print("Plan 1 complete -- resources.out generated")
+   #print("Plan 1 complete -- resources.out generated")
 
    if not os.path.isfile("resources.out"):
          print("could not find expected resources.out file after Plan 1 - exiting")
@@ -314,12 +314,16 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
          print("Found "+pt+"in processed skipping ...") 
          return 
    
-   
+   print("pre-response")
    response = []
    client = boto3.client(clfn) 
+   #print("client")
    paginator = client.get_paginator(descfn)
+   #print("paginator")
+
    for page in paginator.paginate():
       response.extend(page[topkey])
+
    print("response length="+str(len(response)))
    #for item in response:
    #   print(item)
@@ -492,32 +496,57 @@ def get_aws_iam_role_policy(type,id,clfn,descfn,topkey,key,filterid):
 ## special due to scope local
 ##
 def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
-   print("--> In get_aws_iam_policy doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-   
+   #print("--> In get_aws_iam_policy doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   #if "arn:" in id:
+   #   key="Arn"
    client = boto3.client(clfn) 
    response=[]
    paginator = client.get_paginator(descfn)
    for page in paginator.paginate(Scope='Local'):
       response.extend(page[topkey])
-   #print("response="+str(response))
+
    if response == []: 
       print("empty response returning") 
       return   
    for j in response: 
             theid=j[key]
             retid=j["Arn"]
+            #print("response="+str(retid)+" id="+str(id))
             if id is None:
                if theid not in str(globals.policies):
-                  #print("adding "+theid+" to policies")
+                  #print("-- adding "+theid+" to policies")
                   globals.policies = globals.policies + [theid]
                   write_import(type,retid) 
             else:
                if retid == id:
                   if theid not in str(globals.policies):
-                     #print("adding "+theid+" to policies")
+                     #print("---adding "+theid+" to policies")
                      globals.policies = globals.policies + [theid]
                      write_import(type,retid)
    return
 
-
+##
+## special due to mandator role name,
+##
+def get_aws_iam_policy_attchment(type,id,clfn,descfn,topkey,key,filterid):
+   #print("--> In get_aws_iam_policy_attachment doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   if id is None:
+      print("Id must be set to the RoleName")
+      return
+   client = boto3.client(clfn) 
+   response=[]
+   paginator = client.get_paginator(descfn)
+   for page in paginator.paginate(RoleName=id):
+      response.extend(page[topkey])
+   #print("response="+str(response))
+   if response == []: 
+      print("empty response returning") 
+      return   
+   for j in response: 
+            theid=id+"/"+j['PolicyArn']
+            # - no as using policy arns (minus account id etc)
+            globals.dependancies=globals.dependancies + ["aws_iam_policy."+j['PolicyArn']]
+            #print("adding "+theid+" attachment")
+            write_import(type,theid) 
+   return
 

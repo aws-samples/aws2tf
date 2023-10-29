@@ -4,7 +4,10 @@ def resource_types(type):
         net=["aws_vpc","aws_vpc_dhcp_options","aws_subnet","aws_internet_gateway","aws_nat_gateway","aws_route_table","aws_route_table_association","aws_vpc_endpoint","aws_security_group"]
         # call aws_route_table_association from subnet and igw
         return net
-    elif type == "iam": return ["aws_iam_policy"]
+    elif type == "iam": return ["aws_iam_role","aws_iam_policy"]
+    #
+    # "aws_iam_role_policy_attachment" - called from iam_role
+    #
     #elif type == "iam": return ["aws_iam_role","aws_iam_role_policy_attachment","aws_iam_policy"]
     #elif type == "iam": return ["aws_iam_role","aws_iam_role_policy","aws_iam_policy","aws_iam_role_policy_attachment"]
 
@@ -266,11 +269,11 @@ def resource_data(type,id):
 
     elif type == "aws_iam_role_policy_attachment":
         clfn="iam"
-        descfn="list-attached-role-policies"
+        descfn="list_attached_role_policies"
         topkey="AttachedPolicies"
         key="PolicyName"
-        filterid=key  # no filter on list-policies so use jq like filter
-        if id is not None and "arn:aws:iam::" in id: filterid="PolicyArn"
+        filterid="RoleName"  # must pass RoleName
+        if id is not None: filterid="RoleName"
 
     elif type == "aws_iam_user":
         clfn="iam"

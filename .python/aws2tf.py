@@ -178,9 +178,43 @@ if __name__ == '__main__':
 
     # loop through globals.type and call tfplan(type)
 
-    #print("Dependancies out")
-    #for ti in globals.dependancies:
-    #    print(ti)
+    print("Known Dependancies ----------------------")
+### Known dependancies section
+## role attachments
+    i="aws_iam_role_policy_attachment"
+    for j in globals.processed:
+        if "aws_iam_role" in j:
+            id=str(j.split(".")[1])
+            try:
+                clfn,descfn,topkey,key,filterid=resources.resource_data(i,id)
+            #print("calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
+                common.get_aws_iam_policy_attchment(i,id,clfn,descfn,topkey,key,filterid) 
+       
+            except Exception as e:
+                # By this way we can know about the type of error occurring
+                print("The error is: ",e)
+                print("failed")
+
+
+    print("Detected Dependancies -----------------------")
+    for ti in globals.dependancies:
+        print(ti)
+        i=ti.split(".")[0]
+        id=ti.split(".")[1]
+        try:
+            clfn,descfn,topkey,key,filterid=resources.resource_data(i,id)
+            print("calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
+            common.getresource(i,id,clfn,descfn,topkey,key,filterid) 
+        except:
+                pass
+        try:
+            getfn = getattr(common, "get_"+i)
+            getfn(i,id,clfn,descfn,topkey,key,filterid)
+        except Exception as e:
+                # By this way we can know about the type of error occurring
+                print("The error is: ",e)
+   
+
 
     common.tfplan()
     

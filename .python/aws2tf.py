@@ -137,7 +137,7 @@ if __name__ == '__main__':
         i="aws_route_table_association"
         common.get_aws_route_table_association(i,id,clfn,descfn,topkey,key,filterid) 
 
-    elif type=="iam":
+    elif type=="iam" or type=="lattice":
         all_types=resources.resource_types(type)
         for i in all_types:
             #print("calling "+i)
@@ -145,7 +145,9 @@ if __name__ == '__main__':
                 clfn,descfn,topkey,key,filterid=resources.resource_data(i,id)
             #print("calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
                 common.getresource(i,id,clfn,descfn,topkey,key,filterid) 
-            except:
+            except Exception as e:
+                # By this way we can know about the type of error occurring
+                print(f"{e=}")
                 pass
             try:
                 getfn = getattr(common, "get_"+i)
@@ -159,9 +161,13 @@ if __name__ == '__main__':
         #filterid="RoleName"
 
         #common.get_aws_iam_role_policy(i,id,clfn,descfn,topkey,key,filterid) 
-     
+    
     else:  
         clfn,descfn,topkey,key,filterid=resources.resource_data(type,id)  
+        if clfn is None:
+            print("error clfn in None with type="+type)
+            exit() 
+        
         try:
             print("Try calling common.get_"+type)
             get_fn = getattr(common, "get_"+type)
@@ -192,7 +198,8 @@ if __name__ == '__main__':
        
             except Exception as e:
                 # By this way we can know about the type of error occurring
-                print("The error is: ",e)
+                print(f"{e=}")
+              
                 print("failed")
 
 
@@ -212,7 +219,8 @@ if __name__ == '__main__':
             getfn(i,id,clfn,descfn,topkey,key,filterid)
         except Exception as e:
                 # By this way we can know about the type of error occurring
-                print("The error is: ",e)
+                print(f"{e=}")
+              
    
 
 

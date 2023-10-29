@@ -84,7 +84,8 @@ def get_all_s3_buckets(fb,my_region):
             pass
             #print(bl)
             
-     except:
+     except Exception as e:
+         print(f"{e=}")
          print('continuing on exception to location .......')
          continue
      

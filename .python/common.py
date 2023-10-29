@@ -5,6 +5,7 @@ import fixtf
 import os
 import globals
 import glob
+import botocore
 
 
 def tfplan():
@@ -300,7 +301,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
       if type == j: 
          print(type + " in specials list returning ..")
          return
-   print("--> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   if globals.debug: print("--> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
    if type in str(globals.types): 
       print("Found "+type+"in types skipping ...")
@@ -314,27 +315,47 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
          print("Found "+pt+"in processed skipping ...") 
          return 
    
-   print("pre-response")
+   if globals.debug: print("pre-response")
    response = []
    client = boto3.client(clfn) 
-   #print("client")
-   paginator = client.get_paginator(descfn)
-   #print("paginator")
+   if globals.debug: print("client")
 
-   for page in paginator.paginate():
-      response.extend(page[topkey])
+   try:
+      paginator = client.get_paginator(descfn)
+      if globals.debug: print("paginator")
 
-   print("response length="+str(len(response)))
-   #for item in response:
-   #   print(item)
-   #   print("--------------------------------------")
+      for page in paginator.paginate():
+         response.extend(page[topkey])
+   #except Exception as err:
+                # By this way we can know about the type of error occurring
+   except botocore.exceptions.OperationNotPageableError as err:
+         #print(f"{err=}")
+         getfn = getattr(client, descfn)
+         response1 = getfn()
+         response=response1[topkey]
+   else:
+      print("exexpected error in common.getresource")
+      exit()
 
-   print("filterid="+filterid)
+
+   rl=len(response)
+   if rl==0:
+      print("zero response length for type "+type + " returning ..")
+      return
+
+   if globals.debug:
+      print("response length="+str(len(response)))
+      
+      for item in response:
+         print(item)
+         print("--------------------------------------")
+
+   if globals.debug: print("filterid="+filterid)
 
    if str(response) != "[]":
          for item in response:
             if id is None or filterid=="": # do it all
-               #print(str(item))
+               if globals.debug: print(str(item))
                try:
                   if "aws-service-role" in str(item["Path"]): 
                      print("Skipping service role " + str(item[key])) 

@@ -33,7 +33,7 @@ def fixtf(ttft,tf):
             try:              
                 getfn = getattr(fixtf2, ttft)
             except Exception as e:
-                print("The error is: ",e)
+                print(f"{e=}")
                 print("** no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
                 print("t1="+t1) 
                 getfn = getattr(fixtf2, "aws_resource")
@@ -42,7 +42,7 @@ def fixtf(ttft,tf):
                 #print("calling fixtf2."+ttft+" "+tf2)
                 skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
             except Exception as e:
-                print("The error is: ",e)
+                print(f"{e=}")
                 print("--no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
                 print("t1="+t1) 
                 skip,t1,flag1,flag2=fixtf2.aws_resource(t1,tt1,tt2,flag1,flag2)

@@ -10,6 +10,8 @@ def resource_types(type):
     #
     #elif type == "iam": return ["aws_iam_role","aws_iam_role_policy_attachment","aws_iam_policy"]
     #elif type == "iam": return ["aws_iam_role","aws_iam_role_policy","aws_iam_policy","aws_iam_role_policy_attachment"]
+    elif type == "lattice": return ["aws_vpclattice_service_network"]
+
 
     else:
         same=[type]
@@ -282,6 +284,15 @@ def resource_data(type,id):
         key="UserName"
         filterid=key  # no filter on list-users so use jq like filter
         if id is not None and "arn:aws:iam::" in id: filterid="Arn"
+
+    ## Lattice
+    elif type == "aws_vpclattice_service_network":
+        clfn="vpc-lattice"
+        descfn="list_service_networks"
+        topkey="items"
+        key="id"
+        filterid="name"  # no filter on list-users so use jq like filter
+        if id is not None and "sn-" in id: filterid=key
 
    #if type == "aws_availability_zone": return 'AvailabilityZones', ec2client.describe_availability_zones, "ZoneName"
    #if type == "aws_elastic_load_balancer": return 'ElasticLoadBalancers', ec2client.describe_load_balancers, "LoadBalancerName"

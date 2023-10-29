@@ -195,7 +195,9 @@ def  aws_iam_role(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "name":
         tt2=tt2.strip('\"')
-        if len(tt2) > 0: flag1=True
+        if len(tt2) > 0: 
+            flag1=True
+            flag2=tt2
     if tt1 == "name_prefix" and flag1 is True: skip=1
     if tt1 == "policy":
         t1=globals_replace(t1,tt1,tt2)
@@ -226,7 +228,7 @@ def  aws_iam_role(t1,tt1,tt2,flag1,flag2):
                 pt1=pt1+ps+","
             pt1=pt1+"]\n"
             t1=pt1.replace(",]","]")
-            #print("--pt1="+pt1)
+            globals.roles=globals.roles+[flag2]
         else:
             pass
     #    else:

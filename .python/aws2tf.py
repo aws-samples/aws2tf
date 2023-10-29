@@ -140,10 +140,10 @@ if __name__ == '__main__':
     elif type=="iam" or type=="lattice":
         all_types=resources.resource_types(type)
         for i in all_types:
-            #print("calling "+i)
+            if globals.debug: print("calling "+i)
             try:
                 clfn,descfn,topkey,key,filterid=resources.resource_data(i,id)
-            #print("calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
+                if globals.debug: print("calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
                 common.getresource(i,id,clfn,descfn,topkey,key,filterid) 
             except Exception as e:
                 # By this way we can know about the type of error occurring
@@ -187,44 +187,66 @@ if __name__ == '__main__':
     print("Known Dependancies ----------------------")
 ### Known dependancies section
 ## role attachments
+    
     i="aws_iam_role_policy_attachment"
     for j in globals.processed:
         if "aws_iam_role" in j:
             id=str(j.split(".")[1])
             try:
                 clfn,descfn,topkey,key,filterid=resources.resource_data(i,id)
-            #print("calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
+                if globals.debug: 
+                    print("KD calling common.get_aws_iam_policy_attchment with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
+                else:
+                    print(i+"."+id)
                 common.get_aws_iam_policy_attchment(i,id,clfn,descfn,topkey,key,filterid) 
        
             except Exception as e:
                 # By this way we can know about the type of error occurring
                 print(f"{e=}")
-              
                 print("failed")
 
-
+    
     print("Detected Dependancies -----------------------")
+    
+    print(str(globals.dependancies))
+    print("Processed --------------------")
+    for i in globals.processed:
+        print(str(i))
+
     for ti in globals.dependancies:
-        print(ti)
-        i=ti.split(".")[0]
-        id=ti.split(".")[1]
-        try:
-            clfn,descfn,topkey,key,filterid=resources.resource_data(i,id)
-            print("calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
-            common.getresource(i,id,clfn,descfn,topkey,key,filterid) 
-        except:
-                pass
-        try:
-            getfn = getattr(common, "get_"+i)
-            getfn(i,id,clfn,descfn,topkey,key,filterid)
-        except Exception as e:
-                # By this way we can know about the type of error occurring
-                print(f"{e=}")
+        if "arn:aws:iam::aws:policy" not in ti: 
+            if str(ti) not in str(globals.processed):
+                print("DD="+str(ti))
+                i=ti.split(".")[0]
+                id=ti.split(".")[1]
+                if id not in str(globals.policyarns):
+                    try:
+                        clfn,descfn,topkey,key,filterid=resources.resource_data(i,id)
+                        print("DD calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
+                        common.getresource(i,id,clfn,descfn,topkey,key,filterid) 
+                    except:
+                            pass
+                    try:
+                        getfn = getattr(common, "get_"+i)
+                        print("DD calling common.get_"+i+" with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
+
+                        getfn(i,id,clfn,descfn,topkey,key,filterid)
+                    except Exception as e:
+                            # By this way we can know about the type of error occurring
+                            print(f"{e=}")
+                else:
+                    print("DD skip found "+id+" in globals.policyarns")
               
    
 
 
     common.tfplan()
+
+
+
+
+
+
     
     common.wrapup()
    
@@ -232,25 +254,22 @@ if __name__ == '__main__':
         with open("processed.txt","a") as f:
             for i in globals.processed:
                 f.write(i+"\n")
-                if globals.debug is True:
-                    print("Processed:")
-                    print(i)
+
     else:
         with open("processed.txt","w") as f:
             for i in globals.processed:
                 f.write(i+"\n")
-                if globals.debug is True:
-                    print("Processed:")
-                    print(i)
+
 
     com="sort -u processed.txt -o processed.txt"
     rout=common.rc(com)
 
     if globals.debug is True:
+        print("Types -----------------")
         print(globals.types)
 
         #print(globals.processed)
-    
+        print("Processed ---------------")
         for i in globals.processed:
             print(i)
 

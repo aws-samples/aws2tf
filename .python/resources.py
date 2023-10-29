@@ -5,6 +5,7 @@ def resource_types(type):
         # call aws_route_table_association from subnet and igw
         return net
     elif type == "iam": return ["aws_iam_role","aws_iam_policy"]
+    #elif type == "iam": return ["aws_iam_policy"]
     #
     # "aws_iam_role_policy_attachment" - called from iam_role
     #

@@ -58,18 +58,20 @@ def tfplan():
    
 # change this so don't reply on type - get it from file name
 
-   x=glob.glob("aws_*_import.tf")
-   for fil in x:
-         tf=fil.split('_import')[0]
-         #print("tf="+tf)
-         globals.types=globals.types+[tf]
+   #x=glob.glob("aws_*_import.tf")
+   #for fil in x:
+   #      tf=fil.split('__')[0]
+   #      #print("tf="+tf)
+   #      if tf not in globals.type:
+   #         globals.types=globals.types+[tf]
         
    x=glob.glob("aws_*__*.out")
    for fil in x:
          type=fil.split('__')[0]
          tf=fil.split('.')[0]
          #print("type="+type+" tf="+tf)
-         globals.types=globals.types+[type]             
+         if type not in globals.types:
+            globals.types=globals.types+[type]             
          fixtf.fixtf(type,tf)
 
    
@@ -283,15 +285,17 @@ def splitf(file):
 
 # if type == "aws_vpc_endpoint": return "ec2","describe_vpc_endpoints","VpcEndpoints","VpcEndpointId","vpc-id"
 
-def write_import(type,theid):
-   tfid=theid.replace("/","__").replace(".","__").replace(":","__")
-   fn=type+"_"+tfid+"_import.tf"
+#generally pass 3rd param as None - unless overriding
+def write_import(type,theid,tfid):
+   if tfid is None:
+      tfid=theid.replace("/","__").replace(".","__").replace(":","__")
+   fn=type+"__"+tfid+"__import.tf"
    with open(fn, "a") as f:
       f.write('import {\n')
       f.write('  to = ' +type + '.' + tfid + '\n')
       f.write('  id = "'+ theid + '"\n')
       f.write('}\n')
-   globals.processed=globals.processed+[type+"."+theid]  
+   globals.processed=globals.processed+[type+"."+tfid]  
    return
 
 
@@ -333,8 +337,9 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
          getfn = getattr(client, descfn)
          response1 = getfn()
          response=response1[topkey]
-   else:
-      print("exexpected error in common.getresource")
+   except Exception as e:
+      print(f"{e=}")
+      print("unexpected error in common.getresource")
       exit()
 
 
@@ -366,7 +371,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                theid=item[key]
                pt=type+"."+theid
                if pt not in str(globals.processed):
-                  write_import(type,theid)
+                  write_import(type,theid,None)
                else:
                   print("Found "+pt+"in processed skipping ...") 
                   continue
@@ -376,7 +381,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                   if id == str(item[filterid]):
                      #print(str(item))
                      theid=item[key]
-                     write_import(type,theid)
+                     write_import(type,theid,None)
                else:
                   ### There's a dot in the filterid so we need to dig deeper
                   print(str(item))
@@ -395,7 +400,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                         if id == val:
                            theid=item[key]
                            if dotc>1: theid=id+"/"+item[key]
-                           write_import(type,theid)
+                           write_import(type,theid,None)
                      except:
                         print("-------- error on processing")
                         print(str(item))
@@ -459,7 +464,7 @@ def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
                   if subid in str(globals.processed):
                      #print(subid+"in processed...."+fn)
                      theid=subid+"/"+rtid
-                     write_import(type,theid)        
+                     write_import(type,theid,None)        
                except:
                   pass
    return
@@ -492,7 +497,7 @@ def get_aws_iam_role_policy(type,id,clfn,descfn,topkey,key,filterid):
                   print("adding "+j+" to policies for role " + rn)
                   globals.policies = globals.policies + [j]
                   theid=rn+":"+j
-                  write_import(type,theid)
+                  write_import(type,theid,None)
 
 
    else:
@@ -507,7 +512,7 @@ def get_aws_iam_role_policy(type,id,clfn,descfn,topkey,key,filterid):
             print("adding "+j+" to policies for role " + rn)
             globals.policies = globals.policies + [j]
             theid=rn+":"+j
-            write_import(type,theid) 
+            write_import(type,theid,None) 
    
    return
 
@@ -517,33 +522,71 @@ def get_aws_iam_role_policy(type,id,clfn,descfn,topkey,key,filterid):
 ## special due to scope local
 ##
 def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
-   #print("--> In get_aws_iam_policy doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-   #if "arn:" in id:
-   #   key="Arn"
+   if globals.debug: print("--> In get_aws_iam_policy doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
    client = boto3.client(clfn) 
+   if globals.debug: print("client")
    response=[]
-   paginator = client.get_paginator(descfn)
-   for page in paginator.paginate(Scope='Local'):
-      response.extend(page[topkey])
+   if "arn:" in id:
+      print("hi")
+      response1 = client.get_policy(PolicyArn=id)
+      #print(str(response1))
+      response=response1['Policy']
+
+   else:
+      paginator = client.get_paginator(descfn)
+      if globals.debug: print("Paginator")
+
+      try:
+         for page in paginator.paginate(Scope='Local'):
+            response.extend(page[topkey])
+      except Exception as e:
+         print(f"{e=}")
 
    if response == []: 
       print("empty response returning") 
-      return   
-   for j in response: 
+      return  
+    
+   if id is None:
+      for j in response: 
+            #print("j="+str(j))
             theid=j[key]
             retid=j["Arn"]
-            #print("response="+str(retid)+" id="+str(id))
-            if id is None:
+            try:
+               ln=retid.rfind("/")
+               pn=retid[ln+1:]
+            except Exception as e:
+               print("pn error")
+               print(f"{e=}")
+
+            print("policy name="+str(pn))      
+            if retid == id:
                if theid not in str(globals.policies):
+                  #print("---adding "+theid+" to policies")
+                  globals.policies = globals.policies + [theid]
+                  globals.policyarns = globals.policyarns + [retid]
+                  write_import(type,retid,pn)
+   else:
+         j=response
+         #print("j="+str(j))
+         theid=j[key]
+         retid=j["Arn"]
+         try:
+            ln=retid.rfind("/")
+            pn=retid[ln+1:]
+         except Exception as e:
+               print("pn error")
+               print(f"{e=}")
+
+         print("policy name="+str(pn))
+            #print("response="+str(retid)+" id="+str(id))
+         
+         if theid not in str(globals.policies):
                   #print("-- adding "+theid+" to policies")
                   globals.policies = globals.policies + [theid]
-                  write_import(type,retid) 
-            else:
-               if retid == id:
-                  if theid not in str(globals.policies):
-                     #print("---adding "+theid+" to policies")
-                     globals.policies = globals.policies + [theid]
-                     write_import(type,retid)
+                  globals.policyarns = globals.policyarns + [retid]
+                  write_import(type,retid,pn)  
+   
    return
 
 ##
@@ -557,17 +600,26 @@ def get_aws_iam_policy_attchment(type,id,clfn,descfn,topkey,key,filterid):
    client = boto3.client(clfn) 
    response=[]
    paginator = client.get_paginator(descfn)
-   for page in paginator.paginate(RoleName=id):
-      response.extend(page[topkey])
+   try:
+      for page in paginator.paginate(RoleName=id):
+      #for page in paginator.paginate():
+         response.extend(page[topkey])
+   except Exception as e:
+      print(f"{e=}")
    #print("response="+str(response))
    if response == []: 
       print("empty response returning") 
       return   
    for j in response: 
-            theid=id+"/"+j['PolicyArn']
+            retid=j['PolicyArn']
+            theid=id+"/"+retid
+            ln=retid.rfind("/")
+            pn=retid[ln+1:]
+            rn=id+"__"+pn
             # - no as using policy arns (minus account id etc)
-            globals.dependancies=globals.dependancies + ["aws_iam_policy."+j['PolicyArn']]
+            if "arn:aws:iam::aws:policy" not in theid:
+               globals.dependancies=globals.dependancies + ["aws_iam_policy."+retid]
             #print("adding "+theid+" attachment")
-            write_import(type,theid) 
+            write_import(type,theid,rn) 
    return
 

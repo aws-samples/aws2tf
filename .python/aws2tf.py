@@ -154,6 +154,7 @@ if __name__ == '__main__':
                 getfn(i,id,clfn,descfn,topkey,key,filterid)
             except:
                 pass
+
         #clfn="iam"
         #descfn="list_role_policies"
         #topkey="PolicyNames"
@@ -185,25 +186,52 @@ if __name__ == '__main__':
     # loop through globals.type and call tfplan(type)
 
     print("Known Dependancies ----------------------")
+
+    ## lattice
+    for j in globals.processed:
+        if "aws_vpclattice_service_network" in j:
+            
+            id=str(j.split(".")[1])
+            print(id)
+            #../../scripts/get-vpclattice-auth-policy.sh $cname
+            #../../scripts/get-vpclattice-resource-policy.sh $rarn
+            #../../scripts/get-vpclattice-service-network-service-associations.sh $cname
+            #../../scripts/get-vpclattice-service-network-vpc-association.sh $cname
+            ###../../scripts/get-vpclattice-access-log-subscription.sh $cname
+            #../../scripts/get-vpclattice-services.sh $cname
+            for type in ["aws_vpclattice_service"]:
+                print(type)
+            #for type in ["aws_vpclattice_service","aws_vpclattice_service_network_vpc_association"]:
+                clfn,descfn,topkey,key,filterid=resources.resource_data(type,id)
+                try:
+                    get_fn = getattr(common, "get_"+type)
+                    print("calling get_aws_vpclattice_service with type="+type+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
+                    get_fn(type,id,clfn,descfn,topkey,key,filterid)
+                except Exception as e:
+                    # By this way we can know about the type of error occurring
+                    print(f"{e=}")
+                    pass
+
+
 ### Known dependancies section
 ## role attachments
-    
-    i="aws_iam_role_policy_attachment"
-    for j in globals.processed:
-        if "aws_iam_role" in j:
-            id=str(j.split(".")[1])
-            try:
-                clfn,descfn,topkey,key,filterid=resources.resource_data(i,id)
-                if globals.debug: 
-                    print("KD calling common.get_aws_iam_policy_attchment with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
-                else:
-                    print(i+"."+id)
-                common.get_aws_iam_policy_attchment(i,id,clfn,descfn,topkey,key,filterid) 
-       
-            except Exception as e:
-                # By this way we can know about the type of error occurring
-                print(f"{e=}")
-                print("failed")
+## not needed - managed_policy_arns in aws_iam_role handles it    
+#    i="aws_iam_role_policy_attachment"
+#    for j in globals.processed:
+#        if "aws_iam_role" in j:
+#            id=str(j.split(".")[1])
+#            try:
+#                clfn,descfn,topkey,key,filterid=resources.resource_data(i,id)
+#                if globals.debug: 
+#                    print("KD calling common.get_aws_iam_policy_attchment with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
+#                else:
+#                    print(i+"."+id)
+#                common.get_aws_iam_policy_attchment(i,id,clfn,descfn,topkey,key,filterid) 
+#       
+#            except Exception as e:
+#                # By this way we can know about the type of error occurring
+#                print(f"{e=}")
+#                print("failed")
 
     
     print("Detected Dependancies -----------------------")
@@ -237,16 +265,8 @@ if __name__ == '__main__':
                 else:
                     print("DD skip found "+id+" in globals.policyarns")
               
-   
-
 
     common.tfplan()
-
-
-
-
-
-
     
     common.wrapup()
    

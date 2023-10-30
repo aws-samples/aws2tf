@@ -295,6 +295,16 @@ def resource_data(type,id):
         filterid="name"  # no filter on list-users so use jq like filter
         if id is not None and "sn-" in id: filterid=key
 
+
+
+    elif type == "aws_vpclattice_service":
+        clfn="vpc-lattice"
+        descfn="list_services"
+        topkey="items"
+        key="id"
+        filterid="name"  # no filter on list-users so use jq like filter
+        if id is not None and "sn-" in id: filterid=key    
+
    #if type == "aws_availability_zone": return 'AvailabilityZones', ec2client.describe_availability_zones, "ZoneName"
    #if type == "aws_elastic_load_balancer": return 'ElasticLoadBalancers', ec2client.describe_load_balancers, "LoadBalancerName"
    #if type == "aws_instance": return 'Reservations', ec2client.describe_instances, "InstanceId"

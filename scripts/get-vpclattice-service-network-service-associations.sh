@@ -3,7 +3,7 @@ ttft="aws_vpclattice_service_network_service_association"
 pref="items"
 idfilt="id"
 
-cm="$AWS vpc-lattice vpc-lattice list-service-network-service-associations"
+cm="$AWS vpc-lattice list-service-network-service-associations"
 if [[ "$1" != "" ]]; then
     if [[ "$1" == "sn-"* ]]; then
         cm=$(printf "$AWS vpc-lattice list-service-network-service-associations --service-network-identifier $1")

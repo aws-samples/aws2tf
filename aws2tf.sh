@@ -169,7 +169,7 @@ if [ "$f" = "no" ]; then
         rm -f *.tf *.json *.tmp
         rm -f terraform.* tfplan
         rm -rf .terraform data aws_* pi2
-        mkdir -p data not-imported
+        mkdir -p data not-imported imported
     fi
 else
     sort -u data/processed.txt >data/pt.txt
@@ -248,23 +248,23 @@ printf "}\n" >>aws.tf
 export AWS2TF_REGION=$(echo $r)
 export AWS2TF_ACCOUNT=$(echo $mysub)
 
-export AWS2TF_PY=0
-pv=$(python3 --version 2>/dev/null)
-if [[ $? -eq 0 ]]; then
-    majv=$(echo $pv | awk '{print $2}' | cut -f1 -d'.')
-    minv=$(echo $pv | awk '{print $2}' | cut -f2 -d'.')
-    if [ "$majv" -lt "3" ]; then
-        echo "Python 3 is not installed"
-        echo "disabling python acceleration"
-    elif [ "$majv" -ge "3" ]; then
-        if [ "$minv" -lt "7" ]; then
-           echo "Python 3 version is less than 3.7" 
-           echo "disabling python acceleration"
-        else
-            export AWS2TF_PY=1
-        fi
-    fi
-fi
+#export AWS2TF_PY=0
+#pv=$(python3 --version 2>/dev/null)
+#if [[ $? -eq 0 ]]; then
+#    majv=$(echo $pv | awk '{print $2}' | cut -f1 -d'.')
+#    minv=$(echo $pv | awk '{print $2}' | cut -f2 -d'.')
+#    if [ "$majv" -lt "3" ]; then
+#        echo "Python 3 is not installed"
+#        echo "disabling python acceleration"
+#    elif [ "$majv" -ge "3" ]; then
+#        if [ "$minv" -lt "7" ]; then
+#           echo "Python 3 version is less than 3.7" 
+#           echo "disabling python acceleration"
+#        else
+#            export AWS2TF_PY=1
+#        fi
+#    fi
+#fi
 #echo $AWS2TF_PY
 
 
@@ -347,6 +347,7 @@ if [ "$t" == "kinesis" ]; then pre="74*"; fi
 if [ "$t" == "kms" ]; then pre="08*"; fi
 if [ "$t" == "lambda" ]; then pre="700*"; fi
 if [ "$t" == "lf" ]; then pre="63*"; fi
+if [ "$t" == "net" ]; then pre="1*"; fi
 if [ "$t" == "org" ]; then pre="01*"; fi
 if [ "$t" == "params" ]; then pre="445*"; fi
 if [ "$t" == "privatelink" ]; then pre="230*"; fi

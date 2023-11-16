@@ -14,16 +14,12 @@ if [[ $AWS2TF_PY -eq 2 ]]; then
     echo "$1"
     if [[ "$1" == "vpc-"* ]]; then
         #echo "100 Python $ttft with id $1"
-        ../../python/main.py -t $ttft -r $AWS2TF_REGION -i $1
+        ../../.python/aws2tf.py -t $ttft -r $AWS2TF_REGION -i $1 -m True
     else
         #echo "100 Python $ttft"
-        ../../python/main.py -t $ttft -r $AWS2TF_REGION
+        ../../.python/aws2tf.py -t $ttft -r $AWS2TF_REGION -m True
     fi
-    awsout=$(cat data/$ttft.json)
-    #echo $awsout | jq .
-    count=$(echo $awsout | jq ".${pref[(${c})]} | length")
-    if [ "$count" -eq "0" ]; then echo "zero count" && exit; fi
-    count=$(expr $count - 1)
+    exit
 
 else
 

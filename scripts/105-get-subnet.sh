@@ -3,6 +3,18 @@ pref[0]="Subnets"
 ttft="aws_subnet"
 idfilt[0]="SubnetId"
 
+if [[ $AWS2TF_PY -eq 2 ]]; then
+    echo "$1"
+    if [[ "$1" == "" ]]; then
+        #echo "100 Python $ttft with id $1"
+        ../../.python/aws2tf.py -t $ttft -r $AWS2TF_REGION -m True
+    else
+        #echo "100 Python $ttft"
+        ../../.python/aws2tf.py -t $ttft -r $AWS2TF_REGION -i $1 -m True
+    fi
+    exit
+fi
+
 if [ "$1" != "" ]; then
     if [[ "$1" == "vpc-"* ]]; then
         cmd[0]="$AWS ec2 describe-subnets --filters \"Name=vpc-id,Values=$1\"" 

@@ -283,6 +283,26 @@ def aws_vpclattice_service(t1,tt1,tt2,flag1,flag2):
     skip=0
     return skip,t1,flag1,flag2
 
+def aws_vpclattice_service_network_vpc_association(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    if tt1 == "vpc_identifier":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
+        pkey=aws_vpc+"."+tt2 
+        globals.rproc[pkey]=False # set to false to pick up in dependancies
+
+
+    if tt1 == "service_network_identifier":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_vpclattice_service_network." + tt2 + ".id\n"
+    return skip,t1,flag1,flag2
+
+def aws_eks_cluster(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    return skip,t1,flag1,flag2
+
+
+
 def  aws_resource(t1,tt1,tt2,flag1,flag2):
     skip=0
     return skip,t1,flag1,flag2 

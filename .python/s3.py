@@ -8,7 +8,7 @@ def get_all_s3_buckets(fb,my_region):
    print("fb="+str(fb))
    type="aws_s3_bucket"
    
-   print("processed=" + str(globals.processed))
+   print("processed=" + str(globals.rproc))
    """Gets all the AWS S3 buckets and saves them to a file."""
    boto3.setup_default_session(region_name=my_region)
    s3a = boto3.resource("s3",region_name=my_region) 
@@ -49,7 +49,7 @@ def get_all_s3_buckets(fb,my_region):
    for buck in buckets: 
    
      bucket_name=buck.name
-     if "aws_s3_bucket,"+bucket_name in globals.processed:
+     if "aws_s3_bucket,"+bucket_name in globals.rproc:
         print("Already processed skipping bucket " + bucket_name)
         continue
      # jump if bucket name does not match
@@ -105,14 +105,17 @@ def get_all_s3_buckets(fb,my_region):
          f.write('id = "' + bucket_name + '"\n')
          f.write("}\n")
 
-         globals.processed=globals.processed+[type+"."+bucket_name]
+         pkey=type+"."+bucket_name 
+         globals.rproc[pkey]=True
+
+
          for key in s3_fields:
             #print("outside get_s3 type=" + key)
             globals.types=globals.types+[type]
             get_s3(f,s3_fields,key,bucket_name)
       
      
-   print("processed=" + str(globals.processed))
+   print("processed=" + str(globals.rproc))
    
 
 # terraform plan
@@ -140,7 +143,9 @@ def get_s3(f,s3_fields,type,bucket_name):
          f.write("to = " + type + ".b-" + bucket_name + "\n")
          f.write('id = "' + bucket_name + '"\n')
          f.write("}\n")
-         globals.processed=globals.processed+[type+"."+bucket_name]
+
+         pkey=type+"."+bucket_name  
+         globals.rproc[pkey]=True
 
    except:
       #print("No " + type + " config for bucket " + bucket_name)

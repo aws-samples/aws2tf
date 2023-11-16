@@ -9,7 +9,7 @@ import globals
 
 if __name__ == '__main__':
    
-    globals.processed=[]
+
     common.check_python_version()
     #print("cwd=%s" % os.getcwd())
     signal.signal(signal.SIGINT, common.ctrl_c_handler)
@@ -69,9 +69,10 @@ if __name__ == '__main__':
                 if not line:
                     break
                 line=line.strip()
-                globals.processed=globals.processed+[line]
+                
+                globals.rproc[line]=True
             print("Pre Processed:")
-            for i in globals.processed:
+            for i in globals.rproc.keys():
                 print(i)
 
         except:
@@ -108,11 +109,13 @@ if __name__ == '__main__':
    
     if type=="all": type="net"
  
-    elif type=="aws_vpc" or type=="vpc": type="aws_vpc"     
+    elif type=="aws_vpc" or type=="vpc": type="aws_vpc" 
+    elif type=="subnet": type="aws_subnet"    
     elif type=="config": type="aws_config_config_rule"
+    elif type=="eks": type="aws_eks_cluster"
     elif type=="cw" or type=="cloudwatch" or type=="logs": type="aws_cloudwatch_log_group"
 
-### -- now er are calling ----
+### -- now we are calling ----
 
     if type=="s3":
         com="rm -f s3-*.tf s3.tf tfplan *s3*.out"
@@ -126,6 +129,8 @@ if __name__ == '__main__':
             clfn,descfn,topkey,key,filterid=resources.resource_data(i,id)
             #print("calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
             common.getresource(i,id,clfn,descfn,topkey,key,filterid)
+        
+        ## special case for route tables:
         clfn="ec2"
         descfn="describe_route_tables"
         topkey="RouteTables"
@@ -163,10 +168,11 @@ if __name__ == '__main__':
 
         #common.get_aws_iam_role_policy(i,id,clfn,descfn,topkey,key,filterid) 
     
+    ## calling by direct terraform type aws_xxxxx
     else:  
         clfn,descfn,topkey,key,filterid=resources.resource_data(type,id)  
         if clfn is None:
-            print("error clfn in None with type="+type)
+            print("error clfn is None with type="+type)
             exit() 
         
         try:
@@ -188,7 +194,7 @@ if __name__ == '__main__':
     print("Known Dependancies ----------------------")
 
     ## lattice
-    for j in globals.processed:
+    for j in globals.rproc.keys():
         if "aws_vpclattice_service_network" in j:
             
             id=str(j.split(".")[1])
@@ -199,9 +205,10 @@ if __name__ == '__main__':
             #../../scripts/get-vpclattice-service-network-vpc-association.sh $cname
             ###../../scripts/get-vpclattice-access-log-subscription.sh $cname
             #../../scripts/get-vpclattice-services.sh $cname
-            for type in ["aws_vpclattice_service"]:
+            
+            #for type in ["aws_vpclattice_service"]:   
+            for type in ["aws_vpclattice_service","aws_vpclattice_service_network_vpc_association"]:
                 print(type)
-            #for type in ["aws_vpclattice_service","aws_vpclattice_service_network_vpc_association"]:
                 clfn,descfn,topkey,key,filterid=resources.resource_data(type,id)
                 try:
                     get_fn = getattr(common, "get_"+type)
@@ -217,7 +224,7 @@ if __name__ == '__main__':
 ## role attachments
 ## not needed - managed_policy_arns in aws_iam_role handles it    
 #    i="aws_iam_role_policy_attachment"
-#    for j in globals.processed:
+#    for j in globals.rproc.keys():
 #        if "aws_iam_role" in j:
 #            id=str(j.split(".")[1])
 #            try:
@@ -235,15 +242,26 @@ if __name__ == '__main__':
 
     
     print("Detected Dependancies -----------------------")
+    for ti in globals.rproc.keys():
+        if not globals.rproc[ti]:
+            print("Found dependancy" )
+            i=ti.split(".")[0]
+            id=ti.split(".")[1]
+            print("DD="+str(i)+" "+str(id))
+            clfn,descfn,topkey,key,filterid=resources.resource_data(i,id)
+            print("DD calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
+
+
     
     print(str(globals.dependancies))
     print("Processed --------------------")
-    for i in globals.processed:
+    
+    for i in globals.rproc.keys():
         print(str(i))
 
     for ti in globals.dependancies:
         if "arn:aws:iam::aws:policy" not in ti: 
-            if str(ti) not in str(globals.processed):
+            if str(ti) not in globals.rproc:
                 print("DD="+str(ti))
                 i=ti.split(".")[0]
                 id=ti.split(".")[1]
@@ -272,12 +290,14 @@ if __name__ == '__main__':
    
     if mg is True:
         with open("processed.txt","a") as f:
-            for i in globals.processed:
+            for i in globals.rproc.keys():
+                print(str(i))
                 f.write(i+"\n")
 
     else:
         with open("processed.txt","w") as f:
-            for i in globals.processed:
+            for i in globals.rproc.keys():
+                print(str(i))
                 f.write(i+"\n")
 
 
@@ -288,9 +308,8 @@ if __name__ == '__main__':
         print("Types -----------------")
         print(globals.types)
 
-        #print(globals.processed)
         print("Processed ---------------")
-        for i in globals.processed:
+        for i in globals.rproc.keys():
             print(i)
 
     exit(0)

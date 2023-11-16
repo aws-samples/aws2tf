@@ -54,16 +54,6 @@ def tfplan():
    splitf("resources.out")
 
    print("fix tf files.....") 
-   
-   
-# change this so don't reply on type - get it from file name
-
-   #x=glob.glob("aws_*_import.tf")
-   #for fil in x:
-   #      tf=fil.split('__')[0]
-   #      #print("tf="+tf)
-   #      if tf not in globals.type:
-   #         globals.types=globals.types+[tf]
         
    x=glob.glob("aws_*__*.out")
    for fil in x:
@@ -73,6 +63,15 @@ def tfplan():
          if type not in globals.types:
             globals.types=globals.types+[type]             
          fixtf.fixtf(type,tf)
+
+
+
+   ## Derived dependancies here:
+   # move files
+   # DD's
+   # and plan
+   # and vaidate
+      
 
    
    com="terraform fmt"
@@ -88,6 +87,8 @@ def tfplan():
       print(str(rout.stdout.decode().rstrip()))
       print("Validation after fix failed - exiting")
       exit()
+
+
    else: 
       print("Valid Configuration.")
       if globals.validate: exit()
@@ -206,27 +207,27 @@ def check_python_version():
 
 
 def aws_tf(region):
-   
-   with open("aws.tf", 'w') as f3: 
-      f3.write('terraform {\n')
-      f3.write('  required_version = "> 1.5.6"\n')
-      f3.write('  required_providers {\n')
-      f3.write('    aws = {\n')
-      f3.write('      source  = "hashicorp/aws"\n')
-      f3.write('      version = "> 5.16"\n')
-      f3.write('    }\n')
-      f3.write('  }\n')
-      f3.write('}\n')
-      f3.write('provider "aws" {\n')
-      f3.write('  region                   = "' + region +'"\n')
-      f3.write('  shared_credentials_files = ["~/.aws/credentials"]\n')
-      #f3.write('  profile                  = var.profile\n')
-      f3.write('}\n')
-      f3.write('data "aws_region" "current" {}\n')
-      f3.write('data "aws_caller_identity" "current" {}\n')
-      f3.write('data "aws_availability_zones" "az" {\n')
-      f3.write('state = "available"\n')
-      f3.write('}\n')
+   if not os.path.isfile("aws.tf"):
+      with open("aws.tf", 'w') as f3: 
+         f3.write('terraform {\n')
+         f3.write('  required_version = "> 1.5.6"\n')
+         f3.write('  required_providers {\n')
+         f3.write('    aws = {\n')
+         f3.write('      source  = "hashicorp/aws"\n')
+         f3.write('      version = "> 5.16"\n')
+         f3.write('    }\n')
+         f3.write('  }\n')
+         f3.write('}\n')
+         f3.write('provider "aws" {\n')
+         f3.write('  region                   = "' + region +'"\n')
+         f3.write('  shared_credentials_files = ["~/.aws/credentials"]\n')
+         #f3.write('  profile                  = var.profile\n')
+         f3.write('}\n')
+         f3.write('data "aws_region" "current" {}\n')
+         f3.write('data "aws_caller_identity" "current" {}\n')
+         f3.write('data "aws_availability_zones" "az" {\n')
+         f3.write('state = "available"\n')
+         f3.write('}\n')
 
 
 # split resources.out
@@ -295,7 +296,9 @@ def write_import(type,theid,tfid):
       f.write('  to = ' +type + '.' + tfid + '\n')
       f.write('  id = "'+ theid + '"\n')
       f.write('}\n')
-   globals.processed=globals.processed+[type+"."+tfid]  
+
+   pkey=type+"."+tfid 
+   globals.rproc[pkey]=True
    return
 
 
@@ -315,7 +318,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
    if id is not None:
       pt=type+"."+id
       fn=type+"_"+id+"_import.tf"
-      if pt in str(globals.processed):
+      if pt in globals.rproc:
          print("Found "+pt+"in processed skipping ...") 
          return 
    
@@ -371,7 +374,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                
                theid=item[key]
                pt=type+"."+theid
-               if pt not in str(globals.processed):
+               if pt not in globals.rproc:
                   write_import(type,theid,None)
                else:
                   print("Found "+pt+"in processed skipping ...") 
@@ -441,7 +444,7 @@ def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
    if id is not None:
       pt=type+"."+id
       fn=type+"_"+id+"_import.tf"
-      if pt in str(globals.processed):
+      if pt in globals.rproc:
          print("Found "+pt+"in processed skipping ...") 
          return 
    
@@ -463,7 +466,7 @@ def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
                try:
                   #print(str(item['Associations'][r]['SubnetId']))
                   subid=str(item['Associations'][r]['SubnetId'])
-                  if subid in str(globals.processed):
+                  if subid in globals.rproc:
                      #print(subid+"in processed...."+fn)
                      theid=subid+"/"+rtid
                      write_import(type,theid,None)        
@@ -482,7 +485,7 @@ def get_aws_iam_role_policy(type,id,clfn,descfn,topkey,key,filterid):
    response=[]
    rn=id
    if id is None:
-      for j in globals.processed:
+      for j in globals.rproc.keys():
          if "aws_iam_role" in j:
             response=[]
             dotc=j.count('.')
@@ -692,5 +695,42 @@ def get_aws_vpclattice_service_network_vpc_association(type,id,clfn,descfn,topke
             write_import(type,theid,None) 
 
    return
+
+# as list_clusters is awkward
+def get_aws_eks_cluster(type,id,clfn,descfn,topkey,key,filterid):
+   if globals.debug: print("--> In get_aws_vpclattice_service_network_vpc_association doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
+   client = boto3.client(clfn) 
+   if globals.debug: print("--client")
+   response=[]
+   
+   if globals.debug: print("Paginator")
+
+   try:
+      paginator = client.get_paginator(descfn)
+      for page in paginator.paginate():
+         response.extend(page[topkey])
+   except botocore.exceptions.OperationNotPageableError as err:
+         #print(f"{err=}")
+         getfn = getattr(client, descfn)
+         response1 = getfn(serviceNetworkIdentifier=id)
+         response=response1[topkey]
+   except Exception as e:
+      print(f"{e=}")
+      print("unexpected error in paginate")
+      exit()
+      
+
+   if response == []: 
+      print("empty response returning") 
+      return   
+   for j in response: 
+            retid=j # no key
+            theid=retid
+            write_import(type,theid,None) 
+
+   return
+
+
 
 

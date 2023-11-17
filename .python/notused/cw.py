@@ -17,7 +17,7 @@ def cwlogs(type,id,botokey,jsonid,filterid):
         print("calling with filter id="+filterid + " and id=" + id)
         response=dfn(logGroupNamePrefix=id) 
  
-    fn=type+"_import.tf"
+    fn="import__"+type+".tf"
     with open(fn, "w") as f:
             for item in response[botokey]:
                 theid=item[jsonid]

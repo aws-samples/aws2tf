@@ -1,0 +1,322 @@
+# __generated__ by Terraform
+# Please review these resources and move them into your main configuration files.
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-05bb9871246d7348c" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "us-west-2c"
+  availability_zone_id                           = "usw2-az3"
+  cidr_block                                     = "192.168.64.0/19"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/SubnetPublicUSWEST2C"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+    "kubernetes.io/role/elb"                      = "1"
+  }
+  tags_all = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/SubnetPublicUSWEST2C"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+    "kubernetes.io/role/elb"                      = "1"
+  }
+  vpc_id = "vpc-031846ac5e4b45f46"
+}
+
+# __generated__ by Terraform from "sg-0872fd5fdfe1909b5"
+resource "aws_security_group" "sg-0872fd5fdfe1909b5" {
+  description = "Communication between the control plane and worker nodegroups"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress                = []
+  name                   = "eksctl-multitenant-chatapp-cluster-ControlPlaneSecurityGroup-USIOTTHLHBFT"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/ControlPlaneSecurityGroup"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+  }
+  tags_all = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/ControlPlaneSecurityGroup"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+  }
+  vpc_id = "vpc-031846ac5e4b45f46"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-084ba8635bc304b86" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "us-west-2a"
+  availability_zone_id                           = "usw2-az1"
+  cidr_block                                     = "192.168.96.0/19"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/SubnetPrivateUSWEST2A"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+    "kubernetes.io/role/internal-elb"             = "1"
+  }
+  tags_all = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/SubnetPrivateUSWEST2A"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+    "kubernetes.io/role/internal-elb"             = "1"
+  }
+  vpc_id = "vpc-031846ac5e4b45f46"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-00a066c0d07dd3a43" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "us-west-2a"
+  availability_zone_id                           = "usw2-az1"
+  cidr_block                                     = "192.168.0.0/19"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/SubnetPublicUSWEST2A"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+    "kubernetes.io/role/elb"                      = "1"
+  }
+  tags_all = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/SubnetPublicUSWEST2A"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+    "kubernetes.io/role/elb"                      = "1"
+  }
+  vpc_id = "vpc-031846ac5e4b45f46"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-02edd5b52381eef81" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "us-west-2b"
+  availability_zone_id                           = "usw2-az2"
+  cidr_block                                     = "192.168.32.0/19"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = true
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/SubnetPublicUSWEST2B"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+    "kubernetes.io/role/elb"                      = "1"
+  }
+  tags_all = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/SubnetPublicUSWEST2B"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+    "kubernetes.io/role/elb"                      = "1"
+  }
+  vpc_id = "vpc-031846ac5e4b45f46"
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0e2fdf1a250dde006" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "us-west-2c"
+  availability_zone_id                           = "usw2-az3"
+  cidr_block                                     = "192.168.160.0/19"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/SubnetPrivateUSWEST2C"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+    "kubernetes.io/role/internal-elb"             = "1"
+  }
+  tags_all = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/SubnetPrivateUSWEST2C"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+    "kubernetes.io/role/internal-elb"             = "1"
+  }
+  vpc_id = "vpc-031846ac5e4b45f46"
+}
+
+# __generated__ by Terraform from "multitenant-chatapp"
+resource "aws_eks_cluster" "multitenant-chatapp" {
+  enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+  name                      = "multitenant-chatapp"
+  role_arn                  = "arn:aws:iam::566972129213:role/eksctl-multitenant-chatapp-cluster-ServiceRole-mQPEgv7b17s9"
+  tags = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/ControlPlane"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+  }
+  tags_all = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/ControlPlane"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+  }
+  version = "1.27"
+  encryption_config {
+    resources = ["secrets"]
+    provider {
+      key_arn = "arn:aws:kms:us-west-2:566972129213:key/807ce160-6c16-499c-807f-5870808d509a"
+    }
+  }
+  kubernetes_network_config {
+    ip_family         = "ipv4"
+    service_ipv4_cidr = "10.100.0.0/16"
+  }
+  vpc_config {
+    endpoint_private_access = false
+    endpoint_public_access  = true
+    public_access_cidrs     = ["0.0.0.0/0"]
+    security_group_ids      = ["sg-0872fd5fdfe1909b5"]
+    subnet_ids              = ["subnet-00a066c0d07dd3a43", "subnet-02edd5b52381eef81", "subnet-05bb9871246d7348c", "subnet-084ba8635bc304b86", "subnet-0a0cd4e5262b785fd", "subnet-0e2fdf1a250dde006"]
+  }
+}
+
+# __generated__ by Terraform
+resource "aws_subnet" "subnet-0a0cd4e5262b785fd" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "us-west-2b"
+  availability_zone_id                           = "usw2-az2"
+  cidr_block                                     = "192.168.128.0/19"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_lni_at_device_index                     = 0
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_customer_owned_ip_on_launch                = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
+  tags = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/SubnetPrivateUSWEST2B"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+    "kubernetes.io/role/internal-elb"             = "1"
+  }
+  tags_all = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/SubnetPrivateUSWEST2B"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+    "kubernetes.io/role/internal-elb"             = "1"
+  }
+  vpc_id = "vpc-031846ac5e4b45f46"
+}
+
+# __generated__ by Terraform
+resource "aws_vpc" "vpc-031846ac5e4b45f46" {
+  assign_generated_ipv6_cidr_block     = false
+  cidr_block                           = "192.168.0.0/16"
+  enable_dns_hostnames                 = true
+  enable_dns_support                   = true
+  enable_network_address_usage_metrics = false
+  instance_tenancy                     = "default"
+  ipv4_ipam_pool_id                    = null
+  ipv4_netmask_length                  = null
+  ipv6_cidr_block                      = null
+  ipv6_cidr_block_network_border_group = null
+  ipv6_ipam_pool_id                    = null
+  ipv6_netmask_length                  = 0
+  tags = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/VPC"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+  }
+  tags_all = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/VPC"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+  }
+}

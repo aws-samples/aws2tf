@@ -7,6 +7,32 @@ import common
 import resources
 import globals
 
+
+def call_resource(type, id):
+    rr=False
+    clfn, descfn, topkey, key, filterid = resources.resource_data(type, id)
+    if clfn is None:
+        print("error clfn is None with type="+type)
+        exit()
+    try:
+        print("calling generic getresource with type="+type+" id="+str(id)+"   clfn="+clfn +
+              " descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
+        rr=common.getresource(type, id, clfn, descfn, topkey, key, filterid)
+    except:
+        pass
+    if not rr:
+        try:
+            print("calling specific common.get_"+type+" with type="+type+" id="+str(id)+"   clfn=" +
+                    clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
+            getfn = getattr(common, "get_"+type)
+            getfn(type, id, clfn, descfn, topkey, key, filterid)
+        except Exception as e:
+                # By this way we can know about the type of error occurring
+                print(f"{e=}")
+                exit()
+
+
+
 if __name__ == '__main__':
 
     common.check_python_version()
@@ -79,7 +105,7 @@ if __name__ == '__main__':
 
     if mg is False:
         print("No merge - removing terraform.tfstate* and aws_*.tf *.out")
-        com = "rm -f terraform.tfstate* aws_*.tf s3-*.tf tfplan *.out *import.tf imported/* main.tf"
+        com = "rm -f terraform.tfstate* aws_*.tf s3-*.tf tfplan *.out import*.tf imported/* main.tf"
         rout = common.rc(com)
 
     id = args.id
@@ -182,25 +208,26 @@ if __name__ == '__main__':
 
     # calling by direct terraform type aws_xxxxx
     else:
-        clfn, descfn, topkey, key, filterid = resources.resource_data(type, id)
-        if clfn is None:
-            print("error clfn is None with type="+type)
-            exit()
+        call_resource(type,id)
+        #clfn, descfn, topkey, key, filterid = resources.resource_data(type, id)
+        #if clfn is None:
+        #    print("error clfn is None with type="+type)
+        #    exit()
 
-        try:
-            print("Try calling common.get_"+type)
-            get_fn = getattr(common, "get_"+type)
-            get_fn(type, id, clfn, descfn, topkey, key, filterid)
-        except:
-            pass
+        #try:
+        #    print("Try calling common.get_"+type)
+        #    get_fn = getattr(common, "get_"+type)
+        #    get_fn(type, id, clfn, descfn, topkey, key, filterid)
+        #except:
+        #    pass
 
-        if clfn is not None:
+        #if clfn is not None:
             # print("calling getresource with type="+type+" id="+str(id)+" -- clfn="+clfn + " descfn="+descfn+  "topkey="+topkey + "key="+key +"filterid="+filterid)
-            common.getresource(type, id, clfn, descfn, topkey, key, filterid)
-        else:
-            print("Error on calling resources with type=" +
-                  type+" id="+str(id) + "  exiting...")
-            exit()
+        #    common.getresource(type, id, clfn, descfn, topkey, key, filterid)
+        #else:
+        #    print("Error on calling resources with type=" +
+        #          type+" id="+str(id) + "  exiting...")
+        #    exit()
 
     # loop through globals.type and call tfplan(type)
 
@@ -284,26 +311,38 @@ if __name__ == '__main__':
                     print("DD skip found "+id+" in globals.policyarns")
 
     common.tfplan1()
-
     common.tfplan2()
+
+    for i in globals.rproc.keys():
+        print(str(i)+ " : "+str(globals.rproc[i]))
+
+
     print("Detected Dependancies -----------------------")
-    for ti in globals.rproc.keys():
-        if not globals.rproc[ti]:
-            print("Found dependancy")
-            i = ti.split(".")[0]
-            id = ti.split(".")[1]
-            print("DD="+str(i)+" "+str(id))
-            clfn, descfn, topkey, key, filterid = resources.resource_data(
-                i, id)
-            print("DD calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn +
-                  " descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
+    detdep=True
+    while detdep:
+        for ti in globals.rproc.keys():
+            if not globals.rproc[ti]:
+                print("Found dependancy")
+                i = ti.split(".")[0]
+                id = ti.split(".")[1]
+                print("DD calling getresource with type="+i+" id="+str(id))
+                call_resource(i, id)
+        detdep=False
+# go again plan and split / fix
+        com = "rm -f aws_*.tf *.out"
+        rout = common.rc(com)
+        common.tfplan1()
+        common.tfplan2()
+        for ti in globals.rproc.keys():
+            print(str(ti)+":"+str(globals.rproc[ti]))
+
+        for ti in globals.rproc.keys():
+            if not globals.rproc[ti]:
+                detdep=True
+
 
     print("Processed --------------------")
 
-    for i in globals.rproc.keys():
-        print(str(i))
-
-    exit()
     common.tfplan3()
 
     common.wrapup()
@@ -334,23 +373,4 @@ if __name__ == '__main__':
     exit(0)
 
 
-def call_resource(type, id):
-    clfn, descfn, topkey, key, filterid = resources.resource_data(type, id)
-    if clfn is None:
-        print("error clfn is None with type="+type)
-        exit()
-    try:
-        print("calling generic getresource with type="+i+" id="+str(id)+"   clfn="+clfn +
-              " descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
-        common.getresource(i, id, clfn, descfn, topkey, key, filterid)
-    except:
-        pass
-    try:
 
-        print("DD calling specific common.get_"+i+" with type="+i+" id="+str(id)+"   clfn=" +
-              clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
-        getfn = getattr(common, "get_"+i)
-        getfn(i, id, clfn, descfn, topkey, key, filterid)
-    except Exception as e:
-        # By this way we can know about the type of error occurring
-        print(f"{e=}")

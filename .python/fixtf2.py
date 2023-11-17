@@ -25,6 +25,8 @@ def aws_subnet(t1,tt1,tt2,flag1,flag2):
     if tt1 == "vpc_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
+        add_dendendancy("aws_vpc",tt2)
+        
 
     if tt1 == "enable_lni_at_device_index":
         if tt2 == "0": skip=1
@@ -45,6 +47,8 @@ def  aws_security_group(t1,tt1,tt2,flag1,flag2):
     if tt1 == "vpc_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
+        add_dendendancy("aws_vpc",tt2)
+
     if tt1 == "name":
         tt2=tt2.strip('\"')
         if len(tt2) > 0: flag1=True
@@ -63,6 +67,7 @@ def  aws_route_table(t1,tt1,tt2,flag1,flag2):
     if tt1 == "vpc_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
+        add_dendendancy("aws_vpc",tt2)
     if "cidr_block" in tt1:
         tt2=tt2.strip('\"')
         if tt2 == "": t1=tt1 + " = null\n"
@@ -74,6 +79,7 @@ def  aws_internet_gateway(t1,tt1,tt2,flag1,flag2):
     if tt1 == "vpc_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
+        add_dendendancy("aws_vpc",tt2)
 
     return skip,t1,flag1,flag2
 
@@ -85,6 +91,7 @@ def  aws_nat_gateway(t1,tt1,tt2,flag1,flag2):
     if tt1 == "subnet_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
+        add_dendendancy("aws_subnet",tt2)
 
     return skip,t1,flag1,flag2 
 
@@ -137,6 +144,7 @@ def aws_vpc_endpoint(t1,tt1,tt2,flag1,flag2):
     if tt1 == "vpc_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
+        add_dendendancy("aws_vpc",tt2)
 
     if tt1 == "subnet_ids":  t1,skip = deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
     if tt1 == "security_group_ids": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
@@ -154,9 +162,11 @@ def aws_route_table_association(t1,tt1,tt2,flag1,flag2):
     if tt1 == "subnet_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
+        add_dendendancy("aws_subnet",tt2)
     if tt1 == "route_table_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_route_table." + tt2 + ".id\n"
+        add_dendendancy("aws_route_table",tt2)
     
     return skip,t1,flag1,flag2
 
@@ -225,6 +235,7 @@ def aws_iam_role_policy(t1,tt1,tt2,flag1,flag2):
     if tt1 == "role_name":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
+        add_dendendancy("aws_iam_role",tt2)
   
     return skip,t1,flag1,flag2
 
@@ -245,6 +256,7 @@ def aws_iam_role_policy_attachment(t1,tt1,tt2,flag1,flag2):
     if tt1 == "role":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
+        add_dendendancy("aws_iam_role",tt2)
     # skip as using policy arns minus account number etc..
     #if tt1 == "policy_arn": 
     #    tt2=tt2.strip('\"')
@@ -276,6 +288,7 @@ def aws_vpclattice_service_network_vpc_association(t1,tt1,tt2,flag1,flag2):
     if tt1 == "service_network_identifier":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpclattice_service_network." + tt2 + ".id\n"
+        add_dendendancy("aws_vpclattice_service_network",tt2)
     return skip,t1,flag1,flag2
 
 def aws_eks_cluster(t1,tt1,tt2,flag1,flag2):

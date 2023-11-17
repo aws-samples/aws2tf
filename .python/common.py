@@ -32,7 +32,7 @@ def tfplan1():
                try:
                   i=mess.split('(')[2].split(')')[0]
                   print("Removing "+i+" files - plan errors see plan1.json")
-                  com="rm -f s3-*"+ i + "s3-*_import.tf aws_s3_*__b-"+ i +".tf main.tf"
+                  com="rm -f s3-*"+ i + "import__*s3-*.tf aws_s3_*__b-"+ i +".tf main.tf"
                   rout=rc(com)
                   globals.plan2=True
                except:
@@ -180,7 +180,7 @@ def wrapup():
       print(str(rout.stdout.decode().rstrip()))
    else: 
       print("No changes in plan")
-      com="mv *_import.tf *.out *.json imported"
+      com="mv import__*.tf *.out *.json imported"
       rout=rc(com)
 
 
@@ -301,7 +301,7 @@ def splitf(file):
 def write_import(type,theid,tfid):
    if tfid is None:
       tfid=theid.replace("/","__").replace(".","__").replace(":","__")
-   fn=type+"__"+tfid+"__import.tf"
+   fn="import__"+type+"__"+tfid+".tf"
    with open(fn, "a") as f:
       f.write('import {\n')
       f.write('  to = ' +type + '.' + tfid + '\n')
@@ -318,20 +318,22 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
    for j in globals.specials:
       if type == j: 
          print(type + " in specials list returning ..")
-         return
+         return False
    if globals.debug: print("--> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
    if type in str(globals.types): 
       print("Found "+type+"in types skipping ...")
-      return
-   fn=type+"_import.tf"
+      return True
+   
+   fn="import__"+type+".tf"
    
    if id is not None:
       pt=type+"."+id
-      fn=type+"_"+id+"_import.tf"
+      fn="import__"+type+"_"+id+".tf"
       if pt in globals.rproc:
-         print("Found "+pt+"in processed skipping ...") 
-         return 
+         if globals.rproc[pt] is True:
+            print("Found "+pt+" in processed skipping ...") 
+            return True
    
    if globals.debug: print("pre-response")
    response = []
@@ -359,8 +361,8 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
 
    rl=len(response)
    if rl==0:
-      print("zero response length for type "+type + " returning ..")
-      return
+      print("** zero response length for type "+type + " returning .. True")
+      return True
 
    if globals.debug:
       print("response length="+str(len(response)))
@@ -388,14 +390,15 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                if pt not in globals.rproc:
                   write_import(type,theid,None)
                else:
-                  print("Found "+pt+"in processed skipping ...") 
-                  continue
+                  if globals.rproc[pt] is True:
+                     print("Found "+pt+" in processed skipping ...") 
+                     continue
             else:
                if "." not in filterid:
-                  print("***item=" + str(item) + " id=" + id + " filterid=" + filterid+" filtered value: "+str(item[filterid]))
+                  #print("***item=" + str(item) + " id=" + id + " filterid=" + filterid+" filtered value: "+str(item[filterid]))
 
                   if id == str(item[filterid]):
-                     print("--"+str(item))
+                     #print("--"+str(item))
                      theid=item[key]
                      write_import(type,theid,None)
                else:
@@ -423,7 +426,9 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                         print("filterid="+filterid)
                         print("----------------------------")
                         pass
-                  
+   
+   
+   return True               
   
     #tfplan(type)
 
@@ -450,14 +455,15 @@ def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
    if type in str(globals.types): 
       print("Found "+type+"in types skipping ...")
       return
-   fn=type+"_import.tf"
+   fn="import__"+type+".tf"
    
    if id is not None:
       pt=type+"."+id
-      fn=type+"_"+id+"_import.tf"
+      fn="import__"+type+"_"+id+".tf"
       if pt in globals.rproc:
-         print("Found "+pt+"in processed skipping ...") 
-         return 
+         if globals.rproc[pt] is True:
+            print("Found "+pt+"in processed skipping ...") 
+            return 
    
    
    response = []

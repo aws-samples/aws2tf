@@ -1,0 +1,34 @@
+resource "aws_security_group" "sg-0872fd5fdfe1909b5" {
+  description = "Communication between the control plane and worker nodegroups"
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = ""
+    from_port        = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "-1"
+    security_groups  = []
+    self             = false
+    to_port          = 0
+  }]
+  ingress                = []
+  name                   = "eksctl-multitenant-chatapp-cluster-ControlPlaneSecurityGroup-USIOTTHLHBFT"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/ControlPlaneSecurityGroup"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+  }
+  tags_all = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/ControlPlaneSecurityGroup"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+  }
+  vpc_id = "vpc-031846ac5e4b45f46"
+}
+

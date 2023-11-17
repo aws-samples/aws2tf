@@ -31,7 +31,7 @@ def tfplan(type):
       for i in td.split("\n"):
          if i.strip() != "":
             print("Removing "+i+" files - Access problems on bucket")
-            com="rm -f s3-*"+ i + "*_import.tf aws_s3_*__b-"+ i +".tf"
+            com="rm -f s3-*"+ i + "import__*.tf aws_s3_*__b-"+ i +".tf"
             #print("comm = "+ com)
             rout=rc(com)
       # redo plan

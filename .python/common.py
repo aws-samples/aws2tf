@@ -8,7 +8,7 @@ import glob
 import botocore
 
 
-def tfplan():
+def tfplan1():
    print("Plan 1 ... ")
    rf="resources.out"
    com="terraform plan -generate-config-out="+ rf + " -json | jq . > plan1.json"
@@ -34,11 +34,11 @@ def tfplan():
                   print("Removing "+i+" files - plan errors see plan1.json")
                   com="rm -f s3-*"+ i + "s3-*_import.tf aws_s3_*__b-"+ i +".tf main.tf"
                   rout=rc(com)
-                  plan2=True
+                  globals.plan2=True
                except:
                   if globals.debug is True:
                      print(mess.strip())
-                  plan2=True
+                  globals.plan2=True
          except:
                print("Error - no error message, check plan1.json")
                #continue
@@ -46,6 +46,13 @@ def tfplan():
 
    #print("Plan 1 complete -- resources.out generated")
 
+   if not os.path.isfile("resources.out"):
+         print("could not find expected resources.out file after Plan 1 - exiting")
+         exit()  
+   return
+
+def tfplan2():
+   print("Plan 2 ... ")
    if not os.path.isfile("resources.out"):
          print("could not find expected resources.out file after Plan 1 - exiting")
          exit()
@@ -66,14 +73,18 @@ def tfplan():
 
 
 
+
+
+
+def tfplan3():
+   print("Plan 3 ... ")
+   rf="resources.out"
    ## Derived dependancies here:
    # move files
    # DD's
    # and plan
    # and vaidate
-      
-
-   
+         
    com="terraform fmt"
    rout=rc(com)
  
@@ -94,7 +105,7 @@ def tfplan():
       if globals.validate: exit()
 
 
-   if plan2:
+   if globals.plan2:
       
       print("Plan 2 ... ")
       # redo plan

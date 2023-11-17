@@ -161,22 +161,7 @@ def aws_route_table_association(t1,tt1,tt2,flag1,flag2):
     return skip,t1,flag1,flag2
 
 
-def deref_array(t1,tt1,tt2,ttft,prefix,skip):
-    tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
-    cc=tt2.count(',')
-    subs=""
-    #if globals.debug: 
-    #print("-->> " + tt1 + ": "  + tt2 + " count=" + str(cc))
-    if cc > 0:
-        for i in range(cc+1):
-            subn=tt2.split(',')[i]
-            subs=subs + ttft + "." + subn + ".id,"
-            
-    if cc == 0 and prefix in tt2: subs=subs + ttft + "." + tt2 + ".id,"
-             
-    t1=tt1 + " = [" + subs + "]\n"
-    t1=t1.replace(',]',']')
-    return t1,skip
+
 
 def aws_cloudwatch_log_group(t1,tt1,tt2,flag1,flag2):
     skip=0
@@ -249,8 +234,7 @@ def aws_iam_policy(t1,tt1,tt2,flag1,flag2):
         tt2=tt2.strip('\"')
         if len(tt2) > 0: flag1=True
     if tt1 == "name_prefix" and flag1 is True: skip=1
-    if tt1 == "policy":
-        t1=globals_replace(t1,tt1,tt2)
+    if tt1 == "policy": t1=globals_replace(t1,tt1,tt2)
   
     return skip,t1,flag1,flag2
 
@@ -266,8 +250,7 @@ def aws_iam_role_policy_attachment(t1,tt1,tt2,flag1,flag2):
     #    tt2=tt2.strip('\"')
     #    tt2=str(tt2).split("/")[-1]
     #    t1=tt1 + " = aws_iam_policy." + str(tt2) + ".arn\n"
-    if tt1 == "policy_arn": 
-        t1=globals_replace(t1,tt1,tt2)
+    if tt1 == "policy_arn": t1=globals_replace(t1,tt1,tt2)
 
     return skip,t1,flag1,flag2
 
@@ -288,9 +271,7 @@ def aws_vpclattice_service_network_vpc_association(t1,tt1,tt2,flag1,flag2):
     if tt1 == "vpc_identifier":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
-        pkey=aws_vpc+"."+tt2 
-        globals.rproc[pkey]=False # set to false to pick up in dependancies
-
+        add_dendendancy("aws_vpc",tt2)
 
     if tt1 == "service_network_identifier":
         tt2=tt2.strip('\"')
@@ -299,6 +280,8 @@ def aws_vpclattice_service_network_vpc_association(t1,tt1,tt2,flag1,flag2):
 
 def aws_eks_cluster(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "subnet_ids":  t1,skip = deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
+    if tt1 == "security_group_ids": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
     return skip,t1,flag1,flag2
 
 
@@ -332,3 +315,35 @@ def globals_replace(t1,tt1,tt2):
         tt2=tt2.replace('"','')
         t1 = tt1+' = [format("'+tt2+'"'+ends+')]\n'
     return t1
+
+
+def deref_array(t1,tt1,tt2,ttft,prefix,skip):
+    tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
+    cc=tt2.count(',')
+    subs=""
+    #if globals.debug: 
+    #print("-->> " + tt1 + ": "  + tt2 + " count=" + str(cc))
+    if cc > 0:
+        for i in range(cc+1):
+            subn=tt2.split(',')[i]
+            subs=subs + ttft + "." + subn + ".id,"
+            add_dendendancy(ttft,subn)
+
+            
+    if cc == 0 and prefix in tt2: 
+        subs=subs + ttft + "." + tt2 + ".id,"
+        add_dendendancy(ttft,tt2)
+             
+    t1=tt1 + " = [" + subs + "]\n"
+    t1=t1.replace(',]',']')
+    return t1,skip
+
+
+
+def add_dendendancy(type,id):
+    # check if we alredy have it
+    pkey=type+"."+id
+    if pkey not in globals.rproc:
+        print("add_dendendancy: " + pkey)
+        globals.rproc[pkey]=False
+    return

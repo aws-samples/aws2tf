@@ -715,7 +715,7 @@ def add_known_dependancy(type,id):
     pkey=type+"."+id
     if pkey not in globals.rdep:
         print("add_known_dependancy: " + pkey)
-        globals.rproc[pkey]=False
+        globals.rdep[pkey]=False
     return
 
 def call_boto3(clfn,descfn,topkey):

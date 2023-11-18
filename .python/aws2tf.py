@@ -209,27 +209,7 @@ if __name__ == '__main__':
     # calling by direct terraform type aws_xxxxx
     else:
         call_resource(type,id)
-        #clfn, descfn, topkey, key, filterid = resources.resource_data(type, id)
-        #if clfn is None:
-        #    print("error clfn is None with type="+type)
-        #    exit()
 
-        #try:
-        #    print("Try calling common.get_"+type)
-        #    get_fn = getattr(common, "get_"+type)
-        #    get_fn(type, id, clfn, descfn, topkey, key, filterid)
-        #except:
-        #    pass
-
-        #if clfn is not None:
-            # print("calling getresource with type="+type+" id="+str(id)+" -- clfn="+clfn + " descfn="+descfn+  "topkey="+topkey + "key="+key +"filterid="+filterid)
-        #    common.getresource(type, id, clfn, descfn, topkey, key, filterid)
-        #else:
-        #    print("Error on calling resources with type=" +
-        #          type+" id="+str(id) + "  exiting...")
-        #    exit()
-
-    # loop through globals.type and call tfplan(type)
 
     print("Known Dependancies ----------------------")
 
@@ -261,6 +241,15 @@ if __name__ == '__main__':
                     print(f"{e=}")
                     pass
 
+## Known dependancies section
+    for ti in globals.rdep.keys():
+        if not globals.rdep[ti]:
+            i = ti.split(".")[0]
+            id = ti.split(".")[1]
+            print("KD calling getresource with type="+i+" id="+str(id))
+            call_resource(i, id)
+
+
 
 # Known dependancies section
 # role attachments
@@ -285,7 +274,7 @@ if __name__ == '__main__':
     for ti in globals.dependancies:
         if "arn:aws:iam::aws:policy" not in ti:
             if str(ti) not in globals.rproc:
-                print("DD="+str(ti))
+                print("KD="+str(ti))
                 i = ti.split(".")[0]
                 id = ti.split(".")[1]
                 if id not in str(globals.policyarns):
@@ -322,7 +311,6 @@ if __name__ == '__main__':
     while detdep:
         for ti in globals.rproc.keys():
             if not globals.rproc[ti]:
-                print("Found dependancy")
                 i = ti.split(".")[0]
                 id = ti.split(".")[1]
                 print("DD calling getresource with type="+i+" id="+str(id))

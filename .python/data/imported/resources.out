@@ -1,0 +1,41 @@
+# __generated__ by Terraform
+# Please review these resources and move them into your main configuration files.
+
+# __generated__ by Terraform from "multitenant-chatapp"
+resource "aws_eks_cluster" "multitenant-chatapp" {
+  enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+  name                      = "multitenant-chatapp"
+  role_arn                  = "arn:aws:iam::566972129213:role/eksctl-multitenant-chatapp-cluster-ServiceRole-mQPEgv7b17s9"
+  tags = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/ControlPlane"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+  }
+  tags_all = {
+    Name                                          = "eksctl-multitenant-chatapp-cluster/ControlPlane"
+    "alpha.eksctl.io/cluster-name"                = "multitenant-chatapp"
+    "alpha.eksctl.io/cluster-oidc-enabled"        = "true"
+    "alpha.eksctl.io/eksctl-version"              = "0.164.0"
+    "eksctl.cluster.k8s.io/v1alpha1/cluster-name" = "multitenant-chatapp"
+  }
+  version = "1.27"
+  encryption_config {
+    resources = ["secrets"]
+    provider {
+      key_arn = "arn:aws:kms:us-west-2:566972129213:key/807ce160-6c16-499c-807f-5870808d509a"
+    }
+  }
+  kubernetes_network_config {
+    ip_family         = "ipv4"
+    service_ipv4_cidr = "10.100.0.0/16"
+  }
+  vpc_config {
+    endpoint_private_access = false
+    endpoint_public_access  = true
+    public_access_cidrs     = ["0.0.0.0/0"]
+    security_group_ids      = ["sg-0872fd5fdfe1909b5"]
+    subnet_ids              = ["subnet-00a066c0d07dd3a43", "subnet-02edd5b52381eef81", "subnet-05bb9871246d7348c", "subnet-084ba8635bc304b86", "subnet-0a0cd4e5262b785fd", "subnet-0e2fdf1a250dde006"]
+  }
+}

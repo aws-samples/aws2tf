@@ -395,6 +395,7 @@ def special_deps(ttft,taddr):
    #print("In special deps"+ttft+"  "+taddr)
    if ttft == "aws_subnet": 
       #print("In special deps")
+      add_known_dependancy("aws_route_table_association",taddr)
       globals.dependancies=globals.dependancies + ["aws_route_table_association."+taddr]
       return
 
@@ -597,6 +598,7 @@ def get_aws_iam_policy_attchment(type,id,clfn,descfn,topkey,key,filterid):
             rn=id+"__"+pn
             # - no as using policy arns (minus account id etc)
             if "arn:aws:iam::aws:policy" not in theid:
+               add_known_dependancy("aws_iam_policy",retid)
                globals.dependancies=globals.dependancies + ["aws_iam_policy."+retid]
             #print("adding "+theid+" attachment")
             write_import(type,theid,rn) 

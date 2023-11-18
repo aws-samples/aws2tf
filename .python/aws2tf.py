@@ -222,9 +222,7 @@ if __name__ == '__main__':
             # ../../scripts/get-vpclattice-auth-policy.sh $cname
             # ../../scripts/get-vpclattice-resource-policy.sh $rarn
             # ../../scripts/get-vpclattice-service-network-service-associations.sh $cname
-            # ../../scripts/get-vpclattice-service-network-vpc-association.sh $cname
             # ../../scripts/get-vpclattice-access-log-subscription.sh $cname
-            # ../../scripts/get-vpclattice-services.sh $cname
 
             # for type in ["aws_vpclattice_service"]:
             for type in ["aws_vpclattice_service", "aws_vpclattice_service_network_vpc_association"]:
@@ -246,38 +244,10 @@ if __name__ == '__main__':
         if not globals.rdep[ti]:
             i = ti.split(".")[0]
             id = ti.split(".")[1]
-            print("KD calling getresource with type="+i+" id="+str(id))
-            #call_resource(i, id)
+            if id not in str(globals.policyarns)
+                print("KD calling getresource with type="+i+" id="+str(id))
+                call_resource(i, id)
 
-
-
-    for ti in globals.dependancies:
-        if "arn:aws:iam::aws:policy" not in ti:
-            if str(ti) not in globals.rproc:
-                print("KD="+str(ti))
-                i = ti.split(".")[0]
-                id = ti.split(".")[1]
-                if id not in str(globals.policyarns):
-                    try:
-                        clfn, descfn, topkey, key, filterid = resources.resource_data(
-                            i, id)
-                        print("DD calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn +
-                              " descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
-                        common.getresource(
-                            i, id, clfn, descfn, topkey, key, filterid)
-                    except:
-                        pass
-                    try:
-                        getfn = getattr(common, "get_"+i)
-                        print("DD calling common.get_"+i+" with type="+i+" id="+str(id)+"   clfn="+clfn +
-                              " descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
-
-                        getfn(i, id, clfn, descfn, topkey, key, filterid)
-                    except Exception as e:
-                        # By this way we can know about the type of error occurring
-                        print(f"{e=}")
-                else:
-                    print("DD skip found "+id+" in globals.policyarns")
 
     common.tfplan1()
     common.tfplan2()

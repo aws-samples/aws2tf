@@ -247,29 +247,9 @@ if __name__ == '__main__':
             i = ti.split(".")[0]
             id = ti.split(".")[1]
             print("KD calling getresource with type="+i+" id="+str(id))
-            call_resource(i, id)
+            #call_resource(i, id)
 
 
-
-# Known dependancies section
-# role attachments
-# not needed - managed_policy_arns in aws_iam_role handles it
-#    i="aws_iam_role_policy_attachment"
-#    for j in globals.rproc.keys():
-#        if "aws_iam_role" in j:
-#            id=str(j.split(".")[1])
-#            try:
-#                clfn,descfn,topkey,key,filterid=resources.resource_data(i,id)
-#                if globals.debug:
-#                    print("KD calling common.get_aws_iam_policy_attchment with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
-#                else:
-#                    print(i+"."+id)
-#                common.get_aws_iam_policy_attchment(i,id,clfn,descfn,topkey,key,filterid)
-#
-#            except Exception as e:
-#                # By this way we can know about the type of error occurring
-#                print(f"{e=}")
-#                print("failed")
 
     for ti in globals.dependancies:
         if "arn:aws:iam::aws:policy" not in ti:

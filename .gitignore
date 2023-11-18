@@ -6,6 +6,7 @@ terraform.tfstate*
 *.txt
 *.tf
 *.bak
+*.out
 generated
 vpc/generated
 *.orig

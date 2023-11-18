@@ -407,7 +407,12 @@ def resource_data(type,id):
         key="name"
         filterid=key  # no filter on list-users so use jq like filter
   
-
+    elif type == "aws_eks_fargate_profile":
+        clfn="eks"
+        descfn="list_fargate_profiles"
+        topkey="fargateProfileNames"
+        key="clusterName"
+        filterid=key  # no filter on list-users so use jq like filter
 
 
    #if type == "aws_availability_zone": return 'AvailabilityZones', ec2client.describe_availability_zones, "ZoneName"

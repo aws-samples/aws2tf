@@ -72,10 +72,6 @@ def tfplan2():
          fixtf.fixtf(type,tf)
 
 
-
-
-
-
 def tfplan3():
    print("Plan 3 ... ")
    rf="resources.out"
@@ -312,26 +308,27 @@ def write_import(type,theid,tfid):
    globals.rproc[pkey]=True
    return
 
-
+#########################################################################################################################
 
 def getresource(type,id,clfn,descfn,topkey,key,filterid):
    for j in globals.specials:
       if type == j: 
          print(type + " in specials list returning ..")
          return False
-   if globals.debug: print("--> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   if globals.debug: print("-1-> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
    if type in str(globals.types): 
       print("Found "+type+"in types skipping ...")
       return True
-   
-   if pt in globals.rproc:
-      if globals.rproc[pt] is True:
-         print("Found "+pt+" in processed skipping ...") 
-         return True
-   
-   response=call_boto3(clfn,descfn,topkey)   
-
+   #print("--4 >")
+   if id is not None:
+      pt=type+"."+id
+      if pt in globals.rproc:
+         if globals.rproc[pt] is True:
+            print("Found "+pt+" in processed skipping ...") 
+            return True
+   response=call_boto3(clfn,descfn,topkey,id)   
+   print("-->"+str(response))
    if str(response) != "[]":
          for item in response:
             #print("-"+str(item))
@@ -385,7 +382,15 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                         print("filterid="+filterid)
                         print("----------------------------")
                         pass
-   
+   else:
+      if id is not None:
+         print("No "+type+" "+id+" found -empty response")         
+      else:
+         print("No "+type+" found -empty response")
+      return True
+
+
+
    
    return True               
   
@@ -415,13 +420,7 @@ def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
    if type in str(globals.types): 
       print("Found "+type+"in types skipping ...")
       return
-   #fn="import__"+type+".tf"
-   
 
-   if pt in globals.rproc:
-      if globals.rproc[pt] is True:
-         print("Found "+pt+"in processed skipping ...") 
-         return 
    
    
    response = []
@@ -674,28 +673,8 @@ def get_aws_vpclattice_service_network_vpc_association(type,id,clfn,descfn,topke
 
 # as list_clusters is awkward
 def get_aws_eks_cluster(type,id,clfn,descfn,topkey,key,filterid):
-   if globals.debug: print("--> In get_aws_vpclattice_service_network_vpc_association doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-
-   client = boto3.client(clfn) 
-   if globals.debug: print("--client")
-   response=[]
-   
-   if globals.debug: print("Paginator")
-
-   try:
-      paginator = client.get_paginator(descfn)
-      for page in paginator.paginate():
-         response.extend(page[topkey])
-   except botocore.exceptions.OperationNotPageableError as err:
-         #print(f"{err=}")
-         getfn = getattr(client, descfn)
-         response1 = getfn(serviceNetworkIdentifier=id)   ## special
-         response=response1[topkey]
-   except Exception as e:
-      print(f"{e=}")
-      print("unexpected error in paginate")
-      exit()
-      
+   if globals.debug: print("--> In get_aws_eks_cluster doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   response=call_boto3(clfn,descfn,topkey,id)
 
    if response == []: 
       print("empty response returning") 
@@ -705,7 +684,7 @@ def get_aws_eks_cluster(type,id,clfn,descfn,topkey,key,filterid):
       theid=retid
       write_import(type,theid,None) 
       # add fargate known dependancy for cluster name
-      add_known_dependancy("aws_faragte_profile",theid)
+      add_known_dependancy("aws_eks_fargate_profile",theid)
 
 
    return
@@ -720,7 +699,7 @@ def add_known_dependancy(type,id):
         globals.rdep[pkey]=False
     return
 
-def call_boto3(clfn,descfn,topkey):
+def call_boto3(clfn,descfn,topkey,id):
    
    if globals.debug: print("pre-response")
    response = []
@@ -730,26 +709,36 @@ def call_boto3(clfn,descfn,topkey):
    try:
       paginator = client.get_paginator(descfn)
       if globals.debug: print("paginator")
+      
+      if descfn == "list_fargate_profiles":
+         #print("--1a "+str(id))
+         for page in paginator.paginate(clusterName=id): response.extend(page[topkey])
+      else:
+         #print("--1b")
+         for page in paginator.paginate(): 
+            response.extend(page[topkey])
 
-      for page in paginator.paginate():
-         response.extend(page[topkey])
-   #except Exception as err:
-                # By this way we can know about the type of error occurring
    except botocore.exceptions.OperationNotPageableError as err:
-         #print(f"{err=}")
+         print(f"{err=}")
+
          getfn = getattr(client, descfn)
+         
          response1 = getfn()
          response=response1[topkey]
    except Exception as e:
       print(f"{e=}")
       print("unexpected error in common.call_boto3")
+      exc_type, exc_obj, exc_tb = sys.exc_info()
+      fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+      print(exc_type, fname, exc_tb.tb_lineno)
       exit()
 
-
+   #print("--2a")  
    rl=len(response)
+   #print("--2b" + str(rl)) 
    if rl==0:
-      print("** zero response length for type "+type + " returning .. []")
-      return "[]"
+      print("** zero response length for "+ descfn + " returning .. []")
+      return []
 
    if globals.debug:
       print("response length="+str(len(response)))

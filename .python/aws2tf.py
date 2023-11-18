@@ -31,8 +31,6 @@ def call_resource(type, id):
                 print(f"{e=}")
                 exit()
 
-
-
 if __name__ == '__main__':
 
     common.check_python_version()
@@ -210,7 +208,7 @@ if __name__ == '__main__':
     else:
         call_resource(type,id)
 
-
+#########################################################################################################################
     print("Known Dependancies ----------------------")
 
     # lattice
@@ -244,7 +242,7 @@ if __name__ == '__main__':
         if not globals.rdep[ti]:
             i = ti.split(".")[0]
             id = ti.split(".")[1]
-            if id not in str(globals.policyarns)
+            if id not in str(globals.policyarns):
                 print("KD calling getresource with type="+i+" id="+str(id))
                 call_resource(i, id)
 

@@ -26,7 +26,12 @@ def cwlogs(type,id,botokey,jsonid,filterid):
                 f.write('  to = ' +type + '.' + tfid + '\n')
                 f.write('  id = "'+ theid + '"\n')
                 f.write('}\n')
-    f.close()
+
+
+
+
+
+
 
     common.tfplan(type)
     #rf=type+"_resources.out"

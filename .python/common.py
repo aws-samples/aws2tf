@@ -325,53 +325,12 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
       print("Found "+type+"in types skipping ...")
       return True
    
-   fn="import__"+type+".tf"
+   if pt in globals.rproc:
+      if globals.rproc[pt] is True:
+         print("Found "+pt+" in processed skipping ...") 
+         return True
    
-   if id is not None:
-      pt=type+"."+id
-      fn="import__"+type+"_"+id+".tf"
-      if pt in globals.rproc:
-         if globals.rproc[pt] is True:
-            print("Found "+pt+" in processed skipping ...") 
-            return True
-   
-   if globals.debug: print("pre-response")
-   response = []
-   client = boto3.client(clfn) 
-   if globals.debug: print("client")
-
-   try:
-      paginator = client.get_paginator(descfn)
-      if globals.debug: print("paginator")
-
-      for page in paginator.paginate():
-         response.extend(page[topkey])
-   #except Exception as err:
-                # By this way we can know about the type of error occurring
-   except botocore.exceptions.OperationNotPageableError as err:
-         #print(f"{err=}")
-         getfn = getattr(client, descfn)
-         response1 = getfn()
-         response=response1[topkey]
-   except Exception as e:
-      print(f"{e=}")
-      print("unexpected error in common.getresource")
-      exit()
-
-
-   rl=len(response)
-   if rl==0:
-      print("** zero response length for type "+type + " returning .. True")
-      return True
-
-   if globals.debug:
-      print("response length="+str(len(response)))
-      
-      for item in response:
-         print(item)
-         print("--------------------------------------")
-
-   if globals.debug: print("filterid="+filterid)
+   response=call_boto3(clfn,descfn,topkey)   
 
    if str(response) != "[]":
          for item in response:
@@ -455,15 +414,13 @@ def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
    if type in str(globals.types): 
       print("Found "+type+"in types skipping ...")
       return
-   fn="import__"+type+".tf"
+   #fn="import__"+type+".tf"
    
-   if id is not None:
-      pt=type+"."+id
-      fn="import__"+type+"_"+id+".tf"
-      if pt in globals.rproc:
-         if globals.rproc[pt] is True:
-            print("Found "+pt+"in processed skipping ...") 
-            return 
+
+   if pt in globals.rproc:
+      if globals.rproc[pt] is True:
+         print("Found "+pt+"in processed skipping ...") 
+         return 
    
    
    response = []
@@ -509,7 +466,7 @@ def get_aws_iam_role_policy(type,id,clfn,descfn,topkey,key,filterid):
             rn=j.split(".")[1]
             if dotc > 1: rn=rn +"." + j.split(".")[2]         
             paginator = client.get_paginator(descfn)
-            for page in paginator.paginate(RoleName=rn):
+            for page in paginator.paginate(RoleName=rn):   # special
                response.extend(page[topkey])
             if response == []: 
                continue
@@ -560,7 +517,7 @@ def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
       if globals.debug: print("Paginator")
 
       try:
-         for page in paginator.paginate(Scope='Local'):
+         for page in paginator.paginate(Scope='Local'):  # special
             response.extend(page[topkey])
       except Exception as e:
          print(f"{e=}")
@@ -623,7 +580,7 @@ def get_aws_iam_policy_attchment(type,id,clfn,descfn,topkey,key,filterid):
    response=[]
    paginator = client.get_paginator(descfn)
    try:
-      for page in paginator.paginate(RoleName=id):
+      for page in paginator.paginate(RoleName=id):    ## special
       #for page in paginator.paginate():
          response.extend(page[topkey])
    except Exception as e:
@@ -695,7 +652,7 @@ def get_aws_vpclattice_service_network_vpc_association(type,id,clfn,descfn,topke
    except botocore.exceptions.OperationNotPageableError as err:
          #print(f"{err=}")
          getfn = getattr(client, descfn)
-         response1 = getfn(serviceNetworkIdentifier=id)
+         response1 = getfn(serviceNetworkIdentifier=id)  ## special
          response=response1[topkey]
    except Exception as e:
       print(f"{e=}")
@@ -730,7 +687,7 @@ def get_aws_eks_cluster(type,id,clfn,descfn,topkey,key,filterid):
    except botocore.exceptions.OperationNotPageableError as err:
          #print(f"{err=}")
          getfn = getattr(client, descfn)
-         response1 = getfn(serviceNetworkIdentifier=id)
+         response1 = getfn(serviceNetworkIdentifier=id)   ## special
          response=response1[topkey]
    except Exception as e:
       print(f"{e=}")
@@ -742,12 +699,62 @@ def get_aws_eks_cluster(type,id,clfn,descfn,topkey,key,filterid):
       print("empty response returning") 
       return   
    for j in response: 
-            retid=j # no key
-            theid=retid
-            write_import(type,theid,None) 
+      retid=j # no key
+      theid=retid
+      write_import(type,theid,None) 
+      # add fargate known dependancy for cluster name
+      add_known_dependancy("aws_faragte_profile",theid)
+
 
    return
 
 
 
+def add_known_dependancy(type,id):
+    # check if we alredy have it
+    pkey=type+"."+id
+    if pkey not in globals.rdep:
+        print("add_known_dependancy: " + pkey)
+        globals.rproc[pkey]=False
+    return
 
+def call_boto3(clfn,descfn,topkey):
+   
+   if globals.debug: print("pre-response")
+   response = []
+   client = boto3.client(clfn) 
+   if globals.debug: print("client")
+
+   try:
+      paginator = client.get_paginator(descfn)
+      if globals.debug: print("paginator")
+
+      for page in paginator.paginate():
+         response.extend(page[topkey])
+   #except Exception as err:
+                # By this way we can know about the type of error occurring
+   except botocore.exceptions.OperationNotPageableError as err:
+         #print(f"{err=}")
+         getfn = getattr(client, descfn)
+         response1 = getfn()
+         response=response1[topkey]
+   except Exception as e:
+      print(f"{e=}")
+      print("unexpected error in common.call_boto3")
+      exit()
+
+
+   rl=len(response)
+   if rl==0:
+      print("** zero response length for type "+type + " returning .. []")
+      return "[]"
+
+   if globals.debug:
+      print("response length="+str(len(response)))
+      
+      for item in response:
+         print(item)
+         print("--------------------------------------")
+
+
+   return response

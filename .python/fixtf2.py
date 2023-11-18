@@ -25,7 +25,7 @@ def aws_subnet(t1,tt1,tt2,flag1,flag2):
     if tt1 == "vpc_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
-        add_dendendancy("aws_vpc",tt2)
+        add_dependancy("aws_vpc",tt2)
         
 
     if tt1 == "enable_lni_at_device_index":
@@ -47,7 +47,7 @@ def  aws_security_group(t1,tt1,tt2,flag1,flag2):
     if tt1 == "vpc_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
-        add_dendendancy("aws_vpc",tt2)
+        add_dependancy("aws_vpc",tt2)
 
     if tt1 == "name":
         tt2=tt2.strip('\"')
@@ -67,7 +67,7 @@ def  aws_route_table(t1,tt1,tt2,flag1,flag2):
     if tt1 == "vpc_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
-        add_dendendancy("aws_vpc",tt2)
+        add_dependancy("aws_vpc",tt2)
     if "cidr_block" in tt1:
         tt2=tt2.strip('\"')
         if tt2 == "": t1=tt1 + " = null\n"
@@ -79,7 +79,7 @@ def  aws_internet_gateway(t1,tt1,tt2,flag1,flag2):
     if tt1 == "vpc_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
-        add_dendendancy("aws_vpc",tt2)
+        add_dependancy("aws_vpc",tt2)
 
     return skip,t1,flag1,flag2
 
@@ -91,7 +91,7 @@ def  aws_nat_gateway(t1,tt1,tt2,flag1,flag2):
     if tt1 == "subnet_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
-        add_dendendancy("aws_subnet",tt2)
+        add_dependancy("aws_subnet",tt2)
 
     return skip,t1,flag1,flag2 
 
@@ -144,7 +144,7 @@ def aws_vpc_endpoint(t1,tt1,tt2,flag1,flag2):
     if tt1 == "vpc_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
-        add_dendendancy("aws_vpc",tt2)
+        add_dependancy("aws_vpc",tt2)
 
     if tt1 == "subnet_ids":  t1,skip = deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
     if tt1 == "security_group_ids": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
@@ -162,11 +162,11 @@ def aws_route_table_association(t1,tt1,tt2,flag1,flag2):
     if tt1 == "subnet_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
-        add_dendendancy("aws_subnet",tt2)
+        add_dependancy("aws_subnet",tt2)
     if tt1 == "route_table_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_route_table." + tt2 + ".id\n"
-        add_dendendancy("aws_route_table",tt2)
+        add_dependancy("aws_route_table",tt2)
     
     return skip,t1,flag1,flag2
 
@@ -235,7 +235,7 @@ def aws_iam_role_policy(t1,tt1,tt2,flag1,flag2):
     if tt1 == "role_name":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
-        add_dendendancy("aws_iam_role",tt2)
+        add_dependancy("aws_iam_role",tt2)
   
     return skip,t1,flag1,flag2
 
@@ -256,7 +256,7 @@ def aws_iam_role_policy_attachment(t1,tt1,tt2,flag1,flag2):
     if tt1 == "role":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
-        add_dendendancy("aws_iam_role",tt2)
+        add_dependancy("aws_iam_role",tt2)
     # skip as using policy arns minus account number etc..
     #if tt1 == "policy_arn": 
     #    tt2=tt2.strip('\"')
@@ -283,13 +283,15 @@ def aws_vpclattice_service_network_vpc_association(t1,tt1,tt2,flag1,flag2):
     if tt1 == "vpc_identifier":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
-        add_dendendancy("aws_vpc",tt2)
+        add_dependancy("aws_vpc",tt2)
 
     if tt1 == "service_network_identifier":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpclattice_service_network." + tt2 + ".id\n"
-        add_dendendancy("aws_vpclattice_service_network",tt2)
+        add_dependancy("aws_vpclattice_service_network",tt2)
     return skip,t1,flag1,flag2
+
+### EKS
 
 def aws_eks_cluster(t1,tt1,tt2,flag1,flag2):
     skip=0
@@ -298,7 +300,7 @@ def aws_eks_cluster(t1,tt1,tt2,flag1,flag2):
     elif tt1 == "role_name":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
-        add_dendendancy("aws_iam_role",tt2)
+        add_dependancy("aws_iam_role",tt2)
     return skip,t1,flag1,flag2
 
 
@@ -344,12 +346,12 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
         for i in range(cc+1):
             subn=tt2.split(',')[i]
             subs=subs + ttft + "." + subn + ".id,"
-            add_dendendancy(ttft,subn)
+            add_dependancy(ttft,subn)
 
             
     if cc == 0 and prefix in tt2: 
         subs=subs + ttft + "." + tt2 + ".id,"
-        add_dendendancy(ttft,tt2)
+        add_dependancy(ttft,tt2)
              
     t1=tt1 + " = [" + subs + "]\n"
     t1=t1.replace(',]',']')
@@ -357,10 +359,12 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
 
 
 
-def add_dendendancy(type,id):
+def add_dependancy(type,id):
     # check if we alredy have it
     pkey=type+"."+id
     if pkey not in globals.rproc:
-        print("add_dendendancy: " + pkey)
+        print("add_dependancy: " + pkey)
         globals.rproc[pkey]=False
     return
+
+

@@ -143,7 +143,7 @@ if __name__ == '__main__':
     elif type == "cw" or type == "cloudwatch" or type == "logs":
         type = "aws_cloudwatch_log_group"
 
-# -- now we are calling ----
+################# -- now we are calling ----   ###############################
 
     if type == "s3":
         com = "rm -f s3-*.tf s3.tf tfplan *s3*.out"
@@ -154,10 +154,7 @@ if __name__ == '__main__':
         all_types = resources.resource_types(type)
         for i in all_types:
             # print("calling "+i)
-            clfn, descfn, topkey, key, filterid = resources.resource_data(
-                i, id)
-            # print("calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key +"  filterid="+filterid)
-            common.getresource(i, id, clfn, descfn, topkey, key, filterid)
+            call_resource(i, id)
 
         # special case for route tables:
         clfn = "ec2"
@@ -166,43 +163,17 @@ if __name__ == '__main__':
         key = "Associations"
         filterid = key
         if id is not None and "vpc-" in id:
-            filterid = ".Associations.0.SubnetId"
+            filterid = ".Associations.0.VpcId"
         if id is not None and "subnet-" in id:
             filterid = ".Associations.0.SubnetId"
         # call s special: once (if subnet in processed or igw)
         i = "aws_route_table_association"
-        common.get_aws_route_table_association(
-            i, id, clfn, descfn, topkey, key, filterid)
+        common.get_aws_route_table_association(i, id, clfn, descfn, topkey, key, filterid)
 
     elif type == "iam" or type == "lattice":
         all_types = resources.resource_types(type)
         for i in all_types:
-            if globals.debug:
-                print("calling "+i)
-            try:
-                clfn, descfn, topkey, key, filterid = resources.resource_data(
-                    i, id)
-                if globals.debug:
-                    print("calling getresource with type="+i+" id="+str(id)+"   clfn="+clfn +
-                          " descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
-                common.getresource(i, id, clfn, descfn, topkey, key, filterid)
-            except Exception as e:
-                # By this way we can know about the type of error occurring
-                print(f"{e=}")
-                pass
-            try:
-                getfn = getattr(common, "get_"+i)
-                getfn(i, id, clfn, descfn, topkey, key, filterid)
-            except:
-                pass
-
-        # clfn="iam"
-        # descfn="list_role_policies"
-        # topkey="PolicyNames"
-        # key="PolicyNames"
-        # filterid="RoleName"
-
-        # common.get_aws_iam_role_policy(i,id,clfn,descfn,topkey,key,filterid)
+            call_resource(i, id)
 
     # calling by direct terraform type aws_xxxxx
     else:
@@ -229,21 +200,10 @@ if __name__ == '__main__':
             # for type in ["aws_vpclattice_service"]:
             for type in ["aws_vpclattice_service", "aws_vpclattice_service_network_vpc_association"]:
                 print(type)
-                clfn, descfn, topkey, key, filterid = resources.resource_data(
-                    type, id)
-                try:
-                    get_fn = getattr(common, "get_"+type)
-                    print("calling get_aws_vpclattice_service with type="+type+" id="+str(id)+"   clfn=" +
-                          clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
-                    get_fn(type, id, clfn, descfn, topkey, key, filterid)
-                except Exception as e:
-                    # By this way we can know about the type of error occurring
-                    print(f"{e=}")
-                    pass
+                call_resource(type,id)      
 
 ## Known dependancies section
     for ti in list(globals.rdep):
-    #for ti in globals.rdep.keys():
         if not globals.rdep[ti]:
             i = ti.split(".")[0]
             id = ti.split(".")[1]
@@ -295,12 +255,13 @@ if __name__ == '__main__':
             exit()
 
 
-
-    print("Processed --------------------")
-
     common.tfplan3()
 
     common.wrapup()
+
+
+#################################
+
 
     if mg is True:
         with open("processed.txt", "a") as f:

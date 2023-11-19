@@ -707,9 +707,6 @@ def get_aws_eks_fargate_profile(type,id,clfn,descfn,topkey,key,filterid):
       print("rn="+rn)
       print("theid="+theid)
       write_import(type,theid,rn) 
-      # add fargate known dependancy for cluster name
-      #add_known_dependancy("aws_eks_fargate_profile",theid)
-
 
    return
 
@@ -722,6 +719,7 @@ def add_known_dependancy(type,id):
         print("add_known_dependancy: " + pkey)
         globals.rdep[pkey]=False
     return
+
 
 def call_boto3(clfn,descfn,topkey,id):
    

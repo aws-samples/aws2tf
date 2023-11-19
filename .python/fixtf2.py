@@ -267,7 +267,7 @@ def aws_iam_role_policy_attachment(t1,tt1,tt2,flag1,flag2):
     return skip,t1,flag1,flag2
 
 
-# -----------------------
+### VPC Lattice  -----------------------
 
 def aws_vpclattice_service_network(t1,tt1,tt2,flag1,flag2):
     skip=0
@@ -291,7 +291,7 @@ def aws_vpclattice_service_network_vpc_association(t1,tt1,tt2,flag1,flag2):
         add_dependancy("aws_vpclattice_service_network",tt2)
     return skip,t1,flag1,flag2
 
-### EKS
+### EKS -----------
 
 def aws_eks_cluster(t1,tt1,tt2,flag1,flag2):
     skip=0

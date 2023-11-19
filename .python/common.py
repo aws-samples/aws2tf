@@ -103,7 +103,7 @@ def tfplan3():
 
    if globals.plan2:
       
-      print("Plan 2 ... ")
+      print("Plan 4 ... ")
       # redo plan
       com="rm -f resources.out tfplan"
       print(com)
@@ -136,7 +136,7 @@ def tfplan3():
          print("-->> look at plan2.json - or run terraform plan")
          exit()
 
-      print("Plan 2 complete")
+      print("Plan 4 complete")
    
    if not os.path.isfile("tfplan"):
          print("could not find expected tfplan file - exiting")
@@ -328,11 +328,13 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
             print("Found "+pt+" in processed skipping ...") 
             return True
    response=call_boto3(clfn,descfn,topkey,id)   
-   print("-->"+str(response))
+   #print("-->"+str(response))
    if str(response) != "[]":
          for item in response:
             #print("-"+str(item))
+            #print("-gr01-")
             if id is None or filterid=="": # do it all
+               #print("-gr21-")
                if globals.debug: print("--"+str(item))
                try:
                   if "aws-service-role" in str(item["Path"]): 
@@ -350,6 +352,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                      print("Found "+pt+" in processed skipping ...") 
                      continue
             else:
+               #print("-gr31-"+"filterid="+str(filterid))
                if "." not in filterid:
                   #print("***item=" + str(item) + " id=" + id + " filterid=" + filterid+" filtered value: "+str(item[filterid]))
 
@@ -685,6 +688,27 @@ def get_aws_eks_cluster(type,id,clfn,descfn,topkey,key,filterid):
       write_import(type,theid,None) 
       # add fargate known dependancy for cluster name
       add_known_dependancy("aws_eks_fargate_profile",theid)
+
+
+   return
+
+def get_aws_eks_fargate_profile(type,id,clfn,descfn,topkey,key,filterid):
+   if globals.debug: print("--> In get_aws_eks_fargate_profile  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   response=call_boto3(clfn,descfn,topkey,id)
+
+   if response == []: 
+      print("empty response returning") 
+      return   
+   for j in response: 
+      retid=j # no key
+      # need to ocerwrite theid
+      theid=id+":"+retid
+      rn=id+"__"+retid
+      print("rn="+rn)
+      print("theid="+theid)
+      write_import(type,theid,rn) 
+      # add fargate known dependancy for cluster name
+      #add_known_dependancy("aws_eks_fargate_profile",theid)
 
 
    return

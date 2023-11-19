@@ -27,4 +27,7 @@ flip-eks.sh
 *.json
 *.lock.hcl
 aws_*.tf
+tfplan
+**/tfplan
 __pycache__
+.python/data/tfplan

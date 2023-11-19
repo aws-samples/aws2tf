@@ -304,6 +304,22 @@ def aws_eks_cluster(t1,tt1,tt2,flag1,flag2):
     return skip,t1,flag1,flag2
 
 
+def aws_eks_fargate_profile(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    if tt1 == "subnet_ids":  t1,skip = deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
+    elif tt1 == "pod_execution_role_arn":
+        tt2=tt2.strip('\"')
+        if ":" in tt2: tt2=tt2.split("/")[-1]
+        t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+        add_dependancy("aws_iam_role",tt2)
+    elif tt1 == "cluster_name":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_eks_cluster." + tt2 + ".id\n"
+        add_dependancy("aws_eks_cluster",tt2)
+    
+    return skip,t1,flag1,flag2
+
+
 
 def  aws_resource(t1,tt1,tt2,flag1,flag2):
     skip=0

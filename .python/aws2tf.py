@@ -211,6 +211,10 @@ if __name__ == '__main__':
 #########################################################################################################################
     print("Known Dependancies ----------------------")
 
+    for j in list(globals.rproc):
+        print(j)
+
+
     # lattice
     for j in globals.rproc.keys():
         if "aws_vpclattice_service_network" in j:
@@ -238,7 +242,8 @@ if __name__ == '__main__':
                     pass
 
 ## Known dependancies section
-    for ti in globals.rdep.keys():
+    for ti in list(globals.rdep):
+    #for ti in globals.rdep.keys():
         if not globals.rdep[ti]:
             i = ti.split(".")[0]
             id = ti.split(".")[1]
@@ -250,20 +255,29 @@ if __name__ == '__main__':
     common.tfplan1()
     common.tfplan2()
 
-    for i in globals.rproc.keys():
-        print(str(i)+ " : "+str(globals.rproc[i]))
-
-
-    print("Detected Dependancies -----------------------")
+    
+    print("Detected Dependancies 3b-----------------------") 
+    
+    for ti in globals.rproc.keys():
+        print(str(ti)+":"+str(globals.rproc[ti]))
+    
+    
+    
+    if ":" in globals.rproc:
+        print(": in rproc exiting")
+        exit()
+    
     detdep=True
+    lc=0
     while detdep:
-        for ti in globals.rproc.keys():
+        for ti in list(globals.rproc):
             if not globals.rproc[ti]:
                 i = ti.split(".")[0]
                 id = ti.split(".")[1]
                 print("DD calling getresource with type="+i+" id="+str(id))
                 call_resource(i, id)
         detdep=False
+        lc  = lc + 1
 # go again plan and split / fix
         com = "rm -f aws_*.tf *.out"
         rout = common.rc(com)
@@ -275,6 +289,11 @@ if __name__ == '__main__':
         for ti in globals.rproc.keys():
             if not globals.rproc[ti]:
                 detdep=True
+
+        if lc > 10:
+            print("Too many loops exiting")
+            exit()
+
 
 
     print("Processed --------------------")

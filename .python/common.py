@@ -6,6 +6,7 @@ import os
 import globals
 import glob
 import botocore
+import fixtf2
 
 
 def tfplan1():
@@ -67,8 +68,8 @@ def tfplan2():
          type=fil.split('__')[0]
          tf=fil.split('.')[0]
          #print("type="+type+" tf="+tf)
-         if type not in globals.types:
-            globals.types=globals.types+[type]             
+         #if type not in globals.types:
+         #   globals.types=globals.types+[type]             
          fixtf.fixtf(type,tf)
 
 
@@ -298,14 +299,24 @@ def write_import(type,theid,tfid):
    if tfid is None:
       tfid=theid.replace("/","__").replace(".","__").replace(":","__")
    fn="import__"+type+"__"+tfid+".tf"
+   
+   # check if file exists:
+   #
+   if os.path.isfile(fn):
+      print("File exists: " + fn)
+      pkey=type+"."+tfid
+      globals.rproc[pkey]=True
+      return
+   
    with open(fn, "a") as f:
       f.write('import {\n')
       f.write('  to = ' +type + '.' + tfid + '\n')
       f.write('  id = "'+ theid + '"\n')
       f.write('}\n')
 
-   pkey=type+"."+tfid 
+   pkey=type+"."+tfid
    globals.rproc[pkey]=True
+
    return
 
 #########################################################################################################################
@@ -399,8 +410,20 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
 
 def special_deps(ttft,taddr):
    #print("In special deps"+ttft+"  "+taddr)
-   if ttft == "aws_subnet": add_known_dependancy("aws_route_table_association",taddr)   
-   elif ttft == "aws_vpc": add_known_dependancy("aws_route_table_association",taddr)   
+   if ttft == "aws_subnet": 
+      add_known_dependancy("aws_route_table_association",taddr) 
+      fixtf2.add_dependancy("aws_route_table_association",taddr)  
+   elif ttft == "aws_vpc": 
+      add_known_dependancy("aws_route_table_association",taddr)   
+      fixtf2.add_dependancy("aws_route_table_association",taddr)
+   elif ttft == "aws_vpclattice_service_network":
+      add_known_dependancy("aws_vpclattice_service",taddr) 
+      add_known_dependancy("aws_vpclattice_service_network_vpc_association",taddr) 
+      # ../../scripts/get-vpclattice-auth-policy.sh $cname
+      # ../../scripts/get-vpclattice-resource-policy.sh $rarn
+      # ../../scripts/get-vpclattice-service-network-service-associations.sh $cname
+      # ../../scripts/get-vpclattice-access-log-subscription.sh $cname
+
    return  
 
 
@@ -415,36 +438,50 @@ def get_test(type,id,clfn,descfn,topkey,key,filterid):
 #   return
 
 def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
-   print("--> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+"filterid="+filterid)
+   print("--> In get_aws_route_table_association doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    if type in str(globals.types): 
       print("Found "+type+"in types skipping ...")
       return
 
-   
-   
+  
    response = []
    client = boto3.client(clfn) 
    paginator = client.get_paginator(descfn)
-   for page in paginator.paginate():
-      response.extend(page[topkey])
+   if "subnet-" in id:
+      for page in paginator.paginate(Filters=[
+            {
+                  'Name': 'association.subnet-id',
+                  'Values': [id]
+            },
+         ]):
+         response.extend(page[topkey])  
+   else:
+      for page in paginator.paginate():
+         response.extend(page[topkey])
    print("response length="+str(len(response)))
+   #print(str(response))
+   #print(id)
    if str(response) != "[]": 
-      with open(fn, "a") as f:
-         for item in response:
-            il=len(item['Associations'])
-            for r in range(0,il):
-               #print(str(r))
-               #print(str(item['Associations'][r]))
-               rtid=(str(item['Associations'][r]['RouteTableId']))
-               try:
-                  #print(str(item['Associations'][r]['SubnetId']))
-                  subid=str(item['Associations'][r]['SubnetId'])
-                  if subid in globals.rproc:
-                     #print(subid+"in processed...."+fn)
-                     theid=subid+"/"+rtid
-                     write_import(type,theid,None)        
-               except:
-                  pass
+      for item in response:
+         il=len(item['Associations'])
+         print("Associations length="+str(il))
+         for r in range(0,il):
+            #print(str(r))
+            #print(str(item['Associations'][r]))
+            rtid=(str(item['Associations'][r]['RouteTableId']))
+            try:
+               #print(str(item['Associations'][r]['SubnetId']))
+               subid=str(item['Associations'][r]['SubnetId'])
+               print(subid+" in pre-rproc....")
+               #print(globals.rproc)
+               if subid in str(globals.rproc):
+                  print(subid+" in processed....")
+                  theid=subid+"/"+rtid
+                  write_import(type,theid,None)    
+                  pkey=type+"."+id
+                  globals.rproc[pkey]=True    
+            except:
+               pass
    return
 
 

@@ -186,21 +186,7 @@ if __name__ == '__main__':
         print(j)
 
 
-    # lattice
-    for j in globals.rproc.keys():
-        if "aws_vpclattice_service_network" in j:
-
-            id = str(j.split(".")[1])
-            print(id)
-            # ../../scripts/get-vpclattice-auth-policy.sh $cname
-            # ../../scripts/get-vpclattice-resource-policy.sh $rarn
-            # ../../scripts/get-vpclattice-service-network-service-associations.sh $cname
-            # ../../scripts/get-vpclattice-access-log-subscription.sh $cname
-
-            # for type in ["aws_vpclattice_service"]:
-            for type in ["aws_vpclattice_service", "aws_vpclattice_service_network_vpc_association"]:
-                print(type)
-                call_resource(type,id)      
+    
 
 ## Known dependancies section
     print("Known Dependancies ----------------------")
@@ -248,14 +234,23 @@ if __name__ == '__main__':
         rout = common.rc(com)
         common.tfplan1()
         common.tfplan2()
+        print("********** keys start ***************")
         for ti in globals.rproc.keys():
             print(str(ti)+":"+str(globals.rproc[ti]))
 
+        print("********** keys end ***************")  
         for ti in globals.rproc.keys():
+            
             if not globals.rproc[ti]:
-                detdep=True
+                detdep=True 
+                print("still False........")
+                print(str(ti))
 
-        if lc > 10:
+        print("----------- "+str(lc)+" loops completed --------------")
+        
+        
+        
+        if lc > 5:
             print("Too many loops exiting")
             exit()
 

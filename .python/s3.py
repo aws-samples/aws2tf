@@ -42,7 +42,6 @@ def get_all_s3_buckets(fb,my_region):
    }
   
 
-   globals.types=globals.types+[type]
    buckets = s3a.buckets.all()
    
 
@@ -111,7 +110,6 @@ def get_all_s3_buckets(fb,my_region):
 
          for key in s3_fields:
             #print("outside get_s3 type=" + key)
-            globals.types=globals.types+[type]
             get_s3(f,s3_fields,key,bucket_name)
       
      

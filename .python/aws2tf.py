@@ -157,18 +157,18 @@ if __name__ == '__main__':
             call_resource(i, id)
 
         # special case for route tables:
-        clfn = "ec2"
-        descfn = "describe_route_tables"
-        topkey = "RouteTables"
-        key = "Associations"
-        filterid = key
-        if id is not None and "vpc-" in id:
-            filterid = ".Associations.0.VpcId"
-        if id is not None and "subnet-" in id:
-            filterid = ".Associations.0.SubnetId"
-        # call s special: once (if subnet in processed or igw)
-        i = "aws_route_table_association"
-        common.get_aws_route_table_association(i, id, clfn, descfn, topkey, key, filterid)
+        #clfn = "ec2"
+        #descfn = "describe_route_tables"
+        #topkey = "RouteTables"
+        #key = "Associations"
+        #filterid = key
+        #if id is not None and "vpc-" in id:
+        #    filterid = ".Associations.0.VpcId"
+        #if id is not None and "subnet-" in id:
+        #    filterid = ".Associations.0.SubnetId"
+        ## call s special: once (if subnet in processed or igw)
+        #i = "aws_route_table_association"
+        #common.get_aws_route_table_association(i, id, clfn, descfn, topkey, key, filterid)
 
     elif type == "iam" or type == "lattice":
         all_types = resources.resource_types(type)
@@ -180,7 +180,7 @@ if __name__ == '__main__':
         call_resource(type,id)
 
 #########################################################################################################################
-    print("Known Dependancies ----------------------")
+    print("Manual Dependancies ----------------------")
 
     for j in list(globals.rproc):
         print(j)
@@ -203,6 +203,11 @@ if __name__ == '__main__':
                 call_resource(type,id)      
 
 ## Known dependancies section
+    print("Known Dependancies ----------------------")
+
+    for j in list(globals.rproc):
+        print(j)
+
     for ti in list(globals.rdep):
         if not globals.rdep[ti]:
             i = ti.split(".")[0]

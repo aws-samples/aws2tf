@@ -359,6 +359,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                   if id == str(item[filterid]):
                      #print("--"+str(item))
                      theid=item[key]
+                     special_deps(type,theid)
                      write_import(type,theid,None)
                else:
                   ### There's a dot in the filterid so we need to dig deeper
@@ -392,20 +393,15 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
          print("No "+type+" found -empty response")
       return True
 
-
-
-   
    return True               
   
     #tfplan(type)
 
 def special_deps(ttft,taddr):
    #print("In special deps"+ttft+"  "+taddr)
-   if ttft == "aws_subnet": 
-      #print("In special deps")
-      add_known_dependancy("aws_route_table_association",taddr)
-      globals.dependancies=globals.dependancies + ["aws_route_table_association."+taddr]
-      return
+   if ttft == "aws_subnet": add_known_dependancy("aws_route_table_association",taddr)   
+   elif ttft == "aws_vpc": add_known_dependancy("aws_route_table_association",taddr)   
+   return  
 
 
 def get_test(type,id,clfn,descfn,topkey,key,filterid):

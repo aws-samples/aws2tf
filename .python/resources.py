@@ -196,7 +196,7 @@ def resource_data(type,id):
         topkey="RouteTables"
         key=".Associations.0.SubnetId"
         filterid=key
-        if id is not None and "vpc-" in id: filterid=".Associations.0.SubnetId" 
+        if id is not None and "vpc-" in id: filterid=".Associations.0.VpcId" 
         if id is not None and "subnet-" in id: filterid=".Associations.0.SubnetId" 
 
     elif type == "aws_default_network_acl": 

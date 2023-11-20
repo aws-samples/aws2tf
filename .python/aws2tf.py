@@ -239,20 +239,22 @@ if __name__ == '__main__':
         #    print(str(ti)+":"+str(globals.rproc[ti]))
 
         #print("********** keys end ***************")  
+
         for ti in globals.rproc.keys():
             
             if not globals.rproc[ti]:
                 detdep=True 
-                print("still False........")
+
                 print(str(ti))
 
         print("----------- "+str(lc)+" loops completed --------------") 
         
         if lc > 6:
             print("Too many loops exiting")
+            print("still False........")
             for ti in globals.rproc.keys():
                 if not globals.rproc[ti]:
-                    print("still False........")
+                    
                     print(str(ti))
 
             exit()

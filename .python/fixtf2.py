@@ -314,6 +314,8 @@ def aws_launch_template(t1,tt1,tt2,flag1,flag2):
         tt2=tt2.strip('\"')
         if tt2 == "[]": 
             skip=1
+    elif tt1 == "vpc_security_group_ids": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+
     return skip,t1,flag1,flag2
 
 

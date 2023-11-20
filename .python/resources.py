@@ -415,6 +415,14 @@ def resource_data(type,id):
         filterid=key  # no filter on list-users so use jq like filter
 
 
+    elif type == "aws_eks_node_group":
+        clfn="eks"
+        descfn="list_nodegroups"
+        topkey="nodegroups"
+        key="clusterName"
+        filterid=key  # no filter on list-users so use jq like filter
+
+
    #if type == "aws_availability_zone": return 'AvailabilityZones', ec2client.describe_availability_zones, "ZoneName"
    #if type == "aws_elastic_load_balancer": return 'ElasticLoadBalancers', ec2client.describe_load_balancers, "LoadBalancerName"
    #if type == "aws_instance": return 'Reservations', ec2client.describe_instances, "InstanceId"

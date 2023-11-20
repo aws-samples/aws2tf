@@ -225,7 +225,7 @@ if __name__ == '__main__':
             if not globals.rproc[ti]:
                 i = ti.split(".")[0]
                 id = ti.split(".")[1]
-                print("DD calling getresource with type="+i+" id="+str(id))
+                if globals.debug: print("DD calling getresource with type="+i+" id="+str(id))
                 call_resource(i, id)
         detdep=False
         lc  = lc + 1
@@ -246,11 +246,9 @@ if __name__ == '__main__':
                 print("still False........")
                 print(str(ti))
 
-        print("----------- "+str(lc)+" loops completed --------------")
+        print("----------- "+str(lc)+" loops completed --------------") 
         
-        
-        
-        if lc > 5:
+        if lc > 6:
             print("Too many loops exiting")
             exit()
 

@@ -303,7 +303,7 @@ def write_import(type,theid,tfid):
    # check if file exists:
    #
    if os.path.isfile(fn):
-      print("File exists: " + fn)
+      if globals.debug: print("File exists: " + fn)
       pkey=type+"."+tfid
       globals.rproc[pkey]=True
       return
@@ -438,7 +438,7 @@ def get_test(type,id,clfn,descfn,topkey,key,filterid):
 #   return
 
 def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
-   print("--> In get_aws_route_table_association doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   if globals.debug: print("--> In get_aws_route_table_association doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    if type in str(globals.types): 
       print("Found "+type+"in types skipping ...")
       return
@@ -721,7 +721,8 @@ def get_aws_eks_cluster(type,id,clfn,descfn,topkey,key,filterid):
       write_import(type,theid,None) 
       # add fargate known dependancy for cluster name
       add_known_dependancy("aws_eks_fargate_profile",theid)
-
+      add_known_dependancy("aws_eks_node_group",theid) 
+    
 
    return
 
@@ -743,6 +744,23 @@ def get_aws_eks_fargate_profile(type,id,clfn,descfn,topkey,key,filterid):
 
    return
 
+def get_aws_eks_node_group(type,id,clfn,descfn,topkey,key,filterid):
+   if globals.debug: print("--> In get_aws_eks_fargate_profile  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   response=call_boto3(clfn,descfn,topkey,id)
+
+   if response == []: 
+      print("empty response returning") 
+      return   
+   for j in response: 
+      retid=j # no key
+      # need to ocerwrite theid
+      theid=id+":"+retid
+      rn=id+"__"+retid
+      print("rn="+rn)
+      print("theid="+theid)
+      write_import(type,theid,rn) 
+
+   return
 
 
 def add_known_dependancy(type,id):
@@ -765,7 +783,7 @@ def call_boto3(clfn,descfn,topkey,id):
       paginator = client.get_paginator(descfn)
       if globals.debug: print("paginator")
       
-      if descfn == "list_fargate_profiles":
+      if descfn == "list_fargate_profiles" or descfn == "list_nodegroups" :
          #print("--1a "+str(id))
          for page in paginator.paginate(clusterName=id): response.extend(page[topkey])
       else:

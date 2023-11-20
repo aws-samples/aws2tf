@@ -458,13 +458,13 @@ def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
    else:
       for page in paginator.paginate():
          response.extend(page[topkey])
-   print("response length="+str(len(response)))
+   #print("response length="+str(len(response)))
    #print(str(response))
    #print(id)
    if str(response) != "[]": 
       for item in response:
          il=len(item['Associations'])
-         print("Associations length="+str(il))
+         #print("Associations length="+str(il))
          for r in range(0,il):
             #print(str(r))
             #print(str(item['Associations'][r]))
@@ -472,10 +472,10 @@ def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
             try:
                #print(str(item['Associations'][r]['SubnetId']))
                subid=str(item['Associations'][r]['SubnetId'])
-               print(subid+" in pre-rproc....")
+               #print(subid+" in pre-rproc....")
                #print(globals.rproc)
                if subid in str(globals.rproc):
-                  print(subid+" in processed....")
+                  #print(subid+" in processed....")
                   theid=subid+"/"+rtid
                   write_import(type,theid,None)    
                   pkey=type+"."+id

@@ -15,7 +15,7 @@ def call_resource(type, id):
         print("error clfn is None with type="+type)
         exit()
     try:
-        print("calling generic getresource with type="+type+" id="+str(id)+"   clfn="+clfn +
+        if globals.debug: print("calling generic getresource with type="+type+" id="+str(id)+"   clfn="+clfn +
               " descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
         rr=common.getresource(type, id, clfn, descfn, topkey, key, filterid)
     except:
@@ -234,9 +234,9 @@ if __name__ == '__main__':
         rout = common.rc(com)
         common.tfplan1()
         common.tfplan2()
-        print("********** keys start ***************")
-        for ti in globals.rproc.keys():
-            print(str(ti)+":"+str(globals.rproc[ti]))
+        #print("********** keys start ***************")
+        #for ti in globals.rproc.keys():
+        #    print(str(ti)+":"+str(globals.rproc[ti]))
 
         print("********** keys end ***************")  
         for ti in globals.rproc.keys():

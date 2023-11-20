@@ -326,83 +326,97 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
       if type == j: 
          print(type + " in specials list returning ..")
          return False
-   if globals.debug: print("-1-> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   if "aws_launch" in type: print("-1-> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
    if type in str(globals.types): 
       print("Found "+type+"in types skipping ...")
       return True
    #print("--4 >")
-   if id is not None:
-      pt=type+"."+id
-      if pt in globals.rproc:
-         if globals.rproc[pt] is True:
-            print("Found "+pt+" in processed skipping ...") 
-            return True
-   response=call_boto3(clfn,descfn,topkey,id)   
-   #print("-->"+str(response))
-   if str(response) != "[]":
-         for item in response:
-            #print("-"+str(item))
-            #print("-gr01-")
-            if id is None or filterid=="": # do it all
-               #print("-gr21-")
-               if globals.debug: print("--"+str(item))
-               try:
-                  if "aws-service-role" in str(item["Path"]): 
-                     print("Skipping service role " + str(item[key])) 
-                     continue
-               except:
-                  pass
-               
-               theid=item[key]
-               pt=type+"."+theid
-               if pt not in globals.rproc:
-                  write_import(type,theid,None)
-               else:
-                  if globals.rproc[pt] is True:
-                     print("Found "+pt+" in processed skipping ...") 
-                     continue
-            else:
-               #print("-gr31-"+"filterid="+str(filterid))
-               if "." not in filterid:
-                  #print("***item=" + str(item) + " id=" + id + " filterid=" + filterid+" filtered value: "+str(item[filterid]))
+   try:
+      if id is not None:
+         pt=type+"."+id
+         if pt in globals.rproc:
+            if globals.rproc[pt] is True:
+               print("Found "+pt+" in processed skipping ...") 
+               return True
+      response=call_boto3(clfn,descfn,topkey,id)   
+      #print("-->"+str(response))
+      if str(response) != "[]":
+            for item in response:
+               #print("-"+str(item))
+               #print("-gr01-")
+               if id is None or filterid=="": # do it all
+                  #print("-gr21-")
+                  if globals.debug: print("--"+str(item))
+                  try:
+                     if "aws-service-role" in str(item["Path"]): 
+                        print("Skipping service role " + str(item[key])) 
+                        continue
+                  except:
+                     pass
 
-                  if id == str(item[filterid]):
-                     #print("--"+str(item))
-                     theid=item[key]
-                     special_deps(type,theid)
+                  
+                  theid=item[key]
+                  pt=type+"."+theid
+                  if pt not in globals.rproc:
                      write_import(type,theid,None)
+                  else:
+                     if globals.rproc[pt] is True:
+                        print("Found "+pt+" in processed skipping ...") 
+                        continue
                else:
-                  ### There's a dot in the filterid so we need to dig deeper
-                  print(str(item))
-                  print("id="+id+" filterid="+filterid)
-                  filt1=filterid.split('.')[1]
-                  filt2=filterid.split('.')[3]
-                  print("filt1="+filt1+" filt2="+filt2)
-                  dotc=len(item[filt1])
-                  print("dotc="+str(dotc))
-
-                  for j in range(0,dotc):
-                     #print(str(item[filt1][j]))
+                  #print("-gr31-"+"filterid="+str(filterid)+" id="+str(id))
+                  if "." not in filterid:
+                     #print("***item=" + str(item))
                      try:
-                        val=str(item[filt1][j][filt2])
-                        print("val="+val + " id=" + id)
-                        if id == val:
+                        if id == str(item[filterid]):
+                           #print("--"+str(item))
                            theid=item[key]
-                           if dotc>1: theid=id+"/"+item[key]
+                           special_deps(type,theid)
                            write_import(type,theid,None)
                      except:
-                        print("-------- error on processing")
-                        print(str(item))
-                        print("filterid="+filterid)
-                        print("----------------------------")
-                        pass
-   else:
-      if id is not None:
-         print("No "+type+" "+id+" found -empty response")         
+                        print("Could have done write_import "+type+" "+id)
+                        return False
+                  else:
+                     ### There's a dot in the filterid so we need to dig deeper
+                     print(str(item))
+                     print("id="+id+" filterid="+filterid)
+                     filt1=filterid.split('.')[1]
+                     filt2=filterid.split('.')[3]
+                     print("filt1="+filt1+" filt2="+filt2)
+                     dotc=len(item[filt1])
+                     print("dotc="+str(dotc))
+
+                     for j in range(0,dotc):
+                        #print(str(item[filt1][j]))
+                        try:
+                           val=str(item[filt1][j][filt2])
+                           print("val="+val + " id=" + id)
+                           if id == val:
+                              theid=item[key]
+                              if dotc>1: theid=id+"/"+item[key]
+                              write_import(type,theid,None)
+                        except:
+                           print("-------- error on processing")
+                           print(str(item))
+                           print("filterid="+filterid)
+                           print("----------------------------")
+                           pass
       else:
-         print("No "+type+" found -empty response")
-      return True
+         if id is not None:
+            print("No "+type+" "+id+" found -empty response")         
+         else:
+            print("No "+type+" found -empty response")
+         return True
+   
+   except Exception as e:
+      print(f"{e=}")
+      print("unexpected error in common.getresource")
+      exc_type, exc_obj, exc_tb = sys.exc_info()
+      fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+      print(exc_type, fname, exc_tb.tb_lineno)
+      exit()
+        
 
    return True               
   
@@ -763,6 +777,25 @@ def get_aws_eks_node_group(type,id,clfn,descfn,topkey,key,filterid):
    return
 
 
+def get_aws_launch_template(type,id,clfn,descfn,topkey,key,filterid):
+   if globals.debug: print("--> In get_aws_launch_template    doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   response=call_boto3(clfn,descfn,topkey,id)
+   #print("-9a->"+str(response))
+   if response == []: 
+      print("empty response returning") 
+      return   
+   for j in response: 
+            retid=j['LaunchTemplateId']
+            theid=retid
+            write_import(type,theid,id) 
+
+   return
+
+
+
+
+
+
 def add_known_dependancy(type,id):
     # check if we alredy have it
     pkey=type+"."+id
@@ -774,51 +807,73 @@ def add_known_dependancy(type,id):
 
 def call_boto3(clfn,descfn,topkey,id):
    
-   if globals.debug: print("pre-response")
-   response = []
-   client = boto3.client(clfn) 
-   if globals.debug: print("client")
-
    try:
-      paginator = client.get_paginator(descfn)
-      if globals.debug: print("paginator")
-      
-      if descfn == "list_fargate_profiles" or descfn == "list_nodegroups" :
-         #print("--1a "+str(id))
-         for page in paginator.paginate(clusterName=id): response.extend(page[topkey])
-      else:
-         #print("--1b")
-         for page in paginator.paginate(): 
-            response.extend(page[topkey])
+      if globals.debug: print("calling boto3")
+      if globals.debug: print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+      if globals.debug: print("pre-response")
+      response = []
+      client = boto3.client(clfn) 
+      if globals.debug: print("client")
 
-   except botocore.exceptions.OperationNotPageableError as err:
-         print(f"{err=}")
+      try:
+         paginator = client.get_paginator(descfn)
+         if globals.debug: print("paginator")
 
-         getfn = getattr(client, descfn)
+         if descfn == "describe_launch_templates":
+            #print("*******  describe_launch_templates  ********" )
+            if id is not None:
+               if "lt-" in id:
+                  for page in paginator.paginate(LaunchTemplateIds=[id]): response.extend(page[topkey])
+               else:
+                  #print("--->> id="+str(id))
+                  for page in paginator.paginate(LaunchTemplateNames=[id]): response.extend(page[topkey])
+            else:
+               for page in paginator.paginate(): response.extend(page[topkey])
+
+         if descfn == "list_fargate_profiles" or descfn == "list_nodegroups" :
+            #print("--1a "+str(id))
+            for page in paginator.paginate(clusterName=id): response.extend(page[topkey])
+         else:
+            #print("--1b")
+            for page in paginator.paginate(): 
+               response.extend(page[topkey])
+
+      except botocore.exceptions.OperationNotPageableError as err:
+            print(f"{err=}")
+            print("calling non paginated fn "+str(descfn))
+            getfn = getattr(client, descfn)
+            response1 = getfn()
+            response=response1[topkey]
+
+      except Exception as e:
+         print(f"{e=}")
+         print("-1->unexpected error in common.call_boto3")
+         print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+         exc_type, exc_obj, exc_tb = sys.exc_info()
+         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+         print(exc_type, fname, exc_tb.tb_lineno)
+         exit()
+
+      #print("--2a")  
+      rl=len(response)
+      #print("--2b" + str(rl)) 
+      if rl==0:
+         print("** zero response length for "+ descfn + " returning .. []")
+         return []
+
+      if globals.debug:
+         print("response length="+str(len(response)))
          
-         response1 = getfn()
-         response=response1[topkey]
+         for item in response:
+            print(item)
+            print("--------------------------------------")
    except Exception as e:
-      print(f"{e=}")
-      print("unexpected error in common.call_boto3")
-      exc_type, exc_obj, exc_tb = sys.exc_info()
-      fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-      print(exc_type, fname, exc_tb.tb_lineno)
-      exit()
-
-   #print("--2a")  
-   rl=len(response)
-   #print("--2b" + str(rl)) 
-   if rl==0:
-      print("** zero response length for "+ descfn + " returning .. []")
-      return []
-
-   if globals.debug:
-      print("response length="+str(len(response)))
-      
-      for item in response:
-         print(item)
-         print("--------------------------------------")
-
+         print(f"{e=}")
+         print("-2->unexpected error in common.call_boto3")
+         print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+         exc_type, exc_obj, exc_tb = sys.exc_info()
+         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+         print(exc_type, fname, exc_tb.tb_lineno)
+         exit()
 
    return response

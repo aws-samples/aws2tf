@@ -282,9 +282,9 @@ def resource_data(type,id):
         clfn="ec2"
         descfn="describe_launch_templates"
         topkey="LaunchTemplates"
-        key="LaunchTemplateId"
+        key="LaunchTemplateNames"
         filterid=key
-        if id is not None and "vpc-" in id: filterid="VpcId"
+        if id is not None and "lt-" in id: filterid="LaunchTemplateIds"
 
     elif type == "aws_load_balancer":
         clfn="elb"

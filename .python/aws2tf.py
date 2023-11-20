@@ -15,7 +15,7 @@ def call_resource(type, id):
         print("error clfn is None with type="+type)
         exit()
     try:
-        if globals.debug: print("calling generic getresource with type="+type+" id="+str(id)+"   clfn="+clfn +
+        print("calling generic getresource with type="+type+" id="+str(id)+"   clfn="+clfn +
               " descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
         rr=common.getresource(type, id, clfn, descfn, topkey, key, filterid)
     except:
@@ -199,7 +199,7 @@ if __name__ == '__main__':
             i = ti.split(".")[0]
             id = ti.split(".")[1]
             if id not in str(globals.policyarns):
-                print("KD calling getresource with type="+i+" id="+str(id))
+                print("KD calling call_resource with type="+i+" id="+str(id))
                 call_resource(i, id)
 
 
@@ -207,7 +207,7 @@ if __name__ == '__main__':
     common.tfplan2()
 
     
-    print("Detected Dependancies 3b-----------------------") 
+    print("Detected Dependancies -----------------------") 
     
     for ti in globals.rproc.keys():
         print(str(ti)+":"+str(globals.rproc[ti]))
@@ -238,7 +238,7 @@ if __name__ == '__main__':
         #for ti in globals.rproc.keys():
         #    print(str(ti)+":"+str(globals.rproc[ti]))
 
-        print("********** keys end ***************")  
+        #print("********** keys end ***************")  
         for ti in globals.rproc.keys():
             
             if not globals.rproc[ti]:
@@ -250,6 +250,11 @@ if __name__ == '__main__':
         
         if lc > 6:
             print("Too many loops exiting")
+            for ti in globals.rproc.keys():
+                if not globals.rproc[ti]:
+                    print("still False........")
+                    print(str(ti))
+
             exit()
 
 

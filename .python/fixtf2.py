@@ -307,6 +307,16 @@ def aws_vpclattice_service_network_vpc_association(t1,tt1,tt2,flag1,flag2):
         add_dependancy("aws_vpclattice_service_network",tt2)
     return skip,t1,flag1,flag2
 
+
+def aws_launch_template(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    if tt1 == "security_group_names":
+        tt2=tt2.strip('\"')
+        if tt2 == "[]": 
+            skip=1
+    return skip,t1,flag1,flag2
+
+
 ### EKS -----------
 
 def aws_eks_cluster(t1,tt1,tt2,flag1,flag2):
@@ -337,7 +347,9 @@ def aws_eks_fargate_profile(t1,tt1,tt2,flag1,flag2):
 
 def aws_eks_node_group(t1,tt1,tt2,flag1,flag2):
     skip=0
-    if "launch_template {" in t1: flag1=True
+    if "launch_template {" in t1: 
+        #print("******* flag1 true launch_template")
+        flag1=True
     if "max_unavailable_percentage" in tt1:
         tt2=tt2.strip('\"')
         #print(tt1+" "+tt2)
@@ -355,7 +367,9 @@ def aws_eks_node_group(t1,tt1,tt2,flag1,flag2):
     elif tt1 == "name":
         if flag1 is True: 
             tt2=tt2.strip('\"')
-            print("********"+tt2)
+            #print("----********"+tt2)
+            t1=tt1 + " = aws_launch_template." + tt2 + ".name\n"
+            add_dependancy("aws_launch_template",tt2)
             flag1=False
     
     return skip,t1,flag1,flag2

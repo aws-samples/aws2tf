@@ -752,8 +752,8 @@ def get_aws_eks_fargate_profile(type,id,clfn,descfn,topkey,key,filterid):
       # need to ocerwrite theid
       theid=id+":"+retid
       rn=id+"__"+retid
-      print("rn="+rn)
-      print("theid="+theid)
+      #print("rn="+rn)
+      #print("theid="+theid)
       write_import(type,theid,rn) 
 
    return
@@ -811,69 +811,97 @@ def call_boto3(clfn,descfn,topkey,id):
       if globals.debug: print("calling boto3")
       if globals.debug: print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
       if globals.debug: print("pre-response")
-      response = []
-      client = boto3.client(clfn) 
-      if globals.debug: print("client")
+      response=get_boto3_resp(descfn)  # sets response to [] if nothing saved
+      if response == []:
+         client = boto3.client(clfn) 
+         if globals.debug: print("client")
 
-      try:
-         paginator = client.get_paginator(descfn)
-         if globals.debug: print("paginator")
+         try:
+            paginator = client.get_paginator(descfn)
+            if globals.debug: print("paginator")
 
-         if descfn == "describe_launch_templates":
-            #print("*******  describe_launch_templates  ********" )
-            if id is not None:
-               if "lt-" in id:
-                  for page in paginator.paginate(LaunchTemplateIds=[id]): response.extend(page[topkey])
+            if descfn == "describe_launch_templates":
+               #print("*******  describe_launch_templates  ********" )
+               if id is not None:
+                  if "lt-" in id:
+                     for page in paginator.paginate(LaunchTemplateIds=[id]): response.extend(page[topkey])
+                  else:
+                     #print("--->> id="+str(id))
+                     for page in paginator.paginate(LaunchTemplateNames=[id]): response.extend(page[topkey])
                else:
-                  #print("--->> id="+str(id))
-                  for page in paginator.paginate(LaunchTemplateNames=[id]): response.extend(page[topkey])
+                  for page in paginator.paginate(): response.extend(page[topkey])
+
+            if descfn == "list_fargate_profiles" or descfn == "list_nodegroups" :
+               #print("--1a "+str(id))
+               for page in paginator.paginate(clusterName=id): response.extend(page[topkey])
             else:
-               for page in paginator.paginate(): response.extend(page[topkey])
+               #print("--1b")
+               for page in paginator.paginate(): 
+                  response.extend(page[topkey])
+               # save a full paginate as we don't want to do it many times
+               sav_boto3_rep(descfn,response)
 
-         if descfn == "list_fargate_profiles" or descfn == "list_nodegroups" :
-            #print("--1a "+str(id))
-            for page in paginator.paginate(clusterName=id): response.extend(page[topkey])
-         else:
-            #print("--1b")
-            for page in paginator.paginate(): 
-               response.extend(page[topkey])
+         except botocore.exceptions.OperationNotPageableError as err:
+               print(f"{err=}")
+               print("calling non paginated fn "+str(descfn))
+               getfn = getattr(client, descfn)
+               response1 = getfn()
+               response=response1[topkey]
 
-      except botocore.exceptions.OperationNotPageableError as err:
-            print(f"{err=}")
-            print("calling non paginated fn "+str(descfn))
-            getfn = getattr(client, descfn)
-            response1 = getfn()
-            response=response1[topkey]
+         except Exception as e:
+            print(f"{e=}")
+            print("-1->unexpected error in common.call_boto3")
+            print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
+            exit()
 
-      except Exception as e:
-         print(f"{e=}")
-         print("-1->unexpected error in common.call_boto3")
-         print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-         exc_type, exc_obj, exc_tb = sys.exc_info()
-         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-         print(exc_type, fname, exc_tb.tb_lineno)
-         exit()
+         #print("--2a")  
+         rl=len(response)
+         #print("--2b" + str(rl)) 
+         if rl==0:
+            print("** zero response length for "+ descfn + " returning .. []")
+            return []
 
-      #print("--2a")  
-      rl=len(response)
-      #print("--2b" + str(rl)) 
-      if rl==0:
-         print("** zero response length for "+ descfn + " returning .. []")
-         return []
-
-      if globals.debug:
-         print("response length="+str(len(response)))
-         
-         for item in response:
-            print(item)
-            print("--------------------------------------")
+         if globals.debug:
+            print("response length="+str(len(response)))
+            
+            for item in response:
+               print(item)
+               print("--------------------------------------")
+   
+      else:
+         print("@@@@ got global response ")
+      
    except Exception as e:
-         print(f"{e=}")
-         print("-2->unexpected error in common.call_boto3")
-         print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-         exc_type, exc_obj, exc_tb = sys.exc_info()
-         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-         print(exc_type, fname, exc_tb.tb_lineno)
-         exit()
+      print(f"{e=}")
+      print("-2->unexpected error in common.call_boto3")
+      print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+      exc_type, exc_obj, exc_tb = sys.exc_info()
+      fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+      print(exc_type, fname, exc_tb.tb_lineno)
+      exit()
 
+   return response
+
+def sav_boto3_rep(descfn,response):
+   if str(descfn)=="describe_subnets" and globals.aws_subnet_resp==[]:
+      globals.aws_subnet_resp=response  
+      print("@@@@ saved global response "+str(descfn))
+   #
+   elif str(descfn)=="describe_route_tables" and globals.aws_route_table_resp==[]:
+      globals.aws_route_table_resp=response  
+      print("@@@@ saved global response "+str(descfn))
+   return 
+
+def get_boto3_resp(descfn):
+   response=[]
+   if str(descfn)=="describe_subnets" and globals.aws_subnet_resp != []:
+      response=globals.aws_subnet_resp
+      print("@@@@ retreived global response "+str(descfn))
+   #
+   elif str(descfn)=="describe_route_tables" and globals.aws_route_table_resp != []:
+      response=globals.aws_route_table_resp
+      print("@@@@ retreived global response "+str(descfn))  
    return response

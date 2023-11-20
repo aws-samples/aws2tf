@@ -68,9 +68,21 @@ def  aws_route_table(t1,tt1,tt2,flag1,flag2):
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
         add_dependancy("aws_vpc",tt2)
+
     if "cidr_block" in tt1:
         tt2=tt2.strip('\"')
         if tt2 == "": t1=tt1 + " = null\n"
+
+    if "nat_gateway_id" in tt1:
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_nat_gateway." + tt2 + ".id\n"
+        add_dependancy("aws_nat_gateway",tt2)
+
+    if "gateway_id" in tt1:
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_internet_gateway." + tt2 + ".id\n"
+        add_dependancy("aws_internet_gateway",tt2)
+
 
     return skip,t1,flag1,flag2
 
@@ -167,6 +179,9 @@ def aws_route_table_association(t1,tt1,tt2,flag1,flag2):
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_route_table." + tt2 + ".id\n"
         add_dependancy("aws_route_table",tt2)
+    if tt1 == "gateway_id":
+        tt2=tt2.strip('\"')
+        if tt2 == "null": skip=1
     
     return skip,t1,flag1,flag2
 

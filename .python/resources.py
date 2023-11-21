@@ -13,6 +13,7 @@ def resource_types(type):
     #elif type == "iam": return ["aws_iam_role","aws_iam_role_policy","aws_iam_policy","aws_iam_role_policy_attachment"]
     elif type == "lattice": return ["aws_vpclattice_service_network"]
     elif type == "eks": return ["aws_eks_cluster"]
+    elif type == "kms": return ["aws_kms_key"]
 
     elif type =="test": return ["aws_acm_certificate","aws_api_gateway_resource","aws_api_gateway_rest_api" \
     ,"aws_appautoscaling_policy","aws_appautoscaling_target", \
@@ -422,6 +423,27 @@ def resource_data(type,id):
         key="clusterName"
         filterid=key  # no filter on list-users so use jq like filter
 
+    elif type == "aws_kms_key":
+        clfn="kms"
+        descfn="list_keys"
+        topkey="Keys"
+        key="KeyId"
+        filterid="KeyArn"  # no filter on list-users so use jq like filter
+
+    elif type == "aws_kms_alias":
+        clfn="kms"
+        descfn="list_aliases"
+        topkey="Aliases"
+        key="TargetKeyId"
+        filterid="AliasName"  # no filter on list-users so use jq like filter
+
+
+    elif type == "aws_ecs_cluster":
+        clfn="ecs"
+        descfn="list_clusters"
+        topkey="clusterArns"
+        key="clusterArn"
+        filterid=key  # no filter on list-users so use jq like filter    
 
    #if type == "aws_availability_zone": return 'AvailabilityZones', ec2client.describe_availability_zones, "ZoneName"
    #if type == "aws_elastic_load_balancer": return 'ElasticLoadBalancers', ec2client.describe_load_balancers, "LoadBalancerName"

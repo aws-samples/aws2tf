@@ -12,7 +12,8 @@ import fixtf2
 def tfplan1():
    print("Plan 1 ... ")
    rf="resources.out"
-   com="terraform plan -generate-config-out="+ rf + " -json | jq . > plan1.json"
+   #com="terraform plan -generate-config-out="+ rf + " -out tfplan -json > plan2.json"
+   com="terraform plan -generate-config-out="+ rf + " -out tfplan -json | jq . > plan1.json"
    print(com)
    rout=rc(com)
    
@@ -53,7 +54,7 @@ def tfplan1():
    return
 
 def tfplan2():
-   print("Plan 2 ... ")
+   print("fix tf files.....") 
    if not os.path.isfile("resources.out"):
          print("could not find expected resources.out file after Plan 1 - exiting")
          exit()
@@ -61,7 +62,7 @@ def tfplan2():
    #print("split resources.out")
    splitf("resources.out")
 
-   print("fix tf files.....") 
+
         
    x=glob.glob("aws_*__*.out")
    for fil in x:
@@ -71,10 +72,12 @@ def tfplan2():
          #if type not in globals.types:
          #   globals.types=globals.types+[type]             
          fixtf.fixtf(type,tf)
+   com="terraform fmt"
+   rout=rc(com)
 
 
 def tfplan3():
-   print("Plan 3 ... ")
+   print("tfplan3  ... ")
    rf="resources.out"
    ## Derived dependancies here:
    # move files
@@ -82,9 +85,6 @@ def tfplan3():
    # and plan
    # and vaidate
          
-   com="terraform fmt"
-   rout=rc(com)
- 
    com="terraform validate -no-color"
    rout=rc(com)
    el=len(rout.stderr.decode().rstrip())
@@ -140,7 +140,7 @@ def tfplan3():
       print("Plan 4 complete")
    
    if not os.path.isfile("tfplan"):
-         print("could not find expected tfplan file - exiting")
+         print("Plan 4 - could not find expected tfplan file - exiting")
          exit()
          
 
@@ -148,9 +148,9 @@ def tfplan3():
 def wrapup():
    #print("split main.tf")
    #splitf("main.tf")
-   print("Validate json")
-   com="terraform validate -no-color -json > validate.json"
-   rout=rc(com)
+   #print("Validate json")
+   #com="terraform validate -no-color -json > validate.json"
+   #rout=rc(com)
    print("Validate")
    com="terraform validate -no-color"
    rout=rc(com)
@@ -160,8 +160,9 @@ def wrapup():
       print(errm)
    if "Success! The configuration is valid" not in str(rout.stdout.decode().rstrip()):
       print(str(rout.stdout.decode().rstrip()))
+      exit()
    else: 
-      print("Valid Configuration.")
+      print("PASS: Valid Configuration.")
    
 
    #print(str(rout.stdout.decode().rstrip()))
@@ -169,6 +170,8 @@ def wrapup():
    print("terraform import via apply of tfplan....")
    com="terraform apply -no-color tfplan"
    rout=rc(com)
+   zerod=False
+   zeroc=False
    print(str(rout.stdout.decode().rstrip()))
    print("Final Plan check .....")
    com="terraform plan -no-color"
@@ -176,7 +179,7 @@ def wrapup():
    if "No changes. Your infrastructure matches the configuration" not in str(rout.stdout.decode().rstrip()):
       print(str(rout.stdout.decode().rstrip()))
    else: 
-      print("No changes in plan")
+      print("PASS: No changes in plan")
       com="mv import__*.tf *.out *.json imported"
       rout=rc(com)
 
@@ -451,6 +454,23 @@ def get_test(type,id,clfn,descfn,topkey,key,filterid):
 #   print("--> In get_test doing "+ type + ' with id ' + str(id))   
 #   return
 
+
+
+def get_aws_launch_template(type,id,clfn,descfn,topkey,key,filterid):
+   if globals.debug: print("--> In get_aws_launch_template    doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   response=call_boto3(clfn,descfn,topkey,id)
+   #print("-9a->"+str(response))
+   if response == []: 
+      print("empty response returning") 
+      return   
+   for j in response: 
+            retid=j['LaunchTemplateId']
+            theid=retid
+            write_import(type,theid,id) 
+
+   return
+
+
 def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug: print("--> In get_aws_route_table_association doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    if type in str(globals.types): 
@@ -461,6 +481,7 @@ def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
    response = []
    client = boto3.client(clfn) 
    paginator = client.get_paginator(descfn)
+   # TODO - just get all onlce and use @@@@ globals
    if "subnet-" in id:
       for page in paginator.paginate(Filters=[
             {
@@ -472,6 +493,7 @@ def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
    else:
       for page in paginator.paginate():
          response.extend(page[topkey])
+
    #print("response length="+str(len(response)))
    #print(str(response))
    #print(id)
@@ -488,8 +510,11 @@ def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
                subid=str(item['Associations'][r]['SubnetId'])
                #print(subid+" in pre-rproc....")
                #print(globals.rproc)
+               
+               # TODO wrong check ? if don't have subnet should add as dependancy
                if subid in str(globals.rproc):
-                  #print(subid+" in processed....")
+
+                  # TODO check if already have the association
                   theid=subid+"/"+rtid
                   write_import(type,theid,None)    
                   pkey=type+"."+id
@@ -777,25 +802,6 @@ def get_aws_eks_node_group(type,id,clfn,descfn,topkey,key,filterid):
    return
 
 
-def get_aws_launch_template(type,id,clfn,descfn,topkey,key,filterid):
-   if globals.debug: print("--> In get_aws_launch_template    doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-   response=call_boto3(clfn,descfn,topkey,id)
-   #print("-9a->"+str(response))
-   if response == []: 
-      print("empty response returning") 
-      return   
-   for j in response: 
-            retid=j['LaunchTemplateId']
-            theid=retid
-            write_import(type,theid,id) 
-
-   return
-
-
-
-
-
-
 def add_known_dependancy(type,id):
     # check if we alredy have it
     pkey=type+"."+id
@@ -805,6 +811,8 @@ def add_known_dependancy(type,id):
     return
 
 
+
+## TODO - always get all / paginate all - save in globals - filter on id in get_aws_ ??
 def call_boto3(clfn,descfn,topkey,id):
    
    try:

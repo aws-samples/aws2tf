@@ -6,6 +6,9 @@ import s3
 import common
 import resources
 import globals
+import kms
+import os
+import sys
 
 
 def call_resource(type, id):
@@ -24,11 +27,21 @@ def call_resource(type, id):
         try:
             print("calling specific common.get_"+type+" with type="+type+" id="+str(id)+"   clfn=" +
                     clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
-            getfn = getattr(common, "get_"+type)
+            # TODO try getfn = getattr(eval(clfn), "get_"+type)
+            if type == "aws_kms_key":
+                print("*--*")
+                getfn = getattr(eval(clfn), "get_"+type)
+            else:
+                getfn = getattr(common, "get_"+type)
+            
             getfn(type, id, clfn, descfn, topkey, key, filterid)
         except Exception as e:
                 # By this way we can know about the type of error occurring
                 print(f"{e=}")
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                print(exc_type, fname, exc_tb.tb_lineno)
+
                 exit()
 
 if __name__ == '__main__':
@@ -155,20 +168,11 @@ if __name__ == '__main__':
         for i in all_types:
             # print("calling "+i)
             call_resource(i, id)
-
-        # special case for route tables:
-        #clfn = "ec2"
-        #descfn = "describe_route_tables"
-        #topkey = "RouteTables"
-        #key = "Associations"
-        #filterid = key
-        #if id is not None and "vpc-" in id:
-        #    filterid = ".Associations.0.VpcId"
-        #if id is not None and "subnet-" in id:
-        #    filterid = ".Associations.0.SubnetId"
-        ## call s special: once (if subnet in processed or igw)
-        #i = "aws_route_table_association"
-        #common.get_aws_route_table_association(i, id, clfn, descfn, topkey, key, filterid)
+    elif type == "kms":
+        all_types = resources.resource_types(type)
+        for i in all_types:
+            print("calling "+i)
+            call_resource(i, id)
 
     elif type == "iam" or type == "lattice":
         all_types = resources.resource_types(type)

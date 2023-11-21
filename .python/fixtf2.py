@@ -334,6 +334,12 @@ def aws_eks_cluster(t1,tt1,tt2,flag1,flag2):
         if ":" in tt2: tt2=tt2.split("/")[-1]
         t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
         add_dependancy("aws_iam_role",tt2)
+    elif tt1 == "key_arn":
+        tt2=tt2.strip('\"')
+        if ":" in tt2: tt2=tt2.split("/")[-1]
+        t1=tt1 + " = aws_kms_key." + tt2 + ".arn\n"
+        add_dependancy("aws_kms_key",tt2)
+    
     return skip,t1,flag1,flag2
 
 
@@ -380,6 +386,11 @@ def aws_eks_node_group(t1,tt1,tt2,flag1,flag2):
             flag1=False
     
     return skip,t1,flag1,flag2
+
+def aws_kms_key(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    return skip,t1,flag1,flag2 
+
 
 def  aws_resource(t1,tt1,tt2,flag1,flag2):
     skip=0

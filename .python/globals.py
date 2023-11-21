@@ -13,7 +13,7 @@ aws_subnet_resp=[]
 aws_route_table_resp=[]
 plan2=False
 
-specials=["aws_iam_role_policy","aws_route_table_association","aws_iam_policy","aws_iam_policy_attchment","aws_eks_cluster","aws_eks_fagate_profile"]
+specials=["aws_iam_role_policy","aws_route_table_association","aws_iam_policy","aws_iam_policy_attchment","aws_eks_cluster","aws_eks_fagate_profile","aws_kms_key"]
 
 ## Dicts
 

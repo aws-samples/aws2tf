@@ -2,9 +2,6 @@ import globals
 
 def  aws_vpc(t1,tt1,tt2,skipipv6,flag2):
     skip = 0
-    #print(t1)
-    #print(tt1)
-    #print(tt2)
 
     if tt1 == "assign_generated_ipv6_cidr_block":
         if tt2 in "true": skipipv6=True
@@ -40,10 +37,6 @@ def aws_subnet(t1,tt1,tt2,flag1,flag2):
 
 def  aws_security_group(t1,tt1,tt2,flag1,flag2):
     skip = 0
-    #print(t1)
-    #print(tt1)
-    #print(tt2)
-
     if tt1 == "vpc_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
@@ -63,7 +56,7 @@ def  aws_security_group(t1,tt1,tt2,flag1,flag2):
 
 def  aws_route_table(t1,tt1,tt2,flag1,flag2):
     skip=0
-    #print(tt1 + " " + tt2)
+
     if tt1 == "vpc_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
@@ -145,15 +138,12 @@ def  aws_s3_bucket(t1,tt1,tt2,flag1,flag2):
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
         flag2=False
-    
-
 
     return skip,t1,flag1,flag2
 
 
 def aws_vpc_endpoint(t1,tt1,tt2,flag1,flag2):
     skip=0
-    #print("tt1="+tt1)
     if tt1 == "vpc_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
@@ -187,13 +177,10 @@ def aws_route_table_association(t1,tt1,tt2,flag1,flag2):
     return skip,t1,flag1,flag2
 
 
-
-
 def aws_cloudwatch_log_group(t1,tt1,tt2,flag1,flag2):
     skip=0
 
     return skip,t1,flag1,flag2 
-
 
 def aws_config_config_rule(t1,tt1,tt2,flag1,flag2):
     skip=0
@@ -392,7 +379,7 @@ def aws_kms_key(t1,tt1,tt2,flag1,flag2):
     return skip,t1,flag1,flag2 
 
 
-def  aws_resource(t1,tt1,tt2,flag1,flag2):
+def aws_resource(t1,tt1,tt2,flag1,flag2):
     skip=0
     return skip,t1,flag1,flag2 
 

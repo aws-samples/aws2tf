@@ -1,7 +1,6 @@
 import boto3
 import sys
 import subprocess
-import fixtf
 import os
 import globals
 import glob
@@ -71,7 +70,7 @@ def tfplan2():
          #print("type="+type+" tf="+tf)
          #if type not in globals.types:
          #   globals.types=globals.types+[type]             
-         fixtf.fixtf(type,tf)
+         fixtf(type,tf)
    com="terraform fmt"
    rout=rc(com)
 
@@ -226,6 +225,66 @@ def aws_tf(region):
          f3.write('data "aws_availability_zones" "az" {\n')
          f3.write('state = "available"\n')
          f3.write('}\n')
+
+
+
+def fixtf(ttft,tf):
+  
+    rf=tf+".out"
+    tf2=tf+".tf"
+    if globals.debug:
+        print(ttft+" fixtf "+tf+".out") 
+   
+    try:
+        f1 = open(rf, 'r')
+    except:
+        print("no "+rf)
+        return
+    Lines = f1.readlines()
+    #print("getfn for fixtf2."+ttft+" "+tf2)
+    with open(tf2, "a") as f2:
+        skip=0
+        flag1=False
+        flag2=False
+        f2.write("##START,"+ttft+"\n")
+        for t1 in Lines:
+            tt1=t1.split("=")[0].strip()
+            try:
+                tt2=t1.split("=")[1].strip()
+            except:
+                tt2=""
+
+             
+            try:              
+                getfn = getattr(fixtf2, ttft)
+            except Exception as e:
+                print(f"{e=}")
+                print("** no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
+                #print("t1="+t1) 
+                getfn = getattr(fixtf2, "aws_resource")
+          
+            try:
+                #print("calling fixtf2."+ttft+" "+tf2)
+                skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
+            except Exception as e:
+                print(f"{e=}")
+                print("-- no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
+                #print("t1="+t1) 
+                skip,t1,flag1,flag2=fixtf2.aws_resource(t1,tt1,tt2,flag1,flag2)
+
+
+
+            if skip == 0:
+                f2.write(t1)
+                
+    #with open(tf2, "a") as f2:
+    #    f2.write("##END,"+ttft+"\n")
+    #splitf(tf2)
+
+
+
+
+
 
 
 # split resources.out

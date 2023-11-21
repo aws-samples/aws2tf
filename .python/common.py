@@ -813,6 +813,7 @@ def add_known_dependancy(type,id):
 
 
 ## TODO - always get all / paginate all - save in globals - filter on id in get_aws_ ??
+## but in smaller use cases may be better to make filtered boto3 calls ?
 def call_boto3(clfn,descfn,topkey,id):
    
    try:

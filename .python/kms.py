@@ -14,8 +14,10 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
         for j in response: 
             theid=j[key]
             ka="k-"+theid
-            #print(ka)
-            if id is not None and id != theid:
+            #print("ka="+str(ka)+" id="+str(id)+" theid="+str(theid))
+            # if doesnt start with a k add k- to the start of id
+            if id is not None and not id.startswith("k-"): id="k-"+id
+            if id is not None and id != ka:
                 continue
             else:
                 common.write_import(type,theid,ka) 

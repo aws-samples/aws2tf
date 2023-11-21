@@ -194,34 +194,32 @@ if __name__ == '__main__':
             print(str(ti)+":"+str(globals.rproc[ti]))  
             kdep=True
 
-    if kdep:
-        for ti in list(globals.rdep):
+    #if kdep:
+    for ti in list(globals.rdep):
             if not globals.rdep[ti]:
                 i = ti.split(".")[0]
                 id = ti.split(".")[1]
                 if id not in str(globals.policyarns):
                     print("KD calling call_resource with type="+i+" id="+str(id))
                     call_resource(i, id)
-    else:
-        print("No Known Dependancies")
+    #else:
+    #    print("No Known Dependancies")
 
 
     common.tfplan1()
     common.tfplan2()
     
-    
-    
     if ":" in globals.rproc:
         print(": in rproc exiting")
         exit()
 
-
+    print("Detected Dependancies -----------------------") 
     detdep=False
     for ti in globals.rproc.keys():
         if not globals.rproc[ti]: 
             print(str(ti)+":"+str(globals.rproc[ti]))  
             detdep=True
-            print("Detected Dependancies -----------------------") 
+            
  
     if not detdep:
         print("No Detected Dependancies") 

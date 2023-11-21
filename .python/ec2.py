@@ -2,6 +2,7 @@
 
 import common
 import boto3
+import globals
 
 def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug: print("--> In get_aws_route_table_association doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)

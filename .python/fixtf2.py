@@ -323,7 +323,7 @@ def aws_eks_cluster(t1,tt1,tt2,flag1,flag2):
         add_dependancy("aws_iam_role",tt2)
     elif tt1 == "key_arn":
         tt2=tt2.strip('\"')
-        if ":" in tt2: tt2=tt2.split("/")[-1]
+        if ":" in tt2: tt2="k-"+tt2.split("/")[-1]
         t1=tt1 + " = aws_kms_key." + tt2 + ".arn\n"
         add_dependancy("aws_kms_key",tt2)
     

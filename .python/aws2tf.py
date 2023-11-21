@@ -7,6 +7,10 @@ import common
 import resources
 import globals
 import kms
+import eks
+import ec2
+import iam
+
 import os
 import sys
 
@@ -182,33 +186,46 @@ if __name__ == '__main__':
 #########################################################################################################################
 
 ## Known dependancies section
-    print("Known Dependancies ----------------------")
+    
+    kdep=False
+    for ti in globals.rproc.keys():
+        if not globals.rproc[ti]: 
+            print("Known Dependancies ----------------------")
+            print(str(ti)+":"+str(globals.rproc[ti]))  
+            kdep=True
 
-    for j in list(globals.rproc):
-        print(j)
-
-    for ti in list(globals.rdep):
-        if not globals.rdep[ti]:
-            i = ti.split(".")[0]
-            id = ti.split(".")[1]
-            if id not in str(globals.policyarns):
-                print("KD calling call_resource with type="+i+" id="+str(id))
-                call_resource(i, id)
+    if kdep:
+        for ti in list(globals.rdep):
+            if not globals.rdep[ti]:
+                i = ti.split(".")[0]
+                id = ti.split(".")[1]
+                if id not in str(globals.policyarns):
+                    print("KD calling call_resource with type="+i+" id="+str(id))
+                    call_resource(i, id)
+    else:
+        print("No Known Dependancies")
 
 
     common.tfplan1()
     common.tfplan2()
     
-    print("Detected Dependancies -----------------------") 
     
-    for ti in globals.rproc.keys():
-        print(str(ti)+":"+str(globals.rproc[ti]))    
     
     if ":" in globals.rproc:
         print(": in rproc exiting")
         exit()
-    
-    detdep=True
+
+
+    detdep=False
+    for ti in globals.rproc.keys():
+        if not globals.rproc[ti]: 
+            print(str(ti)+":"+str(globals.rproc[ti]))  
+            detdep=True
+            print("Detected Dependancies -----------------------") 
+ 
+    if not detdep:
+        print("No Detected Dependancies") 
+
     lc=0
     while detdep:
         for ti in list(globals.rproc):
@@ -255,7 +272,7 @@ if __name__ == '__main__':
 
 #################################
 
-
+    print("writing processed.txt")
     if mg is True:
         with open("processed.txt", "a") as f:
             for i in globals.rproc.keys():
@@ -263,6 +280,8 @@ if __name__ == '__main__':
                 f.write(i+"\n")
 
     else:
+        
+        
         with open("processed.txt", "w") as f:
             for i in globals.rproc.keys():
                 print(str(i))
@@ -278,5 +297,7 @@ if __name__ == '__main__':
         print("Processed ---------------")
         for i in globals.rproc.keys():
             print(i)
+
+    print("Done")
 
     exit(0)

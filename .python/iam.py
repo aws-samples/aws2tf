@@ -1,6 +1,6 @@
 import common
 import boto3
-
+import globals
 
 ##
 ## hmm inline policies are in the aws_iam_role  anyway !

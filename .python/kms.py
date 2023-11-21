@@ -15,7 +15,10 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
             theid=j[key]
             ka="k-"+theid
             #print(ka)
-            common.write_import(type,theid,ka) 
+            if id is not None and id != theid:
+                continue
+            else:
+                common.write_import(type,theid,ka) 
     except Exception as e:
         print(f"{e=}")
         exc_type, exc_obj, exc_tb = sys.exc_info()

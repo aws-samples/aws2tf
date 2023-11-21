@@ -1,4 +1,7 @@
 import common
+import globals
+
+
 
 # as list_clusters is awkward
 def get_aws_eks_cluster(type,id,clfn,descfn,topkey,key,filterid):

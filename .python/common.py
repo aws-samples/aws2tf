@@ -277,15 +277,6 @@ def fixtf(ttft,tf):
             if skip == 0:
                 f2.write(t1)
                 
-    #with open(tf2, "a") as f2:
-    #    f2.write("##END,"+ttft+"\n")
-    #splitf(tf2)
-
-
-
-
-
-
 
 # split resources.out
 def splitf(file):

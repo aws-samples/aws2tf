@@ -79,11 +79,6 @@ def tfplan2():
 def tfplan3():
    print("tfplan3  ... ")
    rf="resources.out"
-   ## Derived dependancies here:
-   # move files
-   # DD's
-   # and plan
-   # and vaidate
          
    com="terraform validate -no-color"
    rout=rc(com)
@@ -183,9 +178,6 @@ def wrapup():
       com="mv import__*.tf *.out *.json imported"
       rout=rc(com)
 
-
-
-
 def rc(cmd):
     out = subprocess.run(cmd, shell=True, capture_output=True)
     ol=len(out.stdout.decode('utf-8').rstrip())    
@@ -194,10 +186,6 @@ def rc(cmd):
          errm=out.stderr.decode().rstrip()
          #print(errm)
          #exit(1)
-
-    # could be > /dev/null
-    #if ol==0:
-    #    print("No return from command " + str(cmd))
     
     #print(out.stdout.decode().rstrip())
     return out
@@ -214,7 +202,6 @@ def check_python_version():
   if major < 3 or (major == 3 and minor < 7):
     print("This program requires Python 3.7 or later.")
     sys.exit(1)
-
 
 
 def aws_tf(region):
@@ -436,6 +423,7 @@ def special_deps(ttft,taddr):
    elif ttft == "aws_vpclattice_service_network":
       add_known_dependancy("aws_vpclattice_service",taddr) 
       add_known_dependancy("aws_vpclattice_service_network_vpc_association",taddr) 
+      #add_known_dependancy("aws_vpclattice_service_network_vpc_association",taddr)
       # ../../scripts/get-vpclattice-auth-policy.sh $cname
       # ../../scripts/get-vpclattice-resource-policy.sh $rarn
       # ../../scripts/get-vpclattice-service-network-service-associations.sh $cname
@@ -453,353 +441,6 @@ def get_test(type,id,clfn,descfn,topkey,key,filterid):
 #   print("in get_aws_vpc_dhcp_options")
 #   print("--> In get_test doing "+ type + ' with id ' + str(id))   
 #   return
-
-
-
-def get_aws_launch_template(type,id,clfn,descfn,topkey,key,filterid):
-   if globals.debug: print("--> In get_aws_launch_template    doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-   response=call_boto3(clfn,descfn,topkey,id)
-   #print("-9a->"+str(response))
-   if response == []: 
-      print("empty response returning") 
-      return   
-   for j in response: 
-            retid=j['LaunchTemplateId']
-            theid=retid
-            write_import(type,theid,id) 
-
-   return
-
-
-def get_aws_route_table_association(type,id,clfn,descfn,topkey,key,filterid):
-   if globals.debug: print("--> In get_aws_route_table_association doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-   if type in str(globals.types): 
-      print("Found "+type+"in types skipping ...")
-      return
-
-  
-   response = []
-   client = boto3.client(clfn) 
-   paginator = client.get_paginator(descfn)
-   # TODO - just get all onlce and use @@@@ globals
-   if "subnet-" in id:
-      for page in paginator.paginate(Filters=[
-            {
-                  'Name': 'association.subnet-id',
-                  'Values': [id]
-            },
-         ]):
-         response.extend(page[topkey])  
-   else:
-      for page in paginator.paginate():
-         response.extend(page[topkey])
-
-   #print("response length="+str(len(response)))
-   #print(str(response))
-   #print(id)
-   if str(response) != "[]": 
-      for item in response:
-         il=len(item['Associations'])
-         #print("Associations length="+str(il))
-         for r in range(0,il):
-            #print(str(r))
-            #print(str(item['Associations'][r]))
-            rtid=(str(item['Associations'][r]['RouteTableId']))
-            try:
-               #print(str(item['Associations'][r]['SubnetId']))
-               subid=str(item['Associations'][r]['SubnetId'])
-               #print(subid+" in pre-rproc....")
-               #print(globals.rproc)
-               
-               # TODO wrong check ? if don't have subnet should add as dependancy
-               if subid in str(globals.rproc):
-
-                  # TODO check if already have the association
-                  theid=subid+"/"+rtid
-                  write_import(type,theid,None)    
-                  pkey=type+"."+id
-                  globals.rproc[pkey]=True    
-            except:
-               pass
-   return
-
-
-##
-## hmm inline policies are in the aws_iam_role  anyway !
-##
-def get_aws_iam_role_policy(type,id,clfn,descfn,topkey,key,filterid):
-   print("--> In get_aws_iam_role_policy doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-   
-   client = boto3.client(clfn) 
-   response=[]
-   rn=id
-   if id is None:
-      for j in globals.rproc.keys():
-         if "aws_iam_role" in j:
-            response=[]
-            dotc=j.count('.')
-            rn=j.split(".")[1]
-            if dotc > 1: rn=rn +"." + j.split(".")[2]         
-            paginator = client.get_paginator(descfn)
-            for page in paginator.paginate(RoleName=rn):   # special
-               response.extend(page[topkey])
-            if response == []: 
-               continue
-            #print("--RoleName="+rn+" response="+str(response))
-            for j in response: 
-               if j not in str(globals.policies):
-                  print("adding "+j+" to policies for role " + rn)
-                  globals.policies = globals.policies + [j]
-                  theid=rn+":"+j
-                  write_import(type,theid,None)
-
-
-   else:
-      response=[]
-      paginator = client.get_paginator(descfn)
-      for page in paginator.paginate(RoleName=rn):
-         response.extend(page[topkey])
-      print("RoleName="+rn+" response="+str(response))
-
-      for j in response: 
-         if j not in str(globals.policies):
-            print("adding "+j+" to policies for role " + rn)
-            globals.policies = globals.policies + [j]
-            theid=rn+":"+j
-            write_import(type,theid,None) 
-   
-   return
-
-
-
-##
-## special due to scope local
-##
-def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
-   if globals.debug: print("--> In get_aws_iam_policy doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-
-   client = boto3.client(clfn) 
-   if globals.debug: print("client")
-   response=[]
-   if "arn:" in id:
-      print("hi")
-      response1 = client.get_policy(PolicyArn=id)
-      #print(str(response1))
-      response=response1['Policy']
-
-   else:
-      paginator = client.get_paginator(descfn)
-      if globals.debug: print("Paginator")
-
-      try:
-         for page in paginator.paginate(Scope='Local'):  # special
-            response.extend(page[topkey])
-      except Exception as e:
-         print(f"{e=}")
-
-   if response == []: 
-      print("empty response returning") 
-      return  
-    
-   if id is None:
-      for j in response: 
-            #print("j="+str(j))
-            theid=j[key]
-            retid=j["Arn"]
-            try:
-               ln=retid.rfind("/")
-               pn=retid[ln+1:]
-            except Exception as e:
-               print("pn error")
-               print(f"{e=}")
-
-            print("policy name="+str(pn))      
-            if retid == id:
-               if theid not in str(globals.policies):
-                  #print("---adding "+theid+" to policies")
-                  globals.policies = globals.policies + [theid]
-                  globals.policyarns = globals.policyarns + [retid]
-                  write_import(type,retid,pn)
-   else:
-         j=response
-         #print("j="+str(j))
-         theid=j[key]
-         retid=j["Arn"]
-         try:
-            ln=retid.rfind("/")
-            pn=retid[ln+1:]
-         except Exception as e:
-               print("pn error")
-               print(f"{e=}")
-
-         print("policy name="+str(pn))
-            #print("response="+str(retid)+" id="+str(id))
-         
-         if theid not in str(globals.policies):
-                  #print("-- adding "+theid+" to policies")
-                  globals.policies = globals.policies + [theid]
-                  globals.policyarns = globals.policyarns + [retid]
-                  write_import(type,retid,pn)  
-   
-   return
-
-##
-## special due to mandator role name,
-##
-def get_aws_iam_policy_attchment(type,id,clfn,descfn,topkey,key,filterid):
-   #print("--> In get_aws_iam_policy_attachment doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-   if id is None:
-      print("Id must be set to the RoleName")
-      return
-   client = boto3.client(clfn) 
-   response=[]
-   paginator = client.get_paginator(descfn)
-   try:
-      for page in paginator.paginate(RoleName=id):    ## special
-      #for page in paginator.paginate():
-         response.extend(page[topkey])
-   except Exception as e:
-      print(f"{e=}")
-   #print("response="+str(response))
-   if response == []: 
-      print("empty response returning") 
-      return   
-   for j in response: 
-            retid=j['PolicyArn']
-            theid=id+"/"+retid
-            ln=retid.rfind("/")
-            pn=retid[ln+1:]
-            rn=id+"__"+pn
-            # - no as using policy arns (minus account id etc)
-            if "arn:aws:iam::aws:policy" not in theid:
-               add_known_dependancy("aws_iam_policy",retid)
-               globals.dependancies=globals.dependancies + ["aws_iam_policy."+retid]
-            #print("adding "+theid+" attachment")
-            write_import(type,theid,rn) 
-   return
-
-def get_aws_vpclattice_service(type,id,clfn,descfn,topkey,key,filterid):
-   if globals.debug:  print("--> In get_aws_vpclattice_service doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-
-   client = boto3.client(clfn) 
-   if globals.debug: print("--client")
-   response=[]
-   
-   if globals.debug: print("Paginator")
-
-   try:
-      paginator = client.get_paginator(descfn)
-      for page in paginator.paginate():
-         response.extend(page[topkey])
-   except botocore.exceptions.OperationNotPageableError as err:
-         #print(f"{err=}")
-         getfn = getattr(client, descfn)
-         response1 = getfn()
-         response=response1[topkey]
-   except Exception as e:
-      print(f"{e=}")
-      print("unexpected error in paginate")
-      exit()
-      
-
-   if response == []: 
-      print("empty response returning") 
-      return   
-   for j in response: 
-            retid=j['id']
-            theid=retid
-            write_import(type,theid,None) 
-
-   return
-
-def get_aws_vpclattice_service_network_vpc_association(type,id,clfn,descfn,topkey,key,filterid):
-   if globals.debug: print("--> In get_aws_vpclattice_service_network_vpc_association doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-
-   client = boto3.client(clfn) 
-   if globals.debug: print("--client")
-   response=[]
-   
-   if globals.debug: print("Paginator")
-
-   try:
-      paginator = client.get_paginator(descfn)
-      for page in paginator.paginate():
-         response.extend(page[topkey])
-   except botocore.exceptions.OperationNotPageableError as err:
-         #print(f"{err=}")
-         getfn = getattr(client, descfn)
-         response1 = getfn(serviceNetworkIdentifier=id)  ## special
-         response=response1[topkey]
-   except Exception as e:
-      print(f"{e=}")
-      print("unexpected error in paginate")
-      exit()
-      
-
-   if response == []: 
-      print("empty response returning") 
-      return   
-   for j in response: 
-            retid=j['id']
-            theid=retid
-            write_import(type,theid,None) 
-
-   return
-
-# as list_clusters is awkward
-def get_aws_eks_cluster(type,id,clfn,descfn,topkey,key,filterid):
-   if globals.debug: print("--> In get_aws_eks_cluster doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-   response=call_boto3(clfn,descfn,topkey,id)
-
-   if response == []: 
-      print("empty response returning") 
-      return   
-   for j in response: 
-      retid=j # no key
-      theid=retid
-      write_import(type,theid,None) 
-      # add fargate known dependancy for cluster name
-      add_known_dependancy("aws_eks_fargate_profile",theid)
-      add_known_dependancy("aws_eks_node_group",theid) 
-    
-
-   return
-
-def get_aws_eks_fargate_profile(type,id,clfn,descfn,topkey,key,filterid):
-   if globals.debug: print("--> In get_aws_eks_fargate_profile  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-   response=call_boto3(clfn,descfn,topkey,id)
-
-   if response == []: 
-      print("empty response returning") 
-      return   
-   for j in response: 
-      retid=j # no key
-      # need to ocerwrite theid
-      theid=id+":"+retid
-      rn=id+"__"+retid
-      #print("rn="+rn)
-      #print("theid="+theid)
-      write_import(type,theid,rn) 
-
-   return
-
-def get_aws_eks_node_group(type,id,clfn,descfn,topkey,key,filterid):
-   if globals.debug: print("--> In get_aws_eks_fargate_profile  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-   response=call_boto3(clfn,descfn,topkey,id)
-
-   if response == []: 
-      print("empty response returning") 
-      return   
-   for j in response: 
-      retid=j # no key
-      # need to ocerwrite theid
-      theid=id+":"+retid
-      rn=id+"__"+retid
-      print("rn="+rn)
-      print("theid="+theid)
-      write_import(type,theid,rn) 
-
-   return
 
 
 def add_known_dependancy(type,id):

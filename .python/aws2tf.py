@@ -28,13 +28,9 @@ def call_resource(type, id):
             print("calling specific common.get_"+type+" with type="+type+" id="+str(id)+"   clfn=" +
                     clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
             # TODO try getfn = getattr(eval(clfn), "get_"+type)
-            if type == "aws_kms_key":
-                print("*--*")
-                getfn = getattr(eval(clfn), "get_"+type)
-            else:
-                getfn = getattr(common, "get_"+type)
-            
+            getfn = getattr(eval(clfn), "get_"+type)            
             getfn(type, id, clfn, descfn, topkey, key, filterid)
+
         except Exception as e:
                 # By this way we can know about the type of error occurring
                 print(f"{e=}")
@@ -184,13 +180,6 @@ if __name__ == '__main__':
         call_resource(type,id)
 
 #########################################################################################################################
-    print("Manual Dependancies ----------------------")
-
-    for j in list(globals.rproc):
-        print(j)
-
-
-    
 
 ## Known dependancies section
     print("Known Dependancies ----------------------")
@@ -209,14 +198,11 @@ if __name__ == '__main__':
 
     common.tfplan1()
     common.tfplan2()
-
     
     print("Detected Dependancies -----------------------") 
     
     for ti in globals.rproc.keys():
-        print(str(ti)+":"+str(globals.rproc[ti]))
-    
-    
+        print(str(ti)+":"+str(globals.rproc[ti]))    
     
     if ":" in globals.rproc:
         print(": in rproc exiting")
@@ -265,9 +251,7 @@ if __name__ == '__main__':
 
 
     common.tfplan3()
-
     common.wrapup()
-
 
 #################################
 
@@ -296,6 +280,3 @@ if __name__ == '__main__':
             print(i)
 
     exit(0)
-
-
-

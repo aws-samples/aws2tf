@@ -531,8 +531,8 @@ def call_boto3(clfn,descfn,topkey,id):
                else:
                   for page in paginator.paginate(): response.extend(page[topkey])
 
-            if descfn == "list_fargate_profiles" or descfn == "list_nodegroups" :
-               #print("--1a "+str(id))
+            if descfn == "list_fargate_profiles" or descfn == "list_nodegroups" or descfn == "list_identity_provider_configs":
+               print("--1a "+str(id))
                for page in paginator.paginate(clusterName=id): response.extend(page[topkey])
             else:
                #print("--1b")
@@ -561,7 +561,7 @@ def call_boto3(clfn,descfn,topkey,id):
          rl=len(response)
          #print("--2b" + str(rl)) 
          if rl==0:
-            print("** zero response length for "+ descfn + " returning .. []")
+            print("** zero response length for "+ descfn + " in call_boto3 returning .. []")
             return []
 
          if globals.debug:

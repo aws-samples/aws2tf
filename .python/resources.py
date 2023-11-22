@@ -121,33 +121,17 @@ def resource_types(type):
 
 def resource_data(type,id):
 
-    clfn=None
-    descfn=None
-    topkey=None
-    key=None
-    filterid=None
+    clfn=None;descfn=None;topkey=None;key=None;filterid=None
 
     if type == "aws_vpc": 
-            clfn="ec2"
-            descfn="describe_vpcs"
-            topkey='Vpcs' 
-            key="VpcId" 
-            filterid=key
+        clfn="ec2";descfn="describe_vpcs";topkey='Vpcs';key="VpcId";filterid=key
 
     elif type == "aws_vpc_endpoint": 
-        clfn="ec2"
-        descfn="describe_vpc_endpoints"
-        topkey="VpcEndpoints"
-        key="VpcEndpointId"
-        filterid=key
+        clfn="ec2";descfn="describe_vpc_endpoints";topkey="VpcEndpoints";key="VpcEndpointId";filterid=key
         if id is not None and "vpc-" in id: filterid="VpcId"
     
     elif type in "aws_subnet":
-        clfn="ec2"
-        descfn="describe_subnets"
-        topkey="Subnets"
-        key="SubnetId"
-        filterid=key
+        clfn="ec2";descfn="describe_subnets";topkey="Subnets";key="SubnetId";filterid=key
         if id is not None and "vpc-" in id: filterid="VpcId"
 
     elif type == "aws_security_group": 
@@ -376,59 +360,32 @@ def resource_data(type,id):
 
     ## Lattice
     elif type == "aws_vpclattice_service_network":
-        clfn="vpc-lattice"
-        descfn="list_service_networks"
-        topkey="items"
-        key="id"
-        filterid="name"  # no filter on list-users so use jq like filter
+        clfn="vpc-lattice";descfn="list_service_networks";topkey="items";key="id"
+        filterid="name" 
         if id is not None and "sn-" in id: filterid=key
 
     elif type == "aws_vpclattice_service":
-        clfn="vpc-lattice"
-        descfn="list_services"
-        topkey="items"
-        key="id"
-        filterid="name"  # no filter on list-users so use jq like filter
+        clfn="vpc-lattice"; descfn="list_services";topkey="items";key="id";filterid="name"  # no filter on list-users so use jq like filter
         if id is not None and "sn-" in id: filterid=key   
 
     elif type == "aws_vpclattice_service_network_vpc_association":
-        clfn="vpc-lattice"
-        descfn="list_service_network_vpc_associations"
-        topkey="items"
-        key="id"
-        filterid="name"  # no filter on list-users so use jq like filter
+        clfn="vpc-lattice";descfn="list_service_network_vpc_associations";topkey="items";key="id"
+        filterid="name"  
         if id is not None and "sn-" in id: filterid=key   
 
    ### EKS
 
     elif type == "aws_eks_cluster":
-        clfn="eks"
-        descfn="list_clusters"
-        topkey="clusters"
-        key="name"
-        filterid=key  # no filter on list-users so use jq like filter
+        clfn="eks";descfn="list_clusters";topkey="clusters";key="name";filterid=key  
   
     elif type == "aws_eks_fargate_profile":
-        clfn="eks"
-        descfn="list_fargate_profiles"
-        topkey="fargateProfileNames"
-        key="clusterName"
-        filterid=key  # no filter on list-users so use jq like filter
-
+        clfn="eks"; descfn="list_fargate_profiles"; topkey="fargateProfileNames"; key="clusterName";filterid=key  
 
     elif type == "aws_eks_node_group":
-        clfn="eks"
-        descfn="list_nodegroups"
-        topkey="nodegroups"
-        key="clusterName"
-        filterid=key  # no filter on list-users so use jq like filter
+        clfn="eks";descfn="list_nodegroups";topkey="nodegroups";key="clusterName";filterid=key  
 
     elif type == "aws_kms_key":
-        clfn="kms"
-        descfn="list_keys"
-        topkey="Keys"
-        key="KeyId"
-        filterid="KeyArn"  # no filter on list-users so use jq like filter
+        clfn="kms";descfn="list_keys";topkey="Keys";key="KeyId";filterid="KeyArn"
 
     elif type == "aws_kms_alias":
         clfn="kms"

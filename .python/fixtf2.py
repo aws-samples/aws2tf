@@ -372,6 +372,12 @@ def aws_eks_node_group(t1,tt1,tt2,flag1,flag2):
     
     return skip,t1,flag1,flag2
 
+
+def aws_eks_addons(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    return skip,t1,flag1,flag2 
+
+
 def aws_kms_key(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "policy": t1=globals_replace(t1,tt1,tt2)

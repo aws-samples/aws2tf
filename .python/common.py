@@ -531,7 +531,7 @@ def call_boto3(clfn,descfn,topkey,id):
                else:
                   for page in paginator.paginate(): response.extend(page[topkey])
 
-            if descfn == "list_fargate_profiles" or descfn == "list_nodegroups" or descfn == "list_identity_provider_configs":
+            if descfn == "list_fargate_profiles" or descfn == "list_nodegroups" or descfn == "list_identity_provider_configs" or descfn == "list_addons":
                print("--1a "+str(id))
                for page in paginator.paginate(clusterName=id): response.extend(page[topkey])
             else:

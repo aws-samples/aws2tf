@@ -384,26 +384,23 @@ def resource_data(type,id):
     elif type == "aws_eks_node_group":
         clfn="eks";descfn="list_nodegroups";topkey="nodegroups";key="clusterName";filterid=key  
 
+    elif type == "aws_eks_addons":
+        clfn="eks";descfn="list_addons";topkey="addons";key="clusterName";filterid=key  
+
     elif type == "aws_eks_identity_provider_config":
         clfn="eks";descfn="list_identity_provider_configs";topkey="identityProviderConfigs";key="clusterName";filterid=key
+
+### KMS
 
     elif type == "aws_kms_key":
         clfn="kms";descfn="list_keys";topkey="Keys";key="KeyId";filterid="KeyArn"
 
     elif type == "aws_kms_alias":
-        clfn="kms"
-        descfn="list_aliases"
-        topkey="Aliases"
-        key="TargetKeyId"
-        filterid="AliasName"  # no filter on list-users so use jq like filter
+        clfn="kms";descfn="list_aliases";topkey="Aliases";key="TargetKeyId";filterid="AliasName" 
 
 
     elif type == "aws_ecs_cluster":
-        clfn="ecs"
-        descfn="list_clusters"
-        topkey="clusterArns"
-        key="clusterArn"
-        filterid=key  # no filter on list-users so use jq like filter    
+        clfn="ecs";descfn="list_clusters";topkey="clusterArns";key="clusterArn";filterid=key  
 
    #if type == "aws_availability_zone": return 'AvailabilityZones', ec2client.describe_availability_zones, "ZoneName"
    #if type == "aws_elastic_load_balancer": return 'ElasticLoadBalancers', ec2client.describe_load_balancers, "LoadBalancerName"

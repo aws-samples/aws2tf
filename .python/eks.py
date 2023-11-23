@@ -19,6 +19,7 @@ def get_aws_eks_cluster(type,id,clfn,descfn,topkey,key,filterid):
         common.add_known_dependancy("aws_eks_fargate_profile",theid)
         common.add_known_dependancy("aws_eks_node_group",theid) 
         common.add_known_dependancy("aws_eks_identity_provider_config",theid)
+        common.add_known_dependancy("aws_eks_addons",theid)
 
    return
 
@@ -57,6 +58,26 @@ def get_aws_eks_node_group(type,id,clfn,descfn,topkey,key,filterid):
       common.write_import(type,theid,rn) 
 
    return
+
+def get_aws_eks_addons(type,id,clfn,descfn,topkey,key,filterid):
+   if globals.debug: print("--> In get_aws_eks_addons  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   response=common.call_boto3(clfn,descfn,topkey,id)
+
+   if response == []: 
+      print("empty response returning") 
+      return   
+   for j in response: 
+      retid=j # no key
+      # need to ocerwrite theid
+      theid=id+":"+retid
+      rn=id+"__"+retid
+      print("rn="+rn)
+      print("theid="+theid)
+      common.write_import(type,theid,rn) 
+
+   return
+
+
 
 def get_aws_eks_identity_provider_config(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug: print("--> In get_aws_eks_identity_provider_config  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)

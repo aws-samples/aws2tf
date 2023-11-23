@@ -254,7 +254,7 @@ if __name__ == '__main__':
 
         print("----------- "+str(lc)+" loops completed --------------") 
         
-        if lc > 6:
+        if lc > 8:
             print("Too many loops exiting")
             print("still False........")
             for ti in globals.rproc.keys():

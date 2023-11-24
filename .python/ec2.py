@@ -90,7 +90,7 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
 
                         except Exception as e:
                            print(f"{e=}")
-                           print("-1->get_aws_route_table_association")
+                           print("ERROR: -1-> get_aws_route_table_association")
                            print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
                            print(str(item['Associations'][r]))
                            print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
@@ -106,11 +106,12 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
                         
     except Exception as e:
         print(f"{e=}")
-        print("-2->unexpected error in get_aws_route_table_association")
+        print("ERROR: -2->unexpected error in get_aws_route_table_association")
         print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         print(exc_type, fname, exc_tb.tb_lineno)
+        exit()
 
     return
 

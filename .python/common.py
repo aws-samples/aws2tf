@@ -356,6 +356,8 @@ def write_import(type,theid,tfid):
       f.write('}\n')
 
    pkey=type+"."+tfid
+   if type=="aws_kms_alias":
+      print(pkey+" setting True")
    globals.rproc[pkey]=True
 
    return
@@ -506,6 +508,8 @@ def add_known_dependancy(type,id):
 
 ## TODO - always get all / paginate all - save in globals - filter on id in get_aws_ ??
 ## but in smaller use cases may be better to make filtered boto3 calls ?
+## this call doesn't take the key
+
 def call_boto3(clfn,descfn,topkey,id):
    
    try:
@@ -533,8 +537,16 @@ def call_boto3(clfn,descfn,topkey,id):
                   for page in paginator.paginate(): response.extend(page[topkey])
 
             if descfn == "list_fargate_profiles" or descfn == "list_nodegroups" or descfn == "list_identity_provider_configs" or descfn == "list_addons":
-               print("--1a "+str(id))
+               #print("--1a "+str(id))
                for page in paginator.paginate(clusterName=id): response.extend(page[topkey])
+            
+            if clfn=="kms" and descfn=="list_aliases" and id is not None:
+               if id.startswith("k-"): id=id[2:]
+               #print("-- call boto3 --"+str(id))
+               for page in paginator.paginate(KeyId=id): response.extend(page[topkey])
+               return response
+            
+            
             else:
                #print("--1b")
                for page in paginator.paginate(): 
@@ -594,6 +606,10 @@ def sav_boto3_rep(descfn,response):
    elif str(descfn)=="describe_route_tables" and globals.aws_route_table_resp==[]:
       globals.aws_route_table_resp=response  
       #print("@@@@ saved global response "+str(descfn))
+   elif str(descfn)=="list_aliases" and globals.aws_kms_alias==[]:
+      globals.aws_kms_alias=response  
+      #print("@@@@ saved global response "+str(descfn))
+
    return 
 
 def get_boto3_resp(descfn):
@@ -604,5 +620,9 @@ def get_boto3_resp(descfn):
    #
    elif str(descfn)=="describe_route_tables" and globals.aws_route_table_resp != []:
       response=globals.aws_route_table_resp
+      #print("@@@@ retreived global response "+str(descfn))  
+
+   elif str(descfn)=="list_aliases" and globals.aws_kms_alias != []:
+      response=globals.aws_kms_alias
       #print("@@@@ retreived global response "+str(descfn))  
    return response

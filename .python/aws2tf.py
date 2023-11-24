@@ -22,15 +22,15 @@ def call_resource(type, id):
         print("error clfn is None with type="+type)
         exit()
     try:
-        print("calling generic getresource with type="+type+" id="+str(id)+"   clfn="+clfn +
-              " descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
+        #print("calling generic getresource with type="+type+" id="+str(id)+"   clfn="+clfn +
+        #      " descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
         rr=common.getresource(type, id, clfn, descfn, topkey, key, filterid)
     except:
         pass
     if not rr:
         try:
-            print("calling specific common.get_"+type+" with type="+type+" id="+str(id)+"   clfn=" +
-                    clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
+            #print("calling specific common.get_"+type+" with type="+type+" id="+str(id)+"   clfn=" +
+            #        clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
             # TODO try getfn = getattr(eval(clfn), "get_"+type)
             getfn = getattr(eval(clfn), "get_"+type)            
             getfn(type, id, clfn, descfn, topkey, key, filterid)
@@ -188,10 +188,10 @@ if __name__ == '__main__':
 ## Known dependancies section
     
     kdep=False
-    for ti in globals.rproc.keys():
-        if not globals.rproc[ti]: 
+    for ti in globals.rdep.keys():
+        if not globals.rdep[ti]: 
             print("Known Dependancies ----------------------")
-            print(str(ti)+":"+str(globals.rproc[ti]))  
+            print(str(ti)+":"+str(globals.rdep[ti]))  
             kdep=True
 
     #if kdep:
@@ -254,7 +254,7 @@ if __name__ == '__main__':
 
         print("----------- "+str(lc)+" loops completed --------------") 
         
-        if lc > 8:
+        if lc > 9:
             print("ERROR: Too many loops exiting")
             print("ERROR: still False........")
             for ti in globals.rproc.keys():

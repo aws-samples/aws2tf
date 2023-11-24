@@ -255,15 +255,15 @@ if __name__ == '__main__':
         print("----------- "+str(lc)+" loops completed --------------") 
         
         if lc > 8:
-            print("Too many loops exiting")
-            print("still False........")
+            print("ERROR: Too many loops exiting")
+            print("ERROR: still False........")
             for ti in globals.rproc.keys():
                 if not globals.rproc[ti]:
                     
                     print(str(ti))
 
             exit()
-
+            #detdep=True
 
     common.tfplan3()
     common.wrapup()

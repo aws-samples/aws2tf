@@ -384,7 +384,7 @@ def resource_data(type,id):
     elif type == "aws_eks_node_group":
         clfn="eks";descfn="list_nodegroups";topkey="nodegroups";key="clusterName";filterid=key  
 
-    elif type == "aws_eks_addons":
+    elif type == "aws_eks_addon":
         clfn="eks";descfn="list_addons";topkey="addons";key="clusterName";filterid=key  
 
     elif type == "aws_eks_identity_provider_config":

@@ -32,8 +32,9 @@ def tfplan1():
                mess=f2.readline()
                try:
                   i=mess.split('(')[2].split(')')[0]
-                  print("Removing "+i+" files - plan errors see plan1.json")
-                  com="rm -f s3-*"+ i + "import__*s3-*.tf aws_s3_*__b-"+ i +".tf main.tf"
+                  print("ERROR: Removing "+i+" files - plan errors see plan1.json")
+                  com="rm -f s3-*"+ i + " import__*"+i+"*.tf aws_*"+ i +"*.tf"
+                  print(com)
                   rout=rc(com)
                   globals.plan2=True
                except:
@@ -572,7 +573,7 @@ def call_boto3(clfn,descfn,topkey,id):
                print("--------------------------------------")
    
       else:
-         print("@@@@ got global response ")
+         print("got global response ")
       
    except Exception as e:
       print(f"{e=}")
@@ -588,20 +589,20 @@ def call_boto3(clfn,descfn,topkey,id):
 def sav_boto3_rep(descfn,response):
    if str(descfn)=="describe_subnets" and globals.aws_subnet_resp==[]:
       globals.aws_subnet_resp=response  
-      print("@@@@ saved global response "+str(descfn))
+      #print("@@@@ saved global response "+str(descfn))
    #
    elif str(descfn)=="describe_route_tables" and globals.aws_route_table_resp==[]:
       globals.aws_route_table_resp=response  
-      print("@@@@ saved global response "+str(descfn))
+      #print("@@@@ saved global response "+str(descfn))
    return 
 
 def get_boto3_resp(descfn):
    response=[]
    if str(descfn)=="describe_subnets" and globals.aws_subnet_resp != []:
       response=globals.aws_subnet_resp
-      print("@@@@ retreived global response "+str(descfn))
+      #print("@@@@ retreived global response "+str(descfn))
    #
    elif str(descfn)=="describe_route_tables" and globals.aws_route_table_resp != []:
       response=globals.aws_route_table_resp
-      print("@@@@ retreived global response "+str(descfn))  
+      #print("@@@@ retreived global response "+str(descfn))  
    return response

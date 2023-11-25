@@ -16,6 +16,15 @@ def  aws_vpc(t1,tt1,tt2,skipipv6,flag2):
     #            
     return skip,t1,skipipv6,flag2
 
+
+def aws_vpc_ipv4_cidr_block_association(t1,tt1,tt2,skipipv6,flag2):
+    skip = 0         
+    if tt1 == "vpc_id":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
+        add_dependancy("aws_vpc",tt2)
+    return skip,t1,skipipv6,flag2
+
     
 def aws_subnet(t1,tt1,tt2,flag1,flag2):
     skip=0

@@ -8,6 +8,8 @@ import sys
 
 
 def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filterid):
+    #print("--> In get_aws_route_table_association doing " + type + ' with id ' + str(id) +
+    #              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         if globals.debug:
             print("--> In get_aws_route_table_association doing " + type + ' with id ' + str(id) +
@@ -45,11 +47,13 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
 
         #print("@@ response length="+str(len(response)))
         #print(str(response))
-        #print(id)
+        #print("-aa-"+id)
         if str(response) != "[]":
+            #print ("-bb-")
             for item in response:
+                #print(str(item))
                 il = len(item['Associations'])
-                # print("Associations length="+str(il))
+                #print("Associations length="+str(il))
                 for r in range(0, il):
                     # print(str(r))
                     # print(str(item['Associations'][r]))
@@ -99,9 +103,22 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
                            print(exc_type, fname, exc_tb.tb_lineno)
                            exit()
                      else:
-                         print("Setting " + pkey + "=True")
                          pkey="aws_route_table_association"+"."+vpcid
+                         print("Setting " + pkey + "=True")
                          globals.rproc[pkey] = True
+
+            # set subnet true now ? as there's no assoc.
+            for ti in globals.rproc.keys():
+                if not globals.rproc[ti]:
+                    if "aws_route_table_association.subnet" in str(ti):
+                        globals.rproc[ti] = True
+                        print("************** Setting " + ti + "=True")
+        else:
+            print("No response for get_aws_route_table_association")
+            pkey="aws_route_table_association"+"."+id
+            print("Setting " + pkey + "=True")
+            globals.rproc[pkey] = True
+
 
                         
     except Exception as e:
@@ -129,5 +146,35 @@ def get_aws_launch_template(type, id, clfn, descfn, topkey, key, filterid):
         retid = j['LaunchTemplateId']
         theid = retid
         common.write_import(type, theid, id)
+
+    return
+
+def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key, filterid):
+    #if globals.debug:
+    #print("--> In get_aws_vpc_ipv4_cidr_block_association doing " + type + ' with id ' + str(id) +
+    #          " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    response = common.call_boto3(clfn, descfn, topkey, id)
+    #print("-9a->"+str(response))
+    try:
+        if response == []:
+            print("empty response returning")
+            return
+        for j in response:
+            cidrb = j['CidrBlockAssociationSet']
+            vpcid = j['VpcId']
+            if id==vpcid:
+                retid=cidrb[0]['AssociationId']
+                theid = retid
+                common.write_import(type, theid, None)
+                pkey = type+"."+vpcid
+                globals.rproc[pkey] = True
+    except Exception as e:
+        print(f"{e=}")
+        print("ERROR: -2->unexpected error in get_aws_vpc_ipv4_cidr_block_association")
+        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        exit()
 
     return

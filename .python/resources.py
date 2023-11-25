@@ -126,6 +126,9 @@ def resource_data(type,id):
     if type == "aws_vpc": 
         clfn="ec2";descfn="describe_vpcs";topkey='Vpcs';key="VpcId";filterid=key
 
+    if type == "aws_vpc_ipv4_cidr_block_association":
+        clfn="ec2";descfn="describe_vpcs";topkey='Vpcs';key="VpcId";filterid=key
+
     elif type == "aws_vpc_endpoint": 
         clfn="ec2";descfn="describe_vpc_endpoints";topkey="VpcEndpoints";key="VpcEndpointId";filterid=key
         if id is not None and "vpc-" in id: filterid="VpcId"
@@ -135,19 +138,11 @@ def resource_data(type,id):
         if id is not None and "vpc-" in id: filterid="VpcId"
 
     elif type == "aws_security_group": 
-        clfn="ec2"
-        descfn="describe_security_groups"
-        topkey="SecurityGroups"
-        key="GroupId"
-        filterid=key
+        clfn="ec2";descfn="describe_security_groups";topkey="SecurityGroups";key="GroupId";filterid=key
         if id is not None and "vpc-" in id: filterid="VpcId"         
 
     elif type == "aws_internet_gateway": 
-        clfn="ec2"
-        descfn="describe_internet_gateways"
-        topkey="InternetGateways"
-        key="InternetGatewayId"
-        filterid=key
+        clfn="ec2";descfn="describe_internet_gateways";topkey="InternetGateways";key="InternetGatewayId";filterid=key
         if id is not None and "vpc-" in id: filterid=".Attachments.0.VpcId"    
 
     elif type == "aws_nat_gateway": 

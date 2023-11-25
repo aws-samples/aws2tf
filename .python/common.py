@@ -389,7 +389,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                #print("-"+str(item))
                #print("-gr01-")
                if id is None or filterid=="": # do it all
-                  #print("-gr21-")
+                  print("-gr21-")
                   if globals.debug: print("--"+str(item))
                   try:
                      if "aws-service-role" in str(item["Path"]): 
@@ -407,6 +407,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                      if globals.rproc[pt] is True:
                         print("Found "+pt+" in processed skipping ...") 
                         continue
+                  special_deps(type,theid)
                else:
                   #print("-gr31-"+"filterid="+str(filterid)+" id="+str(id))
                   if "." not in filterid:
@@ -473,6 +474,7 @@ def special_deps(ttft,taddr):
    elif ttft == "aws_vpc": 
       add_known_dependancy("aws_route_table_association",taddr)   
       fixtf2.add_dependancy("aws_route_table_association",taddr)
+      fixtf2.add_dependancy("aws_vpc_ipv4_cidr_block_association",taddr)
    elif ttft == "aws_vpclattice_service_network":
       add_known_dependancy("aws_vpclattice_service",taddr) 
       add_known_dependancy("aws_vpclattice_service_network_vpc_association",taddr) 
@@ -513,8 +515,7 @@ def add_known_dependancy(type,id):
 def call_boto3(clfn,descfn,topkey,id):
    
    try:
-      if globals.debug: print("calling boto3")
-      if globals.debug: print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+      if globals.debug: print("call_boto3 clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
       if globals.debug: print("pre-response")
       response=get_boto3_resp(descfn)  # sets response to [] if nothing saved
       if response == []:
@@ -603,6 +604,10 @@ def sav_boto3_rep(descfn,response):
       globals.aws_subnet_resp=response  
       #print("@@@@ saved global response "+str(descfn))
    #
+   if str(descfn)=="describe_vpcs" and globals.aws_vpc_resp==[]:
+      globals.aws_vpc_resp=response  
+
+   #
    elif str(descfn)=="describe_route_tables" and globals.aws_route_table_resp==[]:
       globals.aws_route_table_resp=response  
       #print("@@@@ saved global response "+str(descfn))
@@ -616,8 +621,10 @@ def get_boto3_resp(descfn):
    response=[]
    if str(descfn)=="describe_subnets" and globals.aws_subnet_resp != []:
       response=globals.aws_subnet_resp
-      #print("@@@@ retreived global response "+str(descfn))
-   #
+   
+   elif str(descfn)=="describe_vpcs" and globals.aws_vpc_resp != []:
+      response=globals.aws_vpc_resp
+   
    elif str(descfn)=="describe_route_tables" and globals.aws_route_table_resp != []:
       response=globals.aws_route_table_resp
       #print("@@@@ retreived global response "+str(descfn))  

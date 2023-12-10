@@ -144,19 +144,12 @@ if __name__ == '__main__':
     globals.regionl = len(region)
     common.aws_tf(region)
 
-    if type == "all":
-        type = "net"
-
-    elif type == "aws_vpc" or type == "vpc":
-        type = "aws_vpc"
-    elif type == "subnet":
-        type = "aws_subnet"
-    elif type == "config":
-        type = "aws_config_config_rule"
-    elif type == "eks":
-        type = "aws_eks_cluster"
-    elif type == "cw" or type == "cloudwatch" or type == "logs":
-        type = "aws_cloudwatch_log_group"
+    if type == "all": type = "test"
+    elif type == "aws_vpc" or type == "vpc": type = "aws_vpc"
+    elif type == "subnet": type = "aws_subnet"
+    elif type == "config": type = "aws_config_config_rule"
+    elif type == "eks": type = "aws_eks_cluster"
+    elif type == "cw" or type == "cloudwatch" or type == "logs": type = "aws_cloudwatch_log_group"
         
 
 ################# -- now we are calling ----   ###############################
@@ -166,18 +159,7 @@ if __name__ == '__main__':
         rout = common.rc(com)
         s3.get_all_s3_buckets(fb, region)
 
-    elif type == "net":
-        all_types = resources.resource_types(type)
-        for i in all_types:
-            # print("calling "+i)
-            call_resource(i, id)
-    elif type == "kms":
-        all_types = resources.resource_types(type)
-        for i in all_types:
-            print("calling "+i)
-            call_resource(i, id)
-
-    elif type == "iam" or type == "lattice":
+    elif type == "net" or type == "kms" or type == "iam" or type == "lattice":
         all_types = resources.resource_types(type)
         for i in all_types:
             call_resource(i, id)
@@ -279,10 +261,7 @@ if __name__ == '__main__':
             for i in globals.rproc.keys():
                 print(str(i))
                 f.write(i+"\n")
-
     else:
-        
-        
         with open("processed.txt", "w") as f:
             for i in globals.rproc.keys():
                 print(str(i))

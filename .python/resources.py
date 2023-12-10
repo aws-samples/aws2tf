@@ -351,19 +351,60 @@ def resource_data(type,id):
         if id is not None and "arn:aws:iam::" in id: filterid="Arn"
 
     ## Lattice
+    ##
+    elif type == "aws_vpclattice_access_log_subscription":
+        clfn="vpc-lattice";descfn="list_access_log_subscriptions";topkey="items";key="id"
+        filterid="name"  
+        if id is not None and "sn-" in id: filterid=key 
+    ##
+    elif type == "aws_vpclattice_auth_policy":
+        clfn="vpc-lattice";descfn="list_auth_policies";topkey="items";key="id"
+        filterid="name"  
+        if id is not None and "sn-" in id: filterid=key
+
+    elif type == "aws_vpclattice_listener":
+        clfn="vpc-lattice";descfn="list_listeners";topkey="items";key="id"
+        filterid="name"  
+        if id is not None and "sn-" in id: filterid=key
+
+    elif type == "aws_vpclattice_listener_rule":
+        clfn="vpc-lattice";descfn="list_listener_rules";topkey="items";key="id"
+        filterid="name"  
+        if id is not None and "sn-" in id: filterid=key
+    ##
+    elif type == "aws_vpclattice_resource_policy":  
+        clfn="vpc-lattice";descfn="list_resource_policies";topkey="items";key="id"
+        filterid="name"  
+        if id is not None and "sn-" in id: filterid=key
+    ##
+    elif type == "aws_vpclattice_service":
+        clfn="vpc-lattice"; descfn="list_services";topkey="items";key="id";filterid="name"  # no filter on list-users so use jq like filter
+        if id is not None and "sn-" in id: filterid=key
+    ##
     elif type == "aws_vpclattice_service_network":
         clfn="vpc-lattice";descfn="list_service_networks";topkey="items";key="id"
         filterid="name" 
         if id is not None and "sn-" in id: filterid=key
-
-    elif type == "aws_vpclattice_service":
-        clfn="vpc-lattice"; descfn="list_services";topkey="items";key="id";filterid="name"  # no filter on list-users so use jq like filter
-        if id is not None and "sn-" in id: filterid=key   
-
+    ##
+    elif type == "aws_vpclattice_service_network_service_association":
+        clfn="vpc-lattice";descfn="list_service_network_service_associations";topkey="items";key="id"
+        filterid="name"  
+        if id is not None and "sn-" in id: filterid=key
+    ##
     elif type == "aws_vpclattice_service_network_vpc_association":
         clfn="vpc-lattice";descfn="list_service_network_vpc_associations";topkey="items";key="id"
         filterid="name"  
         if id is not None and "sn-" in id: filterid=key   
+
+    elif type == "aws_vpclattice_target_group":
+        clfn="vpc-lattice";descfn="list_target_groups";topkey="items";key="id"
+        filterid="name"  
+        if id is not None and "sn-" in id: filterid=key
+
+    elif type == "aws_vpclattice_target_group_association":
+        clfn="vpc-lattice";descfn="list_target_group_associations";topkey="items";key="id"
+        filterid="name"  
+        if id is not None and "sn-" in id: filterid=key
 
    ### EKS
 

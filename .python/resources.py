@@ -143,14 +143,11 @@ def resource_data(type,id):
 
     elif type == "aws_internet_gateway": 
         clfn="ec2";descfn="describe_internet_gateways";topkey="InternetGateways";key="InternetGatewayId";filterid=key
-        if id is not None and "vpc-" in id: filterid=".Attachments.0.VpcId"    
+        if id is not None and "vpc-" in id: filterid=".Attachments.0.VpcId"  
+
 
     elif type == "aws_nat_gateway": 
-        clfn="ec2"
-        descfn="describe_nat_gateways"
-        topkey="NatGateways"
-        key="NatGatewayId"
-        filterid=key
+        clfn="ec2";descfn="describe_nat_gateways";topkey="NatGateways";key="NatGatewayId";filterid=key
         if id is not None and "vpc-" in id: filterid="VpcId"           
 
     elif type == "aws_network_acl": 
@@ -393,9 +390,21 @@ def resource_data(type,id):
     elif type == "aws_kms_alias":
         clfn="kms";descfn="list_aliases";topkey="Aliases";key="TargetKeyId";filterid="AliasName" 
 
+### ECS
 
     elif type == "aws_ecs_cluster":
         clfn="ecs";descfn="list_clusters";topkey="clusterArns";key="clusterArn";filterid=key  
+
+
+###         
+
+    elif type == "aws_cloudwatch_log_group":
+        clfn="logs";descfn="describe_log_groups";topkey="logGroups";key="logGroupName";filterid=key
+
+    elif type == "aws_config_config_rule":
+        clfn="config";descfn="describe_config_rules";topkey="ConfigRules";key="ConfigRuleName";filterid=key
+
+
 
    #if type == "aws_availability_zone": return 'AvailabilityZones', ec2client.describe_availability_zones, "ZoneName"
    #if type == "aws_elastic_load_balancer": return 'ElasticLoadBalancers', ec2client.describe_load_balancers, "LoadBalancerName"

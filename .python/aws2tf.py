@@ -22,16 +22,18 @@ def call_resource(type, id):
         print("error clfn is None with type="+type)
         exit()
     try:
-        #print("calling generic getresource with type="+type+" id="+str(id)+"   clfn="+clfn +
-        #      " descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
+        if globals.debug:
+            print("calling generic getresource with type="+type+" id="+str(id)+"   clfn="+clfn +
+              " descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
         rr=common.getresource(type, id, clfn, descfn, topkey, key, filterid)
     except:
         pass
     if not rr:
         try:
-            #print("calling specific common.get_"+type+" with type="+type+" id="+str(id)+"   clfn=" +
-            #        clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
-            # TODO try getfn = getattr(eval(clfn), "get_"+type)
+            if globals.debug:
+                print("calling specific common.get_"+type+" with type="+type+" id="+str(id)+"   clfn=" +
+                    clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
+           
             getfn = getattr(eval(clfn), "get_"+type)            
             getfn(type, id, clfn, descfn, topkey, key, filterid)
 
@@ -155,6 +157,7 @@ if __name__ == '__main__':
         type = "aws_eks_cluster"
     elif type == "cw" or type == "cloudwatch" or type == "logs":
         type = "aws_cloudwatch_log_group"
+        
 
 ################# -- now we are calling ----   ###############################
 

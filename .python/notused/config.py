@@ -28,12 +28,3 @@ def rules(type,id,botokey,jsonid,filterid):
     f.close()
 
     common.tfplan(type)
-    #rf=type+"_resources.out"
-
-    #if os.path.isfile("tfplan"):
-    #     com="cp " + rf + " "+ type + ".tf"
-    #     rout=common.rc(com)
-
-    #else:
-    #     print("could not find expected tfplan file - exiting")
-    #     exit()

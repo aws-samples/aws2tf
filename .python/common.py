@@ -12,6 +12,13 @@ def tfplan1():
    print("Plan 1 ... ")
    rf="resources.out"
    #com="terraform plan -generate-config-out="+ rf + " -out tfplan -json > plan2.json"
+
+
+   if not glob.glob("import*.tf"):
+      print("No import*.tf files found for this resource, exiting ....")
+      exit()
+
+
    com="terraform plan -generate-config-out="+ rf + " -out tfplan -json | jq . > plan1.json"
    print(com)
    rout=rc(com)
@@ -33,7 +40,8 @@ def tfplan1():
                try:
                   i=mess.split('(')[2].split(')')[0]
                   print("ERROR: Removing "+i+" files - plan errors see plan1.json")
-                  com="rm -f s3-*"+ i + " import__*"+i+"*.tf aws_*"+ i +"*.tf"
+                  globals.badlist=globals.badlist+[i]
+                  com="rm -f import__*"+i+"*.tf aws_*"+ i +"*.tf"
                   print(com)
                   rout=rc(com)
                   globals.plan2=True
@@ -61,6 +69,12 @@ def tfplan2():
 
    #print("split resources.out")
    splitf("resources.out")
+   #zap the badlist
+   for i in globals.badlist:
+      com="rm -f aws_*"+i+"*.out"+" aws_*"+i+"*.tf"
+      print("ERROR: Removing "+i+" files - plan errors see plan1.json")
+      print(com)
+      rout=rc(com)
 
 
         
@@ -78,6 +92,10 @@ def tfplan2():
 
 def tfplan3():
    print("tfplan3  ... ")
+   if not glob.glob("aws_*.tf"):
+      print("No aws_*.tf files found for this resource, exiting ....")
+      exit()
+
    rf="resources.out"
          
    com="terraform validate -no-color"
@@ -109,6 +127,7 @@ def tfplan3():
       rout=rc(com)
       zerod=False
       zeroc=False
+      zeroa=False
       with open('plan2.json', 'r') as f:
          for line in f.readlines():
             #print(line)
@@ -116,6 +135,9 @@ def tfplan3():
               zerod=True
             if '0 to change' in line:
               zeroc=True
+            if '0 to add' in line:
+              zeroa=True
+
             if '@level":"error"' in line:
               if globals.debug is True:
                  print("Error" + line)
@@ -123,12 +145,17 @@ def tfplan3():
               exit()
 
       if not zerod:
-         print("-->> plan will destroy - unexpected, is there existing state ?")
+         print("-->> plan will destroy resources! - unexpected, is there existing state ?")
          print("-->> look at plan2.json - or run terraform plan")
          exit()
 
       if not zeroc:
-         print("-->> plan will change resources - unexpected, is there existing state ?")
+         print("-->> plan will change resources! - unexpected, is there existing state ?")
+         print("-->> look at plan2.json - or run terraform plan")
+         exit()
+
+      if not zeroa:
+         print("-->> plan will add resources! - unexpected")
          print("-->> look at plan2.json - or run terraform plan")
          exit()
 
@@ -306,10 +333,10 @@ def splitf(file):
                #print("resource: " + tt1)
                ttft=tt1.split('"')[1]
                taddr=tt1.split('"')[3]
-               if globals.acc in taddr:
-                  a1=taddr.find(globals.acc)
-                  taddr=taddr[:a1]+taddr[a1+12:]
-                  #print("taddr="+taddr)
+               #if globals.acc in taddr:
+               #   a1=taddr.find(globals.acc)
+               #   taddr=taddr[:a1]+taddr[a1+12:]
+               #   #print("taddr="+taddr)
       
                f2=open(ttft+"__"+taddr+".out","w")
                f2.write(tt1)
@@ -408,8 +435,8 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                         print("Found "+pt+" in processed skipping ...") 
                         continue
                   special_deps(type,theid)
-               else:
-                  #print("-gr31-"+"filterid="+str(filterid)+" id="+str(id))
+               else:  
+                  if globals.debug: print("-gr31-"+"filterid="+str(filterid)+" id="+str(id))
                   if "." not in filterid:
                      #print("***item=" + str(item))
                      try:
@@ -419,7 +446,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                            special_deps(type,theid)
                            write_import(type,theid,None)
                      except:
-                        print("Could have done write_import "+type+" "+id)
+                        print("Could have done write_import "+type+" id="+id+" filterid="+filterid)
                         return False
                   else:
                      ### There's a dot in the filterid so we need to dig deeper
@@ -511,6 +538,12 @@ def add_known_dependancy(type,id):
 ## TODO - always get all / paginate all - save in globals - filter on id in get_aws_ ??
 ## but in smaller use cases may be better to make filtered boto3 calls ?
 ## this call doesn't take the key
+
+## can't pass filterid - not possibilr to use for page in paginator.paginate(filterid=id)
+# TODO ? won't accept filter id as string param1 in paginate(param1,id) ??
+# hench working around using descfn - not ideal
+
+
 
 def call_boto3(clfn,descfn,topkey,id):
    
@@ -616,6 +649,7 @@ def sav_boto3_rep(descfn,response):
       #print("@@@@ saved global response "+str(descfn))
 
    return 
+
 
 def get_boto3_resp(descfn):
    response=[]

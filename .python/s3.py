@@ -3,12 +3,11 @@ import boto3
 import common
 import globals
 
-
 def get_all_s3_buckets(fb,my_region):
-   print("fb="+str(fb))
+   print("bucket name="+str(fb))
    type="aws_s3_bucket"
    
-   print("processed=" + str(globals.rproc))
+   #print("processed=" + str(globals.rproc))
    """Gets all the AWS S3 buckets and saves them to a file."""
    boto3.setup_default_session(region_name=my_region)
    s3a = boto3.resource("s3",region_name=my_region) 
@@ -59,9 +58,7 @@ def get_all_s3_buckets(fb,my_region):
             
             continue
 
-     fn="s3-"+str(bucket_name)+"_import.tf"
 
-   
      #print("Bucket: "+bucket_name + '  ------------------------------')
 
      try:
@@ -96,55 +93,26 @@ def get_all_s3_buckets(fb,my_region):
      #    print("failed to access bucket " +bucket_name + " " + bl +" skipping ..")
      #    continue
      print("Bucket: "+bucket_name)
-     with open(fn, "w") as f:
-         tb="to = aws_s3_bucket.b-" + bucket_name + "\n"
-         #print(tb)
-         f.write('import {\n')
-         f.write(tb)
-         f.write('id = "' + bucket_name + '"\n')
-         f.write("}\n")
 
-         pkey=type+"."+bucket_name 
-         globals.rproc[pkey]=True
+     common.write_import(type,bucket_name,"b-"+bucket_name)
 
-
-         for key in s3_fields:
+     for key in s3_fields:
             #print("outside get_s3 type=" + key)
-            get_s3(f,s3_fields,key,bucket_name)
+         get_s3(s3_fields,key,bucket_name)
       
      
-   print("processed=" + str(globals.rproc))
-   
-
-# terraform plan
-   type="aws_s3_bucket"
-   common.tfplan()
-   # and fix it
-   #if os.path.isfile("tfplan"):
-   #   print("calling fixtf "+ type)
-   #   fixtf.fixtf(type)
-   #else:
-   #      print("could not find expected tfplan file - exiting")
-   #      exit()
          
 ####################################################
 
-def get_s3(f,s3_fields,type,bucket_name):
+def get_s3(s3_fields,type,bucket_name):
    try:
       #print("in get_s3 type=" + type)
       response=s3_fields[type](Bucket=bucket_name)
       rl=len(response)
       if rl > 1 :
-         #print("resp done " + type + " rl=" + str(rl))
 
-         f.write('import {\n')
-         f.write("to = " + type + ".b-" + bucket_name + "\n")
-         f.write('id = "' + bucket_name + '"\n')
-         f.write("}\n")
-
-         pkey=type+"."+bucket_name  
-         globals.rproc[pkey]=True
+         common.write_import(type,bucket_name,"b-"+bucket_name)
 
    except:
-      #print("No " + type + " config for bucket " + bucket_name)
+      if globals.debug: print("No " + type + " config for bucket " + bucket_name)
       pass

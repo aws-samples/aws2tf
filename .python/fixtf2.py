@@ -376,6 +376,15 @@ def aws_vpclattice_service_network_vpc_association(t1,tt1,tt2,flag1,flag2):
     return skip,t1,flag1,flag2
 
 
+def aws_vpclattice_service_network_service_association(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    return skip,t1,flag1,flag2
+
+def aws_vpclattice_listener(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    return skip,t1,flag1,flag2
+
+
 def aws_launch_template(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "security_group_names":

@@ -505,13 +505,12 @@ def special_deps(ttft,taddr):
    elif ttft == "aws_vpclattice_service_network":
       add_known_dependancy("aws_vpclattice_service",taddr) 
       add_known_dependancy("aws_vpclattice_service_network_vpc_association",taddr) 
-      add_known_dependancy("aws_vpclattice_auth_policy",taddr)
       add_known_dependancy("aws_vpclattice_service_network_service_association",taddr)
-      add_known_dependancy("aws_vpclattice_resource_policy",taddr)
-      add_known_dependancy("aws_vpclattice_access_log_subscription",taddr)
-      add_known_dependancy("",taddr)
-      # ../../scripts/get-vpclattice-access-log-subscription.sh $cname
-      ## terget group
+      
+      #add_known_dependancy("aws_vpclattice_auth_policy",taddr) get-auth-policy (resource-identifier)
+      #add_known_dependancy("aws_vpclattice_resource_policy",taddr)
+      # add_known_dependancy("aws_vpclattice_access_log_subscription",taddr) (resource-identifier)
+      ## target group
 
       ## listener
 

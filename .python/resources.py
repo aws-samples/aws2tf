@@ -258,7 +258,7 @@ def resource_data(type,id):
         if id is not None and "sn-" in id: filterid=key
 
     elif type == "aws_vpclattice_listener_rule":
-        clfn="vpc-lattice";descfn="list_listener_rules";topkey="items";key="id";filterid="name"  
+        clfn="vpc-lattice";descfn="list_rules";topkey="items";key="id";filterid="name"  
         if id is not None and "sn-" in id: filterid=key
     ##
     elif type == "aws_vpclattice_resource_policy":  
@@ -283,7 +283,7 @@ def resource_data(type,id):
 
     elif type == "aws_vpclattice_target_group": 
         clfn="vpc-lattice";descfn="list_target_groups";topkey="items";key="id";filterid="name"  
-        if id is not None and "sn-" in id: filterid=key
+        if id is not None and "tg-" in id: filterid=key
 
     elif type == "aws_vpclattice_target_group_association":
         clfn="vpc-lattice";descfn="list_target_group_associations";topkey="items";key="id";filterid="name"  

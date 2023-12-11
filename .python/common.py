@@ -38,6 +38,21 @@ def tfplan1():
          try:
                mess=f2.readline()
                try:
+                  if "VPC Lattice" in mess and "404" in mess:
+                     print("ERROR: VPC Lattice 404 error - see plan1.json")
+                     i=mess.split('(')[1].split(')')[0].split('/')[-1]
+                     print("ERROR: Removing "+i+" files - plan errors see plan1.json")
+                     globals.badlist=globals.badlist+[i]
+                     com="rm -f import__*"+i+"*.tf"
+                     print(com)
+                     rout=rc(com)
+
+
+
+               except:
+                  pass
+
+               try:
                   i=mess.split('(')[2].split(')')[0]
                   print("ERROR: Removing "+i+" files - plan errors see plan1.json")
                   globals.badlist=globals.badlist+[i]
@@ -49,6 +64,7 @@ def tfplan1():
                   if globals.debug is True:
                      print(mess.strip())
                   globals.plan2=True
+               
          except:
                print("Error - no error message, check plan1.json")
                #continue
@@ -239,7 +255,7 @@ def aws_tf(region):
          f3.write('  required_providers {\n')
          f3.write('    aws = {\n')
          f3.write('      source  = "hashicorp/aws"\n')
-         f3.write('      version = "> 5.16"\n')
+         f3.write('      version = "5.30.0"\n')
          f3.write('    }\n')
          f3.write('  }\n')
          f3.write('}\n')
@@ -273,7 +289,7 @@ def fixtf(ttft,tf):
     with open(tf2, "a") as f2:
         skip=0
         flag1=False
-        flag2=False
+        flag2=tf
         f2.write("##START,"+ttft+"\n")
         for t1 in Lines:
             tt1=t1.split("=")[0].strip()
@@ -506,7 +522,7 @@ def special_deps(ttft,taddr):
       add_known_dependancy("aws_vpclattice_service",taddr) 
       add_known_dependancy("aws_vpclattice_service_network_vpc_association",taddr) 
       add_known_dependancy("aws_vpclattice_service_network_service_association",taddr)
-      
+
       #add_known_dependancy("aws_vpclattice_auth_policy",taddr) get-auth-policy (resource-identifier)
       #add_known_dependancy("aws_vpclattice_resource_policy",taddr)
       # add_known_dependancy("aws_vpclattice_access_log_subscription",taddr) (resource-identifier)

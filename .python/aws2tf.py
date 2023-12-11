@@ -167,7 +167,7 @@ if __name__ == '__main__':
         rout = common.rc(com)
         s3.get_all_s3_buckets(fb, region)
 
-    elif type == "net" or type == "kms" or type == "iam" or type == "lattice":
+    elif type == "net" or type == "kms" or type == "iam" or type == "lattice" or type == "test":
         all_types = resources.resource_types(type)
         for i in all_types:
             call_resource(i, id)

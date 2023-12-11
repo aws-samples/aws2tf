@@ -41,20 +41,67 @@ def get_aws_vpclattice_service(type,id,clfn,descfn,topkey,key,filterid):
 
 def get_aws_vpclattice_service_network_vpc_association(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug: 
-       print("--> In get_aws_vpclattice_service_network_vpc_association doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+      print("--> In get_aws_vpclattice_service_network_vpc_association doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    get_aws_vpc_lattice(type,id,clfn,descfn,topkey,key,filterid)
    return
 
 def get_aws_vpclattice_service_network_service_association(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug: 
-       print("--> In get_aws_vpclattice_service_network_vpc_association doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+      print("--> In get_aws_vpclattice_service_network_vpc_association doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    get_aws_vpc_lattice(type,id,clfn,descfn,topkey,key,filterid)
    return
 
 def get_aws_vpclattice_access_log_subscription(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug: 
-       print("--> In get_aws_vpclattice_service_network_vpc_association doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+      print("--> In get_aws_vpclattice_service_network_vpc_association doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    get_aws_vpc_lattice(type,id,clfn,descfn,topkey,key,filterid)
+   return
+
+def get_aws_vpclattice_auth_policy(type,id,clfn,descfn,topkey,key,filterid):
+   if globals.debug: 
+      print("--> In get_aws_vpclattice_auth_policy doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   
+   client = common.boto3.client(clfn) 
+   if globals.debug: print("--client")
+   response=[]
+   
+   if globals.debug: print("Paginator")
+
+   try:
+      paginator = client.get_paginator(descfn)
+      for page in paginator.paginate():
+         response.extend(page[topkey])
+   except botocore.exceptions.OperationNotPageableError as err:
+         #print(f"{err=}")
+         getfn = getattr(client, descfn)
+         response = getfn(resourceIdentifier=id)  ## special
+         #response=response1[topkey]
+   except Exception as e:
+      print(f"{e=}")
+      print("unexpected error in paginate")
+      exit()
+      
+
+   if response == []: 
+      print("empty response returning") 
+      return 
+   else:
+       print("**********************VPC Lattice auth policy"+str(response))  
+   for j in response: 
+        #retid=j['id']
+        #theid=retid
+        ### turn id into an arn ?
+        thearn="arn:aws:vpclattice:"+globals.region+":"+globals.acc+":auth-policy/"+id
+        # can use the arn - wants to import with id
+
+        common.write_import(type,id,None) 
+        #fixtf2.add_dependancy("aws_vpclattice_listener_rule",theid)
+        #globals.rproc["aws_vpclattice_listener."+id]=True
+
+   return
+   
+   
+   #get_aws_vpc_lattice(type,id,clfn,descfn,topkey,key,filterid)
    return
 
 

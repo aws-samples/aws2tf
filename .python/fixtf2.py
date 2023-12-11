@@ -353,6 +353,18 @@ def aws_iam_role_policy_attachment(t1,tt1,tt2,flag1,flag2):
 
 ### VPC Lattice  -----------------------
 
+def aws_vpclattice_auth_policy(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    if tt1 == "resource_identifier":
+        tt2=tt2.strip('\"')
+        if "svc-" in tt2:
+            t1=tt1 + " = aws_vpclattice_service." + tt2 + ".arn\n"
+            add_dependancy("aws_vpclattice_service",tt2)
+        if "sn-" in tt2:
+            t1=tt1 + " = aws_vpclattice_service_network." + tt2 + ".arn\n"
+            add_dependancy("aws_vpclattice_service_network",tt2)
+    return skip,t1,flag1,flag2
+
 def aws_vpclattice_service_network(t1,tt1,tt2,flag1,flag2):
     skip=0
     return skip,t1,flag1,flag2 

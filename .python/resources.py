@@ -250,8 +250,7 @@ def resource_data(type,id):
         if id is not None and "sn-" in id: filterid=key 
     ##
     elif type == "aws_vpclattice_auth_policy":
-        clfn="vpc-lattice";descfn="list_auth_policies";topkey="items";key="id";filterid="name"  
-        if id is not None and "sn-" in id: filterid=key
+        clfn="vpc-lattice";descfn="get_auth_policy";topkey="items";key="id";filterid=key 
 
     elif type == "aws_vpclattice_listener":
         clfn="vpc-lattice";descfn="list_listeners";topkey="items";key="id";filterid="name"  

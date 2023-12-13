@@ -2,8 +2,13 @@
 source ../../scripts/functions.sh
 #echo "globals = $mysub $myreg"
 if [[ "$1" != "" ]]; then
-    cmd[0]="$AWS sns get-topic-attributes --topic-arn $1"
-    pref[0]="Attributes"
+    if [[ "$1" == "arn:"* ]];then 
+        cmd[0]="$AWS sns get-topic-attributes --topic-arn $1"
+        pref[0]="Attributes"
+    else
+        echo "you must pass an arn for the parameter"
+        exit
+    fi
 
 else
     cmd[0]="$AWS sns list-topics"
@@ -72,6 +77,7 @@ for c in $(seq 0 0); do
                     if [[ ${tt1} == *":"* ]]; then
                         tt1=$(echo $tt1 | tr -d '"')
                         t1=$(printf "\"%s\"=%s" $tt1 $tt2)
+                        #echo "**** T1=$t1"
                     fi
 
                     if [[ ${tt1} == "signature_version" ]]; then
@@ -118,7 +124,7 @@ for c in $(seq 0 0); do
                         #    t1=$(printf "%s = aws_lambda_function.%s.arn" $tt1 $tfn)
                         #    #else
                             #fixra "$tt1" "$tt2"
-                        #fi
+                        fi
 
                     fi
 
@@ -139,11 +145,12 @@ for c in $(seq 0 0); do
 
             ../../scripts/731-get-sns-subscriptions.sh $cname
             if [[ "$tarn" != "" ]]; then
+              #echo $tarn
                 ../../scripts/731-get-sns-subscriptions.sh $tarn
             fi
 
         done
     fi
 done
-
+#cat aws_sns_topic__*.tf
 rm -f t*.txt

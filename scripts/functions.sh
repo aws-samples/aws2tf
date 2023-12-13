@@ -125,7 +125,7 @@ function fixarn {
 function fixra {
     at0=$(echo $1 | tr -d ' |"')
     at1=$(echo $2 | tr -d ' |"')
-    #echo "raw at0 = ${at0}"
+    #echo "raw at0 = ${at0} at1 = ${at1}"
     if [[ "$at1" != "*" ]]; then
 
         #echo "mysub = $mysub"
@@ -134,7 +134,11 @@ function fixra {
             t1=$(printf "%s = data.aws_region.current.name" $tt1)
 
         elif [[ "$at1" == "$mysub" ]]; then
-            t1=$(printf "%s = data.aws_caller_identity.current.account_id" $tt1)
+            if [[ $at0 == *":"* ]]; then
+                t1=$(printf "\"%s\" = data.aws_caller_identity.current.account_id" $tt1)       
+            else
+                t1=$(printf "%s = data.aws_caller_identity.current.account_id" $tt1)
+            fi
 
         elif [[ $at1 == *"arn:aws:iam::$mysub:root"* ]]; then
             #echo "here....."

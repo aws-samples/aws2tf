@@ -5,11 +5,11 @@
 **Porting to Python**
 ----
 
-A port of this tool to Python is underway, assisted greatly by Amazon CodeWhisperer.
-The Python version will work alongside this version and will gradually replace the bash shell scripts in this code base.
-The python version uses the new terraform v5 method of importing resources, but still also de-references to terraform adresses and looks for dependacies as aws2tf has always done. It will also be dramatically fatser making far fewer calls to terraform.
+A port of this tool to Python is underway, greatly aided by Amazon CodeWhisperer.
+The Python version will coexist with this version and will gradually replace the bash shell scripts in this codebase.
+The Python version utilizes the new Terraform v5 method of importing resources, while still dereferencing Terraform addresses and searching for dependencies as aws2tf has always done. It will also be significantly faster, making far fewer calls to Terraform.
 
-Instructions on how to use this new verison and phase over to it simply by setting an environment variable coming soon...
+Instructions on how to use this new version and phase over to it simply by setting an environment variable will be provided soon...
 
 ----
 

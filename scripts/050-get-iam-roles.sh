@@ -313,6 +313,10 @@ END
                 ../../scripts/628-get-code-commit-repository.sh $ccid $ccid # pass same param twice deliberately
             fi
 
+            if [[ $rsns != "" ]]; then
+                ../../scripts/730-get-sns-topic.sh $rsns
+            fi
+
             #if [[ $getrole != "" ]]; then
             #    ../../scripts/050-get-iam-roles.sh $getrole
             #fi

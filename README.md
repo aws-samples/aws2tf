@@ -1,10 +1,20 @@
 # aws2tf
 
-**December 2022**
-- Updated to use 4.xx of the Terraform provider, testing still in progress - please report any issues you find.**
-- Now optionally includes a security report: "tfsec" CRITICAL and HIGH issues 
+**December 2023**
 
+**Porting to Python**
+----
 
+A port of this tool to Python is underway.
+The Python version will work alongside this version and will gradually replace the bash shell scripts in this code base.
+The python version uses the new terraform v5 method of importing resources, but still also de-references to terraform adresses and looks for dependacies as aws2tf has always done. It will also be dramatically fatser making far fewer calls to terraform.
+
+Instructions on how to use this new verison and phase over to it simply by setting an environment variable coming soon...
+
+----
+
+- Updated to use 5.xx of the Terraform provider, testing still in progress - please report any issues you find.**
+ 
 This utility 'AWS to Terraform' (aws2tf)
 reads an AWS Account and generates all the required terraform configuration files (.tf) from each of the composite AWS resources
 

@@ -31,3 +31,4 @@ tfplan
 **/tfplan
 __pycache__
 .python/data/tfplan
+.python/data/unprocessed.log

@@ -18,8 +18,17 @@ import sys
 
 
 def call_resource(type, id):
+    ## don't get it if we alreay have it
+    # if globals.rproc
+
+    ti=type+"."+id
+    try:
+        if globals.rproc[ti]: return
+    except:
+       print("****  NOT in globals "+ti)
+
     if type=="aws_null":
-        print("called with aws_null! & id="+id)
+        print("-->> called with aws_null! & id="+id)
         return
 
     rr=False

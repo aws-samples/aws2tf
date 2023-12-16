@@ -11,12 +11,17 @@ import eks
 import ec2
 import iam
 import vpc_lattice
+import stacks
 
 import os
 import sys
 
 
 def call_resource(type, id):
+    if type=="aws_null":
+        print("called with aws_null! & id="+id)
+        return
+
     rr=False
     clfn, descfn, topkey, key, filterid = resources.resource_data(type, id)
     if clfn is None:
@@ -126,7 +131,7 @@ if __name__ == '__main__':
 
     if mg is False:
         print("No merge - removing terraform.tfstate* and aws_*.tf *.out")
-        com = "rm -f aws.tf terraform.tfstate* aws_*.tf s3-*.tf tfplan *.out import*.tf imported/* main.tf"
+        com = "rm -f aws.tf terraform.tfstate* aws_*.tf s3-*.tf tfplan *.out *.log import*.tf imported/* main.tf"
         rout = common.rc(com)
 
     id = args.id
@@ -171,6 +176,14 @@ if __name__ == '__main__':
         all_types = resources.resource_types(type)
         for i in all_types:
             call_resource(i, id)
+
+    elif type == "stack":
+        if id is None:
+            print("mst pass a stack name as a parameter")
+            exit()
+        else:
+            stacks.get_stacks(id)
+
 
     # calling by direct terraform type aws_xxxxx
     else:

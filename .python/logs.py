@@ -11,7 +11,13 @@ def get_aws_cloudwatch_log_group(type, id, clfn, descfn, topkey, key, filterid):
         print("empty response returning")
         return
     for j in response:
-
-        retid = j[key]
-        theid = retid
-        common.write_import(type, theid, id)
+        if "arn:" in id:
+            tarn=j[arn]
+            if tarn==id:
+                retid = j[key]
+                theid = retid
+                common.write_import(type, theid, id)    
+        else:
+            retid = j[key]
+            theid = retid
+            common.write_import(type, theid, id)

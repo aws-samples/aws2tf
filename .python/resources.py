@@ -393,7 +393,7 @@ def resource_data(type,id):
 ###         
 
     elif type == "aws_cloudwatch_log_group": clfn="logs";descfn="describe_log_groups";topkey="logGroups";key="logGroupName";filterid=key
-    elif type == "aws_config_config_rule": clfn="config";descfn="describe_config_rules";topkey="ConfigRules";key="ConfigRuleName";filterid=key
+    elif type == "aws_config_config_rule": clfn="config";descfn="describe_config_rules";topkey="ConfigRules";key="ConfigRuleNames";filterid=key
 
 
 

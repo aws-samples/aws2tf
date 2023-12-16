@@ -559,7 +559,7 @@ def add_known_dependancy(type,id):
 ## but in smaller use cases may be better to make filtered boto3 calls ?
 ## this call doesn't take the key
 
-## can't pass filterid - not possibilr to use for page in paginator.paginate(filterid=id)
+## can't pass filterid - not possible to use for page in paginator.paginate(filterid=id)
 # TODO ? won't accept filter id as string param1 in paginate(param1,id) ??
 # hench working around using descfn - not ideal
 
@@ -590,16 +590,29 @@ def call_boto3(clfn,descfn,topkey,id):
                else:
                   for page in paginator.paginate(): response.extend(page[topkey])
 
-            if descfn == "list_fargate_profiles" or descfn == "list_nodegroups" or descfn == "list_identity_provider_configs" or descfn == "list_addons":
+            elif descfn == "list_fargate_profiles" or descfn == "list_nodegroups" or descfn == "list_identity_provider_configs" or descfn == "list_addons":
                #print("--1a "+str(id))
                for page in paginator.paginate(clusterName=id): response.extend(page[topkey])
             
-            if clfn=="kms" and descfn=="list_aliases" and id is not None:
+            elif clfn=="kms" and descfn=="list_aliases" and id is not None:
                if id.startswith("k-"): id=id[2:]
                #print("-- call boto3 --"+str(id))
                for page in paginator.paginate(KeyId=id): response.extend(page[topkey])
                return response
             
+            elif clfn=="describe_config_rules" and id is not None:
+               for page in paginator.paginate(ConfigRuleNames=id): response.extend(page[topkey])
+               return response
+            
+            elif clfn=="describe_log_groups" and id is not None:
+               if "arn:" in id:  
+                  ## arn filtering done in get_aws_cloudwatch_log_group()
+                  for page in paginator.paginate(): response.extend(page[topkey])
+                  return response
+               else:
+                  for page in paginator.paginate(logGroupNamePattern=id): response.extend(page[topkey])
+                  return response            
+               
             
             else:
                #print("--1b")

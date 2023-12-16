@@ -1,7 +1,7 @@
 import common
 import globals
 
-
+# "$AWS configservice describe-config-rules  --config-rule-names $1"
 def get_aws_config_config_rule(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
         print("--> In get_aws_config_config_rule  doing " + type + ' with id ' + str(id) +
@@ -12,7 +12,6 @@ def get_aws_config_config_rule(type, id, clfn, descfn, topkey, key, filterid):
         print("empty response returning")
         return
     for j in response:
-
         retid = j[key]
         theid = retid
         common.write_import(type, theid, id)

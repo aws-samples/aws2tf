@@ -6,6 +6,66 @@ import globals
 import glob
 import botocore
 import fixtf2
+import resources
+import kms
+import eks
+import ec2
+import iam
+import vpc_lattice
+
+
+def call_resource(type, id):
+    
+    if type=="aws_null":
+      with open('stack-null.log', 'a') as f3:
+         f3.write("-->> called with aws_null! & id="+id+"\n")
+      return
+    ## don't get it if we alreay have it
+    # if globals.rproc
+
+    ti=type+"."+id
+    try:
+        if globals.rproc[ti]: return
+    except:
+       pass
+
+    rr=False
+    clfn, descfn, topkey, key, filterid = resources.resource_data(type, id)
+    if clfn is None:
+        print("error clfn is None with type="+type)
+        exit()
+    try:
+        if globals.debug:
+            print("calling generic getresource with type="+type+" id="+str(id)+"   clfn="+clfn +
+              " descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
+        rr=getresource(type, id, clfn, descfn, topkey, key, filterid)
+    except:
+        pass
+    if not rr:
+        try:
+            if globals.debug:
+               print("calling specific common.get_"+type+" with type="+type+" id="+str(id)+"   clfn=" +
+                    clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
+            if clfn=="vpc-lattice":
+               print("vpc-lattice")
+               getfn = getattr(eval("vpc_lattice"), "get_"+type) 
+                #
+                #vpc_lattice.get_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid)
+            else:                  
+               getfn = getattr(eval(clfn), "get_"+type) 
+
+            getfn(type, id, clfn, descfn, topkey, key, filterid)
+
+        except Exception as e:      
+                # By this way we can know about the type of error occurring
+                print(f"{e=}")
+                
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                print(exc_type, fname, exc_tb.tb_lineno)
+
+                exit()
+
 
 
 def tfplan1():

@@ -17,57 +17,6 @@ import os
 import sys
 
 
-def call_resource(type, id):
-    ## don't get it if we alreay have it
-    # if globals.rproc
-
-    ti=type+"."+id
-    try:
-        if globals.rproc[ti]: return
-    except:
-       print("****  NOT in globals "+ti)
-
-    if type=="aws_null":
-        print("-->> called with aws_null! & id="+id)
-        return
-
-    rr=False
-    clfn, descfn, topkey, key, filterid = resources.resource_data(type, id)
-    if clfn is None:
-        print("error clfn is None with type="+type)
-        exit()
-    try:
-        if globals.debug:
-            print("calling generic getresource with type="+type+" id="+str(id)+"   clfn="+clfn +
-              " descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
-        rr=common.getresource(type, id, clfn, descfn, topkey, key, filterid)
-    except:
-        pass
-    if not rr:
-        try:
-            if globals.debug:
-                print("calling specific common.get_"+type+" with type="+type+" id="+str(id)+"   clfn=" +
-                    clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
-            if clfn=="vpc-lattice":
-                print("vpc-lattice")
-                getfn = getattr(eval("vpc_lattice"), "get_"+type) 
-                #
-                #vpc_lattice.get_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid)
-            else:   
-                getfn = getattr(eval(clfn), "get_"+type) 
-
-            getfn(type, id, clfn, descfn, topkey, key, filterid)
-
-
-        except Exception as e:      
-                # By this way we can know about the type of error occurring
-                print(f"{e=}")
-                exc_type, exc_obj, exc_tb = sys.exc_info()
-                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                print(exc_type, fname, exc_tb.tb_lineno)
-
-                exit()
-
 if __name__ == '__main__':
 
     common.check_python_version()
@@ -184,7 +133,7 @@ if __name__ == '__main__':
     elif type == "net" or type == "kms" or type == "iam" or type == "lattice" or type == "test":
         all_types = resources.resource_types(type)
         for i in all_types:
-            call_resource(i, id)
+            common.call_resource(i, id)
 
     elif type == "stack":
         if id is None:
@@ -196,7 +145,7 @@ if __name__ == '__main__':
 
     # calling by direct terraform type aws_xxxxx
     else:
-        call_resource(type,id)
+        common.call_resource(type,id)
 
 #########################################################################################################################
 
@@ -215,8 +164,8 @@ if __name__ == '__main__':
                 i = ti.split(".")[0]
                 id = ti.split(".")[1]
                 if id not in str(globals.policyarns):
-                    print("KD calling call_resource with type="+i+" id="+str(id))
-                    call_resource(i, id)
+                    print("KD calling common.call_resource with type="+i+" id="+str(id))
+                    common.call_resource(i, id)
     #else:
     #    print("No Known Dependancies")
 
@@ -246,7 +195,7 @@ if __name__ == '__main__':
                 i = ti.split(".")[0]
                 id = ti.split(".")[1]
                 if globals.debug: print("DD calling getresource with type="+i+" id="+str(id))
-                call_resource(i, id)
+                common.call_resource(i, id)
         detdep=False
         lc  = lc + 1
 # go again plan and split / fix

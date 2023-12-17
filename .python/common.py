@@ -61,7 +61,8 @@ def call_resource(type, id):
                 print(f"{e=}")
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                print(exc_type, fname, exc_tb.tb_lineno)    
+                print(exc_type, fname, exc_tb.tb_lineno)   
+                exit() 
     
    try:
       if globals.debug:

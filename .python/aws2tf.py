@@ -137,7 +137,7 @@ if __name__ == '__main__':
 
     elif type == "stack":
         if id is None:
-            print("mst pass a stack name as a parameter")
+            print("Must pass a stack name as a parameter   -i <stack name>")
             exit()
         else:
             stacks.get_stacks(id)

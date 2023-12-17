@@ -101,7 +101,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::CloudWatch::Alarm": common.call_resource("aws_null", parn) 
 
             elif type == "AWS::ApiGateway::Account":        print("Error: **Terraform does not support import of "+ type +" skipped**")
-            elif type == "AWS::EC2::Instance":              common.call_resource("aws_null", pid) 
+            elif type == "AWS::EC2::Instance":              common.call_resource("aws_null", type+" "+pid) 
             elif type == "AWS::EC2::KeyPair":               common.call_resource("aws_null", pid) 
             elif type == "AWS::EC2::DHCPOptions":           common.call_resource("aws_null", pid) 
             elif type == "AWS::EC2::EIP":                   common.call_resource("aws_null", pid) 

@@ -18,7 +18,7 @@ def call_resource(type, id):
     
     if type=="aws_null":
       with open('stack-null.log', 'a') as f3:
-         f3.write("-->> called with aws_null! & id="+id+"\n")
+         f3.write("-->> called aws_null for: "+id+"\n")
       return
     ## don't get it if we alreay have it
     # if globals.rproc

@@ -12,6 +12,8 @@ import eks
 import ec2
 import iam
 import vpc_lattice
+import logs
+import config
 
 
 def call_resource(type, id):

@@ -478,29 +478,37 @@ def splitf(file):
 
 #generally pass 3rd param as None - unless overriding
 def write_import(type,theid,tfid):
-   if tfid is not None:
+   try:
       tfid=theid.replace("/","__").replace(".","__").replace(":","__")
-   fn="import__"+type+"__"+tfid+".tf"
-   if globals.debug: print(fn)
-   
-   # check if file exists:
-   #
-   if os.path.isfile(fn):
-      if globals.debug: print("File exists: " + fn)
-      pkey=type+"."+tfid
-      globals.rproc[pkey]=True
-      return
-   
-   with open(fn, "a") as f:
-      f.write('import {\n')
-      f.write('  to = ' +type + '.' + tfid + '\n')
-      f.write('  id = "'+ theid + '"\n')
-      f.write('}\n')
+      fn="import__"+type+"__"+tfid+".tf"
+      if globals.debug: print(fn)
+      
+      # check if file exists:
+      #
+      if os.path.isfile(fn):
+         if globals.debug: print("File exists: " + fn)
+         pkey=type+"."+tfid
+         globals.rproc[pkey]=True
+         return
+      
+      with open(fn, "a") as f:
+         f.write('import {\n')
+         f.write('  to = ' +type + '.' + tfid + '\n')
+         f.write('  id = "'+ theid + '"\n')
+         f.write('}\n')
 
-   pkey=type+"."+tfid
-   if type=="aws_kms_alias":
-      print(pkey+" setting True")
-   globals.rproc[pkey]=True
+      pkey=type+"."+tfid
+      if type=="aws_kms_alias":
+         print(pkey+" setting True")
+      globals.rproc[pkey]=True
+
+   except Exception as e:      
+                # By this way we can know about the type of error occurring
+                print(f"{e=}")
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                print(exc_type, fname, exc_tb.tb_lineno)   
+                exit()
 
    return
 

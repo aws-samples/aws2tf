@@ -79,7 +79,7 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
                            # if subid in str(globals.rproc):
 
                            # TODO check if already have the association
-                           #print("--10a--- id="+str(id))
+                           print("--10a--- id="+str(id)+" subid="+subid+" rtid="+rtid)
                            if id is not None and "subnet-" in id:
                               if subid == id:
                                  theid = subid+"/"+rtid

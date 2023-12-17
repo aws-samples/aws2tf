@@ -481,6 +481,7 @@ def write_import(type,theid,tfid):
    if tfid is None:
       tfid=theid.replace("/","__").replace(".","__").replace(":","__")
    fn="import__"+type+"__"+tfid+".tf"
+   if globals.debug: print(fn)
    
    # check if file exists:
    #

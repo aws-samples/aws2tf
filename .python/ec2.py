@@ -112,7 +112,7 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
                 if not globals.rproc[ti]:
                     if "aws_route_table_association.subnet" in str(ti):
                         globals.rproc[ti] = True
-                        print("************** Setting " + ti + "=True")
+                        #print("************** Setting " + ti + "=True")
         else:
             print("No response for get_aws_route_table_association")
             pkey="aws_route_table_association"+"."+id

@@ -181,7 +181,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::Lambda::EventInvokeConfig": f3.write(type+" "+pid+"  as part of function..")   # fetched as part of function
             elif type == "AWS::Lambda::EventSourceMapping": f3.write(type+" "+pid+"  as part of function..")  # fetched as part of function
 
-            elif type == "AWS::Logs::LogGroup": common.call_resource("aws_cloudwatch_log_group", type+" "+parn) 
+            elif type == "AWS::Logs::LogGroup": common.call_resource("aws_cloudwatch_log_group", parn) 
 
             elif type == "AWS::RDS::DBCluster": common.call_resource("aws_null", pid)
 

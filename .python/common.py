@@ -51,6 +51,10 @@ def call_resource(type, id):
 
             getfn(type, id, clfn, descfn, topkey, key, filterid)
 
+   except AttributeError:
+      print("AttributeError in get_resources")
+      pass
+
    except Exception as e:      
                 # By this way we can know about the type of error occurring
                 print(f"{e=}")

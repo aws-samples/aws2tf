@@ -23,11 +23,12 @@ def call_resource(type, id):
     ## don't get it if we alreay have it
     # if globals.rproc
 
-    ti=type+"."+id
-    try:
-        if globals.rproc[ti]: return
-    except:
-       pass
+    if id is not None:
+      ti=type+"."+id
+      try:
+         if globals.rproc[ti]: return
+      except:
+         pass
 
     rr=False
     clfn, descfn, topkey, key, filterid = resources.resource_data(type, id)

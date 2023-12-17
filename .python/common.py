@@ -478,7 +478,7 @@ def splitf(file):
 
 #generally pass 3rd param as None - unless overriding
 def write_import(type,theid,tfid):
-   if tfid is None:
+   if tfid is not None:
       tfid=theid.replace("/","__").replace(".","__").replace(":","__")
    fn="import__"+type+"__"+tfid+".tf"
    if globals.debug: print(fn)

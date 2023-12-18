@@ -539,7 +539,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                #print("-"+str(item))
                #print("-gr01-")
                if id is None or filterid=="": # do it all
-                  print("-gr21-")
+                  #print("-gr21-")
                   if globals.debug: print("--"+str(item))
                   try:
                      if "aws-service-role" in str(item["Path"]): 

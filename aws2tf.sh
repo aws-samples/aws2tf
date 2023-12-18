@@ -218,7 +218,7 @@ printf "required_version = \"> 1.5.5\"\n" >>aws.tf
 printf "  required_providers {\n" >>aws.tf
 printf "   aws = {\n" >>aws.tf
 printf "     source  = \"hashicorp/aws\"\n" >>aws.tf
-printf "      version = \"= 5.17\"\n" >>aws.tf
+printf "      version = \"= 5.30\"\n" >>aws.tf
 #printf "      version = \"= 4.67\"\n" >>aws.tf
 #printf "      version = \"= 4.34.0\"\n" >> aws.tf
 printf "    }\n" >>aws.tf
@@ -258,26 +258,26 @@ if [[ $? -eq 0 ]]; then
         echo "disabling python acceleration"
     elif [ "$majv" -ge "3" ]; then
         if [ "$minv" -lt "7" ]; then
-           echo "Python 3 version is less than 3.7" 
-           echo "disabling python acceleration"
+            echo "Python 3 version is less than 3.7"
+            echo "disabling python acceleration"
         else
-            
+
             # check for boto3
             ver=$(pip show boto3 | grep Version 2>/dev/null)
             if [[ $? -eq 0 ]]; then
-                echo $ver | cut -f2 -d':' | tr -d ' |.' 
-                bv=$(echo $ver | grep Version | head -1 | cut -f2 -d':' | tr -d ' |.' )
-                echo $bv
+                #echo $ver | cut -f2 -d':' | tr -d ' |.'
+                bv=$(echo $ver | grep Version | head -1 | cut -f2 -d':' | tr -d ' |.')
+                #echo $bv
                 if [[ $bv -ge 12600 ]]; then
                     export AWS2TF_PY=2
                     echo "Found boto3 v1.26.00+"
                     echo "Enabling python acceleration"
                 else
-                    echo "boto3 at version less than 1.26.00 " 
+                    echo "boto3 at version less than 1.26.00 "
                     echo "disabling python acceleration"
                 fi
             else
-                echo "could not find boto3 (pip show boto3)" 
+                echo "could not find boto3 (pip show boto3)"
                 echo "disabling python acceleration"
             fi
         fi
@@ -285,9 +285,7 @@ if [[ $? -eq 0 ]]; then
 fi
 # check for boto3
 
-
-echo $AWS2TF_PY
-
+#echo $AWS2TF_PY
 
 cat aws.tf
 cp ../../stubs/data-aws.tf .
@@ -388,7 +386,7 @@ if [ "$t" == "users" ]; then pre="03*" && exclude="xxxxxxx"; fi
 if [ "$c" == "no" ]; then
     echo "terraform init -upgrade"
     terraform init -upgrade -no-color 2>&1 | tee -a import.log
-    if [[ $? -ne 0 ]];then 
+    if [[ $? -ne 0 ]]; then
         echo "Terraform INit failed - exiting ....."
         exit
     fi
@@ -517,14 +515,14 @@ echo " "
 echo "---------------------------------------------------------------------------"
 which trivy 2>/dev/null
 if [[ $? -eq 0 ]]; then
-    ver=$(trivy version | head -1 | cut -f2 -d':' | tr -d ' |.' )
+    ver=$(trivy version | head -1 | cut -f2 -d':' | tr -d ' |.')
     ver=$(expr $ver + 0)
     if [[ $ver -ge 480 ]]; then
         echo "tfsec security report" >security-report.txt
         echo "CRITICAL:" >>security-report.txt
-        trivy fs --scanners misconfig  . -s CRITICAL --format json -q | jq '.Results[].Misconfigurations[] | [.CauseMetadata.Resource, .Description, .References]' 2>/dev/null >>security-report.txt
+        trivy fs --scanners misconfig . -s CRITICAL --format json -q | jq '.Results[].Misconfigurations[] | [.CauseMetadata.Resource, .Description, .References]' 2>/dev/null >>security-report.txt
         echo "HIGH:" >>security-report.txt
-        trivy fs --scanners misconfig  . -s HIGH --format json -q | jq '.Results[].Misconfigurations[] | [.CauseMetadata.Resource, .Description, .References]' 2>/dev/null >>security-report.txt
+        trivy fs --scanners misconfig . -s HIGH --format json -q | jq '.Results[].Misconfigurations[] | [.CauseMetadata.Resource, .Description, .References]' 2>/dev/null >>security-report.txt
         echo "security report in generated/tf.${mysub}_${r}/security-report.txt"
     else
         echo "Please upgrade trivy to version v0.48.0 or higher"

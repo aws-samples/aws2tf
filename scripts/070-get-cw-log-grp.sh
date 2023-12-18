@@ -1,15 +1,33 @@
 #!/bin/bash
 pref[0]="logGroups"
 tft[0]="aws_cloudwatch_log_group"
+ttft="aws_cloudwatch_log_group"
 idfilt[0]="logGroupName"
-if [ "$1" != "" ]; then
-    if [[ "$1" == "arn:"* ]];then
-        cmd[0]=`printf "$AWS logs describe-log-groups  | jq '.logGroups | select(.arn==\"%s\")' | jq ." $1`
+
+
+if [[ $AWS2TF_PY -eq 2 ]]; then
+    echo "using Python code ..."
+    echo "$1"
+    if [[ "$1" != "" ]]; then
+        #echo "100 Python $ttft with id $1"
+        ../../.python/aws2tf.py -t $ttft -r $AWS2TF_REGION -i $1 -m True
     else
-        cmd[0]="$AWS logs describe-log-groups --log-group-name-prefix \"$1\"" 
+        #echo "100 Python $ttft"
+        ../../.python/aws2tf.py -t $ttft -r $AWS2TF_REGION -m True
     fi
+    exit
+
 else
-    cmd[0]="$AWS logs describe-log-groups"
+
+    if [ "$1" != "" ]; then
+        if [[ "$1" == "arn:"* ]];then
+            cmd[0]=`printf "$AWS logs describe-log-groups  | jq '.logGroups | select(.arn==\"%s\")' | jq ." $1`
+        else
+            cmd[0]="$AWS logs describe-log-groups --log-group-name-prefix \"$1\"" 
+        fi
+    else
+        cmd[0]="$AWS logs describe-log-groups"
+    fi
 fi
 
 

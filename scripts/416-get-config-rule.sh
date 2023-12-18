@@ -1,13 +1,31 @@
 #!/bin/bash
-if [ "$1" != "" ]; then
-    cmd[0]="$AWS configservice describe-config-rules  --config-rule-names $1"
-else
-    cmd[0]="$AWS configservice describe-config-rules"
-fi
-
 pref[0]="ConfigRules"
 tft[0]="aws_config_config_rule"
+ttft="aws_config_config_rule"
 idfilt[0]="ConfigRuleName"
+
+if [[ $AWS2TF_PY -eq 2 ]]; then
+    echo "using Python code ..."
+    echo "$1"
+    if [[ "$1" != "" ]]; then
+        #echo "100 Python $ttft with id $1"
+        ../../.python/aws2tf.py -t $ttft -r $AWS2TF_REGION -i $1 -m True
+    else
+        #echo "100 Python $ttft"
+        ../../.python/aws2tf.py -t $ttft -r $AWS2TF_REGION -m True
+    fi
+    exit
+
+else
+
+
+    if [ "$1" != "" ]; then
+        cmd[0]="$AWS configservice describe-config-rules  --config-rule-names $1"
+    else
+        cmd[0]="$AWS configservice describe-config-rules"
+    fi
+fi
+
 ncpu=$(getconf _NPROCESSORS_ONLN)
 ncpu=$(expr $ncpu \* 3)
 #rm -f ${tft[0]}.tf

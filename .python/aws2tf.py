@@ -71,7 +71,7 @@ if __name__ == '__main__':
         mg = True
         print("Merging "+str(mg))
         try:
-            file = open('processed.txt', 'r')
+            file = open('pyprocessed.txt', 'r')
             while True:
                 line = file.readline()
                 if not line:
@@ -84,7 +84,7 @@ if __name__ == '__main__':
                 print(i)
 
         except:
-            print("No processed.txt found")
+            print("No pyprocessed.txt found")
             pass
 
     if mg is False:
@@ -234,19 +234,19 @@ if __name__ == '__main__':
 
 #################################
 
-    print("writing processed.txt")
+    print("writing pyprocessed.txt")
     if mg is True:
-        with open("processed.txt", "a") as f:
+        with open("pyprocessed.txt", "a") as f:
             for i in globals.rproc.keys():
                 print(str(i))
                 f.write(i+"\n")
     else:
-        with open("processed.txt", "w") as f:
+        with open("pyprocessed.txt", "w") as f:
             for i in globals.rproc.keys():
                 print(str(i))
                 f.write(i+"\n")
 
-    com = "sort -u processed.txt -o processed.txt"
+    com = "sort -u pyprocessed.txt -o pyprocessed.txt"
     rout = common.rc(com)
 
     if globals.debug is True:

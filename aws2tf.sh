@@ -263,11 +263,11 @@ if [[ $? -eq 0 ]]; then
         else
 
             # check for boto3
-            ver=$(pip show boto3 | grep Version 2>/dev/null)
+            bver=$(pip show boto3 | grep Version 2>/dev/null)
             if [[ $? -eq 0 ]]; then
-                #echo $ver | cut -f2 -d':' | tr -d ' |.'
-                bv=$(echo $ver | grep Version | head -1 | cut -f2 -d':' | tr -d ' |.')
-                #echo $bv
+        
+                bv=$(echo $bver | grep Version | head -1 | cut -f2 -d':' | tr -d ' |.')
+         
                 if [[ $bv -ge 12600 ]]; then
                     export AWS2TF_PY=2
                     echo "Found boto3 v1.26.00+"
@@ -498,10 +498,11 @@ echo "Terraform validate ..."
 echo "Terraform validate 2 ..."
 terraform validate 2>/dev/null
 
-if [ "$v" = "yes" ]; then
+if [[ "$v" = "yes" ]]; then
     echo "Validate only (-v yes) - exiting ...."
     exit
 fi
+
 if [ "$d" = "no" ]; then
     echo "skip clean"
     #rm -f *.txt imp*.sh

@@ -261,7 +261,7 @@ if [[ $? -eq 0 ]]; then
             echo "Python 3 version is less than 3.7"
             echo "disabling python acceleration"
         else
-
+            echo "Found Python at v3.7+"
             # check for boto3
             bver=$(pip show boto3 | grep Version 2>/dev/null)
             if [[ $? -eq 0 ]]; then
@@ -283,7 +283,8 @@ if [[ $? -eq 0 ]]; then
         fi
     fi
 fi
-# check for boto3
+echo "disabling python acceleration - more testing needed"
+export AWS2TF_PY=0
 
 #echo $AWS2TF_PY
 

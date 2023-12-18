@@ -41,6 +41,7 @@ if __name__ == '__main__':
 
     if args.validate is not None:
         globals.validate = True
+    
 
     if args.type is None:
         print("type is required eg:  -t aws_vpc")
@@ -230,7 +231,8 @@ if __name__ == '__main__':
             #detdep=True
 
     common.tfplan3()
-    common.wrapup()
+    if globals.validate is False:
+        common.wrapup()
 
 #################################
 

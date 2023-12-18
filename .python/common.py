@@ -226,7 +226,7 @@ def tfplan3():
 
    else: 
       print("Valid Configuration.")
-      if globals.validate: exit()
+      if globals.validate: return
 
 
    if globals.plan2:

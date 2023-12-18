@@ -32,3 +32,4 @@ tfplan
 __pycache__
 .python/data/tfplan
 .python/data/*.log
+.python/bugs.md

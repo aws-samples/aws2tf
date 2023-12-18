@@ -139,7 +139,7 @@ def tfplan1():
                   if "VPC Lattice" in mess and "404" in mess:
                      print("ERROR: VPC Lattice 404 error - see plan1.json")
                      i=mess.split('(')[1].split(')')[0].split('/')[-1]
-                     print("ERROR: Removing "+i+" files - plan errors see plan1.json")
+                     print("ERROR: Removing "+i+" import files - plan errors see plan1.json")
                      globals.badlist=globals.badlist+[i]
                      com="rm -f import__*"+i+"*.tf"
                      print(com)
@@ -385,6 +385,7 @@ def fixtf(ttft,tf):
     Lines = f1.readlines()
     #print("getfn for fixtf2."+ttft+" "+tf2)
     with open(tf2, "a") as f2:
+    #with open(tf2, "w") as f2:
         skip=0
         flag1=False
         flag2=tf

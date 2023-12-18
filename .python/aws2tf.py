@@ -103,8 +103,9 @@ if __name__ == '__main__':
     if args.debug is not None:
         globals.debug = True
 
-    com = "rm -f *.txt *.json"
-    rout = common.rc(com)
+    if mg is False:
+        com = "rm -f *.txt *.json"
+        rout = common.rc(com)
 
     common.aws_tf(region)
 
@@ -200,7 +201,8 @@ if __name__ == '__main__':
         detdep=False
         lc  = lc + 1
 # go again plan and split / fix
-        com = "rm -f aws_*.tf *.out"
+        com = "rm -f aws_*.tf *.out"   # problem for aws2tf.sh files
+        #com = "rm -f aws_"+i+"*.tf *"+i+"*.out"
         rout = common.rc(com)
         common.tfplan1()
         common.tfplan2()

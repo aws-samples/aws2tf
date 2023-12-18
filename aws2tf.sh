@@ -263,20 +263,23 @@ if [[ $? -eq 0 ]]; then
         else
             
             # check for boto3
-            ver=$(pip show boto3 2>/dev/null)
-            
+            ver=$(pip show boto3 | grep Version 2>/dev/null)
             if [[ $? -eq 0 ]]; then
-                bv=$(echo $ver version | head -1 | cut -f2 -d':' | tr -d ' |.' )
+                echo $ver | cut -f2 -d':' | tr -d ' |.' 
+                bv=$(echo $ver | grep Version | head -1 | cut -f2 -d':' | tr -d ' |.' )
+                echo $bv
                 if [[ $bv -ge 12600 ]]; then
                     export AWS2TF_PY=2
-                    echo "Found boto3 v.126.00+"
+                    echo "Found boto3 v1.26.00+"
                     echo "Enabling python acceleration"
                 else
                     echo "boto3 at version less than 1.26.00 " 
                     echo "disabling python acceleration"
+                fi
             else
                 echo "could not find boto3 (pip show boto3)" 
                 echo "disabling python acceleration"
+            fi
         fi
     fi
 fi
@@ -515,7 +518,8 @@ echo "--------------------------------------------------------------------------
 which trivy 2>/dev/null
 if [[ $? -eq 0 ]]; then
     ver=$(trivy version | head -1 | cut -f2 -d':' | tr -d ' |.' )
-    if [[ $ver -ge 0480 ]]; then
+    ver=$(expr $ver + 0)
+    if [[ $ver -ge 480 ]]; then
         echo "tfsec security report" >security-report.txt
         echo "CRITICAL:" >>security-report.txt
         trivy fs --scanners misconfig  . -s CRITICAL --format json -q | jq '.Results[].Misconfigurations[] | [.CauseMetadata.Resource, .Description, .References]' 2>/dev/null >>security-report.txt

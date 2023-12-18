@@ -11,6 +11,7 @@ if [[ "$1" == "vpc-"* ]]; then
 fi
 # delib mistake
 if [[ $AWS2TF_PY -eq 2 ]]; then
+    echo "using Python code ..."
     echo "$1"
     if [[ "$1" == "vpc-"* ]]; then
         #echo "100 Python $ttft with id $1"

@@ -248,24 +248,42 @@ printf "}\n" >>aws.tf
 export AWS2TF_REGION=$(echo $r)
 export AWS2TF_ACCOUNT=$(echo $mysub)
 
-#export AWS2TF_PY=0
-#pv=$(python3 --version 2>/dev/null)
-#if [[ $? -eq 0 ]]; then
-#    majv=$(echo $pv | awk '{print $2}' | cut -f1 -d'.')
-#    minv=$(echo $pv | awk '{print $2}' | cut -f2 -d'.')
-#    if [ "$majv" -lt "3" ]; then
-#        echo "Python 3 is not installed"
-#        echo "disabling python acceleration"
-#    elif [ "$majv" -ge "3" ]; then
-#        if [ "$minv" -lt "7" ]; then
-#           echo "Python 3 version is less than 3.7" 
-#           echo "disabling python acceleration"
-#        else
-#            export AWS2TF_PY=1
-#        fi
-#    fi
-#fi
-#echo $AWS2TF_PY
+export AWS2TF_PY=0
+pv=$(python3 --version 2>/dev/null)
+if [[ $? -eq 0 ]]; then
+    majv=$(echo $pv | awk '{print $2}' | cut -f1 -d'.')
+    minv=$(echo $pv | awk '{print $2}' | cut -f2 -d'.')
+    if [ "$majv" -lt "3" ]; then
+        echo "Python 3 is not installed"
+        echo "disabling python acceleration"
+    elif [ "$majv" -ge "3" ]; then
+        if [ "$minv" -lt "7" ]; then
+           echo "Python 3 version is less than 3.7" 
+           echo "disabling python acceleration"
+        else
+            
+            # check for boto3
+            ver=$(pip show boto3 2>/dev/null)
+            
+            if [[ $? -eq 0 ]]; then
+                bv=$(echo $ver version | head -1 | cut -f2 -d':' | tr -d ' |.' )
+                if [[ $bv -ge 12600 ]]; then
+                    export AWS2TF_PY=2
+                    echo "Found boto3 v.126.00+"
+                    echo "Enabling python acceleration"
+                else
+                    echo "boto3 at version less than 1.26.00 " 
+                    echo "disabling python acceleration"
+            else
+                echo "could not find boto3 (pip show boto3)" 
+                echo "disabling python acceleration"
+        fi
+    fi
+fi
+# check for boto3
+
+
+echo $AWS2TF_PY
 
 
 cat aws.tf
@@ -494,18 +512,18 @@ echo "Terraform Plan ..."
 terraform plan -no-color
 echo " "
 echo "---------------------------------------------------------------------------"
-which tfsec 2>/dev/null
+which trivy 2>/dev/null
 if [[ $? -eq 0 ]]; then
-    ver=$(tfsec --version | tr -d -c 0-9)
-    if [[ $ver -ge 1275 ]]; then
+    ver=$(trivy version | head -1 | cut -f2 -d':' | tr -d ' |.' )
+    if [[ $ver -ge 0480 ]]; then
         echo "tfsec security report" >security-report.txt
         echo "CRITICAL:" >>security-report.txt
-        tfsec -f json | jq '.results[] | select(.severity=="CRITICAL") | [.resource, .description, .resolution, .links[0]]' 2>/dev/null >>security-report.txt
+        trivy fs --scanners misconfig  . -s CRITICAL --format json -q | jq '.Results[].Misconfigurations[] | [.CauseMetadata.Resource, .Description, .References]' 2>/dev/null >>security-report.txt
         echo "HIGH:" >>security-report.txt
-        tfsec -f json | jq '.results[] | select(.severity=="HIGH") | [.resource, .description, .resolution, .links[0]]' 2>/dev/null >>security-report.txt
+        trivy fs --scanners misconfig  . -s HIGH --format json -q | jq '.Results[].Misconfigurations[] | [.CauseMetadata.Resource, .Description, .References]' 2>/dev/null >>security-report.txt
         echo "security report in generated/tf.${mysub}_${r}/security-report.txt"
     else
-        echo "Please upgrade tfsec to version v1.27.5 or higher"
+        echo "Please upgrade trivy to version v0.48.0 or higher"
     fi
 fi
 

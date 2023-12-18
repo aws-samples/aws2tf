@@ -394,8 +394,8 @@ def resource_data(type,id):
 
     elif type == "aws_cloudwatch_log_group": clfn="logs";descfn="describe_log_groups";topkey="logGroups";key="logGroupName";filterid=key
     elif type == "aws_config_config_rule": clfn="config";descfn="describe_config_rules";topkey="ConfigRules";key="ConfigRuleNames";filterid=key
-
-
+    elif type == "aws_instance": clfn="ec2";descfn="describe_instances";topkey="Reservations";key="InstanceId";filterid=key
+    elif type == "aws_lambda_function": clfn="lambda";descfn="list_functions";topkey="Functions";key="FunctionName";filterid=key
 
    #if type == "aws_availability_zone": return 'AvailabilityZones', ec2client.describe_availability_zones, "ZoneName"
    #if type == "aws_elastic_load_balancer": return 'ElasticLoadBalancers', ec2client.describe_load_balancers, "LoadBalancerName"

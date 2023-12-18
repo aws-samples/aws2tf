@@ -569,6 +569,36 @@ def aws_kms_alias(t1,tt1,tt2,flag1,flag2):
     return skip,t1,flag1,flag2 
 
 
+def aws_instance(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    if tt1 == "subnet_id":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
+        add_dependancy("aws_subnet",tt2)
+    elif tt1 == "security_group_ids": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+    elif tt1 == "iam_instance_profile":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_iam_instance_profile." + tt2 + ".name\n"
+        add_dependancy("aws_iam_instance_profile",tt2)
+    elif tt1 == "key_name":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_key_pair." + tt2 + ".key_name\n"
+
+    return skip,t1,flag1,flag2  
+
+
+def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    if tt1 == "role":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+        add_dependancy("aws_iam_role",tt2)
+    elif tt1 == "vpc_config":
+        t1=tt1 + " = aws_vpc_config." + tt2 + ".arn\n"
+        add_dependancy("aws_vpc_config",tt2)
+    return skip,t1,flag1,flag2
+
+
 def aws_resource(t1,tt1,tt2,flag1,flag2):
     skip=0
     return skip,t1,flag1,flag2 

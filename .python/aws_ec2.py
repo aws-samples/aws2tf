@@ -126,7 +126,7 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
         print(exc_type, fname, exc_tb.tb_lineno)
         exit()
 
-    return
+    return True
 
 
 def get_aws_launch_template(type, id, clfn, descfn, topkey, key, filterid):
@@ -143,7 +143,7 @@ def get_aws_launch_template(type, id, clfn, descfn, topkey, key, filterid):
         theid = retid
         common.write_import(type, theid, id)
 
-    return
+    return True
 
 def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key, filterid):
     #if globals.debug:
@@ -173,4 +173,48 @@ def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key,
         print(exc_type, fname, exc_tb.tb_lineno)
         exit()
 
-    return
+    return True
+
+
+def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In get_aws_subnet doing " + type + ' with id ' + str(id) +
+            " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
+    response = common.call_boto3(clfn, descfn, topkey, id)
+    #print("-9a->"+str(response))
+    
+    try:
+        if response == []:
+            print("empty response returning")
+            return
+        
+        if id is None:
+            for j in response: common.write_import(type, j[key], None)     
+        
+        elif "subnet-" in id:
+            for j in response:
+                subid=j['SubnetId']
+                if id==subid: common.write_import(type, j[key], None)
+
+
+        elif "vpc-" in id:
+            for j in response:
+                vpcid=j['VpcId']
+                if id==vpcid: 
+                    common.write_import(type, j[key], None)
+                    pkey = type+"."+vpcid
+                    globals.rproc[pkey] = True
+
+
+    
+    except Exception as e:
+        print(f"{e=}")
+        print("ERROR: -2->unexpected error in get_aws_vpc_ipv4_cidr_block_association")
+        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        exit()
+
+    return True

@@ -21,7 +21,7 @@ def get_aws_eks_cluster(type,id,clfn,descfn,topkey,key,filterid):
         common.add_known_dependancy("aws_eks_identity_provider_config",theid)
         common.add_known_dependancy("aws_eks_addon",theid)
 
-   return
+   return True
 
 def get_aws_eks_fargate_profile(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug: print("--> In get_aws_eks_fargate_profile  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
@@ -39,7 +39,7 @@ def get_aws_eks_fargate_profile(type,id,clfn,descfn,topkey,key,filterid):
       #print("theid="+theid)
       common.write_import(type,theid,rn) 
 
-   return
+   return True
 
 def get_aws_eks_node_group(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug: print("--> In get_aws_eks_fargate_profile  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
@@ -57,7 +57,7 @@ def get_aws_eks_node_group(type,id,clfn,descfn,topkey,key,filterid):
       print("theid="+theid)
       common.write_import(type,theid,rn) 
 
-   return
+   return True
 
 def get_aws_eks_addon(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug: print("--> In get_aws_eks_addon  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
@@ -76,7 +76,7 @@ def get_aws_eks_addon(type,id,clfn,descfn,topkey,key,filterid):
       print("theid="+theid)
       common.write_import(type,theid,rn) 
 
-   return
+   return True
 
 
 
@@ -98,4 +98,4 @@ def get_aws_eks_identity_provider_config(type,id,clfn,descfn,topkey,key,filterid
       print("theid="+theid)
       common.write_import(type,theid,rn) 
 
-   return
+   return True

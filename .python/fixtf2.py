@@ -1,4 +1,7 @@
 import globals
+import os
+import boto3
+import base64
 
 
 def aws_acm_certificate(t1,tt1,tt2,skipipv6,flag2):
@@ -575,28 +578,89 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
         add_dependancy("aws_subnet",tt2)
-    elif tt1 == "security_group_ids": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
-    elif tt1 == "iam_instance_profile":
+    elif tt1 == "vpc_security_group_ids": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+    #elif tt1 == "iam_instance_profile":
+    #    tt2=tt2.strip('\"')
+    #    t1=tt1 + " = aws_iam_instance_profile." + tt2 + ".name\n"
+        #add_dependancy("aws_iam_instance_profile",tt2)
+    #elif tt1 == "key_name":
+    #    tt2=tt2.strip('\"')
+    #    t1=tt1 + " = aws_key_pair." + tt2 + ".key_name\n"
+    elif tt1 == "ipv6_addresses":
         tt2=tt2.strip('\"')
-        t1=tt1 + " = aws_iam_instance_profile." + tt2 + ".name\n"
-        add_dependancy("aws_iam_instance_profile",tt2)
-    elif tt1 == "key_name":
-        tt2=tt2.strip('\"')
-        t1=tt1 + " = aws_key_pair." + tt2 + ".key_name\n"
+        if tt2 == "[]": skip=1
+
+    elif tt1 == "id":
+        flag2=id
+
+    elif tt1 == "user_data":
+        inid=flag2.split("__")[1]
+        client = boto3.client("ec2")
+        resp = client.describe_instance_attribute(Attribute="userData",InstanceId=inid)
+        ud=resp['UserData']['Value']
+        ud2=base64.b64decode(ud).decode('utf-8')
+        with open(flag2+'.sh', 'w') as f:
+            f.write(ud2)
+        t1="user_data_base64 = filebase64sha256(\""+flag2+".sh\")\n lifecycle {\n   ignore_changes = [user_data_replace_on_change,user_data,user_data_base64]\n}\n"
+
+    elif tt1 == "user_data_base64": skip=1
 
     return skip,t1,flag1,flag2  
 
+
+#####################
 
 def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "role":
         tt2=tt2.strip('\"')
+        tt2=tt2.split("/")[-1]
         t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
         add_dependancy("aws_iam_role",tt2)
-    elif tt1 == "vpc_config":
-        t1=tt1 + " = aws_vpc_config." + tt2 + ".arn\n"
-        add_dependancy("aws_vpc_config",tt2)
+    elif tt1 == "filename":
+        tt2=tt2.strip('\"')     
+        if os.path.isfile(flag2+".zip"):
+            t1=tt1 + " = \""+flag2+".zip\"\n lifecycle {\n   ignore_changes = [filename]\n}\n"
+        elif tt2 == "null": skip=1
+    elif tt1 == "image_uri":
+        tt2=tt2.strip('\"')
+        if tt2 == "null": skip=1
+    elif tt1 == "source_code_hash":
+        tt2=tt2.strip('\"')
+        if os.path.isfile(flag2+".zip"):
+            t1=tt1 + " = filebase64sha256(\""+flag2+".zip"+"\")\n"
+        elif tt2 == "null": skip=1
+
+    elif tt1 == "s3_bucket":
+        tt2=tt2.strip('\"')
+        if tt2 == "null": skip=1
+
+    elif tt1 == "subnet_ids":  t1,skip = deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
+    elif tt1 == "security_group_ids": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+
+        #t1=tt1 + " = aws_vpc_config." + tt2 + ".arn\n"
+        #add_dependancy("aws_vpc_config",tt2)
     return skip,t1,flag1,flag2
+
+def aws_lambda_alias(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    return skip,t1,flag1,flag2
+
+def aws_lambda_permission(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    return skip,t1,flag1,flag2
+
+def aws_lambda_function_event_invoke_configs(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    return skip,t1,flag1,flag2
+
+def aws_lambda_event_source_mapping(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    return skip,t1,flag1,flag2
+
+#######################
+
+
 
 
 def aws_resource(t1,tt1,tt2,flag1,flag2):

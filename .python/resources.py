@@ -183,9 +183,6 @@ def resource_types(type):
     ,"aws_vpclattice_service_network_vpc_association","aws_vpclattice_target_group"\
     ,"aws_vpclattice_target_group_attachment","aws_vpn_connection"]
 
-
-
-
     else:
         same=[type]
         return same
@@ -396,14 +393,14 @@ def resource_data(type,id):
     elif type == "aws_config_config_rule": clfn="config";descfn="describe_config_rules";topkey="ConfigRules";key="ConfigRuleName";filterid=key
     elif type == "aws_instance": clfn="ec2";descfn="describe_instances";topkey="Reservations";key="InstanceId";filterid=key
     elif type == "aws_lambda_function": clfn="lambda";descfn="list_functions";topkey="Functions";key="FunctionName";filterid=key
+    elif type == "aws_lambda_alias": clfn="lambda";descfn="list_aliases";topkey="Aliases";key="FunctionName";filterid=key
+    elif type == "aws_lambda_permission": clfn="lambda";descfn="get_policy";topkey="Policy";key="FunctionName";filterid=key
+    elif type == "aws_lambda_layer_version": clfn="lambda";descfn="list_layer_versions";topkey="LayerVersions";key="LayerName";filterid=key
+    elif type == "aws_lambda_function_event_invoke_config": clfn="lambda";descfn="list_function_event_invoke_configs";topkey="FunctionEventInvokeConfigs";key="FunctionName";filterid=key
+    elif type == "aws_lambda_event_source_mapping": clfn="lambda";descfn="list_event_source_mappings";topkey="EventSourceMappings";key="FunctionName";filterid=key
 
-   #if type == "aws_availability_zone": return 'AvailabilityZones', ec2client.describe_availability_zones, "ZoneName"
-   #if type == "aws_elastic_load_balancer": return 'ElasticLoadBalancers', ec2client.describe_load_balancers, "LoadBalancerName"
-   #if type == "aws_instance": return 'Reservations', ec2client.describe_instances, "InstanceId"
+    elif type == "aws_lb": clfn="elbv2";descfn="describe_load_balancers";topkey="LoadBalancers";key="Names";filterid=key
 
-   #if type == "aws_load_balancer": return 'LoadBalancers', ec2client.describe_load_balancers, "LoadBalancerName"
-   
-   #if type == "aws_snapshot": return 'Snapshots', ec2client.describe_snapshots, "SnapshotId"
    #if type == "aws_target_group": return 'TargetGroups', ec2client.describe_target_groups, "TargetGroupName"
 
       # 'TransitGatewayAttachments':ec2client.describe_transit_gateway_attachments,

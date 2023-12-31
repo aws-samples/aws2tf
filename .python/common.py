@@ -6,14 +6,16 @@ import globals
 import glob
 import botocore
 import fixtf2
+from datetime import datetime
 import resources
-import kms
-import eks
-import ec2
-import iam
-import vpc_lattice
-import logs
-import config
+import aws_kms
+import aws_eks
+import aws_ec2
+import aws_iam
+import aws_vpc_lattice
+import aws_logs
+import aws_config
+import aws_lambda
 
 
 def call_resource(type, id):
@@ -28,11 +30,14 @@ def call_resource(type, id):
    if id is not None:
       ti=type+"."+id
       try:
-         if globals.rproc[ti]: return
+         if globals.rproc[ti]: 
+            print("Already processed " + ti)
+            return
       except:
          pass
 
    rr=False
+   sr=False
    clfn, descfn, topkey, key, filterid = resources.resource_data(type, id)
    if clfn is None:
         print("ERROR: clfn is None with type="+type)
@@ -45,15 +50,18 @@ def call_resource(type, id):
                     clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
             if clfn=="vpc-lattice":
                print("vpc-lattice")
-               getfn = getattr(eval("vpc_lattice"), "get_"+type) 
+               getfn = getattr(eval("aws_vpc_lattice"), "get_"+type) 
                 #
                 #vpc_lattice.get_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid)
             else:                  
-               getfn = getattr(eval(clfn), "get_"+type) 
+               getfn = getattr(eval("aws_"+clfn), "get_"+type) 
 
-            getfn(type, id, clfn, descfn, topkey, key, filterid)
+            sr=getfn(type, id, clfn, descfn, topkey, key, filterid)
 
    except AttributeError:
+      pass
+
+   except SyntaxError:
       pass
 
    except Exception as e:      
@@ -64,20 +72,22 @@ def call_resource(type, id):
                 print(exc_type, fname, exc_tb.tb_lineno)   
                 exit() 
     
-   try:
-      if globals.debug:
-            print("calling generic getresource with type="+type+" id="+str(id)+"   clfn="+clfn +
-              " descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
-      rr=getresource(type, id, clfn, descfn, topkey, key, filterid)
-   except:
-      print(f"{e=}")
-                
-      exc_type, exc_obj, exc_tb = sys.exc_info()
-      fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-      print(exc_type, fname, exc_tb.tb_lineno)  
-      if rr is False:
-        print("--->> Could not get resource "+type+" id="+id)
-        pass
+   
+   if not sr:
+      try:
+         if globals.debug:
+               print("calling generic getresource with type="+type+" id="+str(id)+"   clfn="+clfn +
+               " descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
+         rr=getresource(type, id, clfn, descfn, topkey, key, filterid)
+      except:
+         print(f"{e=}")
+                  
+         exc_type, exc_obj, exc_tb = sys.exc_info()
+         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+         print(exc_type, fname, exc_tb.tb_lineno)  
+         if rr is False:
+            print("--->> Could not get resource "+type+" id="+id)
+            pass
    
    #if not rr:
    #     try:
@@ -165,6 +175,10 @@ def tfplan1():
                
          except:
                print("Error - no error message, check plan1.json")
+               dt=datetime.now().isoformat(timespec='seconds') 
+               com="cp plan1.json plan1.json."+dt
+               print(com)
+               rout=rc(com)
                #continue
                exit()
 
@@ -172,11 +186,15 @@ def tfplan1():
 
    if not os.path.isfile("resources.out"):
          print("could not find expected resources.out file after Plan 1 - exiting")
+         dt=datetime.now().isoformat(timespec='seconds') 
+         com="cp plan1.json plan1.json."+dt
+         print(com)
+         rout=rc(com)
          exit()  
    return
 
 def tfplan2():
-   print("fix tf files.....") 
+   #print("fix tf files.....") 
    if not os.path.isfile("resources.out"):
          print("could not find expected resources.out file after Plan 1 - exiting")
          exit()
@@ -362,6 +380,7 @@ def aws_tf(region):
          f3.write('  shared_credentials_files = ["~/.aws/credentials"]\n')
          #f3.write('  profile                  = var.profile\n')
          f3.write('}\n')
+      with open("data-aws.tf", 'w') as f3:
          f3.write('data "aws_region" "current" {}\n')
          f3.write('data "aws_caller_identity" "current" {}\n')
          f3.write('data "aws_availability_zones" "az" {\n')
@@ -384,8 +403,8 @@ def fixtf(ttft,tf):
         return
     Lines = f1.readlines()
     #print("getfn for fixtf2."+ttft+" "+tf2)
-    with open(tf2, "a") as f2:
-    #with open(tf2, "w") as f2:
+    #with open(tf2, "a") as f2:
+    with open(tf2, "w") as f2:
         skip=0
         flag1=False
         flag2=tf
@@ -396,8 +415,7 @@ def fixtf(ttft,tf):
                 tt2=t1.split("=")[1].strip()
             except:
                 tt2=""
-
-             
+ 
             try:              
                 getfn = getattr(fixtf2, ttft)
             except Exception as e:
@@ -516,10 +534,10 @@ def write_import(type,theid,tfid):
 #########################################################################################################################
 
 def getresource(type,id,clfn,descfn,topkey,key,filterid):
-   for j in globals.specials:
-      if type == j: 
-         print(type + " in specials list returning ..")
-         return False
+   #for j in globals.specials:
+   #   if type == j: 
+   #      print(type + " in specials list returning ..")
+   #      return False
    if "aws_launch" in type: print("-1-> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
    if type in str(globals.types): 
@@ -623,9 +641,11 @@ def special_deps(ttft,taddr):
       add_known_dependancy("aws_route_table_association",taddr) 
       fixtf2.add_dependancy("aws_route_table_association",taddr)  
    elif ttft == "aws_vpc": 
-      add_known_dependancy("aws_route_table_association",taddr)   
+      add_known_dependancy("aws_route_table_association",taddr)  
+      add_known_dependancy("aws_subnet",taddr)  
       fixtf2.add_dependancy("aws_route_table_association",taddr)
       fixtf2.add_dependancy("aws_vpc_ipv4_cidr_block_association",taddr)
+
    elif ttft == "aws_vpclattice_service_network":
       add_known_dependancy("aws_vpclattice_service",taddr) 
       add_known_dependancy("aws_vpclattice_service_network_vpc_association",taddr) 
@@ -637,7 +657,6 @@ def special_deps(ttft,taddr):
       ## target group
 
       ## listener
-
 
    return  
 
@@ -662,7 +681,6 @@ def add_known_dependancy(type,id):
     return
 
 
-
 ## TODO - always get all / paginate all - save in globals - filter on id in get_aws_ ??
 ## but in smaller use cases may be better to make filtered boto3 calls ?
 ## this call doesn't take the key
@@ -671,10 +689,7 @@ def add_known_dependancy(type,id):
 # TODO ? won't accept filter id as string param1 in paginate(param1,id) ??
 # hench working around using descfn - not ideal
 
-
-
-def call_boto3(clfn,descfn,topkey,id):
-   
+def call_boto3(clfn,descfn,topkey,id): 
    try:
       if globals.debug: print("call_boto3 clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
       if globals.debug: print("pre-response")
@@ -682,11 +697,10 @@ def call_boto3(clfn,descfn,topkey,id):
       if response == []:
          client = boto3.client(clfn) 
          if globals.debug: print("client")
-
          try:
             paginator = client.get_paginator(descfn)
             if globals.debug: print("paginator")
-
+    
             if descfn == "describe_launch_templates":
                #print("*******  describe_launch_templates  ********" )
                if id is not None:
@@ -698,6 +712,17 @@ def call_boto3(clfn,descfn,topkey,id):
                else:
                   for page in paginator.paginate(): response.extend(page[topkey])
 
+            elif descfn == "describe_instances":
+               print("call_boto3 clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+               if id is not None:
+                  if "i-" in id:
+                     for page in paginator.paginate(InstanceIds=[id]): response.extend(page[topkey][0]['Instances'])
+               else:
+                  for page in paginator.paginate(): response.extend(page[topkey][0]['Instances'])
+                  sav_boto3_rep(descfn,response)
+               
+               #print(str(response))
+
             elif descfn == "list_fargate_profiles" or descfn == "list_nodegroups" or descfn == "list_identity_provider_configs" or descfn == "list_addons":
                #print("--1a "+str(id))
                for page in paginator.paginate(clusterName=id): response.extend(page[topkey])
@@ -708,6 +733,10 @@ def call_boto3(clfn,descfn,topkey,id):
                for page in paginator.paginate(KeyId=id): response.extend(page[topkey])
                return response
             
+            elif clfn=="lambda" and descfn=="list_aliases" and id is not None:
+               for page in paginator.paginate(FunctionName=id): response.extend(page[topkey])
+               return response
+                
             elif clfn=="describe_config_rules" and id is not None:
                for page in paginator.paginate(ConfigRuleNames=id): response.extend(page[topkey])
                return response
@@ -760,7 +789,8 @@ def call_boto3(clfn,descfn,topkey,id):
                print("--------------------------------------")
    
       else:
-         print("got global response ")
+         #print("Global response ")
+         return response
       
    except Exception as e:
       print(f"{e=}")
@@ -774,37 +804,20 @@ def call_boto3(clfn,descfn,topkey,id):
    return response
 
 def sav_boto3_rep(descfn,response):
-   if str(descfn)=="describe_subnets" and globals.aws_subnet_resp==[]:
-      globals.aws_subnet_resp=response  
-      #print("@@@@ saved global response "+str(descfn))
-   #
-   if str(descfn)=="describe_vpcs" and globals.aws_vpc_resp==[]:
-      globals.aws_vpc_resp=response  
-
-   #
-   elif str(descfn)=="describe_route_tables" and globals.aws_route_table_resp==[]:
-      globals.aws_route_table_resp=response  
-      #print("@@@@ saved global response "+str(descfn))
-   elif str(descfn)=="list_aliases" and globals.aws_kms_alias==[]:
-      globals.aws_kms_alias=response  
-      #print("@@@@ saved global response "+str(descfn))
-
+   if str(descfn)=="describe_subnets" and globals.aws_subnet_resp==[]: globals.aws_subnet_resp=response  
+   elif str(descfn)=="describe_vpcs" and globals.aws_vpc_resp==[]: globals.aws_vpc_resp=response  
+   elif str(descfn)=="describe_route_tables" and globals.aws_route_table_resp==[]: globals.aws_route_table_resp=response  
+   elif str(descfn)=="list_aliases" and globals.aws_kms_alias_resp==[]: globals.aws_kms_alias_resp=response  
+   elif str(descfn)=="list_roles" and globals.aws_iam_role_resp==[]: globals.aws_iam_role_resp=response  
+   elif str(descfn)=="describe_instances" and globals.aws_instance_resp==[]: globals.aws_instance_resp=response  
    return 
-
 
 def get_boto3_resp(descfn):
    response=[]
-   if str(descfn)=="describe_subnets" and globals.aws_subnet_resp != []:
-      response=globals.aws_subnet_resp
-   
-   elif str(descfn)=="describe_vpcs" and globals.aws_vpc_resp != []:
-      response=globals.aws_vpc_resp
-   
-   elif str(descfn)=="describe_route_tables" and globals.aws_route_table_resp != []:
-      response=globals.aws_route_table_resp
-      #print("@@@@ retreived global response "+str(descfn))  
-
-   elif str(descfn)=="list_aliases" and globals.aws_kms_alias != []:
-      response=globals.aws_kms_alias
-      #print("@@@@ retreived global response "+str(descfn))  
+   if str(descfn)=="describe_subnets" and globals.aws_subnet_resp != []: response=globals.aws_subnet_resp
+   elif str(descfn)=="describe_vpcs" and globals.aws_vpc_resp != []: response=globals.aws_vpc_resp
+   elif str(descfn)=="describe_route_tables" and globals.aws_route_table_resp != []: response=globals.aws_route_table_resp 
+   elif str(descfn)=="list_aliases" and globals.aws_kms_alias_resp != []: response=globals.aws_kms_alias_resp 
+   elif str(descfn)=="list_roles" and globals.aws_iam_role_resp != []: response=globals.aws_iam_role_resp
+   elif str(descfn)=="describe_instances" and globals.aws_instance_resp != []: response=globals.aws_instance_resp
    return response

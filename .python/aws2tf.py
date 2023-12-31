@@ -2,17 +2,12 @@
 import boto3
 import signal
 import argparse
-import s3
+import aws_s3
 import common
 import resources
 import globals
-import kms
-import eks
-import ec2
-import iam
-import vpc_lattice
+import glob
 import stacks
-
 import os
 import sys
 
@@ -90,7 +85,7 @@ if __name__ == '__main__':
 
     if mg is False:
         print("No merge - removing terraform.tfstate* and aws_*.tf *.out")
-        com = "rm -f aws.tf terraform.tfstate* aws_*.tf s3-*.tf tfplan *.out *.log import*.tf imported/* main.tf"
+        com = "rm -f aws.tf terraform.tfstate* aws_*.tf s3-*.tf aws_*.zip tfplan *.out *.log import*.tf imported/* main.tf"
         rout = common.rc(com)
 
     id = args.id
@@ -112,7 +107,7 @@ if __name__ == '__main__':
 # get the current
     my_session = boto3.setup_default_session(region_name=region)
     globals.acc = boto3.client('sts').get_caller_identity().get('Account')
-    print('Using region: '+region + ' account: ' + globals.acc)
+    print('Using region: '+region + ' account: ' + globals.acc+"\n")
     globals.region = region
     globals.regionl = len(region)
     common.aws_tf(region)
@@ -121,7 +116,9 @@ if __name__ == '__main__':
     elif type == "aws_vpc" or type == "vpc": type = "aws_vpc"
     elif type == "subnet": type = "aws_subnet"
     elif type == "config": type = "aws_config_config_rule"
+    elif type == "ec2": type = "aws_instance"
     elif type == "eks": type = "aws_eks_cluster"
+    elif type == "lambda": type="aws_lambda_function"
     elif type == "cw" or type == "cloudwatch" or type == "logs": type = "aws_cloudwatch_log_group"
         
 
@@ -130,7 +127,7 @@ if __name__ == '__main__':
     if type == "s3":
         com = "rm -f s3-*.tf s3.tf tfplan *s3*.out"
         rout = common.rc(com)
-        s3.get_all_s3_buckets(fb, region)
+        aws_s3.get_all_s3_buckets(fb, region)
 
     elif type == "net" or type == "kms" or type == "iam" or type == "lattice" or type == "test":
         all_types = resources.resource_types(type)
@@ -201,9 +198,20 @@ if __name__ == '__main__':
         detdep=False
         lc  = lc + 1
 # go again plan and split / fix
-        com = "rm -f aws_*.tf *.out"   # problem for aws2tf.sh files
-        #com = "rm -f aws_"+i+"*.tf *"+i+"*.out"
-        rout = common.rc(com)
+
+
+        x=glob.glob("import__aws_*.tf")
+        #print(str(x))
+        #td=""
+        for fil in x:
+            tf=fil.split('__',1)[1]
+            #td=td+" "+tf
+            com = "rm -f "+tf
+            rout = common.rc(com)
+        #print(str(td))
+        #com = "rm -f "+td
+        #rout = common.rc(com)
+         
         common.tfplan1()
         common.tfplan2()
         #print("********** keys start ***************")
@@ -213,21 +221,17 @@ if __name__ == '__main__':
         #print("********** keys end ***************")  
 
         for ti in globals.rproc.keys():
-            
             if not globals.rproc[ti]:
                 detdep=True 
+                print(str(ti)+" is False")
 
-                print(str(ti))
-
-        print("----------- "+str(lc)+" loops completed --------------") 
+        print("----------- Completed "+str(lc)+" dependancy check loops --------------") 
         
         if lc > 9:
             print("ERROR: Too many loops exiting")
-            print("ERROR: still False........")
             for ti in globals.rproc.keys():
-                if not globals.rproc[ti]:
-                    
-                    print(str(ti))
+                if not globals.rproc[ti]:  
+                    print("ERROR: Not found "+str(ti)+" - check if this resource still exists in AWS")
 
             exit()
             #detdep=True
@@ -242,12 +246,12 @@ if __name__ == '__main__':
     if mg is True:
         with open("pyprocessed.txt", "a") as f:
             for i in globals.rproc.keys():
-                print(str(i))
+                if globals.debug: print(str(i))
                 f.write(i+"\n")
     else:
         with open("pyprocessed.txt", "w") as f:
             for i in globals.rproc.keys():
-                print(str(i))
+                if globals.debug: print(str(i))
                 f.write(i+"\n")
 
     com = "sort -u pyprocessed.txt -o pyprocessed.txt"

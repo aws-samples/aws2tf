@@ -99,6 +99,8 @@ def get_all_s3_buckets(fb,my_region):
      for key in s3_fields:
             #print("outside get_s3 type=" + key)
          get_s3(s3_fields,key,bucket_name)
+
+   return True
       
      
          

@@ -247,46 +247,47 @@ printf "}\n" >>aws.tf
 
 export AWS2TF_REGION=$(echo $r)
 export AWS2TF_ACCOUNT=$(echo $mysub)
-
+echo "Disabling python acceleration - more testing needed"
 export AWS2TF_PY=0
-pv=$(python3 --version 2>/dev/null)
-if [[ $? -eq 0 ]]; then
-    majv=$(echo $pv | awk '{print $2}' | cut -f1 -d'.')
-    minv=$(echo $pv | awk '{print $2}' | cut -f2 -d'.')
-    if [ "$majv" -lt "3" ]; then
-        echo "Python 3 is not installed"
-        echo "disabling python acceleration"
-    elif [ "$majv" -ge "3" ]; then
-        if [ "$minv" -lt "7" ]; then
-            echo "Python 3 version is less than 3.7"
-            echo "disabling python acceleration"
-        else
-            echo "Found Python at v3.7+"
-            # check for boto3
-            bver=$(pip show boto3 | grep Version 2>/dev/null)
-            if [[ $? -eq 0 ]]; then
-        
-                bv=$(echo $bver | grep Version | head -1 | cut -f2 -d':' | tr -d ' |.')
-         
-                if [[ $bv -ge 12600 ]]; then
-                    export AWS2TF_PY=2
-                    echo "Found boto3 v1.26.00+"
-                    echo "Enabling python acceleration"
-                else
-                    echo "boto3 at version less than 1.26.00 "
-                    echo "disabling python acceleration"
-                fi
+
+if [[ $AWS2TF_PY != 0 ]]; then
+    pv=$(python3 --version 2>/dev/null)
+    if [[ $? -eq 0 ]]; then
+        majv=$(echo $pv | awk '{print $2}' | cut -f1 -d'.')
+        minv=$(echo $pv | awk '{print $2}' | cut -f2 -d'.')
+        if [ "$majv" -lt "3" ]; then
+            echo "Python 3 is not installed"
+            echo "Disabling python acceleration"
+        elif [ "$majv" -ge "3" ]; then
+            if [ "$minv" -lt "7" ]; then
+                echo "Python 3 version is less than 3.7"
+                echo "Disabling python acceleration"
             else
-                echo "could not find boto3 (pip show boto3)"
-                echo "disabling python acceleration"
+                echo "Found Python at v3.7+"
+                # check for boto3
+                bver=$(pip show boto3 | grep Version 2>/dev/null)
+                if [[ $? -eq 0 ]]; then
+
+                    bv=$(echo $bver | grep Version | head -1 | cut -f2 -d':' | tr -d ' |.')
+
+                    if [[ $bv -ge 12600 ]]; then
+                        export AWS2TF_PY=2
+                        echo "Found boto3 v1.26.00+"
+                        echo "Enabling python acceleration"
+                    else
+                        echo "boto3 at version less than 1.26.00 "
+                        echo "Disabling python acceleration"
+                    fi
+                else
+                    echo "could not find boto3 (pip show boto3)"
+                    echo "Disabling python acceleration"
+                fi
             fi
         fi
     fi
 fi
-echo "disabling python acceleration - more testing needed"
-export AWS2TF_PY=0
-
-#echo $AWS2TF_PY
+#echo "Disabling python acceleration - more testing needed"
+#export AWS2TF_PY=0
 
 cat aws.tf
 cp ../../stubs/data-aws.tf .
@@ -455,7 +456,9 @@ if [[ "$s" == "no" ]]; then
             echo "$docomm" >>data/processed.txt
             terraform validate -no-color -json >validate.json
             if [ "$d" = "no" ]; then
-                ../../scripts/fix-undec.sh
+                if [[ $AWS2TF_PY -ne 2 ]]; then
+                    ../../scripts/fix-undec.sh
+                fi
             fi
             terraform validate
             end=$(date +%s)
@@ -476,7 +479,9 @@ else
     cat unprocessed.log
     terraform validate -no-color -json >validate.json
     if [ "$d" = "no" ]; then
-        ../../scripts/fix-undec.sh
+        if [[ $AWS2TF_PY -ne 2 ]]; then
+            ../../scripts/fix-undec.sh
+        fi
     fi
     terraform validate
 fi
@@ -520,11 +525,11 @@ if [[ $? -eq 0 ]]; then
     ver=$(trivy version | head -1 | cut -f2 -d':' | tr -d ' |.')
     ver=$(expr $ver + 0)
     if [[ $ver -ge 480 ]]; then
-        echo "tfsec security report" >security-report.txt
+        echo "trivy security report" >security-report.txt
         echo "CRITICAL:" >>security-report.txt
-        trivy fs --scanners misconfig . -s CRITICAL --format json -q | jq '.Results[].Misconfigurations[] | [.CauseMetadata.Resource, .Description, .References]' 2>/dev/null >>security-report.txt
+        trivy fs --scanners misconfig . -s CRITICAL --format json -q | jq '.Results[].Misconfigurations' | grep -v null | jq '.[] | [.CauseMetadata.Resource, .Description, .References]' 2>/dev/null >>security-report.txt
         echo "HIGH:" >>security-report.txt
-        trivy fs --scanners misconfig . -s HIGH --format json -q | jq '.Results[].Misconfigurations[] | [.CauseMetadata.Resource, .Description, .References]' 2>/dev/null >>security-report.txt
+        trivy fs --scanners misconfig . -s HIGH --format json -q | jq '.Results[].Misconfigurations' | grep -v null | jq '.[] | [.CauseMetadata.Resource, .Description, .References]' 2>/dev/null >>security-report.txt
         echo "security report in generated/tf.${mysub}_${r}/security-report.txt"
     else
         echo "Please upgrade trivy to version v0.48.0 or higher"

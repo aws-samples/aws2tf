@@ -37,25 +37,25 @@ def get_aws_vpclattice_service(type,id,clfn,descfn,topkey,key,filterid):
       #print("**********************VPC Lattice listener"+str(theid))
       fixtf2.add_dependancy("aws_vpclattice_listener",theid)
 
-   return
+   return True
 
 def get_aws_vpclattice_service_network_vpc_association(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug: 
       print("--> In get_aws_vpclattice_service_network_vpc_association doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    get_aws_vpc_lattice(type,id,clfn,descfn,topkey,key,filterid)
-   return
+   return True
 
 def get_aws_vpclattice_service_network_service_association(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug: 
       print("--> In get_aws_vpclattice_service_network_vpc_association doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    get_aws_vpc_lattice(type,id,clfn,descfn,topkey,key,filterid)
-   return
+   return True
 
 def get_aws_vpclattice_access_log_subscription(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug: 
       print("--> In get_aws_vpclattice_service_network_vpc_association doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    get_aws_vpc_lattice(type,id,clfn,descfn,topkey,key,filterid)
-   return
+   return True
 
 def get_aws_vpclattice_auth_policy(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug: 
@@ -98,11 +98,9 @@ def get_aws_vpclattice_auth_policy(type,id,clfn,descfn,topkey,key,filterid):
         #fixtf2.add_dependancy("aws_vpclattice_listener_rule",theid)
         #globals.rproc["aws_vpclattice_listener."+id]=True
 
-   return
+   return True
    
-   
-   #get_aws_vpc_lattice(type,id,clfn,descfn,topkey,key,filterid)
-   return
+
 
 
 def get_aws_vpclattice_listener(type,id,clfn,descfn,topkey,key,filterid):
@@ -142,7 +140,7 @@ def get_aws_vpclattice_listener(type,id,clfn,descfn,topkey,key,filterid):
         fixtf2.add_dependancy("aws_vpclattice_listener_rule",theid)
         globals.rproc["aws_vpclattice_listener."+id]=True
 
-   return
+   return True
 
 
 # need to deal with id  svc/ruleid - extract ruleid
@@ -185,7 +183,7 @@ def get_aws_vpclattice_listener_rule(type,id,clfn,descfn,topkey,key,filterid):
         common.write_import(type,theid,None) 
    globals.rproc["aws_vpclattice_listener_rule."+id]=True     
 
-   return
+   return True
 
 
 
@@ -223,7 +221,7 @@ def get_aws_vpc_lattice(type,id,clfn,descfn,topkey,key,filterid):
             theid=retid
             common.write_import(type,theid,None) 
 
-   return
+   return True
 
 
 

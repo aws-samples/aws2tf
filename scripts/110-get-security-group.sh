@@ -2,6 +2,7 @@
 pref[0]="SecurityGroups"
 ttft="aws_security_group"
 idfilt[0]="GroupId"
+exit
 if [ "$1" != "" ]; then
     if [[ "$1" == "vpc-"* ]]; then
         cmd[0]="$AWS ec2 describe-security-groups --filters \"Name=vpc-id,Values=$1\"" 

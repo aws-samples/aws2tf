@@ -3,8 +3,31 @@ import os
 import sys
 import globals
 import common
-import s3
+import aws_s3
 import botocore
+
+
+def get_stacks(stack_name):
+    client = boto3.client('cloudformation')
+    nested=[]
+    print("Level 1 stack nesting")
+    nested=getstack(stack_name,nested,client)
+
+    if nested is not None:
+        print("Level 2 stack nesting")
+        for nest in nested:
+            if nest != stack_name:
+                print(nest)
+                getstack(nest,nested,client)
+
+        print("-------------------------------------------")
+
+        for nest in nested:
+            print("Getting stack resources for " + nest)
+            getstackresources(nest,client)
+        
+        print("Stack "+stack_name+" done")
+
 
 
 def getstack(stack_name,nested,client):
@@ -28,16 +51,21 @@ def getstack(stack_name,nested,client):
 
 
     for j in response:
-      
         type=j['ResourceType']
         stat=j['ResourceStatus']
+        stacki=j['StackId']
+        if stacki not in (str(nested)):
+            nested=nested+[stacki]
+            #print("--> adding "+ stacki +" to nested")
         
         if type == "AWS::CloudFormation::Stack":
             if stat == "CREATE_COMPLETE":
-                print(type+' '+stat)
+                #print(type+' '+stat)
                 stackr=j['PhysicalResourceId']
-                print("--> adding"+ stackr +"to nested")
-                nested=nested+[stackr]
+                if stackr not in (str(nested)):
+                    nested=nested+[stackr]
+                    #print("--> adding "+ stackr +" to nested")
+   
     
     return nested
 
@@ -101,7 +129,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::CloudWatch::Alarm": common.call_resource("aws_null", type+" "+parn) 
 
             elif type == "AWS::ApiGateway::Account":        print("Error: **Terraform does not support import of "+ type +" skipped**")
-            elif type == "AWS::EC2::Instance":              common.call_resource("aws_null", type+" "+pid) 
+            elif type == "AWS::EC2::Instance":              common.call_resource("aws_instance", pid) 
             elif type == "AWS::EC2::KeyPair":               common.call_resource("aws_null", type+" "+pid) 
             elif type == "AWS::EC2::DHCPOptions":           common.call_resource("aws_null", type+" "+pid) 
             elif type == "AWS::EC2::EIP":                   common.call_resource("aws_null", type+" "+pid) 
@@ -113,7 +141,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::EC2::LaunchTemplate":        common.call_resource("aws_null", type+" "+pid) 
             elif type == "AWS::EC2::SecurityGroup":         common.call_resource("aws_security_group", pid) 
             elif type == "AWS::EC2::SecurityGroupIngress":  f3.write(type +" fetched as part of SecurityGroup..\n")
-            elif type == "AWS::EC2::VPCEndpoint":           common.call_resource("aws_null", type+" "+pid) 
+            elif type == "AWS::EC2::VPCEndpoint":           common.call_resource("aws_vpc_endpoint", pid) 
             elif type == "AWS::EC2::VPC":                   print("****>"+pid);common.call_resource("aws_vpc", pid) 
             elif type == "AWS::EC2::Subnet":                common.call_resource("aws_subnet", pid) 
             elif type == "AWS::EC2::RouteTable":            common.call_resource("aws_route_table", pid) 
@@ -175,7 +203,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::LakeFormation::Permissions":  common.call_resource("aws_null", type+" "+pid) 
             elif type == "AWS::LakeFormation::PrincipalPermissions":  common.call_resource("aws_null", lrid) 
 
-            elif type == "AWS::Lambda::Function":  common.call_resource("aws_null", type+" "+pid) 
+            elif type == "AWS::Lambda::Function":  common.call_resource("aws_lambda_function", pid) 
             elif type == "AWS::Lambda::LayerVersion":  common.call_resource("aws_null", type+" "+pid) 
             elif type == "AWS::Lambda::Permission": f3.write(type+" "+pid+"  as part of function..")          # fetched as part of function
             elif type == "AWS::Lambda::EventInvokeConfig": f3.write(type+" "+pid+"  as part of function..")   # fetched as part of function
@@ -183,7 +211,7 @@ def getstackresources(stack_name,client):
 
             elif type == "AWS::Logs::LogGroup": common.call_resource("aws_cloudwatch_log_group", parn) 
 
-            elif type == "AWS::RDS::DBCluster": common.call_resource("aws_null", pid)
+            elif type == "AWS::RDS::DBCluster": common.call_resource("aws_null", type+" "+pid)
 
             elif type == "AWS::RDS::DBSubnetGroup": common.call_resource("aws_null", type+" "+pid) 
             elif type == "AWS::RDS::DBInstance": common.call_resource("aws_null", type+" "+pid)  # 601-get-rds-ins.sh & 614-get-rds-cluster-aurora-ins.sh
@@ -200,7 +228,7 @@ def getstackresources(stack_name,client):
                 common.call_resource("aws_null", tarn)
                 
 
-            elif type == "AWS::S3::Bucket":                     s3.get_all_s3_buckets(pid, globals.region)
+            elif type == "AWS::S3::Bucket":                     aws_s3.get_all_s3_buckets(pid, globals.region)
             elif type == "AWS::S3::BucketPolicy":               f3.write(type +" fetched as part of bucket...\n")
 
             elif type == "AWS::SageMaker::AppImageConfig":  common.call_resource("aws_null", type+" "+pid) 
@@ -230,30 +258,5 @@ def getstackresources(stack_name,client):
     f3.close()
     return
 
-def get_stacks(stack_name):
-    client = boto3.client('cloudformation')
-    nested=[]
-    print("Level 1 stack nesting")
-    nested=getstack(stack_name,nested,client)
 
-    if nested is not None:
-        print("Level 2 stack nesting")
-        for nest in nested:
-            if nest != stack_name:
-                print(nest)
-                getstack(nest,nested,client)
-
-        if stack_name not in (str(nested)):
-            nested=nested+[stack_name]
-    
-
-        print("Stacks Found:")
-        for nest in nested:
-            print(nest)
-
-        for nest in nested:
-            print("getting stack resources for " + nest)
-            getstackresources(nest,client)
-        
-        print("stack "+stack_name+" done")
 

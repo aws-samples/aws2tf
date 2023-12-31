@@ -46,7 +46,7 @@ def get_aws_iam_role_policy(type,id,clfn,descfn,topkey,key,filterid):
             theid=rn+":"+j
             common.write_import(type,theid,None) 
    
-   return
+   return True
 
 
 
@@ -98,6 +98,7 @@ def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
                   globals.policies = globals.policies + [theid]
                   globals.policyarns = globals.policyarns + [retid]
                   common.write_import(type,retid,pn)
+
    else:
          j=response
          #print("j="+str(j))
@@ -119,7 +120,7 @@ def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
                   globals.policyarns = globals.policyarns + [retid]
                   common.write_import(type,retid,pn)  
    
-   return
+   return True
 
 ##
 ## special due to mandator role name,
@@ -154,4 +155,4 @@ def get_aws_iam_policy_attchment(type,id,clfn,descfn,topkey,key,filterid):
                globals.dependancies=globals.dependancies + ["aws_iam_policy."+retid]
             #print("adding "+theid+" attachment")
             common.write_import(type,theid,rn) 
-   return
+   return True

@@ -44,3 +44,5 @@ def get_aws_cloudwatch_log_group(type, id, clfn, descfn, topkey, key, filterid):
         print(exc_type, fname, exc_tb.tb_lineno)
         exit()
 
+    return True
+

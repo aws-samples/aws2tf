@@ -218,3 +218,164 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
         exit()
 
     return True
+
+
+
+def get_aws_network_acl(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In get_aws_subnet doing " + type + ' with id ' + str(id) +
+            " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
+## vall boto3 with Filter default=false
+
+        response = []
+        client = boto3.client(clfn)
+        paginator = client.get_paginator(descfn)
+        # TODO - just get all onlce and use @@@@ globals
+        if id is not None:
+            if "acl-" in id:
+                for page in paginator.paginate(Filters=[
+                    {
+                        'Name': 'association.network-acl-id',
+                        'Values': [id]
+                    },
+                    {
+                        'Name': 'default',
+                        'Values': False
+                    }
+                    ]):
+                    response.extend(page[topkey])
+            elif "vpc-" in id:
+                for page in paginator.paginate(Filters=[
+                    {
+                        'Name': 'vpc-id',
+                        'Values': [id]
+                    },
+                    {
+                        'Name': 'default',
+                        'Values': False
+                    }
+                    ]):
+                    response.extend(page[topkey])
+            else:
+                print("Error in get_aws_route_table_association unexpected id value")
+        else:
+            for page in paginator.paginate(Filters=[
+                    {
+                        'Name': 'default',
+                        'Values': False
+                    }
+                    ]):
+                    response.extend(page[topkey])
+
+
+
+################################################################
+
+
+    
+    try:
+        if response == []:
+            print("empty response returning")
+            return
+        
+        if id is None:
+            for j in response: common.write_import(type, j[key], None)     
+        
+        else:
+            for j in response:
+                common.write_import(type, j[key], None)
+                pkey = type+"."+j[key]
+                globals.rproc[pkey] = True
+
+    
+    except Exception as e:
+        print(f"{e=}")
+        print("ERROR: -2->unexpected error in get_aws_vpc_ipv4_cidr_block_association")
+        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        exit()
+
+    return True
+
+
+def get_aws_default_network_acl(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In get_aws_subnet doing " + type + ' with id ' + str(id) +
+            " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
+## vall boto3 with Filter default=false
+
+        response = []
+        client = boto3.client(clfn)
+        paginator = client.get_paginator(descfn)
+        # TODO - just get all onlce and use @@@@ globals
+        if id is not None:
+            if "acl-" in id:
+                for page in paginator.paginate(Filters=[
+                    {
+                        'Name': 'association.network-acl-id',
+                        'Values': [id]
+                    },
+                    {
+                        'Name': 'default',
+                        'Values': False
+                    }
+                    ]):
+                    response.extend(page[topkey])
+            elif "vpc-" in id:
+                for page in paginator.paginate(Filters=[
+                    {
+                        'Name': 'vpc-id',
+                        'Values': [id]
+                    },
+                    {
+                        'Name': 'default',
+                        'Values': False
+                    }
+                    ]):
+                    response.extend(page[topkey])
+            else:
+                print("Error in get_aws_route_table_association unexpected id value")
+        else:
+            for page in paginator.paginate(Filters=[
+                    {
+                        'Name': 'default',
+                        'Values': False
+                    }
+                    ]):
+                    response.extend(page[topkey])
+
+
+
+################################################################
+
+
+    
+    try:
+        if response == []:
+            print("empty response returning")
+            return
+        
+        if id is None:
+            for j in response: common.write_import(type, j[key], None)     
+        
+        else:
+            for j in response:
+                common.write_import(type, j[key], None)
+                pkey = type+"."+j[key]
+                globals.rproc[pkey] = True
+
+    
+    except Exception as e:
+        print(f"{e=}")
+        print("ERROR: -2->unexpected error in get_aws_vpc_ipv4_cidr_block_association")
+        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        exit()
+
+    return True

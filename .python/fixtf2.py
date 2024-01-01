@@ -8,13 +8,8 @@ def aws_acm_certificate(t1,tt1,tt2,skipipv6,flag2):
     skip = 0
     return skip,t1,skipipv6,flag2
 
-def aws_acm_certificate(t1,tt1,tt2,skipipv6,flag2):
-    skip = 0
-    return skip,t1,skipipv6,flag2
-
 def  aws_vpc(t1,tt1,tt2,skipipv6,flag2):
     skip = 0
-
     if tt1 == "assign_generated_ipv6_cidr_block":
         if tt2 in "true": skipipv6=True
     if tt1 == "ipv6_cidr_block":
@@ -125,7 +120,10 @@ def  aws_nat_gateway(t1,tt1,tt2,flag1,flag2):
 
 def  aws_network_acl(t1,tt1,tt2,flag1,flag2):
     skip=0
+    return skip,t1,flag1,flag2
 
+def  aws_default_network_acl(t1,tt1,tt2,flag1,flag2):
+    skip=0
     return skip,t1,flag1,flag2
 
 

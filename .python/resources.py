@@ -205,12 +205,9 @@ def resource_data(type,id):
 
     if type=="aws_acm_certificate": clfn="acm";descfn="list_certificates";topkey='CertificateSummaryList';key="CertificateArn";filterid=key
         
-
-
     elif type == "aws_vpc": clfn="ec2";descfn="describe_vpcs";topkey='Vpcs';key="VpcId";filterid=key
-
     elif type == "aws_vpc_ipv4_cidr_block_association": clfn="ec2";descfn="describe_vpcs";topkey='Vpcs';key="VpcId";filterid=key
-
+    
     elif type == "aws_vpc_endpoint": 
         clfn="ec2";descfn="describe_vpc_endpoints";topkey="VpcEndpoints";key="VpcEndpointId";filterid=key
         if id is not None and "vpc-" in id: filterid="VpcId"
@@ -234,7 +231,11 @@ def resource_data(type,id):
     elif type == "aws_network_acl": 
         clfn="ec2";descfn="describe_network_acls";topkey="NetworkAcls";key="NetworkAclId";filterid=key
         if id is not None and "vpc-" in id: filterid="VpcId" 
-
+ 
+    elif type == "aws_default_network_acl": 
+        clfn="ec2";descfn="describe_network_acls";topkey="NetworkAcls";key="NetworkAclId";filterid=key
+        if id is not None and "vpc-" in id: filterid="VpcId" 
+     
     elif type == "aws_route_table": 
         clfn="ec2";descfn="describe_route_tables";topkey="RouteTables";key="RouteTableId";filterid=key
         if id is not None and "vpc-" in id: filterid="VpcId"    

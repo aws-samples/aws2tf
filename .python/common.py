@@ -126,6 +126,8 @@ def tfplan1():
       print("No import*.tf files found for this resource, exiting ....")
       exit()
 
+   com="rm -f "+rf
+   rout=rc(com)
 
    com="terraform plan -generate-config-out="+ rf + " -out tfplan -json | jq . > plan1.json"
    print(com)
@@ -410,6 +412,7 @@ def fixtf(ttft,tf):
         flag2=tf
         f2.write("##START,"+ttft+"\n")
         for t1 in Lines:
+            skip=0
             tt1=t1.split("=")[0].strip()
             try:
                 tt2=t1.split("=")[1].strip()
@@ -432,8 +435,6 @@ def fixtf(ttft,tf):
                 print("-- no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
                 #print("t1="+t1) 
                 skip,t1,flag1,flag2=fixtf2.aws_resource(t1,tt1,tt2,flag1,flag2)
-
-
 
             if skip == 0:
                 f2.write(t1)
@@ -583,7 +584,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                      #print("***item=" + str(item))
                      try:
                         if id == str(item[filterid]):
-                           #print("--"+str(item))
+                           print("-gr31 item-"+str(item))
                            theid=item[key]
                            special_deps(type,theid)
                            write_import(type,theid,None)

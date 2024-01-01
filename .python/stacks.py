@@ -184,7 +184,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::IAM::Role":                      common.call_resource("aws_iam_role", type+" "+pid)
 
             elif type == "AWS::IAM::ManagedPolicy":  common.call_resource("aws_null", type+" "+parn) 
-            elif type == "AWS::IAM::InstanceProfile":  common.call_resource("aws_null", type+" "+pid) 
+            elif type == "AWS::IAM::InstanceProfile":  common.call_resource("aws_iam_instance_profile", pid) 
             elif type == "AWS::IAM::User":  common.call_resource("aws_null", type+" "+pid) 
             elif type == "AWS::IAM::AccessKey": common.call_resource("aws_null", type+" "+pid) 
             elif type == "AWS::IAM::ServiceLinkedRole":  common.call_resource("aws_null", type+" "+pid) 

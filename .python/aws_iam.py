@@ -75,9 +75,8 @@ def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
       except Exception as e:
          print(f"{e=}")
 
-   if response == []: 
-      print("empty response returning") 
-      return  
+   if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+ 
     
    if id is None:
       for j in response: 

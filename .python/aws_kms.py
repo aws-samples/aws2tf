@@ -13,9 +13,8 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
 
     response=common.call_boto3(clfn,descfn,topkey,id)
     #print("-9a->"+str(response))
-    if response == []: 
-        print("empty response returning") 
-        return   
+    if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+   
     try:
         for j in response: 
             theid=j[key]
@@ -57,11 +56,11 @@ def get_aws_kms_alias(type,id,clfn,descfn,topkey,key,filterid):
     response=common.call_boto3(clfn,descfn,topkey,id)
     #print("-9a->"+str(response))
     if response == []: 
-        print("empty response returning") 
+        print("Empty response for "+type+ " id="+str(id)+" returning")
         pkey=type+"."+id
         if not globals.rproc[pkey]:
             globals.rproc[pkey]=True
-        return   
+        return True 
     try:
         for j in response: 
             #print(str(j))

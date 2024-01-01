@@ -7,10 +7,8 @@ import globals
 def get_aws_eks_cluster(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug: print("--> In get_aws_eks_cluster doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    response=common.call_boto3(clfn,descfn,topkey,id)
-
-   if response == []: 
-      print("empty response returning") 
-      return   
+   if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+  
    for j in response: 
         retid=j # no key
         theid=retid
@@ -26,10 +24,8 @@ def get_aws_eks_cluster(type,id,clfn,descfn,topkey,key,filterid):
 def get_aws_eks_fargate_profile(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug: print("--> In get_aws_eks_fargate_profile  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    response=common.call_boto3(clfn,descfn,topkey,id)
+   if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
-   if response == []: 
-      print("empty response returning") 
-      return   
    for j in response: 
       retid=j # no key
       # need to ocerwrite theid
@@ -44,10 +40,8 @@ def get_aws_eks_fargate_profile(type,id,clfn,descfn,topkey,key,filterid):
 def get_aws_eks_node_group(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug: print("--> In get_aws_eks_fargate_profile  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    response=common.call_boto3(clfn,descfn,topkey,id)
-
-   if response == []: 
-      print("empty response returning") 
-      return   
+   if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+ 
    for j in response: 
       retid=j # no key
       # need to ocerwrite theid
@@ -63,9 +57,8 @@ def get_aws_eks_addon(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug: print("--> In get_aws_eks_addon  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    response=common.call_boto3(clfn,descfn,topkey,id)
 
-   if response == []: 
-      print("WARNING: get_aws_eks_addon empty response returning") 
-      return   
+   if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+
    for j in response:
       print("**********************EKS Addon"+str(j)) 
       retid=j # no key

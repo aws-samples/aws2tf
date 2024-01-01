@@ -151,9 +151,7 @@ def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key,
     response = common.call_boto3(clfn, descfn, topkey, id)
     #print("-9a->"+str(response))
     try:
-        if response == []:
-            print("empty response returning")
-            return
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response:
             cidrb = j['CidrBlockAssociationSet']
             vpcid = j['VpcId']

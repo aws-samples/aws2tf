@@ -15,10 +15,8 @@ def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
     #print("-9a->"+str(response))
     
     try:
-        if response == []:
-            print("empty response returning")
-            return
-        
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+ 
         for j in response: 
             fn=j[key]
             if id is not None and id!=fn: continue
@@ -74,9 +72,7 @@ def get_aws_lambda_alias(type, id, clfn, descfn, topkey, key, filterid):
     #print("-9a->"+str(response))
     
     try:
-        if response == []:
-            print("empty response returning")
-            return
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         for j in response: 
             #print(str(j))

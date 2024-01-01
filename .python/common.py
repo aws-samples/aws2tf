@@ -584,7 +584,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                      #print("***item=" + str(item))
                      try:
                         if id == str(item[filterid]):
-                           print("-gr31 item-"+str(item))
+                           if globals.debug: print("-gr31 item-"+str(item))
                            theid=item[key]
                            special_deps(type,theid)
                            write_import(type,theid,None)

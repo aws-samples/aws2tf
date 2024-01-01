@@ -360,6 +360,10 @@ def aws_iam_role_policy_attachment(t1,tt1,tt2,flag1,flag2):
 
     return skip,t1,flag1,flag2
 
+def aws_iam_instance_profile(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    return skip,t1,flag1,flag2
+
 
 ### VPC Lattice  -----------------------
 
@@ -602,6 +606,11 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
         t1="user_data_base64 = filebase64sha256(\""+flag2+".sh\")\n lifecycle {\n   ignore_changes = [user_data_replace_on_change,user_data,user_data_base64]\n}\n"
 
     elif tt1 == "user_data_base64": skip=1
+    elif tt1 == "iam_instance_profile":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_iam_instance_profile." + tt2 + ".name\n"
+        add_dependancy("aws_iam_instance_profile",tt2)
+
 
     return skip,t1,flag1,flag2  
 

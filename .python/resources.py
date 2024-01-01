@@ -318,8 +318,7 @@ def resource_data(type,id):
         clfn="iam";descfn="list_policies";topkey="Policies";key="PolicyName";filterid=key 
         if id is not None and "arn:aws:iam::" in id: filterid="Arn"
 
-    elif type == "aws_iam_role_policy":
-        clfn="iam";descfn="list_role_policies";topkey="PolicyNames";key="PolicyNames";filterid="RoleName"
+    elif type == "aws_iam_role_policy": clfn="iam";descfn="list_role_policies";topkey="PolicyNames";key="PolicyNames";filterid="RoleName"
 
     elif type == "aws_iam_role_policy_attachment":
         clfn="iam";descfn="list_attached_role_policies";topkey="AttachedPolicies";key="PolicyName";filterid="RoleName" 
@@ -328,6 +327,10 @@ def resource_data(type,id):
     elif type == "aws_iam_user":
         clfn="iam";descfn="list_users";topkey="Users";key="UserName";filterid=key 
         if id is not None and "arn:aws:iam::" in id: filterid="Arn"
+
+    elif type == "aws_iam_instance_profile":
+        clfn="iam";descfn="get_instance_profile";topkey="InstanceProfile";key="InstanceProfileName";filterid=key 
+        
 
     ## Lattice
     ##

@@ -1,6 +1,8 @@
 import common
 import boto3
 import globals
+import sys
+import os
 
 ##
 ## hmm inline policies are in the aws_iam_role  anyway !
@@ -154,3 +156,36 @@ def get_aws_iam_policy_attchment(type,id,clfn,descfn,topkey,key,filterid):
             #print("adding "+theid+" attachment")
             common.write_import(type,theid,rn) 
    return True
+
+
+
+def get_aws_iam_instance_profile(type,id,clfn,descfn,topkey,key,filterid):
+   if globals.debug:
+       print("--> In get_aws_iam_instance_profile  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   
+   client = boto3.client(clfn) 
+   response=[]
+
+   try:
+      response1 = client.get_instance_profile(InstanceProfileName=id)
+      j=response1[topkey]
+      if j == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+
+      print("get_instance_profile response="+str(j))
+ 
+      theid=j[key]
+      common.write_import(type,theid,None) 
+      
+   except Exception as e:
+        print(f"{e=}")
+        print("ERROR: -2->unexpected error in aws_iam_instance_profile")
+        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        exit()
+
+
+
+   return True
+

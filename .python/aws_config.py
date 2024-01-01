@@ -11,9 +11,8 @@ def get_aws_config_config_rule(type, id, clfn, descfn, topkey, key, filterid):
     try:
         response = common.call_boto3(clfn, descfn, topkey, id)
         #print("-9a->"+str(response))
-        if response == []:
-            print("empty response returning")
-            return
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+
         if id is None:
             for j in response:
                 retid = j[key]

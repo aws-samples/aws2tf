@@ -1,0 +1,182 @@
+{
+  "@level": "info",
+  "@message": "Terraform 1.6.6",
+  "@module": "terraform.ui",
+  "@timestamp": "2024-01-01T18:27:37.785091Z",
+  "terraform": "1.6.6",
+  "type": "version",
+  "ui": "1.2"
+}
+{
+  "@level": "info",
+  "@message": "data.aws_caller_identity.current: Refreshing...",
+  "@module": "terraform.ui",
+  "@timestamp": "2024-01-01T18:27:41.009848Z",
+  "hook": {
+    "resource": {
+      "addr": "data.aws_caller_identity.current",
+      "module": "",
+      "resource": "data.aws_caller_identity.current",
+      "implied_provider": "aws",
+      "resource_type": "aws_caller_identity",
+      "resource_name": "current",
+      "resource_key": null
+    },
+    "action": "read"
+  },
+  "type": "apply_start"
+}
+{
+  "@level": "info",
+  "@message": "data.aws_availability_zones.az: Refreshing...",
+  "@module": "terraform.ui",
+  "@timestamp": "2024-01-01T18:27:41.009871Z",
+  "hook": {
+    "resource": {
+      "addr": "data.aws_availability_zones.az",
+      "module": "",
+      "resource": "data.aws_availability_zones.az",
+      "implied_provider": "aws",
+      "resource_type": "aws_availability_zones",
+      "resource_name": "az",
+      "resource_key": null
+    },
+    "action": "read"
+  },
+  "type": "apply_start"
+}
+{
+  "@level": "info",
+  "@message": "data.aws_region.current: Refreshing...",
+  "@module": "terraform.ui",
+  "@timestamp": "2024-01-01T18:27:41.009890Z",
+  "hook": {
+    "resource": {
+      "addr": "data.aws_region.current",
+      "module": "",
+      "resource": "data.aws_region.current",
+      "implied_provider": "aws",
+      "resource_type": "aws_region",
+      "resource_name": "current",
+      "resource_key": null
+    },
+    "action": "read"
+  },
+  "type": "apply_start"
+}
+{
+  "@level": "info",
+  "@message": "data.aws_region.current: Refresh complete after 0s [id=us-west-2]",
+  "@module": "terraform.ui",
+  "@timestamp": "2024-01-01T18:27:41.015745Z",
+  "hook": {
+    "resource": {
+      "addr": "data.aws_region.current",
+      "module": "",
+      "resource": "data.aws_region.current",
+      "implied_provider": "aws",
+      "resource_type": "aws_region",
+      "resource_name": "current",
+      "resource_key": null
+    },
+    "action": "read",
+    "id_key": "id",
+    "id_value": "us-west-2",
+    "elapsed_seconds": 0
+  },
+  "type": "apply_complete"
+}
+{
+  "@level": "info",
+  "@message": "data.aws_caller_identity.current: Refresh complete after 0s [id=566972129213]",
+  "@module": "terraform.ui",
+  "@timestamp": "2024-01-01T18:27:41.193965Z",
+  "hook": {
+    "resource": {
+      "addr": "data.aws_caller_identity.current",
+      "module": "",
+      "resource": "data.aws_caller_identity.current",
+      "implied_provider": "aws",
+      "resource_type": "aws_caller_identity",
+      "resource_name": "current",
+      "resource_key": null
+    },
+    "action": "read",
+    "id_key": "id",
+    "id_value": "566972129213",
+    "elapsed_seconds": 0
+  },
+  "type": "apply_complete"
+}
+{
+  "@level": "info",
+  "@message": "data.aws_availability_zones.az: Refresh complete after 1s [id=us-west-2]",
+  "@module": "terraform.ui",
+  "@timestamp": "2024-01-01T18:27:41.913151Z",
+  "hook": {
+    "resource": {
+      "addr": "data.aws_availability_zones.az",
+      "module": "",
+      "resource": "data.aws_availability_zones.az",
+      "implied_provider": "aws",
+      "resource_type": "aws_availability_zones",
+      "resource_name": "az",
+      "resource_key": null
+    },
+    "action": "read",
+    "id_key": "id",
+    "id_value": "us-west-2",
+    "elapsed_seconds": 1
+  },
+  "type": "apply_complete"
+}
+{
+  "@level": "info",
+  "@message": "Plan: 0 to add, 0 to change, 0 to destroy.",
+  "@module": "terraform.ui",
+  "@timestamp": "2024-01-01T18:27:41.921705Z",
+  "changes": {
+    "add": 0,
+    "change": 0,
+    "import": 0,
+    "remove": 0,
+    "operation": "plan"
+  },
+  "type": "change_summary"
+}
+{
+  "@level": "error",
+  "@message": "Error: use the `aws_default_network_acl` resource instead",
+  "@module": "terraform.ui",
+  "@timestamp": "2024-01-01T18:27:41.921768Z",
+  "diagnostic": {
+    "severity": "error",
+    "summary": "use the `aws_default_network_acl` resource instead",
+    "detail": ""
+  },
+  "type": "diagnostic"
+}
+{
+  "@level": "error",
+  "@message": "Error: use the `aws_default_network_acl` resource instead",
+  "@module": "terraform.ui",
+  "@timestamp": "2024-01-01T18:27:41.921978Z",
+  "diagnostic": {
+    "severity": "error",
+    "summary": "use the `aws_default_network_acl` resource instead",
+    "detail": ""
+  },
+  "type": "diagnostic"
+}
+{
+  "@level": "error",
+  "@message": "Error: use the `aws_default_network_acl` resource instead",
+  "@module": "terraform.ui",
+  "@timestamp": "2024-01-01T18:27:41.921987Z",
+  "diagnostic": {
+    "severity": "error",
+    "summary": "use the `aws_default_network_acl` resource instead",
+    "detail": ""
+  },
+  "type": "diagnostic"
+}

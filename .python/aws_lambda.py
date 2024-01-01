@@ -117,10 +117,8 @@ def get_aws_lambda_permission(type, id, clfn, descfn, topkey, key, filterid):
             print("WARNING: ResourceNotFoundException for "+type+ " "+str(id)+" returning")
             return True
 
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
-        if response == []:
-            print("Empty response for "+type+ " "+str(id)+" returning")
-            return True
         
         #print("-42a-"+str(response))
            
@@ -158,11 +156,7 @@ def get_aws_lambda_function_event_invoke_config(type, id, clfn, descfn, topkey, 
         response1 = getfn(FunctionName=id)
         response=response1[topkey]
 
-
-        if response == []:
-            print("Empty response for "+type+ " "+str(id)+" returning")
-            return True
-
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         for j in response: 
             print(str(j))

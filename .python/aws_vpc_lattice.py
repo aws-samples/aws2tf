@@ -26,10 +26,8 @@ def get_aws_vpclattice_service(type,id,clfn,descfn,topkey,key,filterid):
       print("unexpected error in paginate")
       exit()
       
+   if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True  
 
-   if response == []: 
-      print("empty response returning") 
-      return   
    for j in response: 
       retid=j['id']
       theid=retid
@@ -81,10 +79,8 @@ def get_aws_vpclattice_auth_policy(type,id,clfn,descfn,topkey,key,filterid):
       print("unexpected error in paginate")
       exit()
       
+   if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
-   if response == []: 
-      print("empty response returning") 
-      return 
    else:
        print("**********************VPC Lattice auth policy"+str(response))  
    for j in response: 
@@ -129,10 +125,8 @@ def get_aws_vpclattice_listener(type,id,clfn,descfn,topkey,key,filterid):
       print("unexpected error in paginate")
       exit()
       
-
-   if response == []: 
-      print("empty response returning") 
-      return   
+   if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+  
    for j in response: 
         retid=j['id']
         theid=id+"/"+retid
@@ -174,9 +168,8 @@ def get_aws_vpclattice_listener_rule(type,id,clfn,descfn,topkey,key,filterid):
       exit()
       
    print("***>>>>"+str(response))
-   if response == []: 
-      print("empty response returning") 
-      return   
+   if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+  
    for j in response: 
         retid=j['id']
         theid=svid+"/"+rlid+"/"+retid
@@ -212,10 +205,8 @@ def get_aws_vpc_lattice(type,id,clfn,descfn,topkey,key,filterid):
       print("unexpected error in paginate")
       exit()
       
-
-   if response == []: 
-      print("empty response returning") 
-      return   
+   if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+   
    for j in response: 
             retid=j['id']
             theid=retid

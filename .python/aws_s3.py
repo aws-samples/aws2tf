@@ -110,6 +110,7 @@ def get_s3(s3_fields,type,bucket_name):
    try:
       #print("in get_s3 type=" + type)
       response=s3_fields[type](Bucket=bucket_name)
+      
       rl=len(response)
       if rl > 1 :
 

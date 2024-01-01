@@ -135,9 +135,8 @@ def get_aws_launch_template(type, id, clfn, descfn, topkey, key, filterid):
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     response = common.call_boto3(clfn, descfn, topkey, id)
     # print("-9a->"+str(response))
-    if response == []:
-        print("empty response returning")
-        return
+    if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+
     for j in response:
         retid = j['LaunchTemplateId']
         theid = retid
@@ -185,9 +184,7 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
     #print("-9a->"+str(response))
     
     try:
-        if response == []:
-            print("empty response returning")
-            return
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         if id is None:
             for j in response: common.write_import(type, j[key], None)     
@@ -223,15 +220,17 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_network_acl(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
-        print("--> In get_aws_subnet doing " + type + ' with id ' + str(id) +
+        print("--> In get_aws_network_acl doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
 ## vall boto3 with Filter default=false
 
-        response = []
-        client = boto3.client(clfn)
-        paginator = client.get_paginator(descfn)
-        # TODO - just get all onlce and use @@@@ globals
+    response = []
+    client = boto3.client(clfn)
+    paginator = client.get_paginator(descfn)
+    #print("51a paginator")
+    # TODO - just get all onlce and use @@@@ globals
+    try:
         if id is not None:
             if "acl-" in id:
                 for page in paginator.paginate(Filters=[
@@ -241,7 +240,7 @@ def get_aws_network_acl(type, id, clfn, descfn, topkey, key, filterid):
                     },
                     {
                         'Name': 'default',
-                        'Values': False
+                        'Values': [False]
                     }
                     ]):
                     response.extend(page[topkey])
@@ -253,7 +252,7 @@ def get_aws_network_acl(type, id, clfn, descfn, topkey, key, filterid):
                     },
                     {
                         'Name': 'default',
-                        'Values': False
+                        'Values': [False]
                     }
                     ]):
                     response.extend(page[topkey])
@@ -263,7 +262,7 @@ def get_aws_network_acl(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(Filters=[
                     {
                         'Name': 'default',
-                        'Values': False
+                        'Values': ['false']
                     }
                     ]):
                     response.extend(page[topkey])
@@ -273,11 +272,7 @@ def get_aws_network_acl(type, id, clfn, descfn, topkey, key, filterid):
 ################################################################
 
 
-    
-    try:
-        if response == []:
-            print("empty response returning")
-            return
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         if id is None:
             for j in response: common.write_import(type, j[key], None)     
@@ -291,7 +286,7 @@ def get_aws_network_acl(type, id, clfn, descfn, topkey, key, filterid):
     
     except Exception as e:
         print(f"{e=}")
-        print("ERROR: -2->unexpected error in get_aws_vpc_ipv4_cidr_block_association")
+        print("ERROR: -2->unexpected error in get_aws_network_acl")
         print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -303,7 +298,7 @@ def get_aws_network_acl(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_default_network_acl(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
-        print("--> In get_aws_subnet doing " + type + ' with id ' + str(id) +
+        print("--> In get_aws_default_network_acl doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
 ## vall boto3 with Filter default=false
@@ -355,9 +350,7 @@ def get_aws_default_network_acl(type, id, clfn, descfn, topkey, key, filterid):
 
     
     try:
-        if response == []:
-            print("empty response returning")
-            return
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         if id is None:
             for j in response: common.write_import(type, j[key], None)     
@@ -371,7 +364,7 @@ def get_aws_default_network_acl(type, id, clfn, descfn, topkey, key, filterid):
     
     except Exception as e:
         print(f"{e=}")
-        print("ERROR: -2->unexpected error in get_aws_vpc_ipv4_cidr_block_association")
+        print("ERROR: -2->unexpected error in get_aws_default_network_acl")
         print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]

@@ -139,10 +139,9 @@ def get_aws_iam_policy_attchment(type,id,clfn,descfn,topkey,key,filterid):
          response.extend(page[topkey])
    except Exception as e:
       print(f"{e=}")
-   #print("response="+str(response))
-   if response == []: 
-      print("empty response returning") 
-      return   
+
+   if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+   
    for j in response: 
             retid=j['PolicyArn']
             theid=id+"/"+retid

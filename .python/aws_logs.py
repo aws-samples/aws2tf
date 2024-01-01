@@ -12,9 +12,8 @@ def get_aws_cloudwatch_log_group(type, id, clfn, descfn, topkey, key, filterid):
     response = common.call_boto3(clfn, descfn, topkey, id)
     #print("-9a->"+str(response))
     try:
-        if response == []:
-            print("empty response returning")
-            return
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+
         if id is not None:
             if "arn:" in id:
                 for j in response:

@@ -1,8 +1,8 @@
 # aws2tf
 
-**December 2023**
+**January 2024**
 
-**Porting to Python**
+**Python Version**
 ----
 
 A port of this tool to Python is underway, greatly aided by Amazon CodeWhisperer.

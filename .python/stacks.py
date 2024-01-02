@@ -173,7 +173,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::EMR::SecurityConfiguration": common.call_resource("aws_null", type+" "+pid) 
 
             elif type == "AWS::Events::EventBus": common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::Events::Rule": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::Events::Rule": common.call_resource("aws_config_config_rule", pid)
 
             elif type == "AWS::Glue::Connection": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Glue::Crawler": common.call_resource("aws_null", type+" "+pid)

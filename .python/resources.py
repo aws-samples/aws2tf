@@ -429,6 +429,20 @@ def resource_data(type,id):
 
     elif type == "aws_redshiftserverless_workgroup": clfn="redshift-serverless";descfn="get_workgroup";topkey="workgroup";key="workgroupName";filterid=key
     elif type == "aws_redshiftserverless_namespace": clfn="redshift-serverless";descfn="get_namespace";topkey="namespace";key="namespaceName";filterid=key
-
+    elif type == "aws_redshift_cluster": clfn="redshift";descfn="describe_clusters";topkey="Clusters";key="ClusterIdentifier";filterid=key
+    elif type == "aws_redshift_subnet_group": clfn="redshift";descfn="describe_cluster_subnet_groups";topkey="ClusterSubnetGroups";key="ClusterSubnetGroupName";filterid=key
+    elif type == "aws_redshift_parameter_group": clfn="redshift";descfn="describe_cluster_parameter_groups";topkey="ParameterGroups";key="ParameterGroupName";filterid=key
     
+    
+    elif type == "aws_rds_cluster": clfn="rds";descfn="describe_db_clusters";topkey="DBClusters";key="DBClusterIdentifier";filterid=key
+    elif type == "aws_rds_cluster_parameter_group": clfn="rds";descfn="describe_db_cluster_parameter_groups";topkey="DBClusterParameterGroups";key="DBClusterParameterGroupName";filterid=key
+    elif type == "aws_rds_cluster_instance": clfn="rds";descfn="describe_db_instances";topkey="DBInstances";key="DBInstanceIdentifier";filterid=key
+    
+    elif type == "aws_db_parameter_group": clfn="rds";descfn="describe_db_parameter_groups";topkey="DBParameterGroups";key="DBParameterGroupName";filterid=key
+    elif type == "aws_db_subnet_group": clfn="rds";descfn="describe_db_subnet_groups";topkey="DBSubnetGroups";key="DBSubnetGroupName";filterid=key
+    elif type == "aws_db_instance": clfn="rds";descfn="describe_db_instances";topkey="DBInstances";key="DBInstanceIdentifier";filterid=key
+    elif type == "aws_db_event_subscription": clfn="rds";descfn="describe_event_subscriptions";topkey="EventSubscriptionsList";key="SubscriptionName";filterid=key
+    
+
+
     return clfn,descfn,topkey,key,filterid

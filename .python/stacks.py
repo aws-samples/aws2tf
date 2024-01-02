@@ -212,21 +212,20 @@ def getstackresources(stack_name,client):
 
             elif type == "AWS::Logs::LogGroup": common.call_resource("aws_cloudwatch_log_group", parn) 
 
-            elif type == "AWS::RDS::DBCluster": common.call_resource("aws_null", type+" "+pid)
-
-            elif type == "AWS::RDS::DBSubnetGroup": common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::RDS::DBInstance": common.call_resource("aws_null", type+" "+pid)  # 601-get-rds-ins.sh & 614-get-rds-cluster-aurora-ins.sh
-                
-            elif type == "AWS::RDS::DBParameterGroup":  common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::RDS::EventSubscription":  common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::RDS::DBClusterParameterGroup": common.call_resource("aws_null", type+" "+pid) 
-
             elif type == "AWS::RedshiftServerless::Namespace": common.call_resource("aws_redshiftserverless_namespace", pid)
             elif type == "AWS::RedshiftServerless::Workgroup": common.call_resource("aws_redshiftserverless_workgroup", pid)
 
-            elif type == "AWS::Redshift::Cluster":  common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::Redshift::ClusterParameterGroup":  common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::Redshift::ClusterSubnetGroup":  common.call_resource("aws_null", type+" "+pid) 
+            elif type == "AWS::Redshift::Cluster":  common.call_resource("aws_redshift_cluster", pid) 
+            elif type == "AWS::Redshift::ClusterParameterGroup":  common.call_resource("aws_redshift_parameter_group", pid)
+            elif type == "AWS::Redshift::ClusterSubnetGroup":  common.call_resource("aws_redshift_subnet_group", pid) 
+
+            elif type == "AWS::RDS::DBCluster": common.call_resource("aws_rds_cluster", pid)
+            elif type == "AWS::RDS::DBClusterParameterGroup": common.call_resource("aws_rds_cluster_parameter_group", pid)
+            elif type == "AWS::RDS::DBInstance": common.call_resource("aws_db_instance", pid)   
+            elif type == "AWS::RDS::DBParameterGroup":  common.call_resource("aws_db_parameter_group", pid) 
+            elif type == "AWS::RDS::DBSubnetGroup": common.call_resource("aws_db_subnet_group", pid) 
+            elif type == "AWS::RDS::EventSubscription":  common.call_resource("aws_db_event_subscription", pid) 
+
 
             elif type == "AWS::ServiceCatalog::PortfolioPrincipalAssociation": 
                 tarn=parn.split('|')[0]

@@ -19,6 +19,7 @@ import aws_lambda
 import aws_redshift
 
 
+
 def call_resource(type, id):
     
    if type=="aws_null":
@@ -70,8 +71,9 @@ def call_resource(type, id):
    except SyntaxError:
       pass
 
-   #except NameError:
-   #   pass
+   except NameError:
+      print("NameError: name 'getfn' - no aws_"+clfn+".py file ?")
+      pass
 
    except Exception as e:      
                 # By this way we can know about the type of error occurring

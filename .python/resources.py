@@ -328,8 +328,7 @@ def resource_data(type,id):
         clfn="iam";descfn="list_users";topkey="Users";key="UserName";filterid=key 
         if id is not None and "arn:aws:iam::" in id: filterid="Arn"
 
-    elif type == "aws_iam_instance_profile":
-        clfn="iam";descfn="get_instance_profile";topkey="InstanceProfile";key="InstanceProfileName";filterid=key 
+    elif type == "aws_iam_instance_profile": clfn="iam";descfn="get_instance_profile";topkey="InstanceProfile";key="InstanceProfileName";filterid=key 
         
 
     ## Lattice
@@ -338,8 +337,7 @@ def resource_data(type,id):
         clfn="vpc-lattice";descfn="list_access_log_subscriptions";topkey="items";key="id";filterid="name"  
         if id is not None and "sn-" in id: filterid=key 
     ##
-    elif type == "aws_vpclattice_auth_policy":
-        clfn="vpc-lattice";descfn="get_auth_policy";topkey="items";key="id";filterid=key 
+    elif type == "aws_vpclattice_auth_policy": clfn="vpc-lattice";descfn="get_auth_policy";topkey="items";key="id";filterid=key 
 
     elif type == "aws_vpclattice_listener":
         clfn="vpc-lattice";descfn="list_listeners";topkey="items";key="id";filterid="name"  
@@ -428,6 +426,9 @@ def resource_data(type,id):
 
    #if type == "aws_vpn_gateway": return 'VpnGateways', ec2client.describe_vpn_gateways, "VpnGatewayId"
    #if type == "aws_vpn_connection": return 'VpnConnections', ec2client.describe_vpn_connections, "VpnConnectionId", "vpc-id"
+
+    elif type == "aws_redshiftserverless_workgroup": clfn="redshift-serverless";descfn="get_workgroup";topkey="workgroup";key="workgroupName";filterid=key
+    elif type == "aws_redshiftserverless_namespace": clfn="redshift-serverless";descfn="get_namespace";topkey="namespace";key="namespaceName";filterid=key
 
     
     return clfn,descfn,topkey,key,filterid

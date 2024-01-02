@@ -193,7 +193,8 @@ def getstackresources(stack_name,client):
             elif type == "AWS::IAM::Policy": f3.write(type+" "+pid+" Should be fetched via Roles etc\n") 
 
             elif type == "AWS::KinesisFirehose::DeliveryStream":  common.call_resource("aws_null", type+" "+pid) 
-
+            elif type == "AWS::Kinesis::Stream":  common.call_resource("aws_null", type+" "+pid)
+   
             elif type == "AWS::KMS::Key":  common.call_resource("aws_null", type+" "+pid) 
             elif type == "AWS::KMS::Alias": f3.write(type+" "+pid+"  fetched as part of function..'")  # fetched as part of function
 
@@ -220,7 +221,11 @@ def getstackresources(stack_name,client):
             elif type == "AWS::RDS::EventSubscription":  common.call_resource("aws_null", type+" "+pid) 
             elif type == "AWS::RDS::DBClusterParameterGroup": common.call_resource("aws_null", type+" "+pid) 
 
+            elif type == "AWS::RedshiftServerless::Namespace": common.call_resource("aws_redshiftserverless_namespace", pid)
+            elif type == "AWS::RedshiftServerless::Workgroup": common.call_resource("aws_redshiftserverless_workgroup", pid)
+
             elif type == "AWS::Redshift::Cluster":  common.call_resource("aws_null", type+" "+pid) 
+            elif type == "AWS::Redshift::ClusterParameterGroup":  common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Redshift::ClusterSubnetGroup":  common.call_resource("aws_null", type+" "+pid) 
 
             elif type == "AWS::ServiceCatalog::PortfolioPrincipalAssociation": 

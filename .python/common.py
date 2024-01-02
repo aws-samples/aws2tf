@@ -16,6 +16,7 @@ import aws_vpc_lattice
 import aws_logs
 import aws_config
 import aws_lambda
+import aws_redshift
 
 
 def call_resource(type, id):
@@ -48,12 +49,17 @@ def call_resource(type, id):
             if globals.debug:
                print("calling specific common.get_"+type+" with type="+type+" id="+str(id)+"   clfn=" +
                     clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
+            
             if clfn=="vpc-lattice":
                print("vpc-lattice")
                getfn = getattr(eval("aws_vpc_lattice"), "get_"+type) 
-                #
-                #vpc_lattice.get_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid)
-            else:                  
+            elif clfn=="redshift-serverless":
+               print("redshift-serverless")
+               getfn = getattr(eval("aws_redshift"), "get_"+type) 
+               #aws_redshift.get_aws_redshiftserverless_namespace(type, id, clfn, descfn, topkey, key, filterid)
+
+            else:   
+               print("-1a- clfn:"+clfn+" type:"+type)
                getfn = getattr(eval("aws_"+clfn), "get_"+type) 
 
             sr=getfn(type, id, clfn, descfn, topkey, key, filterid)
@@ -63,6 +69,9 @@ def call_resource(type, id):
 
    except SyntaxError:
       pass
+
+   #except NameError:
+   #   pass
 
    except Exception as e:      
                 # By this way we can know about the type of error occurring

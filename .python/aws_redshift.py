@@ -11,15 +11,20 @@ def get_aws_redshiftserverless_namespace(type, id, clfn, descfn, topkey, key, fi
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     # Directly get id
+    
     try:
-        common.write_import(type,id,None) 
-   
-        #response = []
-        #client = boto3.client(clfn)
-        #response1 = client.get_namespace(namespaceName=id)
-        #response=response1[topkey]
+        if id is not None:
+            common.write_import(type,id,None) 
+        else:
+            response = []
+            client = boto3.client(clfn)
+            response1 = client.list_namespaces()
+            response=response1['namespaces']
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            for j in response:
+                common.write_import(type,j[key],None) 
 
-        #if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        
 
     except Exception as e:
             print(f"{e=}")
@@ -40,14 +45,19 @@ def get_aws_redshiftserverless_workgroup(type, id, clfn, descfn, topkey, key, fi
 
     # Directly get id
     try:
-        common.write_import(type,id,None) 
-   
-        #response = []
-        #client = boto3.client(clfn)
-        #response1 = client.get_namespace(namespaceName=id)
-        #response=response1[topkey]
+        if id is not None:
+            common.write_import(type,id,None) 
+        else:
+            response = []
+            client = boto3.client(clfn)
+            response1 = client.list_workgroups()
+            response=response1['workgroups']
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
-        #if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            for j in response:
+                common.write_import(type,j[key],None)
+
+
 
     except Exception as e:
             print(f"{e=}")

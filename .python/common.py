@@ -59,7 +59,7 @@ def call_resource(type, id):
                #aws_redshift.get_aws_redshiftserverless_namespace(type, id, clfn, descfn, topkey, key, filterid)
 
             else:   
-               print("-1a- clfn:"+clfn+" type:"+type)
+               #print("-1a- clfn:"+clfn+" type:"+type)
                getfn = getattr(eval("aws_"+clfn), "get_"+type) 
 
             sr=getfn(type, id, clfn, descfn, topkey, key, filterid)

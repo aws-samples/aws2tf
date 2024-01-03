@@ -17,6 +17,7 @@ import aws_logs
 import aws_config
 import aws_lambda
 import aws_redshift
+import aws_secretsmanager
 
 
 
@@ -72,7 +73,7 @@ def call_resource(type, id):
       pass
 
    except NameError:
-      print("NameError: name 'getfn' - no aws_"+clfn+".py file ?")
+      if globals.debug: print("NameError: name 'getfn' - no aws_"+clfn+".py file ?")
       pass
 
    except Exception as e:      

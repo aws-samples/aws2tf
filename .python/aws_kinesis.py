@@ -5,9 +5,7 @@ import os
 import sys
 
 
-def get_aws_stub(type, id, clfn, descfn, topkey, key, filterid):
-
-
+def get_aws_kinesis_stream(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
         print("--> In get_aws_kinesis_stream  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
@@ -43,4 +41,3 @@ def get_aws_stub(type, id, clfn, descfn, topkey, key, filterid):
             exit()
 
     return True
-

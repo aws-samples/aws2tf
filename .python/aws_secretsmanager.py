@@ -24,9 +24,7 @@ def get_aws_secretsmanager_secret(type, id, clfn, descfn, topkey, key, filterid)
 
 
         else:
-            paginator = client.get_paginator('describe_secret')
-            for page in paginator.paginate(SecretId=id):   
-                response = response + page
+            response = client.describe_secret(SecretId=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
             common.write_import(type,j[key],None)

@@ -763,6 +763,17 @@ def aws_kinesis_stream(t1,tt1,tt2,flag1,flag2):
 
 def aws_secretsmanager_secret(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "recovery_window_in_days":
+        tt2=tt2.strip('\"')
+        if tt2 == "null": 
+            t1 = tt1 + "= 30\n lifecycle {\n   ignore_changes = [recovery_window_in_days,force_overwrite_replica_secret]\n}\n"
+
+    elif tt1 == "force_overwrite_replica_secret":
+        tt2=tt2.strip('\"')
+        if tt2 == "null": 
+            t1 = tt1 + "= false\n"
+
+
     return skip,t1,flag1,flag2
 
 
@@ -801,6 +812,9 @@ def globals_replace(t1,tt1,tt2):
 
 
 def deref_array(t1,tt1,tt2,ttft,prefix,skip):
+    if tt2 == "null" or tt2 == "[]":
+        skip=1
+        return t1,skip
     tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
     cc=tt2.count(',')
     subs=""
@@ -833,6 +847,7 @@ def deref_role_arn(t1,tt1,tt2):
 
  #if tt1 == "security_groups": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
 def deref_role_arn_array(t1,tt1,tt2):
+    if tt2 == "null" or tt2 == "[]": return t1
     tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
     cc=tt2.count(',')
     subs=""

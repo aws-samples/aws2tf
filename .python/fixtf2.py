@@ -163,59 +163,101 @@ def  aws_s3_bucket(t1,tt1,tt2,flag1,flag2):
 
 def aws_s3_bucket_acl(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "bucket" and flag2 is True:
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
     return skip,t1,flag1,flag2
 
 def aws_s3_bucket_analytics(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "bucket" and flag2 is True:
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
     return skip,t1,flag1,flag2
 
 def aws_s3_bucket_cors_configuration(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "bucket" and flag2 is True:
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
     return skip,t1,flag1,flag2
 
 def aws_s3_bucket_intelligent_tiering_configuration(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "bucket" and flag2 is True:
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
     return skip,t1,flag1,flag2
 
 def aws_s3_bucket_versioning(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "bucket" and flag2 is True:
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
     return skip,t1,flag1,flag2
 
 def aws_s3_bucket_website_configuration(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "bucket" and flag2 is True:
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
     return skip,t1,flag1,flag2
 
 def aws_s3_bucket_lifecycle_configuration(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "bucket" and flag2 is True:
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
     return skip,t1,flag1,flag2
 
 def aws_s3_bucket_logging(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "bucket" and flag2 is True:
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
     return skip,t1,flag1,flag2
 
 def aws_s3_bucket_metric(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "bucket" and flag2 is True:
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
     return skip,t1,flag1,flag2
 
 def aws_s3_bucket_request_payment_configuration(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "bucket" and flag2 is True:
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
     return skip,t1,flag1,flag2
 
 def aws_s3_bucket_accelerate_configuration(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "bucket" and flag2 is True:
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
     return skip,t1,flag1,flag2
 
 def aws_s3_bucket_server_side_encryption_configuration(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "bucket" and flag2 is True:
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
     return skip,t1,flag1,flag2
 
 def aws_s3_bucket_ownership_controls(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "bucket" and flag2 is True:
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
     return skip,t1,flag1,flag2
 
 def aws_s3_bucket_policy(t1,tt1,tt2,flag1,flag2):
     skip=0
-    if tt1 == "policy": t1=globals_replace(t1,tt1,tt2)
+    if tt1 == "bucket" and flag2 is True:
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
+    elif tt1 == "policy": t1=globals_replace(t1,tt1,tt2)
     return skip,t1,flag1,flag2
 
 
@@ -226,9 +268,9 @@ def aws_vpc_endpoint(t1,tt1,tt2,flag1,flag2):
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
         add_dependancy("aws_vpc",tt2)
 
-    if tt1 == "subnet_ids":  t1,skip = deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
-    if tt1 == "security_group_ids": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
-
+    elif tt1 == "subnet_ids":  t1,skip = deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
+    elif tt1 == "security_group_ids": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+    elif tt1 == "route_table_ids": t1,skip = deref_array(t1,tt1,tt2,"aws_route_table","rtb-",skip)
     return skip,t1,flag1,flag2
 
 
@@ -723,6 +765,17 @@ def aws_rds_cluster(t1,tt1,tt2,flag1,flag2):
     if tt1 == "vpc_security_group_ids": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
     elif tt1 == "iam_roles":    
         t1=deref_role_arn_array(t1,tt1,tt2)
+    elif tt1 == "db_cluster_parameter_group_name":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_rds_cluster_parameter_group." + tt2 + ".id\n"
+        add_dependancy("aws_rds_cluster_parameter_group",tt2)
+    elif tt1 == "db_subnet_group_name":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_db_subnet_group." + tt2 + ".id\n"
+        add_dependancy("aws_db_subnet_group",tt2)
+    #elif tt1 == "cluster_members":
+    #    t1=deref_array(t1,tt1,tt2,"aws_db_instance","*",skip)
+    
     return skip,t1,flag1,flag2
 
 def aws_rds_cluster_parameter_group(t1,tt1,tt2,flag1,flag2):

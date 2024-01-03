@@ -700,6 +700,7 @@ def aws_redshiftserverless_workgroup(t1,tt1,tt2,flag1,flag2):
     return skip,t1,flag1,flag2 
 
 def aws_redshift_cluster(t1,tt1,tt2,flag1,flag2):
+    skip=0
     if tt1 == "vpc_security_group_ids": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
     elif tt1 == "iam_roles":    
         t1=deref_role_arn_array(t1,tt1,tt2)

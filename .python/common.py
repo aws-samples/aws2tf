@@ -134,7 +134,7 @@ def call_resource(type, id):
 
 
 def tfplan1():
-   print("Plan 1 ... ")
+   print("Terraform Plan Loop ... ")
    rf="resources.out"
    #com="terraform plan -generate-config-out="+ rf + " -out tfplan -json > plan2.json"
 
@@ -242,7 +242,7 @@ def tfplan2():
 
 
 def tfplan3():
-   print("tfplan3  ... ")
+   print("Validate and Test Plan  ... ")
    if not glob.glob("aws_*.tf"):
       print("No aws_*.tf files found for this resource, exiting ....")
       exit()
@@ -268,7 +268,7 @@ def tfplan3():
 
    if globals.plan2:
       
-      print("Plan 4 ... ")
+      print("Penultimate Terraform Plan ... ")
       # redo plan
       com="rm -f resources.out tfplan"
       print(com)
@@ -324,7 +324,7 @@ def wrapup():
    #print("Validate json")
    #com="terraform validate -no-color -json > validate.json"
    #rout=rc(com)
-   print("Validate")
+   print("Final Terraform Validation")
    com="terraform validate -no-color"
    rout=rc(com)
    el=len(rout.stderr.decode().rstrip())
@@ -337,7 +337,7 @@ def wrapup():
    else: 
       print("PASS: Valid Configuration.")
    
-
+   print("Terraform Import")
    #print(str(rout.stdout.decode().rstrip()))
    # do the import via apply
    print("terraform import via apply of tfplan....")
@@ -346,7 +346,7 @@ def wrapup():
    zerod=False
    zeroc=False
    print(str(rout.stdout.decode().rstrip()))
-   print("Final Plan check .....")
+   print("Final Plan Check .....")
    com="terraform plan -no-color"
    rout=rc(com)
    if "No changes. Your infrastructure matches the configuration" not in str(rout.stdout.decode().rstrip()):
@@ -427,6 +427,7 @@ def fixtf(ttft,tf):
         skip=0
         flag1=False
         flag2=tf
+        nofind=0
         f2.write("##START,"+ttft+"\n")
         for t1 in Lines:
             skip=0
@@ -440,21 +441,25 @@ def fixtf(ttft,tf):
                 getfn = getattr(fixtf2, ttft)
             except Exception as e:
                 print(f"{e=}")
-                print("** no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
+                #print("** no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
                 #print("t1="+t1) 
+                nofind=1
                 getfn = getattr(fixtf2, "aws_resource")
           
             try:
-                #print("calling fixtf2."+ttft+" "+tf2)
                 skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
             except Exception as e:
                 print(f"{e=}")
-                print("-- no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
+                #print("-- no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
                 #print("t1="+t1) 
+                nofind=2
                 skip,t1,flag1,flag2=fixtf2.aws_resource(t1,tt1,tt2,flag1,flag2)
 
             if skip == 0:
                 f2.write(t1)
+        if nofind > 0:
+           print("WARNING: No fixtf2 for "+ttft+" calling generic fixtf2.aws_resource nofind="+str(nofind))
+           
                 
 
 # split resources.out

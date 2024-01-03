@@ -442,7 +442,11 @@ def resource_data(type,id):
     elif type == "aws_db_subnet_group": clfn="rds";descfn="describe_db_subnet_groups";topkey="DBSubnetGroups";key="DBSubnetGroupName";filterid=key
     elif type == "aws_db_instance": clfn="rds";descfn="describe_db_instances";topkey="DBInstances";key="DBInstanceIdentifier";filterid=key
     elif type == "aws_db_event_subscription": clfn="rds";descfn="describe_event_subscriptions";topkey="EventSubscriptionsList";key="SubscriptionName";filterid=key
-    
+    elif type == "aws_glue_crawler": clfn="glue";descfn="get_crawlers";topkey="Crawlers";key="Name";filterid=key
+    elif type == "aws_glue_catalog_database": clfn="glue";descfn="get_databases";topkey="DatabaseList";key="Name";filterid=key
+
+    elif type == "aws_kinesis_stream": clfn="kinesis";descfn="list_streams";topkey="StreamNames";key="StreamName";filterid=key
+    elif type == "aws_secretsmanager_secret": clfn="secretsmanager";descfn="list_secrets";topkey="SecretList";key="ARN";filterid=key
 
 
     return clfn,descfn,topkey,key,filterid

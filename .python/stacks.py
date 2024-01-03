@@ -176,8 +176,8 @@ def getstackresources(stack_name,client):
             elif type == "AWS::Events::Rule": common.call_resource("aws_config_config_rule", pid)
 
             elif type == "AWS::Glue::Connection": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::Glue::Crawler": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::Glue::Database": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::Glue::Crawler": common.call_resource("aws_glue_crawler", pid)
+            elif type == "AWS::Glue::Database": common.call_resource("aws_glue_catalog_database", pid)
             elif type == "AWS::Glue::Job": common.call_resource("aws_null", type+" "+pid) 
             elif type == "AWS::Glue::Table": f3.write(type+" "+pid+" Should be fetched via Glue Database Resource\n") 
             elif type == "AWS::Glue::Partition": f3.write(type+" "+pid+" Should be fetched via Glue Table Resource") 
@@ -193,7 +193,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::IAM::Policy": f3.write(type+" "+pid+" Should be fetched via Roles etc\n") 
 
             elif type == "AWS::KinesisFirehose::DeliveryStream":  common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::Kinesis::Stream":  common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::Kinesis::Stream":  common.call_resource("aws_kinesis_stream", pid)
    
             elif type == "AWS::KMS::Key":  common.call_resource("aws_null", type+" "+pid) 
             elif type == "AWS::KMS::Alias": f3.write(type+" "+pid+"  fetched as part of function..'")  # fetched as part of function
@@ -252,7 +252,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::ServiceDiscovery::PrivateDnsNamespace": f3.write(type+" "+pid+"  as part srv discovery ? ..\n") 
             elif type == "AWS::StepFunctions::StateMachine":  common.call_resource("aws_null", type+" "+pid) 
             #elif type == "AWS::SecretsManager::SecretTargetAttachment ;;
-            elif type == "AWS::SecretsManager::Secret": common.call_resource("aws_null", type+" "+parn) 
+            elif type == "AWS::SecretsManager::Secret": common.call_resource("aws_secretsmanager_secret", parn) 
             elif type == "AWS::ServiceDiscovery::Service": common.call_resource("aws_null", type+" "+pid) 
  
 

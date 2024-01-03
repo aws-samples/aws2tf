@@ -455,6 +455,15 @@ def fixtf(ttft,tf):
                 nofind=2
                 skip,t1,flag1,flag2=fixtf2.aws_resource(t1,tt1,tt2,flag1,flag2)
 
+            ####
+            
+            # common replacement code here
+            # rhs=account number
+            # rhs is still an arn
+            # : in tt1 for quote it
+                
+            #### 
+
             if skip == 0:
                 f2.write(t1)
         if nofind > 0:

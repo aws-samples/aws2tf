@@ -4,6 +4,7 @@ aws.tf.sav
 .terraform
 terraform.tfstate*
 *.txt
+*.zip
 *.tf
 *.bak
 *.out

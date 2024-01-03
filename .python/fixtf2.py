@@ -746,10 +746,22 @@ def aws_redshift_cluster(t1,tt1,tt2,flag1,flag2):
     if tt1 == "vpc_security_group_ids": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
     elif tt1 == "iam_roles":    
         t1=deref_role_arn_array(t1,tt1,tt2)
+    elif tt1 == "cluster_subnet_group_name":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_redshift_subnet_group." + tt2 + ".id\n"
+        add_dependancy("aws_redshift_subnet_group",tt2)
+    elif tt1 == "cluster_parameter_group_name":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_redshift_parameter_group." + tt2 + ".id\n"
+        add_dependancy("aws_redshift_parameter_group",tt2)
+    elif tt1 == "kms_key_id":
+        t1=deref_kms_key(t1,tt1,tt2)
+    
     return skip,t1,flag1,flag2 
 
 def aws_redshift_subnet_group(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "subnet_ids":  t1,skip = deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
     return skip,t1,flag1,flag2
 
 def aws_redshift_parameter_group(t1,tt1,tt2,flag1,flag2):
@@ -773,6 +785,8 @@ def aws_rds_cluster(t1,tt1,tt2,flag1,flag2):
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_db_subnet_group." + tt2 + ".id\n"
         add_dependancy("aws_db_subnet_group",tt2)
+    elif tt1 == "kms_key_id":
+        t1=deref_kms_key(t1,tt1,tt2)
     #elif tt1 == "cluster_members":
     #    t1=deref_array(t1,tt1,tt2,"aws_db_instance","*",skip)
     
@@ -792,10 +806,12 @@ def aws_db_parameter_group(t1,tt1,tt2,flag1,flag2):
 
 def aws_db_subnet_group(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "subnet_ids":  t1,skip = deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
     return skip,t1,flag1,flag2
 
 def aws_db_instance(t1,tt1,tt2,flag1,flag2):
     skip=0
+
     return skip,t1,flag1,flag2
 
 def aws_db_event_subscription(t1,tt1,tt2,flag1,flag2):
@@ -899,9 +915,20 @@ def deref_role_arn(t1,tt1,tt2):
     if ":role" in tt2:
         tt2=tt2.split('/')[-1]
         t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
-
         add_dependancy("aws_iam_role",tt2)
     return t1
+
+def deref_kms_key(t1,tt1,tt2):
+    print("deref_kms_key 1: " + tt2)
+    if "arn:aws:kms:" in tt2:
+        #tt2=tt2.split('/')[-1]
+        #tt2=tt2.strip('\"')
+        print("deref_kms_key 2: " + tt2)
+        t1=globals_replace(t1,tt1,tt2)
+        #t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
+        #add_dependancy("aws_kms_key",tt2)
+    return t1
+
 
 
  #if tt1 == "security_groups": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)

@@ -431,6 +431,7 @@ def resource_data(type,id):
     elif type == "aws_redshiftserverless_namespace": clfn="redshift-serverless";descfn="get_namespace";topkey="namespace";key="namespaceName";filterid=key
     elif type == "aws_redshift_cluster": clfn="redshift";descfn="describe_clusters";topkey="Clusters";key="ClusterIdentifier";filterid=key
     elif type == "aws_redshift_subnet_group": clfn="redshift";descfn="describe_cluster_subnet_groups";topkey="ClusterSubnetGroups";key="ClusterSubnetGroupName";filterid=key
+    
     elif type == "aws_redshift_parameter_group": clfn="redshift";descfn="describe_cluster_parameter_groups";topkey="ParameterGroups";key="ParameterGroupName";filterid=key
     
     
@@ -451,5 +452,6 @@ def resource_data(type,id):
 
     elif type == "aws_cloudwatch_event_rule": clfn="events";descfn="list_rules";topkey="Rules";key="Name";filterid=key
 
+    elif type == "aws_rds_cluster_parameter_group": clfn="rds";descfn="describe_db_cluster_parameter_groups";topkey="DBClusterParameterGroups";key="DBClusterParameterGroupName";filterid=key
 
     return clfn,descfn,topkey,key,filterid

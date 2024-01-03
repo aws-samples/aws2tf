@@ -171,7 +171,7 @@ def get_aws_iam_instance_profile(type,id,clfn,descfn,topkey,key,filterid):
       j=response1[topkey]
       if j == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
-      print("get_instance_profile response="+str(j))
+      #print("get_instance_profile response="+str(j))
  
       theid=j[key]
       common.write_import(type,theid,None) 

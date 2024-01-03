@@ -104,16 +104,16 @@ def getstackresources(stack_name,client):
 
             elif type == "AWS::ApiGateway::Account": f3.write("Error: **Terraform does not support import of $type skipped**\n") 
             elif type == "AWS::ApiGateway::RestApi": common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::ApiGateway::Resource": f3.write(type+" "+pid+"  as part of RestApi..' ") 
+            elif type == "AWS::ApiGateway::Resource": f3.write(type+" "+pid+"  as part of RestApi..\n") 
 
-            elif type == "AWS::ApplicationAutoScaling::ScalableTarget": f3.write(type+" "+pid+"  as part of parent recources ' ") 
-            elif type == "AWS::ApplicationAutoScaling::ScalingPolicy": f3.write(type+" "+pid+"  as part of parent recources ' ") 
+            elif type == "AWS::ApplicationAutoScaling::ScalableTarget": f3.write(type+" "+pid+"  as part of parent recources\n") 
+            elif type == "AWS::ApplicationAutoScaling::ScalingPolicy": f3.write(type+" "+pid+"  as part of parent recources\n") 
 
             elif type == "AWS::AppMesh::Mesh":  common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::AppMesh::VirtualGateway": f3.write(type+" "+pid+"  as part of parent mesh ' ") 
-            elif type == "AWS::AppMesh::VirtualNode": f3.write(type+" "+pid+"  as part of parent mesh ' ") 
-            elif type == "AWS::AppMesh::VirtualRouter": f3.write(type+" "+pid+"  as part of parent mesh ' ") 
-            elif type == "AWS::AppMesh::VirtualService": f3.write(type+" "+pid+"  as part of parent mesh ' ") 
+            elif type == "AWS::AppMesh::VirtualGateway": f3.write(type+" "+pid+"  as part of parent mesh\n") 
+            elif type == "AWS::AppMesh::VirtualNode": f3.write(type+" "+pid+"  as part of parent mesh\n") 
+            elif type == "AWS::AppMesh::VirtualRouter": f3.write(type+" "+pid+"  as part of parent mesh\n") 
+            elif type == "AWS::AppMesh::VirtualService": f3.write(type+" "+pid+"  as part of parent mesh\n") 
 
             elif type == "AWS::Athena::NamedQuery":  common.call_resource("aws_null", type+" "+pid) 
             elif type == "AWS::Athena::WorkGroup":  common.call_resource("aws_null", type+" "+pid) 
@@ -158,11 +158,11 @@ def getstackresources(stack_name,client):
             elif type == "AWS::ECS::TaskDefinition":  common.call_resource("aws_null", type+" "+pid) 
 
             elif type == "AWS::EFS::FileSystem":  common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::EFS::MountTarget": f3.write(type+" "+pid+" attached as part of EFS::FileSystem ..") 
-            elif type == "AWS::EFS::AccessPoint": f3.write(type+" "+pid+" attached as part of EFS::FileSystem ..'") 
+            elif type == "AWS::EFS::MountTarget": f3.write(type+" "+pid+" attached as part of EFS::FileSystem ..\n") 
+            elif type == "AWS::EFS::AccessPoint": f3.write(type+" "+pid+" attached as part of EFS::FileSystem ..\n") 
 
             elif type == "AWS::EKS::Cluster":  common.call_resource("aws_eks_cluster", pid) 
-            elif type == "AWS::EKS::Nodegroup": f3.write(type+" "+pid+"  Should be fetched via the EKS Cluster Resource") 
+            elif type == "AWS::EKS::Nodegroup": f3.write(type+" "+pid+"  Should be fetched via the EKS Cluster Resource\n") 
 
             elif type == "AWS::ElasticLoadBalancingV2::LoadBalancer":  common.call_resource("aws_null", type+" "+parn) 
             elif type == "AWS::ElasticLoadBalancingV2::Listener":  common.call_resource("aws_null", type+" "+parn) 
@@ -180,8 +180,8 @@ def getstackresources(stack_name,client):
             elif type == "AWS::Glue::Database": common.call_resource("aws_glue_catalog_database", pid)
             elif type == "AWS::Glue::Job": common.call_resource("aws_null", type+" "+pid) 
             elif type == "AWS::Glue::Table": f3.write(type+" "+pid+" Should be fetched via Glue Database Resource\n") 
-            elif type == "AWS::Glue::Partition": f3.write(type+" "+pid+" Should be fetched via Glue Table Resource") 
-            elif type == "AWS::IAM::Role":                      common.call_resource("aws_iam_role", type+" "+pid)
+            elif type == "AWS::Glue::Partition": f3.write(type+" "+pid+" Should be fetched via Glue Table Resource\n") 
+            elif type == "AWS::IAM::Role":              common.call_resource("aws_iam_role", type+" "+pid)
 
             elif type == "AWS::IAM::ManagedPolicy":  common.call_resource("aws_null", type+" "+parn) 
             elif type == "AWS::IAM::InstanceProfile":  common.call_resource("aws_iam_instance_profile", pid) 
@@ -196,7 +196,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::Kinesis::Stream":  common.call_resource("aws_kinesis_stream", pid)
    
             elif type == "AWS::KMS::Key":  common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::KMS::Alias": f3.write(type+" "+pid+"  fetched as part of function..'")  # fetched as part of function
+            elif type == "AWS::KMS::Alias": f3.write(type+" "+pid+"  fetched as part of function..\n")  # fetched as part of function
 
             elif type == "AWS::LakeFormation::DataLakeSettings":  common.call_resource("aws_null", type+" "+pid) 
             elif type == "AWS::LakeFormation::Resource": common.call_resource("aws_null", type+" "+pid) 
@@ -206,9 +206,9 @@ def getstackresources(stack_name,client):
 
             elif type == "AWS::Lambda::Function":  common.call_resource("aws_lambda_function", pid) 
             elif type == "AWS::Lambda::LayerVersion":  common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::Lambda::Permission": f3.write(type+" "+pid+"  as part of function..")          # fetched as part of function
-            elif type == "AWS::Lambda::EventInvokeConfig": f3.write(type+" "+pid+"  as part of function..")   # fetched as part of function
-            elif type == "AWS::Lambda::EventSourceMapping": f3.write(type+" "+pid+"  as part of function..")  # fetched as part of function
+            elif type == "AWS::Lambda::Permission": f3.write(type+" "+pid+"  as part of function..\n")          # fetched as part of function
+            elif type == "AWS::Lambda::EventInvokeConfig": f3.write(type+" "+pid+"  as part of function..\n")   # fetched as part of function
+            elif type == "AWS::Lambda::EventSourceMapping": f3.write(type+" "+pid+"  as part of function..\n")  # fetched as part of function
 
             elif type == "AWS::Logs::LogGroup": common.call_resource("aws_cloudwatch_log_group", parn) 
 
@@ -238,7 +238,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::SageMaker::AppImageConfig":  common.call_resource("aws_null", type+" "+pid) 
             elif type == "AWS::SageMaker::Domain":  common.call_resource("aws_null", type+" "+parn) 
             elif type == "AWS::SageMaker::Image":  common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::SageMaker::ImageVersion": f3.write(type+" "+pid+"  as part of SageMaker Image..'")  # fetched as part of function
+            elif type == "AWS::SageMaker::ImageVersion": f3.write(type+" "+pid+"  as part of SageMaker Image..\n")  # fetched as part of function
             elif type == "AWS::SageMaker::NotebookInstance":  common.call_resource("aws_null", type+" "+pid) 
             elif type == "AWS::SageMaker::UserProfile": common.call_resource("aws_null", pid)
 
@@ -254,7 +254,9 @@ def getstackresources(stack_name,client):
             #elif type == "AWS::SecretsManager::SecretTargetAttachment ;;
             elif type == "AWS::SecretsManager::Secret": common.call_resource("aws_secretsmanager_secret", parn) 
             elif type == "AWS::ServiceDiscovery::Service": common.call_resource("aws_null", type+" "+pid) 
- 
+            elif "Custom::" in type: 
+                f3.write(type +" fetched as Lambda function ..."+ pid +"\n")
+               
 
             else:
                 f.write("--UNPROCESSED-- "+type + " "+ pid +" "+ parn+" \n")

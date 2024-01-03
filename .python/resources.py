@@ -445,7 +445,7 @@ def resource_data(type,id):
     elif type == "aws_glue_crawler": clfn="glue";descfn="get_crawlers";topkey="Crawlers";key="Name";filterid=key
     elif type == "aws_glue_catalog_database": clfn="glue";descfn="get_databases";topkey="DatabaseList";key="Name";filterid=key
 
-    elif type == "aws_kinesis_stream": clfn="kinesis";descfn="list_streams";topkey="StreamNames";key="StreamName";filterid=key
+    elif type == "aws_kinesis_stream": clfn="kinesis";descfn="list_streams";topkey="StreamSummaries";key="StreamName";filterid=key
     elif type == "aws_secretsmanager_secret": clfn="secretsmanager";descfn="list_secrets";topkey="SecretList";key="ARN";filterid=key
 
 

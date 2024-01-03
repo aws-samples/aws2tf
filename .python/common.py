@@ -18,6 +18,7 @@ import aws_config
 import aws_lambda
 import aws_redshift
 import aws_secretsmanager
+import aws_kinesis
 
 
 
@@ -67,13 +68,15 @@ def call_resource(type, id):
             sr=getfn(type, id, clfn, descfn, topkey, key, filterid)
 
    except AttributeError:
+      if globals.debug: print("AttributeError: name 'getfn' - no aws_"+clfn+".py file ?")
       pass
 
    except SyntaxError:
+      if globals.debug: print("SyntaxError: name 'getfn' - no aws_"+clfn+".py file ?")
       pass
 
    except NameError:
-      if globals.debug: print("NameError: name 'getfn' - no aws_"+clfn+".py file ?")
+      if globals.debug: print("WARNING: NameError: name 'getfn' - no aws_"+clfn+".py file ?")
       pass
 
    except Exception as e:      

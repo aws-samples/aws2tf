@@ -22,14 +22,12 @@ def get_aws_kinesis_stream(type, id, clfn, descfn, topkey, key, filterid):
             for j in response:
                 common.write_import(type,j[key],None) 
 
-        else:
-             
+        else:   
             response = client.describe_stream(StreamName=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-            j=response
+            j=response['StreamDescription']
             common.write_import(type,j[key],None)
 
-        
 
     except Exception as e:
             print(f"{e=}")

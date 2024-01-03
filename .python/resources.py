@@ -439,6 +439,7 @@ def resource_data(type,id):
     elif type == "aws_rds_cluster_instance": clfn="rds";descfn="describe_db_instances";topkey="DBInstances";key="DBInstanceIdentifier";filterid=key
     
     elif type == "aws_db_parameter_group": clfn="rds";descfn="describe_db_parameter_groups";topkey="DBParameterGroups";key="DBParameterGroupName";filterid=key
+    
     elif type == "aws_db_subnet_group": clfn="rds";descfn="describe_db_subnet_groups";topkey="DBSubnetGroups";key="DBSubnetGroupName";filterid=key
     elif type == "aws_db_instance": clfn="rds";descfn="describe_db_instances";topkey="DBInstances";key="DBInstanceIdentifier";filterid=key
     elif type == "aws_db_event_subscription": clfn="rds";descfn="describe_event_subscriptions";topkey="EventSubscriptionsList";key="SubscriptionName";filterid=key
@@ -447,6 +448,8 @@ def resource_data(type,id):
 
     elif type == "aws_kinesis_stream": clfn="kinesis";descfn="list_streams";topkey="StreamSummaries";key="StreamName";filterid=key
     elif type == "aws_secretsmanager_secret": clfn="secretsmanager";descfn="list_secrets";topkey="SecretList";key="ARN";filterid=key
+
+    elif type == "aws_cloudwatch_event_rule": clfn="events";descfn="list_rules";topkey="Rules";key="Name";filterid=key
 
 
     return clfn,descfn,topkey,key,filterid

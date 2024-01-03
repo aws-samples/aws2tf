@@ -19,6 +19,8 @@ import aws_lambda
 import aws_redshift
 import aws_secretsmanager
 import aws_kinesis
+import aws_glue
+import aws_rds
 
 
 
@@ -514,7 +516,8 @@ def splitf(file):
 #generally pass 3rd param as None - unless overriding
 def write_import(type,theid,tfid):
    try:
-      tfid=theid.replace("/","__").replace(".","__").replace(":","__")
+      if tfid is None:
+         tfid=theid.replace("/","__").replace(".","__").replace(":","__")
       fn="import__"+type+"__"+tfid+".tf"
       if globals.debug: print(fn)
       

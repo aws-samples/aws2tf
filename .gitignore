@@ -28,6 +28,7 @@ flip-eks.sh
 *.json
 *.lock.hcl
 aws_*.tf
+aws_instance__i*.sh
 tfplan
 **/tfplan
 __pycache__

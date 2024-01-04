@@ -33,8 +33,14 @@ for i in $(seq 0 $count); do
     if [ -f "$fn" ]; then echo "$fn exists already skipping" && continue; fi
 
     printf "resource \"%s\" \"%s\" {}" $ttft $rname >$fn
-    terraform import $ttft.${rname} "${cname}" | grep Importing
+    terraform import $ttft.${rname} "${cname}-blah" | grep Importing
+
     terraform state show -no-color $ttft.${rname} >t1.txt
+    if [[ $? -ne 0 ]]; then 
+        echo "WARNING: $ttft $cname - not created or imported" 
+        rm -f $fn
+        continue
+    fi
 
     rm -f $fn
 

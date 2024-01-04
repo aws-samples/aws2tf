@@ -18,6 +18,7 @@ to-aws-samples.sh
 test*
 *.new
 *.sav
+*.zip
 clean*
 *.xlsx
 quotas

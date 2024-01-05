@@ -245,7 +245,7 @@ for cname in ${bucklist[@]}; do
             done
         fi # lifecycle
 
-        if [[ ${t1} == *"policy {"* ]]; then
+        if [[ ${t1} == *"policy"*"jsonencode(" ]]; then
             #echo $t1
             skip=1
             lbc=0
@@ -255,6 +255,32 @@ for cname in ${bucklist[@]}; do
             while [[ $breq -eq 0 ]]; do
                 if [[ "${t1}" == *"("* ]]; then lbc=$(expr $lbc + 1); fi
                 if [[ "${t1}" == *")"* ]]; then rbc=$(expr $rbc + 1); fi
+                #echo "op=$lbc $rbc $t1"
+                if [[ $rbc -eq $lbc ]]; then
+                    breq=1
+                else
+                    read line
+                    t1=$(echo "$line")
+                fi
+            done
+
+
+
+
+        fi
+
+
+
+        if [[ ${t1} == *"policy {"* ]]; then
+            #echo $t1
+            skip=1
+            lbc=0
+            rbc=0
+            breq=0
+            dopol=1
+            while [[ $breq -eq 0 ]]; do
+                if [[ "${t1}" == *"{"* ]]; then lbc=$(expr $lbc + 1); fi
+                if [[ "${t1}" == *"}"* ]]; then rbc=$(expr $rbc + 1); fi
                 #echo "op=$lbc $rbc $t1"
                 if [[ $rbc -eq $lbc ]]; then
                     breq=1

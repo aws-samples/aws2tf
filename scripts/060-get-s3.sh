@@ -24,7 +24,7 @@ skipbucks=()
 bucklist=()
 
 for cname in ${bucks[@]}; do
-    #echo $cname
+    #echo "getting bucket $cname"
     lifec=0
     doacl2=0
 
@@ -73,8 +73,6 @@ if [ $jc -gt 0 ]; then
 fi
 
 
-
-
 for cname in ${bucklist[@]}; do
     cname=$(echo $cname | tr -d '"')
     #echo $cname
@@ -109,7 +107,10 @@ for cname in ${bucklist[@]}; do
     dopol=0
     dolog=0
 
+
+    #echo "--> $file $flines"
     echo $aws2tfmess >$fn
+
 
     while IFS= read line; do
         #echo "$s3b" | { while IFS= read -r line  # open { for varaible scope
@@ -117,13 +118,14 @@ for cname in ${bucklist[@]}; do
         skip=0
         # display $line or do something with $line
         t1=$(echo "$line")
+        #echo "t1=$t1"
 
-        if [[ "$t1" == *"grant"* ]]; then
+        if [[ "$t1" == *"grant {"* ]]; then
             doacl=0
             doid=1
         fi
 
-        if [[ "$t1" == *"server_side_encryption_configuration"* ]]; then
+        if [[ "$t1" == *"server_side_encryption_configuration {"* ]]; then
             #echo $t1
             skip=1
             lbc=0
@@ -143,7 +145,7 @@ for cname in ${bucklist[@]}; do
             done
         fi # server_side_encryption_configuration
 
-        if [[ "$t1" == *"versioning"* ]]; then
+        if [[ "$t1" == *"versioning {"* ]]; then
             #echo $t1
             skip=1
             lbc=0
@@ -153,7 +155,7 @@ for cname in ${bucklist[@]}; do
             while [[ $breq -eq 0 ]]; do
                 if [[ "${t1}" == *"{"* ]]; then lbc=$(expr $lbc + 1); fi
                 if [[ "${t1}" == *"}"* ]]; then rbc=$(expr $rbc + 1); fi
-                #echo "op=$lbc $rbc $t1"
+                #echo "versioning=$lbc $rbc $t1"
                 if [[ $rbc -eq $lbc ]]; then
                     breq=1
                 else
@@ -163,7 +165,7 @@ for cname in ${bucklist[@]}; do
             done
         fi
 
-        if [[ "$t1" == *"logging"* ]]; then
+        if [[ "$t1" == *"logging {"* ]]; then
             #echo $t1
             skip=1
             lbc=0
@@ -173,7 +175,7 @@ for cname in ${bucklist[@]}; do
             while [[ $breq -eq 0 ]]; do
                 if [[ "${t1}" == *"{"* ]]; then lbc=$(expr $lbc + 1); fi
                 if [[ "${t1}" == *"}"* ]]; then rbc=$(expr $rbc + 1); fi
-                #echo "op=$lbc $rbc $t1"
+                #echo "logging=$lbc $rbc $t1"
                 if [[ $rbc -eq $lbc ]]; then
                     breq=1
                 else
@@ -183,7 +185,7 @@ for cname in ${bucklist[@]}; do
             done
         fi
 
-        if [[ "$t1" == *"website"* ]]; then
+        if [[ "$t1" == *"website {"* ]]; then
             #echo $t1
             skip=1
             lbc=0
@@ -203,7 +205,7 @@ for cname in ${bucklist[@]}; do
             done
         fi # website
 
-        if [[ ${t1} == *"grant"* ]]; then
+        if [[ ${t1} == *"grant {"* ]]; then
             #echo $t1
             skip=1
             lbc=0
@@ -223,7 +225,7 @@ for cname in ${bucklist[@]}; do
             done
         fi
 
-        if [[ ${t1} == *"lifecycle_rule"* ]]; then
+        if [[ ${t1} == *"lifecycle_rule {"* ]]; then
             #echo $t1
             skip=1
             lbc=0
@@ -243,7 +245,7 @@ for cname in ${bucklist[@]}; do
             done
         fi # lifecycle
 
-        if [[ ${t1} == *"policy"* ]]; then
+        if [[ ${t1} == *"policy {"* ]]; then
             #echo $t1
             skip=1
             lbc=0
@@ -350,6 +352,15 @@ for cname in ${bucklist[@]}; do
         #done # while file
     done <"$file"
 
+
+###########
+    echo "Done $file loop"
+
+
+
+
+
+
     if [[ "$keyid" != "" ]]; then
         #echo "*** key for $keyid"
         ../../scripts/080-get-kms-key.sh $keyid
@@ -365,8 +376,8 @@ for cname in ${bucklist[@]}; do
         ../../scripts/get-aws_s3_bucket_policy.sh $cname &
     fi
     if [[ $dover -eq 1 ]]; then
-        #echo "versioning job for $cname"
-        ../../scripts/get-aws_s3_bucket_versioning.sh $cname &
+        echo "versioning job for $cname"
+        #../../scripts/get-aws_s3_bucket_versioning.sh $cname &
     fi
     if [[ $doacl2 -eq 1 ]]; then
         #echo "acl job for $cname"

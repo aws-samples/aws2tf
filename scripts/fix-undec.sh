@@ -42,18 +42,21 @@ for c in $(seq 0 $count); do
             #echo "tft=$tft  res=$res addr=$addr (for grep)"
 
             if [[ $tft == "aws_s3_bucket" ]]; then
-    
+
                 tarn=$(grep $addr data/arn-map.dat | cut -f2 -d',' | head -1)
-                if [[ $tarn != "null" ]]; then
-                    cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
-                    echo "** Undeclared Fix: ${res} -- $tarn"
-                else
-                    cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $addr)
-                    echo "** Undeclared Fix: ${res} -- $addr"
+                
+                if [[ $tarn != "" ]]; then
+                    if [[ $tarn != "null" ]]; then
+                        cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
+                        echo "** Undeclared Fix: ${res} -- $tarn"
+                    else
+                        cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $addr)
+                        echo "** Undeclared Fix: ${res} -- $addr"
+                    fi
+                    #echo " "
+                    #echo $cmd
+                    eval $cmd
                 fi
-                #echo " "
-                #echo $cmd
-                eval $cmd
             fi
             if [[ $tft == "aws_kms_key" ]]; then
 
@@ -67,13 +70,12 @@ for c in $(seq 0 $count); do
                 fi
             fi
 
-
             if [[ $tft == "aws_sagemaker_image" ]] || [[ $tft == "aws_lambda_function" ]] || [[ $tft == "aws_dynamodb_table" ]] || [[ $tft == "aws_sns_topic" ]] || [[ $tft == "aws_iam_role" ]] || [[ $tft == "aws_codepipeline" ]]; then
                 tarn=$(grep $addr data/arn-map.dat | grep $tft | cut -f2 -d',' | head -1)
                 tarn=${tarn//\//\\/}
                 if [[ $tarn != "null" ]] && [[ $tarn != "" ]]; then
                     cmd=$(printf "sed -i'.orig' -e 's/%s/\"%s\"/g' ${fil}" $res $tarn)
-             
+
                     echo " "
                     #echo $cmd
                     echo "** Undeclared Fix: ${res} -- ${tarn}"
@@ -97,7 +99,6 @@ for c in $(seq 0 $count); do
             #        fi
             #    fi
             #fi
-
 
             #special case in cloudtrail
             if [[ $fil == "aws_cloudtrail"* ]]; then

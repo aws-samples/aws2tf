@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 exit()
-f2=open("aws_resources.py","w")
+f2=open("aws_resources2.py","w")
 
 with open('aws_resources.dat', 'r') as f:
     f2.write('import boto3\n\n')

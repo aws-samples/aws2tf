@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+exit()
 f2=open("aws_resources.py","w")
 
 with open('aws_resources.dat', 'r') as f:

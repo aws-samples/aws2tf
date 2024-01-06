@@ -264,7 +264,8 @@ def resource_data(type,id):
         clfn="ec2";descfn="describe_subnets";topkey="Subnets";key="SubnetId";filterid=key
         if id is not None and "vpc-" in id: filterid="VpcId"
 
-    elif type == "aws_default_vpc": clfn="ec2";descfn="describe_vpcs";topkey="Vpcs";key="VpcId";filterid=KeyError
+    elif type == "aws_default_vpc": 
+        clfn="ec2";descfn="describe_vpcs";topkey="Vpcs";key="VpcId";filterid=KeyError
 
     elif type == "aws_default_internet_gateway":
         clfn="ec2";descfn="describe_internet_gateways";topkey="InternetGateways";key="InternetGatewayId";filterid=key
@@ -306,7 +307,8 @@ def resource_data(type,id):
         clfn="iam";descfn="list_policies";topkey="Policies";key="PolicyName";filterid=key 
         if id is not None and "arn:aws:iam::" in id: filterid="Arn"
 
-    elif type == "aws_iam_role_policy": clfn="iam";descfn="list_role_policies";topkey="PolicyNames";key="PolicyNames";filterid="RoleName"
+    elif type == "aws_iam_role_policy": 
+        clfn="iam";descfn="list_role_policies";topkey="PolicyNames";key="PolicyNames";filterid="RoleName"
 
     elif type == "aws_iam_role_policy_attachment":
         clfn="iam";descfn="list_attached_role_policies";topkey="AttachedPolicies";key="PolicyName";filterid="RoleName" 

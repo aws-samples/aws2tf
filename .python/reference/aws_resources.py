@@ -1,9 +1,5 @@
 import boto3
-
-if type == "all":
-    print("all")
-
-elif type == "aws_accessanalyzer_analyzer":
+if type == "aws_accessanalyzer_analyzer":
     clfn="accessanalyzer";descfn="list_analyzers";topkey='AnalyzerList';key="Name";filterid=key
 elif type == "aws_accessanalyzer_archive_rule":
     clfn="accessanalyzer";descfn="list_archive_rules";topkey='ArchiveRules';key="RuleName";filterid=key
@@ -1028,7 +1024,6 @@ elif type == "aws_elasticsearch_domain":
 elif type == "aws_elasticsearch_domain_policy":
     clfn="es";descfn="describe_elasticsearch_domain_policy";topkey='Policy';key="Policy";filterid=key
 #elif type == "aws_elasticsearch_domain_saml_options":
-
 elif type == "aws_elasticsearch_vpc_endpoint":
     clfn="es";descfn="describe_vpc_endpoints";topkey='VpcEndpoints';key="VpcEndpointId";filterid=key
 elif type == "aws_elastictranscoder_pipeline":
@@ -1350,340 +1345,665 @@ elif type == "aws_internet_gateway_attachment":
 elif type == "aws_internetmonitor_monitor":
     clfn="internetmonitor";descfn="list_monitors";topkey='Monitors';key="MonitorId";filterid=key
 elif type == "aws_iot_authorizer":
-    
+    clfn="iot";descfn="list_authorizers";topkey='Authorizers';key="AuthorizerName";filterid=key
 elif type == "aws_iot_billing_group":
+    clfn="iot";descfn="list_billing_groups";topkey='BillingGroups';key="BillingGroupName";filterid=key
 elif type == "aws_iot_ca_certificate":
+    clfn="iot";descfn="list_ca_certificates";topkey='CACertificates';key="Id";filterid=key
 elif type == "aws_iot_certificate":
+    clfn="iot";descfn="list_certificates";topkey='Certificates';key="CertificateId";filterid=key
 elif type == "aws_iot_domain_configuration":
+    clfn="iot";descfn="list_domain_configurations";topkey='DomainConfigurations';key="DomainConfigurationName";filterid=key
 elif type == "aws_iot_endpoint":
+    clfn="iot";descfn="list_endpoints";topkey='Endpoints';key="EndpointAddress";filterid=key
 elif type == "aws_iot_event_configurations":
+    clfn="iot";descfn="list_event_configurations";topkey='EventConfigurations';key="EventConfigurationName";filterid=key
 elif type == "aws_iot_indexing_configuration":
+    clfn="iot";descfn="list_indexing_configurations";topkey='IndexingConfigurations';key="IndexingConfigurationName";filterid=key
 elif type == "aws_iot_logging_options":
+    clfn="iot";descfn="describe_logging_options";topkey='LoggingOptions';key="roleArn";filterid=key
 elif type == "aws_iot_policy":
+    clfn="iot";descfn="list_policies";topkey='policies';key="policyName";filterid=key
 elif type == "aws_iot_policy_attachment":
+    clfn="iot";descfn="list_policies";topkey='Policies';key="PolicyName";filterid=key
 elif type == "aws_iot_provisioning_template":
+    clfn="iot";descfn="list_provisioning_templates";topkey='ProvisioningTemplates';key="TemplateName";filterid=key
 elif type == "aws_iot_registration_code":
+    clfn="iot";descfn="list_registration_code";topkey='RegistrationCode';key="RegistrationCode";filterid=key
 elif type == "aws_iot_role_alias":
+    clfn="iot";descfn="list_role_aliases";topkey='RoleAliases';key="RoleAliasName";filterid=key
 elif type == "aws_iot_thing":
+    clfn="iot";descfn="list_things";topkey='things';key="thingName";filterid=key
 elif type == "aws_iot_thing_group":
+    clfn="iot";descfn="list_thing_groups";topkey='ThingGroups';key="ThingGroupName";filterid=key
 elif type == "aws_iot_thing_group_membership":
+    clfn="iot";descfn="list_thing_group_memberships";topkey='ThingGroupMemberships';key="ThingGroupName";filterid=key
 elif type == "aws_iot_thing_principal_attachment":
+    clfn="iot";descfn="list_thing_principal_attachments";topkey='ThingPrincipalAttachments';key="ThingName";filterid=key
 elif type == "aws_iot_thing_type":
+    clfn="iot";descfn="list_thing_types";topkey='ThingTypes';key="ThingTypeName";filterid=key
 elif type == "aws_iot_topic_rule":
+    clfn="iot";descfn="list_topic_rules";topkey='rules';key="ruleName";filterid=key
 elif type == "aws_iot_topic_rule_destination":
+    clfn="iot";descfn="list_topic_rule_destinations";topkey='destinations';key="destinationName";filterid=key
 elif type == "aws_ip_ranges":
+    clfn="ec2";descfn="describe_managed_prefix_lists";topkey='PrefixLists';key="PrefixListId";filterid=key
 elif type == "aws_ivs_channel":
+    clfn="ivs";descfn="list_channels";topkey='Channels';key="arn";filterid=key
 elif type == "aws_ivs_playback_key_pair":
+    clfn="ivs";descfn="list_playback_key_pairs";topkey='PlaybackKeyPairs';key="arn";filterid=key
 elif type == "aws_ivs_recording_configuration":
+    clfn="ivs";descfn="list_recording_configurations";topkey='RecordingConfigurations';key="arn";filterid=key
 elif type == "aws_ivs_stream_key":
+    clfn="ivs";descfn="list_stream_keys";topkey='StreamKeys';key="arn";filterid=key
 elif type == "aws_ivschat_logging_configuration":
+    clfn="ivschat";descfn="list_logging_configurations";topkey='LoggingConfigurations';key="arn";filterid=key
 elif type == "aws_ivschat_room":
+    clfn="ivschat";descfn="list_rooms";topkey='Rooms';key="arn";filterid=key
 elif type == "aws_kendra_data_source":
+    clfn="kendra";descfn="list_data_sources";topkey='DataSources';key="Id";filterid=key
 elif type == "aws_kendra_experience":
+    clfn="kendra";descfn="list_experiences";topkey='Experiences';key="Id";filterid=key
 elif type == "aws_kendra_faq":
+    clfn="kendra";descfn="list_faqs";topkey='Faqs';key="Id";filterid=key
 elif type == "aws_kendra_index":
+    clfn="kendra";descfn="list_indices";topkey='Indices';key="Id";filterid=key
 elif type == "aws_kendra_query_suggestions_block_list":
+    clfn="kendra";descfn="list_query_suggestions_block_lists";topkey='QuerySuggestionsBlockLists';key="Id";filterid=key
 elif type == "aws_kendra_thesaurus":
+    clfn="kendra";descfn="list_thesauri";topkey='Thesauri';key="Id";filterid=key
 elif type == "aws_key_pair":
+    clfn="ec2";descfn="describe_key_pairs";topkey='KeyPairs';key="KeyName";filterid=key
 elif type == "aws_keyspaces_keyspace":
+    clfn="keyspaces";descfn="list_keyspaces";topkey='Keyspaces';key="Name";filterid=key
 elif type == "aws_keyspaces_table":
+    clfn="keyspaces";descfn="list_tables";topkey='Tables';key="Name";filterid=key
 elif type == "aws_kinesis_analytics_application":
+    clfn="kinesisanalytics";descfn="list_applications";topkey='ApplicationSummaries';key="ApplicationName";filterid=key
 elif type == "aws_kinesis_firehose_delivery_stream":
+    clfn="firehose";descfn="list_delivery_streams";topkey='DeliveryStreamNames';key="DeliveryStreamName";filterid=key
 elif type == "aws_kinesis_stream":
+    clfn="kinesis";descfn="list_streams";topkey='StreamNames';key="StreamName";filterid=key
 elif type == "aws_kinesis_stream_consumer":
+    clfn="kinesis";descfn="list_stream_consumers";topkey='Consumers';key="ConsumerName";filterid=key
 elif type == "aws_kinesis_video_stream":
+    clfn="kinesisvideo";descfn="list_streams";topkey='StreamNames';key="StreamName";filterid=key
 elif type == "aws_kinesisanalyticsv2_application":
+    clfn="kinesisanalyticsv2";descfn="list_applications";topkey='ApplicationSummaries';key="ApplicationName";filterid=key
 elif type == "aws_kinesisanalyticsv2_application_snapshot":
+    clfn="kinesisanalyticsv2";descfn="list_application_snapshots";topkey='ApplicationSnapshots';key="SnapshotName";filterid=key
 elif type == "aws_kms_alias":
+    clfn="kms";descfn="list_aliases";topkey='Aliases';key="AliasName";filterid=key
 elif type == "aws_kms_ciphertext":
+    clfn="kms";descfn="list_grants";topkey='Grants';key="GrantId";filterid=key
 elif type == "aws_kms_custom_key_store":
+    clfn="kms";descfn="list_custom_key_stores";topkey='CustomKeyStores';key="CustomKeyStoreId";filterid=key
 elif type == "aws_kms_external_key":
+    clfn="kms";descfn="list_external_keys";topkey='ExternalKeys';key="KeyId";filterid=key
 elif type == "aws_kms_grant":
+    clfn="kms";descfn="list_grants";topkey='Grants';key="GrantId";filterid=key
 elif type == "aws_kms_key":
+    clfn="kms";descfn="list_keys";topkey='Keys';key="KeyId";filterid=key
 elif type == "aws_kms_key_policy":
+    clfn="kms";descfn="list_key_policies";topkey='PolicyNames';key="PolicyName";filterid=key
 elif type == "aws_kms_public_key":
+    clfn="kms";descfn="list_public_keys";topkey='PublicKeys';key="KeyId";filterid=key
 elif type == "aws_kms_replica_external_key":
+    clfn="kms";descfn="list_replica_keys";topkey='ReplicaKeys';key="KeyId";filterid=key
 elif type == "aws_kms_replica_key":
+    clfn="kms";descfn="list_replica_keys";topkey='ReplicaKeys';key="KeyId";filterid=key
 elif type == "aws_kms_secret":
+    clfn="kms";descfn="list_secrets";topkey='SecretList';key="SecretId";filterid=key
 elif type == "aws_kms_secrets":
+    clfn="kms";descfn="list_secrets";topkey='SecretList';key="SecretId";filterid=key
 elif type == "aws_lakeformation_data_lake_settings":
+    clfn="lakeformation";descfn="list_data_lake_settings";topkey='DataLakeSettings';key="DataLakeSettingsId";filterid=key
 elif type == "aws_lakeformation_lf_tag":
+    clfn="lakeformation";descfn="list_lf_tags";topkey='LFTags';key="LFTagKey";filterid=key
 elif type == "aws_lakeformation_permissions":
+    clfn="lakeformation";descfn="list_permissions";topkey='Permissions';key="Principal";filterid=key
 elif type == "aws_lakeformation_resource":
+    clfn="lakeformation";descfn="list_resources";topkey='ResourceInfoList';key="ResourceArn";filterid=key
 elif type == "aws_lakeformation_resource_lf_tags":
+    clfn="lakeformation";descfn="list_resource_lf_tags";topkey='LFTags';key="LFTagKey";filterid=key
 elif type == "aws_lambda_alias":
+    clfn="lambda";descfn="list_aliases";topkey='Aliases';key="Name";filterid=key
 elif type == "aws_lambda_code_signing_config":
+    clfn="lambda";descfn="list_code_signing_configs";topkey='CodeSigningConfigs';key="CodeSigningConfigArn";filterid=key
 elif type == "aws_lambda_event_source_mapping":
+    clfn="lambda";descfn="list_event_source_mappings";topkey='EventSourceMappings';key="UUID";filterid=key
 elif type == "aws_lambda_function":
+    clfn="lambda";descfn="list_functions";topkey='Functions';key="FunctionName";filterid=key
 elif type == "aws_lambda_function_event_invoke_config":
+    clfn="lambda";descfn="list_function_event_invoke_configs";topkey='FunctionEventInvokeConfigs';key="FunctionName";filterid=key
 elif type == "aws_lambda_function_url":
+    clfn="lambda";descfn="list_function_url_configs";topkey='FunctionUrlConfigs';key="FunctionName";filterid=key
 elif type == "aws_lambda_functions":
+    clfn="lambda";descfn="list_functions";topkey='Functions';key="FunctionName";filterid=key
 elif type == "aws_lambda_invocation":
+    clfn="lambda";descfn="list_functions";topkey='Functions';key="FunctionName";filterid=key
 elif type == "aws_lambda_layer_version":
+    clfn="lambda";descfn="list_layer_versions";topkey='LayerVersions';key="LayerName";filterid=key
 elif type == "aws_lambda_layer_version_permission":
+    clfn="lambda";descfn="list_layer_version_permissions";topkey='LayerVersionPermissions';key="LayerName";filterid=key
 elif type == "aws_lambda_permission":
+    clfn="lambda";descfn="list_functions";topkey='Functions';key="FunctionName";filterid=key
 elif type == "aws_lambda_provisioned_concurrency_config":
+    clfn="lambda";descfn="list_provisioned_concurrency_configs";topkey='ProvisionedConcurrencyConfigs';key="FunctionName";filterid=key
 elif type == "aws_launch_configuration":
+    clfn="autoscaling";descfn="describe_launch_configurations";topkey='LaunchConfigurations';key="LaunchConfigurationName";filterid=key
 elif type == "aws_launch_template":
+    clfn="ec2";descfn="describe_launch_templates";topkey='LaunchTemplates';key="LaunchTemplateId";filterid=key
 elif type == "aws_lb":
+    clfn="elbv2";descfn="describe_load_balancers";topkey='LoadBalancers';key="LoadBalancerArn";filterid=key
 elif type == "aws_lb_cookie_stickiness_policy":
+    clfn="elbv2";descfn="describe_load_balancer_policies";topkey='PolicyDescriptions';key="PolicyName";filterid=key
 elif type == "aws_lb_hosted_zone_id":
+    clfn="elbv2";descfn="describe_load_balancers";topkey='LoadBalancers';key="LoadBalancerArn";filterid=key
 elif type == "aws_lb_listener":
+    clfn="elbv2";descfn="describe_listeners";topkey='Listeners';key="ListenerArn";filterid=key
 elif type == "aws_lb_listener_certificate":
+    clfn="elbv2";descfn="describe_listener_certificates";topkey='Certificates';key="CertificateArn";filterid=key
 elif type == "aws_lb_listener_rule":
+    clfn="elbv2";descfn="describe_rules";topkey='Rules';key="RuleArn";filterid=key
 elif type == "aws_lb_ssl_negotiation_policy":
+    clfn="elbv2";descfn="describe_ssl_policies";topkey='SslPolicies';key="SslPolicyName";filterid=key
 elif type == "aws_lb_target_group":
+    clfn="elbv2";descfn="describe_target_groups";topkey='TargetGroups';key="TargetGroupArn";filterid=key
 elif type == "aws_lb_target_group_attachment":
+    clfn="elbv2";descfn="describe_target_group_attributes";topkey='Attributes';key="Key";filterid=key
 elif type == "aws_lb_trust_store":
+    clfn="elbv2";descfn="describe_load_balancer_attributes";topkey='Attributes';key="Key";filterid=key
 elif type == "aws_lb_trust_store_revocation":
+    clfn="elbv2";descfn="describe_load_balancer_attributes";topkey='Attributes';key="Key";filterid=key
 elif type == "aws_lbs":
+    clfn="elbv2";descfn="describe_load_balancers";topkey='LoadBalancers';key="LoadBalancerArn";filterid=key
 elif type == "aws_lex_bot":
+    clfn="lex";descfn="get_bots";topkey='bots';key="name";filterid=key
 elif type == "aws_lex_bot_alias":
+    clfn="lex";descfn="get_bot_aliases";topkey='aliases';key="name";filterid=key
 elif type == "aws_lex_intent":
+    clfn="lex";descfn="get_intents";topkey='intents';key="name";filterid=key
 elif type == "aws_lex_slot_type":
+    clfn="lex";descfn="get_slot_types";topkey='slotTypes';key="name";filterid=key
 elif type == "aws_lexv2models_bot":
+    clfn="lexv2";descfn="list_bots";topkey='bots';key="name";filterid=key
 elif type == "aws_lexv2models_bot_locale":
+    clfn="lexv2";descfn="list_bot_locales";topkey='botLocales';key="name";filterid=key
 elif type == "aws_lexv2models_bot_version":
+    clfn="lexv2";descfn="list_bot_versions";topkey='botVersions';key="name";filterid=key
 elif type == "aws_licensemanager_association":
+    clfn="licensemanager";descfn="list_associations";topkey='Associations';key="LicenseConfigurationArn";filterid=key
 elif type == "aws_licensemanager_grant":
+    clfn="licensemanager";descfn="list_grants";topkey='Grants';key="GrantArn";filterid=key
 elif type == "aws_licensemanager_grant_accepter":
+    clfn="licensemanager";descfn="list_grant_accepters";topkey='GrantAccepters';key="GrantId";filterid=key
 elif type == "aws_licensemanager_grants":
+    clfn="licensemanager";descfn="list_grants";topkey='Grants';key="GrantArn";filterid=key
 elif type == "aws_licensemanager_license_configuration":
+    clfn="licensemanager";descfn="list_license_configurations";topkey='LicenseConfigurations';key="LicenseConfigurationArn";filterid=key
 elif type == "aws_licensemanager_received_license":
+    clfn="licensemanager";descfn="list_received_licenses";topkey='ReceivedLicenses';key="LicenseId";filterid=key
 elif type == "aws_licensemanager_received_licenses":
+    clfn="licensemanager";descfn="list_received_licenses";topkey='ReceivedLicenses';key="LicenseId";filterid=key
 elif type == "aws_lightsail_bucket":
+    clfn="lightsail";descfn="get_buckets";topkey='Buckets';key="name";filterid=key
 elif type == "aws_lightsail_bucket_access_key":
+    clfn="lightsail";descfn="get_bucket_access_keys";topkey='AccessKeys';key="name";filterid=key
 elif type == "aws_lightsail_bucket_resource_access":
+    clfn="lightsail";descfn="get_bucket_resources";topkey='Buckets';key="name";filterid=key
 elif type == "aws_lightsail_certificate":
+    clfn="lightsail";descfn="get_certificates";topkey='Certificates';key="name";filterid=key
 elif type == "aws_lightsail_container_service":
+    clfn="lightsail";descfn="get_container_services";topkey='ContainerServices';key="name";filterid=key
 elif type == "aws_lightsail_container_service_deployment_v=":
+    clfn="lightsail";descfn="get_container_service_deployments";topkey='Deployments';key="name";filterid=key
 elif type == "aws_lightsail_database":
+    clfn="lightsail";descfn="get_databases";topkey='Databases';key="name";filterid=key
 elif type == "aws_lightsail_disk":
+    clfn="lightsail";descfn="get_disks";topkey='Disks';key="name";filterid=key
 elif type == "aws_lightsail_disk_attachment":
+    clfn="lightsail";descfn="get_disk_attachments";topkey='DiskAttachments';key="name";filterid=key
 elif type == "aws_lightsail_distribution":
+    clfn="lightsail";descfn="get_distributions";topkey='Distributions';key="name";filterid=key
 elif type == "aws_lightsail_domain":
+    clfn="lightsail";descfn="get_domains";topkey='Domains';key="name";filterid=key
 elif type == "aws_lightsail_domain_entry":
+    clfn="lightsail";descfn="get_domain_entries";topkey='DomainEntries';key="name";filterid=key
 elif type == "aws_lightsail_instance":
+    clfn="lightsail";descfn="get_instances";topkey='Instances';key="name";filterid=key
 elif type == "aws_lightsail_instance_public_ports":
+    clfn="lightsail";descfn="get_instance_public_ports";topkey='PublicPorts';key="name";filterid=key
 elif type == "aws_lightsail_key_pair":
+    clfn="lightsail";descfn="get_instance_public_ports";topkey='PortInfo';key="name";filterid=key
 elif type == "aws_lightsail_lb":
+    clfn="lightsail";descfn="get_key_pairs";topkey='KeyPairs';key="name";filterid=key
 elif type == "aws_lightsail_lb_attachment":
+    clfn="lightsail";descfn="get_load_balancers";topkey='LoadBalancers';key="name";filterid=key
 elif type == "aws_lightsail_lb_certificate":
+    clfn="lightsail";descfn="get_key_pairs";topkey='KeyPairs';key="name";filterid=key
 elif type == "aws_lightsail_lb_certificate_attachment":
+    clfn="lightsail";descfn="get_load_balancer_certificates";topkey='Certificates';key="name";filterid=key
 elif type == "aws_lightsail_lb_https_redirection_policy":
+    clfn="lightsail";descfn="get_key_pairs";topkey='KeyPairs';key="name";filterid=key
 elif type == "aws_lightsail_lb_stickiness_policy":
+    clfn="lightsail";descfn="get_load_balancer_https_redirection_policies";topkey='HttpsRedirectPolicies';key="name";filterid=key
 elif type == "aws_lightsail_static_ip":
+    clfn="lightsail";descfn="get_key_pairs";topkey='KeyPairs';key="name";filterid=key
 elif type == "aws_lightsail_static_ip_attachment":
+    clfn="lightsail";descfn="get_static_ips";topkey='StaticIps';key="name";filterid=key
 elif type == "aws_load_balancer_backend_server_policy":
+    clfn="elbv2";descfn="describe_backend_server_policies";topkey='BackendServerDescriptions';key="PolicyName";filterid=key
 elif type == "aws_load_balancer_listener_policy":
+    clfn="elbv2";descfn="describe_listeners";topkey='Listeners';key="PolicyNames";filterid=key
 elif type == "aws_load_balancer_policy":
+    clfn="elbv2";descfn="describe_load_balancer_policies";topkey='Policies';key="PolicyName";filterid=key
 elif type == "aws_location_geofence_collection":
+    clfn="location";descfn="list_geofence_collections";topkey='GeofenceCollections';key="CollectionName";filterid=key
 elif type == "aws_location_map":
+    clfn="location";descfn="list_maps";topkey='Maps';key="MapName";filterid=key
 elif type == "aws_location_place_index":
+    clfn="location";descfn="list_place_indexes";topkey='PlaceIndexes';key="IndexName";filterid=key
 elif type == "aws_location_route_calculator":
+    clfn="location";descfn="list_route_calculators";topkey='RouteCalculators';key="CalculatorName";filterid=key
 elif type == "aws_location_tracker":
+    clfn="location";descfn="list_trackers";topkey='Trackers';key="TrackerName";filterid=key
 elif type == "aws_location_tracker_association":
+    clfn="location";descfn="list_tracker_associations";topkey='TrackerAssociations';key="TrackerName";filterid=key
 elif type == "aws_location_tracker_associations":
+    clfn="location";descfn="list_tracker_associations";topkey='TrackerAssociations';key="TrackerName";filterid=key
 elif type == "aws_macie2_account":
+    clfn="macie2";descfn="list_account_settings";topkey='AccountSettings';key="Name";filterid=key
 elif type == "aws_macie2_classification_export_configuration":
+    clfn="macie2";descfn="list_classification_export_configurations";topkey='ClassificationExportConfigurations';key="Id";filterid=key
 elif type == "aws_macie2_classification_job":
+    clfn="macie2";descfn="list_classification_jobs";topkey='ClassificationJobs';key="Id";filterid=key
 elif type == "aws_macie2_custom_data_identifier":
+    clfn="macie2";descfn="list_custom_data_identifiers";topkey='CustomDataIdentifiers';key="Id";filterid=key
 elif type == "aws_macie2_findings_filter":
+    clfn="macie2";descfn="list_findings_filters";topkey='FindingsFilters';key="Name";filterid=key
 elif type == "aws_macie2_invitation_accepter":
+    clfn="macie2";descfn="list_invitations";topkey='Invitations';key="AccountId";filterid=key
 elif type == "aws_macie2_member":
+    clfn="macie2";descfn="list_invitation_accepters";topkey='InvitationAccepters';key="AccountId";filterid=key
 elif type == "aws_macie2_organization_admin_account":
+    clfn="macie2";descfn="list_members";topkey='Members';key="AccountId";filterid=key
 elif type == "aws_main_route_table_association":
+    clfn="ec2";descfn="describe_route_tables";topkey='RouteTables';key="Associations[].Main";filterid=key
 elif type == "aws_media_convert_queue":
+    clfn="mediaconvert";descfn="list_queues";topkey='Queues';key="Name";filterid=key
 elif type == "aws_media_package_channel":
+    clfn="mediapackage";descfn="list_channels";topkey='Channels';key="Id";filterid=key
 elif type == "aws_media_store_container":
+    clfn="mediastore";descfn="list_containers";topkey='Containers';key="Name";filterid=key
 elif type == "aws_media_store_container_policy":
+    clfn="mediastore";descfn="list_container_policies";topkey='ContainerPolicies';key="Policy";filterid=key
 elif type == "aws_medialive_channel":
+    clfn="medialive";descfn="list_channels";topkey='Channels';key="Id";filterid=key
 elif type == "aws_medialive_input":
+    clfn="medialive";descfn="list_inputs";topkey='Inputs';key="Id";filterid=key
 elif type == "aws_medialive_input_security_group":
+    clfn="medialive";descfn="list_input_security_groups";topkey='InputSecurityGroups';key="Id";filterid=key
 elif type == "aws_medialive_multiplex":
+    clfn="medialive";descfn="list_multiplexes";topkey='Multiplexes';key="Id";filterid=key
 elif type == "aws_medialive_multiplex_program":
+    clfn="medialive";descfn="list_multiplex_programs";topkey='MultiplexPrograms';key="Id";filterid=key
 elif type == "aws_memorydb_acl":
+    clfn="memorydb";descfn="list_acls";topkey='ACLs';key="Name";filterid=key
 elif type == "aws_memorydb_cluster":
+    clfn="memorydb";descfn="list_clusters";topkey='Clusters';key="Name";filterid=key
 elif type == "aws_memorydb_parameter_group":
+    clfn="memorydb";descfn="list_parameter_groups";topkey='ParameterGroups';key="Name";filterid=key
 elif type == "aws_memorydb_snapshot":
+    clfn="memorydb";descfn="list_snapshots";topkey='Snapshots';key="Name";filterid=key
 elif type == "aws_memorydb_subnet_group":
+    clfn="memorydb";descfn="list_subnet_groups";topkey='SubnetGroups';key="Name";filterid=key
 elif type == "aws_memorydb_user":
+    clfn="memorydb";descfn="list_users";topkey='Users';key="Name";filterid=key
 elif type == "aws_mq_broker":
+    clfn="mq";descfn="list_brokers";topkey='BrokerSummaries';key="BrokerName";filterid=key
 elif type == "aws_mq_broker_instance_type_offerings":
+    clfn="mq";descfn="list_instance_type_offerings";topkey='InstanceTypeOfferings';key="InstanceType";filterid=key
 elif type == "aws_mq_configuration":
+    clfn="mq";descfn="list_configurations";topkey='Configurations';key="Name";filterid=key
 elif type == "aws_msk_broker_nodes":
+    clfn="msk";descfn="list_nodes";topkey='Nodes';key="NodeId";filterid=key
 elif type == "aws_msk_cluster":
+    clfn="msk";descfn="list_clusters";topkey='Clusters';key="ClusterName";filterid=key
 elif type == "aws_msk_cluster_policy":
+    clfn="msk";descfn="list_cluster_policies";topkey='ClusterPolicies';key="PolicyName";filterid=key
 elif type == "aws_msk_configuration":
+    clfn="msk";descfn="list_configurations";topkey='Configurations';key="Arn";filterid=key
 elif type == "aws_msk_kafka_version":
+    clfn="msk";descfn="list_kafka_versions";topkey='KafkaVersions';key="Version";filterid=key
 elif type == "aws_msk_replicator":
+    clfn="msk";descfn="list_replicators";topkey='Replicators';key="ReplicatorName";filterid=key
 elif type == "aws_msk_scram_secret_association":
+    clfn="msk";descfn="list_scram_secrets";topkey='ScramSecrets';key="ClusterArn";filterid=key
 elif type == "aws_msk_serverless_cluster":
+    clfn="msk";descfn="list_serverless_clusters";topkey='ServerlessClusters';key="ClusterName";filterid=key
 elif type == "aws_msk_vpc_connection":
+    clfn="msk";descfn="list_vpc_connections";topkey='VpcConnections';key="VpcConnectionName";filterid=key
 elif type == "aws_mskconnect_connector":
+    clfn="mskconnect";descfn="list_connectors";topkey='Connectors';key="Name";filterid=key
 elif type == "aws_mskconnect_custom_plugin":
+    clfn="mskconnect";descfn="list_custom_plugins";topkey='CustomPlugins';key="Name";filterid=key
 elif type == "aws_mskconnect_worker_configuration":
+    clfn="mskconnect";descfn="list_worker_configurations";topkey='WorkerConfigurations';key="Name";filterid=key
 elif type == "aws_mwaa_environment":
+    clfn="mwaa";descfn="list_environments";topkey='Environments';key="Name";filterid=key
 elif type == "aws_nat_gateway":
+    clfn="ec2";descfn="describe_nat_gateways";topkey='NatGateways';key="NatGatewayId";filterid=key
 elif type == "aws_nat_gateways":
+    clfn="ec2";descfn="describe_nat_gateways";topkey='NatGateways';key="NatGatewayId";filterid=key
 elif type == "aws_neptune_cluster":
+    clfn="neptune";descfn="describe_db_clusters";topkey='DBClusters';key="DBClusterIdentifier";filterid=key
 elif type == "aws_neptune_cluster_endpoint":
+    clfn="neptune";descfn="describe_db_cluster_endpoints";topkey='DBClusterEndpoints';key="Endpoint";filterid=key
 elif type == "aws_neptune_cluster_instance":
+    clfn="neptune";descfn="describe_db_cluster_instances";topkey='DBClusterInstances';key="DBInstanceIdentifier";filterid=key
 elif type == "aws_neptune_cluster_parameter_group":
+    clfn="neptune";descfn="describe_db_cluster_parameter_groups";topkey='DBClusterParameterGroups';key="DBClusterParameterGroupName";filterid=key
 elif type == "aws_neptune_cluster_snapshot":
+    clfn="neptune";descfn="describe_db_cluster_snapshots";topkey='DBClusterSnapshots';key="DBClusterSnapshotIdentifier";filterid=key
 elif type == "aws_neptune_engine_version":
+    clfn="neptune";descfn="describe_db_engine_versions";topkey='DBEngineVersions';key="Engine";filterid=key
 elif type == "aws_neptune_event_subscription":
+    clfn="neptune";descfn="describe_event_subscriptions";topkey='EventSubscriptions';key="SubscriptionName";filterid=key
 elif type == "aws_neptune_global_cluster":
+    clfn="neptune";descfn="describe_global_clusters";topkey='GlobalClusters';key="GlobalClusterIdentifier";filterid=key
 elif type == "aws_neptune_orderable_db_instance":
+    clfn="neptune";descfn="describe_orderable_db_instance_options";topkey='OrderableDBInstanceOptions';key="Engine";filterid=key
 elif type == "aws_neptune_parameter_group":
+    clfn="neptune";descfn="describe_db_parameter_groups";topkey='DBParameterGroups';key="DBParameterGroupName";filterid=key
 elif type == "aws_neptune_subnet_group":
+    clfn="neptune";descfn="describe_db_subnet_groups";topkey='DBSubnetGroups';key="DBSubnetGroupName";filterid=key
 elif type == "aws_network_acl":
+    clfn="ec2";descfn="describe_network_acls";topkey='NetworkAcls';key="NetworkAclId";filterid=key
 elif type == "aws_network_acl_association":
+    clfn="ec2";descfn="describe_network_acls";topkey='NetworkAcls';key="NetworkAclId";filterid=key
 elif type == "aws_network_acl_rule":
+    clfn="ec2";descfn="describe_network_acls";topkey='NetworkAcls';key="NetworkAclId";filterid=key
 elif type == "aws_network_acls":
+    clfn="ec2";descfn="describe_network_acls";topkey='NetworkAcls';key="NetworkAclId";filterid=key
 elif type == "aws_network_interface":
+    clfn="ec2";descfn="describe_network_interfaces";topkey='NetworkInterfaces';key="NetworkInterfaceId";filterid=key
 elif type == "aws_network_interface_attachment":
+    clfn="ec2";descfn="describe_network_interfaces";topkey='NetworkInterfaces';key="NetworkInterfaceId";filterid=key
 elif type == "aws_network_interface_sg_attachment":
+    clfn="ec2";descfn="describe_network_interfaces";topkey='NetworkInterfaces';key="NetworkInterfaceId";filterid=key
 elif type == "aws_network_interfaces":
+    clfn="ec2";descfn="describe_network_interfaces";topkey='NetworkInterfaces';key="NetworkInterfaceId";filterid=key
 elif type == "aws_networkfirewall_firewall":
+    clfn="network-firewall";descfn="list_firewalls";topkey='Firewalls';key="FirewallArn";filterid=key
 elif type == "aws_networkfirewall_firewall_policy":
+    clfn="network-firewall";descfn="list_firewall_policies";topkey='FirewallPolicies';key="FirewallPolicyArn";filterid=key
 elif type == "aws_networkfirewall_logging_configuration":
+    clfn="network-firewall";descfn="list_logging_configurations";topkey='LoggingConfigurations';key="FirewallArn";filterid=key
 elif type == "aws_networkfirewall_resource_policy":
+    clfn="network-firewall";descfn="list_resource_policies";topkey='ResourcePolicies';key="ResourceArn";filterid=key
 elif type == "aws_networkfirewall_rule_group":
+    clfn="network-firewall";descfn="list_rule_groups";topkey='RuleGroups';key="RuleGroupArn";filterid=key
 elif type == "aws_networkmanager_attachment_accepter":
+    clfn="networkmanager";descfn="list_attachment_accepters";topkey='AttachmentAccepters';key="AttachmentId";filterid=key
 elif type == "aws_networkmanager_connect_attachment":
+    clfn="networkmanager";descfn="list_connect_attachments";topkey='ConnectAttachments';key="AttachmentId";filterid=key
 elif type == "aws_networkmanager_connect_peer":
+    clfn="networkmanager";descfn="list_connect_peers";topkey='ConnectPeers';key="ConnectPeerId";filterid=key
 elif type == "aws_networkmanager_connection":
+    clfn="networkmanager";descfn="list_connections";topkey='Connections';key="ConnectionId";filterid=key
 elif type == "aws_networkmanager_connections":
+    clfn="networkmanager";descfn="list_connections";topkey='Connections';key="ConnectionId";filterid=key
 elif type == "aws_networkmanager_core_network":
+    clfn="networkmanager";descfn="list_core_networks";topkey='CoreNetworks';key="CoreNetworkId";filterid=key
 elif type == "aws_networkmanager_core_network_policy_attac=":
+    clfn="networkmanager";descfn="list_core_network_policy_attachments";topkey='CoreNetworkPolicyAttachments';key="CoreNetworkPolicyAttachmentId";filterid=key
 elif type == "aws_networkmanager_core_network_policy_docum=":
+    clfn="networkmanager";descfn="list_core_network_policy_documents";topkey='CoreNetworkPolicyDocuments';key="CoreNetworkPolicyDocumentId";filterid=key
 elif type == "aws_networkmanager_customer_gateway_association":
+    clfn="networkmanager";descfn="list_customer_gateway_associations";topkey='CustomerGatewayAssociations';key="CustomerGatewayAssociationId";filterid=key
 elif type == "aws_networkmanager_device":
+    clfn="networkmanager";descfn="list_devices";topkey='Devices';key="DeviceId";filterid=key
 elif type == "aws_networkmanager_devices":
+    clfn="networkmanager";descfn="list_devices";topkey='Devices';key="DeviceId";filterid=key
 elif type == "aws_networkmanager_global_network":
+    clfn="networkmanager";descfn="list_global_networks";topkey='GlobalNetworks';key="GlobalNetworkId";filterid=key
 elif type == "aws_networkmanager_global_networks":
+    clfn="networkmanager";descfn="list_global_networks";topkey='GlobalNetworks';key="GlobalNetworkId";filterid=key
 elif type == "aws_networkmanager_link":
+    clfn="networkmanager";descfn="list_links";topkey='Links';key="LinkId";filterid=key
 elif type == "aws_networkmanager_link_association":
+    clfn="networkmanager";descfn="list_link_associations";topkey='LinkAssociations';key="LinkAssociationId";filterid=key
 elif type == "aws_networkmanager_links":
+    clfn="networkmanager";descfn="list_links";topkey='Links';key="LinkId";filterid=key
 elif type == "aws_networkmanager_site":
+    clfn="networkmanager";descfn="list_sites";topkey='Sites';key="SiteId";filterid=key
 elif type == "aws_networkmanager_site_to_site_vpn_att=":
+    clfn="networkmanager";descfn="list_site_to_site_vpn_attachments";topkey='SiteToSiteVpnAttachments';key="SiteToSiteVpnAttachmentId";filterid=key
 elif type == "aws_networkmanager_sites":
+    clfn="networkmanager";descfn="list_sites";topkey='Sites';key="SiteId";filterid=key
 elif type == "aws_networkmanager_transit_gateway_connect_p=":
+    clfn="networkmanager";descfn="list_transit_gateway_connect_peers";topkey='TransitGatewayConnectPeers';key="TransitGatewayConnectPeerId";filterid=key
 elif type == "aws_networkmanager_transit_gateway_peering":
+    clfn="networkmanager";descfn="list_transit_gateway_peerings";topkey='TransitGatewayPeerings';key="TransitGatewayPeeringId";filterid=key
 elif type == "aws_networkmanager_transit_gateway_registration":
+    clfn="networkmanager";descfn="list_transit_gateway_registrations";topkey='TransitGatewayRegistrations';key="TransitGatewayRegistrationId";filterid=key
 elif type == "aws_networkmanager_transit_gateway_route_tab=":
+    clfn="networkmanager";descfn="list_transit_gateway_route_tables";topkey='TransitGatewayRouteTables';key="TransitGatewayRouteTableId";filterid=key
 elif type == "aws_networkmanager_vpc_attachment":
+    clfn="networkmanager";descfn="list_vpc_attachments";topkey='VpcAttachments';key="VpcAttachmentId";filterid=key
 elif type == "aws_oam_link":
+    clfn="networkmanager";descfn="list_links";topkey='Links';key="LinkId";filterid=key
 elif type == "aws_oam_sink":
+    clfn="networkmanager";descfn="list_links";topkey='Links';key="LinkId";filterid=key
 elif type == "aws_oam_sink_policy":
+    clfn="networkmanager";descfn="list_links";topkey='Links';key="LinkId";filterid=key
 elif type == "aws_opensearch_domain":
+    clfn="opensearch";descfn="list_domain_names";topkey='DomainNames';key="DomainName";filterid=key
 elif type == "aws_opensearch_domain_policy":
+    clfn="opensearch";descfn="list_domain_names";topkey='DomainNames';key="DomainName";filterid=key
 elif type == "aws_opensearch_domain_saml_options":
+    clfn="opensearch";descfn="list_domain_names";topkey='DomainNames';key="DomainName";filterid=key
 elif type == "aws_opensearch_inbound_connection_accepter":
+    clfn="opensearch";descfn="list_inbound_connection_accepters";topkey='InboundConnectionAccepters';key="ConnectionId";filterid=key
 elif type == "aws_opensearch_outbound_connection":
+    clfn="opensearch";descfn="list_inbound_connection_accepters";topkey='InboundConnectionAccepters';key="InboundConnectionId";filterid=key
 elif type == "aws_opensearch_package":
+    clfn="opensearch";descfn="list_packages";topkey='Packages';key="PackageID";filterid=key
 elif type == "aws_opensearch_package_association":
+    clfn="opensearch";descfn="list_packages";topkey='Packages';key="PackageID";filterid=key
 elif type == "aws_opensearch_vpc_endpoint":
+    clfn="opensearch";descfn="list_vpc_endpoints";topkey='VpcEndpoints';key="VpcEndpointId";filterid=key
 elif type == "aws_opensearchserverless_access_policy":
+    clfn="opensearch";descfn="list_access_policies";topkey='AccessPolicies';key="PolicyId";filterid=key
 elif type == "aws_opensearchserverless_collection":
+    clfn="opensearch";descfn="list_collections";topkey='Collections';key="CollectionId";filterid=key
 elif type == "aws_opensearchserverless_lifecycle_policy":
+    clfn="opensearch";descfn="list_lifecycle_policies";topkey='LifecyclePolicies';key="PolicyId";filterid=key
 elif type == "aws_opensearchserverless_security_config":
+    clfn="opensearch";descfn="list_security_configs";topkey='SecurityConfigs';key="SecurityConfigId";filterid=key
 elif type == "aws_opensearchserverless_security_policy":
+    clfn="opensearch";descfn="list_security_policies";topkey='SecurityPolicies';key="PolicyId";filterid=key
 elif type == "aws_opensearchserverless_vpc_endpoint":
+    clfn="opensearch";descfn="list_vpc_endpoints";topkey='VpcEndpoints';key="VpcEndpointId";filterid=key
 elif type == "aws_opsworks_application":
+    clfn="opsworks";descfn="list_applications";topkey='Applications';key="ApplicationId";filterid=key
 elif type == "aws_opsworks_custom_layer":
+    clfn="opsworks";descfn="list_custom_layers";topkey='CustomLayers';key="LayerId";filterid=key
 elif type == "aws_opsworks_ecs_cluster_layer":
+    clfn="opsworks";descfn="list_ecs_cluster_layers";topkey='EcsClusterLayers';key="LayerId";filterid=key
 elif type == "aws_opsworks_ganglia_layer":
+    clfn="opsworks";descfn="list_ganglia_layers";topkey='GangliaLayers';key="LayerId";filterid=key
 elif type == "aws_opsworks_haproxy_layer":
+    clfn="opsworks";descfn="list_haproxy_layers";topkey='HaproxyLayers';key="LayerId";filterid=key
 elif type == "aws_opsworks_instance":
+    clfn="opsworks";descfn="list_instances";topkey='Instances';key="InstanceId";filterid=key
 elif type == "aws_opsworks_java_app_layer":
+    clfn="opsworks";descfn="list_java_app_layers";topkey='JavaAppLayers';key="LayerId";filterid=key
 elif type == "aws_opsworks_memcached_layer":
+    clfn="opsworks";descfn="list_memcached_layers";topkey='MemcachedLayers';key="LayerId";filterid=key
 elif type == "aws_opsworks_mysql_layer":
+    clfn="opsworks";descfn="list_mysql_layers";topkey='MysqlLayers';key="LayerId";filterid=key
 elif type == "aws_opsworks_nodejs_app_layer":
+    clfn="opsworks";descfn="list_nodejs_app_layers";topkey='NodejsAppLayers';key="LayerId";filterid=key
 elif type == "aws_opsworks_permission":
+    clfn="opsworks";descfn="list_permissions";topkey='Permissions';key="PermissionId";filterid=key
 elif type == "aws_opsworks_php_app_layer":
+    clfn="opsworks";descfn="list_php_app_layers";topkey='PhpAppLayers';key="LayerId";filterid=key
 elif type == "aws_opsworks_rails_app_layer":
+    clfn="opsworks";descfn="list_rails_app_layers";topkey='RailsAppLayers';key="LayerId";filterid=key
 elif type == "aws_opsworks_rds_db_instance":
+    clfn="opsworks";descfn="list_rds_db_instances";topkey='RdsDbInstances';key="DbInstanceArn";filterid=key
 elif type == "aws_opsworks_stack":
+    clfn="opsworks";descfn="list_stacks";topkey='Stacks';key="StackId";filterid=key
 elif type == "aws_opsworks_static_web_layer":
+    clfn="opsworks";descfn="list_static_web_layers";topkey='StaticWebLayers';key="LayerId";filterid=key
 elif type == "aws_opsworks_user_profile":
+    clfn="opsworks";descfn="list_user_profiles";topkey='UserProfiles';key="IamUserArn";filterid=key
 elif type == "aws_organizations_account":
+    clfn="organizations";descfn="list_accounts";topkey='Accounts';key="Id";filterid=key
 elif type == "aws_organizations_delegated_administrator":
+    clfn="organizations";descfn="list_delegated_administrators";topkey='DelegatedAdministrators';key="Id";filterid=key
 elif type == "aws_organizations_delegated_administrators":
+    clfn="organizations";descfn="list_delegated_administrators";topkey='DelegatedAdministrators';key="Id";filterid=key
 elif type == "aws_organizations_delegated_services":
+    clfn="organizations";descfn="list_delegated_services";topkey='DelegatedServices';key="ServicePrincipal";filterid=key
 elif type == "aws_organizations_organization":
+    clfn="organizations";descfn="list_organizations";topkey='Organization';key="Id";filterid=key
 elif type == "aws_organizations_organizational_unit":
+    clfn="organizations";descfn="list_organizational_units";topkey='OrganizationalUnits';key="Id";filterid=key
 elif type == "aws_organizations_organizational_unit_child_=":
+    clfn="organizations";descfn="list_organizational_units";topkey='OrganizationalUnits';key="Id";filterid=key
 elif type == "aws_organizations_organizational_unit_descendant_=":
+    clfn="organizations";descfn="list_organizational_units";topkey='OrganizationalUnits';key="Id";filterid=key
 elif type == "aws_organizations_organizational_units":
+    clfn="organizations";descfn="list_organizational_units";topkey='OrganizationalUnits';key="Id";filterid=key
 elif type == "aws_organizations_policies":
+    clfn="organizations";descfn="list_policies";topkey='Policies';key="Id";filterid=key
 elif type == "aws_organizations_policies_for_target":
+    clfn="organizations";descfn="list_policies";topkey='Policies';key="Id";filterid=key
 elif type == "aws_organizations_policy":
+    clfn="organizations";descfn="list_policies";topkey='Policies';key="Id";filterid=key
 elif type == "aws_organizations_policy_attachment":
+    clfn="organizations";descfn="list_policy_attachments";topkey='PolicyAttachments';key="Id";filterid=key
 elif type == "aws_organizations_resource_policy":
+    clfn="organizations";descfn="list_resource_policies";topkey='ResourcePolicies';key="Id";filterid=key
 elif type == "aws_organizations_resource_tags":
+    clfn="organizations";descfn="list_resource_tags";topkey='ResourceTags';key="Id";filterid=key
 elif type == "aws_outposts_asset":
+    clfn="outposts";descfn="list_assets";topkey='Assets';key="Id";filterid=key
 elif type == "aws_outposts_assets":
+    clfn="outposts";descfn="list_assets";topkey='Assets';key="Id";filterid=key
 elif type == "aws_outposts_outpost":
+    clfn="outposts";descfn="list_outposts";topkey='Outposts';key="Id";filterid=key
 elif type == "aws_outposts_outpost_instance_type":
+    clfn="outposts";descfn="list_outpost_instance_types";topkey='OutpostInstanceTypes';key="Id";filterid=key
 elif type == "aws_outposts_outpost_instance_types":
+    clfn="outposts";descfn="list_outpost_instance_types";topkey='OutpostInstanceTypes';key="Id";filterid=key
 elif type == "aws_outposts_outposts":
+    clfn="outposts";descfn="list_outposts";topkey='Outposts';key="Id";filterid=key
 elif type == "aws_outposts_site":
+    clfn="outposts";descfn="list_sites";topkey='Sites';key="Id";filterid=key
 elif type == "aws_outposts_sites":
+    clfn="outposts";descfn="list_sites";topkey='Sites';key="Id";filterid=key
 elif type == "aws_partition":
+    clfn="sts";descfn="get_partition";topkey='Partition';key="Partition";filterid=key
 elif type == "aws_pinpoint_adm_channel":
+    clfn="pinpoint";descfn="list_adm_channels";topkey='AdmChannels';key="Id";filterid=key
 elif type == "aws_pinpoint_apns_channel":
+    clfn="pinpoint";descfn="list_apns_channels";topkey='ApnsChannels';key="Id";filterid=key
 elif type == "aws_pinpoint_apns_sandbox_channel":
+    clfn="pinpoint";descfn="list_apns_sandbox_channels";topkey='ApnsSandboxChannels';key="Id";filterid=key
 elif type == "aws_pinpoint_apns_voip_channel":
+    clfn="pinpoint";descfn="list_apns_voip_channels";topkey='ApnsVoipChannels';key="Id";filterid=key
 elif type == "aws_pinpoint_apns_voip_sandbox_channel":
+    clfn="pinpoint";descfn="list_apns_voip_sandbox_channels";topkey='ApnsVoipSandboxChannels';key="Id";filterid=key
 elif type == "aws_pinpoint_app":
+    clfn="pinpoint";descfn="list_apps";topkey='Apps';key="Id";filterid=key
 elif type == "aws_pinpoint_baidu_channel":
+    clfn="pinpoint";descfn="list_baidu_channels";topkey='BaiduChannels';key="Id";filterid=key
 elif type == "aws_pinpoint_email_channel":
+    clfn="pinpoint";descfn="list_email_channels";topkey='EmailChannels';key="Id";filterid=key
 elif type == "aws_pinpoint_event_stream":
+    clfn="pinpoint";descfn="list_event_streams";topkey='EventStreams';key="Id";filterid=key
 elif type == "aws_pinpoint_gcm_channel":
+    clfn="pinpoint";descfn="list_gcm_channels";topkey='GcmChannels';key="Id";filterid=key
 elif type == "aws_pinpoint_sms_channel":
+    clfn="pinpoint";descfn="list_sms_channels";topkey='SmsChannels';key="Id";filterid=key
 elif type == "aws_pipes_pipe":
+    clfn="pipes";descfn="list_pipes";topkey='Pipes';key="Name";filterid=key
 elif type == "aws_placement_group":
+    clfn="ec2";descfn="describe_placement_groups";topkey='PlacementGroups';key="GroupName";filterid=key
 elif type == "aws_polly_voices":
+    clfn="polly";descfn="describe_voices";topkey='Voices';key="Id";filterid=key
 elif type == "aws_prefix_list":
+    clfn="ec2";descfn="describe_prefix_lists";topkey='PrefixLists';key="PrefixListId";filterid=key
 elif type == "aws_pricing_product":
+    clfn="pricing";descfn="describe_services";topkey='Services';key="ServiceCode";filterid=key
 elif type == "aws_prometheus_alert_manager_definition":
+    clfn="prometheus";descfn="list_alertmanager_definition";topkey='AlertmanagerDefinition';key="Name";filterid=key
 elif type == "aws_prometheus_rule_group_namespace":
+    clfn="prometheus";descfn="list_rule_group_namespaces";topkey='RuleGroupNamespaces';key="Name";filterid=key
 elif type == "aws_prometheus_workspace":
+    clfn="prometheus";descfn="list_workspaces";topkey='Workspaces';key="Name";filterid=key
 elif type == "aws_proxy_protocol_policy":
+    clfn="wafv2";descfn="list_proxy_protocol_policies";topkey='ProxyProtocolPolicies';key="Name";filterid=key
 elif type == "aws_qldb_ledger":
+    clfn="qldb";descfn="list_ledgers";topkey='Ledgers';key="Name";filterid=key
 elif type == "aws_qldb_stream":
+    clfn="qldb";descfn="list_streams";topkey='Streams';key="Name";filterid=key
 elif type == "aws_quicksight_account_subscription":
+    clfn="quicksight";descfn="list_account_subscriptions";topkey='AccountSubscriptions';key="SubscriptionId";filterid=key
 elif type == "aws_quicksight_analysis":
+    clfn="quicksight";descfn="list_analyses";topkey='Analyses';key="AnalysisId";filterid=key
 elif type == "aws_quicksight_dashboard":
+    clfn="quicksight";descfn="list_dashboards";topkey='Dashboards';key="DashboardId";filterid=key
 elif type == "aws_quicksight_data_set":
+    clfn="quicksight";descfn="list_data_sets";topkey='DataSets';key="DataSetId";filterid=key
 elif type == "aws_quicksight_data_source":
+    clfn="quicksight";descfn="list_data_sources";topkey='DataSources';key="DataSourceId";filterid=key
 elif type == "aws_quicksight_folder":
+    clfn="quicksight";descfn="list_folders";topkey='Folders';key="FolderId";filterid=key
 elif type == "aws_quicksight_folder_membership":
+    clfn="quicksight";descfn="list_folder_memberships";topkey='FolderMemberships';key="FolderMembershipId";filterid=key
 elif type == "aws_quicksight_group":
+    clfn="quicksight";descfn="list_groups";topkey='Groups';key="GroupName";filterid=key
 elif type == "aws_quicksight_group_membership":
+    clfn="quicksight";descfn="list_group_memberships";topkey='GroupMemberships';key="GroupMembershipId";filterid=key
 elif type == "aws_quicksight_iam_policy_assignment":
+    clfn="quicksight";descfn="list_iam_policy_assignments";topkey='IamPolicyAssignments';key="AssignmentName";filterid=key
 elif type == "aws_quicksight_ingestion":
+    clfn="quicksight";descfn="list_ingestions";topkey='Ingestions';key="IngestionId";filterid=key
 elif type == "aws_quicksight_namespace":
+    clfn="quicksight";descfn="list_namespaces";topkey='Namespaces';key="Namespace";filterid=key
 elif type == "aws_quicksight_refresh_schedule":
+    clfn="quicksight";descfn="list_refresh_schedules";topkey='RefreshSchedules';key="ScheduleId";filterid=key
 elif type == "aws_quicksight_template":
+    clfn="quicksight";descfn="list_templates";topkey='Templates';key="TemplateId";filterid=key
 elif type == "aws_quicksight_template_alias":
+    clfn="quicksight";descfn="list_template_aliases";topkey='TemplateAliases';key="AliasName";filterid=key
 elif type == "aws_quicksight_theme":
+    clfn="quicksight";descfn="list_themes";topkey='Themes';key="ThemeId";filterid=key
 elif type == "aws_quicksight_user":
+    clfn="quicksight";descfn="list_users";topkey='Users';key="UserName";filterid=key
 elif type == "aws_quicksight_vpc_connection":
+    clfn="quicksight";descfn="list_vpc_connections";topkey='VpcConnections';key="VpcConnectionId";filterid=key
 elif type == "aws_ram_principal_association":
+    clfn="ram";descfn="list_principal_associations";topkey="PrincipalAssociations";key="PrincipalAssociationId";filterid=key
 elif type == "aws_ram_resource_association":
+    clfn="ram";descfn="list_resource_associations";topkey="ResourceAssociations";key="ResourceAssociationId";filterid=key
 elif type == "aws_ram_resource_share":
+    clfn="ram";descfn="list_resource_shares";topkey="ResourceShares";key="ResourceShareArn";filterid=key
 elif type == "aws_ram_resource_share_accepter":
+    clfn="ram";descfn="list_resource_share_accepters";topkey="ResourceShareAccepters";key="ResourceShareAccepterArn";filterid=key
 elif type == "aws_ram_sharing_with_organization":
-
+    clfn="ram";descfn="list_sharing_accounts";topkey="AccountIds";key="AccountId";filterid=key    
 elif type == "aws_rbin_rule":
     clfn="route53resolver";descfn="list_resolver_rules";topkey="ResolverRules";key="Id";filterid=key
 elif type == "aws_rds_certificate":
     clfn="rds";descfn="describe_certificates";topkey="Certificates";key="CertificateIdentifier";filterid=key
-
-elif type == "aws_rds_cluster": clfn="rds";descfn="describe_db_clusters";topkey="DBClusters";key="DBClusterIdentifier";filterid=key
+elif type == "aws_rds_cluster": 
+    clfn="rds";descfn="describe_db_clusters";topkey="DBClusters";key="DBClusterIdentifier";filterid=key
 elif type == "aws_rds_cluster_activity_stream": 
     clfn="rds";descfn="describe_db_cluster_activity_stream";topkey="ActivityStream";key="ActivityStreamId";filterid=key
 elif type == "aws_rds_cluster_endpoint":
@@ -1708,7 +2028,6 @@ elif type == "aws_rds_orderable_db_instance":
     clfn="rds";descfn="describe_orderable_db_instance_options";topkey="OrderableDBInstanceOptions";key="Engine";filterid=key
 elif type == "aws_rds_reserved_instance":
     clfn="rds";descfn="describe_reserved_db_instances";topkey="ReservedDBInstances";key="ReservedDBInstanceId";filterid=key
-
 elif type == "aws_rds_reserved_instance_offering":
     clfn="rds";descfn="describe_reserved_db_instance_offerings";topkey="ReservedDBInstanceOfferings";key="ReservedDBInstancesOfferingId";filterid=key
 elif type == "aws_redshift_authentication_profile":
@@ -1719,7 +2038,6 @@ elif type == "aws_redshift_cluster_credentials":
     clfn="redshift";descfn="describe_cluster_credentials";topkey="ClusterCredentials";key="DbUser";filterid=key
 elif type == "aws_redshift_cluster_iam_roles":
     clfn="redshift";descfn="describe_cluster_iam_roles";topkey="ClusterIamRoles";key="ClusterIdentifier";filterid=key
-
 elif type == "aws_redshift_cluster_snapshot":
     clfn="redshift";descfn="describe_cluster_snapshots";topkey="Snapshots";key="SnapshotIdentifier";filterid=key
 elif type == "aws_redshift_endpoint_access":
@@ -1776,7 +2094,6 @@ elif type == "aws_regions":
     clfn="ec2";descfn="describe_regions";topkey="Regions";key="RegionName";filterid=key
 elif type == "aws_resourceexplorer2_index":
     clfn="resource-explorer2";descfn="list_indices";topkey="Indices";key="Name";filterid=key
-
 elif type == "aws_resourceexplorer2_view":
     clfn="resource-explorer2";descfn="list_views";topkey="Views";key="Name";filterid=key
 elif type == "aws_resourcegroups_group":

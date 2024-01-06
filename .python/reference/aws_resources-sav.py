@@ -2868,5 +2868,5 @@ elif type == "aws_xray_group":
     clfn="xray";descfn="get_group";topkey="Group";key="GroupName";filterid=key
 elif type == "aws_xray_sampling_rule":
     clfn="xray";descfn="get_sampling_rules";topkey="SamplingRuleRecords";key="SamplingRuleRecord";filterid=key
-
+## END ##
 

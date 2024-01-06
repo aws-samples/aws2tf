@@ -361,7 +361,6 @@ def resource_data(type,id):
         clfn="vpc-lattice";descfn="list_target_groups";topkey="items";key="id";filterid="name"  
         if id is not None and "tg-" in id: filterid=key
 
-
 ### EKS
     elif type == "aws_eks_cluster": 
         clfn="eks";descfn="list_clusters";topkey="clusters";key="name";filterid=key  
@@ -373,7 +372,6 @@ def resource_data(type,id):
         clfn="eks";descfn="list_addons";topkey="addons";key="clusterName";filterid=key  
     elif type == "aws_eks_identity_provider_config": 
         clfn="eks";descfn="list_identity_provider_configs";topkey="identityProviderConfigs";key="clusterName";filterid=key
-
 ### KMS
     elif type == "aws_kms_key": 
         clfn="kms";descfn="list_keys";topkey="Keys";key="KeyId";filterid="KeyArn"
@@ -408,29 +406,7 @@ def resource_data(type,id):
     elif type == "aws_lb": 
         clfn="elbv2";descfn="describe_load_balancers";topkey="LoadBalancers";key="Names";filterid=key
 
-   #if type == "aws_target_group": return 'TargetGroups', ec2client.describe_target_groups, "TargetGroupName"
-
-      # 'TransitGatewayAttachments':ec2client.describe_transit_gateway_attachments,
-   #if type == "aws_transit_gateway": return 'TransitGateways', ec2client.describe_transit_gateways, "TransitGatewayId"
-   #if type == "aws_transit_gateway_connect_peer": return 'TransitGatewayConnectPeers', ec2client.describe_transit_gateway_connect_peers, "TransitGatewayConnectPeerId"
-   #if type == "aws_transit_gateway_connect": return 'TransitGatewayConnects', ec2client.describe_transit_gateway_connects, "TransitGatewayConnectId"
-   #if type == "aws_transit_gateway_multicast_domain": return 'TransitGatewayMulticastDomains', ec2client.describe_transit_gateway_multicast_domains, "TransitGatewayMulticastDomainId"
-   #if type == "aws_transit_gateway_vpc_attachment": return 'TransitGatewayVpcAttachments', ec2client.describe_transit_gateway_vpc_attachments, "TransitGatewayAttachmentId"
-   #if type == "aws_transit_gateway_vpn": return 'TransitGatewayVpns', ec2client.describe_transit_gateway_vpns, "TransitGatewayVpnId"
-   #if type == "aws_transit_gateway_route_table": return 'TransitGatewayRouteTables', ec2client.describe_transit_gateway_route_tables, "TransitGatewayRouteTableId"
-   #if type == "aws_transit_gateway_route_table_vpc_association": return 'TransitGatewayRouteTableVpcAssociations', ec2client.describe_transit_gateway_route_table_vpc_associations, "TransitGatewayAttachmentId"
-   #if type == "aws_transit_gateway_route_table_propagation": return 'TransitGatewayRouteTablePropagations', ec2client.describe_transit_gateway_route_table_propagations, "TransitGatewayAttachmentId"
-   #if type == "aws_transit_gateway_peering_attachment": return 'TransitGatewayPeeringAttachments', ec2client.describe_transit_gateway_peering_attachments, "TransitGatewayAttachmentId"
-   #if type == "aws_transit_gateway_multicast_group": return 'TransitGatewayMulticastGroups', ec2client.describe_transit_gateway_multicast_groups, "TransitGatewayMulticastDomainId"
-   #if type == "aws_transit_gateway_multicast_group_source": return 'TransitGatewayMulticastGroupSources', ec2client.describe_transit_gateway_multicast_group_sources, "TransitGatewayMulticastDomainId"
-   #if type == "aws_transit_gateway_multicast_group_member": return 'TransitGatewayMulticastGroupMembers', ec2client.describe_transit_gateway_multicast_group_members, "TransitGatewayMulticastDomainId"
-   #if type == "aws_transit_gateway_attachment": return 'TransitGatewayAttachments', ec2client.describe_transit_gateway_attachments, "TransitGatewayAttachmentId"
-   #if type == "aws_transit_gateway_route_table": return 'TransitGatewayRouteTables', ec2client.describe_transit_gateway_route_tables, "TransitGatewayRouteTableId"
-      
-   #if type == "aws_volume": return 'VolumeAttachments', ec2client.describe_volumes, "VolumeId"
-
-   #if type == "aws_vpn_gateway": return 'VpnGateways', ec2client.describe_vpn_gateways, "VpnGatewayId"
-   #if type == "aws_vpn_connection": return 'VpnConnections', ec2client.describe_vpn_connections, "VpnConnectionId", "vpc-id"
+   
 
     elif type == "aws_redshiftserverless_workgroup": 
         clfn="redshift-serverless";descfn="get_workgroup";topkey="workgroup";key="workgroupName";filterid=key
@@ -476,8 +452,7 @@ def resource_data(type,id):
         clfn="events";descfn="list_rules";topkey="Rules";key="Name";filterid=key
 
 
-## auto generated:
-
+## START AUTOGEN: 
 
     elif type == "aws_accessanalyzer_analyzer":
         clfn="accessanalyzer";descfn="list_analyzers";topkey='AnalyzerList';key="Name";filterid=key
@@ -3346,7 +3321,7 @@ def resource_data(type,id):
         clfn="xray";descfn="get_group";topkey="Group";key="GroupName";filterid=key
     elif type == "aws_xray_sampling_rule":
         clfn="xray";descfn="get_sampling_rules";topkey="SamplingRuleRecords";key="SamplingRuleRecord";filterid=key
-    ## END ##
+    ## END AUTOGEN ##
 
 
 

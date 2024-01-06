@@ -734,157 +734,308 @@ elif type == "aws_docdb_cluster_instance":
 elif type == "aws_docdb_cluster_parameter_group":
     clfn="docdb";descfn="describe_db_cluster_parameter_groups";topkey='DBClusterParameterGroups';key="DBClusterParameterGroupName";filterid=key
 elif type == "aws_docdb_cluster_snapshot":
-
+    clfn="docdb";descfn="describe_db_cluster_snapshots";topkey='DBClusterSnapshots';key="DBClusterSnapshotIdentifier";filterid=key
 elif type == "aws_docdb_event_subscription":
+    clfn="docdb";descfn="describe_event_subscriptions";topkey='EventSubscriptionsList';key="SubscriptionName";filterid=key
 elif type == "aws_docdb_global_cluster":
+    clfn="docdb";descfn="describe_global_clusters";topkey='GlobalClusters';key="GlobalClusterIdentifier";filterid=key
 elif type == "aws_docdb_subnet_group":
+    clfn="docdb";descfn="describe_db_subnet_groups";topkey='DBSubnetGroups';key="DBSubnetGroupName";filterid=key
 elif type == "aws_docdbelastic_cluster":
+    clfn="docdbelastic";descfn="describe_clusters";topkey='Clusters';key="ClusterName";filterid=key
 elif type == "aws_dx_bgp_peer":
+    clfn="directconnect";descfn="describe_bgp_peers";topkey='BgpPeers';key="BgpPeerId";filterid=key
 elif type == "aws_dx_connection":
+    clfn="directconnect";descfn="describe_connections";topkey='Connections';key="ConnectionId";filterid=key
 elif type == "aws_dx_connection_association":
+    clfn="directconnect";descfn="describe_connection_associations";topkey='ConnectionAssociations';key="ConnectionId";filterid=key
 elif type == "aws_dx_connection_confirmation":
+    clfn="directconnect";descfn="describe_confirmations";topkey='Confirmations';key="ConfirmationToken";filterid=key
 elif type == "aws_dx_gateway":
+    clfn="directconnect";descfn="describe_gateways";topkey='Gateways';key="GatewayId";filterid=key
 elif type == "aws_dx_gateway_association":
+    clfn="directconnect";descfn="describe_gateway_associations";topkey='GatewayAssociations';key="GatewayId";filterid=key
 elif type == "aws_dx_gateway_association_proposal":
+    clfn="directconnect";descfn="describe_gateway_association_proposals";topkey='GatewayAssociationProposals';key="GatewayId";filterid=key
 elif type == "aws_dx_hosted_connection":
+    clfn="directconnect";descfn="describe_gateway_association_proposals";topkey='GatewayAssociationProposals';key="ProposalId";filterid=key
 elif type == "aws_dx_hosted_private_virtual_interface":
+    clfn="directconnect";descfn="describe_hosted_private_virtual_interfaces";topkey='VirtualInterfaces';key="VirtualInterfaceId";filterid=key
 elif type == "aws_dx_hosted_private_virtual_interface_<wbr=":
+    clfn="directconnect";descfn="describe_hosted_private_virtual_interfaces";topkey='VirtualInterfaces';key="VirtualInterfaceId";filterid=key
 elif type == "aws_dx_hosted_public_virtual_interface":
+    clfn="directconnect";descfn="describe_hosted_public_virtual_interfaces";topkey='VirtualInterfaces';key="VirtualInterfaceId";filterid=key
 elif type == "aws_dx_hosted_public_virtual_interface_=":
+    clfn="directconnect";descfn="describe_hosted_public_virtual_interfaces";topkey='VirtualInterfaces';key="VirtualInterfaceId";filterid=key
 elif type == "aws_dx_hosted_transit_virtual_interface":
+    clfn="directconnect";descfn="describe_hosted_transit_virtual_interfaces";topkey='VirtualInterfaces';key="VirtualInterfaceId";filterid=key
 elif type == "aws_dx_hosted_transit_virtual_interface_<wbr=":
+    clfn="directconnect";descfn="describe_hosted_transit_virtual_interfaces";topkey='VirtualInterfaces';key="VirtualInterfaceId";filterid=key
 elif type == "aws_dx_lag":
+    clfn="directconnect";descfn="describe_lags";topkey='Lags';key="LagId";filterid=key
 elif type == "aws_dx_macsec_key_association":
+    clfn="directconnect";descfn="describe_macsec_key_associations";topkey='MacsecKeyAssociations';key="AssociationId";filterid=key
 elif type == "aws_dx_private_virtual_interface":
+    clfn="directconnect";descfn="describe_private_virtual_interfaces";topkey='VirtualInterfaces';key="VirtualInterfaceId";filterid=key
 elif type == "aws_dx_public_virtual_interface":
+    clfn="directconnect";descfn="describe_public_virtual_interfaces";topkey='VirtualInterfaces';key="VirtualInterfaceId";filterid=key
 elif type == "aws_dx_transit_virtual_interface":
+    clfn="directconnect";descfn="describe_transit_virtual_interfaces";topkey='VirtualInterfaces';key="VirtualInterfaceId";filterid=key
 elif type == "aws_dynamodb_contributor_insights":
+    clfn="dynamodb";descfn="describe_contributor_insights";topkey='ContributorInsightsList';key="ContributorInsightsArn";filterid=key
 elif type == "aws_dynamodb_global_table":
+    clfn="dynamodb";descfn="describe_global_tables";topkey='GlobalTables';key="GlobalTableName";filterid=key
 elif type == "aws_dynamodb_kinesis_streaming_destination":
+    clfn="dynamodb";descfn="describe_kinesis_streaming_destination";topkey='KinesisStreamingDestination';key="TableName";filterid=key
 elif type == "aws_dynamodb_table":
+    clfn="dynamodb";descfn="describe_table";topkey='Table';key="TableName";filterid=key
 elif type == "aws_dynamodb_table_item":
+    clfn="dynamodb";descfn="describe_table";topkey='Table';key="TableName";filterid=key
 elif type == "aws_dynamodb_table_replica":
+    clfn="dynamodb";descfn="describe_table_replica_auto_scaling";topkey='TableReplicaAutoScalingDescription';key="TableName";filterid=key
 elif type == "aws_dynamodb_tag":
+    clfn="dynamodb";descfn="list_tags_of_resource";topkey='Tags';key="Key";filterid=key
 elif type == "aws_ebs_default_kms_key":
+    clfn="ebs";descfn="describe_default_kms_key";topkey='DefaultKmsKeyId';key="DefaultKmsKeyId";filterid=key
 elif type == "aws_ebs_encryption_by_default":
+    clfn="ebs";descfn="describe_ebs_encryption_by_default";topkey='EbsEncryptionByDefault';key="EbsEncryptionByDefault";filterid=key
 elif type == "aws_ebs_snapshot":
+    clfn="ebs";descfn="describe_snapshots";topkey='Snapshots';key="SnapshotId";filterid=key
 elif type == "aws_ebs_snapshot_copy":
+    clfn="ebs";descfn="describe_snapshot_copy_grants";topkey='SnapshotCopyGrants';key="SnapshotCopyGrantName";filterid=key
 elif type == "aws_ebs_snapshot_import":
+    clfn="ebs";descfn="describe_snapshot_import_tasks";topkey='SnapshotTasks';key="SnapshotTaskIdentifier";filterid=key
 elif type == "aws_ebs_volume":
+    clfn="ebs";descfn="describe_volumes";topkey='Volumes';key="VolumeId";filterid=key
 elif type == "aws_ec2_availability_zone_group":
+    clfn="ec2";descfn="describe_availability_zone_groups";topkey='AvailabilityZoneGroups';key="GroupName";filterid=key
 elif type == "aws_ec2_capacity_reservation":
+    clfn="ec2";descfn="describe_capacity_reservations";topkey='CapacityReservations';key="CapacityReservationId";filterid=key
 elif type == "aws_ec2_carrier_gateway":
+    clfn="ec2";descfn="describe_carrier_gateways";topkey='CarrierGateways';key="CarrierGatewayId";filterid=key
 elif type == "aws_ec2_client_vpn_authorization_rule":
+    clfn="ec2";descfn="describe_client_vpn_authorization_rules";topkey='AuthorizationRules';key="ClientVpnEndpointId";filterid=key
 elif type == "aws_ec2_client_vpn_endpoint":
+    clfn="ec2";descfn="describe_client_vpn_endpoints";topkey='ClientVpnEndpoints';key="ClientVpnEndpointId";filterid=key
 elif type == "aws_ec2_client_vpn_network_association":
+    clfn="ec2";descfn="describe_client_vpn_network_associations";topkey='Associations';key="ClientVpnEndpointId";filterid=key
 elif type == "aws_ec2_client_vpn_route":
+    clfn="ec2";descfn="describe_client_vpn_routes";topkey='Routes';key="ClientVpnEndpointId";filterid=key
 elif type == "aws_ec2_coip_pool":
+    clfn="ec2";descfn="describe_coip_pools";topkey='CoipPools';key="CoipPoolId";filterid=key
 elif type == "aws_ec2_fleet":
+    clfn="ec2";descfn="describe_fleets";topkey='Fleets';key="FleetId";filterid=key
 elif type == "aws_ec2_host":
+    clfn="ec2";descfn="describe_hosts";topkey='Hosts';key="HostId";filterid=key
 elif type == "aws_ec2_image_block_public_access":
+    clfn="ec2";descfn="describe_image_attribute";topkey='ImageAttribute';key="ImageId";filterid=key
 elif type == "aws_ec2_instance_connect_endpoint":
+    clfn="ec2";descfn="describe_instance_connect_endpoints";topkey='InstanceConnectEndpoints';key="InstanceConnectEndpointId";filterid=key
 elif type == "aws_ec2_instance_state":
+    clfn="ec2";descfn="describe_instance_status";topkey='InstanceStatuses';key="InstanceId";filterid=key
 elif type == "aws_ec2_local_gateway":
+    clfn="ec2";descfn="describe_local_gateways";topkey='LocalGateways';key="LocalGatewayId";filterid=key
 elif type == "aws_ec2_local_gateway_route":
+    clfn="ec2";descfn="describe_local_gateway_routes";topkey='LocalGatewayRoutes';key="LocalGatewayRouteTableId";filterid=key
 elif type == "aws_ec2_local_gateway_route_table":
+    clfn="ec2";descfn="describe_local_gateway_route_tables";topkey='LocalGatewayRouteTables';key="LocalGatewayRouteTableId";filterid=key
 elif type == "aws_ec2_local_gateway_route_table_vpc_<=":
+    clfn="ec2";descfn="describe_local_gateway_route_tables";topkey='LocalGatewayRouteTables';key="LocalGatewayRouteTableId";filterid=key
 elif type == "aws_ec2_local_gateway_route_tables":
+    clfn="ec2";descfn="describe_local_gateway_route_tables";topkey='LocalGatewayRouteTables';key="LocalGatewayRouteTableId";filterid=key
 elif type == "aws_ec2_local_gateway_virtual_interface":
+    clfn="ec2";descfn="describe_local_gateway_virtual_interfaces";topkey='LocalGatewayVirtualInterfaces';key="LocalGatewayVirtualInterfaceId";filterid=key
 elif type == "aws_ec2_local_gateway_virtual_interface_<wbr=":
+    clfn="ec2";descfn="describe_local_gateway_virtual_interfaces";topkey='LocalGatewayVirtualInterfaces';key="LocalGatewayVirtualInterfaceId";filterid=key
 elif type == "aws_ec2_local_gateways":
+    clfn="ec2";descfn="describe_local_gateways";topkey='LocalGateways';key="LocalGatewayId";filterid=key
 elif type == "aws_ec2_managed_prefix_list":
+    clfn="ec2";descfn="describe_managed_prefix_lists";topkey='PrefixLists';key="PrefixListId";filterid=key
 elif type == "aws_ec2_managed_prefix_list_entry":
+    clfn="ec2";descfn="describe_managed_prefix_list_entries";topkey='Entries';key="PrefixListId";filterid=key
 elif type == "aws_ec2_managed_prefix_lists":
+    clfn="ec2";descfn="describe_managed_prefix_lists";topkey='PrefixLists';key="PrefixListId";filterid=key
 elif type == "aws_ec2_subnet_cidr_reservation":
+    clfn="ec2";descfn="describe_subnet_cidr_reservations";topkey='SubnetCidrReservations';key="SubnetCidrReservationId";filterid=key
 elif type == "aws_ec2_tag":
+    clfn="ec2";descfn="describe_tags";topkey='Tags';key="ResourceId";filterid=key
 elif type == "aws_ec2_traffic_mirror_filter":
+    clfn="ec2";descfn="describe_traffic_mirror_filters";topkey='TrafficMirrorFilters';key="TrafficMirrorFilterId";filterid=key
 elif type == "aws_ec2_traffic_mirror_filter_rule":
+    clfn="ec2";descfn="describe_traffic_mirror_filter_rules";topkey='TrafficMirrorFilterRules';key="TrafficMirrorFilterRuleId";filterid=key
 elif type == "aws_ec2_traffic_mirror_session":
+    clfn="ec2";descfn="describe_traffic_mirror_sessions";topkey='TrafficMirrorSessions';key="TrafficMirrorSessionId";filterid=key
 elif type == "aws_ec2_traffic_mirror_target":
+    clfn="ec2";descfn="describe_traffic_mirror_targets";topkey='TrafficMirrorTargets';key="TrafficMirrorTargetId";filterid=key
 elif type == "aws_ec2_transit_gateway":
+    clfn="ec2";descfn="describe_transit_gateways";topkey='TransitGateways';key="TransitGatewayId";filterid=key
 elif type == "aws_ec2_transit_gateway_attachment":
+    clfn="ec2";descfn="describe_transit_gateway_attachments";topkey='TransitGatewayAttachments';key="TransitGatewayAttachmentId";filterid=key
 elif type == "aws_ec2_transit_gateway_attachments":
+    clfn="ec2";descfn="describe_transit_gateway_attachments";topkey='TransitGatewayAttachments';key="TransitGatewayAttachmentId";filterid=key
 elif type == "aws_ec2_transit_gateway_connect":
+    clfn="ec2";descfn="describe_transit_gateway_connects";topkey='TransitGatewayConnects';key="TransitGatewayConnectId";filterid=key
 elif type == "aws_ec2_transit_gateway_connect_peer":
+    clfn="ec2";descfn="describe_transit_gateway_connect_peers";topkey='TransitGatewayConnectPeers';key="TransitGatewayConnectPeerId";filterid=key
 elif type == "aws_ec2_transit_gateway_dx_gateway_atta=":
+    clfn="ec2";descfn="describe_transit_gateway_dx_gateway_attachments";topkey='TransitGatewayDxGatewayAttachments';key="TransitGatewayDxGatewayAttachmentId";filterid=key
 elif type == "aws_ec2_transit_gateway_multicast_domain":
+    clfn="ec2";descfn="describe_transit_gateway_multicast_domains";topkey='TransitGatewayMulticastDomains';key="TransitGatewayMulticastDomainId";filterid=key
 elif type == "aws_ec2_transit_gateway_multicast_domain_<wb=":
+    clfn="ec2";descfn="describe_transit_gateway_multicast_domains";topkey='TransitGatewayMulticastDomains';key="TransitGatewayMulticastDomainId";filterid=key
 elif type == "aws_ec2_transit_gateway_multicast_group_<wbr=":
+    clfn="ec2";descfn="describe_transit_gateway_multicast_groups";topkey='TransitGatewayMulticastGroups';key="TransitGatewayMulticastGroupId";filterid=key
 elif type == "aws_ec2_transit_gateway_peering_attachment":
+    clfn="ec2";descfn="describe_transit_gateway_peering_attachments";topkey='TransitGatewayPeeringAttachments';key="TransitGatewayPeeringAttachmentId";filterid=key
 elif type == "aws_ec2_transit_gateway_peering_attachment_<=":
+    clfn="ec2";descfn="describe_transit_gateway_peering_attachments";topkey='TransitGatewayPeeringAttachments';key="TransitGatewayPeeringAttachmentId";filterid=key
 elif type == "aws_ec2_transit_gateway_policy_table":
+    clfn="ec2";descfn="describe_transit_gateway_policy_tables";topkey='TransitGatewayPolicyTables';key="TransitGatewayPolicyTableId";filterid=key
 elif type == "aws_ec2_transit_gateway_policy_table_as=":
+    clfn="ec2";descfn="describe_transit_gateway_policy_table_associations";topkey='TransitGatewayPolicyTableAssociations';key="TransitGatewayPolicyTableAssociationId";filterid=key
 elif type == "aws_ec2_transit_gateway_prefix_list_ref=":
+    clfn="ec2";descfn="describe_transit_gateway_prefix_list_references";topkey='TransitGatewayPrefixListReferences';key="TransitGatewayPrefixListReferenceId";filterid=key
 elif type == "aws_ec2_transit_gateway_route":
+    clfn="ec2";descfn="describe_transit_gateway_routes";topkey='TransitGatewayRoutes';key="TransitGatewayRouteId";filterid=key
 elif type == "aws_ec2_transit_gateway_route_table":
+    clfn="ec2";descfn="describe_transit_gateway_route_tables";topkey='TransitGatewayRouteTables';key="TransitGatewayRouteTableId";filterid=key
 elif type == "aws_ec2_transit_gateway_route_table_ass=":
+    clfn="ec2";descfn="describe_transit_gateway_route_table_associations";topkey='TransitGatewayRouteTableAssociations';key="TransitGatewayRouteTableAssociationId";filterid=key
 elif type == "aws_ec2_transit_gateway_route_table_pro=":
+    clfn="ec2";descfn="describe_transit_gateway_route_table_propagations";topkey='TransitGatewayRouteTablePropagations';key="TransitGatewayRouteTablePropagationId";filterid=key
 elif type == "aws_ec2_transit_gateway_route_table_rou=":
+    clfn="ec2";descfn="describe_transit_gateway_route_tables";topkey='TransitGatewayRouteTables';key="TransitGatewayRouteTableId";filterid=key
 elif type == "aws_ec2_transit_gateway_route_tables":
+    clfn="ec2";descfn="describe_transit_gateway_route_tables";topkey='TransitGatewayRouteTables';key="TransitGatewayRouteTableId";filterid=key
 elif type == "aws_ec2_transit_gateway_vpc_attachment":
+    clfn="ec2";descfn="describe_transit_gateway_vpc_attachments";topkey='TransitGatewayVpcAttachments';key="TransitGatewayVpcAttachmentId";filterid=key
 elif type == "aws_ec2_transit_gateway_vpc_attachment_=":
+    clfn="ec2";descfn="describe_transit_gateway_vpc_attachments";topkey='TransitGatewayVpcAttachments';key="TransitGatewayVpcAttachmentId";filterid=key
 elif type == "aws_ec2_transit_gateway_vpc_attachments":
+    clfn="ec2";descfn="describe_transit_gateway_vpc_attachments";topkey='TransitGatewayVpcAttachments';key="TransitGatewayVpcAttachmentId";filterid=key
 elif type == "aws_ec2_transit_gateway_vpn_attachment":
+    clfn="ec2";descfn="describe_transit_gateway_vpn_attachments";topkey='TransitGatewayVpnAttachments';key="TransitGatewayVpnAttachmentId";filterid=key
 elif type == "aws_ecr_authorization_token":
+    clfn="ecr";descfn="describe_authorization_tokens";topkey='authorizationTokens';key="authorizationTokenId";filterid=key
 elif type == "aws_ecr_image":
+    clfn="ecr";descfn="describe_images";topkey='images';key="imageId";filterid=key
 elif type == "aws_ecr_lifecycle_policy":
+    clfn="ecr";descfn="describe_lifecycle_policy";topkey='lifecyclePolicyText';key="lifecyclePolicyText";filterid=key
 elif type == "aws_ecr_pull_through_cache_rule":
+    clfn="ecr";descfn="describe_pull_through_cache_rules";topkey='pullThroughCacheRules';key="registryId";filterid=key
 elif type == "aws_ecr_registry_policy":
+    clfn="ecr";descfn="describe_registry_policy";topkey='registryPolicyText';key="registryPolicyText";filterid=key
 elif type == "aws_ecr_registry_scanning_configuration":
+    clfn="ecr";descfn="describe_registry_scanning_configuration";topkey='registryScanningConfiguration';key="registryScanningConfiguration";filterid=key
 elif type == "aws_ecr_replication_configuration":
+    clfn="ecr";descfn="describe_replication_configuration";topkey='replicationConfiguration';key="replicationConfiguration";filterid=key
 elif type == "aws_ecr_repositories":
+    clfn="ecr";descfn="describe_repositories";topkey='repositories';key="repositoryName";filterid=key
 elif type == "aws_ecr_repository":
+    clfn="ecr";descfn="describe_repositories";topkey='repositories';key="repositoryName";filterid=key
 elif type == "aws_ecr_repository_policy":
+    clfn="ecr";descfn="describe_repository_policy";topkey='policyText';key="policyText";filterid=key
 elif type == "aws_ecrpublic_authorization_token":
+    clfn="ecr";descfn="describe_authorization_tokens";topkey='authorizationTokens';key="authorizationTokenId";filterid=key
 elif type == "aws_ecrpublic_repository":
+    clfn="ecr";descfn="describe_repositories";topkey='repositories';key="repositoryName";filterid=key
 elif type == "aws_ecrpublic_repository_policy":
+    clfn="ecr";descfn="describe_repository_policy";topkey='policyText';key="policyText";filterid=key
 elif type == "aws_ecs_account_setting_default":
+    clfn="ecs";descfn="describe_account_settings";topkey='settings';key="name";filterid=key
 elif type == "aws_ecs_capacity_provider":
+    clfn="ecs";descfn="describe_capacity_providers";topkey='capacityProviders';key="name";filterid=key
 elif type == "aws_ecs_cluster":
+    clfn="ecs";descfn="describe_clusters";topkey='clusters';key="clusterName";filterid=key
 elif type == "aws_ecs_cluster_capacity_providers":
+    clfn="ecs";descfn="describe_clusters";topkey='clusters';key="clusterName";filterid=key
 elif type == "aws_ecs_container_definition":
+    clfn="ecs";descfn="describe_container_definitions";topkey='containerDefinitions';key="name";filterid=key
 elif type == "aws_ecs_service":
+    clfn="ecs";descfn="describe_services";topkey='services';key="serviceName";filterid=key
 elif type == "aws_ecs_tag":
+    clfn="ecs";descfn="list_tags_for_resource";topkey='tags';key="key";filterid=key
 elif type == "aws_ecs_task_definition":
+    clfn="ecs";descfn="describe_task_definition";topkey='taskDefinition';key="taskDefinitionArn";filterid=key
 elif type == "aws_ecs_task_execution":
+    clfn="ecs";descfn="describe_task_execution";topkey='task';key="taskArn";filterid=key
 elif type == "aws_ecs_task_set":
+    clfn="ecs";descfn="describe_task_sets";topkey='taskSets';key="id";filterid=key
 elif type == "aws_efs_access_point":
+    clfn="efs";descfn="describe_access_points";topkey='AccessPoints';key="AccessPointId";filterid=key
 elif type == "aws_efs_backup_policy":
+    clfn="efs";descfn="describe_backup_policy";topkey='BackupPolicy';key="BackupPolicy";filterid=key
 elif type == "aws_efs_file_system":
+    clfn="efs";descfn="describe_file_systems";topkey='FileSystems';key="FileSystemId";filterid=key
 elif type == "aws_efs_file_system_policy":
+    clfn="efs";descfn="describe_file_system_policy";topkey='Policy';key="Policy";filterid=key
 elif type == "aws_efs_mount_target":
+    clfn="efs";descfn="describe_mount_targets";topkey='MountTargets';key="MountTargetId";filterid=key
 elif type == "aws_efs_replication_configuration":
+    clfn="efs";descfn="describe_replication_configuration";topkey='ReplicationConfiguration';key="ReplicationConfiguration";filterid=key
 elif type == "aws_egress_only_internet_gateway":
+    clfn="ec2";descfn="describe_egress_only_internet_gateways";topkey='EgressOnlyInternetGateways';key="EgressOnlyInternetGatewayId";filterid=key
 elif type == "aws_eip":
+    clfn="ec2";descfn="describe_addresses";topkey='Addresses';key="PublicIp";filterid=key
 elif type == "aws_eip_association":
+    clfn="ec2";descfn="describe_addresses";topkey='Addresses';key="PublicIp";filterid=key
 elif type == "aws_eks_addon":
+    clfn="eks";descfn="describe_addon_versions";topkey='addonVersions';key="addonVersion";filterid=key
 elif type == "aws_eks_addon_version":
+    clfn="eks";descfn="describe_addon_versions";topkey='addonVersions';key="addonVersion";filterid=key
 elif type == "aws_eks_cluster":
+    clfn="eks";descfn="describe_cluster";topkey='cluster';key="name";filterid=key
 elif type == "aws_eks_cluster_auth":
+    clfn="eks";descfn="describe_cluster";topkey='cluster';key="name";filterid=key
 elif type == "aws_eks_fargate_profile":
+    clfn="eks";descfn="describe_fargate_profiles";topkey='fargateProfiles';key="fargateProfileName";filterid=key
 elif type == "aws_eks_identity_provider_config":
+    clfn="eks";descfn="describe_identity_provider_config";topkey='identityProviderConfig';key="identityProviderConfigName";filterid=key
 elif type == "aws_eks_node_group":
+    clfn="eks";descfn="describe_nodegroup";topkey='nodegroup';key="nodegroupName";filterid=key
 elif type == "aws_eks_pod_identity_association":
+    clfn="eks";descfn="describe_pod_identity_association";topkey='podIdentity';key="podIdentityArn";filterid=key
 elif type == "aws_elastic_beanstalk_application":
+    clfn="elasticbeanstalk";descfn="describe_applications";topkey='Applications';key="ApplicationName";filterid=key
 elif type == "aws_elastic_beanstalk_application_version":
+    clfn="elasticbeanstalk";descfn="describe_application_versions";topkey='ApplicationVersions';key="VersionLabel";filterid=key
 elif type == "aws_elastic_beanstalk_configuration_template":
+    clfn="elasticbeanstalk";descfn="describe_configuration_settings";topkey='ConfigurationSettings';key="ApplicationName";filterid=key
 elif type == "aws_elastic_beanstalk_environment":
+    clfn="elasticbeanstalk";descfn="describe_environments";topkey='Environments';key="EnvironmentName";filterid=key
 elif type == "aws_elastic_beanstalk_hosted_zone":
+    clfn="elasticbeanstalk";descfn="describe_configuration_settings";topkey='ConfigurationSettings';key="ApplicationName";filterid=key
 elif type == "aws_elastic_beanstalk_solution_stack":
+    clfn="elasticbeanstalk";descfn="describe_solution_stacks";topkey='SolutionStacks';key="SolutionStackName";filterid=key
 elif type == "aws_elasticache_cluster":
+    clfn="elasticache";descfn="describe_cache_clusters";topkey='CacheClusters';key="CacheClusterId";filterid=key
 elif type == "aws_elasticache_global_replication_group":
+    clfn="elasticache";descfn="describe_global_replication_groups";topkey='GlobalReplicationGroups';key="GlobalReplicationGroupId";filterid=key
 elif type == "aws_elasticache_parameter_group":
+    clfn="elasticache";descfn="describe_cache_parameter_groups";topkey='CacheParameterGroups';key="CacheParameterGroupName";filterid=key
 elif type == "aws_elasticache_replication_group":
+    clfn="elasticache";descfn="describe_replication_groups";topkey='ReplicationGroups';key="ReplicationGroupId";filterid=key
 elif type == "aws_elasticache_subnet_group":
+    clfn="elasticache";descfn="describe_cache_subnet_groups";topkey='CacheSubnetGroups';key="CacheSubnetGroupName";filterid=key
 elif type == "aws_elasticache_user":
+    clfn="elasticache";descfn="describe_users";topkey='Users';key="UserId";filterid=key
 elif type == "aws_elasticache_user_group":
+    clfn="elasticache";descfn="describe_user_groups";topkey='UserGroups';key="UserGroupId";filterid=key
 elif type == "aws_elasticache_user_group_association":
+    clfn="elasticache";descfn="describe_user_group_memberships";topkey='UserGroupMemberships';key="UserGroupId";filterid=key
 elif type == "aws_elasticsearch_domain":
+    clfn="es";descfn="describe_elasticsearch_domains";topkey='DomainStatusList';key="DomainName";filterid=key
 elif type == "aws_elasticsearch_domain_policy":
+    clfn="es";descfn="describe_elasticsearch_domain_policy";topkey='Policy';key="Policy";filterid=key
 elif type == "aws_elasticsearch_domain_saml_options":
+    
+
 elif type == "aws_elasticsearch_vpc_endpoint":
+    clfn="es";descfn="describe_vpc_endpoints";topkey='VpcEndpoints';key="VpcEndpointId";filterid=key
 elif type == "aws_elastictranscoder_pipeline":
+    clfn="elastictranscoder";descfn="list_pipelines";topkey='Pipelines';key="Id";filterid=key
 elif type == "aws_elastictranscoder_preset":
+
 elif type == "aws_elb":
 elif type == "aws_elb_attachment":
 elif type == "aws_elb_hosted_zone_id":

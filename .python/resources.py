@@ -614,13 +614,13 @@ def resource_data(type,id):
         clfn="appmesh";descfn="list_virtual_routers";topkey='VirtualRouters';key="VirtualRouterName";filterid=key
     elif type == "aws_appmesh_virtual_service":
         clfn="appmesh";descfn="list_virtual_services";topkey='VirtualServices';key="VirtualServiceName";filterid=key
-    elif type == "aws_apprunner_auto_scaling_configuration_ver=":
+    elif type == "aws_apprunner_auto_scaling_configuration_version":
         clfn="apprunner";descfn="list_auto_scaling_configuration_versions";topkey='AutoScalingConfigurationVersions';key="AutoScalingConfigurationVersionArn";filterid=key
     elif type == "aws_apprunner_connection":
         clfn="apprunner";descfn="list_connections";topkey='Connections';key="ConnectionArn";filterid=key
     elif type == "aws_apprunner_custom_domain_association":
         clfn="apprunner";descfn="list_custom_domain_associations";topkey='CustomDomainAssociations';key="CustomDomainAssociationArn";filterid=key
-    elif type == "aws_apprunner_default_auto_scaling_configura=":
+    elif type == "aws_apprunner_default_auto_scaling_configuration_version":
         clfn="apprunner";descfn="list_default_auto_scaling_configurations";topkey='DefaultAutoScalingConfigurations';key="DefaultAutoScalingConfigurationArn";filterid=key
     elif type == "aws_apprunner_observability_configuration":
         clfn="apprunner";descfn="list_observability_configurations";topkey='ObservabilityConfigurations';key="ObservabilityConfigurationArn";filterid=key
@@ -686,7 +686,7 @@ def resource_data(type,id):
         clfn="auditmanager";descfn="list_frameworks";topkey='Frameworks';key="Id";filterid=key
     elif type == "aws_auditmanager_framework_share":
         clfn="auditmanager";descfn="list_framework_shares";topkey='FrameworkShares';key="Id";filterid=key
-    elif type == "aws_auditmanager_organization_admin_account_=":
+    elif type == "aws_auditmanager_organization_admin_account_registration":
         clfn="auditmanager";descfn="list_organization_admin_accounts";topkey='OrganizationAdminAccounts';key="Id";filterid=key
     elif type == "aws_autoscaling_attachment":
         clfn="autoscaling";descfn="list_attachments";topkey='Attachments';key="AttachmentName";filterid=key
@@ -766,9 +766,9 @@ def resource_data(type,id):
         clfn="chime";descfn="list_voice_connector_streaming_configurations";topkey='VoiceConnectorStreamingConfigurations';key="VoiceConnectorName";filterid=key
     elif type == "aws_chime_voice_connector_termination":
         clfn="chime";descfn="list_voice_connector_termination_configurations";topkey='VoiceConnectorTerminationConfigurations';key="VoiceConnectorName";filterid=key
-    elif type == "aws_chime_voice_connector_termination_creden=":
+    elif type == "aws_chime_voice_connector_termination_credentials":
         clfn="chime";descfn="list_voice_connector_termination_credentials";topkey='VoiceConnectorTerminationCredentials';key="Name";filterid=key
-    elif type == "aws_chimesdkmediapipelines_media_insights_pipelin=":
+    elif type == "aws_chimesdkmediapipelines_media_insights_pipeline_configuration":
         clfn="chimesdkmediapipelines";descfn="list_media_insights_pipelines";topkey='MediaInsightsPipelines';key="Name";filterid=key
     elif type == "aws_chimesdkvoice_global_settings":
         clfn="chimesdkvoice";descfn="list_global_settings";topkey='GlobalSettings';key="GlobalSettingsName";filterid=key
@@ -804,7 +804,7 @@ def resource_data(type,id):
         clfn="cloudfront";descfn="list_distributions";topkey='Distributions';key="Id";filterid=key
     elif type == "aws_cloudfront_field_level_encryption_config":
         clfn="cloudfront";descfn="list_field_level_encryption_configs";topkey='FieldLevelEncryptionConfigs';key="Id";filterid=key
-    elif type == "aws_cloudfront_field_level_encryption_profil=":
+    elif type == "aws_cloudfront_field_level_encryption_profile":
         clfn="cloudfront";descfn="list_field_level_encryption_profiles";topkey='FieldLevelEncryptionProfiles';key="Id";filterid=key
     elif type == "aws_cloudfront_function":
         clfn="cloudfront";descfn="list_functions";topkey='Functions';key="FunctionId";filterid=key
@@ -910,7 +910,7 @@ def resource_data(type,id):
         clfn="codecatalyst";descfn="list_source_repositories";topkey='SourceRepositories';key="Id";filterid=key
     elif type == "aws_codecommit_approval_rule_template":
         clfn="codecommit";descfn="list_approval_rule_templates";topkey='ApprovalRuleTemplates';key="Name";filterid=key
-    elif type == "aws_codecommit_approval_rule_template_associ=":
+    elif type == "aws_codecommit_approval_rule_template_association":
         clfn="codecommit";descfn="list_associated_approval_rule_templates";topkey='AssociatedApprovalRuleTemplates';key="Name";filterid=key
     elif type == "aws_codecommit_repository":
         clfn="codecommit";descfn="list_repositories";topkey='Repositories';key="Name";filterid=key
@@ -940,7 +940,7 @@ def resource_data(type,id):
         clfn="codestarnotifications";descfn="list_notification_rules";topkey='NotificationRules';key="Name";filterid=key
     elif type == "aws_cognito_identity_pool":
         clfn="cognito";descfn="list_identity_pools";topkey='IdentityPools';key="IdentityPoolName";filterid=key
-    elif type == "aws_cognito_identity_pool_provider_principal=":
+    elif type == "aws_cognito_identity_pool_provider_principal_tag":
         clfn="cognito";descfn="list_identity_pool_roles";topkey='IdentityPoolRoles';key="IdentityPoolId";filterid=key
     elif type == "aws_cognito_identity_pool_roles_attachment":
         clfn="cognito";descfn="list_identity_pool_roles_attachments";topkey='IdentityPoolRolesAttachments';key="IdentityPoolId";filterid=key
@@ -1050,13 +1050,13 @@ def resource_data(type,id):
         clfn="datasync";descfn="list_location_s3";topkey='Locations';key="LocationArn";filterid=key
     elif type == "aws_datasync_location_efs":
         clfn="datasync";descfn="list_location_efs";topkey='Locations';key="LocationArn";filterid=key
-    elif type == "aws_datasync_location_fsx_lustre_file_s=":
+    elif type == "aws_datasync_location_fsx_lustre_file_system":
         clfn="datasync";descfn="list_location_fsx_lustre";topkey='Locations';key="LocationArn";filterid=key
-    elif type == "aws_datasync_location_fsx_ontap_file_sy=":
+    elif type == "aws_datasync_location_fsx_ontap_file_system":
         clfn="datasync";descfn="list_location_fsx_ontap";topkey='Locations';key="LocationArn";filterid=key
-    elif type == "aws_datasync_location_fsx_openzfs_file_=":
+    elif type == "aws_datasync_location_fsx_openzfs_file_system":
         clfn="datasync";descfn="list_location_fsx_openzfs";topkey='Locations';key="LocationArn";filterid=key
-    elif type == "aws_datasync_location_fsx_windows_file_=":
+    elif type == "aws_datasync_location_fsx_windows_file_system":
         clfn="datasync";descfn="list_location_fsx_windows";topkey='Locations';key="LocationArn";filterid=key
     elif type == "aws_datasync_location_hdfs":
         clfn="datasync";descfn="list_location_hdfs";topkey='Locations';key="LocationArn";filterid=key
@@ -1156,7 +1156,7 @@ def resource_data(type,id):
         clfn="ds";descfn="list_regions";topkey='Regions';key="DirectoryId";filterid=key
     elif type == "aws_directory_service_shared_directory":
         clfn="ds";descfn="list_shared_directories";topkey='SharedDirectories';key="SharedDirectoryId";filterid=key
-    elif type == "aws_directory_service_shared_directory_accep=":
+    elif type == "aws_directory_service_shared_directory_acceptor":
         clfn="ds";descfn="list_accepted_shared_directories";topkey='AcceptedSharedDirectories';key="SharedDirectoryId";filterid=key
     elif type == "aws_directory_service_trust":
         clfn="ds";descfn="list_trusts";topkey='Trusts';key="TrustId";filterid=key
@@ -1212,15 +1212,15 @@ def resource_data(type,id):
         clfn="directconnect";descfn="describe_gateway_association_proposals";topkey='GatewayAssociationProposals';key="ProposalId";filterid=key
     elif type == "aws_dx_hosted_private_virtual_interface":
         clfn="directconnect";descfn="describe_hosted_private_virtual_interfaces";topkey='VirtualInterfaces';key="VirtualInterfaceId";filterid=key
-    elif type == "aws_dx_hosted_private_virtual_interface_<wbr=":
+    elif type == "aws_dx_hosted_private_virtual_interface_accepter":
         clfn="directconnect";descfn="describe_hosted_private_virtual_interfaces";topkey='VirtualInterfaces';key="VirtualInterfaceId";filterid=key
     elif type == "aws_dx_hosted_public_virtual_interface":
         clfn="directconnect";descfn="describe_hosted_public_virtual_interfaces";topkey='VirtualInterfaces';key="VirtualInterfaceId";filterid=key
-    elif type == "aws_dx_hosted_public_virtual_interface_=":
+    elif type == "aws_dx_hosted_public_virtual_interface_accepter":
         clfn="directconnect";descfn="describe_hosted_public_virtual_interfaces";topkey='VirtualInterfaces';key="VirtualInterfaceId";filterid=key
     elif type == "aws_dx_hosted_transit_virtual_interface":
         clfn="directconnect";descfn="describe_hosted_transit_virtual_interfaces";topkey='VirtualInterfaces';key="VirtualInterfaceId";filterid=key
-    elif type == "aws_dx_hosted_transit_virtual_interface_<wbr=":
+    elif type == "aws_dx_hosted_transit_virtual_interface_accepter":
         clfn="directconnect";descfn="describe_hosted_transit_virtual_interfaces";topkey='VirtualInterfaces';key="VirtualInterfaceId";filterid=key
     elif type == "aws_dx_lag":
         clfn="directconnect";descfn="describe_lags";topkey='Lags';key="LagId";filterid=key
@@ -1284,22 +1284,18 @@ def resource_data(type,id):
         clfn="ec2";descfn="describe_instance_connect_endpoints";topkey='InstanceConnectEndpoints';key="InstanceConnectEndpointId";filterid=key
     elif type == "aws_ec2_instance_state":
         clfn="ec2";descfn="describe_instance_status";topkey='InstanceStatuses';key="InstanceId";filterid=key
-    elif type == "aws_ec2_local_gateway":
-        clfn="ec2";descfn="describe_local_gateways";topkey='LocalGateways';key="LocalGatewayId";filterid=key
+    #elif type == "aws_ec2_local_gateway":
+    #    clfn="ec2";descfn="describe_local_gateways";topkey='LocalGateways';key="LocalGatewayId";filterid=key
     elif type == "aws_ec2_local_gateway_route":
         clfn="ec2";descfn="describe_local_gateway_routes";topkey='LocalGatewayRoutes';key="LocalGatewayRouteTableId";filterid=key
-    elif type == "aws_ec2_local_gateway_route_table":
+    #elif type == "aws_ec2_local_gateway_route_table":
+    #    clfn="ec2";descfn="describe_local_gateway_route_tables";topkey='LocalGatewayRouteTables';key="LocalGatewayRouteTableId";filterid=key
+    elif type == "aws_ec2_local_gateway_route_table_vpc_association":
         clfn="ec2";descfn="describe_local_gateway_route_tables";topkey='LocalGatewayRouteTables';key="LocalGatewayRouteTableId";filterid=key
-    elif type == "aws_ec2_local_gateway_route_table_vpc_<=":
-        clfn="ec2";descfn="describe_local_gateway_route_tables";topkey='LocalGatewayRouteTables';key="LocalGatewayRouteTableId";filterid=key
-    elif type == "aws_ec2_local_gateway_route_tables":
-        clfn="ec2";descfn="describe_local_gateway_route_tables";topkey='LocalGatewayRouteTables';key="LocalGatewayRouteTableId";filterid=key
-    elif type == "aws_ec2_local_gateway_virtual_interface":
-        clfn="ec2";descfn="describe_local_gateway_virtual_interfaces";topkey='LocalGatewayVirtualInterfaces';key="LocalGatewayVirtualInterfaceId";filterid=key
-    elif type == "aws_ec2_local_gateway_virtual_interface_<wbr=":
-        clfn="ec2";descfn="describe_local_gateway_virtual_interfaces";topkey='LocalGatewayVirtualInterfaces';key="LocalGatewayVirtualInterfaceId";filterid=key
-    elif type == "aws_ec2_local_gateways":
-        clfn="ec2";descfn="describe_local_gateways";topkey='LocalGateways';key="LocalGatewayId";filterid=key
+    #elif type == "aws_ec2_local_gateway_route_tables":
+    #    clfn="ec2";descfn="describe_local_gateway_route_tables";topkey='LocalGatewayRouteTables';key="LocalGatewayRouteTableId";filterid=key
+    #elif type == "aws_ec2_local_gateway_virtual_interface":
+    #    clfn="ec2";descfn="describe_local_gateway_virtual_interfaces";topkey='LocalGatewayVirtualInterfaces';key="LocalGatewayVirtualInterfaceId";filterid=key
     elif type == "aws_ec2_managed_prefix_list":
         clfn="ec2";descfn="describe_managed_prefix_lists";topkey='PrefixLists';key="PrefixListId";filterid=key
     elif type == "aws_ec2_managed_prefix_list_entry":
@@ -1328,39 +1324,41 @@ def resource_data(type,id):
         clfn="ec2";descfn="describe_transit_gateway_connects";topkey='TransitGatewayConnects';key="TransitGatewayConnectId";filterid=key
     elif type == "aws_ec2_transit_gateway_connect_peer":
         clfn="ec2";descfn="describe_transit_gateway_connect_peers";topkey='TransitGatewayConnectPeers';key="TransitGatewayConnectPeerId";filterid=key
-    elif type == "aws_ec2_transit_gateway_dx_gateway_atta=":
+    elif type == "aws_ec2_transit_gateway_dx_gateway_attachment":
         clfn="ec2";descfn="describe_transit_gateway_dx_gateway_attachments";topkey='TransitGatewayDxGatewayAttachments';key="TransitGatewayDxGatewayAttachmentId";filterid=key
     elif type == "aws_ec2_transit_gateway_multicast_domain":
         clfn="ec2";descfn="describe_transit_gateway_multicast_domains";topkey='TransitGatewayMulticastDomains';key="TransitGatewayMulticastDomainId";filterid=key
-    elif type == "aws_ec2_transit_gateway_multicast_domain_<wb=":
+    elif type == "aws_ec2_transit_gateway_multicast_domain_association":
         clfn="ec2";descfn="describe_transit_gateway_multicast_domains";topkey='TransitGatewayMulticastDomains';key="TransitGatewayMulticastDomainId";filterid=key
-    elif type == "aws_ec2_transit_gateway_multicast_group_<wbr=":
+    elif type == "aws_ec2_transit_gateway_multicast_group_member":
+        clfn="ec2";descfn="describe_transit_gateway_multicast_groups";topkey='TransitGatewayMulticastGroups';key="TransitGatewayMulticastGroupId";filterid=key
+    elif type == "aws_ec2_transit_gateway_multicast_group_source":
         clfn="ec2";descfn="describe_transit_gateway_multicast_groups";topkey='TransitGatewayMulticastGroups';key="TransitGatewayMulticastGroupId";filterid=key
     elif type == "aws_ec2_transit_gateway_peering_attachment":
         clfn="ec2";descfn="describe_transit_gateway_peering_attachments";topkey='TransitGatewayPeeringAttachments';key="TransitGatewayPeeringAttachmentId";filterid=key
-    elif type == "aws_ec2_transit_gateway_peering_attachment_<=":
+    elif type == "aws_ec2_transit_gateway_peering_attachment_accepter":
         clfn="ec2";descfn="describe_transit_gateway_peering_attachments";topkey='TransitGatewayPeeringAttachments';key="TransitGatewayPeeringAttachmentId";filterid=key
     elif type == "aws_ec2_transit_gateway_policy_table":
         clfn="ec2";descfn="describe_transit_gateway_policy_tables";topkey='TransitGatewayPolicyTables';key="TransitGatewayPolicyTableId";filterid=key
-    elif type == "aws_ec2_transit_gateway_policy_table_as=":
+    elif type == "aws_ec2_transit_gateway_policy_table_association":
         clfn="ec2";descfn="describe_transit_gateway_policy_table_associations";topkey='TransitGatewayPolicyTableAssociations';key="TransitGatewayPolicyTableAssociationId";filterid=key
-    elif type == "aws_ec2_transit_gateway_prefix_list_ref=":
+    elif type == "aws_ec2_transit_gateway_prefix_list_reference":
         clfn="ec2";descfn="describe_transit_gateway_prefix_list_references";topkey='TransitGatewayPrefixListReferences';key="TransitGatewayPrefixListReferenceId";filterid=key
     elif type == "aws_ec2_transit_gateway_route":
         clfn="ec2";descfn="describe_transit_gateway_routes";topkey='TransitGatewayRoutes';key="TransitGatewayRouteId";filterid=key
     elif type == "aws_ec2_transit_gateway_route_table":
         clfn="ec2";descfn="describe_transit_gateway_route_tables";topkey='TransitGatewayRouteTables';key="TransitGatewayRouteTableId";filterid=key
-    elif type == "aws_ec2_transit_gateway_route_table_ass=":
+    elif type == "aws_ec2_transit_gateway_route_table_association":
         clfn="ec2";descfn="describe_transit_gateway_route_table_associations";topkey='TransitGatewayRouteTableAssociations';key="TransitGatewayRouteTableAssociationId";filterid=key
-    elif type == "aws_ec2_transit_gateway_route_table_pro=":
+    elif type == "aws_ec2_transit_gateway_route_table_propropagation":
         clfn="ec2";descfn="describe_transit_gateway_route_table_propagations";topkey='TransitGatewayRouteTablePropagations';key="TransitGatewayRouteTablePropagationId";filterid=key
-    elif type == "aws_ec2_transit_gateway_route_table_rou=":
-        clfn="ec2";descfn="describe_transit_gateway_route_tables";topkey='TransitGatewayRouteTables';key="TransitGatewayRouteTableId";filterid=key
-    elif type == "aws_ec2_transit_gateway_route_tables":
-        clfn="ec2";descfn="describe_transit_gateway_route_tables";topkey='TransitGatewayRouteTables';key="TransitGatewayRouteTableId";filterid=key
+    #elif type == "aws_ec2_transit_gateway_route_table_routes":
+    #    clfn="ec2";descfn="describe_transit_gateway_route_tables";topkey='TransitGatewayRouteTables';key="TransitGatewayRouteTableId";filterid=key
+    # elif type == "aws_ec2_transit_gateway_route_tables":
+    #     clfn="ec2";descfn="describe_transit_gateway_route_tables";topkey='TransitGatewayRouteTables';key="TransitGatewayRouteTableId";filterid=key
     elif type == "aws_ec2_transit_gateway_vpc_attachment":
         clfn="ec2";descfn="describe_transit_gateway_vpc_attachments";topkey='TransitGatewayVpcAttachments';key="TransitGatewayVpcAttachmentId";filterid=key
-    elif type == "aws_ec2_transit_gateway_vpc_attachment_=":
+    elif type == "aws_ec2_transit_gateway_vpc_attachment_accepter":
         clfn="ec2";descfn="describe_transit_gateway_vpc_attachments";topkey='TransitGatewayVpcAttachments';key="TransitGatewayVpcAttachmentId";filterid=key
     elif type == "aws_ec2_transit_gateway_vpc_attachments":
         clfn="ec2";descfn="describe_transit_gateway_vpc_attachments";topkey='TransitGatewayVpcAttachments';key="TransitGatewayVpcAttachmentId";filterid=key
@@ -1593,7 +1591,7 @@ def resource_data(type,id):
         clfn="globalaccelerator";descfn="list_accelerators";topkey='Accelerators';key="AcceleratorArn";filterid=key
     elif type == "aws_globalaccelerator_custom_routing_accelerator":
         clfn="globalaccelerator";descfn="list_accelerators";topkey='Accelerators';key="AcceleratorArn";filterid=key
-    elif type == "aws_globalaccelerator_custom_routing_endpoint_<wb=":
+    elif type == "aws_globalaccelerator_custom_routing_endpoint_group":
         clfn="globalaccelerator";descfn="list_endpoint_groups";topkey='EndpointGroups';key="EndpointGroupArn";filterid=key
     elif type == "aws_globalaccelerator_custom_routing_listener":
         clfn="globalaccelerator";descfn="list_listeners";topkey='Listeners';key="ListenerArn";filterid=key
@@ -2009,7 +2007,7 @@ def resource_data(type,id):
         clfn="lightsail";descfn="get_certificates";topkey='Certificates';key="name";filterid=key
     elif type == "aws_lightsail_container_service":
         clfn="lightsail";descfn="get_container_services";topkey='ContainerServices';key="name";filterid=key
-    elif type == "aws_lightsail_container_service_deployment_v=":
+    elif type == "aws_lightsail_container_service_deployment_version":
         clfn="lightsail";descfn="get_container_service_deployments";topkey='Deployments';key="name";filterid=key
     elif type == "aws_lightsail_database":
         clfn="lightsail";descfn="get_databases";topkey='Databases';key="name";filterid=key
@@ -2209,9 +2207,9 @@ def resource_data(type,id):
         clfn="networkmanager";descfn="list_connections";topkey='Connections';key="ConnectionId";filterid=key
     elif type == "aws_networkmanager_core_network":
         clfn="networkmanager";descfn="list_core_networks";topkey='CoreNetworks';key="CoreNetworkId";filterid=key
-    elif type == "aws_networkmanager_core_network_policy_attac=":
+    elif type == "aws_networkmanager_core_network_policy_attachment":
         clfn="networkmanager";descfn="list_core_network_policy_attachments";topkey='CoreNetworkPolicyAttachments';key="CoreNetworkPolicyAttachmentId";filterid=key
-    elif type == "aws_networkmanager_core_network_policy_docum=":
+    elif type == "aws_networkmanager_core_network_policy_documument":
         clfn="networkmanager";descfn="list_core_network_policy_documents";topkey='CoreNetworkPolicyDocuments';key="CoreNetworkPolicyDocumentId";filterid=key
     elif type == "aws_networkmanager_customer_gateway_association":
         clfn="networkmanager";descfn="list_customer_gateway_associations";topkey='CustomerGatewayAssociations';key="CustomerGatewayAssociationId";filterid=key
@@ -2231,17 +2229,17 @@ def resource_data(type,id):
         clfn="networkmanager";descfn="list_links";topkey='Links';key="LinkId";filterid=key
     elif type == "aws_networkmanager_site":
         clfn="networkmanager";descfn="list_sites";topkey='Sites';key="SiteId";filterid=key
-    elif type == "aws_networkmanager_site_to_site_vpn_att=":
+    elif type == "aws_networkmanager_site_to_site_vpn_attachment":
         clfn="networkmanager";descfn="list_site_to_site_vpn_attachments";topkey='SiteToSiteVpnAttachments';key="SiteToSiteVpnAttachmentId";filterid=key
     elif type == "aws_networkmanager_sites":
         clfn="networkmanager";descfn="list_sites";topkey='Sites';key="SiteId";filterid=key
-    elif type == "aws_networkmanager_transit_gateway_connect_p=":
+    elif type == "aws_networkmanager_transit_gateway_connect_peer_association":
         clfn="networkmanager";descfn="list_transit_gateway_connect_peers";topkey='TransitGatewayConnectPeers';key="TransitGatewayConnectPeerId";filterid=key
     elif type == "aws_networkmanager_transit_gateway_peering":
         clfn="networkmanager";descfn="list_transit_gateway_peerings";topkey='TransitGatewayPeerings';key="TransitGatewayPeeringId";filterid=key
     elif type == "aws_networkmanager_transit_gateway_registration":
         clfn="networkmanager";descfn="list_transit_gateway_registrations";topkey='TransitGatewayRegistrations';key="TransitGatewayRegistrationId";filterid=key
-    elif type == "aws_networkmanager_transit_gateway_route_tab=":
+    elif type == "aws_networkmanager_transit_gateway_route_table_attachment":
         clfn="networkmanager";descfn="list_transit_gateway_route_tables";topkey='TransitGatewayRouteTables';key="TransitGatewayRouteTableId";filterid=key
     elif type == "aws_networkmanager_vpc_attachment":
         clfn="networkmanager";descfn="list_vpc_attachments";topkey='VpcAttachments';key="VpcAttachmentId";filterid=key
@@ -2325,9 +2323,9 @@ def resource_data(type,id):
         clfn="organizations";descfn="list_organizations";topkey='Organization';key="Id";filterid=key
     elif type == "aws_organizations_organizational_unit":
         clfn="organizations";descfn="list_organizational_units";topkey='OrganizationalUnits';key="Id";filterid=key
-    elif type == "aws_organizations_organizational_unit_child_=":
+    elif type == "aws_organizations_organizational_unit_child_accounts":
         clfn="organizations";descfn="list_organizational_units";topkey='OrganizationalUnits';key="Id";filterid=key
-    elif type == "aws_organizations_organizational_unit_descendant_=":
+    elif type == "aws_organizations_organizational_unit_descendant_accounts":
         clfn="organizations";descfn="list_organizational_units";topkey='OrganizationalUnits';key="Id";filterid=key
     elif type == "aws_organizations_organizational_units":
         clfn="organizations";descfn="list_organizational_units";topkey='OrganizationalUnits';key="Id";filterid=key
@@ -2597,7 +2595,7 @@ def resource_data(type,id):
         clfn="route53";descfn="list_resolver_firewall_rules";topkey="ResolverFirewallRules";key="Id";filterid=key
     elif type == "aws_route53_resolver_query_log_config":
         clfn="route53";descfn="list_resolver_query_log_configs";topkey="ResolverQueryLogConfigs";key="Id";filterid=key
-    elif type == "aws_route53_resolver_query_log_config_a=":
+    elif type == "aws_route53_resolver_query_log_config_association":
         clfn="route53";descfn="list_resolver_query_log_config_associations";topkey="ResolverQueryLogConfigAssociations";key="Id";filterid=key
     elif type == "aws_route53_resolver_rule":
         clfn="route53";descfn="list_resolver_rules";topkey="ResolverRules";key="Id";filterid=key
@@ -2659,7 +2657,7 @@ def resource_data(type,id):
         clfn="s3";descfn="get_bucket_analytics_configuration";topkey="AnalyticsConfiguration";key="Id";filterid=key
     elif type == "aws_s3_bucket_cors_configuration":
         clfn="s3";descfn="get_bucket_cors_configuration";topkey="CORSRules";key="AllowedMethods";filterid=key
-    elif type == "aws_s3_bucket_intelligent_tiering_configurat=":
+    elif type == "aws_s3_bucket_intelligent_tiering_configuration":
         clfn="s3";descfn="get_bucket_intelligent_tiering_configuration";topkey="IntelligentTieringConfiguration";key="Id";filterid=key
     elif type == "aws_s3_bucket_inventory":
         clfn="s3";descfn="get_bucket_inventory_configuration";topkey="InventoryConfiguration";key="Id";filterid=key
@@ -2707,7 +2705,7 @@ def resource_data(type,id):
         clfn="s3control";descfn="list_access_grants";topkey="AccessGrants";key="Grantee.DisplayName";filterid=key
     elif type == "aws_s3control_access_grants_instance":
         clfn="s3control";descfn="list_access_grants";topkey="AccessGrants";key="Grantee.DisplayName";filterid=key
-    elif type == "aws_s3control_access_grants_instance_resourc=":
+    elif type == "aws_s3control_access_grants_instance_resource_policy":
         clfn="s3control";descfn="list_access_grants";topkey="AccessGrants";key="Grantee.DisplayName";filterid=key
     elif type == "aws_s3control_access_grants_location":
         clfn="s3control";descfn="list_access_grants";topkey="AccessGrants";key="Grantee.DisplayName";filterid=key
@@ -2721,11 +2719,11 @@ def resource_data(type,id):
         clfn="s3control";descfn="get_bucket_policy";topkey="Policy";key="Policy";filterid=key
     elif type == "aws_s3control_multi_region_access_point":
         clfn="s3control";descfn="list_access_points";topkey="AccessPoints";key="Name";filterid=key
-    elif type == "aws_s3control_multi_region_access_point_<wbr=":
+    elif type == "aws_s3control_multi_region_access_point_policy":
         clfn="s3control";descfn="list_access_points";topkey="AccessPoints";key="Name";filterid=key
     elif type == "aws_s3control_object_lambda_access_point":
         clfn="s3control";descfn="list_access_points";topkey="AccessPoints";key="Name";filterid=key
-    elif type == "aws_s3control_object_lambda_access_point_<wb=":
+    elif type == "aws_s3control_object_lambda_access_point_policy":
         clfn="s3control";descfn="list_access_points";topkey="AccessPoints";key="Name";filterid=key
     elif type == "aws_s3control_storage_lens_configuration":
         clfn="s3control";descfn="get_storage_lens_configuration";topkey="StorageLensConfiguration";key="Id";filterid=key
@@ -2769,7 +2767,7 @@ def resource_data(type,id):
         clfn="sagemaker";descfn="list_monitoring_schedules";topkey="MonitoringSchedules";key="MonitoringScheduleArn";filterid=key
     elif type == "aws_sagemaker_notebook_instance":
         clfn="sagemaker";descfn="list_notebook_instances";topkey="NotebookInstances";key="NotebookInstanceArn";filterid=key
-    elif type == "aws_sagemaker_notebook_instance_lifecycle_co=":
+    elif type == "aws_sagemaker_notebook_instance_lifecycle_configuration":
         clfn="sagemaker";descfn="list_notebook_instance_lifecycle_configs";topkey="NotebookInstanceLifecycleConfigs";key="NotebookInstanceLifecycleConfigArn";filterid=key
     elif type == "aws_sagemaker_pipeline":
         clfn="sagemaker";descfn="list_pipelines";topkey="Pipelines";key="PipelineArn";filterid=key
@@ -2845,7 +2843,7 @@ def resource_data(type,id):
         clfn="securitylake";descfn="describe_data_lakes";topkey="DataLakes";key="DataLakeArn";filterid=key
     elif type == "aws_serverlessapplicationrepository_application":
         clfn="serverlessrepo";descfn="list_applications";topkey="Applications";key="ApplicationId";filterid=key
-    elif type == "aws_serverlessapplicationrepository_cloudformation_sta=":
+    elif type == "aws_serverlessapplicationrepository_cloudformation_stack":
         clfn="serverlessrepo";descfn="list_application_versions";topkey="ApplicationVersions";key="ApplicationVersionId";filterid=key
     elif type == "aws_service_discovery_http_namespace":
         clfn="servicediscovery";descfn="list_http_namespaces";topkey="HttpNamespaces";key="HttpNamespaceArn";filterid=key
@@ -2931,7 +2929,7 @@ def resource_data(type,id):
         clfn="sesv2";descfn="describe_account_vdm_attributes";topkey="AccountVdmAttributes";key="AccountVdmAttributes";filterid=key
     elif type == "aws_sesv2_configuration_set":
         clfn="sesv2";descfn="describe_configuration_set";topkey="ConfigurationSet";key="ConfigurationSet";filterid=key
-    elif type == "aws_sesv2_configuration_set_event_destinatio=":
+    elif type == "aws_sesv2_configuration_set_event_destination":
         clfn="sesv2";descfn="describe_configuration_set_event_destination";topkey="EventDestination";key="EventDestination";filterid=key
     elif type == "aws_sesv2_contact_list":
         clfn="sesv2";descfn="describe_contact_list";topkey="ContactList";key="ContactList";filterid=key
@@ -2943,7 +2941,7 @@ def resource_data(type,id):
         clfn="sesv2";descfn="describe_email_identity";topkey="EmailIdentity";key="EmailIdentity";filterid=key
     elif type == "aws_sesv2_email_identity_feedback_attributes":
         clfn="sesv2";descfn="describe_email_identity_feedback_attributes";topkey="EmailIdentityFeedbackAttributes";key="EmailIdentityFeedbackAttributes";filterid=key
-    elif type == "aws_sesv2_email_identity_mail_from_attr=":
+    elif type == "aws_sesv2_email_identity_mail_from_attributes":
         clfn="sesv2";descfn="describe_email_identity_mail_from_attributes";topkey="MailFromAttributes";key="MailFromAttributes";filterid=key
     elif type == "aws_sfn_activity":
         clfn="stepfunctions";descfn="list_activities";topkey="Activities";key="ActivityArn";filterid=key
@@ -2953,17 +2951,17 @@ def resource_data(type,id):
         clfn="stepfunctions";descfn="list_state_machines";topkey="StateMachines";key="StateMachineArn";filterid=key
     elif type == "aws_sfn_state_machine_versions":
         clfn="stepfunctions";descfn="list_state_machine_versions";topkey="Versions";key="Version";filterid=key
-    elif type == "aws_shield_application_layer_automatic_respo=":
+    elif type == "aws_shield_application_layer_automatic_response":
         clfn="shield";descfn="list_application_layer_automatic_response_associations";topkey="ApplicationLayerAutomaticResponseAssociations";key="Id";filterid=key
-    elif type == "aws_shield_drt_access_log_bucket_associ=":
+    elif type == "aws_shield_drt_access_log_bucket_association":
         clfn="shield";descfn="list_drt_access_log_bucket_associations";topkey="DrtAccessLogBucketAssociations";key="Id";filterid=key
-    elif type == "aws_shield_drt_access_role_arn_associat=":
+    elif type == "aws_shield_drt_access_role_arn_association":
         clfn="shield";descfn="list_drt_access_role_arn_associations";topkey="DrtAccessRoleArnAssociations";key="Id";filterid=key
     elif type == "aws_shield_protection":
         clfn="shield";descfn="list_protections";topkey="Protections";key="Id";filterid=key
     elif type == "aws_shield_protection_group":
         clfn="shield";descfn="list_protection_groups";topkey="ProtectionGroups";key="Id";filterid=key
-    elif type == "aws_shield_protection_health_check_associati=":
+    elif type == "aws_shield_protection_health_check_association":
         clfn="shield";descfn="list_protection_health_check_associations";topkey="ProtectionHealthCheckAssociations";key="Id";filterid=key
     elif type == "aws_signer_signing_job":
         clfn="signer";descfn="list_signing_jobs";topkey="Jobs";key="JobId";filterid=key
@@ -3055,9 +3053,9 @@ def resource_data(type,id):
         clfn="ssoadmin";descfn="list_application_assignments";topkey="ApplicationAssignments";key="AccountAssignmentCreationTime";filterid=key
     elif type == "aws_ssoadmin_application_providers":
         clfn="ssoadmin";descfn="list_application_providers";topkey="ApplicationProviders";key="ApplicationProviderId";filterid=key
-    elif type == "aws_ssoadmin_customer_managed_policy_attachm=":
+    elif type == "aws_ssoadmin_customer_managed_policy_attachment":
         clfn="ssoadmin";descfn="list_customer_managed_policy_attachments";topkey="CustomerManagedPolicyAttachments";key="AccountAssignmentCreationTime";filterid=key
-    elif type == "aws_ssoadmin_instance_access_control_attribu=":
+    elif type == "aws_ssoadmin_instance_access_control_attributes":
         clfn="ssoadmin";descfn="list_instance_access_control_attribute_configuration";topkey="InstanceAccessControlAttributeConfiguration";key="AccountAssignmentCreationTime";filterid=key
     elif type == "aws_ssoadmin_instances":
         clfn="ssoadmin";descfn="list_instances";topkey="Instances";key="InstanceArn";filterid=key
@@ -3145,7 +3143,7 @@ def resource_data(type,id):
         clfn="verifiedaccess";descfn="list_instances";topkey="Instances";key="InstanceId";filterid=key
     elif type == "aws_verifiedaccess_instance_logging_configuration":
         clfn="verifiedaccess";descfn="list_instance_logging_configurations";topkey="InstanceLoggingConfigurations";key="InstanceId";filterid=key
-    elif type == "aws_verifiedaccess_instance_trust_provider_a=":
+    elif type == "aws_verifiedaccess_instance_trust_provider_attachment":
         clfn="verifiedaccess";descfn="list_instance_trust_providers";topkey="InstanceTrustProviders";key="InstanceId";filterid=key
     elif type == "aws_verifiedaccess_trust_provider":
         clfn="verifiedaccess";descfn="list_trust_providers";topkey="TrustProviders";key="TrustProviderId";filterid=key
@@ -3197,7 +3195,7 @@ def resource_data(type,id):
     #    clfn="ec2";descfn="describe_vpc_cidr_block_associations";topkey="CidrBlockAssociations";key="AssociationId";filterid=key
     elif type == "aws_vpc_ipv6_cidr_block_association":
         clfn="ec2";descfn="describe_vpc_cidr_block_associations";topkey="CidrBlockAssociations";key="AssociationId";filterid=key
-    elif type == "aws_vpc_network_performance_metric_subscript=":
+    elif type == "aws_vpc_network_performance_metric_subscription":
         clfn="ec2";descfn="describe_network_insights_path_subscriptions";topkey="NetworkInsightsPathSubscriptions";key="NetworkInsightsPathSubscriptionId";filterid=key
     elif type == "aws_vpc_peering_connection":
         clfn="ec2";descfn="describe_vpc_peering_connections";topkey="VpcPeeringConnections";key="VpcPeeringConnectionId";filterid=key

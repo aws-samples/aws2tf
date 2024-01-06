@@ -1027,174 +1027,330 @@ elif type == "aws_elasticsearch_domain":
     clfn="es";descfn="describe_elasticsearch_domains";topkey='DomainStatusList';key="DomainName";filterid=key
 elif type == "aws_elasticsearch_domain_policy":
     clfn="es";descfn="describe_elasticsearch_domain_policy";topkey='Policy';key="Policy";filterid=key
-elif type == "aws_elasticsearch_domain_saml_options":
-    
+#elif type == "aws_elasticsearch_domain_saml_options":
 
 elif type == "aws_elasticsearch_vpc_endpoint":
     clfn="es";descfn="describe_vpc_endpoints";topkey='VpcEndpoints';key="VpcEndpointId";filterid=key
 elif type == "aws_elastictranscoder_pipeline":
     clfn="elastictranscoder";descfn="list_pipelines";topkey='Pipelines';key="Id";filterid=key
 elif type == "aws_elastictranscoder_preset":
-
+    clfn="elastictranscoder";descfn="list_presets";topkey='Presets';key="Id";filterid=key
 elif type == "aws_elb":
+    clfn="elb";descfn="describe_load_balancers";topkey='LoadBalancerDescriptions';key="LoadBalancerName";filterid=key
 elif type == "aws_elb_attachment":
+    clfn="elb";descfn="describe_load_balancer_attributes";topkey='LoadBalancerAttributes';key="LoadBalancerName";filterid=key
 elif type == "aws_elb_hosted_zone_id":
+    clfn="elb";descfn="describe_load_balancers";topkey='LoadBalancerDescriptions';key="LoadBalancerName";filterid=key
 elif type == "aws_elb_service_account":
+    clfn="elb";descfn="describe_load_balancers";topkey='LoadBalancerDescriptions';key="LoadBalancerName";filterid=key
 elif type == "aws_emr_block_public_access_configuration":
+    clfn="emr";descfn="describe_block_public_access_configurations";topkey='BlockPublicAccessConfigurations';key="Id";filterid=key
 elif type == "aws_emr_cluster":
+    clfn="emr";descfn="describe_cluster";topkey='Cluster';key="Id";filterid=key
 elif type == "aws_emr_instance_fleet":
+    clfn="emr";descfn="describe_instance_fleets";topkey='InstanceFleets';key="Id";filterid=key
 elif type == "aws_emr_instance_group":
+    clfn="emr";descfn="describe_instance_groups";topkey='InstanceGroups';key="Id";filterid=key
 elif type == "aws_emr_managed_scaling_policy":
+    clfn="emr";descfn="describe_managed_scaling_policies";topkey='ManagedScalingPolicies';key="Id";filterid=key
 elif type == "aws_emr_release_labels":
+    clfn="emr";descfn="describe_release_labels";topkey='ReleaseLabels';key="Id";filterid=key
 elif type == "aws_emr_security_configuration":
+    clfn="emr";descfn="describe_security_configurations";topkey='SecurityConfigurations';key="Name";filterid=key
 elif type == "aws_emr_studio":
+    clfn="emr";descfn="describe_studios";topkey='Studios';key="Id";filterid=key
 elif type == "aws_emr_studio_session_mapping":
+    clfn="emr";descfn="describe_studio_session_mappings";topkey='SessionMappings';key="Id";filterid=key
 elif type == "aws_emr_supported_instance_types":
+    clfn="emr";descfn="list_supported_instance_types";topkey='SupportedInstanceTypes';key="InstanceType";filterid=key
 elif type == "aws_emrcontainers_job_template":
+    clfn="emrcontainers";descfn="list_job_templates";topkey='JobTemplates';key="Id";filterid=key
 elif type == "aws_emrcontainers_virtual_cluster":
+    clfn="emrcontainers";descfn="list_virtual_clusters";topkey='VirtualClusters';key="Id";filterid=key
 elif type == "aws_emrserverless_application":
+    clfn="emrserverless";descfn="list_applications";topkey='Applications';key="Id";filterid=key
 elif type == "aws_evidently_feature":
+    clfn="evidently";descfn="list_features";topkey='Features';key="Name";filterid=key
 elif type == "aws_evidently_launch":
+    clfn="evidently";descfn="list_launches";topkey='Launches';key="Name";filterid=key
 elif type == "aws_evidently_project":
+    clfn="evidently";descfn="list_projects";topkey='Projects';key="Name";filterid=key
 elif type == "aws_evidently_segment":
+    clfn="evidently";descfn="list_segments";topkey='Segments';key="Name";filterid=key
 elif type == "aws_finspace_kx_cluster":
+    clfn="finspace";descfn="list_clusters";topkey='Clusters';key="ClusterId";filterid=key
 elif type == "aws_finspace_kx_database":
+    clfn="finspace";descfn="list_databases";topkey='Databases';key="DatabaseId";filterid=key
 elif type == "aws_finspace_kx_dataview":
+    clfn="finspace";descfn="list_data_views";topkey='DataViews';key="DataViewId";filterid=key
 elif type == "aws_finspace_kx_environment":
+    clfn="finspace";descfn="list_environments";topkey='Environments';key="EnvironmentId";filterid=key
 elif type == "aws_finspace_kx_scaling_group":
+    clfn="finspace";descfn="list_scaling_groups";topkey='ScalingGroups';key="ScalingGroupId";filterid=key
 elif type == "aws_finspace_kx_user":
+    clfn="finspace";descfn="list_users";topkey='Users';key="UserId";filterid=key
 elif type == "aws_finspace_kx_volume":
+    clfn="finspace";descfn="list_volumes";topkey='Volumes';key="VolumeId";filterid=key
 elif type == "aws_fis_experiment_template":
+    clfn="fis";descfn="list_experiment_templates";topkey='ExperimentTemplates';key="Id";filterid=key
 elif type == "aws_flow_log":
+    clfn="ec2";descfn="describe_flow_logs";topkey='FlowLogs';key="FlowLogId";filterid=key
 elif type == "aws_fms_admin_account":
+    clfn="fms";descfn="list_admin_accounts";topkey='AdminAccounts';key="AdminAccountId";filterid=key
 elif type == "aws_fms_policy":
+    clfn="fms";descfn="list_policies";topkey='PolicyList';key="PolicyId";filterid=key
 elif type == "aws_fsx_backup":
+    clfn="fsx";descfn="describe_backups";topkey='Backups';key="BackupId";filterid=key
 elif type == "aws_fsx_data_repository_association":
+    clfn="fsx";descfn="describe_data_repository_associations";topkey='DataRepositoryAssociations';key="AssociationId";filterid=key
 elif type == "aws_fsx_file_cache":
+    clfn="fsx";descfn="describe_file_caches";topkey='FileCaches';key="FileCacheId";filterid=key
 elif type == "aws_fsx_lustre_file_system":
+    clfn="fsx";descfn="describe_file_systems";topkey='FileSystems';key="FileSystemId";filterid=key
 elif type == "aws_fsx_ontap_file_system":
+    clfn="fsx";descfn="describe_file_systems";topkey='FileSystems';key="FileSystemId";filterid=key
 elif type == "aws_fsx_ontap_storage_virtual_machine":
+    clfn="fsx";descfn="describe_storage_virtual_machines";topkey='StorageVirtualMachines';key="StorageVirtualMachineId";filterid=key
 elif type == "aws_fsx_ontap_storage_virtual_machines":
+    clfn="fsx";descfn="describe_storage_virtual_machines";topkey='StorageVirtualMachines';key="StorageVirtualMachineId";filterid=key
 elif type == "aws_fsx_ontap_volume":
+    clfn="fsx";descfn="describe_volumes";topkey='Volumes';key="VolumeId";filterid=key
 elif type == "aws_fsx_openzfs_file_system":
+    clfn="fsx";descfn="describe_file_systems";topkey='FileSystems';key="FileSystemId";filterid=key
 elif type == "aws_fsx_openzfs_snapshot":
+    clfn="fsx";descfn="describe_snapshots";topkey='Snapshots';key="SnapshotId";filterid=key
 elif type == "aws_fsx_openzfs_volume":
+    clfn="fsx";descfn="describe_volumes";topkey='Volumes';key="VolumeId";filterid=key
 elif type == "aws_fsx_windows_file_system":
+    clfn="fsx";descfn="describe_file_systems";topkey='FileSystems';key="FileSystemId";filterid=key
 elif type == "aws_gamelift_alias":
+    clfn="gamelift";descfn="list_aliases";topkey='Aliases';key="AliasId";filterid=key
 elif type == "aws_gamelift_build":
+    clfn="gamelift";descfn="list_builds";topkey='Builds';key="BuildId";filterid=key
 elif type == "aws_gamelift_fleet":
+    clfn="gamelift";descfn="list_fleets";topkey='Fleets';key="FleetId";filterid=key
 elif type == "aws_gamelift_game_server_group":
+    clfn="gamelift";descfn="list_game_server_groups";topkey='GameServerGroups';key="GameServerGroupId";filterid=key
 elif type == "aws_gamelift_game_session_queue":
+    clfn="gamelift";descfn="list_game_session_queues";topkey='GameSessionQueues';key="GameSessionQueueName";filterid=key
 elif type == "aws_gamelift_script":
+    clfn="gamelift";descfn="list_scripts";topkey='Scripts';key="ScriptId";filterid=key
 elif type == "aws_glacier_vault":
+    clfn="glacier";descfn="list_vaults";topkey='VaultList';key="VaultName";filterid=key
 elif type == "aws_glacier_vault_lock":
+    clfn="glacier";descfn="list_vault_locks";topkey='VaultLockList';key="VaultLockId";filterid=key
 elif type == "aws_globalaccelerator_accelerator":
+    clfn="globalaccelerator";descfn="list_accelerators";topkey='Accelerators';key="AcceleratorArn";filterid=key
 elif type == "aws_globalaccelerator_custom_routing_accelerator":
+    clfn="globalaccelerator";descfn="list_accelerators";topkey='Accelerators';key="AcceleratorArn";filterid=key
 elif type == "aws_globalaccelerator_custom_routing_endpoint_<wb=":
+    clfn="globalaccelerator";descfn="list_endpoint_groups";topkey='EndpointGroups';key="EndpointGroupArn";filterid=key
 elif type == "aws_globalaccelerator_custom_routing_listener":
+    clfn="globalaccelerator";descfn="list_listeners";topkey='Listeners';key="ListenerArn";filterid=key
 elif type == "aws_globalaccelerator_endpoint_group":
+    clfn="globalaccelerator";descfn="list_endpoint_groups";topkey='EndpointGroups';key="EndpointGroupArn";filterid=key
 elif type == "aws_globalaccelerator_listener":
+    clfn="globalaccelerator";descfn="list_listeners";topkey='Listeners';key="ListenerArn";filterid=key
 elif type == "aws_glue_catalog_database":
+    clfn="glue";descfn="list_databases";topkey='DatabaseList';key="Name";filterid=key
 elif type == "aws_glue_catalog_table":
+    clfn="glue";descfn="list_tables";topkey='TableList';key="Name";filterid=key
 elif type == "aws_glue_classifier":
+    clfn="glue";descfn="list_classifiers";topkey='Classifiers';key="Name";filterid=key
 elif type == "aws_glue_connection":
+    clfn="glue";descfn="list_connections";topkey='ConnectionList';key="Name";filterid=key
 elif type == "aws_glue_crawler":
+    clfn="glue";descfn="list_crawlers";topkey='CrawlerNames';key="Name";filterid=key
 elif type == "aws_glue_data_catalog_encryption_settings":
+    clfn="glue";descfn="get_data_catalog_encryption_settings";topkey='DataCatalogEncryptionSettings';key="CatalogId";filterid=key
 elif type == "aws_glue_data_quality_ruleset":
+    clfn="glue";descfn="list_data_quality_rulesets";topkey='RulesetNames';key="Name";filterid=key
 elif type == "aws_glue_dev_endpoint":
+    clfn="glue";descfn="list_dev_endpoints";topkey='DevEndpoints';key="EndpointName";filterid=key
 elif type == "aws_glue_job":
+    clfn="glue";descfn="list_jobs";topkey='JobNames';key="Name";filterid=key
 elif type == "aws_glue_ml_transform":
+    clfn="glue";descfn="list_ml_transforms";topkey='TransformIds';key="TransformId";filterid=key
 elif type == "aws_glue_partition":
+    clfn="glue";descfn="list_partitions";topkey='Partitions';key="PartitionValues";filterid=key
 elif type == "aws_glue_partition_index":
+    clfn="glue";descfn="list_partition_indexes";topkey='PartitionIndexNames';key="Name";filterid=key
 elif type == "aws_glue_registry":
+    clfn="glue";descfn="list_registries";topkey='Registries';key="RegistryId";filterid=key
 elif type == "aws_glue_resource_policy":
+    clfn="glue";descfn="list_resource_policies";topkey='ResourcePolicies';key="PolicyHash";filterid=key
 elif type == "aws_glue_schema":
+    clfn="glue";descfn="list_schemas";topkey='Schemas';key="SchemaId";filterid=key
 elif type == "aws_glue_script":
+    clfn="glue";descfn="list_scripts";topkey='Scripts';key="ScriptId";filterid=key
 elif type == "aws_glue_security_configuration":
+    clfn="glue";descfn="list_security_configurations";topkey='SecurityConfigurations';key="Name";filterid=key
 elif type == "aws_glue_trigger":
+    clfn="glue";descfn="list_triggers";topkey='Triggers';key="Name";filterid=key
 elif type == "aws_glue_user_defined_function":
+    clfn="glue";descfn="list_user_defined_functions";topkey='UserDefinedFunctionNames';key="Name";filterid=key
 elif type == "aws_glue_workflow":
+    clfn="glue";descfn="list_workflows";topkey='Workflows';key="Name";filterid=key
 elif type == "aws_grafana_license_association":
+    clfn="grafana";descfn="list_license_associations";topkey='LicenseAssociations';key="LicenseAssociationArn";filterid=key
 elif type == "aws_grafana_role_association":
+    clfn="grafana";descfn="list_role_associations";topkey='RoleAssociations';key="RoleAssociationArn";filterid=key
 elif type == "aws_grafana_workspace":
+    clfn="grafana";descfn="list_workspaces";topkey='Workspaces';key="WorkspaceId";filterid=key
 elif type == "aws_grafana_workspace_api_key":
+    clfn="grafana";descfn="list_workspace_api_keys";topkey='ApiKeys';key="KeyId";filterid=key
 elif type == "aws_grafana_workspace_saml_configuration":
+    clfn="grafana";descfn="list_workspace_saml_configurations";topkey='SamlConfigurations';key="SamlConfigurationId";filterid=key
 elif type == "aws_guardduty_detector":
+    clfn="guardduty";descfn="list_detectors";topkey='DetectorIds';key="DetectorId";filterid=key
 elif type == "aws_guardduty_detector_feature":
+    clfn="guardduty";descfn="list_detector_features";topkey='DetectorFeatures';key="DetectorFeatureName";filterid=key
 elif type == "aws_guardduty_filter":
+    clfn="guardduty";descfn="list_filters";topkey='FilterNames';key="FilterName";filterid=key
 elif type == "aws_guardduty_finding_ids":
+    clfn="guardduty";descfn="list_findings";topkey='FindingIds';key="FindingId";filterid=key
 elif type == "aws_guardduty_invite_accepter":
+    clfn="guardduty";descfn="list_invitation_accepters";topkey='InvitationAccepters';key="InvitationAccepterId";filterid=key
 elif type == "aws_guardduty_ipset":
+    clfn="guardduty";descfn="list_ip_sets";topkey='IpSetIds';key="IpSetId";filterid=key
 elif type == "aws_guardduty_member":
+    clfn="guardduty";descfn="list_members";topkey='Members';key="MemberId";filterid=key
 elif type == "aws_guardduty_organization_admin_account":
+    clfn="guardduty";descfn="list_organization_admin_accounts";topkey='AdminAccounts';key="AdminAccountId";filterid=key
 elif type == "aws_guardduty_organization_configuration":
+    clfn="guardduty";descfn="list_organization_configurations";topkey='OrganizationConfigurations';key="OrganizationConfigurationId";filterid=key
 elif type == "aws_guardduty_organization_configuration_feature":
+    clfn="guardduty";descfn="list_organization_configuration_features";topkey='OrganizationConfigurationFeatures';key="OrganizationConfigurationFeature";filterid=key
 elif type == "aws_guardduty_publishing_destination":
+    clfn="guardduty";descfn="list_publishing_destinations";topkey='PublishingDestinations';key="DestinationId";filterid=key
 elif type == "aws_guardduty_threatintelset":
+    clfn="guardduty";descfn="list_threat_intel_sets";topkey='ThreatIntelSetIds';key="ThreatIntelSetId";filterid=key
 elif type == "aws_iam_access_key":
+    clfn="iam";descfn="list_access_keys";topkey='AccessKeyMetadata';key="AccessKeyId";filterid=key
 elif type == "aws_iam_access_keys":
+    clfn="iam";descfn="list_access_keys";topkey='AccessKeyMetadata';key="AccessKeyId";filterid=key
 elif type == "aws_iam_account_alias":
+    clfn="iam";descfn="list_account_aliases";topkey='AccountAliases';key="AccountAlias";filterid=key
 elif type == "aws_iam_account_password_policy":
+    clfn="iam";descfn="get_account_password_policy";topkey='PasswordPolicy';key="PasswordPolicy";filterid=key
 elif type == "aws_iam_group":
+    clfn="iam";descfn="list_groups";topkey='Groups';key="GroupName";filterid=key
 elif type == "aws_iam_group_membership":
+    clfn="iam";descfn="get_group";topkey='Group';key="GroupName";filterid=key
 elif type == "aws_iam_group_policy":
+    clfn="iam";descfn="list_groups_for_user";topkey='Groups';key="GroupName";filterid=key
 elif type == "aws_iam_group_policy_attachment":
+    clfn="iam";descfn="get_group_policy";topkey='GroupPolicy';key="GroupName";filterid=key
 elif type == "aws_iam_instance_profile":
+    clfn="iam";descfn="list_instance_profiles";topkey='InstanceProfiles';key="InstanceProfileName";filterid=key
 elif type == "aws_iam_instance_profiles":
+    clfn="iam";descfn="list_instance_profiles";topkey='InstanceProfiles';key="InstanceProfileName";filterid=key
 elif type == "aws_iam_openid_connect_provider":
+    clfn="iam";descfn="list_open_id_connect_providers";topkey='OpenIDConnectProviderList';key="Arn";filterid=key
 elif type == "aws_iam_policy":
+    clfn="iam";descfn="list_policies";topkey='Policies';key="PolicyName";filterid=key
 elif type == "aws_iam_policy_attachment":
+    clfn="iam";descfn="get_policy";topkey='Policy';key="PolicyArn";filterid=key
 elif type == "aws_iam_policy_document":
-
+    clfn="iam";descfn="get_policy_version";topkey='PolicyVersion';key="PolicyArn";filterid=key
 elif type == "aws_iam_principal_policy_simulation":
+    clfn="iam";descfn="simulate_principal_policy";topkey='EvaluationResults';key="EvaluationResultIdentifier";filterid=key
 elif type == "aws_iam_role":
+    clfn="iam";descfn="list_roles";topkey='Roles';key="RoleName";filterid=key
 elif type == "aws_iam_role_policy":
+    clfn="iam";descfn="list_role_policies";topkey='PolicyNames';key="PolicyName";filterid=key
 elif type == "aws_iam_role_policy_attachment":
+    clfn="iam";descfn="get_role_policy";topkey='Policy';key="RoleName";filterid=key
 elif type == "aws_iam_roles":
+    clfn="iam";descfn="list_roles";topkey='Roles';key="RoleName";filterid=key
 elif type == "aws_iam_saml_provider":
+    clfn="iam";descfn="list_saml_providers";topkey='SAMLProviderList';key="Arn";filterid=key
 elif type == "aws_iam_security_token_service_preferences":
+    clfn="iam";descfn="get_account_token_version";topkey='AccountTokenVersion';key="AccountTokenVersion";filterid=key
 elif type == "aws_iam_server_certificate":
+    clfn="iam";descfn="list_server_certificates";topkey='ServerCertificateMetadataList';key="ServerCertificateName";filterid=key
 elif type == "aws_iam_service_linked_role":
+    clfn="iam";descfn="list_service_linked_roles";topkey='ServiceLinkedRoles';key="Arn";filterid=key
 elif type == "aws_iam_service_specific_credential":
+    clfn="iam";descfn="list_service_specific_credentials";topkey='ServiceSpecificCredentials';key="ServiceSpecificCredentialId";filterid=key
 elif type == "aws_iam_session_context":
+    clfn="iam";descfn="get_session_context";topkey='SessionContext';key="SessionContextKey";filterid=key
 elif type == "aws_iam_signing_certificate":
+    clfn="iam";descfn="list_signing_certificates";topkey='Certificates';key="CertificateId";filterid=key
 elif type == "aws_iam_user":
+    clfn="iam";descfn="list_users";topkey='Users';key="UserName";filterid=key
 elif type == "aws_iam_user_group_membership":
+    clfn="iam";descfn="get_user_group_membership";topkey='Groups';key="GroupName";filterid=key
 elif type == "aws_iam_user_login_profile":
+    clfn="iam";descfn="get_login_profile";topkey='LoginProfile';key="UserName";filterid=key
 elif type == "aws_iam_user_policy":
+    clfn="iam";descfn="list_user_policies";topkey='PolicyNames';key="PolicyName";filterid=key
 elif type == "aws_iam_user_policy_attachment":
+    clfn="iam";descfn="get_user_policy";topkey='Policy';key="UserName";filterid=key
 elif type == "aws_iam_user_ssh_key":
+    clfn="iam";descfn="list_ssh_public_keys";topkey='SSHPublicKeys';key="SSHPublicKeyId";filterid=key
 elif type == "aws_iam_users":
+    clfn="iam";descfn="list_users";topkey='Users';key="UserName";filterid=key
 elif type == "aws_iam_virtual_mfa_device":
+    clfn="iam";descfn="list_virtual_mfa_devices";topkey='VirtualMFADevices';key="SerialNumber";filterid=key
 elif type == "aws_identitystore_group":
+    clfn="identitystore";descfn="list_groups";topkey='Groups';key="GroupId";filterid=key
 elif type == "aws_identitystore_group_membership":
+    clfn="identitystore";descfn="list_group_memberships";topkey='GroupMemberships';key="GroupId";filterid=key
 elif type == "aws_identitystore_user":
+    clfn="identitystore";descfn="list_users";topkey='Users';key="UserId";filterid=key
 elif type == "aws_imagebuilder_component":
+    clfn="imagebuilder";descfn="list_components";topkey='Components';key="ComponentArn";filterid=key
 elif type == "aws_imagebuilder_components":
+    clfn="imagebuilder";descfn="list_components";topkey='Components';key="ComponentArn";filterid=key
 elif type == "aws_imagebuilder_container_recipe":
+    clfn="imagebuilder";descfn="list_container_recipes";topkey='ContainerRecipes';key="ContainerRecipeArn";filterid=key
 elif type == "aws_imagebuilder_container_recipes":
+    clfn="imagebuilder";descfn="list_container_recipes";topkey='ContainerRecipes';key="ContainerRecipeArn";filterid=key
 elif type == "aws_imagebuilder_distribution_configuration":
+    clfn="imagebuilder";descfn="list_distribution_configurations";topkey='DistributionConfigurations';key="DistributionConfigurationArn";filterid=key
 elif type == "aws_imagebuilder_distribution_configurations":
+    clfn="imagebuilder";descfn="list_distribution_configurations";topkey='DistributionConfigurations';key="DistributionConfigurationArn";filterid=key
 elif type == "aws_imagebuilder_image":
+    clfn="imagebuilder";descfn="list_images";topkey='Images';key="ImageArn";filterid=key
 elif type == "aws_imagebuilder_image_pipeline":
+    clfn="imagebuilder";descfn="list_image_pipelines";topkey='ImagePipelines';key="ImagePipelineArn";filterid=key
 elif type == "aws_imagebuilder_image_pipelines":
+    clfn="imagebuilder";descfn="list_image_pipelines";topkey='ImagePipelines';key="ImagePipelineArn";filterid=key
 elif type == "aws_imagebuilder_image_recipe":
+    clfn="imagebuilder";descfn="list_image_recipes";topkey='ImageRecipes';key="ImageRecipeArn";filterid=key
 elif type == "aws_imagebuilder_image_recipes":
+    clfn="imagebuilder";descfn="list_image_recipes";topkey='ImageRecipes';key="ImageRecipeArn";filterid=key
 elif type == "aws_imagebuilder_infrastructure_configuration":
+    clfn="imagebuilder";descfn="list_infrastructure_configurations";topkey='InfrastructureConfigurations';key="InfrastructureConfigurationArn";filterid=key
 elif type == "aws_imagebuilder_infrastructure_configurations":
+    clfn="imagebuilder";descfn="list_infrastructure_configurations";topkey='InfrastructureConfigurations';key="InfrastructureConfigurationArn";filterid=key
 elif type == "aws_inspector2_delegated_admin_account":
+    clfn="inspector2";descfn="list_delegated_admin_accounts";topkey='DelegatedAdminAccounts';key="AccountId";filterid=key
 elif type == "aws_inspector2_enabler":
+    clfn="inspector2";descfn="list_enablers";topkey='Enablers';key="Name";filterid=key
 elif type == "aws_inspector2_member_association":
+    clfn="inspector2";descfn="list_member_associations";topkey='MemberAssociations';key="AccountId";filterid=key
 elif type == "aws_inspector2_organization_configuration":
+    clfn="inspector2";descfn="list_organization_configurations";topkey='OrganizationConfigurations';key="OrganizationConfigurationArn";filterid=key
 elif type == "aws_inspector_assessment_target":
+    clfn="inspector";descfn="list_assessment_targets";topkey='AssessmentTargets';key="Name";filterid=key
 elif type == "aws_inspector_assessment_template":
+    clfn="inspector";descfn="list_assessment_templates";topkey='AssessmentTemplates';key="Name";filterid=key
 elif type == "aws_inspector_resource_group":
+    clfn="inspector";descfn="list_resource_groups";topkey='ResourceGroups';key="Name";filterid=key
 elif type == "aws_inspector_rules_packages":
+    clfn="inspector";descfn="list_rules_packages";topkey='RulesPackages';key="Name";filterid=key
 elif type == "aws_instance":
+    clfn="ec2";descfn="describe_instances";topkey='Reservations';key="Instances";filterid=key
 elif type == "aws_internet_gateway":
+    clfn="ec2";descfn="describe_internet_gateways";topkey='InternetGateways';key="InternetGatewayId";filterid=key
 elif type == "aws_internet_gateway_attachment":
+    clfn="ec2";descfn="describe_internet_gateway_attachments";topkey='InternetGatewayAttachments';key="InternetGatewayId";filterid=key
 elif type == "aws_internetmonitor_monitor":
+    clfn="internetmonitor";descfn="list_monitors";topkey='Monitors';key="MonitorId";filterid=key
 elif type == "aws_iot_authorizer":
+    
 elif type == "aws_iot_billing_group":
 elif type == "aws_iot_ca_certificate":
 elif type == "aws_iot_certificate":

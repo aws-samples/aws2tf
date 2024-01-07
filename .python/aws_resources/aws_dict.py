@@ -8,10 +8,10 @@ aws_vpc = {
 
 aws_vpc_ipv4_cidr_block_association = {
 	"clfn":		"ec2",
-	"descfn":	"describe_vpcs",
-	"topkey":	"Vpcs",
-	"key":		"VpcId",
-	"filterid":	"VpcId"
+	"descfn":	"describe_vpc_cidr_block_association_sets",
+	"topkey":	"VpcId",
+	"key":		"AssociationId",
+	"filterid":	"AssociationId"
 }
 
 aws_vpc_endpoint = {

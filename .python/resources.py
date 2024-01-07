@@ -211,176 +211,38 @@ def resource_data(type,id):
     filterid=aws_dict.aws_resources[type]['filterid']
 
     print("type:",type,"id:",id,"clfn:",clfn,"descfn:",descfn,"topkey:",topkey,"key:",key,"filterid:",filterid)
-
-
-    if type == "aws_vpc_ipv4_cidr_block_association": 
-        clfn="ec2";descfn="describe_vpcs";topkey='Vpcs';key="VpcId";filterid=key
     
-    elif type == "aws_vpc_endpoint": 
-        if id is not None and "vpc-" in id: filterid="VpcId"
-    
-    elif type in "aws_subnet":
-        if id is not None and "vpc-" in id: filterid="VpcId"
-
-    elif type == "aws_security_group": 
-        if id is not None and "vpc-" in id: filterid="VpcId"         
-
-    elif type == "aws_internet_gateway": 
-        clfn="ec2";descfn="describe_internet_gateways";topkey="InternetGateways";key="InternetGatewayId";filterid=key
-        if id is not None and "vpc-" in id: filterid=".Attachments.0.VpcId"  
-
-    elif type == "aws_nat_gateway": 
-        clfn="ec2";descfn="describe_nat_gateways";topkey="NatGateways";key="NatGatewayId";filterid=key
-        if id is not None and "vpc-" in id: filterid="VpcId"           
-
-    elif type == "aws_network_acl": 
-        clfn="ec2";descfn="describe_network_acls";topkey="NetworkAcls";key="NetworkAclId";filterid=key
-        if id is not None and "vpc-" in id: filterid="VpcId" 
+    if id is not None:
+        if "vpc-" in id:
+            if type == "aws_vpc_endpoint": filterid="VpcId";return clfn,descfn,topkey,key,filterid
+            elif type in "aws_subnet": filterid="VpcId";return clfn,descfn,topkey,key,filterid
+            elif type == "aws_security_group": filterid="VpcId" ;return clfn,descfn,topkey,key,filterid        
+            elif type == "aws_internet_gateway": filterid=".Attachments.0.VpcId"  ;return clfn,descfn,topkey,key,filterid
+            elif type == "aws_nat_gateway": filterid="VpcId"  ;return clfn,descfn,topkey,key,filterid         
+            elif type == "aws_network_acl": filterid="VpcId" ;return clfn,descfn,topkey,key,filterid
+            elif type == "aws_default_network_acl": filterid="VpcId" ;return clfn,descfn,topkey,key,filterid
+            elif type == "aws_route_table": filterid="VpcId"  ;return clfn,descfn,topkey,key,filterid  
+            elif type == "aws_route_table_association":filterid=".Associations.0.VpcId" ;return clfn,descfn,topkey,key,filterid
+            elif type == "aws_default_route_table": filterid="VpcId";return clfn,descfn,topkey,key,filterid
+            elif type == "aws_default_security_group": filterid="VpcId" ;return clfn,descfn,topkey,key,filterid
+            elif type == "aws_default_subnet": filterid="VpcId" ;return clfn,descfn,topkey,key,filterid
+            elif type == "aws_default_internet_gateway": filterid="attachment.vpc-id" ;return clfn,descfn,topkey,key,filterid
+            elif type == "aws_image": filterid="VpcId" ;return clfn,descfn,topkey,key,filterid
+            elif type == "aws_key_pair": filterid="VpcId" ;return clfn,descfn,topkey,key,filterid
+            elif type == "aws_launch_configuration": filterid="VpcId" ;return clfn,descfn,topkey,key,filterid
+            elif type == "aws_vpc_ipv4_cidr_block_association": filterid="VpcId" ;return clfn,descfn,topkey,key,filterid
+            elif type == "aws_flow_log": filterid="VpcId" ;return clfn,descfn,topkey,key,filterid
  
-    elif type == "aws_default_network_acl": 
-        clfn="ec2";descfn="describe_network_acls";topkey="NetworkAcls";key="NetworkAclId";filterid=key
-        if id is not None and "vpc-" in id: filterid="VpcId" 
-        return clfn,descfn,topkey,key,filterid
-     
-    elif type == "aws_route_table": 
-        clfn="ec2";descfn="describe_route_tables";topkey="RouteTables";key="RouteTableId";filterid=key
-        if id is not None and "vpc-" in id: filterid="VpcId"    
+        elif "arn:aws:iam::" in id:
+            if type == "aws_iam_role": filterid="Arn" ;return clfn,descfn,topkey,key,filterid
+            if type == "aws_iam_policy": filterid="Arn" ;return clfn,descfn,topkey,key,filterid
+            if type == "aws_iam_user": filterid="Arn" ;return clfn,descfn,topkey,key,filterid
 
-    elif type == "aws_route_table_association":
-        clfn="ec2";descfn="describe_route_tables";topkey="RouteTables";key=".Associations.0.SubnetId";filterid=key
-        if id is not None and "vpc-" in id: filterid=".Associations.0.VpcId" 
-        if id is not None and "subnet-" in id: filterid=".Associations.0.SubnetId" 
-        return clfn,descfn,topkey,key,filterid
+        elif "subnet-" in id:
+            if type == "aws_route_table_association": filterid=".Associations.0.SubnetId" ;return clfn,descfn,topkey,key,filterid
 
-
-
-    elif type == "aws_default_route_table":
-        clfn="ec2";descfn="describe_route_tables";topkey="RouteTables";key="RouteTableId";filterid=key
-        if id is not None and "vpc-" in id: filterid="VpcId"
-        return clfn,descfn,topkey,key,filterid
-
-    elif type == "aws_default_security_group":
-        clfn="ec2";descfn="describe_security_groups";topkey="SecurityGroups";key="GroupId";filterid=key
-        if id is not None and "vpc-" in id: filterid="VpcId"
-
-    elif type == "aws_default_subnet":
-        clfn="ec2";descfn="describe_subnets";topkey="Subnets";key="SubnetId";filterid=key
-        if id is not None and "vpc-" in id: filterid="VpcId"
-
-    elif type == "aws_default_vpc": 
-        clfn="ec2";descfn="describe_vpcs";topkey="Vpcs";key="VpcId";filterid=KeyError
-
-    elif type == "aws_default_internet_gateway":
-        clfn="ec2";descfn="describe_internet_gateways";topkey="InternetGateways";key="InternetGatewayId";filterid=key
-        if id is not None and "vpc-" in id: filterid="attachment.vpc-id"
-
-    elif type == "aws_vpc_dhcp_options": 
-        clfn="ec2";descfn="describe_dhcp_options";topkey="DhcpOptions";key="DhcpOptionsId";filterid=""
-
-
-    elif type == "aws_image":
-        clfn="ec2";descfn="describe_images";topkey="Images";key="ImageId";filterid=key
-        if id is not None and "vpc-" in id: filterid="VpcId"
-
-    elif type == "aws_key_pair":
-        clfn="ec2";descfn="describe_key_pairs";topkey="KeyPairs";key="KeyName";filterid=key
-        if id is not None and "vpc-" in id: filterid="VpcId"
-
-    elif type == "aws_launch_configuration":
-        clfn="autoscaling";descfn="describe_launch_configurations";topkey="LaunchConfigurations";key="LaunchConfigurationName";filterid=key
-        if id is not None and "vpc-" in id: filterid="VpcId"
-
-    elif type == "aws_launch_template":
-        clfn="ec2";descfn="describe_launch_templates";topkey="LaunchTemplates";key="LaunchTemplateNames";filterid=key
-        if id is not None and "lt-" in id: filterid="LaunchTemplateIds"
-
-    elif type == "aws_vpc_ipv4_cidr_block_association":
-        clfn="ec2";descfn="describe_vpc_cidr_block_association_sets";topkey="VpcId";key="AssociationId";filterid=key
-        if id is not None and "vpc-" in id: filterid="VpcId"
-
-    elif type == "aws_flow_log":
-        clfn="ec2";descfn="describe_flow_logs";topkey="FlowLogs";key="FlowLogId";filterid=key
-        if id is not None and "vpc-" in id: filterid="VpcId"
-
-    elif type == "aws_iam_role":
-        clfn="iam";descfn="list_roles";topkey="Roles";key="RoleName";filterid=key
-        if id is not None and "arn:aws:iam::" in id: filterid="Arn"
-
-    elif type == "aws_iam_policy":
-        clfn="iam";descfn="list_policies";topkey="Policies";key="PolicyName";filterid=key 
-        if id is not None and "arn:aws:iam::" in id: filterid="Arn"
-
-    elif type == "aws_iam_role_policy": 
-        clfn="iam";descfn="list_role_policies";topkey="PolicyNames";key="PolicyNames";filterid="RoleName"
-
-    elif type == "aws_iam_role_policy_attachment":
-        clfn="iam";descfn="list_attached_role_policies";topkey="AttachedPolicies";key="PolicyName";filterid="RoleName" 
-        if id is not None: filterid="RoleName"
-
-    elif type == "aws_iam_user":
-        clfn="iam";descfn="list_users";topkey="Users";key="UserName";filterid=key 
-        if id is not None and "arn:aws:iam::" in id: filterid="Arn"
-
-    elif type == "aws_iam_instance_profile": 
-        clfn="iam";descfn="get_instance_profile";topkey="InstanceProfile";key="InstanceProfileName";filterid=key 
-        
-
-    ## Lattice
-    ##
-    elif type == "aws_vpclattice_access_log_subscription":
-        clfn="vpc-lattice";descfn="list_access_log_subscriptions";topkey="items";key="id";filterid="name"  
-        if id is not None and "sn-" in id: filterid=key 
-    ##
-    elif type == "aws_vpclattice_auth_policy": 
-        clfn="vpc-lattice";descfn="get_auth_policy";topkey="items";key="id";filterid=key 
-
-    elif type == "aws_vpclattice_listener":
-        clfn="vpc-lattice";descfn="list_listeners";topkey="items";key="id";filterid="name"  
-        if id is not None and "sn-" in id: filterid=key
-
-    elif type == "aws_vpclattice_listener_rule":
-        clfn="vpc-lattice";descfn="list_rules";topkey="items";key="id";filterid="name"  
-        if id is not None and "sn-" in id: filterid=key
-    ##
-    elif type == "aws_vpclattice_resource_policy":  
-        clfn="vpc-lattice";descfn="list_resource_policies";topkey="items";key="id";filterid="name"  
-        if id is not None and "sn-" in id: filterid=key
-    ##
-    elif type == "aws_vpclattice_service":
-        clfn="vpc-lattice"; descfn="list_services";topkey="items";key="id";filterid="name"  # no filter on list-users so use jq like filter
-        if id is not None and "sn-" in id: filterid=key
-    ##
-    elif type == "aws_vpclattice_service_network":
-        clfn="vpc-lattice";descfn="list_service_networks";topkey="items";key="id";filterid="name" 
-        if id is not None and "sn-" in id: filterid=key
-    ##
-    elif type == "aws_vpclattice_service_network_service_association":
-        clfn="vpc-lattice";descfn="list_service_network_service_associations";topkey="items";key="id";filterid="name"  
-        if id is not None and "sn-" in id: filterid=key
-    ##
-    elif type == "aws_vpclattice_service_network_vpc_association":
-        clfn="vpc-lattice";descfn="list_service_network_vpc_associations";topkey="items";key="id";filterid="name"  
-        if id is not None and "sn-" in id: filterid=key   
-
-    elif type == "aws_vpclattice_target_group": 
-        clfn="vpc-lattice";descfn="list_target_groups";topkey="items";key="id";filterid="name"  
-        if id is not None and "tg-" in id: filterid=key
-
-### get from dict
-
-
-
-### EKS
-    elif type == "aws_eks_cluster": 
-        clfn="eks";descfn="list_clusters";topkey="clusters";key="name";filterid=key  
-    elif type == "aws_eks_fargate_profile": 
-        clfn="eks"; descfn="list_fargate_profiles"; topkey="fargateProfileNames"; key="clusterName";filterid=key  
-    elif type == "aws_eks_node_group": 
-        clfn="eks";descfn="list_nodegroups";topkey="nodegroups";key="clusterName";filterid=key  
-    elif type == "aws_eks_addon": 
-        clfn="eks";descfn="list_addons";topkey="addons";key="clusterName";filterid=key  
-    elif type == "aws_eks_identity_provider_config": 
-        clfn="eks";descfn="list_identity_provider_configs";topkey="identityProviderConfigs";key="clusterName";filterid=key
+        elif "lt-" in id:
+            if type == "aws_launch_template":filterid="LaunchTemplateIds"; return clfn,descfn,topkey,key,filterid
 
 
     return clfn,descfn,topkey,key,filterid

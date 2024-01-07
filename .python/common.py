@@ -106,32 +106,6 @@ def call_resource(type, id):
             print("--->> Could not get resource "+type+" id="+id)
             pass
    
-   #if not rr:
-   #     try:
-   #         if globals.debug:
-   #            print("calling specific common.get_"+type+" with type="+type+" id="+str(id)+"   clfn=" +
-   #                 clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
-   #         if clfn=="vpc-lattice":
-   #            print("vpc-lattice")
-   #            getfn = getattr(eval("vpc_lattice"), "get_"+type) 
-   #             #
-   #             #vpc_lattice.get_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid)
-   #         else:                  
-   #            getfn = getattr(eval(clfn), "get_"+type) #
-
-   #         getfn(type, id, clfn, descfn, topkey, key, filterid)
-
-   #     except Exception as e:      
-                # By this way we can know about the type of error occurring
-   #             print(f"{e=}")
-                
-   #             exc_type, exc_obj, exc_tb = sys.exc_info()
-   #             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-   #             print(exc_type, fname, exc_tb.tb_lineno)
-
-   #             exit()
-
-
 
 def tfplan1():
    print("Terraform Plan Loop ... ")

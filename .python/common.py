@@ -21,6 +21,7 @@ import aws_secretsmanager
 import aws_kinesis
 import aws_glue
 import aws_rds
+import aws_dict
 
 
 
@@ -545,7 +546,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
    #   if type == j: 
    #      print(type + " in specials list returning ..")
    #      return False
-   if "aws_launch" in type: print("-1-> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   if globals.debug: print("-1-> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
    if type in str(globals.types): 
       print("Found "+type+"in types skipping ...")
@@ -584,6 +585,11 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                         print("Found "+pt+" in processed skipping ...") 
                         continue
                   special_deps(type,theid)
+               
+               
+               #
+               # id has something
+               #
                else:  
                   if globals.debug: print("-gr31-"+"filterid="+str(filterid)+" id="+str(id))
                   if "." not in filterid:

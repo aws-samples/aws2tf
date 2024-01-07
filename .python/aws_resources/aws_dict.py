@@ -8,8 +8,8 @@ aws_vpc = {
 
 aws_vpc_ipv4_cidr_block_association = {
 	"clfn":		"ec2",
-	"descfn":	"describe_vpc_cidr_block_association_sets",
-	"topkey":	"VpcId",
+	"descfn":	"describe_vpcs",
+	"topkey":	"Vpcs",
 	"key":		"AssociationId",
 	"filterid":	"AssociationId"
 }
@@ -168,7 +168,7 @@ aws_launch_template = {
 
 aws_vpc_ipv4_cidr_block_association = {
 	"clfn":		"ec2",
-	"descfn":	"describe_vpc_cidr_block_association_sets",
+	"descfn":	"describe_vpcs",
 	"topkey":	"VpcId",
 	"key":		"AssociationId",
 	"filterid":	"AssociationId"

@@ -1,3 +1,5 @@
+# provider version 5.31.0 - January 2024
+#
 aws_vpc = {
 	"clfn":		"ec2",
 	"descfn":	"describe_vpcs",

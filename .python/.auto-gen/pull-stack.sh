@@ -1,0 +1,1 @@
+aws cloudformation list-types --visibility PUBLIC --type RESOURCE --query 'TypeSummaries[].TypeName' | grep '"AWS::' | tr -d ' |,|"' > cf-resources.dat

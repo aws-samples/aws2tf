@@ -108,7 +108,7 @@ for cname in ${bucklist[@]}; do
     dolog=0
 
 
-    #echo "--> $file $flines"
+    echo "--> $file $flines"
     echo $aws2tfmess >$fn
 
 
@@ -119,6 +119,8 @@ for cname in ${bucklist[@]}; do
         # display $line or do something with $line
         t1=$(echo "$line")
         #echo "t1=$t1"
+        t1t=$(echo "$t1" | tr -d ' ')
+        #echo "t1t=$t1t"
 
         if [[ "$t1" == *"grant {"* ]]; then
             doacl=0
@@ -144,9 +146,8 @@ for cname in ${bucklist[@]}; do
                 fi
             done
         fi # server_side_encryption_configuration
-
-        if [[ "$t1" == *"versioning {"* ]]; then
-            #echo $t1
+        
+        if [[ "$t1t" == "versioning{" ]]; then
             skip=1
             lbc=0
             rbc=0
@@ -165,7 +166,7 @@ for cname in ${bucklist[@]}; do
             done
         fi
 
-        if [[ "$t1" == *"logging {"* ]]; then
+        if [[ "$t1t" == "logging{" ]]; then
             #echo $t1
             skip=1
             lbc=0
@@ -185,7 +186,7 @@ for cname in ${bucklist[@]}; do
             done
         fi
 
-        if [[ "$t1" == *"website {"* ]]; then
+        if [[ "$t1t" == "website{" ]]; then
             #echo $t1
             skip=1
             lbc=0
@@ -205,7 +206,7 @@ for cname in ${bucklist[@]}; do
             done
         fi # website
 
-        if [[ ${t1} == *"grant {"* ]]; then
+        if [[ ${t1t} == "grant{" ]]; then
             #echo $t1
             skip=1
             lbc=0
@@ -225,7 +226,7 @@ for cname in ${bucklist[@]}; do
             done
         fi
 
-        if [[ ${t1} == *"lifecycle_rule {"* ]]; then
+        if [[ ${t1t} == "lifecycle_rule{" ]]; then
             #echo $t1
             skip=1
             lbc=0
@@ -264,14 +265,11 @@ for cname in ${bucklist[@]}; do
                 fi
             done
 
-
-
-
         fi
 
 
 
-        if [[ ${t1} == *"policy {"* ]]; then
+        if [[ ${t1t} == "policy{" ]]; then
             #echo $t1
             skip=1
             lbc=0
@@ -383,10 +381,6 @@ for cname in ${bucklist[@]}; do
     echo "Done $file loop"
 
 
-
-
-
-
     if [[ "$keyid" != "" ]]; then
         #echo "*** key for $keyid"
         ../../scripts/080-get-kms-key.sh $keyid
@@ -403,7 +397,7 @@ for cname in ${bucklist[@]}; do
     fi
     if [[ $dover -eq 1 ]]; then
         echo "versioning job for $cname"
-        #../../scripts/get-aws_s3_bucket_versioning.sh $cname &
+        ../../scripts/get-aws_s3_bucket_versioning.sh $cname &
     fi
     if [[ $doacl2 -eq 1 ]]; then
         #echo "acl job for $cname"

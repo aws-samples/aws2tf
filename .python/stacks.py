@@ -180,31 +180,31 @@ def getstackresources(stack_name,client):
             elif type == "AWS::Glue::Job": common.call_resource("aws_glue_job", pid) 
             elif type == "AWS::Glue::Table": common.call_resource("aws_glue_catalog_table", pid)
             elif type == "AWS::Glue::Partition": common.call_resource("aws_glue_partition", pid) 
-            elif type == "AWS::IAM::Role":              common.call_resource("aws_iam_role", type+" "+pid)
-
+            
+            elif type == "AWS::IAM::Role":              common.call_resource("aws_iam_role", pid)
             elif type == "AWS::IAM::ManagedPolicy":  common.call_resource("aws_null", type+" "+parn) 
             elif type == "AWS::IAM::InstanceProfile":  common.call_resource("aws_iam_instance_profile", pid) 
-            elif type == "AWS::IAM::User":  common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::IAM::AccessKey": common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::IAM::ServiceLinkedRole":  common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::IAM::Group":  common.call_resource("aws_null", type+" "+pid) 
+            elif type == "AWS::IAM::User":  common.call_resource("aws_iam_user", pid) 
+            elif type == "AWS::IAM::AccessKey": common.call_resource("aws_iam_access_key", pid) 
+            elif type == "AWS::IAM::ServiceLinkedRole":  common.call_resource("aws_iam_service_linked_role", pid) 
+            elif type == "AWS::IAM::Group":  common.call_resource("aws_iam_group", pid) 
             #elif type == "AWS::IAM::Policy)  echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;
             elif type == "AWS::IAM::Policy": f3.write(type+" "+pid+" Should be fetched via Roles etc\n") 
 
-            elif type == "AWS::KinesisFirehose::DeliveryStream":  common.call_resource("aws_null", type+" "+pid) 
+            elif type == "AWS::KinesisFirehose::DeliveryStream":  common.call_resource("aws_kinesis_firehose_delivery_stream", pid) 
             elif type == "AWS::Kinesis::Stream":  common.call_resource("aws_kinesis_stream", pid)
    
-            elif type == "AWS::KMS::Key":  common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::KMS::Alias": f3.write(type+" "+pid+"  fetched as part of function..\n")  # fetched as part of function
+            elif type == "AWS::KMS::Key":  common.call_resource("aws_kms_key", pid) 
+            elif type == "AWS::KMS::Alias": common.call_resource("aws_kms_alias", pid) 
 
-            elif type == "AWS::LakeFormation::DataLakeSettings":  common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::LakeFormation::Resource": common.call_resource("aws_null", type+" "+pid) 
+            elif type == "AWS::LakeFormation::DataLakeSettings":  common.call_resource("aws_lakeformation_data_lake_settings", pid) 
+            elif type == "AWS::LakeFormation::Resource": common.call_resource("aws_lakeformation_resource", pid) 
             # pid pard can be json structures for this one
-            elif type == "AWS::LakeFormation::Permissions":  common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::LakeFormation::PrincipalPermissions":  common.call_resource("aws_null", lrid) 
+            elif type == "AWS::LakeFormation::Permissions":  common.call_resource("aws_lakeformation_permissions", pid) 
+            elif type == "AWS::LakeFormation::PrincipalPermissions":  common.call_resource("aws_lakeformation_permissions", lrid) 
 
             elif type == "AWS::Lambda::Function":  common.call_resource("aws_lambda_function", pid) 
-            elif type == "AWS::Lambda::LayerVersion":  common.call_resource("aws_null", type+" "+pid) 
+            elif type == "AWS::Lambda::LayerVersion":  common.call_resource("aws_lambda_layer_version", pid) 
             elif type == "AWS::Lambda::Permission": f3.write(type+" "+pid+"  as part of function..\n")          # fetched as part of function
             elif type == "AWS::Lambda::EventInvokeConfig": f3.write(type+" "+pid+"  as part of function..\n")   # fetched as part of function
             elif type == "AWS::Lambda::EventSourceMapping": f3.write(type+" "+pid+"  as part of function..\n")  # fetched as part of function
@@ -233,30 +233,30 @@ def getstackresources(stack_name,client):
 
             elif type == "AWS::S3::Bucket":                     aws_s3.get_all_s3_buckets(pid, globals.region)
             elif type == "AWS::S3::BucketPolicy":               f3.write(type +" fetched as part of bucket...\n")
-            elif type == "AWS::S3::AccessGrant": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::S3::AccessGrantsInstance": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::S3::AccessGrantsLocation": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::S3::AccessPoint": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::S3::MultiRegionAccessPoint": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::S3::MultiRegionAccessPointPolicy": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::S3::StorageLens": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::S3::AccessGrant": common.call_resource("aws_s3control_access_grant", pid)
+            elif type == "AWS::S3::AccessGrantsInstance": common.call_resource("aws_s3control_access_grants_instance", pid)
+            elif type == "AWS::S3::AccessGrantsLocation": common.call_resource("aws_s3control_access_grants_location", pid)
+            elif type == "AWS::S3::AccessPoint": common.call_resource("aws_s3_access_point", pid)
+            elif type == "AWS::S3::MultiRegionAccessPoint": common.call_resource("aws_s3control_multi_region_access_point", pid)
+            elif type == "AWS::S3::MultiRegionAccessPointPolicy": common.call_resource("aws_s3control_multi_region_access_point_policy", pid)
+            elif type == "AWS::S3::StorageLens": common.call_resource("aws_s3control_storage_lens_configuration", pid)
             elif type == "AWS::S3::StorageLensGroup": common.call_resource("aws_null", type+" "+pid)
 
-            elif type == "AWS::SageMaker::AppImageConfig":  common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::SageMaker::Domain":  common.call_resource("aws_null", type+" "+parn) 
-            elif type == "AWS::SageMaker::Image":  common.call_resource("aws_null", type+" "+pid) 
+            elif type == "AWS::SageMaker::AppImageConfig":  common.call_resource("aws_sagemaker_app_image_config", pid) 
+            elif type == "AWS::SageMaker::Domain":  common.call_resource("aws_sagemaker_domain", parn) 
+            elif type == "AWS::SageMaker::Image":  common.call_resource("aws_sagemaker_image", pid) 
             elif type == "AWS::SageMaker::ImageVersion": f3.write(type+" "+pid+"  as part of SageMaker Image..\n")  # fetched as part of function
-            elif type == "AWS::SageMaker::NotebookInstance":  common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::SageMaker::UserProfile": common.call_resource("aws_null", pid)
+            elif type == "AWS::SageMaker::NotebookInstance":  common.call_resource("aws_sagemaker_notebook_instance", pid) 
+            elif type == "AWS::SageMaker::UserProfile": common.call_resource("aws_sagemaker_user_profile", pid)
 
-            elif type == "AWS::SNS::Subscription":  common.call_resource("aws_null", type+" "+parn) 
-            elif type == "AWS::SNS::Topic":  common.call_resource("aws_null", type+" "+parn) 
-            elif type == "AWS::SNS::TopicPolicy":  common.call_resource("aws_null", type+" "+parn) 
-            elif type == "AWS::SQS::Queue":  common.call_resource("aws_null", type+" "+parn) 
+            elif type == "AWS::SNS::Subscription":  common.call_resource("aws_sns_topic_subscription", parn) 
+            elif type == "AWS::SNS::Topic":  common.call_resource("aws_sns_topic", parn) 
+            elif type == "AWS::SNS::TopicPolicy":  common.call_resource("aws_sns_topic_policy", parn) 
+            elif type == "AWS::SQS::Queue":  common.call_resource("aws_sqs_queue", type+" "+parn) 
             elif type == "AWS::SQS::QueuePolicy": f3.write(type+" "+pid+"  as part of SQS Queue ..\n") 
 
-            elif type == "AWS::SSM::Parameter":  common.call_resource("aws_null", type+" "+pid) 
-            elif type == "AWS::ServiceDiscovery::PrivateDnsNamespace": f3.write(type+" "+pid+"  as part srv discovery ? ..\n") 
+            elif type == "AWS::SSM::Parameter":  common.call_resource("aws_ssm_parameter", pid) 
+            elif type == "AWS::ServiceDiscovery::PrivateDnsNamespace": common.call_resource("aws_service_discovery_private_dns_namespace", pid)
             elif type == "AWS::StepFunctions::StateMachine":  common.call_resource("aws_null", type+" "+pid) 
             #elif type == "AWS::SecretsManager::SecretTargetAttachment ;;
             elif type == "AWS::SecretsManager::Secret": common.call_resource("aws_secretsmanager_secret", parn) 

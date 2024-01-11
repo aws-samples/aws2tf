@@ -80,7 +80,7 @@ for c in `seq 0 0`; do
                             if [[ "$tarn" == *":role"* ]];then
                                 trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')
                                 trole=${trole//:/_} && trole=${trole//./_} && trole=${trole//\//_}
-                                t1=`printf "%s = aws_iam_role.r-%s.arn" $tt1 $trole`
+                                t1=`printf "%s = aws_iam_role.r-%s.arn" $tt1 ${trole//./_}`
                             fi
                         fi                 
                     fi

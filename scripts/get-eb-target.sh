@@ -108,7 +108,7 @@ for c in `seq 0 0`; do
                     fi          
                     if [[ ${tt1} == "role_arn" ]];then 
                         trarn=`echo "$tt2" | rev | cut -f1 -d'/' | rev | tr -d '"'`
-                        t1=`printf "%s = aws_iam_role.r-%s.arn" $tt1 $trarn`
+                        t1=`printf "%s = aws_iam_role.r-%s.arn" $tt1 ${trarn//./_}`
                     fi
                     if [[ ${tt1} == "owner_id" ]];then skip=1;fi
                     if [[ ${tt1} == "input_template" ]];then

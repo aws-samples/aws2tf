@@ -80,7 +80,7 @@ for c in `seq 0 0`; do
                         rarn=`echo $tt2 | tr -d '"'` 
                         skip=0;
                         trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')                            
-                        t1=`printf "%s = aws_iam_role.r-%s.arn" $tt1 $trole`
+                        t1=`printf "%s = aws_iam_role.r-%s.arn" $tt1 ${trole//./_}`
                     fi
 
                     if [[ ${tt1} == "replication_instance_public_ips" ]];then 

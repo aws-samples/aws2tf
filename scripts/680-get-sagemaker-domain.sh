@@ -91,7 +91,8 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "execution_role" ]];then 
                         rarn=`echo $tt2 | tr -d '"'`
                         erole=`echo "$tt2" | rev | cut -d'/' -f1 | rev | tr -d '"'`
-                        t1=`printf "%s = aws_iam_role.r-%s.arn" $tt1 $erole`                
+                     
+                        t1=`printf "%s = aws_iam_role.r-%s.arn" $tt1 ${erole//./_}`                
                     fi
                     if [[ ${tt1} == "kms_key_id" ]];then 
                         keyid=`echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"'`

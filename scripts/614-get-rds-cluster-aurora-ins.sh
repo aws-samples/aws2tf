@@ -87,8 +87,9 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == "monitoring_role_arn" ]]; then
                         tarn=`echo $tt2 | tr -d '"'`
                         tanam=$(echo $tarn | rev | cut -f1 -d'/' | rev)
+                    
                         tlarn=${tarn//:/_} && tlarn=${tlarn//./_} && tlarn=${tlarn//\//_}
-                        t1=`printf "%s = aws_iam_role.r-%s.arn" $tt1 $tanam`
+                        t1=`printf "%s = aws_iam_role.r-%s.arn" $tt1 ${tanam//./_}`
                     fi
 
                     #if [[ ${tt1} == "kms_key_id" ]];then

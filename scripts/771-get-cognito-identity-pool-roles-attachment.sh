@@ -66,7 +66,7 @@ for c in `seq 0 0`; do
                     if [[ ${tt1} == *"authenticated"* ]];then 
                         tarn=$(echo $tt2 | tr -d '"')
                         tid=$(echo $tarn | rev | cut -f1 -d'/' | rev)
-                        t1=`printf "%s = aws_iam_role.r-%s.arn" $tt1 $tid`
+                        t1=`printf "%s = aws_iam_role.r-%s.arn" $tt1 ${tid//./_}`
                     fi
                                      
 

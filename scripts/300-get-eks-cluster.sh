@@ -176,8 +176,9 @@ if [ "$kcount" -gt "0" ]; then
                             if [[ ${tt1} == "role_arn" ]]; then
                                 skip=0
                                 trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')
+                              
                                 echo "depends_on = [aws_iam_role.r-$trole]" >>$fn
-                                t1=$(printf "%s = aws_iam_role.r-%s.arn" $tt1 $trole)
+                                t1=$(printf "%s = aws_iam_role.r-%s.arn" $tt1 ${trole//./_})
                             fi
                             if [[ ${tt1} == "owner_id" ]]; then skip=1; fi
                             if [[ ${tt1} == "association_id" ]]; then skip=1; fi

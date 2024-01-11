@@ -101,7 +101,8 @@ for c in `seq 0 0`; do
                     fi
                     if [[ ${tt1} == "service_role" ]]; then
                         srvrole=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_iam_role.r-%s.name" $tt1 $srvrole`
+          
+                        t1=`printf "%s = aws_iam_role.r-%s.name" $tt1 ${srvrole//./_}`
                     fi
 
                     #if [[ ${tt1} == "autoscaling_role" ]]; then

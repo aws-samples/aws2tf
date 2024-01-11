@@ -156,7 +156,7 @@ for c in $(seq 0 0); do
                                     rarn=$(echo $tt2 | tr -d '"')
                                     trole=$(echo $tt2 | rev | cut -f1 -d'/' | rev | tr -d '"')
                                     if [[ $trole != $cname ]]; then
-                                        t1=$(printf "%s = aws_iam_role.r-%s.arn" $tt1 $trole)
+                                        t1=$(printf "%s = aws_iam_role.r-%s.arn" $tt1 ${trole//./_})
                                         getrole+=$(printf "\"%s\" " $rarn)
                                         echo "aws_iam_role,$rarn,$trole" >>data/arn-map.dat
                                     fi

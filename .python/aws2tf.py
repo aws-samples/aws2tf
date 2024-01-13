@@ -18,6 +18,7 @@ if __name__ == '__main__':
     # print("cwd=%s" % os.getcwd())
     signal.signal(signal.SIGINT, common.ctrl_c_handler)
     argParser = argparse.ArgumentParser()
+    argParser.add_argument("-a", "--apionly", help="boto3 api only [False]|True")
     argParser.add_argument(
         "-b", "--bucket", help="bucket name or matching sting")
     argParser.add_argument(
@@ -37,6 +38,8 @@ if __name__ == '__main__':
     if args.validate is not None:
         globals.validate = True
     
+    if args.apionly is not None:
+        globals.apionly = True
 
     if args.type is None:
         print("type is required eg:  -t aws_vpc")
@@ -150,6 +153,8 @@ if __name__ == '__main__':
 
 ## Known dependancies section
     
+    if args.apionly:   exit(0)
+
     kdep=False
     for ti in globals.rdep.keys():
         if not globals.rdep[ti]: 

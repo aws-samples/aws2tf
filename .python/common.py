@@ -772,21 +772,21 @@ def call_boto3(type,clfn,descfn,topkey,id):
                sav_boto3_rep(descfn,response)
 
          except botocore.exceptions.ParamValidationError as err:
-            print(f"{err=}")
+            print(f"{err=}"+","+type+","+clfn)
             print("ParamValidationError 1 in common.call_boto3: type="+type+" clfn="+clfn)
             return []
             
 
          except botocore.exceptions.OperationNotPageableError as err:
                print(f"{err=}")
-               print("calling non paginated fn "+str(descfn))
+               #print("calling non paginated fn "+str(descfn))
                try:
                   getfn = getattr(client, descfn)
                   response1 = getfn()
                   response=response1[topkey]
                except botocore.exceptions.ParamValidationError as err:
-                  print(f"{err=}")
-                  print("ParamValidationError 2 in common.call_boto3: type="+type+" clfn="+clfn)
+                  print(f"{err=}"+","+type+","+clfn)
+                  #print("ParamValidationError 2 in common.call_boto3: type="+type+" clfn="+clfn)
                   return []
                
 

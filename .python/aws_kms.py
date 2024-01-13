@@ -11,7 +11,7 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
     #if globals.debug: print("--> In get_aws_kms_key    doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     print("--> In get_aws_kms_key    doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
-    response=common.call_boto3(clfn,descfn,topkey,id)
+    response=common.call_boto3(type,clfn,descfn,topkey,id)
     #print("-9a->"+str(response))
     if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
    
@@ -53,7 +53,7 @@ def get_aws_kms_alias(type,id,clfn,descfn,topkey,key,filterid):
     #if globals.debug: print("--> In get_aws_kms_key    doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     print("--> In get_aws_kms_alias  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
-    response=common.call_boto3(clfn,descfn,topkey,id)
+    response=common.call_boto3(type,clfn,descfn,topkey,id)
     #print("-9a->"+str(response))
     if response == []: 
         print("Empty response for "+type+ " id="+str(id)+" returning")

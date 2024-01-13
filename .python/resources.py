@@ -203,8 +203,11 @@ def resource_types(type):
 ##########################################################################################################
 
 def resource_data(type,id):
+    print("type:",type,"id:",id)
     clfn=None;descfn=None;topkey=None;key=None;filterid=None
+
     clfn=aws_dict.aws_resources[type]['clfn']
+
     descfn=aws_dict.aws_resources[type]['descfn']
     topkey=aws_dict.aws_resources[type]['topkey']
     key=aws_dict.aws_resources[type]['key']

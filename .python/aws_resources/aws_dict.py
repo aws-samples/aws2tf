@@ -595,17 +595,17 @@ aws_cloudwatch_event_rule = {
 aws_accessanalyzer_analyzer = {
 	"clfn":		"accessanalyzer",
 	"descfn":	"list_analyzers",
-	"topkey":	"AnalyzerList",
-	"key":		"Name",
-	"filterid":	"Name"
+	"topkey":	"analyzers",
+	"key":		"name",
+	"filterid":	"name"
 }
 
 aws_accessanalyzer_archive_rule = {
 	"clfn":		"accessanalyzer",
 	"descfn":	"list_archive_rules",
-	"topkey":	"ArchiveRules",
-	"key":		"RuleName",
-	"filterid":	"RuleName"
+	"topkey":	"archiveRules",
+	"key":		"ruleName",
+	"filterid":	"ruleName"
 }
 
 aws_account_alternate_contact = {
@@ -631,7 +631,6 @@ aws_acm_certificate = {
 	"key":		"CertificateArn",
 	"filterid":	"CertificateArn"
 }
-
 
 
 aws_acm_certificate_validation = {
@@ -11489,6 +11488,7 @@ aws_resources = {
 	"aws_accessanalyzer_archive_rule": aws_accessanalyzer_archive_rule,
 	"aws_account_alternate_contact": aws_account_alternate_contact,
 	"aws_account_primary_contact": aws_account_primary_contact,
+    "aws_acm_certificate": aws_acm_certificate,
 	"aws_acm_certificate_validation": aws_acm_certificate_validation,
 	"aws_acmpca_certificate": aws_acmpca_certificate,
 	"aws_acmpca_certificate_authority": aws_acmpca_certificate_authority,

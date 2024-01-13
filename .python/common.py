@@ -97,7 +97,7 @@ def call_resource(type, id):
                print("calling generic getresource with type="+type+" id="+str(id)+"   clfn="+clfn +
                " descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
          rr=getresource(type, id, clfn, descfn, topkey, key, filterid)
-      except:
+      except Exception as e:
          print(f"{e=}")
                   
          exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -559,7 +559,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
             if globals.rproc[pt] is True:
                print("Found "+pt+" in processed skipping ...") 
                return True
-      response=call_boto3(clfn,descfn,topkey,id)   
+      response=call_boto3(type,clfn,descfn,topkey,id)   
       #print("-->"+str(response))
       if str(response) != "[]":
             for item in response:
@@ -702,7 +702,7 @@ def add_known_dependancy(type,id):
 # TODO ? won't accept filter id as string param1 in paginate(param1,id) ??
 # hench working around using descfn - not ideal
 
-def call_boto3(clfn,descfn,topkey,id): 
+def call_boto3(type,clfn,descfn,topkey,id): 
    try:
       if globals.debug: print("call_boto3 clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
       if globals.debug: print("pre-response")
@@ -771,12 +771,24 @@ def call_boto3(clfn,descfn,topkey,id):
                # save a full paginate as we don't want to do it many times
                sav_boto3_rep(descfn,response)
 
+         except botocore.exceptions.ParamValidationError as err:
+            print(f"{err=}")
+            print("ParamValidationError 1 in common.call_boto3: type="+type+" clfn="+clfn)
+            return []
+            
+
          except botocore.exceptions.OperationNotPageableError as err:
                print(f"{err=}")
                print("calling non paginated fn "+str(descfn))
-               getfn = getattr(client, descfn)
-               response1 = getfn()
-               response=response1[topkey]
+               try:
+                  getfn = getattr(client, descfn)
+                  response1 = getfn()
+                  response=response1[topkey]
+               except botocore.exceptions.ParamValidationError as err:
+                  print(f"{err=}")
+                  print("ParamValidationError 2 in common.call_boto3: type="+type+" clfn="+clfn)
+                  return []
+               
 
          except Exception as e:
             print(f"{e=}")

@@ -9,7 +9,7 @@ def get_aws_config_config_rule(type, id, clfn, descfn, topkey, key, filterid):
         print("--> In get_aws_config_config_rule  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
-        response = common.call_boto3(clfn, descfn, topkey, id)
+        response = common.call_boto3(type,clfn, descfn, topkey, id)
         #print("-9a->"+str(response))
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
 

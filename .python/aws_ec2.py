@@ -133,7 +133,7 @@ def get_aws_launch_template(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
         print("--> In get_aws_launch_template    doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-    response = common.call_boto3(clfn, descfn, topkey, id)
+    response = common.call_boto3(type,clfn, descfn, topkey, id)
     # print("-9a->"+str(response))
     if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
@@ -148,7 +148,7 @@ def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key,
     if globals.debug:
         print("--> In get_aws_vpc_ipv4_cidr_block_association doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-    response = common.call_boto3(clfn, descfn, topkey, id)
+    response = common.call_boto3(type,clfn, descfn, topkey, id)
     #print("-9a->"+str(response))
     try:
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
@@ -178,7 +178,7 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
         print("--> In get_aws_subnet doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
-    response = common.call_boto3(clfn, descfn, topkey, id)
+    response = common.call_boto3(type,clfn, descfn, topkey, id)
     #print("-9a->"+str(response))
     
     try:

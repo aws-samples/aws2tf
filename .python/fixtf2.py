@@ -2,12 +2,12 @@ import globals
 import os
 import boto3
 import base64
-
-
+#
 def aws_acm_certificate(t1,tt1,tt2,skipipv6,flag2):
     skip = 0
     return skip,t1,skipipv6,flag2
 
+#
 def  aws_vpc(t1,tt1,tt2,skipipv6,flag2):
     skip = 0
     if tt1 == "assign_generated_ipv6_cidr_block":
@@ -23,7 +23,7 @@ def  aws_vpc(t1,tt1,tt2,skipipv6,flag2):
     #            
     return skip,t1,skipipv6,flag2
 
-
+#
 def aws_vpc_ipv4_cidr_block_association(t1,tt1,tt2,skipipv6,flag2):
     skip = 0         
     if tt1 == "vpc_id":
@@ -32,7 +32,7 @@ def aws_vpc_ipv4_cidr_block_association(t1,tt1,tt2,skipipv6,flag2):
         add_dependancy("aws_vpc",tt2)
     return skip,t1,skipipv6,flag2
 
-    
+#    
 def aws_subnet(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "vpc_id":
@@ -50,7 +50,7 @@ def aws_subnet(t1,tt1,tt2,flag1,flag2):
 
     return skip,t1,flag1,flag2
 
-
+#
 def  aws_security_group(t1,tt1,tt2,flag1,flag2):
     skip = 0
     if tt1 == "vpc_id":
@@ -70,6 +70,7 @@ def  aws_security_group(t1,tt1,tt2,flag1,flag2):
     #            
     return skip,t1,flag1,flag2
 
+#
 def  aws_route_table(t1,tt1,tt2,flag1,flag2):
     skip=0
 
@@ -95,7 +96,7 @@ def  aws_route_table(t1,tt1,tt2,flag1,flag2):
             add_dependancy("aws_internet_gateway",tt2)
 
     return skip,t1,flag1,flag2
-
+#
 def  aws_internet_gateway(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "vpc_id":
@@ -105,6 +106,7 @@ def  aws_internet_gateway(t1,tt1,tt2,flag1,flag2):
 
     return skip,t1,flag1,flag2
 
+#
 def  aws_nat_gateway(t1,tt1,tt2,flag1,flag2):
     skip=0
     if "secondary_private_ip_address_count" in tt1:
@@ -117,7 +119,7 @@ def  aws_nat_gateway(t1,tt1,tt2,flag1,flag2):
 
     return skip,t1,flag1,flag2 
 
-
+#
 def  aws_network_acl(t1,tt1,tt2,flag1,flag2):
     skip=0
     return skip,t1,flag1,flag2
@@ -126,7 +128,7 @@ def  aws_default_network_acl(t1,tt1,tt2,flag1,flag2):
     skip=0
     return skip,t1,flag1,flag2
 
-
+#
 def  aws_s3_bucket(t1,tt1,tt2,flag1,flag2):
     skip=0
     if "resource":
@@ -160,7 +162,7 @@ def  aws_s3_bucket(t1,tt1,tt2,flag1,flag2):
 
     return skip,t1,flag1,flag2
 
-
+#
 def aws_s3_bucket_acl(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "bucket" and flag2 is True:
@@ -260,7 +262,7 @@ def aws_s3_bucket_policy(t1,tt1,tt2,flag1,flag2):
     elif tt1 == "policy": t1=globals_replace(t1,tt1,tt2)
     return skip,t1,flag1,flag2
 
-
+#
 def aws_vpc_endpoint(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "vpc_id":

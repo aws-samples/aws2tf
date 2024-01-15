@@ -30,13 +30,23 @@ def aws_iam_group_policy_attachment(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
 
+def aws_iam_instance_profile(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    return skip,t1,flag1,flag2
+
 def aws_iam_openid_connect_provider(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
 
 def aws_iam_policy(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+    skip=0
+    if tt1 == "name":
+        tt2=tt2.strip('\"')
+        if len(tt2) > 0: flag1=True
+    if tt1 == "name_prefix" and flag1 is True: skip=1
+    if tt1 == "policy": t1=globals_replace(t1,tt1,tt2)
+  
+    return skip,t1,flag1,flag2
 
 def aws_iam_policy_attachment(t1,tt1,tt2,flag1,flag2):
 	skip=0
@@ -49,6 +59,73 @@ def aws_iam_policy_document(t1,tt1,tt2,flag1,flag2):
 def aws_iam_principal_policy_simulation(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
+
+def  aws_iam_role(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    if tt1 == "name":
+        tt2=tt2.strip('\"')
+        if len(tt2) > 0: 
+            flag1=True
+            flag2=tt2
+    if tt1 == "name_prefix" and flag1 is True: skip=1
+    if tt1 == "policy": t1=globals_replace(t1,tt1,tt2)
+    if tt1 == "assume_role_policy": t1=globals_replace(t1,tt1,tt2)
+    if tt1 == "managed_policy_arns":   
+        if tt2 == "[]": 
+            skip=1
+        elif ":"+globals.acc+":" in tt2:
+            fs=""
+            ends=",data.aws_caller_identity.current.account_id"
+            tt2=tt2.replace("[","").replace("]","")
+            cc=tt2.count(",")
+            #print(str(tt2)+"cc="+str(cc))
+            pt1=tt1+" = ["
+            for j in range(0,cc+1):
+                #print("-- tt2 "+str(j)+" split ="+tt2.split(",")[j])
+                #print("-- tt2 "+j+" split ="+tt2.split(",")[j])
+                ps=tt2.split(",")[j]
+                if ":"+globals.acc+":" in ps:
+                    #print("ps1="+ps)
+                    a1=ps.find(":"+globals.acc+":")
+                    #print("a1="+str(a1))
+                    ps=ps[:a1]+":%s:"+ps[a1+14:]
+                    #print("ps2="+ps)
+                    ps = 'format('+ps+ends+')'
+                    #print("ps3="+ps)         
+                pt1=pt1+ps+","
+            pt1=pt1+"]\n"
+            t1=pt1.replace(",]","]")
+            globals.roles=globals.roles+[flag2]
+        else:
+            pass
+    #    else:
+    #        t1=globals_replace(t1,tt1,tt2)
+    return skip,t1,flag1,flag2
+
+def aws_iam_role_policy(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    if tt1 == "role_name":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
+        add_dependancy("aws_iam_role",tt2)
+  
+    return skip,t1,flag1,flag2
+
+def aws_iam_role_policy_attachment(t1,tt1,tt2,flag1,flag2):
+    #print("fixit2.aws_iam_role_policy_attachment")
+    skip=0
+    if tt1 == "role":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
+        add_dependancy("aws_iam_role",tt2)
+    # skip as using policy arns minus account number etc..
+    #if tt1 == "policy_arn": 
+    #    tt2=tt2.strip('\"')
+    #    tt2=str(tt2).split("/")[-1]
+    #    t1=tt1 + " = aws_iam_policy." + str(tt2) + ".arn\n"
+    if tt1 == "policy_arn": t1=globals_replace(t1,tt1,tt2)
+
+    return skip,t1,flag1,flag2
 
 def aws_iam_saml_provider(t1,tt1,tt2,flag1,flag2):
 	skip=0

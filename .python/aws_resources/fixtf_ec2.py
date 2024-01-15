@@ -226,6 +226,57 @@ def aws_eip_association(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
 
+
+def aws_instance(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    if tt1 == "subnet_id":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
+        add_dependancy("aws_subnet",tt2)
+    elif tt1 == "vpc_security_group_ids": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+    #elif tt1 == "iam_instance_profile":
+    #    tt2=tt2.strip('\"')
+    #    t1=tt1 + " = aws_iam_instance_profile." + tt2 + ".name\n"
+        #add_dependancy("aws_iam_instance_profile",tt2)
+    #elif tt1 == "key_name":
+    #    tt2=tt2.strip('\"')
+    #    t1=tt1 + " = aws_key_pair." + tt2 + ".key_name\n"
+    elif tt1 == "ipv6_addresses":
+        tt2=tt2.strip('\"')
+        if tt2 == "[]": skip=1
+
+    elif tt1 == "id":
+        flag2=id
+
+    elif tt1 == "user_data":
+        inid=flag2.split("__")[1]
+        client = boto3.client("ec2")
+        resp = client.describe_instance_attribute(Attribute="userData",InstanceId=inid)
+        ud=resp['UserData']['Value']
+        ud2=base64.b64decode(ud).decode('utf-8')
+        with open(flag2+'.sh', 'w') as f:
+            f.write(ud2)
+        t1="user_data_base64 = filebase64sha256(\""+flag2+".sh\")\n lifecycle {\n   ignore_changes = [user_data_replace_on_change,user_data,user_data_base64]\n}\n"
+
+    elif tt1 == "user_data_base64": skip=1
+    elif tt1 == "iam_instance_profile":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_iam_instance_profile." + tt2 + ".name\n"
+        add_dependancy("aws_iam_instance_profile",tt2)
+
+
+    return skip,t1,flag1,flag2
+
+
+def  aws_internet_gateway(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    if tt1 == "vpc_id":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
+        add_dependancy("aws_vpc",tt2)
+
+    return skip,t1,flag1,flag2
+
 def aws_internet_gateway_attachment(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
@@ -234,9 +285,39 @@ def aws_ip_ranges(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
 
+def aws_launch_template(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    if tt1 == "security_group_names":
+        tt2=tt2.strip('\"')
+        if tt2 == "[]": 
+            skip=1
+    elif tt1 == "vpc_security_group_ids": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+
+    return skip,t1,flag1,flag2
+
 def aws_main_route_table_association(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
+
+def  aws_nat_gateway(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    if "secondary_private_ip_address_count" in tt1:
+        tt2=tt2.strip('\"')
+        if tt2 == "0": skip=1
+    if tt1 == "subnet_id":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
+        add_dependancy("aws_subnet",tt2)
+
+    return skip,t1,flag1,flag2 
+
+def  aws_network_acl(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    return skip,t1,flag1,flag2
+
+def  aws_default_network_acl(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    return skip,t1,flag1,flag2
 
 def aws_network_acl_association(t1,tt1,tt2,flag1,flag2):
 	skip=0
@@ -286,9 +367,71 @@ def aws_route(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
 
+def  aws_route_table(t1,tt1,tt2,flag1,flag2):
+    skip=0
+
+    if tt1 == "vpc_id":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
+        add_dependancy("aws_vpc",tt2)
+
+    elif "cidr_block" in tt1:
+        tt2=tt2.strip('\"')
+        if tt2 == "": t1=tt1 + " = null\n"
+
+    elif "nat_gateway_id" in tt1:
+        tt2=tt2.strip('\"')
+        if tt2 != "":
+            t1=tt1 + " = aws_nat_gateway." + tt2 + ".id\n"
+            add_dependancy("aws_nat_gateway",tt2)
+
+    elif tt1 == "gateway_id":
+        tt2=tt2.strip('\"')
+        if tt2 != "":
+            t1=tt1 + " = aws_internet_gateway." + tt2 + ".id\n"
+            add_dependancy("aws_internet_gateway",tt2)
+
+    return skip,t1,flag1,flag2
+
+def aws_route_table_association(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    if tt1 == "subnet_id":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
+        add_dependancy("aws_subnet",tt2)
+    if tt1 == "route_table_id":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_route_table." + tt2 + ".id\n"
+        add_dependancy("aws_route_table",tt2)
+    if tt1 == "gateway_id":
+        tt2=tt2.strip('\"')
+        if tt2 == "null": skip=1
+    
+    return skip,t1,flag1,flag2
+
 def aws_security_group_rule(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
+
+def  aws_security_group(t1,tt1,tt2,flag1,flag2):
+    skip = 0
+    if tt1 == "vpc_id":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
+        add_dependancy("aws_vpc",tt2)
+
+    if tt1 == "name":
+        tt2=tt2.strip('\"')
+        if len(tt2) > 0: flag1=True
+
+    #CIRCULAR reference problems:
+    #if tt1 == "security_groups": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+
+    if tt1 == "name_prefix" and flag1 is True: skip=1
+       
+    #            
+    return skip,t1,flag1,flag2
+
 
 def aws_security_groups(t1,tt1,tt2,flag1,flag2):
 	skip=0
@@ -310,13 +453,63 @@ def aws_spot_instance_request(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
 
+def aws_subnet(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    if tt1 == "vpc_id":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
+        add_dependancy("aws_vpc",tt2)
+        
+
+    if tt1 == "enable_lni_at_device_index":
+        if tt2 == "0": skip=1
+    if tt1 == "availability_zone_id": skip=1
+    #
+    if tt1 == "map_customer_owned_ip_on_launch":
+        if tt2 == "false": skip=1
+
+    return skip,t1,flag1,flag2
+
 def aws_volume_attachment(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
 
+
+def  aws_vpc(t1,tt1,tt2,skipipv6,flag2):
+    skip = 0
+    if tt1 == "assign_generated_ipv6_cidr_block":
+        if tt2 in "true": skipipv6=True
+    if tt1 == "ipv6_cidr_block":
+        if skipipv6: skip = 1
+    if tt1 == "ipv6_ipam_pool_id":
+        if skipipv6: skip = 1
+    if tt1 == "ipv6_netmask_length":
+        if tt2 == "0":
+            skip=1
+        
+    #            
+    return skip,t1,skipipv6,flag2
+
+
 def aws_vpc_dhcp_options_association(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
+
+def aws_vpc_endpoint(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    if tt1 == "vpc_id":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
+        add_dependancy("aws_vpc",tt2)
+
+    elif tt1 == "subnet_ids":  t1,skip = deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
+    elif tt1 == "security_group_ids": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+    elif tt1 == "route_table_ids": t1,skip = deref_array(t1,tt1,tt2,"aws_route_table","rtb-",skip)
+    return skip,t1,flag1,flag2
+
+def aws_vpc_dhcp_options(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    return skip,t1,flag1,flag2
 
 def aws_vpc_endpoint_connection_accepter(t1,tt1,tt2,flag1,flag2):
 	skip=0
@@ -385,6 +578,14 @@ def aws_vpc_ipam_resource_discovery_association(t1,tt1,tt2,flag1,flag2):
 def aws_vpc_ipam_scope(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
+
+def aws_vpc_ipv4_cidr_block_association(t1,tt1,tt2,skipipv6,flag2):
+    skip = 0         
+    if tt1 == "vpc_id":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
+        add_dependancy("aws_vpc",tt2)
+    return skip,t1,skipipv6,flag2
 
 def aws_vpc_ipv6_cidr_block_association(t1,tt1,tt2,flag1,flag2):
 	skip=0

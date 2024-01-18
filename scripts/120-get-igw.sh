@@ -71,8 +71,8 @@ for c in `seq 0 0`; do
                     #if [[ ${tt1} == "ipv6_association_id" ]];then skip=1;fi
                     #if [[ ${tt1} == "ipv6_cidr_block" ]];then skip=1;fi
                     if [[ ${tt1} == "vpc_id" ]]; then
-                        tt2=`echo $tt2 | tr -d '"'`
-                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $tt2`
+                        vpcid=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`
                     fi
                 fi
                 if [ "$skip" == "0" ]; then
@@ -81,6 +81,11 @@ for c in `seq 0 0`; do
                 fi
                 
             done <"$file"
+
+            if [ "$vpcid" != "" ]; then
+                #echo "subnet vpc call with vpcid=$vpcid"
+                ../../scripts/100-get-vpc.sh $vpcid
+            fi
             
         done
     fi

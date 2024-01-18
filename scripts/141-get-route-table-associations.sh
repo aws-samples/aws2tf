@@ -91,8 +91,8 @@ for c in $(seq 0 0); do
                                     t1=$(printf "%s = aws_route_table.%s.id" $tt1 $rtid)
                                 fi
                                 if [[ ${tt1} == "subnet_id" ]]; then
-                                    tt2=$(echo $tt2 | tr -d '"')
-                                    t1=$(printf "%s = aws_subnet.%s.id" $tt1 $tt2)
+                                    subid=$(echo $tt2 | tr -d '"')
+                                    t1=$(printf "%s = aws_subnet.%s.id" $tt1 $subid)
                                 fi
 
                             fi
@@ -108,6 +108,10 @@ for c in $(seq 0 0); do
 
                         if [[ $rtid != "" ]]; then
                             ../../scripts/140-get-route-table.sh $rtid
+                        fi
+
+                        if [ "$subid" != "" ]; then
+                            ../../scripts/105-get-subnet.sh $subid
                         fi
 
                     fi

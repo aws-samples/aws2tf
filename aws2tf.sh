@@ -420,7 +420,7 @@ if [[ "$s" == "no" ]]; then
     tstart=$(date +%s)
     ls ../../scripts/$pre-get-*$t*.sh 2> /dev/null
     if [[ $? -ne 0 ]];then
-        echo "Filtering on type $t unsupported exiting ..."
+        echo "Filtering on type $t unsupported see:   ./aws2tf.sh -h   exiting ..."
         exit $?
     fi
     for com in $(ls ../../scripts/$pre-get-*$t*.sh | cut -d'/' -f4 | sort -g); do

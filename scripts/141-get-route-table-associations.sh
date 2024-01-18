@@ -105,7 +105,6 @@ for c in $(seq 0 0); do
                         done <"$file"
 
                         ## dependancies
-
                         if [[ $rtid != "" ]]; then
                             ../../scripts/140-get-route-table.sh $rtid
                         fi

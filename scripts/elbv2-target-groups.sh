@@ -100,6 +100,9 @@ for c in `seq 0 0`; do
                     if [[ ${t1} == *"target_failover {}"* ]]; then
                         skip=1
                     fi
+                    if [[ ${t1} == *"target_health_state {}"* ]]; then
+                        skip=1
+                    fi
                 fi
                 
                 if [ "$skip" == "0" ]; then

@@ -77,6 +77,7 @@ for c in $(seq 0 0); do
                     if [[ ${tt1} == "id" ]]; then skip=1; fi
                     if [[ ${tt1} == "role_arn" ]]; then skip=1; fi
                     if [[ ${tt1} == "owner_id" ]]; then skip=1; fi
+                    if [[ ${tt1} == "is_enabled" ]]; then skip=1; fi
 
                 fi
                 if [ "$skip" == "0" ]; then

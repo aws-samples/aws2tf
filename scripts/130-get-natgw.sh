@@ -89,6 +89,14 @@ for c in $(seq 0 0); do
                         subnets+=$(printf "\"%s\" " $tt2)
 
                     fi
+
+                    if [[ ${tt1} == "vpc_id" ]]; then
+                        vpcid=`echo $tt2 | tr -d '"'`
+                        t1=`printf "%s = aws_vpc.%s.id" $tt1 $vpcid`
+                    fi
+
+
+
                     if [[ ${tt1} == "allocation_id" ]]; then
                         eipa=$(echo $tt2 | tr -d '"')
                         t1=$(printf "%s = aws_eip.%s.id" $tt1 $eipa)
@@ -111,6 +119,10 @@ for c in $(seq 0 0); do
                     ../../scripts/105-get-subnet.sh $sub1
                 fi
             done
+            if [ "$vpcid" != "" ]; then
+                ../../scripts/100-get-vpc.sh $vpcid
+            fi
+
 
         done
 

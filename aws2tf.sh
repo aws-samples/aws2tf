@@ -35,10 +35,12 @@ usage() {
     echo "           emr"
     echo "           glue"
     echo "           iam"
+    echo "           igw"
     echo "           kinesis"
     echo "           kms"
     echo "           lambda"
     echo "           lf"
+    echo "           natgw"
     echo "           org"
     echo "           params"
     echo "           privatelink"
@@ -377,6 +379,7 @@ if [ "$t" == "kms" ]; then pre="08*"; fi
 if [ "$t" == "lambda" ]; then pre="700*"; fi
 if [ "$t" == "lf" ]; then pre="63*"; fi
 if [ "$t" == "net" ]; then pre="1*"; fi
+if [ "$t" == "natgw" ]; then pre="130*"; fi
 if [ "$t" == "org" ]; then pre="01*"; fi
 if [ "$t" == "params" ]; then pre="445*"; fi
 if [ "$t" == "privatelink" ]; then pre="230*"; fi

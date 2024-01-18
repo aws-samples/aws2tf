@@ -364,6 +364,7 @@ if [ "$t" == "efs" ]; then pre="27*"; fi
 if [ "$t" == "emr" ]; then pre="37*"; fi
 if [ "$t" == "glue" ]; then pre="65*"; fi
 if [ "$t" == "iam" ]; then pre="05*"; fi
+if [ "$t" == "igw" ]; then pre="120*"; fi
 if [ "$t" == "kinesis" ]; then pre="74*"; fi
 if [ "$t" == "kms" ]; then pre="08*"; fi
 if [ "$t" == "lambda" ]; then pre="700*"; fi

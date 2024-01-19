@@ -28,7 +28,7 @@ for c in $(seq 0 $count); do
     #
     #echo "Reference to undeclared resource"
     # swapping a terraform resource for a arn
-    
+
     if [[ $summ == "Reference to undeclared resource" ]]; then
         if [[ $code == *"="* ]]; then
             res=$(echo $code | cut -f2 -d'=')
@@ -58,6 +58,7 @@ for c in $(seq 0 $count); do
                         eval $cmd
                     fi
                 fi
+
             fi
             if [[ $tft == "aws_kms_key" ]]; then
 

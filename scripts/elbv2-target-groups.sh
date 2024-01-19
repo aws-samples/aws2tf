@@ -64,6 +64,7 @@ for c in `seq 0 0`; do
 				skip=0
                 # display $line or do something with $line
                 t1=`echo "$line"` 
+                trt1=$(echo $t1)
                 if [[ ${t1} == *"="* ]];then
                     tt1=`echo "$line" | cut -f1 -d'=' | tr -d ' '` 
                     tt2=`echo "$line" | cut -f2- -d'='`
@@ -101,6 +102,9 @@ for c in `seq 0 0`; do
                         skip=1
                     fi
                     if [[ ${t1} == *"target_health_state {}"* ]]; then
+                        skip=1
+                    fi
+                    if [[ ${trt1} == "target_health_state{}" ]]; then
                         skip=1
                     fi
                 fi

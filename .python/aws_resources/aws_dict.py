@@ -1050,7 +1050,7 @@ aws_app_cookie_stickiness_policy = {
 }
 
 aws_appautoscaling_policy = {
-	"clfn":		"appautoscaling",
+	"clfn":		"application-autoscaling",
 	"descfn":	"describe_scaling_policies",
 	"topkey":	"ScalingPolicies",
 	"key":		"PolicyName",
@@ -1058,7 +1058,7 @@ aws_appautoscaling_policy = {
 }
 
 aws_appautoscaling_scheduled_action = {
-	"clfn":		"appautoscaling",
+	"clfn":		"application-autoscaling",
 	"descfn":	"describe_scheduled_actions",
 	"topkey":	"ScheduledActions",
 	"key":		"ScheduledActionName",
@@ -1066,7 +1066,7 @@ aws_appautoscaling_scheduled_action = {
 }
 
 aws_appautoscaling_target = {
-	"clfn":		"appautoscaling",
+	"clfn":		"application-autoscaling",
 	"descfn":	"describe_scaling_targets",
 	"topkey":	"ScalingTargets",
 	"key":		"ResourceId",

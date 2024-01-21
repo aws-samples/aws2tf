@@ -1170,7 +1170,7 @@ aws_appintegrations_event_integration = {
 }
 
 aws_applicationinsights_application = {
-	"clfn":		"applicationinsights",
+	"clfn":		"application-insights",
 	"descfn":	"list_applications",
 	"topkey":	"ApplicationInfoList",
 	"key":		"Name",
@@ -1594,7 +1594,7 @@ aws_autoscaling_traffic_source_attachment = {
 }
 
 aws_autoscalingplans_scaling_plan = {
-	"clfn":		"autoscalingplans",
+	"clfn":		"autoscaling-plans",
 	"descfn":	"list_scaling_plans",
 	"topkey":	"ScalingPlans",
 	"key":		"ScalingPlanName",
@@ -1722,7 +1722,7 @@ aws_bedrock_model_invocation_logging_configuration = {
 }
 
 aws_billing_service_account = {
-	"clfn":		"billing",
+	"clfn":		"billingconductor",
 	"descfn":	"list_service_accounts",
 	"topkey":	"ServiceAccounts",
 	"key":		"ServiceAccountId",
@@ -1794,7 +1794,7 @@ aws_ce_cost_category = {
 }
 
 aws_chime_voice_connector = {
-	"clfn":		"chime",
+	"clfn":		"chime-sdk-voice",
 	"descfn":	"list_voice_connectors",
 	"topkey":	"VoiceConnectors",
 	"key":		"Name",
@@ -1802,7 +1802,7 @@ aws_chime_voice_connector = {
 }
 
 aws_chime_voice_connector_group = {
-	"clfn":		"chime",
+	"clfn":		"chime-sdk-voice",
 	"descfn":	"list_voice_connector_groups",
 	"topkey":	"VoiceConnectorGroups",
 	"key":		"Name",
@@ -1810,7 +1810,7 @@ aws_chime_voice_connector_group = {
 }
 
 aws_chime_voice_connector_logging = {
-	"clfn":		"chime",
+	"clfn":		"chime-sdk-voice",
 	"descfn":	"list_voice_connector_logging_configurations",
 	"topkey":	"VoiceConnectorLoggingConfigurations",
 	"key":		"VoiceConnectorName",
@@ -1818,7 +1818,7 @@ aws_chime_voice_connector_logging = {
 }
 
 aws_chime_voice_connector_origination = {
-	"clfn":		"chime",
+	"clfn":		"chime-sdk-voice",
 	"descfn":	"list_voice_connector_origination_configurations",
 	"topkey":	"VoiceConnectorOriginationConfigurations",
 	"key":		"VoiceConnectorName",
@@ -1826,7 +1826,7 @@ aws_chime_voice_connector_origination = {
 }
 
 aws_chime_voice_connector_streaming = {
-	"clfn":		"chime",
+	"clfn":		"chime-sdk-voice",
 	"descfn":	"list_voice_connector_streaming_configurations",
 	"topkey":	"VoiceConnectorStreamingConfigurations",
 	"key":		"VoiceConnectorName",
@@ -1834,7 +1834,7 @@ aws_chime_voice_connector_streaming = {
 }
 
 aws_chime_voice_connector_termination = {
-	"clfn":		"chime",
+	"clfn":		"chime-sdk-voice",
 	"descfn":	"list_voice_connector_termination_configurations",
 	"topkey":	"VoiceConnectorTerminationConfigurations",
 	"key":		"VoiceConnectorName",
@@ -1842,7 +1842,7 @@ aws_chime_voice_connector_termination = {
 }
 
 aws_chime_voice_connector_termination_credentials = {
-	"clfn":		"chime",
+	"clfn":		"chime-sdk-voice",
 	"descfn":	"list_voice_connector_termination_credentials",
 	"topkey":	"VoiceConnectorTerminationCredentials",
 	"key":		"Name",
@@ -1850,7 +1850,7 @@ aws_chime_voice_connector_termination_credentials = {
 }
 
 aws_chimesdkmediapipelines_media_insights_pipeline_configuration = {
-	"clfn":		"chimesdkmediapipelines",
+	"clfn":		"chime-sdk-media-pipelines",
 	"descfn":	"list_media_insights_pipelines",
 	"topkey":	"MediaInsightsPipelines",
 	"key":		"Name",
@@ -1858,7 +1858,7 @@ aws_chimesdkmediapipelines_media_insights_pipeline_configuration = {
 }
 
 aws_chimesdkvoice_global_settings = {
-	"clfn":		"chimesdkvoice",
+	"clfn":		"chime-sdk-voice",
 	"descfn":	"list_global_settings",
 	"topkey":	"GlobalSettings",
 	"key":		"GlobalSettingsName",
@@ -1866,7 +1866,7 @@ aws_chimesdkvoice_global_settings = {
 }
 
 aws_chimesdkvoice_sip_media_application = {
-	"clfn":		"chimesdkvoice",
+	"clfn":		"chime-sdk-voice",
 	"descfn":	"list_sip_media_applications",
 	"topkey":	"SipMediaApplications",
 	"key":		"Name",
@@ -1874,7 +1874,7 @@ aws_chimesdkvoice_sip_media_application = {
 }
 
 aws_chimesdkvoice_sip_rule = {
-	"clfn":		"chimesdkvoice",
+	"clfn":		"chime-sdk-voice",
 	"descfn":	"list_sip_rules",
 	"topkey":	"SipRules",
 	"key":		"Name",
@@ -1882,7 +1882,7 @@ aws_chimesdkvoice_sip_rule = {
 }
 
 aws_chimesdkvoice_voice_profile_domain = {
-	"clfn":		"chimesdkvoice",
+	"clfn":		"chime-sdk-voice",
 	"descfn":	"list_voice_profile_domains",
 	"topkey":	"VoiceProfileDomains",
 	"key":		"Name",
@@ -1922,7 +1922,7 @@ aws_cloud9_environment_membership = {
 }
 
 aws_cloudcontrolapi_resource = {
-	"clfn":		"cloudcontrolapi",
+	"clfn":		"cloudcontrol",
 	"descfn":	"list_resources",
 	"topkey":	"Resources",
 	"key":		"Identifier",
@@ -2514,7 +2514,7 @@ aws_codestarnotifications_notification_rule = {
 }
 
 aws_cognito_identity_pool = {
-	"clfn":		"cognito",
+	"clfn":		"cognito-identity",
 	"descfn":	"list_identity_pools",
 	"topkey":	"IdentityPools",
 	"key":		"IdentityPoolName",
@@ -2522,7 +2522,7 @@ aws_cognito_identity_pool = {
 }
 
 aws_cognito_identity_pool_provider_principal_tag = {
-	"clfn":		"cognito",
+	"clfn":		"cognito-identity",
 	"descfn":	"list_identity_pool_roles",
 	"topkey":	"IdentityPoolRoles",
 	"key":		"IdentityPoolId",
@@ -2530,7 +2530,7 @@ aws_cognito_identity_pool_provider_principal_tag = {
 }
 
 aws_cognito_identity_pool_roles_attachment = {
-	"clfn":		"cognito",
+	"clfn":		"cognito-identity",
 	"descfn":	"list_identity_pool_roles_attachments",
 	"topkey":	"IdentityPoolRolesAttachments",
 	"key":		"IdentityPoolId",
@@ -2538,7 +2538,7 @@ aws_cognito_identity_pool_roles_attachment = {
 }
 
 aws_cognito_identity_provider = {
-	"clfn":		"cognito",
+	"clfn":		"cognito-idp",
 	"descfn":	"list_identity_providers",
 	"topkey":	"IdentityProviders",
 	"key":		"ProviderName",
@@ -2546,7 +2546,7 @@ aws_cognito_identity_provider = {
 }
 
 aws_cognito_managed_user_pool_client = {
-	"clfn":		"cognito",
+	"clfn":		"cognito-idp",
 	"descfn":	"list_user_pool_clients",
 	"topkey":	"UserPoolClients",
 	"key":		"ClientName",
@@ -2562,7 +2562,7 @@ aws_cognito_resource_server = {
 }
 
 aws_cognito_risk_configuration = {
-	"clfn":		"cognito",
+	"clfn":		"cognito-idp",
 	"descfn":	"list_risk_configurations",
 	"topkey":	"RiskConfigurations",
 	"key":		"Id",
@@ -2570,7 +2570,7 @@ aws_cognito_risk_configuration = {
 }
 
 aws_cognito_user = {
-	"clfn":		"cognito",
+	"clfn":		"cognito-idp",
 	"descfn":	"list_users",
 	"topkey":	"Users",
 	"key":		"Username",
@@ -2578,7 +2578,7 @@ aws_cognito_user = {
 }
 
 aws_cognito_user_group = {
-	"clfn":		"cognito",
+	"clfn":		"cognito-idp",
 	"descfn":	"list_user_groups",
 	"topkey":	"UserGroups",
 	"key":		"GroupName",
@@ -2586,7 +2586,7 @@ aws_cognito_user_group = {
 }
 
 aws_cognito_user_in_group = {
-	"clfn":		"cognito",
+	"clfn":		"cognito-idp",
 	"descfn":	"list_users_in_group",
 	"topkey":	"UsersInGroup",
 	"key":		"Username",
@@ -2594,7 +2594,7 @@ aws_cognito_user_in_group = {
 }
 
 aws_cognito_user_pool = {
-	"clfn":		"cognito",
+	"clfn":		"cognito-idp",
 	"descfn":	"list_user_pools",
 	"topkey":	"UserPools",
 	"key":		"Name",
@@ -2602,7 +2602,7 @@ aws_cognito_user_pool = {
 }
 
 aws_cognito_user_pool_client = {
-	"clfn":		"cognito",
+	"clfn":		"cognito-idp",
 	"descfn":	"list_user_pool_clients",
 	"topkey":	"UserPoolClients",
 	"key":		"ClientName",
@@ -2610,7 +2610,7 @@ aws_cognito_user_pool_client = {
 }
 
 aws_cognito_user_pool_domain = {
-	"clfn":		"cognito",
+	"clfn":		"cognito-idp",
 	"descfn":	"list_user_pool_domains",
 	"topkey":	"UserPoolDomains",
 	"key":		"Domain",
@@ -2618,7 +2618,7 @@ aws_cognito_user_pool_domain = {
 }
 
 aws_cognito_user_pool_ui_customization = {
-	"clfn":		"cognito",
+	"clfn":		"cognito-idp",
 	"descfn":	"list_user_pool_uis",
 	"topkey":	"UserPoolUis",
 	"key":		"UserPoolId",
@@ -6322,7 +6322,7 @@ aws_lexv2models_bot_version = {
 }
 
 aws_licensemanager_association = {
-	"clfn":		"licensemanager",
+	"clfn":		"license-manager",
 	"descfn":	"list_associations",
 	"topkey":	"Associations",
 	"key":		"LicenseConfigurationArn",
@@ -6330,7 +6330,7 @@ aws_licensemanager_association = {
 }
 
 aws_licensemanager_grant = {
-	"clfn":		"licensemanager",
+	"clfn":		"license-manager",
 	"descfn":	"list_grants",
 	"topkey":	"Grants",
 	"key":		"GrantArn",
@@ -6338,7 +6338,7 @@ aws_licensemanager_grant = {
 }
 
 aws_licensemanager_grant_accepter = {
-	"clfn":		"licensemanager",
+	"clfn":		"license-manager",
 	"descfn":	"list_grant_accepters",
 	"topkey":	"GrantAccepters",
 	"key":		"GrantId",
@@ -6346,7 +6346,7 @@ aws_licensemanager_grant_accepter = {
 }
 
 aws_licensemanager_grants = {
-	"clfn":		"licensemanager",
+	"clfn":		"license-manager",
 	"descfn":	"list_grants",
 	"topkey":	"Grants",
 	"key":		"GrantArn",
@@ -6354,7 +6354,7 @@ aws_licensemanager_grants = {
 }
 
 aws_licensemanager_license_configuration = {
-	"clfn":		"licensemanager",
+	"clfn":		"license-manager",
 	"descfn":	"list_license_configurations",
 	"topkey":	"LicenseConfigurations",
 	"key":		"LicenseConfigurationArn",
@@ -6362,7 +6362,7 @@ aws_licensemanager_license_configuration = {
 }
 
 aws_licensemanager_received_license = {
-	"clfn":		"licensemanager",
+	"clfn":		"license-manager",
 	"descfn":	"list_received_licenses",
 	"topkey":	"ReceivedLicenses",
 	"key":		"LicenseId",
@@ -6370,7 +6370,7 @@ aws_licensemanager_received_license = {
 }
 
 aws_licensemanager_received_licenses = {
-	"clfn":		"licensemanager",
+	"clfn":		"license-manager",
 	"descfn":	"list_received_licenses",
 	"topkey":	"ReceivedLicenses",
 	"key":		"LicenseId",
@@ -6858,7 +6858,7 @@ aws_mq_configuration = {
 }
 
 aws_msk_broker_nodes = {
-	"clfn":		"msk",
+	"clfn":		"kafka",
 	"descfn":	"list_nodes",
 	"topkey":	"Nodes",
 	"key":		"NodeId",
@@ -6866,7 +6866,7 @@ aws_msk_broker_nodes = {
 }
 
 aws_msk_cluster = {
-	"clfn":		"msk",
+	"clfn":		"kafka",
 	"descfn":	"list_clusters",
 	"topkey":	"Clusters",
 	"key":		"ClusterName",
@@ -6874,7 +6874,7 @@ aws_msk_cluster = {
 }
 
 aws_msk_cluster_policy = {
-	"clfn":		"msk",
+	"clfn":		"kafka",
 	"descfn":	"list_cluster_policies",
 	"topkey":	"ClusterPolicies",
 	"key":		"PolicyName",
@@ -6882,7 +6882,7 @@ aws_msk_cluster_policy = {
 }
 
 aws_msk_configuration = {
-	"clfn":		"msk",
+	"clfn":		"kafka",
 	"descfn":	"list_configurations",
 	"topkey":	"Configurations",
 	"key":		"Arn",
@@ -6890,7 +6890,7 @@ aws_msk_configuration = {
 }
 
 aws_msk_kafka_version = {
-	"clfn":		"msk",
+	"clfn":		"kafka",
 	"descfn":	"list_kafka_versions",
 	"topkey":	"KafkaVersions",
 	"key":		"Version",
@@ -6898,7 +6898,7 @@ aws_msk_kafka_version = {
 }
 
 aws_msk_replicator = {
-	"clfn":		"msk",
+	"clfn":		"kafka",
 	"descfn":	"list_replicators",
 	"topkey":	"Replicators",
 	"key":		"ReplicatorName",
@@ -6906,7 +6906,7 @@ aws_msk_replicator = {
 }
 
 aws_msk_scram_secret_association = {
-	"clfn":		"msk",
+	"clfn":		"kafka",
 	"descfn":	"list_scram_secrets",
 	"topkey":	"ScramSecrets",
 	"key":		"ClusterArn",
@@ -6914,7 +6914,7 @@ aws_msk_scram_secret_association = {
 }
 
 aws_msk_serverless_cluster = {
-	"clfn":		"msk",
+	"clfn":		"kafka",
 	"descfn":	"list_serverless_clusters",
 	"topkey":	"ServerlessClusters",
 	"key":		"ClusterName",
@@ -6922,7 +6922,7 @@ aws_msk_serverless_cluster = {
 }
 
 aws_msk_vpc_connection = {
-	"clfn":		"msk",
+	"clfn":		"kafka",
 	"descfn":	"list_vpc_connections",
 	"topkey":	"VpcConnections",
 	"key":		"VpcConnectionName",
@@ -6930,7 +6930,7 @@ aws_msk_vpc_connection = {
 }
 
 aws_mskconnect_connector = {
-	"clfn":		"mskconnect",
+	"clfn":		"kafkaconnect",
 	"descfn":	"list_connectors",
 	"topkey":	"Connectors",
 	"key":		"Name",
@@ -6938,7 +6938,7 @@ aws_mskconnect_connector = {
 }
 
 aws_mskconnect_custom_plugin = {
-	"clfn":		"mskconnect",
+	"clfn":		"kafkaconnect",
 	"descfn":	"list_custom_plugins",
 	"topkey":	"CustomPlugins",
 	"key":		"Name",
@@ -6946,7 +6946,7 @@ aws_mskconnect_custom_plugin = {
 }
 
 aws_mskconnect_worker_configuration = {
-	"clfn":		"mskconnect",
+	"clfn":		"kafkaconnect",
 	"descfn":	"list_worker_configurations",
 	"topkey":	"WorkerConfigurations",
 	"key":		"Name",
@@ -7930,7 +7930,7 @@ aws_pricing_product = {
 }
 
 aws_prometheus_alert_manager_definition = {
-	"clfn":		"prometheus",
+	"clfn":		"amp",
 	"descfn":	"list_alertmanager_definition",
 	"topkey":	"AlertmanagerDefinition",
 	"key":		"Name",
@@ -7938,7 +7938,7 @@ aws_prometheus_alert_manager_definition = {
 }
 
 aws_prometheus_rule_group_namespace = {
-	"clfn":		"prometheus",
+	"clfn":		"amp",
 	"descfn":	"list_rule_group_namespaces",
 	"topkey":	"RuleGroupNamespaces",
 	"key":		"Name",
@@ -7946,7 +7946,7 @@ aws_prometheus_rule_group_namespace = {
 }
 
 aws_prometheus_workspace = {
-	"clfn":		"prometheus",
+	"clfn":		"amp",
 	"descfn":	"list_workspaces",
 	"topkey":	"Workspaces",
 	"key":		"Name",
@@ -9802,7 +9802,7 @@ aws_servicecatalog_tag_option_resource_association = {
 }
 
 aws_servicequotas_service = {
-	"clfn":		"servicequotas",
+	"clfn":		"service-quotas",
 	"descfn":	"list_services",
 	"topkey":	"Services",
 	"key":		"ServiceCode",
@@ -9810,7 +9810,7 @@ aws_servicequotas_service = {
 }
 
 aws_servicequotas_service_quota = {
-	"clfn":		"servicequotas",
+	"clfn":		"service-quotas",
 	"descfn":	"list_service_quotas",
 	"topkey":	"Quotas",
 	"key":		"QuotaCode",
@@ -9818,7 +9818,7 @@ aws_servicequotas_service_quota = {
 }
 
 aws_servicequotas_template = {
-	"clfn":		"servicequotas",
+	"clfn":		"service-quotas",
 	"descfn":	"list_templates",
 	"topkey":	"Templates",
 	"key":		"TemplateId",
@@ -9826,7 +9826,7 @@ aws_servicequotas_template = {
 }
 
 aws_servicequotas_template_association = {
-	"clfn":		"servicequotas",
+	"clfn":		"service-quotas",
 	"descfn":	"list_template_associations",
 	"topkey":	"TemplateAssociations",
 	"key":		"TemplateAssociationId",
@@ -9834,7 +9834,7 @@ aws_servicequotas_template_association = {
 }
 
 aws_servicequotas_templates = {
-	"clfn":		"servicequotas",
+	"clfn":		"service-quotas",
 	"descfn":	"list_templates",
 	"topkey":	"Templates",
 	"key":		"TemplateId",
@@ -10130,7 +10130,7 @@ aws_signer_signing_profile_permission = {
 }
 
 aws_simpledb_domain = {
-	"clfn":		"simpledb",
+	"clfn":		"sdb",
 	"descfn":	"list_domains",
 	"topkey":	"DomainNames",
 	"key":		"DomainName",
@@ -10378,7 +10378,7 @@ aws_ssm_service_setting = {
 }
 
 aws_ssmcontacts_contact = {
-	"clfn":		"ssmcontacts",
+	"clfn":		"ssm-contacts",
 	"descfn":	"list_contacts",
 	"topkey":	"Contacts",
 	"key":		"Alias",
@@ -10386,7 +10386,7 @@ aws_ssmcontacts_contact = {
 }
 
 aws_ssmcontacts_contact_channel = {
-	"clfn":		"ssmcontacts",
+	"clfn":		"ssm-contacts",
 	"descfn":	"list_contact_channels",
 	"topkey":	"ContactChannels",
 	"key":		"ChannelId",
@@ -10394,7 +10394,7 @@ aws_ssmcontacts_contact_channel = {
 }
 
 aws_ssmcontacts_plan = {
-	"clfn":		"ssmcontacts",
+	"clfn":		"ssm-contacts",
 	"descfn":	"list_plans",
 	"topkey":	"Plans",
 	"key":		"PlanId",
@@ -10402,7 +10402,7 @@ aws_ssmcontacts_plan = {
 }
 
 aws_ssmincidents_replication_set = {
-	"clfn":		"ssmincidents",
+	"clfn":		"ssm-incidents",
 	"descfn":	"list_replication_sets",
 	"topkey":	"ReplicationSets",
 	"key":		"Arn",
@@ -10410,7 +10410,7 @@ aws_ssmincidents_replication_set = {
 }
 
 aws_ssmincidents_response_plan = {
-	"clfn":		"ssmincidents",
+	"clfn":		"ssm-incidents",
 	"descfn":	"list_response_plans",
 	"topkey":	"ResponsePlans",
 	"key":		"Arn",
@@ -10418,7 +10418,7 @@ aws_ssmincidents_response_plan = {
 }
 
 aws_ssoadmin_account_assignment = {
-	"clfn":		"ssoadmin",
+	"clfn":		"sso-admin",
 	"descfn":	"list_account_assignments",
 	"topkey":	"AccountAssignments",
 	"key":		"AccountAssignmentCreationTime",
@@ -10426,7 +10426,7 @@ aws_ssoadmin_account_assignment = {
 }
 
 aws_ssoadmin_application = {
-	"clfn":		"ssoadmin",
+	"clfn":		"sso-admin",
 	"descfn":	"list_applications",
 	"topkey":	"Applications",
 	"key":		"ApplicationId",
@@ -10434,7 +10434,7 @@ aws_ssoadmin_application = {
 }
 
 aws_ssoadmin_application_assignment = {
-	"clfn":		"ssoadmin",
+	"clfn":		"sso-admin",
 	"descfn":	"list_application_assignments",
 	"topkey":	"ApplicationAssignments",
 	"key":		"AccountAssignmentCreationTime",
@@ -10442,7 +10442,7 @@ aws_ssoadmin_application_assignment = {
 }
 
 aws_ssoadmin_application_assignment_configuration = {
-	"clfn":		"ssoadmin",
+	"clfn":		"sso-admin",
 	"descfn":	"list_application_assignment_configurations",
 	"topkey":	"ApplicationAssignmentConfigurations",
 	"key":		"AccountAssignmentCreationTime",
@@ -10450,7 +10450,7 @@ aws_ssoadmin_application_assignment_configuration = {
 }
 
 aws_ssoadmin_application_assignments = {
-	"clfn":		"ssoadmin",
+	"clfn":		"sso-admin",
 	"descfn":	"list_application_assignments",
 	"topkey":	"ApplicationAssignments",
 	"key":		"AccountAssignmentCreationTime",
@@ -10458,7 +10458,7 @@ aws_ssoadmin_application_assignments = {
 }
 
 aws_ssoadmin_application_providers = {
-	"clfn":		"ssoadmin",
+	"clfn":		"sso-admin",
 	"descfn":	"list_application_providers",
 	"topkey":	"ApplicationProviders",
 	"key":		"ApplicationProviderId",
@@ -10466,7 +10466,7 @@ aws_ssoadmin_application_providers = {
 }
 
 aws_ssoadmin_customer_managed_policy_attachment = {
-	"clfn":		"ssoadmin",
+	"clfn":		"sso-admin",
 	"descfn":	"list_customer_managed_policy_attachments",
 	"topkey":	"CustomerManagedPolicyAttachments",
 	"key":		"AccountAssignmentCreationTime",
@@ -10474,7 +10474,7 @@ aws_ssoadmin_customer_managed_policy_attachment = {
 }
 
 aws_ssoadmin_instance_access_control_attributes = {
-	"clfn":		"ssoadmin",
+	"clfn":		"sso-admin",
 	"descfn":	"list_instance_access_control_attribute_configuration",
 	"topkey":	"InstanceAccessControlAttributeConfiguration",
 	"key":		"AccountAssignmentCreationTime",
@@ -10482,7 +10482,7 @@ aws_ssoadmin_instance_access_control_attributes = {
 }
 
 aws_ssoadmin_instances = {
-	"clfn":		"ssoadmin",
+	"clfn":		"sso-admin",
 	"descfn":	"list_instances",
 	"topkey":	"Instances",
 	"key":		"InstanceArn",
@@ -10490,7 +10490,7 @@ aws_ssoadmin_instances = {
 }
 
 aws_ssoadmin_managed_policy_attachment = {
-	"clfn":		"ssoadmin",
+	"clfn":		"sso-admin",
 	"descfn":	"list_managed_policy_attachments",
 	"topkey":	"ManagedPolicyAttachments",
 	"key":		"AccountAssignmentCreationTime",
@@ -10498,7 +10498,7 @@ aws_ssoadmin_managed_policy_attachment = {
 }
 
 aws_ssoadmin_permission_set = {
-	"clfn":		"ssoadmin",
+	"clfn":		"sso-admin",
 	"descfn":	"list_permission_sets",
 	"topkey":	"PermissionSets",
 	"key":		"PermissionSetArn",
@@ -10506,7 +10506,7 @@ aws_ssoadmin_permission_set = {
 }
 
 aws_ssoadmin_permission_set_inline_policy = {
-	"clfn":		"ssoadmin",
+	"clfn":		"sso-admin",
 	"descfn":	"list_permission_set_inline_policies",
 	"topkey":	"PermissionSetInlinePolicies",
 	"key":		"PermissionSetArn",
@@ -10514,7 +10514,7 @@ aws_ssoadmin_permission_set_inline_policy = {
 }
 
 aws_ssoadmin_permissions_boundary_attachment = {
-	"clfn":		"ssoadmin",
+	"clfn":		"sso-admin",
 	"descfn":	"list_permissions_boundary_attachments",
 	"topkey":	"PermissionsBoundaryAttachments",
 	"key":		"AccountAssignmentCreationTime",
@@ -10522,7 +10522,7 @@ aws_ssoadmin_permissions_boundary_attachment = {
 }
 
 aws_ssoadmin_principal_application_assignments = {
-	"clfn":		"ssoadmin",
+	"clfn":		"sso-admin",
 	"descfn":	"list_principal_application_assignments",
 	"topkey":	"PrincipalApplicationAssignments",
 	"key":		"AccountAssignmentCreationTime",
@@ -10530,7 +10530,7 @@ aws_ssoadmin_principal_application_assignments = {
 }
 
 aws_ssoadmin_trusted_token_issuer = {
-	"clfn":		"ssoadmin",
+	"clfn":		"sso-admin",
 	"descfn":	"list_trusted_token_issuers",
 	"topkey":	"TrustedTokenIssuers",
 	"key":		"TrustedTokenIssuerId",
@@ -10658,7 +10658,7 @@ aws_synthetics_group_association = {
 }
 
 aws_timestreamwrite_database = {
-	"clfn":		"timestreamwrite",
+	"clfn":		"timestream-write",
 	"descfn":	"list_databases",
 	"topkey":	"Databases",
 	"key":		"DatabaseName",
@@ -10666,7 +10666,7 @@ aws_timestreamwrite_database = {
 }
 
 aws_timestreamwrite_table = {
-	"clfn":		"timestreamwrite",
+	"clfn":		"timestream-write",
 	"descfn":	"list_tables",
 	"topkey":	"Tables",
 	"key":		"TableName",
@@ -10786,7 +10786,7 @@ aws_transfer_workflow = {
 }
 
 aws_verifiedaccess_endpoint = {
-	"clfn":		"verifiedaccess",
+	"clfn":		"ec2",
 	"descfn":	"list_endpoints",
 	"topkey":	"Endpoints",
 	"key":		"EndpointId",
@@ -10794,7 +10794,7 @@ aws_verifiedaccess_endpoint = {
 }
 
 aws_verifiedaccess_group = {
-	"clfn":		"verifiedaccess",
+	"clfn":		"ec2",
 	"descfn":	"list_groups",
 	"topkey":	"Groups",
 	"key":		"GroupId",
@@ -10802,7 +10802,7 @@ aws_verifiedaccess_group = {
 }
 
 aws_verifiedaccess_instance = {
-	"clfn":		"verifiedaccess",
+	"clfn":		"ec2",
 	"descfn":	"list_instances",
 	"topkey":	"Instances",
 	"key":		"InstanceId",
@@ -10810,7 +10810,7 @@ aws_verifiedaccess_instance = {
 }
 
 aws_verifiedaccess_instance_logging_configuration = {
-	"clfn":		"verifiedaccess",
+	"clfn":		"ec2",
 	"descfn":	"list_instance_logging_configurations",
 	"topkey":	"InstanceLoggingConfigurations",
 	"key":		"InstanceId",
@@ -10818,7 +10818,7 @@ aws_verifiedaccess_instance_logging_configuration = {
 }
 
 aws_verifiedaccess_instance_trust_provider_attachment = {
-	"clfn":		"verifiedaccess",
+	"clfn":		"ec2",
 	"descfn":	"list_instance_trust_providers",
 	"topkey":	"InstanceTrustProviders",
 	"key":		"InstanceId",
@@ -10826,7 +10826,7 @@ aws_verifiedaccess_instance_trust_provider_attachment = {
 }
 
 aws_verifiedaccess_trust_provider = {
-	"clfn":		"verifiedaccess",
+	"clfn":		"ec2",
 	"descfn":	"list_trust_providers",
 	"topkey":	"TrustProviders",
 	"key":		"TrustProviderId",
@@ -11042,7 +11042,7 @@ aws_vpc_security_group_ingress_rule = {
 }
 
 aws_vpclattice_target_group_attachment = {
-	"clfn":		"vpclattice",
+	"clfn":		"vpc-lattice",
 	"descfn":	"list_target_group_attachments",
 	"topkey":	"TargetGroupAttachments",
 	"key":		"TargetGroupAttachmentId",
@@ -11186,7 +11186,7 @@ aws_waf_xss_match_set = {
 }
 
 aws_wafregional_byte_match_set = {
-	"clfn":		"wafregional",
+	"clfn":		"waf-regional",
 	"descfn":	"list_byte_match_sets",
 	"topkey":	"ByteMatchSets",
 	"key":		"ByteMatchSetId",
@@ -11194,7 +11194,7 @@ aws_wafregional_byte_match_set = {
 }
 
 aws_wafregional_geo_match_set = {
-	"clfn":		"wafregional",
+	"clfn":		"waf-regional",
 	"descfn":	"list_geo_match_sets",
 	"topkey":	"GeoMatchSets",
 	"key":		"GeoMatchSetId",
@@ -11202,7 +11202,7 @@ aws_wafregional_geo_match_set = {
 }
 
 aws_wafregional_ipset = {
-	"clfn":		"wafregional",
+	"clfn":		"waf-regional",
 	"descfn":	"list_ip_sets",
 	"topkey":	"IPSets",
 	"key":		"IPSetId",
@@ -11210,7 +11210,7 @@ aws_wafregional_ipset = {
 }
 
 aws_wafregional_rate_based_rule = {
-	"clfn":		"wafregional",
+	"clfn":		"waf-regional",
 	"descfn":	"list_rate_based_rules",
 	"topkey":	"RateBasedRules",
 	"key":		"RuleId",
@@ -11218,7 +11218,7 @@ aws_wafregional_rate_based_rule = {
 }
 
 aws_wafregional_regex_match_set = {
-	"clfn":		"wafregional",
+	"clfn":		"waf-regional",
 	"descfn":	"list_regex_match_sets",
 	"topkey":	"RegexMatchSets",
 	"key":		"RegexMatchSetId",
@@ -11226,7 +11226,7 @@ aws_wafregional_regex_match_set = {
 }
 
 aws_wafregional_regex_pattern_set = {
-	"clfn":		"wafregional",
+	"clfn":		"waf-regional",
 	"descfn":	"list_regex_pattern_sets",
 	"topkey":	"RegexPatternSets",
 	"key":		"RegexPatternSetId",
@@ -11234,7 +11234,7 @@ aws_wafregional_regex_pattern_set = {
 }
 
 aws_wafregional_rule = {
-	"clfn":		"wafregional",
+	"clfn":		"waf-regional",
 	"descfn":	"list_rules",
 	"topkey":	"Rules",
 	"key":		"RuleId",
@@ -11242,7 +11242,7 @@ aws_wafregional_rule = {
 }
 
 aws_wafregional_rule_group = {
-	"clfn":		"wafregional",
+	"clfn":		"waf-regional",
 	"descfn":	"list_rule_groups",
 	"topkey":	"RuleGroups",
 	"key":		"RuleGroupId",
@@ -11250,7 +11250,7 @@ aws_wafregional_rule_group = {
 }
 
 aws_wafregional_size_constraint_set = {
-	"clfn":		"wafregional",
+	"clfn":		"waf-regional",
 	"descfn":	"list_size_constraint_sets",
 	"topkey":	"SizeConstraintSets",
 	"key":		"SizeConstraintSetId",
@@ -11258,7 +11258,7 @@ aws_wafregional_size_constraint_set = {
 }
 
 aws_wafregional_sql_injection_match_set = {
-	"clfn":		"wafregional",
+	"clfn":		"waf-regional",
 	"descfn":	"list_sql_injection_match_sets",
 	"topkey":	"SqlInjectionMatchSets",
 	"key":		"SqlInjectionMatchSetId",
@@ -11266,7 +11266,7 @@ aws_wafregional_sql_injection_match_set = {
 }
 
 aws_wafregional_web_acl = {
-	"clfn":		"wafregional",
+	"clfn":		"waf-regional",
 	"descfn":	"list_web_acls",
 	"topkey":	"WebACLs",
 	"key":		"WebACLId",
@@ -11274,7 +11274,7 @@ aws_wafregional_web_acl = {
 }
 
 aws_wafregional_web_acl_association = {
-	"clfn":		"wafregional",
+	"clfn":		"waf-regional",
 	"descfn":	"list_web_acl_associations",
 	"topkey":	"WebACLAssociations",
 	"key":		"AssociationId",
@@ -11282,7 +11282,7 @@ aws_wafregional_web_acl_association = {
 }
 
 aws_wafregional_xss_match_set = {
-	"clfn":		"wafregional",
+	"clfn":		"waf-regional",
 	"descfn":	"list_xss_match_sets",
 	"topkey":	"XssMatchSets",
 	"key":		"XssMatchSetId",

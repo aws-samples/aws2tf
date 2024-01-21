@@ -1,7 +1,6 @@
 import common
 import botocore
 import globals
-import fixtf2
 
 def get_aws_vpclattice_service(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug:  print("--> In get_aws_vpclattice_service doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
@@ -33,7 +32,7 @@ def get_aws_vpclattice_service(type,id,clfn,descfn,topkey,key,filterid):
       theid=retid
       common.write_import(type,theid,None) 
       #print("**********************VPC Lattice listener"+str(theid))
-      fixtf2.add_dependancy("aws_vpclattice_listener",theid)
+      common.add_dependancy("aws_vpclattice_listener",theid)
 
    return True
 
@@ -91,7 +90,7 @@ def get_aws_vpclattice_auth_policy(type,id,clfn,descfn,topkey,key,filterid):
         # can use the arn - wants to import with id
 
         common.write_import(type,id,None) 
-        #fixtf2.add_dependancy("aws_vpclattice_listener_rule",theid)
+        #common.add_dependancy("aws_vpclattice_listener_rule",theid)
         #globals.rproc["aws_vpclattice_listener."+id]=True
 
    return True
@@ -131,7 +130,7 @@ def get_aws_vpclattice_listener(type,id,clfn,descfn,topkey,key,filterid):
         retid=j['id']
         theid=id+"/"+retid
         common.write_import(type,theid,None) 
-        fixtf2.add_dependancy("aws_vpclattice_listener_rule",theid)
+        common.add_dependancy("aws_vpclattice_listener_rule",theid)
         globals.rproc["aws_vpclattice_listener."+id]=True
 
    return True

@@ -1,3 +1,7 @@
+import common
+import fixtf
+
+
 def aws_iam_access_key(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
@@ -44,7 +48,7 @@ def aws_iam_policy(t1,tt1,tt2,flag1,flag2):
         tt2=tt2.strip('\"')
         if len(tt2) > 0: flag1=True
     if tt1 == "name_prefix" and flag1 is True: skip=1
-    if tt1 == "policy": t1=globals_replace(t1,tt1,tt2)
+    if tt1 == "policy": t1=fixtf.globals_replace(t1,tt1,tt2)
   
     return skip,t1,flag1,flag2
 
@@ -68,8 +72,8 @@ def  aws_iam_role(t1,tt1,tt2,flag1,flag2):
             flag1=True
             flag2=tt2
     if tt1 == "name_prefix" and flag1 is True: skip=1
-    if tt1 == "policy": t1=globals_replace(t1,tt1,tt2)
-    if tt1 == "assume_role_policy": t1=globals_replace(t1,tt1,tt2)
+    if tt1 == "policy": t1=fixtf.globals_replace(t1,tt1,tt2)
+    if tt1 == "assume_role_policy": t1=fixtf.globals_replace(t1,tt1,tt2)
     if tt1 == "managed_policy_arns":   
         if tt2 == "[]": 
             skip=1
@@ -99,7 +103,7 @@ def  aws_iam_role(t1,tt1,tt2,flag1,flag2):
         else:
             pass
     #    else:
-    #        t1=globals_replace(t1,tt1,tt2)
+    #        t1=fixtf.globals_replace(t1,tt1,tt2)
     return skip,t1,flag1,flag2
 
 def aws_iam_role_policy(t1,tt1,tt2,flag1,flag2):
@@ -107,7 +111,7 @@ def aws_iam_role_policy(t1,tt1,tt2,flag1,flag2):
     if tt1 == "role_name":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
-        add_dependancy("aws_iam_role",tt2)
+        common.add_dependancy("aws_iam_role",tt2)
   
     return skip,t1,flag1,flag2
 
@@ -117,13 +121,13 @@ def aws_iam_role_policy_attachment(t1,tt1,tt2,flag1,flag2):
     if tt1 == "role":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
-        add_dependancy("aws_iam_role",tt2)
+        common.add_dependancy("aws_iam_role",tt2)
     # skip as using policy arns minus account number etc..
     #if tt1 == "policy_arn": 
     #    tt2=tt2.strip('\"')
     #    tt2=str(tt2).split("/")[-1]
     #    t1=tt1 + " = aws_iam_policy." + str(tt2) + ".arn\n"
-    if tt1 == "policy_arn": t1=globals_replace(t1,tt1,tt2)
+    if tt1 == "policy_arn": t1=fixtf.globals_replace(t1,tt1,tt2)
 
     return skip,t1,flag1,flag2
 

@@ -5,7 +5,7 @@ import os
 import globals
 import glob
 import botocore
-import fixtf2
+import fixtf
 from datetime import datetime
 import resources
 import aws_kms
@@ -21,8 +21,6 @@ import aws_secretsmanager
 import aws_kinesis
 import aws_glue
 import aws_rds
-
-
 
 
 def call_resource(type, id):
@@ -211,7 +209,7 @@ def tfplan2():
          #print("type="+type+" tf="+tf)
          #if type not in globals.types:
          #   globals.types=globals.types+[type]             
-         fixtf(type,tf)
+         fixtf.fixtf(type,tf)
    com="terraform fmt"
    rout=rc(com)
 
@@ -380,70 +378,10 @@ def aws_tf(region):
          f3.write('data "aws_availability_zones" "az" {\n')
          f3.write('state = "available"\n')
          f3.write('}\n')
-
-
-
-def fixtf(ttft,tf):
-  
-    rf=tf+".out"
-    tf2=tf+".tf"
-    if globals.debug:
-        print(ttft+" fixtf "+tf+".out") 
-   
-    try:
-        f1 = open(rf, 'r')
-    except:
-        print("no "+rf)
-        return
-    Lines = f1.readlines()
-    #print("getfn for fixtf2."+ttft+" "+tf2)
-    #with open(tf2, "a") as f2:
-    with open(tf2, "w") as f2:
-        skip=0
-        flag1=False
-        flag2=tf
-        nofind=0
-        f2.write("##START,"+ttft+"\n")
-        for t1 in Lines:
-            skip=0
-            tt1=t1.split("=")[0].strip()
-            try:
-                tt2=t1.split("=")[1].strip()
-            except:
-                tt2=""
- 
-            try:              
-                getfn = getattr(fixtf2, ttft)
-            except Exception as e:
-                print(f"{e=}")
-                #print("** no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
-                #print("t1="+t1) 
-                nofind=1
-                getfn = getattr(fixtf2, "aws_resource")
-          
-            try:
-                skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
-            except Exception as e:
-                print(f"{e=}")
-                #print("-- no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
-                #print("t1="+t1) 
-                nofind=2
-                skip,t1,flag1,flag2=fixtf2.aws_resource(t1,tt1,tt2,flag1,flag2)
-
-            ####
-            
-            # common replacement code here
-            # rhs=account number
-            # rhs is still an arn
-            # : in tt1 for quote it
-                
-            #### 
-
-            if skip == 0:
-                f2.write(t1)
-        if nofind > 0:
-           print("WARNING: No fixtf2 for "+ttft+" calling generic fixtf2.aws_resource nofind="+str(nofind))
-           
+   com = "terraform init"
+   rout = rc(com) 
+   print(rout.stdout.decode().rstrip())
+        
                 
 
 # split resources.out
@@ -652,12 +590,12 @@ def special_deps(ttft,taddr):
    #print("In special deps"+ttft+"  "+taddr)
    if ttft == "aws_subnet": 
       add_known_dependancy("aws_route_table_association",taddr) 
-      fixtf2.add_dependancy("aws_route_table_association",taddr)  
+      add_dependancy("aws_route_table_association",taddr)  
    elif ttft == "aws_vpc": 
       add_known_dependancy("aws_route_table_association",taddr)  
       add_known_dependancy("aws_subnet",taddr)  
-      fixtf2.add_dependancy("aws_route_table_association",taddr)
-      fixtf2.add_dependancy("aws_vpc_ipv4_cidr_block_association",taddr)
+      add_dependancy("aws_route_table_association",taddr)
+      add_dependancy("aws_vpc_ipv4_cidr_block_association",taddr)
 
    elif ttft == "aws_vpclattice_service_network":
       add_known_dependancy("aws_vpclattice_service",taddr) 
@@ -691,6 +629,14 @@ def add_known_dependancy(type,id):
     if pkey not in globals.rdep:
         print("add_known_dependancy: " + pkey)
         globals.rdep[pkey]=False
+    return
+
+def add_dependancy(type,id):
+    # check if we alredy have it
+    pkey=type+"."+id
+    if pkey not in globals.rproc:
+        print("add_dependancy: " + pkey)
+        globals.rproc[pkey]=False
     return
 
 
@@ -846,3 +792,4 @@ def get_boto3_resp(descfn):
    elif str(descfn)=="list_roles" and globals.aws_iam_role_resp != []: response=globals.aws_iam_role_resp
    elif str(descfn)=="describe_instances" and globals.aws_instance_resp != []: response=globals.aws_instance_resp
    return response
+

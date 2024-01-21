@@ -105,8 +105,6 @@ if __name__ == '__main__':
         com = "rm -f *.txt *.json"
         rout = common.rc(com)
 
-    common.aws_tf(region)
-
 # get the current
     my_session = boto3.setup_default_session(region_name=region)
     globals.acc = boto3.client('sts').get_caller_identity().get('Account')
@@ -114,6 +112,7 @@ if __name__ == '__main__':
     globals.region = region
     globals.regionl = len(region)
     common.aws_tf(region)
+    
 
     if type == "all": type = "test"
     elif type == "aws_vpc" or type == "vpc": type = "aws_vpc"

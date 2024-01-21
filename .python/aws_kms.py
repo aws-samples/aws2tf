@@ -1,6 +1,5 @@
 import common
 import globals
-import fixtf2
 import os
 import sys
 import boto3
@@ -32,7 +31,7 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
                     kman=kresp['KeyMetadata']['KeyManager']
                     if kstatus == "Enabled" and kman != "AWS":
                         common.write_import(type,theid,ka) 
-                        fixtf2.add_dependancy("aws_kms_alias","k-"+theid)
+                        common.add_dependancy("aws_kms_alias","k-"+theid)
                 except Exception as e:
                     print("WARNING: can't access key")
                     print(f"{e=}")

@@ -1,3 +1,6 @@
+import common
+import fixtf
+
 def aws_s3_access_point(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
@@ -133,7 +136,7 @@ def aws_s3_bucket_policy(t1,tt1,tt2,flag1,flag2):
     if tt1 == "bucket" and flag2 is True:
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
-    elif tt1 == "policy": t1=globals_replace(t1,tt1,tt2)
+    elif tt1 == "policy": t1=fixtf.globals_replace(t1,tt1,tt2)
     return skip,t1,flag1,flag2
 
 

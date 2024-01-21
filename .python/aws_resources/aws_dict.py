@@ -2490,7 +2490,7 @@ aws_codepipeline_webhook = {
 }
 
 aws_codestarconnections_connection = {
-	"clfn":		"codestarconnections",
+	"clfn":		"codestar-connections",
 	"descfn":	"list_connections",
 	"topkey":	"Connections",
 	"key":		"ConnectionName",
@@ -2498,7 +2498,7 @@ aws_codestarconnections_connection = {
 }
 
 aws_codestarconnections_host = {
-	"clfn":		"codestarconnections",
+	"clfn":		"codestar-connections",
 	"descfn":	"list_hosts",
 	"topkey":	"Hosts",
 	"key":		"Name",
@@ -2506,7 +2506,7 @@ aws_codestarconnections_host = {
 }
 
 aws_codestarnotifications_notification_rule = {
-	"clfn":		"codestarnotifications",
+	"clfn":		"codestar-notifications",
 	"descfn":	"list_notification_rules",
 	"topkey":	"NotificationRules",
 	"key":		"Name",
@@ -2882,7 +2882,7 @@ aws_customer_gateway = {
 }
 
 aws_customerprofiles_domain = {
-	"clfn":		"customerprofiles",
+	"clfn":		"customer-profiles",
 	"descfn":	"list_domains",
 	"topkey":	"Domains",
 	"key":		"DomainName",
@@ -4626,7 +4626,7 @@ aws_emr_supported_instance_types = {
 }
 
 aws_emrcontainers_job_template = {
-	"clfn":		"emrcontainers",
+	"clfn":		"emr-containers",
 	"descfn":	"list_job_templates",
 	"topkey":	"JobTemplates",
 	"key":		"Id",
@@ -4634,7 +4634,7 @@ aws_emrcontainers_job_template = {
 }
 
 aws_emrcontainers_virtual_cluster = {
-	"clfn":		"emrcontainers",
+	"clfn":		"emr-containers",
 	"descfn":	"list_virtual_clusters",
 	"topkey":	"VirtualClusters",
 	"key":		"Id",
@@ -4642,7 +4642,7 @@ aws_emrcontainers_virtual_cluster = {
 }
 
 aws_emrserverless_application = {
-	"clfn":		"emrserverless",
+	"clfn":		"emr-serverless",
 	"descfn":	"list_applications",
 	"topkey":	"Applications",
 	"key":		"Id",
@@ -6266,7 +6266,7 @@ aws_lbs = {
 }
 
 aws_lex_bot = {
-	"clfn":		"lex",
+	"clfn":		"lex-models",
 	"descfn":	"get_bots",
 	"topkey":	"bots",
 	"key":		"name",
@@ -6274,7 +6274,7 @@ aws_lex_bot = {
 }
 
 aws_lex_bot_alias = {
-	"clfn":		"lex",
+	"clfn":		"lex-models",
 	"descfn":	"get_bot_aliases",
 	"topkey":	"aliases",
 	"key":		"name",
@@ -6282,7 +6282,7 @@ aws_lex_bot_alias = {
 }
 
 aws_lex_intent = {
-	"clfn":		"lex",
+	"clfn":		"lex-models",
 	"descfn":	"get_intents",
 	"topkey":	"intents",
 	"key":		"name",
@@ -6290,7 +6290,7 @@ aws_lex_intent = {
 }
 
 aws_lex_slot_type = {
-	"clfn":		"lex",
+	"clfn":		"lex-models",
 	"descfn":	"get_slot_types",
 	"topkey":	"slotTypes",
 	"key":		"name",
@@ -6298,7 +6298,7 @@ aws_lex_slot_type = {
 }
 
 aws_lexv2models_bot = {
-	"clfn":		"lexv2",
+	"clfn":		"lexv2-models",
 	"descfn":	"list_bots",
 	"topkey":	"bots",
 	"key":		"name",
@@ -6306,7 +6306,7 @@ aws_lexv2models_bot = {
 }
 
 aws_lexv2models_bot_locale = {
-	"clfn":		"lexv2",
+	"clfn":		"lexv2-models",
 	"descfn":	"list_bot_locales",
 	"topkey":	"botLocales",
 	"key":		"name",
@@ -6314,7 +6314,7 @@ aws_lexv2models_bot_locale = {
 }
 
 aws_lexv2models_bot_version = {
-	"clfn":		"lexv2",
+	"clfn":		"lexv2-models",
 	"descfn":	"list_bot_versions",
 	"topkey":	"botVersions",
 	"key":		"name",
@@ -8162,7 +8162,7 @@ aws_ram_sharing_with_organization = {
 }
 
 aws_rbin_rule = {
-	"clfn":		"route53resolver",
+	"clfn":		"rbin",
 	"descfn":	"list_resolver_rules",
 	"topkey":	"ResolverRules",
 	"key":		"Id",
@@ -8474,7 +8474,7 @@ aws_regions = {
 }
 
 aws_resourceexplorer2_index = {
-	"clfn":		"resource-explorer2",
+	"clfn":		"resource-explorer-2",
 	"descfn":	"list_indices",
 	"topkey":	"Indices",
 	"key":		"Name",
@@ -8482,7 +8482,7 @@ aws_resourceexplorer2_index = {
 }
 
 aws_resourceexplorer2_view = {
-	"clfn":		"resource-explorer2",
+	"clfn":		"resource-explorer-2",
 	"descfn":	"list_views",
 	"topkey":	"Views",
 	"key":		"Name",
@@ -8770,7 +8770,7 @@ aws_route53domains_registered_domain = {
 }
 
 aws_route53recoverycontrolconfig_cluster = {
-	"clfn":		"route53recoverycontrolconfig",
+	"clfn":		"route53-recovery-control-config",
 	"descfn":	"list_clusters",
 	"topkey":	"Clusters",
 	"key":		"ClusterArn",
@@ -8778,7 +8778,7 @@ aws_route53recoverycontrolconfig_cluster = {
 }
 
 aws_route53recoverycontrolconfig_control_panel = {
-	"clfn":		"route53recoverycontrolconfig",
+	"clfn":		"route53-recovery-control-config",
 	"descfn":	"list_control_panels",
 	"topkey":	"ControlPanels",
 	"key":		"ControlPanelArn",
@@ -8786,7 +8786,7 @@ aws_route53recoverycontrolconfig_control_panel = {
 }
 
 aws_route53recoverycontrolconfig_routing_control = {
-	"clfn":		"route53recoverycontrolconfig",
+	"clfn":		"route53-recovery-control-config",
 	"descfn":	"list_routing_controls",
 	"topkey":	"RoutingControls",
 	"key":		"RoutingControlArn",
@@ -8794,7 +8794,7 @@ aws_route53recoverycontrolconfig_routing_control = {
 }
 
 aws_route53recoverycontrolconfig_safety_rule = {
-	"clfn":		"route53recoverycontrolconfig",
+	"clfn":		"route53-recovery-control-config",
 	"descfn":	"list_safety_rules",
 	"topkey":	"SafetyRules",
 	"key":		"SafetyRuleArn",
@@ -8802,7 +8802,7 @@ aws_route53recoverycontrolconfig_safety_rule = {
 }
 
 aws_route53recoveryreadiness_cell = {
-	"clfn":		"route53recoveryreadiness",
+	"clfn":		"route53-recovery-readiness",
 	"descfn":	"list_cells",
 	"topkey":	"Cells",
 	"key":		"CellArn",
@@ -8810,7 +8810,7 @@ aws_route53recoveryreadiness_cell = {
 }
 
 aws_route53recoveryreadiness_readiness_check = {
-	"clfn":		"route53recoveryreadiness",
+	"clfn":		"route53-recovery-readiness",
 	"descfn":	"list_readiness_checks",
 	"topkey":	"ReadinessChecks",
 	"key":		"ReadinessCheckArn",
@@ -8818,7 +8818,7 @@ aws_route53recoveryreadiness_readiness_check = {
 }
 
 aws_route53recoveryreadiness_recovery_group = {
-	"clfn":		"route53recoveryreadiness",
+	"clfn":		"route53-recovery-readiness",
 	"descfn":	"list_recovery_groups",
 	"topkey":	"RecoveryGroups",
 	"key":		"RecoveryGroupArn",
@@ -8826,7 +8826,7 @@ aws_route53recoveryreadiness_recovery_group = {
 }
 
 aws_route53recoveryreadiness_resource_set = {
-	"clfn":		"route53recoveryreadiness",
+	"clfn":		"route53-recovery-readiness",
 	"descfn":	"list_resource_sets",
 	"topkey":	"ResourceSets",
 	"key":		"ResourceSetArn",

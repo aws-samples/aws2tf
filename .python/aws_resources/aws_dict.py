@@ -2458,7 +2458,7 @@ aws_codeguruprofiler_profiling_group = {
 }
 
 aws_codegurureviewer_repository_association = {
-	"clfn":		"codegurureviewer",
+	"clfn":		"codeguru-reviewer",
 	"descfn":	"list_repository_associations",
 	"topkey":	"RepositoryAssociations",
 	"key":		"Name",
@@ -3450,7 +3450,7 @@ aws_docdb_subnet_group = {
 }
 
 aws_docdbelastic_cluster = {
-	"clfn":		"docdbelastic",
+	"clfn":		"docdb-elastic",
 	"descfn":	"describe_clusters",
 	"topkey":	"Clusters",
 	"key":		"ClusterName",

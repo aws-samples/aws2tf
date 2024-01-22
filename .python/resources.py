@@ -187,6 +187,13 @@ def resource_types(type):
         return same
 
 
+
+
+
+
+##########################################################################################################
+
+
 # problematic: "aws_network_acl"
 # Error: use the `aws_default_network_acl` resource instead
 
@@ -197,7 +204,6 @@ def resource_types(type):
 # key - the primary filter for the API call - either direct to describe call - or as part of filter Name=""
 # finally - in the response what the primary id field is vpc-id 
 
-##########################################################################################################
 
 def resource_data(type,id):
     #print("type:",type,"id:",id)

@@ -203,7 +203,7 @@ def resource_types(type):
 ##########################################################################################################
 
 def resource_data(type,id):
-    print("type:",type,"id:",id)
+    #print("type:",type,"id:",id)
     clfn=None;descfn=None;topkey=None;key=None;filterid=None
 
     clfn=aws_dict.aws_resources[type]['clfn']
@@ -213,7 +213,7 @@ def resource_data(type,id):
     key=aws_dict.aws_resources[type]['key']
     filterid=aws_dict.aws_resources[type]['filterid']
 
-    print("type:",type,"id:",id,"clfn:",clfn,"descfn:",descfn,"topkey:",topkey,"key:",key,"filterid:",filterid)
+    #print("type:",type,"id:",id,"clfn:",clfn,"descfn:",descfn,"topkey:",topkey,"key:",key,"filterid:",filterid)
     
     if id is not None:
         if "vpc-" in id:

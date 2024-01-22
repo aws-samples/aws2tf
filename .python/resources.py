@@ -2,7 +2,6 @@ from aws_resources import aws_dict
 
 def resource_types(type):
     if type == "net":
-        #net=["aws_vpc","aws_subnet","aws_route_table"]
         net=["aws_vpc","aws_vpc_dhcp_options","aws_subnet","aws_internet_gateway","aws_nat_gateway","aws_route_table","aws_route_table_association","aws_vpc_endpoint","aws_security_group"]
         # call aws_route_table_association from subnet and igw
         return net
@@ -11,9 +10,7 @@ def resource_types(type):
     #
     # "aws_iam_role_policy_attachment" - called from iam_role
     #
-    #elif type == "iam": return ["aws_iam_role","aws_iam_role_policy_attachment","aws_iam_policy"]
-    #elif type == "iam": return ["aws_iam_role","aws_iam_role_policy","aws_iam_policy","aws_iam_role_policy_attachment"]
-    elif type == "lattice": return ["aws_vpclattice_service_network"]
+    #elif type == "iam": return ["aws_iam_role","aws_iam_role_policy_attachment","aws_iam_policy"
     elif type == "eks": return ["aws_eks_cluster"]
     elif type == "kms": return ["aws_kms_key"]
 
@@ -194,10 +191,10 @@ def resource_types(type):
 # Error: use the `aws_default_network_acl` resource instead
 
 # 5x returns:
-# boto3.client('ec2') - so for example ec2
-# the describe function - like describe-vpcs
-# from the response -the top level key - like Vpcs
-# the primary filter for the API call - either direct to describe call - or as part of filter Name=""
+# clfn - boto3.client('ec2') - so for example ec2
+# descfn - the describe function - like describe-vpcs
+# topkey - from the response -the top level key - like Vpcs
+# key - the primary filter for the API call - either direct to describe call - or as part of filter Name=""
 # finally - in the response what the primary id field is vpc-id 
 
 ##########################################################################################################

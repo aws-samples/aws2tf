@@ -1,5 +1,6 @@
 import globals
 import os
+import sys
 import boto3
 import base64
 import resources
@@ -226,7 +227,7 @@ def fixtf(ttft,tf):
 
     clfn=clfn.replace('-','_')
     callfn="fixtf_"+clfn
-
+    #print("callfn="+callfn)
 
     Lines = f1.readlines()
     #print("getfn for fixtf2."+ttft+" "+tf2)
@@ -246,11 +247,15 @@ def fixtf(ttft,tf):
                 tt2=""
  
             try:    
+                #print("trying "+callfn+" "+ttft)
                 getfn = getattr(eval(callfn), ttft)           
                 #getfn = getattr(fixtf2, ttft)
             except Exception as e:
                 print(f"{e=}")
-                #print("** no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                print(exc_type, fname, exc_tb.tb_lineno)
+                print("** no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
                 #print("t1="+t1) 
                 nofind=1
                 
@@ -259,7 +264,11 @@ def fixtf(ttft,tf):
                 skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
             except Exception as e:
                 print(f"{e=}")
-                print("-- no fixtf for "+ttft+" calling generic fixtf2.aws_resource")
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                print(exc_type, fname, exc_tb.tb_lineno)
+
+                print("-- no fixtf for "+tf+" calling generic fixtf2.aws_resource")
                 #print("t1="+t1) 
                 nofind=2
                 skip,t1,flag1,flag2=aws_resource(t1,tt1,tt2,flag1,flag2)
@@ -276,7 +285,7 @@ def fixtf(ttft,tf):
             if skip == 0:
                 f2.write(t1)
         if nofind > 0:
-           print("WARNING: No fixtf for "+ttft+" calling generic fixtf2.aws_resource nofind="+str(nofind))
+           print("WARNING: No fixtf for "+tf+" calling generic fixtf2.aws_resource nofind="+str(nofind))
            
 
 def aws_resource(t1,tt1,tt2,flag1,flag2):
@@ -291,7 +300,7 @@ def globals_replace(t1,tt1,tt2):
             r1=tt2.find(":"+globals.region+":")
             a1=tt2.find(":"+globals.acc+":")
             #print("--> r1="+ str(r1) + " ")
-            #print("--> a1="+ str(a1) + " ")
+            print("--> a1="+ str(a1) + " ")
             if r1>0 and r1 < a1:
                     #print("--> 6a")
                     ends=ends+",data.aws_region.current.name"
@@ -317,8 +326,8 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
     tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
     cc=tt2.count(',')
     subs=""
-    #if globals.debug: 
-    #print("-->> " + tt1 + ": "  + tt2 + " count=" + str(cc))
+    if globals.debug: 
+        print("-->> " + tt1 + ": "  + tt2 + " count=" + str(cc))
     if cc > 0:
         for i in range(cc+1):
             subn=tt2.split(',')[i]

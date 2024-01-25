@@ -63,6 +63,10 @@ def aws_ec2_coip_pool(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
 
+def aws_default_security_group(t1,tt1,tt2,flag1,flag2):
+	skip=0
+	return skip,t1,flag1,flag2
+
 def aws_ec2_fleet(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
@@ -231,6 +235,10 @@ def aws_eip_association(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
 
+def aws_flow_log(t1,tt1,tt2,flag1,flag2):
+	skip=0
+	return skip,t1,flag1,flag2
+
 
 def aws_instance(t1,tt1,tt2,flag1,flag2):
     skip=0
@@ -290,6 +298,24 @@ def aws_ip_ranges(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
 
+def aws_key_pair(t1,tt1,tt2,flag1,flag2):
+	skip=0
+	if tt1 == "key_name":
+		tt2=tt2.strip('\"')
+		flag1=tt2
+	if tt1 == "public_key":
+		client = boto3.client("ec2")
+		resp=client.describe_key_pairs(KeyNames=[flag1],IncludePublicKey=True)
+		resp1=resp['KeyPairs']
+		for j in resp1:
+			pubk=j['PublicKey']
+			pubk=pubk.strip()
+			t1=tt1 + " = \""+pubk+"\"\n"
+
+
+	return skip,t1,flag1,flag2
+
+
 def aws_launch_template(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "security_group_names":
@@ -297,6 +323,10 @@ def aws_launch_template(t1,tt1,tt2,flag1,flag2):
         if tt2 == "[]": 
             skip=1
     elif tt1 == "vpc_security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+    elif tt1 == "throughput":
+        tt2=tt2.strip('\"')
+        if tt2 == "0": skip=1
+
 
     return skip,t1,flag1,flag2
 

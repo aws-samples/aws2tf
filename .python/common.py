@@ -41,6 +41,7 @@ def call_resource(type, id):
             return
       except:
          pass
+   else:
       if type in needid_dict.aws_needid:
          print("WARNING: " +  type + "cannot have null id must pass parameter "+needid_dict.aws_needid[type]['param'])
          exit(0)
@@ -67,8 +68,9 @@ def call_resource(type, id):
                #aws_redshift.get_aws_redshiftserverless_namespace(type, id, clfn, descfn, topkey, key, filterid)
 
             else:   
-               #print("-1a- clfn:"+clfn+" type:"+type)
+               #print("-1aa- clfn:"+clfn+" type:"+type)
                getfn = getattr(eval("aws_"+clfn), "get_"+type) 
+               #print("-1ab- clfn:"+clfn+" type:"+type)
 
             sr=getfn(type, id, clfn, descfn, topkey, key, filterid)
 
@@ -382,9 +384,12 @@ def aws_tf(region):
          f3.write('data "aws_availability_zones" "az" {\n')
          f3.write('state = "available"\n')
          f3.write('}\n')
-   com = "terraform init"
-   rout = rc(com) 
-   print(rout.stdout.decode().rstrip())
+   if not os.path.isdir(".terraform/providers/registry.terraform.io/hashicorp/aws"): 
+      com = "terraform init"
+      rout = rc(com) 
+      print(rout.stdout.decode().rstrip())
+   else:
+      print("skipping terraform init")
         
                 
 

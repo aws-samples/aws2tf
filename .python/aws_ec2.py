@@ -238,7 +238,7 @@ def get_aws_network_acl(type, id, clfn, descfn, topkey, key, filterid):
                     },
                     {
                         'Name': 'default',
-                        'Values': [False]
+                        'Values': ['false']
                     }
                     ]):
                     response.extend(page[topkey])
@@ -250,7 +250,7 @@ def get_aws_network_acl(type, id, clfn, descfn, topkey, key, filterid):
                     },
                     {
                         'Name': 'default',
-                        'Values': [False]
+                        'Values': ['false']
                     }
                     ]):
                     response.extend(page[topkey])
@@ -314,7 +314,7 @@ def get_aws_default_network_acl(type, id, clfn, descfn, topkey, key, filterid):
                     },
                     {
                         'Name': 'default',
-                        'Values': False
+                        'Values': ['true']
                     }
                     ]):
                     response.extend(page[topkey])
@@ -326,7 +326,7 @@ def get_aws_default_network_acl(type, id, clfn, descfn, topkey, key, filterid):
                     },
                     {
                         'Name': 'default',
-                        'Values': False
+                        'Values': ['true']
                     }
                     ]):
                     response.extend(page[topkey])
@@ -336,7 +336,7 @@ def get_aws_default_network_acl(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(Filters=[
                     {
                         'Name': 'default',
-                        'Values': False
+                        'Values': ['true']
                     }
                     ]):
                     response.extend(page[topkey])

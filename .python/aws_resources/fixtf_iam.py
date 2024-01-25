@@ -1,5 +1,6 @@
 import common
 import fixtf
+import globals
 
 
 def aws_iam_access_key(t1,tt1,tt2,flag1,flag2):

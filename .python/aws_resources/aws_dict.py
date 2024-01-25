@@ -120,14 +120,6 @@ aws_default_vpc = {
 	"filterid":	"KeyError"
 }
 
-aws_default_internet_gateway = {
-	"clfn":		"ec2",
-	"descfn":	"describe_internet_gateways",
-	"topkey":	"InternetGateways",
-	"key":		"InternetGatewayId",
-	"filterid":	"InternetGatewayId"
-}
-
 aws_vpc_dhcp_options = {
 	"clfn":		"ec2",
 	"descfn":	"describe_dhcp_options",
@@ -164,16 +156,8 @@ aws_launch_template = {
 	"clfn":		"ec2",
 	"descfn":	"describe_launch_templates",
 	"topkey":	"LaunchTemplates",
-	"key":		"LaunchTemplateNames",
+	"key":		"LaunchTemplateIds",
 	"filterid":	"LaunchTemplateNames"
-}
-
-aws_vpc_ipv4_cidr_block_association = {
-	"clfn":		"ec2",
-	"descfn":	"describe_vpcs",
-	"topkey":	"VpcId",
-	"key":		"AssociationId",
-	"filterid":	"AssociationId"
 }
 
 aws_flow_log = {
@@ -11425,7 +11409,6 @@ aws_resources = {
 	"aws_default_security_group": aws_default_security_group,
 	"aws_default_subnet": aws_default_subnet,
 	"aws_default_vpc": aws_default_vpc,
-	"aws_default_internet_gateway": aws_default_internet_gateway,
 	"aws_vpc_dhcp_options": aws_vpc_dhcp_options,
 	"aws_image": aws_image,
 	"aws_key_pair": aws_key_pair,

@@ -21,6 +21,7 @@ import aws_secretsmanager
 import aws_kinesis
 import aws_glue
 import aws_rds
+from aws_resources import needid_dict
 
 
 def call_resource(type, id):
@@ -40,6 +41,9 @@ def call_resource(type, id):
             return
       except:
          pass
+      if type in needid_dict.aws_needid:
+         print("WARNING: " +  type + "cannot have null id must pass parameter "+needid_dict.aws_needid[type]['param'])
+         exit(0)
 
    rr=False
    sr=False

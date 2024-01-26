@@ -30,7 +30,9 @@ flip-eks.sh
 aws_*.tf
 aws_instance__i*.sh
 tfplan
+plan*
 **/tfplan
+**/plan*
 __pycache__
 .python/data/tfplan
 .python/data/*.log

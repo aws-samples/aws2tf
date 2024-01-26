@@ -43,7 +43,7 @@ from aws_resources import fixtf_cloudfront
 from aws_resources import fixtf_cloudhsmv2
 from aws_resources import fixtf_cloudsearch
 from aws_resources import fixtf_cloudtrail
-from aws_resources import fixtf_cloudwatch
+from aws_resources import fixtf_logs
 from aws_resources import fixtf_codeartifact
 from aws_resources import fixtf_codebuild
 from aws_resources import fixtf_codecatalyst
@@ -124,7 +124,7 @@ from aws_resources import fixtf_lakeformation
 from aws_resources import fixtf_lambda
 from aws_resources import fixtf_lex
 from aws_resources import fixtf_lexv2_models
-from aws_resources import fixtf_licensemanager
+from aws_resources import fixtf_license_manager
 from aws_resources import fixtf_lightsail
 from aws_resources import fixtf_location
 from aws_resources import fixtf_macie2

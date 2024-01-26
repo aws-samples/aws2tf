@@ -35,7 +35,7 @@ from aws_resources import fixtf_cloudfront
 from aws_resources import fixtf_cloudhsmv2
 from aws_resources import fixtf_cloudsearch
 from aws_resources import fixtf_cloudtrail
-from aws_resources import fixtf_cloudwatch
+from aws_resources import fixtf_logs
 from aws_resources import fixtf_codeartifact
 from aws_resources import fixtf_codebuild
 from aws_resources import fixtf_codecatalyst

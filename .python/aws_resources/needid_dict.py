@@ -884,8 +884,23 @@ aws_lambda_layer_version = {
   "clfn": "lambda"
 }
 
+aws_lambda_event_source_mapping = {
+  "param": "LayerName",
+  "clfn": "lambda"    
+}
+
 aws_lambda_provisioned_concurrency_config = {
   "param": "FunctionName",
+  "clfn": "lambda"
+}
+
+aws_lambda_permission = {
+  "param": "FunctionName",
+  "clfn": "lambda"  
+}
+
+aws_lambda_function_event_invoke_config = {
+  "param": "FunctionName", 
   "clfn": "lambda"
 }
 
@@ -1560,9 +1575,12 @@ aws_needid = {
   "aws_kms_grant": aws_kms_grant,
   "aws_kms_key_policy": aws_kms_key_policy,
   "aws_lambda_alias": aws_lambda_alias,
+  "aws_lambda_event_source_mapping": aws_lambda_event_source_mapping,
   "aws_lambda_function_url": aws_lambda_function_url,
   "aws_lambda_layer_version": aws_lambda_layer_version,
+  "aws_lambda_permission": aws_lambda_permission,
   "aws_lambda_provisioned_concurrency_config": aws_lambda_provisioned_concurrency_config,
+  "aws_lambda_function_event_invoke_config": aws_lambda_function_event_invoke_config,
   "aws_lb_listener_certificate": aws_lb_listener_certificate,
   "aws_lb_target_group_attachment": aws_lb_target_group_attachment,
   "aws_lb_trust_store": aws_lb_trust_store,

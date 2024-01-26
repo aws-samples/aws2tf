@@ -436,7 +436,7 @@ aws_lb = {
 	"clfn":		"elbv2",
 	"descfn":	"describe_load_balancers",
 	"topkey":	"LoadBalancers",
-	"key":		"Names",
+	"key":		"LoadBalancerArn",
 	"filterid":	"Names"
 }
 

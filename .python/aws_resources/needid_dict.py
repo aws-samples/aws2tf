@@ -759,6 +759,11 @@ aws_iam_group_policy_attachment = {
   "clfn": "iam"
 }
 
+aws_iam_instance_profile= {
+  "param": "InstanceProfileName",
+  "clfn": "iam"
+}
+
 aws_iam_policy_attachment = {
   "param": "PolicyArn",
   "clfn": "iam"
@@ -879,14 +884,14 @@ aws_lambda_function_url = {
   "clfn": "lambda"
 }
 
-aws_lambda_layer_version = {
-  "param": "LayerName",
-  "clfn": "lambda"
-}
-
 aws_lambda_event_source_mapping = {
   "param": "LayerName",
   "clfn": "lambda"    
+}
+
+aws_lambda_layer_version = {
+  "param": "LayerName",
+  "clfn": "lambda"
 }
 
 aws_lambda_provisioned_concurrency_config = {
@@ -903,6 +908,7 @@ aws_lambda_function_event_invoke_config = {
   "param": "FunctionName", 
   "clfn": "lambda"
 }
+
 
 aws_lb_listener_certificate = {
   "param": "ListenerArn",
@@ -1379,6 +1385,21 @@ aws_vpclattice_listener_rule = {
   "clfn": "vpc-lattice"
 }
 
+aws_vpclattice_access_log_subscription = {
+  "param": "serviceNetworkIdentifier",
+  "clfn": "vpc-lattice" 
+}
+
+aws_vpclattice_service_network_service_association = {
+  "param": "serviceNetworkIdentifier",
+  "clfn": "vpc-lattice" 
+}
+
+aws_vpclattice_service_network_vpc_association = {
+  "param": "serviceNetworkIdentifier",
+  "clfn": "vpc-lattice" 
+}
+
 aws_wafv2_ip_set = {
   "param": "Scope",
   "clfn": "wafv2"
@@ -1552,6 +1573,7 @@ aws_needid = {
   "aws_iam_group_membership": aws_iam_group_membership,
   "aws_iam_group_policy": aws_iam_group_policy,
   "aws_iam_group_policy_attachment": aws_iam_group_policy_attachment,
+  "aws_iam_instance_profile": aws_iam_instance_profile,
   "aws_iam_policy_attachment": aws_iam_policy_attachment,
   "aws_iam_policy_document": aws_iam_policy_document,
   "aws_iam_principal_policy_simulation": aws_iam_principal_policy_simulation,
@@ -1676,6 +1698,9 @@ aws_needid = {
   "aws_transfer_agreement": aws_transfer_agreement,
   "aws_transfer_user": aws_transfer_user,
   "aws_vpclattice_listener_rule": aws_vpclattice_listener_rule,
+  "aws_vpclattice_access_log_subscription": aws_vpclattice_access_log_subscription,
+  "aws_vpclattice_service_network_vpc_association": aws_vpclattice_service_network_vpc_association,
+  "aws_vpclattice_service_network_service_association": aws_vpclattice_service_network_service_association,
   "aws_wafv2_ip_set": aws_wafv2_ip_set,
   "aws_wafv2_regex_pattern_set": aws_wafv2_regex_pattern_set,
   "aws_wafv2_rule_group": aws_wafv2_rule_group,

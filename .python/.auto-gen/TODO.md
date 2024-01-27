@@ -12,9 +12,6 @@ aws_iam_role andy.test.role
 aws_kms_alias - too many loops
 
 
-
-aws_instance
-
 add_dependancy: aws_vpc_ipv4_cidr_block_association.vpc-0d18b88f8596b92c3
 Terraform Plan Loop ... 
 terraform plan -generate-config-out=resources.out -out tfplan -json | jq . > plan1.json

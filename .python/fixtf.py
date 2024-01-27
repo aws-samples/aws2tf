@@ -90,6 +90,7 @@ from aws_resources import fixtf_emr
 from aws_resources import fixtf_emr_containers
 from aws_resources import fixtf_emrserverless
 from aws_resources import fixtf_es
+from aws_resources import fixtf_events
 from aws_resources import fixtf_evidently
 from aws_resources import fixtf_finspace
 from aws_resources import fixtf_firehose
@@ -227,7 +228,7 @@ def fixtf(ttft,tf):
 
     clfn=clfn.replace('-','_')
     callfn="fixtf_"+clfn
-    #print("callfn="+callfn)
+    if globals.debug: print("callfn="+callfn+" ttft="+ttft)
 
     Lines = f1.readlines()
     #print("getfn for fixtf2."+ttft+" "+tf2)
@@ -268,7 +269,7 @@ def fixtf(ttft,tf):
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                 print(exc_type, fname, exc_tb.tb_lineno)
 
-                print("-- no fixtf for "+tf+" calling generic fixtf2.aws_resource")
+                print("-- no fixtf for "+tf+" calling generic fixtf2.aws_resource callfn="+callfn)
                 #print("t1="+t1) 
                 nofind=2
                 skip,t1,flag1,flag2=aws_resource(t1,tt1,tt2,flag1,flag2)
@@ -300,7 +301,7 @@ def globals_replace(t1,tt1,tt2):
             r1=tt2.find(":"+globals.region+":")
             a1=tt2.find(":"+globals.acc+":")
             #print("--> r1="+ str(r1) + " ")
-            print("--> a1="+ str(a1) + " ")
+            #print("--> a1="+ str(a1) + " ")
             if r1>0 and r1 < a1:
                     #print("--> 6a")
                     ends=ends+",data.aws_region.current.name"

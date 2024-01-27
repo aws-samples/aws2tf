@@ -1380,6 +1380,11 @@ aws_transfer_user = {
   "clfn": "transfer"
 }
 
+aws_vpclattice_auth_policy = {
+  "param": "resourceIdentifier",
+  "clfn": "vpc-lattice"
+}
+
 aws_vpclattice_listener_rule = {
   "param": "listenerIdentifier,serviceIdentifier",
   "clfn": "vpc-lattice"

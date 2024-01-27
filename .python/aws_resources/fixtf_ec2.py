@@ -2,6 +2,8 @@ import common
 import fixtf
 import base64
 import boto3
+import sys
+import os
 
 def aws_ami(t1,tt1,tt2,flag1,flag2):
 	skip=0
@@ -245,44 +247,53 @@ def aws_flow_log(t1,tt1,tt2,flag1,flag2):
 
 
 def aws_instance(t1,tt1,tt2,flag1,flag2):
-    skip=0
-    if tt1 == "subnet_id":
-        tt2=tt2.strip('\"')
-        t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
-        common.add_dependancy("aws_subnet",tt2)
-    elif tt1 == "vpc_security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
-    #elif tt1 == "iam_instance_profile":
-    #    tt2=tt2.strip('\"')
-    #    t1=tt1 + " = aws_iam_instance_profile." + tt2 + ".name\n"
-        #common.add_dependancy("aws_iam_instance_profile",tt2)
-    #elif tt1 == "key_name":
-    #    tt2=tt2.strip('\"')
-    #    t1=tt1 + " = aws_key_pair." + tt2 + ".key_name\n"
-    elif tt1 == "ipv6_addresses":
-        tt2=tt2.strip('\"')
-        if tt2 == "[]": skip=1
+	skip=0
+	
+	try:
+		#print("hi")
+		if tt1 == "subnet_id":
+			tt2=tt2.strip('\"')
+			t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
+			common.add_dependancy("aws_subnet",tt2)
+		elif tt1 == "vpc_security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
 
-    elif tt1 == "id":
-        flag2=id
+		elif tt1 == "ipv6_addresses":
+			tt2=tt2.strip('\"')
+			if tt2 == "[]": skip=1
 
-    elif tt1 == "user_data":
-        inid=flag2.split("__")[1]
-        client = boto3.client("ec2")
-        resp = client.describe_instance_attribute(Attribute="userData",InstanceId=inid)
-        ud=resp['UserData']['Value']
-        ud2=base64.b64decode(ud).decode('utf-8')
-        with open(flag2+'.sh', 'w') as f:
-            f.write(ud2)
-        t1="user_data_base64 = filebase64sha256(\""+flag2+".sh\")\n lifecycle {\n   ignore_changes = [user_data_replace_on_change,user_data,user_data_base64]\n}\n"
+		elif tt1 == "id":
+			flag2=id
 
-    elif tt1 == "user_data_base64": skip=1
-    elif tt1 == "iam_instance_profile":
-        tt2=tt2.strip('\"')
-        t1=tt1 + " = aws_iam_instance_profile." + tt2 + ".name\n"
-        common.add_dependancy("aws_iam_instance_profile",tt2)
+		elif tt1 == "user_data":
+			inid=flag2.split("__")[1]
+			client = boto3.client("ec2")
+			resp = client.describe_instance_attribute(Attribute="userData",InstanceId=inid)
+			try:
+				ud=resp['UserData']['Value']
+				ud2=base64.b64decode(ud).decode('utf-8')
+				with open(flag2+'.sh', 'w') as f:
+					f.write(ud2)
+				t1="user_data_base64 = filebase64sha256(\""+flag2+".sh\")\n lifecycle {\n   ignore_changes = [user_data_replace_on_change,user_data,user_data_base64]\n}\n"
+			except KeyError:
+				pass
 
+		elif tt1 == "user_data_base64": skip=1
+	
+		elif tt1 == "iam_instance_profile":
+			tt2=tt2.strip('\"')
+			t1=tt1 + " = aws_iam_instance_profile." + tt2 + ".name\n"
+			common.add_dependancy("aws_iam_instance_profile",tt2)
 
-    return skip,t1,flag1,flag2
+		
+	except Exception as e:
+		print(f"{e=}")
+		print("ERROR: -1-> fixtf-ec2 aws_instance")
+		exc_type, exc_obj, exc_tb = sys.exc_info()
+		fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+		print(exc_type, fname, exc_tb.tb_lineno)
+		exit()
+		
+	return skip,t1,flag1,flag2
 
 
 def  aws_internet_gateway(t1,tt1,tt2,flag1,flag2):

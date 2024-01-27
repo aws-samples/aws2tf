@@ -250,10 +250,10 @@ aws_vpclattice_listener_rule = {
 
 aws_vpclattice_resource_policy = {
 	"clfn":		"vpc-lattice",
-	"descfn":	"list_resource_policies",
-	"topkey":	"items",
-	"key":		"id",
-	"filterid":	"name"
+	"descfn":	"get_resource_policy",
+	"topkey":	"policy",
+	"key":		"resourceArn",
+	"filterid":	"resourceArn"
 }
 
 aws_vpclattice_service = {

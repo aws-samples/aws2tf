@@ -356,7 +356,7 @@ aws_ecs_cluster = {
 	"clfn":		"ecs",
 	"descfn":	"list_clusters",
 	"topkey":	"clusterArns",
-	"key":		"clusterArn",
+	"key":		"cluster",
 	"filterid":	"clusterArn"
 }
 
@@ -4179,7 +4179,7 @@ aws_ecrpublic_repository_policy = {
 
 aws_ecs_account_setting_default = {
 	"clfn":		"ecs",
-	"descfn":	"describe_account_settings",
+	"descfn":	"list_account_settings",
 	"topkey":	"settings",
 	"key":		"name",
 	"filterid":	"name"
@@ -4201,20 +4201,13 @@ aws_ecs_cluster_capacity_providers = {
 	"filterid":	"clusterName"
 }
 
-aws_ecs_container_definition = {
-	"clfn":		"ecs",
-	"descfn":	"describe_container_definitions",
-	"topkey":	"containerDefinitions",
-	"key":		"name",
-	"filterid":	"name"
-}
 
 aws_ecs_service = {
 	"clfn":		"ecs",
-	"descfn":	"describe_services",
-	"topkey":	"services",
-	"key":		"serviceName",
-	"filterid":	"serviceName"
+	"descfn":	"list_services",
+	"topkey":	"serviceArns",
+	"key":		"cluster",
+	"filterid":	"cluster"
 }
 
 aws_ecs_tag = {
@@ -4231,14 +4224,6 @@ aws_ecs_task_definition = {
 	"topkey":	"taskDefinition",
 	"key":		"taskDefinitionArn",
 	"filterid":	"taskDefinitionArn"
-}
-
-aws_ecs_task_execution = {
-	"clfn":		"ecs",
-	"descfn":	"describe_task_execution",
-	"topkey":	"task",
-	"key":		"taskArn",
-	"filterid":	"taskArn"
 }
 
 aws_ecs_task_set = {
@@ -7475,9 +7460,9 @@ aws_opsworks_custom_layer = {
 
 aws_opsworks_ecs_cluster_layer = {
 	"clfn":		"opsworks",
-	"descfn":	"list_ecs_cluster_layers",
-	"topkey":	"EcsClusterLayers",
-	"key":		"LayerId",
+	"descfn":	"describe_ecs_clusters",
+	"topkey":	"EcsClusters",
+	"key":		"NOIMPORT",
 	"filterid":	"LayerId"
 }
 
@@ -11920,11 +11905,9 @@ aws_resources = {
 	"aws_ecs_account_setting_default": aws_ecs_account_setting_default,
 	"aws_ecs_capacity_provider": aws_ecs_capacity_provider,
 	"aws_ecs_cluster_capacity_providers": aws_ecs_cluster_capacity_providers,
-	"aws_ecs_container_definition": aws_ecs_container_definition,
 	"aws_ecs_service": aws_ecs_service,
 	"aws_ecs_tag": aws_ecs_tag,
 	"aws_ecs_task_definition": aws_ecs_task_definition,
-	"aws_ecs_task_execution": aws_ecs_task_execution,
 	"aws_ecs_task_set": aws_ecs_task_set,
 	"aws_efs_access_point": aws_efs_access_point,
 	"aws_efs_backup_policy": aws_efs_backup_policy,

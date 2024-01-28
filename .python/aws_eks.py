@@ -2,7 +2,6 @@ import common
 import globals
 
 
-
 # as list_clusters is awkward
 def get_aws_eks_cluster(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug: print("--> In get_aws_eks_cluster doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)

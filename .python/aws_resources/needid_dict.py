@@ -615,7 +615,7 @@ aws_ecr_image = {
 }
 
 aws_ecs_service = {
-  "param": "services",
+  "param": "cluster",
   "clfn": "ecs"
 }
 

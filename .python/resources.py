@@ -209,7 +209,12 @@ def resource_data(type,id):
     #print("type:",type,"id:",id)
     clfn=None;descfn=None;topkey=None;key=None;filterid=None
 
-    clfn=aws_dict.aws_resources[type]['clfn']
+    try:
+        clfn=aws_dict.aws_resources[type]['clfn']
+    except KeyError:
+        print("WARNING: "+ type + " may nor be a Terraform resource ?")
+        return clfn,descfn,topkey,key,filterid
+
 
     descfn=aws_dict.aws_resources[type]['descfn']
     topkey=aws_dict.aws_resources[type]['topkey']

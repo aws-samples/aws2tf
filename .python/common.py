@@ -9,6 +9,7 @@ import fixtf
 from datetime import datetime
 import resources
 import aws_kms
+import aws_ecs
 import aws_eks
 import aws_ec2
 import aws_iam
@@ -50,6 +51,12 @@ def call_resource(type, id):
    rr=False
    sr=False
    clfn, descfn, topkey, key, filterid = resources.resource_data(type, id)
+   if key == "NOIMPORT":
+      print("WARNING: Terraform cannot import type: " + type)
+      return
+
+   
+   
    if clfn is None:
         print("ERROR: clfn is None with type="+type)
         exit()
@@ -75,8 +82,12 @@ def call_resource(type, id):
 
             sr=getfn(type, id, clfn, descfn, topkey, key, filterid)
 
-   except AttributeError:
+   except AttributeError as e:
       if globals.debug: print("AttributeError: name 'getfn' - no aws_"+clfn+".py file ?")
+      print(f"{e=}")
+      exc_type, exc_obj, exc_tb = sys.exc_info()
+      fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+      print(exc_type, fname, exc_tb.tb_lineno)
       pass
 
    except SyntaxError:

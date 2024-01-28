@@ -7,4 +7,9 @@ def aws_acm_certificate_validation(t1,tt1,tt2,flag1,flag2):
 
 def aws_acm_certificate(t1,tt1,tt2,skipipv6,flag2):
     skip = 0
+    if tt1 == "validation_method":
+        tt2=tt2.strip('\"')
+        if tt2 == "NONE": skip=1
+
+        
     return skip,t1,skipipv6,flag2

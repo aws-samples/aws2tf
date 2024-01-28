@@ -21,6 +21,7 @@ import aws_secretsmanager
 import aws_kinesis
 import aws_glue
 import aws_rds
+import aws_apigateway
 from aws_resources import needid_dict
 
 
@@ -32,7 +33,7 @@ def call_resource(type, id):
       return
     ## don't get it if we alreay have it
     # if globals.rproc
-
+   if globals.debug: print("---->>>>> "+type+"   "+str(id))
    if id is not None:
       ti=type+"."+id
       try:
@@ -538,12 +539,12 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                # id has something
                #
                else:  
-                  if globals.debug: print("-gr31-"+"filterid="+str(filterid)+" id="+str(id))
+                  #if globals.debug: print("-gr31-"+"filterid="+str(filterid)+" id="+str(id))
                   if "." not in filterid:
                      #print("***item=" + str(item))
                      try:
                         if id == str(item[filterid]):
-                           if globals.debug: print("-gr31 item-"+str(item))
+                           #if globals.debug: print("-gr31 item-"+str(item))
                            theid=item[key]
                            special_deps(type,theid)
                            write_import(type,theid,None)

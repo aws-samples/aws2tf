@@ -349,7 +349,7 @@ def deref_role_arn(t1,tt1,tt2):
     if ":role" in tt2:
         tt2=tt2.split('/')[-1]
         t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
-        common.__annotations__add_dependancy("aws_iam_role",tt2)
+        common.add_dependancy("aws_iam_role",tt2)
     return t1
 
 def deref_kms_key(t1,tt1,tt2):

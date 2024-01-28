@@ -19,6 +19,11 @@ aws_acmpca_permission = {
   "clfn": "acm-pca"
 }
 
+aws_acmpca_policy = {
+  "param": "ResourceArn", 
+  "clfn": "acm-pca"
+}
+
 aws_amplify_backend_environment = {
   "param": "appId",
   "clfn": "amplify"
@@ -209,6 +214,11 @@ aws_acmpca_permission = {
   "clfn": "acm-pca"
 }
 
+aws_acmpca_certificate = {
+  "param": "CertificateAuthorityArn,CertificateArn",
+  "clfn": "acm-pca"
+}
+
 aws_amplify_backend_environment = {
   "param": "appId",
   "clfn": "amplify"
@@ -251,6 +261,11 @@ aws_api_gateway_documentation_part = {
 
 aws_api_gateway_documentation_version = {
   "param": "restApiId",
+  "clfn": "apigateway"
+}
+
+aws_api_gateway_integration = {
+  "param": "restApiId,resourceId,httpMethod",
   "clfn": "apigateway"
 }
 
@@ -1429,6 +1444,7 @@ aws_needid = {
   "aws_accessanalyzer_archive_rule": aws_accessanalyzer_archive_rule,
   "aws_account_alternate_contact": aws_account_alternate_contact,
   "aws_account_primary_contact": aws_account_primary_contact,
+  "aws_acmpca_certificate": aws_acmpca_certificate,
   "aws_acmpca_permission": aws_acmpca_permission,
   "aws_amplify_backend_environment": aws_amplify_backend_environment,
   "aws_amplify_branch": aws_amplify_branch,
@@ -1440,6 +1456,7 @@ aws_needid = {
   "aws_api_gateway_documentation_part": aws_api_gateway_documentation_part,
   "aws_api_gateway_documentation_version": aws_api_gateway_documentation_version,
   "aws_api_gateway_gateway_response": aws_api_gateway_gateway_response,
+  "aws_api_gateway_integration": aws_api_gateway_integration,
   "aws_api_gateway_model": aws_api_gateway_model,
   "aws_api_gateway_request_validator": aws_api_gateway_request_validator,
   "aws_api_gateway_resource": aws_api_gateway_resource,
@@ -1468,6 +1485,7 @@ aws_needid = {
   "aws_account_alternate_contact": aws_account_alternate_contact,
   "aws_account_primary_contact": aws_account_primary_contact,
   "aws_acmpca_permission": aws_acmpca_permission,
+  "aws_acmpca_policy": aws_acmpca_policy,
   "aws_amplify_backend_environment": aws_amplify_backend_environment,
   "aws_amplify_branch": aws_amplify_branch,
   "aws_amplify_domain_association": aws_amplify_domain_association,

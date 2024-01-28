@@ -627,9 +627,9 @@ aws_acm_certificate_validation = {
 
 aws_acmpca_certificate = {
 	"clfn":		"acm-pca",
-	"descfn":	"list_certificates",
+	"descfn":	"get_certificate",
 	"topkey":	"CertificateAuthorityList",
-	"key":		"Arn",
+	"key":		"Certificate",
 	"filterid":	"Arn"
 }
 
@@ -659,10 +659,10 @@ aws_acmpca_permission = {
 
 aws_acmpca_policy = {
 	"clfn":		"acm-pca",
-	"descfn":	"list_policies",
-	"topkey":	"Policies",
-	"key":		"PolicyId",
-	"filterid":	"PolicyId"
+	"descfn":	"get_policy",
+	"topkey":	"Policy",
+	"key":		"ResourceArn",
+	"filterid":	"ResourceArn"
 }
 
 aws_ami = {
@@ -819,10 +819,10 @@ aws_api_gateway_gateway_response = {
 
 aws_api_gateway_integration = {
 	"clfn":		"apigateway",
-	"descfn":	"get_integrations",
+	"descfn":	"get_integration",
 	"topkey":	"items",
-	"key":		"id",
-	"filterid":	"id"
+	"key":		"restApiId",
+	"filterid":	"restApiId"
 }
 
 aws_api_gateway_integration_response = {

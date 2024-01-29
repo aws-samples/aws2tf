@@ -45,7 +45,7 @@ def call_resource(type, id):
          pass
    else:
       if type in needid_dict.aws_needid:
-         print("WARNING: " +  type + "cannot have null id must pass parameter "+needid_dict.aws_needid[type]['param'])
+         print("WARNING: " +  type + " cannot have null id must pass parameter "+needid_dict.aws_needid[type]['param'])
          exit(0)
 
    rr=False
@@ -83,11 +83,12 @@ def call_resource(type, id):
             sr=getfn(type, id, clfn, descfn, topkey, key, filterid)
 
    except AttributeError as e:
-      if globals.debug: print("AttributeError: name 'getfn' - no aws_"+clfn+".py file ?")
-      print(f"{e=}")
-      exc_type, exc_obj, exc_tb = sys.exc_info()
-      fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-      print(exc_type, fname, exc_tb.tb_lineno)
+      if globals.debug: 
+         print("AttributeError: name 'getfn' - no aws_"+clfn+".py file ?")
+         print(f"{e=}")
+         exc_type, exc_obj, exc_tb = sys.exc_info()
+         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+         print(exc_type, fname, exc_tb.tb_lineno)
       pass
 
    except SyntaxError:

@@ -4201,7 +4201,6 @@ aws_ecs_cluster_capacity_providers = {
 	"filterid":	"clusterName"
 }
 
-
 aws_ecs_service = {
 	"clfn":		"ecs",
 	"descfn":	"list_services",
@@ -4222,8 +4221,8 @@ aws_ecs_task_definition = {
 	"clfn":		"ecs",
 	"descfn":	"describe_task_definition",
 	"topkey":	"taskDefinition",
-	"key":		"taskDefinitionArn",
-	"filterid":	"taskDefinitionArn"
+	"key":		"taskDefinition",
+	"filterid":	"taskDefinition"
 }
 
 aws_ecs_task_set = {

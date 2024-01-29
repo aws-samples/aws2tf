@@ -624,10 +624,10 @@ aws_ecs_tag = {
   "clfn": "ecs"
 }
 
-aws_ecs_task_definition = {
-  "param": "taskDefinition",
-  "clfn": "ecs"
-}
+#aws_ecs_task_definition = {
+#  "param": "taskDefinition",
+#  "clfn": "ecs"
+#}
 
 aws_ecs_task_set = {
   "param": "cluster,service",
@@ -1566,7 +1566,7 @@ aws_needid = {
   "aws_ecr_image": aws_ecr_image,
   "aws_ecs_service": aws_ecs_service,
   "aws_ecs_tag": aws_ecs_tag,
-  "aws_ecs_task_definition": aws_ecs_task_definition,
+  #"aws_ecs_task_definition": aws_ecs_task_definition,
   "aws_ecs_task_set": aws_ecs_task_set,
   "aws_efs_backup_policy": aws_efs_backup_policy,
   "aws_efs_file_system_policy": aws_efs_file_system_policy,

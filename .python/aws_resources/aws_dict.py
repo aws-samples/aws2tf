@@ -3921,14 +3921,6 @@ aws_ec2_transit_gateway_route_table_association = {
 	"filterid":	"TransitGatewayRouteTableAssociationId"
 }
 
-aws_ec2_transit_gateway_route_table_propropagation = {
-	"clfn":		"ec2",
-	"descfn":	"describe_transit_gateway_route_table_propagations",
-	"topkey":	"TransitGatewayRouteTablePropagations",
-	"key":		"TransitGatewayRouteTablePropagationId",
-	"filterid":	"TransitGatewayRouteTablePropagationId"
-}
-
 aws_ec2_transit_gateway_vpc_attachment = {
 	"clfn":		"ec2",
 	"descfn":	"describe_transit_gateway_vpc_attachments",
@@ -3943,38 +3935,6 @@ aws_ec2_transit_gateway_vpc_attachment_accepter = {
 	"topkey":	"TransitGatewayVpcAttachments",
 	"key":		"TransitGatewayVpcAttachmentId",
 	"filterid":	"TransitGatewayVpcAttachmentId"
-}
-
-aws_ec2_transit_gateway_vpc_attachments = {
-	"clfn":		"ec2",
-	"descfn":	"describe_transit_gateway_vpc_attachments",
-	"topkey":	"TransitGatewayVpcAttachments",
-	"key":		"TransitGatewayVpcAttachmentId",
-	"filterid":	"TransitGatewayVpcAttachmentId"
-}
-
-aws_ec2_transit_gateway_vpn_attachment = {
-	"clfn":		"ec2",
-	"descfn":	"describe_transit_gateway_vpn_attachments",
-	"topkey":	"TransitGatewayVpnAttachments",
-	"key":		"TransitGatewayVpnAttachmentId",
-	"filterid":	"TransitGatewayVpnAttachmentId"
-}
-
-aws_ecr_authorization_token = {
-	"clfn":		"ecr",
-	"descfn":	"describe_authorization_tokens",
-	"topkey":	"authorizationTokens",
-	"key":		"authorizationTokenId",
-	"filterid":	"authorizationTokenId"
-}
-
-aws_ecr_image = {
-	"clfn":		"ecr",
-	"descfn":	"describe_images",
-	"topkey":	"images",
-	"key":		"imageId",
-	"filterid":	"imageId"
 }
 
 aws_ecr_lifecycle_policy = {
@@ -4017,14 +3977,6 @@ aws_ecr_replication_configuration = {
 	"filterid":	"replicationConfiguration"
 }
 
-aws_ecr_repositories = {
-	"clfn":		"ecr",
-	"descfn":	"describe_repositories",
-	"topkey":	"repositories",
-	"key":		"repositoryName",
-	"filterid":	"repositoryName"
-}
-
 aws_ecr_repository = {
 	"clfn":		"ecr",
 	"descfn":	"describe_repositories",
@@ -4039,14 +3991,6 @@ aws_ecr_repository_policy = {
 	"topkey":	"policyText",
 	"key":		"policyText",
 	"filterid":	"policyText"
-}
-
-aws_ecrpublic_authorization_token = {
-	"clfn":		"ecr",
-	"descfn":	"describe_authorization_tokens",
-	"topkey":	"authorizationTokens",
-	"key":		"authorizationTokenId",
-	"filterid":	"authorizationTokenId"
 }
 
 aws_ecrpublic_repository = {
@@ -4193,22 +4137,6 @@ aws_eip_association = {
 	"filterid":	"PublicIp"
 }
 
-aws_eks_addon_version = {
-	"clfn":		"eks",
-	"descfn":	"describe_addon_versions",
-	"topkey":	"addonVersions",
-	"key":		"addonVersion",
-	"filterid":	"addonVersion"
-}
-
-aws_eks_cluster_auth = {
-	"clfn":		"eks",
-	"descfn":	"describe_cluster",
-	"topkey":	"cluster",
-	"key":		"name",
-	"filterid":	"name"
-}
-
 aws_eks_pod_identity_association = {
 	"clfn":		"eks",
 	"descfn":	"describe_pod_identity_association",
@@ -4249,21 +4177,6 @@ aws_elastic_beanstalk_environment = {
 	"filterid":	"EnvironmentName"
 }
 
-aws_elastic_beanstalk_hosted_zone = {
-	"clfn":		"elasticbeanstalk",
-	"descfn":	"describe_configuration_settings",
-	"topkey":	"ConfigurationSettings",
-	"key":		"ApplicationName",
-	"filterid":	"ApplicationName"
-}
-
-aws_elastic_beanstalk_solution_stack = {
-	"clfn":		"elasticbeanstalk",
-	"descfn":	"describe_solution_stacks",
-	"topkey":	"SolutionStacks",
-	"key":		"SolutionStackName",
-	"filterid":	"SolutionStackName"
-}
 
 aws_elasticache_cluster = {
 	"clfn":		"elasticache",
@@ -4385,22 +4298,6 @@ aws_elb_attachment = {
 	"filterid":	"LoadBalancerName"
 }
 
-aws_elb_hosted_zone_id = {
-	"clfn":		"elb",
-	"descfn":	"describe_load_balancers",
-	"topkey":	"LoadBalancerDescriptions",
-	"key":		"LoadBalancerName",
-	"filterid":	"LoadBalancerName"
-}
-
-aws_elb_service_account = {
-	"clfn":		"elb",
-	"descfn":	"describe_load_balancers",
-	"topkey":	"LoadBalancerDescriptions",
-	"key":		"LoadBalancerName",
-	"filterid":	"LoadBalancerName"
-}
-
 aws_emr_block_public_access_configuration = {
 	"clfn":		"emr",
 	"descfn":	"describe_block_public_access_configurations",
@@ -4441,14 +4338,6 @@ aws_emr_managed_scaling_policy = {
 	"filterid":	"Id"
 }
 
-aws_emr_release_labels = {
-	"clfn":		"emr",
-	"descfn":	"describe_release_labels",
-	"topkey":	"ReleaseLabels",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
 aws_emr_security_configuration = {
 	"clfn":		"emr",
 	"descfn":	"describe_security_configurations",
@@ -4471,14 +4360,6 @@ aws_emr_studio_session_mapping = {
 	"topkey":	"SessionMappings",
 	"key":		"Id",
 	"filterid":	"Id"
-}
-
-aws_emr_supported_instance_types = {
-	"clfn":		"emr",
-	"descfn":	"list_supported_instance_types",
-	"topkey":	"SupportedInstanceTypes",
-	"key":		"InstanceType",
-	"filterid":	"InstanceType"
 }
 
 aws_emrcontainers_job_template = {
@@ -4658,14 +4539,6 @@ aws_fsx_ontap_file_system = {
 }
 
 aws_fsx_ontap_storage_virtual_machine = {
-	"clfn":		"fsx",
-	"descfn":	"describe_storage_virtual_machines",
-	"topkey":	"StorageVirtualMachines",
-	"key":		"StorageVirtualMachineId",
-	"filterid":	"StorageVirtualMachineId"
-}
-
-aws_fsx_ontap_storage_virtual_machines = {
 	"clfn":		"fsx",
 	"descfn":	"describe_storage_virtual_machines",
 	"topkey":	"StorageVirtualMachines",
@@ -4929,14 +4802,6 @@ aws_glue_schema = {
 	"filterid":	"SchemaId"
 }
 
-aws_glue_script = {
-	"clfn":		"glue",
-	"descfn":	"list_scripts",
-	"topkey":	"Scripts",
-	"key":		"ScriptId",
-	"filterid":	"ScriptId"
-}
-
 aws_glue_security_configuration = {
 	"clfn":		"glue",
 	"descfn":	"list_security_configurations",
@@ -5031,14 +4896,6 @@ aws_guardduty_filter = {
 	"topkey":	"FilterNames",
 	"key":		"FilterName",
 	"filterid":	"FilterName"
-}
-
-aws_guardduty_finding_ids = {
-	"clfn":		"guardduty",
-	"descfn":	"list_findings",
-	"topkey":	"FindingIds",
-	"key":		"FindingId",
-	"filterid":	"FindingId"
 }
 
 aws_guardduty_invite_accepter = {
@@ -11757,22 +11614,15 @@ aws_resources = {
 	"aws_ec2_transit_gateway_route": aws_ec2_transit_gateway_route,
 	"aws_ec2_transit_gateway_route_table": aws_ec2_transit_gateway_route_table,
 	"aws_ec2_transit_gateway_route_table_association": aws_ec2_transit_gateway_route_table_association,
-	"aws_ec2_transit_gateway_route_table_propropagation": aws_ec2_transit_gateway_route_table_propropagation,
 	"aws_ec2_transit_gateway_vpc_attachment": aws_ec2_transit_gateway_vpc_attachment,
 	"aws_ec2_transit_gateway_vpc_attachment_accepter": aws_ec2_transit_gateway_vpc_attachment_accepter,
-	"aws_ec2_transit_gateway_vpc_attachments": aws_ec2_transit_gateway_vpc_attachments,
-	"aws_ec2_transit_gateway_vpn_attachment": aws_ec2_transit_gateway_vpn_attachment,
-	"aws_ecr_authorization_token": aws_ecr_authorization_token,
-	"aws_ecr_image": aws_ecr_image,
 	"aws_ecr_lifecycle_policy": aws_ecr_lifecycle_policy,
 	"aws_ecr_pull_through_cache_rule": aws_ecr_pull_through_cache_rule,
 	"aws_ecr_registry_policy": aws_ecr_registry_policy,
 	"aws_ecr_registry_scanning_configuration": aws_ecr_registry_scanning_configuration,
 	"aws_ecr_replication_configuration": aws_ecr_replication_configuration,
-	"aws_ecr_repositories": aws_ecr_repositories,
 	"aws_ecr_repository": aws_ecr_repository,
 	"aws_ecr_repository_policy": aws_ecr_repository_policy,
-	"aws_ecrpublic_authorization_token": aws_ecrpublic_authorization_token,
 	"aws_ecrpublic_repository": aws_ecrpublic_repository,
 	"aws_ecrpublic_repository_policy": aws_ecrpublic_repository_policy,
 	"aws_ecs_account_setting_default": aws_ecs_account_setting_default,
@@ -11791,15 +11641,11 @@ aws_resources = {
 	"aws_egress_only_internet_gateway": aws_egress_only_internet_gateway,
 	"aws_eip": aws_eip,
 	"aws_eip_association": aws_eip_association,
-	"aws_eks_addon_version": aws_eks_addon_version,
-	"aws_eks_cluster_auth": aws_eks_cluster_auth,
 	"aws_eks_pod_identity_association": aws_eks_pod_identity_association,
 	"aws_elastic_beanstalk_application": aws_elastic_beanstalk_application,
 	"aws_elastic_beanstalk_application_version": aws_elastic_beanstalk_application_version,
 	"aws_elastic_beanstalk_configuration_template": aws_elastic_beanstalk_configuration_template,
 	"aws_elastic_beanstalk_environment": aws_elastic_beanstalk_environment,
-	"aws_elastic_beanstalk_hosted_zone": aws_elastic_beanstalk_hosted_zone,
-	"aws_elastic_beanstalk_solution_stack": aws_elastic_beanstalk_solution_stack,
 	"aws_elasticache_cluster": aws_elasticache_cluster,
 	"aws_elasticache_global_replication_group": aws_elasticache_global_replication_group,
 	"aws_elasticache_parameter_group": aws_elasticache_parameter_group,
@@ -11815,18 +11661,14 @@ aws_resources = {
 	"aws_elastictranscoder_preset": aws_elastictranscoder_preset,
 	"aws_elb": aws_elb,
 	"aws_elb_attachment": aws_elb_attachment,
-	"aws_elb_hosted_zone_id": aws_elb_hosted_zone_id,
-	"aws_elb_service_account": aws_elb_service_account,
 	"aws_emr_block_public_access_configuration": aws_emr_block_public_access_configuration,
 	"aws_emr_cluster": aws_emr_cluster,
 	"aws_emr_instance_fleet": aws_emr_instance_fleet,
 	"aws_emr_instance_group": aws_emr_instance_group,
 	"aws_emr_managed_scaling_policy": aws_emr_managed_scaling_policy,
-	"aws_emr_release_labels": aws_emr_release_labels,
 	"aws_emr_security_configuration": aws_emr_security_configuration,
 	"aws_emr_studio": aws_emr_studio,
 	"aws_emr_studio_session_mapping": aws_emr_studio_session_mapping,
-	"aws_emr_supported_instance_types": aws_emr_supported_instance_types,
 	"aws_emrcontainers_job_template": aws_emrcontainers_job_template,
 	"aws_emrcontainers_virtual_cluster": aws_emrcontainers_virtual_cluster,
 	"aws_emrserverless_application": aws_emrserverless_application,
@@ -11850,7 +11692,6 @@ aws_resources = {
 	"aws_fsx_lustre_file_system": aws_fsx_lustre_file_system,
 	"aws_fsx_ontap_file_system": aws_fsx_ontap_file_system,
 	"aws_fsx_ontap_storage_virtual_machine": aws_fsx_ontap_storage_virtual_machine,
-	"aws_fsx_ontap_storage_virtual_machines": aws_fsx_ontap_storage_virtual_machines,
 	"aws_fsx_ontap_volume": aws_fsx_ontap_volume,
 	"aws_fsx_openzfs_file_system": aws_fsx_openzfs_file_system,
 	"aws_fsx_openzfs_snapshot": aws_fsx_openzfs_snapshot,
@@ -11883,7 +11724,6 @@ aws_resources = {
 	"aws_glue_registry": aws_glue_registry,
 	"aws_glue_resource_policy": aws_glue_resource_policy,
 	"aws_glue_schema": aws_glue_schema,
-	"aws_glue_script": aws_glue_script,
 	"aws_glue_security_configuration": aws_glue_security_configuration,
 	"aws_glue_trigger": aws_glue_trigger,
 	"aws_glue_user_defined_function": aws_glue_user_defined_function,
@@ -11896,7 +11736,6 @@ aws_resources = {
 	"aws_guardduty_detector": aws_guardduty_detector,
 	"aws_guardduty_detector_feature": aws_guardduty_detector_feature,
 	"aws_guardduty_filter": aws_guardduty_filter,
-	"aws_guardduty_finding_ids": aws_guardduty_finding_ids,
 	"aws_guardduty_invite_accepter": aws_guardduty_invite_accepter,
 	"aws_guardduty_ipset": aws_guardduty_ipset,
 	"aws_guardduty_member": aws_guardduty_member,

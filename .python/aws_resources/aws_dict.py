@@ -5334,13 +5334,6 @@ aws_iot_domain_configuration = {
 	"filterid":	"DomainConfigurationName"
 }
 
-aws_iot_endpoint = {
-	"clfn":		"iot",
-	"descfn":	"list_endpoints",
-	"topkey":	"Endpoints",
-	"key":		"EndpointAddress",
-	"filterid":	"EndpointAddress"
-}
 
 aws_iot_event_configurations = {
 	"clfn":		"iot",
@@ -5390,13 +5383,6 @@ aws_iot_provisioning_template = {
 	"filterid":	"TemplateName"
 }
 
-aws_iot_registration_code = {
-	"clfn":		"iot",
-	"descfn":	"list_registration_code",
-	"topkey":	"RegistrationCode",
-	"key":		"RegistrationCode",
-	"filterid":	"RegistrationCode"
-}
 
 aws_iot_role_alias = {
 	"clfn":		"iot",
@@ -5462,14 +5448,6 @@ aws_iot_topic_rule_destination = {
 	"filterid":	"destinationName"
 }
 
-aws_ip_ranges = {
-	"clfn":		"ec2",
-	"descfn":	"describe_managed_prefix_lists",
-	"topkey":	"PrefixLists",
-	"key":		"PrefixListId",
-	"filterid":	"PrefixListId"
-}
-
 aws_ivs_channel = {
 	"clfn":		"ivs",
 	"descfn":	"list_channels",
@@ -5490,14 +5468,6 @@ aws_ivs_recording_configuration = {
 	"clfn":		"ivs",
 	"descfn":	"list_recording_configurations",
 	"topkey":	"RecordingConfigurations",
-	"key":		"arn",
-	"filterid":	"arn"
-}
-
-aws_ivs_stream_key = {
-	"clfn":		"ivs",
-	"descfn":	"list_stream_keys",
-	"topkey":	"StreamKeys",
 	"key":		"arn",
 	"filterid":	"arn"
 }
@@ -5670,13 +5640,6 @@ aws_kms_key_policy = {
 	"filterid":	"PolicyName"
 }
 
-aws_kms_public_key = {
-	"clfn":		"kms",
-	"descfn":	"list_public_keys",
-	"topkey":	"PublicKeys",
-	"key":		"KeyId",
-	"filterid":	"KeyId"
-}
 
 aws_kms_replica_external_key = {
 	"clfn":		"kms",
@@ -5694,21 +5657,6 @@ aws_kms_replica_key = {
 	"filterid":	"KeyId"
 }
 
-aws_kms_secret = {
-	"clfn":		"kms",
-	"descfn":	"list_secrets",
-	"topkey":	"SecretList",
-	"key":		"SecretId",
-	"filterid":	"SecretId"
-}
-
-aws_kms_secrets = {
-	"clfn":		"kms",
-	"descfn":	"list_secrets",
-	"topkey":	"SecretList",
-	"key":		"SecretId",
-	"filterid":	"SecretId"
-}
 
 aws_lakeformation_data_lake_settings = {
 	"clfn":		"lakeformation",
@@ -5766,13 +5714,6 @@ aws_lambda_function_url = {
 	"filterid":	"FunctionName"
 }
 
-aws_lambda_functions = {
-	"clfn":		"lambda",
-	"descfn":	"list_functions",
-	"topkey":	"Functions",
-	"key":		"FunctionName",
-	"filterid":	"FunctionName"
-}
 
 aws_lambda_invocation = {
 	"clfn":		"lambda",
@@ -5804,14 +5745,6 @@ aws_lb_cookie_stickiness_policy = {
 	"topkey":	"PolicyDescriptions",
 	"key":		"PolicyName",
 	"filterid":	"PolicyName"
-}
-
-aws_lb_hosted_zone_id = {
-	"clfn":		"elbv2",
-	"descfn":	"describe_load_balancers",
-	"topkey":	"LoadBalancers",
-	"key":		"LoadBalancerArn",
-	"filterid":	"LoadBalancerArn"
 }
 
 aws_lb_listener = {
@@ -5876,14 +5809,6 @@ aws_lb_trust_store_revocation = {
 	"topkey":	"Attributes",
 	"key":		"Key",
 	"filterid":	"Key"
-}
-
-aws_lbs = {
-	"clfn":		"elbv2",
-	"descfn":	"describe_load_balancers",
-	"topkey":	"LoadBalancers",
-	"key":		"LoadBalancerArn",
-	"filterid":	"LoadBalancerArn"
 }
 
 aws_lex_bot = {
@@ -5966,36 +5891,12 @@ aws_licensemanager_grant_accepter = {
 	"filterid":	"GrantId"
 }
 
-aws_licensemanager_grants = {
-	"clfn":		"license-manager",
-	"descfn":	"list_grants",
-	"topkey":	"Grants",
-	"key":		"GrantArn",
-	"filterid":	"GrantArn"
-}
-
 aws_licensemanager_license_configuration = {
 	"clfn":		"license-manager",
 	"descfn":	"list_license_configurations",
 	"topkey":	"LicenseConfigurations",
 	"key":		"LicenseConfigurationArn",
 	"filterid":	"LicenseConfigurationArn"
-}
-
-aws_licensemanager_received_license = {
-	"clfn":		"license-manager",
-	"descfn":	"list_received_licenses",
-	"topkey":	"ReceivedLicenses",
-	"key":		"LicenseId",
-	"filterid":	"LicenseId"
-}
-
-aws_licensemanager_received_licenses = {
-	"clfn":		"license-manager",
-	"descfn":	"list_received_licenses",
-	"topkey":	"ReceivedLicenses",
-	"key":		"LicenseId",
-	"filterid":	"LicenseId"
 }
 
 aws_lightsail_bucket = {
@@ -6254,14 +6155,6 @@ aws_location_tracker_association = {
 	"filterid":	"TrackerName"
 }
 
-aws_location_tracker_associations = {
-	"clfn":		"location",
-	"descfn":	"list_tracker_associations",
-	"topkey":	"TrackerAssociations",
-	"key":		"TrackerName",
-	"filterid":	"TrackerName"
-}
-
 aws_macie2_account = {
 	"clfn":		"macie2",
 	"descfn":	"list_account_settings",
@@ -6462,28 +6355,12 @@ aws_mq_broker = {
 	"filterid":	"BrokerName"
 }
 
-aws_mq_broker_instance_type_offerings = {
-	"clfn":		"mq",
-	"descfn":	"list_instance_type_offerings",
-	"topkey":	"InstanceTypeOfferings",
-	"key":		"InstanceType",
-	"filterid":	"InstanceType"
-}
-
 aws_mq_configuration = {
 	"clfn":		"mq",
 	"descfn":	"list_configurations",
 	"topkey":	"Configurations",
 	"key":		"Name",
 	"filterid":	"Name"
-}
-
-aws_msk_broker_nodes = {
-	"clfn":		"kafka",
-	"descfn":	"list_nodes",
-	"topkey":	"Nodes",
-	"key":		"NodeId",
-	"filterid":	"NodeId"
 }
 
 aws_msk_cluster = {
@@ -6508,14 +6385,6 @@ aws_msk_configuration = {
 	"topkey":	"Configurations",
 	"key":		"Arn",
 	"filterid":	"Arn"
-}
-
-aws_msk_kafka_version = {
-	"clfn":		"kafka",
-	"descfn":	"list_kafka_versions",
-	"topkey":	"KafkaVersions",
-	"key":		"Version",
-	"filterid":	"Version"
 }
 
 aws_msk_replicator = {
@@ -6622,13 +6491,6 @@ aws_neptune_cluster_snapshot = {
 	"filterid":	"DBClusterSnapshotIdentifier"
 }
 
-aws_neptune_engine_version = {
-	"clfn":		"neptune",
-	"descfn":	"describe_db_engine_versions",
-	"topkey":	"DBEngineVersions",
-	"key":		"Engine",
-	"filterid":	"Engine"
-}
 
 aws_neptune_event_subscription = {
 	"clfn":		"neptune",
@@ -6644,14 +6506,6 @@ aws_neptune_global_cluster = {
 	"topkey":	"GlobalClusters",
 	"key":		"GlobalClusterIdentifier",
 	"filterid":	"GlobalClusterIdentifier"
-}
-
-aws_neptune_orderable_db_instance = {
-	"clfn":		"neptune",
-	"descfn":	"describe_orderable_db_instance_options",
-	"topkey":	"OrderableDBInstanceOptions",
-	"key":		"Engine",
-	"filterid":	"Engine"
 }
 
 aws_neptune_parameter_group = {
@@ -6686,14 +6540,6 @@ aws_network_acl_rule = {
 	"filterid":	"NetworkAclId"
 }
 
-aws_network_acls = {
-	"clfn":		"ec2",
-	"descfn":	"describe_network_acls",
-	"topkey":	"NetworkAcls",
-	"key":		"NetworkAclId",
-	"filterid":	"NetworkAclId"
-}
-
 aws_network_interface = {
 	"clfn":		"ec2",
 	"descfn":	"describe_network_interfaces",
@@ -6711,14 +6557,6 @@ aws_network_interface_attachment = {
 }
 
 aws_network_interface_sg_attachment = {
-	"clfn":		"ec2",
-	"descfn":	"describe_network_interfaces",
-	"topkey":	"NetworkInterfaces",
-	"key":		"NetworkInterfaceId",
-	"filterid":	"NetworkInterfaceId"
-}
-
-aws_network_interfaces = {
 	"clfn":		"ec2",
 	"descfn":	"describe_network_interfaces",
 	"topkey":	"NetworkInterfaces",
@@ -6798,14 +6636,6 @@ aws_networkmanager_connection = {
 	"filterid":	"ConnectionId"
 }
 
-aws_networkmanager_connections = {
-	"clfn":		"networkmanager",
-	"descfn":	"list_connections",
-	"topkey":	"Connections",
-	"key":		"ConnectionId",
-	"filterid":	"ConnectionId"
-}
-
 aws_networkmanager_core_network = {
 	"clfn":		"networkmanager",
 	"descfn":	"list_core_networks",
@@ -6820,14 +6650,6 @@ aws_networkmanager_core_network_policy_attachment = {
 	"topkey":	"CoreNetworkPolicyAttachments",
 	"key":		"CoreNetworkPolicyAttachmentId",
 	"filterid":	"CoreNetworkPolicyAttachmentId"
-}
-
-aws_networkmanager_core_network_policy_documument = {
-	"clfn":		"networkmanager",
-	"descfn":	"list_core_network_policy_documents",
-	"topkey":	"CoreNetworkPolicyDocuments",
-	"key":		"CoreNetworkPolicyDocumentId",
-	"filterid":	"CoreNetworkPolicyDocumentId"
 }
 
 aws_networkmanager_customer_gateway_association = {
@@ -6846,23 +6668,7 @@ aws_networkmanager_device = {
 	"filterid":	"DeviceId"
 }
 
-aws_networkmanager_devices = {
-	"clfn":		"networkmanager",
-	"descfn":	"list_devices",
-	"topkey":	"Devices",
-	"key":		"DeviceId",
-	"filterid":	"DeviceId"
-}
-
 aws_networkmanager_global_network = {
-	"clfn":		"networkmanager",
-	"descfn":	"list_global_networks",
-	"topkey":	"GlobalNetworks",
-	"key":		"GlobalNetworkId",
-	"filterid":	"GlobalNetworkId"
-}
-
-aws_networkmanager_global_networks = {
 	"clfn":		"networkmanager",
 	"descfn":	"list_global_networks",
 	"topkey":	"GlobalNetworks",
@@ -6886,14 +6692,6 @@ aws_networkmanager_link_association = {
 	"filterid":	"LinkAssociationId"
 }
 
-aws_networkmanager_links = {
-	"clfn":		"networkmanager",
-	"descfn":	"list_links",
-	"topkey":	"Links",
-	"key":		"LinkId",
-	"filterid":	"LinkId"
-}
-
 aws_networkmanager_site = {
 	"clfn":		"networkmanager",
 	"descfn":	"list_sites",
@@ -6908,14 +6706,6 @@ aws_networkmanager_site_to_site_vpn_attachment = {
 	"topkey":	"SiteToSiteVpnAttachments",
 	"key":		"SiteToSiteVpnAttachmentId",
 	"filterid":	"SiteToSiteVpnAttachmentId"
-}
-
-aws_networkmanager_sites = {
-	"clfn":		"networkmanager",
-	"descfn":	"list_sites",
-	"topkey":	"Sites",
-	"key":		"SiteId",
-	"filterid":	"SiteId"
 }
 
 aws_networkmanager_transit_gateway_connect_peer_association = {
@@ -11698,14 +11488,12 @@ aws_resources = {
 	"aws_iot_ca_certificate": aws_iot_ca_certificate,
 	"aws_iot_certificate": aws_iot_certificate,
 	"aws_iot_domain_configuration": aws_iot_domain_configuration,
-	"aws_iot_endpoint": aws_iot_endpoint,
 	"aws_iot_event_configurations": aws_iot_event_configurations,
 	"aws_iot_indexing_configuration": aws_iot_indexing_configuration,
 	"aws_iot_logging_options": aws_iot_logging_options,
 	"aws_iot_policy": aws_iot_policy,
 	"aws_iot_policy_attachment": aws_iot_policy_attachment,
 	"aws_iot_provisioning_template": aws_iot_provisioning_template,
-	"aws_iot_registration_code": aws_iot_registration_code,
 	"aws_iot_role_alias": aws_iot_role_alias,
 	"aws_iot_thing": aws_iot_thing,
 	"aws_iot_thing_group": aws_iot_thing_group,
@@ -11714,11 +11502,9 @@ aws_resources = {
 	"aws_iot_thing_type": aws_iot_thing_type,
 	"aws_iot_topic_rule": aws_iot_topic_rule,
 	"aws_iot_topic_rule_destination": aws_iot_topic_rule_destination,
-	"aws_ip_ranges": aws_ip_ranges,
 	"aws_ivs_channel": aws_ivs_channel,
 	"aws_ivs_playback_key_pair": aws_ivs_playback_key_pair,
 	"aws_ivs_recording_configuration": aws_ivs_recording_configuration,
-	"aws_ivs_stream_key": aws_ivs_stream_key,
 	"aws_ivschat_logging_configuration": aws_ivschat_logging_configuration,
 	"aws_ivschat_room": aws_ivschat_room,
 	"aws_kendra_data_source": aws_kendra_data_source,
@@ -11740,11 +11526,8 @@ aws_resources = {
 	"aws_kms_external_key": aws_kms_external_key,
 	"aws_kms_grant": aws_kms_grant,
 	"aws_kms_key_policy": aws_kms_key_policy,
-	"aws_kms_public_key": aws_kms_public_key,
 	"aws_kms_replica_external_key": aws_kms_replica_external_key,
 	"aws_kms_replica_key": aws_kms_replica_key,
-	"aws_kms_secret": aws_kms_secret,
-	"aws_kms_secrets": aws_kms_secrets,
 	"aws_lakeformation_data_lake_settings": aws_lakeformation_data_lake_settings,
 	"aws_lakeformation_lf_tag": aws_lakeformation_lf_tag,
 	"aws_lakeformation_permissions": aws_lakeformation_permissions,
@@ -11752,12 +11535,10 @@ aws_resources = {
 	"aws_lakeformation_resource_lf_tags": aws_lakeformation_resource_lf_tags,
 	"aws_lambda_code_signing_config": aws_lambda_code_signing_config,
 	"aws_lambda_function_url": aws_lambda_function_url,
-	"aws_lambda_functions": aws_lambda_functions,
 	"aws_lambda_invocation": aws_lambda_invocation,
 	"aws_lambda_layer_version_permission": aws_lambda_layer_version_permission,
 	"aws_lambda_provisioned_concurrency_config": aws_lambda_provisioned_concurrency_config,
 	"aws_lb_cookie_stickiness_policy": aws_lb_cookie_stickiness_policy,
-	"aws_lb_hosted_zone_id": aws_lb_hosted_zone_id,
 	"aws_lb_listener": aws_lb_listener,
 	"aws_lb_listener_certificate": aws_lb_listener_certificate,
 	"aws_lb_listener_rule": aws_lb_listener_rule,
@@ -11766,7 +11547,6 @@ aws_resources = {
 	"aws_lb_target_group_attachment": aws_lb_target_group_attachment,
 	"aws_lb_trust_store": aws_lb_trust_store,
 	"aws_lb_trust_store_revocation": aws_lb_trust_store_revocation,
-	"aws_lbs": aws_lbs,
 	"aws_lex_bot": aws_lex_bot,
 	"aws_lex_bot_alias": aws_lex_bot_alias,
 	"aws_lex_intent": aws_lex_intent,
@@ -11777,10 +11557,7 @@ aws_resources = {
 	"aws_licensemanager_association": aws_licensemanager_association,
 	"aws_licensemanager_grant": aws_licensemanager_grant,
 	"aws_licensemanager_grant_accepter": aws_licensemanager_grant_accepter,
-	"aws_licensemanager_grants": aws_licensemanager_grants,
 	"aws_licensemanager_license_configuration": aws_licensemanager_license_configuration,
-	"aws_licensemanager_received_license": aws_licensemanager_received_license,
-	"aws_licensemanager_received_licenses": aws_licensemanager_received_licenses,
 	"aws_lightsail_bucket": aws_lightsail_bucket,
 	"aws_lightsail_bucket_access_key": aws_lightsail_bucket_access_key,
 	"aws_lightsail_bucket_resource_access": aws_lightsail_bucket_resource_access,
@@ -11813,7 +11590,6 @@ aws_resources = {
 	"aws_location_route_calculator": aws_location_route_calculator,
 	"aws_location_tracker": aws_location_tracker,
 	"aws_location_tracker_association": aws_location_tracker_association,
-	"aws_location_tracker_associations": aws_location_tracker_associations,
 	"aws_macie2_account": aws_macie2_account,
 	"aws_macie2_classification_export_configuration": aws_macie2_classification_export_configuration,
 	"aws_macie2_classification_job": aws_macie2_classification_job,
@@ -11839,13 +11615,10 @@ aws_resources = {
 	"aws_memorydb_subnet_group": aws_memorydb_subnet_group,
 	"aws_memorydb_user": aws_memorydb_user,
 	"aws_mq_broker": aws_mq_broker,
-	"aws_mq_broker_instance_type_offerings": aws_mq_broker_instance_type_offerings,
 	"aws_mq_configuration": aws_mq_configuration,
-	"aws_msk_broker_nodes": aws_msk_broker_nodes,
 	"aws_msk_cluster": aws_msk_cluster,
 	"aws_msk_cluster_policy": aws_msk_cluster_policy,
 	"aws_msk_configuration": aws_msk_configuration,
-	"aws_msk_kafka_version": aws_msk_kafka_version,
 	"aws_msk_replicator": aws_msk_replicator,
 	"aws_msk_scram_secret_association": aws_msk_scram_secret_association,
 	"aws_msk_serverless_cluster": aws_msk_serverless_cluster,
@@ -11859,19 +11632,15 @@ aws_resources = {
 	"aws_neptune_cluster_instance": aws_neptune_cluster_instance,
 	"aws_neptune_cluster_parameter_group": aws_neptune_cluster_parameter_group,
 	"aws_neptune_cluster_snapshot": aws_neptune_cluster_snapshot,
-	"aws_neptune_engine_version": aws_neptune_engine_version,
 	"aws_neptune_event_subscription": aws_neptune_event_subscription,
 	"aws_neptune_global_cluster": aws_neptune_global_cluster,
-	"aws_neptune_orderable_db_instance": aws_neptune_orderable_db_instance,
 	"aws_neptune_parameter_group": aws_neptune_parameter_group,
 	"aws_neptune_subnet_group": aws_neptune_subnet_group,
 	"aws_network_acl_association": aws_network_acl_association,
 	"aws_network_acl_rule": aws_network_acl_rule,
-	"aws_network_acls": aws_network_acls,
 	"aws_network_interface": aws_network_interface,
 	"aws_network_interface_attachment": aws_network_interface_attachment,
 	"aws_network_interface_sg_attachment": aws_network_interface_sg_attachment,
-	"aws_network_interfaces": aws_network_interfaces,
 	"aws_networkfirewall_firewall": aws_networkfirewall_firewall,
 	"aws_networkfirewall_firewall_policy": aws_networkfirewall_firewall_policy,
 	"aws_networkfirewall_logging_configuration": aws_networkfirewall_logging_configuration,
@@ -11881,21 +11650,15 @@ aws_resources = {
 	"aws_networkmanager_connect_attachment": aws_networkmanager_connect_attachment,
 	"aws_networkmanager_connect_peer": aws_networkmanager_connect_peer,
 	"aws_networkmanager_connection": aws_networkmanager_connection,
-	"aws_networkmanager_connections": aws_networkmanager_connections,
 	"aws_networkmanager_core_network": aws_networkmanager_core_network,
 	"aws_networkmanager_core_network_policy_attachment": aws_networkmanager_core_network_policy_attachment,
-	"aws_networkmanager_core_network_policy_documument": aws_networkmanager_core_network_policy_documument,
 	"aws_networkmanager_customer_gateway_association": aws_networkmanager_customer_gateway_association,
 	"aws_networkmanager_device": aws_networkmanager_device,
-	"aws_networkmanager_devices": aws_networkmanager_devices,
 	"aws_networkmanager_global_network": aws_networkmanager_global_network,
-	"aws_networkmanager_global_networks": aws_networkmanager_global_networks,
 	"aws_networkmanager_link": aws_networkmanager_link,
 	"aws_networkmanager_link_association": aws_networkmanager_link_association,
-	"aws_networkmanager_links": aws_networkmanager_links,
 	"aws_networkmanager_site": aws_networkmanager_site,
 	"aws_networkmanager_site_to_site_vpn_attachment": aws_networkmanager_site_to_site_vpn_attachment,
-	"aws_networkmanager_sites": aws_networkmanager_sites,
 	"aws_networkmanager_transit_gateway_connect_peer_association": aws_networkmanager_transit_gateway_connect_peer_association,
 	"aws_networkmanager_transit_gateway_peering": aws_networkmanager_transit_gateway_peering,
 	"aws_networkmanager_transit_gateway_registration": aws_networkmanager_transit_gateway_registration,

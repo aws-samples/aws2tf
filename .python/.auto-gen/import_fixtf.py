@@ -115,7 +115,7 @@ from aws_resources import fixtf_kms
 from aws_resources import fixtf_lakeformation
 from aws_resources import fixtf_lambda
 from aws_resources import fixtf_lex
-from aws_resources import fixtf_lexv2-models
+from aws_resources import fixtf_lexv2_models
 from aws_resources import fixtf_licensemanager
 from aws_resources import fixtf_lightsail
 from aws_resources import fixtf_location

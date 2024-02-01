@@ -4970,14 +4970,6 @@ aws_iam_access_key = {
 	"filterid":	"AccessKeyId"
 }
 
-aws_iam_access_keys = {
-	"clfn":		"iam",
-	"descfn":	"list_access_keys",
-	"topkey":	"AccessKeyMetadata",
-	"key":		"AccessKeyId",
-	"filterid":	"AccessKeyId"
-}
-
 aws_iam_account_alias = {
 	"clfn":		"iam",
 	"descfn":	"list_account_aliases",
@@ -5050,22 +5042,6 @@ aws_iam_policy_attachment = {
 	"filterid":	"PolicyArn"
 }
 
-aws_iam_policy_document = {
-	"clfn":		"iam",
-	"descfn":	"get_policy_version",
-	"topkey":	"PolicyVersion",
-	"key":		"PolicyArn",
-	"filterid":	"PolicyArn"
-}
-
-aws_iam_principal_policy_simulation = {
-	"clfn":		"iam",
-	"descfn":	"simulate_principal_policy",
-	"topkey":	"EvaluationResults",
-	"key":		"EvaluationResultIdentifier",
-	"filterid":	"EvaluationResultIdentifier"
-}
-
 aws_iam_saml_provider = {
 	"clfn":		"iam",
 	"descfn":	"list_saml_providers",
@@ -5104,14 +5080,6 @@ aws_iam_service_specific_credential = {
 	"topkey":	"ServiceSpecificCredentials",
 	"key":		"ServiceSpecificCredentialId",
 	"filterid":	"ServiceSpecificCredentialId"
-}
-
-aws_iam_session_context = {
-	"clfn":		"iam",
-	"descfn":	"get_session_context",
-	"topkey":	"SessionContext",
-	"key":		"SessionContextKey",
-	"filterid":	"SessionContextKey"
 }
 
 aws_iam_signing_certificate = {
@@ -5162,14 +5130,6 @@ aws_iam_user_ssh_key = {
 	"filterid":	"SSHPublicKeyId"
 }
 
-aws_iam_users = {
-	"clfn":		"iam",
-	"descfn":	"list_users",
-	"topkey":	"Users",
-	"key":		"UserName",
-	"filterid":	"UserName"
-}
-
 aws_iam_virtual_mfa_device = {
 	"clfn":		"iam",
 	"descfn":	"list_virtual_mfa_devices",
@@ -5210,13 +5170,6 @@ aws_imagebuilder_component = {
 	"filterid":	"ComponentArn"
 }
 
-aws_imagebuilder_components = {
-	"clfn":		"imagebuilder",
-	"descfn":	"list_components",
-	"topkey":	"Components",
-	"key":		"ComponentArn",
-	"filterid":	"ComponentArn"
-}
 
 aws_imagebuilder_container_recipe = {
 	"clfn":		"imagebuilder",
@@ -5226,13 +5179,6 @@ aws_imagebuilder_container_recipe = {
 	"filterid":	"ContainerRecipeArn"
 }
 
-aws_imagebuilder_container_recipes = {
-	"clfn":		"imagebuilder",
-	"descfn":	"list_container_recipes",
-	"topkey":	"ContainerRecipes",
-	"key":		"ContainerRecipeArn",
-	"filterid":	"ContainerRecipeArn"
-}
 
 aws_imagebuilder_distribution_configuration = {
 	"clfn":		"imagebuilder",
@@ -5242,13 +5188,6 @@ aws_imagebuilder_distribution_configuration = {
 	"filterid":	"DistributionConfigurationArn"
 }
 
-aws_imagebuilder_distribution_configurations = {
-	"clfn":		"imagebuilder",
-	"descfn":	"list_distribution_configurations",
-	"topkey":	"DistributionConfigurations",
-	"key":		"DistributionConfigurationArn",
-	"filterid":	"DistributionConfigurationArn"
-}
 
 aws_imagebuilder_image = {
 	"clfn":		"imagebuilder",
@@ -5266,13 +5205,6 @@ aws_imagebuilder_image_pipeline = {
 	"filterid":	"ImagePipelineArn"
 }
 
-aws_imagebuilder_image_pipelines = {
-	"clfn":		"imagebuilder",
-	"descfn":	"list_image_pipelines",
-	"topkey":	"ImagePipelines",
-	"key":		"ImagePipelineArn",
-	"filterid":	"ImagePipelineArn"
-}
 
 aws_imagebuilder_image_recipe = {
 	"clfn":		"imagebuilder",
@@ -5282,23 +5214,7 @@ aws_imagebuilder_image_recipe = {
 	"filterid":	"ImageRecipeArn"
 }
 
-aws_imagebuilder_image_recipes = {
-	"clfn":		"imagebuilder",
-	"descfn":	"list_image_recipes",
-	"topkey":	"ImageRecipes",
-	"key":		"ImageRecipeArn",
-	"filterid":	"ImageRecipeArn"
-}
-
 aws_imagebuilder_infrastructure_configuration = {
-	"clfn":		"imagebuilder",
-	"descfn":	"list_infrastructure_configurations",
-	"topkey":	"InfrastructureConfigurations",
-	"key":		"InfrastructureConfigurationArn",
-	"filterid":	"InfrastructureConfigurationArn"
-}
-
-aws_imagebuilder_infrastructure_configurations = {
 	"clfn":		"imagebuilder",
 	"descfn":	"list_infrastructure_configurations",
 	"topkey":	"InfrastructureConfigurations",
@@ -5358,14 +5274,6 @@ aws_inspector_resource_group = {
 	"clfn":		"inspector",
 	"descfn":	"list_resource_groups",
 	"topkey":	"ResourceGroups",
-	"key":		"Name",
-	"filterid":	"Name"
-}
-
-aws_inspector_rules_packages = {
-	"clfn":		"inspector",
-	"descfn":	"list_rules_packages",
-	"topkey":	"RulesPackages",
 	"key":		"Name",
 	"filterid":	"Name"
 }
@@ -11745,7 +11653,6 @@ aws_resources = {
 	"aws_guardduty_publishing_destination": aws_guardduty_publishing_destination,
 	"aws_guardduty_threatintelset": aws_guardduty_threatintelset,
 	"aws_iam_access_key": aws_iam_access_key,
-	"aws_iam_access_keys": aws_iam_access_keys,
 	"aws_iam_account_alias": aws_iam_account_alias,
 	"aws_iam_account_password_policy": aws_iam_account_password_policy,
 	"aws_iam_group": aws_iam_group,
@@ -11755,38 +11662,28 @@ aws_resources = {
 	"aws_iam_openid_connect_provider": aws_iam_openid_connect_provider,
 	"aws_iam_policy": aws_iam_policy,
 	"aws_iam_policy_attachment": aws_iam_policy_attachment,
-	"aws_iam_policy_document": aws_iam_policy_document,
-	"aws_iam_principal_policy_simulation": aws_iam_principal_policy_simulation,
 	"aws_iam_saml_provider": aws_iam_saml_provider,
 	"aws_iam_security_token_service_preferences": aws_iam_security_token_service_preferences,
 	"aws_iam_server_certificate": aws_iam_server_certificate,
 	"aws_iam_service_linked_role": aws_iam_service_linked_role,
 	"aws_iam_service_specific_credential": aws_iam_service_specific_credential,
-	"aws_iam_session_context": aws_iam_session_context,
 	"aws_iam_signing_certificate": aws_iam_signing_certificate,
 	"aws_iam_user_group_membership": aws_iam_user_group_membership,
 	"aws_iam_user_login_profile": aws_iam_user_login_profile,
 	"aws_iam_user_policy": aws_iam_user_policy,
 	"aws_iam_user_policy_attachment": aws_iam_user_policy_attachment,
 	"aws_iam_user_ssh_key": aws_iam_user_ssh_key,
-	"aws_iam_users": aws_iam_users,
 	"aws_iam_virtual_mfa_device": aws_iam_virtual_mfa_device,
 	"aws_identitystore_group": aws_identitystore_group,
 	"aws_identitystore_group_membership": aws_identitystore_group_membership,
 	"aws_identitystore_user": aws_identitystore_user,
 	"aws_imagebuilder_component": aws_imagebuilder_component,
-	"aws_imagebuilder_components": aws_imagebuilder_components,
 	"aws_imagebuilder_container_recipe": aws_imagebuilder_container_recipe,
-	"aws_imagebuilder_container_recipes": aws_imagebuilder_container_recipes,
 	"aws_imagebuilder_distribution_configuration": aws_imagebuilder_distribution_configuration,
-	"aws_imagebuilder_distribution_configurations": aws_imagebuilder_distribution_configurations,
 	"aws_imagebuilder_image": aws_imagebuilder_image,
 	"aws_imagebuilder_image_pipeline": aws_imagebuilder_image_pipeline,
-	"aws_imagebuilder_image_pipelines": aws_imagebuilder_image_pipelines,
 	"aws_imagebuilder_image_recipe": aws_imagebuilder_image_recipe,
-	"aws_imagebuilder_image_recipes": aws_imagebuilder_image_recipes,
 	"aws_imagebuilder_infrastructure_configuration": aws_imagebuilder_infrastructure_configuration,
-	"aws_imagebuilder_infrastructure_configurations": aws_imagebuilder_infrastructure_configurations,
 	"aws_inspector2_delegated_admin_account": aws_inspector2_delegated_admin_account,
 	"aws_inspector2_enabler": aws_inspector2_enabler,
 	"aws_inspector2_member_association": aws_inspector2_member_association,
@@ -11794,7 +11691,6 @@ aws_resources = {
 	"aws_inspector_assessment_target": aws_inspector_assessment_target,
 	"aws_inspector_assessment_template": aws_inspector_assessment_template,
 	"aws_inspector_resource_group": aws_inspector_resource_group,
-	"aws_inspector_rules_packages": aws_inspector_rules_packages,
 	"aws_internet_gateway_attachment": aws_internet_gateway_attachment,
 	"aws_internetmonitor_monitor": aws_internetmonitor_monitor,
 	"aws_iot_authorizer": aws_iot_authorizer,

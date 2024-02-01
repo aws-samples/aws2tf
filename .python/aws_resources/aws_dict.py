@@ -7036,22 +7036,6 @@ aws_organizations_delegated_administrator = {
 	"filterid":	"Id"
 }
 
-aws_organizations_delegated_administrators = {
-	"clfn":		"organizations",
-	"descfn":	"list_delegated_administrators",
-	"topkey":	"DelegatedAdministrators",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
-aws_organizations_delegated_services = {
-	"clfn":		"organizations",
-	"descfn":	"list_delegated_services",
-	"topkey":	"DelegatedServices",
-	"key":		"ServicePrincipal",
-	"filterid":	"ServicePrincipal"
-}
-
 aws_organizations_organization = {
 	"clfn":		"organizations",
 	"descfn":	"list_organizations",
@@ -7064,46 +7048,6 @@ aws_organizations_organizational_unit = {
 	"clfn":		"organizations",
 	"descfn":	"list_organizational_units",
 	"topkey":	"OrganizationalUnits",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
-aws_organizations_organizational_unit_child_accounts = {
-	"clfn":		"organizations",
-	"descfn":	"list_organizational_units",
-	"topkey":	"OrganizationalUnits",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
-aws_organizations_organizational_unit_descendant_accounts = {
-	"clfn":		"organizations",
-	"descfn":	"list_organizational_units",
-	"topkey":	"OrganizationalUnits",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
-aws_organizations_organizational_units = {
-	"clfn":		"organizations",
-	"descfn":	"list_organizational_units",
-	"topkey":	"OrganizationalUnits",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
-aws_organizations_policies = {
-	"clfn":		"organizations",
-	"descfn":	"list_policies",
-	"topkey":	"Policies",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
-aws_organizations_policies_for_target = {
-	"clfn":		"organizations",
-	"descfn":	"list_policies",
-	"topkey":	"Policies",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -7132,13 +7076,6 @@ aws_organizations_resource_policy = {
 	"filterid":	"Id"
 }
 
-aws_organizations_resource_tags = {
-	"clfn":		"organizations",
-	"descfn":	"list_resource_tags",
-	"topkey":	"ResourceTags",
-	"key":		"Id",
-	"filterid":	"Id"
-}
 
 aws_outposts_asset = {
 	"clfn":		"outposts",
@@ -11700,19 +11637,11 @@ aws_resources = {
 	"aws_opsworks_user_profile": aws_opsworks_user_profile,
 	"aws_organizations_account": aws_organizations_account,
 	"aws_organizations_delegated_administrator": aws_organizations_delegated_administrator,
-	"aws_organizations_delegated_administrators": aws_organizations_delegated_administrators,
-	"aws_organizations_delegated_services": aws_organizations_delegated_services,
 	"aws_organizations_organization": aws_organizations_organization,
 	"aws_organizations_organizational_unit": aws_organizations_organizational_unit,
-	"aws_organizations_organizational_unit_child_accounts": aws_organizations_organizational_unit_child_accounts,
-	"aws_organizations_organizational_unit_descendant_accounts": aws_organizations_organizational_unit_descendant_accounts,
-	"aws_organizations_organizational_units": aws_organizations_organizational_units,
-	"aws_organizations_policies": aws_organizations_policies,
-	"aws_organizations_policies_for_target": aws_organizations_policies_for_target,
 	"aws_organizations_policy": aws_organizations_policy,
 	"aws_organizations_policy_attachment": aws_organizations_policy_attachment,
 	"aws_organizations_resource_policy": aws_organizations_resource_policy,
-	"aws_organizations_resource_tags": aws_organizations_resource_tags,
 	"aws_outposts_asset": aws_outposts_asset,
 	"aws_outposts_assets": aws_outposts_assets,
 	"aws_outposts_outpost": aws_outposts_outpost,

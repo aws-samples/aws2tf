@@ -128,14 +128,6 @@ aws_vpc_dhcp_options = {
 	"filterid":	""
 }
 
-aws_image = {
-	"clfn":		"ec2",
-	"descfn":	"describe_images",
-	"topkey":	"Images",
-	"key":		"ImageId",
-	"filterid":	"ImageId"
-}
-
 aws_key_pair = {
 	"clfn":		"ec2",
 	"descfn":	"describe_key_pairs",
@@ -1705,14 +1697,6 @@ aws_bedrock_model_invocation_logging_configuration = {
 	"filterid":	"ModelInvocationLoggingConfigurationName"
 }
 
-aws_billing_service_account = {
-	"clfn":		"billingconductor",
-	"descfn":	"list_service_accounts",
-	"topkey":	"ServiceAccounts",
-	"key":		"ServiceAccountId",
-	"filterid":	"ServiceAccountId"
-}
-
 aws_budgets_budget = {
 	"clfn":		"budgets",
 	"descfn":	"list_budgets",
@@ -1727,22 +1711,6 @@ aws_budgets_budget_action = {
 	"topkey":	"BudgetActions",
 	"key":		"ActionId",
 	"filterid":	"ActionId"
-}
-
-aws_caller_identity = {
-	"clfn":		"sts",
-	"descfn":	"get_caller_identity",
-	"topkey":	"UserId",
-	"key":		"UserId",
-	"filterid":	"UserId"
-}
-
-aws_canonical_user_id = {
-	"clfn":		"sts",
-	"descfn":	"get_caller_identity",
-	"topkey":	"UserId",
-	"key":		"UserId",
-	"filterid":	"UserId"
 }
 
 aws_ce_anomaly_monitor = {
@@ -2017,14 +1985,6 @@ aws_cloudfront_origin_access_control = {
 	"filterid":	"Id"
 }
 
-aws_cloudfront_origin_access_identities = {
-	"clfn":		"cloudfront",
-	"descfn":	"list_origin_access_identities",
-	"topkey":	"OriginAccessIdentities",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
 aws_cloudfront_origin_access_identity = {
 	"clfn":		"cloudfront",
 	"descfn":	"list_origin_access_identities",
@@ -2181,14 +2141,6 @@ aws_cloudwatch_event_permission = {
 	"clfn":		"cloudwatch",
 	"descfn":	"list_permissions",
 	"topkey":	"Permissions",
-	"key":		"Name",
-	"filterid":	"Name"
-}
-
-aws_cloudwatch_event_source = {
-	"clfn":		"cloudwatch",
-	"descfn":	"list_sources",
-	"topkey":	"Sources",
 	"key":		"Name",
 	"filterid":	"Name"
 }
@@ -3049,14 +3001,6 @@ aws_db_cluster_snapshot = {
 	"filterid":	"DBClusterSnapshotIdentifier"
 }
 
-aws_db_event_categories = {
-	"clfn":		"rds",
-	"descfn":	"describe_event_categories",
-	"topkey":	"EventCategoriesMapList",
-	"key":		"SourceType",
-	"filterid":	"SourceType"
-}
-
 aws_db_instance = {
 	"clfn":		"rds",
 	"descfn":	"describe_db_instances",
@@ -3135,14 +3079,6 @@ aws_db_snapshot_copy = {
 	"topkey":	"DBSnapshotAttributesResult",
 	"key":		"DBSnapshotIdentifier",
 	"filterid":	"DBSnapshotIdentifier"
-}
-
-aws_default_tags = {
-	"clfn":		"ec2",
-	"descfn":	"describe_tags",
-	"topkey":	"Tags",
-	"key":		"ResourceId",
-	"filterid":	"ResourceId"
 }
 
 aws_default_vpc_dhcp_options = {
@@ -3285,14 +3221,6 @@ aws_directory_service_shared_directory = {
 	"clfn":		"ds",
 	"descfn":	"list_shared_directories",
 	"topkey":	"SharedDirectories",
-	"key":		"SharedDirectoryId",
-	"filterid":	"SharedDirectoryId"
-}
-
-aws_directory_service_shared_directory_acceptor = {
-	"clfn":		"ds",
-	"descfn":	"list_accepted_shared_directories",
-	"topkey":	"AcceptedSharedDirectories",
 	"key":		"SharedDirectoryId",
 	"filterid":	"SharedDirectoryId"
 }
@@ -3753,14 +3681,6 @@ aws_ec2_client_vpn_route = {
 	"filterid":	"ClientVpnEndpointId"
 }
 
-aws_ec2_coip_pool = {
-	"clfn":		"ec2",
-	"descfn":	"describe_coip_pools",
-	"topkey":	"CoipPools",
-	"key":		"CoipPoolId",
-	"filterid":	"CoipPoolId"
-}
-
 aws_ec2_fleet = {
 	"clfn":		"ec2",
 	"descfn":	"describe_fleets",
@@ -3833,14 +3753,6 @@ aws_ec2_managed_prefix_list_entry = {
 	"filterid":	"PrefixListId"
 }
 
-aws_ec2_managed_prefix_lists = {
-	"clfn":		"ec2",
-	"descfn":	"describe_managed_prefix_lists",
-	"topkey":	"PrefixLists",
-	"key":		"PrefixListId",
-	"filterid":	"PrefixListId"
-}
-
 aws_ec2_subnet_cidr_reservation = {
 	"clfn":		"ec2",
 	"descfn":	"describe_subnet_cidr_reservations",
@@ -3897,22 +3809,6 @@ aws_ec2_transit_gateway = {
 	"filterid":	"TransitGatewayId"
 }
 
-aws_ec2_transit_gateway_attachment = {
-	"clfn":		"ec2",
-	"descfn":	"describe_transit_gateway_attachments",
-	"topkey":	"TransitGatewayAttachments",
-	"key":		"TransitGatewayAttachmentId",
-	"filterid":	"TransitGatewayAttachmentId"
-}
-
-aws_ec2_transit_gateway_attachments = {
-	"clfn":		"ec2",
-	"descfn":	"describe_transit_gateway_attachments",
-	"topkey":	"TransitGatewayAttachments",
-	"key":		"TransitGatewayAttachmentId",
-	"filterid":	"TransitGatewayAttachmentId"
-}
-
 aws_ec2_transit_gateway_connect = {
 	"clfn":		"ec2",
 	"descfn":	"describe_transit_gateway_connects",
@@ -3927,14 +3823,6 @@ aws_ec2_transit_gateway_connect_peer = {
 	"topkey":	"TransitGatewayConnectPeers",
 	"key":		"TransitGatewayConnectPeerId",
 	"filterid":	"TransitGatewayConnectPeerId"
-}
-
-aws_ec2_transit_gateway_dx_gateway_attachment = {
-	"clfn":		"ec2",
-	"descfn":	"describe_transit_gateway_dx_gateway_attachments",
-	"topkey":	"TransitGatewayDxGatewayAttachments",
-	"key":		"TransitGatewayDxGatewayAttachmentId",
-	"filterid":	"TransitGatewayDxGatewayAttachmentId"
 }
 
 aws_ec2_transit_gateway_multicast_domain = {
@@ -11394,7 +11282,6 @@ aws_resources = {
 	"aws_default_subnet": aws_default_subnet,
 	"aws_default_vpc": aws_default_vpc,
 	"aws_vpc_dhcp_options": aws_vpc_dhcp_options,
-	"aws_image": aws_image,
 	"aws_key_pair": aws_key_pair,
 	"aws_launch_configuration": aws_launch_configuration,
 	"aws_launch_template": aws_launch_template,
@@ -11592,11 +11479,8 @@ aws_resources = {
 	"aws_batch_job_queue": aws_batch_job_queue,
 	"aws_batch_scheduling_policy": aws_batch_scheduling_policy,
 	"aws_bedrock_model_invocation_logging_configuration": aws_bedrock_model_invocation_logging_configuration,
-	"aws_billing_service_account": aws_billing_service_account,
 	"aws_budgets_budget": aws_budgets_budget,
 	"aws_budgets_budget_action": aws_budgets_budget_action,
-	"aws_caller_identity": aws_caller_identity,
-	"aws_canonical_user_id": aws_canonical_user_id,
 	"aws_ce_anomaly_monitor": aws_ce_anomaly_monitor,
 	"aws_ce_anomaly_subscription": aws_ce_anomaly_subscription,
 	"aws_ce_cost_allocation_tag": aws_ce_cost_allocation_tag,
@@ -11631,7 +11515,6 @@ aws_resources = {
 	"aws_cloudfront_key_group": aws_cloudfront_key_group,
 	"aws_cloudfront_monitoring_subscription": aws_cloudfront_monitoring_subscription,
 	"aws_cloudfront_origin_access_control": aws_cloudfront_origin_access_control,
-	"aws_cloudfront_origin_access_identities": aws_cloudfront_origin_access_identities,
 	"aws_cloudfront_origin_access_identity": aws_cloudfront_origin_access_identity,
 	"aws_cloudfront_origin_request_policy": aws_cloudfront_origin_request_policy,
 	"aws_cloudfront_public_key": aws_cloudfront_public_key,
@@ -11652,7 +11535,6 @@ aws_resources = {
 	"aws_cloudwatch_event_connection": aws_cloudwatch_event_connection,
 	"aws_cloudwatch_event_endpoint": aws_cloudwatch_event_endpoint,
 	"aws_cloudwatch_event_permission": aws_cloudwatch_event_permission,
-	"aws_cloudwatch_event_source": aws_cloudwatch_event_source,
 	"aws_cloudwatch_event_target": aws_cloudwatch_event_target,
 	"aws_cloudwatch_log_data_protection_policy": aws_cloudwatch_log_data_protection_policy,
 	"aws_cloudwatch_log_destination": aws_cloudwatch_log_destination,
@@ -11760,7 +11642,6 @@ aws_resources = {
 	"aws_dax_parameter_group": aws_dax_parameter_group,
 	"aws_dax_subnet_group": aws_dax_subnet_group,
 	"aws_db_cluster_snapshot": aws_db_cluster_snapshot,
-	"aws_db_event_categories": aws_db_event_categories,
 	"aws_db_instance": aws_db_instance,
 	"aws_db_instance_automated_backups_replication": aws_db_instance_automated_backups_replication,
 	"aws_db_instance_role_association": aws_db_instance_role_association,
@@ -11771,7 +11652,6 @@ aws_resources = {
 	"aws_db_proxy_target": aws_db_proxy_target,
 	"aws_db_snapshot": aws_db_snapshot,
 	"aws_db_snapshot_copy": aws_db_snapshot_copy,
-	"aws_default_tags": aws_default_tags,
 	"aws_default_vpc_dhcp_options": aws_default_vpc_dhcp_options,
 	"aws_detective_graph": aws_detective_graph,
 	"aws_detective_invitation_accepter": aws_detective_invitation_accepter,
@@ -11790,7 +11670,6 @@ aws_resources = {
 	"aws_directory_service_radius_settings": aws_directory_service_radius_settings,
 	"aws_directory_service_region": aws_directory_service_region,
 	"aws_directory_service_shared_directory": aws_directory_service_shared_directory,
-	"aws_directory_service_shared_directory_acceptor": aws_directory_service_shared_directory_acceptor,
 	"aws_directory_service_trust": aws_directory_service_trust,
 	"aws_dlm_lifecycle_policy": aws_dlm_lifecycle_policy,
 	"aws_dms_certificate": aws_dms_certificate,
@@ -11848,7 +11727,6 @@ aws_resources = {
 	"aws_ec2_client_vpn_endpoint": aws_ec2_client_vpn_endpoint,
 	"aws_ec2_client_vpn_network_association": aws_ec2_client_vpn_network_association,
 	"aws_ec2_client_vpn_route": aws_ec2_client_vpn_route,
-	"aws_ec2_coip_pool": aws_ec2_coip_pool,
 	"aws_ec2_fleet": aws_ec2_fleet,
 	"aws_ec2_host": aws_ec2_host,
 	"aws_ec2_image_block_public_access": aws_ec2_image_block_public_access,
@@ -11858,7 +11736,6 @@ aws_resources = {
 	"aws_ec2_local_gateway_route_table_vpc_association": aws_ec2_local_gateway_route_table_vpc_association,
 	"aws_ec2_managed_prefix_list": aws_ec2_managed_prefix_list,
 	"aws_ec2_managed_prefix_list_entry": aws_ec2_managed_prefix_list_entry,
-	"aws_ec2_managed_prefix_lists": aws_ec2_managed_prefix_lists,
 	"aws_ec2_subnet_cidr_reservation": aws_ec2_subnet_cidr_reservation,
 	"aws_ec2_tag": aws_ec2_tag,
 	"aws_ec2_traffic_mirror_filter": aws_ec2_traffic_mirror_filter,
@@ -11866,11 +11743,8 @@ aws_resources = {
 	"aws_ec2_traffic_mirror_session": aws_ec2_traffic_mirror_session,
 	"aws_ec2_traffic_mirror_target": aws_ec2_traffic_mirror_target,
 	"aws_ec2_transit_gateway": aws_ec2_transit_gateway,
-	"aws_ec2_transit_gateway_attachment": aws_ec2_transit_gateway_attachment,
-	"aws_ec2_transit_gateway_attachments": aws_ec2_transit_gateway_attachments,
 	"aws_ec2_transit_gateway_connect": aws_ec2_transit_gateway_connect,
 	"aws_ec2_transit_gateway_connect_peer": aws_ec2_transit_gateway_connect_peer,
-	"aws_ec2_transit_gateway_dx_gateway_attachment": aws_ec2_transit_gateway_dx_gateway_attachment,
 	"aws_ec2_transit_gateway_multicast_domain": aws_ec2_transit_gateway_multicast_domain,
 	"aws_ec2_transit_gateway_multicast_domain_association": aws_ec2_transit_gateway_multicast_domain_association,
 	"aws_ec2_transit_gateway_multicast_group_member": aws_ec2_transit_gateway_multicast_group_member,

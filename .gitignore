@@ -39,3 +39,4 @@ __pycache__
 .python/probeout/*
 .python/bugs.md
 .scripts/*
+.python/provider-data/terraform-provider-aws

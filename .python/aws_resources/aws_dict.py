@@ -1106,14 +1106,6 @@ aws_appconfig_environment = {
 	"filterid":	"Id"
 }
 
-aws_appconfig_extension = {
-	"clfn":		"appconfig",
-	"descfn":	"list_extensions",
-	"topkey":	"Items",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
 aws_appconfig_extension_association = {
 	"clfn":		"appconfig",
 	"descfn":	"list_extension_associations",
@@ -4004,7 +3996,7 @@ aws_ecr_repository = {
 
 aws_ecr_repository_policy = {
 	"clfn":		"ecr",
-	"descfn":	"describe_repository_policy",
+	"descfn":	"get_repository_policy",
 	"topkey":	"policyText",
 	"key":		"policyText",
 	"filterid":	"policyText"
@@ -10522,7 +10514,6 @@ aws_resources = {
 	"aws_appconfig_deployment": aws_appconfig_deployment,
 	"aws_appconfig_deployment_strategy": aws_appconfig_deployment_strategy,
 	"aws_appconfig_environment": aws_appconfig_environment,
-	"aws_appconfig_extension": aws_appconfig_extension,
 	"aws_appconfig_extension_association": aws_appconfig_extension_association,
 	"aws_appconfig_hosted_configuration_version": aws_appconfig_hosted_configuration_version,
 	"aws_appflow_connector_profile": aws_appflow_connector_profile,

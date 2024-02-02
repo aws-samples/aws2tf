@@ -1,0 +1,9 @@
+aws_appconfig_extension = {
+	"clfn":		"appconfig",
+	"descfn":	"list_extensions",
+	"topkey":	"Items",
+	"key":		"Id",
+	"filterid":	"Id"
+}
+# problem with import id - not is list output
+"aws_appconfig_extension": aws_appconfig_extension,

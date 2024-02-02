@@ -7,3 +7,13 @@ aws_appconfig_extension = {
 }
 # problem with import id - not is list output
 "aws_appconfig_extension": aws_appconfig_extension,
+
+aws_network_interface = {
+	"clfn":		"ec2",
+	"descfn":	"describe_network_interfaces",
+	"topkey":	"NetworkInterfaces",
+	"key":		"NetworkInterfaceId",
+	"filterid":	"NetworkInterfaceId"
+}
+
+	"aws_network_interface": aws_network_interface,

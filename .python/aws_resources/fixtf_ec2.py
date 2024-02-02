@@ -383,6 +383,30 @@ def aws_network_acls(t1,tt1,tt2,flag1,flag2):
 
 def aws_network_interface(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if "private_ips_count" in tt1:
+		tt2=tt2.strip('\"')
+		if tt2 == "0": skip=1
+	elif "private_ips_count" in tt1:
+		tt2=tt2.strip('\"')
+		if tt2 == "0": skip=1
+	elif "ipv6_prefixes" in tt1:
+		tt2=tt2.strip('\"')
+		if tt2 == "[]": skip=1
+	elif "ipv6_address_count" in tt1:
+		tt2=tt2.strip('\"')
+		if tt2 == "0": skip=1
+	elif "ipv6_address_list" in tt1:
+		tt2=tt2.strip('\"')
+		if tt2 == "[]": skip=1
+	elif "ipv4_prefix_count" in tt1:
+		tt2=tt2.strip('\"')
+		if tt2 == "0": skip=1
+	elif "ipv4_prefixes" in tt1:
+		tt2=tt2.strip('\"')
+		if tt2 == "[]": skip=1
+	
+	
+
 	return skip,t1,flag1,flag2
 
 def aws_network_interface_attachment(t1,tt1,tt2,flag1,flag2):

@@ -17,3 +17,24 @@ aws_network_interface = {
 }
 
 	"aws_network_interface": aws_network_interface,
+
+aws_default_subnet = {
+	"clfn":		"ec2",
+	"descfn":	"describe_subnets",
+	"topkey":	"Subnets",
+	"key":		"SubnetId",
+	"filterid":	"SubnetId"
+}
+
+"aws_default_subnet": aws_default_subnet,
+
+
+aws_default_vpc = {
+	"clfn":		"ec2",
+	"descfn":	"describe_vpcs",
+	"topkey":	"Vpcs",
+	"key":		"VpcId",
+	"filterid":	"KeyError"
+}
+
+	"aws_default_vpc": aws_default_vpc,

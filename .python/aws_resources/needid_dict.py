@@ -1440,6 +1440,11 @@ aws_wafv2_web_acl = {
   "clfn": "wafv2"
 }
 
+aws_xray_group = {
+  "param": "GroupName",
+  "clfn": "xray"
+}
+
 aws_needid = {
   "aws_accessanalyzer_archive_rule": aws_accessanalyzer_archive_rule,
   "aws_account_alternate_contact": aws_account_alternate_contact,
@@ -1727,5 +1732,6 @@ aws_needid = {
   "aws_wafv2_ip_set": aws_wafv2_ip_set,
   "aws_wafv2_regex_pattern_set": aws_wafv2_regex_pattern_set,
   "aws_wafv2_rule_group": aws_wafv2_rule_group,
-  "aws_wafv2_web_acl": aws_wafv2_web_acl
+  "aws_wafv2_web_acl": aws_wafv2_web_acl,
+  "aws_xray_group": aws_xray_group
 }

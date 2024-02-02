@@ -523,7 +523,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
       #print("-->"+str(response))
       if str(response) != "[]":
             for item in response:
-               #print("-"+str(item))
+               print("-"+str(item))
                #print("-gr01-")
                if id is None or filterid=="": # do it all
                   #print("-gr21-")

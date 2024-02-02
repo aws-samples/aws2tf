@@ -341,6 +341,7 @@ def aws_launch_template(t1,tt1,tt2,flag1,flag2):
     elif tt1 == "throughput":
         tt2=tt2.strip('\"')
         if tt2 == "0": skip=1
+    elif tt1 == "name_prefix": skip=1
 
 
     return skip,t1,flag1,flag2

@@ -104,21 +104,6 @@ aws_default_security_group = {
 	"filterid":	"GroupId"
 }
 
-aws_default_subnet = {
-	"clfn":		"ec2",
-	"descfn":	"describe_subnets",
-	"topkey":	"Subnets",
-	"key":		"SubnetId",
-	"filterid":	"SubnetId"
-}
-
-aws_default_vpc = {
-	"clfn":		"ec2",
-	"descfn":	"describe_vpcs",
-	"topkey":	"Vpcs",
-	"key":		"VpcId",
-	"filterid":	"KeyError"
-}
 
 aws_vpc_dhcp_options = {
 	"clfn":		"ec2",
@@ -10361,8 +10346,8 @@ aws_xray_sampling_rule = {
 	"clfn":		"xray",
 	"descfn":	"get_sampling_rules",
 	"topkey":	"SamplingRuleRecords",
-	"key":		"SamplingRuleRecord",
-	"filterid":	"SamplingRuleRecord"
+	"key":		"RuleName",
+	"filterid":	"RuleArn"
 }
 
 aws_resources = {
@@ -10379,8 +10364,6 @@ aws_resources = {
 	"aws_route_table_association": aws_route_table_association,
 	"aws_default_route_table": aws_default_route_table,
 	"aws_default_security_group": aws_default_security_group,
-	"aws_default_subnet": aws_default_subnet,
-	"aws_default_vpc": aws_default_vpc,
 	"aws_vpc_dhcp_options": aws_vpc_dhcp_options,
 	"aws_key_pair": aws_key_pair,
 	"aws_launch_configuration": aws_launch_configuration,

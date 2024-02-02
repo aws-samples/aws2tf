@@ -1,5 +1,6 @@
 def aws_cloudwatch_event_rule(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if "name_prefix" in tt1: skip=1
     return skip,t1,flag1,flag2
 
 def aws_cloudwatch_event_api_destination(t1,tt1,tt2,flag1,flag2):

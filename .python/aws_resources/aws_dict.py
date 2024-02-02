@@ -288,6 +288,23 @@ aws_vpclattice_target_group = {
 	"filterid":	"name"
 }
 
+aws_eks_access_entry = {
+  	"clfn":		"eks",
+	"descfn":	"list_access_entries",  
+    "topkey":	"accessEntries",
+	"key":		"clusterName",
+	"filterid":	"clusterName"
+}
+
+aws_eks_access_policy_association = {
+    "clfn":		"eks",
+	"descfn":	"list_access_policies",  
+    "topkey":	"accessPolicies",
+	"key":		"name",
+	"filterid":	"arn" 
+
+}
+
 aws_eks_cluster = {
 	"clfn":		"eks",
 	"descfn":	"list_clusters",
@@ -7076,79 +7093,6 @@ aws_organizations_resource_policy = {
 	"filterid":	"Id"
 }
 
-
-aws_outposts_asset = {
-	"clfn":		"outposts",
-	"descfn":	"list_assets",
-	"topkey":	"Assets",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
-aws_outposts_assets = {
-	"clfn":		"outposts",
-	"descfn":	"list_assets",
-	"topkey":	"Assets",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
-aws_outposts_outpost = {
-	"clfn":		"outposts",
-	"descfn":	"list_outposts",
-	"topkey":	"Outposts",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
-aws_outposts_outpost_instance_type = {
-	"clfn":		"outposts",
-	"descfn":	"list_outpost_instance_types",
-	"topkey":	"OutpostInstanceTypes",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
-aws_outposts_outpost_instance_types = {
-	"clfn":		"outposts",
-	"descfn":	"list_outpost_instance_types",
-	"topkey":	"OutpostInstanceTypes",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
-aws_outposts_outposts = {
-	"clfn":		"outposts",
-	"descfn":	"list_outposts",
-	"topkey":	"Outposts",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
-aws_outposts_site = {
-	"clfn":		"outposts",
-	"descfn":	"list_sites",
-	"topkey":	"Sites",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
-aws_outposts_sites = {
-	"clfn":		"outposts",
-	"descfn":	"list_sites",
-	"topkey":	"Sites",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
-aws_partition = {
-	"clfn":		"sts",
-	"descfn":	"get_partition",
-	"topkey":	"Partition",
-	"key":		"Partition",
-	"filterid":	"Partition"
-}
-
 aws_pinpoint_adm_channel = {
 	"clfn":		"pinpoint",
 	"descfn":	"list_adm_channels",
@@ -7251,30 +7195,6 @@ aws_placement_group = {
 	"topkey":	"PlacementGroups",
 	"key":		"GroupName",
 	"filterid":	"GroupName"
-}
-
-aws_polly_voices = {
-	"clfn":		"polly",
-	"descfn":	"describe_voices",
-	"topkey":	"Voices",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
-aws_prefix_list = {
-	"clfn":		"ec2",
-	"descfn":	"describe_prefix_lists",
-	"topkey":	"PrefixLists",
-	"key":		"PrefixListId",
-	"filterid":	"PrefixListId"
-}
-
-aws_pricing_product = {
-	"clfn":		"pricing",
-	"descfn":	"describe_services",
-	"topkey":	"Services",
-	"key":		"ServiceCode",
-	"filterid":	"ServiceCode"
 }
 
 aws_prometheus_alert_manager_definition = {
@@ -7517,14 +7437,6 @@ aws_rbin_rule = {
 	"filterid":	"Id"
 }
 
-aws_rds_certificate = {
-	"clfn":		"rds",
-	"descfn":	"describe_certificates",
-	"topkey":	"Certificates",
-	"key":		"CertificateIdentifier",
-	"filterid":	"CertificateIdentifier"
-}
-
 aws_rds_cluster_activity_stream = {
 	"clfn":		"rds",
 	"descfn":	"describe_db_cluster_activity_stream",
@@ -7549,26 +7461,10 @@ aws_rds_cluster_role_association = {
 	"filterid":	"DBClusterRoleAssociationId"
 }
 
-aws_rds_clusters = {
-	"clfn":		"rds",
-	"descfn":	"describe_db_clusters",
-	"topkey":	"DBClusters",
-	"key":		"DBClusterIdentifier",
-	"filterid":	"DBClusterIdentifier"
-}
-
 aws_rds_custom_db_engine_version = {
 	"clfn":		"rds",
 	"descfn":	"describe_custom_db_engine_versions",
 	"topkey":	"CustomDBEngineVersions",
-	"key":		"EngineVersion",
-	"filterid":	"EngineVersion"
-}
-
-aws_rds_engine_version = {
-	"clfn":		"rds",
-	"descfn":	"describe_db_engine_versions",
-	"topkey":	"DBEngineVersions",
 	"key":		"EngineVersion",
 	"filterid":	"EngineVersion"
 }
@@ -7589,14 +7485,6 @@ aws_rds_global_cluster = {
 	"filterid":	"GlobalClusterIdentifier"
 }
 
-aws_rds_orderable_db_instance = {
-	"clfn":		"rds",
-	"descfn":	"describe_orderable_db_instance_options",
-	"topkey":	"OrderableDBInstanceOptions",
-	"key":		"Engine",
-	"filterid":	"Engine"
-}
-
 aws_rds_reserved_instance = {
 	"clfn":		"rds",
 	"descfn":	"describe_reserved_db_instances",
@@ -7605,28 +7493,12 @@ aws_rds_reserved_instance = {
 	"filterid":	"ReservedDBInstanceId"
 }
 
-aws_rds_reserved_instance_offering = {
-	"clfn":		"rds",
-	"descfn":	"describe_reserved_db_instance_offerings",
-	"topkey":	"ReservedDBInstanceOfferings",
-	"key":		"ReservedDBInstancesOfferingId",
-	"filterid":	"ReservedDBInstancesOfferingId"
-}
-
 aws_redshift_authentication_profile = {
 	"clfn":		"redshift",
 	"descfn":	"describe_authentication_profiles",
 	"topkey":	"AuthenticationProfiles",
 	"key":		"AuthenticationProfileName",
 	"filterid":	"AuthenticationProfileName"
-}
-
-aws_redshift_cluster_credentials = {
-	"clfn":		"redshift",
-	"descfn":	"describe_cluster_credentials",
-	"topkey":	"ClusterCredentials",
-	"key":		"DbUser",
-	"filterid":	"DbUser"
 }
 
 aws_redshift_cluster_iam_roles = {
@@ -7685,14 +7557,6 @@ aws_redshift_hsm_configuration = {
 	"filterid":	"HsmConfigurationIdentifier"
 }
 
-aws_redshift_orderable_cluster = {
-	"clfn":		"redshift",
-	"descfn":	"describe_orderable_cluster_options",
-	"topkey":	"OrderableClusterOptions",
-	"key":		"ClusterType",
-	"filterid":	"ClusterType"
-}
-
 aws_redshift_partner = {
 	"clfn":		"redshift",
 	"descfn":	"describe_partners",
@@ -7715,14 +7579,6 @@ aws_redshift_scheduled_action = {
 	"topkey":	"ScheduledActions",
 	"key":		"ScheduledActionName",
 	"filterid":	"ScheduledActionName"
-}
-
-aws_redshift_service_account = {
-	"clfn":		"redshift",
-	"descfn":	"describe_service_accounts",
-	"topkey":	"ServiceAccounts",
-	"key":		"ServiceAccountName",
-	"filterid":	"ServiceAccountName"
 }
 
 aws_redshift_snapshot_copy_grant = {
@@ -7765,14 +7621,6 @@ aws_redshiftdata_statement = {
 	"filterid":	"Id"
 }
 
-aws_redshiftserverless_credentials = {
-	"clfn":		"redshift-serverless",
-	"descfn":	"describe_credentials",
-	"topkey":	"Credentials",
-	"key":		"Name",
-	"filterid":	"Name"
-}
-
 aws_redshiftserverless_endpoint_access = {
 	"clfn":		"redshift-serverless",
 	"descfn":	"describe_endpoint_access",
@@ -7805,22 +7653,6 @@ aws_redshiftserverless_usage_limit = {
 	"filterid":	"UsageLimitId"
 }
 
-aws_region = {
-	"clfn":		"ec2",
-	"descfn":	"describe_regions",
-	"topkey":	"Regions",
-	"key":		"RegionName",
-	"filterid":	"RegionName"
-}
-
-aws_regions = {
-	"clfn":		"ec2",
-	"descfn":	"describe_regions",
-	"topkey":	"Regions",
-	"key":		"RegionName",
-	"filterid":	"RegionName"
-}
-
 aws_resourceexplorer2_index = {
 	"clfn":		"resource-explorer-2",
 	"descfn":	"list_indices",
@@ -7851,14 +7683,6 @@ aws_resourcegroups_resource = {
 	"topkey":	"ResourceIdentifiers",
 	"key":		"ResourceArn",
 	"filterid":	"ResourceArn"
-}
-
-aws_resourcegroupstaggingapi_resources = {
-	"clfn":		"resourcegroupstaggingapi",
-	"descfn":	"get_resources",
-	"topkey":	"ResourceTagMappingList",
-	"key":		"ResourceARN",
-	"filterid":	"ResourceARN"
 }
 
 aws_rolesanywhere_profile = {
@@ -8005,22 +7829,6 @@ aws_route53_resolver_firewall_rule_group = {
 	"filterid":	"Id"
 }
 
-aws_route53_resolver_firewall_rule_groups = {
-	"clfn":		"route53",
-	"descfn":	"list_resolver_firewall_rule_groups",
-	"topkey":	"ResolverFirewallRuleGroups",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
-aws_route53_resolver_firewall_rules = {
-	"clfn":		"route53",
-	"descfn":	"list_resolver_firewall_rules",
-	"topkey":	"ResolverFirewallRules",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
 aws_route53_resolver_query_log_config = {
 	"clfn":		"route53",
 	"descfn":	"list_resolver_query_log_configs",
@@ -8053,26 +7861,10 @@ aws_route53_resolver_rule_association = {
 	"filterid":	"Id"
 }
 
-aws_route53_resolver_rules = {
-	"clfn":		"route53",
-	"descfn":	"list_resolver_rules",
-	"topkey":	"ResolverRules",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
 aws_route53_traffic_policy = {
 	"clfn":		"route53",
 	"descfn":	"list_traffic_policies",
 	"topkey":	"TrafficPolicies",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
-aws_route53_traffic_policy_document = {
-	"clfn":		"route53",
-	"descfn":	"list_traffic_policy_documents",
-	"topkey":	"TrafficPolicyDocuments",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -8317,13 +8109,8 @@ aws_s3_bucket_object_lock_configuration = {
 	"filterid":	"ObjectLockEnabled"
 }
 
-aws_s3_bucket_objects = {
-	"clfn":		"s3",
-	"descfn":	"list_objects",
-	"topkey":	"Contents",
-	"key":		"Key",
-	"filterid":	"Key"
-}
+
+
 
 aws_s3_bucket_ownership_controls = {
 	"clfn":		"s3",
@@ -8397,14 +8184,6 @@ aws_s3_directory_bucket = {
 	"filterid":	"Name"
 }
 
-aws_s3_directory_buckets = {
-	"clfn":		"s3",
-	"descfn":	"list_buckets",
-	"topkey":	"Buckets",
-	"key":		"Name",
-	"filterid":	"Name"
-}
-
 aws_s3_object = {
 	"clfn":		"s3",
 	"descfn":	"get_object",
@@ -8419,14 +8198,6 @@ aws_s3_object_copy = {
 	"topkey":	"Body",
 	"key":		"Body",
 	"filterid":	"Body"
-}
-
-aws_s3_objects = {
-	"clfn":		"s3",
-	"descfn":	"list_objects",
-	"topkey":	"Contents",
-	"key":		"Key",
-	"filterid":	"Key"
 }
 
 aws_s3control_access_grant = {
@@ -8709,14 +8480,6 @@ aws_sagemaker_pipeline = {
 	"filterid":	"PipelineArn"
 }
 
-aws_sagemaker_prebuilt_ecr_image = {
-	"clfn":		"sagemaker",
-	"descfn":	"list_prebuilt_ecr_images",
-	"topkey":	"PrebuiltEcrImages",
-	"key":		"PrebuiltEcrImageArn",
-	"filterid":	"PrebuiltEcrImageArn"
-}
-
 aws_sagemaker_project = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_projects",
@@ -8821,13 +8584,6 @@ aws_schemas_schema = {
 	"filterid":	"SchemaArn"
 }
 
-aws_secretsmanager_random_password = {
-	"clfn":		"secretsmanager",
-	"descfn":	"get_random_password",
-	"topkey":	"RandomPassword",
-	"key":		"RandomPassword",
-	"filterid":	"RandomPassword"
-}
 
 aws_secretsmanager_secret_policy = {
 	"clfn":		"secretsmanager",
@@ -8859,14 +8615,6 @@ aws_security_group_rule = {
 	"topkey":	"SecurityGroupRules",
 	"key":		"RuleId",
 	"filterid":	"RuleId"
-}
-
-aws_security_groups = {
-	"clfn":		"ec2",
-	"descfn":	"describe_security_groups",
-	"topkey":	"SecurityGroups",
-	"key":		"GroupId",
-	"filterid":	"GroupId"
 }
 
 aws_securityhub_account = {
@@ -8965,13 +8713,6 @@ aws_securitylake_data_lake = {
 	"filterid":	"DataLakeArn"
 }
 
-aws_serverlessapplicationrepository_application = {
-	"clfn":		"serverlessrepo",
-	"descfn":	"list_applications",
-	"topkey":	"Applications",
-	"key":		"ApplicationId",
-	"filterid":	"ApplicationId"
-}
 
 aws_serverlessapplicationrepository_cloudformation_stack = {
 	"clfn":		"serverlessrepo",
@@ -9037,13 +8778,6 @@ aws_servicecatalog_constraint = {
 	"filterid":	"ConstraintId"
 }
 
-aws_servicecatalog_launch_paths = {
-	"clfn":		"servicecatalog",
-	"descfn":	"list_launch_paths",
-	"topkey":	"LaunchPaths",
-	"key":		"Id",
-	"filterid":	"Id"
-}
 
 aws_servicecatalog_organizations_access = {
 	"clfn":		"servicecatalog",
@@ -9057,14 +8791,6 @@ aws_servicecatalog_portfolio = {
 	"clfn":		"servicecatalog",
 	"descfn":	"list_portfolios",
 	"topkey":	"Portfolios",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
-aws_servicecatalog_portfolio_constraints = {
-	"clfn":		"servicecatalog",
-	"descfn":	"list_portfolio_constraints",
-	"topkey":	"PortfolioConstraints",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -9117,13 +8843,6 @@ aws_servicecatalog_provisioning_artifact = {
 	"filterid":	"Id"
 }
 
-aws_servicecatalog_provisioning_artifacts = {
-	"clfn":		"servicecatalog",
-	"descfn":	"list_provisioning_artifacts",
-	"topkey":	"ProvisioningArtifacts",
-	"key":		"Id",
-	"filterid":	"Id"
-}
 
 aws_servicecatalog_service_action = {
 	"clfn":		"servicecatalog",
@@ -9149,14 +8868,6 @@ aws_servicecatalog_tag_option_resource_association = {
 	"filterid":	"Id"
 }
 
-aws_servicequotas_service = {
-	"clfn":		"service-quotas",
-	"descfn":	"list_services",
-	"topkey":	"Services",
-	"key":		"ServiceCode",
-	"filterid":	"ServiceCode"
-}
-
 aws_servicequotas_service_quota = {
 	"clfn":		"service-quotas",
 	"descfn":	"list_service_quotas",
@@ -9179,14 +8890,6 @@ aws_servicequotas_template_association = {
 	"topkey":	"TemplateAssociations",
 	"key":		"TemplateAssociationId",
 	"filterid":	"TemplateAssociationId"
-}
-
-aws_servicequotas_templates = {
-	"clfn":		"service-quotas",
-	"descfn":	"list_templates",
-	"topkey":	"Templates",
-	"key":		"TemplateId",
-	"filterid":	"TemplateId"
 }
 
 aws_ses_active_receipt_rule_set = {
@@ -9397,14 +9100,6 @@ aws_sfn_state_machine = {
 	"filterid":	"StateMachineArn"
 }
 
-aws_sfn_state_machine_versions = {
-	"clfn":		"stepfunctions",
-	"descfn":	"list_state_machine_versions",
-	"topkey":	"Versions",
-	"key":		"Version",
-	"filterid":	"Version"
-}
-
 aws_shield_application_layer_automatic_response = {
 	"clfn":		"shield",
 	"descfn":	"list_application_layer_automatic_response_associations",
@@ -9597,14 +9292,6 @@ aws_sqs_queue_redrive_policy = {
 	"filterid":	"RedrivePolicy"
 }
 
-aws_sqs_queues = {
-	"clfn":		"sqs",
-	"descfn":	"list_queues",
-	"topkey":	"QueueUrls",
-	"key":		"QueueUrl",
-	"filterid":	"QueueUrl"
-}
-
 aws_ssm_activation = {
 	"clfn":		"ssm",
 	"descfn":	"list_activations",
@@ -9637,14 +9324,6 @@ aws_ssm_document = {
 	"filterid":	"Name"
 }
 
-aws_ssm_instances = {
-	"clfn":		"ssm",
-	"descfn":	"list_associations",
-	"topkey":	"AssociationList",
-	"key":		"InstanceId",
-	"filterid":	"InstanceId"
-}
-
 aws_ssm_maintenance_window = {
 	"clfn":		"ssm",
 	"descfn":	"list_maintenance_windows",
@@ -9669,23 +9348,8 @@ aws_ssm_maintenance_window_task = {
 	"filterid":	"TaskId"
 }
 
-aws_ssm_maintenance_windows = {
-	"clfn":		"ssm",
-	"descfn":	"list_maintenance_windows",
-	"topkey":	"WindowIdentities",
-	"key":		"WindowId",
-	"filterid":	"WindowId"
-}
 
 aws_ssm_parameter = {
-	"clfn":		"ssm",
-	"descfn":	"describe_parameters",
-	"topkey":	"Parameters",
-	"key":		"Name",
-	"filterid":	"Name"
-}
-
-aws_ssm_parameters_by_path = {
 	"clfn":		"ssm",
 	"descfn":	"describe_parameters",
 	"topkey":	"Parameters",
@@ -9797,22 +9461,6 @@ aws_ssoadmin_application_assignment_configuration = {
 	"filterid":	"AccountAssignmentCreationTime"
 }
 
-aws_ssoadmin_application_assignments = {
-	"clfn":		"sso-admin",
-	"descfn":	"list_application_assignments",
-	"topkey":	"ApplicationAssignments",
-	"key":		"AccountAssignmentCreationTime",
-	"filterid":	"AccountAssignmentCreationTime"
-}
-
-aws_ssoadmin_application_providers = {
-	"clfn":		"sso-admin",
-	"descfn":	"list_application_providers",
-	"topkey":	"ApplicationProviders",
-	"key":		"ApplicationProviderId",
-	"filterid":	"ApplicationProviderId"
-}
-
 aws_ssoadmin_customer_managed_policy_attachment = {
 	"clfn":		"sso-admin",
 	"descfn":	"list_customer_managed_policy_attachments",
@@ -9827,14 +9475,6 @@ aws_ssoadmin_instance_access_control_attributes = {
 	"topkey":	"InstanceAccessControlAttributeConfiguration",
 	"key":		"AccountAssignmentCreationTime",
 	"filterid":	"AccountAssignmentCreationTime"
-}
-
-aws_ssoadmin_instances = {
-	"clfn":		"sso-admin",
-	"descfn":	"list_instances",
-	"topkey":	"Instances",
-	"key":		"InstanceArn",
-	"filterid":	"InstanceArn"
 }
 
 aws_ssoadmin_managed_policy_attachment = {
@@ -9865,14 +9505,6 @@ aws_ssoadmin_permissions_boundary_attachment = {
 	"clfn":		"sso-admin",
 	"descfn":	"list_permissions_boundary_attachments",
 	"topkey":	"PermissionsBoundaryAttachments",
-	"key":		"AccountAssignmentCreationTime",
-	"filterid":	"AccountAssignmentCreationTime"
-}
-
-aws_ssoadmin_principal_application_assignments = {
-	"clfn":		"sso-admin",
-	"descfn":	"list_principal_application_assignments",
-	"topkey":	"PrincipalApplicationAssignments",
 	"key":		"AccountAssignmentCreationTime",
 	"filterid":	"AccountAssignmentCreationTime"
 }
@@ -9915,14 +9547,6 @@ aws_storagegateway_gateway = {
 	"topkey":	"Gateways",
 	"key":		"GatewayARN",
 	"filterid":	"GatewayARN"
-}
-
-aws_storagegateway_local_disk = {
-	"clfn":		"storagegateway",
-	"descfn":	"describe_local_disks",
-	"topkey":	"Disks",
-	"key":		"DiskARN",
-	"filterid":	"DiskARN"
 }
 
 aws_storagegateway_nfs_file_share = {
@@ -10800,6 +10424,9 @@ aws_resources = {
 	"aws_eks_node_group": aws_eks_node_group,
 	"aws_eks_addon": aws_eks_addon,
 	"aws_eks_identity_provider_config": aws_eks_identity_provider_config,
+    "aws_eks_pod_identity_association": aws_eks_pod_identity_association,
+    "aws_eks_access_entry": aws_eks_access_entry,
+    "aws_eks_access_policy_association": aws_eks_access_policy_association,
 	"aws_kms_key": aws_kms_key,
 	"aws_kms_alias": aws_kms_alias,
 	"aws_ecs_cluster": aws_ecs_cluster,
@@ -11276,7 +10903,6 @@ aws_resources = {
 	"aws_egress_only_internet_gateway": aws_egress_only_internet_gateway,
 	"aws_eip": aws_eip,
 	"aws_eip_association": aws_eip_association,
-	"aws_eks_pod_identity_association": aws_eks_pod_identity_association,
 	"aws_elastic_beanstalk_application": aws_elastic_beanstalk_application,
 	"aws_elastic_beanstalk_application_version": aws_elastic_beanstalk_application_version,
 	"aws_elastic_beanstalk_configuration_template": aws_elastic_beanstalk_configuration_template,
@@ -11642,15 +11268,6 @@ aws_resources = {
 	"aws_organizations_policy": aws_organizations_policy,
 	"aws_organizations_policy_attachment": aws_organizations_policy_attachment,
 	"aws_organizations_resource_policy": aws_organizations_resource_policy,
-	"aws_outposts_asset": aws_outposts_asset,
-	"aws_outposts_assets": aws_outposts_assets,
-	"aws_outposts_outpost": aws_outposts_outpost,
-	"aws_outposts_outpost_instance_type": aws_outposts_outpost_instance_type,
-	"aws_outposts_outpost_instance_types": aws_outposts_outpost_instance_types,
-	"aws_outposts_outposts": aws_outposts_outposts,
-	"aws_outposts_site": aws_outposts_site,
-	"aws_outposts_sites": aws_outposts_sites,
-	"aws_partition": aws_partition,
 	"aws_pinpoint_adm_channel": aws_pinpoint_adm_channel,
 	"aws_pinpoint_apns_channel": aws_pinpoint_apns_channel,
 	"aws_pinpoint_apns_sandbox_channel": aws_pinpoint_apns_sandbox_channel,
@@ -11664,9 +11281,6 @@ aws_resources = {
 	"aws_pinpoint_sms_channel": aws_pinpoint_sms_channel,
 	"aws_pipes_pipe": aws_pipes_pipe,
 	"aws_placement_group": aws_placement_group,
-	"aws_polly_voices": aws_polly_voices,
-	"aws_prefix_list": aws_prefix_list,
-	"aws_pricing_product": aws_pricing_product,
 	"aws_prometheus_alert_manager_definition": aws_prometheus_alert_manager_definition,
 	"aws_prometheus_rule_group_namespace": aws_prometheus_rule_group_namespace,
 	"aws_prometheus_workspace": aws_prometheus_workspace,
@@ -11697,20 +11311,14 @@ aws_resources = {
 	"aws_ram_resource_share_accepter": aws_ram_resource_share_accepter,
 	"aws_ram_sharing_with_organization": aws_ram_sharing_with_organization,
 	"aws_rbin_rule": aws_rbin_rule,
-	"aws_rds_certificate": aws_rds_certificate,
 	"aws_rds_cluster_activity_stream": aws_rds_cluster_activity_stream,
 	"aws_rds_cluster_endpoint": aws_rds_cluster_endpoint,
 	"aws_rds_cluster_role_association": aws_rds_cluster_role_association,
-	"aws_rds_clusters": aws_rds_clusters,
 	"aws_rds_custom_db_engine_version": aws_rds_custom_db_engine_version,
-	"aws_rds_engine_version": aws_rds_engine_version,
 	"aws_rds_export_task": aws_rds_export_task,
 	"aws_rds_global_cluster": aws_rds_global_cluster,
-	"aws_rds_orderable_db_instance": aws_rds_orderable_db_instance,
 	"aws_rds_reserved_instance": aws_rds_reserved_instance,
-	"aws_rds_reserved_instance_offering": aws_rds_reserved_instance_offering,
 	"aws_redshift_authentication_profile": aws_redshift_authentication_profile,
-	"aws_redshift_cluster_credentials": aws_redshift_cluster_credentials,
 	"aws_redshift_cluster_iam_roles": aws_redshift_cluster_iam_roles,
 	"aws_redshift_cluster_snapshot": aws_redshift_cluster_snapshot,
 	"aws_redshift_endpoint_access": aws_redshift_endpoint_access,
@@ -11718,28 +11326,22 @@ aws_resources = {
 	"aws_redshift_event_subscription": aws_redshift_event_subscription,
 	"aws_redshift_hsm_client_certificate": aws_redshift_hsm_client_certificate,
 	"aws_redshift_hsm_configuration": aws_redshift_hsm_configuration,
-	"aws_redshift_orderable_cluster": aws_redshift_orderable_cluster,
 	"aws_redshift_partner": aws_redshift_partner,
 	"aws_redshift_resource_policy": aws_redshift_resource_policy,
 	"aws_redshift_scheduled_action": aws_redshift_scheduled_action,
-	"aws_redshift_service_account": aws_redshift_service_account,
 	"aws_redshift_snapshot_copy_grant": aws_redshift_snapshot_copy_grant,
 	"aws_redshift_snapshot_schedule": aws_redshift_snapshot_schedule,
 	"aws_redshift_snapshot_schedule_association": aws_redshift_snapshot_schedule_association,
 	"aws_redshift_usage_limit": aws_redshift_usage_limit,
 	"aws_redshiftdata_statement": aws_redshiftdata_statement,
-	"aws_redshiftserverless_credentials": aws_redshiftserverless_credentials,
 	"aws_redshiftserverless_endpoint_access": aws_redshiftserverless_endpoint_access,
 	"aws_redshiftserverless_resource_policy": aws_redshiftserverless_resource_policy,
 	"aws_redshiftserverless_snapshot": aws_redshiftserverless_snapshot,
 	"aws_redshiftserverless_usage_limit": aws_redshiftserverless_usage_limit,
-	"aws_region": aws_region,
-	"aws_regions": aws_regions,
 	"aws_resourceexplorer2_index": aws_resourceexplorer2_index,
 	"aws_resourceexplorer2_view": aws_resourceexplorer2_view,
 	"aws_resourcegroups_group": aws_resourcegroups_group,
 	"aws_resourcegroups_resource": aws_resourcegroups_resource,
-	"aws_resourcegroupstaggingapi_resources": aws_resourcegroupstaggingapi_resources,
 	"aws_rolesanywhere_profile": aws_rolesanywhere_profile,
 	"aws_rolesanywhere_trust_anchor": aws_rolesanywhere_trust_anchor,
 	"aws_route": aws_route,
@@ -11758,15 +11360,11 @@ aws_resources = {
 	"aws_route53_resolver_firewall_domain_list": aws_route53_resolver_firewall_domain_list,
 	"aws_route53_resolver_firewall_rule": aws_route53_resolver_firewall_rule,
 	"aws_route53_resolver_firewall_rule_group": aws_route53_resolver_firewall_rule_group,
-	"aws_route53_resolver_firewall_rule_groups": aws_route53_resolver_firewall_rule_groups,
-	"aws_route53_resolver_firewall_rules": aws_route53_resolver_firewall_rules,
 	"aws_route53_resolver_query_log_config": aws_route53_resolver_query_log_config,
 	"aws_route53_resolver_query_log_config_association": aws_route53_resolver_query_log_config_association,
 	"aws_route53_resolver_rule": aws_route53_resolver_rule,
 	"aws_route53_resolver_rule_association": aws_route53_resolver_rule_association,
-	"aws_route53_resolver_rules": aws_route53_resolver_rules,
 	"aws_route53_traffic_policy": aws_route53_traffic_policy,
-	"aws_route53_traffic_policy_document": aws_route53_traffic_policy_document,
 	"aws_route53_traffic_policy_instance": aws_route53_traffic_policy_instance,
 	"aws_route53_vpc_association_authorization": aws_route53_vpc_association_authorization,
 	"aws_route53_zone": aws_route53_zone,
@@ -11797,7 +11395,6 @@ aws_resources = {
 	"aws_s3_bucket_notification": aws_s3_bucket_notification,
 	"aws_s3_bucket_object": aws_s3_bucket_object,
 	"aws_s3_bucket_object_lock_configuration": aws_s3_bucket_object_lock_configuration,
-	"aws_s3_bucket_objects": aws_s3_bucket_objects,
 	"aws_s3_bucket_ownership_controls": aws_s3_bucket_ownership_controls,
 	"aws_s3_bucket_policy": aws_s3_bucket_policy,
 	"aws_s3_bucket_public_access_block": aws_s3_bucket_public_access_block,
@@ -11807,10 +11404,8 @@ aws_resources = {
 	"aws_s3_bucket_versioning": aws_s3_bucket_versioning,
 	"aws_s3_bucket_website_configuration": aws_s3_bucket_website_configuration,
 	"aws_s3_directory_bucket": aws_s3_directory_bucket,
-	"aws_s3_directory_buckets": aws_s3_directory_buckets,
 	"aws_s3_object": aws_s3_object,
 	"aws_s3_object_copy": aws_s3_object_copy,
-	"aws_s3_objects": aws_s3_objects,
 	"aws_s3control_access_grant": aws_s3control_access_grant,
 	"aws_s3control_access_grants_instance": aws_s3control_access_grants_instance,
 	"aws_s3control_access_grants_instance_resource_policy": aws_s3control_access_grants_instance_resource_policy,
@@ -11846,7 +11441,6 @@ aws_resources = {
 	"aws_sagemaker_notebook_instance": aws_sagemaker_notebook_instance,
 	"aws_sagemaker_notebook_instance_lifecycle_configuration": aws_sagemaker_notebook_instance_lifecycle_configuration,
 	"aws_sagemaker_pipeline": aws_sagemaker_pipeline,
-	"aws_sagemaker_prebuilt_ecr_image": aws_sagemaker_prebuilt_ecr_image,
 	"aws_sagemaker_project": aws_sagemaker_project,
 	"aws_sagemaker_servicecatalog_portfolio_status": aws_sagemaker_servicecatalog_portfolio_status,
 	"aws_sagemaker_space": aws_sagemaker_space,
@@ -11860,12 +11454,10 @@ aws_resources = {
 	"aws_schemas_registry": aws_schemas_registry,
 	"aws_schemas_registry_policy": aws_schemas_registry_policy,
 	"aws_schemas_schema": aws_schemas_schema,
-	"aws_secretsmanager_random_password": aws_secretsmanager_random_password,
 	"aws_secretsmanager_secret_policy": aws_secretsmanager_secret_policy,
 	"aws_secretsmanager_secret_rotation": aws_secretsmanager_secret_rotation,
 	"aws_secretsmanager_secret_version": aws_secretsmanager_secret_version,
 	"aws_security_group_rule": aws_security_group_rule,
-	"aws_security_groups": aws_security_groups,
 	"aws_securityhub_account": aws_securityhub_account,
 	"aws_securityhub_action_target": aws_securityhub_action_target,
 	"aws_securityhub_finding_aggregator": aws_securityhub_finding_aggregator,
@@ -11878,7 +11470,6 @@ aws_resources = {
 	"aws_securityhub_standards_control": aws_securityhub_standards_control,
 	"aws_securityhub_standards_subscription": aws_securityhub_standards_subscription,
 	"aws_securitylake_data_lake": aws_securitylake_data_lake,
-	"aws_serverlessapplicationrepository_application": aws_serverlessapplicationrepository_application,
 	"aws_serverlessapplicationrepository_cloudformation_stack": aws_serverlessapplicationrepository_cloudformation_stack,
 	"aws_service_discovery_http_namespace": aws_service_discovery_http_namespace,
 	"aws_service_discovery_instance": aws_service_discovery_instance,
@@ -11887,25 +11478,20 @@ aws_resources = {
 	"aws_service_discovery_service": aws_service_discovery_service,
 	"aws_servicecatalog_budget_resource_association": aws_servicecatalog_budget_resource_association,
 	"aws_servicecatalog_constraint": aws_servicecatalog_constraint,
-	"aws_servicecatalog_launch_paths": aws_servicecatalog_launch_paths,
 	"aws_servicecatalog_organizations_access": aws_servicecatalog_organizations_access,
 	"aws_servicecatalog_portfolio": aws_servicecatalog_portfolio,
-	"aws_servicecatalog_portfolio_constraints": aws_servicecatalog_portfolio_constraints,
 	"aws_servicecatalog_portfolio_share": aws_servicecatalog_portfolio_share,
 	"aws_servicecatalog_principal_portfolio_association": aws_servicecatalog_principal_portfolio_association,
 	"aws_servicecatalog_product": aws_servicecatalog_product,
 	"aws_servicecatalog_product_portfolio_association": aws_servicecatalog_product_portfolio_association,
 	"aws_servicecatalog_provisioned_product": aws_servicecatalog_provisioned_product,
 	"aws_servicecatalog_provisioning_artifact": aws_servicecatalog_provisioning_artifact,
-	"aws_servicecatalog_provisioning_artifacts": aws_servicecatalog_provisioning_artifacts,
 	"aws_servicecatalog_service_action": aws_servicecatalog_service_action,
 	"aws_servicecatalog_tag_option": aws_servicecatalog_tag_option,
 	"aws_servicecatalog_tag_option_resource_association": aws_servicecatalog_tag_option_resource_association,
-	"aws_servicequotas_service": aws_servicequotas_service,
 	"aws_servicequotas_service_quota": aws_servicequotas_service_quota,
 	"aws_servicequotas_template": aws_servicequotas_template,
 	"aws_servicequotas_template_association": aws_servicequotas_template_association,
-	"aws_servicequotas_templates": aws_servicequotas_templates,
 	"aws_ses_active_receipt_rule_set": aws_ses_active_receipt_rule_set,
 	"aws_ses_configuration_set": aws_ses_configuration_set,
 	"aws_ses_domain_dkim": aws_ses_domain_dkim,
@@ -11932,7 +11518,6 @@ aws_resources = {
 	"aws_sfn_activity": aws_sfn_activity,
 	"aws_sfn_alias": aws_sfn_alias,
 	"aws_sfn_state_machine": aws_sfn_state_machine,
-	"aws_sfn_state_machine_versions": aws_sfn_state_machine_versions,
 	"aws_shield_application_layer_automatic_response": aws_shield_application_layer_automatic_response,
 	"aws_shield_drt_access_log_bucket_association": aws_shield_drt_access_log_bucket_association,
 	"aws_shield_drt_access_role_arn_association": aws_shield_drt_access_role_arn_association,
@@ -11957,18 +11542,14 @@ aws_resources = {
 	"aws_sqs_queue_policy": aws_sqs_queue_policy,
 	"aws_sqs_queue_redrive_allow_policy": aws_sqs_queue_redrive_allow_policy,
 	"aws_sqs_queue_redrive_policy": aws_sqs_queue_redrive_policy,
-	"aws_sqs_queues": aws_sqs_queues,
 	"aws_ssm_activation": aws_ssm_activation,
 	"aws_ssm_association": aws_ssm_association,
 	"aws_ssm_default_patch_baseline": aws_ssm_default_patch_baseline,
 	"aws_ssm_document": aws_ssm_document,
-	"aws_ssm_instances": aws_ssm_instances,
 	"aws_ssm_maintenance_window": aws_ssm_maintenance_window,
 	"aws_ssm_maintenance_window_target": aws_ssm_maintenance_window_target,
 	"aws_ssm_maintenance_window_task": aws_ssm_maintenance_window_task,
-	"aws_ssm_maintenance_windows": aws_ssm_maintenance_windows,
 	"aws_ssm_parameter": aws_ssm_parameter,
-	"aws_ssm_parameters_by_path": aws_ssm_parameters_by_path,
 	"aws_ssm_patch_baseline": aws_ssm_patch_baseline,
 	"aws_ssm_patch_group": aws_ssm_patch_group,
 	"aws_ssm_resource_data_sync": aws_ssm_resource_data_sync,
@@ -11982,22 +11563,17 @@ aws_resources = {
 	"aws_ssoadmin_application": aws_ssoadmin_application,
 	"aws_ssoadmin_application_assignment": aws_ssoadmin_application_assignment,
 	"aws_ssoadmin_application_assignment_configuration": aws_ssoadmin_application_assignment_configuration,
-	"aws_ssoadmin_application_assignments": aws_ssoadmin_application_assignments,
-	"aws_ssoadmin_application_providers": aws_ssoadmin_application_providers,
 	"aws_ssoadmin_customer_managed_policy_attachment": aws_ssoadmin_customer_managed_policy_attachment,
 	"aws_ssoadmin_instance_access_control_attributes": aws_ssoadmin_instance_access_control_attributes,
-	"aws_ssoadmin_instances": aws_ssoadmin_instances,
 	"aws_ssoadmin_managed_policy_attachment": aws_ssoadmin_managed_policy_attachment,
 	"aws_ssoadmin_permission_set": aws_ssoadmin_permission_set,
 	"aws_ssoadmin_permission_set_inline_policy": aws_ssoadmin_permission_set_inline_policy,
 	"aws_ssoadmin_permissions_boundary_attachment": aws_ssoadmin_permissions_boundary_attachment,
-	"aws_ssoadmin_principal_application_assignments": aws_ssoadmin_principal_application_assignments,
 	"aws_ssoadmin_trusted_token_issuer": aws_ssoadmin_trusted_token_issuer,
 	"aws_storagegateway_cache": aws_storagegateway_cache,
 	"aws_storagegateway_cached_iscsi_volume": aws_storagegateway_cached_iscsi_volume,
 	"aws_storagegateway_file_system_association": aws_storagegateway_file_system_association,
 	"aws_storagegateway_gateway": aws_storagegateway_gateway,
-	"aws_storagegateway_local_disk": aws_storagegateway_local_disk,
 	"aws_storagegateway_nfs_file_share": aws_storagegateway_nfs_file_share,
 	"aws_storagegateway_smb_file_share": aws_storagegateway_smb_file_share,
 	"aws_storagegateway_stored_iscsi_volume": aws_storagegateway_stored_iscsi_volume,

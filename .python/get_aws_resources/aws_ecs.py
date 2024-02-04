@@ -77,8 +77,8 @@ def get_aws_ecs_service(type,id,clfn,descfn,topkey,key,filterid):
 
 def get_aws_ecs_task_definition(type,id,clfn,descfn,topkey,key,filterid):
 
-    if globals.debug:
-        print("--> get_aws_ecs_task_definition  doing " + type + ' with id ' + str(id) +
+    #if globals.debug:
+    print("--> get_aws_ecs_task_definition  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -89,7 +89,12 @@ def get_aws_ecs_task_definition(type,id,clfn,descfn,topkey,key,filterid):
             response = client.list_task_definitions()
             response=response['taskDefinitionArns']
         else:
-            response = client.describe_task_definition(taskDefinition=id) 
+            tid=id
+            if "arn:" in id:
+                 tid=id.split(":")[-2]+":"+id.split(":")[-1]
+            print("************tid="+tid)     
+            
+            response = client.describe_task_definition(taskDefinition=tid) 
             response=response[topkey]
 
         
@@ -102,6 +107,8 @@ def get_aws_ecs_task_definition(type,id,clfn,descfn,topkey,key,filterid):
         else:
             pkey=response['taskDefinitionArn']
             common.write_import(type,pkey,None) 
+            globals.rproc["aws_ecs_task_definition."+id]=True
+
 
     except botocore.exceptions.ClientError as err:
          print("Cannot find Task desciption with decription" + id)

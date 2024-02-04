@@ -10,20 +10,20 @@ from datetime import datetime
 import resources
 import aws_kms
 import aws_ecs
-import aws_eks
-import aws_ec2
-import aws_iam
-import aws_vpc_lattice
-import aws_logs
-import aws_config
-import aws_lambda
-import aws_redshift
-import aws_secretsmanager
-import aws_kinesis
-import aws_glue
-import aws_rds
-import aws_apigateway
-from aws_resources import needid_dict
+from get_aws_resources import aws_eks
+from get_aws_resources import aws_ec2
+from get_aws_resources import aws_iam
+from get_aws_resources import aws_vpc_lattice
+from get_aws_resources import aws_logs
+from get_aws_resources import aws_config
+from get_aws_resources import aws_lambda
+from get_aws_resources import aws_redshift
+from get_aws_resources import aws_secretsmanager
+from get_aws_resources import aws_kinesis
+from get_aws_resources import aws_glue
+from get_aws_resources import aws_rds
+from get_aws_resources import aws_apigateway
+from fixtf_aws_resources import needid_dict
 
 
 def call_resource(type, id):

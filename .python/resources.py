@@ -1,4 +1,4 @@
-from aws_resources import aws_dict
+from fixtf_aws_resources import aws_dict
 
 def resource_types(type):
     if type == "net":

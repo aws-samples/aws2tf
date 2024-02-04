@@ -3,7 +3,7 @@ import os
 import sys
 import globals
 import common
-import aws_s3
+from get_aws_resources import aws_s3
 import botocore
 
 

@@ -2,7 +2,7 @@
 import boto3
 import signal
 import argparse
-import aws_s3
+from get_aws_resources import aws_s3
 import common
 import resources
 import globals

@@ -7,8 +7,8 @@ import sys
 def get_aws_appautoscaling_target(type, id, clfn, descfn, topkey, key, filterid):
 
 
-    #if globals.debug:
-    print("--> In get_aws_appautoscaling_target  doing " + type + ' with id ' + str(id) +
+    if globals.debug:
+        print("--> In get_aws_appautoscaling_target  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -20,9 +20,9 @@ def get_aws_appautoscaling_target(type, id, clfn, descfn, topkey, key, filterid)
             response = client.describe_scalable_targets(ServiceNamespace="ecs")
         
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-            print(str(response))
+            #print(str(response))
             for j in response[topkey]:
-                print(str(j))
+                #print(str(j))
                 sns=j['ServiceNamespace']
                 rid=j['ResourceId']
                 scd=j['ScalableDimension']
@@ -34,21 +34,21 @@ def get_aws_appautoscaling_target(type, id, clfn, descfn, topkey, key, filterid)
                 globals.rproc[pkey]=True
 
         else:
-            print(id)
+            #print(id)
             rrid=id.split("/",1)[1]
-            print(rrid)
+            #print(rrid)
             response = client.describe_scalable_targets(ServiceNamespace="ecs",ResourceIds=[rrid])
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
 
-                print(str(j))
+                #print(str(j))
                 sns=j['ServiceNamespace']
                 rid=j['ResourceId']
                 scd=j['ScalableDimension']
                 pkey="aws_appautoscaling_target."+sns+"/"+rid
                 tid=sns+"/"+rid+"/"+scd
                 common.write_import(type,tid,None)
-                print("****pkey="+pkey)
+                #print("****pkey="+pkey)
                 globals.rproc[pkey]=True
 
     except Exception as e:

@@ -120,6 +120,7 @@ if __name__ == '__main__':
     elif type == "config": type = "aws_config_config_rule"
     elif type == "ec2": type = "aws_instance"
     elif type == "eks": type = "aws_eks_cluster"
+    elif type == "ecs": type = "aws_ecs_cluster"
     elif type == "lambda": type="aws_lambda_function"
     elif type == "cw" or type == "cloudwatch" or type == "logs": type = "aws_cloudwatch_log_group"
         

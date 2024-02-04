@@ -1045,8 +1045,8 @@ aws_appautoscaling_scheduled_action = {
 
 aws_appautoscaling_target = {
 	"clfn":		"application-autoscaling",
-	"descfn":	"describe_scaling_targets",
-	"topkey":	"ScalingTargets",
+	"descfn":	"describe_scalable_targets",
+	"topkey":	"ScalableTargets",
 	"key":		"ResourceId",
 	"filterid":	"ResourceId"
 }

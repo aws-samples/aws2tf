@@ -52,15 +52,16 @@ def get_aws_ecs_service(type,id,clfn,descfn,topkey,key,filterid):
 
         response=response[topkey]
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        print(str(response))
+        #print("*********"+str(response))
         for j in response: 
             retid=j # no key
             srvn=retid.split('/')[1]
             pkey=id+"/"+srvn
             common.write_import(type,pkey,None) 
-            tid="ecs/"+pkey
-            common.add_known_dependancy("aws_appautoscaling_target",tid)
-            #common.add_known_dependancy("aws_appautoscaling_policy",tid)
+            tid="ecs/service/"+pkey
+            #print("********** tid="+tid)
+            common.add_dependancy("aws_appautoscaling_target",tid)
+            common.add_dependancy("aws_appautoscaling_policy",tid)
 
     except Exception as e:
             print(f"{e=}")

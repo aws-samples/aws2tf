@@ -8,8 +8,9 @@ import botocore
 import fixtf
 from datetime import datetime
 import resources
-import aws_kms
-import aws_ecs
+from get_aws_resources import aws_application_autoscaling
+from get_aws_resources import aws_kms
+from get_aws_resources import aws_ecs
 from get_aws_resources import aws_eks
 from get_aws_resources import aws_ec2
 from get_aws_resources import aws_iam
@@ -67,17 +68,14 @@ def call_resource(type, id):
                print("calling specific common.get_"+type+" with type="+type+" id="+str(id)+"   clfn=" +
                     clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
             
-            if clfn=="vpc-lattice":
-               print("vpc-lattice")
-               getfn = getattr(eval("aws_vpc_lattice"), "get_"+type) 
-            elif clfn=="redshift-serverless":
-               print("redshift-serverless")
-               getfn = getattr(eval("aws_redshift"), "get_"+type) 
+            if clfn=="vpc-lattice":  getfn = getattr(eval("aws_vpc_lattice"), "get_"+type) 
+            elif clfn=="redshift-serverless":  getfn = getattr(eval("aws_redshift"), "get_"+type) 
                #aws_redshift.get_aws_redshiftserverless_namespace(type, id, clfn, descfn, topkey, key, filterid)
 
             else:   
                #print("-1aa- clfn:"+clfn+" type:"+type)
-               getfn = getattr(eval("aws_"+clfn), "get_"+type) 
+               mclfn=clfn.replace("-","_")
+               getfn = getattr(eval("aws_"+mclfn), "get_"+type) 
                #print("-1ab- clfn:"+clfn+" type:"+type)
 
             sr=getfn(type, id, clfn, descfn, topkey, key, filterid)

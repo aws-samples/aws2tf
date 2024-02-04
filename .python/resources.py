@@ -212,7 +212,8 @@ def resource_data(type,id):
     try:
         clfn=aws_dict.aws_resources[type]['clfn']
     except KeyError:
-        print("WARNING: "+ type + " may nor be a Terraform resource ?")
+        print("WARNING: "+ type + " may not be a Terraform resource ? or it might be being skipped deliberately")
+        print("(eg. aws_network_interface is skipped)")
         return clfn,descfn,topkey,key,filterid
 
 

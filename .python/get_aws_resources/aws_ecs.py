@@ -60,7 +60,7 @@ def get_aws_ecs_service(type,id,clfn,descfn,topkey,key,filterid):
             common.write_import(type,pkey,None) 
             tid="ecs/"+pkey
             common.add_known_dependancy("aws_appautoscaling_target",tid)
-            common.add_known_dependancy("aws_appautoscaling_policy",tid)
+            #common.add_known_dependancy("aws_appautoscaling_policy",tid)
 
     except Exception as e:
             print(f"{e=}")

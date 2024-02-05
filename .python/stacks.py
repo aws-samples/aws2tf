@@ -131,7 +131,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::EC2::Instance":              common.call_resource("aws_instance", pid) 
             elif type == "AWS::EC2::KeyPair":               common.call_resource("aws_key_pair", pid) 
             elif type == "AWS::EC2::DHCPOptions":           common.call_resource("aws_vpc_dhcp_options", pid) 
-            elif type == "AWS::EC2::EIP":                   common.call_resource("aws_eip", pid) 
+            elif type == "AWS::EC2::EIP":                   f3.write(type +" fetched as part of other resources..\n")
             elif type == "AWS::EC2::NatGateway":            common.call_resource("aws_nat_gateway", pid) 
             elif type == "AWS::EC2::NetworkAcl":            common.call_resource("aws_network_acl", type+" "+pid) 
             elif type == "AWS::EC2::NetworkAclEntry":       f3.write(type +" fetched as part of NetworkAcl..\n")

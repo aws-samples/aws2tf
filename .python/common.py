@@ -33,6 +33,11 @@ def call_resource(type, id):
       with open('stack-null.log', 'a') as f3:
          f3.write("-->> called aws_null for: "+id+"\n")
       return
+   
+
+   with open('processed-resources.log', 'a') as f4:
+      f4.write(type+ " : " +id+"\n")
+      
     ## don't get it if we alreay have it
     # if globals.rproc
    if globals.debug: print("---->>>>> "+type+"   "+str(id))

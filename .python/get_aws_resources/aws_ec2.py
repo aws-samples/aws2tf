@@ -6,6 +6,36 @@ import globals
 import os
 import sys
 
+def get_aws_eip(type, id, clfn, descfn, topkey, key, filterid):
+
+    if globals.debug:
+        print("--> In get_aws_eip doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+        
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            response = client.describe_addresses()        
+        else:        
+            response = client.describe_addresses(AllocationIds=[id])
+
+
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        for j in response[topkey]:
+            common.write_import(type,j[key],None) 
+
+    except Exception as e:
+            print(f"{e=}")
+            print("ERROR: -2->unexpected error in get_aws_eip")
+            print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
+            exit()
+
+    return True
+
 
 def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filterid):
     #print("--> In get_aws_route_table_association doing " + type + ' with id ' + str(id) +
@@ -155,12 +185,15 @@ def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key,
         for j in response:
             cidrb = j['CidrBlockAssociationSet']
             vpcid = j['VpcId']
+            vpc_cidr = j['CidrBlock']
             if id==vpcid:
-                retid=cidrb[0]['AssociationId']
-                theid = retid
-                common.write_import(type, theid, None)
-                pkey = type+"."+vpcid
-                globals.rproc[pkey] = True
+                for k in cidrb:
+                    if vpc_cidr == k['CidrBlock']: continue
+                    theid=k['AssociationId']
+                    specid=vpcid+"__"+theid
+                    common.write_import(type, theid, specid)
+                    pkey = type+"."+vpcid+"__"+theid
+                    globals.rproc[pkey] = True
     except Exception as e:
         print(f"{e=}")
         print("ERROR: -2->unexpected error in get_aws_vpc_ipv4_cidr_block_association")
@@ -339,14 +372,7 @@ def get_aws_default_network_acl(type, id, clfn, descfn, topkey, key, filterid):
                         'Values': ['true']
                     }
                     ]):
-                    response.extend(page[topkey])
-
-
-
-################################################################
-
-
-    
+                    response.extend(page[topkey])    
     try:
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         

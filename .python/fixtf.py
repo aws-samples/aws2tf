@@ -355,12 +355,8 @@ def deref_role_arn(t1,tt1,tt2):
 def deref_kms_key(t1,tt1,tt2):
     print("deref_kms_key 1: " + tt2)
     if "arn:aws:kms:" in tt2:
-        #tt2=tt2.split('/')[-1]
-        #tt2=tt2.strip('\"')
         print("deref_kms_key 2: " + tt2)
         t1=globals_replace(t1,tt1,tt2)
-        #t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
-        #add_dependancy("aws_kms_key",tt2)
     return t1
 
 

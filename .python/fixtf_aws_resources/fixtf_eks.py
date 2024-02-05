@@ -3,6 +3,17 @@ import fixtf
 
 def aws_eks_addon(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "cluster_name":
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_eks_cluster." + tt2 + ".id\n"
+        common.add_dependancy("aws_eks_cluster",tt2)
+    elif tt1 == "service_account_role_arn":
+        tt2=tt2.strip('\"')
+        if ":role/" in tt2:
+            tt2=tt2.split("/")[-1]
+            t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+            common.add_dependancy("aws_iam_role",tt2)
+
     return skip,t1,flag1,flag2 
 
 def aws_eks_addon_version(t1,tt1,tt2,flag1,flag2):
@@ -47,10 +58,7 @@ def aws_eks_fargate_profile(t1,tt1,tt2,flag1,flag2):
         if ":" in tt2: tt2=tt2.split("/")[-1]
         t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
         common.add_dependancy("aws_iam_role",tt2)
-    elif tt1 == "cluster_name":
-        tt2=tt2.strip('\"')
-        t1=tt1 + " = aws_eks_cluster." + tt2 + ".id\n"
-        common.add_dependancy("aws_eks_cluster",tt2)
+
     
     return skip,t1,flag1,flag2
 

@@ -4119,7 +4119,7 @@ aws_eip = {
 	"clfn":		"ec2",
 	"descfn":	"describe_addresses",
 	"topkey":	"Addresses",
-	"key":		"PublicIp",
+	"key":		"AllocationId",
 	"filterid":	"PublicIp"
 }
 

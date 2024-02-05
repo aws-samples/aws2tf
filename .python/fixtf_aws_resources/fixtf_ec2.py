@@ -355,11 +355,16 @@ def  aws_nat_gateway(t1,tt1,tt2,flag1,flag2):
     if "secondary_private_ip_address_count" in tt1:
         tt2=tt2.strip('\"')
         if tt2 == "0": skip=1
-    if tt1 == "subnet_id":
+    elif tt1 == "subnet_id":
         tt2=tt2.strip('\"')
         t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
         common.add_dependancy("aws_subnet",tt2)
-
+    elif tt1 == "private_ip": skip=1
+    elif tt1 == "public_ip": skip=1
+    elif tt1 == "allocation_id": 
+        tt2=tt2.strip('\"')
+        t1=tt1 + " = aws_eip." + tt2 + ".id\n"
+        common.add_dependancy("aws_eip",tt2)
     return skip,t1,flag1,flag2 
 
 def  aws_network_acl(t1,tt1,tt2,flag1,flag2):

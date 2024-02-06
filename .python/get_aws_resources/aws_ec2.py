@@ -188,11 +188,14 @@ def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key,
             vpc_cidr = j['CidrBlock']
             if id==vpcid:
                 for k in cidrb:
-                    if vpc_cidr == k['CidrBlock']: continue
+                    if vpc_cidr == k['CidrBlock']: 
+                        pkey = type+"."+vpcid
+                        globals.rproc[pkey] = True
+                        continue
                     theid=k['AssociationId']
                     specid=vpcid+"__"+theid
                     common.write_import(type, theid, specid)
-                    pkey = type+"."+vpcid+"__"+theid
+                    pkey = type+"."+vpcid
                     globals.rproc[pkey] = True
     except Exception as e:
         print(f"{e=}")

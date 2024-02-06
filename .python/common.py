@@ -36,7 +36,7 @@ def call_resource(type, id):
    
 
    with open('processed-resources.log', 'a') as f4:
-      f4.write(type+ " : " +id+"\n")
+      f4.write(type+ " : " +str(id)+"\n")
       
     ## don't get it if we alreay have it
     # if globals.rproc

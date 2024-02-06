@@ -9201,7 +9201,7 @@ aws_sns_topic_subscription = {
 	"clfn":		"sns",
 	"descfn":	"list_subscriptions_by_topic",
 	"topkey":	"Subscriptions",
-	"key":		"SubscriptionArn",
+	"key":		"TopicArn",
 	"filterid":	"SubscriptionArn"
 }
 

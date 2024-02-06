@@ -7,11 +7,11 @@ def aws_redshift_cluster(t1,tt1,tt2,flag1,flag2):
     elif tt1 == "iam_roles":    
         t1=fixtf.deref_role_arn_array(t1,tt1,tt2)
     elif tt1 == "cluster_subnet_group_name":
-        tt2=tt2.strip('\"')
+        ##tt2=tt2.strip('\"')
         t1=tt1 + " = aws_redshift_subnet_group." + tt2 + ".id\n"
         common.add_dependancy("aws_redshift_subnet_group",tt2)
     elif tt1 == "cluster_parameter_group_name":
-        tt2=tt2.strip('\"')
+        ##tt2=tt2.strip('\"')
         t1=tt1 + " = aws_redshift_parameter_group." + tt2 + ".id\n"
         common.add_dependancy("aws_redshift_parameter_group",tt2)
     elif tt1 == "kms_key_id":

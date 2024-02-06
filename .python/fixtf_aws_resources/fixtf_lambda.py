@@ -5,26 +5,26 @@ import os
 def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "role":
-        tt2=tt2.strip('\"')
+        ##tt2=tt2.strip('\"')
         tt2=tt2.split("/")[-1]
         t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
         common.add_dependancy("aws_iam_role",tt2)
     elif tt1 == "filename":
-        tt2=tt2.strip('\"')     
+        ##tt2=tt2.strip('\"')     
         if os.path.isfile(flag2+".zip"):
             t1=tt1 + " = \""+flag2+".zip\"\n lifecycle {\n   ignore_changes = [filename]\n}\n"
         elif tt2 == "null": skip=1
     elif tt1 == "image_uri":
-        tt2=tt2.strip('\"')
+        ##tt2=tt2.strip('\"')
         if tt2 == "null": skip=1
     elif tt1 == "source_code_hash":
-        tt2=tt2.strip('\"')
+        ##tt2=tt2.strip('\"')
         if os.path.isfile(flag2+".zip"):
             t1=tt1 + " = filebase64sha256(\""+flag2+".zip"+"\")\n"
         elif tt2 == "null": skip=1
 
     elif tt1 == "s3_bucket":
-        tt2=tt2.strip('\"')
+        ##tt2=tt2.strip('\"')
         if tt2 == "null": skip=1
 
     elif tt1 == "subnet_ids":  t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)

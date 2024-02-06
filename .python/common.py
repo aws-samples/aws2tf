@@ -613,6 +613,9 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
 
 def special_deps(ttft,taddr):
    #print("In special deps"+ttft+"  "+taddr)
+   if ttft == "aws_security_group": 
+      add_known_dependancy("aws_security_group_rule",taddr) 
+      add_dependancy("aws_security_group_rule",taddr) 
    if ttft == "aws_subnet": 
       add_known_dependancy("aws_route_table_association",taddr) 
       add_dependancy("aws_route_table_association",taddr)  

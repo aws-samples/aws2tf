@@ -6,6 +6,121 @@ import globals
 import os
 import sys
 
+
+
+def get_aws_security_group_rule(type, id, clfn, descfn, topkey, key, filterid):
+
+    if globals.debug:
+        print("--> In get_security_group_rule doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+        
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            response = client.describe_security_group_rules()        
+        else:        
+            if "sg-" in id:
+                response = client.describe_security_group_rules(Filters=[{'Name': 'group-id','Values': [id]},])
+                pkey="aws_security_group_rule."+id
+                globals.rproc[pkey] = True
+
+
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        
+
+        
+        for j in response[topkey]:
+            protocol="";fromport="";toport="";cidr4="";cidr6="";prefixlistid="";refgrp_sgid="";refgrp_peerst="";refgrp_userid="";refgrp_vpcid="";refgrp_peerid=""
+            #print(str(j))
+            try:
+                sgid=j['GroupId']
+                if j['IsEgress']:
+                    ing="egress"
+                else:
+                    ing="ingress"
+            except KeyError:
+                pass
+            try:
+                protocol=j['IpProtocol']
+            except KeyError:
+                pass
+            try:
+                fromport=str(j['FromPort'])
+            except KeyError:
+                pass
+            try:
+                toport=str(j['ToPort'])
+            except KeyError:
+                pass
+            try:
+                cidr4=j['CidrIpv4']
+            except KeyError:
+                pass
+            try:
+                cidr6=j['CidrIpv6']
+            except KeyError:
+                pass
+            try:
+                prefixlistid=j['PrefixListId']
+            except KeyError:
+                pass
+            try:   
+                refgrp_sgid=j['ReferencedGroupInfo']['GroupId']
+            except KeyError:
+                pass
+            try:
+                refgrp_peerst=j['ReferencedGroupInfo']['PeeringStatus']
+            except KeyError:
+                pass
+            try:
+                refgrp_userid=j['ReferencedGroupInfo']['UserId']
+            except KeyError:
+                pass
+            try:
+                refgrp_vpcid=j['ReferencedGroupInfo']['VpcId']
+            except KeyError:
+                pass
+            try:
+                refgrp_peerid=j['ReferencedGroupInfo']['VpcPeeringConnectionId']
+            except KeyError:
+                pass
+
+            #print("************1************")
+            #print(sgid+ing+protocol+fromport+toport)
+            #print("************2************")
+            #print(cidr4+cidr6+prefixlistid)
+            #print("************3************")
+            #print(refgrp_sgid+refgrp_peerst+refgrp_userid+refgrp_vpcid+refgrp_peerid)
+
+
+            impstring=sgid+"_"+ing
+            #print("protocol="+protocol)
+            if protocol != "": impstring=impstring + "_" + protocol
+            if fromport != "": impstring=impstring + "_" + fromport
+            if toport != "": impstring= impstring + "_" + toport
+            if cidr4 != "": impstring= impstring + "_" + cidr4
+            if cidr6 != "": impstring= impstring + "_" + cidr6
+            if refgrp_sgid != "": impstring= impstring + "_" + refgrp_sgid
+
+            common.write_import(type,impstring,None) 
+            pkey="aws_security_group_rule."+sgid
+            globals.rproc[pkey] = True
+
+
+    except Exception as e:
+            print(f"{e=}")
+            print("ERROR: -2->unexpected error in get_security_group_rule")
+            print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
+            exit()
+
+    return True
+
+
+
 def get_aws_eip(type, id, clfn, descfn, topkey, key, filterid):
 
     if globals.debug:

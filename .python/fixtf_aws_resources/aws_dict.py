@@ -8582,8 +8582,8 @@ aws_security_group_rule = {
 	"clfn":		"ec2",
 	"descfn":	"describe_security_group_rules",
 	"topkey":	"SecurityGroupRules",
-	"key":		"RuleId",
-	"filterid":	"RuleId"
+	"key":		"SecurityGroupRuleId",
+	"filterid":	"VpcId"
 }
 
 aws_securityhub_account = {

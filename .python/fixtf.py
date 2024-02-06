@@ -229,7 +229,7 @@ def fixtf(ttft,tf):
     clfn=clfn.replace('-','_')
     callfn="fixtf_"+clfn
     if globals.debug: print("callfn="+callfn+" ttft="+ttft)
-
+    globals.lbc=0
     Lines = f1.readlines()
     #print("getfn for fixtf2."+ttft+" "+tf2)
     #with open(tf2, "a") as f2:
@@ -243,7 +243,7 @@ def fixtf(ttft,tf):
             skip=0
             tt1=t1.split("=")[0].strip()
             try:
-                tt2=t1.split("=")[1].strip()
+                tt2=t1.split("=")[1].strip().strip('\"')
             except:
                 tt2=""
  
@@ -345,7 +345,7 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
     return t1,skip
 
 def deref_role_arn(t1,tt1,tt2):
-    tt2=tt2.strip('\"')
+    ##tt2=tt2.strip('\"')
     if ":role" in tt2:
         tt2=tt2.split('/')[-1]
         t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"

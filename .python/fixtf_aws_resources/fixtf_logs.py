@@ -6,7 +6,7 @@ import fixtf
 def aws_cloudwatch_log_group(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "name":
-        tt2=tt2.strip('\"')
+        ##tt2=tt2.strip('\"')
         if len(tt2) > 0: flag1=True
 
     #CIRCULAR reference problems:
@@ -15,7 +15,7 @@ def aws_cloudwatch_log_group(t1,tt1,tt2,flag1,flag2):
     if tt1 == "name_prefix" and flag1 is True: skip=1
 
     if tt1 == "kms_key_id":
-        tt2=tt2.strip('\"')
+        ##tt2=tt2.strip('\"')
         if tt2 != "null": 
             t1=tt1 + " = aws_kms_key.k-" + tt2 + ".id\n"
             common.add_dependancy("aws_kms_key",tt2)

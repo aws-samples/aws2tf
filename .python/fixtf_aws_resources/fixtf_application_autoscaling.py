@@ -15,7 +15,7 @@ def aws_appautoscaling_target(t1,tt1,tt2,flag1,flag2):
 		if ":role/aws-service-role" in tt2:
 			t1=fixtf.globals_replace(t1,tt1,tt2)
 		else:
-			tt2=tt2.strip('\"')
+			##tt2=tt2.strip('\"')
 			if tt2 != "null":
 				if ":" in tt2: tt2=tt2.split("/")[-1]
 				t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"

@@ -1509,10 +1509,10 @@ aws_autoscaling_attachment = {
 
 aws_autoscaling_group = {
 	"clfn":		"autoscaling",
-	"descfn":	"list_groups",
-	"topkey":	"Groups",
+	"descfn":	"describe_auto_scaling_groups",
+	"topkey":	"AutoScalingGroups",
 	"key":		"AutoScalingGroupName",
-	"filterid":	"AutoScalingGroupName"
+	"filterid":	"AutoScalingGroupArn"
 }
 
 aws_autoscaling_group_tag = {

@@ -16,7 +16,7 @@ aws_vpc_resp=[]
 aws_iam_role_resp=[]
 aws_instance_resp=[]
 lbc=0
-
+asg_azs=False
 plan2=False
 
 #specials=["aws_iam_role_policy","aws_route_table_association","aws_iam_policy","aws_iam_policy_attchment",

@@ -269,6 +269,11 @@ aws_api_gateway_integration = {
   "clfn": "apigateway"
 }
 
+aws_api_gateway_integration_response = {
+  "param": "restApiId,resourceId,httpMethod,statusCode",
+  "clfn": "apigateway"  
+}
+
 aws_api_gateway_gateway_response = {
   "param": "restApiId",
   "clfn": "apigateway"
@@ -276,6 +281,11 @@ aws_api_gateway_gateway_response = {
 
 aws_api_gateway_model = {
   "param": "restApiId",
+  "clfn": "apigateway"
+}
+
+aws_api_gateway_method = {
+  "param": "restApiId,resourceId,httpMethod",
   "clfn": "apigateway"
 }
 
@@ -1462,6 +1472,7 @@ aws_needid = {
   "aws_api_gateway_documentation_version": aws_api_gateway_documentation_version,
   "aws_api_gateway_gateway_response": aws_api_gateway_gateway_response,
   "aws_api_gateway_integration": aws_api_gateway_integration,
+  "aws_api_gateway_method": aws_api_gateway_method,
   "aws_api_gateway_model": aws_api_gateway_model,
   "aws_api_gateway_request_validator": aws_api_gateway_request_validator,
   "aws_api_gateway_resource": aws_api_gateway_resource,
@@ -1501,6 +1512,7 @@ aws_needid = {
   "aws_api_gateway_documentation_part": aws_api_gateway_documentation_part,
   "aws_api_gateway_documentation_version": aws_api_gateway_documentation_version,
   "aws_api_gateway_gateway_response": aws_api_gateway_gateway_response,
+  "aws_api_gateway_integration_response": aws_api_gateway_integration_response, 
   "aws_api_gateway_model": aws_api_gateway_model,
   "aws_api_gateway_request_validator": aws_api_gateway_request_validator,
   "aws_api_gateway_resource": aws_api_gateway_resource,

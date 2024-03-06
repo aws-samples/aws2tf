@@ -829,7 +829,7 @@ aws_api_gateway_integration_response = {
 
 aws_api_gateway_method = {
 	"clfn":		"apigateway",
-	"descfn":	"get_methods",
+	"descfn":	"get_method",
 	"topkey":	"items",
 	"key":		"httpMethod",
 	"filterid":	"httpMethod"

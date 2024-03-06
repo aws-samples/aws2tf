@@ -67,10 +67,19 @@ def aws_eks_node_group(t1,tt1,tt2,flag1,flag2):
     if "launch_template {" in t1: 
         #print("******* flag1 true launch_template")
         flag1=True
+
+
     if "max_unavailable_percentage" in tt1:
         ##tt2=tt2.strip('\"')
         #print(tt1+" "+tt2)
         if tt2 == "0": skip=1
+
+    elif "max_unavailable" in tt1:
+        ##tt2=tt2.strip('\"')
+        #print(tt1+" "+tt2)
+        if tt2 == "0": skip=1
+
+    elif "node_group_name_prefix" in tt1: skip=1
     elif tt1 == "cluster_name":
         ##tt2=tt2.strip('\"')
         t1=tt1 + " = aws_eks_cluster." + tt2 + ".id\n"

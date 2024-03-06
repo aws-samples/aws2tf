@@ -689,12 +689,12 @@ def call_boto3(type,clfn,descfn,topkey,id):
             if globals.debug: print("paginator")
     
             if descfn == "describe_launch_templates":
-               #print("*******  describe_launch_templates  ********" )
+               print("*******  describe_launch_templates  ********" )
                if id is not None:
                   if "lt-" in id:
                      for page in paginator.paginate(LaunchTemplateIds=[id]): response.extend(page[topkey])
                   else:
-                     #print("--->> id="+str(id))
+                     print("--->> id="+str(id))
                      for page in paginator.paginate(LaunchTemplateNames=[id]): response.extend(page[topkey])
                else:
                   for page in paginator.paginate(): response.extend(page[topkey])

@@ -311,12 +311,12 @@ def globals_replace(t1,tt1,tt2):
             tt2=tt2[:a1]+":%s:"+tt2[a1+14:]
             ends=ends+",data.aws_caller_identity.current.account_id"
          
-            t1 = tt1+" = format("+tt2+ends+")\n"
+            t1 = tt1+' = format("'+tt2+ends+'")\n'
     if tt1 == "managed_policy_arns":
         tt2=tt2.replace('[','')
         tt2=tt2.replace(']','')
         tt2=tt2.replace('"','')
-        t1 = tt1+' = [format("'+tt2+'"'+ends+')]\n'
+        t1 = tt1+' = [format("'+tt2+'"'+ends+'")]\n'
     return t1
 
 

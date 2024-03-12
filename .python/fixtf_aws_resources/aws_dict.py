@@ -4694,7 +4694,7 @@ aws_globalaccelerator_listener = {
 
 aws_glue_catalog_table = {
 	"clfn":		"glue",
-	"descfn":	"list_tables",
+	"descfn":	"get_tables",
 	"topkey":	"TableList",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -4806,8 +4806,8 @@ aws_glue_security_configuration = {
 
 aws_glue_trigger = {
 	"clfn":		"glue",
-	"descfn":	"list_triggers",
-	"topkey":	"Triggers",
+	"descfn":	"get_trigger",
+	"topkey":	"Trigger",
 	"key":		"Name",
 	"filterid":	"Name"
 }
@@ -5654,7 +5654,7 @@ aws_kms_replica_key = {
 
 aws_lakeformation_data_lake_settings = {
 	"clfn":		"lakeformation",
-	"descfn":	"list_data_lake_settings",
+	"descfn":	"get_data_lake_settings",
 	"topkey":	"DataLakeSettings",
 	"key":		"DataLakeSettingsId",
 	"filterid":	"DataLakeSettingsId"
@@ -9064,9 +9064,9 @@ aws_sfn_alias = {
 aws_sfn_state_machine = {
 	"clfn":		"stepfunctions",
 	"descfn":	"list_state_machines",
-	"topkey":	"StateMachines",
-	"key":		"StateMachineArn",
-	"filterid":	"StateMachineArn"
+	"topkey":	"stateMachines",
+	"key":		"stateMachineArn",
+	"filterid":	"stateMachineArn"
 }
 
 aws_shield_application_layer_automatic_response = {

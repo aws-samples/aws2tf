@@ -178,7 +178,8 @@ def getstackresources(stack_name,client):
             elif type == "AWS::Glue::Crawler": common.call_resource("aws_glue_crawler", pid)
             elif type == "AWS::Glue::Database": common.call_resource("aws_glue_catalog_database", pid)
             elif type == "AWS::Glue::Job": common.call_resource("aws_glue_job", pid) 
-            elif type == "AWS::Glue::Table": common.call_resource("aws_glue_catalog_table", pid)
+            elif type == "AWS::Glue::Table": f3.write(type +" fetched as part of AWS::Glue::Database ...\n")
+            elif type == "AWS::Glue::Trigger": common.call_resource("aws_glue_trigger", pid)
             elif type == "AWS::Glue::Partition": common.call_resource("aws_glue_partition", pid) 
             
             elif type == "AWS::IAM::Role":              common.call_resource("aws_iam_role", pid)

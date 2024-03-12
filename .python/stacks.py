@@ -234,8 +234,10 @@ def getstackresources(stack_name,client):
                 common.call_resource("aws_null", tarn)
                 
 
-            elif type == "AWS::S3::Bucket":                     aws_s3.get_all_s3_buckets(pid, globals.region)
-            elif type == "AWS::S3::BucketPolicy":               f3.write(type +" fetched as part of bucket...\n")
+            elif type == "AWS::S3::Bucket":  
+                print("-->> aws_s3.get_all_s3_buckets "+pid+"   "+globals.region)
+                aws_s3.get_all_s3_buckets(pid, globals.region)
+            elif type == "AWS::S3::BucketPolicy":  f3.write(type +" fetched as part of bucket...\n")
             elif type == "AWS::S3::AccessGrant": common.call_resource("aws_s3control_access_grant", pid)
             elif type == "AWS::S3::AccessGrantsInstance": common.call_resource("aws_s3control_access_grants_instance", pid)
             elif type == "AWS::S3::AccessGrantsLocation": common.call_resource("aws_s3control_access_grants_location", pid)

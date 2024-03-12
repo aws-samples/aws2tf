@@ -2,6 +2,8 @@
 import boto3
 import common
 import globals
+import os
+import sys
 
 def get_all_s3_buckets(fb,my_region):
    print("bucket name="+str(fb))
@@ -64,15 +66,14 @@ def get_all_s3_buckets(fb,my_region):
      try:
          #print('location')
          location = s3.get_bucket_location(Bucket=bucket_name)
-         
+         #print(location)
          bl=location['LocationConstraint']
-         #print ("bucket: " +  bucket_name + " location="+bl)
+         #print ("bucket: " +  bucket_name + " location="+str(bl))
          if bl != my_region:
-            #print('continuing on non default location '+ bl)
-            continue
-         if bl is None:  
-               #print('continuing on None location .......')
-               continue
+            #print('continuing on non default location '+ str(bl))     
+            if bl is None:  
+               #print('passing on None location .......')
+               pass
          elif bl == 'null':  
                #print('continuing on null location .......')
                continue
@@ -82,6 +83,10 @@ def get_all_s3_buckets(fb,my_region):
             
      except Exception as e:
          print(f"{e=}")
+         print("ERROR: -2->unexpected error in get_all_s3_buckets")
+         exc_type, exc_obj, exc_tb = sys.exc_info()
+         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+         print(exc_type, fname, exc_tb.tb_lineno)
          print('continuing on exception to location .......')
          continue
      
@@ -92,7 +97,7 @@ def get_all_s3_buckets(fb,my_region):
      #except:
      #    print("failed to access bucket " +bucket_name + " " + bl +" skipping ..")
      #    continue
-     print("Bucket: "+bucket_name)
+     #print("Bucket: "+bucket_name)
 
      common.write_import(type,bucket_name,"b-"+bucket_name)
 

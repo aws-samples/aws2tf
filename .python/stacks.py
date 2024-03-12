@@ -85,7 +85,8 @@ def getstackresources(stack_name,client):
     rl=len(response)
     with open('stack-unprocessed.log', 'a') as f:
         for j in response:
-            f3=open('stack-fetched.log', 'a')
+            f3=open('stack-fetched-implicit.log', 'a')
+            f4=open('stack-fetched-explicit.log', 'a')
             type=j['ResourceType']
             pid=j['PhysicalResourceId'].split('/')[-1]
             parn=j['PhysicalResourceId']
@@ -97,6 +98,7 @@ def getstackresources(stack_name,client):
                 print("type="+type)
             
             print("stack "+stack_name+ " importing "+ str(ri) + " of "+ str(rl)+ " type="+type+ " pid="+pid)
+            f4.write("Importing type="+type+ " pid="+pid+"\n")
 
 
             if type == "AWS::CloudFormation::Stack": continue
@@ -1326,6 +1328,7 @@ def getstackresources(stack_name,client):
                 f.write("--UNPROCESSED-- "+type + " "+ pid +" "+ parn+" \n")
 
     f3.close()
+    f4.close()
     return
 
 

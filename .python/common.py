@@ -8,6 +8,7 @@ import botocore
 import fixtf
 from datetime import datetime
 import resources
+from get_aws_resources import aws_athena
 from get_aws_resources import aws_application_autoscaling
 from get_aws_resources import aws_kms
 from get_aws_resources import aws_ecs

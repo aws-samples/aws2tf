@@ -1429,10 +1429,10 @@ aws_athena_prepared_statement = {
 
 aws_athena_workgroup = {
 	"clfn":		"athena",
-	"descfn":	"list_work_groups",
-	"topkey":	"WorkGroups",
+	"descfn":	"get_work_group",
+	"topkey":	"WorkGroup",
 	"key":		"Name",
-	"filterid":	"Name"
+	"filterid":	"WorkGroup"
 }
 
 aws_auditmanager_account_registration = {

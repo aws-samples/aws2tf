@@ -88,7 +88,7 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
             
             # set dependency false
             tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
-            print("Setting True "+tkey)
+            #print("Setting True "+tkey)
             globals.rproc[tkey]=True
 
     except Exception as e:

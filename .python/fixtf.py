@@ -231,8 +231,12 @@ def fixtf(ttft,tf):
     if globals.debug: print("callfn="+callfn+" ttft="+ttft)
     globals.lbc=0
     Lines = f1.readlines()
-    #print("getfn for fixtf2."+ttft+" "+tf2)
+    print("getfn for fixtf2."+ttft+" "+tf2)
     #with open(tf2, "a") as f2:
+
+    #if globals.acc in tf2:
+    #    tf2=tf2.replace(globals.acc, "__")
+
     with open(tf2, "w") as f2:
         skip=0
         flag1=False
@@ -293,6 +297,8 @@ def aws_resource(t1,tt1,tt2,flag1,flag2):
     skip=0
     return skip,t1,flag1,flag2 
 
+
+# generic replace of acct and region in arn
 def globals_replace(t1,tt1,tt2):
     #print("policy " + globals.acc + " "+ tt2)
     ends=""

@@ -392,10 +392,8 @@ def aws_network_acls(t1,tt1,tt2,flag1,flag2):
 def aws_network_interface(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if "private_ips_count" in tt1:
-		##tt2=tt2.strip('\"')
 		if tt2 == "0": skip=1
 	elif "private_ips_count" in tt1:
-		##tt2=tt2.strip('\"')
 		if tt2 == "0": skip=1
 	elif "ipv6_prefixes" in tt1:
 		##tt2=tt2.strip('\"')
@@ -600,14 +598,14 @@ def  aws_vpc(t1,tt1,tt2,skipipv6,flag2):
     skip = 0
     if tt1 == "assign_generated_ipv6_cidr_block":
         if tt2 in "true": skipipv6=True
-    if tt1 == "ipv6_cidr_block":
+    elif tt1 == "ipv6_cidr_block":
         if skipipv6: skip = 1
-    if tt1 == "ipv6_ipam_pool_id":
+    elif tt1 == "ipv6_ipam_pool_id":
         if skipipv6: skip = 1
-    if tt1 == "ipv6_netmask_length":
+    elif tt1 == "ipv6_netmask_length":
         if tt2 == "0":
             skip=1
-        
+    elif tt1 == "owner_id": skip=1
     #            
     return skip,t1,skipipv6,flag2
 

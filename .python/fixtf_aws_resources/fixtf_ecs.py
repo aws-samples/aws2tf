@@ -14,6 +14,10 @@ def aws_ecs_cluster(t1,tt1,tt2,flag1,flag2):
 				common.add_dependancy("aws_kms_key",tt2)
 		else:
 			skip=1
+	elif tt1 == "namespace":
+		if "arn:" in tt2: t1=fixtf.globals_replace(t1,tt1,tt2)
+			
+
 
 	return skip,t1,flag1,flag2
 
@@ -55,6 +59,14 @@ def aws_ecs_service(t1,tt1,tt2,flag1,flag2):
 		else:
 			tdarn="arn:aws:ecs:"+globals.region+":"+globals.acc+":"+"task-definition:"+tt2
 			common.add_dependancy("aws_ecs_task_definition",tdarn)
+
+	elif tt1 == "target_group_arn":
+		if "arn:" in tt2:
+			#tt2 = tt2.split("/")[-1]
+			tgarn=tt2.replace("/","__").replace(".","__").replace(":","__")
+			t1=tt1 + " = aws_lb_target_group." + tgarn + ".arn\n"
+			common.add_dependancy("aws_lb_target_group", tgarn) 
+
 
 
 	return skip,t1,flag1,flag2

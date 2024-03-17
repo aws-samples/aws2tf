@@ -45,18 +45,39 @@ def get_aws_ecs_service(type,id,clfn,descfn,topkey,key,filterid):
     try:
         response = []
         client = boto3.client(clfn)
-        if id is None:         
+        if "arn:" in id:
+
+            cln=id.split('/')[-2]
+            srvn=id.split('/')[-1]
+            response = client.describe_services(cluster=cln,services=[srvn])
+            response=response['services']
+            for j in response: 
+                pkey=cln+"/"+srvn   # clustername/servicename
+                common.write_import(type,pkey,None) 
+                tid="ecs/service/"+pkey
+                common.add_dependancy("aws_appautoscaling_target",tid)
+                common.add_dependancy("aws_appautoscaling_policy",tid)
+                return True
+
+
+        elif id is None:         
             response = client.list_services()
         else:
             response = client.list_services(cluster=id) 
 
         response=response[topkey]
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        #print("*********"+str(response))
+        
+        # a list of arns is returned
+        
         for j in response: 
             retid=j # no key
-            srvn=retid.split('/')[1]
-            pkey=id+"/"+srvn
+            #print("*********"+str(retid))
+            srvn=retid.split('/')[-1]
+            cln=retid.split('/')[-2]
+            #print("*********srvn="+str(srvn))
+            #print("*********cln="+str(cln))
+            pkey=cln+"/"+srvn   # clustername/servicename
             common.write_import(type,pkey,None) 
             tid="ecs/service/"+pkey
             #print("********** tid="+tid)
@@ -77,8 +98,8 @@ def get_aws_ecs_service(type,id,clfn,descfn,topkey,key,filterid):
 
 def get_aws_ecs_task_definition(type,id,clfn,descfn,topkey,key,filterid):
 
-    #if globals.debug:
-    print("--> get_aws_ecs_task_definition  doing " + type + ' with id ' + str(id) +
+    if globals.debug:
+        print("--> get_aws_ecs_task_definition  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -92,7 +113,7 @@ def get_aws_ecs_task_definition(type,id,clfn,descfn,topkey,key,filterid):
             tid=id
             if "arn:" in id:
                  tid=id.split(":")[-2]+":"+id.split(":")[-1]
-            print("************tid="+tid)     
+            #print("************tid="+tid)     
             
             response = client.describe_task_definition(taskDefinition=tid) 
             response=response[topkey]

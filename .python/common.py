@@ -11,9 +11,10 @@ import resources
 from get_aws_resources import aws_athena
 from get_aws_resources import aws_application_autoscaling
 from get_aws_resources import aws_kms
+from get_aws_resources import aws_ec2
 from get_aws_resources import aws_ecs
 from get_aws_resources import aws_eks
-from get_aws_resources import aws_ec2
+from get_aws_resources import aws_elbv2
 from get_aws_resources import aws_iam
 from get_aws_resources import aws_vpc_lattice
 from get_aws_resources import aws_logs
@@ -149,6 +150,7 @@ def tfplan1():
    file="plan1.json"
    f2=open(file, "r")
    plan2=True
+   
 
    while True:
       line = f2.readline()
@@ -169,8 +171,15 @@ def tfplan1():
                      com="rm -f import__*"+i+"*.tf"
                      print(com)
                      rout=rc(com)
-
-
+                  elif "Error: Cannot import non-existent remote object" in mess:
+                     print("ERROR: Cannot import non-existent remote object - see plan1.json")
+                     i=mess.split('(')[1].split(')')[0].split('/')[-1]
+                     print("ERROR: Removing "+i+" import files - plan errors see plan1.json")
+                     globals.badlist=globals.badlist+[i]
+                     com="mv import__*"+i+"*.tf import__*"+i+"*.tf.error"
+                     print(com)
+                     rout=rc(com)
+                     exit()
 
                except:
                   pass
@@ -299,7 +308,6 @@ def tfplan3():
       if not zeroc:
          print("-->> plan will change resources! - unexpected, is there existing state ?")
          print("-->> look at plan2.json - or run terraform plan")
-         exit()
 
       if not zeroa:
          print("-->> plan will add resources! - unexpected")
@@ -386,7 +394,7 @@ def aws_tf(region):
          f3.write('  required_providers {\n')
          f3.write('    aws = {\n')
          f3.write('      source  = "hashicorp/aws"\n')
-         f3.write('      version = "5.30.0"\n')
+         f3.write('      version = "5.41.0"\n')
          f3.write('    }\n')
          f3.write('  }\n')
          f3.write('}\n')

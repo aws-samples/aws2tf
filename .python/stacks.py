@@ -98,7 +98,7 @@ def getstackresources(stack_name,client):
                 print("type="+type)
             
             print("stack "+stack_name+ " importing "+ str(ri) + " of "+ str(rl)+ " type="+type+ " pid="+pid)
-            f4.write("Importing type="+type+ " pid="+pid+"\n")
+            f4.write("Type="+type+ " pid="+pid+ " parn="+parn+"\n")
 
 
             if type == "AWS::CloudFormation::Stack": continue
@@ -168,7 +168,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::ElasticLoadBalancingV2::LoadBalancer":  common.call_resource("aws_lb", parn) 
             elif type == "AWS::ElasticLoadBalancingV2::Listener":  common.call_resource("aws_lb_listener", parn) 
             elif type == "AWS::ElasticLoadBalancingV2::ListenerRule":  common.call_resource("aws_lb_listener_rule", parn) 
-            elif type == "AWS::ElasticLoadBalancingV2::TargetGroup":  common.call_resource("ws_lb_target_group", parn) 
+            elif type == "AWS::ElasticLoadBalancingV2::TargetGroup":  common.call_resource("aws_lb_target_group", parn) 
 
             elif type == "AWS::EMR::Cluster":  common.call_resource("aws_emr_cluster", pid) 
             elif type == "AWS::EMR::SecurityConfiguration": common.call_resource("aws_emr_security_configuration", pid) 

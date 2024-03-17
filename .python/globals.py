@@ -33,3 +33,7 @@ badlist=[]
 rproc={}
 rdep={}
 trdep={}
+
+mopup={
+    "aws_service_discovery_http_namespace":"ns-"
+}

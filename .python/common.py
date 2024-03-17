@@ -306,8 +306,9 @@ def tfplan3():
          exit()
 
       if not zeroc:
-         print("-->> plan will change resources! - unexpected, is there existing state ?")
+         print("-->> plan will change resources! - unexpected")
          print("-->> look at plan2.json - or run terraform plan")
+         exit()
 
       if not zeroa:
          print("-->> plan will add resources! - unexpected")
@@ -573,8 +574,15 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                            special_deps(type,theid)
                            write_import(type,theid,None)
                      except:
-                        print("Could have done write_import "+type+" id="+id+" filterid="+filterid)
-                        return False
+                        if globals.mopup.get(type) is not None:
+                           if id.startswith(globals.mopup[type]):
+                              write_import(type,id,None)
+                              return True
+
+                        else:
+                           with open('missed-getresource.log', 'a') as f4:
+                              f4.write("Could have done write_import "+type+" id="+id+" filterid="+filterid+"/n")
+                           return False
                   else:
                      ### There's a dot in the filterid so we need to dig deeper
                      print(str(item))

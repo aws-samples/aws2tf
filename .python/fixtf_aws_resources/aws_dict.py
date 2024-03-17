@@ -8693,9 +8693,9 @@ aws_serverlessapplicationrepository_cloudformation_stack = {
 
 aws_service_discovery_http_namespace = {
 	"clfn":		"servicediscovery",
-	"descfn":	"list_http_namespaces",
-	"topkey":	"HttpNamespaces",
-	"key":		"HttpNamespaceArn",
+	"descfn":	"list_namespaces",
+	"topkey":	"Namespaces",
+	"key":		"Id",
 	"filterid":	"HttpNamespaceArn"
 }
 

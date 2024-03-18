@@ -3933,10 +3933,10 @@ aws_ec2_transit_gateway_vpc_attachment_accepter = {
 
 aws_ecr_lifecycle_policy = {
 	"clfn":		"ecr",
-	"descfn":	"describe_lifecycle_policy",
-	"topkey":	"lifecyclePolicyText",
-	"key":		"lifecyclePolicyText",
-	"filterid":	"lifecyclePolicyText"
+	"descfn":	"get_lifecycle_policy",
+	"topkey":	"",
+	"key":		"repositoryName",
+	"filterid":	"registryId"
 }
 
 aws_ecr_pull_through_cache_rule = {
@@ -3949,26 +3949,26 @@ aws_ecr_pull_through_cache_rule = {
 
 aws_ecr_registry_policy = {
 	"clfn":		"ecr",
-	"descfn":	"describe_registry_policy",
-	"topkey":	"registryPolicyText",
-	"key":		"registryPolicyText",
-	"filterid":	"registryPolicyText"
+	"descfn":	"get_registry_policy",
+	"topkey":	"",
+	"key":		"policyText",
+	"filterid":	"policyText"
 }
 
 aws_ecr_registry_scanning_configuration = {
 	"clfn":		"ecr",
-	"descfn":	"describe_registry_scanning_configuration",
-	"topkey":	"registryScanningConfiguration",
-	"key":		"registryScanningConfiguration",
-	"filterid":	"registryScanningConfiguration"
+	"descfn":	"get_registry_scanning_configuration",
+	"topkey":	"",
+	"key":		"registryId",
+	"filterid":	"registryId"
 }
 
 aws_ecr_replication_configuration = {
 	"clfn":		"ecr",
-	"descfn":	"describe_replication_configuration",
-	"topkey":	"replicationConfiguration",
-	"key":		"replicationConfiguration",
-	"filterid":	"replicationConfiguration"
+	"descfn":	"get_registry_policy",
+	"topkey":	"",
+	"key":		"registryId",
+	"filterid":	"registryId"
 }
 
 aws_ecr_repository = {
@@ -3997,10 +3997,10 @@ aws_ecrpublic_repository = {
 
 aws_ecrpublic_repository_policy = {
 	"clfn":		"ecr",
-	"descfn":	"describe_repository_policy",
-	"topkey":	"policyText",
-	"key":		"policyText",
-	"filterid":	"policyText"
+	"descfn":	"get_repository_policy",
+	"topkey":	"",
+	"key":		"registryId",
+	"filterid":	"registryId"
 }
 
 aws_ecs_account_setting_default = {
@@ -10264,16 +10264,16 @@ aws_wafv2_web_acl = {
 
 aws_wafv2_web_acl_association = {
 	"clfn":		"wafv2",
-	"descfn":	"list_web_acl_associations",
-	"topkey":	"WebACLAssociations",
-	"key":		"AssociationId",
-	"filterid":	"AssociationId"
+	"descfn":	"get_web_acl",
+	"topkey":	"WebACL",
+	"key":		"AssociationConfig",
+	"filterid":	"AssociationConfig"
 }
 
 aws_wafv2_web_acl_logging_configuration = {
 	"clfn":		"wafv2",
-	"descfn":	"list_web_acl_logging_configurations",
-	"topkey":	"WebACLLoggingConfigurations",
+	"descfn":	"get_logging_configuration",
+	"topkey":	"LoggingConfiguration",
 	"key":		"ResourceArn",
 	"filterid":	"ResourceArn"
 }

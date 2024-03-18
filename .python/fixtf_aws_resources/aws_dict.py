@@ -10281,30 +10281,30 @@ aws_wafv2_web_acl_logging_configuration = {
 aws_worklink_fleet = {
 	"clfn":		"worklink",
 	"descfn":	"list_fleets",
-	"topkey":	"Fleets",
+	"topkey":	"FleetSummaryList",
 	"key":		"FleetArn",
 	"filterid":	"FleetArn"
 }
 
 aws_worklink_website_certificate_authority_association = {
 	"clfn":		"worklink",
-	"descfn":	"list_website_certificate_authority_associations",
-	"topkey":	"WebsiteCertificateAuthorityAssociations",
-	"key":		"AssociationId",
-	"filterid":	"AssociationId"
+	"descfn":	"list_website_certificate_authorities",
+	"topkey":	"WebsiteCertificateAuthorities",
+	"key":		"WebsiteCaId",
+	"filterid":	"WebsiteCaId"
 }
 
 aws_workspaces_connection_alias = {
 	"clfn":		"workspaces",
-	"descfn":	"list_connection_aliases",
+	"descfn":	"describe_connection_aliases",
 	"topkey":	"ConnectionAliases",
-	"key":		"ConnectionAliasId",
-	"filterid":	"ConnectionAliasId"
+	"key":		"AliasId",
+	"filterid":	"AliasId"
 }
 
 aws_workspaces_directory = {
 	"clfn":		"workspaces",
-	"descfn":	"list_directories",
+	"descfn":	"describe_workspace_directories",
 	"topkey":	"Directories",
 	"key":		"DirectoryId",
 	"filterid":	"DirectoryId"
@@ -10312,15 +10312,15 @@ aws_workspaces_directory = {
 
 aws_workspaces_ip_group = {
 	"clfn":		"workspaces",
-	"descfn":	"list_ip_groups",
-	"topkey":	"IpGroups",
+	"descfn":	"describe_ip_groups",
+	"topkey":	"Result",
 	"key":		"GroupId",
 	"filterid":	"GroupId"
 }
 
 aws_workspaces_workspace = {
 	"clfn":		"workspaces",
-	"descfn":	"list_workspaces",
+	"descfn":	"describe_workspaces",
 	"topkey":	"Workspaces",
 	"key":		"WorkspaceId",
 	"filterid":	"WorkspaceId"

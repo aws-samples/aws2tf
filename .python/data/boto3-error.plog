@@ -2168,3 +2168,451 @@ clfn=servicediscovery descfn=list_public_dns_namespaces topkey=PublicDnsNamespac
 e=KeyError('list_public_dns_namespaces')
 exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
 -----------------------------------------------------------------------------
+clfn=servicecatalog descfn=list_budget_resource_associations topkey=BudgetResourceAssociations id=None
+e=KeyError('list_budget_resource_associations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=servicecatalog descfn=list_constraints topkey=Constraints id=None
+e=KeyError('list_constraints')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=servicecatalog descfn=list_organization_access topkey=OrganizationAccess id=None
+e=KeyError('list_organization_access')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=servicecatalog descfn=list_portfolios topkey=Portfolios id=None
+e=KeyError('Portfolios')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=766
+-----------------------------------------------------------------------------
+clfn=servicecatalog descfn=list_portfolio_shares topkey=PortfolioShares id=None
+e=KeyError('list_portfolio_shares')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=servicecatalog descfn=list_principal_portfolio_associations topkey=PrincipalPortfolioAssociations id=None
+e=KeyError('list_principal_portfolio_associations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=servicecatalog descfn=list_products topkey=Products id=None
+e=KeyError('list_products')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=servicecatalog descfn=list_product_portfolio_associations topkey=ProductPortfolioAssociations id=None
+e=KeyError('list_product_portfolio_associations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=servicecatalog descfn=list_provisioned_products topkey=ProvisionedProducts id=None
+e=KeyError('list_provisioned_products')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=servicecatalog descfn=list_service_actions topkey=ServiceActions id=None
+e=KeyError('ServiceActions')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=766
+-----------------------------------------------------------------------------
+clfn=servicecatalog descfn=list_tag_options topkey=TagOptions id=None
+e=KeyError('TagOptions')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=766
+-----------------------------------------------------------------------------
+clfn=servicecatalog descfn=list_tag_option_resource_associations topkey=TagOptionResourceAssociations id=None
+e=KeyError('list_tag_option_resource_associations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=service-quotas descfn=list_templates topkey=Templates id=None
+e=KeyError('list_templates')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=service-quotas descfn=list_template_associations topkey=TemplateAssociations id=None
+e=KeyError('list_template_associations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ses descfn=describe_configuration_sets topkey=ConfigurationSets id=None
+e=KeyError('describe_configuration_sets')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ses descfn=describe_domain_dkim topkey=DkimAttributes id=None
+e=KeyError('describe_domain_dkim')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ses descfn=describe_domain_identity topkey=DomainIdentities id=None
+e=KeyError('describe_domain_identity')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ses descfn=describe_domain_identity_verification topkey=VerificationToken id=None
+e=KeyError('describe_domain_identity_verification')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ses descfn=describe_domain_mail_from topkey=MailFromAttributes id=None
+e=KeyError('describe_domain_mail_from')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ses descfn=describe_email_identity topkey=IdentityType id=None
+e=KeyError('describe_email_identity')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ses descfn=describe_event_destination topkey=EventDestination id=None
+e=KeyError('describe_event_destination')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ses descfn=describe_identity_notification_topic topkey=Identity id=None
+e=KeyError('describe_identity_notification_topic')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ses descfn=describe_identity_policy topkey=Policy id=None
+e=KeyError('describe_identity_policy')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ses descfn=describe_receipt_filter topkey=Filter id=None
+e=KeyError('describe_receipt_filter')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ses descfn=describe_template topkey=Template id=None
+e=KeyError('describe_template')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=sesv2 descfn=describe_account_vdm_attributes topkey=AccountVdmAttributes id=None
+e=KeyError('describe_account_vdm_attributes')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=sesv2 descfn=describe_configuration_set topkey=ConfigurationSet id=None
+e=KeyError('describe_configuration_set')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=sesv2 descfn=describe_configuration_set_event_destination topkey=EventDestination id=None
+e=KeyError('describe_configuration_set_event_destination')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=sesv2 descfn=describe_contact_list topkey=ContactList id=None
+e=KeyError('describe_contact_list')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=sesv2 descfn=describe_dedicated_ip_assignment topkey=DedicatedIpAssignment id=None
+e=KeyError('describe_dedicated_ip_assignment')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=sesv2 descfn=describe_dedicated_ip_pool topkey=DedicatedIpPool id=None
+e=KeyError('describe_dedicated_ip_pool')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=sesv2 descfn=describe_email_identity topkey=EmailIdentity id=None
+e=KeyError('describe_email_identity')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=sesv2 descfn=describe_email_identity_feedback_attributes topkey=EmailIdentityFeedbackAttributes id=None
+e=KeyError('describe_email_identity_feedback_attributes')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=sesv2 descfn=describe_email_identity_mail_from_attributes topkey=MailFromAttributes id=None
+e=KeyError('describe_email_identity_mail_from_attributes')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=stepfunctions descfn=list_activities topkey=Activities id=None
+e=KeyError('Activities')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=766
+-----------------------------------------------------------------------------
+clfn=stepfunctions descfn=list_aliases topkey=Aliases id=None
+e=KeyError('list_aliases')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=shield descfn=list_application_layer_automatic_response_associations topkey=ApplicationLayerAutomaticResponseAssociations id=None
+e=KeyError('list_application_layer_automatic_response_associations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=shield descfn=list_drt_access_log_bucket_associations topkey=DrtAccessLogBucketAssociations id=None
+e=KeyError('list_drt_access_log_bucket_associations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=shield descfn=list_drt_access_role_arn_associations topkey=DrtAccessRoleArnAssociations id=None
+e=KeyError('list_drt_access_role_arn_associations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=shield descfn=list_protections topkey=Protections id=None
+e=ResourceNotFoundException('An error occurred (ResourceNotFoundException) when calling the ListProtections operation: The subscription does not exist.')
+exc_type=<class 'botocore.errorfactory.ResourceNotFoundException'>, fname='common.py', exc_tb.tb_lineno=765
+-----------------------------------------------------------------------------
+clfn=shield descfn=list_protection_health_check_associations topkey=ProtectionHealthCheckAssociations id=None
+e=KeyError('list_protection_health_check_associations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=signer descfn=list_signing_jobs topkey=Jobs id=None
+e=KeyError('Jobs')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=766
+-----------------------------------------------------------------------------
+clfn=signer descfn=list_signing_profiles topkey=Profiles id=None
+e=KeyError('Profiles')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=766
+-----------------------------------------------------------------------------
+clfn=signer descfn=list_signing_profile_permissions topkey=Permissions id=None
+e=KeyError('list_signing_profile_permissions')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=sdb descfn=list_domains topkey=DomainNames id=None
+e=KeyError('DomainNames')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=766
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_create_volume_permissions topkey=CreateVolumePermissions id=None
+e=KeyError('describe_create_volume_permissions')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=sns descfn=get_sms_preferences topkey=SMSPreferences id=None
+e=KeyError('get_sms_preferences')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ssm descfn=list_activations topkey=ActivationList id=None
+e=KeyError('list_activations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ssm descfn=list_associations topkey=AssociationList id=None
+e=KeyError('AssociationList')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=766
+-----------------------------------------------------------------------------
+clfn=ssm descfn=list_maintenance_windows topkey=WindowIdentities id=None
+e=KeyError('list_maintenance_windows')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ssm descfn=list_targets_for_maintenance_window topkey=WindowTargetIds id=None
+e=KeyError('list_targets_for_maintenance_window')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ssm descfn=list_tasks_for_maintenance_window topkey=TaskIds id=None
+e=KeyError('list_tasks_for_maintenance_window')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ssm descfn=list_patch_baselines topkey=BaselineIdentities id=None
+e=KeyError('list_patch_baselines')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ssm descfn=list_patch_groups topkey=PatchGroups id=None
+e=KeyError('list_patch_groups')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ssm-contacts descfn=list_plans topkey=Plans id=None
+e=KeyError('list_plans')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ssm-incidents descfn=list_replication_sets topkey=ReplicationSets id=None
+e=KeyError('ReplicationSets')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=766
+-----------------------------------------------------------------------------
+clfn=ssm-incidents descfn=list_response_plans topkey=ResponsePlans id=None
+e=KeyError('ResponsePlans')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=766
+-----------------------------------------------------------------------------
+clfn=sso-admin descfn=list_applications topkey=Applications id=None
+e=KeyError('list_applications')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=sso-admin descfn=list_application_assignments topkey=ApplicationAssignments id=None
+e=KeyError('list_application_assignments')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=sso-admin descfn=list_application_assignment_configurations topkey=ApplicationAssignmentConfigurations id=None
+e=KeyError('list_application_assignment_configurations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=sso-admin descfn=list_customer_managed_policy_attachments topkey=CustomerManagedPolicyAttachments id=None
+e=KeyError('list_customer_managed_policy_attachments')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=sso-admin descfn=list_instance_access_control_attribute_configuration topkey=InstanceAccessControlAttributeConfiguration id=None
+e=KeyError('list_instance_access_control_attribute_configuration')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=sso-admin descfn=list_managed_policy_attachments topkey=ManagedPolicyAttachments id=None
+e=KeyError('list_managed_policy_attachments')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=sso-admin descfn=list_permission_set_inline_policies topkey=PermissionSetInlinePolicies id=None
+e=KeyError('list_permission_set_inline_policies')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=sso-admin descfn=list_permissions_boundary_attachments topkey=PermissionsBoundaryAttachments id=None
+e=KeyError('list_permissions_boundary_attachments')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=sso-admin descfn=list_trusted_token_issuers topkey=TrustedTokenIssuers id=None
+e=KeyError('list_trusted_token_issuers')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=storagegateway descfn=describe_gateways topkey=Gateways id=None
+e=KeyError('describe_gateways')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=storagegateway descfn=describe_tape_pools topkey=TapePools id=None
+e=KeyError('describe_tape_pools')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=synthetics descfn=list_canaries topkey=Canaries id=None
+e=KeyError('list_canaries')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=synthetics descfn=list_canary_groups topkey=Groups id=None
+e=KeyError('list_canary_groups')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=synthetics descfn=list_group_associations topkey=GroupAssociations id=None
+e=KeyError('list_group_associations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=transfer descfn=list_ssh_public_keys topkey=SshPublicKeys id=None
+e=KeyError('list_ssh_public_keys')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=transfer descfn=list_tags topkey=Tags id=None
+e=KeyError('list_tags')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=list_endpoints topkey=Endpoints id=None
+e=KeyError('list_endpoints')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=list_groups topkey=Groups id=None
+e=KeyError('list_groups')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=list_instances topkey=Instances id=None
+e=KeyError('list_instances')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=list_instance_logging_configurations topkey=InstanceLoggingConfigurations id=None
+e=KeyError('list_instance_logging_configurations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=list_instance_trust_providers topkey=InstanceTrustProviders id=None
+e=KeyError('list_instance_trust_providers')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=list_trust_providers topkey=TrustProviders id=None
+e=KeyError('list_trust_providers')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_dhcp_options_associations topkey=DhcpOptionsAssociations id=None
+e=KeyError('describe_dhcp_options_associations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_vpc_endpoint_connection_accepters topkey=VpcEndpointConnectionAccepters id=None
+e=KeyError('describe_vpc_endpoint_connection_accepters')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_vpc_endpoint_connection_notifications topkey=VpcEndpointConnectionNotifications id=None
+e=KeyError('VpcEndpointConnectionNotifications')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=766
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_vpc_endpoint_service_policies topkey=Policies id=None
+e=KeyError('describe_vpc_endpoint_service_policies')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_vpc_endpoint_route_table_associations topkey=RouteTableAssociations id=None
+e=KeyError('describe_vpc_endpoint_route_table_associations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_vpc_endpoint_security_group_associations topkey=SecurityGroupAssociations id=None
+e=KeyError('describe_vpc_endpoint_security_group_associations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_vpc_endpoint_service_allowed_principals topkey=AllowedPrincipals id=None
+e=KeyError('describe_vpc_endpoint_service_allowed_principals')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_vpc_endpoint_subnet_associations topkey=SubnetAssociations id=None
+e=KeyError('describe_vpc_endpoint_subnet_associations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_ipam_organization_admin_accounts topkey=OrganizationAdminAccounts id=None
+e=KeyError('describe_ipam_organization_admin_accounts')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_ipam_pools topkey=Pools id=None
+e=KeyError('Pools')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=766
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_ipam_pool_cidrs topkey=Cidrs id=None
+e=KeyError('describe_ipam_pool_cidrs')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_ipam_pool_cidr_allocations topkey=Allocations id=None
+e=KeyError('describe_ipam_pool_cidr_allocations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_ipam_preview_next_cidrs topkey=Cidrs id=None
+e=KeyError('describe_ipam_preview_next_cidrs')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_ipam_resource_discoveries topkey=ResourceDiscoveries id=None
+e=KeyError('ResourceDiscoveries')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=766
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_ipam_resource_discovery_associations topkey=ResourceDiscoveryAssociations id=None
+e=KeyError('ResourceDiscoveryAssociations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=766
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_ipam_scopes topkey=Scopes id=None
+e=KeyError('Scopes')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=766
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_vpc_cidr_block_associations topkey=CidrBlockAssociations id=None
+e=KeyError('describe_vpc_cidr_block_associations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_network_insights_path_subscriptions topkey=NetworkInsightsPathSubscriptions id=None
+e=KeyError('describe_network_insights_path_subscriptions')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_vpc_peering_connection_accepters topkey=VpcPeeringConnectionAccepters id=None
+e=KeyError('describe_vpc_peering_connection_accepters')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_vpc_peering_connection_options topkey=VpcPeeringConnectionOptions id=None
+e=KeyError('describe_vpc_peering_connection_options')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=vpc-lattice descfn=list_target_group_attachments topkey=TargetGroupAttachments id=None
+e=KeyError('list_target_group_attachments')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_vpn_connection_routes topkey=VpnConnectionRoutes id=None
+e=KeyError('describe_vpn_connection_routes')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_vpn_gateway_attachments topkey=VpnGatewayAttachments id=None
+e=KeyError('describe_vpn_gateway_attachments')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=ec2 descfn=describe_vpn_gateway_route_propagations topkey=VpnGatewayRoutePropagations id=None
+e=KeyError('describe_vpn_gateway_route_propagations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=waf descfn=list_rate_based_rules topkey=RateBasedRules id=None
+e=KeyError('RateBasedRules')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=766
+-----------------------------------------------------------------------------
+clfn=waf-regional descfn=list_web_acl_associations topkey=WebACLAssociations id=None
+e=KeyError('list_web_acl_associations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=wafv2 descfn=list_web_acl_associations topkey=WebACLAssociations id=None
+e=KeyError('list_web_acl_associations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=wafv2 descfn=list_web_acl_logging_configurations topkey=WebACLLoggingConfigurations id=None
+e=KeyError('list_web_acl_logging_configurations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=worklink descfn=list_website_certificate_authority_associations topkey=WebsiteCertificateAuthorityAssociations id=None
+e=KeyError('list_website_certificate_authority_associations')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=workspaces descfn=list_connection_aliases topkey=ConnectionAliases id=None
+e=KeyError('list_connection_aliases')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=workspaces descfn=list_directories topkey=Directories id=None
+e=KeyError('list_directories')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=workspaces descfn=list_ip_groups topkey=IpGroups id=None
+e=KeyError('list_ip_groups')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------
+clfn=workspaces descfn=list_workspaces topkey=Workspaces id=None
+e=KeyError('list_workspaces')
+exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+-----------------------------------------------------------------------------

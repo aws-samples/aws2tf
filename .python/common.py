@@ -793,6 +793,11 @@ def call_boto3(type,clfn,descfn,topkey,id):
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             print(exc_type, fname, exc_tb.tb_lineno)
+            with open('boto3-error.plog', 'a') as f:
+               f.write("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
+               f.write(f"{e=}\n")
+               f.write(f"{exc_type=}, {fname=}, {exc_tb.tb_lineno=}\n")
+               f.write("-----------------------------------------------------------------------------\n")
             exit()
 
          #print("--2a")  

@@ -203,7 +203,7 @@ if __name__ == '__main__':
                 i = ti.split(".")[0]
                 id = ti.split(".")[1]
                 if globals.debug: print("DD calling getresource with type="+i+" id="+str(id))
-                print("----- DD ----  calling getresource with type="+i+" id="+str(id))
+                #print("----- DD ----  calling getresource with type="+i+" id="+str(id))
                 common.call_resource(i, id)
         detdep=False
         lc  = lc + 1

@@ -1158,9 +1158,9 @@ aws_appmesh_gateway_route = {
 aws_appmesh_mesh = {
 	"clfn":		"appmesh",
 	"descfn":	"list_meshes",
-	"topkey":	"Meshes",
-	"key":		"MeshName",
-	"filterid":	"MeshName"
+	"topkey":	"meshes",
+	"key":		"meshName",
+	"filterid":	"meshName"
 }
 
 aws_appmesh_route = {
@@ -1854,17 +1854,17 @@ aws_cleanrooms_configured_table = {
 aws_cloud9_environment_ec2 = {
 	"clfn":		"cloud9",
 	"descfn":	"list_environments",
-	"topkey":	"Environments",
+	"topkey":	"environmentIds",
 	"key":		"Name",
 	"filterid":	"Name"
 }
 
 aws_cloud9_environment_membership = {
 	"clfn":		"cloud9",
-	"descfn":	"list_environment_memberships",
-	"topkey":	"Memberships",
-	"key":		"Id",
-	"filterid":	"Id"
+	"descfn":	"describe_environment_memberships",
+	"topkey":	"memberships",
+	"key":		"environmentId",
+	"filterid":	"environmentId"
 }
 
 aws_cloudcontrolapi_resource = {

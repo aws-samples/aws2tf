@@ -5061,11 +5061,11 @@ aws_iam_server_certificate = {
 }
 
 aws_iam_service_linked_role = {
-	"clfn":		"iam",
-	"descfn":	"list_service_linked_roles",
-	"topkey":	"ServiceLinkedRoles",
-	"key":		"Arn",
-	"filterid":	"Arn"
+    "clfn":		"iam",
+	"descfn":	"list_roles",
+	"topkey":	"Roles",
+	"key":		"RoleName",
+	"filterid":	"RoleName"
 }
 
 aws_iam_service_specific_credential = {
@@ -7466,14 +7466,14 @@ aws_redshift_authentication_profile = {
 	"clfn":		"redshift",
 	"descfn":	"describe_authentication_profiles",
 	"topkey":	"AuthenticationProfiles",
-	"key":		"AuthenticationProfileName",
+	"key":		"ClusterIdentifier",
 	"filterid":	"AuthenticationProfileName"
 }
 
 aws_redshift_cluster_iam_roles = {
 	"clfn":		"redshift",
-	"descfn":	"describe_cluster_iam_roles",
-	"topkey":	"ClusterIamRoles",
+	"descfn":	"describe_clusters",
+	"topkey":	"Clusters",
 	"key":		"ClusterIdentifier",
 	"filterid":	"ClusterIdentifier"
 }

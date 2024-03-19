@@ -34,6 +34,13 @@ rproc={}
 rdep={}
 trdep={}
 
+# for common boto3
 mopup={
     "aws_service_discovery_http_namespace":"ns-"
+}
+
+# these skip import - as they can't be imported - or no way to find with boto3
+noimport={
+    "aws_iam_user_group_membership":True,
+    "aws_iam_security_token_service_preferences":True
 }

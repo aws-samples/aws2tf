@@ -3572,11 +3572,11 @@ aws_dynamodb_tag = {
 }
 
 aws_ebs_default_kms_key = {
-	"clfn":		"ebs",
-	"descfn":	"describe_default_kms_key",
-	"topkey":	"DefaultKmsKeyId",
-	"key":		"DefaultKmsKeyId",
-	"filterid":	"DefaultKmsKeyId"
+	"clfn":		"ec2",
+	"descfn":	"get_ebs_default_kms_key_id",
+	"topkey":	"KmsKeyId",
+	"key":		"KmsKeyId",
+	"filterid":	"KmsKeyId"
 }
 
 aws_ebs_encryption_by_default = {
@@ -8556,18 +8556,18 @@ aws_schemas_schema = {
 
 aws_secretsmanager_secret_policy = {
 	"clfn":		"secretsmanager",
-	"descfn":	"get_secret_policy",
-	"topkey":	"Policy",
-	"key":		"Policy",
-	"filterid":	"Policy"
+	"descfn":	"get_resource_policy",
+	"topkey":	"ARN",
+	"key":		"ARN",
+	"filterid":	"ARN"
 }
 
 aws_secretsmanager_secret_rotation = {
 	"clfn":		"secretsmanager",
-	"descfn":	"get_secret_rotation",
-	"topkey":	"Rotation",
-	"key":		"Rotation",
-	"filterid":	"Rotation"
+	"descfn":	"describe_secret",
+	"topkey":	"ARN",
+	"key":		"SecretId",
+	"filterid":	"SecretId"
 }
 
 aws_secretsmanager_secret_version = {

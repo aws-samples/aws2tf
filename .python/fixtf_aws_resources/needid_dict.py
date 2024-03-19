@@ -1274,6 +1274,16 @@ aws_secretsmanager_secret_version = {
   "clfn": "secretsmanager"
 }
 
+aws_secretsmanager_secret_rotation = {
+  "param": "SecretId",
+  "clfn": "secretsmanager"
+}
+
+secretsmanager_secret_policy = {
+  "param": "SecretId",
+  "clfn": "secretsmanager"
+}
+
 aws_securityhub_standards_control = {
   "param": "StandardsSubscriptionArn",
   "clfn": "securityhub"
@@ -1715,6 +1725,8 @@ aws_needid = {
   "aws_sagemaker_model_package_group_policy": aws_sagemaker_model_package_group_policy,
   "aws_schemas_schema": aws_schemas_schema,
   "aws_secretsmanager_secret_version": aws_secretsmanager_secret_version,
+  "aws_secretsmanager_secret_rotation": aws_secretsmanager_secret_rotation,
+  "secretsmanager_secret_policy": secretsmanager_secret_policy,
   "aws_securityhub_standards_control": aws_securityhub_standards_control,
   "aws_serverlessapplicationrepository_cloudformation_stack": aws_serverlessapplicationrepository_cloudformation_stack,
   "aws_service_discovery_instance": aws_service_discovery_instance,

@@ -289,16 +289,7 @@ clfn=cleanrooms descfn=list_configured_tables topkey=ConfiguredTables id=None
 e=KeyError('ConfiguredTables')
 exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=766
 
------------------------------------------------------------------------------
--1->unexpected error in common.call_boto3
-clfn=cloud9 descfn=list_environment_memberships topkey=Memberships id=None
-e=KeyError('list_environment_memberships')
-exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
------------------------------------------------------------------------------
--1->unexpected error in common.call_boto3
-clfn=cloudformation descfn=list_stacks topkey=Stacks id=None
-e=KeyError('Stacks')
-exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=766
+
 -----------------------------------------------------------------------------
 -1->unexpected error in common.call_boto3
 clfn=cloudformation descfn=list_stack_sets topkey=StackSets id=None

@@ -1878,7 +1878,7 @@ aws_cloudcontrolapi_resource = {
 aws_cloudformation_stack = {
 	"clfn":		"cloudformation",
 	"descfn":	"list_stacks",
-	"topkey":	"Stacks",
+	"topkey":	"StackSummaries",
 	"key":		"StackName",
 	"filterid":	"StackName"
 }

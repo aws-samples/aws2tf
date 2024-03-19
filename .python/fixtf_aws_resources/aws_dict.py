@@ -5604,7 +5604,7 @@ aws_kms_ciphertext = {
 
 aws_kms_custom_key_store = {
 	"clfn":		"kms",
-	"descfn":	"list_custom_key_stores",
+	"descfn":	"describe_custom_key_stores",
 	"topkey":	"CustomKeyStores",
 	"key":		"CustomKeyStoreId",
 	"filterid":	"CustomKeyStoreId"

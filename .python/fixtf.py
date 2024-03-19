@@ -231,7 +231,7 @@ def fixtf(ttft,tf):
     if globals.debug: print("callfn="+callfn+" ttft="+ttft)
     globals.lbc=0
     Lines = f1.readlines()
-    print("getfn for fixtf2."+ttft+" "+tf2)
+    #print("getfn for fixtf2."+ttft+" "+tf2)
     #with open(tf2, "a") as f2:
 
     #if globals.acc in tf2:

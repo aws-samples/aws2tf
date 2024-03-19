@@ -29,6 +29,7 @@ if __name__ == '__main__':
     argParser.add_argument("-d", "--debug", help="debug [False]|True")
     argParser.add_argument("-v", "--validate", help="validate [False]|True")
     args = argParser.parse_args()
+    type=""
     # print("args=%s" % args)
 
     # print("args.bucket=%s" % args.bucket)
@@ -41,7 +42,7 @@ if __name__ == '__main__':
     if args.apionly is not None:
         globals.apionly = True
 
-    if args.type is None:
+    if args.type is None or args.type=="":
         print("type is required eg:  -t aws_vpc")
         print("setting to all")
         args.type = "all"
@@ -113,6 +114,8 @@ if __name__ == '__main__':
     globals.regionl = len(region)
     common.aws_tf(region)
     
+    print("---<><><"+ str(type))
+    print("id=   " +str(id))
 
     if type == "all": type = "test"
     elif type == "aws_vpc" or type == "vpc": type = "aws_vpc"
@@ -123,6 +126,7 @@ if __name__ == '__main__':
     elif type == "ecs": type = "aws_ecs_cluster"
     elif type == "lambda": type="aws_lambda_function"
     elif type == "cw" or type == "cloudwatch" or type == "logs": type = "aws_cloudwatch_log_group"
+    elif type == "" or type is None: type = "aws_vpc"
         
 
 ################# -- now we are calling ----   ###############################
@@ -199,6 +203,7 @@ if __name__ == '__main__':
                 i = ti.split(".")[0]
                 id = ti.split(".")[1]
                 if globals.debug: print("DD calling getresource with type="+i+" id="+str(id))
+                print("----- DD ----  calling getresource with type="+i+" id="+str(id))
                 common.call_resource(i, id)
         detdep=False
         lc  = lc + 1

@@ -38,7 +38,7 @@ def call_resource(type, id):
    
 
    with open('processed-resources.log', 'a') as f4:
-      f4.write(type+ " : " +str(id)+"\n")
+      f4.write(str(type)+ " : " +str(id)+"\n")
       
     ## don't get it if we alreay have it
     # if globals.rproc
@@ -379,12 +379,17 @@ def ctrl_c_handler(signum, frame):
 
 
 def check_python_version():
-  version = sys.version_info
-  major = version.major
-  minor = version.minor
-  if major < 3 or (major == 3 and minor < 7):
-    print("This program requires Python 3.7 or later.")
-    sys.exit(1)
+   version = sys.version_info
+   major = version.major
+   minor = version.minor
+   if major < 3 or (major == 3 and minor < 7):
+      print("This program requires Python 3.7 or later.")
+      sys.exit(1)
+# check boto3 version 
+   if boto3.__version__ < '1.34.64':
+      print("This program requires boto3 1.34.64 or later.")
+      print("Try: pip install boto3==1.34.64")
+      sys.exit(1)
 
 
 def aws_tf(region):

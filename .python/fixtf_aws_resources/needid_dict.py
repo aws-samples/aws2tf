@@ -934,6 +934,10 @@ aws_lambda_function_event_invoke_config = {
   "clfn": "lambda"
 }
 
+aws_lb_listener_rule = {
+  "param": "ListenerArn",
+  "clfn": "elbv2"
+}
 
 aws_lb_listener_certificate = {
   "param": "ListenerArn",
@@ -1644,6 +1648,7 @@ aws_needid = {
   "aws_lambda_provisioned_concurrency_config": aws_lambda_provisioned_concurrency_config,
   "aws_lambda_function_event_invoke_config": aws_lambda_function_event_invoke_config,
   "aws_lb_listener_certificate": aws_lb_listener_certificate,
+  "aws_lb_listener_rule": aws_lb_listener_rule,
   "aws_lb_target_group_attachment": aws_lb_target_group_attachment,
   "aws_lb_trust_store": aws_lb_trust_store,
   "aws_lb_trust_store_revocation": aws_lb_trust_store_revocation,

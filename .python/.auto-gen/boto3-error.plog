@@ -1298,38 +1298,19 @@ exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=766
 clfn=kinesisvideo descfn=list_streams topkey=StreamNames id=None
 e=KeyError('StreamNames')
 exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=766
------------------------------------------------------------------------------
-clfn=kms descfn=list_custom_key_stores topkey=CustomKeyStores id=None
-e=KeyError('list_custom_key_stores')
-exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
------------------------------------------------------------------------------
-clfn=kms descfn=list_external_keys topkey=ExternalKeys id=None
-e=KeyError('list_external_keys')
-exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
------------------------------------------------------------------------------
-clfn=kms descfn=list_replica_keys topkey=ReplicaKeys id=None
-e=KeyError('list_replica_keys')
-exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
------------------------------------------------------------------------------
-clfn=kms descfn=list_replica_keys topkey=ReplicaKeys id=None
-e=KeyError('list_replica_keys')
-exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+
+
 -----------------------------------------------------------------------------
 clfn=lakeformation descfn=list_resource_lf_tags topkey=LFTags id=None
 e=KeyError('list_resource_lf_tags')
 exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
------------------------------------------------------------------------------
-clfn=lambda descfn=list_layer_version_permissions topkey=LayerVersionPermissions id=None
-e=KeyError('list_layer_version_permissions')
-exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
+
+
 -----------------------------------------------------------------------------
 clfn=elbv2 descfn=describe_load_balancer_policies topkey=PolicyDescriptions id=None
 e=KeyError('describe_load_balancer_policies')
 exc_type=<class 'KeyError'>, fname='common.py', exc_tb.tb_lineno=708
------------------------------------------------------------------------------
-clfn=elbv2 descfn=describe_rules topkey=Rules id=None
-e=ClientError('An error occurred (ValidationError) when calling the DescribeRules operation: You must specify either listener rule ARNs or a listener ARN')
-exc_type=<class 'botocore.exceptions.ClientError'>, fname='common.py', exc_tb.tb_lineno=765
+
 -----------------------------------------------------------------------------
 clfn=license-manager descfn=list_associations topkey=Associations id=None
 e=KeyError('list_associations')

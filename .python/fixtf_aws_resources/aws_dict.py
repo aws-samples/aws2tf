@@ -5612,10 +5612,10 @@ aws_kms_custom_key_store = {
 
 aws_kms_external_key = {
 	"clfn":		"kms",
-	"descfn":	"list_external_keys",
-	"topkey":	"ExternalKeys",
+	"descfn":	"list_keys",
+	"topkey":	"Keys",
 	"key":		"KeyId",
-	"filterid":	"KeyId"
+	"filterid":	"KeyArn"
 }
 
 aws_kms_grant = {
@@ -5637,16 +5637,16 @@ aws_kms_key_policy = {
 
 aws_kms_replica_external_key = {
 	"clfn":		"kms",
-	"descfn":	"list_replica_keys",
-	"topkey":	"ReplicaKeys",
+	"descfn":	"list_keys",
+	"topkey":	"Keys",
 	"key":		"KeyId",
 	"filterid":	"KeyId"
 }
 
 aws_kms_replica_key = {
 	"clfn":		"kms",
-	"descfn":	"list_replica_keys",
-	"topkey":	"ReplicaKeys",
+	"descfn":	"list_keys",
+	"topkey":	"Keys",
 	"key":		"KeyId",
 	"filterid":	"KeyId"
 }
@@ -5719,8 +5719,8 @@ aws_lambda_invocation = {
 
 aws_lambda_layer_version_permission = {
 	"clfn":		"lambda",
-	"descfn":	"list_layer_version_permissions",
-	"topkey":	"LayerVersionPermissions",
+	"descfn":	"list_layers",
+	"topkey":	"Layers",
 	"key":		"LayerName",
 	"filterid":	"LayerName"
 }
@@ -5735,10 +5735,10 @@ aws_lambda_provisioned_concurrency_config = {
 
 aws_lb_cookie_stickiness_policy = {
 	"clfn":		"elbv2",
-	"descfn":	"describe_load_balancer_policies",
-	"topkey":	"PolicyDescriptions",
-	"key":		"PolicyName",
-	"filterid":	"PolicyName"
+	"descfn":	"describe_load_balancers",
+	"topkey":	"LoadBalancers",
+	"key":		"LoadBalancerArn",
+	"filterid":	"Names"
 }
 
 aws_lb_listener = {

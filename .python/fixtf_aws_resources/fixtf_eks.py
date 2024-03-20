@@ -36,11 +36,11 @@ def aws_eks_cluster(t1,tt1,tt2,flag1,flag2):
         ##tt2=tt2.strip('\"')
         t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
         common.add_dependancy("aws_iam_role",tt2)
-    elif tt1 == "role_arn":
-        ##tt2=tt2.strip('\"')
-        if ":" in tt2: tt2=tt2.split("/")[-1]
-        t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
-        common.add_dependancy("aws_iam_role",tt2)
+#    elif tt1 == "role_arn":
+#        ##tt2=tt2.strip('\"')
+#        if ":" in tt2: tt2=tt2.split("/")[-1]
+#        t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+#        common.add_dependancy("aws_iam_role",tt2)
     elif tt1 == "key_arn":
         ##tt2=tt2.strip('\"')
         if ":" in tt2: tt2="k-"+tt2.split("/")[-1]

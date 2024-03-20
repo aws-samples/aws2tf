@@ -352,8 +352,10 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
     return t1,skip
 
 def deref_role_arn(t1,tt1,tt2):
-    ##tt2=tt2.strip('\"')
-    if ":role" in tt2:
+
+    if ":role/aws-service-role" in tt2:	t1=fixtf.globals_replace(t1,tt1,tt2)
+    
+    elif ":role" in tt2:
         tt2=tt2.split('/')[-1]
         t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
         common.add_dependancy("aws_iam_role",tt2)

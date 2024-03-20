@@ -35,8 +35,7 @@ def aws_vpclattice_service_network_vpc_association(t1,tt1,tt2,flag1,flag2):
         t1=tt1 + " = aws_vpclattice_service_network." + tt2 + ".id\n"
         common.add_dependancy("aws_vpclattice_service_network",tt2)
     
-    elif tt1 == "security_group_ids": 
-        t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+    ##elif tt1 == "security_group_ids":  t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
     return skip,t1,flag1,flag2
 
 

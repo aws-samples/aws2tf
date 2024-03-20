@@ -27,8 +27,8 @@ def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
         ##tt2=tt2.strip('\"')
         if tt2 == "null": skip=1
 
-    elif tt1 == "subnet_ids":  t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
-    elif tt1 == "security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+    ##elif tt1 == "subnet_ids":  t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
+    ##elif tt1 == "security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
 
         #t1=tt1 + " = aws_vpc_config." + tt2 + ".arn\n"
         #common.add_dependancy("aws_vpc_config",tt2)

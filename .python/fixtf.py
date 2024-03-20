@@ -6,6 +6,7 @@ import base64
 import resources
 import common
 
+from fixtf_aws_resources import fixtf_common
 from fixtf_aws_resources import fixtf_accessanalyzer
 from fixtf_aws_resources import fixtf_acm
 from fixtf_aws_resources import fixtf_acm_pca
@@ -266,7 +267,9 @@ def fixtf(ttft,tf):
                 
           
             try:
+
                 skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
+                skip,t1,flag1,flag2=fixtf_common.aws_common(ttft,t1,tt1,tt2,flag1,flag2)
             except Exception as e:
                 print(f"{e=}")
                 exc_type, exc_obj, exc_tb = sys.exc_info()

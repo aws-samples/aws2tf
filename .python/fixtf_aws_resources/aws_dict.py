@@ -3309,10 +3309,10 @@ aws_docdb_cluster = {
 
 aws_docdb_cluster_instance = {
 	"clfn":		"docdb",
-	"descfn":	"describe_db_cluster_instances",
-	"topkey":	"DBClusterInstances",
-	"key":		"DBClusterIdentifier",
-	"filterid":	"DBClusterIdentifier"
+	"descfn":	"describe_db_instances",
+	"topkey":	"DBInstances",
+	"key":		"DBInstanceIdentifier",
+	"filterid":	"DBInstanceIdentifier"
 }
 
 aws_docdb_cluster_parameter_group = {
@@ -8429,8 +8429,8 @@ aws_sagemaker_notebook_instance = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_notebook_instances",
 	"topkey":	"NotebookInstances",
-	"key":		"NotebookInstanceArn",
-	"filterid":	"NotebookInstanceArn"
+	"key":		"NotebookInstanceName",
+	"filterid":	"NotebookInstanceName"
 }
 
 aws_sagemaker_notebook_instance_lifecycle_configuration = {

@@ -7,7 +7,7 @@ def aws_db_parameter_group(t1,tt1,tt2,flag1,flag2):
 
 def aws_db_subnet_group(t1,tt1,tt2,flag1,flag2):
     skip=0
-    if tt1 == "subnet_ids":  t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
+    ##if tt1 == "subnet_ids":  t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
     return skip,t1,flag1,flag2
 
 def aws_db_instance(t1,tt1,tt2,flag1,flag2):
@@ -70,10 +70,9 @@ def aws_db_snapshot_copy(t1,tt1,tt2,flag1,flag2):
 
 def aws_rds_cluster(t1,tt1,tt2,flag1,flag2):
     skip=0
-    if tt1 == "vpc_security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
-    elif tt1 == "iam_roles":    
-        t1=fixtf.deref_role_arn_array(t1,tt1,tt2)
-    elif tt1 == "db_cluster_parameter_group_name":
+    ##if tt1 == "vpc_security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+    ## if tt1 == "iam_roles":  t1=fixtf.deref_role_arn_array(t1,tt1,tt2)
+    if tt1 == "db_cluster_parameter_group_name":
         ##tt2=tt2.strip('\"')
         t1=tt1 + " = aws_rds_cluster_parameter_group." + tt2 + ".id\n"
         common.add_dependancy("aws_rds_cluster_parameter_group",tt2)
@@ -81,10 +80,8 @@ def aws_rds_cluster(t1,tt1,tt2,flag1,flag2):
         ##tt2=tt2.strip('\"')
         t1=tt1 + " = aws_db_subnet_group." + tt2 + ".id\n"
         common.add_dependancy("aws_db_subnet_group",tt2)
-    elif tt1 == "kms_key_id":
-        t1=fixtf.deref_kms_key(t1,tt1,tt2)
-    #elif tt1 == "cluster_members":
-    #    t1=deref_array(t1,tt1,tt2,"aws_db_instance","*",skip)
+    #elif tt1 == "kms_key_id": t1=fixtf.deref_kms_key(t1,tt1,tt2)
+    ##elif tt1 == "cluster_members": t1=fixtf.deref_array(t1,tt1,tt2,"aws_db_instance","*",skip)
     
     return skip,t1,flag1,flag2
 

@@ -9,23 +9,25 @@ import fixtf
 from datetime import datetime
 import resources
 from get_aws_resources import aws_athena
+from get_aws_resources import aws_apigateway
 from get_aws_resources import aws_application_autoscaling
+from get_aws_resources import aws_config
 from get_aws_resources import aws_kms
 from get_aws_resources import aws_ec2
 from get_aws_resources import aws_ecs
 from get_aws_resources import aws_eks
 from get_aws_resources import aws_elbv2
-from get_aws_resources import aws_iam
-from get_aws_resources import aws_vpc_lattice
-from get_aws_resources import aws_logs
-from get_aws_resources import aws_config
-from get_aws_resources import aws_lambda
-from get_aws_resources import aws_redshift
-from get_aws_resources import aws_secretsmanager
-from get_aws_resources import aws_kinesis
 from get_aws_resources import aws_glue
+from get_aws_resources import aws_iam
+from get_aws_resources import aws_kinesis
+from get_aws_resources import aws_logs
+from get_aws_resources import aws_lambda
 from get_aws_resources import aws_rds
-from get_aws_resources import aws_apigateway
+from get_aws_resources import aws_redshift
+from get_aws_resources import aws_sagemaker
+from get_aws_resources import aws_secretsmanager
+from get_aws_resources import aws_vpc_lattice
+
 from fixtf_aws_resources import needid_dict
 
 

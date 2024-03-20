@@ -2,14 +2,17 @@
 import boto3
 import signal
 import argparse
+import glob
+import os
+import sys
+
 from get_aws_resources import aws_s3
 import common
 import resources
 import globals
-import glob
+
 import stacks
-import os
-import sys
+
 
 
 if __name__ == '__main__':

@@ -254,10 +254,9 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 	try:
 		#print("hi")
 		if tt1 == "subnet_id":
-			##tt2=tt2.strip('\"')
 			t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
 			common.add_dependancy("aws_subnet",tt2)
-		elif tt1 == "vpc_security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+		##elif tt1 == "vpc_security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
 
 		elif tt1 == "ipv6_addresses":
 			##tt2=tt2.strip('\"')
@@ -339,7 +338,7 @@ def aws_launch_template(t1,tt1,tt2,flag1,flag2):
         ##tt2=tt2.strip('\"')
         if tt2 == "[]": 
             skip=1
-    elif tt1 == "vpc_security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+    ##elif tt1 == "vpc_security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
     elif tt1 == "throughput":
         ##tt2=tt2.strip('\"')
         if tt2 == "0": skip=1
@@ -522,7 +521,7 @@ def  aws_security_group(t1,tt1,tt2,flag1,flag2):
         if len(tt2) > 0: flag1=True
 
     #CIRCULAR reference problems:
-    #if tt1 == "security_groups": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+    ##if tt1 == "security_groups": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
 	# fix via ingress /egress rules - ?
     elif tt1 == "egress" or globals.lbc > 0 :
         ##tt2=tt2.strip('\"')
@@ -621,9 +620,9 @@ def aws_vpc_endpoint(t1,tt1,tt2,flag1,flag2):
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
         common.add_dependancy("aws_vpc",tt2)
 
-    elif tt1 == "subnet_ids":  t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
-    elif tt1 == "security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
-    elif tt1 == "route_table_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_route_table","rtb-",skip)
+    ##elif tt1 == "subnet_ids":  t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
+    ##elif tt1 == "security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+    ##elif tt1 == "route_table_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_route_table","rtb-",skip)
     return skip,t1,flag1,flag2
 
 def aws_vpc_dhcp_options(t1,tt1,tt2,flag1,flag2):

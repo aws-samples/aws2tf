@@ -602,8 +602,7 @@ def  aws_vpc(t1,tt1,tt2,skipipv6,flag2):
     elif tt1 == "ipv6_ipam_pool_id":
         if skipipv6: skip = 1
     elif tt1 == "ipv6_netmask_length":
-        if tt2 == "0":
-            skip=1
+        if tt2 == "0":  skip=1
     elif tt1 == "owner_id": skip=1
     #            
     return skip,t1,skipipv6,flag2

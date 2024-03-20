@@ -6,7 +6,7 @@ import base64
 import resources
 import common
 
-from fixtf_aws_resources import fixtf_common
+from fixtf_aws_resources import aws_common
 from fixtf_aws_resources import fixtf_accessanalyzer
 from fixtf_aws_resources import fixtf_acm
 from fixtf_aws_resources import fixtf_acm_pca
@@ -262,14 +262,12 @@ def fixtf(ttft,tf):
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                 print(exc_type, fname, exc_tb.tb_lineno)
                 print("** no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
-                #print("t1="+t1) 
                 nofind=1
                 
-          
             try:
-
+                skip,t1,flag1,flag2=aws_common.aws_common(ttft,t1,tt1,tt2,flag1,flag2)
                 skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
-                skip,t1,flag1,flag2=fixtf_common.aws_common(ttft,t1,tt1,tt2,flag1,flag2)
+                #print("t1="+t1)
             except Exception as e:
                 print(f"{e=}")
                 exc_type, exc_obj, exc_tb = sys.exc_info()

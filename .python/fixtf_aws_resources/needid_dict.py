@@ -654,6 +654,11 @@ aws_efs_file_system_policy = {
   "clfn": "efs"
 }
 
+aws_eks_access_entry = {
+  "param": "clusterName",
+  "clfn": "eks"
+}
+
 aws_eks_addon = {
   "param": "clusterName",
   "clfn": "eks"
@@ -675,6 +680,11 @@ aws_eks_identity_provider_config = {
 }
 
 aws_eks_node_group = {
+  "param": "clusterName",
+  "clfn": "eks"
+}
+
+aws_eks_pod_identity_association = {
   "param": "clusterName",
   "clfn": "eks"
 }
@@ -1601,11 +1611,13 @@ aws_needid = {
   "aws_ecs_task_set": aws_ecs_task_set,
   "aws_efs_backup_policy": aws_efs_backup_policy,
   "aws_efs_file_system_policy": aws_efs_file_system_policy,
+  "aws_eks_access_entry": aws_eks_access_entry,
   "aws_eks_addon": aws_eks_addon,
   "aws_eks_cluster_auth": aws_eks_cluster_auth,
   "aws_eks_fargate_profile": aws_eks_fargate_profile,
   "aws_eks_identity_provider_config": aws_eks_identity_provider_config,
   "aws_eks_node_group": aws_eks_node_group,
+  "aws_eks_pod_identity_association": aws_eks_pod_identity_association,
   "aws_elastic_beanstalk_configuration_template": aws_elastic_beanstalk_configuration_template,
   "aws_elastic_beanstalk_hosted_zone": aws_elastic_beanstalk_hosted_zone,
   "aws_elasticsearch_domain": aws_elasticsearch_domain,

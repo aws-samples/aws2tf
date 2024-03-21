@@ -739,7 +739,7 @@ def call_boto3(type,clfn,descfn,topkey,id):
                
                #print(str(response))
 
-            elif descfn == "list_fargate_profiles" or descfn == "list_nodegroups" or descfn == "list_identity_provider_configs" or descfn == "list_addons":
+            elif descfn == "describe_pod_identity_association" or descfn == "list_fargate_profiles" or descfn == "list_nodegroups" or descfn == "list_identity_provider_configs" or descfn == "list_addons":
                #print("--1a "+str(id))
                for page in paginator.paginate(clusterName=id): response.extend(page[topkey])
             
@@ -782,11 +782,13 @@ def call_boto3(type,clfn,descfn,topkey,id):
 
          except botocore.exceptions.OperationNotPageableError as err:
                print(f"{err=}")
-               #print("calling non paginated fn "+str(descfn))
+               print("calling non paginated fn "+str(descfn)+" id="+str(id))
                try:
                   getfn = getattr(client, descfn)
-                  response1 = getfn()
-                  response=response1[topkey]
+                  if id is None:
+                     print("id None")
+                     response1 = getfn()
+                     response=response1[topkey]
                except botocore.exceptions.ParamValidationError as err:
                   print(f"{err=}"+","+type+","+clfn)
                   #print("ParamValidationError 2 in common.call_boto3: type="+type+" clfn="+clfn)

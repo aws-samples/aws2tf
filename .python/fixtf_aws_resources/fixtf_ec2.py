@@ -485,7 +485,7 @@ def aws_route_table_association(t1,tt1,tt2,flag1,flag2):
     if tt1 == "gateway_id":
         ##tt2=tt2.strip('\"')
         if tt2 == "null": skip=1
-    print("------Yo t1="+t1)
+    #print("------Yo t1="+t1)
     return skip,t1,flag1,flag2
 
 def aws_security_group_rule(t1,tt1,tt2,flag1,flag2):

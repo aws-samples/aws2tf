@@ -4133,10 +4133,10 @@ aws_eip_association = {
 
 aws_eks_pod_identity_association = {
 	"clfn":		"eks",
-	"descfn":	"describe_pod_identity_association",
-	"topkey":	"podIdentity",
-	"key":		"podIdentityArn",
-	"filterid":	"podIdentityArn"
+	"descfn":	"list_pod_identity_associations",
+	"topkey":	"associations",
+	"key":		"associationId",
+	"filterid":	"associationId"
 }
 
 aws_elastic_beanstalk_application = {

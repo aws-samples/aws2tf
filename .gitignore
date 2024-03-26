@@ -5,6 +5,7 @@ aws.tf.sav
 terraform.tfstate*
 *.txt
 *.zip
+*.plog
 *.tf
 *.bak
 *.out
@@ -33,6 +34,7 @@ tfplan
 plan*
 **/tfplan
 **/plan*
+**/*.plog
 __pycache__
 .python/data/tfplan
 .python/data/*.log
@@ -40,7 +42,3 @@ __pycache__
 .python/bugs.md
 .scripts/*
 .python/provider-data/terraform-provider-aws
-.python/.auto-gen/boto3-error.plog
-.python/data/boto3-error.plog
-.python/.auto-gen/boto3-error.plog
-.python/.auto-gen/boto3-error.plog

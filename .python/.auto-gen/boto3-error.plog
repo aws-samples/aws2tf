@@ -1638,9 +1638,8 @@ e=KeyError('describe_vpc_peering_connection_accepters')
 type=aws_vpc_peering_connection_options clfn=ec2 descfn=describe_vpc_peering_connection_options topkey=VpcPeeringConnectionOptions id=None
 e=KeyError('describe_vpc_peering_connection_options')
 -----------------------------------------------------------------------------
-type=aws_vpclattice_target_group_attachment clfn=vpc-lattice descfn=list_target_group_attachments topkey=TargetGroupAttachments id=None
-e=KeyError('list_target_group_attachments')
------------------------------------------------------------------------------
+
+
 type=aws_vpn_connection_route clfn=ec2 descfn=describe_vpn_connection_routes topkey=VpnConnectionRoutes id=None
 e=KeyError('describe_vpn_connection_routes')
 -----------------------------------------------------------------------------

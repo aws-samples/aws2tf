@@ -41,6 +41,9 @@ mopup={
 
 # these skip import - as they can't be imported - or no way to find with boto3
 noimport={
-    "aws_iam_user_group_membership":True,
-    "aws_iam_security_token_service_preferences":True
+    "aws_iam_user_group_membership": True,
+    "aws_iam_security_token_service_preferences": True,
+    "aws_ebs_snapshot_copy": True,
+    "aws_ebs_snapshot_import": True,
+    "aws_vpclattice_target_group_attachment": True
 }

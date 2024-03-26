@@ -40,3 +40,7 @@ __pycache__
 .python/bugs.md
 .scripts/*
 .python/provider-data/terraform-provider-aws
+.python/.auto-gen/boto3-error.plog
+.python/data/boto3-error.plog
+.python/.auto-gen/boto3-error.plog
+.python/.auto-gen/boto3-error.plog

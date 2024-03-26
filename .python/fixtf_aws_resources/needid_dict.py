@@ -654,6 +654,11 @@ aws_efs_file_system_policy = {
   "clfn": "efs"
 }
 
+aws_efs_mount_targets = {
+  "param": "FileSystemId,MountTargetId,AccessPointId",
+  "clfn": "efs"
+}
+
 aws_eks_access_entry = {
   "param": "clusterName",
   "clfn": "eks"
@@ -1616,6 +1621,7 @@ aws_needid = {
   "aws_eks_cluster_auth": aws_eks_cluster_auth,
   "aws_eks_fargate_profile": aws_eks_fargate_profile,
   "aws_eks_identity_provider_config": aws_eks_identity_provider_config,
+  "aws_efs_mount_targets": aws_efs_mount_targets,
   "aws_eks_node_group": aws_eks_node_group,
   "aws_eks_pod_identity_association": aws_eks_pod_identity_association,
   "aws_elastic_beanstalk_configuration_template": aws_elastic_beanstalk_configuration_template,

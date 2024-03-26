@@ -3580,15 +3580,15 @@ aws_ebs_default_kms_key = {
 }
 
 aws_ebs_encryption_by_default = {
-	"clfn":		"ebs",
-	"descfn":	"describe_ebs_encryption_by_default",
+	"clfn":		"ec2",
+	"descfn":	"get_ebs_encryption_by_default",
 	"topkey":	"EbsEncryptionByDefault",
 	"key":		"EbsEncryptionByDefault",
 	"filterid":	"EbsEncryptionByDefault"
 }
 
 aws_ebs_snapshot = {
-	"clfn":		"ebs",
+	"clfn":		"ec2",
 	"descfn":	"describe_snapshots",
 	"topkey":	"Snapshots",
 	"key":		"SnapshotId",
@@ -3612,7 +3612,7 @@ aws_ebs_snapshot_import = {
 }
 
 aws_ebs_volume = {
-	"clfn":		"ebs",
+	"clfn":		"ec2",
 	"descfn":	"describe_volumes",
 	"topkey":	"Volumes",
 	"key":		"VolumeId",
@@ -3621,8 +3621,8 @@ aws_ebs_volume = {
 
 aws_ec2_availability_zone_group = {
 	"clfn":		"ec2",
-	"descfn":	"describe_availability_zone_groups",
-	"topkey":	"AvailabilityZoneGroups",
+	"descfn":	"describe_availability_zones",
+	"topkey":	"AvailabilityZones",
 	"key":		"GroupName",
 	"filterid":	"GroupName"
 }
@@ -3661,8 +3661,8 @@ aws_ec2_client_vpn_endpoint = {
 
 aws_ec2_client_vpn_network_association = {
 	"clfn":		"ec2",
-	"descfn":	"describe_client_vpn_network_associations",
-	"topkey":	"Associations",
+	"descfn":	"describe_client_vpn_endpoints",
+	"topkey":	"ClientVpnEndpoints",
 	"key":		"ClientVpnEndpointId",
 	"filterid":	"ClientVpnEndpointId"
 }
@@ -3717,7 +3717,7 @@ aws_ec2_instance_state = {
 
 aws_ec2_local_gateway_route = {
 	"clfn":		"ec2",
-	"descfn":	"describe_local_gateway_routes",
+	"descfn":	"describe_local_gateway_route_tables",
 	"topkey":	"LocalGatewayRoutes",
 	"key":		"LocalGatewayRouteTableId",
 	"filterid":	"LocalGatewayRouteTableId"
@@ -3741,18 +3741,18 @@ aws_ec2_managed_prefix_list = {
 
 aws_ec2_managed_prefix_list_entry = {
 	"clfn":		"ec2",
-	"descfn":	"describe_managed_prefix_list_entries",
-	"topkey":	"Entries",
+	"descfn":	"describe_managed_prefix_lists",
+	"topkey":	"PrefixLists",
 	"key":		"PrefixListId",
 	"filterid":	"PrefixListId"
 }
 
 aws_ec2_subnet_cidr_reservation = {
 	"clfn":		"ec2",
-	"descfn":	"describe_subnet_cidr_reservations",
-	"topkey":	"SubnetCidrReservations",
-	"key":		"SubnetCidrReservationId",
-	"filterid":	"SubnetCidrReservationId"
+	"descfn":	"describe_subnets",
+	"topkey":	"Subnets",
+	"key":		"CidrBlock",
+	"filterid":	"CidrBlock"
 }
 
 aws_ec2_tag = {
@@ -3773,10 +3773,10 @@ aws_ec2_traffic_mirror_filter = {
 
 aws_ec2_traffic_mirror_filter_rule = {
 	"clfn":		"ec2",
-	"descfn":	"describe_traffic_mirror_filter_rules",
-	"topkey":	"TrafficMirrorFilterRules",
-	"key":		"TrafficMirrorFilterRuleId",
-	"filterid":	"TrafficMirrorFilterRuleId"
+	"descfn":	"describe_traffic_mirror_filters",
+	"topkey":	"TrafficMirrorFilters",
+	"key":		"TrafficMirrorFilterId",
+	"filterid":	"TrafficMirrorFilterId"
 }
 
 aws_ec2_traffic_mirror_session = {
@@ -3837,18 +3837,18 @@ aws_ec2_transit_gateway_multicast_domain_association = {
 
 aws_ec2_transit_gateway_multicast_group_member = {
 	"clfn":		"ec2",
-	"descfn":	"describe_transit_gateway_multicast_groups",
-	"topkey":	"TransitGatewayMulticastGroups",
-	"key":		"TransitGatewayMulticastGroupId",
-	"filterid":	"TransitGatewayMulticastGroupId"
+	"descfn":	"describe_transit_gateway_multicast_domains",
+	"topkey":	"TransitGatewayMulticastDomains",
+	"key":		"TransitGatewayMulticastDomainId",
+	"filterid":	"TransitGatewayMulticastDomainId"
 }
 
 aws_ec2_transit_gateway_multicast_group_source = {
 	"clfn":		"ec2",
-	"descfn":	"describe_transit_gateway_multicast_groups",
-	"topkey":	"TransitGatewayMulticastGroups",
-	"key":		"TransitGatewayMulticastGroupId",
-	"filterid":	"TransitGatewayMulticastGroupId"
+    "descfn":	"describe_transit_gateway_multicast_domains",
+	"topkey":	"TransitGatewayMulticastDomains",
+	"key":		"TransitGatewayMulticastDomainId",
+	"filterid":	"TransitGatewayMulticastDomainId"
 }
 
 aws_ec2_transit_gateway_peering_attachment = {
@@ -3869,23 +3869,23 @@ aws_ec2_transit_gateway_peering_attachment_accepter = {
 
 aws_ec2_transit_gateway_policy_table = {
 	"clfn":		"ec2",
-	"descfn":	"describe_transit_gateway_policy_tables",
-	"topkey":	"TransitGatewayPolicyTables",
+	"descfn":	"get_transit_gateway_policy_table_entries",
+	"topkey":	"TransitGatewayPolicyTableEntries",
 	"key":		"TransitGatewayPolicyTableId",
 	"filterid":	"TransitGatewayPolicyTableId"
 }
 
 aws_ec2_transit_gateway_policy_table_association = {
 	"clfn":		"ec2",
-	"descfn":	"describe_transit_gateway_policy_table_associations",
-	"topkey":	"TransitGatewayPolicyTableAssociations",
-	"key":		"TransitGatewayPolicyTableAssociationId",
-	"filterid":	"TransitGatewayPolicyTableAssociationId"
+	"descfn":	"get_transit_gateway_policy_table_associations",
+	"topkey":	"Associations",
+	"key":		"TransitGatewayPolicyTableId",
+	"filterid":	"TransitGatewayPolicyTableId"
 }
 
 aws_ec2_transit_gateway_prefix_list_reference = {
 	"clfn":		"ec2",
-	"descfn":	"describe_transit_gateway_prefix_list_references",
+	"descfn":	"get_transit_gateway_prefix_list_references",
 	"topkey":	"TransitGatewayPrefixListReferences",
 	"key":		"TransitGatewayPrefixListReferenceId",
 	"filterid":	"TransitGatewayPrefixListReferenceId"
@@ -3909,10 +3909,10 @@ aws_ec2_transit_gateway_route_table = {
 
 aws_ec2_transit_gateway_route_table_association = {
 	"clfn":		"ec2",
-	"descfn":	"describe_transit_gateway_route_table_associations",
-	"topkey":	"TransitGatewayRouteTableAssociations",
-	"key":		"TransitGatewayRouteTableAssociationId",
-	"filterid":	"TransitGatewayRouteTableAssociationId"
+	"descfn":	"get_transit_gateway_policy_table_associations",
+	"topkey":	"Associations",
+	"key":		"TransitGatewayPolicyTableId",
+	"filterid":	"TransitGatewayPolicyTableId"
 }
 
 aws_ec2_transit_gateway_vpc_attachment = {
@@ -4101,10 +4101,10 @@ aws_efs_mount_target = {
 
 aws_efs_replication_configuration = {
 	"clfn":		"efs",
-	"descfn":	"describe_replication_configuration",
-	"topkey":	"ReplicationConfiguration",
-	"key":		"ReplicationConfiguration",
-	"filterid":	"ReplicationConfiguration"
+	"descfn":	"describe_replication_configurations",
+	"topkey":	"Replications",
+	"key":		"FileSystemId ",
+	"filterid":	"SourceFileSystemId "
 }
 
 aws_egress_only_internet_gateway = {

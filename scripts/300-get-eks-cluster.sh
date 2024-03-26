@@ -56,19 +56,6 @@ if [ "$kcount" -gt "0" ]; then
             terraform state rm $ts >t2.txt
         done
 
-        ## this needs to loop !!
-        ## this is now done in NatGW code
-        #natgw=`$AWS ec2 describe-nat-gateways --filter "Name=vpc-id,Values=${tcmd}"
-        #cnatgw=`echo $natgw | jq ".NatGateways | length"`
-        #echo "found $cnatgw NAT GW's"
-        #if [ "$cnatgw" -gt "0" ]; then
-        #    np=`expr $cnatgw - 1`
-        #    for g in `seq 0 $cnatgw`; do
-        #        eipall=`echo $natgw | jq ".NatGateways[(${g})].NatGatewayAddresses[0].AllocationId" | tr -d '"'`
-        #        ../../scripts/get-eip.sh $eipall
-        #    done
-        #fi
-
         ../../scripts/120*.sh $tcmd # igw
         ../../scripts/130*.sh $tcmd # nat gw
         # still need to call as eip is nested from nat gw

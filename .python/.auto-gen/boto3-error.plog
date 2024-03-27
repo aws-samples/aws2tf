@@ -76,26 +76,17 @@ e=KeyError('list_framework_shares')
 type=aws_auditmanager_organization_admin_account_registration clfn=auditmanager descfn=list_organization_admin_accounts topkey=OrganizationAdminAccounts id=None
 e=KeyError('list_organization_admin_accounts')
 -----------------------------------------------------------------------------
-type=aws_autoscaling_attachment clfn=autoscaling descfn=list_attachments topkey=Attachments id=None
-e=KeyError('list_attachments')
------------------------------------------------------------------------------
 type=aws_autoscaling_group_tag clfn=autoscaling descfn=list_tags topkey=Tags id=None
 e=KeyError('list_tags')
 -----------------------------------------------------------------------------
 type=aws_autoscaling_lifecycle_hook clfn=autoscaling descfn=list_lifecycle_hooks topkey=LifecycleHooks id=None
 e=KeyError('list_lifecycle_hooks')
 -----------------------------------------------------------------------------
-type=aws_autoscaling_notification clfn=autoscaling descfn=list_notifications topkey=Notifications id=None
-e=KeyError('list_notifications')
------------------------------------------------------------------------------
 type=aws_autoscaling_policy clfn=autoscaling descfn=list_policies topkey=Policies id=None
 e=KeyError('list_policies')
 -----------------------------------------------------------------------------
 type=aws_autoscaling_schedule clfn=autoscaling descfn=list_schedules topkey=Schedules id=None
 e=KeyError('list_schedules')
------------------------------------------------------------------------------
-type=aws_autoscaling_traffic_source_attachment clfn=autoscaling descfn=list_traffic_source_attachments topkey=TrafficSourceAttachments id=None
-e=KeyError('list_traffic_source_attachments')
 -----------------------------------------------------------------------------
 type=aws_autoscalingplans_scaling_plan clfn=autoscaling-plans descfn=list_scaling_plans topkey=ScalingPlans id=None
 e=KeyError('list_scaling_plans')
@@ -295,17 +286,11 @@ e=KeyError('list_associated_approval_rule_templates')
 type=aws_codecommit_repository clfn=codecommit descfn=list_repositories topkey=Repositories id=None
 e=KeyError('Repositories')
 -----------------------------------------------------------------------------
-type=aws_codecommit_trigger clfn=codecommit descfn=list_repository_triggers topkey=RepositoryTriggers id=None
-e=KeyError('list_repository_triggers')
------------------------------------------------------------------------------
 type=aws_codedeploy_app clfn=codedeploy descfn=list_apps topkey=Apps id=None
 e=KeyError('list_apps')
 -----------------------------------------------------------------------------
 type=aws_codedeploy_deployment_config clfn=codedeploy descfn=list_deployment_configs topkey=DeploymentConfigs id=None
 e=KeyError('DeploymentConfigs')
------------------------------------------------------------------------------
-type=aws_codegurureviewer_repository_association clfn=codeguru-reviewer descfn=list_repository_associations topkey=RepositoryAssociations id=None
-e=KeyError('RepositoryAssociations')
 -----------------------------------------------------------------------------
 type=aws_codepipeline clfn=codepipeline descfn=list_pipelines topkey=Pipelines id=None
 e=KeyError('Pipelines')
@@ -493,15 +478,6 @@ e=KeyError('describe_s3_endpoints')
 type=aws_docdbelastic_cluster clfn=docdb-elastic descfn=describe_clusters topkey=Clusters id=None
 e=KeyError('describe_clusters')
 -----------------------------------------------------------------------------
-type=aws_dx_bgp_peer clfn=directconnect descfn=describe_bgp_peers topkey=BgpPeers id=None
-e=KeyError('describe_bgp_peers')
------------------------------------------------------------------------------
-type=aws_dx_connection_association clfn=directconnect descfn=describe_connection_associations topkey=ConnectionAssociations id=None
-e=KeyError('describe_connection_associations')
------------------------------------------------------------------------------
-type=aws_dx_connection_confirmation clfn=directconnect descfn=describe_confirmations topkey=Confirmations id=None
-e=KeyError('describe_confirmations')
------------------------------------------------------------------------------
 type=aws_dx_gateway clfn=directconnect descfn=describe_gateways topkey=Gateways id=None
 e=KeyError('describe_gateways')
 -----------------------------------------------------------------------------
@@ -509,9 +485,6 @@ type=aws_dx_gateway_association clfn=directconnect descfn=describe_gateway_assoc
 e=KeyError('describe_gateway_associations')
 -----------------------------------------------------------------------------
 type=aws_dx_gateway_association_proposal clfn=directconnect descfn=describe_gateway_association_proposals topkey=GatewayAssociationProposals id=None
-e=KeyError('describe_gateway_association_proposals')
------------------------------------------------------------------------------
-type=aws_dx_hosted_connection clfn=directconnect descfn=describe_gateway_association_proposals topkey=GatewayAssociationProposals id=None
 e=KeyError('describe_gateway_association_proposals')
 -----------------------------------------------------------------------------
 type=aws_dx_hosted_private_virtual_interface clfn=directconnect descfn=describe_hosted_private_virtual_interfaces topkey=VirtualInterfaces id=None
@@ -532,9 +505,6 @@ e=KeyError('describe_hosted_transit_virtual_interfaces')
 type=aws_dx_hosted_transit_virtual_interface_accepter clfn=directconnect descfn=describe_hosted_transit_virtual_interfaces topkey=VirtualInterfaces id=None
 e=KeyError('describe_hosted_transit_virtual_interfaces')
 -----------------------------------------------------------------------------
-type=aws_dx_macsec_key_association clfn=directconnect descfn=describe_macsec_key_associations topkey=MacsecKeyAssociations id=None
-e=KeyError('describe_macsec_key_associations')
------------------------------------------------------------------------------
 type=aws_dx_private_virtual_interface clfn=directconnect descfn=describe_private_virtual_interfaces topkey=VirtualInterfaces id=None
 e=KeyError('describe_private_virtual_interfaces')
 -----------------------------------------------------------------------------
@@ -547,13 +517,20 @@ e=KeyError('describe_transit_virtual_interfaces')
 type=aws_dynamodb_global_table clfn=dynamodb descfn=describe_global_tables topkey=GlobalTables id=None
 e=KeyError('describe_global_tables')
 -----------------------------------------------------------------------------
-
+type=aws_ec2_local_gateway_route clfn=ec2 descfn=describe_local_gateway_route_tables topkey=LocalGatewayRoutes id=None
+e=KeyError('LocalGatewayRoutes')
+-----------------------------------------------------------------------------
+type=aws_ec2_transit_gateway_route clfn=ec2 descfn=describe_transit_gateway_routes topkey=TransitGatewayRoutes id=None
+e=KeyError('describe_transit_gateway_routes')
+-----------------------------------------------------------------------------
+type=aws_efs_mount_target clfn=efs descfn=describe_mount_targets topkey=MountTargets id=None
+e=BadRequest('An error occurred (BadRequest) when calling the DescribeMountTargets operation: Must specify exactly one mutually exclusive parameter.')
+-----------------------------------------------------------------------------
+type=aws_efs_replication_configuration clfn=efs descfn=describe_replication_configurations topkey=Replications id=None
+e=ReplicationNotFound('An error occurred (ReplicationNotFound) when calling the DescribeReplicationConfigurations operation: No replications found.')
 -----------------------------------------------------------------------------
 type=aws_elasticache_user_group_association clfn=elasticache descfn=describe_user_group_memberships topkey=UserGroupMemberships id=None
 e=KeyError('describe_user_group_memberships')
------------------------------------------------------------------------------
-type=aws_elasticsearch_domain_policy clfn=es descfn=describe_elasticsearch_domain_policy topkey=Policy id=None
-e=KeyError('describe_elasticsearch_domain_policy')
 -----------------------------------------------------------------------------
 type=aws_emr_block_public_access_configuration clfn=emr descfn=describe_block_public_access_configurations topkey=BlockPublicAccessConfigurations id=None
 e=KeyError('describe_block_public_access_configurations')
@@ -651,20 +628,11 @@ e=KeyError('list_user_defined_functions')
 type=aws_grafana_license_association clfn=grafana descfn=list_license_associations topkey=LicenseAssociations id=None
 e=KeyError('list_license_associations')
 -----------------------------------------------------------------------------
-type=aws_grafana_role_association clfn=grafana descfn=list_role_associations topkey=RoleAssociations id=None
-e=KeyError('list_role_associations')
------------------------------------------------------------------------------
 type=aws_grafana_workspace clfn=grafana descfn=list_workspaces topkey=Workspaces id=None
 e=KeyError('Workspaces')
 -----------------------------------------------------------------------------
-type=aws_grafana_workspace_api_key clfn=grafana descfn=list_workspace_api_keys topkey=ApiKeys id=None
-e=KeyError('list_workspace_api_keys')
------------------------------------------------------------------------------
 type=aws_grafana_workspace_saml_configuration clfn=grafana descfn=list_workspace_saml_configurations topkey=SamlConfigurations id=None
 e=KeyError('list_workspace_saml_configurations')
------------------------------------------------------------------------------
-type=aws_guardduty_detector_feature clfn=guardduty descfn=list_detector_features topkey=DetectorFeatures id=None
-e=KeyError('list_detector_features')
 -----------------------------------------------------------------------------
 type=aws_guardduty_invite_accepter clfn=guardduty descfn=list_invitation_accepters topkey=InvitationAccepters id=None
 e=KeyError('list_invitation_accepters')
@@ -672,32 +640,20 @@ e=KeyError('list_invitation_accepters')
 type=aws_guardduty_organization_configuration clfn=guardduty descfn=list_organization_configurations topkey=OrganizationConfigurations id=None
 e=KeyError('list_organization_configurations')
 -----------------------------------------------------------------------------
-type=aws_guardduty_organization_configuration_feature clfn=guardduty descfn=list_organization_configuration_features topkey=OrganizationConfigurationFeatures id=None
-e=KeyError('list_organization_configuration_features')
------------------------------------------------------------------------------
-
-
+type=aws_iam_user_group_membership clfn=iam descfn=get_user_group_membership topkey=Groups id=None
+e=KeyError('get_user_group_membership')
 -----------------------------------------------------------------------------
 type=aws_inspector2_delegated_admin_account clfn=inspector2 descfn=list_delegated_admin_accounts topkey=DelegatedAdminAccounts id=None
 e=KeyError('DelegatedAdminAccounts')
 -----------------------------------------------------------------------------
-type=aws_inspector2_enabler clfn=inspector2 descfn=list_enablers topkey=Enablers id=None
-e=KeyError('list_enablers')
------------------------------------------------------------------------------
 type=aws_inspector2_member_association clfn=inspector2 descfn=list_member_associations topkey=MemberAssociations id=None
 e=KeyError('list_member_associations')
------------------------------------------------------------------------------
-type=aws_inspector2_organization_configuration clfn=inspector2 descfn=list_organization_configurations topkey=OrganizationConfigurations id=None
-e=KeyError('list_organization_configurations')
 -----------------------------------------------------------------------------
 type=aws_inspector_assessment_target clfn=inspector descfn=list_assessment_targets topkey=AssessmentTargets id=None
 e=KeyError('AssessmentTargets')
 -----------------------------------------------------------------------------
 type=aws_inspector_assessment_template clfn=inspector descfn=list_assessment_templates topkey=AssessmentTemplates id=None
 e=KeyError('AssessmentTemplates')
------------------------------------------------------------------------------
-type=aws_inspector_resource_group clfn=inspector descfn=list_resource_groups topkey=ResourceGroups id=None
-e=KeyError('list_resource_groups')
 -----------------------------------------------------------------------------
 type=aws_internet_gateway_attachment clfn=ec2 descfn=describe_internet_gateway_attachments topkey=InternetGatewayAttachments id=None
 e=KeyError('describe_internet_gateway_attachments')
@@ -708,26 +664,11 @@ e=KeyError('Authorizers')
 type=aws_iot_billing_group clfn=iot descfn=list_billing_groups topkey=BillingGroups id=None
 e=KeyError('BillingGroups')
 -----------------------------------------------------------------------------
-type=aws_iot_ca_certificate clfn=iot descfn=list_ca_certificates topkey=CACertificates id=None
-e=KeyError('CACertificates')
------------------------------------------------------------------------------
-type=aws_iot_certificate clfn=iot descfn=list_certificates topkey=Certificates id=None
-e=KeyError('Certificates')
------------------------------------------------------------------------------
 type=aws_iot_domain_configuration clfn=iot descfn=list_domain_configurations topkey=DomainConfigurations id=None
 e=KeyError('DomainConfigurations')
 -----------------------------------------------------------------------------
 type=aws_iot_event_configurations clfn=iot descfn=list_event_configurations topkey=EventConfigurations id=None
 e=KeyError('list_event_configurations')
------------------------------------------------------------------------------
-type=aws_iot_indexing_configuration clfn=iot descfn=list_indexing_configurations topkey=IndexingConfigurations id=None
-e=KeyError('list_indexing_configurations')
------------------------------------------------------------------------------
-type=aws_iot_logging_options clfn=iot descfn=describe_logging_options topkey=LoggingOptions id=None
-e=KeyError('describe_logging_options')
------------------------------------------------------------------------------
-type=aws_iot_policy_attachment clfn=iot descfn=list_policies topkey=Policies id=None
-e=KeyError('Policies')
 -----------------------------------------------------------------------------
 type=aws_iot_provisioning_template clfn=iot descfn=list_provisioning_templates topkey=ProvisioningTemplates id=None
 e=KeyError('ProvisioningTemplates')
@@ -740,9 +681,6 @@ e=KeyError('ThingGroups')
 -----------------------------------------------------------------------------
 type=aws_iot_thing_group_membership clfn=iot descfn=list_thing_group_memberships topkey=ThingGroupMemberships id=None
 e=KeyError('list_thing_group_memberships')
------------------------------------------------------------------------------
-type=aws_iot_thing_principal_attachment clfn=iot descfn=list_thing_principal_attachments topkey=ThingPrincipalAttachments id=None
-e=KeyError('list_thing_principal_attachments')
 -----------------------------------------------------------------------------
 type=aws_iot_thing_type clfn=iot descfn=list_thing_types topkey=ThingTypes id=None
 e=KeyError('ThingTypes')
@@ -765,9 +703,6 @@ e=KeyError('Keyspaces')
 type=aws_kinesis_video_stream clfn=kinesisvideo descfn=list_streams topkey=StreamNames id=None
 e=KeyError('StreamNames')
 -----------------------------------------------------------------------------
-type=aws_lakeformation_resource_lf_tags clfn=lakeformation descfn=list_resource_lf_tags topkey=LFTags id=None
-e=KeyError('list_resource_lf_tags')
------------------------------------------------------------------------------
 type=aws_licensemanager_association clfn=license-manager descfn=list_associations topkey=Associations id=None
 e=KeyError('list_associations')
 -----------------------------------------------------------------------------
@@ -789,20 +724,11 @@ e=KeyError('Disks')
 type=aws_lightsail_disk_attachment clfn=lightsail descfn=get_disk_attachments topkey=DiskAttachments id=None
 e=KeyError('get_disk_attachments')
 -----------------------------------------------------------------------------
-type=aws_lightsail_domain clfn=lightsail descfn=get_domains topkey=Domains id=None
-e=InvalidInputException('An error occurred (InvalidInputException) when calling the GetDomains operation: Domain-related APIs are only available in the us-east-1 Region. Please set your Region configuration to us-east-1 to create, view, or edit domain resources.')
------------------------------------------------------------------------------
 type=aws_lightsail_domain_entry clfn=lightsail descfn=get_domain_entries topkey=DomainEntries id=None
 e=KeyError('get_domain_entries')
 -----------------------------------------------------------------------------
 type=aws_lightsail_instance clfn=lightsail descfn=get_instances topkey=Instances id=None
 e=KeyError('Instances')
------------------------------------------------------------------------------
-type=aws_lightsail_instance_public_ports clfn=lightsail descfn=get_instance_public_ports topkey=PublicPorts id=None
-e=KeyError('get_instance_public_ports')
------------------------------------------------------------------------------
-type=aws_lightsail_key_pair clfn=lightsail descfn=get_instance_public_ports topkey=PortInfo id=None
-e=KeyError('get_instance_public_ports')
 -----------------------------------------------------------------------------
 type=aws_lightsail_lb clfn=lightsail descfn=get_key_pairs topkey=KeyPairs id=None
 e=KeyError('KeyPairs')
@@ -821,21 +747,6 @@ e=KeyError('KeyPairs')
 -----------------------------------------------------------------------------
 type=aws_lightsail_lb_stickiness_policy clfn=lightsail descfn=get_load_balancer_https_redirection_policies topkey=HttpsRedirectPolicies id=None
 e=KeyError('get_load_balancer_https_redirection_policies')
------------------------------------------------------------------------------
-type=aws_lightsail_static_ip clfn=lightsail descfn=get_key_pairs topkey=KeyPairs id=None
-e=KeyError('KeyPairs')
------------------------------------------------------------------------------
-type=aws_lightsail_static_ip_attachment clfn=lightsail descfn=get_static_ips topkey=StaticIps id=None
-e=KeyError('StaticIps')
------------------------------------------------------------------------------
-type=aws_load_balancer_backend_server_policy clfn=elbv2 descfn=describe_backend_server_policies topkey=BackendServerDescriptions id=None
-e=KeyError('describe_backend_server_policies')
------------------------------------------------------------------------------
-type=aws_load_balancer_listener_policy clfn=elbv2 descfn=describe_listeners topkey=Listeners id=None
-e=ClientError('An error occurred (ValidationError) when calling the DescribeListeners operation: You must specify either listener ARNs or a load balancer ARN')
------------------------------------------------------------------------------
-type=aws_load_balancer_policy clfn=elbv2 descfn=describe_load_balancer_policies topkey=Policies id=None
-e=KeyError('describe_load_balancer_policies')
 -----------------------------------------------------------------------------
 type=aws_location_geofence_collection clfn=location descfn=list_geofence_collections topkey=GeofenceCollections id=None
 e=KeyError('GeofenceCollections')
@@ -930,9 +841,6 @@ e=KeyError('list_logging_configurations')
 type=aws_networkfirewall_resource_policy clfn=network-firewall descfn=list_resource_policies topkey=ResourcePolicies id=None
 e=KeyError('list_resource_policies')
 -----------------------------------------------------------------------------
-type=aws_networkmanager_attachment_accepter clfn=networkmanager descfn=list_attachment_accepters topkey=AttachmentAccepters id=None
-e=KeyError('list_attachment_accepters')
------------------------------------------------------------------------------
 type=aws_networkmanager_connect_attachment clfn=networkmanager descfn=list_connect_attachments topkey=ConnectAttachments id=None
 e=KeyError('list_connect_attachments')
 -----------------------------------------------------------------------------
@@ -996,9 +904,6 @@ e=KeyError('list_inbound_connection_accepters')
 type=aws_opensearch_package clfn=opensearch descfn=list_packages topkey=Packages id=None
 e=KeyError('list_packages')
 -----------------------------------------------------------------------------
-type=aws_opensearch_package_association clfn=opensearch descfn=list_packages topkey=Packages id=None
-e=KeyError('list_packages')
------------------------------------------------------------------------------
 type=aws_opensearchserverless_access_policy clfn=opensearch descfn=list_access_policies topkey=AccessPolicies id=None
 e=KeyError('list_access_policies')
 -----------------------------------------------------------------------------
@@ -1020,47 +925,17 @@ e=KeyError('list_applications')
 type=aws_opsworks_custom_layer clfn=opsworks descfn=list_custom_layers topkey=CustomLayers id=None
 e=KeyError('list_custom_layers')
 -----------------------------------------------------------------------------
-type=aws_opsworks_ganglia_layer clfn=opsworks descfn=list_ganglia_layers topkey=GangliaLayers id=None
-e=KeyError('list_ganglia_layers')
------------------------------------------------------------------------------
-type=aws_opsworks_haproxy_layer clfn=opsworks descfn=list_haproxy_layers topkey=HaproxyLayers id=None
-e=KeyError('list_haproxy_layers')
------------------------------------------------------------------------------
 type=aws_opsworks_instance clfn=opsworks descfn=list_instances topkey=Instances id=None
 e=KeyError('list_instances')
 -----------------------------------------------------------------------------
-type=aws_opsworks_java_app_layer clfn=opsworks descfn=list_java_app_layers topkey=JavaAppLayers id=None
-e=KeyError('list_java_app_layers')
------------------------------------------------------------------------------
-type=aws_opsworks_memcached_layer clfn=opsworks descfn=list_memcached_layers topkey=MemcachedLayers id=None
-e=KeyError('list_memcached_layers')
------------------------------------------------------------------------------
-type=aws_opsworks_mysql_layer clfn=opsworks descfn=list_mysql_layers topkey=MysqlLayers id=None
-e=KeyError('list_mysql_layers')
------------------------------------------------------------------------------
-type=aws_opsworks_nodejs_app_layer clfn=opsworks descfn=list_nodejs_app_layers topkey=NodejsAppLayers id=None
-e=KeyError('list_nodejs_app_layers')
------------------------------------------------------------------------------
-type=aws_opsworks_permission clfn=opsworks descfn=list_permissions topkey=Permissions id=None
-e=KeyError('list_permissions')
------------------------------------------------------------------------------
 type=aws_opsworks_php_app_layer clfn=opsworks descfn=list_php_app_layers topkey=PhpAppLayers id=None
 e=KeyError('list_php_app_layers')
------------------------------------------------------------------------------
-type=aws_opsworks_rails_app_layer clfn=opsworks descfn=list_rails_app_layers topkey=RailsAppLayers id=None
-e=KeyError('list_rails_app_layers')
------------------------------------------------------------------------------
-type=aws_opsworks_rds_db_instance clfn=opsworks descfn=list_rds_db_instances topkey=RdsDbInstances id=None
-e=KeyError('list_rds_db_instances')
 -----------------------------------------------------------------------------
 type=aws_opsworks_stack clfn=opsworks descfn=list_stacks topkey=Stacks id=None
 e=KeyError('list_stacks')
 -----------------------------------------------------------------------------
 type=aws_opsworks_static_web_layer clfn=opsworks descfn=list_static_web_layers topkey=StaticWebLayers id=None
 e=KeyError('list_static_web_layers')
------------------------------------------------------------------------------
-type=aws_opsworks_user_profile clfn=opsworks descfn=list_user_profiles topkey=UserProfiles id=None
-e=KeyError('list_user_profiles')
 -----------------------------------------------------------------------------
 type=aws_organizations_organization clfn=organizations descfn=list_organizations topkey=Organization id=None
 e=KeyError('list_organizations')
@@ -1115,15 +990,6 @@ e=KeyError('list_rule_group_namespaces')
 -----------------------------------------------------------------------------
 type=aws_prometheus_workspace clfn=amp descfn=list_workspaces topkey=Workspaces id=None
 e=KeyError('Workspaces')
------------------------------------------------------------------------------
-type=aws_proxy_protocol_policy clfn=wafv2 descfn=list_proxy_protocol_policies topkey=ProxyProtocolPolicies id=None
-e=KeyError('list_proxy_protocol_policies')
------------------------------------------------------------------------------
-type=aws_qldb_stream clfn=qldb descfn=list_streams topkey=Streams id=None
-e=KeyError('list_streams')
------------------------------------------------------------------------------
-type=aws_quicksight_account_subscription clfn=quicksight descfn=list_account_subscriptions topkey=AccountSubscriptions id=None
-e=KeyError('list_account_subscriptions')
 -----------------------------------------------------------------------------
 type=aws_quicksight_folder_membership clfn=quicksight descfn=list_folder_memberships topkey=FolderMemberships id=None
 e=KeyError('list_folder_memberships')
@@ -1181,9 +1047,6 @@ e=KeyError('describe_usage_limits')
 -----------------------------------------------------------------------------
 type=aws_resourceexplorer2_index clfn=resource-explorer-2 descfn=list_indices topkey=Indices id=None
 e=KeyError('list_indices')
------------------------------------------------------------------------------
-type=aws_resourcegroups_resource clfn=resource-groups descfn=list_resources topkey=ResourceIdentifiers id=None
-e=KeyError('list_resources')
 -----------------------------------------------------------------------------
 type=aws_rolesanywhere_profile clfn=rolesanywhere descfn=list_profiles topkey=Profiles id=None
 e=KeyError('Profiles')
@@ -1356,9 +1219,6 @@ e=KeyError('list_budget_resource_associations')
 type=aws_servicecatalog_constraint clfn=servicecatalog descfn=list_constraints topkey=Constraints id=None
 e=KeyError('list_constraints')
 -----------------------------------------------------------------------------
-type=aws_servicecatalog_organizations_access clfn=servicecatalog descfn=list_organization_access topkey=OrganizationAccess id=None
-e=KeyError('list_organization_access')
------------------------------------------------------------------------------
 type=aws_servicecatalog_portfolio clfn=servicecatalog descfn=list_portfolios topkey=Portfolios id=None
 e=KeyError('Portfolios')
 -----------------------------------------------------------------------------
@@ -1400,9 +1260,6 @@ e=KeyError('describe_domain_dkim')
 -----------------------------------------------------------------------------
 type=aws_ses_domain_identity clfn=ses descfn=describe_domain_identity topkey=DomainIdentities id=None
 e=KeyError('describe_domain_identity')
------------------------------------------------------------------------------
-type=aws_ses_domain_identity_verification clfn=ses descfn=describe_domain_identity_verification topkey=VerificationToken id=None
-e=KeyError('describe_domain_identity_verification')
 -----------------------------------------------------------------------------
 type=aws_ses_domain_mail_from clfn=ses descfn=describe_domain_mail_from topkey=MailFromAttributes id=None
 e=KeyError('describe_domain_mail_from')
@@ -1458,15 +1315,6 @@ e=KeyError('Activities')
 type=aws_sfn_alias clfn=stepfunctions descfn=list_aliases topkey=Aliases id=None
 e=KeyError('list_aliases')
 -----------------------------------------------------------------------------
-type=aws_shield_application_layer_automatic_response clfn=shield descfn=list_application_layer_automatic_response_associations topkey=ApplicationLayerAutomaticResponseAssociations id=None
-e=KeyError('list_application_layer_automatic_response_associations')
------------------------------------------------------------------------------
-type=aws_shield_drt_access_log_bucket_association clfn=shield descfn=list_drt_access_log_bucket_associations topkey=DrtAccessLogBucketAssociations id=None
-e=KeyError('list_drt_access_log_bucket_associations')
------------------------------------------------------------------------------
-type=aws_shield_drt_access_role_arn_association clfn=shield descfn=list_drt_access_role_arn_associations topkey=DrtAccessRoleArnAssociations id=None
-e=KeyError('list_drt_access_role_arn_associations')
------------------------------------------------------------------------------
 type=aws_shield_protection clfn=shield descfn=list_protections topkey=Protections id=None
 e=ResourceNotFoundException('An error occurred (ResourceNotFoundException) when calling the ListProtections operation: The subscription does not exist.')
 -----------------------------------------------------------------------------
@@ -1485,12 +1333,6 @@ e=KeyError('list_signing_profile_permissions')
 type=aws_simpledb_domain clfn=sdb descfn=list_domains topkey=DomainNames id=None
 e=KeyError('DomainNames')
 -----------------------------------------------------------------------------
-type=aws_snapshot_create_volume_permission clfn=ec2 descfn=describe_create_volume_permissions topkey=CreateVolumePermissions id=None
-e=KeyError('describe_create_volume_permissions')
------------------------------------------------------------------------------
-type=aws_sns_sms_preferences clfn=sns descfn=get_sms_preferences topkey=SMSPreferences id=None
-e=KeyError('get_sms_preferences')
------------------------------------------------------------------------------
 type=aws_ssm_activation clfn=ssm descfn=list_activations topkey=ActivationList id=None
 e=KeyError('list_activations')
 -----------------------------------------------------------------------------
@@ -1508,9 +1350,6 @@ e=KeyError('list_tasks_for_maintenance_window')
 -----------------------------------------------------------------------------
 type=aws_ssm_patch_baseline clfn=ssm descfn=list_patch_baselines topkey=BaselineIdentities id=None
 e=KeyError('list_patch_baselines')
------------------------------------------------------------------------------
-type=aws_ssm_patch_group clfn=ssm descfn=list_patch_groups topkey=PatchGroups id=None
-e=KeyError('list_patch_groups')
 -----------------------------------------------------------------------------
 type=aws_ssmcontacts_plan clfn=ssm-contacts descfn=list_plans topkey=Plans id=None
 e=KeyError('list_plans')
@@ -1563,9 +1402,6 @@ e=KeyError('list_tags')
 type=aws_verifiedaccess_endpoint clfn=ec2 descfn=list_endpoints topkey=Endpoints id=None
 e=KeyError('list_endpoints')
 -----------------------------------------------------------------------------
-type=aws_verifiedaccess_group clfn=ec2 descfn=list_groups topkey=Groups id=None
-e=KeyError('list_groups')
------------------------------------------------------------------------------
 type=aws_verifiedaccess_instance clfn=ec2 descfn=list_instances topkey=Instances id=None
 e=KeyError('list_instances')
 -----------------------------------------------------------------------------
@@ -1593,12 +1429,6 @@ e=KeyError('describe_vpc_endpoint_service_policies')
 type=aws_vpc_endpoint_route_table_association clfn=ec2 descfn=describe_vpc_endpoint_route_table_associations topkey=RouteTableAssociations id=None
 e=KeyError('describe_vpc_endpoint_route_table_associations')
 -----------------------------------------------------------------------------
-type=aws_vpc_endpoint_security_group_association clfn=ec2 descfn=describe_vpc_endpoint_security_group_associations topkey=SecurityGroupAssociations id=None
-e=KeyError('describe_vpc_endpoint_security_group_associations')
------------------------------------------------------------------------------
-type=aws_vpc_endpoint_service_allowed_principal clfn=ec2 descfn=describe_vpc_endpoint_service_allowed_principals topkey=AllowedPrincipals id=None
-e=KeyError('describe_vpc_endpoint_service_allowed_principals')
------------------------------------------------------------------------------
 type=aws_vpc_endpoint_subnet_association clfn=ec2 descfn=describe_vpc_endpoint_subnet_associations topkey=SubnetAssociations id=None
 e=KeyError('describe_vpc_endpoint_subnet_associations')
 -----------------------------------------------------------------------------
@@ -1614,9 +1444,6 @@ e=KeyError('describe_ipam_pool_cidrs')
 type=aws_vpc_ipam_pool_cidr_allocation clfn=ec2 descfn=describe_ipam_pool_cidr_allocations topkey=Allocations id=None
 e=KeyError('describe_ipam_pool_cidr_allocations')
 -----------------------------------------------------------------------------
-type=aws_vpc_ipam_preview_next_cidr clfn=ec2 descfn=describe_ipam_preview_next_cidrs topkey=Cidrs id=None
-e=KeyError('describe_ipam_preview_next_cidrs')
------------------------------------------------------------------------------
 type=aws_vpc_ipam_resource_discovery clfn=ec2 descfn=describe_ipam_resource_discoveries topkey=ResourceDiscoveries id=None
 e=KeyError('ResourceDiscoveries')
 -----------------------------------------------------------------------------
@@ -1629,25 +1456,11 @@ e=KeyError('Scopes')
 type=aws_vpc_ipv6_cidr_block_association clfn=ec2 descfn=describe_vpc_cidr_block_associations topkey=CidrBlockAssociations id=None
 e=KeyError('describe_vpc_cidr_block_associations')
 -----------------------------------------------------------------------------
-type=aws_vpc_network_performance_metric_subscription clfn=ec2 descfn=describe_network_insights_path_subscriptions topkey=NetworkInsightsPathSubscriptions id=None
-e=KeyError('describe_network_insights_path_subscriptions')
------------------------------------------------------------------------------
 type=aws_vpc_peering_connection_accepter clfn=ec2 descfn=describe_vpc_peering_connection_accepters topkey=VpcPeeringConnectionAccepters id=None
 e=KeyError('describe_vpc_peering_connection_accepters')
 -----------------------------------------------------------------------------
 type=aws_vpc_peering_connection_options clfn=ec2 descfn=describe_vpc_peering_connection_options topkey=VpcPeeringConnectionOptions id=None
 e=KeyError('describe_vpc_peering_connection_options')
------------------------------------------------------------------------------
-
-
-type=aws_vpn_connection_route clfn=ec2 descfn=describe_vpn_connection_routes topkey=VpnConnectionRoutes id=None
-e=KeyError('describe_vpn_connection_routes')
------------------------------------------------------------------------------
-type=aws_vpn_gateway_attachment clfn=ec2 descfn=describe_vpn_gateway_attachments topkey=VpnGatewayAttachments id=None
-e=KeyError('describe_vpn_gateway_attachments')
------------------------------------------------------------------------------
-type=aws_vpn_gateway_route_propagation clfn=ec2 descfn=describe_vpn_gateway_route_propagations topkey=VpnGatewayRoutePropagations id=None
-e=KeyError('describe_vpn_gateway_route_propagations')
 -----------------------------------------------------------------------------
 type=aws_waf_rate_based_rule clfn=waf descfn=list_rate_based_rules topkey=RateBasedRules id=None
 e=KeyError('RateBasedRules')

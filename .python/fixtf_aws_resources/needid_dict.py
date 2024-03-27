@@ -604,6 +604,11 @@ aws_dynamodb_tag = {
   "clfn": "dynamodb"
 }
 
+
+aws_ebs_snapshot = {
+  "param": "SnapshotId",
+  "clfn": "ec2"  
+}
 aws_ec2_client_vpn_authorization_rule = {
   "param": "ClientVpnEndpointId",
   "clfn": "ec2"
@@ -1606,6 +1611,7 @@ aws_needid = {
   "aws_dynamodb_table_item": aws_dynamodb_table_item,
   "aws_dynamodb_table_replica": aws_dynamodb_table_replica,
   "aws_dynamodb_tag": aws_dynamodb_tag,
+  "aws_ebs_snapshot": aws_ebs_snapshot,
   "aws_ec2_client_vpn_authorization_rule": aws_ec2_client_vpn_authorization_rule,
   "aws_ec2_client_vpn_route": aws_ec2_client_vpn_route,
   "aws_ec2_image_block_public_access": aws_ec2_image_block_public_access,

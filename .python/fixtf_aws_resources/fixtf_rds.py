@@ -12,7 +12,8 @@ def aws_db_subnet_group(t1,tt1,tt2,flag1,flag2):
 
 def aws_db_instance(t1,tt1,tt2,flag1,flag2):
     skip=0
-
+    if tt1 == "domain_dns_ips":
+       if tt2 == "[]": skip=1
     return skip,t1,flag1,flag2
 
 def aws_db_event_subscription(t1,tt1,tt2,flag1,flag2):

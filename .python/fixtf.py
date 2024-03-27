@@ -265,7 +265,15 @@ def fixtf(ttft,tf):
                 nofind=1
                 
             try:
+                ####
+                # common replacement code here
+                # rhs=account number
+                # rhs is still an arn
+                # : in tt1 for quote it
                 skip,t1,flag1,flag2=aws_common.aws_common(ttft,t1,tt1,tt2,flag1,flag2)
+                
+
+
                 skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
                 #print("t1="+t1)
             except Exception as e:
@@ -279,12 +287,7 @@ def fixtf(ttft,tf):
                 nofind=2
                 skip,t1,flag1,flag2=aws_resource(t1,tt1,tt2,flag1,flag2)
 
-            ####
-            
-            # common replacement code here
-            # rhs=account number
-            # rhs is still an arn
-            # : in tt1 for quote it
+
                 
             #### 
 

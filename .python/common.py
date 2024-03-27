@@ -34,7 +34,7 @@ from fixtf_aws_resources import aws_no_import
 
 def call_resource(type, id):
     
-   if aws_no_import.noimport[type]:
+   if type in aws_no_import.noimport:
       print("WARNING: Terraform cannot import type: " + type)
       return
    if type=="aws_null":

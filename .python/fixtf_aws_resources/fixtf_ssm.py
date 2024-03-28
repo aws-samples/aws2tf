@@ -44,14 +44,18 @@ def aws_ssm_maintenance_windows(t1,tt1,tt2,flag1,flag2):
 
 def aws_ssm_parameter(t1,tt1,tt2,flag1,flag2):
 	skip=0
-	print(str(tt1) + " " + str(tt2))
+	#print(str(tt1) + " " + str(tt2))
 	if tt1 == "arn": globals.ssmparamn=tt2 
 	elif tt1 == "value":
 		if globals.ssmparamn != "":
 			client = boto3.client("ssm")
 			response = client.get_parameter(Name=globals.ssmparamn, WithDecryption=True)
 			vs=response["Parameter"]["Value"]
-			if vs.startswith('{"'):
+			ml=len(vs.split('\n'))
+			#print("-->>>>>"+str(ml))
+			if ml > 1:
+				vs=vs.replace('\n','').replace('${','$${').replace('\t','')
+			if vs.startswith('{"') or vs.startswith('["') :
 				t1 = tt1 + " = jsonencode("+vs+")\n"
 			else:
 				t1 = tt1 + " = \"" + vs + "\"\n"

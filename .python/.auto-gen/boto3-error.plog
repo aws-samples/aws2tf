@@ -1,11 +1,5 @@
-type=aws_api_gateway_method_response clfn=apigateway descfn=get_method_responses topkey=items id=None
-e=KeyError('get_method_responses')
------------------------------------------------------------------------------
-type=aws_api_gateway_method_settings clfn=apigateway descfn=get_method_settings topkey=items id=None
-e=KeyError('get_method_settings')
------------------------------------------------------------------------------
-type=aws_api_gateway_rest_api_policy clfn=apigateway descfn=get_rest_api_policy topkey=policy id=None
-e=KeyError('get_rest_api_policy')
+
+
 -----------------------------------------------------------------------------
 type=aws_appflow_connector_profile clfn=appflow descfn=list_connector_profiles topkey=ConnectorProfileDetailsList id=None
 e=KeyError('list_connector_profiles')
@@ -1399,72 +1393,11 @@ e=KeyError('list_ssh_public_keys')
 type=aws_transfer_tag clfn=transfer descfn=list_tags topkey=Tags id=None
 e=KeyError('list_tags')
 -----------------------------------------------------------------------------
-type=aws_verifiedaccess_endpoint clfn=ec2 descfn=list_endpoints topkey=Endpoints id=None
-e=KeyError('list_endpoints')
------------------------------------------------------------------------------
-type=aws_verifiedaccess_instance clfn=ec2 descfn=list_instances topkey=Instances id=None
-e=KeyError('list_instances')
------------------------------------------------------------------------------
-type=aws_verifiedaccess_instance_logging_configuration clfn=ec2 descfn=list_instance_logging_configurations topkey=InstanceLoggingConfigurations id=None
-e=KeyError('list_instance_logging_configurations')
------------------------------------------------------------------------------
-type=aws_verifiedaccess_instance_trust_provider_attachment clfn=ec2 descfn=list_instance_trust_providers topkey=InstanceTrustProviders id=None
-e=KeyError('list_instance_trust_providers')
------------------------------------------------------------------------------
-type=aws_verifiedaccess_trust_provider clfn=ec2 descfn=list_trust_providers topkey=TrustProviders id=None
-e=KeyError('list_trust_providers')
------------------------------------------------------------------------------
-type=aws_vpc_dhcp_options_association clfn=ec2 descfn=describe_dhcp_options_associations topkey=DhcpOptionsAssociations id=None
-e=KeyError('describe_dhcp_options_associations')
------------------------------------------------------------------------------
-type=aws_vpc_endpoint_connection_accepter clfn=ec2 descfn=describe_vpc_endpoint_connection_accepters topkey=VpcEndpointConnectionAccepters id=None
-e=KeyError('describe_vpc_endpoint_connection_accepters')
------------------------------------------------------------------------------
-type=aws_vpc_endpoint_connection_notification clfn=ec2 descfn=describe_vpc_endpoint_connection_notifications topkey=VpcEndpointConnectionNotifications id=None
-e=KeyError('VpcEndpointConnectionNotifications')
------------------------------------------------------------------------------
-type=aws_vpc_endpoint_policy clfn=ec2 descfn=describe_vpc_endpoint_service_policies topkey=Policies id=None
-e=KeyError('describe_vpc_endpoint_service_policies')
------------------------------------------------------------------------------
-type=aws_vpc_endpoint_route_table_association clfn=ec2 descfn=describe_vpc_endpoint_route_table_associations topkey=RouteTableAssociations id=None
-e=KeyError('describe_vpc_endpoint_route_table_associations')
------------------------------------------------------------------------------
-type=aws_vpc_endpoint_subnet_association clfn=ec2 descfn=describe_vpc_endpoint_subnet_associations topkey=SubnetAssociations id=None
-e=KeyError('describe_vpc_endpoint_subnet_associations')
------------------------------------------------------------------------------
-type=aws_vpc_ipam_organization_admin_account clfn=ec2 descfn=describe_ipam_organization_admin_accounts topkey=OrganizationAdminAccounts id=None
-e=KeyError('describe_ipam_organization_admin_accounts')
------------------------------------------------------------------------------
-type=aws_vpc_ipam_pool clfn=ec2 descfn=describe_ipam_pools topkey=Pools id=None
-e=KeyError('Pools')
------------------------------------------------------------------------------
-type=aws_vpc_ipam_pool_cidr clfn=ec2 descfn=describe_ipam_pool_cidrs topkey=Cidrs id=None
-e=KeyError('describe_ipam_pool_cidrs')
------------------------------------------------------------------------------
-type=aws_vpc_ipam_pool_cidr_allocation clfn=ec2 descfn=describe_ipam_pool_cidr_allocations topkey=Allocations id=None
-e=KeyError('describe_ipam_pool_cidr_allocations')
------------------------------------------------------------------------------
-type=aws_vpc_ipam_resource_discovery clfn=ec2 descfn=describe_ipam_resource_discoveries topkey=ResourceDiscoveries id=None
-e=KeyError('ResourceDiscoveries')
------------------------------------------------------------------------------
-type=aws_vpc_ipam_resource_discovery_association clfn=ec2 descfn=describe_ipam_resource_discovery_associations topkey=ResourceDiscoveryAssociations id=None
-e=KeyError('ResourceDiscoveryAssociations')
------------------------------------------------------------------------------
-type=aws_vpc_ipam_scope clfn=ec2 descfn=describe_ipam_scopes topkey=Scopes id=None
-e=KeyError('Scopes')
------------------------------------------------------------------------------
-type=aws_vpc_ipv6_cidr_block_association clfn=ec2 descfn=describe_vpc_cidr_block_associations topkey=CidrBlockAssociations id=None
-e=KeyError('describe_vpc_cidr_block_associations')
------------------------------------------------------------------------------
-type=aws_vpc_peering_connection_accepter clfn=ec2 descfn=describe_vpc_peering_connection_accepters topkey=VpcPeeringConnectionAccepters id=None
-e=KeyError('describe_vpc_peering_connection_accepters')
------------------------------------------------------------------------------
-type=aws_vpc_peering_connection_options clfn=ec2 descfn=describe_vpc_peering_connection_options topkey=VpcPeeringConnectionOptions id=None
-e=KeyError('describe_vpc_peering_connection_options')
------------------------------------------------------------------------------
-type=aws_waf_rate_based_rule clfn=waf descfn=list_rate_based_rules topkey=RateBasedRules id=None
-e=KeyError('RateBasedRules')
------------------------------------------------------------------------------
-type=aws_wafregional_web_acl_association clfn=waf-regional descfn=list_web_acl_associations topkey=WebACLAssociations id=None
-e=KeyError('list_web_acl_associations')
------------------------------------------------------------------------------
+
+
+
+
+
+
+
+

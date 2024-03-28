@@ -104,4 +104,11 @@ noimport = {
     "aws_vpn_connection_route": True,
     "aws_vpn_gateway_attachment": True,
     "aws_vpn_gateway_route_propagation": True,
+    # hand driven exclusions
+    "aws_wafregional_web_acl_association": True,    # get it from target rsource
+    "aws_vpc_dhcp_options_association": True,      # get it from target rsource
+    "aws_vpc_ipam_organization_admin_account": True,
+    # via other resources
+    "aws_api_gateway_method_response": True,
+    "aws_api_gateway_method_settings": True,
 }

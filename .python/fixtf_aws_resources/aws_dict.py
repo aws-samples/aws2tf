@@ -837,7 +837,7 @@ aws_api_gateway_method = {
 
 aws_api_gateway_method_response = {
 	"clfn":		"apigateway",
-	"descfn":	"get_method_responses",
+	"descfn":	"get_method_response",
 	"topkey":	"items",
 	"key":		"httpMethod",
 	"filterid":	"httpMethod"
@@ -885,10 +885,10 @@ aws_api_gateway_rest_api = {
 
 aws_api_gateway_rest_api_policy = {
 	"clfn":		"apigateway",
-	"descfn":	"get_rest_api_policy",
+	"descfn":	"get_rest_api",
 	"topkey":	"policy",
 	"key":		"id",
-	"filterid":	"id"
+	"filterid":	"restApiId"
 }
 
 aws_api_gateway_stage = {
@@ -9728,50 +9728,50 @@ aws_transfer_workflow = {
 
 aws_verifiedaccess_endpoint = {
 	"clfn":		"ec2",
-	"descfn":	"list_endpoints",
-	"topkey":	"Endpoints",
-	"key":		"EndpointId",
-	"filterid":	"EndpointId"
+	"descfn":	"describe_verified_access_endpoints",
+	"topkey":	"VerifiedAccessEndpoints",
+	"key":		"VerifiedAccessEndpointId",
+	"filterid":	"VerifiedAccessEndpointId"
 }
 
 aws_verifiedaccess_group = {
 	"clfn":		"ec2",
-	"descfn":	"list_groups",
-	"topkey":	"Groups",
-	"key":		"GroupId",
-	"filterid":	"GroupId"
+	"descfn":	"describe_verified_access_groups",
+	"topkey":	"VerifiedAccessGroups",
+	"key":		"VerifiedAccessGroupId",
+	"filterid":	"VerifiedAccessGroupId"
 }
 
 aws_verifiedaccess_instance = {
 	"clfn":		"ec2",
-	"descfn":	"list_instances",
-	"topkey":	"Instances",
-	"key":		"InstanceId",
-	"filterid":	"InstanceId"
+	"descfn":	"describe_verified_access_instances",
+	"topkey":	"VerifiedAccessInstances",
+	"key":		"VerifiedAccessInstanceId",
+	"filterid":	"VerifiedAccessInstanceId"
 }
 
 aws_verifiedaccess_instance_logging_configuration = {
 	"clfn":		"ec2",
-	"descfn":	"list_instance_logging_configurations",
-	"topkey":	"InstanceLoggingConfigurations",
-	"key":		"InstanceId",
-	"filterid":	"InstanceId"
+	"descfn":	"describe_verified_access_instance_logging_configurations",
+	"topkey":	"LoggingConfigurations",
+	"key":		"VerifiedAccessInstanceId",
+	"filterid":	"VerifiedAccessInstanceId"
 }
 
 aws_verifiedaccess_instance_trust_provider_attachment = {
 	"clfn":		"ec2",
-	"descfn":	"list_instance_trust_providers",
-	"topkey":	"InstanceTrustProviders",
-	"key":		"InstanceId",
-	"filterid":	"InstanceId"
+	"descfn":	"describe_verified_access_trust_providers",
+	"topkey":	"VerifiedAccessTrustProviders",
+	"key":		"VerifiedAccessTrustProviderId",
+	"filterid":	"VerifiedAccessTrustProviderId"
 }
 
 aws_verifiedaccess_trust_provider = {
 	"clfn":		"ec2",
-	"descfn":	"list_trust_providers",
-	"topkey":	"TrustProviders",
-	"key":		"TrustProviderId",
-	"filterid":	"TrustProviderId"
+	"descfn":	"describe_verified_access_trust_providers",
+	"topkey":	"VerifiedAccessTrustProviders",
+	"key":		"VerifiedAccessTrustProviderId",
+	"filterid":	"VerifiedAccessTrustProviderId"
 }
 
 aws_volume_attachment = {
@@ -9792,42 +9792,42 @@ aws_vpc_dhcp_options_association = {
 
 aws_vpc_endpoint_connection_accepter = {
 	"clfn":		"ec2",
-	"descfn":	"describe_vpc_endpoint_connection_accepters",
-	"topkey":	"VpcEndpointConnectionAccepters",
-	"key":		"VpcEndpointConnectionAccepterId",
-	"filterid":	"VpcEndpointConnectionAccepterId"
+	"descfn":	"describe_vpc_endpoint_connections",
+	"topkey":	"VpcEndpointConnections",
+	"key":		"VpcEndpointId",
+	"filterid":	"ServiceId"
 }
 
 aws_vpc_endpoint_connection_notification = {
 	"clfn":		"ec2",
 	"descfn":	"describe_vpc_endpoint_connection_notifications",
-	"topkey":	"VpcEndpointConnectionNotifications",
-	"key":		"VpcEndpointConnectionNotificationId",
-	"filterid":	"VpcEndpointConnectionNotificationId"
+	"topkey":	"ConnectionNotificationSet",
+	"key":		"ConnectionNotificationId",
+	"filterid":	"ConnectionNotificationId"
 }
 
 aws_vpc_endpoint_policy = {
 	"clfn":		"ec2",
-	"descfn":	"describe_vpc_endpoint_service_policies",
-	"topkey":	"Policies",
-	"key":		"PolicyDocument",
-	"filterid":	"PolicyDocument"
+	"descfn":	"describe_vpc_endpoints",
+	"topkey":	"VpcEndpoints",
+	"key":		"VpcEndpointId",
+	"filterid":	"VpcEndpointId"
 }
 
 aws_vpc_endpoint_route_table_association = {
 	"clfn":		"ec2",
-	"descfn":	"describe_vpc_endpoint_route_table_associations",
-	"topkey":	"RouteTableAssociations",
-	"key":		"RouteTableAssociationId",
-	"filterid":	"RouteTableAssociationId"
+	"descfn":	"describe_vpc_endpoints",
+	"topkey":	"VpcEndpoints",
+	"key":		"VpcEndpointId",
+	"filterid":	"VpcEndpointId"
 }
 
 aws_vpc_endpoint_security_group_association = {
 	"clfn":		"ec2",
-	"descfn":	"describe_vpc_endpoint_security_group_associations",
-	"topkey":	"SecurityGroupAssociations",
-	"key":		"SecurityGroupId",
-	"filterid":	"SecurityGroupId"
+	"descfn":	"describe_vpc_endpoints",
+	"topkey":	"VpcEndpoints",
+	"key":		"VpcEndpointId",
+	"filterid":	"VpcEndpointId"
 }
 
 aws_vpc_endpoint_service = {
@@ -9873,25 +9873,25 @@ aws_vpc_ipam_organization_admin_account = {
 aws_vpc_ipam_pool = {
 	"clfn":		"ec2",
 	"descfn":	"describe_ipam_pools",
-	"topkey":	"Pools",
-	"key":		"PoolId",
-	"filterid":	"PoolId"
+	"topkey":	"IpamPools",
+	"key":		"IpamPoolId",
+	"filterid":	"IpamPoolId"
 }
 
 aws_vpc_ipam_pool_cidr = {
 	"clfn":		"ec2",
-	"descfn":	"describe_ipam_pool_cidrs",
-	"topkey":	"Cidrs",
-	"key":		"Cidr",
-	"filterid":	"Cidr"
+	"descfn":	"get_ipam_pool_cidrs",
+	"topkey":	"IpamPoolCidrs",
+	"key":		"IpamPoolCidrId",
+	"filterid":	"IpamPoolCidrId"
 }
 
 aws_vpc_ipam_pool_cidr_allocation = {
 	"clfn":		"ec2",
-	"descfn":	"describe_ipam_pool_cidr_allocations",
-	"topkey":	"Allocations",
-	"key":		"AllocationId",
-	"filterid":	"AllocationId"
+	"descfn":	"get_ipam_pool_allocations",
+	"topkey":	"IpamPoolAllocations",
+	"key":		"IpamPoolAllocationId",
+	"filterid":	"IpamPoolAllocationId"
 }
 
 aws_vpc_ipam_preview_next_cidr = {
@@ -9905,33 +9905,33 @@ aws_vpc_ipam_preview_next_cidr = {
 aws_vpc_ipam_resource_discovery = {
 	"clfn":		"ec2",
 	"descfn":	"describe_ipam_resource_discoveries",
-	"topkey":	"ResourceDiscoveries",
-	"key":		"ResourceDiscoveryId",
-	"filterid":	"ResourceDiscoveryId"
+	"topkey":	"IpamResourceDiscoveries",
+	"key":		"IpamResourceDiscoveryId",
+	"filterid":	"IpamResourceDiscoveryId"
 }
 
 aws_vpc_ipam_resource_discovery_association = {
 	"clfn":		"ec2",
 	"descfn":	"describe_ipam_resource_discovery_associations",
-	"topkey":	"ResourceDiscoveryAssociations",
-	"key":		"ResourceDiscoveryAssociationId",
-	"filterid":	"ResourceDiscoveryAssociationId"
+	"topkey":	"IpamResourceDiscoveryAssociations",
+	"key":		"IpamResourceDiscoveryAssociationId",
+	"filterid":	"IpamResourceDiscoveryAssociationId"
 }
 
 aws_vpc_ipam_scope = {
 	"clfn":		"ec2",
 	"descfn":	"describe_ipam_scopes",
-	"topkey":	"Scopes",
-	"key":		"ScopeId",
-	"filterid":	"ScopeId"
+	"topkey":	"IpamScopes",
+	"key":		"IpamScopeId",
+	"filterid":	"IpamScopeId"
 }
 
 aws_vpc_ipv6_cidr_block_association = {
 	"clfn":		"ec2",
-	"descfn":	"describe_vpc_cidr_block_associations",
-	"topkey":	"CidrBlockAssociations",
-	"key":		"AssociationId",
-	"filterid":	"AssociationId"
+	"descfn":	"get_associated_ipv6_pool_cidrs",
+	"topkey":	"Ipv6CidrAssociations",
+	"key":		"PoolId",
+	"filterid":	"PoolId"
 }
 
 aws_vpc_network_performance_metric_subscription = {
@@ -9952,18 +9952,18 @@ aws_vpc_peering_connection = {
 
 aws_vpc_peering_connection_accepter = {
 	"clfn":		"ec2",
-	"descfn":	"describe_vpc_peering_connection_accepters",
-	"topkey":	"VpcPeeringConnectionAccepters",
+    "descfn":	"describe_vpc_peering_connections",
+	"topkey":	"VpcPeeringConnections",
 	"key":		"VpcPeeringConnectionId",
 	"filterid":	"VpcPeeringConnectionId"
 }
 
 aws_vpc_peering_connection_options = {
 	"clfn":		"ec2",
-	"descfn":	"describe_vpc_peering_connection_options",
-	"topkey":	"VpcPeeringConnectionOptions",
+    "descfn":	"describe_vpc_peering_connections",
+	"topkey":	"VpcPeeringConnections",
 	"key":		"VpcPeeringConnectionId",
-	"filterid":	"VpcPeeringConnectionId"
+	"filterid":	"VpcPeeringConnection"
 }
 
 aws_vpc_security_group_egress_rule = {
@@ -10057,7 +10057,7 @@ aws_waf_ipset = {
 aws_waf_rate_based_rule = {
 	"clfn":		"waf",
 	"descfn":	"list_rate_based_rules",
-	"topkey":	"RateBasedRules",
+	"topkey":	"Rules",
 	"key":		"RuleId",
 	"filterid":	"RuleId"
 }

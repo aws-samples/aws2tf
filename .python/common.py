@@ -781,6 +781,10 @@ def call_boto3(type,clfn,descfn,topkey,id):
          except botocore.exceptions.ParamValidationError as err:
             print(f"{err=}"+","+type+","+clfn)
             print("ParamValidationError 1 in common.call_boto3: type="+type+" clfn="+clfn)
+            with open('boto3-error.plog', 'a') as f:
+                     f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
+                     f.write(f"{e=}\n")
+                     f.write("-----------------------------------------------------------------------------\n")
             return []
             
 
@@ -796,6 +800,10 @@ def call_boto3(type,clfn,descfn,topkey,id):
                except botocore.exceptions.ParamValidationError as err:
                   print(f"{err=}"+","+type+","+clfn)
                   #print("ParamValidationError 2 in common.call_boto3: type="+type+" clfn="+clfn)
+                  with open('boto3-error.plog', 'a') as f:
+                     f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
+                     f.write(f"{e=}\n")
+                     f.write("-----------------------------------------------------------------------------\n")
                   return []
                
 

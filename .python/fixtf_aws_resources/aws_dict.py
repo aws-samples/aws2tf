@@ -4862,10 +4862,10 @@ aws_grafana_workspace_api_key = {
 
 aws_grafana_workspace_saml_configuration = {
 	"clfn":		"grafana",
-	"descfn":	"list_workspace_saml_configurations",
-	"topkey":	"SamlConfigurations",
-	"key":		"SamlConfigurationId",
-	"filterid":	"SamlConfigurationId"
+	"descfn":	"describe_workspace_authentication",
+	"topkey":	"authentication",
+	"key":		"workspaceId",
+	"filterid":	"workspaceId"
 }
 
 aws_guardduty_detector = {
@@ -9261,21 +9261,23 @@ aws_sqs_queue_redrive_policy = {
 	"filterid":	"RedrivePolicy"
 }
 
+
 aws_ssm_activation = {
-	"clfn":		"ssm",
-	"descfn":	"list_activations",
-	"topkey":	"ActivationList",
-	"key":		"ActivationId",
-	"filterid":	"ActivationId"
+    "clfn": "ssm", 
+    "descfn": "describe_activations",
+    "topkey": "ActivationList",
+    "key": "ActivationId",
+    "filterid": "ActivationId"
 }
 
 aws_ssm_association = {
-	"clfn":		"ssm",
-	"descfn":	"list_associations",
-	"topkey":	"AssociationList",
-	"key":		"AssociationId",
-	"filterid":	"AssociationId"
+    "clfn": "ssm",
+    "descfn": "describe_association", 
+    "topkey": "AssociationDescription",
+    "key": "AssociationId",
+    "filterid": "AssociationId"
 }
+
 
 aws_ssm_default_patch_baseline = {
 	"clfn":		"ssm",
@@ -9293,28 +9295,31 @@ aws_ssm_document = {
 	"filterid":	"Name"
 }
 
+
 aws_ssm_maintenance_window = {
-	"clfn":		"ssm",
-	"descfn":	"list_maintenance_windows",
-	"topkey":	"WindowIdentities",
-	"key":		"WindowId",
-	"filterid":	"WindowId"
+    "clfn": "ssm",
+    "descfn": "describe_maintenance_windows", 
+    "topkey": "WindowIdentities",
+    "key": "WindowId",
+    "filterid": "WindowId"
 }
+
 
 aws_ssm_maintenance_window_target = {
-	"clfn":		"ssm",
-	"descfn":	"list_targets_for_maintenance_window",
-	"topkey":	"WindowTargetIds",
-	"key":		"WindowTargetId",
-	"filterid":	"WindowTargetId"
+    "clfn": "ssm",
+    "descfn": "describe_maintenance_window_targets",
+    "topkey": "Targets",
+    "key": "WindowTargetId", 
+    "filterid": "WindowTargetId"
 }
 
+
 aws_ssm_maintenance_window_task = {
-	"clfn":		"ssm",
-	"descfn":	"list_tasks_for_maintenance_window",
-	"topkey":	"TaskIds",
-	"key":		"TaskId",
-	"filterid":	"TaskId"
+    "clfn": "ssm", 
+    "descfn": "describe_maintenance_window_tasks",
+    "topkey": "Tasks",
+    "key": "WindowTaskId",
+    "filterid": "WindowTaskId"
 }
 
 
@@ -9327,12 +9332,13 @@ aws_ssm_parameter = {
 }
 
 aws_ssm_patch_baseline = {
-	"clfn":		"ssm",
-	"descfn":	"list_patch_baselines",
-	"topkey":	"BaselineIdentities",
-	"key":		"BaselineId",
-	"filterid":	"BaselineId"
+    "clfn": "ssm",
+    "descfn": "describe_patch_baselines",
+    "topkey": "BaselineIdentities", 
+    "key": "BaselineId",
+    "filterid": "BaselineId"
 }
+
 
 aws_ssm_patch_group = {
 	"clfn":		"ssm",
@@ -9359,12 +9365,13 @@ aws_ssm_service_setting = {
 }
 
 aws_ssmcontacts_contact = {
-	"clfn":		"ssm-contacts",
-	"descfn":	"list_contacts",
-	"topkey":	"Contacts",
-	"key":		"Alias",
-	"filterid":	"Alias"
+    "clfn": "ssm-contacts",
+    "descfn": "list_contacts",
+    "topkey": "Contacts",
+    "key": "ContactArn", 
+    "filterid": "ContactArn"
 }
+
 
 aws_ssmcontacts_contact_channel = {
 	"clfn":		"ssm-contacts",
@@ -9376,26 +9383,28 @@ aws_ssmcontacts_contact_channel = {
 
 aws_ssmcontacts_plan = {
 	"clfn":		"ssm-contacts",
-	"descfn":	"list_plans",
-	"topkey":	"Plans",
-	"key":		"PlanId",
-	"filterid":	"PlanId"
+	"descfn":	"get_contact",
+	"topkey":	"Plan",
+	"key":		"ContactArn",
+	"filterid":	"ContactArn"
 }
 
+
 aws_ssmincidents_replication_set = {
-	"clfn":		"ssm-incidents",
-	"descfn":	"list_replication_sets",
-	"topkey":	"ReplicationSets",
-	"key":		"Arn",
-	"filterid":	"Arn"
+    "clfn": "ssm-incidents",
+    "descfn": "list_replication_sets",
+    "topkey": "replicationSetArns",
+    "key": "",
+    "filterid": ""
 }
+
 
 aws_ssmincidents_response_plan = {
 	"clfn":		"ssm-incidents",
 	"descfn":	"list_response_plans",
-	"topkey":	"ResponsePlans",
-	"key":		"Arn",
-	"filterid":	"Arn"
+	"topkey":	"responsePlanSummaries",
+	"key":		"arn",
+	"filterid":	"arn"
 }
 
 aws_ssoadmin_account_assignment = {

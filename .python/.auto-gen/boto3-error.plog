@@ -625,8 +625,8 @@ e=KeyError('list_license_associations')
 type=aws_grafana_workspace clfn=grafana descfn=list_workspaces topkey=Workspaces id=None
 e=KeyError('Workspaces')
 -----------------------------------------------------------------------------
-type=aws_grafana_workspace_saml_configuration clfn=grafana descfn=list_workspace_saml_configurations topkey=SamlConfigurations id=None
-e=KeyError('list_workspace_saml_configurations')
+
+
 -----------------------------------------------------------------------------
 type=aws_guardduty_invite_accepter clfn=guardduty descfn=list_invitation_accepters topkey=InvitationAccepters id=None
 e=KeyError('list_invitation_accepters')
@@ -1327,32 +1327,9 @@ e=KeyError('list_signing_profile_permissions')
 type=aws_simpledb_domain clfn=sdb descfn=list_domains topkey=DomainNames id=None
 e=KeyError('DomainNames')
 -----------------------------------------------------------------------------
-type=aws_ssm_activation clfn=ssm descfn=list_activations topkey=ActivationList id=None
-e=KeyError('list_activations')
------------------------------------------------------------------------------
-type=aws_ssm_association clfn=ssm descfn=list_associations topkey=AssociationList id=None
-e=KeyError('AssociationList')
------------------------------------------------------------------------------
-type=aws_ssm_maintenance_window clfn=ssm descfn=list_maintenance_windows topkey=WindowIdentities id=None
-e=KeyError('list_maintenance_windows')
------------------------------------------------------------------------------
-type=aws_ssm_maintenance_window_target clfn=ssm descfn=list_targets_for_maintenance_window topkey=WindowTargetIds id=None
-e=KeyError('list_targets_for_maintenance_window')
------------------------------------------------------------------------------
-type=aws_ssm_maintenance_window_task clfn=ssm descfn=list_tasks_for_maintenance_window topkey=TaskIds id=None
-e=KeyError('list_tasks_for_maintenance_window')
------------------------------------------------------------------------------
-type=aws_ssm_patch_baseline clfn=ssm descfn=list_patch_baselines topkey=BaselineIdentities id=None
-e=KeyError('list_patch_baselines')
------------------------------------------------------------------------------
-type=aws_ssmcontacts_plan clfn=ssm-contacts descfn=list_plans topkey=Plans id=None
-e=KeyError('list_plans')
------------------------------------------------------------------------------
-type=aws_ssmincidents_replication_set clfn=ssm-incidents descfn=list_replication_sets topkey=ReplicationSets id=None
-e=KeyError('ReplicationSets')
------------------------------------------------------------------------------
-type=aws_ssmincidents_response_plan clfn=ssm-incidents descfn=list_response_plans topkey=ResponsePlans id=None
-e=KeyError('ResponsePlans')
+
+
+
 -----------------------------------------------------------------------------
 type=aws_ssoadmin_application_assignment_configuration clfn=sso-admin descfn=list_application_assignment_configurations topkey=ApplicationAssignmentConfigurations id=None
 e=KeyError('list_application_assignment_configurations')

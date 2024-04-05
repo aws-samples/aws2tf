@@ -111,4 +111,20 @@ noimport = {
     # via other resources
     "aws_api_gateway_method_response": True,
     "aws_api_gateway_method_settings": True,
+    # API not available
+    "aws_appintegrations_data_integration": True,
+    "aws_appintegrations_event_integration": True,
+    "aws_connect_instance": True,
+    "aws_devicefarm_instance_profile": True,
+    "aws_devicefarm_project": True,
+    "aws_globalaccelerator_accelerator": True,
+    "aws_globalaccelerator_custom_routing_accelerator": True,
+    "aws_route53domains_registered_domain": True,
+    "aws_route53recoverycontrolconfig_cluster": True,
+    "aws_route53recoverycontrolconfig_control_panel": True,
+    "aws_route53recoveryreadiness_cell": True,
+    "aws_route53recoveryreadiness_readiness_check": True,
+    "aws_route53recoveryreadiness_recovery_group": True,
+    "aws_route53recoveryreadiness_resource_set": True,
+
 }

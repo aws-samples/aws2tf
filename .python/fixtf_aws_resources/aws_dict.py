@@ -1517,7 +1517,7 @@ aws_autoscaling_group = {
 
 aws_autoscaling_group_tag = {
 	"clfn":		"autoscaling",
-	"descfn":	"list_tags",
+	"descfn":	"describe_tags",
 	"topkey":	"Tags",
 	"key":		"ResourceId",
 	"filterid":	"ResourceId"
@@ -1525,7 +1525,7 @@ aws_autoscaling_group_tag = {
 
 aws_autoscaling_lifecycle_hook = {
 	"clfn":		"autoscaling",
-	"descfn":	"list_lifecycle_hooks",
+	"descfn":	"describe_lifecycle_hooks",
 	"topkey":	"LifecycleHooks",
 	"key":		"LifecycleHookName",
 	"filterid":	"LifecycleHookName"
@@ -1541,18 +1541,18 @@ aws_autoscaling_notification = {
 
 aws_autoscaling_policy = {
 	"clfn":		"autoscaling",
-	"descfn":	"list_policies",
-	"topkey":	"Policies",
+	"descfn":	"describe_policies",
+	"topkey":	"ScalingPolicies",
 	"key":		"PolicyName",
 	"filterid":	"PolicyName"
 }
 
 aws_autoscaling_schedule = {
 	"clfn":		"autoscaling",
-	"descfn":	"list_schedules",
-	"topkey":	"Schedules",
-	"key":		"ScheduleName",
-	"filterid":	"ScheduleName"
+	"descfn":	"describe_scheduled_actions",
+	"topkey":	"ScheduledUpdateGroupActions",
+	"key":		"ScheduledActionName",
+	"filterid":	"ScheduledActionName"
 }
 
 aws_autoscaling_traffic_source_attachment = {
@@ -1565,7 +1565,7 @@ aws_autoscaling_traffic_source_attachment = {
 
 aws_autoscalingplans_scaling_plan = {
 	"clfn":		"autoscaling-plans",
-	"descfn":	"list_scaling_plans",
+	"descfn":	"describe_scaling_plans",
 	"topkey":	"ScalingPlans",
 	"key":		"ScalingPlanName",
 	"filterid":	"ScalingPlanName"

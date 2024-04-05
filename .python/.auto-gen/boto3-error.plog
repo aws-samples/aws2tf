@@ -4,11 +4,7 @@
 type=aws_appflow_connector_profile clfn=appflow descfn=list_connector_profiles topkey=ConnectorProfileDetailsList id=None
 e=KeyError('list_connector_profiles')
 -----------------------------------------------------------------------------
-type=aws_appintegrations_data_integration clfn=appintegrations descfn=list_data_integrations topkey=DataIntegrations id=None
-e=EndpointConnectionError('Could not connect to the endpoint URL: "https://app-integrations.eu-west-1.amazonaws.com/dataIntegrations"')
------------------------------------------------------------------------------
-type=aws_appintegrations_event_integration clfn=appintegrations descfn=list_event_integrations topkey=EventIntegrations id=None
-e=EndpointConnectionError('Could not connect to the endpoint URL: "https://app-integrations.eu-west-1.amazonaws.com/eventIntegrations"')
+
 -----------------------------------------------------------------------------
 type=aws_apprunner_auto_scaling_configuration_version clfn=apprunner descfn=list_auto_scaling_configuration_versions topkey=AutoScalingConfigurationVersions id=None
 e=KeyError('list_auto_scaling_configuration_versions')
@@ -70,20 +66,9 @@ e=KeyError('list_framework_shares')
 type=aws_auditmanager_organization_admin_account_registration clfn=auditmanager descfn=list_organization_admin_accounts topkey=OrganizationAdminAccounts id=None
 e=KeyError('list_organization_admin_accounts')
 -----------------------------------------------------------------------------
-type=aws_autoscaling_group_tag clfn=autoscaling descfn=list_tags topkey=Tags id=None
-e=KeyError('list_tags')
+
 -----------------------------------------------------------------------------
-type=aws_autoscaling_lifecycle_hook clfn=autoscaling descfn=list_lifecycle_hooks topkey=LifecycleHooks id=None
-e=KeyError('list_lifecycle_hooks')
------------------------------------------------------------------------------
-type=aws_autoscaling_policy clfn=autoscaling descfn=list_policies topkey=Policies id=None
-e=KeyError('list_policies')
------------------------------------------------------------------------------
-type=aws_autoscaling_schedule clfn=autoscaling descfn=list_schedules topkey=Schedules id=None
-e=KeyError('list_schedules')
------------------------------------------------------------------------------
-type=aws_autoscalingplans_scaling_plan clfn=autoscaling-plans descfn=list_scaling_plans topkey=ScalingPlans id=None
-e=KeyError('list_scaling_plans')
+
 -----------------------------------------------------------------------------
 type=aws_backup_global_settings clfn=backup descfn=list_global_settings topkey=GlobalSettings id=None
 e=KeyError('list_global_settings')
@@ -355,8 +340,7 @@ e=KeyError('list_remediation_configurations')
 type=aws_connect_bot_association clfn=connect descfn=list_bot_associations topkey=BotAssociations id=None
 e=KeyError('list_bot_associations')
 -----------------------------------------------------------------------------
-type=aws_connect_instance clfn=connect descfn=list_instances topkey=Instances id=None
-e=EndpointConnectionError('Could not connect to the endpoint URL: "https://connect.eu-west-1.amazonaws.com/instance"')
+
 -----------------------------------------------------------------------------
 type=aws_connect_lambda_function_association clfn=connect descfn=list_lambda_function_associations topkey=LambdaFunctionAssociations id=None
 e=KeyError('list_lambda_function_associations')
@@ -439,11 +423,7 @@ e=KeyError('list_invitation_accepters')
 type=aws_detective_organization_configuration clfn=detective descfn=list_organization_configurations topkey=OrganizationConfigurations id=None
 e=KeyError('list_organization_configurations')
 -----------------------------------------------------------------------------
-type=aws_devicefarm_instance_profile clfn=devicefarm descfn=list_instance_profiles topkey=InstanceProfiles id=None
-e=EndpointConnectionError('Could not connect to the endpoint URL: "https://devicefarm.eu-west-1.amazonaws.com/"')
------------------------------------------------------------------------------
-type=aws_devicefarm_project clfn=devicefarm descfn=list_projects topkey=Projects id=None
-e=EndpointConnectionError('Could not connect to the endpoint URL: "https://devicefarm.eu-west-1.amazonaws.com/"')
+
 -----------------------------------------------------------------------------
 type=aws_directory_service_conditional_forwarder clfn=ds descfn=list_conditional_forwarders topkey=ConditionalForwarders id=None
 e=KeyError('list_conditional_forwarders')
@@ -592,11 +572,7 @@ e=KeyError('list_game_session_queues')
 type=aws_glacier_vault_lock clfn=glacier descfn=list_vault_locks topkey=VaultLockList id=None
 e=KeyError('list_vault_locks')
 -----------------------------------------------------------------------------
-type=aws_globalaccelerator_accelerator clfn=globalaccelerator descfn=list_accelerators topkey=Accelerators id=None
-e=EndpointConnectionError('Could not connect to the endpoint URL: "https://globalaccelerator.eu-west-1.amazonaws.com/"')
------------------------------------------------------------------------------
-type=aws_globalaccelerator_custom_routing_accelerator clfn=globalaccelerator descfn=list_accelerators topkey=Accelerators id=None
-e=EndpointConnectionError('Could not connect to the endpoint URL: "https://globalaccelerator.eu-west-1.amazonaws.com/"')
+
 -----------------------------------------------------------------------------
 type=aws_glue_classifier clfn=glue descfn=list_classifiers topkey=Classifiers id=None
 e=KeyError('list_classifiers')
@@ -1099,26 +1075,7 @@ e=KeyError('list_vpc_associations_authorization')
 type=aws_route53_zone_association clfn=route53 descfn=list_hosted_zone_associations topkey=HostedZoneAssociations id=None
 e=KeyError('list_hosted_zone_associations')
 -----------------------------------------------------------------------------
-type=aws_route53domains_registered_domain clfn=route53domains descfn=list_domains topkey=Domains id=None
-e=EndpointConnectionError('Could not connect to the endpoint URL: "https://route53domains.eu-west-1.amazonaws.com/"')
------------------------------------------------------------------------------
-type=aws_route53recoverycontrolconfig_cluster clfn=route53-recovery-control-config descfn=list_clusters topkey=Clusters id=None
-e=EndpointConnectionError('Could not connect to the endpoint URL: "https://route53-recovery-control-config.eu-west-1.amazonaws.com/cluster"')
------------------------------------------------------------------------------
-type=aws_route53recoverycontrolconfig_control_panel clfn=route53-recovery-control-config descfn=list_control_panels topkey=ControlPanels id=None
-e=EndpointConnectionError('Could not connect to the endpoint URL: "https://route53-recovery-control-config.eu-west-1.amazonaws.com/controlpanels"')
------------------------------------------------------------------------------
-type=aws_route53recoveryreadiness_cell clfn=route53-recovery-readiness descfn=list_cells topkey=Cells id=None
-e=EndpointConnectionError('Could not connect to the endpoint URL: "https://route53-recovery-readiness.eu-west-1.amazonaws.com/cells"')
------------------------------------------------------------------------------
-type=aws_route53recoveryreadiness_readiness_check clfn=route53-recovery-readiness descfn=list_readiness_checks topkey=ReadinessChecks id=None
-e=EndpointConnectionError('Could not connect to the endpoint URL: "https://route53-recovery-readiness.eu-west-1.amazonaws.com/readinesschecks"')
------------------------------------------------------------------------------
-type=aws_route53recoveryreadiness_recovery_group clfn=route53-recovery-readiness descfn=list_recovery_groups topkey=RecoveryGroups id=None
-e=EndpointConnectionError('Could not connect to the endpoint URL: "https://route53-recovery-readiness.eu-west-1.amazonaws.com/recoverygroups"')
------------------------------------------------------------------------------
-type=aws_route53recoveryreadiness_resource_set clfn=route53-recovery-readiness descfn=list_resource_sets topkey=ResourceSets id=None
-e=EndpointConnectionError('Could not connect to the endpoint URL: "https://route53-recovery-readiness.eu-west-1.amazonaws.com/resourcesets"')
+
 -----------------------------------------------------------------------------
 type=aws_rum_app_monitor clfn=rum descfn=list_app_monitors topkey=AppMonitors id=None
 e=KeyError('AppMonitors')

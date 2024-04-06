@@ -56,17 +56,11 @@ e=KeyError('list_organization_admin_accounts')
 
 
 -----------------------------------------------------------------------------
-type=aws_backup_selection clfn=backup descfn=list_selections topkey=Selections id=None
-e=KeyError('list_selections')
------------------------------------------------------------------------------
 type=aws_backup_vault_lock_configuration clfn=backup descfn=list_vault_lock_configuration topkey=VaultLockConfiguration id=None
 e=KeyError('list_vault_lock_configuration')
 -----------------------------------------------------------------------------
 type=aws_backup_vault_notifications clfn=backup descfn=list_vault_notifications topkey=VaultNotifications id=None
 e=KeyError('list_vault_notifications')
------------------------------------------------------------------------------
-type=aws_backup_vault_policy clfn=backup descfn=list_vault_policies topkey=VaultPolicies id=None
-e=KeyError('list_vault_policies')
 -----------------------------------------------------------------------------
 
 

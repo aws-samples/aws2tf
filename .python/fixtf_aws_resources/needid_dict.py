@@ -464,6 +464,21 @@ aws_auditmanager_control = {
   "clfn": "auditmanager"
 }
 
+aws_backup_selection = {
+    "param": "BackupPlanId",
+    "clfn": "backup"  
+}
+
+aws_backup_vault_policy = {
+    "param": "BackupVaultName",
+    "clfn": "backup"  
+}
+
+aws_backup_vault_notifications = {
+    "param": "BackupVaultName",
+    "clfn": "backup"  
+}
+
 aws_chime_voice_connector_termination_credentials = {
   "param": "VoiceConnectorId",
   "clfn": "chime"
@@ -1583,6 +1598,9 @@ aws_needid = {
   "aws_athena_database": aws_athena_database,
   "aws_athena_prepared_statement": aws_athena_prepared_statement,
   "aws_auditmanager_control": aws_auditmanager_control,
+  "aws_backup_selection": aws_backup_selection,
+  "aws_backup_vault_policy": aws_backup_vault_policy,
+  "aws_backup_vault_notifications": aws_backup_vault_notifications,
   "aws_chime_voice_connector_termination_credentials": aws_chime_voice_connector_termination_credentials,
   "aws_codecatalyst_dev_environment": aws_codecatalyst_dev_environment,
   "aws_codecatalyst_project": aws_codecatalyst_project,

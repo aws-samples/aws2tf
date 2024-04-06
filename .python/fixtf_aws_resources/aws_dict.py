@@ -1613,10 +1613,10 @@ aws_backup_report_plan = {
 
 aws_backup_selection = {
 	"clfn":		"backup",
-	"descfn":	"list_selections",
-	"topkey":	"Selections",
-	"key":		"SelectionName",
-	"filterid":	"SelectionName"
+	"descfn":	"list_backup_selections",
+	"topkey":	"BackupSelectionsList",
+	"key":		"BackupPlanId",
+	"filterid":	"BackupPlanId"
 }
 
 aws_backup_vault = {
@@ -1637,18 +1637,18 @@ aws_backup_vault_lock_configuration = {
 
 aws_backup_vault_notifications = {
 	"clfn":		"backup",
-	"descfn":	"list_vault_notifications",
-	"topkey":	"VaultNotifications",
-	"key":		"VaultNotificationsName",
-	"filterid":	"VaultNotificationsName"
+	"descfn":	"get_backup_vault_notifications",
+	"topkey":	"SNSTopicArn",
+	"key":		"BackupVaultName",
+	"filterid":	"BackupVaultName"
 }
 
 aws_backup_vault_policy = {
 	"clfn":		"backup",
-	"descfn":	"list_vault_policies",
-	"topkey":	"VaultPolicies",
-	"key":		"VaultName",
-	"filterid":	"VaultName"
+	"descfn":	"get_backup_vault_access_policy",
+	"topkey":	"Policy",
+	"key":		"BackupVaultName",
+	"filterid":	"BackupVaultName"
 }
 
 aws_batch_compute_environment = {

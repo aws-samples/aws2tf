@@ -1629,10 +1629,10 @@ aws_backup_vault = {
 
 aws_backup_vault_lock_configuration = {
 	"clfn":		"backup",
-	"descfn":	"list_vault_lock_configuration",
-	"topkey":	"VaultLockConfiguration",
-	"key":		"VaultLockConfigurationName",
-	"filterid":	"VaultLockConfigurationName"
+	"descfn":	"describe_backup_vault",
+	"topkey":	"BackupVaultName",
+	"key":		"BackupVaultName",
+	"filterid":	"BackupVaultName"
 }
 
 aws_backup_vault_notifications = {

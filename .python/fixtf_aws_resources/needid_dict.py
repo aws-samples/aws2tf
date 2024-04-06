@@ -479,6 +479,11 @@ aws_backup_vault_notifications = {
     "clfn": "backup"  
 }
 
+aws_backup_vault_lock_configuration = {
+    "param": "BackupVaultName",
+    "clfn": "backup"  
+}
+
 aws_chime_voice_connector_termination_credentials = {
   "param": "VoiceConnectorId",
   "clfn": "chime"
@@ -1601,6 +1606,7 @@ aws_needid = {
   "aws_backup_selection": aws_backup_selection,
   "aws_backup_vault_policy": aws_backup_vault_policy,
   "aws_backup_vault_notifications": aws_backup_vault_notifications,
+  "aws_backup_vault_lock_configuration": aws_backup_vault_lock_configuration,
   "aws_chime_voice_connector_termination_credentials": aws_chime_voice_connector_termination_credentials,
   "aws_codecatalyst_dev_environment": aws_codecatalyst_dev_environment,
   "aws_codecatalyst_project": aws_codecatalyst_project,

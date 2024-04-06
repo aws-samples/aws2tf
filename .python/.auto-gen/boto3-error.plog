@@ -54,17 +54,6 @@ type=aws_auditmanager_organization_admin_account_registration clfn=auditmanager 
 e=KeyError('list_organization_admin_accounts')
 -----------------------------------------------------------------------------
 
-
------------------------------------------------------------------------------
-type=aws_backup_vault_lock_configuration clfn=backup descfn=list_vault_lock_configuration topkey=VaultLockConfiguration id=None
-e=KeyError('list_vault_lock_configuration')
------------------------------------------------------------------------------
-type=aws_backup_vault_notifications clfn=backup descfn=list_vault_notifications topkey=VaultNotifications id=None
-e=KeyError('list_vault_notifications')
------------------------------------------------------------------------------
-
-
-
 type=aws_batch_compute_environment clfn=batch descfn=list_compute_environments topkey=ComputeEnvironments id=None
 e=KeyError('list_compute_environments')
 -----------------------------------------------------------------------------

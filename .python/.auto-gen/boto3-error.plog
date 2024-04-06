@@ -1,19 +1,6 @@
 
-
------------------------------------------------------------------------------
-type=aws_appflow_connector_profile clfn=appflow descfn=list_connector_profiles topkey=ConnectorProfileDetailsList id=None
-e=KeyError('list_connector_profiles')
 -----------------------------------------------------------------------------
 
------------------------------------------------------------------------------
-type=aws_apprunner_auto_scaling_configuration_version clfn=apprunner descfn=list_auto_scaling_configuration_versions topkey=AutoScalingConfigurationVersions id=None
-e=KeyError('list_auto_scaling_configuration_versions')
------------------------------------------------------------------------------
-type=aws_apprunner_custom_domain_association clfn=apprunner descfn=list_custom_domain_associations topkey=CustomDomainAssociations id=None
-e=KeyError('list_custom_domain_associations')
------------------------------------------------------------------------------
-type=aws_apprunner_default_auto_scaling_configuration_version clfn=apprunner descfn=list_default_auto_scaling_configurations topkey=DefaultAutoScalingConfigurations id=None
-e=KeyError('list_default_auto_scaling_configurations')
 -----------------------------------------------------------------------------
 type=aws_appstream_directory_config clfn=appstream descfn=list_directory_configs topkey=DirectoryConfigs id=None
 e=KeyError('list_directory_configs')
@@ -67,23 +54,10 @@ type=aws_auditmanager_organization_admin_account_registration clfn=auditmanager 
 e=KeyError('list_organization_admin_accounts')
 -----------------------------------------------------------------------------
 
------------------------------------------------------------------------------
 
------------------------------------------------------------------------------
-type=aws_backup_global_settings clfn=backup descfn=list_global_settings topkey=GlobalSettings id=None
-e=KeyError('list_global_settings')
------------------------------------------------------------------------------
-type=aws_backup_plan clfn=backup descfn=list_plans topkey=Plans id=None
-e=KeyError('list_plans')
------------------------------------------------------------------------------
-type=aws_backup_region_settings clfn=backup descfn=list_region_settings topkey=RegionSettings id=None
-e=KeyError('list_region_settings')
 -----------------------------------------------------------------------------
 type=aws_backup_selection clfn=backup descfn=list_selections topkey=Selections id=None
 e=KeyError('list_selections')
------------------------------------------------------------------------------
-type=aws_backup_vault clfn=backup descfn=list_vaults topkey=Vaults id=None
-e=KeyError('list_vaults')
 -----------------------------------------------------------------------------
 type=aws_backup_vault_lock_configuration clfn=backup descfn=list_vault_lock_configuration topkey=VaultLockConfiguration id=None
 e=KeyError('list_vault_lock_configuration')
@@ -94,6 +68,9 @@ e=KeyError('list_vault_notifications')
 type=aws_backup_vault_policy clfn=backup descfn=list_vault_policies topkey=VaultPolicies id=None
 e=KeyError('list_vault_policies')
 -----------------------------------------------------------------------------
+
+
+
 type=aws_batch_compute_environment clfn=batch descfn=list_compute_environments topkey=ComputeEnvironments id=None
 e=KeyError('list_compute_environments')
 -----------------------------------------------------------------------------
@@ -106,8 +83,7 @@ e=KeyError('list_job_queues')
 type=aws_batch_scheduling_policy clfn=batch descfn=list_scheduling_policies topkey=SchedulingPolicies id=None
 e=KeyError('SchedulingPolicies')
 -----------------------------------------------------------------------------
-type=aws_bedrock_model_invocation_logging_configuration clfn=bedrock descfn=list_model_invocation_logging_configurations topkey=ModelInvocationLoggingConfigurations id=None
-e=KeyError('list_model_invocation_logging_configurations')
+
 -----------------------------------------------------------------------------
 type=aws_budgets_budget clfn=budgets descfn=list_budgets topkey=Budgets id=None
 e=KeyError('list_budgets')
@@ -142,12 +118,17 @@ e=KeyError('list_media_insights_pipelines')
 type=aws_chimesdkvoice_global_settings clfn=chime-sdk-voice descfn=list_global_settings topkey=GlobalSettings id=None
 e=KeyError('list_global_settings')
 -----------------------------------------------------------------------------
+
+
 type=aws_cleanrooms_collaboration clfn=cleanrooms descfn=list_collaborations topkey=Collaborations id=None
 e=KeyError('Collaborations')
 -----------------------------------------------------------------------------
 type=aws_cleanrooms_configured_table clfn=cleanrooms descfn=list_configured_tables topkey=ConfiguredTables id=None
 e=KeyError('ConfiguredTables')
 -----------------------------------------------------------------------------
+
+
+
 type=aws_cloudformation_stack_set clfn=cloudformation descfn=list_stack_sets topkey=StackSets id=None
 e=KeyError('StackSets')
 -----------------------------------------------------------------------------
@@ -306,6 +287,9 @@ e=KeyError('EntityRecognizers')
 -----------------------------------------------------------------------------
 type=aws_config_aggregate_authorization clfn=config descfn=list_aggregate_authorizations topkey=AggregateAuthorizations id=None
 e=KeyError('list_aggregate_authorizations')
+
+
+
 -----------------------------------------------------------------------------
 type=aws_config_configuration_aggregator clfn=config descfn=list_configuration_aggregators topkey=ConfigurationAggregators id=None
 e=KeyError('list_configuration_aggregators')
@@ -336,6 +320,8 @@ e=KeyError('list_organization_managed_rules')
 -----------------------------------------------------------------------------
 type=aws_config_remediation_configuration clfn=config descfn=list_remediation_configurations topkey=RemediationConfigurations id=None
 e=KeyError('list_remediation_configurations')
+
+
 -----------------------------------------------------------------------------
 type=aws_connect_bot_association clfn=connect descfn=list_bot_associations topkey=BotAssociations id=None
 e=KeyError('list_bot_associations')
@@ -594,12 +580,6 @@ e=KeyError('list_security_configurations')
 -----------------------------------------------------------------------------
 type=aws_glue_user_defined_function clfn=glue descfn=list_user_defined_functions topkey=UserDefinedFunctionNames id=None
 e=KeyError('list_user_defined_functions')
------------------------------------------------------------------------------
-type=aws_grafana_license_association clfn=grafana descfn=list_license_associations topkey=LicenseAssociations id=None
-e=KeyError('list_license_associations')
------------------------------------------------------------------------------
-type=aws_grafana_workspace clfn=grafana descfn=list_workspaces topkey=Workspaces id=None
-e=KeyError('Workspaces')
 -----------------------------------------------------------------------------
 
 
@@ -864,6 +844,9 @@ e=KeyError('list_links')
 -----------------------------------------------------------------------------
 type=aws_oam_sink_policy clfn=networkmanager descfn=list_links topkey=Links id=None
 e=KeyError('list_links')
+
+
+
 -----------------------------------------------------------------------------
 type=aws_opensearch_inbound_connection_accepter clfn=opensearch descfn=list_inbound_connection_accepters topkey=InboundConnectionAccepters id=None
 e=KeyError('list_inbound_connection_accepters')
@@ -963,6 +946,8 @@ e=KeyError('Workspaces')
 -----------------------------------------------------------------------------
 type=aws_quicksight_folder_membership clfn=quicksight descfn=list_folder_memberships topkey=FolderMemberships id=None
 e=KeyError('list_folder_memberships')
+
+
 -----------------------------------------------------------------------------
 type=aws_ram_principal_association clfn=ram descfn=list_principal_associations topkey=PrincipalAssociations id=None
 e=KeyError('list_principal_associations')

@@ -1109,10 +1109,10 @@ aws_appconfig_hosted_configuration_version = {
 
 aws_appflow_connector_profile = {
 	"clfn":		"appflow",
-	"descfn":	"list_connector_profiles",
-	"topkey":	"ConnectorProfileDetailsList",
-	"key":		"ConnectorProfileName",
-	"filterid":	"ConnectorProfileName"
+	"descfn":	"describe_connector_profiles",
+	"topkey":	"connectorProfileDetails",
+	"key":		"connectorProfileArn",
+	"filterid":	"connectorProfileArn"
 }
 
 aws_appflow_flow = {
@@ -1205,10 +1205,10 @@ aws_appmesh_virtual_service = {
 
 aws_apprunner_auto_scaling_configuration_version = {
 	"clfn":		"apprunner",
-	"descfn":	"list_auto_scaling_configuration_versions",
-	"topkey":	"AutoScalingConfigurationVersions",
-	"key":		"AutoScalingConfigurationVersionArn",
-	"filterid":	"AutoScalingConfigurationVersionArn"
+	"descfn":	"describe_auto_scaling_configuration",
+	"topkey":	"AutoScalingConfiguration",
+	"key":		"AutoScalingConfigurationArn",
+	"filterid":	"AutoScalingConfigurationArn"
 }
 
 aws_apprunner_connection = {
@@ -1221,18 +1221,18 @@ aws_apprunner_connection = {
 
 aws_apprunner_custom_domain_association = {
 	"clfn":		"apprunner",
-	"descfn":	"list_custom_domain_associations",
-	"topkey":	"CustomDomainAssociations",
-	"key":		"CustomDomainAssociationArn",
-	"filterid":	"CustomDomainAssociationArn"
+	"descfn":	"describe_custom_domains",
+	"topkey":	"CustomDomains",
+	"key":		"ServiceArn",
+	"filterid":	"ServiceArn"
 }
 
 aws_apprunner_default_auto_scaling_configuration_version = {
 	"clfn":		"apprunner",
-	"descfn":	"list_default_auto_scaling_configurations",
-	"topkey":	"DefaultAutoScalingConfigurations",
-	"key":		"DefaultAutoScalingConfigurationArn",
-	"filterid":	"DefaultAutoScalingConfigurationArn"
+	"descfn":	"describe_auto_scaling_configuration",
+	"topkey":	"AutoScalingConfiguration",
+	"key":		"AutoScalingConfigurationArn",
+	"filterid":	"AutoScalingConfigurationArn"
 }
 
 aws_apprunner_observability_configuration = {
@@ -1581,7 +1581,7 @@ aws_backup_framework = {
 
 aws_backup_global_settings = {
 	"clfn":		"backup",
-	"descfn":	"list_global_settings",
+	"descfn":	"describe_global_settings",
 	"topkey":	"GlobalSettings",
 	"key":		"GlobalSettingsName",
 	"filterid":	"GlobalSettingsName"
@@ -1589,18 +1589,18 @@ aws_backup_global_settings = {
 
 aws_backup_plan = {
 	"clfn":		"backup",
-	"descfn":	"list_plans",
-	"topkey":	"Plans",
-	"key":		"PlanName",
-	"filterid":	"PlanName"
+	"descfn":	"list_backup_plans",
+	"topkey":	"BackupPlansList",
+	"key":		"BackupPlanId",
+	"filterid":	"BackupPlanId"
 }
 
 aws_backup_region_settings = {
 	"clfn":		"backup",
-	"descfn":	"list_region_settings",
-	"topkey":	"RegionSettings",
-	"key":		"RegionSettingsName",
-	"filterid":	"RegionSettingsName"
+	"descfn":	"describe_region_settings",
+	"topkey":	"ResourceTypeOptInPreference",
+	"key":		"null",
+	"filterid":	"null"
 }
 
 aws_backup_report_plan = {
@@ -1621,10 +1621,10 @@ aws_backup_selection = {
 
 aws_backup_vault = {
 	"clfn":		"backup",
-	"descfn":	"list_vaults",
-	"topkey":	"Vaults",
-	"key":		"VaultName",
-	"filterid":	"VaultName"
+	"descfn":	"list_backup_vaults",
+	"topkey":	"BackupVaultList",
+	"key":		"BackupVaultName",
+	"filterid":	"BackupVaultName"
 }
 
 aws_backup_vault_lock_configuration = {
@@ -1685,10 +1685,10 @@ aws_batch_scheduling_policy = {
 
 aws_bedrock_model_invocation_logging_configuration = {
 	"clfn":		"bedrock",
-	"descfn":	"list_model_invocation_logging_configurations",
-	"topkey":	"ModelInvocationLoggingConfigurations",
-	"key":		"ModelInvocationLoggingConfigurationName",
-	"filterid":	"ModelInvocationLoggingConfigurationName"
+	"descfn":	"get_model_invocation_logging_configuration",
+	"topkey":	"loggingConfig",
+	"key":		"null",
+	"filterid":	"null"
 }
 
 aws_budgets_budget = {
@@ -4847,9 +4847,9 @@ aws_grafana_role_association = {
 aws_grafana_workspace = {
 	"clfn":		"grafana",
 	"descfn":	"list_workspaces",
-	"topkey":	"Workspaces",
-	"key":		"WorkspaceId",
-	"filterid":	"WorkspaceId"
+	"topkey":	"workspaces",
+	"key":		"id",
+	"filterid":	"id"
 }
 
 aws_grafana_workspace_api_key = {

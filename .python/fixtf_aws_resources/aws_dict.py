@@ -7407,11 +7407,11 @@ aws_rbin_rule = {
 }
 
 aws_rds_cluster_activity_stream = {
-	"clfn":		"rds",
-	"descfn":	"describe_db_cluster_activity_stream",
-	"topkey":	"ActivityStream",
-	"key":		"ActivityStreamId",
-	"filterid":	"ActivityStreamId"
+    "clfn":		"rds",
+    "descfn":	"describe_db_clusters",
+	"topkey":	"DBClusters",
+	"key":		"DBClusterIdentifier",
+	"filterid":	"DBClusterIdentifier"
 }
 
 aws_rds_cluster_endpoint = {
@@ -7422,19 +7422,19 @@ aws_rds_cluster_endpoint = {
 	"filterid":	"DBClusterEndpointIdentifier"
 }
 
-aws_rds_cluster_role_association = {
+aws_rds_cluster_role_association= {
 	"clfn":		"rds",
-	"descfn":	"describe_db_cluster_role_associations",
-	"topkey":	"DBClusterRoleAssociations",
-	"key":		"DBClusterRoleAssociationId",
-	"filterid":	"DBClusterRoleAssociationId"
+    "descfn":	"describe_db_clusters",
+	"topkey":	"DBClusters",
+	"key":		"DBClusterIdentifier",
+	"filterid":	"DBClusterIdentifier"
 }
 
 aws_rds_custom_db_engine_version = {
 	"clfn":		"rds",
-	"descfn":	"describe_custom_db_engine_versions",
-	"topkey":	"CustomDBEngineVersions",
-	"key":		"EngineVersion",
+	"descfn":	"describe_db_clusters",
+	"topkey":	"DBClusters",
+	"key":		"Engine",
 	"filterid":	"EngineVersion"
 }
 

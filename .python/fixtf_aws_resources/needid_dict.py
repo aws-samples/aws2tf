@@ -1114,6 +1114,11 @@ aws_quicksight_user = {
   "clfn": "quicksight"
 }
 
+aws_rds_cluster_role_association = {
+  "param":	"DBClusterIdentifier",
+	"clfn":		"rds"
+}
+
 aws_rds_orderable_db_instance = {
   "param": "Engine",
   "clfn": "rds"
@@ -1733,6 +1738,7 @@ aws_needid = {
   "aws_quicksight_template_alias": aws_quicksight_template_alias,
   "aws_quicksight_theme": aws_quicksight_theme,
   "aws_quicksight_user": aws_quicksight_user,
+  "aws_rds_cluster_role_association": aws_rds_cluster_role_association,
   "aws_rds_orderable_db_instance": aws_rds_orderable_db_instance,
   "aws_redshift_partner": aws_redshift_partner,
   "aws_redshiftdata_statement": aws_redshiftdata_statement,

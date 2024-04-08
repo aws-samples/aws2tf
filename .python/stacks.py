@@ -568,7 +568,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::DocDB::EventSubscription": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::DocDBElastic::Cluster": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::DynamoDB::GlobalTable": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::DynamoDB::Table": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::DynamoDB::Table": common.call_resource("aws_dynamodb_table",pid)
             elif type == "AWS::EC2::CapacityReservation": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::EC2::CapacityReservationFleet": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::EC2::CarrierGateway": common.call_resource("aws_null", type+" "+pid)

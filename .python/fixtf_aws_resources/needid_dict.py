@@ -604,11 +604,6 @@ aws_dynamodb_kinesis_streaming_destination = {
   "clfn": "dynamodb"
 }
 
-aws_dynamodb_table = {
-  "param": "TableName",
-  "clfn": "dynamodb"
-}
-
 aws_dynamodb_table_item = {
   "param": "TableName",
   "clfn": "dynamodb"
@@ -1641,7 +1636,6 @@ aws_needid = {
   "aws_devicefarm_upload": aws_devicefarm_upload,
   "aws_dynamodb_contributor_insights": aws_dynamodb_contributor_insights,
   "aws_dynamodb_kinesis_streaming_destination": aws_dynamodb_kinesis_streaming_destination,
-  "aws_dynamodb_table": aws_dynamodb_table,
   "aws_dynamodb_table_item": aws_dynamodb_table_item,
   "aws_dynamodb_table_replica": aws_dynamodb_table_replica,
   "aws_dynamodb_tag": aws_dynamodb_tag,

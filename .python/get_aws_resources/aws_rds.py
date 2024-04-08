@@ -8,8 +8,8 @@ import sys
 def get_aws_db_parameter_group(type, id, clfn, descfn, topkey, key, filterid):
 
 
-    if globals.debug:
-        print("--> In get_aws_db_parameter_group  doing " + type + ' with id ' + str(id) +
+    #if globals.debug:
+    print("--> In get_aws_db_parameter_group  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -27,8 +27,13 @@ def get_aws_db_parameter_group(type, id, clfn, descfn, topkey, key, filterid):
                 common.write_import(type,j[key],None) 
             else:
                 if "default." not in id: 
-                    id="default."+id
-                if id==j[key]: common.write_import(type,j[key],None)
+                    did="default."+id
+                if did==j[key]: 
+                    common.write_import(type,j[key],None)
+                else:
+                    if id==j[key]:
+                        common.write_import(type,j[key],None)
+
    
 
     except Exception as e:
@@ -41,3 +46,5 @@ def get_aws_db_parameter_group(type, id, clfn, descfn, topkey, key, filterid):
             exit()
 
     return True
+
+

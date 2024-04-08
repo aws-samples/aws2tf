@@ -19,6 +19,7 @@ lbc=0
 asg_azs=False
 plan2=False
 ssmparamn=""
+repdbin=False
 
 #specials=["aws_iam_role_policy","aws_route_table_association","aws_iam_policy","aws_iam_policy_attchment",
 #          "aws_eks_cluster","aws_eks_fagate_profile","aws_kms_key","aws_kms_alias",

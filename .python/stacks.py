@@ -1094,7 +1094,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::RDS::DBProxy": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::RDS::DBProxyEndpoint": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::RDS::DBProxyTargetGroup": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::RDS::DBSecurityGroup": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::RDS::DBSecurityGroup": common.call_resource("aws_security_group", pid)
             elif type == "AWS::RDS::DBSecurityGroupIngress": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::RDS::GlobalCluster": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::RDS::OptionGroup": common.call_resource("aws_null", type+" "+pid)

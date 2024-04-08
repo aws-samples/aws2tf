@@ -7489,7 +7489,7 @@ aws_redshift_cluster_snapshot = {
 aws_redshift_endpoint_access = {
 	"clfn":		"redshift",
 	"descfn":	"describe_endpoint_access",
-	"topkey":	"EndpointAccess",
+	"topkey":	"EndpointAccessList",
 	"key":		"EndpointName",
 	"filterid":	"EndpointName"
 }
@@ -7497,7 +7497,7 @@ aws_redshift_endpoint_access = {
 aws_redshift_endpoint_authorization = {
 	"clfn":		"redshift",
 	"descfn":	"describe_endpoint_authorization",
-	"topkey":	"EndpointAuthorization",
+	"topkey":	"EndpointAuthorizationList",
 	"key":		"EndpointName",
 	"filterid":	"EndpointName"
 }
@@ -7536,10 +7536,10 @@ aws_redshift_partner = {
 
 aws_redshift_resource_policy = {
 	"clfn":		"redshift",
-	"descfn":	"describe_resource_policies",
-	"topkey":	"ResourcePolicies",
-	"key":		"ResourcePolicyId",
-	"filterid":	"ResourcePolicyId"
+	"descfn":	"get_resource_policy",
+	"topkey":	"ResourcePolicy",
+	"key":		"ResourceArn",
+	"filterid":	"ResourceArn"
 }
 
 aws_redshift_scheduled_action = {
@@ -7568,10 +7568,10 @@ aws_redshift_snapshot_schedule = {
 
 aws_redshift_snapshot_schedule_association = {
 	"clfn":		"redshift",
-	"descfn":	"describe_snapshot_schedule_associations",
-	"topkey":	"SnapshotScheduleAssociations",
-	"key":		"ScheduleAssociationId",
-	"filterid":	"ScheduleAssociationId"
+	"descfn":	"describe_snapshot_schedules",
+	"topkey":	"SnapshotSchedules",
+	"key":		"ScheduleIdentifier",
+	"filterid":	"ScheduleIdentifier"
 }
 
 aws_redshift_usage_limit = {

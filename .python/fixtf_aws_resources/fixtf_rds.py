@@ -1,5 +1,6 @@
 import common
 import fixtf
+import globals
 
 def aws_db_parameter_group(t1,tt1,tt2,flag1,flag2):
     skip=0
@@ -14,6 +15,14 @@ def aws_db_instance(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "domain_dns_ips":
        if tt2 == "[]": skip=1
+
+    elif tt1 == "db_name" or tt1 ==  "username":
+       if globals.repdbin: skip=1
+
+    elif tt1 == "parameter_group_name":
+        if "default" not in tt2:
+            t1=tt1 + " = aws_db_parameter_group." + tt2 + ".id\n"
+
     return skip,t1,flag1,flag2
 
 def aws_db_event_subscription(t1,tt1,tt2,flag1,flag2):

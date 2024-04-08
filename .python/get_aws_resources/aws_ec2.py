@@ -20,10 +20,17 @@ def get_aws_security_group_rule(type, id, clfn, descfn, topkey, key, filterid):
         if id is None:
             response = client.describe_security_group_rules()        
         else:        
-            if "sg-" in id:
+            if id.startswith("sg-"):
                 response = client.describe_security_group_rules(Filters=[{'Name': 'group-id','Values': [id]},])
                 pkey="aws_security_group_rule."+id
                 globals.rproc[pkey] = True
+            else:  # assume it's security group name
+                response = client.describe_security_group_rules(GroupNames=[id]) 
+                for j in response[topkey]:
+                    gid=j['GroupId']
+                    pkey="aws_security_group_rule."+gid
+                    globals.rproc[pkey] = True
+
 
 
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True

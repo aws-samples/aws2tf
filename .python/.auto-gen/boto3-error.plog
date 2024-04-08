@@ -1,7 +1,5 @@
 
 -----------------------------------------------------------------------------
-
------------------------------------------------------------------------------
 type=aws_appstream_directory_config clfn=appstream descfn=list_directory_configs topkey=DirectoryConfigs id=None
 e=KeyError('list_directory_configs')
 -----------------------------------------------------------------------------
@@ -952,20 +950,6 @@ e=KeyError('list_resolver_rules')
 -----------------------------------------------------------------------------
 
 
-
------------------------------------------------------------------------------
-type=aws_redshift_endpoint_access clfn=redshift descfn=describe_endpoint_access topkey=EndpointAccess id=None
-e=KeyError('EndpointAccess')
------------------------------------------------------------------------------
-type=aws_redshift_endpoint_authorization clfn=redshift descfn=describe_endpoint_authorization topkey=EndpointAuthorization id=None
-e=KeyError('EndpointAuthorization')
------------------------------------------------------------------------------
-type=aws_redshift_resource_policy clfn=redshift descfn=describe_resource_policies topkey=ResourcePolicies id=None
-e=KeyError('describe_resource_policies')
------------------------------------------------------------------------------
-type=aws_redshift_snapshot_schedule_association clfn=redshift descfn=describe_snapshot_schedule_associations topkey=SnapshotScheduleAssociations id=None
-e=KeyError('describe_snapshot_schedule_associations')
------------------------------------------------------------------------------
 
 
 

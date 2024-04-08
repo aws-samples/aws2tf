@@ -234,6 +234,19 @@ def fixtf(ttft,tf):
     Lines = f1.readlines()
     #print("getfn for fixtf2."+ttft+" "+tf2)
     #with open(tf2, "a") as f2:
+    ## Prescan    
+    if ttft=="aws_db_instance":
+        for t1 in Lines:
+            t1=t1.strip()
+            skip=0
+            tt1=t1.split("=")[0].strip()
+            try:
+                tt2=t1.split("=")[1].strip().strip('\"')
+            except:
+                tt2=""
+            if tt1=="replicate_source_db":
+                if tt2 != "null": globals.repdbin=True
+
 
     #if globals.acc in tf2:
     #    tf2=tf2.replace(globals.acc, "__")

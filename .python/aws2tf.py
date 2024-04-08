@@ -118,7 +118,7 @@ if __name__ == '__main__':
     common.aws_tf(region)
     
     print("---<><><"+ str(type))
-    print("id=   " +str(id))
+    print("id=" +str(id))
 
     if type == "all": type = "test"
     elif type == "aws_vpc" or type == "vpc": type = "aws_vpc"

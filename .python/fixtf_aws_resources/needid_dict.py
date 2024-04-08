@@ -1114,6 +1114,11 @@ aws_quicksight_user = {
   "clfn": "quicksight"
 }
 
+aws_redshift_resource_policy = {
+  "param":	"ResourceArn",
+	"clfn":		"redshift"
+}
+
 aws_rds_cluster_role_association = {
   "param":	"DBClusterIdentifier",
 	"clfn":		"rds"
@@ -1741,6 +1746,7 @@ aws_needid = {
   "aws_rds_cluster_role_association": aws_rds_cluster_role_association,
   "aws_rds_orderable_db_instance": aws_rds_orderable_db_instance,
   "aws_redshift_partner": aws_redshift_partner,
+  "aws_redshift_resource_policy": aws_redshift_resource_policy,
   "aws_redshiftdata_statement": aws_redshiftdata_statement,
   "aws_route53_cidr_location": aws_route53_cidr_location,
   "aws_route53_record": aws_route53_record,

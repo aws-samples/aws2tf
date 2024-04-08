@@ -286,7 +286,6 @@ def fixtf(ttft,tf):
                 skip,t1,flag1,flag2=aws_common.aws_common(ttft,t1,tt1,tt2,flag1,flag2)
                 
 
-
                 skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
                 #print("t1="+t1)
             except Exception as e:
@@ -362,6 +361,8 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
     if cc == 0 and prefix in tt2: 
         subs=subs + ttft + "." + tt2 + ".id,"
         common.add_dependancy(ttft,tt2)
+    else:
+        print("Warning: named security group:" + tt2)    
              
     t1=tt1 + " = [" + subs + "]\n"
     t1=t1.replace(',]',']')

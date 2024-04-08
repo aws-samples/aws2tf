@@ -264,12 +264,12 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 	
 	try:
 		#print("hi")
-		if tt1 == "subnet_id":
-			t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
-			common.add_dependancy("aws_subnet",tt2)
+		#if tt1 == "subnet_id":
+	#		t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
+	#		common.add_dependancy("aws_subnet",tt2)
 		##elif tt1 == "vpc_security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
 
-		elif tt1 == "ipv6_addresses":
+		if tt1 == "ipv6_addresses":
 			##tt2=tt2.strip('\"')
 			if tt2 == "[]": skip=1
 
@@ -292,9 +292,17 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 		elif tt1 == "user_data_base64": skip=1
 	
 		elif tt1 == "iam_instance_profile":
-			##tt2=tt2.strip('\"')
-			t1=tt1 + " = aws_iam_instance_profile." + tt2 + ".name\n"
-			common.add_dependancy("aws_iam_instance_profile",tt2)
+			if tt2 != "null":
+				t1=tt1 + " = aws_iam_instance_profile." + tt2 + ".name\n"
+				common.add_dependancy("aws_iam_instance_profile",tt2)
+
+
+		elif tt1 == "security_groups": skip=1
+		elif tt1 == "key_name": 
+			if tt2 != "null":
+				t1=tt1 + " = aws_key_pair." + tt2 + ".id\n"
+				common.add_dependancy("aws_key_pair",tt2)
+
 
 		
 	except Exception as e:
@@ -337,7 +345,7 @@ def aws_key_pair(t1,tt1,tt2,flag1,flag2):
 		for j in resp1:
 			pubk=j['PublicKey']
 			pubk=pubk.strip()
-			t1=tt1 + " = \""+pubk+"\"\n"
+			t1=tt1 + " = \""+pubk+"\"\n" +"\n lifecycle {\n   ignore_changes = [public_key]\n}\n"
 
 
 	return skip,t1,flag1,flag2
@@ -381,6 +389,9 @@ def  aws_nat_gateway(t1,tt1,tt2,flag1,flag2):
 
 def  aws_network_acl(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "ipv6_cidr_block":
+       if tt2 == "":
+         t1=tt1+ " = null\n"
     return skip,t1,flag1,flag2
 
 def  aws_default_network_acl(t1,tt1,tt2,flag1,flag2):

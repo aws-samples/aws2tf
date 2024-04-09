@@ -8,6 +8,7 @@ def aws_iam_access_key(t1,tt1,tt2,flag1,flag2):
     if tt1 == "user":
         pkey="aws_iam_access_key."+tt2
         globals.rproc[pkey]=True
+        t1=tt1+" = aws_iam_user."+tt2+".id\n"
     return skip,t1,flag1,flag2
 
 def aws_iam_access_keys(t1,tt1,tt2,flag1,flag2):
@@ -27,14 +28,19 @@ def aws_iam_group(t1,tt1,tt2,flag1,flag2):
 	if tt1 == "name":
 		#print("get users in group "+tt2)
 		common.add_dependancy("aws_iam_user_group_membership",tt2)
+		common.add_dependancy("aws_iam_group_policy",tt2)
 	return skip,t1,flag1,flag2
 
 def aws_iam_group_membership(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+    skip=0
+
+		
+    return skip,t1,flag1,flag2
 
 def aws_iam_group_policy(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="group" and tt2 !="null":
+		t1=tt1+" = aws_iam_group."+tt2+".id\n"
 	return skip,t1,flag1,flag2
 
 def aws_iam_group_policy_attachment(t1,tt1,tt2,flag1,flag2):
@@ -167,8 +173,13 @@ def aws_iam_signing_certificate(t1,tt1,tt2,flag1,flag2):
 	return skip,t1,flag1,flag2
 
 def aws_iam_user_group_membership(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+    skip=0
+    #print(t1)
+    if tt1 == "user":
+        t1=tt1+" = aws_iam_user."+tt2+".id\n"
+    elif tt1 == "groups":
+        t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_iam_group","",skip)
+    return skip,t1,flag1,flag2
 
 def aws_iam_user_login_profile(t1,tt1,tt2,flag1,flag2):
 	skip=0
@@ -190,7 +201,8 @@ def aws_iam_user(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "name":
         common.add_dependancy("aws_iam_access_key",tt2)
-
+        common.add_dependancy("aws_iam_user_policy",tt2)
+		
     return skip,t1,flag1,flag2
 
 def aws_iam_users(t1,tt1,tt2,flag1,flag2):

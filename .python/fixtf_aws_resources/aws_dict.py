@@ -4998,8 +4998,8 @@ aws_iam_group_membership = {
 
 aws_iam_group_policy = {
 	"clfn":		"iam",
-	"descfn":	"list_groups_for_user",
-	"topkey":	"Groups",
+	"descfn":	"list_group_policies",
+	"topkey":	"PolicyNames",
 	"key":		"GroupName",
 	"filterid":	"GroupName"
 }

@@ -222,3 +222,78 @@ def get_aws_iam_user_group_membership(type,id,clfn,descfn,topkey,key,filterid):
 
    return True
 
+
+def get_aws_iam_user_policy(type,id,clfn,descfn,topkey,key,filterid):
+   if globals.debug:
+      print("--> In get_aws_iam_user_policy  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   
+   client = boto3.client(clfn) 
+   response=[]
+
+   try:
+      response1 = client.list_user_policies(UserName=id)
+      #print("response1="+str(response1))
+      response=response1['PolicyNames']
+      if response == []: 
+         print("Empty response for "+type+ " id="+str(id)+" returning")
+         pkey="aws_iam_user_policy."+id
+         globals.rproc[pkey]=True
+         return True
+      for j in response:
+         polname=j
+         theid=id+":"+polname
+         common.write_import(type,theid,None) 
+         pkey="aws_iam_user_policy."+id
+         globals.rproc[pkey]=True
+
+      
+   except Exception as e:
+        print(f"{e=}")
+        print("ERROR: -2->unexpected error in aws_iam_user_policy")
+        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        exit()
+
+
+
+   return True
+
+def get_aws_iam_group_policy(type,id,clfn,descfn,topkey,key,filterid):
+   if globals.debug:
+      print("--> In get_aws_iam_group_policy  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   
+   client = boto3.client(clfn) 
+   response=[]
+
+   try:
+      response1 = client.list_group_policies(GroupName=id)
+      #print("response1="+str(response1))
+      response=response1['PolicyNames']
+      if response == []: 
+         print("Empty response for "+type+ " id="+str(id)+" returning")
+         pkey="aws_iam_group_policy."+id
+         globals.rproc[pkey]=True
+         return True
+      #print("response="+str(response))
+      for j in response:
+         polname=j
+         theid=id+":"+polname
+         common.write_import(type,theid,None) 
+         pkey="aws_iam_group_policy."+id
+         globals.rproc[pkey]=True
+
+      
+   except Exception as e:
+        print(f"{e=}")
+        print("ERROR: -2->unexpected error in aws_iam_group_policy")
+        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        exit()
+
+
+
+   return True

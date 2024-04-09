@@ -8,8 +8,8 @@ import sys
 def get_aws_db_parameter_group(type, id, clfn, descfn, topkey, key, filterid):
 
 
-    #if globals.debug:
-    print("--> In get_aws_db_parameter_group  doing " + type + ' with id ' + str(id) +
+    if globals.debug:
+        print("--> In get_aws_db_parameter_group  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:

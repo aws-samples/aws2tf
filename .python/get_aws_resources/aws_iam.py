@@ -189,3 +189,36 @@ def get_aws_iam_instance_profile(type,id,clfn,descfn,topkey,key,filterid):
 
    return True
 
+def get_aws_iam_user_group_membership(type,id,clfn,descfn,topkey,key,filterid):
+   if globals.debug:
+       print("--> In get_aws_iam_user_group_membership  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   
+   client = boto3.client(clfn) 
+   response=[]
+
+   try:
+      response1 = client.get_group(GroupName=id)
+      response=response1[topkey]
+      if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+      for j in response:
+         userid=j[key]
+         grpn=id
+         theid=userid+"/"+grpn
+         common.write_import(type,theid,None) 
+         pkey="aws_iam_user_group_membership."+grpn
+         globals.rproc[pkey]=True
+
+      
+   except Exception as e:
+        print(f"{e=}")
+        print("ERROR: -2->unexpected error in aws_iam_user_group_membership")
+        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        exit()
+
+
+
+   return True
+

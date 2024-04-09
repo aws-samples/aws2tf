@@ -21,6 +21,9 @@ def aws_iam_account_password_policy(t1,tt1,tt2,flag1,flag2):
 
 def aws_iam_group(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1 == "name":
+		#print("get users in group "+tt2)
+		common.add_dependancy("aws_iam_user_group_membership",tt2)
 	return skip,t1,flag1,flag2
 
 def aws_iam_group_membership(t1,tt1,tt2,flag1,flag2):

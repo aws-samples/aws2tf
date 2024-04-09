@@ -777,7 +777,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::IAM::SAMLProvider": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::IAM::ServerCertificate": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::IAM::UserPolicy": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::IAM::UserToGroupAddition": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::IAM::UserToGroupAddition": f3.write(type +" fetched as part of IAM Group...\n")
             elif type == "AWS::IAM::VirtualMFADevice": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::IVS::Channel": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::IVS::PlaybackKeyPair": common.call_resource("aws_null", type+" "+pid)

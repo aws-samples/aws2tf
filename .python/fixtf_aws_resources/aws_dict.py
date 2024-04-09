@@ -5086,10 +5086,10 @@ aws_iam_signing_certificate = {
 
 aws_iam_user_group_membership = {
 	"clfn":		"iam",
-	"descfn":	"get_user_group_membership",
-	"topkey":	"Groups",
-	"key":		"GroupName",
-	"filterid":	"GroupName"
+	"descfn":	"get_group",
+	"topkey":	"Users",
+	"key":		"UserName",
+	"filterid":	"UserName"
 }
 
 aws_iam_user_login_profile = {

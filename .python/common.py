@@ -547,7 +547,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
             if globals.rproc[pt] is True:
                print("Found "+pt+" in processed skipping ...") 
                return True
-      response=call_boto3(type,clfn,descfn,topkey,id)   
+      response=call_boto3(type,clfn,descfn,topkey,key,id)   
       #print("-->"+str(response))
       if str(response) != "[]":
             for item in response:
@@ -579,7 +579,9 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                # id has something
                #
                else:  
-                  #if globals.debug: print("-gr31-"+"filterid="+str(filterid)+" id="+str(id))
+                  if globals.debug: 
+                     print("-gr31-"+"filterid="+str(filterid)+" id="+str(id)+"  key="+key)
+                     print(str(item))
                   if "." not in filterid:
                      #print("***item=" + str(item))
                      try:
@@ -588,7 +590,14 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                            theid=item[key]
                            special_deps(type,theid)
                            write_import(type,theid,None)
-                     except:
+                        elif filterid != key:
+                           if globals.debug:
+                              print("id="+id+" filterid="+filterid)
+                              print("item="+str(item))
+                           theid=item[filterid]
+                           write_import(type,theid,None)
+                     except Exception as e:
+                        print(f"{e=}")
                         if globals.mopup.get(type) is not None:
                            if id.startswith(globals.mopup[type]):
                               write_import(type,id,None)
@@ -599,7 +608,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                               f4.write("Could have done write_import "+type+" id="+id+" filterid="+filterid+"/n")
                            return False
                   else:
-                     ### There's a dot in the filterid so we need to dig deeper
+                     ### There IS a dot in the filterid so we need to dig deeper
                      print(str(item))
                      print("id="+id+" filterid="+filterid)
                      filt1=filterid.split('.')[1]
@@ -708,7 +717,7 @@ def add_dependancy(type,id):
 # TODO ? won't accept filter id as string param1 in paginate(param1,id) ??
 # hench working around using descfn - not ideal
 
-def call_boto3(type,clfn,descfn,topkey,id): 
+def call_boto3(type,clfn,descfn,topkey,key,id): 
    try:
       if globals.debug: print("call_boto3 clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
       if globals.debug: print("pre-response")
@@ -748,6 +757,11 @@ def call_boto3(type,clfn,descfn,topkey,id):
                #print("--1a "+str(id))
                for page in paginator.paginate(clusterName=id): response.extend(page[topkey])
             
+            
+            elif descfn == "list_access_keys" and id is not None:
+               for page in paginator.paginate(UserName=id): response.extend(page[topkey])
+                    
+            
             elif clfn=="kms" and descfn=="list_aliases" and id is not None:
                if id.startswith("k-"): id=id[2:]
                #print("-- call boto3 --"+str(id))
@@ -773,11 +787,27 @@ def call_boto3(type,clfn,descfn,topkey,id):
                
             
             else:
-               #print("--1b")
+               if globals.debug: print("--1b")
+               # main get all call - usually a list- describe- or get- 
                for page in paginator.paginate(): 
                   response.extend(page[topkey])
-               # save a full paginate as we don't want to do it many times
                sav_boto3_rep(descfn,response)
+
+               if id is not None:
+                  fresp=response
+                  if globals.debug:print("--2")
+                  response=[]
+                  if globals.debug: print(str(fresp))
+                  # get by id - useually a describe- or get-
+                  for i in fresp:
+                     if globals.debug: print(i[key],id)
+                     if i[key] == id:
+                        response=[i]
+                        break
+                  #print("--3")
+                  # get by filter - useually a list- describe- or get-   
+               # save a full paginate as we don't want to do it many times
+               
 
          except botocore.exceptions.ParamValidationError as err:
             print(f"{err=}"+","+type+","+clfn)
@@ -833,7 +863,7 @@ def call_boto3(type,clfn,descfn,topkey,id):
             
             for item in response:
                print(item)
-               print("--------------------------------------")
+            print("--------------------------------------")
    
       else:
          #print("Global response ")

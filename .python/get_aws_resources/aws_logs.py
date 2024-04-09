@@ -9,7 +9,7 @@ def get_aws_cloudwatch_log_group(type, id, clfn, descfn, topkey, key, filterid):
         print("--> In get_aws_cloudwatch_log_group  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
-    response = common.call_boto3(type,clfn, descfn, topkey, id)
+    response = common.call_boto3(type,clfn, descfn, topkey, key, id)
     #print("-9a->"+str(response))
     try:
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True

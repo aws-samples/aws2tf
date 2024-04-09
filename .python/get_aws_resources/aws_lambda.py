@@ -11,7 +11,7 @@ def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
     print("--> In get_aws_lambda_function doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
-    response = common.call_boto3(type,clfn, descfn, topkey, id)
+    response = common.call_boto3(type,clfn, descfn, topkey, key, id)
     #print("-9a->"+str(response))
     
     try:
@@ -68,7 +68,7 @@ def get_aws_lambda_alias(type, id, clfn, descfn, topkey, key, filterid):
         print("--> In get_aws_lambda_alias doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
-    response = common.call_boto3(type,clfn, descfn, topkey, id)
+    response = common.call_boto3(type,clfn, descfn, topkey, key, id)
     #print("-9a->"+str(response))
     
     try:
@@ -98,7 +98,7 @@ def get_aws_lambda_permission(type, id, clfn, descfn, topkey, key, filterid):
         print("--> In get_aws_lambda_permission doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
-    #response = common.call_boto3(type,clfn, descfn, topkey, id)
+    #response = common.call_boto3(type,clfn, descfn, topkey, key, id)
     #print("-9a->"+str(response))
     try:
         # this one no paginate
@@ -141,7 +141,7 @@ def get_aws_lambda_function_event_invoke_config(type, id, clfn, descfn, topkey, 
         print("--> In get_aws_lambda_function_event_invoke_config doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
-    #response = common.call_boto3(type,clfn, descfn, topkey, id)
+    #response = common.call_boto3(type,clfn, descfn, topkey, key, id)
     #print("-9a->"+str(response))
     try:
         # this one no paginate
@@ -181,7 +181,7 @@ def get_aws_lambda_event_source_mapping(type, id, clfn, descfn, topkey, key, fil
         print("--> In get_aws_lambda_event_source_mapping doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
-    #response = common.call_boto3(type,clfn, descfn, topkey, id)
+    #response = common.call_boto3(type,clfn, descfn, topkey, key, id)
     #print("-9a->"+str(response))
     try:
         # this one no paginate

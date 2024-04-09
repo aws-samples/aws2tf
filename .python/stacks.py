@@ -190,7 +190,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::IAM::ManagedPolicy":  common.call_resource("aws_null", type+" "+parn) 
             elif type == "AWS::IAM::InstanceProfile":  common.call_resource("aws_iam_instance_profile", pid) 
             elif type == "AWS::IAM::User":  common.call_resource("aws_iam_user", pid) 
-            elif type == "AWS::IAM::AccessKey": common.call_resource("aws_iam_access_key", pid) 
+            elif type == "AWS::IAM::AccessKey": f3.write(type+" "+pid+" Should be fetched via IAM Users etc\n")  
             elif type == "AWS::IAM::ServiceLinkedRole":  common.call_resource("aws_iam_service_linked_role", pid) 
             elif type == "AWS::IAM::Group":  common.call_resource("aws_iam_group", pid) 
             #elif type == "AWS::IAM::Policy)  echo "../../scripts/get-iam-policies.sh $parn" >> commands.sh ;;

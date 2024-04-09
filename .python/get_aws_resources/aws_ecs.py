@@ -14,7 +14,7 @@ def get_aws_ecs_cluster(type,id,clfn,descfn,topkey,key,filterid):
     try:
         
         response = []
-        response=common.call_boto3(type,clfn,descfn,topkey,id)
+        response=common.call_boto3(type,clfn,descfn,topkey,key,id)
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         for j in response: 

@@ -254,9 +254,9 @@ def aws_eip_association(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if tt1 == "instance_id":
 		t1 = tt1 + " = aws_instance."+tt2+".id\n"
-	if tt1 == "public_ip": skip=1
-	if tt1 == "private_ip_address": skip=1
-	if tt1 == "network_interface_id": skip=1
+	elif tt1 == "public_ip": skip=1
+	elif tt1 == "private_ip_address": skip=1
+	elif tt1 == "network_interface_id": skip=1
 
 	return skip,t1,flag1,flag2
 

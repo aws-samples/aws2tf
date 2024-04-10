@@ -823,11 +823,21 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                print(f"{err=}")
                print("calling non paginated fn "+str(descfn)+" id="+str(id))
                try:
-                  getfn = getattr(client, descfn)
+                  getfn = getattr(client, descfn)                     
+                  response1 = getfn()
+                  response1=response1[topkey]
+                  if globals.debug: print("Non-pag response1="+str(response1))
                   if id is None:
                      print("id None")
-                     response1 = getfn()
-                     response=response1[topkey]
+                     response=response1
+                     if globals.debug: print("Non-pag response no ID ="+str(response))
+                  else: #try a match
+                     for j in response1:
+                        if id==j[key]:
+                           response=[j]
+                           if globals.debug: print("Non-pag response with ID ="+str(response))
+                           
+
                except botocore.exceptions.ParamValidationError as err:
                   print(f"{err=}"+","+type+","+clfn)
                   #print("ParamValidationError 2 in common.call_boto3: type="+type+" clfn="+clfn)

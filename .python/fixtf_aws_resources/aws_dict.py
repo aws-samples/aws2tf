@@ -4127,8 +4127,8 @@ aws_eip_association = {
 	"clfn":		"ec2",
 	"descfn":	"describe_addresses",
 	"topkey":	"Addresses",
-	"key":		"PublicIp",
-	"filterid":	"PublicIp"
+	"key":		"AssociationId",
+	"filterid":	"AssociationId"
 }
 
 aws_eks_pod_identity_association = {

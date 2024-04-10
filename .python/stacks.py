@@ -578,7 +578,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::EC2::ClientVpnTargetNetworkAssociation": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::EC2::CustomerGateway": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::EC2::EC2Fleet": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::EC2::EIPAssociation": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::EC2::EIPAssociation": common.call_resource("aws_eip_association", pid)
             elif type == "AWS::EC2::EgressOnlyInternetGateway": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::EC2::EnclaveCertificateIamRoleAssociation": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::EC2::GatewayRouteTableAssociation": common.call_resource("aws_null", type+" "+pid)

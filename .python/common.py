@@ -2,6 +2,7 @@ import boto3
 import sys
 import subprocess
 import os
+import json
 import globals
 import glob
 import botocore
@@ -313,9 +314,43 @@ def tfplan3():
          exit()
 
       if not zeroc:
-         print("-->> plan will change resources! - unexpected")
-         print("-->> look at plan2.json - or run terraform plan")
-         exit()
+         ## decide if to ignore ot not
+         planList=[]
+         planDict={}
+         changeList=[]
+         allowedchange=False
+         nchanges=0
+         nallowedchanges=0
+         with open('plan2.json') as f:
+            for jsonObj in f:
+               planDict = json.loads(jsonObj)
+               planList.append(planDict)
+         for pe in planList:
+            if pe['type'] == "planned_change" and pe['change']['action']=="update":
+               nchanges=nchanges+1
+               if pe['change']['resource']['resource_type']=="aws_lb_listener":
+                  changeList.append(pe['change']['resource']['addr'])
+                  print("Planned changes found in Terraform Plan for typre: "+str(pe['change']['resource']['resource_type']))
+                  allowedchange=True
+                  nallowedchanges=nallowedchanges+1
+         if nchanges==nallowedchanges:
+            print("\n-->> plan will change "+ str(nchanges)  +" resources! - these are expected changes only (should be non-consequential)")
+            ci=1
+            
+            print("-->> Check the planned changes in these resources listed below by running: terraform plan\n")   
+
+            for i in changeList:
+               print(str(ci)+": "+str(i))
+               ci=ci+1
+
+
+            print("\n-->> Then if happy with the output changes for the above resources, run this command to complete aws2tf-py tasks:")
+            print("terraform apply -no-color tfplan")
+            exit()
+         else:
+            print("-->> plan will change resources! - unexpected")
+            print("-->> look at plan2.json - or run terraform plan")
+            exit()
 
       if not zeroa:
          print("-->> plan will add resources! - unexpected")
@@ -407,7 +442,7 @@ def aws_tf(region):
          f3.write('  required_providers {\n')
          f3.write('    aws = {\n')
          f3.write('      source  = "hashicorp/aws"\n')
-         f3.write('      version = "5.41.0"\n')
+         f3.write('      version = "5.44.0"\n')
          f3.write('    }\n')
          f3.write('  }\n')
          f3.write('}\n')
@@ -513,9 +548,10 @@ def write_import(type,theid,tfid):
          f.write('}\n')
 
       pkey=type+"."+tfid
-      if type=="aws_kms_alias":
-         print(pkey+" setting True")
       globals.rproc[pkey]=True
+      pkey=type+"."+theid
+      globals.rproc[pkey]=True
+
 
    except Exception as e:      
                 # By this way we can know about the type of error occurring
@@ -800,10 +836,19 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                   if globals.debug: print(str(fresp))
                   # get by id - useually a describe- or get-
                   for i in fresp:
-                     if globals.debug: print(i[key],id)
-                     if i[key] == id:
-                        response=[i]
-                        break
+                     if globals.debug: 
+                        try:
+                           print(i[key],id)
+                        except TypeError:
+                           print(i,id)
+                     try:
+                        if id in i[key]:
+                           response=[i]
+                           break
+                     except TypeError:
+                        if id in i:
+                           response=[i]
+                           break
                   #print("--3")
                   # get by filter - useually a list- describe- or get-   
                # save a full paginate as we don't want to do it many times

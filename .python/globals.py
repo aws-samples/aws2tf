@@ -15,11 +15,15 @@ aws_kms_alias_resp=[]
 aws_vpc_resp=[]
 aws_iam_role_resp=[]
 aws_instance_resp=[]
-lbc=0
+lbc=0; rbc=0
 asg_azs=False
 plan2=False
 ssmparamn=""
 repdbin=False
+stripblock=""
+stripstart=""
+stripend=""
+
 
 #specials=["aws_iam_role_policy","aws_route_table_association","aws_iam_policy","aws_iam_policy_attchment",
 #          "aws_eks_cluster","aws_eks_fagate_profile","aws_kms_key","aws_kms_alias",

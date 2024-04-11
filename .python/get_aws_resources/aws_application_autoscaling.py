@@ -34,9 +34,12 @@ def get_aws_appautoscaling_target(type, id, clfn, descfn, topkey, key, filterid)
                 globals.rproc[pkey]=True
 
         else:
-            #print(id)
-            rrid=id.split("/",1)[1]
-            #print("rrid="+rrid+ " topkey="+topkey)
+            print("id="+id)
+            if "/" in id:
+                rrid=id.split("/",1)[1]
+            if "|" in id:
+                rrid=id.split("|")[2]
+            print("rrid="+rrid+ " topkey="+topkey)
             response = client.describe_scalable_targets(ServiceNamespace="ecs",ResourceIds=[rrid])
             #print("----------"+str(response))
             if response[topkey] == []: 
@@ -100,9 +103,11 @@ def get_aws_appautoscaling_policy(type, id, clfn, descfn, topkey, key, filterid)
                 globals.rproc[pkey]=True
 
         else:
-            #print(id)
-            rrid=id.split("/",1)[1]
-            #print(rrid)
+            print(id)
+            if "/" in id:
+                rrid=id.split("/",1)[1]
+            else: rrid=id
+            print(rrid)
             response = client.describe_scaling_policies(ServiceNamespace="ecs",ResourceId=rrid)
             #print(str(response))
             if response[topkey] == []: 

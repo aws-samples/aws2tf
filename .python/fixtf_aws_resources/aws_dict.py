@@ -2205,8 +2205,8 @@ aws_cloudwatch_log_subscription_filter = {
 
 aws_cloudwatch_metric_alarm = {
 	"clfn":		"cloudwatch",
-	"descfn":	"list_alarms",
-	"topkey":	"MetricAlarms",
+	"descfn":	"describe_alarms",
+	"topkey":	"CompositeAlarms",
 	"key":		"AlarmName",
 	"filterid":	"AlarmName"
 }

@@ -128,7 +128,7 @@ def getstackresources(stack_name,client):
 
             elif type == "AWS::Cloud9::EnvironmentEC2":  common.call_resource("aws_cloud9_environment_ec2", pid) 
 
-            elif type == "AWS::CloudWatch::Alarm": common.call_resource(" aws_cloudwatch_metric_alarm", parn) 
+            elif type == "AWS::CloudWatch::Alarm": common.call_resource("aws_cloudwatch_metric_alarm", parn) 
 
             elif type == "AWS::EC2::Instance":              common.call_resource("aws_instance", pid) 
             elif type == "AWS::EC2::KeyPair":               common.call_resource("aws_key_pair", pid) 

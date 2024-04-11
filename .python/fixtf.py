@@ -230,7 +230,7 @@ def fixtf(ttft,tf):
     clfn=clfn.replace('-','_')
     callfn="fixtf_"+clfn
     if globals.debug: print("callfn="+callfn+" ttft="+ttft)
-    globals.lbc=0
+
     Lines = f1.readlines()
     #print("getfn for fixtf2."+ttft+" "+tf2)
     #with open(tf2, "a") as f2:
@@ -246,6 +246,23 @@ def fixtf(ttft,tf):
                 tt2=""
             if tt1=="replicate_source_db":
                 if tt2 != "null": globals.repdbin=True
+
+    
+    ## Block stripping init
+    globals.lbc=0
+    globals.rbc=0
+    globals.stripblock=""
+    globals.stripstart=""
+    globals.stripend=""
+    if ttft=="aws_lb_listener_rule" or ttft=="aws_lb_listener":
+        globals.stripblock="forward {"
+        globals.stripstart="{"
+        globals.stripend="}"
+    if ttft=="aws_lb":
+        globals.stripblock="subnet_mapping {"
+        globals.stripstart="{"
+        globals.stripend="}"
+
 
 
     #if globals.acc in tf2:
@@ -287,13 +304,26 @@ def fixtf(ttft,tf):
                 
 
                 skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
+                ## strip sections
+                if globals.stripblock != "":
+                    if globals.stripblock in t1: globals.lbc=1
+                    elif globals.stripstart in t1 and globals.lbc>0: globals.lbc=globals.lbc+1
+                    
+                    if globals.stripend in t1 and globals.lbc>0:
+                        globals.lbc=globals.lbc-1
+                        skip=1
+                    elif globals.lbc > 0: skip=1
+                
+                #print("t1="+t1)
+	            #print("lbc="+str(globals.lbc)+" rbc="+str(globals.rbc)+" skip="+str(skip))
+
                 #print("t1="+t1)
             except Exception as e:
                 print(f"{e=}")
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                 print(exc_type, fname, exc_tb.tb_lineno)
-
+                print("-- no fixtf for type:"+ttft+" callfn:"+callfn)
                 print("-- no fixtf for "+tf+" calling generic fixtf2.aws_resource callfn="+callfn)
                 #print("t1="+t1) 
                 nofind=2
@@ -370,7 +400,7 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
 
 def deref_role_arn(t1,tt1,tt2):
 
-    if ":role/aws-service-role" in tt2:	t1=fixtf.globals_replace(t1,tt1,tt2)
+    if ":role/aws-service-role" in tt2:	t1=globals_replace(t1,tt1,tt2)
     
     elif ":role" in tt2:
         tt2=tt2.split('/')[-1]

@@ -19,6 +19,7 @@ def get_aws_ecs_cluster(type,id,clfn,descfn,topkey,key,filterid):
         
         for j in response: 
             retid=j # no key
+            
             cln=retid.split('/')[1]
             common.write_import(type,cln,None) 
             common.add_known_dependancy("aws_ecs_service",cln)

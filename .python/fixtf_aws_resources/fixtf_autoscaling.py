@@ -54,8 +54,12 @@ def aws_launch_configuration(t1,tt1,tt2,flag1,flag2):
 
 	if tt1 == "id":
 			flag2=tt2
-	if tt1 == "user_data_base64": skip=1
-	if tt1 == "user_data":
+
+	elif tt1 == "iam_instance_profile":
+		t1 = tt1 + " = iam_instance_profile."+tt2+".id/n"
+
+	elif tt1 == "user_data_base64": skip=1
+	elif tt1 == "user_data":
 		#inid=flag2.split("__")[1]
 		client = boto3.client("autoscaling")
 		print(str(flag2))

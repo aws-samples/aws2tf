@@ -1,4 +1,5 @@
 import globals
+import common
 
 def aws_lb_cookie_stickiness_policy(t1,tt1,tt2,flag1,flag2):
 	skip=0
@@ -12,14 +13,19 @@ def aws_lb_listener(t1,tt1,tt2,flag1,flag2):
 	skip=0
 
 	if "load_balancer_arn" == tt1:
-		t1=t1+"\n lifecycle {\n   ignore_changes = [default_action[0].forward[0]]\n}\n"
+		tt2=tt2.replace("/","_").replace(".","_").replace(":","_")
+		t1 = tt1 + " = aws_lb."+tt2+".arn\n"
+		#t1=t1+"\n lifecycle {\n   ignore_changes = [default_action[0].forward[0]]\n}\n"
 
 	if "order" == tt1:
 		if tt2 == "0": skip=1
 	elif "duration" == tt1:
 		if tt2 == "0": t1=tt1+" = 1\n"	
-	#elif "target_group_arn" == tt1: skip=1	
-
+	elif "target_group_arn" == tt1: 
+		tgarn=tt2
+		tt2=tt2.replace("/","_").replace(".","_").replace(":","_")
+		t1 = tt1 + " = aws_lb_target_group."+tt2+".arn\n"
+		common.add_dependancy("aws_lb_target_group",tgarn)
 
 	return skip,t1,flag1,flag2
 

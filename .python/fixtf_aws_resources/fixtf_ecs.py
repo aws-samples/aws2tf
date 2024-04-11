@@ -63,7 +63,7 @@ def aws_ecs_service(t1,tt1,tt2,flag1,flag2):
 		if "arn:" in tt2:
 			#tt2 = tt2.split("/")[-1]
 			oarn=tt2
-			tgarn=tt2.replace("/","__").replace(".","__").replace(":","__")
+			tgarn=tt2.replace("/","_").replace(".","_").replace(":","_")
 			t1=tt1 + " = aws_lb_target_group." + tgarn + ".arn\n"
 			common.add_dependancy("aws_lb_target_group", oarn) 
 

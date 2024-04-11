@@ -121,7 +121,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::Athena::WorkGroup":  common.call_resource("aws_athena_workgroup", pid) 
 
             elif type == "AWS::AutoScaling::AutoScalingGroup":  common.call_resource("aws_autoscaling_group", pid) 
-            elif type == "AWS::AutoScaling::LaunchConfiguration":  common.call_resource("aws_null", type+" "+pid) 
+            elif type == "AWS::AutoScaling::LaunchConfiguration":  common.call_resource("aws_launch_configuration", pid) 
             elif type == "AWS::AutoScaling::LifecycleHook": common.call_resource("aws_autoscaling_lifecycle_hook", pid)
 
             elif type == "AWS::CDK::Metadata": f3.write(type+" "+pid+" skipped only relevant to CDK .. \n") 

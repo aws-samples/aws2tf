@@ -56,7 +56,14 @@ def aws_launch_configuration(t1,tt1,tt2,flag1,flag2):
 			flag2=tt2
 
 	elif tt1 == "iam_instance_profile":
-		t1 = tt1 + " = iam_instance_profile."+tt2+".id/n"
+		if tt2 != "null":
+			t1 = tt1 + " = aws_iam_instance_profile."+tt2+".id\n"
+			common.add_dependancy("aws_iam_instance_profile",tt2)
+
+	elif tt1 == "key_name": 
+		if tt2 != "null":
+			t1=tt1 + " = aws_key_pair." + tt2 + ".id\n"
+			common.add_dependancy("aws_key_pair",tt2)
 
 	elif tt1 == "user_data_base64": skip=1
 	elif tt1 == "user_data":
@@ -73,7 +80,7 @@ def aws_launch_configuration(t1,tt1,tt2,flag1,flag2):
 
 			with open(flag2+'.sh', 'w') as f:
 				f.write(str(ud2))
-			t1="user_data_base64 = filebase64sha256(\""+flag2+".sh\")\n lifecycle {\n   ignore_changes = [user_data,user_data_base64]\n}\n"
+			t1="user_data_base64 = filebase64sha256(\""+flag2+".sh\")\n lifecycle {\n      create_before_destroy = true\n     ignore_changes = [user_data,user_data_base64]\n}\n"
 		except KeyError:
 			pass
 

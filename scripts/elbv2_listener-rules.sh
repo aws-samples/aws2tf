@@ -40,6 +40,11 @@ for c in `seq 0 0`; do
             echo "$ttft $cname"
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_}
             fn=`printf "%s__%s.tf" $ttft $rname`
+            ## check if isdefault
+            isdef=`echo $awsout | jq ".${pref[(${c})]}[(${i})].IsDefault" | tr -d '"'`
+            #echo $isdef
+            if [[ ${isdef} == true ]]; then echo "Desfult rule skipping...." && continue; fi
+
             #echo $fn
             if [ -f "$fn" ] ; then echo "$fn exists already skipping" && continue; fi
             printf "resource \"%s\" \"%s\" {\n" $ttft $rname > $fn

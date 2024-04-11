@@ -2,7 +2,7 @@
 pref[0]="SecurityGroups"
 ttft="aws_security_group"
 idfilt[0]="GroupId"
-exit
+
 if [ "$1" != "" ]; then
     if [[ "$1" == "vpc-"* ]]; then
         cmd[0]="$AWS ec2 describe-security-groups --filters \"Name=vpc-id,Values=$1\"" 
@@ -23,7 +23,7 @@ ncpu=`expr $ncpu - 1`
 for c in `seq 0 0`; do
     
     cm=${cmd[$c]}
-	#echo $cm
+	echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"

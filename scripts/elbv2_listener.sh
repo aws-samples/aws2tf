@@ -66,7 +66,7 @@ for c in `seq 0 0`; do
                     tt2=`echo "$line" | cut -f2- -d'='`
                     if [[ ${tt1} == "arn" ]];then
                         if [[ ${tt2} == *"listener"* ]];then
-                            listarn=`echo ${tt2}`
+                            listarn=`echo ${tt2} | tr -d '"'`
                             echo $listarn
                             skip=1
                         else
@@ -120,6 +120,9 @@ for c in `seq 0 0`; do
             done <"$file"
             if [[ "$tarn" != "" ]]; then
                 ../../scripts/elbv2-target-groups.sh $tarn
+            fi
+            if [[ "$tarn" != "" ]]; then
+                ../../scripts/elbv2_listener-rules.sh $listarn
             fi
             if [[ "$lbarn" != "" ]]; then
                 echo "lbarn=$lbarn"

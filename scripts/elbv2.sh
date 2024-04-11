@@ -20,7 +20,7 @@ for c in `seq 0 0`; do
  
     cm=${cmd[$c]}
 	ttft=${tft[(${c})]}
-	echo $cm
+	#echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
@@ -114,6 +114,7 @@ for c in `seq 0 0`; do
                     fi
                     if [[ "$t1" == *"subnet-"* ]]; then
                         t1=`echo $t1 | tr -d '"|,'`
+                        subnets+=`printf "\"%s\" " $t1`
                         t1=`printf "aws_subnet.%s.id," $t1`
                     fi
                     if [[ ${t1} == *"subnet_mapping"* ]];then
@@ -141,16 +142,16 @@ for c in `seq 0 0`; do
             ../../scripts/elbv2-target-groups.sh $lbarn
             for sub in ${subnets[@]}; do
                 sub1=`echo $sub | tr -d '"'`
-                echo "calling for $sub1"
                 if [ "$sub1" != "" ]; then
+                    #echo "calling for $sub1"
                     ../../scripts/105-get-subnet.sh $sub1
                 fi
             done
-
+      
             for sg in ${sgs[@]}; do
                 sg1=`echo $sg | tr -d '"'`
-                echo "calling for $sg1"
-                if [ "$sg1" != "" ]; then
+                if [[ "$sg1" != "" ]]; then
+                     #echo "---->>>>> calling for $sg1"
                     ../../scripts/110-get-security-group.sh $sg1
                 fi
             done

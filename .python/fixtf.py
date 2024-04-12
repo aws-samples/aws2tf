@@ -213,6 +213,16 @@ def fixtf(ttft,tf):
   
     rf=tf+".out"
     tf2=tf+".tf"
+
+    ## will this check break things ?
+    if os.path.isfile(tf2):
+         #if globals.debug: 
+         print("File exists: " + tf2+ " skipping ...") 
+         return 
+    else:
+        print("processing "+tf2)
+
+
     if globals.debug:
         print(ttft+" fixtf "+tf+".out") 
    
@@ -337,6 +347,9 @@ def fixtf(ttft,tf):
                 f2.write(t1)
         if nofind > 0:
            print("WARNING: No fixtf for "+tf+" calling generic fixtf2.aws_resource nofind="+str(nofind))
+        ## move *.out to impoted
+        com = "mv "+rf+" imported"
+        rout = common.rc(com)
            
 
 def aws_resource(t1,tt1,tt2,flag1,flag2):

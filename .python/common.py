@@ -148,8 +148,8 @@ def tfplan1():
       print("No import*.tf files found for this resource, exiting ....")
       exit()
 
-   com="rm -f "+rf
-   rout=rc(com)
+   #com="rm -f "+rf
+   #rout=rc(com)
 
    com="terraform plan -generate-config-out="+ rf + " -out tfplan -json | jq . > plan1.json"
    print(com)

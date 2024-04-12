@@ -94,6 +94,8 @@ if __name__ == '__main__':
         print("No merge - removing terraform.tfstate* and aws_*.tf *.out")
         com = "rm -f aws.tf terraform.tfstate* aws_*.tf s3-*.tf aws_*.zip tfplan *.out *.log aws_*.sh import*.tf imported/* main.tf plan1* plan2*"
         rout = common.rc(com)
+        com = "mkdir -p imported notimported"
+        rout = common.rc(com)
 
     id = args.id
 

@@ -33,12 +33,12 @@ def get_aws_appautoscaling_target(type, id, clfn, descfn, topkey, key, filterid)
                 globals.rproc[pkey]=True
 
         else:
-            print("id="+id)
+            #print("id="+id)
             if "/" in id:
                 rrid=id.split("/",1)[1]
             if "|" in id:
                 rrid=id.split("|")[2]
-            print("rrid="+rrid+ " topkey="+topkey)
+            #print("rrid="+rrid+ " topkey="+topkey)
             response = client.describe_scalable_targets(ServiceNamespace="ecs",ResourceIds=[rrid])
             #print("----------"+str(response))
             if response[topkey] == []: 

@@ -475,8 +475,8 @@ def get_aws_default_network_acl(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_key_pair(type, id, clfn, descfn, topkey, key, filterid):
 
-    #if globals.debug:
-    print("--> In get_aws_key_pair  doing " + type + ' with id ' + str(id) +
+    if globals.debug:
+        print("--> In get_aws_key_pair  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:

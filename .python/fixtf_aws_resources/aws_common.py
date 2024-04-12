@@ -45,7 +45,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                 else:
                     skip=1
 
-        elif tt1 == "role_arn" or tt1=="service_linked_role_arn": 
+        elif tt1 == "role_arn" or tt1=="service_linked_role_arn" or tt1 == "execution_role_arn" or tt1 == "task_role_arn": 
             t1=fixtf.deref_role_arn(t1,tt1,tt2)
 
         elif tt1 == "role" or tt1=="iam_role" or tt1=="role_name":

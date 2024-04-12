@@ -13,14 +13,24 @@ def aws_autoscaling_attachment(t1,tt1,tt2,flag1,flag2):
 
 def aws_autoscaling_group(t1,tt1,tt2,flag1,flag2):
 	skip=0
-	if tt1 == "load_balancers" and tt2 == "[]": skip=1
+	if tt1=="name":
+		t1=t1+"\n lifecycle {\n   ignore_changes = [force_delete,force_delete_warm_pool,ignore_failed_scaling_activities,wait_for_capacity_timeout]\n}\n"
+	elif tt1 == "load_balancers" and tt2 == "[]": skip=1
 	elif tt1 == "target_group_arns": skip=1
 	elif tt1 == "availability_zones":
 		if len(tt2) > 4: globals.asg_azs=True
-	if tt1 == "vpc_zone_identifier":
+	elif tt1 == "vpc_zone_identifier":
 		if globals.asg_azs: skip=1
 
-	if tt1 == "force_delete": skip =0
+	elif tt1 == "force_delete" or tt1=="force_delete_warm_pool" or tt1=="ignore_failed_scaling_activities":
+		if tt2=="null":
+			t1 = tt1 +" = false\n"
+   			
+
+	elif tt1=="wait_for_capacity_timeout":
+		if tt2=="null":
+			t1 = tt1 +" = \"10m\"\n"
+	
 
 	return skip,t1,flag1,flag2
 

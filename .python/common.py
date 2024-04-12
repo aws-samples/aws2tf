@@ -7,9 +7,11 @@ import globals
 import glob
 import botocore
 import fixtf
+import inspect
 from datetime import datetime
 import resources
 from get_aws_resources import aws_athena
+from get_aws_resources import aws_autoscaling
 from get_aws_resources import aws_apigateway
 from get_aws_resources import aws_application_autoscaling
 from get_aws_resources import aws_config
@@ -952,4 +954,13 @@ def get_boto3_resp(descfn):
    elif str(descfn)=="list_roles" and globals.aws_iam_role_resp != []: response=globals.aws_iam_role_resp
    elif str(descfn)=="describe_instances" and globals.aws_instance_resp != []: response=globals.aws_instance_resp
    return response
+
+
+def handle_error(e,frame,clfn,descfn,topkey,id):
+   print("\nERROR: in "+frame+" clfn="+clfn+" descfn="+descfn)
+   print("topkey="+topkey+" id="+str(id))
+   exc_type, exc_obj, exc_tb = sys.exc_info()
+   fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+   print(f"{e=}", fname, exc_tb.tb_lineno)
+   exit()
 

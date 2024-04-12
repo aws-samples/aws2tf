@@ -1512,7 +1512,7 @@ aws_autoscaling_group = {
 	"descfn":	"describe_auto_scaling_groups",
 	"topkey":	"AutoScalingGroups",
 	"key":		"AutoScalingGroupName",
-	"filterid":	"AutoScalingGroupArn"
+	"filterid":	"AutoScalingGroupARN"
 }
 
 aws_autoscaling_group_tag = {

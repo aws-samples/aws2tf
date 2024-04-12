@@ -1,12 +1,9 @@
-#!/usr/bin/env python3
-
 import common
 import boto3
 import globals
 import os
 import sys
-
-
+import inspect
 
 def get_aws_security_group_rule(type, id, clfn, descfn, topkey, key, filterid):
 
@@ -116,13 +113,7 @@ def get_aws_security_group_rule(type, id, clfn, descfn, topkey, key, filterid):
 
 
     except Exception as e:
-            print(f"{e=}")
-            print("ERROR: -2->unexpected error in get_security_group_rule")
-            print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(exc_type, fname, exc_tb.tb_lineno)
-            exit()
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
 
@@ -148,13 +139,7 @@ def get_aws_eip(type, id, clfn, descfn, topkey, key, filterid):
             common.write_import(type,j[key],None) 
 
     except Exception as e:
-            print(f"{e=}")
-            print("ERROR: -2->unexpected error in get_aws_eip")
-            print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(exc_type, fname, exc_tb.tb_lineno)
-            exit()
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
 
@@ -270,13 +255,8 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
 
                         
     except Exception as e:
-        print(f"{e=}")
-        print("ERROR: -2->unexpected error in get_aws_route_table_association")
-        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
-        exit()
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+ 
 
     return True
 
@@ -320,13 +300,7 @@ def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key,
                     pkey = type+"."+vpcid
                     globals.rproc[pkey] = True
     except Exception as e:
-        print(f"{e=}")
-        print("ERROR: -2->unexpected error in get_aws_vpc_ipv4_cidr_block_association")
-        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
-        exit()
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
 
@@ -362,13 +336,8 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
 
     
     except Exception as e:
-        print(f"{e=}")
-        print("ERROR: -2->unexpected error in get_aws_vpc_ipv4_cidr_block_association")
-        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
-        exit()
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
 
     return True
 
@@ -441,13 +410,7 @@ def get_aws_network_acl(type, id, clfn, descfn, topkey, key, filterid):
 
     
     except Exception as e:
-        print(f"{e=}")
-        print("ERROR: -2->unexpected error in get_aws_network_acl")
-        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
-        exit()
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
 
@@ -512,14 +475,8 @@ def get_aws_default_network_acl(type, id, clfn, descfn, topkey, key, filterid):
 
     
     except Exception as e:
-        print(f"{e=}")
-        print("ERROR: -2->unexpected error in get_aws_default_network_acl")
-        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
-        exit()
-
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+       
     return True
 
 
@@ -546,13 +503,7 @@ def get_aws_key_pair(type, id, clfn, descfn, topkey, key, filterid):
                 common.write_import(type,j[key],None) 
 
     except Exception as e:
-            print(f"{e=}")
-            print("ERROR: -2->unexpected error in get_aws_key_pair")
-            print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(exc_type, fname, exc_tb.tb_lineno)
-            exit()
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
 

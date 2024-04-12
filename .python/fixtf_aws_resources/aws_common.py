@@ -48,6 +48,18 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         elif tt1 == "role_arn" or tt1=="service_linked_role_arn": 
             t1=fixtf.deref_role_arn(t1,tt1,tt2)
 
+        elif tt1 == "role" or tt1=="iam_role" or tt1=="role_name":
+            if tt2 !="null" and "arn:" not in tt2:  
+                t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
+                common.add_dependancy("aws_iam_role",tt2)
+
+        elif tt1=="target_group_arn" and tt2 != "null":
+            tgarn=tt2
+            tt2=tt2.replace("/","_").replace(".","_").replace(":","_")
+            t1 = tt1 + " = aws_lb_target_group."+tt2+".arn\n"
+            common.add_dependancy("aws_lb_target_group",tgarn)
+
+
     except Exception as e:
         common.handle_error2(e,str(inspect.currentframe()),id)
 

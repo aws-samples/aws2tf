@@ -49,7 +49,6 @@ def aws_iam_group_policy_attachment(t1,tt1,tt2,flag1,flag2):
 
 def aws_iam_instance_profile(t1,tt1,tt2,flag1,flag2):
     skip=0
-    if tt1 == "role" and tt2 !="null": t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
     return skip,t1,flag1,flag2
 
 def aws_iam_openid_connect_provider(t1,tt1,tt2,flag1,flag2):
@@ -122,20 +121,19 @@ def  aws_iam_role(t1,tt1,tt2,flag1,flag2):
 
 def aws_iam_role_policy(t1,tt1,tt2,flag1,flag2):
     skip=0
-    if tt1 == "role_name":
-        ##tt2=tt2.strip('\"')
-        t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
-        common.add_dependancy("aws_iam_role",tt2)
+    #if tt1 == "role_name":
+    #    t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
+    #    common.add_dependancy("aws_iam_role",tt2)
   
     return skip,t1,flag1,flag2
 
 def aws_iam_role_policy_attachment(t1,tt1,tt2,flag1,flag2):
     #print("fixit2.aws_iam_role_policy_attachment")
     skip=0
-    if tt1 == "role":
-        ##tt2=tt2.strip('\"')
-        t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
-        common.add_dependancy("aws_iam_role",tt2)
+    #if tt1 == "role":
+    #    ##tt2=tt2.strip('\"')
+    #    t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
+    #    common.add_dependancy("aws_iam_role",tt2)
     # skip as using policy arns minus account number etc..
     #if tt1 == "policy_arn": 
     #    ##tt2=tt2.strip('\"')

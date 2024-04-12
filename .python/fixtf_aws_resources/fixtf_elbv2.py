@@ -21,11 +21,11 @@ def aws_lb_listener(t1,tt1,tt2,flag1,flag2):
 		if tt2 == "0": skip=1
 	elif "duration" == tt1:
 		if tt2 == "0": t1=tt1+" = 1\n"	
-	elif "target_group_arn" == tt1: 
-		tgarn=tt2
-		tt2=tt2.replace("/","_").replace(".","_").replace(":","_")
-		t1 = tt1 + " = aws_lb_target_group."+tt2+".arn\n"
-		common.add_dependancy("aws_lb_target_group",tgarn)
+	#elif "target_group_arn" == tt1: 
+	#	tgarn=tt2
+	#	tt2=tt2.replace("/","_").replace(".","_").replace(":","_")
+	#	t1 = tt1 + " = aws_lb_target_group."+tt2+".arn\n"
+	#	common.add_dependancy("aws_lb_target_group",tgarn)
 
 	return skip,t1,flag1,flag2
 
@@ -43,6 +43,11 @@ def aws_lb_listener_rule(t1,tt1,tt2,flag1,flag2):
 	elif "duration" == tt1:
 		if tt2 == "0": 
 			t1=tt1+" = 1\n"
+	#elif "target_group_arn" == tt1: 
+#		tgarn=tt2
+#		tt2=tt2.replace("/","_").replace(".","_").replace(":","_")
+#		t1 = tt1 + " = aws_lb_target_group."+tt2+".arn\n"
+#		common.add_dependancy("aws_lb_target_group",tgarn)
 	#elif "arn" == tt1: skip=1
 			
 	#elif "target_group_arn" == tt1: skip=1

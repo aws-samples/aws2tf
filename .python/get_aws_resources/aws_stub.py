@@ -1,8 +1,6 @@
 import common
 import boto3
 import globals
-import os
-import sys
 import inspect
 
 

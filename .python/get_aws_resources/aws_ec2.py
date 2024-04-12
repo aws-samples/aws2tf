@@ -226,15 +226,8 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
                               globals.rproc[pkey] = True
 
                         except Exception as e:
-                           print(f"{e=}")
-                           print("ERROR: -1-> get_aws_route_table_association")
-                           print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-                           print(str(item['Associations'][r]))
-                           print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-                           exc_type, exc_obj, exc_tb = sys.exc_info()
-                           fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                           print(exc_type, fname, exc_tb.tb_lineno)
-                           exit()
+                           common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
                      else:
                          pkey="aws_route_table_association"+"."+vpcid
                          print("Setting " + pkey + "=True")

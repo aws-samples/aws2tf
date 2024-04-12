@@ -1,7 +1,5 @@
 import common
 import globals
-import os
-import sys
 import inspect
 
 # "$AWS configservice describe-config-rules  --config-rule-names $1"

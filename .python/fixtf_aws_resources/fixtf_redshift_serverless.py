@@ -2,6 +2,7 @@ import common
 import fixtf
 import sys
 import os
+import inspect
 
 def aws_redshiftserverless_namespace(t1,tt1,tt2,flag1,flag2):
     try:
@@ -23,17 +24,9 @@ def aws_redshiftserverless_namespace(t1,tt1,tt2,flag1,flag2):
         ##elif tt1 == "iam_roles":  t1=fixtf.deref_role_arn_array(t1,tt1,tt2)
 
     except Exception as e:
-        print(f"{e=}")
-        print("ERROR: -1-> fixtf_redshift_serverless aws_redshiftserverless_namespace")
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
-        exit()
-    
+        common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id)    
     
     return skip,t1,flag1,flag2 
-
-
 
 
 def aws_redshiftserverless_workgroup(t1,tt1,tt2,flag1,flag2):

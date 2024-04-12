@@ -2,8 +2,6 @@ import common
 import fixtf
 import base64
 import boto3
-import sys
-import os
 import globals
 import botocore
 import inspect

@@ -75,6 +75,7 @@ def getstackresources(stack_name,client):
         resp = client.describe_stack_resources(StackName=stack_name)
         response=resp['StackResources']
     except Exception as e:
+        
         print(f"{e=}")
         print("-1->unexpected error in getstack")
         exc_type, exc_obj, exc_tb = sys.exc_info()

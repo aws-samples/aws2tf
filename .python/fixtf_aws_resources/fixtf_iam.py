@@ -49,6 +49,7 @@ def aws_iam_group_policy_attachment(t1,tt1,tt2,flag1,flag2):
 
 def aws_iam_instance_profile(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1 == "role" and tt2 !="null": t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
     return skip,t1,flag1,flag2
 
 def aws_iam_openid_connect_provider(t1,tt1,tt2,flag1,flag2):

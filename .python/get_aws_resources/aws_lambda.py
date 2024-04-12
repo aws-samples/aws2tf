@@ -1,10 +1,10 @@
 import common
-import os
-import sys
 import boto3
 import requests
 import globals
 import botocore
+import inspect
+
 
 def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
     #if globals.debug:
@@ -30,13 +30,8 @@ def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
 
 
     except Exception as e:
-        print(f"{e=}")
-        print("ERROR: -2->unexpected error in get_aws_lambda_function")
-        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
-        exit()
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+        
 
     return True
 
@@ -54,12 +49,8 @@ def get_lambda_code(fn):
 
     
     except Exception as e:
-        print(f"{e=}")
-        print("ERROR: -2->unexpected error in get_lambda_code")
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
-        exit()
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
 
     return True
     
@@ -82,13 +73,7 @@ def get_aws_lambda_alias(type, id, clfn, descfn, topkey, key, filterid):
         
 
     except Exception as e:
-        print(f"{e=}")
-        print("ERROR: -2->unexpected error in get_aws_lambda_function")
-        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
-        exit()
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
 
@@ -125,14 +110,8 @@ def get_aws_lambda_permission(type, id, clfn, descfn, topkey, key, filterid):
         
 
     except Exception as e:
-        print(f"{e=}")
-        print("ERROR: -2->unexpected error in get_aws_lambda_function")
-        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
-        exit()
-
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+    
     return True
 
 
@@ -163,14 +142,8 @@ def get_aws_lambda_function_event_invoke_config(type, id, clfn, descfn, topkey, 
 
         
     except Exception as e:
-        print(f"{e=}")
-        print("ERROR: -2->unexpected error in get_aws_lambda_function")
-        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
-        exit()
-
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+        
     return True
 
 
@@ -204,12 +177,7 @@ def get_aws_lambda_event_source_mapping(type, id, clfn, descfn, topkey, key, fil
         
 
     except Exception as e:
-        print(f"{e=}")
-        print("ERROR: -2->unexpected error in get_aws_lambda_function")
-        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
-        exit()
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+    
 
     return True

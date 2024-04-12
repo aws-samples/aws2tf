@@ -221,7 +221,9 @@ if __name__ == '__main__':
         for fil in x:
             tf=fil.split('__',1)[1]
             #td=td+" "+tf
-            com = "rm -f "+tf
+##########################
+##########################
+            com = "mv "+tf +" imported/"+tf
             rout = common.rc(com)
         #print(str(td))
         #com = "rm -f "+td
@@ -255,7 +257,9 @@ if __name__ == '__main__':
     if globals.validate is False:
         common.wrapup()
 
-#################################
+##########################################################################
+####### Finish up
+#########################################################################
 
     print("writing pyprocessed.txt")
     if mg is True:

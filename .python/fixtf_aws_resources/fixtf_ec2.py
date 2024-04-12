@@ -5,6 +5,7 @@ import boto3
 import sys
 import os
 import globals
+import inspect
 
 def aws_ami(t1,tt1,tt2,flag1,flag2):
 	skip=0
@@ -318,12 +319,8 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 
 		
 	except Exception as e:
-		print(f"{e=}")
-		print("ERROR: -1-> fixtf-ec2 aws_instance")
-		exc_type, exc_obj, exc_tb = sys.exc_info()
-		fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-		print(exc_type, fname, exc_tb.tb_lineno)
-		exit()
+		common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id)
+
 		
 	return skip,t1,flag1,flag2
 

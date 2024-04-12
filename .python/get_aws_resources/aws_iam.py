@@ -1,8 +1,7 @@
 import common
 import boto3
 import globals
-import sys
-import os
+import inspect
 
 ##
 ## hmm inline policies are in the aws_iam_role  anyway !
@@ -177,15 +176,7 @@ def get_aws_iam_instance_profile(type,id,clfn,descfn,topkey,key,filterid):
       common.write_import(type,theid,None) 
       
    except Exception as e:
-        print(f"{e=}")
-        print("ERROR: -2->unexpected error in aws_iam_instance_profile")
-        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
-        exit()
-
-
+      common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
    return True
 
@@ -210,15 +201,8 @@ def get_aws_iam_user_group_membership(type,id,clfn,descfn,topkey,key,filterid):
 
       
    except Exception as e:
-        print(f"{e=}")
-        print("ERROR: -2->unexpected error in aws_iam_user_group_membership")
-        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
-        exit()
-
-
+      common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+                          
 
    return True
 
@@ -248,14 +232,7 @@ def get_aws_iam_user_policy(type,id,clfn,descfn,topkey,key,filterid):
 
       
    except Exception as e:
-        print(f"{e=}")
-        print("ERROR: -2->unexpected error in aws_iam_user_policy")
-        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
-        exit()
-
+      common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
 
    return True
@@ -286,14 +263,7 @@ def get_aws_iam_group_policy(type,id,clfn,descfn,topkey,key,filterid):
 
       
    except Exception as e:
-        print(f"{e=}")
-        print("ERROR: -2->unexpected error in aws_iam_group_policy")
-        print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
-        exit()
-
+      common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
 
    return True

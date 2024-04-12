@@ -1,6 +1,7 @@
 import common
 import botocore
 import globals
+import inspect
 
 def get_aws_vpclattice_service(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug:  print("--> In get_aws_vpclattice_service doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
@@ -21,9 +22,7 @@ def get_aws_vpclattice_service(type,id,clfn,descfn,topkey,key,filterid):
          response1 = getfn()
          response=response1[topkey]
    except Exception as e:
-      print(f"{e=}")
-      print("unexpected error in paginate")
-      exit()
+      common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
       
    if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True  
 
@@ -74,9 +73,7 @@ def get_aws_vpclattice_auth_policy(type,id,clfn,descfn,topkey,key,filterid):
          response = getfn(resourceIdentifier=id)  ## special
          #response=response1[topkey]
    except Exception as e:
-      print(f"{e=}")
-      print("unexpected error in paginate")
-      exit()
+      common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
       
    if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
@@ -120,9 +117,8 @@ def get_aws_vpclattice_listener(type,id,clfn,descfn,topkey,key,filterid):
          response1 = getfn(serviceIdentifier=id)  ## special
          response=response1[topkey]
    except Exception as e:
-      print(f"{e=}")
-      print("unexpected error in paginate")
-      exit()
+      common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
       
    if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
   
@@ -162,9 +158,8 @@ def get_aws_vpclattice_listener_rule(type,id,clfn,descfn,topkey,key,filterid):
          response1 = getfn(serviceIdentifier=svid,listenerIdentifier=rlid)  ## special
          response=response1[topkey]
    except Exception as e:
-      print(f"{e=}")
-      print("unexpected error in paginate")
-      exit()
+      common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
       
    print("***>>>>"+str(response))
    if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
@@ -200,9 +195,9 @@ def get_aws_vpc_lattice(type,id,clfn,descfn,topkey,key,filterid):
         response1 = getfn(serviceNetworkIdentifier=id)  ## special
         response=response1[topkey]
    except Exception as e:
-      print(f"{e=}")
-      print("unexpected error in paginate")
-      exit()
+      common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+      #common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id) 
+
       
    if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
    

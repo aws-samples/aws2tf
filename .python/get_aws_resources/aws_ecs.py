@@ -1,7 +1,5 @@
 import common
 import globals
-import sys
-import os
 import boto3
 import botocore
 import inspect

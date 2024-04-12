@@ -214,13 +214,22 @@ def fixtf(ttft,tf):
     rf=tf+".out"
     tf2=tf+".tf"
 
+#### Optimisation ???????
+    if os.path.isfile("imported/"+tf2):
+        com = "cp imported/"+tf2+" ."
+        rout = common.rc(com)
+        com = "mv rf imported/"+rf
+        rout = common.rc(com)
+
+
+
     ## will this check break things ?
     if os.path.isfile(tf2):
          #if globals.debug: 
-         print("File exists: " + tf2+ " skipping ...") 
+         if globals.debug: print("File exists: " + tf2+ " skipping ...") 
          return 
     else:
-        print("processing "+tf2)
+        if globals.debug:  print("processing "+tf2)
 
 
     if globals.debug:

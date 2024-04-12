@@ -1,8 +1,6 @@
 import common
 import boto3
 import globals
-import os
-import sys
 import inspect
 
 def get_aws_api_gateway_account(type, id, clfn, descfn, topkey, key, filterid):

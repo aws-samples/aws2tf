@@ -2,8 +2,6 @@
 import common
 import boto3
 import globals
-import os
-import sys
 import inspect
 
 def get_aws_autoscaling_group(type, id, clfn, descfn, topkey, key, filterid):    

@@ -4,6 +4,7 @@ import common
 import globals
 import os
 import sys
+import inspect
 
 def get_all_s3_buckets(fb,my_region):
    print("bucket name="+str(fb))

@@ -3,8 +3,7 @@ import common
 import fixtf
 import base64
 import boto3
-import sys
-import os
+import inspect
 
 
 def aws_autoscaling_attachment(t1,tt1,tt2,flag1,flag2):
@@ -30,6 +29,11 @@ def aws_autoscaling_group(t1,tt1,tt2,flag1,flag2):
 	elif tt1=="wait_for_capacity_timeout":
 		if tt2=="null":
 			t1 = tt1 +" = \"10m\"\n"
+
+	elif tt1=="launch_configuration":
+		if tt2!="null":
+			t1 = tt1 +" = aws_launch_configuration."+tt2+".id\n"
+
 	
 
 	return skip,t1,flag1,flag2
@@ -95,12 +99,7 @@ def aws_launch_configuration(t1,tt1,tt2,flag1,flag2):
 			pass
 
 		except Exception as e:
-			print(f"{e=}")
-			print("ERROR: -1-> fixtf-autoscaling aws_launch_configuration")
-			exc_type, exc_obj, exc_tb = sys.exc_info()
-			fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-			print(exc_type, fname, exc_tb.tb_lineno)
-			exit()
+			common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id)
 
 
 	return skip,t1,flag1,flag2

@@ -114,15 +114,9 @@ def call_resource(type, id):
       if globals.debug: print("WARNING: NameError: name 'getfn' - no aws_"+clfn+".py file ?")
       pass
 
-   except Exception as e:      
-                # By this way we can know about the type of error occurring
-                print(f"{e=}")
-                exc_type, exc_obj, exc_tb = sys.exc_info()
-                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                print(exc_type, fname, exc_tb.tb_lineno)   
-                exit() 
-    
-   
+   except Exception as e:
+      handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)     
+      
    if not sr:
       try:
          if globals.debug:
@@ -150,13 +144,11 @@ def tfplan1():
       print("No import*.tf files found for this resource, exiting ....")
       exit()
 
-   #com="rm -f "+rf
-   #rout=rc(com)
 
    com="terraform plan -generate-config-out="+ rf + " -out tfplan -json | jq . > plan1.json"
    print(com)
    rout=rc(com)
-   
+
    file="plan1.json"
    f2=open(file, "r")
    plan2=True
@@ -228,13 +220,13 @@ def tfplan1():
    return
 
 def tfplan2():
-   #print("fix tf files.....") 
+   print("fix tf files.....") 
    if not os.path.isfile("resources.out"):
          print("could not find expected resources.out file after Plan 1 - exiting")
          exit()
 
    #print("split resources.out")
-   splitf("resources.out")
+   splitf("resources.out")  # generated *.out files
    #zap the badlist
    for i in globals.badlist:
       com="rm -f aws_*"+i+"*.out"+" aws_*"+i+"*.tf"
@@ -513,9 +505,9 @@ def splitf(file):
                except:
                   print("tried to write to closed file: >"+ tt1 + "<")
    else:
-      print("could not find expected main.tf file")
+      print("could not find expected resources.out file")
       
-        
+   # moves resources.out to imported
    com="mv "+file +" imported/" +file
    rout=rc(com)  
    #com="terraform fmt"
@@ -554,13 +546,8 @@ def write_import(type,theid,tfid):
       globals.rproc[pkey]=True
 
 
-   except Exception as e:      
-                # By this way we can know about the type of error occurring
-                print(f"{e=}")
-                exc_type, exc_obj, exc_tb = sys.exc_info()
-                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                print(exc_type, fname, exc_tb.tb_lineno)   
-                exit()
+   except Exception as e:  
+      handle_error2(e,str(inspect.currentframe().f_code.co_name),id)    
 
    return
 
@@ -677,13 +664,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
          return True
    
    except Exception as e:
-      print(f"{e=}")
-      print("unexpected error in common.getresource")
-      exc_type, exc_obj, exc_tb = sys.exc_info()
-      fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-      print(exc_type, fname, exc_tb.tb_lineno)
-      exit()
-        
+      handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
    return True               
   
@@ -895,17 +876,7 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                
 
          except Exception as e:
-            print(f"{e=}")
-            print("-1->unexpected error in common.call_boto3")
-            print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(exc_type, fname, exc_tb.tb_lineno)
-            with open('boto3-error.plog', 'a') as f:
-               f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
-               f.write(f"{e=}\n")
-               f.write("-----------------------------------------------------------------------------\n")
-            exit()
+            handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
          #print("--2a")  
          rl=len(response)
@@ -926,13 +897,7 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
          return response
       
    except Exception as e:
-      print(f"{e=}")
-      print("-2->unexpected error in common.call_boto3")
-      print("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-      exc_type, exc_obj, exc_tb = sys.exc_info()
-      fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-      print(exc_type, fname, exc_tb.tb_lineno)
-      exit()
+      handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
    return response
 
@@ -962,5 +927,21 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    exc_type, exc_obj, exc_tb = sys.exc_info()
    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
    print(f"{e=}", fname, exc_tb.tb_lineno)
+   with open('boto3-error.plog', 'a') as f:
+      f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
+      f.write(f"{e=}\n", fname, exc_tb.tb_lineno)
+      f.write("-----------------------------------------------------------------------------\n")
+   exit()
+
+def handle_error2(e,frame,id):
+   print("\nERROR: in "+frame)
+   print("id="+str(id))
+   exc_type, exc_obj, exc_tb = sys.exc_info()
+   fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+   print(f"{e=}", fname, exc_tb.tb_lineno)
+   with open('boto3-error.plog', 'a') as f:
+      f.write("type="+type+" id="+str(id)+"\n")
+      f.write(f"{e=}\n", fname, exc_tb.tb_lineno)
+      f.write("-----------------------------------------------------------------------------\n")
    exit()
 

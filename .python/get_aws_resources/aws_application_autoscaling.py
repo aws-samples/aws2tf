@@ -1,8 +1,6 @@
 import common
 import boto3
 import globals
-import os
-import sys
 import inspect
 
 def get_aws_appautoscaling_target(type, id, clfn, descfn, topkey, key, filterid):

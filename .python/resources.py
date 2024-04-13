@@ -10,6 +10,7 @@ def resource_types(type):
     elif type == "artifact": rets=["aws_codeartifact_domain","aws_codeartifact_repository"]; return rets
     elif type == "athena": rets=["aws_athena_named_query"]; return rets
     elif type == "aurora": rets=["aws_rds_cluster_parameter_group","aws_rds_cluster"]; return rets
+    elif type == "autoscaling": rets=["aws_autoscaling_group"]; return rets
     elif type == "code": rets=["aws_codestarnotifications_notification_rule","aws_codebuild_projec","aws_codeartifact_domain","aws_codeartifact_repository","aws_codecommit_repository","aws_codepipeline"]; return rets
     elif type == "cloudfront": rets=["aws_cloudfront_distribution"]; return rets
     elif type == "cloudtrail": rets=["aws_cloudtrail"]; return rets
@@ -19,36 +20,37 @@ def resource_types(type):
     elif type == "config": rets=["aws_config_configuration_recorder","aws_config_delivery_channel","aws_config_configuration_recorder_status","aws_config_config_rule"]; return rets
     elif type == "cw-log": rets=["aws_cloudwatch_log_group"]; return rets
     elif type == "dms": rets=["aws_dms_replication_instance","aws_dms_endpoint","aws_dms_replication_task"]; return rets
-    elif type == "dynamodb": rets=[""]; return rets
-    elif type == "eb": rets=[""]; return rets
-    elif type == "ec2": rets=[""]; return rets
+    elif type == "dynamodb": rets=["aws_dynamodb_table"]; return rets
+    elif type == "eb": rets=["aws_cloudwatch_event_bus","aws_cloudwatch_event_rule"]; return rets
+    elif type == "ec2": rets=["aws_ec2_host","aws_instance"]; return rets
     elif type == "ecs": rets = ["aws_ecs_cluster"]
-    elif type == "efs": rets=[""]; return rets
+    elif type == "efs": rets=["aws_efs_file_system"]; return rets
     elif type == "eks": return ["aws_eks_cluster"]
-    elif type == "emr": rets=[""]; return rets
-    elif type == "glue": rets=[""]; return rets
+    elif type == "emr": rets=["aws_emr_cluster","aws_emr_security""_configuration"]; return rets
+    elif type == "glue": rets=["aws_glue_crawler","aws_glue_job","aws_glue_connection"]; return rets
     elif type == "iam": return ["aws_iam_role","aws_iam_policy"]
-    elif type == "igw": rets=[""]; return rets
-    elif type == "kinesis": rets=[""]; return rets
+    elif type == "igw": rets=["aws_internet_gateway"]; return rets
+    elif type == "kinesis": rets=["aws_kinesis_stream","aws_kinesis_firehose_delivery_stream"]; return rets
     elif type == "kms": return ["aws_kms_key"]
-    elif type == "lambda": rets=[""]; return rets
-    elif type == "lf": rets=[""]; return rets
-    elif type == "natgw": rets=[""]; return rets
-    elif type == "org": rets=[""]; return rets
-    elif type == "params": rets=[""]; return rets
-    elif type == "privatelink": rets=[""]; return rets
-    elif type == "ram": rets=[""]; return rets
-    elif type == "rds": rets=[""]; return rets
-    elif type == "s3": rets=[""]; return rets
-    elif type == "sagemaker": rets=[""]; return rets
-    elif type == "secrets": rets=[""]; return rets
-    elif type == "sc": rets=[""]; return rets           # service catalog
-    elif type == "sfn": rets=[""]; return rets            # State machine
-    elif type == "security-group": rets=[""]; return rets # security group
-    elif type == "sqs": rets=[""]; return rets            # SQS
-    elif type == "spot": rets=[""]; return rets
-    elif type == "vpclattice": rets=[""]; return rets
-    elif type == "users": rets=[""]; return rets
+    elif type == "lambda": rets=["aws_lambda_function"]; return rets
+    elif type == "lf": rets=["aws_lakeformation_data_lake_settings","aws_lakeformation_resource","aws_lakeformation_permissions"]; return rets
+    elif type == "natgw": rets=["aws_nat_gateway"]; return rets
+    elif type == "org": rets=["aws_organizations_organization","aws_organizations_account","aws_organizations_organizational_unit","aws_organizations_policy"]; return rets
+    elif type == "params": rets=["aws_ssm_parameter"]; return rets
+    elif type == "privatelink": rets=["aws_vpc_endpoint_service"]; return rets
+    elif type == "ram": rets=["aws_ram_resource_share"]; return rets
+    elif type == "rds": rets=["aws_db_instance","aws_db_parameter_group","aws_db_event_subscription",""]; return rets
+    elif type == "s3": rets=["aws_s3_bucket"]; return rets
+    elif type == "sagemaker": rets=["aws_sagemaker_domain"]; return rets
+    elif type == "secrets": rets=["aws_secretsmanager_secret"]; return rets
+    elif type == "sc": rets=["aws_servicecatalog_portfolio",""]; return rets           # service catalog
+    elif type == "sfn": rets=["aws_sfn_state_machine"]; return rets            # State machine
+    elif type == "security-group": rets=["aws_security_group"]; return rets # security group
+    elif type == "sns": rets=["aws_sns_topic"]; return rets
+    elif type == "sqs": rets=["aws_sqs_queue"]; return rets            # SQS
+    elif type == "spot": rets=["aws_spot_fleet_request"]; return rets
+    elif type == "vpclattice": rets=["aws_vpclattice_service_network"]; return rets
+    elif type == "users": rets=["aws_iam_user","aws_iam_group"]; return rets
 
     elif type =="all": 
         # construct from dict aws_dict.aws_resources - get all keys

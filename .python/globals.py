@@ -1,3 +1,6 @@
+cwd=""
+path1=""
+path2=""
 processed=[]
 dependancies=[]
 types=[]

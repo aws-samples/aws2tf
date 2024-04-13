@@ -8,6 +8,7 @@ import os
 import sys
 
 
+
 sys.path.insert(0, './.python')
 from get_aws_resources import aws_s3
 import common
@@ -15,7 +16,7 @@ import resources
 import globals
 
 import stacks
-
+from fixtf_aws_resources import aws_dict
 
 
 if __name__ == '__main__':
@@ -23,17 +24,18 @@ if __name__ == '__main__':
     common.check_python_version()
     # print("cwd=%s" % os.getcwd())
     signal.signal(signal.SIGINT, common.ctrl_c_handler)
+    mg = False
     argParser = argparse.ArgumentParser()
-    argParser.add_argument("-a", "--apionly", help="boto3 api only [False]|True")
-    argParser.add_argument(
-        "-b", "--bucket", help="bucket name or matching sting")
-    argParser.add_argument(
-        "-t", "--type", help="resource type aws_s3, ec2 aws_vpc etc")
+    #argParser.add_argument("-h", "--help", help="aws2tf help")
+    argParser.add_argument("-l", "--list",help="List extra help information" , action='store_true')
+    argParser.add_argument("-a", "--apionly", help="boto3 api only [False]|True", action='store_true')
+    argParser.add_argument("-b", "--bucket", help="bucket name or matching sting")
+    argParser.add_argument("-t", "--type", help="resource type aws_s3, ec2 aws_vpc etc")
     argParser.add_argument("-r", "--region", help="region")
     argParser.add_argument("-i", "--id", help="resource id")
-    argParser.add_argument("-m", "--merge", help="merge [False]|True")
-    argParser.add_argument("-d", "--debug", help="debug [False]|True")
-    argParser.add_argument("-v", "--validate", help="validate [False]|True")
+    argParser.add_argument("-m", "--merge", help="merge", action='store_true')
+    argParser.add_argument("-d", "--debug", help="debug", action='store_true')
+    argParser.add_argument("-v", "--validate", help="validate", action='store_true')
     args = argParser.parse_args()
     type=""
     # print("args=%s" % args)
@@ -42,11 +44,12 @@ if __name__ == '__main__':
     # print("args.type=%s" % args.type)
     # print("args.id=%s" % args.id)
 
-    if args.validate is not None:
-        globals.validate = True
+    if args.list:
+        print("Extra Help")
+        exit()
     
-    if args.apionly is not None:
-        globals.apionly = True
+    if args.debug: globals.debug = True
+    if args.validate: globals.validate = True
 
     if args.type is None or args.type=="":
         print("type is required eg:  -t aws_vpc")
@@ -72,9 +75,8 @@ if __name__ == '__main__':
     globals.region = region
     globals.regionl = len(region)
 
-    mg = False
-    if args.merge is not None:
-        mg = True
+ 
+    if args.merge:
         print("Merging "+str(mg))
         try:
             file = open('pyprocessed.txt', 'r')
@@ -94,7 +96,8 @@ if __name__ == '__main__':
             pass
 
 
-    # get the current
+    # get the current env and set directory
+
     my_session = boto3.setup_default_session(region_name=region)
     globals.acc = boto3.client('sts').get_caller_identity().get('Account')
     print('Using region: '+region + ' account: ' + globals.acc+"\n")
@@ -120,13 +123,10 @@ if __name__ == '__main__':
 
     id = args.id
 
-    if args.bucket is None:
-        fb = id
-    else:
-        fb = args.bucket
+    if args.bucket is None: fb = id
+    else:  fb = args.bucket
 
-    if args.debug is not None:
-        globals.debug = True
+
 
     if mg is False:
         com = "rm -f *.txt *.json"
@@ -135,32 +135,19 @@ if __name__ == '__main__':
     print("---<><><"+ str(type))
     print("id=" +str(id))
 
-    if type == "all": type = "test"
-    elif type == "aws_vpc" or type == "vpc": type = "aws_vpc"
+    #if type == "all": type = "test"
+    if type == "aws_vpc" or type == "vpc": type = "aws_vpc"
     elif type == "subnet": type = "aws_subnet"
     elif type == "config": type = "aws_config_config_rule"
     elif type == "ec2": type = "aws_instance"
-    elif type == "eks": type = "aws_eks_cluster"
-    elif type == "ecs": type = "aws_ecs_cluster"
+    #elif type == "eks": type = "aws_eks_cluster"
+    #elif type == "ecs": type = "aws_ecs_cluster"
     elif type == "lambda": type="aws_lambda_function"
     elif type == "cw" or type == "cloudwatch" or type == "logs": type = "aws_cloudwatch_log_group"
-    elif type == "" or type is None: type = "aws_vpc"
+    elif type == "" or type is None: type = "all"
         
 
 ################# -- now we are calling ----   ###############################
-
-
-
-
-    if type == "s3":
-        com = "rm -f s3-*.tf s3.tf tfplan *s3*.out"
-        rout = common.rc(com)
-        aws_s3.get_all_s3_buckets(fb, region)
-
-    elif type == "net" or type == "kms" or type == "iam" or type == "lattice" or type == "test":
-        all_types = resources.resource_types(type)
-        for i in all_types:
-            common.call_resource(i, id)
 
     elif type == "stack":
         if id is None:
@@ -169,10 +156,19 @@ if __name__ == '__main__':
         else:
             stacks.get_stacks(id)
 
+    if type == "s3":
+        com = "rm -f s3-*.tf s3.tf tfplan *s3*.out"
+        rout = common.rc(com)
+        aws_s3.get_all_s3_buckets(fb, region)
 
-    # calling by direct terraform type aws_xxxxx
+    all_types = resources.resource_types(type)
+    print("all_types="+str(all_types))
+    if all_types != None:
+        for i in all_types:
+            common.call_resource(i, id)
     else:
-        common.call_resource(type,id)
+        if type in aws_dict.aws_resources:
+            common.call_resource(type,id)
 
 #########################################################################################################################
 

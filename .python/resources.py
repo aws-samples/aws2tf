@@ -1,6 +1,7 @@
 from fixtf_aws_resources import aws_dict
 
 def resource_types(type):
+    rets=[]
     if type == "net": 
         rets=["aws_vpc","aws_vpc_dhcp_options","aws_subnet","aws_internet_gateway","aws_nat_gateway","aws_route_table","aws_route_table_association","aws_vpc_endpoint","aws_security_group"]
         return rets
@@ -53,9 +54,8 @@ def resource_types(type):
     elif type == "users": rets=["aws_iam_user","aws_iam_group"]; return rets
 
     elif type =="all": 
-        # construct from dict aws_dict.aws_resources - get all keys
         keys_list = aws_dict.aws_resources.keys()
-        rets=[]
+        
         for i in keys_list:
             rets.append(i)
         #print(str(rets))

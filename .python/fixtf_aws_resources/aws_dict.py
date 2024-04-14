@@ -1150,9 +1150,9 @@ aws_applicationinsights_application = {
 aws_appmesh_gateway_route = {
 	"clfn":		"appmesh",
 	"descfn":	"list_gateway_routes",
-	"topkey":	"GatewayRoutes",
-	"key":		"GatewayRouteName",
-	"filterid":	"GatewayRouteName"
+	"topkey":	"gatewayRoutes",
+	"key":		"gatewayRouteName",
+	"filterid":	"gatewayRouteName"
 }
 
 aws_appmesh_mesh = {
@@ -1166,41 +1166,41 @@ aws_appmesh_mesh = {
 aws_appmesh_route = {
 	"clfn":		"appmesh",
 	"descfn":	"list_routes",
-	"topkey":	"Routes",
-	"key":		"RouteName",
-	"filterid":	"RouteName"
+	"topkey":	"routes",
+	"key":		"routeName",
+	"filterid":	"routeName"
 }
 
 aws_appmesh_virtual_gateway = {
 	"clfn":		"appmesh",
 	"descfn":	"list_virtual_gateways",
-	"topkey":	"VirtualGateways",
-	"key":		"VirtualGatewayName",
-	"filterid":	"VirtualGatewayName"
+	"topkey":	"virtualGateways",
+	"key":		"virtualGatewayName",
+	"filterid":	"virtualGatewayName"
 }
 
 aws_appmesh_virtual_node = {
 	"clfn":		"appmesh",
 	"descfn":	"list_virtual_nodes",
-	"topkey":	"VirtualNodes",
-	"key":		"VirtualNodeName",
-	"filterid":	"VirtualNodeName"
+	"topkey":	"virtualNodes",
+	"key":		"virtualNodeName",
+	"filterid":	"virtualNodeName"
 }
 
 aws_appmesh_virtual_router = {
 	"clfn":		"appmesh",
 	"descfn":	"list_virtual_routers",
-	"topkey":	"VirtualRouters",
-	"key":		"VirtualRouterName",
-	"filterid":	"VirtualRouterName"
+	"topkey":	"virtualRouters",
+	"key":		"virtualRouterName",
+	"filterid":	"virtualRouterName"
 }
 
 aws_appmesh_virtual_service = {
 	"clfn":		"appmesh",
 	"descfn":	"list_virtual_services",
-	"topkey":	"VirtualServices",
-	"key":		"VirtualServiceName",
-	"filterid":	"VirtualServiceName"
+	"topkey":	"virtualServices",
+	"key":		"meshName",
+	"filterid":	"virtualServiceName"
 }
 
 aws_apprunner_auto_scaling_configuration_version = {

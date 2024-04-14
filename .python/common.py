@@ -13,6 +13,7 @@ import resources
 from get_aws_resources import aws_athena
 from get_aws_resources import aws_autoscaling
 from get_aws_resources import aws_apigateway
+from get_aws_resources import aws_appmesh
 from get_aws_resources import aws_application_autoscaling
 from get_aws_resources import aws_config
 from get_aws_resources import aws_dynamodb

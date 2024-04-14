@@ -28,7 +28,6 @@ if __name__ == '__main__':
     argParser = argparse.ArgumentParser()
     #argParser.add_argument("-h", "--help", help="aws2tf help")
     argParser.add_argument("-l", "--list",help="List extra help information" , action='store_true')
-    argParser.add_argument("-a", "--apionly", help="boto3 api only [False]|True", action='store_true')
     argParser.add_argument("-b", "--bucket", help="bucket name or matching sting")
     argParser.add_argument("-t", "--type", help="resource type aws_s3, ec2 aws_vpc etc")
     argParser.add_argument("-r", "--region", help="region")
@@ -36,6 +35,7 @@ if __name__ == '__main__':
     argParser.add_argument("-m", "--merge", help="merge", action='store_true')
     argParser.add_argument("-d", "--debug", help="debug", action='store_true')
     argParser.add_argument("-v", "--validate", help="validate", action='store_true')
+    argParser.add_argument("-a", "--apionly", help="boto3 api only (for debugging)", action='store_true')
     args = argParser.parse_args()
     type=""
     # print("args=%s" % args)
@@ -174,7 +174,7 @@ if __name__ == '__main__':
 
 ## Known dependancies section
     
-    if args.apionly:   exit(0)
+
 
     kdep=False
     for ti in globals.rdep.keys():
@@ -194,6 +194,7 @@ if __name__ == '__main__':
     #else:
     #    print("No Known Dependancies")
 
+    if args.apionly:   exit(0)
 
     common.tfplan1()
     common.tfplan2()

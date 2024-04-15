@@ -16,6 +16,7 @@ from get_aws_resources import aws_apigateway
 from get_aws_resources import aws_appmesh
 from get_aws_resources import aws_application_autoscaling
 from get_aws_resources import aws_config
+from get_aws_resources import aws_dms
 from get_aws_resources import aws_dynamodb
 from get_aws_resources import aws_kms
 from get_aws_resources import aws_ec2

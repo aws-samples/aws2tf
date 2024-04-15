@@ -31,6 +31,7 @@ from get_aws_resources import aws_rds
 from get_aws_resources import aws_redshift
 from get_aws_resources import aws_sagemaker
 from get_aws_resources import aws_secretsmanager
+from get_aws_resources import aws_sns
 from get_aws_resources import aws_vpc_lattice
 
 from fixtf_aws_resources import needid_dict
@@ -841,8 +842,8 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                # save a full paginate as we don't want to do it many times
                
 
-         except botocore.exceptions.ParamValidationError as err:
-            print(f"{err=}"+","+type+","+clfn)
+         except botocore.exceptions.ParamValidationError as e:
+            print(f"{e=}"+","+type+","+clfn)
             print("ParamValidationError 1 in common.call_boto3: type="+type+" clfn="+clfn)
             with open('boto3-error.plog', 'a') as f:
                      f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
@@ -870,8 +871,8 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                            if globals.debug: print("Non-pag response with ID ="+str(response))
                            
 
-               except botocore.exceptions.ParamValidationError as err:
-                  print(f"{err=}"+","+type+","+clfn)
+               except botocore.exceptions.ParamValidationError as e:
+                  print(f"{e=}"+","+type+","+clfn)
                   #print("ParamValidationError 2 in common.call_boto3: type="+type+" clfn="+clfn)
                   with open('boto3-error.plog', 'a') as f:
                      f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")

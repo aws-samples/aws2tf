@@ -2589,7 +2589,7 @@ aws_config_configuration_aggregator = {
 
 aws_config_configuration_recorder = {
 	"clfn":		"config",
-	"descfn":	"list_configuration_recorders",
+	"descfn":	"describe_configuration_recorders",
 	"topkey":	"ConfigurationRecorders",
 	"key":		"name",
 	"filterid":	"name"
@@ -2613,7 +2613,7 @@ aws_config_conformance_pack = {
 
 aws_config_delivery_channel = {
 	"clfn":		"config",
-	"descfn":	"list_delivery_channels",
+	"descfn":	"describe_delivery_channels",
 	"topkey":	"DeliveryChannels",
 	"key":		"name",
 	"filterid":	"name"
@@ -9193,7 +9193,7 @@ aws_sns_topic_policy = {
 	"clfn":		"sns",
 	"descfn":	"get_topic_attributes",
 	"topkey":	"Attributes",
-	"key":		"Policy",
+	"key":		"TopicArn",
 	"filterid":	"Policy"
 }
 
@@ -9201,7 +9201,7 @@ aws_sns_topic_subscription = {
 	"clfn":		"sns",
 	"descfn":	"list_subscriptions_by_topic",
 	"topkey":	"Subscriptions",
-	"key":		"TopicArn",
+	"key":		"SubscriptionArn",
 	"filterid":	"SubscriptionArn"
 }
 

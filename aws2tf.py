@@ -8,7 +8,6 @@ import os
 import sys
 
 
-
 sys.path.insert(0, './.python')
 from get_aws_resources import aws_s3
 import common
@@ -297,6 +296,6 @@ if __name__ == '__main__':
         for i in globals.rproc.keys():
             print(i)
 
-    print("Done")
+    print("\nTerraform files & state in sub-directory: "+ globals.path1+"\n")
 
     exit(0)

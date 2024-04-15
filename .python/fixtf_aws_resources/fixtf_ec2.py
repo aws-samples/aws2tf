@@ -249,7 +249,7 @@ def aws_egress_only_internet_gateway(t1,tt1,tt2,flag1,flag2):
 def aws_eip(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if tt1 == "network_interface": skip = 1
-	if tt1 == "instance":
+	if tt1 == "instance" and tt2 != "null":
 		t1 = tt1 + " = aws_instance."+tt2+".id\n"
 	return skip,t1,flag1,flag2
 

@@ -63,20 +63,24 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
 def get_aws_kms_alias(type,id,clfn,descfn,topkey,key,filterid):
     #if globals.debug: print("--> In get_aws_kms_key    doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     print("--> In get_aws_kms_alias  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    response = []
+    client = boto3.client(clfn)
+    paginator = client.get_paginator(descfn)
+    for page in paginator.paginate():
+        response = response + page[topkey]
+    if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+    
+    #pkey=type+"."+id
+    #if not globals.rproc[pkey]:
+    #    globals.rproc[pkey]=True
+    #return True 
+    #aws_kms_alias = {"clfn":"kms","descfn":"list_aliases",	"topkey":"Aliases",	"key":"TargetKeyId","filterid":	"AliasName"}
 
-    response=common.call_boto3(type,clfn,descfn,topkey,key,id)
-    #print("-9a->"+str(response))
-    if response == []: 
-        print("Empty response for "+type+ " id="+str(id)+" returning")
-        pkey=type+"."+id
-        if not globals.rproc[pkey]:
-            globals.rproc[pkey]=True
-        return True 
     try:
         for j in response: 
             #print(str(j))
             try:
-                theid=j[key]
+                theid=j[key] # this will be an id
                 aliasname=j['AliasName']
                 if aliasname.startswith("alias/aws"):
                     print("Skipping "+aliasname+" "+theid)
@@ -85,7 +89,17 @@ def get_aws_kms_alias(type,id,clfn,descfn,topkey,key,filterid):
                     continue
             except KeyError:
                 continue
+
             ka="k-"+theid
+
+            # if there's an alias match - good enough
+            if id==aliasname or "alias/"+id==aliasname:
+                print("KMS ALAIS: Alias match importing ",id)
+                common.write_import(type,aliasname,ka) 
+                pkey=type+".k-"+theid
+                globals.rproc[pkey]=True
+                return True
+
             #print("ka="+str(ka)+" id="+str(id)+" theid="+str(theid))
             # if doesnt start with a k add k- to the start of id
             if id is not None and not id.startswith("k-"): id="k-"+id
@@ -96,17 +110,11 @@ def get_aws_kms_alias(type,id,clfn,descfn,topkey,key,filterid):
                 
                 continue
             else:
-                #print("--- id equal to ka")
-                #print("ka="+str(ka)+" id="+str(id)+" theid="+str(theid))
+                print("KMS ALAIS: Id match importing ",id)
+
                 common.write_import(type,aliasname,ka) 
 
-                    #write_import(type,theid,tfid)
-                    #f.write('import {\n')
-                    #f.write('  to = ' +type + '.' + tfid + '\n')
-                    #f.write('  id = "'+ theid + '"\n')
-                    #f.write('}\n')
 
-                    #pkey=type+"."+tfid
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

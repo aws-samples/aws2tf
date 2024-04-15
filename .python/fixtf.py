@@ -321,8 +321,8 @@ def fixtf(ttft,tf):
                 # : in tt1 for quote it
                 skip,t1,flag1,flag2=aws_common.aws_common(ttft,t1,tt1,tt2,flag1,flag2)
                 
-
-                skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
+                if skip==0:
+                    skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
                 ## strip sections
                 if globals.stripblock != "":
                     if globals.stripblock in t1: globals.lbc=1
@@ -395,7 +395,10 @@ def globals_replace(t1,tt1,tt2):
 
 
 def deref_array(t1,tt1,tt2,ttft,prefix,skip):
+
+
     if tt2 == "null" or tt2 == "[]":
+
         skip=1
         return t1,skip
     tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')

@@ -35,6 +35,7 @@ if __name__ == '__main__':
     argParser.add_argument("-d", "--debug", help="debug", action='store_true')
     argParser.add_argument("-v", "--validate", help="validate", action='store_true')
     argParser.add_argument("-a", "--apionly", help="boto3 api only (for debugging)", action='store_true')
+    argParser.add_argument("-b3", "--boto3error", help="exit on boto3 api error (for debugging)", action='store_true')
     args = argParser.parse_args()
     type=""
     # print("args=%s" % args)
@@ -131,8 +132,8 @@ if __name__ == '__main__':
         com = "rm -f *.txt *.json"
         rout = common.rc(com)
     
-    print("---<><><"+ str(type))
-    print("id=" +str(id))
+    print("---<><><"+ str(type),str(id))
+
 
     #if type == "all": type = "test"
     if type == "aws_vpc" or type == "vpc": type = "aws_vpc"

@@ -432,9 +432,6 @@ def check_python_version():
 
 
 def aws_tf(region):
-   print("----------->>>>>>>>")
-   print("cwd="+os.getcwd())
-   print("glob="+globals.path1)
    #os.chdir(globals.path1) 
    if not os.path.isfile("aws.tf"):
       with open("aws.tf", 'w') as f3: 

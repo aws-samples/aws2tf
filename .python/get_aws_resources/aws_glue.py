@@ -118,3 +118,29 @@ def get_aws_glue_trigger(type, id, clfn, descfn, topkey, key, filterid):
 
 
     return True
+
+def get_aws_glue_job(type, id, clfn, descfn, topkey, key, filterid):
+
+    if globals.debug:
+        print("--> In get_aws_glue_job  doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+        
+    try:
+        response = []
+        client = boto3.client(clfn)
+        
+        response = client.list_jobs()
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        for j in response['JobNames']:
+            pkey=j
+            if id is None:
+                common.write_import(type,pkey,None) 
+            else:
+                if id==j:
+                    common.write_import(type,pkey,None)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+
+    return True

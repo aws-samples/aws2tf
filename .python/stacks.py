@@ -7,23 +7,28 @@ from get_aws_resources import aws_s3
 import botocore
 
 
+## Enter here:
 def get_stacks(stack_name):
     client = boto3.client('cloudformation')
     nested=[]
-    print("Level 1 stack nesting")
+    print("Level 1 stack nesting for "+ stack_name)
     nested=getstack(stack_name,nested,client)
+    
 
     if nested is not None:
         print("Level 2 stack nesting")
         for nest in nested:
-            if nest != stack_name:
-                print(nest)
-                getstack(nest,nested,client)
+            sn=nest.split("/")[1]
+            if sn != stack_name:
+                #print("nest= "+sn)
+                nested=getstack(sn,nested,client)
+                #print("Level 3 stack nesting")
+
 
         print("-------------------------------------------")
 
         for nest in nested:
-            print("Getting stack resources for " + nest)
+            #print("Getting stack resources for " + nest)
             getstackresources(nest,client)
         
         print("Stack "+stack_name+" done")
@@ -56,15 +61,16 @@ def getstack(stack_name,nested,client):
         stacki=j['StackId']
         if stacki not in (str(nested)):
             nested=nested+[stacki]
-            #print("--> adding "+ stacki +" to nested")
+            #print("-1-> adding "+ stacki +" to nested")
         
+        # most added here
         if type == "AWS::CloudFormation::Stack":
             if stat == "CREATE_COMPLETE":
                 #print(type+' '+stat)
                 stackr=j['PhysicalResourceId']
                 if stackr not in (str(nested)):
                     nested=nested+[stackr]
-                    #print("--> adding "+ stackr +" to nested")
+                    #print("-2-> adding "+ stackr +" to nested")
    
     
     return nested
@@ -72,6 +78,8 @@ def getstack(stack_name,nested,client):
 
 def getstackresources(stack_name,client):
     try:
+        print("Getting resources for stack: "+stack_name.split("/")[1])
+        
         resp = client.describe_stack_resources(StackName=stack_name)
         response=resp['StackResources']
     except Exception as e:
@@ -1025,7 +1033,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::OpenSearchServerless::SecurityConfig": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::OpenSearchServerless::SecurityPolicy": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::OpenSearchServerless::VpcEndpoint": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::OpenSearchService::Domain": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::OpenSearchService::Domain": common.call_resource("aws_opensearch_domain", pid)
             elif type == "AWS::OpsWorks::App": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::OpsWorks::ElasticLoadBalancerAttachment": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::OpsWorks::Instance": common.call_resource("aws_null", type+" "+pid)

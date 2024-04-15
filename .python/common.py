@@ -32,6 +32,7 @@ from get_aws_resources import aws_redshift
 from get_aws_resources import aws_sagemaker
 from get_aws_resources import aws_secretsmanager
 from get_aws_resources import aws_sns
+from get_aws_resources import aws_sqs
 from get_aws_resources import aws_vpc_lattice
 
 from fixtf_aws_resources import needid_dict

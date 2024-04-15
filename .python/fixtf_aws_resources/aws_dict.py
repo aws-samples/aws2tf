@@ -9233,8 +9233,8 @@ aws_sqs_queue = {
 	"clfn":		"sqs",
 	"descfn":	"list_queues",
 	"topkey":	"QueueUrls",
-	"key":		"QueueUrl",
-	"filterid":	"QueueUrl"
+	"key":		"",
+	"filterid":	""
 }
 
 aws_sqs_queue_policy = {

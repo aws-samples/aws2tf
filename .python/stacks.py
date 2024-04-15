@@ -260,7 +260,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::SNS::Subscription":  common.call_resource("aws_sns_topic_subscription", parn) 
             elif type == "AWS::SNS::Topic":  common.call_resource("aws_sns_topic", parn) 
             elif type == "AWS::SNS::TopicPolicy":  common.call_resource("aws_sns_topic_policy", parn) 
-            elif type == "AWS::SQS::Queue":  common.call_resource("aws_sqs_queue", type+" "+parn) 
+            elif type == "AWS::SQS::Queue":  common.call_resource("aws_sqs_queue", parn) 
             elif type == "AWS::SQS::QueuePolicy": f3.write(type+" "+pid+"  as part of SQS Queue ..\n") 
 
             elif type == "AWS::SSM::Parameter":  common.call_resource("aws_ssm_parameter", pid) 

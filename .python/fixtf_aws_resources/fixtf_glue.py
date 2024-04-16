@@ -1,3 +1,5 @@
+import globals 
+
 def aws_glue_crawler(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "sample_size":
@@ -37,6 +39,15 @@ def aws_glue_dev_endpoint(t1,tt1,tt2,flag1,flag2):
 
 def aws_glue_job(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1 == "max_capacity" and tt2 != "null":
+		globals.gulejobmaxcap=True
+	if tt1 == "number_of_workers":
+		if globals.gulejobmaxcap: skip=1
+	if tt1 == "worker_type":
+		if globals.gulejobmaxcap: skip=1
+	if tt1 == "description":
+		t1=t1+"\n lifecycle {\n   ignore_changes = [glue_version,number_of_workers,worker_type]\n}\n"
+	
 	return skip,t1,flag1,flag2
 
 def aws_glue_ml_transform(t1,tt1,tt2,flag1,flag2):

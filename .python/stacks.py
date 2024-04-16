@@ -92,8 +92,9 @@ def getstackresources(stack_name,client):
         exit()
     ri=0
     rl=len(response)
-    with open('stack-unprocessed.log', 'a') as f:
-        for j in response:
+    
+    for j in response:
+            f=open('stack-unprocessed.log', 'a')
             f3=open('stack-fetched-implicit.log', 'a')
             f4=open('stack-fetched-explicit.log', 'a')
             type=j['ResourceType']
@@ -747,7 +748,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::Glue::Schema": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Glue::SchemaVersion": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Glue::SchemaVersionMetadata": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::Glue::SecurityConfiguration": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::Glue::SecurityConfiguration": common.call_resource("aws_glue_security_configuration",pid)
             elif type == "AWS::Glue::Trigger": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Glue::Workflow": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Grafana::Workspace": common.call_resource("aws_null", type+" "+pid)

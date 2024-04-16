@@ -283,7 +283,7 @@ def fixtf(ttft,tf):
         globals.stripend="}"
 
 
-
+    globals.gulejobmaxcap=False
     #if globals.acc in tf2:
     #    tf2=tf2.replace(globals.acc, "__")
 

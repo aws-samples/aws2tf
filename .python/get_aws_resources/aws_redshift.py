@@ -4,7 +4,7 @@ import globals
 import inspect
 
 
-def get_aws_redshiftserverless_namespace(type, id, clfn, descfn, topkey, key, filterid):
+def get_aws_blank_namespace(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
         print("--> In get_aws_redshiftserverless_namespace  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
@@ -32,7 +32,7 @@ def get_aws_redshiftserverless_namespace(type, id, clfn, descfn, topkey, key, fi
     return True
 
 
-def get_aws_redshiftserverless_workgroup(type, id, clfn, descfn, topkey, key, filterid):
+def get_aws_blank_workgroup(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
         print("--> In _aws_redshiftserverless_workgroup  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)

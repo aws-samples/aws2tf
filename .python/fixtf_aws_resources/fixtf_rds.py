@@ -106,7 +106,7 @@ def aws_rds_cluster(t1,tt1,tt2,flag1,flag2):
 					inn=inn.strip('"')
 					print("--inn->>>>", inn)
 					#t1=tt1 + " = aws_rds_cluster_instance." + inn + ".id\n"
-					common.add_dependancy("aws_rds_cluster_instance", inn)0
+					common.add_dependancy("aws_rds_cluster_instance", inn)
 		# Error: Cycle: aws_rds_cluster.launch-database-qkj2lkbcs7ne-auroras-auroracluster-oxhqkawhlbto, aws_rds_cluster_instance.mdadb
 
 		

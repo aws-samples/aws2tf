@@ -30,6 +30,7 @@ from get_aws_resources import aws_logs
 from get_aws_resources import aws_lambda
 from get_aws_resources import aws_rds
 from get_aws_resources import aws_redshift
+from get_aws_resources import aws_redshift_serverless
 from get_aws_resources import aws_sagemaker
 from get_aws_resources import aws_secretsmanager
 from get_aws_resources import aws_sns
@@ -90,8 +91,7 @@ def call_resource(type, id):
                     clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
             
             if clfn=="vpc-lattice":  getfn = getattr(eval("aws_vpc_lattice"), "get_"+type) 
-            elif clfn=="redshift-serverless":  getfn = getattr(eval("aws_redshift"), "get_"+type) 
-               #aws_redshift.get_aws_redshiftserverless_namespace(type, id, clfn, descfn, topkey, key, filterid)
+            elif clfn=="redshift-serverless":  getfn = getattr(eval("aws_redshift_serverless"), "get_"+type) 
 
             else:   
                #print("-1aa- clfn:"+clfn+" type:"+type)

@@ -23,6 +23,7 @@ asg_azs=False
 plan2=False
 ssmparamn=""
 repdbin=False
+gulejobmaxcap=False
 stripblock=""
 stripstart=""
 stripend=""

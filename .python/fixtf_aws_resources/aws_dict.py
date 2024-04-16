@@ -436,16 +436,16 @@ aws_lb = {
 
 aws_redshiftserverless_workgroup = {
 	"clfn":		"redshift-serverless",
-	"descfn":	"get_workgroup",
-	"topkey":	"workgroup",
+	"descfn":	"list_workgroups",
+	"topkey":	"workgroups",
 	"key":		"workgroupName",
 	"filterid":	"workgroupName"
 }
 
 aws_redshiftserverless_namespace = {
 	"clfn":		"redshift-serverless",
-	"descfn":	"get_namespace",
-	"topkey":	"namespace",
+	"descfn":	"list_namespaces",
+	"topkey":	"namespaces",
 	"key":		"namespaceName",
 	"filterid":	"namespaceName"
 }
@@ -4798,7 +4798,7 @@ aws_glue_schema = {
 
 aws_glue_security_configuration = {
 	"clfn":		"glue",
-	"descfn":	"list_security_configurations",
+	"descfn":	"get_security_configurations",
 	"topkey":	"SecurityConfigurations",
 	"key":		"Name",
 	"filterid":	"Name"

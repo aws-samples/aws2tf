@@ -22,7 +22,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
 
         elif tt1 == "subnets" or tt1 == "subnet_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
         elif tt1 == "route_table_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_route_table","rtb-",skip)
-        #elif tt1 == "cluster_members": fixtf.deref_array(t1,tt1,tt2,type,"*",skip)
+        
         elif tt1 == "iam_roles": t1=fixtf.deref_role_arn_array(t1,tt1,tt2)
         elif tt1 == "vpc_id":
             if tt2 != "null":
@@ -32,7 +32,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         elif tt1 == "subnet_id":
             if tt2 != "null":
                 t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
-                print("----->>>>>>"+tt2)
+                #print("----->>>>>>"+tt2)
                 common.add_dependancy("aws_subnet", tt2)
 
         

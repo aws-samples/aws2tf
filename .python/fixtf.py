@@ -320,9 +320,11 @@ def fixtf(ttft,tf):
                 # rhs is still an arn
                 # : in tt1 for quote it
                 skip,t1,flag1,flag2=aws_common.aws_common(ttft,t1,tt1,tt2,flag1,flag2)
-                
-                if skip==0:
+
+                if skip==0:                    
                     skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
+
+
                 ## strip sections
                 if globals.stripblock != "":
                     if globals.stripblock in t1: globals.lbc=1
@@ -344,7 +346,7 @@ def fixtf(ttft,tf):
                 print(exc_type, fname, exc_tb.tb_lineno)
                 print("-- no fixtf for type:"+ttft+" callfn:"+callfn)
                 print("-- no fixtf for "+tf+" calling generic fixtf2.aws_resource callfn="+callfn)
-                #print("t1="+t1) 
+                print("t1="+str(t1)) 
                 nofind=2
                 skip,t1,flag1,flag2=aws_resource(t1,tt1,tt2,flag1,flag2)
 
@@ -396,16 +398,13 @@ def globals_replace(t1,tt1,tt2):
 
 def deref_array(t1,tt1,tt2,ttft,prefix,skip):
 
-
     if tt2 == "null" or tt2 == "[]":
-
         skip=1
         return t1,skip
     tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
     cc=tt2.count(',')
     subs=""
-    if globals.debug: 
-        print("-->> " + tt1 + ": "  + tt2 + " count=" + str(cc))
+    #if globals.debug: 
     if cc > 0:
         for i in range(cc+1):
             subn=tt2.split(',')[i]
@@ -413,8 +412,9 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
             common.add_dependancy(ttft,subn)
 
             
-    if cc == 0 and prefix in tt2: 
-        subs=subs + ttft + "." + tt2 + ".id,"
+    if cc == 0 and prefix in tt2:
+        subs=ttft + "." + tt2 + ".id"
+        print("Here", subs) 
         common.add_dependancy(ttft,tt2)
     else:
         print("Warning: named security group:" + tt2)    

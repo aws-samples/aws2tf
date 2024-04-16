@@ -414,7 +414,7 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
             
     if cc == 0 and prefix in tt2:
         subs=ttft + "." + tt2 + ".id"
-        print("Here", subs) 
+ 
         common.add_dependancy(ttft,tt2)
     else:
         print("Warning: named security group:" + tt2)    

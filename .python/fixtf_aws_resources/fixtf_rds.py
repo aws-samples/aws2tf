@@ -92,8 +92,16 @@ def aws_rds_cluster(t1,tt1,tt2,flag1,flag2):
 			common.add_dependancy("aws_db_subnet_group",tt2)
 		#elif tt1 == "kms_key_id": t1=fixtf.deref_kms_key(t1,tt1,tt2)
 		elif tt1 == "cluster_members": 
-			t1,skip=fixtf.deref_array(t1,tt1,tt2,"aws_rds_cluster_instance","",skip)
-			#common.add_dependancy("aws_rds_cluster_instance",tt2)
+			#t1,skip=fixtf.deref_array(t1,tt1,tt2,"aws_rds_cluster_instance","",skip)
+			cc=tt2.count(',')
+			if cc == 0:
+				inn=tt2.strip('[]').strip("'")
+				
+				#t1=tt1 + " = aws_rds_cluster_instance." + inn + ".id\n"
+				common.add_dependancy("aws_rds_cluster_instance",inn)
+		# Error: Cycle: aws_rds_cluster.launch-database-qkj2lkbcs7ne-auroras-auroracluster-oxhqkawhlbto, aws_rds_cluster_instance.mdadb
+
+		
 
 	except Exception as e:
 		print("*** Exception in aws_rds_cluster: " + str(e))
@@ -110,8 +118,14 @@ def aws_rds_cluster_instance(t1,tt1,tt2,flag1,flag2):
 	if tt1=="performance_insights_retention_period":
 		if tt2=="0":
 			skip=1
-	return skip,t1,flag1,flag2
+	elif tt1 == "cluster_identifier" and tt2 != "null":
+		t1=tt1 + " = aws_rds_cluster." + tt2 + ".id\n"
+		common.add_dependancy("aws_rds_cluster", tt2)
+	elif tt1 == "db_subnet_group_name" and tt2 != "null":
+		t1=tt1 + " = aws_db_subnet_group." + tt2 + ".id\n"
+		common.add_dependancy("aws_db_subnet_group", tt2)
 
+	return skip,t1,flag1,flag2
 
 def aws_rds_certificate(t1,tt1,tt2,flag1,flag2):
 	skip=0

@@ -97,7 +97,6 @@ def aws_rds_cluster(t1,tt1,tt2,flag1,flag2):
 			if cc == 0:
 				inn=tt2.strip('[]').strip("'")
 				inn=inn.strip('"')
-				print("--inn->>>>",inn)
 				#t1=tt1 + " = aws_rds_cluster_instance." + inn + ".id\n"
 				common.add_dependancy("aws_rds_cluster_instance",inn)
 			if cc > 0:

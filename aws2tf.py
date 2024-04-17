@@ -23,7 +23,7 @@ if __name__ == '__main__':
     common.check_python_version()
     # print("cwd=%s" % os.getcwd())
     signal.signal(signal.SIGINT, common.ctrl_c_handler)
-    mg = False
+
     argParser = argparse.ArgumentParser()
     #argParser.add_argument("-h", "--help", help="aws2tf help")
     argParser.add_argument("-l", "--list",help="List extra help information" , action='store_true')
@@ -39,10 +39,11 @@ if __name__ == '__main__':
     args = argParser.parse_args()
     type=""
     # print("args=%s" % args)
-
+    
     # print("args.bucket=%s" % args.bucket)
     # print("args.type=%s" % args.type)
     # print("args.id=%s" % args.id)
+    mg=args.merge
 
     if args.list:
         print("Extra Help")
@@ -75,6 +76,7 @@ if __name__ == '__main__':
     globals.region = region
     globals.regionl = len(region)
 
+    print("args.merge="+str(args.merge))
  
     if args.merge:
         print("Merging "+str(mg))

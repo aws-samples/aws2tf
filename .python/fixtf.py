@@ -370,32 +370,70 @@ def aws_resource(t1,tt1,tt2,flag1,flag2):
 
 # generic replace of acct and region in arn
 def globals_replace(t1,tt1,tt2):
-    #print("policy " + globals.acc + " "+ tt2)
+    #print("glob rep " + globals.acc + " "+ tt2)
     ends=""
     tt2=tt2.replace("%", "%%")
-    while ":"+globals.acc+":" in tt2:
-            #print("--> 5")
-            r1=tt2.find(":"+globals.region+":")
-            a1=tt2.find(":"+globals.acc+":")
-            #print("--> r1="+ str(r1) + " ")
-            #print("--> a1="+ str(a1) + " ")
-            if r1>0 and r1 < a1:
-                    #print("--> 6a")
-                    ends=ends+",data.aws_region.current.name"
-                    tt2=tt2[:r1]+":%s:"+tt2[r1+globals.regionl+2:]
 
-            a1=tt2.find(":"+globals.acc+":")
-            tt2=tt2[:a1]+":%s:"+tt2[a1+14:]
+    if ":"+globals.acc+":" in tt2:
+        while ":"+globals.acc+":" in tt2:
+                #print("--> 5")
+                r1=tt2.find(":"+globals.region+":")
+                a1=tt2.find(":"+globals.acc+":")
+                #print("--> r1="+ str(r1) + " ")
+                #print("--> a1="+ str(a1) + " ")
+                if r1>0 and r1 < a1:
+                        #print("--> 6a")
+                        ends=ends+",data.aws_region.current.name"
+                        tt2=tt2[:r1]+":%s:"+tt2[r1+globals.regionl+2:]
+
+                a1=tt2.find(":"+globals.acc+":")
+                tt2=tt2[:a1]+":%s:"+tt2[a1+14:]
+                
+                ends=ends+",data.aws_caller_identity.current.account_id"
             
-            ends=ends+",data.aws_caller_identity.current.account_id"
-         
-            t1 = tt1+' = format("'+tt2+ '"' +ends+')\n'
+                t1 = tt1+' = format("'+tt2+ '"' +ends+')\n'
+    
     if tt1 == "managed_policy_arns":
         tt2=tt2.replace('[','')
         tt2=tt2.replace(']','')
         tt2=tt2.replace('"','')
         t1 = tt1+' = [format("' + tt2 + '"' + ends +')]\n'
     return t1
+
+
+def rhs_replace(t1,tt1,tt2):
+    ends=""
+
+    if "{" not in tt2 and "[" not in tt2:  # so probably not a policy 
+
+        while globals.acc in tt2:
+                    #print("--> 5b",tt2)
+                    r1=tt2.find(globals.region)
+                    a1=tt2.find(globals.acc)
+                    #print("--> r1="+ str(r1) + " ")
+                    #print("--> a1="+ str(a1) + " ")
+                    if r1>0 and a1>0 and r1 < a1: # there is region and it comes 1st
+                            #print("--> 6a")
+                            ends=ends+",data.aws_region.current.name"
+                            tt2=tt2[:r1]+"%s"+tt2[r1+globals.regionl:]
+                            a1=tt2.find(globals.acc)
+                            tt2=tt2[:a1]+"%s"+tt2[a1+12:]
+                            ends=ends+",data.aws_caller_identity.current.account_id"
+                    if r1>0 and a1>0 and r1 > a1: # there is region and it comes 2nd
+                            #print("--> 6b")
+                            ends=ends+",data.aws_caller_identity.current.account_id"         
+                            tt2=tt2[:r1]+"%s"+tt2[r1+globals.regionl:]
+                            a1=tt2.find(globals.acc)
+                            tt2=tt2[:a1]+"%s"+tt2[a1+12:]
+                            ends=ends+",data.aws_region.current.name"
+                
+                    t1 = tt1+' = format("'+tt2+ '"' +ends+')\n'
+        #print("t1="+t1)
+
+    return t1
+
+
+
 
 
 def deref_array(t1,tt1,tt2,ttft,prefix,skip):

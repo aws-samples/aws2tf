@@ -1,11 +1,12 @@
 import globals 
 
 def aws_glue_crawler(t1,tt1,tt2,flag1,flag2):
-    skip=0
-    if tt1 == "sample_size":
-        ##tt2=tt2.strip('\"')
-        if tt2 == "0": skip=1
-    return skip,t1,flag1,flag2
+	skip=0
+	if tt1 == "sample_size":
+		if tt2 == "0": skip=1
+	if tt1 == "security_configuration" and tt2 != "null":
+		t1 = tt1 + " = aws_glue_security_configuration."+tt2+".id\n"
+	return skip,t1,flag1,flag2
 
 def aws_glue_catalog_database(t1,tt1,tt2,flag1,flag2):
     skip=0
@@ -46,6 +47,8 @@ def aws_glue_job(t1,tt1,tt2,flag1,flag2):
 		if globals.gulejobmaxcap: skip=1
 	if tt1 == "description":
 		t1=t1+"\n lifecycle {\n   ignore_changes = [glue_version,number_of_workers,worker_type]\n}\n"
+	if tt1 == "security_configuration" and tt2 != "null":
+		t1 = tt1 + " = aws_glue_security_configuration."+tt2+".id\n"
 	
 	return skip,t1,flag1,flag2
 

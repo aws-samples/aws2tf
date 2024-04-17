@@ -45,7 +45,9 @@ def aws_ssm_maintenance_windows(t1,tt1,tt2,flag1,flag2):
 def aws_ssm_parameter(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	#print(str(tt1) + " " + str(tt2))
-	if tt1 == "arn": globals.ssmparamn=tt2 
+	if tt1 == "arn": 
+		globals.ssmparamn=tt2
+		skip=1 
 	elif tt1 == "value":
 		if globals.ssmparamn != "":
 			client = boto3.client("ssm")
@@ -59,7 +61,7 @@ def aws_ssm_parameter(t1,tt1,tt2,flag1,flag2):
 				t1 = tt1 + " = jsonencode("+vs+")\n"
 			else:
 				t1 = tt1 + " = \"" + vs + "\"\n"
-			globals.ssmparamn=""
+			globals.ssmparamn=""	
 	elif tt1 == "insecure_value": 
 		t1 ="lifecycle {\n" + "   ignore_changes = [value]\n" +  "}\n"
 		

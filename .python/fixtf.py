@@ -372,6 +372,7 @@ def aws_resource(t1,tt1,tt2,flag1,flag2):
 def globals_replace(t1,tt1,tt2):
     #print("policy " + globals.acc + " "+ tt2)
     ends=""
+    tt2=tt2.replace("%", "%%")
     while ":"+globals.acc+":" in tt2:
             #print("--> 5")
             r1=tt2.find(":"+globals.region+":")
@@ -385,6 +386,7 @@ def globals_replace(t1,tt1,tt2):
 
             a1=tt2.find(":"+globals.acc+":")
             tt2=tt2[:a1]+":%s:"+tt2[a1+14:]
+            
             ends=ends+",data.aws_caller_identity.current.account_id"
          
             t1 = tt1+' = format("'+tt2+ '"' +ends+')\n'

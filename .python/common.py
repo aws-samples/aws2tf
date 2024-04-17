@@ -177,6 +177,10 @@ def tfplan1():
                      com="rm -f import__*"+i+"*.tf"
                      print(com)
                      rout=rc(com)
+
+
+
+
                   elif "Error: Cannot import non-existent remote object" in mess:
                      print("ERROR: Cannot import non-existent remote object - see plan1.json")
                      i=mess.split('(')[1].split(')')[0].split('/')[-1]
@@ -220,14 +224,19 @@ def tfplan1():
          com="cp plan1.json plan1.json."+dt
          print(com)
          rout=rc(com)
-         exit()  
+         
+         #exit()  
    return
+
+
+
 
 def tfplan2():
    print("fix tf files.....") 
    if not os.path.isfile("resources.out"):
-         print("could not find expected resources.out file after Plan 1 - exiting")
-         exit()
+         print("could not find expected resources.out file in tfplan2 - exiting")
+         #exit()
+         return
 
    #print("split resources.out")
    splitf("resources.out")  # generated *.out files
@@ -237,6 +246,7 @@ def tfplan2():
       print("ERROR: Removing "+i+" files - plan errors see plan1.json")
       print(com)
       rout=rc(com)
+      # sed to remove references
 
 
         
@@ -266,6 +276,10 @@ def tfplan3():
    if el!=0:
       errm=rout.stderr.decode().rstrip()
       print(errm)
+      com="terraform validate -no-color -json > validate2.json"
+      rout=rc(com)
+
+
    if "Success! The configuration is valid" not in str(rout.stdout.decode().rstrip()):
       print(str(rout.stdout.decode().rstrip()))
       print("Validation after fix failed - exiting")
@@ -274,7 +288,9 @@ def tfplan3():
 
    else: 
       print("Valid Configuration.")
-      if globals.validate: return
+      if globals.validate: 
+         print("Validate Only..")
+         return
 
 
    if globals.plan2:

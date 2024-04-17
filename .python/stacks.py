@@ -2,9 +2,11 @@ import boto3
 import os
 import sys
 import globals
-import common
+
 from get_aws_resources import aws_s3
 import botocore
+import common
+
 
 
 ## Enter here:
@@ -26,12 +28,16 @@ def get_stacks(stack_name):
 
 
         print("-------------------------------------------")
-
-        for nest in nested:
-            #print("Getting stack resources for " + nest)
-            getstackresources(nest,client)
-        
-        print("Stack "+stack_name+" done")
+        nst=len(nested)
+        i=1
+        with open("stacks.sh", "a") as f6:         
+            for nest in nested:
+                sn=nest.split("/")[1]
+                f6.write("../../aws2tf.py -t stack -i "+sn+"\n")
+                print("\n############## Getting resources for stack " + sn + " "+str(i)+" of "+str(nst)+" ##############")
+                getstackresources(nest,client)
+                i=i+1
+            print("Stack "+stack_name+" done")
 
 
 
@@ -107,7 +113,7 @@ def getstackresources(stack_name,client):
             if globals.debug:
                 print("type="+type)
             sn=stack_name.split('/')[-2]
-            print("stack "+sn+ " importing "+ str(ri) + " of "+ str(rl)+ " type="+type+ " pid="+pid)
+            print("Importing "+ str(ri) + " of "+ str(rl)+ " type="+type+ " pid="+pid)
             f4.write("Type="+type+ " pid="+pid+ " parn="+parn+"\n")
 
 
@@ -225,8 +231,11 @@ def getstackresources(stack_name,client):
             elif type == "AWS::Lambda::EventSourceMapping": f3.write(type+" "+pid+"  as part of function..\n")  # fetched as part of function
 
             elif type == "AWS::Logs::LogGroup": common.call_resource("aws_cloudwatch_log_group", parn) 
+            
+            ##### terraform crash !
+            #elif type == "AWS::RedshiftServerless::Namespace": common.call_resource("aws_redshiftserverless_namespace", pid)
+            ##### terraform crash !
 
-            elif type == "AWS::RedshiftServerless::Namespace": common.call_resource("aws_redshiftserverless_namespace", pid)
             elif type == "AWS::RedshiftServerless::Workgroup": common.call_resource("aws_redshiftserverless_workgroup", pid)
 
             elif type == "AWS::Redshift::Cluster":  common.call_resource("aws_redshift_cluster", pid) 
@@ -1342,6 +1351,11 @@ def getstackresources(stack_name,client):
 
     f3.close()
     f4.close()
+    f.close()
+## Plan it so Terraform not overwhealmed ?
+    #common.tfplan1()
+    #common.tfplan2()
+
     return
 
 

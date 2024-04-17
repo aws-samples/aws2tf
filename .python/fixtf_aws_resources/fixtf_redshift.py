@@ -13,7 +13,6 @@ def aws_redshift_cluster(t1,tt1,tt2,flag1,flag2):
 		if not tt2.startswith("default"):
 			t1=tt1 + " = aws_redshift_parameter_group." + tt2 + ".id\n"
 			common.add_dependancy("aws_redshift_parameter_group",tt2)
-    #elif tt1 == "kms_key_id":    t1=fixtf.deref_kms_key(t1,tt1,tt2)
 	elif tt1 == "apply_immediately":
 		if tt2=="null":
 			t1=tt1+" = false \n lifecycle {\n   ignore_changes = [apply_immediately,cluster_version]\n}\n"

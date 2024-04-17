@@ -13,14 +13,6 @@ def aws_cloudwatch_log_group(t1,tt1,tt2,flag1,flag2):
   
     if tt1 == "name_prefix" and flag1 is True: skip=1
 
-#    if tt1 == "kms_key_id":
-#        ##tt2=tt2.strip('\"')
-#        if tt2 != "null": 
-#            t1=tt1 + " = aws_kms_key.k-" + tt2 + ".id\n"
-#            common.add_dependancy("aws_kms_key",tt2)
-#        else:
-#            skip=1
-
     return skip,t1,flag1,flag2 
 
 def aws_cloudwatch_composite_alarm(t1,tt1,tt2,flag1,flag2):

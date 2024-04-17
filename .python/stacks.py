@@ -233,7 +233,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::Logs::LogGroup": common.call_resource("aws_cloudwatch_log_group", parn) 
             
             ##### terraform crash !
-            #elif type == "AWS::RedshiftServerless::Namespace": common.call_resource("aws_redshiftserverless_namespace", pid)
+            elif type == "AWS::RedshiftServerless::Namespace": common.call_resource("aws_redshiftserverless_namespace", pid)
             ##### terraform crash !
 
             elif type == "AWS::RedshiftServerless::Workgroup": common.call_resource("aws_redshiftserverless_workgroup", pid)

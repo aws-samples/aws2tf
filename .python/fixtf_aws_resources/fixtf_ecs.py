@@ -4,15 +4,7 @@ import globals
 
 def aws_ecs_cluster(t1,tt1,tt2,flag1,flag2):
 	skip=0
-#	if tt1 == "kms_key_id":
-#		if tt2 != "null": 
-#			if tt2 == "AWS_OWNED_KMS_KEY":	
-#				skip=1
-#			else:
-#				t1=tt1 + " = aws_kms_key.k-" + tt2 + ".id\n"
-#				common.add_dependancy("aws_kms_key",tt2)
-#		else:
-#			skip=1
+
 	if tt1 == "namespace":
 		if "arn:" in tt2: t1=fixtf.globals_replace(t1,tt1,tt2)
 			

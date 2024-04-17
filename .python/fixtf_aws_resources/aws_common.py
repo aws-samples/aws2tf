@@ -43,8 +43,12 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                     if tt2 == "AWS_OWNED_KMS_KEY":	
                         skip=1
                     else:
-                        if "arn:" in tt2: tt2=tt2.split("/")[-1]	
-                        t1=tt1 + " = aws_kms_key.k-" + tt2 + ".id\n"
+                        if "arn:" in tt2: 
+                            tt2=tt2.split("/")[-1]	
+                            t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
+                        else:
+                            tt2=tt2.split("/")[-1]	
+                            t1=tt1 + " = aws_kms_key.k-" + tt2 + ".id\n"
                         common.add_dependancy("aws_kms_key",tt2)
                 else:
                     skip=1

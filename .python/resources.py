@@ -42,6 +42,7 @@ def resource_types(type):
     elif type == "ram": rets=["aws_ram_resource_share"]; return rets
     elif type == "rds": rets=["aws_db_instance","aws_db_parameter_group","aws_db_event_subscription",""]; return rets
     elif type == "s3": rets=["aws_s3_bucket"]; return rets
+    elif type == "subnet": type = ["aws_subnet"]; return rets
     elif type == "sagemaker": rets=["aws_sagemaker_domain"]; return rets
     elif type == "secrets": rets=["aws_secretsmanager_secret"]; return rets
     elif type == "sc": rets=["aws_servicecatalog_portfolio",""]; return rets           # service catalog
@@ -52,6 +53,7 @@ def resource_types(type):
     elif type == "spot": rets=["aws_spot_fleet_request"]; return rets
     elif type == "vpclattice": rets=["aws_vpclattice_service_network"]; return rets
     elif type == "users": rets=["aws_iam_user","aws_iam_group"]; return rets
+    elif type == "vpc": rets=["aws_vpc"]; return rets
 
     elif type =="all": 
         keys_list = aws_dict.aws_resources.keys()

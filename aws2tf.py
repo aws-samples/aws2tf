@@ -116,7 +116,7 @@ if __name__ == '__main__':
 
     if mg is False:
         print("No merge - removing terraform.tfstate* and aws_*.tf *.out")
-        com = "rm -f aws.tf terraform.tfstate* aws_*.tf s3-*.tf aws_*.zip tfplan *.out *.log aws_*.sh import*.tf imported/* main.tf plan1* plan2*"
+        com = "rm -f aws.tf terraform.tfstate* aws_*.tf s3-*.tf aws_*.zip tfplan *.out *.log aws_*.sh stacks.sh import*.tf imported/* main.tf plan1* plan2* *.txt *.json"
         rout = common.rc(com)
         com = "mkdir -p imported notimported"
         rout = common.rc(com)
@@ -125,25 +125,10 @@ if __name__ == '__main__':
 
     if args.bucket is None: fb = id
     else:  fb = args.bucket
-
-
-
-    if mg is False:
-        com = "rm -f *.txt *.json"
-        rout = common.rc(com)
     
-    print("---<><><"+ str(type),str(id))
+    print("---<><>"+ str(type),str(id))
 
-
-    #if type == "all": type = "test"
-    if type == "aws_vpc" or type == "vpc": type = "aws_vpc"
-    elif type == "subnet": type = "aws_subnet"
-    elif type == "config": type = "aws_config_config_rule"
-    elif type == "ec2": type = "aws_instance"
-    #elif type == "eks": type = "aws_eks_cluster"
-    #elif type == "ecs": type = "aws_ecs_cluster"
-    elif type == "lambda": type="aws_lambda_function"
-    elif type == "cw" or type == "cloudwatch" or type == "logs": type = "aws_cloudwatch_log_group"
+    if type == "cw" or type == "cloudwatch" or type == "logs": type = "aws_cloudwatch_log_group"
     elif type == "" or type is None: type = "all"
         
 
@@ -174,22 +159,12 @@ if __name__ == '__main__':
 
 ## Known dependancies section
     
-
-
-    kdep=False
-    for ti in globals.rdep.keys():
-        if not globals.rdep[ti]: 
-            print("Known Dependancies ----------------------")
-            print(str(ti)+":"+str(globals.rdep[ti]))  
-            kdep=True
-
-    #if kdep:
     for ti in list(globals.rdep):
             if not globals.rdep[ti]:
                 i = ti.split(".")[0]
                 id = ti.split(".")[1]
                 if id not in str(globals.policyarns):
-                    print("KD calling common.call_resource with type="+i+" id="+str(id))
+                    print("type="+i+" id="+str(id))
                     common.call_resource(i, id)
     #else:
     #    print("No Known Dependancies")
@@ -207,7 +182,8 @@ if __name__ == '__main__':
     detdep=False
     for ti in globals.rproc.keys():
         if not globals.rproc[ti]: 
-            print(str(ti)+":"+str(globals.rproc[ti]))  
+            #print(str(ti)+":"+str(globals.rproc[ti]))  
+            print(str(ti)) 
             detdep=True
             
  
@@ -225,6 +201,7 @@ if __name__ == '__main__':
                 common.call_resource(i, id)
         detdep=False
         lc  = lc + 1
+
 # go again plan and split / fix
 
 
@@ -265,6 +242,9 @@ if __name__ == '__main__':
 
             exit()
             #detdep=True
+
+
+
 
     common.tfplan3()
     if globals.validate is False:

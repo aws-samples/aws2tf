@@ -1838,17 +1838,17 @@ aws_chimesdkvoice_voice_profile_domain = {
 aws_cleanrooms_collaboration = {
 	"clfn":		"cleanrooms",
 	"descfn":	"list_collaborations",
-	"topkey":	"Collaborations",
-	"key":		"CollaborationId",
-	"filterid":	"CollaborationId"
+	"topkey":	"collaborationList",
+	"key":		"id",
+	"filterid":	"id"
 }
 
 aws_cleanrooms_configured_table = {
 	"clfn":		"cleanrooms",
 	"descfn":	"list_configured_tables",
-	"topkey":	"ConfiguredTables",
-	"key":		"ConfiguredTableName",
-	"filterid":	"ConfiguredTableName"
+	"topkey":	"configuredTableSummaries",
+	"key":		"id",
+	"filterid":	"id"
 }
 
 aws_cloud9_environment_ec2 = {
@@ -1886,7 +1886,7 @@ aws_cloudformation_stack = {
 aws_cloudformation_stack_set = {
 	"clfn":		"cloudformation",
 	"descfn":	"list_stack_sets",
-	"topkey":	"StackSets",
+	"topkey":	"Summaries",
 	"key":		"StackSetName",
 	"filterid":	"StackSetName"
 }
@@ -1902,9 +1902,9 @@ aws_cloudformation_stack_set_instance = {
 aws_cloudformation_type = {
 	"clfn":		"cloudformation",
 	"descfn":	"list_types",
-	"topkey":	"Types",
-	"key":		"Arn",
-	"filterid":	"Arn"
+	"topkey":	"TypeSummaries",
+	"key":		"TypeArn",
+	"filterid":	"TypeArn"
 }
 
 aws_cloudfront_cache_policy = {
@@ -1926,7 +1926,7 @@ aws_cloudfront_continuous_deployment_policy = {
 aws_cloudfront_distribution = {
 	"clfn":		"cloudfront",
 	"descfn":	"list_distributions",
-	"topkey":	"Distributions",
+	"topkey":	"DistributionList.Items",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -2021,7 +2021,7 @@ aws_cloudfront_response_headers_policy = {
 
 aws_cloudhsm_v2_cluster = {
 	"clfn":		"cloudhsmv2",
-	"descfn":	"list_clusters",
+	"descfn":	"describe_clusters",
 	"topkey":	"Clusters",
 	"key":		"ClusterId",
 	"filterid":	"ClusterId"
@@ -2030,9 +2030,9 @@ aws_cloudhsm_v2_cluster = {
 aws_cloudhsm_v2_hsm = {
 	"clfn":		"cloudhsmv2",
 	"descfn":	"list_hsms",
-	"topkey":	"Hsms",
-	"key":		"HsmId",
-	"filterid":	"HsmId"
+	"topkey":	"Clusters",
+	"key":		"ClusterId",
+	"filterid":	"ClusterId"
 }
 
 aws_cloudsearch_domain = {
@@ -2084,7 +2084,7 @@ aws_cloudwatch_dashboard = {
 }
 
 aws_cloudwatch_event_api_destination = {
-	"clfn":		"cloudwatch",
+	"clfn":		"events",
 	"descfn":	"list_api_destinations",
 	"topkey":	"ApiDestinations",
 	"key":		"Name",
@@ -2092,7 +2092,7 @@ aws_cloudwatch_event_api_destination = {
 }
 
 aws_cloudwatch_event_archive = {
-	"clfn":		"cloudwatch",
+	"clfn":		"events",
 	"descfn":	"list_archives",
 	"topkey":	"Archives",
 	"key":		"ArchiveName",
@@ -2100,15 +2100,15 @@ aws_cloudwatch_event_archive = {
 }
 
 aws_cloudwatch_event_bus = {
-	"clfn":		"cloudwatch",
+	"clfn":		"events",
 	"descfn":	"list_event_buses",
-	"topkey":	"EventBusNames",
+	"topkey":	"EventBuses",
 	"key":		"Name",
 	"filterid":	"Name"
 }
 
 aws_cloudwatch_event_bus_policy = {
-	"clfn":		"cloudwatch",
+	"clfn":		"events",
 	"descfn":	"list_event_bus_policies",
 	"topkey":	"EventBusPolicies",
 	"key":		"Name",
@@ -2116,7 +2116,7 @@ aws_cloudwatch_event_bus_policy = {
 }
 
 aws_cloudwatch_event_connection = {
-	"clfn":		"cloudwatch",
+	"clfn":		"events",
 	"descfn":	"list_connections",
 	"topkey":	"Connections",
 	"key":		"Name",
@@ -2124,7 +2124,7 @@ aws_cloudwatch_event_connection = {
 }
 
 aws_cloudwatch_event_endpoint = {
-	"clfn":		"cloudwatch",
+	"clfn":		"events",
 	"descfn":	"list_endpoints",
 	"topkey":	"Endpoints",
 	"key":		"Name",
@@ -2132,7 +2132,7 @@ aws_cloudwatch_event_endpoint = {
 }
 
 aws_cloudwatch_event_permission = {
-	"clfn":		"cloudwatch",
+	"clfn":		"events",
 	"descfn":	"list_permissions",
 	"topkey":	"Permissions",
 	"key":		"Name",
@@ -2140,7 +2140,7 @@ aws_cloudwatch_event_permission = {
 }
 
 aws_cloudwatch_event_target = {
-	"clfn":		"cloudwatch",
+	"clfn":		"events",
 	"descfn":	"list_targets",
 	"topkey":	"Targets",
 	"key":		"Name",
@@ -2148,7 +2148,7 @@ aws_cloudwatch_event_target = {
 }
 
 aws_cloudwatch_log_data_protection_policy = {
-	"clfn":		"cloudwatch",
+	"clfn":		"logs",
 	"descfn":	"list_data_protection_policies",
 	"topkey":	"DataProtectionPolicies",
 	"key":		"Name",
@@ -2156,7 +2156,7 @@ aws_cloudwatch_log_data_protection_policy = {
 }
 
 aws_cloudwatch_log_destination = {
-	"clfn":		"cloudwatch",
+	"clfn":		"logs",
 	"descfn":	"list_destinations",
 	"topkey":	"Destinations",
 	"key":		"DestinationName",
@@ -2164,7 +2164,7 @@ aws_cloudwatch_log_destination = {
 }
 
 aws_cloudwatch_log_destination_policy = {
-	"clfn":		"cloudwatch",
+	"clfn":		"logs",
 	"descfn":	"list_destination_policies",
 	"topkey":	"DestinationPolicies",
 	"key":		"DestinationName",
@@ -2172,7 +2172,7 @@ aws_cloudwatch_log_destination_policy = {
 }
 
 aws_cloudwatch_log_metric_filter = {
-	"clfn":		"cloudwatch",
+	"clfn":		"logs",
 	"descfn":	"list_metric_filters",
 	"topkey":	"MetricFilters",
 	"key":		"Name",
@@ -2180,7 +2180,7 @@ aws_cloudwatch_log_metric_filter = {
 }
 
 aws_cloudwatch_log_resource_policy = {
-	"clfn":		"cloudwatch",
+	"clfn":		"logs",
 	"descfn":	"list_resource_policies",
 	"topkey":	"ResourcePolicies",
 	"key":		"Name",
@@ -2188,15 +2188,15 @@ aws_cloudwatch_log_resource_policy = {
 }
 
 aws_cloudwatch_log_stream = {
-	"clfn":		"cloudwatch",
-	"descfn":	"list_log_streams",
-	"topkey":	"LogStreams",
-	"key":		"LogStreamName",
-	"filterid":	"LogStreamName"
+	"clfn":		"logs",
+	"descfn":	"describe_log_streams",
+	"topkey":	"logStreams",
+	"key":		"logStreamName",
+	"filterid":	"logStreamName"
 }
 
 aws_cloudwatch_log_subscription_filter = {
-	"clfn":		"cloudwatch",
+	"clfn":		"logs",
 	"descfn":	"list_subscription_filters",
 	"topkey":	"SubscriptionFilters",
 	"key":		"Name",
@@ -4710,7 +4710,7 @@ aws_glue_classifier = {
 
 aws_glue_connection = {
 	"clfn":		"glue",
-	"descfn":	"list_connections",
+	"descfn":	"get_connections",
 	"topkey":	"ConnectionList",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -7024,7 +7024,7 @@ aws_organizations_delegated_administrator = {
 
 aws_organizations_organization = {
 	"clfn":		"organizations",
-	"descfn":	"list_organizations",
+	"descfn":	"describe_organization",
 	"topkey":	"Organization",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -7032,8 +7032,8 @@ aws_organizations_organization = {
 
 aws_organizations_organizational_unit = {
 	"clfn":		"organizations",
-	"descfn":	"list_organizational_units",
-	"topkey":	"OrganizationalUnits",
+	"descfn":	"describe_organizational_unit",
+	"topkey":	"OrganizationalUnit",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -7048,18 +7048,18 @@ aws_organizations_policy = {
 
 aws_organizations_policy_attachment = {
 	"clfn":		"organizations",
-	"descfn":	"list_policy_attachments",
-	"topkey":	"PolicyAttachments",
-	"key":		"Id",
-	"filterid":	"Id"
+	"descfn":	"list_targets_for_policy",
+	"topkey":	"Targets",
+	"key":		"TargetId",
+	"filterid":	"TargetId"
 }
 
 aws_organizations_resource_policy = {
 	"clfn":		"organizations",
-	"descfn":	"list_resource_policies",
-	"topkey":	"ResourcePolicies",
-	"key":		"Id",
-	"filterid":	"Id"
+	"descfn":	"describe_resource_policy",
+	"topkey":	"ResourcePolicy",
+	"key":		"ResourcePolicySummary.Id",
+	"filterid":	"ResourcePolicySummary.Id"
 }
 
 aws_pinpoint_adm_channel = {

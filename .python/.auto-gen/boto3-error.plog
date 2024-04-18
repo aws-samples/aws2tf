@@ -30,12 +30,6 @@ e=KeyError('list_domain_name_api_associations')
 type=aws_appsync_graphql_api clfn=appsync descfn=list_graphql_apis topkey=GraphqlApis id=None
 e=KeyError('GraphqlApis')
 
------------------------------------------------------------------------------
-type=aws_athena_data_catalog clfn=athena descfn=list_data_catalogs topkey=DataCatalogs id=None
-e=KeyError('DataCatalogs')
------------------------------------------------------------------------------
-
-
 
 -----------------------------------------------------------------------------
 type=aws_auditmanager_account_registration clfn=auditmanager descfn=list_account_registrations topkey=AccountRegistrations id=None
@@ -103,38 +97,20 @@ e=KeyError('list_global_settings')
 -----------------------------------------------------------------------------
 
 
-type=aws_cleanrooms_collaboration clfn=cleanrooms descfn=list_collaborations topkey=Collaborations id=None
-e=KeyError('Collaborations')
------------------------------------------------------------------------------
-type=aws_cleanrooms_configured_table clfn=cleanrooms descfn=list_configured_tables topkey=ConfiguredTables id=None
-e=KeyError('ConfiguredTables')
------------------------------------------------------------------------------
 
-
-
-type=aws_cloudformation_stack_set clfn=cloudformation descfn=list_stack_sets topkey=StackSets id=None
-e=KeyError('StackSets')
 -----------------------------------------------------------------------------
 type=aws_cloudformation_stack_set_instance clfn=cloudformation descfn=list_stack_set_instances topkey=StackSetInstances id=None
 e=KeyError('list_stack_set_instances')
 -----------------------------------------------------------------------------
-type=aws_cloudformation_type clfn=cloudformation descfn=list_types topkey=Types id=None
-e=KeyError('Types')
------------------------------------------------------------------------------
-type=aws_cloudfront_distribution clfn=cloudfront descfn=list_distributions topkey=Distributions id=None
-e=KeyError('Distributions')
+
 -----------------------------------------------------------------------------
 type=aws_cloudfront_monitoring_subscription clfn=cloudfront descfn=list_monitoring_subscriptions topkey=MonitoringSubscriptions id=None
 e=KeyError('list_monitoring_subscriptions')
 -----------------------------------------------------------------------------
 type=aws_cloudfront_origin_access_identity clfn=cloudfront descfn=list_origin_access_identities topkey=OriginAccessIdentities id=None
 e=KeyError('list_origin_access_identities')
------------------------------------------------------------------------------
-type=aws_cloudhsm_v2_cluster clfn=cloudhsmv2 descfn=list_clusters topkey=Clusters id=None
-e=KeyError('list_clusters')
------------------------------------------------------------------------------
-type=aws_cloudhsm_v2_hsm clfn=cloudhsmv2 descfn=list_hsms topkey=Hsms id=None
-e=KeyError('list_hsms')
+
+
 -----------------------------------------------------------------------------
 type=aws_cloudsearch_domain clfn=cloudsearch descfn=list_domains topkey=DomainNames id=None
 e=KeyError('list_domains')
@@ -189,17 +165,18 @@ e=KeyError('list_metric_filters')
 type=aws_cloudwatch_log_resource_policy clfn=cloudwatch descfn=list_resource_policies topkey=ResourcePolicies id=None
 e=KeyError('list_resource_policies')
 -----------------------------------------------------------------------------
-type=aws_cloudwatch_log_stream clfn=cloudwatch descfn=list_log_streams topkey=LogStreams id=None
-e=KeyError('list_log_streams')
+
+
 -----------------------------------------------------------------------------
 type=aws_cloudwatch_log_subscription_filter clfn=cloudwatch descfn=list_subscription_filters topkey=SubscriptionFilters id=None
 e=KeyError('list_subscription_filters')
 -----------------------------------------------------------------------------
-type=aws_cloudwatch_metric_alarm clfn=cloudwatch descfn=list_alarms topkey=MetricAlarms id=None
-e=KeyError('list_alarms')
+
 -----------------------------------------------------------------------------
 type=aws_cloudwatch_query_definition clfn=cloudwatch descfn=list_query_definitions topkey=QueryDefinitions id=None
 e=KeyError('list_query_definitions')
+
+
 -----------------------------------------------------------------------------
 type=aws_codeartifact_domain clfn=codeartifact descfn=list_domains topkey=Domains id=None
 e=KeyError('Domains')
@@ -550,8 +527,6 @@ e=KeyError('list_vault_locks')
 type=aws_glue_classifier clfn=glue descfn=list_classifiers topkey=Classifiers id=None
 e=KeyError('list_classifiers')
 -----------------------------------------------------------------------------
-type=aws_glue_connection clfn=glue descfn=list_connections topkey=ConnectionList id=None
-e=KeyError('list_connections')
 -----------------------------------------------------------------------------
 type=aws_glue_partition clfn=glue descfn=list_partitions topkey=Partitions id=None
 e=KeyError('list_partitions')
@@ -562,8 +537,6 @@ e=KeyError('list_partition_indexes')
 type=aws_glue_resource_policy clfn=glue descfn=list_resource_policies topkey=ResourcePolicies id=None
 e=KeyError('list_resource_policies')
 -----------------------------------------------------------------------------
-type=aws_glue_security_configuration clfn=glue descfn=list_security_configurations topkey=SecurityConfigurations id=None
-e=KeyError('list_security_configurations')
 -----------------------------------------------------------------------------
 type=aws_glue_user_defined_function clfn=glue descfn=list_user_defined_functions topkey=UserDefinedFunctionNames id=None
 e=KeyError('list_user_defined_functions')
@@ -577,9 +550,6 @@ e=KeyError('list_invitation_accepters')
 type=aws_guardduty_organization_configuration clfn=guardduty descfn=list_organization_configurations topkey=OrganizationConfigurations id=None
 e=KeyError('list_organization_configurations')
 
------------------------------------------------------------------------------
-type=aws_iam_user_group_membership clfn=iam descfn=get_user_group_membership topkey=Groups id=None
-e=KeyError('get_user_group_membership')
 
 -----------------------------------------------------------------------------
 type=aws_inspector2_delegated_admin_account clfn=inspector2 descfn=list_delegated_admin_accounts topkey=DelegatedAdminAccounts id=None
@@ -882,18 +852,7 @@ e=KeyError('list_stacks')
 type=aws_opsworks_static_web_layer clfn=opsworks descfn=list_static_web_layers topkey=StaticWebLayers id=None
 e=KeyError('list_static_web_layers')
 
------------------------------------------------------------------------------
-type=aws_organizations_organization clfn=organizations descfn=list_organizations topkey=Organization id=None
-e=KeyError('list_organizations')
------------------------------------------------------------------------------
-type=aws_organizations_organizational_unit clfn=organizations descfn=list_organizational_units topkey=OrganizationalUnits id=None
-e=KeyError('list_organizational_units')
------------------------------------------------------------------------------
-type=aws_organizations_policy_attachment clfn=organizations descfn=list_policy_attachments topkey=PolicyAttachments id=None
-e=KeyError('list_policy_attachments')
------------------------------------------------------------------------------
-type=aws_organizations_resource_policy clfn=organizations descfn=list_resource_policies topkey=ResourcePolicies id=None
-e=KeyError('list_resource_policies')
+
 
 -----------------------------------------------------------------------------
 type=aws_pinpoint_adm_channel clfn=pinpoint descfn=list_adm_channels topkey=AdmChannels id=None
@@ -979,6 +938,7 @@ e=KeyError('describe_snapshots')
 -----------------------------------------------------------------------------
 type=aws_redshiftserverless_usage_limit clfn=redshift-serverless descfn=describe_usage_limits topkey=UsageLimits id=None
 e=KeyError('describe_usage_limits')
+
 -----------------------------------------------------------------------------
 type=aws_resourceexplorer2_index clfn=resource-explorer-2 descfn=list_indices topkey=Indices id=None
 e=KeyError('list_indices')
@@ -1110,12 +1070,15 @@ e=KeyError('describe_standards_subscriptions')
 -----------------------------------------------------------------------------
 type=aws_securitylake_data_lake clfn=securitylake descfn=describe_data_lakes topkey=DataLakes id=None
 e=KeyError('describe_data_lakes')
+
 -----------------------------------------------------------------------------
 type=aws_service_discovery_private_dns_namespace clfn=servicediscovery descfn=list_private_dns_namespaces topkey=PrivateDnsNamespaces id=None
 e=KeyError('list_private_dns_namespaces')
 -----------------------------------------------------------------------------
 type=aws_service_discovery_public_dns_namespace clfn=servicediscovery descfn=list_public_dns_namespaces topkey=PublicDnsNamespaces id=None
 e=KeyError('list_public_dns_namespaces')
+
+
 -----------------------------------------------------------------------------
 type=aws_servicecatalog_budget_resource_association clfn=servicecatalog descfn=list_budget_resource_associations topkey=BudgetResourceAssociations id=None
 e=KeyError('list_budget_resource_associations')
@@ -1258,6 +1221,7 @@ e=KeyError('list_permission_set_inline_policies')
 -----------------------------------------------------------------------------
 type=aws_ssoadmin_permissions_boundary_attachment clfn=sso-admin descfn=list_permissions_boundary_attachments topkey=PermissionsBoundaryAttachments id=None
 e=KeyError('list_permissions_boundary_attachments')
+
 -----------------------------------------------------------------------------
 type=aws_storagegateway_gateway clfn=storagegateway descfn=describe_gateways topkey=Gateways id=None
 e=KeyError('describe_gateways')

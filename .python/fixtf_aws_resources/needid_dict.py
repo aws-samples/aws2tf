@@ -1014,6 +1014,16 @@ aws_neptune_orderable_db_instance = {
   "clfn": "neptune"
 }
 
+aws_organizations_organizational_unit = {
+  "param": "OrganizationalUnitId",
+  "clfn": "organizations"
+}
+
+aws_organizations_policy_attachment  = {
+  "param": "OrganizationalUnitId",
+  "clfn": "PolicyId"
+}
+
 aws_organizations_policies = {
   "param": "Filter",
   "clfn": "organizations"

@@ -2581,7 +2581,7 @@ aws_config_aggregate_authorization = {
 
 aws_config_configuration_aggregator = {
 	"clfn":		"config",
-	"descfn":	"list_configuration_aggregators",
+	"descfn":	"describe_configuration_aggregators",
 	"topkey":	"ConfigurationAggregators",
 	"key":		"ConfigurationAggregatorName",
 	"filterid":	"ConfigurationAggregatorName"
@@ -2605,8 +2605,8 @@ aws_config_configuration_recorder_status = {
 
 aws_config_conformance_pack = {
 	"clfn":		"config",
-	"descfn":	"list_conformance_packs",
-	"topkey":	"ConformancePackNames",
+	"descfn":	"describe_conformance_packs",
+	"topkey":	"ConformancePackDetails",
 	"key":		"ConformancePackName",
 	"filterid":	"ConformancePackName"
 }
@@ -2637,18 +2637,18 @@ aws_config_organization_custom_policy_rule = {
 
 aws_config_organization_custom_rule = {
 	"clfn":		"config",
-	"descfn":	"list_organization_custom_rules",
-	"topkey":	"OrganizationCustomRules",
-	"key":		"PolicyRuleName",
-	"filterid":	"PolicyRuleName"
+	"descfn":	"describe_organization_config_rules",
+	"topkey":	"OrganizationConfigRules",
+	"key":		"OrganizationConfigRuleName",
+	"filterid":	"OrganizationConfigRuleName"
 }
 
 aws_config_organization_managed_rule = {
 	"clfn":		"config",
-	"descfn":	"list_organization_managed_rules",
-	"topkey":	"OrganizationManagedRules",
-	"key":		"PolicyRuleName",
-	"filterid":	"PolicyRuleName"
+	"descfn":	"describe_organization_config_rules",
+	"topkey":	"OrganizationConfigRules",
+	"key":		"OrganizationConfigRuleName",
+	"filterid":	"OrganizationConfigRuleName"
 }
 
 aws_config_remediation_configuration = {

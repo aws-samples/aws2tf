@@ -251,20 +251,16 @@ e=KeyError('EntityRecognizers')
 type=aws_config_aggregate_authorization clfn=config descfn=list_aggregate_authorizations topkey=AggregateAuthorizations id=None
 e=KeyError('list_aggregate_authorizations')
 -----------------------------------------------------------------------------
-type=aws_config_configuration_aggregator clfn=config descfn=list_configuration_aggregators topkey=ConfigurationAggregators id=None
-e=KeyError('list_configuration_aggregators')
+
 -----------------------------------------------------------------------------
-type=aws_config_configuration_recorder clfn=config descfn=list_configuration_recorders topkey=ConfigurationRecorders id=None
-e=KeyError('list_configuration_recorders')
+
 -----------------------------------------------------------------------------
 type=aws_config_configuration_recorder_status clfn=config descfn=list_configuration_recorder_status topkey=ConfigurationRecorderStatus id=None
 e=KeyError('list_configuration_recorder_status')
 -----------------------------------------------------------------------------
-type=aws_config_conformance_pack clfn=config descfn=list_conformance_packs topkey=ConformancePackNames id=None
-e=KeyError('list_conformance_packs')
+
 -----------------------------------------------------------------------------
-type=aws_config_delivery_channel clfn=config descfn=list_delivery_channels topkey=DeliveryChannels id=None
-e=KeyError('list_delivery_channels')
+
 -----------------------------------------------------------------------------
 type=aws_config_organization_conformance_pack clfn=config descfn=list_organization_conformance_packs topkey=OrganizationConformancePackNames id=None
 e=KeyError('list_organization_conformance_packs')

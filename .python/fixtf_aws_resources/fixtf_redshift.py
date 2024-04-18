@@ -17,6 +17,7 @@ def aws_redshift_cluster(t1,tt1,tt2,flag1,flag2):
 		if tt2=="null":
 			t1=tt1+" = false \n lifecycle {\n   ignore_changes = [apply_immediately,cluster_version]\n}\n"
         ##tt2=tt2.strip('\"')
+	if tt1 == "endpoint": skip=1
     
 	return skip,t1,flag1,flag2 
 

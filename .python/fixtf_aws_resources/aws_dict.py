@@ -7168,26 +7168,26 @@ aws_placement_group = {
 
 aws_prometheus_alert_manager_definition = {
 	"clfn":		"amp",
-	"descfn":	"list_alertmanager_definition",
-	"topkey":	"AlertmanagerDefinition",
+	"descfn":	"describe_alert_manager_definition",
+	"topkey":	"alertManagerDefinitionn",
 	"key":		"Name",
-	"filterid":	"Name"
+	"filterid":	"workspaceId"
 }
 
 aws_prometheus_rule_group_namespace = {
 	"clfn":		"amp",
-	"descfn":	"list_rule_group_namespaces",
-	"topkey":	"RuleGroupNamespaces",
-	"key":		"Name",
-	"filterid":	"Name"
+	"descfn":	"list_rule_groups_namespaces",
+	"topkey":	"ruleGroupsNamespaces",
+	"key":		"arn",
+	"filterid":	"arn"
 }
 
 aws_prometheus_workspace = {
 	"clfn":		"amp",
 	"descfn":	"list_workspaces",
-	"topkey":	"Workspaces",
-	"key":		"Name",
-	"filterid":	"Name"
+	"topkey":	"workspaces",
+	"key":		"arn",
+	"filterid":	"arn"
 }
 
 aws_proxy_protocol_policy = {

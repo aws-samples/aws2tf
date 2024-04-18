@@ -853,11 +853,8 @@ e=KeyError('list_sms_channels')
 type=aws_prometheus_alert_manager_definition clfn=amp descfn=list_alertmanager_definition topkey=AlertmanagerDefinition id=None
 e=KeyError('list_alertmanager_definition')
 -----------------------------------------------------------------------------
-type=aws_prometheus_rule_group_namespace clfn=amp descfn=list_rule_group_namespaces topkey=RuleGroupNamespaces id=None
-e=KeyError('list_rule_group_namespaces')
------------------------------------------------------------------------------
-type=aws_prometheus_workspace clfn=amp descfn=list_workspaces topkey=Workspaces id=None
-e=KeyError('Workspaces')
+
+
 -----------------------------------------------------------------------------
 type=aws_quicksight_folder_membership clfn=quicksight descfn=list_folder_memberships topkey=FolderMemberships id=None
 e=KeyError('list_folder_memberships')

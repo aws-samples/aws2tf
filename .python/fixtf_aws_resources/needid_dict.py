@@ -1545,6 +1545,11 @@ aws_wafv2_web_acl = {
   "clfn": "wafv2"
 }
 
+aws_prometheus_alert_manager_definition = {
+  "param": "workspaceId",
+	"clfn":		"amp"
+}
+
 aws_xray_group = {
   "param": "GroupName",
   "clfn": "xray"
@@ -1848,6 +1853,7 @@ aws_needid = {
   "aws_vpclattice_access_log_subscription": aws_vpclattice_access_log_subscription,
   "aws_vpclattice_service_network_vpc_association": aws_vpclattice_service_network_vpc_association,
   "aws_vpclattice_service_network_service_association": aws_vpclattice_service_network_service_association,
+  "aws_prometheus_alert_manager_definition": aws_prometheus_alert_manager_definition,
   "aws_wafv2_ip_set": aws_wafv2_ip_set,
   "aws_wafv2_regex_pattern_set": aws_wafv2_regex_pattern_set,
   "aws_wafv2_rule_group": aws_wafv2_rule_group,

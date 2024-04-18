@@ -248,31 +248,6 @@ e=KeyError('EntityRecognizers')
 -----------------------------------------------------------------------------
 
 
-type=aws_config_aggregate_authorization clfn=config descfn=list_aggregate_authorizations topkey=AggregateAuthorizations id=None
-e=KeyError('list_aggregate_authorizations')
------------------------------------------------------------------------------
-
------------------------------------------------------------------------------
-
------------------------------------------------------------------------------
-type=aws_config_configuration_recorder_status clfn=config descfn=list_configuration_recorder_status topkey=ConfigurationRecorderStatus id=None
-e=KeyError('list_configuration_recorder_status')
------------------------------------------------------------------------------
-
------------------------------------------------------------------------------
-
------------------------------------------------------------------------------
-type=aws_config_organization_conformance_pack clfn=config descfn=list_organization_conformance_packs topkey=OrganizationConformancePackNames id=None
-e=KeyError('list_organization_conformance_packs')
------------------------------------------------------------------------------
-type=aws_config_organization_custom_policy_rule clfn=config descfn=list_organization_custom_policy_rules topkey=OrganizationCustomPolicyRules id=None
-e=KeyError('list_organization_custom_policy_rules')
------------------------------------------------------------------------------
-
------------------------------------------------------------------------------
-type=aws_config_remediation_configuration clfn=config descfn=list_remediation_configurations topkey=RemediationConfigurations id=None
-e=KeyError('list_remediation_configurations')
-
 
 -----------------------------------------------------------------------------
 type=aws_connect_bot_association clfn=connect descfn=list_bot_associations topkey=BotAssociations id=None

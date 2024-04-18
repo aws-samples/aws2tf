@@ -2573,10 +2573,10 @@ aws_comprehend_entity_recognizer = {
 
 aws_config_aggregate_authorization = {
 	"clfn":		"config",
-	"descfn":	"list_aggregate_authorizations",
+	"descfn":	"describe_aggregation_authorizations",
 	"topkey":	"AggregateAuthorizations",
-	"key":		"AuthorizationName",
-	"filterid":	"AuthorizationName"
+	"key":		"AuthorizedAccountId",
+	"filterid":	"AuthorizedAccountId"
 }
 
 aws_config_configuration_aggregator = {
@@ -2597,8 +2597,8 @@ aws_config_configuration_recorder = {
 
 aws_config_configuration_recorder_status = {
 	"clfn":		"config",
-	"descfn":	"list_configuration_recorder_status",
-	"topkey":	"ConfigurationRecorderStatus",
+	"descfn":	"describe_configuration_recorder_status",
+	"topkey":	"ConfigurationRecordersStatus",
 	"key":		"name",
 	"filterid":	"name"
 }
@@ -2621,10 +2621,10 @@ aws_config_delivery_channel = {
 
 aws_config_organization_conformance_pack = {
 	"clfn":		"config",
-	"descfn":	"list_organization_conformance_packs",
-	"topkey":	"OrganizationConformancePackNames",
-	"key":		"ConformancePackName",
-	"filterid":	"ConformancePackName"
+	"descfn":	"describe_organization_conformance_packs",
+	"topkey":	"OrganizationConformancePacks",
+	"key":		"OrganizationConformancePackName",
+	"filterid":	"OrganizationConformancePackName"
 }
 
 aws_config_organization_custom_policy_rule = {
@@ -2653,7 +2653,7 @@ aws_config_organization_managed_rule = {
 
 aws_config_remediation_configuration = {
 	"clfn":		"config",
-	"descfn":	"list_remediation_configurations",
+	"descfn":	"describe_remediation_configurations",
 	"topkey":	"RemediationConfigurations",
 	"key":		"ConfigRuleName",
 	"filterid":	"ConfigRuleName"

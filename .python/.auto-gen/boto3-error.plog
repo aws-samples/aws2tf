@@ -68,6 +68,7 @@ e=KeyError('list_budgets')
 type=aws_budgets_budget_action clfn=budgets descfn=list_budget_actions topkey=BudgetActions id=None
 e=KeyError('list_budget_actions')
 -----------------------------------------------------------------------------
+
 type=aws_ce_anomaly_monitor clfn=ce descfn=list_anomaly_monitors topkey=AnomalyMonitors id=None
 e=KeyError('list_anomaly_monitors')
 -----------------------------------------------------------------------------
@@ -125,13 +126,13 @@ e=KeyError('list_composite_alarms')
 -----------------------------------------------------------------------------
 type=aws_cloudwatch_dashboard clfn=cloudwatch descfn=list_dashboards topkey=Dashboards id=None
 e=KeyError('Dashboards')
+
 -----------------------------------------------------------------------------
 type=aws_cloudwatch_event_api_destination clfn=cloudwatch descfn=list_api_destinations topkey=ApiDestinations id=None
 e=KeyError('list_api_destinations')
 -----------------------------------------------------------------------------
 type=aws_cloudwatch_event_archive clfn=cloudwatch descfn=list_archives topkey=Archives id=None
 e=KeyError('list_archives')
------------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------
 type=aws_cloudwatch_event_bus_policy clfn=cloudwatch descfn=list_event_bus_policies topkey=EventBusPolicies id=None
@@ -166,8 +167,6 @@ e=KeyError('list_resource_policies')
 type=aws_cloudwatch_log_subscription_filter clfn=cloudwatch descfn=list_subscription_filters topkey=SubscriptionFilters id=None
 e=KeyError('list_subscription_filters')
 -----------------------------------------------------------------------------
-
-
 
 
 -----------------------------------------------------------------------------
@@ -315,8 +314,9 @@ e=KeyError('list_parameter_groups')
 type=aws_dax_subnet_group clfn=dax descfn=list_subnet_groups topkey=SubnetGroups id=None
 e=KeyError('list_subnet_groups')
 -----------------------------------------------------------------------------
-type=aws_db_instance_role_association clfn=rds descfn=describe_db_instance_role_associations topkey=DBInstanceRoleAssociations id=None
-e=KeyError('describe_db_instance_role_associations')
+
+
+
 -----------------------------------------------------------------------------
 type=aws_db_proxy_default_target_group clfn=rds descfn=describe_db_proxy_default_target_groups topkey=DBProxyDefaultTargetGroups id=None
 e=KeyError('describe_db_proxy_default_target_groups')
@@ -581,6 +581,7 @@ e=KeyError('list_grants')
 -----------------------------------------------------------------------------
 type=aws_licensemanager_grant_accepter clfn=license-manager descfn=list_grant_accepters topkey=GrantAccepters id=None
 e=KeyError('list_grant_accepters')
+
 -----------------------------------------------------------------------------
 type=aws_lightsail_bucket_resource_access clfn=lightsail descfn=get_bucket_resources topkey=Buckets id=None
 e=KeyError('get_bucket_resources')
@@ -636,6 +637,7 @@ e=KeyError('Trackers')
 type=aws_location_tracker_association clfn=location descfn=list_tracker_associations topkey=TrackerAssociations id=None
 e=KeyError('list_tracker_associations')
 -----------------------------------------------------------------------------
+
 type=aws_macie2_account clfn=macie2 descfn=list_account_settings topkey=AccountSettings id=None
 e=KeyError('list_account_settings')
 -----------------------------------------------------------------------------
@@ -699,6 +701,7 @@ e=KeyError('CustomPlugins')
 type=aws_mskconnect_worker_configuration clfn=kafkaconnect descfn=list_worker_configurations topkey=WorkerConfigurations id=None
 e=KeyError('WorkerConfigurations')
 -----------------------------------------------------------------------------
+
 type=aws_neptune_cluster_instance clfn=neptune descfn=describe_db_cluster_instances topkey=DBClusterInstances id=None
 e=KeyError('describe_db_cluster_instances')
 -----------------------------------------------------------------------------
@@ -850,10 +853,6 @@ e=KeyError('list_sms_channels')
 -----------------------------------------------------------------------------
 
 
-type=aws_prometheus_alert_manager_definition clfn=amp descfn=list_alertmanager_definition topkey=AlertmanagerDefinition id=None
-e=KeyError('list_alertmanager_definition')
------------------------------------------------------------------------------
-
 
 -----------------------------------------------------------------------------
 type=aws_quicksight_folder_membership clfn=quicksight descfn=list_folder_memberships topkey=FolderMemberships id=None
@@ -909,8 +908,6 @@ e=KeyError('TrustAnchors')
 
 
 
-
-
 -----------------------------------------------------------------------------
 type=aws_route53_resolver_config clfn=route53 descfn=list_resolver_configs topkey=ResolverConfigs id=None
 e=KeyError('list_resolver_configs')
@@ -952,6 +949,7 @@ e=KeyError('AppMonitors')
 -----------------------------------------------------------------------------
 type=aws_rum_metrics_destination clfn=rum descfn=list_metrics_destinations topkey=MetricsDestinations id=None
 e=KeyError('list_metrics_destinations')
+
 -----------------------------------------------------------------------------
 type=aws_s3_access_point clfn=s3 descfn=list_access_points topkey=AccessPoints id=None
 e=KeyError('list_access_points')
@@ -964,6 +962,8 @@ e=KeyError('get_bucket_server_side_encryption_configuration')
 -----------------------------------------------------------------------------
 type=aws_s3control_bucket clfn=s3control descfn=list_buckets topkey=Buckets id=None
 e=KeyError('list_buckets')
+
+
 -----------------------------------------------------------------------------
 type=aws_sagemaker_code_repository clfn=sagemaker descfn=list_code_repositories topkey=CodeRepositories id=None
 e=KeyError('CodeRepositories')
@@ -1000,6 +1000,8 @@ e=KeyError('Pipelines')
 -----------------------------------------------------------------------------
 type=aws_sagemaker_servicecatalog_portfolio_status clfn=sagemaker descfn=get_service_catalog_portfolio_status topkey=Status id=None
 e=KeyError('get_service_catalog_portfolio_status')
+
+
 -----------------------------------------------------------------------------
 type=aws_schemas_registry_policy clfn=schemas descfn=get_registry_policy topkey=Policy id=None
 e=KeyError('get_registry_policy')

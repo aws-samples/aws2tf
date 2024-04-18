@@ -1398,9 +1398,9 @@ aws_appsync_type = {
 aws_athena_data_catalog = {
 	"clfn":		"athena",
 	"descfn":	"list_data_catalogs",
-	"topkey":	"DataCatalogs",
-	"key":		"Name",
-	"filterid":	"Name"
+	"topkey":	"DataCatalogsSummary",
+	"key":		"CatalogName",
+	"filterid":	"CatalogName"
 }
 
 aws_athena_database = {
@@ -1414,9 +1414,9 @@ aws_athena_database = {
 aws_athena_named_query = {
 	"clfn":		"athena",
 	"descfn":	"list_named_queries",
-	"topkey":	"NamedQueries",
-	"key":		"NamedQueryId",
-	"filterid":	"NamedQueryId"
+	"topkey":	"NamedQueryIds",
+	"key":		"",
+	"filterid":	""
 }
 
 aws_athena_prepared_statement = {
@@ -7696,7 +7696,7 @@ aws_route53_cidr_location = {
 
 aws_route53_delegation_set = {
 	"clfn":		"route53",
-	"descfn":	"list_delegation_sets",
+	"descfn":	"",
 	"topkey":	"DelegationSets",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -7712,26 +7712,26 @@ aws_route53_health_check = {
 
 aws_route53_hosted_zone_dnssec = {
 	"clfn":		"route53",
-	"descfn":	"list_hosted_zone_dnssec",
-	"topkey":	"HostedZoneDNSSEC",
-	"key":		"Id",
-	"filterid":	"Id"
+	"descfn":	"get_dnssec",
+	"topkey":	"KeySigningKeys",
+	"key":		"HostedZoneId",
+	"filterid":	"HostedZoneId"
 }
 
 aws_route53_key_signing_key = {
 	"clfn":		"route53",
-	"descfn":	"list_key_signing_keys",
+	"descfn":	"get_dnssec",
 	"topkey":	"KeySigningKeys",
-	"key":		"Id",
-	"filterid":	"Id"
+	"key":		"HostedZoneId",
+	"filterid":	"HostedZoneId"
 }
 
 aws_route53_query_log = {
 	"clfn":		"route53",
-	"descfn":	"list_query_logs",
-	"topkey":	"QueryLogs",
+	"descfn":	"list_query_logging_configs",
+	"topkey":	"QueryLoggingConfigs",
 	"key":		"Id",
-	"filterid":	"Id"
+	"filterid":	"HostedZoneId"
 }
 
 aws_route53_record = {
@@ -7743,7 +7743,7 @@ aws_route53_record = {
 }
 
 aws_route53_resolver_config = {
-	"clfn":		"route53",
+	"clfn":		"route53resolver",
 	"descfn":	"list_resolver_configs",
 	"topkey":	"ResolverConfigs",
 	"key":		"Id",
@@ -7751,7 +7751,7 @@ aws_route53_resolver_config = {
 }
 
 aws_route53_resolver_dnssec_config = {
-	"clfn":		"route53",
+	"clfn":		"route53resolver",
 	"descfn":	"list_resolver_dnssec_configs",
 	"topkey":	"ResolverDNSSECConfigs",
 	"key":		"Id",
@@ -7759,7 +7759,7 @@ aws_route53_resolver_dnssec_config = {
 }
 
 aws_route53_resolver_endpoint = {
-	"clfn":		"route53",
+	"clfn":		"route53resolver",
 	"descfn":	"list_resolver_endpoints",
 	"topkey":	"ResolverEndpoints",
 	"key":		"Id",
@@ -7767,7 +7767,7 @@ aws_route53_resolver_endpoint = {
 }
 
 aws_route53_resolver_firewall_config = {
-	"clfn":		"route53",
+	"clfn":		"route53resolver",
 	"descfn":	"list_resolver_firewall_configs",
 	"topkey":	"ResolverFirewallConfigs",
 	"key":		"Id",
@@ -7775,7 +7775,7 @@ aws_route53_resolver_firewall_config = {
 }
 
 aws_route53_resolver_firewall_domain_list = {
-	"clfn":		"route53",
+	"clfn":		"route53resolver",
 	"descfn":	"list_resolver_firewall_domain_lists",
 	"topkey":	"ResolverFirewallDomainLists",
 	"key":		"Id",
@@ -7783,7 +7783,7 @@ aws_route53_resolver_firewall_domain_list = {
 }
 
 aws_route53_resolver_firewall_rule = {
-	"clfn":		"route53",
+	"clfn":		"route53resolver",
 	"descfn":	"list_resolver_firewall_rules",
 	"topkey":	"ResolverFirewallRules",
 	"key":		"Id",
@@ -7791,7 +7791,7 @@ aws_route53_resolver_firewall_rule = {
 }
 
 aws_route53_resolver_firewall_rule_group = {
-	"clfn":		"route53",
+	"clfn":		"route53resolver",
 	"descfn":	"list_resolver_firewall_rule_groups",
 	"topkey":	"ResolverFirewallRuleGroups",
 	"key":		"Id",
@@ -7799,7 +7799,7 @@ aws_route53_resolver_firewall_rule_group = {
 }
 
 aws_route53_resolver_query_log_config = {
-	"clfn":		"route53",
+	"clfn":		"route53resolver",
 	"descfn":	"list_resolver_query_log_configs",
 	"topkey":	"ResolverQueryLogConfigs",
 	"key":		"Id",
@@ -7807,7 +7807,7 @@ aws_route53_resolver_query_log_config = {
 }
 
 aws_route53_resolver_query_log_config_association = {
-	"clfn":		"route53",
+	"clfn":		"route53resolver",
 	"descfn":	"list_resolver_query_log_config_associations",
 	"topkey":	"ResolverQueryLogConfigAssociations",
 	"key":		"Id",
@@ -7815,7 +7815,7 @@ aws_route53_resolver_query_log_config_association = {
 }
 
 aws_route53_resolver_rule = {
-	"clfn":		"route53",
+	"clfn":		"route53resolver",
 	"descfn":	"list_resolver_rules",
 	"topkey":	"ResolverRules",
 	"key":		"Id",
@@ -7823,7 +7823,7 @@ aws_route53_resolver_rule = {
 }
 
 aws_route53_resolver_rule_association = {
-	"clfn":		"route53",
+	"clfn":		"route53resolver",
 	"descfn":	"list_resolver_rule_associations",
 	"topkey":	"ResolverRuleAssociations",
 	"key":		"Id",
@@ -7848,10 +7848,18 @@ aws_route53_traffic_policy_instance = {
 
 aws_route53_vpc_association_authorization = {
 	"clfn":		"route53",
-	"descfn":	"list_vpc_associations_authorization",
-	"topkey":	"VPCAssociations",
-	"key":		"Id",
-	"filterid":	"Id"
+	"descfn":	"get_hosted_zone",
+    "topkey":	"VPCs",
+	"key":		"VPCId",
+	"filterid":	"VPCRegion"
+}
+
+aws_route53_zone_association = {
+	"clfn":		"route53",
+	"descfn":	"list_hosted_zones_by_vpc",
+	"topkey":	"HostedZoneSummaries",
+	"key":		"HostedZoneId",
+	"filterid":	"HostedZoneId"
 }
 
 aws_route53_zone = {
@@ -7862,13 +7870,7 @@ aws_route53_zone = {
 	"filterid":	"Name"
 }
 
-aws_route53_zone_association = {
-	"clfn":		"route53",
-	"descfn":	"list_hosted_zone_associations",
-	"topkey":	"HostedZoneAssociations",
-	"key":		"Id",
-	"filterid":	"Id"
-}
+
 
 aws_route53domains_registered_domain = {
 	"clfn":		"route53domains",

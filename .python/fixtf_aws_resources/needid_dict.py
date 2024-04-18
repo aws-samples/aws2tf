@@ -1139,6 +1139,27 @@ aws_route53_cidr_location = {
   "clfn": "route53"
 }
 
+aws_route53_hosted_zone_dnssec = {
+  "param": "HostedZoneId",
+  "clfn": "route53"
+}
+
+aws_route53_key_signing_key = {
+  "param": "HostedZoneId",
+  "clfn": "route53"
+}
+
+aws_route53_vpc_association_authorization = {
+  "param": "HostedZoneId",
+  "clfn": "route53"
+}
+
+aws_route53_zone_association = {
+  "param": "VPCId,VPCRegion",
+  "clfn": "route53"
+}
+
+
 aws_route53_record = {
   "param": "HostedZoneId",
   "clfn": "route53"

@@ -1375,6 +1375,11 @@ aws_service_discovery_instance = {
   "clfn": "servicediscovery"
 }
 
+aws_servicecatalog_constraint = {
+  "param": "PortfolioId",
+  "clfn": "servicecatalog" 
+}
+
 aws_servicecatalog_launch_paths = {
   "param": "ProductId",
   "clfn": "servicecatalog"

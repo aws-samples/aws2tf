@@ -8711,18 +8711,18 @@ aws_service_discovery_instance = {
 
 aws_service_discovery_private_dns_namespace = {
 	"clfn":		"servicediscovery",
-	"descfn":	"list_private_dns_namespaces",
-	"topkey":	"PrivateDnsNamespaces",
-	"key":		"PrivateDnsNamespaceArn",
-	"filterid":	"PrivateDnsNamespaceArn"
+	"descfn":	"list_namespaces",
+	"topkey":	"Namespaces",
+	"key":		"Arn",
+	"filterid":	"Arn"
 }
 
 aws_service_discovery_public_dns_namespace = {
 	"clfn":		"servicediscovery",
-	"descfn":	"list_public_dns_namespaces",
-	"topkey":	"PublicDnsNamespaces",
-	"key":		"PublicDnsNamespaceArn",
-	"filterid":	"PublicDnsNamespaceArn"
+	"descfn":	"list_namespaces",
+	"topkey":	"Namespaces",
+	"key":		"Arn",
+	"filterid":	"Arn"
 }
 
 aws_service_discovery_service = {
@@ -8743,8 +8743,8 @@ aws_servicecatalog_budget_resource_association = {
 
 aws_servicecatalog_constraint = {
 	"clfn":		"servicecatalog",
-	"descfn":	"list_constraints",
-	"topkey":	"Constraints",
+	"descfn":	"list_constraints_for_portfolio",
+	"topkey":	"ConstraintDetails",
 	"key":		"ConstraintId",
 	"filterid":	"ConstraintId"
 }
@@ -8761,7 +8761,7 @@ aws_servicecatalog_organizations_access = {
 aws_servicecatalog_portfolio = {
 	"clfn":		"servicecatalog",
 	"descfn":	"list_portfolios",
-	"topkey":	"Portfolios",
+	"topkey":	"PortfolioDetails",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -8784,10 +8784,10 @@ aws_servicecatalog_principal_portfolio_association = {
 
 aws_servicecatalog_product = {
 	"clfn":		"servicecatalog",
-	"descfn":	"list_products",
+	"descfn":	"search_products_as_admin",
 	"topkey":	"Products",
-	"key":		"Id",
-	"filterid":	"Id"
+	"key":		"ProductViewSummary.ProductId",
+	"filterid":	"ProductViewSummary.ProductId"
 }
 
 aws_servicecatalog_product_portfolio_association = {
@@ -8818,7 +8818,7 @@ aws_servicecatalog_provisioning_artifact = {
 aws_servicecatalog_service_action = {
 	"clfn":		"servicecatalog",
 	"descfn":	"list_service_actions",
-	"topkey":	"ServiceActions",
+	"topkey":	"ServiceActionSummaries",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -9050,17 +9050,17 @@ aws_sesv2_email_identity_mail_from_attributes = {
 aws_sfn_activity = {
 	"clfn":		"stepfunctions",
 	"descfn":	"list_activities",
-	"topkey":	"Activities",
-	"key":		"ActivityArn",
-	"filterid":	"ActivityArn"
+	"topkey":	"activities",
+	"key":		"activityArn",
+	"filterid":	"activityArn"
 }
 
 aws_sfn_alias = {
 	"clfn":		"stepfunctions",
-	"descfn":	"list_aliases",
-	"topkey":	"Aliases",
-	"key":		"AliasArn",
-	"filterid":	"AliasArn"
+	"descfn":	"list_state_machine_aliases",
+	"topkey":	"stateMachineAliases",
+	"key":		"stateMachineAliasArn",
+	"filterid":	"stateMachineAliasArn"
 }
 
 aws_sfn_state_machine = {

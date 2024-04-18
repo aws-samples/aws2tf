@@ -1031,23 +1031,13 @@ e=KeyError('describe_standards_subscriptions')
 type=aws_securitylake_data_lake clfn=securitylake descfn=describe_data_lakes topkey=DataLakes id=None
 e=KeyError('describe_data_lakes')
 
------------------------------------------------------------------------------
-type=aws_service_discovery_private_dns_namespace clfn=servicediscovery descfn=list_private_dns_namespaces topkey=PrivateDnsNamespaces id=None
-e=KeyError('list_private_dns_namespaces')
------------------------------------------------------------------------------
-type=aws_service_discovery_public_dns_namespace clfn=servicediscovery descfn=list_public_dns_namespaces topkey=PublicDnsNamespaces id=None
-e=KeyError('list_public_dns_namespaces')
 
 
 -----------------------------------------------------------------------------
 type=aws_servicecatalog_budget_resource_association clfn=servicecatalog descfn=list_budget_resource_associations topkey=BudgetResourceAssociations id=None
 e=KeyError('list_budget_resource_associations')
 -----------------------------------------------------------------------------
-type=aws_servicecatalog_constraint clfn=servicecatalog descfn=list_constraints topkey=Constraints id=None
-e=KeyError('list_constraints')
------------------------------------------------------------------------------
-type=aws_servicecatalog_portfolio clfn=servicecatalog descfn=list_portfolios topkey=Portfolios id=None
-e=KeyError('Portfolios')
+
 -----------------------------------------------------------------------------
 type=aws_servicecatalog_portfolio_share clfn=servicecatalog descfn=list_portfolio_shares topkey=PortfolioShares id=None
 e=KeyError('list_portfolio_shares')
@@ -1055,8 +1045,7 @@ e=KeyError('list_portfolio_shares')
 type=aws_servicecatalog_principal_portfolio_association clfn=servicecatalog descfn=list_principal_portfolio_associations topkey=PrincipalPortfolioAssociations id=None
 e=KeyError('list_principal_portfolio_associations')
 -----------------------------------------------------------------------------
-type=aws_servicecatalog_product clfn=servicecatalog descfn=list_products topkey=Products id=None
-e=KeyError('list_products')
+
 -----------------------------------------------------------------------------
 type=aws_servicecatalog_product_portfolio_association clfn=servicecatalog descfn=list_product_portfolio_associations topkey=ProductPortfolioAssociations id=None
 e=KeyError('list_product_portfolio_associations')
@@ -1064,14 +1053,16 @@ e=KeyError('list_product_portfolio_associations')
 type=aws_servicecatalog_provisioned_product clfn=servicecatalog descfn=list_provisioned_products topkey=ProvisionedProducts id=None
 e=KeyError('list_provisioned_products')
 -----------------------------------------------------------------------------
-type=aws_servicecatalog_service_action clfn=servicecatalog descfn=list_service_actions topkey=ServiceActions id=None
-e=KeyError('ServiceActions')
+
 -----------------------------------------------------------------------------
 type=aws_servicecatalog_tag_option clfn=servicecatalog descfn=list_tag_options topkey=TagOptions id=None
 e=KeyError('TagOptions')
 -----------------------------------------------------------------------------
 type=aws_servicecatalog_tag_option_resource_association clfn=servicecatalog descfn=list_tag_option_resource_associations topkey=TagOptionResourceAssociations id=None
 e=KeyError('list_tag_option_resource_associations')
+
+
+
 -----------------------------------------------------------------------------
 type=aws_servicequotas_template clfn=service-quotas descfn=list_templates topkey=Templates id=None
 e=KeyError('list_templates')
@@ -1136,11 +1127,7 @@ e=KeyError('describe_email_identity_feedback_attributes')
 type=aws_sesv2_email_identity_mail_from_attributes clfn=sesv2 descfn=describe_email_identity_mail_from_attributes topkey=MailFromAttributes id=None
 e=KeyError('describe_email_identity_mail_from_attributes')
 -----------------------------------------------------------------------------
-type=aws_sfn_activity clfn=stepfunctions descfn=list_activities topkey=Activities id=None
-e=KeyError('Activities')
------------------------------------------------------------------------------
-type=aws_sfn_alias clfn=stepfunctions descfn=list_aliases topkey=Aliases id=None
-e=KeyError('list_aliases')
+
 -----------------------------------------------------------------------------
 type=aws_shield_protection clfn=shield descfn=list_protections topkey=Protections id=None
 e=ResourceNotFoundException('An error occurred (ResourceNotFoundException) when calling the ListProtections operation: The subscription does not exist.')

@@ -2157,10 +2157,10 @@ aws_cloudwatch_log_data_protection_policy = {
 
 aws_cloudwatch_log_destination = {
 	"clfn":		"logs",
-	"descfn":	"list_destinations",
-	"topkey":	"Destinations",
-	"key":		"DestinationName",
-	"filterid":	"DestinationName"
+	"descfn":	"describe_destinations",
+	"topkey":	"destinations",
+	"key":		"destinationName",
+	"filterid":	"destinationName"
 }
 
 aws_cloudwatch_log_destination_policy = {

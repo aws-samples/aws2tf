@@ -153,8 +153,7 @@ e=KeyError('list_targets')
 type=aws_cloudwatch_log_data_protection_policy clfn=cloudwatch descfn=list_data_protection_policies topkey=DataProtectionPolicies id=None
 e=KeyError('list_data_protection_policies')
 -----------------------------------------------------------------------------
-type=aws_cloudwatch_log_destination clfn=cloudwatch descfn=list_destinations topkey=Destinations id=None
-e=KeyError('list_destinations')
+
 -----------------------------------------------------------------------------
 type=aws_cloudwatch_log_destination_policy clfn=cloudwatch descfn=list_destination_policies topkey=DestinationPolicies id=None
 e=KeyError('list_destination_policies')

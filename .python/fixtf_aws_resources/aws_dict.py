@@ -2628,11 +2628,11 @@ aws_config_organization_conformance_pack = {
 }
 
 aws_config_organization_custom_policy_rule = {
-	"clfn":		"config",
-	"descfn":	"list_organization_custom_policy_rules",
-	"topkey":	"OrganizationCustomPolicyRules",
-	"key":		"PolicyRuleName",
-	"filterid":	"PolicyRuleName"
+    "clfn":		"config",
+	"descfn":	"describe_organization_config_rules",
+	"topkey":	"OrganizationConfigRules",
+	"key":		"OrganizationConfigRuleName",
+	"filterid":	"OrganizationConfigRuleName"
 }
 
 aws_config_organization_custom_rule = {

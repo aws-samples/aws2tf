@@ -268,11 +268,7 @@ e=KeyError('list_organization_conformance_packs')
 type=aws_config_organization_custom_policy_rule clfn=config descfn=list_organization_custom_policy_rules topkey=OrganizationCustomPolicyRules id=None
 e=KeyError('list_organization_custom_policy_rules')
 -----------------------------------------------------------------------------
-type=aws_config_organization_custom_rule clfn=config descfn=list_organization_custom_rules topkey=OrganizationCustomRules id=None
-e=KeyError('list_organization_custom_rules')
------------------------------------------------------------------------------
-type=aws_config_organization_managed_rule clfn=config descfn=list_organization_managed_rules topkey=OrganizationManagedRules id=None
-e=KeyError('list_organization_managed_rules')
+
 -----------------------------------------------------------------------------
 type=aws_config_remediation_configuration clfn=config descfn=list_remediation_configurations topkey=RemediationConfigurations id=None
 e=KeyError('list_remediation_configurations')

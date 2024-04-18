@@ -9,7 +9,7 @@ def resource_types(type):
     elif type == "appmesh": rets=["aws_appmesh_mesh"]; return rets
     elif type == "appstream": rets=["aws_appstream_image_builder","aws_appstream_stack","aws_appstream_fleet","aws_appstream_user"]; return rets
     elif type == "artifact": rets=["aws_codeartifact_domain","aws_codeartifact_repository"]; return rets
-    elif type == "athena": rets=["aws_athena_named_query"]; return rets
+    elif type == "athena": rets=["aws_athena_named_query","aws_athena_data_catalog"]; return rets
     elif type == "aurora": rets=["aws_rds_cluster_parameter_group","aws_rds_cluster"]; return rets
     elif type == "autoscaling": rets=["aws_autoscaling_group"]; return rets
     elif type == "code": rets=["aws_codestarnotifications_notification_rule","aws_codebuild_projec","aws_codeartifact_domain","aws_codeartifact_repository","aws_codecommit_repository","aws_codepipeline"]; return rets

@@ -132,8 +132,7 @@ e=KeyError('list_api_destinations')
 type=aws_cloudwatch_event_archive clfn=cloudwatch descfn=list_archives topkey=Archives id=None
 e=KeyError('list_archives')
 -----------------------------------------------------------------------------
-type=aws_cloudwatch_event_bus clfn=cloudwatch descfn=list_event_buses topkey=EventBusNames id=None
-e=KeyError('list_event_buses')
+
 -----------------------------------------------------------------------------
 type=aws_cloudwatch_event_bus_policy clfn=cloudwatch descfn=list_event_bus_policies topkey=EventBusPolicies id=None
 e=KeyError('list_event_bus_policies')
@@ -164,16 +163,11 @@ e=KeyError('list_metric_filters')
 type=aws_cloudwatch_log_resource_policy clfn=cloudwatch descfn=list_resource_policies topkey=ResourcePolicies id=None
 e=KeyError('list_resource_policies')
 -----------------------------------------------------------------------------
-
-
------------------------------------------------------------------------------
 type=aws_cloudwatch_log_subscription_filter clfn=cloudwatch descfn=list_subscription_filters topkey=SubscriptionFilters id=None
 e=KeyError('list_subscription_filters')
 -----------------------------------------------------------------------------
 
------------------------------------------------------------------------------
-type=aws_cloudwatch_query_definition clfn=cloudwatch descfn=list_query_definitions topkey=QueryDefinitions id=None
-e=KeyError('list_query_definitions')
+
 
 
 -----------------------------------------------------------------------------

@@ -2221,10 +2221,10 @@ aws_cloudwatch_metric_stream = {
 
 aws_cloudwatch_query_definition = {
 	"clfn":		"cloudwatch",
-	"descfn":	"list_query_definitions",
-	"topkey":	"QueryDefinitions",
-	"key":		"Name",
-	"filterid":	"Name"
+	"descfn":	"describe_query_definitions",
+	"topkey":	"queryDefinitions",
+	"key":		"queryDefinitionId",
+	"filterid":	"queryDefinitionId"
 }
 
 aws_codeartifact_domain = {

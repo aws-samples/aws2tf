@@ -67,18 +67,14 @@ def getstack(stack_name,nested,client):
         stacki=j['StackId']
         if stacki not in (str(nested)):
             nested=nested+[stacki]
-            #print("-1-> adding "+ stacki +" to nested")
         
         # most added here
         if type == "AWS::CloudFormation::Stack":
             if stat == "CREATE_COMPLETE":
-                #print(type+' '+stat)
                 stackr=j['PhysicalResourceId']
                 if stackr not in (str(nested)):
                     nested=nested+[stackr]
-                    #print("-2-> adding "+ stackr +" to nested")
-   
-    
+             
     return nested
 
 

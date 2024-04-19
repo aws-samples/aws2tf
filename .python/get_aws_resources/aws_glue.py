@@ -23,14 +23,15 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
                 common.write_import(type,pkey,tfid) 
                 common.add_dependancy("aws_glue_catalog_table",pkey)
 
-        else:          
+        else: 
+            if ":" in id:   id =id.split(":")[1]    
             response = client.get_database(Name=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Database']
             pkey=globals.acc+":"+j[key]
             tfid="d-"+pkey.replace(":","__")
             common.write_import(type,pkey,tfid)
-            print("Add dep aws_glue_catalog_table "+pkey)
+            #print("KD add aws_glue_catalog_table "+pkey)
             common.add_dependancy("aws_glue_catalog_table",pkey)
 
     except Exception as e:
@@ -51,9 +52,6 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
     try:
         response = []
         client = boto3.client(clfn)
-
-
-        
         if id is None:
             print("ID cannot be None")
  
@@ -165,6 +163,41 @@ def get_aws_glue_security_configuration(type, id, clfn, descfn, topkey, key, fil
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['SecurityConfiguration']
             common.write_import(type,j[key],None)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+
+def get_aws_glue_crawler(type, id, clfn, descfn, topkey, key, filterid):
+
+    if globals.debug:
+        print("--> In get_aws_glue_crawler doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+        
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate():
+                response = response + page[topkey]
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            for j in response:
+                crn=j[key]
+                dbn=j['DatabaseName']
+                common.write_import(type,crn,None) 
+                common.add_dependancy("aws_glue_catalog_database",dbn)
+
+        else:          
+            response = client.get_crawler(Name=id)
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            j=response['Crawler']
+            crn=j[key]
+            dbn=j['DatabaseName']
+            common.write_import(type,crn,None)
+            common.add_dependancy("aws_glue_catalog_database",dbn)
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

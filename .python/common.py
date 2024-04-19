@@ -31,6 +31,7 @@ from get_aws_resources import aws_lambda
 from get_aws_resources import aws_rds
 from get_aws_resources import aws_redshift
 from get_aws_resources import aws_redshift_serverless
+from get_aws_resources import aws_s3
 from get_aws_resources import aws_sagemaker
 from get_aws_resources import aws_secretsmanager
 from get_aws_resources import aws_sns
@@ -46,11 +47,11 @@ def call_resource(type, id):
    if type in aws_no_import.noimport:
       print("WARNING: Terraform cannot import type: " + type)
       return
-   if type=="aws_null":
+   elif type=="aws_null":
       with open('stack-null.log', 'a') as f3:
          f3.write("-->> called aws_null for: "+id+"\n")
       return
-   
+  
 
    with open('processed-resources.log', 'a') as f4:
       f4.write(str(type)+ " : " +str(id)+"\n")
@@ -741,6 +742,8 @@ def add_known_dependancy(type,id):
 
 def add_dependancy(type,id):
     # check if we alredy have it
+    if type=="aws_glue_catalog_database":
+       if ":" not in id: id=globals.acc+":"+id
     pkey=type+"."+id
     if pkey not in globals.rproc:
         print("add_dependancy: " + pkey)

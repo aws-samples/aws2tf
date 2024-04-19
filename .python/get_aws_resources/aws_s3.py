@@ -6,6 +6,11 @@ import os
 import sys
 import inspect
 
+def get_aws_s3_bucket(type, id, clfn, descfn, topkey, key, filterid):
+   get_all_s3_buckets(id,globals.region)
+   return True
+
+
 def get_all_s3_buckets(fb,my_region):
    print("bucket name="+str(fb))
    type="aws_s3_bucket"

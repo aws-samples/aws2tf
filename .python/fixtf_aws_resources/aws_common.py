@@ -37,7 +37,6 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         elif tt1 == "subnet_id":
             if tt2 != "null":
                 t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
-                #print("----->>>>>>"+tt2)
                 common.add_dependancy("aws_subnet", tt2)
 
         

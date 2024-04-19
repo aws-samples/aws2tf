@@ -225,8 +225,9 @@ def fixtf(ttft,tf):
 
     ## will this check break things ?
     if os.path.isfile(tf2):
-         #if globals.debug: 
-         if globals.debug: print("File exists: " + tf2+ " skipping ...") 
+
+         if globals.debug:
+            print("File exists: " + tf2+ " skipping ...")                 
          return 
     else:
         if globals.debug:  print("processing "+tf2)

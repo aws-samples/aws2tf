@@ -37,6 +37,7 @@ from get_aws_resources import aws_secretsmanager
 from get_aws_resources import aws_sns
 from get_aws_resources import aws_sqs
 from get_aws_resources import aws_vpc_lattice
+from get_aws_resources import aws_wafv2
 
 from fixtf_aws_resources import needid_dict
 from fixtf_aws_resources import aws_no_import
@@ -542,7 +543,7 @@ def splitf(file):
 def write_import(type,theid,tfid):
    try:
       if tfid is None:
-         tfid=theid.replace("/","_").replace(".","_").replace(":","_")
+         tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_")
       fn="import__"+type+"__"+tfid+".tf"
 
       if globals.debug: print(fn)

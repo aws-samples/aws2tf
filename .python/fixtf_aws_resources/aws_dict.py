@@ -406,8 +406,8 @@ aws_lambda_layer_version = {
 	"clfn":		"lambda",
 	"descfn":	"list_layer_versions",
 	"topkey":	"LayerVersions",
-	"key":		"LayerName",
-	"filterid":	"LayerName"
+	"key":		"LayerVersionArn",
+	"filterid":	"LayerVersionArn"
 }
 
 aws_lambda_function_event_invoke_config = {

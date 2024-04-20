@@ -6,6 +6,37 @@ import botocore
 import inspect
 
 
+
+def get_aws_lambda_layer(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            paginator = client.get_paginator('list_layers')
+            for page in paginator.paginate():
+                response = response + page['Layers']
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            for j in response:
+                common.write_import(type,j['LayerArn'],None) 
+
+        else:    
+            if "arn:" in id:
+                id=id.split(":")[6]  
+            response = client.list_layer_versions(Name=id)
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            for j in response[topkey]:
+                common.write_import(type,j[key],None) 
+        
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+
 def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
     #if globals.debug:
     print("--> In get_aws_lambda_function doing " + type + ' with id ' + str(id) +
@@ -172,8 +203,9 @@ def get_aws_lambda_event_source_mapping(type, id, clfn, descfn, topkey, key, fil
         for j in response: 
             print(str(j))
             fn=j['UUID']
-            theid=fn
-            common.write_import(type, theid, None)
+            theid="l-"+fn
+
+            common.write_import(type, fn, theid)
         
 
     except Exception as e:

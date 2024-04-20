@@ -96,7 +96,7 @@ def getstackresources(stack_name,client):
     rl=len(response)
     
     for j in response:
-            f=open('stack-unprocessed.log', 'a')
+
             f3=open('stack-fetched-implicit.log', 'a')
             f4=open('stack-fetched-explicit.log', 'a')
             type=j['ResourceType']
@@ -114,9 +114,10 @@ def getstackresources(stack_name,client):
 
 
             if type == "AWS::CloudFormation::Stack": continue
-            elif "AWS::CloudFormation::WaitCondition" in type: f.write("skipping "+type+"\n")
+            elif "AWS::CloudFormation::WaitCondition" in type: 
+                f3.write("skipping "+type+"\n")
 
-            elif type == "AWS::ApiGateway::Account": f3.write("Error: **Terraform does not support import of $type skipped**\n") 
+            elif type == "AWS::ApiGateway::Account": f3.write("Error: **Terraform does not support import of " +type + " skipped**\n") 
             elif type == "AWS::ApiGateway::RestApi": common.call_resource("aws_apigatewayv2_api", pid) 
             elif type == "AWS::ApiGateway::Resource": f3.write(type+" "+pid+"  as part of RestApi..\n") 
 
@@ -124,10 +125,10 @@ def getstackresources(stack_name,client):
             elif type == "AWS::ApplicationAutoScaling::ScalingPolicy": common.call_resource("aws_appautoscaling_policy", pid) 
 
             elif type == "AWS::AppMesh::Mesh":  common.call_resource("aws_appmesh_mesh", pid) 
-            elif type == "AWS::AppMesh::VirtualGateway": f3.write(type+" "+pid+"  as part of parent mesh\n") 
-            elif type == "AWS::AppMesh::VirtualNode": f3.write(type+" "+pid+"  as part of parent mesh\n") 
-            elif type == "AWS::AppMesh::VirtualRouter": f3.write(type+" "+pid+"  as part of parent mesh\n") 
-            elif type == "AWS::AppMesh::VirtualService": f3.write(type+" "+pid+"  as part of parent mesh\n") 
+            elif type == "AWS::AppMesh::VirtualGateway": f3.write(type+" "+pid+" fetched as part of parent mesh\n") 
+            elif type == "AWS::AppMesh::VirtualNode": f3.write(type+" "+pid+"  fetched as part of parent mesh\n") 
+            elif type == "AWS::AppMesh::VirtualRouter": f3.write(type+" "+pid+"  fetched as part of parent mesh\n") 
+            elif type == "AWS::AppMesh::VirtualService": f3.write(type+" "+pid+"  fetched as part of parent mesh\n") 
 
             elif type == "AWS::Athena::NamedQuery":  common.call_resource("aws_athena_named_query", pid) 
             elif type == "AWS::Athena::WorkGroup":  common.call_resource("aws_athena_workgroup", pid) 
@@ -145,24 +146,24 @@ def getstackresources(stack_name,client):
             elif type == "AWS::EC2::Instance":              common.call_resource("aws_instance", pid) 
             elif type == "AWS::EC2::KeyPair":               common.call_resource("aws_key_pair", pid) 
             elif type == "AWS::EC2::DHCPOptions":           common.call_resource("aws_vpc_dhcp_options", pid) 
-            elif type == "AWS::EC2::EIP":                   f3.write(type +" fetched as part of other resources..\n")
+            elif type == "AWS::EC2::EIP":                   f3.write(type+" "+pid+" fetched as part of other resources..\n")
             elif type == "AWS::EC2::NatGateway":            common.call_resource("aws_nat_gateway", pid) 
             elif type == "AWS::EC2::NetworkAcl":            common.call_resource("aws_network_acl", pid) 
-            elif type == "AWS::EC2::NetworkAclEntry":       f3.write(type +" fetched as part of NetworkAcl..\n")
+            elif type == "AWS::EC2::NetworkAclEntry":       f3.write(type+" "+pid+" fetched as part of NetworkAcl..\n")
             elif type == "AWS::EC2::SubnetNetworkAclAssociation": f3.write(type +" fetched as part of NetworkAcl..\n")
             elif type == "AWS::EC2::InternetGateway":       common.call_resource("aws_internet_gateway", pid) 
             elif type == "AWS::EC2::LaunchTemplate":        common.call_resource("aws_launch_template", pid) 
             elif type == "AWS::EC2::SecurityGroup":         common.call_resource("aws_security_group", pid) 
-            elif type == "AWS::EC2::SecurityGroupIngress":  f3.write(type +" fetched as part of SecurityGroup..\n")
-            elif type == "AWS::EC2::SecurityGroupEgress":   f3.write(type +" fetched as part of SecurityGroup..\n")
+            elif type == "AWS::EC2::SecurityGroupIngress":  f3.write(type+" "+pid+" fetched as part of SecurityGroup..\n")
+            elif type == "AWS::EC2::SecurityGroupEgress":   f3.write(type+" "+pid+" fetched as part of SecurityGroup..\n")
 
             elif type == "AWS::EC2::VPCEndpoint":           common.call_resource("aws_vpc_endpoint", pid) 
             elif type == "AWS::EC2::VPC":                   common.call_resource("aws_vpc", pid) 
             elif type == "AWS::EC2::Subnet":                common.call_resource("aws_subnet", pid) 
             elif type == "AWS::EC2::RouteTable":            common.call_resource("aws_route_table", pid) 
-            elif type == "AWS::EC2::Route":                     f3.write(type +" fetched as part of RouteTable...\n")
-            elif type == "AWS::EC2::SubnetRouteTableAssociation": f3.write(type +" fetched as part of Subnet...\n")
-            elif type == "AWS::EC2::VPCGatewayAttachment":      f3.write(type +" fetched as part of IGW...\n")
+            elif type == "AWS::EC2::Route":                     f3.write(type+" "+pid+" fetched as part of RouteTable...\n")
+            elif type == "AWS::EC2::SubnetRouteTableAssociation": f3.write(type+" "+pid+" fetched as part of Subnet...\n")
+            elif type == "AWS::EC2::VPCGatewayAttachment":      f3.write(type+" "+pid+" fetched as part of IGW...\n")
             elif type == "AWS::EC2::VPCEndpointService":        common.call_resource("aws_vpc_endpoint_service", pid) 
             elif type == "AWS::EC2::FlowLog":                   common.call_resource("aws_flow_log", pid) 
 
@@ -194,7 +195,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::Glue::Crawler": common.call_resource("aws_glue_crawler", pid)
             elif type == "AWS::Glue::Database": common.call_resource("aws_glue_catalog_database", pid)
             elif type == "AWS::Glue::Job": common.call_resource("aws_glue_job", pid) 
-            elif type == "AWS::Glue::Table": f3.write(type +" fetched as part of AWS::Glue::Database ...\n")
+            elif type == "AWS::Glue::Table": f3.write(type+" "+pid+" fetched as part of AWS::Glue::Database ...\n")
             elif type == "AWS::Glue::Trigger": common.call_resource("aws_glue_trigger", pid)
             elif type == "AWS::Glue::Partition": common.call_resource("aws_glue_partition", pid) 
             
@@ -251,9 +252,7 @@ def getstackresources(stack_name,client):
                 common.call_resource("aws_null", tarn)
                 
 
-            elif type == "AWS::S3::Bucket":  
-                print("-->> aws_s3.get_all_s3_buckets "+pid+"   "+globals.region)
-                aws_s3.get_all_s3_buckets(pid, globals.region)
+            elif type == "AWS::S3::Bucket":  common.call_resource("aws_s3_bucket", pid)
             elif type == "AWS::S3::BucketPolicy":  f3.write(type +" fetched as part of bucket...\n")
             elif type == "AWS::S3::AccessGrant": common.call_resource("aws_s3control_access_grant", pid)
             elif type == "AWS::S3::AccessGrantsInstance": common.call_resource("aws_s3control_access_grants_instance", pid)
@@ -318,16 +317,16 @@ def getstackresources(stack_name,client):
 
             elif type == "AWS::ApiGatewayV2::Api": common.call_resource("aws_apigatewayv2_api", pid)
             elif type == "AWS::ApiGatewayV2::ApiGatewayManagedOverrides": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::ApiGatewayV2::ApiMapping": common.call_resource("aws_apigatewayv2_api_mapping", pid)
-            elif type == "AWS::ApiGatewayV2::Authorizer": common.call_resource("aws_apigatewayv2_authorizer", pid)
-            elif type == "AWS::ApiGatewayV2::Deployment": common.call_resource("aws_apigatewayv2_deployment", pid)
+            elif type == "AWS::ApiGatewayV2::ApiMapping": f3.write(type+" "+pid+" fetched as part of ApiGatewayV2 Api..\n")
+            elif type == "AWS::ApiGatewayV2::Authorizer": f3.write(type+" "+pid+" fetched as part of ApiGatewayV2 Api..\n")
+            elif type == "AWS::ApiGatewayV2::Deployment": f3.write(type+" "+pid+" fetched as part of ApiGatewayV2 Api..\n")
             elif type == "AWS::ApiGatewayV2::DomainName": common.call_resource("aws_apigatewayv2_domain_name", pid)
-            elif type == "AWS::ApiGatewayV2::Integration": common.call_resource("aws_apigatewayv2_integratio", pid)
-            elif type == "AWS::ApiGatewayV2::IntegrationResponse": common.call_resource("aws_apigatewayv2_integration_response", pid)
-            elif type == "AWS::ApiGatewayV2::Model": common.call_resource("aws_apigatewayv2_model", pid)
-            elif type == "AWS::ApiGatewayV2::Route": common.call_resource("aws_apigatewayv2_route", pid)
-            elif type == "AWS::ApiGatewayV2::RouteResponse": common.call_resource("aws_apigatewayv2_route_response", pid)
-            elif type == "AWS::ApiGatewayV2::Stage": common.call_resource("aws_apigatewayv2_stage", pid)
+            elif type == "AWS::ApiGatewayV2::Integration": f3.write(type+" "+pid+" fetched as part of ApiGatewayV2 Api..\n")
+            elif type == "AWS::ApiGatewayV2::IntegrationResponse": f3.write(type+" "+pid+" fetched as part of ApiGatewayV2 Api..\n")
+            elif type == "AWS::ApiGatewayV2::Model": f3.write(type+" "+pid+" fetched as part of ApiGatewayV2 Api..\n")
+            elif type == "AWS::ApiGatewayV2::Route": f3.write(type+" "+pid+" fetched as part of ApiGatewayV2 Api..\n")
+            elif type == "AWS::ApiGatewayV2::RouteResponse": f3.write(type+" "+pid+" fetched as part of ApiGatewayV2 Api..\n")
+            elif type == "AWS::ApiGatewayV2::Stage": f3.write(type+" "+pid+" fetched as part of ApiGatewayV2 Api..\n")
             elif type == "AWS::ApiGatewayV2::VpcLink": common.call_resource("aws_apigatewayv2_vpc_link", pid)
 
             elif type == "AWS::AppConfig::Application": common.call_resource("aws_null", type+" "+pid)
@@ -1343,7 +1342,8 @@ def getstackresources(stack_name,client):
             elif "Custom::" in type: 
                 f3.write(type +" fetched as Lambda function ..."+ pid +"\n")
             else:
-                f.write("--UNPROCESSED-- "+type + " "+ pid +" "+ parn+" \n")
+                with open('stack-unprocessed.err', 'a'):
+                    f.write("--UNPROCESSED-- "+type + " "+ pid +" "+ parn+" \n")
 
     f3.close()
     f4.close()

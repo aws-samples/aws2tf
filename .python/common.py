@@ -13,6 +13,7 @@ import resources
 from get_aws_resources import aws_athena
 from get_aws_resources import aws_autoscaling
 from get_aws_resources import aws_apigateway
+from get_aws_resources import aws_apigatewayv2
 from get_aws_resources import aws_appmesh
 from get_aws_resources import aws_application_autoscaling
 from get_aws_resources import aws_config
@@ -49,7 +50,7 @@ def call_resource(type, id):
       print("WARNING: Terraform cannot import type: " + type)
       return
    elif type=="aws_null":
-      with open('stack-null.log', 'a') as f3:
+      with open('stack-null.err', 'a') as f3:
          f3.write("-->> called aws_null for: "+id+"\n")
       return
   
@@ -762,9 +763,12 @@ def add_dependancy(type,id):
 
 def call_boto3(type,clfn,descfn,topkey,key,id): 
    try:
-      if globals.debug: print("call_boto3 clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+      #if globals.debug: 
+      print("call_boto3 clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
       if globals.debug: print("pre-response")
+      # get any pre-saved response
       response=get_boto3_resp(descfn)  # sets response to [] if nothing saved
+      
       if response == []:
          client = boto3.client(clfn) 
          if globals.debug: print("client")
@@ -772,7 +776,16 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
             paginator = client.get_paginator(descfn)
             if globals.debug: print("paginator")
     
-            if descfn == "describe_launch_templates":
+            if "apigatewayv2" in str(type):
+               for page in paginator.paginate(ApiId=id): 
+                  response.extend(page[topkey]) 
+               pkey=type+"."+id
+               globals.rproc[pkey]=True
+               if response != []:
+                  print(str(response))
+               
+
+            elif descfn == "describe_launch_templates":
                #print("*******  describe_launch_templates  ********" )
                #print(">> id="+str(id))
                if id is not None:
@@ -862,9 +875,12 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                
 
          except botocore.exceptions.ParamValidationError as e:
-            print(f"{e=}"+","+type+","+clfn)
+
             print("ParamValidationError 1 in common.call_boto3: type="+type+" clfn="+clfn)
-            with open('boto3-error.plog', 'a') as f:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(f"{e=}", fname, exc_tb.tb_lineno)
+            with open('boto3-error.err', 'a') as f:
                      f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
                      f.write(f"{e=}\n")
                      f.write("-----------------------------------------------------------------------------\n")
@@ -891,9 +907,13 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                            
 
                except botocore.exceptions.ParamValidationError as e:
-                  print(f"{e=}"+","+type+","+clfn)
-                  #print("ParamValidationError 2 in common.call_boto3: type="+type+" clfn="+clfn)
-                  with open('boto3-error.plog', 'a') as f:
+
+                  print("ParamValidationError 2 in common.call_boto3: type="+type+" clfn="+clfn)
+                  exc_type, exc_obj, exc_tb = sys.exc_info()
+                  fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                  print(f"{e=}", fname, exc_tb.tb_lineno)    
+                                    
+                  with open('boto3-error.err', 'a') as f:
                      f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
                      f.write(f"{e=}\n")
                      f.write("-----------------------------------------------------------------------------\n")
@@ -952,7 +972,7 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    exc_type, exc_obj, exc_tb = sys.exc_info()
    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
    print(f"{e=}", fname, exc_tb.tb_lineno)
-   with open('boto3-error.plog', 'a') as f:
+   with open('boto3-error.err', 'a') as f:
       f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
       f.write(f"{e=}\n", fname, exc_tb.tb_lineno)
       f.write("-----------------------------------------------------------------------------\n")
@@ -964,7 +984,7 @@ def handle_error2(e,frame,id):
    exc_type, exc_obj, exc_tb = sys.exc_info()
    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
    print(f"{e=}", fname, exc_tb.tb_lineno)
-   with open('boto3-error.plog', 'a') as f:
+   with open('boto3-error.err', 'a') as f:
       f.write("type="+type+" id="+str(id)+"\n")
       f.write(f"{e=}\n", fname, exc_tb.tb_lineno)
       f.write("-----------------------------------------------------------------------------\n")

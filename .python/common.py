@@ -763,8 +763,8 @@ def add_dependancy(type,id):
 
 def call_boto3(type,clfn,descfn,topkey,key,id): 
    try:
-      #if globals.debug: 
-      print("call_boto3 clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+      if globals.debug: 
+         print("call_boto3 clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
       if globals.debug: print("pre-response")
       # get any pre-saved response
       response=get_boto3_resp(descfn)  # sets response to [] if nothing saved
@@ -781,8 +781,8 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                   response.extend(page[topkey]) 
                pkey=type+"."+id
                globals.rproc[pkey]=True
-               if response != []:
-                  print(str(response))
+               #if response != []:
+               #   print(str(response))
                
 
             elif descfn == "describe_launch_templates":
@@ -799,7 +799,7 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                   for page in paginator.paginate(): response.extend(page[topkey])
 
             elif descfn == "describe_instances":
-               print("call_boto3 clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+               #print("call_boto3 clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
                if id is not None:
                   if "i-" in id:
                      for page in paginator.paginate(InstanceIds=[id]): response.extend(page[topkey][0]['Instances'])

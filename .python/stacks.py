@@ -428,9 +428,9 @@ def getstackresources(stack_name,client):
             elif type == "AWS::CloudFormation::TypeActivation": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::CloudFormation::WaitConditionHandle": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::CloudFront::CachePolicy": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::CloudFront::CloudFrontOriginAccessIdentity": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::CloudFront::CloudFrontOriginAccessIdentity": common.call_resource("aws_cloudfront_origin_access_identity", pid)
             elif type == "AWS::CloudFront::ContinuousDeploymentPolicy": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::CloudFront::Distribution": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::CloudFront::Distribution": common.call_resource("aws_cloudfront_distribution", parn)
             elif type == "AWS::CloudFront::Function": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::CloudFront::KeyGroup": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::CloudFront::KeyValueStore": common.call_resource("aws_null", type+" "+pid)
@@ -1342,12 +1342,12 @@ def getstackresources(stack_name,client):
             elif "Custom::" in type: 
                 f3.write(type +" fetched as Lambda function ..."+ pid +"\n")
             else:
-                with open('stack-unprocessed.err', 'a'):
+                print("--UNPROCESSED-- "+type + " "+ pid +" "+ parn)
+                with open('stack-unprocessed.err', 'a') as f:
                     f.write("--UNPROCESSED-- "+type + " "+ pid +" "+ parn+" \n")
 
     f3.close()
     f4.close()
-    f.close()
 ## Plan it so Terraform not overwhealmed ?
     #common.tfplan1()
     #common.tfplan2()

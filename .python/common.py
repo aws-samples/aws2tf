@@ -16,6 +16,7 @@ from get_aws_resources import aws_apigateway
 from get_aws_resources import aws_apigatewayv2
 from get_aws_resources import aws_appmesh
 from get_aws_resources import aws_application_autoscaling
+from get_aws_resources import aws_cloudfront
 from get_aws_resources import aws_config
 from get_aws_resources import aws_dms
 from get_aws_resources import aws_dynamodb
@@ -882,7 +883,7 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
             print(f"{e=}", fname, exc_tb.tb_lineno)
             with open('boto3-error.err', 'a') as f:
                      f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
-                     f.write(f"{e=}\n")
+                     f.write(f"{e=}\n", fname, exc_tb.tb_lineno)
                      f.write("-----------------------------------------------------------------------------\n")
             return []
             
@@ -915,7 +916,7 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                                     
                   with open('boto3-error.err', 'a') as f:
                      f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
-                     f.write(f"{e=}\n")
+                     f.write(f"{e=}\n", fname, exc_tb.tb_lineno)
                      f.write("-----------------------------------------------------------------------------\n")
                   return []
                

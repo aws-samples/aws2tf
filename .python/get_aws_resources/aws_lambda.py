@@ -25,7 +25,32 @@ def get_aws_lambda_layer(type, id, clfn, descfn, topkey, key, filterid):
         else:    
             if "arn:" in id:
                 id=id.split(":")[6]  
-            response = client.list_layer_versions(Name=id)
+            print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@id="+str(id))
+            response = client.list_layer_versions(LayerName=id)
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            for j in response[topkey]:
+                common.write_import(type,j[key],None) 
+        
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+def get_aws_lambda_layer_version(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            print("WARNING: Must pass LayerName as parameter")
+
+        else:    
+            if "arn:" in id:
+                id=id.split(":")[6]  
+            response = client.list_layer_versions(LayerName=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 common.write_import(type,j[key],None) 

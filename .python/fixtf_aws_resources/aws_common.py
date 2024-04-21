@@ -13,8 +13,10 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
 
         if tt1=="bucket":
             if type != "aws_s3_bucket":
-                t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
-                return skip,t1,flag1,flag2
+                if "." not in tt2:
+                    t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
+                    common.add_dependancy("aws_s3_bucket", tt2)
+                    return skip,t1,flag1,flag2
 
         elif tt1 == "security_groups" or tt1 == "security_group_ids" or tt1 == "vpc_security_group_ids":
         # avoid circular references

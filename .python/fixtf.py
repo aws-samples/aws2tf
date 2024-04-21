@@ -267,6 +267,18 @@ def fixtf(ttft,tf):
             if tt1=="replicate_source_db":
                 if tt2 != "null": globals.repdbin=True
 
+    elif ttft=="aws_lambda_event_source_mapping":
+        for t1 in Lines:
+            t1=t1.strip()
+            skip=0
+            tt1=t1.split("=")[0].strip()
+            try:
+                tt2=t1.split("=")[1].strip().strip('\"')
+            except:
+                tt2=""
+            if tt1=="destination_arn":
+                if tt2 == "null": globals.levsmap=True
+
     
     ## Block stripping init
     globals.lbc=0
@@ -283,6 +295,10 @@ def fixtf(ttft,tf):
         globals.stripstart="{"
         globals.stripend="}"
 
+    if ttft=="aws_lambda_event_source_mapping" and globals.levsmap:
+        globals.stripblock="destination_config {"
+        globals.stripstart="{"
+        globals.stripend="}"
 
     globals.gulejobmaxcap=False
     #if globals.acc in tf2:
@@ -326,7 +342,7 @@ def fixtf(ttft,tf):
                     skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
 
 
-                ## strip sections
+                ## block strip sections
                 if globals.stripblock != "":
                     if globals.stripblock in t1: globals.lbc=1
                     elif globals.stripstart in t1 and globals.lbc>0: globals.lbc=globals.lbc+1

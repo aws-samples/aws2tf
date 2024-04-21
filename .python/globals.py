@@ -24,6 +24,7 @@ plan2=False
 ssmparamn=""
 repdbin=False
 gulejobmaxcap=False
+levsmap=False
 stripblock=""
 stripstart=""
 stripend=""

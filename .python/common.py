@@ -545,7 +545,7 @@ def splitf(file):
 def write_import(type,theid,tfid):
    try:
       if tfid is None:
-         tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_")
+         tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_")
       fn="import__"+type+"__"+tfid+".tf"
 
       if globals.debug: print(fn)

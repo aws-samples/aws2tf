@@ -25,7 +25,6 @@ def get_aws_lambda_layer(type, id, clfn, descfn, topkey, key, filterid):
         else:    
             if "arn:" in id:
                 id=id.split(":")[6]  
-            print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@id="+str(id))
             response = client.list_layer_versions(LayerName=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:

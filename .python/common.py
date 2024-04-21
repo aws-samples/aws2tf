@@ -18,6 +18,7 @@ from get_aws_resources import aws_appmesh
 from get_aws_resources import aws_application_autoscaling
 from get_aws_resources import aws_cloudfront
 from get_aws_resources import aws_codebuild
+from get_aws_resources import aws_cognito_idp
 from get_aws_resources import aws_config
 from get_aws_resources import aws_dms
 from get_aws_resources import aws_dynamodb

@@ -2527,7 +2527,7 @@ aws_cognito_user_pool = {
 	"clfn":		"cognito-idp",
 	"descfn":	"list_user_pools",
 	"topkey":	"UserPools",
-	"key":		"Name",
+	"key":		"Id",
 	"filterid":	"Name"
 }
 

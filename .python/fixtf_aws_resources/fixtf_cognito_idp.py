@@ -31,6 +31,8 @@ def aws_cognito_user_in_group(t1,tt1,tt2,flag1,flag2):
 
 def aws_cognito_user_pool(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="email_verification_message" or tt1=="email_verification_subject" or tt1=="sms_authentication_message" or tt1=="sms_verification_message": 
+		skip=1
 	return skip,t1,flag1,flag2
 
 def aws_cognito_user_pool_client(t1,tt1,tt2,flag1,flag2):

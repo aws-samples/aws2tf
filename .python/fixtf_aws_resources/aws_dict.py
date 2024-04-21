@@ -2262,9 +2262,9 @@ aws_codeartifact_repository_permissions_policy = {
 aws_codebuild_project = {
 	"clfn":		"codebuild",
 	"descfn":	"list_projects",
-	"topkey":	"Projects",
-	"key":		"Name",
-	"filterid":	"Name"
+	"topkey":	"projects",
+	"key":		"",
+	"filterid":	""
 }
 
 aws_codebuild_report_group = {

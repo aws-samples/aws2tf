@@ -2509,8 +2509,8 @@ aws_cognito_user = {
 
 aws_cognito_user_group = {
 	"clfn":		"cognito-idp",
-	"descfn":	"list_user_groups",
-	"topkey":	"UserGroups",
+	"descfn":	"list_groups",
+	"topkey":	"Groups",
 	"key":		"GroupName",
 	"filterid":	"GroupName"
 }
@@ -2535,8 +2535,8 @@ aws_cognito_user_pool_client = {
 	"clfn":		"cognito-idp",
 	"descfn":	"list_user_pool_clients",
 	"topkey":	"UserPoolClients",
-	"key":		"ClientName",
-	"filterid":	"ClientName"
+	"key":		"ClientId",
+	"filterid":	"ClientId"
 }
 
 aws_cognito_user_pool_domain = {

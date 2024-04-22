@@ -473,7 +473,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::Cognito::IdentityPoolPrincipalTag": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Cognito::IdentityPoolRoleAttachment": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Cognito::LogDeliveryConfiguration": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::Cognito::UserPool": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::Cognito::UserPool": common.call_resource("aws_cognito_user_pool",pid)
             elif type == "AWS::Cognito::UserPoolClient": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Cognito::UserPoolDomain": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Cognito::UserPoolGroup": common.call_resource("aws_null", type+" "+pid)

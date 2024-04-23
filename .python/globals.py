@@ -25,6 +25,7 @@ ssmparamn=""
 repdbin=False
 gulejobmaxcap=False
 levsmap=False
+api_id=""
 stripblock=""
 stripstart=""
 stripend=""

@@ -18,11 +18,12 @@ def get_aws_cognito_user_pool(type, id, clfn, descfn, topkey, key, filterid):
             if id is None: 
                 common.write_import(type,j[key],None) 
                 common.add_known_dependancy("aws_cognito_user_group", j[key])
-                ommon.add_known_dependancy("aws_cognito_user_group", j[key])
+                common.add_known_dependancy("aws_cognito_user_pool_client", j[key])
             elif j[key] == id:
                 common.write_import(type,j[key],None) 
+                common.add_known_dependancy("aws_cognito_user_group", j[key])
                 common.add_known_dependancy("aws_cognito_user_pool_client", j[key])
-                ommon.add_known_dependancy("aws_cognito_user_pool_client", j[key])
+
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

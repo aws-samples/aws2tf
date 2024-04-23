@@ -10,7 +10,9 @@ import inspect
 def aws_common(type,t1,tt1,tt2,flag1,flag2):
     skip=0
     try:
-
+        if tt1=="api_id" and "apigatewayv2" in type:
+            t1=tt1 + " = aws_apigatewayv2_api." + tt2 + ".id\n"
+            common.add_dependancy("aws_apigatewayv2_api", tt2)
         if tt1=="bucket":
             if type != "aws_s3_bucket":
                 if "." not in tt2:

@@ -348,7 +348,8 @@ def tfplan3():
          for pe in planList:
             if pe['type'] == "planned_change" and pe['change']['action']=="update":
                nchanges=nchanges+1
-               if pe['change']['resource']['resource_type']=="aws_lb_listener":
+               ctype=pe['change']['resource']['resource_type']
+               if ctype=="aws_lb_listener" or ctype=="aws_cognito_user_pool_client":
                   changeList.append(pe['change']['resource']['addr'])
                   print("Planned changes found in Terraform Plan for typre: "+str(pe['change']['resource']['resource_type']))
                   allowedchange=True

@@ -509,6 +509,16 @@ aws_codedeploy_deployment_group = {
   "clfn": "codedeploy"
 }
 
+aws_cognito_user_group= {
+  "param": "UserPoolId",
+  "clfn": "cognito-idp"
+}
+
+aws_cognito_user_pool_client= {
+  "param": "UserPoolId",
+  "clfn": "cognito-idp"
+}
+
 aws_connect_contact_flow = {
   "param": "InstanceId",
   "clfn": "connect"
@@ -1658,6 +1668,8 @@ aws_needid = {
   "aws_codecatalyst_project": aws_codecatalyst_project,
   "aws_codecatalyst_source_repository": aws_codecatalyst_source_repository,
   "aws_codedeploy_deployment_group": aws_codedeploy_deployment_group,
+  "aws_cognito_user_group": aws_cognito_user_group,
+  "aws_cognito_user_pool_client": aws_cognito_user_pool_client,
   "aws_connect_contact_flow": aws_connect_contact_flow,
   "aws_connect_contact_flow_module": aws_connect_contact_flow_module,
   "aws_connect_hours_of_operation": aws_connect_hours_of_operation,

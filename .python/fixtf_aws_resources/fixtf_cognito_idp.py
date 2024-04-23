@@ -37,6 +37,17 @@ def aws_cognito_user_pool(t1,tt1,tt2,flag1,flag2):
 
 def aws_cognito_user_pool_client(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="access_token_validity":
+		if tt2=="0":
+			t1=tt1+" = 1\n" + "\nlifecycle {\n" + "   ignore_changes = [access_token_validity]\n" +  "}\n"
+
+	if tt1=="access_token":
+		if tt2=="null":
+			t1=tt1+" = \"hours\"\n"
+	elif tt1=="refresh_token":
+		if tt2=="null":
+			t1=tt1+" = \"days\"\n"
+	
 	return skip,t1,flag1,flag2
 
 def aws_cognito_user_pool_domain(t1,tt1,tt2,flag1,flag2):

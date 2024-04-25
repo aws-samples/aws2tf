@@ -13,7 +13,8 @@ def get_aws_iam_role_policy(type,id,clfn,descfn,topkey,key,filterid):
    response=[]
    rn=id
    if id is None:
-      for j in globals.rproc.keys():
+      #for j in globals.rproc.keys():
+      for j in list(globals.rproc):
          if "aws_iam_role" in j:
             response=[]
             dotc=j.count('.')
@@ -25,11 +26,11 @@ def get_aws_iam_role_policy(type,id,clfn,descfn,topkey,key,filterid):
             if response == []: 
                continue
             #print("--RoleName="+rn+" response="+str(response))
-            for j in response: 
-               if j not in str(globals.policies):
-                  print("adding "+j+" to policies for role " + rn)
-                  globals.policies = globals.policies + [j]
-                  theid=rn+":"+j
+            for k in response: 
+               if k not in str(globals.policies):
+                  print("adding "+k+" to policies for role " + rn)
+                  globals.policies = globals.policies + [k]
+                  theid=rn+":"+k
                   common.write_import(type,theid,None)
 
 
@@ -60,13 +61,8 @@ def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
    client = boto3.client(clfn) 
    if globals.debug: print("client")
    response=[]
-   if "arn:" in id:
-      print("hi")
-      response1 = client.get_policy(PolicyArn=id)
-      #print(str(response1))
-      response=response1['Policy']
-
-   else:
+   if id is None:
+   
       paginator = client.get_paginator(descfn)
       if globals.debug: print("Paginator")
 
@@ -75,6 +71,12 @@ def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
             response.extend(page[topkey])
       except Exception as e:
          print(f"{e=}")
+   
+   elif "arn:" in id:
+      print("hi")
+      response1 = client.get_policy(PolicyArn=id)
+      #print(str(response1))
+      response=response1['Policy']
 
    if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
  
@@ -262,6 +264,38 @@ def get_aws_iam_group_policy(type,id,clfn,descfn,topkey,key,filterid):
          globals.rproc[pkey]=True
 
       
+   except Exception as e:
+      common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+
+   return True
+
+def get_aws_iam_role_policy(type, id, clfn, descfn, topkey, key, filterid):
+   if globals.debug:
+      print("--> In get_aws_iam_role_policy  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   try:
+      if id is None:
+         print("Empty response for "+type+ " id="+str(id)+" returning")
+         return True
+      client = boto3.client(clfn)
+      response=[]
+
+      response1 = client.list_role_policies(RoleName=id)
+      #print("response1="+str(response1))
+      response=response1['PolicyNames']
+      if response == []:
+         print("Empty response for "+type+ " id="+str(id)+" returning")
+         pkey="aws_iam_role_policy."+id
+         globals.rproc[pkey]=True
+         return True
+      #print("response="+str(response))
+      for j in response:
+         polname=j
+         theid=id+":"+polname
+         common.write_import(type, theid, None)
+         pkey="aws_iam_role_policy."+id
+         globals.rproc[pkey]=True
+
    except Exception as e:
       common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 

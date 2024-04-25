@@ -81,7 +81,8 @@ def call_resource(type, id):
    else:
       if type in needid_dict.aws_needid:
          print("WARNING: " +  type + " cannot have null id must pass parameter "+needid_dict.aws_needid[type]['param'])
-         exit(0)
+         ### TODO api only
+         return
 
    rr=False
    sr=False

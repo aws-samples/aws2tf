@@ -854,6 +854,11 @@ aws_iam_role_policy_attachment = {
   "clfn": "iam"
 }
 
+aws_iam_role_policy = {
+  "param": "RoleName",
+  "clfn": "iam"
+}
+
 aws_iam_user_login_profile = {
   "param": "UserName",
   "clfn": "iam"
@@ -1515,6 +1520,11 @@ aws_vpclattice_auth_policy = {
   "clfn": "vpc-lattice"
 }
 
+aws_vpclattice_resource_policy = {
+    "param": "resourceIdentifier",
+    "clfn": "vpc-lattice" 
+}
+
 aws_vpclattice_listener_rule = {
   "param": "listenerIdentifier,serviceIdentifier",
   "clfn": "vpc-lattice"
@@ -1531,6 +1541,11 @@ aws_vpclattice_service_network_service_association = {
 }
 
 aws_vpclattice_service_network_vpc_association = {
+  "param": "serviceNetworkIdentifier",
+  "clfn": "vpc-lattice" 
+}
+
+aws_vpclattice_listener = {
   "param": "serviceNetworkIdentifier",
   "clfn": "vpc-lattice" 
 }
@@ -1736,6 +1751,7 @@ aws_needid = {
   "aws_iam_policy_attachment": aws_iam_policy_attachment,
   "aws_iam_policy_document": aws_iam_policy_document,
   "aws_iam_principal_policy_simulation": aws_iam_principal_policy_simulation,
+  "aws_iam_role_policy": aws_iam_role_policy,
   "aws_iam_role_policy_attachment": aws_iam_role_policy_attachment,
   "aws_iam_user_login_profile": aws_iam_user_login_profile,
   "aws_iam_user_policy": aws_iam_user_policy,
@@ -1861,8 +1877,10 @@ aws_needid = {
   "aws_transfer_access": aws_transfer_access,
   "aws_transfer_agreement": aws_transfer_agreement,
   "aws_transfer_user": aws_transfer_user,
+  "aws_vpclattice_listener": aws_vpclattice_listener,
   "aws_vpclattice_listener_rule": aws_vpclattice_listener_rule,
   "aws_vpclattice_access_log_subscription": aws_vpclattice_access_log_subscription,
+  "aws_vpclattice_resource_policy": aws_vpclattice_resource_policy,
   "aws_vpclattice_service_network_vpc_association": aws_vpclattice_service_network_vpc_association,
   "aws_vpclattice_service_network_service_association": aws_vpclattice_service_network_service_association,
   "aws_prometheus_alert_manager_definition": aws_prometheus_alert_manager_definition,

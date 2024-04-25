@@ -337,8 +337,8 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_network_acl(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
-        print("--> In get_aws_network_acl doing " + type + ' with id ' + str(id) +
+    #if globals.debug:
+    print("--> In get_aws_network_acl doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
 ## vall boto3 with Filter default=false
@@ -377,13 +377,8 @@ def get_aws_network_acl(type, id, clfn, descfn, topkey, key, filterid):
             else:
                 print("Error in get_aws_route_table_association unexpected id value")
         else:
-            for page in paginator.paginate(Filters=[
-                    {
-                        'Name': 'default',
-                        'Values': ['false']
-                    }
-                    ]):
-                    response.extend(page[topkey])
+            for page in paginator.paginate(Filters=[{'Name': 'default', 'Values': ['false']}]):
+                response.extend(page[topkey])
 
 
 
@@ -414,11 +409,11 @@ def get_aws_default_network_acl(type, id, clfn, descfn, topkey, key, filterid):
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
 ## vall boto3 with Filter default=false
-
+    try:
         response = []
         client = boto3.client(clfn)
         paginator = client.get_paginator(descfn)
-        # TODO - just get all onlce and use @@@@ globals
+            # TODO - just get all onlce and use @@@@ globals
         if id is not None:
             if "acl-" in id:
                 for page in paginator.paginate(Filters=[
@@ -454,7 +449,7 @@ def get_aws_default_network_acl(type, id, clfn, descfn, topkey, key, filterid):
                     }
                     ]):
                     response.extend(page[topkey])    
-    try:
+
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         if id is None:

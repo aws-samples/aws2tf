@@ -8,7 +8,7 @@ import inspect
 
 def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
     keyclient=boto3.client('kms')
-    if "arn:" in id:
+    if id is not None and "arn:" in id:
         id=id.split("/")[-1]
     #if globals.debug: print("--> In get_aws_kms_key    doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     print("--> In get_aws_kms_key    doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)

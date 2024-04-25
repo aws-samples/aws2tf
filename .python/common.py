@@ -147,7 +147,7 @@ def call_resource(type, id):
          fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
          print(exc_type, fname, exc_tb.tb_lineno)  
          if rr is False:
-            print("--->> Could not get resource "+type+" id="+id)
+            print("--->> Could not get resource "+type+" id="+str(id))
             pass
    
 
@@ -815,7 +815,10 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                   if "i-" in id:
                      for page in paginator.paginate(InstanceIds=[id]): response.extend(page[topkey][0]['Instances'])
                else:
-                  for page in paginator.paginate(): response.extend(page[topkey][0]['Instances'])
+                  for page in paginator.paginate(): 
+                     if len(page[topkey])==0:
+                        continue
+                     response.extend(page[topkey][0]['Instances'])
                   sav_boto3_rep(descfn,response)
                
                #print(str(response))
@@ -985,7 +988,8 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    print(f"{e=}", fname, exc_tb.tb_lineno)
    with open('boto3-error.err', 'a') as f:
       f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
-      f.write(f"{e=}\n", fname, exc_tb.tb_lineno)
+      f.write(f"{e=} " + fname + exc_tb.tb_lineno + "\n")
+
       f.write("-----------------------------------------------------------------------------\n")
    exit()
 
@@ -997,7 +1001,7 @@ def handle_error2(e,frame,id):
    print(f"{e=}", fname, exc_tb.tb_lineno)
    with open('boto3-error.err', 'a') as f:
       f.write("type="+type+" id="+str(id)+"\n")
-      f.write(f"{e=}\n", fname, exc_tb.tb_lineno)
+      f.write(f"{e=} " + fname + exc_tb.tb_lineno + "\n")
       f.write("-----------------------------------------------------------------------------\n")
    exit()
 

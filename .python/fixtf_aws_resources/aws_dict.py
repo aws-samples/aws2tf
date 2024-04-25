@@ -685,8 +685,8 @@ aws_ami_from_instance = {
 
 aws_ami_launch_permission = {
 	"clfn":		"ec2",
-	"descfn":	"describe_images",
-	"topkey":	"Images",
+	"descfn":	"describe_image_attribute",
+	"topkey":	"LaunchPermissions",
 	"key":		"ImageId",
 	"filterid":	"ImageId"
 }
@@ -1118,9 +1118,9 @@ aws_appflow_connector_profile = {
 aws_appflow_flow = {
 	"clfn":		"appflow",
 	"descfn":	"list_flows",
-	"topkey":	"Flows",
-	"key":		"FlowName",
-	"filterid":	"FlowName"
+	"topkey":	"flows",
+	"key":		"flowArn",
+	"filterid":	"flowArn"
 }
 
 aws_appintegrations_data_integration = {

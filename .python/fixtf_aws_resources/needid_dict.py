@@ -29,6 +29,16 @@ aws_amplify_backend_environment = {
   "clfn": "amplify"
 }
 
+aws_ami = {
+  "param": "ImageId",
+  "clfn": "ec2"
+}
+
+aws_ami_launch_permission = {
+  "param": "ImageId",
+  "clfn": "ec2"
+}
+
 aws_amplify_branch = {
   "param": "appId",
   "clfn": "amplify"
@@ -1627,6 +1637,8 @@ aws_needid = {
   "aws_account_primary_contact": aws_account_primary_contact,
   "aws_acmpca_permission": aws_acmpca_permission,
   "aws_acmpca_policy": aws_acmpca_policy,
+  "aws_ami": aws_ami,
+  "aws_ami_launch_permission": aws_ami_launch_permission,
   "aws_amplify_backend_environment": aws_amplify_backend_environment,
   "aws_amplify_branch": aws_amplify_branch,
   "aws_amplify_domain_association": aws_amplify_domain_association,

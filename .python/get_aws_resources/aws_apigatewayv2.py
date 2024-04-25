@@ -152,3 +152,34 @@ def get_aws_apigatewayv2_route(type, id, clfn, descfn, topkey, key, filterid):
 
     return True
 
+def get_aws_apigatewayv2_domain_name(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +  " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:   
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            response = client.get_domain_names(MaxResults="32")
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+
+            for j in response[topkey]:
+                retid = j[key]
+                theid = retid
+                common.write_import(type, theid, None)
+                pkey=type+"."+theid
+                globals.rproc[pkey]=True
+        else:          
+            response = client.get_domain_name(DomainName=id)
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            j=response    
+            retid = j[key]
+            theid = retid
+            common.write_import(type, theid, None)
+            pkey=type+"."+theid
+            globals.rproc[pkey]=True
+                    
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+

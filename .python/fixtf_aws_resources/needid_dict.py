@@ -1870,5 +1870,13 @@ aws_needid = {
   "aws_wafv2_regex_pattern_set": aws_wafv2_regex_pattern_set,
   "aws_wafv2_rule_group": aws_wafv2_rule_group,
   "aws_wafv2_web_acl": aws_wafv2_web_acl,
-  "aws_xray_group": aws_xray_group
+  "aws_xray_group": aws_xray_group,
+  "aws_organizations_organizational_unit": aws_organizations_organizational_unit,
+  "aws_organizations_policy_attachment": aws_organizations_policy_attachment,
+  "aws_route53_hosted_zone_dnssec": aws_route53_hosted_zone_dnssec,
+  "aws_route53_key_signing_key": aws_route53_key_signing_key,
+  "aws_route53_vpc_association_authorization": aws_route53_vpc_association_authorization,
+  "aws_route53_zone_association": aws_route53_zone_association,
+  "aws_servicecatalog_constraint": aws_servicecatalog_constraint,
+  "aws_vpclattice_auth_policy": aws_vpclattice_auth_policy
 }

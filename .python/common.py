@@ -45,6 +45,7 @@ from get_aws_resources import aws_wafv2
 
 from fixtf_aws_resources import needid_dict
 from fixtf_aws_resources import aws_no_import
+from fixtf_aws_resources import aws_not_implemented
 
 
 def call_resource(type, id):
@@ -52,6 +53,11 @@ def call_resource(type, id):
    if type in aws_no_import.noimport:
       print("WARNING: Terraform cannot import type: " + type)
       return
+   
+   if type in aws_not_implemented.notimplemented:
+      print("WARNING: NOT IMPLEMENTED YET for type: " + type)
+      return
+   
    elif type=="aws_null":
       with open('stack-null.err', 'a') as f3:
          f3.write("-->> called aws_null for: "+id+"\n")

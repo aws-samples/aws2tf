@@ -127,4 +127,5 @@ noimport = {
     "aws_route53recoveryreadiness_readiness_check": True,
     "aws_route53recoveryreadiness_recovery_group": True,
     "aws_route53recoveryreadiness_resource_set": True,
+    "aws_cloudwatch_query_definition": True,
 }

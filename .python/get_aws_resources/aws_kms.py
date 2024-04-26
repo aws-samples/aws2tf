@@ -83,7 +83,7 @@ def get_aws_kms_alias(type,id,clfn,descfn,topkey,key,filterid):
                 theid=j[key] # this will be an id
                 aliasname=j['AliasName']
                 if aliasname.startswith("alias/aws"):
-                    print("Skipping "+aliasname+" "+theid)
+                    if globals.debug: print("Skipping "+aliasname+" "+theid)
                     pkey=type+".k-"+theid
                     globals.rproc[pkey]=True
                     continue

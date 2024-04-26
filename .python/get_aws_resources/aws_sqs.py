@@ -11,9 +11,7 @@ def get_aws_sqs_queue(type, id, clfn, descfn, topkey, key, filterid):
         response = []
         client = boto3.client(clfn)
         if id is None:
-            paginator = client.get_paginator(descfn)
-            for page in paginator.paginate():
-                response = response + page[topkey]
+            response = client.list_queues()
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 common.write_import(type,j,None) 
@@ -22,7 +20,6 @@ def get_aws_sqs_queue(type, id, clfn, descfn, topkey, key, filterid):
             response = client.list_queues()
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
-                print(str(j),id)
                 if j==id:
                     common.write_import(type,j,None)
 

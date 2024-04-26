@@ -1214,9 +1214,9 @@ aws_apprunner_auto_scaling_configuration_version = {
 aws_apprunner_connection = {
 	"clfn":		"apprunner",
 	"descfn":	"list_connections",
-	"topkey":	"Connections",
-	"key":		"ConnectionArn",
-	"filterid":	"ConnectionArn"
+	"topkey":	"ConnectionSummaryList",
+	"key":		"ConnectionName",
+	"filterid":	"ConnectionName"
 }
 
 aws_apprunner_custom_domain_association = {
@@ -1238,7 +1238,7 @@ aws_apprunner_default_auto_scaling_configuration_version = {
 aws_apprunner_observability_configuration = {
 	"clfn":		"apprunner",
 	"descfn":	"list_observability_configurations",
-	"topkey":	"ObservabilityConfigurations",
+	"topkey":	"ObservabilityConfigurationSummaryList",
 	"key":		"ObservabilityConfigurationArn",
 	"filterid":	"ObservabilityConfigurationArn"
 }
@@ -1246,7 +1246,7 @@ aws_apprunner_observability_configuration = {
 aws_apprunner_service = {
 	"clfn":		"apprunner",
 	"descfn":	"list_services",
-	"topkey":	"Services",
+	"topkey":	"ServiceSummaryList",
 	"key":		"ServiceArn",
 	"filterid":	"ServiceArn"
 }
@@ -1262,7 +1262,7 @@ aws_apprunner_vpc_connector = {
 aws_apprunner_vpc_ingress_connection = {
 	"clfn":		"apprunner",
 	"descfn":	"list_vpc_ingress_connections",
-	"topkey":	"VpcIngressConnections",
+	"topkey":	"VpcIngressConnectionSummaryList",
 	"key":		"VpcIngressConnectionArn",
 	"filterid":	"VpcIngressConnectionArn"
 }
@@ -1350,9 +1350,9 @@ aws_appsync_datasource = {
 aws_appsync_domain_name = {
 	"clfn":		"appsync",
 	"descfn":	"list_domain_names",
-	"topkey":	"DomainNames",
-	"key":		"DomainName",
-	"filterid":	"DomainName"
+	"topkey":	"domainNameConfigs",
+	"key":		"domainName",
+	"filterid":	"domainName"
 }
 
 aws_appsync_domain_name_api_association = {
@@ -1727,8 +1727,8 @@ aws_ce_cost_allocation_tag = {
 	"clfn":		"ce",
 	"descfn":	"list_cost_allocation_tags",
 	"topkey":	"CostAllocationTags",
-	"key":		"CostAllocationTagKey",
-	"filterid":	"CostAllocationTagKey"
+	"key":		"TagKey",
+	"filterid":	"TagKey"
 }
 
 aws_ce_cost_category = {
@@ -1910,7 +1910,7 @@ aws_cloudformation_type = {
 aws_cloudfront_cache_policy = {
 	"clfn":		"cloudfront",
 	"descfn":	"list_cache_policies",
-	"topkey":	"CachePolicies",
+	"topkey":	"CachePolicyList",
 	"key":		"CachePolicyId",
 	"filterid":	"CachePolicyId"
 }
@@ -1942,7 +1942,7 @@ aws_cloudfront_field_level_encryption_config = {
 aws_cloudfront_field_level_encryption_profile = {
 	"clfn":		"cloudfront",
 	"descfn":	"list_field_level_encryption_profiles",
-	"topkey":	"FieldLevelEncryptionProfiles",
+	"topkey":	"FieldLevelEncryptionProfileList",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -1950,7 +1950,7 @@ aws_cloudfront_field_level_encryption_profile = {
 aws_cloudfront_function = {
 	"clfn":		"cloudfront",
 	"descfn":	"list_functions",
-	"topkey":	"Functions",
+	"topkey":	"FunctionList",
 	"key":		"FunctionId",
 	"filterid":	"FunctionId"
 }
@@ -1958,7 +1958,7 @@ aws_cloudfront_function = {
 aws_cloudfront_key_group = {
 	"clfn":		"cloudfront",
 	"descfn":	"list_key_groups",
-	"topkey":	"KeyGroups",
+	"topkey":	"KeyGroupList",
 	"key":		"KeyGroupId",
 	"filterid":	"KeyGroupId"
 }
@@ -1974,7 +1974,7 @@ aws_cloudfront_monitoring_subscription = {
 aws_cloudfront_origin_access_control = {
 	"clfn":		"cloudfront",
 	"descfn":	"list_origin_access_controls",
-	"topkey":	"OriginAccessControls",
+	"topkey":	"OriginAccessControlList",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -1998,7 +1998,7 @@ aws_cloudfront_origin_request_policy = {
 aws_cloudfront_public_key = {
 	"clfn":		"cloudfront",
 	"descfn":	"list_public_keys",
-	"topkey":	"PublicKeys",
+	"topkey":	"PublicKeyList",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -2014,7 +2014,7 @@ aws_cloudfront_realtime_log_config = {
 aws_cloudfront_response_headers_policy = {
 	"clfn":		"cloudfront",
 	"descfn":	"list_response_headers_policies",
-	"topkey":	"ResponseHeadersPolicies",
+	"topkey":	"ResponseHeadersPolicyList",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -2029,7 +2029,7 @@ aws_cloudhsm_v2_cluster = {
 
 aws_cloudhsm_v2_hsm = {
 	"clfn":		"cloudhsmv2",
-	"descfn":	"list_hsms",
+	"descfn":	"describe_clusters",
 	"topkey":	"Clusters",
 	"key":		"ClusterId",
 	"filterid":	"ClusterId"
@@ -2214,7 +2214,7 @@ aws_cloudwatch_metric_alarm = {
 aws_cloudwatch_metric_stream = {
 	"clfn":		"cloudwatch",
 	"descfn":	"list_metric_streams",
-	"topkey":	"MetricStreams",
+	"topkey":	"Entries",
 	"key":		"Name",
 	"filterid":	"Name"
 }

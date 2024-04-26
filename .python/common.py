@@ -617,7 +617,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                   if globals.debug: print("--"+str(item))
                   try:
                      if "aws-service-role" in str(item["Path"]): 
-                        print("Skipping service role " + str(item[key])) 
+                        if globals.debug:  print("Skipping service role " + str(item[key])) 
                         continue
                   except:
                      pass
@@ -941,7 +941,7 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
          rl=len(response)
          #print("--2b" + str(rl)) 
          if rl==0:
-            print("** zero response length for "+ descfn + " in call_boto3 returning .. []")
+            if globals.debug: print("** zero response length for "+ descfn + " in call_boto3 returning .. []")
             return []
 
          if globals.debug:

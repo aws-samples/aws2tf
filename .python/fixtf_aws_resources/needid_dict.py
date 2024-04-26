@@ -489,6 +489,11 @@ aws_auditmanager_control = {
   "clfn": "auditmanager"
 }
 
+aws_autoscaling_lifecycle_hook  = {
+    "param": "AutoScalingGroupName",
+    "clfn": "autoscaling"  
+}
+
 aws_backup_selection = {
     "param": "BackupPlanId",
     "clfn": "backup"  
@@ -513,6 +518,12 @@ aws_chime_voice_connector_termination_credentials = {
   "param": "VoiceConnectorId",
   "clfn": "chime"
 }
+
+aws_cloudwatch_log_stream = {
+  "param": "LogGroupName",
+  "clfn": "logs"
+}
+
 
 aws_codecatalyst_dev_environment = {
   "param": "spaceName,projectName",
@@ -542,6 +553,11 @@ aws_cognito_user_group= {
 aws_cognito_user_pool_client= {
   "param": "UserPoolId",
   "clfn": "cognito-idp"
+}
+
+aws_config_remediation_configuration = {
+  "param": "ConfigRuleNames",
+  "clfn": "config"
 }
 
 aws_connect_contact_flow = {
@@ -673,6 +689,29 @@ aws_ec2_image_block_public_access = {
   "param": "Attribute,ImageId",
   "clfn": "ec2"
 }
+
+aws_ec2_transit_gateway_policy_table = {
+  "param": "TransitGatewayPolicyTableId",
+  "clfn": "ec2"
+}
+
+
+aws_ecrpublic_repository_policy = {
+  "param": "repositoryName",
+  "clfn": "ecr"
+}
+
+aws_ecr_repository_policy = {
+  "param": "repositoryName",
+  "clfn": "ecr"
+}
+
+aws_ecr_lifecycle_policy = {
+  "param": "repositoryName",
+  "clfn": "ecr"
+}
+
+
 
 aws_ecr_image = {
   "param": "repositoryName",
@@ -807,6 +846,11 @@ aws_globalaccelerator_endpoint_group = {
 aws_globalaccelerator_listener = {
   "param": "AcceleratorArn",
   "clfn": "globalaccelerator"
+}
+
+aws_grafana_workspace_saml_configuration = {
+  "param": "workspaceId",
+  "clfn": "grafana"
 }
 
 aws_guardduty_filter = {
@@ -1012,6 +1056,11 @@ aws_lambda_permission = {
 aws_lambda_function_event_invoke_config = {
   "param": "FunctionName", 
   "clfn": "lambda"
+}
+
+aws_lb_listener = {
+  "param": "ListenerArn",
+  "clfn": "elbv2"
 }
 
 aws_lb_listener_rule = {
@@ -1709,15 +1758,18 @@ aws_needid = {
   "aws_athena_database": aws_athena_database,
   "aws_athena_prepared_statement": aws_athena_prepared_statement,
   "aws_auditmanager_control": aws_auditmanager_control,
+  "aws_autoscaling_lifecycle_hook": aws_autoscaling_lifecycle_hook,
   "aws_backup_selection": aws_backup_selection,
   "aws_backup_vault_policy": aws_backup_vault_policy,
   "aws_backup_vault_notifications": aws_backup_vault_notifications,
   "aws_backup_vault_lock_configuration": aws_backup_vault_lock_configuration,
   "aws_chime_voice_connector_termination_credentials": aws_chime_voice_connector_termination_credentials,
+  "aws_cloudwatch_log_stream": aws_cloudwatch_log_stream,
   "aws_codecatalyst_dev_environment": aws_codecatalyst_dev_environment,
   "aws_codecatalyst_project": aws_codecatalyst_project,
   "aws_codecatalyst_source_repository": aws_codecatalyst_source_repository,
   "aws_codedeploy_deployment_group": aws_codedeploy_deployment_group,
+  "aws_config_remediation_configuration": aws_config_remediation_configuration,
   "aws_cognito_user_group": aws_cognito_user_group,
   "aws_cognito_user_pool_client": aws_cognito_user_pool_client,
   "aws_connect_contact_flow": aws_connect_contact_flow,
@@ -1747,6 +1799,10 @@ aws_needid = {
   "aws_ec2_client_vpn_route": aws_ec2_client_vpn_route,
   "aws_ec2_image_block_public_access": aws_ec2_image_block_public_access,
   "aws_ecr_image": aws_ecr_image,
+  "aws_ec2_transit_gateway_policy_table": aws_ec2_transit_gateway_policy_table,
+  "aws_ecr_lifecycle_policy": aws_ecr_lifecycle_policy,
+  "aws_ecr_repository_policy": aws_ecr_repository_policy,
+  "aws_ecrpublic_repository_policy": aws_ecrpublic_repository_policy,
   "aws_ecs_service": aws_ecs_service,
   "aws_ecs_tag": aws_ecs_tag,
   #"aws_ecs_task_definition": aws_ecs_task_definition,
@@ -1773,6 +1829,7 @@ aws_needid = {
   "aws_globalaccelerator_custom_routing_listener": aws_globalaccelerator_custom_routing_listener,
   "aws_globalaccelerator_endpoint_group": aws_globalaccelerator_endpoint_group,
   "aws_globalaccelerator_listener": aws_globalaccelerator_listener,
+  "aws_grafana_workspace_saml_configuration": aws_grafana_workspace_saml_configuration,
   "aws_guardduty_filter": aws_guardduty_filter,
   "aws_guardduty_finding_ids": aws_guardduty_finding_ids,
   "aws_guardduty_ipset": aws_guardduty_ipset,
@@ -1814,6 +1871,7 @@ aws_needid = {
   "aws_lambda_permission": aws_lambda_permission,
   "aws_lambda_provisioned_concurrency_config": aws_lambda_provisioned_concurrency_config,
   "aws_lambda_function_event_invoke_config": aws_lambda_function_event_invoke_config,
+  "aws_lb_listener": aws_lb_listener,
   "aws_lb_listener_certificate": aws_lb_listener_certificate,
   "aws_lb_listener_rule": aws_lb_listener_rule,
   "aws_lb_target_group_attachment": aws_lb_target_group_attachment,

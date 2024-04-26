@@ -204,6 +204,21 @@ aws_appmesh_virtual_service = {
   "clfn": "appmesh"
 }
 
+aws_apprunner_auto_scaling_configuration_version  = {
+  "param": "AutoScalingConfigurationArn",
+  "clfn": "apprunner"
+}
+
+aws_apprunner_custom_domain_association = {
+  "param": "ServiceArn",
+  "clfn": "apprunner"
+}
+
+aws_apprunner_default_auto_scaling_configuration_version = {
+  "param": "AutoScalingConfigurationArn",
+  "clfn": "apprunner"
+}
+
 aws_accessanalyzer_archive_rule = {
   "param": "analyzerName",
   "clfn": "accessanalyzer"
@@ -866,6 +881,11 @@ aws_iam_role_policy_attachment = {
 
 aws_iam_role_policy = {
   "param": "RoleName",
+  "clfn": "iam"
+}
+
+aws_iam_user_group_membership = {
+  "param": "GroupName",
   "clfn": "iam"
 }
 
@@ -1678,6 +1698,9 @@ aws_needid = {
   "aws_appmesh_virtual_node": aws_appmesh_virtual_node,
   "aws_appmesh_virtual_router": aws_appmesh_virtual_router,
   "aws_appmesh_virtual_service": aws_appmesh_virtual_service,
+  "aws_apprunner_auto_scaling_configuration_version": aws_apprunner_auto_scaling_configuration_version,
+  "aws_apprunner_custom_domain_association": aws_apprunner_custom_domain_association,
+  "aws_apprunner_default_auto_scaling_configuration_version": aws_apprunner_default_auto_scaling_configuration_version,
   "aws_appsync_api_key": aws_appsync_api_key,
   "aws_appsync_datasource": aws_appsync_datasource,
   "aws_appsync_function": aws_appsync_function,
@@ -1765,6 +1788,7 @@ aws_needid = {
   "aws_iam_principal_policy_simulation": aws_iam_principal_policy_simulation,
   "aws_iam_role_policy": aws_iam_role_policy,
   "aws_iam_role_policy_attachment": aws_iam_role_policy_attachment,
+  "aws_iam_user_group_membership": aws_iam_user_group_membership,
   "aws_iam_user_login_profile": aws_iam_user_login_profile,
   "aws_iam_user_policy": aws_iam_user_policy,
   "aws_iam_user_policy_attachment": aws_iam_user_policy_attachment,

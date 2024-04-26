@@ -896,7 +896,7 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
             print(f"{e=}", fname, exc_tb.tb_lineno)
             with open('boto3-error.err', 'a') as f:
                      f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
-                     f.write(f"{e=}\n", fname, exc_tb.tb_lineno)
+                     f.write(f"{e=} "+ +str(fname)+ " "+ str(exc_tb.tb_lineno)+"\n")
                      f.write("-----------------------------------------------------------------------------\n")
             return []
             
@@ -929,7 +929,7 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                                     
                   with open('boto3-error.err', 'a') as f:
                      f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
-                     f.write(f"{e=}\n", fname, exc_tb.tb_lineno)
+                     f.write(f"{e=}\n"+ str(fname)+ " "+str(exc_tb.tb_lineno) + "\n")
                      f.write("-----------------------------------------------------------------------------\n")
                   return []
                
@@ -988,7 +988,7 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    print(f"{e=}", fname, exc_tb.tb_lineno)
    with open('boto3-error.err', 'a') as f:
       f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
-      f.write(f"{e=} " + fname + exc_tb.tb_lineno + "\n")
+      f.write(f"{e=} " + str(fname) + " "+str(exc_tb.tb_lineno) + "\n")
 
       f.write("-----------------------------------------------------------------------------\n")
    exit()
@@ -1001,7 +1001,7 @@ def handle_error2(e,frame,id):
    print(f"{e=}", fname, exc_tb.tb_lineno)
    with open('boto3-error.err', 'a') as f:
       f.write("type="+type+" id="+str(id)+"\n")
-      f.write(f"{e=} " + fname + exc_tb.tb_lineno + "\n")
+      f.write(f"{e=} " + str(fname) + " "+str(exc_tb.tb_lineno) + "\n")
       f.write("-----------------------------------------------------------------------------\n")
    exit()
 

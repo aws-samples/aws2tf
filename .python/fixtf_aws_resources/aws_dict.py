@@ -2820,7 +2820,7 @@ aws_customerprofiles_domain = {
 }
 
 aws_customerprofiles_profile = {
-	"clfn":		"customerprofiles",
+	"clfn":		"customer-profiles",
 	"descfn":	"list_profiles",
 	"topkey":	"Profiles",
 	"key":		"ProfileArn",

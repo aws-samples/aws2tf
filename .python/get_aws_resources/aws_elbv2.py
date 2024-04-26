@@ -43,12 +43,13 @@ def get_aws_lb_listener(type,id,clfn,descfn,topkey,key,filterid):
     try:
         client = boto3.client(clfn)
         response = []
-        if ":listener/" in id:
-            response = client.describe_listeners(ListenerArns=[id])
-        elif ":loadbalancer/" in id:
-            response = client.describe_listeners(LoadBalancerArn=id)
-        else:
-            response = client.describe_listeners()
+        if id is None:
+            response = client.describe_listeners() 
+        elif ":listener/" in id and id is not None:
+                response = client.describe_listeners(ListenerArns=[id])
+        elif ":loadbalancer/" in id and id is not None:
+                response = client.describe_listeners(LoadBalancerArn=id)
+   
         response=response[topkey]
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         

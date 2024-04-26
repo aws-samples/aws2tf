@@ -155,6 +155,7 @@ if __name__ == '__main__':
             common.call_resource(i, id)
     else:
         if type in aws_dict.aws_resources:
+            
             common.call_resource(type,id)
 
 #########################################################################################################################

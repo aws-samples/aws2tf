@@ -9,6 +9,7 @@ import inspect
 
 def aws_common(type,t1,tt1,tt2,flag1,flag2):
     skip=0
+    #print("aws_common t1=",t1)
     try:
         if tt1=="api_id" and "apigatewayv2" in type:
             t1=tt1 + " = aws_apigatewayv2_api." + tt2 + ".id\n"
@@ -87,8 +88,8 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
 
 
         ### RHS processing
-
-        if tt2.startswith("s3://"): t1=fixtf.rhs_replace(t1,tt1,tt2)
+        ### causes a hang loop
+        #if tt2.startswith("s3://"): t1=fixtf.rhs_replace(t1,tt1,tt2)
         elif tt2==globals.acc: t1=tt1 + ' = format("%s",data.aws_caller_identity.current.account_id)\n'
         elif tt2==globals.region: t1=tt1 + ' = format("%s",data.aws_region.current.name)\n'
         

@@ -5,7 +5,7 @@ import fixtf
 def aws_cloudwatch_log_group(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "name":
-        ##tt2=tt2.strip('\"')
+        
         if len(tt2) > 0: flag1=True
 
     #CIRCULAR reference problems:

@@ -58,7 +58,7 @@ def aws_iam_openid_connect_provider(t1,tt1,tt2,flag1,flag2):
 def aws_iam_policy(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "name":
-        ##tt2=tt2.strip('\"')
+        
         if len(tt2) > 0: flag1=True
     if tt1 == "name_prefix" and flag1 is True: skip=1
     if tt1 == "policy": t1=fixtf.globals_replace(t1,tt1,tt2)
@@ -80,7 +80,7 @@ def aws_iam_principal_policy_simulation(t1,tt1,tt2,flag1,flag2):
 def  aws_iam_role(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "name":
-        ##tt2=tt2.strip('\"')
+        
         if len(tt2) > 0: 
             flag1=True
             flag2=tt2
@@ -131,12 +131,12 @@ def aws_iam_role_policy_attachment(t1,tt1,tt2,flag1,flag2):
     #print("fixit2.aws_iam_role_policy_attachment")
     skip=0
     #if tt1 == "role":
-    #    ##tt2=tt2.strip('\"')
+    #    
     #    t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
     #    common.add_dependancy("aws_iam_role",tt2)
     # skip as using policy arns minus account number etc..
     #if tt1 == "policy_arn": 
-    #    ##tt2=tt2.strip('\"')
+    #    
     #    tt2=str(tt2).split("/")[-1]
     #    t1=tt1 + " = aws_iam_policy." + str(tt2) + ".arn\n"
     if tt1 == "policy_arn": t1=fixtf.globals_replace(t1,tt1,tt2)

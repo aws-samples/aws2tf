@@ -14,6 +14,7 @@ noimport = {
     "aws_codecommit_trigger": True,
     "aws_codegurureviewer_repository_association": True,
     "aws_cognito_user_in_group": True,
+    "aws_default_route_table": True,
     "aws_detective_organization_admin_account": True,
     "aws_dx_bgp_peer": True,
     "aws_dx_connection_association": True,

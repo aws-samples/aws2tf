@@ -43,7 +43,7 @@ def aws_default_vpc_dhcp_options(t1,tt1,tt2,flag1,flag2):
 def aws_ebs_volume(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if "throughput" in tt1:
-		##tt2=tt2.strip('\"')
+		
 		if tt2 == "0": skip=1
 	return skip,t1,flag1,flag2
 
@@ -81,6 +81,84 @@ def aws_ec2_coip_pool(t1,tt1,tt2,flag1,flag2):
 
 def aws_default_security_group(t1,tt1,tt2,flag1,flag2):
 	skip=0
+    #print("entry t1="+t1+" lbc="+str(globals.lbc))
+	if tt1 == "vpc_id":
+		t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
+		common.add_dependancy("aws_vpc",tt2)
+
+	elif tt1 == "name":
+		if len(tt2) > 0: flag1=True
+
+    #CIRCULAR reference problems:
+    ##if tt1 == "security_groups": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+	# fix via ingress /egress rules - ?
+	elif tt1 == "egress" or globals.lbc > 0 :
+            
+		if tt2 == "[]": skip = 1
+		if "[" in t1: globals.lbc=globals.lbc+1
+		if "]" in t1: globals.lbc=globals.lbc-1
+        #print("***t1="+t1+" lbc="+str(globals.lbc))
+	
+		if globals.lbc > 0: skip = 1
+		if globals.lbc == 0:
+           #print("***t1="+t1+" lbc="+str(globals.lbc))
+			if "]" in t1.strip(): skip=1
+
+	elif tt1 == "ingress" or globals.lbc > 0 :
+    
+		if tt2 == "[]": skip = 1
+		if "[" in t1: globals.lbc=globals.lbc+1
+		if "]" in t1: globals.lbc=globals.lbc-1
+        #print("***t1="+t1+" lbc="+str(globals.lbc))
+	
+		if globals.lbc > 0: skip = 1
+		if globals.lbc == 0:
+           #print("***t1="+t1+" lbc="+str(globals.lbc))
+			if "]" in t1.strip(): skip=1
+
+	elif tt1 == "name_prefix" and flag1 is True: skip=1
+	
+	return skip,t1,flag1,flag2
+
+def  aws_security_group(t1,tt1,tt2,flag1,flag2):
+	skip = 0
+    #print("entry t1="+t1+" lbc="+str(globals.lbc))
+	if tt1 == "vpc_id":
+		t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
+		common.add_dependancy("aws_vpc",tt2)
+
+	elif tt1 == "name":
+		if len(tt2) > 0: flag1=True
+
+    #CIRCULAR reference problems:
+    ##if tt1 == "security_groups": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+	# fix via ingress /egress rules - ?
+	elif tt1 == "egress" or globals.lbc > 0 :
+            
+		if tt2 == "[]": skip = 1
+		if "[" in t1: globals.lbc=globals.lbc+1
+		if "]" in t1: globals.lbc=globals.lbc-1
+        #print("***t1="+t1+" lbc="+str(globals.lbc))
+	
+		if globals.lbc > 0: skip = 1
+		if globals.lbc == 0:
+           #print("***t1="+t1+" lbc="+str(globals.lbc))
+			if "]" in t1.strip(): skip=1
+
+	elif tt1 == "ingress" or globals.lbc > 0 :
+    
+		if tt2 == "[]": skip = 1
+		if "[" in t1: globals.lbc=globals.lbc+1
+		if "]" in t1: globals.lbc=globals.lbc-1
+        #print("***t1="+t1+" lbc="+str(globals.lbc))
+	
+		if globals.lbc > 0: skip = 1
+		if globals.lbc == 0:
+           #print("***t1="+t1+" lbc="+str(globals.lbc))
+			if "]" in t1.strip(): skip=1
+
+	elif tt1 == "name_prefix" and flag1 is True: skip=1
+		
 	return skip,t1,flag1,flag2
 
 def aws_ec2_fleet(t1,tt1,tt2,flag1,flag2):
@@ -114,7 +192,7 @@ def aws_ec2_local_gateway_route_table_vpc_association(t1,tt1,tt2,flag1,flag2):
 def aws_ec2_managed_prefix_list(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if tt1 == "max_entries":
-			##tt2=tt2.strip('\"')
+			
 			if tt2 == "0": skip=1
 	return skip,t1,flag1,flag2
 
@@ -283,7 +361,7 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 		##elif tt1 == "vpc_security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
 
 		if tt1 == "ipv6_addresses":
-			##tt2=tt2.strip('\"')
+			
 			if tt2 == "[]": skip=1
 
 		elif tt1 == "id":
@@ -328,7 +406,7 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 def  aws_internet_gateway(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "vpc_id":
-        ##tt2=tt2.strip('\"')
+        
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
         common.add_dependancy("aws_vpc",tt2)
 
@@ -345,7 +423,7 @@ def aws_ip_ranges(t1,tt1,tt2,flag1,flag2):
 def aws_key_pair(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if tt1 == "key_name":
-		##tt2=tt2.strip('\"')
+		
 		flag1=tt2
 	if tt1 == "public_key":
 		client = boto3.client("ec2")
@@ -363,12 +441,12 @@ def aws_key_pair(t1,tt1,tt2,flag1,flag2):
 def aws_launch_template(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "security_group_names":
-        ##tt2=tt2.strip('\"')
+        
         if tt2 == "[]": 
             skip=1
     ##elif tt1 == "vpc_security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
     elif tt1 == "throughput":
-        ##tt2=tt2.strip('\"')
+        
         if tt2 == "0": skip=1
     elif tt1 == "name_prefix": skip=1
 
@@ -382,16 +460,16 @@ def aws_main_route_table_association(t1,tt1,tt2,flag1,flag2):
 def  aws_nat_gateway(t1,tt1,tt2,flag1,flag2):
     skip=0
     if "secondary_private_ip_address_count" in tt1:
-        ##tt2=tt2.strip('\"')
+        
         if tt2 == "0": skip=1
     elif tt1 == "subnet_id":
-        ##tt2=tt2.strip('\"')
+        
         t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
         common.add_dependancy("aws_subnet",tt2)
     elif tt1 == "private_ip": skip=1
     elif tt1 == "public_ip": skip=1
     elif tt1 == "allocation_id": 
-        ##tt2=tt2.strip('\"')
+        
         t1=tt1 + " = aws_eip." + tt2 + ".id\n"
         common.add_dependancy("aws_eip",tt2)
     return skip,t1,flag1,flag2 
@@ -426,19 +504,19 @@ def aws_network_interface(t1,tt1,tt2,flag1,flag2):
 	elif "private_ips_count" in tt1:
 		if tt2 == "0": skip=1
 	elif "ipv6_prefixes" in tt1:
-		##tt2=tt2.strip('\"')
+		
 		if tt2 == "[]": skip=1
 	elif "ipv6_address_count" in tt1:
-		##tt2=tt2.strip('\"')
+		
 		if tt2 == "0": skip=1
 	elif "ipv6_address_list" in tt1:
-		##tt2=tt2.strip('\"')
+		
 		if tt2 == "[]": skip=1
 	elif "ipv4_prefix_count" in tt1:
-		##tt2=tt2.strip('\"')
+		
 		if tt2 == "0": skip=1
 	elif "ipv4_prefixes" in tt1:
-		##tt2=tt2.strip('\"')
+		
 		if tt2 == "[]": skip=1
 	
 	
@@ -481,22 +559,22 @@ def  aws_route_table(t1,tt1,tt2,flag1,flag2):
     skip=0
 
     if tt1 == "vpc_id":
-        ##tt2=tt2.strip('\"')
+        
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
         common.add_dependancy("aws_vpc",tt2)
 
     elif "cidr_block" in tt1:
-        ##tt2=tt2.strip('\"')
+        
         if tt2 == "": t1=tt1 + " = null\n"
 
     elif "nat_gateway_id" in tt1:
-        ##tt2=tt2.strip('\"')
+        
         if tt2 != "":
             t1=tt1 + " = aws_nat_gateway." + tt2 + ".id\n"
             common.add_dependancy("aws_nat_gateway",tt2)
 
     elif tt1 == "gateway_id":
-        ##tt2=tt2.strip('\"')
+        
         if tt2 != "":
             t1=tt1 + " = aws_internet_gateway." + tt2 + ".id\n"
             common.add_dependancy("aws_internet_gateway",tt2)
@@ -506,15 +584,15 @@ def  aws_route_table(t1,tt1,tt2,flag1,flag2):
 def aws_route_table_association(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "subnet_id":
-        ##tt2=tt2.strip('\"')
+        
         t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
         common.add_dependancy("aws_subnet",tt2)
     if tt1 == "route_table_id":
-        ##tt2=tt2.strip('\"')
+        
         t1=tt1 + " = aws_route_table." + tt2 + ".id\n"
         common.add_dependancy("aws_route_table",tt2)
     if tt1 == "gateway_id":
-        ##tt2=tt2.strip('\"')
+        
         if tt2 == "null": skip=1
     #print("------Yo t1="+t1)
     return skip,t1,flag1,flag2
@@ -522,16 +600,16 @@ def aws_route_table_association(t1,tt1,tt2,flag1,flag2):
 def aws_security_group_rule(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if tt1 == "ipv6_cidr_blocks":
-		##tt2=tt2.strip('\"')
+		
 		if tt2 == "[]": skip=1
 	elif tt1 == "cidr_blocks":
-		##tt2=tt2.strip('\"')
+		
 		if tt2 == "[]": skip=1
 	elif tt1 == "self":
-		##tt2=tt2.strip('\"')
+		
 		if tt2 == "false": skip=1
 	elif tt1 == "security_group_id" or tt1 == "source_security_group_id": 
-		##tt2=tt2.strip('\"')
+		
 		if "sg-" in tt2:
 			t1=tt1 + " = aws_security_group." + tt2 + ".id\n"
 			common.add_dependancy("aws_security_group",tt2)
@@ -543,19 +621,19 @@ def  aws_security_group(t1,tt1,tt2,flag1,flag2):
     skip = 0
     #print("entry t1="+t1+" lbc="+str(globals.lbc))
     if tt1 == "vpc_id":
-        ##tt2=tt2.strip('\"')
+        
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
         common.add_dependancy("aws_vpc",tt2)
 
     elif tt1 == "name":
-        ##tt2=tt2.strip('\"')
+        
         if len(tt2) > 0: flag1=True
 
     #CIRCULAR reference problems:
     ##if tt1 == "security_groups": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
 	# fix via ingress /egress rules - ?
     elif tt1 == "egress" or globals.lbc > 0 :
-        ##tt2=tt2.strip('\"')
+        
         
         if tt2 == "[]": skip = 1
         if "[" in t1: globals.lbc=globals.lbc+1
@@ -568,7 +646,7 @@ def  aws_security_group(t1,tt1,tt2,flag1,flag2):
            if "]" in t1.strip(): skip=1
 
     elif tt1 == "ingress" or globals.lbc > 0 :
-        ##tt2=tt2.strip('\"')
+        
         
         if tt2 == "[]": skip = 1
         if "[" in t1: globals.lbc=globals.lbc+1
@@ -605,7 +683,7 @@ def aws_spot_instance_request(t1,tt1,tt2,flag1,flag2):
 def aws_subnet(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "vpc_id":
-        ##tt2=tt2.strip('\"')
+        
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
         common.add_dependancy("aws_vpc",tt2)
         
@@ -646,7 +724,7 @@ def aws_vpc_dhcp_options_association(t1,tt1,tt2,flag1,flag2):
 def aws_vpc_endpoint(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "vpc_id":
-        ##tt2=tt2.strip('\"')
+        
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
         common.add_dependancy("aws_vpc",tt2)
 
@@ -730,7 +808,7 @@ def aws_vpc_ipam_scope(t1,tt1,tt2,flag1,flag2):
 def aws_vpc_ipv4_cidr_block_association(t1,tt1,tt2,skipipv6,flag2):
     skip = 0         
     if tt1 == "vpc_id":
-        ##tt2=tt2.strip('\"')
+        
         t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
         common.add_dependancy("aws_vpc",tt2)
     return skip,t1,skipipv6,flag2

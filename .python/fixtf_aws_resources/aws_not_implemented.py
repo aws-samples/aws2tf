@@ -31,6 +31,7 @@ notimplemented = {
     "aws_chimesdkmediapipelines_media_insights_pipeline_configuration": True,
     "aws_chimesdkvoice_global_settings": True,
     "aws_cloudformation_stack_set_instance": True,
+    "aws_cloudformation_stack": True,
     "aws_cloudfront_monitoring_subscription": True,
     "aws_cloudfront_origin_access_identity": True,
     "aws_cloudsearch_domain": True,

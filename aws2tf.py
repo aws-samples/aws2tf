@@ -150,9 +150,19 @@ if __name__ == '__main__':
 
     all_types = resources.resource_types(type)
     print("all_types="+str(all_types))
+    print("len all_types="+str(len(all_types)))
+    
     if all_types != None:
+        istart=1
+        ic=1
+        it=100
         for i in all_types:
+            print(str(ic)+" of "+str(it) +" type="+i)
+            
+            if ic < istart: continue
+            if ic > it: break
             common.call_resource(i, id)
+            ic=ic+1
     else:
         if type in aws_dict.aws_resources:
             

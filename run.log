@@ -378,7 +378,7 @@ id None
 No aws_apigatewayv2_vpc_link found -empty response
 No aws_app_cookie_stickiness_policy found -empty response
 WARNING: Terraform cannot import type: aws_appautoscaling_scheduled_action
->>>>>>>>>>>>{'ScalableTargets': [], 'ResponseMetadata': {'RequestId': 'dbc37eed-cc59-47b8-990b-b5694cf8afc6', 'HTTPStatusCode': 200, 'HTTPHeaders': {'x-amzn-requestid': 'dbc37eed-cc59-47b8-990b-b5694cf8afc6', 'content-type': 'application/x-amz-json-1.1', 'content-length': '22', 'date': 'Sat, 27 Apr 2024 06:53:11 GMT'}, 'RetryAttempts': 0}}
+>>>>>>>>>>>>{'ScalableTargets': [], 'ResponseMetadata': {'RequestId': '3ca2f064-372e-4b4d-87bf-4d59acd56f5d', 'HTTPStatusCode': 200, 'HTTPHeaders': {'x-amzn-requestid': '3ca2f064-372e-4b4d-87bf-4d59acd56f5d', 'content-type': 'application/x-amz-json-1.1', 'content-length': '22', 'date': 'Sat, 27 Apr 2024 08:32:07 GMT'}, 'RetryAttempts': 0}}
 No aws_appconfig_application found -empty response
 WARNING: aws_appconfig_configuration_profile cannot have null id must pass parameter ApplicationId
 WARNING: aws_appconfig_deployment cannot have null id must pass parameter ApplicationId,EnvironmentId
@@ -471,16 +471,7 @@ err=OperationNotPageableError('Operation cannot be paginated: list_frameworks')
 calling non paginated fn list_frameworks id=None
 id None
 No aws_backup_framework found -empty response
-err=OperationNotPageableError('Operation cannot be paginated: describe_global_settings')
-calling non paginated fn describe_global_settings id=None
-id None
-
-ERROR: in getresource clfn=backup descfn=describe_global_settings
-topkey=GlobalSettings id=None
-e=TypeError('string indices must be integers') [e1]  common.py 626
-e=TypeError('can only concatenate str (not "type") to str')
-<class 'TypeError'> common.py 142
---->> Could not get resource aws_backup_global_settings id=None
+WARNING: NOT IMPLEMENTED YET for type: aws_backup_global_settings
 No aws_backup_plan found -empty response
 err=OperationNotPageableError('Operation cannot be paginated: describe_region_settings')
 calling non paginated fn describe_region_settings id=None
@@ -522,9 +513,7 @@ WARNING: NOT IMPLEMENTED YET for type: aws_budgets_budget
 WARNING: NOT IMPLEMENTED YET for type: aws_budgets_budget_action
 WARNING: NOT IMPLEMENTED YET for type: aws_ce_anomaly_monitor
 WARNING: NOT IMPLEMENTED YET for type: aws_ce_anomaly_subscription
-err=OperationNotPageableError('Operation cannot be paginated: list_cost_allocation_tags')
-calling non paginated fn list_cost_allocation_tags id=None
-id None
+WARNING: NOT IMPLEMENTED YET for type: aws_ce_cost_allocation_tag
 WARNING: NOT IMPLEMENTED YET for type: aws_ce_cost_category
 err=OperationNotPageableError('Operation cannot be paginated: list_voice_connectors')
 calling non paginated fn list_voice_connectors id=None
@@ -1120,6 +1109,27 @@ No aws_ec2_instance_state found -empty response
 WARNING: NOT IMPLEMENTED YET for type: aws_ec2_local_gateway_route
 No aws_ec2_local_gateway_route_table_vpc_association found -empty response
 WARNING: NOT IMPLEMENTED YET for type: aws_ec2_subnet_cidr_reservation
+Found aws_ec2_tag.rtb-02a7b529e11fd37c1 in processed skipping ...
+Found aws_ec2_tag.rtb-02a7b529e11fd37c1 in processed skipping ...
+Found aws_ec2_tag.rtb-02a7b529e11fd37c1 in processed skipping ...
+Found aws_ec2_tag.rtb-04b090f1c3f8a92a3 in processed skipping ...
+Found aws_ec2_tag.rtb-04b090f1c3f8a92a3 in processed skipping ...
+Found aws_ec2_tag.rtb-04b090f1c3f8a92a3 in processed skipping ...
+Found aws_ec2_tag.rtb-053dd623201a50c0d in processed skipping ...
+Found aws_ec2_tag.rtb-053dd623201a50c0d in processed skipping ...
+Found aws_ec2_tag.rtb-053dd623201a50c0d in processed skipping ...
+Found aws_ec2_tag.rtb-09900fd48353cab1a in processed skipping ...
+Found aws_ec2_tag.rtb-09900fd48353cab1a in processed skipping ...
+Found aws_ec2_tag.rtb-09900fd48353cab1a in processed skipping ...
+Found aws_ec2_tag.eipalloc-01029678dc99aa394 in processed skipping ...
+Found aws_ec2_tag.eipalloc-01029678dc99aa394 in processed skipping ...
+Found aws_ec2_tag.eipalloc-01029678dc99aa394 in processed skipping ...
+Found aws_ec2_tag.eipalloc-03f6c8dc60791d0e0 in processed skipping ...
+Found aws_ec2_tag.eipalloc-03f6c8dc60791d0e0 in processed skipping ...
+Found aws_ec2_tag.eipalloc-03f6c8dc60791d0e0 in processed skipping ...
+Found aws_ec2_tag.igw-083b683686262ee62 in processed skipping ...
+Found aws_ec2_tag.igw-083b683686262ee62 in processed skipping ...
+Found aws_ec2_tag.igw-083b683686262ee62 in processed skipping ...
 Found aws_ec2_tag.sg-00d42d6b8b05bcca4 in processed skipping ...
 Found aws_ec2_tag.sg-00d42d6b8b05bcca4 in processed skipping ...
 Found aws_ec2_tag.sg-01b943c6509bc61b0 in processed skipping ...
@@ -1132,56 +1142,35 @@ Found aws_ec2_tag.sg-098ada41bb20da592 in processed skipping ...
 Found aws_ec2_tag.sg-098ada41bb20da592 in processed skipping ...
 Found aws_ec2_tag.sg-0e88ab2e4fffd7469 in processed skipping ...
 Found aws_ec2_tag.sg-0e88ab2e4fffd7469 in processed skipping ...
+Found aws_ec2_tag.vpc-06de28040a0b05f71 in processed skipping ...
+Found aws_ec2_tag.vpc-06de28040a0b05f71 in processed skipping ...
+Found aws_ec2_tag.vpc-06de28040a0b05f71 in processed skipping ...
+Found aws_ec2_tag.subnet-0442e3a4c7595aa59 in processed skipping ...
+Found aws_ec2_tag.subnet-0442e3a4c7595aa59 in processed skipping ...
+Found aws_ec2_tag.subnet-0442e3a4c7595aa59 in processed skipping ...
+Found aws_ec2_tag.subnet-0442e3a4c7595aa59 in processed skipping ...
+Found aws_ec2_tag.subnet-0442e3a4c7595aa59 in processed skipping ...
+Found aws_ec2_tag.subnet-05f48ae73d750dcc0 in processed skipping ...
+Found aws_ec2_tag.subnet-05f48ae73d750dcc0 in processed skipping ...
+Found aws_ec2_tag.subnet-05f48ae73d750dcc0 in processed skipping ...
+Found aws_ec2_tag.subnet-05f48ae73d750dcc0 in processed skipping ...
+Found aws_ec2_tag.subnet-05f48ae73d750dcc0 in processed skipping ...
+Found aws_ec2_tag.subnet-0ec540a7bc664b530 in processed skipping ...
+Found aws_ec2_tag.subnet-0ec540a7bc664b530 in processed skipping ...
+Found aws_ec2_tag.subnet-0ec540a7bc664b530 in processed skipping ...
+Found aws_ec2_tag.subnet-0ec540a7bc664b530 in processed skipping ...
+Found aws_ec2_tag.subnet-0ec540a7bc664b530 in processed skipping ...
+Found aws_ec2_tag.subnet-0f2f725df3c3d8a5e in processed skipping ...
+Found aws_ec2_tag.subnet-0f2f725df3c3d8a5e in processed skipping ...
+Found aws_ec2_tag.subnet-0f2f725df3c3d8a5e in processed skipping ...
+Found aws_ec2_tag.subnet-0f2f725df3c3d8a5e in processed skipping ...
+Found aws_ec2_tag.subnet-0f2f725df3c3d8a5e in processed skipping ...
 Found aws_ec2_tag.nat-024f71d6ee3522e8b in processed skipping ...
 Found aws_ec2_tag.nat-024f71d6ee3522e8b in processed skipping ...
 Found aws_ec2_tag.nat-024f71d6ee3522e8b in processed skipping ...
 Found aws_ec2_tag.nat-07eed2ed5eaf86a3b in processed skipping ...
 Found aws_ec2_tag.nat-07eed2ed5eaf86a3b in processed skipping ...
 Found aws_ec2_tag.nat-07eed2ed5eaf86a3b in processed skipping ...
-Found aws_ec2_tag.subnet-0442e3a4c7595aa59 in processed skipping ...
-Found aws_ec2_tag.subnet-0442e3a4c7595aa59 in processed skipping ...
-Found aws_ec2_tag.subnet-0442e3a4c7595aa59 in processed skipping ...
-Found aws_ec2_tag.subnet-0442e3a4c7595aa59 in processed skipping ...
-Found aws_ec2_tag.subnet-0442e3a4c7595aa59 in processed skipping ...
-Found aws_ec2_tag.subnet-05f48ae73d750dcc0 in processed skipping ...
-Found aws_ec2_tag.subnet-05f48ae73d750dcc0 in processed skipping ...
-Found aws_ec2_tag.subnet-05f48ae73d750dcc0 in processed skipping ...
-Found aws_ec2_tag.subnet-05f48ae73d750dcc0 in processed skipping ...
-Found aws_ec2_tag.subnet-05f48ae73d750dcc0 in processed skipping ...
-Found aws_ec2_tag.subnet-0ec540a7bc664b530 in processed skipping ...
-Found aws_ec2_tag.subnet-0ec540a7bc664b530 in processed skipping ...
-Found aws_ec2_tag.subnet-0ec540a7bc664b530 in processed skipping ...
-Found aws_ec2_tag.subnet-0ec540a7bc664b530 in processed skipping ...
-Found aws_ec2_tag.subnet-0ec540a7bc664b530 in processed skipping ...
-Found aws_ec2_tag.subnet-0f2f725df3c3d8a5e in processed skipping ...
-Found aws_ec2_tag.subnet-0f2f725df3c3d8a5e in processed skipping ...
-Found aws_ec2_tag.subnet-0f2f725df3c3d8a5e in processed skipping ...
-Found aws_ec2_tag.subnet-0f2f725df3c3d8a5e in processed skipping ...
-Found aws_ec2_tag.subnet-0f2f725df3c3d8a5e in processed skipping ...
-Found aws_ec2_tag.igw-083b683686262ee62 in processed skipping ...
-Found aws_ec2_tag.igw-083b683686262ee62 in processed skipping ...
-Found aws_ec2_tag.igw-083b683686262ee62 in processed skipping ...
-Found aws_ec2_tag.vpc-06de28040a0b05f71 in processed skipping ...
-Found aws_ec2_tag.vpc-06de28040a0b05f71 in processed skipping ...
-Found aws_ec2_tag.vpc-06de28040a0b05f71 in processed skipping ...
-Found aws_ec2_tag.eipalloc-01029678dc99aa394 in processed skipping ...
-Found aws_ec2_tag.eipalloc-01029678dc99aa394 in processed skipping ...
-Found aws_ec2_tag.eipalloc-01029678dc99aa394 in processed skipping ...
-Found aws_ec2_tag.eipalloc-03f6c8dc60791d0e0 in processed skipping ...
-Found aws_ec2_tag.eipalloc-03f6c8dc60791d0e0 in processed skipping ...
-Found aws_ec2_tag.eipalloc-03f6c8dc60791d0e0 in processed skipping ...
-Found aws_ec2_tag.rtb-02a7b529e11fd37c1 in processed skipping ...
-Found aws_ec2_tag.rtb-02a7b529e11fd37c1 in processed skipping ...
-Found aws_ec2_tag.rtb-02a7b529e11fd37c1 in processed skipping ...
-Found aws_ec2_tag.rtb-04b090f1c3f8a92a3 in processed skipping ...
-Found aws_ec2_tag.rtb-04b090f1c3f8a92a3 in processed skipping ...
-Found aws_ec2_tag.rtb-04b090f1c3f8a92a3 in processed skipping ...
-Found aws_ec2_tag.rtb-053dd623201a50c0d in processed skipping ...
-Found aws_ec2_tag.rtb-053dd623201a50c0d in processed skipping ...
-Found aws_ec2_tag.rtb-053dd623201a50c0d in processed skipping ...
-Found aws_ec2_tag.rtb-09900fd48353cab1a in processed skipping ...
-Found aws_ec2_tag.rtb-09900fd48353cab1a in processed skipping ...
-Found aws_ec2_tag.rtb-09900fd48353cab1a in processed skipping ...
 No aws_ec2_traffic_mirror_filter found -empty response
 No aws_ec2_traffic_mirror_filter_rule found -empty response
 No aws_ec2_traffic_mirror_session found -empty response
@@ -2250,6 +2239,124 @@ WARNING: NOT IMPLEMENTED YET for type: aws_rum_metrics_destination
 WARNING: NOT IMPLEMENTED YET for type: aws_s3_access_point
 WARNING: aws_s3_account_public_access_block cannot have null id must pass parameter Bucket
 bucket name=None
+Skipping bucket 2054o5m2g5sttto6p99up00c3ckq5sec-oidc in region eu-west-2 not in configured region us-east-1
+Skipping bucket 566972129213-eu-west-1-personalizepocvod in region eu-west-1 not in configured region us-east-1
+Skipping bucket andy-mountain-duck in region eu-west-2 not in configured region us-east-1
+Skipping bucket andytrails in region eu-west-2 not in configured region us-east-1
+Skipping bucket andytrailsdata in region eu-west-2 not in configured region us-east-1
+Skipping bucket appstream-app-settings-eu-west-2-566972129213-0veihnv6 in region eu-west-2 not in configured region us-east-1
+Skipping bucket appstream-logs-eu-west-2-566972129213-1pwkobyo in region eu-west-2 not in configured region us-east-1
+Skipping bucket appstream2-36fb080bb8-eu-west-2-566972129213 in region eu-west-2 not in configured region us-east-1
+Skipping bucket at-billing-reports in region eu-west-2 not in configured region us-east-1
+Skipping bucket at-bucket-key in region eu-central-1 not in configured region us-east-1
+Skipping bucket at-bucketc-apse2-release-versioning in region us-west-2 not in configured region us-east-1
+Skipping bucket at-cis in region eu-west-2 not in configured region us-east-1
+Skipping bucket at-deepracer1 in region None not in configured region us-east-1
+passing on None location .......
+Skipping bucket at-disk-image-file-bucket in region eu-west-2 not in configured region us-east-1
+Skipping bucket at-dr-train in region None not in configured region us-east-1
+passing on None location .......
+Skipping bucket at-dr-transit in region None not in configured region us-east-1
+passing on None location .......
+Skipping bucket at-dwp in region eu-west-2 not in configured region us-east-1
+Skipping bucket at-hmrc-gdpr in region eu-west-2 not in configured region us-east-1
+Skipping bucket at-hmrc1 in region eu-west-2 not in configured region us-east-1
+Skipping bucket at-hmrc2 in region eu-west-2 not in configured region us-east-1
+Skipping bucket at-hmrc3 in region eu-west-2 not in configured region us-east-1
+Skipping bucket at-image-builder in region eu-west-2 not in configured region us-east-1
+Skipping bucket at-macie-results in region eu-west-2 not in configured region us-east-1
+Skipping bucket at-pinpoint-endpoints in region eu-west-1 not in configured region us-east-1
+Skipping bucket at-pinpoint-segments in region eu-west-1 not in configured region us-east-1
+Skipping bucket at-private-info in region eu-west-2 not in configured region us-east-1
+Skipping bucket at-sechub-demo in region eu-west-2 not in configured region us-east-1
+Skipping bucket at-test-bucket-5669 in region eu-west-2 not in configured region us-east-1
+Skipping bucket at-tier2 in region eu-west-1 not in configured region us-east-1
+Skipping bucket aws-athena-query-results-566972129213-eu-west-2 in region eu-west-2 not in configured region us-east-1
+Skipping bucket aws-athena-query-results-eu-west-2-566972129213 in region eu-west-2 not in configured region us-east-1
+Skipping bucket aws-glue-scripts-566972129213-eu-west-2 in region eu-west-2 not in configured region us-east-1
+Skipping bucket aws-glue-temporary-566972129213-eu-west-2 in region eu-west-2 not in configured region us-east-1
+Skipping bucket aws-patch-compliance in region eu-west-2 not in configured region us-east-1
+Skipping bucket aws-proton-tf-bucket-566972129213 in region eu-west-1 not in configured region us-east-1
+Skipping bucket aws-sam-cli-managed-default-samclisourcebucket-1rn6q2w77mmvt in region eu-west-2 not in configured region us-east-1
+Skipping bucket aws-waf-logs-at-566972129213-eu-west-2 in region eu-west-2 not in configured region us-east-1
+Skipping bucket awsandy-athena-query-output in region eu-west-2 not in configured region us-east-1
+Skipping bucket awsome-terraform-example-awsometerraformexampledo-153x4ti1tb59q in region eu-west-2 not in configured region us-east-1
+Skipping bucket awsome-terraform-example-awsometerraformexamplete-1t75egsrxu1z5 in region eu-west-2 not in configured region us-east-1
+Skipping bucket bedrockchatstack-accesslogbucketda470295-talfi037xjpg in region None not in configured region us-east-1
+passing on None location .......
+Skipping bucket bedrockchatstack-apipublishcodebuildapipublishcode-xkwxhghbgwva in region None not in configured region us-east-1
+passing on None location .......
+Skipping bucket bedrockchatstack-documentbucketae41e5a9-4jln2hcbqg7w in region None not in configured region us-east-1
+passing on None location .......
+Skipping bucket bedrockchatstack-frontendassetbucket3fa96e62-45rkqt1v11iu in region None not in configured region us-east-1
+passing on None location .......
+Skipping bucket bedrockchatstack-largemessagebucketad0c9b6b-zfl5kakggh7k in region None not in configured region us-east-1
+passing on None location .......
+Skipping bucket bedrockchatstack-usageanalysisddbbucketbf747e15-txtopvhcuvux in region None not in configured region us-east-1
+passing on None location .......
+Skipping bucket bedrockchatstack-usageanalysisqueryresultbucketef0-7hiqnh1vu9za in region None not in configured region us-east-1
+passing on None location .......
+Skipping bucket bedrockchatstack-websocketlargepayloadsupportbucke-6awjkvjkmj2d in region None not in configured region us-east-1
+passing on None location .......
+Skipping bucket cdk-hnb659fds-assets-566972129213-eu-west-1 in region eu-west-1 not in configured region us-east-1
+Skipping bucket cdk-hnb659fds-assets-566972129213-us-east-1 in region None not in configured region us-east-1
+passing on None location .......
+Skipping bucket cf-templates-oso3xlmyxir7-eu-west-1 in region eu-west-1 not in configured region us-east-1
+Skipping bucket cf-templates-oso3xlmyxir7-eu-west-2 in region eu-west-2 not in configured region us-east-1
+Skipping bucket cf-templates-oso3xlmyxir7-us-east-1 in region None not in configured region us-east-1
+passing on None location .......
+Skipping bucket cloudtrail-awslogs-566972129213-hq4grwmr-isengard-do-not-delete in region None not in configured region us-east-1
+passing on None location .......
+Skipping bucket config-bucket-566972129213 in region us-west-2 not in configured region us-east-1
+Skipping bucket config-bucket-london-566972129213 in region eu-west-2 not in configured region us-east-1
+Skipping bucket contextual-data-tenanta-oamkzwyx in region us-west-2 not in configured region us-east-1
+Skipping bucket contextual-data-tenantb-oamkzwyx in region us-west-2 not in configured region us-east-1
+Skipping bucket data-eu-west-2-566972129213 in region eu-west-2 not in configured region us-east-1
+Skipping bucket do-not-delete-gatedgarden-audit-566972129213 in region us-west-2 not in configured region us-east-1
+Skipping bucket ds-data-bucket-fsi-smteam-dev-023917a053e9 in region eu-west-1 not in configured region us-east-1
+Skipping bucket ds-data-lake-029e33c5a105 in region eu-west-1 not in configured region us-east-1
+Skipping bucket ds-data-lake-andyt in region eu-west-2 not in configured region us-east-1
+Skipping bucket ds-model-bucket-fsi-smteam-dev-023917a053e9 in region eu-west-1 not in configured region us-east-1
+Skipping bucket eks-resources in region eu-west-2 not in configured region us-east-1
+Skipping bucket elasticbeanstalk-eu-west-2-566972129213 in region eu-west-2 not in configured region us-east-1
+Skipping bucket emr-eks-demo-566972129213-eu-west-1 in region eu-west-1 not in configured region us-east-1
+Skipping bucket emr-eks-demo-566972129213-eu-west-2 in region eu-west-2 not in configured region us-east-1
+Skipping bucket emr-eks-demo-566972129213-eu-west-3 in region eu-west-3 not in configured region us-east-1
+Skipping bucket envoy-config-oamkzwyx in region us-west-2 not in configured region us-east-1
+Skipping bucket kendra-atdata in region eu-west-1 not in configured region us-east-1
+Skipping bucket lbat-access-logs in region eu-west-2 not in configured region us-east-1
+Skipping bucket mac-archive-cbb in region eu-west-2 not in configured region us-east-1
+Skipping bucket mac-backup-cyberduck in region eu-west-2 not in configured region us-east-1
+Skipping bucket macm1pro-cyberduck-backup in region eu-west-2 not in configured region us-east-1
+Skipping bucket my-tf-log-bucket-566972129213 in region eu-west-3 not in configured region us-east-1
+Skipping bucket oracle-swingbench in region eu-west-1 not in configured region us-east-1
+Skipping bucket orders-eu-west-1-566972129213 in region eu-west-1 not in configured region us-east-1
+Skipping bucket pp-raw in region eu-west-2 not in configured region us-east-1
+Skipping bucket prescription-lambda in region eu-west-2 not in configured region us-east-1
+Skipping bucket sagemaker-at-test1 in region eu-west-2 not in configured region us-east-1
+Skipping bucket sagemaker-eu-west-1-566972129213 in region eu-west-1 not in configured region us-east-1
+Skipping bucket sagemaker-eu-west-2-566972129213 in region eu-west-2 not in configured region us-east-1
+Skipping bucket sagemaker-project-p-lkzs8xe3oxlm in region eu-west-1 not in configured region us-east-1
+Skipping bucket sagemaker-project-p-v5ex8oomns1u in region eu-west-1 not in configured region us-east-1
+Skipping bucket sagemaker-studio-566972129213-bohc5lznq5i in region eu-west-1 not in configured region us-east-1
+Skipping bucket sagemaker-studio-566972129213-k2moomvxlbl in region eu-west-2 not in configured region us-east-1
+Skipping bucket sagemaker-studio-566972129213-k5pso5zq5 in region eu-west-2 not in configured region us-east-1
+Skipping bucket sagemaker-studio-566972129213-n99rd3ghipm in region eu-west-1 not in configured region us-east-1
+Skipping bucket sagemaker-studio-566972129213-r6l91w6tq3s in region eu-west-2 not in configured region us-east-1
+Skipping bucket sagemaker-studio-566972129213-svc2vy51zsr in region eu-west-1 not in configured region us-east-1
+Skipping bucket sagemaker-studio-566972129213-u8zzuznbo5 in region eu-west-1 not in configured region us-east-1
+Skipping bucket sagemaker-studio-566972129213-uyksww3fh3 in region eu-west-2 not in configured region us-east-1
+Skipping bucket secure-data-science-cloudformation-10981-eu-west-2 in region eu-west-2 not in configured region us-east-1
+Skipping bucket secure-data-science-cloudformation-11859-eu-west-3 in region eu-west-3 not in configured region us-east-1
+Skipping bucket secure-data-science-cloudformation-21359-eu-west-1 in region eu-west-1 not in configured region us-east-1
+Skipping bucket smemr2-s3bucket-0838av6k8ywf in region eu-west-1 not in configured region us-east-1
+Skipping bucket ssm-andyt in region eu-west-2 not in configured region us-east-1
+Skipping bucket stackset-demo-infrastruc-pipelinebuiltartifactbuc-1b7dv099snmj3 in region eu-west-2 not in configured region us-east-1
+Skipping bucket stackset-ecsworkshop-inf-pipelinebuiltartifactbuc-109u7ntlnsvqe in region eu-west-1 not in configured region us-east-1
+Skipping bucket studiovpc-data-566972129213 in region eu-west-1 not in configured region us-east-1
+Skipping bucket swapcaser in region eu-west-2 not in configured region us-east-1
+Skipping bucket testvpce in region eu-west-2 not in configured region us-east-1
+Skipping bucket tflab in region eu-west-2 not in configured region us-east-1
 WARNING: aws_s3_bucket_accelerate_configuration cannot have null id must pass parameter Bucket
 WARNING: aws_s3_bucket_acl cannot have null id must pass parameter Bucket
 WARNING: aws_s3_bucket_analytics_configuration cannot have null id must pass parameter Bucket,Id
@@ -2843,76 +2950,31 @@ id None
 No aws_vpn_gateway found -empty response
 WARNING: Terraform cannot import type: aws_vpn_gateway_attachment
 WARNING: Terraform cannot import type: aws_vpn_gateway_route_propagation
-No aws_waf_byte_match_set found -empty response
-No aws_waf_geo_match_set found -empty response
-No aws_waf_ipset found -empty response
-No aws_waf_rate_based_rule found -empty response
-No aws_waf_regex_match_set found -empty response
-No aws_waf_regex_pattern_set found -empty response
-No aws_waf_rule found -empty response
-No aws_waf_rule_group found -empty response
-No aws_waf_size_constraint_set found -empty response
-No aws_waf_sql_injection_match_set found -empty response
-No aws_waf_web_acl found -empty response
-No aws_waf_xss_match_set found -empty response
-err=OperationNotPageableError('Operation cannot be paginated: list_byte_match_sets')
-calling non paginated fn list_byte_match_sets id=None
-id None
-No aws_wafregional_byte_match_set found -empty response
-err=OperationNotPageableError('Operation cannot be paginated: list_geo_match_sets')
-calling non paginated fn list_geo_match_sets id=None
-id None
-No aws_wafregional_geo_match_set found -empty response
-err=OperationNotPageableError('Operation cannot be paginated: list_ip_sets')
-calling non paginated fn list_ip_sets id=None
-id None
-No aws_wafregional_ipset found -empty response
-err=OperationNotPageableError('Operation cannot be paginated: list_rate_based_rules')
-calling non paginated fn list_rate_based_rules id=None
-
-ERROR: in call_boto3 clfn=waf-regional descfn=list_rate_based_rules
-topkey=RateBasedRules id=None
-e=KeyError('RateBasedRules') [e1]  common.py 910
-
-ERROR: in getresource clfn=waf-regional descfn=list_rate_based_rules
-topkey=RateBasedRules id=None
-e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
-e=TypeError('can only concatenate str (not "type") to str')
-<class 'TypeError'> common.py 142
---->> Could not get resource aws_wafregional_rate_based_rule id=None
-err=OperationNotPageableError('Operation cannot be paginated: list_regex_match_sets')
-calling non paginated fn list_regex_match_sets id=None
-id None
-No aws_wafregional_regex_match_set found -empty response
-err=OperationNotPageableError('Operation cannot be paginated: list_regex_pattern_sets')
-calling non paginated fn list_regex_pattern_sets id=None
-id None
-No aws_wafregional_regex_pattern_set found -empty response
-err=OperationNotPageableError('Operation cannot be paginated: list_rules')
-calling non paginated fn list_rules id=None
-id None
-No aws_wafregional_rule found -empty response
-err=OperationNotPageableError('Operation cannot be paginated: list_rule_groups')
-calling non paginated fn list_rule_groups id=None
-id None
-No aws_wafregional_rule_group found -empty response
-err=OperationNotPageableError('Operation cannot be paginated: list_size_constraint_sets')
-calling non paginated fn list_size_constraint_sets id=None
-id None
-No aws_wafregional_size_constraint_set found -empty response
-err=OperationNotPageableError('Operation cannot be paginated: list_sql_injection_match_sets')
-calling non paginated fn list_sql_injection_match_sets id=None
-id None
-No aws_wafregional_sql_injection_match_set found -empty response
-err=OperationNotPageableError('Operation cannot be paginated: list_web_acls')
-calling non paginated fn list_web_acls id=None
-id None
-No aws_wafregional_web_acl found -empty response
+WARNING: NOT IMPLEMENTED YET for type: aws_waf_byte_match_set
+WARNING: NOT IMPLEMENTED YET for type: aws_waf_geo_match_set
+WARNING: NOT IMPLEMENTED YET for type: aws_waf_ipset
+WARNING: NOT IMPLEMENTED YET for type: aws_waf_rate_based_rule
+WARNING: NOT IMPLEMENTED YET for type: aws_waf_regex_match_set
+WARNING: NOT IMPLEMENTED YET for type: aws_waf_regex_pattern_set
+WARNING: NOT IMPLEMENTED YET for type: aws_waf_rule
+WARNING: NOT IMPLEMENTED YET for type: aws_waf_rule_group
+WARNING: NOT IMPLEMENTED YET for type: aws_waf_size_constraint_set
+WARNING: NOT IMPLEMENTED YET for type: aws_waf_sql_injection_match_set
+WARNING: NOT IMPLEMENTED YET for type: aws_waf_web_acl
+WARNING: NOT IMPLEMENTED YET for type: aws_waf_xss_match_set
+WARNING: NOT IMPLEMENTED YET for type: aws_wafregional_byte_match_set
+WARNING: NOT IMPLEMENTED YET for type: aws_wafregional_geo_match_set
+WARNING: NOT IMPLEMENTED YET for type: aws_wafregional_ipset
+WARNING: NOT IMPLEMENTED YET for type: aws_wafregional_rate_based_rule
+WARNING: NOT IMPLEMENTED YET for type: aws_wafregional_regex_match_set
+WARNING: NOT IMPLEMENTED YET for type: aws_wafregional_regex_pattern_set
+WARNING: NOT IMPLEMENTED YET for type: aws_wafregional_rule
+WARNING: NOT IMPLEMENTED YET for type: aws_wafregional_rule_group
+WARNING: NOT IMPLEMENTED YET for type: aws_wafregional_size_constraint_set
+WARNING: NOT IMPLEMENTED YET for type: aws_wafregional_sql_injection_match_set
+WARNING: NOT IMPLEMENTED YET for type: aws_wafregional_web_acl
 WARNING: Terraform cannot import type: aws_wafregional_web_acl_association
-err=OperationNotPageableError('Operation cannot be paginated: list_xss_match_sets')
-calling non paginated fn list_xss_match_sets id=None
-id None
-No aws_wafregional_xss_match_set found -empty response
+WARNING: NOT IMPLEMENTED YET for type: aws_wafregional_xss_match_set
 WARNING: aws_wafv2_ip_set cannot have null id must pass parameter Scope
 WARNING: aws_wafv2_regex_pattern_set cannot have null id must pass parameter Scope
 WARNING: aws_wafv2_rule_group cannot have null id must pass parameter Scope
@@ -3105,61 +3167,61 @@ type=aws_cognito_user_pool_client id=us-east-1_NhgXDnETl
 Empty response for aws_cognito_user_pool_client id=us-east-1_NhgXDnETl returning
 Terraform Plan Loop ... 
 terraform plan -generate-config-out=resources.out -out tfplan -json | jq . > plan1.json
-could not find expected resources.out file after Plan 1 - exiting
-cp plan1.json plan1.json.2024-04-27T07:59:48
-fix tf files.....
-could not find expected resources.out file in tfplan2 - exiting
-Detected Dependancies -----------------------
-aws_vpc_ipv4_cidr_block_association.vpc-06de28040a0b05f71
-aws_vpc_ipv4_cidr_block_association.vpc-c1adeabb
-aws_kms_alias.k-08618d63-c37e-44b8-80c3-918b6865b4c3
-aws_kms_alias.k-396418b5-2725-4205-9139-c87ee93b7c52
-aws_kms_alias.k-5c67411c-02ed-4e0f-b916-9a959af366cd
-aws_kms_alias.k-7fe83ba6-a1d5-4211-a56b-2c4b1c7e7715
-aws_kms_alias.k-8473f3e6-c96e-4446-ac6f-a72f213ca257
-aws_kms_alias.k-8b6f7d94-07b2-45da-9b1f-04b37c4cf506
-aws_kms_alias.k-b2387c5d-321d-412f-8bee-e718ddb42054
-aws_kms_alias.k-bcdd5b23-b1fb-4b51-912d-659f02d125d7
-aws_kms_alias.k-cace16c9-f843-44db-9c6e-a5520f5ccc4c
-aws_kms_alias.k-f0e95595-4d1f-4ec5-b3df-b1b466c032eb
-aws_kms_alias.k-f523d7f0-fb8a-43cd-93a3-c0d943221989
-aws_kms_alias.k-f6ef128a-9515-496f-80b1-5300c994226a
-aws_glue_catalog_table.566972129213:bedrockchatstack_usage_analysis
-aws_glue_catalog_table.566972129213:glue-demo
-aws_glue_catalog_table.566972129213:tpc
-aws_apigatewayv2_authorizer.cj1p7wpdok
-aws_apigatewayv2_deployment.cj1p7wpdok
-aws_apigatewayv2_integration.cj1p7wpdok
-aws_apigatewayv2_model.cj1p7wpdok
-aws_apigatewayv2_route.cj1p7wpdok
-aws_apigatewayv2_stage.cj1p7wpdok
-aws_apigatewayv2_authorizer.d9tcdrwoh1
-aws_apigatewayv2_deployment.d9tcdrwoh1
-aws_apigatewayv2_integration.d9tcdrwoh1
-aws_apigatewayv2_model.d9tcdrwoh1
-aws_apigatewayv2_route.d9tcdrwoh1
-aws_apigatewayv2_stage.d9tcdrwoh1
---> In get_aws_kms_alias  doing aws_kms_alias with id k-08618d63-c37e-44b8-80c3-918b6865b4c3 clfn=kms descfn=list_aliases topkey=Aliases key=TargetKeyId filterid=AliasName
---> In get_aws_kms_alias  doing aws_kms_alias with id k-396418b5-2725-4205-9139-c87ee93b7c52 clfn=kms descfn=list_aliases topkey=Aliases key=TargetKeyId filterid=AliasName
---> In get_aws_kms_alias  doing aws_kms_alias with id k-5c67411c-02ed-4e0f-b916-9a959af366cd clfn=kms descfn=list_aliases topkey=Aliases key=TargetKeyId filterid=AliasName
---> In get_aws_kms_alias  doing aws_kms_alias with id k-7fe83ba6-a1d5-4211-a56b-2c4b1c7e7715 clfn=kms descfn=list_aliases topkey=Aliases key=TargetKeyId filterid=AliasName
---> In get_aws_kms_alias  doing aws_kms_alias with id k-8473f3e6-c96e-4446-ac6f-a72f213ca257 clfn=kms descfn=list_aliases topkey=Aliases key=TargetKeyId filterid=AliasName
---> In get_aws_kms_alias  doing aws_kms_alias with id k-8b6f7d94-07b2-45da-9b1f-04b37c4cf506 clfn=kms descfn=list_aliases topkey=Aliases key=TargetKeyId filterid=AliasName
---> In get_aws_kms_alias  doing aws_kms_alias with id k-b2387c5d-321d-412f-8bee-e718ddb42054 clfn=kms descfn=list_aliases topkey=Aliases key=TargetKeyId filterid=AliasName
---> In get_aws_kms_alias  doing aws_kms_alias with id k-bcdd5b23-b1fb-4b51-912d-659f02d125d7 clfn=kms descfn=list_aliases topkey=Aliases key=TargetKeyId filterid=AliasName
---> In get_aws_kms_alias  doing aws_kms_alias with id k-cace16c9-f843-44db-9c6e-a5520f5ccc4c clfn=kms descfn=list_aliases topkey=Aliases key=TargetKeyId filterid=AliasName
---> In get_aws_kms_alias  doing aws_kms_alias with id k-f0e95595-4d1f-4ec5-b3df-b1b466c032eb clfn=kms descfn=list_aliases topkey=Aliases key=TargetKeyId filterid=AliasName
---> In get_aws_kms_alias  doing aws_kms_alias with id k-f523d7f0-fb8a-43cd-93a3-c0d943221989 clfn=kms descfn=list_aliases topkey=Aliases key=TargetKeyId filterid=AliasName
---> In get_aws_kms_alias  doing aws_kms_alias with id k-f6ef128a-9515-496f-80b1-5300c994226a clfn=kms descfn=list_aliases topkey=Aliases key=TargetKeyId filterid=AliasName
-Empty response for aws_apigatewayv2_authorizer id=cj1p7wpdok returning
-Empty response for aws_apigatewayv2_model id=cj1p7wpdok returning
-Empty response for aws_apigatewayv2_model id=d9tcdrwoh1 returning
-Terraform Plan Loop ... 
-terraform plan -generate-config-out=resources.out -out tfplan -json | jq . > plan1.json
-could not find expected resources.out file after Plan 1 - exiting
-cp plan1.json plan1.json.2024-04-27T08:00:53
-fix tf files.....
-could not find expected resources.out file in tfplan2 - exiting
------------ Completed 1 dependancy check loops --------------
-Validate and Test Plan  ... 
-No aws_*.tf files found for this resource, exiting ....
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Removing arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0c7e89f711c3095f4 files - plan errors see plan1.json
+rm -f import__*arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0c7e89f711c3095f4*.tf aws_*arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0c7e89f711c3095f4*.tf
+ERROR: Removing FrontendReactBuildDeployAwsCliLayer6AE670F6 files - plan errors see plan1.json
+rm -f import__*FrontendReactBuildDeployAwsCliLayer6AE670F6*.tf aws_*FrontendReactBuildDeployAwsCliLayer6AE670F6*.tf
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Removing cwsyn-deepracer1-1f2a9dbb-90b1-407d-af59-2c9acaac785e files - plan errors see plan1.json
+rm -f import__*cwsyn-deepracer1-1f2a9dbb-90b1-407d-af59-2c9acaac785e*.tf aws_*cwsyn-deepracer1-1f2a9dbb-90b1-407d-af59-2c9acaac785e*.tf
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Removing arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-096d816473f2bdb03 files - plan errors see plan1.json
+rm -f import__*arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-096d816473f2bdb03*.tf aws_*arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-096d816473f2bdb03*.tf
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Removing arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0be8c61cde3be63f3 files - plan errors see plan1.json
+rm -f import__*arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0be8c61cde3be63f3*.tf aws_*arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0be8c61cde3be63f3*.tf
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Removing arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0cb0c4966f86b059b files - plan errors see plan1.json
+rm -f import__*arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0cb0c4966f86b059b*.tf aws_*arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0cb0c4966f86b059b*.tf
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Removing aurora-postgresql files - plan errors see plan1.json
+rm -f import__*aurora-postgresql*.tf aws_*aurora-postgresql*.tf
+ERROR: Removing arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0ec16280999c5c75e files - plan errors see plan1.json
+rm -f import__*arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0ec16280999c5c75e*.tf aws_*arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0ec16280999c5c75e*.tf
+ERROR: Removing arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-03e3f588eec25344c files - plan errors see plan1.json
+rm -f import__*arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-03e3f588eec25344c*.tf aws_*arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-03e3f588eec25344c*.tf
+ERROR: Removing arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0ee4f94581368c0d4 files - plan errors see plan1.json
+rm -f import__*arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0ee4f94581368c0d4*.tf aws_*arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0ee4f94581368c0d4*.tf
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Removing arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-09a5f8eb62bde80b1 files - plan errors see plan1.json
+rm -f import__*arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-09a5f8eb62bde80b1*.tf aws_*arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-09a5f8eb62bde80b1*.tf
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Cannot import non-existent remote object - see plan1.json
+ERROR: Removing 5c67411c-02ed-4e0f-b916-9a959af366cd files - plan errors see plan1.json
+rm -f import__*5c67411c-02ed-4e0f-b916-9a959af366cd*.tf aws_*5c67411c-02ed-4e0f-b916-9a959af366cd*.tf
+ERROR: Removing -[\\w]+ files - plan errors see plan1.json
+rm -f import__*-[\\w]+*.tf aws_*-[\\w]+*.tf
+ERROR: Removing arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0c10e657807c7a700 files - plan errors see plan1.json
+rm -f import__*arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0c10e657807c7a700*.tf aws_*arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0c10e657807c7a700*.tf
+ERROR: Removing arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0028ca011460d5eaf files - plan errors see plan1.json
+rm -f import__*arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0028ca011460d5eaf*.tf aws_*arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0028ca011460d5eaf*.tf
+ERROR: Cannot import non-existent remote object - see plan1.json

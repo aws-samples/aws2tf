@@ -40,6 +40,7 @@ from get_aws_resources import aws_sagemaker
 from get_aws_resources import aws_secretsmanager
 from get_aws_resources import aws_sns
 from get_aws_resources import aws_sqs
+from get_aws_resources import aws_ssm
 from get_aws_resources import aws_vpc_lattice
 from get_aws_resources import aws_wafv2
 
@@ -611,9 +612,9 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
       if str(response) != "[]":
             for item in response:
                #print("-"+str(item))
-               print("-gr01-")
+               #print("-gr01-")
                if id is None or filterid=="": # do it all
-                  print("-gr21-")
+                  #print("-gr21-")
                   if globals.debug: print("--"+str(item))
                   try:
                      if "aws-service-role" in str(item["Path"]): 
@@ -693,7 +694,9 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                            pass
       else:
          if id is not None:
-            print("No "+type+" "+id+" found -empty response")         
+            print("No "+type+" "+id+" found -empty response") 
+            pkey=type+"."+id  
+            globals.rproc[pkey]=True      
          else:
             print("No "+type+" found -empty response")
          return True

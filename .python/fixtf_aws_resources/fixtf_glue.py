@@ -49,6 +49,7 @@ def aws_glue_dev_endpoint(t1,tt1,tt2,flag1,flag2):
 
 def aws_glue_job(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	#print("aws_glue_job t1=",t1)
 	if tt1 == "max_capacity" and tt2 != "null":
 		globals.gulejobmaxcap=True
 	if tt1 == "number_of_workers":

@@ -33,7 +33,7 @@ def aws_ecs_service(t1,tt1,tt2,flag1,flag2):
 	##if tt1 == "security_groups": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
 	##if tt1 == "subnets":  t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
 	if tt1 == "cluster":
-		##tt2=tt2.strip('\"')
+		
 		if "arn:" in tt2: tt2 = tt2.split("/")[-1]
 			
 		if tt2 != "null": 
@@ -43,7 +43,7 @@ def aws_ecs_service(t1,tt1,tt2,flag1,flag2):
 			skip=1
 	elif tt1 == "task_definition":
 		#print("--->>>>"+tt2)
-		##tt2=tt2.strip('\"')
+		
 		if "arn:" in tt2: 	
 			tt2 = tt2.split("/")[-1]
 			t1=tt1 + " = aws_ecs_task_definition." + tt2 + ".arn\n"

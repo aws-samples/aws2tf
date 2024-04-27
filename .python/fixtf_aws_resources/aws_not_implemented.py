@@ -133,6 +133,7 @@ notimplemented = {
     "aws_ec2_transit_gateway_route": True,  ### TODO
     "aws_efs_mount_target": True,  ### TODO
     "aws_efs_replication_configuration": True,
+    "aws_eks_access_policy_association": True, ### TODO
     "aws_elasticache_user_group_association": True,
     "aws_elastictranscoder_preset": True,
     "aws_emr_block_public_access_configuration": True,

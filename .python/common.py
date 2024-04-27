@@ -611,9 +611,9 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
       if str(response) != "[]":
             for item in response:
                #print("-"+str(item))
-               #print("-gr01-")
+               print("-gr01-")
                if id is None or filterid=="": # do it all
-                  #print("-gr21-")
+                  print("-gr21-")
                   if globals.debug: print("--"+str(item))
                   try:
                      if "aws-service-role" in str(item["Path"]): 
@@ -893,10 +893,10 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
             print("ParamValidationError 1 in common.call_boto3: type="+type+" clfn="+clfn)
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(f"{e=}", fname, exc_tb.tb_lineno)
+            print(f"{e=} [pv1] ", fname, exc_tb.tb_lineno)
             with open('boto3-error.err', 'a') as f:
                      f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
-                     f.write(f"{e=} "+ +str(fname)+ " "+ str(exc_tb.tb_lineno)+"\n")
+                     f.write(f"{e=} [pv1] "+ +str(fname)+ " "+ str(exc_tb.tb_lineno)+"\n")
                      f.write("-----------------------------------------------------------------------------\n")
             return []
             
@@ -925,11 +925,11 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                   print("ParamValidationError 2 in common.call_boto3: type="+type+" clfn="+clfn)
                   exc_type, exc_obj, exc_tb = sys.exc_info()
                   fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                  print(f"{e=}", fname, exc_tb.tb_lineno)    
+                  print(f"{e=} [pv2] ", fname, exc_tb.tb_lineno)    
                                     
                   with open('boto3-error.err', 'a') as f:
                      f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
-                     f.write(f"{e=}\n"+ str(fname)+ " "+str(exc_tb.tb_lineno) + "\n")
+                     f.write(f"{e=} [pv2] "+ str(fname)+ " "+str(exc_tb.tb_lineno) + "\n")
                      f.write("-----------------------------------------------------------------------------\n")
                   return []
                
@@ -985,10 +985,10 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    print("topkey="+topkey+" id="+str(id))
    exc_type, exc_obj, exc_tb = sys.exc_info()
    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-   print(f"{e=}", fname, exc_tb.tb_lineno)
+   print(f"{e=} [e1] ", fname, exc_tb.tb_lineno)
    with open('boto3-error.err', 'a') as f:
       f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
-      f.write(f"{e=} " + str(fname) + " "+str(exc_tb.tb_lineno) + "\n")
+      f.write(f"{e=} [e1] " + str(fname) + " "+str(exc_tb.tb_lineno) + "\n")
 
       f.write("-----------------------------------------------------------------------------\n")
    exit()
@@ -998,10 +998,10 @@ def handle_error2(e,frame,id):
    print("id="+str(id))
    exc_type, exc_obj, exc_tb = sys.exc_info()
    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-   print(f"{e=}", fname, exc_tb.tb_lineno)
+   print(f"{e=} [e2] ", fname, exc_tb.tb_lineno)
    with open('boto3-error.err', 'a') as f:
       f.write("type="+type+" id="+str(id)+"\n")
-      f.write(f"{e=} " + str(fname) + " "+str(exc_tb.tb_lineno) + "\n")
+      f.write(f"{e=} [e2] " + str(fname) + " "+str(exc_tb.tb_lineno) + "\n")
       f.write("-----------------------------------------------------------------------------\n")
    exit()
 

@@ -14,7 +14,7 @@ def get_aws_s3_bucket(type, id, clfn, descfn, topkey, key, filterid):
 def get_all_s3_buckets(fb,my_region):
    print("bucket name="+str(fb))
    type="aws_s3_bucket"
-   
+   if globals.debug: print("my_region="+my_region)
    #print("processed=" + str(globals.rproc))
    """Gets all the AWS S3 buckets and saves them to a file."""
    boto3.setup_default_session(region_name=my_region)
@@ -72,16 +72,18 @@ def get_all_s3_buckets(fb,my_region):
      try:
          #print('location')
          location = s3.get_bucket_location(Bucket=bucket_name)
-         #print(location)
          bl=location['LocationConstraint']
-         #print ("bucket: " +  bucket_name + " location="+str(bl))
+         #print("bl="+bl)
+         #print ("bucket: " +  bucket_name + " location="+str(bl)+"  my_region="+my_region)
          if bl != my_region:
-            #print('continuing on non default location '+ str(bl))     
+            print('Skipping bucket '+bucket_name+' in region '+ str(bl)+ " not in configured region "+my_region)     
             if bl is None:  
-               #print('passing on None location .......')
+               print('passing on None location .......')
                pass
+            else:
+               continue
          elif bl == 'null':  
-               #print('continuing on null location .......')
+               print('continuing on null location .......')
                continue
          else:
             pass

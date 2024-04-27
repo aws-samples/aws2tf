@@ -4,19 +4,20 @@ notimplemented = {
     "aws_appstream_fleet_stack_association": True,
     "aws_appstream_image_builder": True,
     "aws_appstream_stack": True,
-    "aws_appstream_user": True,
+    "aws_appstream_user": True, ### TODO
     "aws_appstream_user_stack_association": True,
     "aws_appsync_api_cache": True,
     "aws_appsync_domain_name_api_association": True,
     "aws_appsync_graphql_api": True,
-    "aws_auditmanager_account_registration": True,
+    "aws_auditmanager_account_registration": True,  ### TODO
     "aws_auditmanager_assessment_delegation": True,
     "aws_auditmanager_framework": True,
     "aws_auditmanager_framework_share": True,
     "aws_auditmanager_organization_admin_account_registration": True,
+    "aws_backup_global_settings": True,
     "aws_batch_compute_environment": True,
     "aws_batch_job_definition": True,
-    "aws_batch_job_queue": True,
+    "aws_batch_job_queue": True,  ### TODO
     "aws_batch_scheduling_policy": True,
     "aws_budgets_budget": True,
     "aws_budgets_budget_action": True,
@@ -42,7 +43,7 @@ notimplemented = {
     "aws_cloudwatch_event_connection": True,
     "aws_cloudwatch_event_endpoint": True,
     "aws_cloudwatch_event_permission": True,
-    "aws_cloudwatch_event_target": True,
+    "aws_cloudwatch_event_target": True,  ### TODO
     "aws_cloudwatch_log_data_protection_policy": True,
     "aws_cloudwatch_log_destination_policy": True,
     "aws_cloudwatch_log_metric_filter": True,
@@ -52,7 +53,7 @@ notimplemented = {
     "aws_codeartifact_domain_permissions_policy": True,
     "aws_codeartifact_repository": True,
     "aws_codeartifact_repository_permissions_policy": True,
-    "aws_codebuild_project": True,
+    "aws_codebuild_project": True,  ### TODO
     "aws_codebuild_report_group": True,
     "aws_codebuild_resource_policy": True,
     "aws_codebuild_webhook": True,
@@ -60,19 +61,19 @@ notimplemented = {
     "aws_codecommit_repository": True,
     "aws_codedeploy_app": True,
     "aws_codedeploy_deployment_config": True,
-    "aws_codepipeline": True,
+    "aws_codepipeline": True, ### TODO
     "aws_codepipeline_custom_action_type": True,
     "aws_codepipeline_webhook": True,
     "aws_cognito_identity_pool_provider_principal_tag": True,
     "aws_cognito_identity_pool_roles_attachment": True,
     "aws_cognito_risk_configuration": True,
-    "aws_cognito_user_group": True,
-    "aws_cognito_user_pool_domain": True,
+    "aws_cognito_user_group": True,  ### TODO
+    "aws_cognito_user_pool_domain": True,  ### TODO
     "aws_cognito_user_pool_ui_customization": True,
     "aws_comprehend_document_classifier": True,
     "aws_comprehend_entity_recognizer": True,
     "aws_connect_bot_association": True,
-    "aws_connect_lambda_function_association": True,
+    "aws_connect_lambda_function_association": True, ### TODO
     "aws_connect_user_hierarchy_structure": True,
     "aws_connect_vocabulary": True,
     "aws_controltower_control": True,
@@ -89,9 +90,9 @@ notimplemented = {
     "aws_datasync_location_hdfs": True,
     "aws_datasync_location_nfs": True,
     "aws_datasync_location_object_storage": True,
-    "aws_datasync_location_s3": True,
+    "aws_datasync_location_s3": True,  ### TODO
     "aws_datasync_location_smb": True,
-    "aws_dax_cluster": True,
+    "aws_dax_cluster": True,  ### TODO
     "aws_dax_parameter_group": True,
     "aws_dax_subnet_group": True,
     "aws_db_proxy_default_target_group": True,
@@ -105,7 +106,7 @@ notimplemented = {
 	"aws_devicefarm_test_grid_project": True,
 	"aws_devicefarm_upload": True,
     "aws_directory_service_conditional_forwarder": True,
-    "aws_directory_service_directory": True,
+    "aws_directory_service_directory": True,  ### TODO
     "aws_directory_service_radius_settings": True,
     "aws_directory_service_region": True,
     "aws_directory_service_shared_directory": True,
@@ -128,13 +129,13 @@ notimplemented = {
     "aws_dynamodb_global_table": True,
     "aws_ec2_local_gateway_route": True,
     "aws_ec2_subnet_cidr_reservation": True,
-    "aws_ec2_transit_gateway_route": True,
-    "aws_efs_mount_target": True,
+    "aws_ec2_transit_gateway_route": True,  ### TODO
+    "aws_efs_mount_target": True,  ### TODO
     "aws_efs_replication_configuration": True,
     "aws_elasticache_user_group_association": True,
     "aws_elastictranscoder_preset": True,
     "aws_emr_block_public_access_configuration": True,
-    "aws_emr_instance_fleet": True,
+    "aws_emr_instance_fleet": True,  ### TODO
     "aws_emr_instance_group": True,
     "aws_emr_managed_scaling_policy": True,
     "aws_emr_security_configuration": True,
@@ -156,8 +157,8 @@ notimplemented = {
     "aws_gamelift_fleet": True,
     "aws_gamelift_game_session_queue": True,
     "aws_glacier_vault_lock": True,
-    "aws_glue_classifier": True,
-    "aws_glue_partition": True,
+    "aws_glue_classifier": True, ### TODO
+    "aws_glue_partition": True,  ### TODO
     "aws_glue_partition_index": True,
     "aws_glue_resource_policy": True,
     "aws_glue_user_defined_function": True,
@@ -165,7 +166,7 @@ notimplemented = {
     "aws_guardduty_organization_configuration": True,
     "aws_inspector2_delegated_admin_account": True,
     "aws_inspector2_member_association": True,
-    "aws_inspector_assessment_target": True,
+    "aws_inspector_assessment_target": True,  ### TODO
     "aws_inspector_assessment_template": True,
     "aws_internet_gateway_attachment": True,
     "aws_iot_authorizer": True,
@@ -174,7 +175,7 @@ notimplemented = {
     "aws_iot_event_configurations": True,
     "aws_iot_provisioning_template": True,
     "aws_iot_role_alias": True,
-    "aws_iot_thing_group": True,
+    "aws_iot_thing_group": True,  ### TODO
     "aws_iot_thing_group_membership": True,
     "aws_iot_thing_type": True,
     "aws_iot_topic_rule_destination": True,
@@ -190,7 +191,7 @@ notimplemented = {
     "aws_licensemanager_grant": True,
     "aws_licensemanager_grant_accepter": True,
     "aws_lightsail_bucket_resource_access": True,
-    "aws_lightsail_database": True,
+    "aws_lightsail_database": True,  ### TODO
     "aws_lightsail_disk": True,
     "aws_lightsail_disk_attachment": True,
     "aws_lightsail_domain_entry": True,
@@ -209,7 +210,7 @@ notimplemented = {
     "aws_location_tracker_association": True,
     "aws_macie2_account": True,
     "aws_macie2_classification_export_configuration": True,
-    "aws_macie2_classification_job": True,
+    "aws_macie2_classification_job": True,  ### TODO
     "aws_macie2_custom_data_identifier": True,
     "aws_macie2_findings_filter": True,
     "aws_macie2_invitation_accepter": True,
@@ -217,21 +218,21 @@ notimplemented = {
     "aws_macie2_organization_admin_account": True,
     "aws_media_store_container_policy": True,
     "aws_memorydb_acl": True,
-    "aws_memorydb_cluster": True,
+    "aws_memorydb_cluster": True,   ### TODO
     "aws_memorydb_parameter_group": True,
     "aws_memorydb_snapshot": True,
     "aws_memorydb_subnet_group": True,
     "aws_memorydb_user": True,
-    "aws_msk_cluster": True,
+    "aws_msk_cluster": True,  ### TODO
     "aws_msk_cluster_policy": True,
     "aws_msk_serverless_cluster": True,
-    "aws_mskconnect_connector": True,
+    "aws_mskconnect_connector": True,  ### TODO
     "aws_mskconnect_custom_plugin": True,
     "aws_mskconnect_worker_configuration": True,
     "aws_neptune_cluster_instance": True,
     "aws_neptune_event_subscription": True,
     "aws_networkfirewall_logging_configuration": True,
-    "aws_networkfirewall_resource_policy": True,
+    "aws_networkfirewall_resource_policy": True, ### TODO
     "aws_networkmanager_connect_attachment": True,
     "aws_networkmanager_connection": True,
     "aws_networkmanager_core_network_policy_attachment": True,
@@ -250,7 +251,7 @@ notimplemented = {
     "aws_oam_link": True,
     "aws_oam_sink": True,
     "aws_oam_sink_policy": True,
-    "aws_opensearch_inbound_connection_accepter": True,
+    "aws_opensearch_inbound_connection_accepter": True,  ### TODO
     "aws_opensearch_outbound_connection": True,
     "aws_opensearch_package": True,
     "aws_opensearchserverless_access_policy": True,
@@ -279,12 +280,12 @@ notimplemented = {
     "aws_quicksight_folder_membership": True,
     "aws_ram_principal_association": True,
     "aws_ram_resource_association": True,
-    "aws_ram_resource_share": True,
+    "aws_ram_resource_share": True,  ### TODO
     "aws_ram_resource_share_accepter": True,
     "aws_ram_sharing_with_organization": True,
     "aws_rbin_rule": True,
     "aws_redshiftserverless_endpoint_access": True,
-    "aws_redshiftserverless_resource_policy": True,
+    "aws_redshiftserverless_resource_policy": True,  ### TODO
     "aws_redshiftserverless_snapshot": True,
     "aws_redshiftserverless_usage_limit": True,
     "aws_resourceexplorer2_index": True,
@@ -311,16 +312,16 @@ notimplemented = {
     "aws_s3control_bucket": True,
     "aws_sagemaker_code_repository": True,
     "aws_sagemaker_data_quality_job_definition": True,
-    "aws_sagemaker_device": True,
+    "aws_sagemaker_device": True,  
     "aws_sagemaker_device_fleet": True,
     "aws_sagemaker_endpoint_configuration": True,
-    "aws_sagemaker_feature_group": True,
+    "aws_sagemaker_feature_group": True,  ### TODO
     "aws_sagemaker_flow_definition": True,
     "aws_sagemaker_human_task_ui": True,
     "aws_sagemaker_model_package_group": True,
     "aws_sagemaker_monitoring_schedule": True,
-    "aws_sagemaker_pipeline": True,
-    "aws_sagemaker_servicecatalog_portfolio_status": True,
+    "aws_sagemaker_pipeline": True,  ### TODO
+    "aws_sagemaker_servicecatalog_portfolio_status": True, ### TODO
     "aws_schemas_registry_policy": True,
     "aws_securityhub_finding_aggregator": True,
     "aws_securityhub_insight": True,
@@ -329,7 +330,7 @@ notimplemented = {
     "aws_securityhub_organization_admin_account": True,
     "aws_securityhub_product_subscription": True,
     "aws_securityhub_standards_subscription": True,
-    "aws_securitylake_data_lake": True,
+    "aws_securitylake_data_lake": True,  ### TODO
     "aws_servicecatalog_budget_resource_association": True,
     "aws_servicecatalog_portfolio_share": True,
     "aws_servicecatalog_principal_portfolio_association": True,
@@ -403,12 +404,39 @@ notimplemented = {
 	"aws_api_gateway_usage_plan": True,
 	"aws_api_gateway_usage_plan_key": True,
 	"aws_api_gateway_vpc_link": True,
+### old WAF
+	"aws_waf_byte_match_set": True,
+	"aws_waf_geo_match_set": True,
+	"aws_waf_ipset": True,
+	"aws_waf_rate_based_rule": True,
+	"aws_waf_regex_match_set": True,
+	"aws_waf_regex_pattern_set": True,
+	"aws_waf_rule": True,
+	"aws_waf_rule_group": True,
+	"aws_waf_size_constraint_set": True,
+	"aws_waf_sql_injection_match_set": True,
+	"aws_waf_web_acl": True,
+	"aws_waf_xss_match_set": True,
+	"aws_wafregional_byte_match_set": True,
+	"aws_wafregional_geo_match_set": True,
+	"aws_wafregional_ipset": True,
+	"aws_wafregional_rate_based_rule": True,
+	"aws_wafregional_regex_match_set": True,
+	"aws_wafregional_regex_pattern_set": True,
+	"aws_wafregional_rule": True,
+	"aws_wafregional_rule_group": True,
+	"aws_wafregional_size_constraint_set": True,
+	"aws_wafregional_sql_injection_match_set": True,
+	"aws_wafregional_web_acl": True,
+	"aws_wafregional_web_acl_association": True,
+	"aws_wafregional_xss_match_set": True,
     "aws_auditmanager_account_registration": True,
-	"aws_auditmanager_assessment": True,
+	"aws_auditmanager_assessment": True,   ### TODO
 	"aws_auditmanager_assessment_delegation": True,
 	"aws_auditmanager_assessment_report": True,
 	"aws_auditmanager_control": True,
 	"aws_auditmanager_framework": True,
 	"aws_auditmanager_framework_share": True,
-	"aws_auditmanager_organization_admin_account_registration": True
+	"aws_auditmanager_organization_admin_account_registration": True,
+    "aws_ce_cost_allocation_tag": True ### TODO
 }

@@ -1,0 +1,1773 @@
+
+err=OperationNotPageableError('Operation cannot be paginated: get_model_invocation_logging_configuration')
+calling non paginated fn get_model_invocation_logging_configuration id=None
+
+ERROR: in call_boto3 clfn=bedrock descfn=get_model_invocation_logging_configuration
+topkey=loggingConfig id=None
+e=KeyError('loggingConfig') [e1]  common.py 910
+
+ERROR: in getresource clfn=bedrock descfn=get_model_invocation_logging_configuration
+topkey=loggingConfig id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_bedrock_model_invocation_logging_configuration id=None
+
+err=OperationNotPageableError('Operation cannot be paginated: list_cost_allocation_tags')
+calling non paginated fn list_cost_allocation_tags id=None
+id None
+WARNING: NOT IMPLEMENTED YET for type: aws_ce_cost_category
+err=OperationNotPageableError('Operation cannot be paginated: list_voice_connectors')
+calling non paginated fn list_voice_connectors id=None
+id None
+No aws_chime_voice_connector found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: list_voice_connector_groups')
+calling non paginated fn list_voice_connector_groups id=None
+id None
+
+No aws_chimesdkvoice_sip_rule found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: list_voice_profile_domains')
+calling non paginated fn list_voice_profile_domains id=None
+id None
+
+No aws_cloudformation_type found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: list_cache_policies')
+calling non paginated fn list_cache_policies id=None
+id None
+
+ERROR: in getresource clfn=cloudfront descfn=list_cache_policies
+topkey=CachePolicyList id=None
+e=TypeError('string indices must be integers') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_cloudfront_cache_policy id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_continuous_deployment_policies')
+calling non paginated fn list_continuous_deployment_policies id=None
+
+ERROR: in call_boto3 clfn=cloudfront descfn=list_continuous_deployment_policies
+topkey=ContinuousDeploymentPolicies id=None
+e=KeyError('ContinuousDeploymentPolicies') [e1]  common.py 910
+
+ERROR: in getresource clfn=cloudfront descfn=list_continuous_deployment_policies
+topkey=ContinuousDeploymentPolicies id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_cloudfront_continuous_deployment_policy id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_field_level_encryption_configs')
+calling non paginated fn list_field_level_encryption_configs id=None
+
+ERROR: in call_boto3 clfn=cloudfront descfn=list_field_level_encryption_configs
+topkey=FieldLevelEncryptionConfigs id=None
+e=KeyError('FieldLevelEncryptionConfigs') [e1]  common.py 910
+
+ERROR: in getresource clfn=cloudfront descfn=list_field_level_encryption_configs
+topkey=FieldLevelEncryptionConfigs id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_cloudfront_field_level_encryption_config id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_field_level_encryption_profiles')
+calling non paginated fn list_field_level_encryption_profiles id=None
+id None
+
+ERROR: in getresource clfn=cloudfront descfn=list_field_level_encryption_profiles
+topkey=FieldLevelEncryptionProfileList id=None
+e=TypeError('string indices must be integers') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_cloudfront_field_level_encryption_profile id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_functions')
+calling non paginated fn list_functions id=None
+id None
+
+ERROR: in getresource clfn=cloudfront descfn=list_functions
+topkey=FunctionList id=None
+e=TypeError('string indices must be integers') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_cloudfront_function id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_key_groups')
+calling non paginated fn list_key_groups id=None
+id None
+
+ERROR: in getresource clfn=cloudfront descfn=list_key_groups
+topkey=KeyGroupList id=None
+e=TypeError('string indices must be integers') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_cloudfront_key_group id=None
+WARNING: NOT IMPLEMENTED YET for type: aws_cloudfront_monitoring_subscription
+err=OperationNotPageableError('Operation cannot be paginated: list_origin_access_controls')
+calling non paginated fn list_origin_access_controls id=None
+id None
+
+ERROR: in getresource clfn=cloudfront descfn=list_origin_access_controls
+topkey=OriginAccessControlList id=None
+e=TypeError('string indices must be integers') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_cloudfront_origin_access_control id=None
+WARNING: NOT IMPLEMENTED YET for type: aws_cloudfront_origin_access_identity
+
+ERROR: in getresource clfn=cloudfront descfn=list_cloud_front_origin_access_identities
+topkey=CloudFrontOriginAccessIdentityList id=None
+e=TypeError('string indices must be integers') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_cloudfront_origin_request_policy id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_public_keys')
+calling non paginated fn list_public_keys id=None
+id None
+
+ERROR: in getresource clfn=cloudfront descfn=list_public_keys
+topkey=PublicKeyList id=None
+e=TypeError('string indices must be integers') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_cloudfront_public_key id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_realtime_log_configs')
+calling non paginated fn list_realtime_log_configs id=None
+id None
+
+ERROR: in getresource clfn=cloudfront descfn=list_realtime_log_configs
+topkey=RealtimeLogConfigs id=None
+e=TypeError('string indices must be integers') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_cloudfront_realtime_log_config id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_response_headers_policies')
+calling non paginated fn list_response_headers_policies id=None
+id None
+
+ERROR: in getresource clfn=cloudfront descfn=list_response_headers_policies
+topkey=ResponseHeadersPolicyList id=None
+e=TypeError('string indices must be integers') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_cloudfront_response_headers_policy id=None
+No aws_cloudhsm_v2_cluster found -empty response
+No aws_cloudhsm_v2_hsm found -empty response
+WARNING: NOT IMPLEMENTED YET for type: aws_cloudsearch_domain
+WARNING: NOT IMPLEMENTED YET for type: aws_cloudsearch_domain_service_access_policy
+err=OperationNotPageableError('Operation cannot be paginated: list_event_data_stores')
+calling non paginated fn list_event_data_stores id=None
+id None
+No aws_cloudtrail_event_data_store found -empty response
+WARNING: NOT IMPLEMENTED YET for type: aws_cloudwatch_composite_alarm
+WARNING: NOT IMPLEMENTED YET for type: aws_cloudwatch_dashboard
+WARNING: NOT IMPLEMENTED YET for type: aws_cloudwatch_event_api_destination
+WARNING: NOT IMPLEMENTED YET for type: aws_cloudwatch_event_archive
+err=OperationNotPageableError('Operation cannot be paginated: list_event_buses')
+calling non paginated fn list_event_buses id=None
+id None
+
+No aws_cloudwatch_metric_alarm found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: list_metric_streams')
+calling non paginated fn list_metric_streams id=None
+id None
+
+err=OperationNotPageableError('Operation cannot be paginated: list_source_credentials')
+calling non paginated fn list_source_credentials id=None
+
+ERROR: in call_boto3 clfn=codebuild descfn=list_source_credentials
+topkey=SourceCredentialsInfos id=None
+e=KeyError('SourceCredentialsInfos') [e1]  common.py 910
+
+ERROR: in getresource clfn=codebuild descfn=list_source_credentials
+topkey=SourceCredentialsInfos id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_codebuild_source_credential id=None
+WARNING: NOT IMPLEMENTED YET for type: aws_codebuild_webhook
+WARNING: Terraform cannot import type: aws_codecatalyst_dev_environment
+WARNING: aws_codecatalyst_project cannot have null id must pass parameter spaceName
+WARNING: aws_codecatalyst_source_repository cannot have null id must pass parameter spaceName,projectName
+err=OperationNotPageableError('Operation cannot be paginated: list_approval_rule_templates')
+calling non paginated fn list_approval_rule_templates id=None
+
+ERROR: in call_boto3 clfn=codecommit descfn=list_approval_rule_templates
+topkey=ApprovalRuleTemplates id=None
+e=KeyError('ApprovalRuleTemplates') [e1]  common.py 910
+
+ERROR: in getresource clfn=codecommit descfn=list_approval_rule_templates
+topkey=ApprovalRuleTemplates id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_codecommit_approval_rule_template id=None
+
+err=OperationNotPageableError('Operation cannot be paginated: list_profiling_groups')
+calling non paginated fn list_profiling_groups id=None
+
+ERROR: in call_boto3 clfn=codeguruprofiler descfn=list_profiling_groups
+topkey=ProfilingGroups id=None
+e=KeyError('ProfilingGroups') [e1]  common.py 910
+
+ERROR: in getresource clfn=codeguruprofiler descfn=list_profiling_groups
+topkey=ProfilingGroups id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_codeguruprofiler_profiling_group id=None
+WARNING: Terraform cannot import type: aws_codegurureviewer_repository_association
+WARNING: NOT IMPLEMENTED YET for type: aws_codepipeline
+WARNING: NOT IMPLEMENTED YET for type: aws_codepipeline_custom_action_type
+WARNING: NOT IMPLEMENTED YET for type: aws_codepipeline_webhook
+err=OperationNotPageableError('Operation cannot be paginated: list_connections')
+calling non paginated fn list_connections id=None
+id None
+err=OperationNotPageableError('Operation cannot be paginated: list_hosts')
+calling non paginated fn list_hosts id=None
+id None
+No aws_codestarconnections_host found -empty response
+No aws_codestarnotifications_notification_rule found -empty response
+ParamValidationError 1 in common.call_boto3: type=aws_cognito_identity_pool clfn=cognito-identity
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "MaxResults"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=cognito-identity descfn=list_identity_pools
+topkey=IdentityPools id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=cognito-identity descfn=list_identity_pools
+topkey=IdentityPools id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_cognito_identity_pool id=None
+WARNING: NOT IMPLEMENTED YET for type: aws_cognito_identity_pool_provider_principal_tag
+WARNING: NOT IMPLEMENTED YET for type: aws_cognito_identity_pool_roles_attachment
+ParamValidationError 1 in common.call_boto3: type=aws_cognito_identity_provider clfn=cognito-idp
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "UserPoolId"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=cognito-idp descfn=list_identity_providers
+topkey=IdentityProviders id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=cognito-idp descfn=list_identity_providers
+topkey=IdentityProviders id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_cognito_identity_provider id=None
+ParamValidationError 1 in common.call_boto3: type=aws_cognito_managed_user_pool_client clfn=cognito-idp
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "UserPoolId"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=cognito-idp descfn=list_user_pool_clients
+topkey=UserPoolClients id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=cognito-idp descfn=list_user_pool_clients
+topkey=UserPoolClients id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_cognito_managed_user_pool_client id=None
+
+ERROR: in call_boto3 clfn=cognito descfn=list_resource_servers
+topkey=ResourceServers id=None
+e=UnknownServiceError("Unknown service: 'cognito'. Valid service names are: accessanalyzer, account, acm, acm-pca, alexaforbusiness, amp, amplify, amplifybackend, amplifyuibuilder, apigateway, apigatewaymanagementapi, apigatewayv2, appconfig, appconfigdata, appfabric, appflow, appintegrations, application-autoscaling, application-insights, applicationcostprofiler, appmesh, apprunner, appstream, appsync, arc-zonal-shift, artifact, athena, auditmanager, autoscaling, autoscaling-plans, b2bi, backup, backup-gateway, backupstorage, batch, bcm-data-exports, bedrock, bedrock-agent, bedrock-agent-runtime, bedrock-runtime, billingconductor, braket, budgets, ce, chatbot, chime, chime-sdk-identity, chime-sdk-media-pipelines, chime-sdk-meetings, chime-sdk-messaging, chime-sdk-voice, cleanrooms, cleanroomsml, cloud9, cloudcontrol, clouddirectory, cloudformation, cloudfront, cloudfront-keyvaluestore, cloudhsm, cloudhsmv2, cloudsearch, cloudsearchdomain, cloudtrail, cloudtrail-data, cloudwatch, codeartifact, codebuild, codecatalyst, codecommit, codedeploy, codeguru-reviewer, codeguru-security, codeguruprofiler, codepipeline, codestar, codestar-connections, codestar-notifications, cognito-identity, cognito-idp, cognito-sync, comprehend, comprehendmedical, compute-optimizer, config, connect, connect-contact-lens, connectcampaigns, connectcases, connectparticipant, controltower, cost-optimization-hub, cur, customer-profiles, databrew, dataexchange, datapipeline, datasync, datazone, dax, detective, devicefarm, devops-guru, directconnect, discovery, dlm, dms, docdb, docdb-elastic, drs, ds, dynamodb, dynamodbstreams, ebs, ec2, ec2-instance-connect, ec2-mercury, ecr, ecr-public, ecs, efs, eks, eks-auth, elastic-inference, elasticache, elasticbeanstalk, elastictranscoder, elb, elbv2, emr, emr-containers, emr-serverless, entityresolution, es, events, evidently, finspace, finspace-data, firehose, fis, fms, forecast, forecastquery, frauddetector, freetier, fsx, gamelift, glacier, globalaccelerator, glue, grafana, greengrass, greengrassv2, groundstation, guardduty, health, healthlake, honeycode, iam, identitystore, imagebuilder, importexport, inspector, inspector-scan, inspector2, internetmonitor, iot, iot-data, iot-jobs-data, iot1click-devices, iot1click-projects, iotanalytics, iotdeviceadvisor, iotevents, iotevents-data, iotfleethub, iotfleetwise, iotsecuretunneling, iotsitewise, iotthingsgraph, iottwinmaker, iotwireless, ivs, ivs-realtime, ivschat, kafka, kafkaconnect, kendra, kendra-ranking, keyspaces, kinesis, kinesis-video-archived-media, kinesis-video-media, kinesis-video-signaling, kinesis-video-webrtc-storage, kinesisanalytics, kinesisanalyticsv2, kinesisvideo, kms, lakeformation, lambda, launch-wizard, lex-models, lex-runtime, lexv2-models, lexv2-runtime, license-manager, license-manager-linux-subscriptions, license-manager-user-subscriptions, lightsail, location, logs, lookoutequipment, lookoutmetrics, lookoutvision, m2, machinelearning, macie2, managedblockchain, managedblockchain-query, marketplace-agreement, marketplace-catalog, marketplace-deployment, marketplace-entitlement, marketplacecommerceanalytics, mediaconnect, mediaconvert, medialive, mediapackage, mediapackage-vod, mediapackagev2, mediastore, mediastore-data, mediatailor, medical-imaging, memorydb, meteringmarketplace, mgh, mgn, migration-hub-refactor-spaces, migrationhub-config, migrationhuborchestrator, migrationhubstrategy, mobile, mq, mturk, mwaa, neptune, neptune-graph, neptunedata, network-firewall, networkmanager, networkmonitor, nimble, oam, omics, opensearch, opensearchserverless, opsworks, opsworkscm, organizations, osis, outposts, panorama, payment-cryptography, payment-cryptography-data, pca-connector-ad, personalize, personalize-events, personalize-runtime, pi, pinpoint, pinpoint-email, pinpoint-sms-voice, pinpoint-sms-voice-v2, pipes, polly, pricing, privatenetworks, proton, qbusiness, qconnect, qldb, qldb-session, quicksight, ram, rbin, rds, rds-data, redshift, redshift-data, redshift-serverless, rekognition, repostspace, resiliencehub, resource-explorer-2, resource-groups, resourcegroupstaggingapi, robomaker, rolesanywhere, route53, route53-recovery-cluster, route53-recovery-control-config, route53-recovery-readiness, route53domains, route53resolver, rum, s3, s3control, s3outposts, sagemaker, sagemaker-a2i-runtime, sagemaker-edge, sagemaker-featurestore-runtime, sagemaker-geospatial, sagemaker-metrics, sagemaker-runtime, savingsplans, scheduler, schemas, sdb, secretsmanager, securityhub, securitylake, serverlessrepo, service-quotas, servicecatalog, servicecatalog-appregistry, servicediscovery, ses, sesv2, shield, signer, simspaceweaver, sms, sms-voice, snow-device-management, snowball, sns, sqs, ssm, ssm-contacts, ssm-incidents, ssm-sap, sso, sso-admin, sso-oidc, stepfunctions, storagegateway, sts, supplychain, support, support-app, swf, synthetics, textract, timestream-influxdb, timestream-query, timestream-write, tnb, transcribe, transfer, translate, trustedadvisor, verifiedpermissions, voice-id, vpc-lattice, vpc-lattice-preview, vpc-service-network, waf, waf-regional, wafv2, wellarchitected, wisdom, workdocs, worklink, workmail, workmailmessageflow, workspaces, workspaces-thin-client, workspaces-web, xray") [e1]  common.py 784
+
+ERROR: in getresource clfn=cognito descfn=list_resource_servers
+topkey=ResourceServers id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_cognito_resource_server id=None
+WARNING: NOT IMPLEMENTED YET for type: aws_cognito_risk_configuration
+ParamValidationError 1 in common.call_boto3: type=aws_cognito_user clfn=cognito-idp
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "UserPoolId"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=cognito-idp descfn=list_users
+topkey=Users id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=cognito-idp descfn=list_users
+topkey=Users id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_cognito_user id=None
+WARNING: NOT IMPLEMENTED YET for type: aws_cognito_user_group
+WARNING: Terraform cannot import type: aws_cognito_user_in_group
+
+
+ERROR: in call_boto3 clfn=config descfn=describe_aggregation_authorizations
+topkey=AggregateAuthorizations id=None
+e=KeyError('AggregateAuthorizations') [e1]  common.py 863
+
+ERROR: in call_boto3 clfn=config descfn=describe_aggregation_authorizations
+topkey=AggregateAuthorizations id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 938
+
+ERROR: in getresource clfn=config descfn=describe_aggregation_authorizations
+topkey=AggregateAuthorizations id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_config_aggregate_authorization id=None
+No aws_config_configuration_aggregator found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: describe_configuration_recorders')
+calling non paginated fn describe_configuration_recorders id=None
+id None
+err=OperationNotPageableError('Operation cannot be paginated: describe_configuration_recorder_status')
+calling non paginated fn describe_configuration_recorder_status id=None
+id None
+No aws_config_conformance_pack found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: describe_delivery_channels')
+calling non paginated fn describe_delivery_channels id=None
+id None
+No aws_config_organization_conformance_pack found -empty response
+
+err=OperationNotPageableError('Operation cannot be paginated: describe_customer_gateways')
+calling non paginated fn describe_customer_gateways id=None
+id None
+No aws_customer_gateway found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: list_domains')
+calling non paginated fn list_domains id=None
+
+ERROR: in call_boto3 clfn=customer-profiles descfn=list_domains
+topkey=Domains id=None
+e=KeyError('Domains') [e1]  common.py 910
+
+ERROR: in getresource clfn=customer-profiles descfn=list_domains
+topkey=Domains id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_customerprofiles_domain id=None
+
+ERROR: in call_boto3 clfn=customer-profiles descfn=list_profiles
+topkey=Profiles id=None
+e=KeyError('list_profiles') [e1]  common.py 787
+
+ERROR: in call_boto3 clfn=customer-profiles descfn=list_profiles
+topkey=Profiles id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 938
+
+ERROR: in getresource clfn=customer-profiles descfn=list_profiles
+topkey=Profiles id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_customerprofiles_profile id=None
+No aws_dataexchange_data_set found -empty response
+WARNING: NOT IMPLEMENTED YET for type: aws_dataexchange_revision
+WARNING: NOT IMPLEMENTED YET for type: aws_datapipeline_pipeline
+WARNING: NOT IMPLEMENTED YET for type: aws_datapipeline_pipeline_definition
+
+
+ERROR: in call_boto3 clfn=rds descfn=describe_db_instance_role_associations
+topkey=DBInstanceRoleAssociations id=None
+e=KeyError('describe_db_instance_role_associations') [e1]  common.py 787
+
+ERROR: in call_boto3 clfn=rds descfn=describe_db_instance_role_associations
+topkey=DBInstanceRoleAssociations id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 938
+
+ERROR: in getresource clfn=rds descfn=describe_db_instance_role_associations
+topkey=DBInstanceRoleAssociations id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_db_instance_role_association id=None
+No aws_db_proxy found -empty response
+WARNING: NOT IMPLEMENTED YET for type: aws_db_proxy_default_target_group
+No aws_db_proxy_endpoint found -empty response
+WARNING: aws_db_proxy_target cannot have null id must pass parameter DBProxyName
+No aws_db_snapshot found -empty response
+WARNING: aws_db_snapshot_copy cannot have null id must pass parameter DBSnapshotIdentifier
+WARNING: NOT IMPLEMENTED YET for type: aws_default_vpc_dhcp_options
+err=OperationNotPageableError('Operation cannot be paginated: list_graphs')
+calling non paginated fn list_graphs id=None
+
+ERROR: in call_boto3 clfn=detective descfn=list_graphs
+topkey=Graphs id=None
+e=KeyError('Graphs') [e1]  common.py 910
+
+ERROR: in getresource clfn=detective descfn=list_graphs
+topkey=Graphs id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_detective_graph id=None
+
+err=OperationNotPageableError('Operation cannot be paginated: describe_replication_configs')
+calling non paginated fn describe_replication_configs id=None
+id None
+No aws_dms_replication_config found -empty response
+Empty response for aws_dms_replication_instance id=None returning
+No aws_dms_replication_subnet_group found -empty response
+No aws_dms_replication_task found -empty response
+WARNING: NOT IMPLEMENTED YET for type: aws_dms_s3_endpoint
+No aws_docdb_event_subscription found -empty response
+No aws_docdb_global_cluster found -empty response
+WARNING: NOT IMPLEMENTED YET for type: aws_docdbelastic_cluster
+WARNING: Terraform cannot import type: aws_dx_bgp_peer
+err=OperationNotPageableError('Operation cannot be paginated: describe_connections')
+calling non paginated fn describe_connections id=None
+
+ERROR: in call_boto3 clfn=directconnect descfn=describe_connections
+topkey=Connections id=None
+e=KeyError('Connections') [e1]  common.py 910
+
+ERROR: in getresource clfn=directconnect descfn=describe_connections
+topkey=Connections id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_dx_connection id=None
+
+err=OperationNotPageableError('Operation cannot be paginated: describe_lags')
+calling non paginated fn describe_lags id=None
+
+ERROR: in call_boto3 clfn=directconnect descfn=describe_lags
+topkey=Lags id=None
+e=KeyError('Lags') [e1]  common.py 910
+
+ERROR: in getresource clfn=directconnect descfn=describe_lags
+topkey=Lags id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_dx_lag id=None
+
+err=OperationNotPageableError('Operation cannot be paginated: get_ebs_default_kms_key_id')
+calling non paginated fn get_ebs_default_kms_key_id id=None
+id None
+
+ERROR: in getresource clfn=ec2 descfn=get_ebs_default_kms_key_id
+topkey=KmsKeyId id=None
+e=TypeError('string indices must be integers') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ebs_default_kms_key id=None
+err=OperationNotPageableError('Operation cannot be paginated: get_ebs_encryption_by_default')
+calling non paginated fn get_ebs_encryption_by_default id=None
+id None
+
+ERROR: in call_boto3 clfn=ec2 descfn=get_ebs_encryption_by_default
+topkey=EbsEncryptionByDefault id=None
+e=TypeError("object of type 'bool' has no len()") [e1]  common.py 941
+
+ERROR: in getresource clfn=ec2 descfn=get_ebs_encryption_by_default
+topkey=EbsEncryptionByDefault id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ebs_encryption_by_default id=None
+WARNING: aws_ebs_snapshot cannot have null id must pass parameter SnapshotId
+WARNING: Terraform cannot import type: aws_ebs_snapshot_copy
+WARNING: Terraform cannot import type: aws_ebs_snapshot_import
+No aws_ebs_volume found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: describe_availability_zones')
+calling non paginated fn describe_availability_zones id=None
+id None
+
+
+WARNING: aws_ec2_transit_gateway_policy_table cannot have null id must pass parameter TransitGatewayPolicyTableId
+ParamValidationError 1 in common.call_boto3: type=aws_ec2_transit_gateway_policy_table_association clfn=ec2
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "TransitGatewayPolicyTableId"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=ec2 descfn=get_transit_gateway_policy_table_associations
+topkey=Associations id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=ec2 descfn=get_transit_gateway_policy_table_associations
+topkey=Associations id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ec2_transit_gateway_policy_table_association id=None
+ParamValidationError 1 in common.call_boto3: type=aws_ec2_transit_gateway_prefix_list_reference clfn=ec2
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "TransitGatewayRouteTableId"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=ec2 descfn=get_transit_gateway_prefix_list_references
+topkey=TransitGatewayPrefixListReferences id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=ec2 descfn=get_transit_gateway_prefix_list_references
+topkey=TransitGatewayPrefixListReferences id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ec2_transit_gateway_prefix_list_reference id=None
+WARNING: NOT IMPLEMENTED YET for type: aws_ec2_transit_gateway_route
+No aws_ec2_transit_gateway_route_table found -empty response
+ParamValidationError 1 in common.call_boto3: type=aws_ec2_transit_gateway_route_table_association clfn=ec2
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "TransitGatewayPolicyTableId"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=ec2 descfn=get_transit_gateway_policy_table_associations
+topkey=Associations id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=ec2 descfn=get_transit_gateway_policy_table_associations
+topkey=Associations id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ec2_transit_gateway_route_table_association id=None
+No aws_ec2_transit_gateway_vpc_attachment found -empty response
+No aws_ec2_transit_gateway_vpc_attachment_accepter found -empty response
+WARNING: aws_ecr_lifecycle_policy cannot have null id must pass parameter repositoryName
+No aws_ecr_pull_through_cache_rule found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: get_registry_policy')
+calling non paginated fn get_registry_policy id=None
+
+ERROR: in call_boto3 clfn=ecr descfn=get_registry_policy
+topkey= id=None
+e=RegistryPolicyNotFoundException("An error occurred (RegistryPolicyNotFoundException) when calling the GetRegistryPolicy operation: Registry policy does not exist in the registry with id '566972129213'") [e1]  common.py 909
+
+ERROR: in getresource clfn=ecr descfn=get_registry_policy
+topkey= id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ecr_registry_policy id=None
+err=OperationNotPageableError('Operation cannot be paginated: get_registry_scanning_configuration')
+calling non paginated fn get_registry_scanning_configuration id=None
+
+ERROR: in call_boto3 clfn=ecr descfn=get_registry_scanning_configuration
+topkey= id=None
+e=KeyError('') [e1]  common.py 910
+
+ERROR: in getresource clfn=ecr descfn=get_registry_scanning_configuration
+topkey= id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ecr_registry_scanning_configuration id=None
+err=OperationNotPageableError('Operation cannot be paginated: get_registry_policy')
+calling non paginated fn get_registry_policy id=None
+
+ERROR: in call_boto3 clfn=ecr descfn=get_registry_policy
+topkey= id=None
+e=RegistryPolicyNotFoundException("An error occurred (RegistryPolicyNotFoundException) when calling the GetRegistryPolicy operation: Registry policy does not exist in the registry with id '566972129213'") [e1]  common.py 909
+
+ERROR: in getresource clfn=ecr descfn=get_registry_policy
+topkey= id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ecr_replication_configuration id=None
+WARNING: aws_ecr_repository_policy cannot have null id must pass parameter repositoryName
+WARNING: aws_ecrpublic_repository_policy cannot have null id must pass parameter repositoryName
+No aws_ecs_account_setting_default found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: describe_capacity_providers')
+calling non paginated fn describe_capacity_providers id=None
+id None
+err=OperationNotPageableError('Operation cannot be paginated: describe_clusters')
+calling non paginated fn describe_clusters id=None
+id None
+No aws_ecs_cluster_capacity_providers found -empty response
+WARNING: aws_ecs_service cannot have null id must pass parameter cluster
+WARNING: aws_ecs_tag cannot have null id must pass parameter resourceArn
+WARNING: aws_ecs_task_set cannot have null id must pass parameter cluster,service
+No aws_efs_access_point found -empty response
+WARNING: aws_efs_backup_policy cannot have null id must pass parameter FileSystemId
+No aws_efs_file_system found -empty response
+WARNING: aws_efs_file_system_policy cannot have null id must pass parameter FileSystemId
+WARNING: NOT IMPLEMENTED YET for type: aws_efs_mount_target
+WARNING: NOT IMPLEMENTED YET for type: aws_efs_replication_configuration
+No aws_egress_only_internet_gateway found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: describe_addresses')
+calling non paginated fn describe_addresses id=None
+id None
+err=OperationNotPageableError('Operation cannot be paginated: describe_applications')
+calling non paginated fn describe_applications id=None
+id None
+No aws_elastic_beanstalk_application found -empty response
+WARNING: Terraform cannot import type: aws_elastic_beanstalk_application_version
+WARNING: Terraform cannot import type: aws_elastic_beanstalk_configuration_template
+No aws_elastic_beanstalk_environment found -empty response
+No aws_elasticache_cluster found -empty response
+No aws_elasticache_global_replication_group found -empty response
+No aws_elasticache_replication_group found -empty response
+No aws_elasticache_subnet_group found -empty response
+No aws_elasticache_user_group found -empty response
+WARNING: NOT IMPLEMENTED YET for type: aws_elasticache_user_group_association
+WARNING: aws_elasticsearch_domain cannot have null id must pass parameter DomainNames
+WARNING: Terraform cannot import type: aws_elasticsearch_domain_policy
+
+err=OperationNotPageableError('Operation cannot be paginated: list_environments')
+calling non paginated fn list_environments id=None
+
+ERROR: in call_boto3 clfn=finspace descfn=list_environments
+topkey=Environments id=None
+e=KeyError('Environments') [e1]  common.py 910
+
+ERROR: in getresource clfn=finspace descfn=list_environments
+topkey=Environments id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_finspace_kx_environment id=None
+WARNING: NOT IMPLEMENTED YET for type: aws_finspace_kx_scaling_group
+WARNING: NOT IMPLEMENTED YET for type: aws_finspace_kx_user
+WARNING: NOT IMPLEMENTED YET for type: aws_finspace_kx_volume
+err=OperationNotPageableError('Operation cannot be paginated: list_experiment_templates')
+calling non paginated fn list_experiment_templates id=None
+
+ERROR: in call_boto3 clfn=fis descfn=list_experiment_templates
+topkey=ExperimentTemplates id=None
+e=KeyError('ExperimentTemplates') [e1]  common.py 910
+
+ERROR: in getresource clfn=fis descfn=list_experiment_templates
+topkey=ExperimentTemplates id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_fis_experiment_template id=None
+WARNING: NOT IMPLEMENTED YET for type: aws_fms_admin_account
+WARNING: NOT IMPLEMENTED YET for type: aws_fms_policy
+No aws_fsx_backup found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: describe_data_repository_associations')
+calling non paginated fn describe_data_repository_associations id=None
+
+ERROR: in call_boto3 clfn=fsx descfn=describe_data_repository_associations
+topkey=DataRepositoryAssociations id=None
+e=KeyError('DataRepositoryAssociations') [e1]  common.py 910
+
+ERROR: in getresource clfn=fsx descfn=describe_data_repository_associations
+topkey=DataRepositoryAssociations id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_fsx_data_repository_association id=None
+err=OperationNotPageableError('Operation cannot be paginated: describe_file_caches')
+calling non paginated fn describe_file_caches id=None
+
+
+WARNING: NOT IMPLEMENTED YET for type: aws_gamelift_fleet
+No aws_gamelift_game_server_group found -empty response
+WARNING: NOT IMPLEMENTED YET for type: aws_gamelift_game_session_queue
+No aws_gamelift_script found -empty response
+No aws_glacier_vault found -empty response
+
+
+ID cannot be None
+WARNING: NOT IMPLEMENTED YET for type: aws_glue_classifier
+err=OperationNotPageableError('Operation cannot be paginated: get_data_catalog_encryption_settings')
+calling non paginated fn get_data_catalog_encryption_settings id=None
+id None
+
+ERROR: in getresource clfn=glue descfn=get_data_catalog_encryption_settings
+topkey=DataCatalogEncryptionSettings id=None
+e=TypeError('string indices must be integers') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_glue_data_catalog_encryption_settings id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_data_quality_rulesets')
+calling non paginated fn list_data_quality_rulesets id=None
+
+ERROR: in call_boto3 clfn=glue descfn=list_data_quality_rulesets
+topkey=RulesetNames id=None
+e=KeyError('RulesetNames') [e1]  common.py 910
+
+ERROR: in getresource clfn=glue descfn=list_data_quality_rulesets
+topkey=RulesetNames id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_glue_data_quality_ruleset id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_dev_endpoints')
+calling non paginated fn list_dev_endpoints id=None
+
+ERROR: in call_boto3 clfn=glue descfn=list_dev_endpoints
+topkey=DevEndpoints id=None
+e=KeyError('DevEndpoints') [e1]  common.py 910
+
+ERROR: in getresource clfn=glue descfn=list_dev_endpoints
+topkey=DevEndpoints id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_glue_dev_endpoint id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_ml_transforms')
+calling non paginated fn list_ml_transforms id=None
+id None
+No aws_glue_ml_transform found -empty response
+WARNING: NOT IMPLEMENTED YET for type: aws_glue_partition
+WARNING: NOT IMPLEMENTED YET for type: aws_glue_partition_index
+No aws_glue_registry found -empty response
+WARNING: NOT IMPLEMENTED YET for type: aws_glue_resource_policy
+No aws_glue_schema found -empty response
+Empty response for aws_glue_security_configuration id=None returning
+WARNING: NOT IMPLEMENTED YET for type: aws_glue_user_defined_function
+err=OperationNotPageableError('Operation cannot be paginated: list_workflows')
+calling non paginated fn list_workflows id=None
+id None
+
+ERROR: in getresource clfn=glue descfn=list_workflows
+topkey=Workflows id=None
+e=TypeError('string indices must be integers') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_glue_workflow id=None
+WARNING: Terraform cannot import type: aws_grafana_license_association
+WARNING: Terraform cannot import type: aws_grafana_role_association
+No aws_grafana_workspace found -empty response
+WARNING: Terraform cannot import type: aws_grafana_workspace_api_key
+WARNING: aws_grafana_workspace_saml_configuration cannot have null id must pass parameter workspaceId
+
+ERROR: in getresource clfn=guardduty descfn=list_detectors
+topkey=DetectorIds id=None
+e=TypeError('string indices must be integers') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_guardduty_detector id=None
+WARNING: Terraform cannot import type: aws_guardduty_detector_feature
+WARNING: aws_guardduty_filter cannot have null id must pass parameter DetectorId
+WARNING: NOT IMPLEMENTED YET for type: aws_guardduty_invite_accepter
+WARNING: aws_guardduty_ipset cannot have null id must pass parameter DetectorId
+WARNING: aws_guardduty_member cannot have null id must pass parameter DetectorId
+No aws_guardduty_organization_admin_account found -empty response
+WARNING: NOT IMPLEMENTED YET for type: aws_guardduty_organization_configuration
+WARNING: Terraform cannot import type: aws_guardduty_organization_configuration_feature
+WARNING: aws_guardduty_publishing_destination cannot have null id must pass parameter DetectorId
+WARNING: aws_guardduty_threatintelset cannot have null id must pass parameter DetectorId
+No aws_iam_account_alias found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: get_account_password_policy')
+calling non paginated fn get_account_password_policy id=None
+
+ERROR: in call_boto3 clfn=iam descfn=get_account_password_policy
+topkey=PasswordPolicy id=None
+e=NoSuchEntityException('An error occurred (NoSuchEntity) when calling the GetAccountPasswordPolicy operation: The Password Policy with domain name 566972129213 cannot be found.') [e1]  common.py 909
+
+ERROR: in getresource clfn=iam descfn=get_account_password_policy
+topkey=PasswordPolicy id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_iam_account_password_policy id=None
+WARNING: Terraform cannot import type: aws_iam_group_membership
+WARNING: aws_iam_group_policy cannot have null id must pass parameter UserName
+WARNING: aws_iam_group_policy_attachment cannot have null id must pass parameter GroupName,PolicyName
+err=OperationNotPageableError('Operation cannot be paginated: list_open_id_connect_providers')
+calling non paginated fn list_open_id_connect_providers id=None
+id None
+WARNING: Terraform cannot import type: aws_iam_policy_attachment
+err=OperationNotPageableError('Operation cannot be paginated: list_saml_providers')
+calling non paginated fn list_saml_providers id=None
+id None
+No aws_iam_saml_provider found -empty response
+WARNING: Terraform cannot import type: aws_iam_security_token_service_preferences
+No aws_iam_server_certificate found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: list_service_specific_credentials')
+calling non paginated fn list_service_specific_credentials id=None
+id None
+No aws_iam_service_specific_credential found -empty response
+No aws_iam_signing_certificate found -empty response
+
+err=OperationNotPageableError('Operation cannot be paginated: list_components')
+calling non paginated fn list_components id=None
+
+ERROR: in call_boto3 clfn=imagebuilder descfn=list_components
+topkey=Components id=None
+e=KeyError('Components') [e1]  common.py 910
+
+ERROR: in getresource clfn=imagebuilder descfn=list_components
+topkey=Components id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_imagebuilder_component id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_container_recipes')
+calling non paginated fn list_container_recipes id=None
+
+ERROR: in call_boto3 clfn=imagebuilder descfn=list_container_recipes
+topkey=ContainerRecipes id=None
+e=KeyError('ContainerRecipes') [e1]  common.py 910
+
+ERROR: in getresource clfn=imagebuilder descfn=list_container_recipes
+topkey=ContainerRecipes id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_imagebuilder_container_recipe id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_distribution_configurations')
+calling non paginated fn list_distribution_configurations id=None
+
+ERROR: in call_boto3 clfn=imagebuilder descfn=list_distribution_configurations
+topkey=DistributionConfigurations id=None
+e=KeyError('DistributionConfigurations') [e1]  common.py 910
+
+ERROR: in getresource clfn=imagebuilder descfn=list_distribution_configurations
+topkey=DistributionConfigurations id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_imagebuilder_distribution_configuration id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_images')
+calling non paginated fn list_images id=None
+
+ERROR: in call_boto3 clfn=imagebuilder descfn=list_images
+topkey=Images id=None
+e=KeyError('Images') [e1]  common.py 910
+
+ERROR: in getresource clfn=imagebuilder descfn=list_images
+topkey=Images id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_imagebuilder_image id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_image_pipelines')
+calling non paginated fn list_image_pipelines id=None
+
+ERROR: in call_boto3 clfn=imagebuilder descfn=list_image_pipelines
+topkey=ImagePipelines id=None
+e=KeyError('ImagePipelines') [e1]  common.py 910
+
+ERROR: in getresource clfn=imagebuilder descfn=list_image_pipelines
+topkey=ImagePipelines id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_imagebuilder_image_pipeline id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_image_recipes')
+calling non paginated fn list_image_recipes id=None
+
+ERROR: in call_boto3 clfn=imagebuilder descfn=list_image_recipes
+topkey=ImageRecipes id=None
+e=KeyError('ImageRecipes') [e1]  common.py 910
+
+ERROR: in getresource clfn=imagebuilder descfn=list_image_recipes
+topkey=ImageRecipes id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_imagebuilder_image_recipe id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_infrastructure_configurations')
+calling non paginated fn list_infrastructure_configurations id=None
+
+ERROR: in call_boto3 clfn=imagebuilder descfn=list_infrastructure_configurations
+topkey=InfrastructureConfigurations id=None
+e=KeyError('InfrastructureConfigurations') [e1]  common.py 910
+
+ERROR: in getresource clfn=imagebuilder descfn=list_infrastructure_configurations
+topkey=InfrastructureConfigurations id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_imagebuilder_infrastructure_configuration id=None
+
+err=OperationNotPageableError('Operation cannot be paginated: list_logging_configurations')
+calling non paginated fn list_logging_configurations id=None
+
+ERROR: in call_boto3 clfn=ivschat descfn=list_logging_configurations
+topkey=LoggingConfigurations id=None
+e=KeyError('LoggingConfigurations') [e1]  common.py 910
+
+ERROR: in getresource clfn=ivschat descfn=list_logging_configurations
+topkey=LoggingConfigurations id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ivschat_logging_configuration id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_rooms')
+calling non paginated fn list_rooms id=None
+
+ERROR: in call_boto3 clfn=ivschat descfn=list_rooms
+topkey=Rooms id=None
+e=KeyError('Rooms') [e1]  common.py 910
+
+ERROR: in getresource clfn=ivschat descfn=list_rooms
+topkey=Rooms id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ivschat_room id=None
+WARNING: aws_kendra_data_source cannot have null id must pass parameter IndexId
+WARNING: aws_kendra_experience cannot have null id must pass parameter IndexId
+WARNING: aws_kendra_faq cannot have null id must pass parameter IndexId
+err=OperationNotPageableError('Operation cannot be paginated: list_indices')
+calling non paginated fn list_indices id=None
+
+ERROR: in call_boto3 clfn=kendra descfn=list_indices
+topkey=Indices id=None
+e=KeyError('Indices') [e1]  common.py 910
+
+ERROR: in getresource clfn=kendra descfn=list_indices
+topkey=Indices id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_kendra_index id=None
+WARNING: aws_kendra_query_suggestions_block_list cannot have null id must pass parameter IndexId
+WARNING: aws_kendra_thesaurus cannot have null id must pass parameter IndexId
+WARNING: NOT IMPLEMENTED YET for type: aws_keyspaces_keyspace
+WARNING: aws_keyspaces_table cannot have null id must pass parameter keyspaceName
+err=OperationNotPageableError('Operation cannot be paginated: list_applications')
+calling non paginated fn list_applications id=None
+id None
+No aws_kinesis_analytics_application found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: list_delivery_streams')
+calling non paginated fn list_delivery_streams id=None
+id None
+No aws_kinesis_firehose_delivery_stream found -empty response
+WARNING: aws_kinesis_stream_consumer cannot have null id must pass parameter StreamARN
+WARNING: NOT IMPLEMENTED YET for type: aws_kinesis_video_stream
+No aws_kinesisanalyticsv2_application found -empty response
+WARNING: aws_kinesisanalyticsv2_application_snapshot cannot have null id must pass parameter ApplicationName
+WARNING: Terraform cannot import type: aws_kms_ciphertext
+No aws_kms_custom_key_store found -empty response
+WARNING: NOT IMPLEMENTED YET for type: aws_kms_external_key
+WARNING: aws_kms_grant cannot have null id must pass parameter KeyId
+WARNING: aws_kms_key_policy cannot have null id must pass parameter KeyId
+WARNING: NOT IMPLEMENTED YET for type: aws_kms_replica_external_key
+WARNING: NOT IMPLEMENTED YET for type: aws_kms_replica_key
+WARNING: Terraform cannot import type: aws_lakeformation_data_lake_settings
+
+ERROR: in getresource clfn=lakeformation descfn=list_lf_tags
+topkey=LFTags id=None
+e=KeyError('LFTagKey') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_lakeformation_lf_tag id=None
+WARNING: Terraform cannot import type: aws_lakeformation_permissions
+WARNING: Terraform cannot import type: aws_lakeformation_resource
+WARNING: Terraform cannot import type: aws_lakeformation_resource_lf_tags
+No aws_lambda_code_signing_config found -empty response
+WARNING: aws_lambda_function_url cannot have null id must pass parameter FunctionName
+WARNING: Terraform cannot import type: aws_lambda_invocation
+WARNING: aws_lambda_provisioned_concurrency_config cannot have null id must pass parameter FunctionName
+WARNING: Terraform cannot import type: aws_lb_cookie_stickiness_policy
+WARNING: aws_lb_listener cannot have null id must pass parameter ListenerArn
+WARNING: aws_lb_listener_certificate cannot have null id must pass parameter ListenerArn
+WARNING: aws_lb_listener_rule cannot have null id must pass parameter ListenerArn
+WARNING: Terraform cannot import type: aws_lb_ssl_negotiation_policy
+No aws_lb_target_group found -empty response
+WARNING: Terraform cannot import type: aws_lb_target_group_attachment
+WARNING: aws_lb_trust_store cannot have null id must pass parameter LoadBalancerArn
+WARNING: aws_lb_trust_store_revocation cannot have null id must pass parameter LoadBalancerArn
+No aws_lex_bot found -empty response
+ParamValidationError 1 in common.call_boto3: type=aws_lex_bot_alias clfn=lex-models
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "botName"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=lex-models descfn=get_bot_aliases
+topkey=aliases id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=lex-models descfn=get_bot_aliases
+topkey=aliases id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_lex_bot_alias id=None
+No aws_lex_intent found -empty response
+No aws_lex_slot_type found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: list_bots')
+calling non paginated fn list_bots id=None
+
+ERROR: in call_boto3 clfn=lexv2-models descfn=list_bots
+topkey=bots id=None
+e=KeyError('bots') [e1]  common.py 910
+
+ERROR: in getresource clfn=lexv2-models descfn=list_bots
+topkey=bots id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_lexv2models_bot id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_bot_locales')
+calling non paginated fn list_bot_locales id=None
+ParamValidationError 2 in common.call_boto3: type=aws_lexv2models_bot_locale clfn=lexv2-models
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "botId"\nMissing required parameter in input: "botVersion"') [pv2]  common.py 909
+No aws_lexv2models_bot_locale found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: list_bot_versions')
+calling non paginated fn list_bot_versions id=None
+ParamValidationError 2 in common.call_boto3: type=aws_lexv2models_bot_version clfn=lexv2-models
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "botId"') [pv2]  common.py 909
+No aws_lexv2models_bot_version found -empty response
+WARNING: NOT IMPLEMENTED YET for type: aws_licensemanager_association
+WARNING: NOT IMPLEMENTED YET for type: aws_licensemanager_grant
+WARNING: NOT IMPLEMENTED YET for type: aws_licensemanager_grant_accepter
+No aws_licensemanager_license_configuration found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: get_buckets')
+calling non paginated fn get_buckets id=None
+
+ERROR: in call_boto3 clfn=lightsail descfn=get_buckets
+topkey=Buckets id=None
+e=KeyError('Buckets') [e1]  common.py 910
+
+ERROR: in getresource clfn=lightsail descfn=get_buckets
+topkey=Buckets id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_lightsail_bucket id=None
+WARNING: aws_lightsail_bucket_access_key cannot have null id must pass parameter bucketName
+WARNING: NOT IMPLEMENTED YET for type: aws_lightsail_bucket_resource_access
+err=OperationNotPageableError('Operation cannot be paginated: get_certificates')
+calling non paginated fn get_certificates id=None
+
+ERROR: in call_boto3 clfn=lightsail descfn=get_certificates
+topkey=Certificates id=None
+e=KeyError('Certificates') [e1]  common.py 910
+
+ERROR: in getresource clfn=lightsail descfn=get_certificates
+topkey=Certificates id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_lightsail_certificate id=None
+err=OperationNotPageableError('Operation cannot be paginated: get_container_services')
+calling non paginated fn get_container_services id=None
+
+ERROR: in call_boto3 clfn=lightsail descfn=get_container_services
+topkey=ContainerServices id=None
+e=KeyError('ContainerServices') [e1]  common.py 910
+
+ERROR: in getresource clfn=lightsail descfn=get_container_services
+topkey=ContainerServices id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_lightsail_container_service id=None
+
+err=OperationNotPageableError('Operation cannot be paginated: get_distributions')
+calling non paginated fn get_distributions id=None
+
+ERROR: in call_boto3 clfn=lightsail descfn=get_distributions
+topkey=Distributions id=None
+e=KeyError('Distributions') [e1]  common.py 910
+
+ERROR: in getresource clfn=lightsail descfn=get_distributions
+topkey=Distributions id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_lightsail_distribution id=None
+
+
+No aws_mq_broker found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: list_configurations')
+calling non paginated fn list_configurations id=None
+id None
+No aws_mq_configuration found -empty response
+WARNING: NOT IMPLEMENTED YET for type: aws_msk_cluster
+WARNING: NOT IMPLEMENTED YET for type: aws_msk_cluster_policy
+No aws_msk_configuration found -empty response
+No aws_msk_replicator found -empty response
+ParamValidationError 1 in common.call_boto3: type=aws_msk_scram_secret_association clfn=kafka
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "ClusterArn"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=kafka descfn=list_scram_secrets
+topkey=ScramSecrets id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=kafka descfn=list_scram_secrets
+topkey=ScramSecrets id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_msk_scram_secret_association id=None
+
+
+err=OperationNotPageableError('Operation cannot be paginated: list_domain_names')
+calling non paginated fn list_domain_names id=None
+id None
+No aws_opensearch_domain found -empty response
+WARNING: Terraform cannot import type: aws_opensearch_domain_policy
+err=OperationNotPageableError('Operation cannot be paginated: list_domain_names')
+calling non paginated fn list_domain_names id=None
+id None
+No aws_opensearch_domain_saml_options found -empty response
+WARNING: NOT IMPLEMENTED YET for type: aws_opensearch_inbound_connection_accepter
+WARNING: NOT IMPLEMENTED YET for type: aws_opensearch_outbound_connection
+WARNING: NOT IMPLEMENTED YET for type: aws_opensearch_package
+WARNING: Terraform cannot import type: aws_opensearch_package_association
+err=OperationNotPageableError('Operation cannot be paginated: list_vpc_endpoints')
+calling non paginated fn list_vpc_endpoints id=None
+
+ERROR: in call_boto3 clfn=opensearch descfn=list_vpc_endpoints
+topkey=VpcEndpoints id=None
+e=KeyError('VpcEndpoints') [e1]  common.py 910
+
+ERROR: in getresource clfn=opensearch descfn=list_vpc_endpoints
+topkey=VpcEndpoints id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_opensearch_vpc_endpoint id=None
+
+err=OperationNotPageableError('Operation cannot be paginated: list_vpc_endpoints')
+calling non paginated fn list_vpc_endpoints id=None
+
+ERROR: in call_boto3 clfn=opensearch descfn=list_vpc_endpoints
+topkey=VpcEndpoints id=None
+e=KeyError('VpcEndpoints') [e1]  common.py 910
+
+ERROR: in getresource clfn=opensearch descfn=list_vpc_endpoints
+topkey=VpcEndpoints id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_opensearchserverless_vpc_endpoint id=None
+
+No aws_organizations_delegated_administrator found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: describe_organization')
+calling non paginated fn describe_organization id=None
+id None
+
+ERROR: in getresource clfn=organizations descfn=describe_organization
+topkey=Organization id=None
+e=TypeError('string indices must be integers') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_organizations_organization id=None
+
+err=OperationNotPageableError('Operation cannot be paginated: describe_resource_policy')
+calling non paginated fn describe_resource_policy id=None
+
+ERROR: in call_boto3 clfn=organizations descfn=describe_resource_policy
+topkey=ResourcePolicy id=None
+e=ResourcePolicyNotFoundException('An error occurred (ResourcePolicyNotFoundException) when calling the DescribeResourcePolicy operation: No resource-based policy found.') [e1]  common.py 909
+
+ERROR: in getresource clfn=organizations descfn=describe_resource_policy
+topkey=ResourcePolicy id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_organizations_resource_policy id=None
+
+err=OperationNotPageableError('Operation cannot be paginated: describe_placement_groups')
+calling non paginated fn describe_placement_groups id=None
+id None
+No aws_placement_group found -empty response
+WARNING: aws_prometheus_alert_manager_definition cannot have null id must pass parameter workspaceId
+ParamValidationError 1 in common.call_boto3: type=aws_prometheus_rule_group_namespace clfn=amp
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "workspaceId"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=amp descfn=list_rule_groups_namespaces
+topkey=ruleGroupsNamespaces id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=amp descfn=list_rule_groups_namespaces
+topkey=ruleGroupsNamespaces id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_prometheus_rule_group_namespace id=None
+No aws_prometheus_workspace found -empty response
+WARNING: Terraform cannot import type: aws_proxy_protocol_policy
+err=OperationNotPageableError('Operation cannot be paginated: list_ledgers')
+calling non paginated fn list_ledgers id=None
+id None
+No aws_qldb_ledger found -empty response
+
+ParamValidationError 1 in common.call_boto3: type=aws_quicksight_group_membership clfn=quicksight
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "GroupName"\nMissing required parameter in input: "AwsAccountId"\nMissing required parameter in input: "Namespace"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=quicksight descfn=list_group_memberships
+topkey=GroupMemberships id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=quicksight descfn=list_group_memberships
+topkey=GroupMemberships id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_quicksight_group_membership id=None
+
+err=OperationNotPageableError('Operation cannot be paginated: list_refresh_schedules')
+calling non paginated fn list_refresh_schedules id=None
+ParamValidationError 2 in common.call_boto3: type=aws_quicksight_refresh_schedule clfn=quicksight
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "AwsAccountId"\nMissing required parameter in input: "DataSetId"') [pv2]  common.py 909
+No aws_quicksight_refresh_schedule found -empty response
+r
+err=OperationNotPageableError('Operation cannot be paginated: list_vpc_connections')
+calling non paginated fn list_vpc_connections id=None
+ParamValidationError 2 in common.call_boto3: type=aws_quicksight_vpc_connection clfn=quicksight
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "AwsAccountId"') [pv2]  common.py 909
+No aws_quicksight_vpc_connection found -empty response
+
+
+ERROR: in getresource clfn=rds descfn=describe_db_cluster_endpoints
+topkey=DBClusterEndpoints id=None
+e=KeyError('DBClusterEndpointIdentifier') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_rds_cluster_endpoint id=None
+WARNING: aws_rds_cluster_role_association cannot have null id must pass parameter DBClusterIdentifier
+No aws_rds_export_task found -empty response
+No aws_rds_global_cluster found -empty response
+No aws_rds_reserved_instance found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: describe_authentication_profiles')
+calling non paginated fn describe_authentication_profiles id=None
+id None
+
+
+
+ERROR: in call_boto3 clfn=route53 descfn=
+topkey=DelegationSets id=None
+e=KeyError('') [e1]  common.py 787
+
+ERROR: in call_boto3 clfn=route53 descfn=
+topkey=DelegationSets id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 938
+
+ERROR: in getresource clfn=route53 descfn=
+topkey=DelegationSets id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_route53_delegation_set id=None
+
+err=OperationNotPageableError('Operation cannot be paginated: list_traffic_policies')
+calling non paginated fn list_traffic_policies id=None
+
+ERROR: in call_boto3 clfn=route53 descfn=list_traffic_policies
+topkey=TrafficPolicies id=None
+e=KeyError('TrafficPolicies') [e1]  common.py 910
+
+ERROR: in getresource clfn=route53 descfn=list_traffic_policies
+topkey=TrafficPolicies id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_route53_traffic_policy id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_traffic_policy_instances')
+calling non paginated fn list_traffic_policy_instances id=None
+id None
+No aws_route53_traffic_policy_instance found -empty response
+
+ParamValidationError 1 in common.call_boto3: type=aws_route53recoverycontrolconfig_routing_control clfn=route53-recovery-control-config
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "ControlPanelArn"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=route53-recovery-control-config descfn=list_routing_controls
+topkey=RoutingControls id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=route53-recovery-control-config descfn=list_routing_controls
+topkey=RoutingControls id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_route53recoverycontrolconfig_routing_control id=None
+ParamValidationError 1 in common.call_boto3: type=aws_route53recoverycontrolconfig_safety_rule clfn=route53-recovery-control-config
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "ControlPanelArn"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=route53-recovery-control-config descfn=list_safety_rules
+topkey=SafetyRules id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=route53-recovery-control-config descfn=list_safety_rules
+topkey=SafetyRules id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_route53recoverycontrolconfig_safety_rule id=None
+
+
+err=OperationNotPageableError('Operation cannot be paginated: list_access_grants')
+calling non paginated fn list_access_grants id=None
+ParamValidationError 2 in common.call_boto3: type=aws_s3control_access_grant clfn=s3control
+e=ParamValidationError('Parameter validation failed:\nAccountId is required but not set') [pv2]  common.py 909
+No aws_s3control_access_grant found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: list_access_grants')
+calling non paginated fn list_access_grants id=None
+ParamValidationError 2 in common.call_boto3: type=aws_s3control_access_grants_instance clfn=s3control
+e=ParamValidationError('Parameter validation failed:\nAccountId is required but not set') [pv2]  common.py 909
+No aws_s3control_access_grants_instance found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: list_access_grants')
+calling non paginated fn list_access_grants id=None
+ParamValidationError 2 in common.call_boto3: type=aws_s3control_access_grants_instance_resource_policy clfn=s3control
+e=ParamValidationError('Parameter validation failed:\nAccountId is required but not set') [pv2]  common.py 909
+No aws_s3control_access_grants_instance_resource_policy found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: list_access_grants')
+calling non paginated fn list_access_grants id=None
+ParamValidationError 2 in common.call_boto3: type=aws_s3control_access_grants_location clfn=s3control
+e=ParamValidationError('Parameter validation failed:\nAccountId is required but not set') [pv2]  common.py 909
+No aws_s3control_access_grants_location found -empty response
+
+
+No aws_sagemaker_notebook_instance_lifecycle_configuration found -empty response
+WARNING: NOT IMPLEMENTED YET for type: aws_sagemaker_pipeline
+err=OperationNotPageableError('Operation cannot be paginated: list_projects')
+calling non paginated fn list_projects id=None
+
+ERROR: in call_boto3 clfn=sagemaker descfn=list_projects
+topkey=Projects id=None
+e=KeyError('Projects') [e1]  common.py 910
+
+ERROR: in getresource clfn=sagemaker descfn=list_projects
+topkey=Projects id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_sagemaker_project id=None
+
+
+ERROR: in getresource clfn=scheduler descfn=list_schedule_groups
+topkey=ScheduleGroups id=None
+e=KeyError('ScheduleGroupArn') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_scheduler_schedule_group id=None
+No aws_schemas_discoverer found -empty response
+
+ERROR: in getresource clfn=schemas descfn=list_registries
+topkey=Registries id=None
+e=KeyError('RegistryArn') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_schemas_registry id=None
+WARNING: NOT IMPLEMENTED YET for type: aws_schemas_registry_policy
+WARNING: aws_schemas_schema cannot have null id must pass parameter RegistryName
+err=OperationNotPageableError('Operation cannot be paginated: get_resource_policy')
+calling non paginated fn get_resource_policy id=None
+ParamValidationError 2 in common.call_boto3: type=aws_secretsmanager_secret_policy clfn=secretsmanager
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "SecretId"') [pv2]  common.py 909
+No aws_secretsmanager_secret_policy found -empty response
+WARNING: aws_secretsmanager_secret_rotation cannot have null id must pass parameter SecretId
+WARNING: aws_secretsmanager_secret_version cannot have null id must pass parameter SecretId
+err=OperationNotPageableError('Operation cannot be paginated: describe_hub')
+calling non paginated fn describe_hub id=None
+
+ERROR: in call_boto3 clfn=securityhub descfn=describe_hub
+topkey=Hub id=None
+e=KeyError('Hub') [e1]  common.py 910
+
+ERROR: in getresource clfn=securityhub descfn=describe_hub
+topkey=Hub id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_securityhub_account id=None
+No aws_securityhub_action_target found -empty response
+
+err=OperationNotPageableError('Operation cannot be paginated: describe_organization_configuration')
+calling non paginated fn describe_organization_configuration id=None
+
+ERROR: in call_boto3 clfn=securityhub descfn=describe_organization_configuration
+topkey=OrganizationConfiguration id=None
+e=InvalidAccessException('An error occurred (InvalidAccessException) when calling the DescribeOrganizationConfiguration operation: Account 566972129213 is not an administrator for this organization') [e1]  common.py 909
+
+ERROR: in getresource clfn=securityhub descfn=describe_organization_configuration
+topkey=OrganizationConfiguration id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_securityhub_organization_configuration id=None
+
+
+ERROR: in call_boto3 clfn=servicecatalog descfn=search_products_as_admin
+topkey=Products id=None
+e=KeyError('Products') [e1]  common.py 863
+
+ERROR: in call_boto3 clfn=servicecatalog descfn=search_products_as_admin
+topkey=Products id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 938
+
+ERROR: in getresource clfn=servicecatalog descfn=search_products_as_admin
+topkey=Products id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_servicecatalog_product id=None
+WARNING: NOT IMPLEMENTED YET for type: aws_servicecatalog_product_portfolio_association
+WARNING: NOT IMPLEMENTED YET for type: aws_servicecatalog_provisioned_product
+WARNING: aws_servicecatalog_provisioning_artifact cannot have null id must pass parameter ProductId
+No aws_servicecatalog_service_action found -empty response
+WARNING: NOT IMPLEMENTED YET for type: aws_servicecatalog_tag_option
+WARNING: NOT IMPLEMENTED YET for type: aws_servicecatalog_tag_option_resource_association
+ParamValidationError 1 in common.call_boto3: type=aws_servicequotas_service_quota clfn=service-quotas
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "ServiceCode"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=service-quotas descfn=list_service_quotas
+topkey=Quotas id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=service-quotas descfn=list_service_quotas
+topkey=Quotas id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_servicequotas_service_quota id=None
+WARNING: NOT IMPLEMENTED YET for type: aws_servicequotas_template
+WARNING: NOT IMPLEMENTED YET for type: aws_servicequotas_template_association
+err=OperationNotPageableError('Operation cannot be paginated: describe_active_receipt_rule_set')
+calling non paginated fn describe_active_receipt_rule_set id=None
+
+ERROR: in call_boto3 clfn=ses descfn=describe_active_receipt_rule_set
+topkey=Metadata id=None
+e=KeyError('Metadata') [e1]  common.py 910
+
+ERROR: in getresource clfn=ses descfn=describe_active_receipt_rule_set
+topkey=Metadata id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ses_active_receipt_rule_set id=None
+WARNING: NOT IMPLEMENTED YET for type: aws_ses_configuration_set
+WARNING: NOT IMPLEMENTED YET for type: aws_ses_domain_dkim
+
+No aws_sfn_activity found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: list_state_machine_aliases')
+calling non paginated fn list_state_machine_aliases id=None
+ParamValidationError 2 in common.call_boto3: type=aws_sfn_alias clfn=stepfunctions
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "stateMachineArn"') [pv2]  common.py 909
+No aws_sfn_alias found -empty response
+No aws_sfn_state_machine found -empty response
+
+err=OperationNotPageableError('Operation cannot be paginated: list_protection_groups')
+calling non paginated fn list_protection_groups id=None
+
+ERROR: in call_boto3 clfn=shield descfn=list_protection_groups
+topkey=ProtectionGroups id=None
+e=ResourceNotFoundException('An error occurred (ResourceNotFoundException) when calling the ListProtectionGroups operation: The subscription does not exist.') [e1]  common.py 909
+
+ERROR: in getresource clfn=shield descfn=list_protection_groups
+topkey=ProtectionGroups id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_shield_protection_group id=None
+
+WARNING: aws_sns_topic_subscription cannot have null id must pass parameter TopicArn
+err=OperationNotPageableError('Operation cannot be paginated: describe_spot_datafeed_subscription')
+calling non paginated fn describe_spot_datafeed_subscription id=None
+
+ERROR: in call_boto3 clfn=ec2 descfn=describe_spot_datafeed_subscription
+topkey=SpotDatafeedSubscription id=None
+e=ClientError('An error occurred (InvalidSpotDatafeed.NotFound) when calling the DescribeSpotDatafeedSubscription operation: Spot datafeed subscription does not exist.') [e1]  common.py 909
+
+ERROR: in getresource clfn=ec2 descfn=describe_spot_datafeed_subscription
+topkey=SpotDatafeedSubscription id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_spot_datafeed_subscription id=None
+No aws_spot_fleet_request found -empty response
+WARNING: Terraform cannot import type: aws_spot_instance_request
+WARNING: aws_sqs_queue_policy cannot have null id must pass parameter QueueUrl
+WARNING: aws_sqs_queue_redrive_allow_policy cannot have null id must pass parameter QueueUrl
+WARNING: aws_sqs_queue_redrive_policy cannot have null id must pass parameter QueueUrl
+No aws_ssm_activation found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: describe_association')
+calling non paginated fn describe_association id=None
+
+ERROR: in call_boto3 clfn=ssm descfn=describe_association
+topkey=AssociationDescription id=None
+e=ClientError('An error occurred (ValidationException) when calling the DescribeAssociation operation: Must either provide instance id + document name, or provide association id ') [e1]  common.py 909
+
+ERROR: in getresource clfn=ssm descfn=describe_association
+topkey=AssociationDescription id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ssm_association id=None
+err=OperationNotPageableError('Operation cannot be paginated: get_default_patch_baseline')
+calling non paginated fn get_default_patch_baseline id=None
+
+ERROR: in call_boto3 clfn=ssm descfn=get_default_patch_baseline
+topkey=Baseline id=None
+e=KeyError('Baseline') [e1]  common.py 910
+
+ERROR: in getresource clfn=ssm descfn=get_default_patch_baseline
+topkey=Baseline id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ssm_default_patch_baseline id=None
+ParamValidationError 1 in common.call_boto3: type=aws_ssm_maintenance_window_target clfn=ssm
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "WindowId"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=ssm descfn=describe_maintenance_window_targets
+topkey=Targets id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=ssm descfn=describe_maintenance_window_targets
+topkey=Targets id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ssm_maintenance_window_target id=None
+ParamValidationError 1 in common.call_boto3: type=aws_ssm_maintenance_window_task clfn=ssm
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "WindowId"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=ssm descfn=describe_maintenance_window_tasks
+topkey=Tasks id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=ssm descfn=describe_maintenance_window_tasks
+topkey=Tasks id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ssm_maintenance_window_task id=None
+WARNING: Terraform cannot import type: aws_ssm_patch_group
+WARNING: NOT IMPLEMENTED YET for type: aws_ssm_resource_data_sync
+WARNING: aws_ssm_service_setting cannot have null id must pass parameter SettingId
+No aws_ssmcontacts_contact found -empty response
+ParamValidationError 1 in common.call_boto3: type=aws_ssmcontacts_contact_channel clfn=ssm-contacts
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "ContactId"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=ssm-contacts descfn=list_contact_channels
+topkey=ContactChannels id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=ssm-contacts descfn=list_contact_channels
+topkey=ContactChannels id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ssmcontacts_contact_channel id=None
+err=OperationNotPageableError('Operation cannot be paginated: get_contact')
+calling non paginated fn get_contact id=None
+ParamValidationError 2 in common.call_boto3: type=aws_ssmcontacts_plan clfn=ssm-contacts
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "ContactId"') [pv2]  common.py 909
+No aws_ssmcontacts_plan found -empty response
+No aws_ssmincidents_replication_set found -empty response
+No aws_ssmincidents_response_plan found -empty response
+ParamValidationError 1 in common.call_boto3: type=aws_ssoadmin_account_assignment clfn=sso-admin
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "AccountId"\nMissing required parameter in input: "InstanceArn"\nMissing required parameter in input: "PermissionSetArn"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=sso-admin descfn=list_account_assignments
+topkey=AccountAssignments id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=sso-admin descfn=list_account_assignments
+topkey=AccountAssignments id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ssoadmin_account_assignment id=None
+ParamValidationError 1 in common.call_boto3: type=aws_ssoadmin_application clfn=sso-admin
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "InstanceArn"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=sso-admin descfn=list_applications
+topkey=Applications id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=sso-admin descfn=list_applications
+topkey=Applications id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ssoadmin_application id=None
+ParamValidationError 1 in common.call_boto3: type=aws_ssoadmin_application_assignment clfn=sso-admin
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "ApplicationArn"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=sso-admin descfn=list_application_assignments
+topkey=ApplicationAssignments id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=sso-admin descfn=list_application_assignments
+topkey=ApplicationAssignments id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ssoadmin_application_assignment id=None
+
+ParamValidationError 1 in common.call_boto3: type=aws_ssoadmin_permission_set clfn=sso-admin
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "InstanceArn"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=sso-admin descfn=list_permission_sets
+topkey=PermissionSets id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=sso-admin descfn=list_permission_sets
+topkey=PermissionSets id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ssoadmin_permission_set id=None
+WARNING: NOT IMPLEMENTED YET for type: aws_ssoadmin_permission_set_inline_policy
+WARNING: NOT IMPLEMENTED YET for type: aws_ssoadmin_permissions_boundary_attachment
+ParamValidationError 1 in common.call_boto3: type=aws_ssoadmin_trusted_token_issuer clfn=sso-admin
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "InstanceArn"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=sso-admin descfn=list_trusted_token_issuers
+topkey=TrustedTokenIssuers id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=sso-admin descfn=list_trusted_token_issuers
+topkey=TrustedTokenIssuers id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_ssoadmin_trusted_token_issuer id=None
+
+err=OperationNotPageableError('Operation cannot be paginated: list_databases')
+calling non paginated fn list_databases id=None
+id None
+No aws_timestreamwrite_database found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: list_tables')
+calling non paginated fn list_tables id=None
+id None
+No aws_timestreamwrite_table found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: list_language_models')
+calling non paginated fn list_language_models id=None
+
+ERROR: in call_boto3 clfn=transcribe descfn=list_language_models
+topkey=LanguageModels id=None
+e=KeyError('LanguageModels') [e1]  common.py 910
+
+ERROR: in getresource clfn=transcribe descfn=list_language_models
+topkey=LanguageModels id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_transcribe_language_model id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_medical_vocabularies')
+calling non paginated fn list_medical_vocabularies id=None
+id None
+No aws_transcribe_medical_vocabulary found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: list_vocabularies')
+calling non paginated fn list_vocabularies id=None
+id None
+No aws_transcribe_vocabulary found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: list_vocabulary_filters')
+calling non paginated fn list_vocabulary_filters id=None
+id None
+
+
+ERROR: in getresource clfn=ec2 descfn=describe_vpc_endpoint_services
+topkey=ServiceNames id=None
+e=TypeError('string indices must be integers') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_vpc_endpoint_service id=None
+WARNING: Terraform cannot import type: aws_vpc_endpoint_service_allowed_principal
+
+ERROR: in call_boto3 clfn=ec2 descfn=describe_vpc_endpoint_subnet_associations
+topkey=SubnetAssociations id=None
+e=KeyError('describe_vpc_endpoint_subnet_associations') [e1]  common.py 787
+
+ERROR: in call_boto3 clfn=ec2 descfn=describe_vpc_endpoint_subnet_associations
+topkey=SubnetAssociations id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 938
+
+ERROR: in getresource clfn=ec2 descfn=describe_vpc_endpoint_subnet_associations
+topkey=SubnetAssociations id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_vpc_endpoint_subnet_association id=None
+No aws_vpc_ipam found -empty response
+WARNING: Terraform cannot import type: aws_vpc_ipam_organization_admin_account
+No aws_vpc_ipam_pool found -empty response
+ParamValidationError 1 in common.call_boto3: type=aws_vpc_ipam_pool_cidr clfn=ec2
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "IpamPoolId"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=ec2 descfn=get_ipam_pool_cidrs
+topkey=IpamPoolCidrs id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=ec2 descfn=get_ipam_pool_cidrs
+topkey=IpamPoolCidrs id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_vpc_ipam_pool_cidr id=None
+ParamValidationError 1 in common.call_boto3: type=aws_vpc_ipam_pool_cidr_allocation clfn=ec2
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "IpamPoolId"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=ec2 descfn=get_ipam_pool_allocations
+topkey=IpamPoolAllocations id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=ec2 descfn=get_ipam_pool_allocations
+topkey=IpamPoolAllocations id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_vpc_ipam_pool_cidr_allocation id=None
+
+ParamValidationError 1 in common.call_boto3: type=aws_vpc_ipv6_cidr_block_association clfn=ec2
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "PoolId"') [pv1]  common.py 862
+
+ERROR: in call_boto3 clfn=ec2 descfn=get_associated_ipv6_pool_cidrs
+topkey=Ipv6CidrAssociations id=None
+e=TypeError("bad operand type for unary +: 'str'") [e1]  common.py 899
+
+ERROR: in getresource clfn=ec2 descfn=get_associated_ipv6_pool_cidrs
+topkey=Ipv6CidrAssociations id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_vpc_ipv6_cidr_block_association id=None
+WARNING: Terraform cannot import type: aws_vpc_network_performance_metric_subscription
+No aws_vpc_peering_connection found -empty response
+No aws_vpc_peering_connection_accepter found -empty response
+No aws_vpc_peering_connection_options found -empty response
+WARNING: Terraform cannot import type: aws_vpclattice_target_group_attachment
+err=OperationNotPageableError('Operation cannot be paginated: describe_vpn_connections')
+calling non paginated fn describe_vpn_connections id=None
+id None
+No aws_vpn_connection found -empty response
+WARNING: Terraform cannot import type: aws_vpn_connection_route
+err=OperationNotPageableError('Operation cannot be paginated: describe_vpn_gateways')
+calling non paginated fn describe_vpn_gateways id=None
+id None
+
+err=OperationNotPageableError('Operation cannot be paginated: get_web_acl')
+calling non paginated fn get_web_acl id=None
+ParamValidationError 2 in common.call_boto3: type=aws_wafv2_web_acl_association clfn=wafv2
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "Name"\nMissing required parameter in input: "Scope"\nMissing required parameter in input: "Id"') [pv2]  common.py 909
+No aws_wafv2_web_acl_association found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: get_logging_configuration')
+calling non paginated fn get_logging_configuration id=None
+ParamValidationError 2 in common.call_boto3: type=aws_wafv2_web_acl_logging_configuration clfn=wafv2
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "ResourceArn"') [pv2]  common.py 909
+No aws_wafv2_web_acl_logging_configuration found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: list_fleets')
+calling non paginated fn list_fleets id=None
+
+ERROR: in call_boto3 clfn=worklink descfn=list_fleets
+topkey=FleetSummaryList id=None
+e=EndpointConnectionError('Could not connect to the endpoint URL: "https://worklink.us-east-1.amazonaws.com/listFleets"') [e1]  common.py 909
+
+ERROR: in getresource clfn=worklink descfn=list_fleets
+topkey=FleetSummaryList id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 609
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_worklink_fleet id=None
+err=OperationNotPageableError('Operation cannot be paginated: list_website_certificate_authorities')
+calling non paginated fn list_website_certificate_authorities id=None
+ParamValidationError 2 in common.call_boto3: type=aws_worklink_website_certificate_authority_association clfn=worklink
+e=ParamValidationError('Parameter validation failed:\nMissing required parameter in input: "FleetArn"') [pv2]  common.py 909
+No aws_worklink_website_certificate_authority_association found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: describe_connection_aliases')
+calling non paginated fn describe_connection_aliases id=None
+id None
+No aws_workspaces_connection_alias found -empty response
+No aws_workspaces_directory found -empty response
+No aws_workspaces_ip_group found -empty response
+No aws_workspaces_workspace found -empty response
+err=OperationNotPageableError('Operation cannot be paginated: get_encryption_config')
+calling non paginated fn get_encryption_config id=None
+id None
+
+ERROR: in getresource clfn=xray descfn=get_encryption_config
+topkey=EncryptionConfig id=None
+e=TypeError('string indices must be integers') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_xray_encryption_config id=None
+WARNING: aws_xray_group cannot have null id must pass parameter GroupName
+
+ERROR: in getresource clfn=xray descfn=get_sampling_rules
+topkey=SamplingRuleRecords id=None
+e=KeyError('RuleName') [e1]  common.py 626
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 142
+--->> Could not get resource aws_xray_sampling_rule id=None
+type=aws_route_table_association id=vpc-06de28040a0b05f71
+
+type=aws_cognito_user_pool_client id=us-east-1_HbG9YlGVB
+Empty response for aws_cognito_user_pool_client id=us-east-1_HbG9YlGVB returning
+type=aws_cognito_user_group id=us-east-1_L8PdDHqcL
+ 
+terraform plan -generate-config-out=resources.out -out tfplan -json | jq . > plan1.json
+could not find expected resources.out file after Plan 1 - exiting
+cp plan1.json plan1.json.2024-04-27T08:00:53
+fix tf files.....
+could not find expected resources.out file in tfplan2 - exiting
+----------- Completed 1 dependancy check loops --------------
+Validate and Test Plan  ... 
+No aws_*.tf files found for this resource, exiting ....

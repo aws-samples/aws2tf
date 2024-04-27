@@ -143,10 +143,10 @@ if __name__ == '__main__':
         else:
             stacks.get_stacks(id)
 
-    if type == "s3":
-        com = "rm -f s3-*.tf s3.tf tfplan *s3*.out"
-        rout = common.rc(com)
-        aws_s3.get_all_s3_buckets(fb, region)
+    #if type == "s3":
+    #    com = "rm -f s3-*.tf s3.tf tfplan *s3*.out"
+    #    rout = common.rc(com)
+    #    aws_s3.get_all_s3_buckets(fb, region)
 
     all_types = resources.resource_types(type)
     print("all_types="+str(all_types))

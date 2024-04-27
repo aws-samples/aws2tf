@@ -68,7 +68,11 @@ def get_aws_kms_alias(type,id,clfn,descfn,topkey,key,filterid):
     paginator = client.get_paginator(descfn)
     for page in paginator.paginate():
         response = response + page[topkey]
-    if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+    if response == []: 
+        print("Empty response for "+type+ " id="+str(id)+" returning"); 
+        pkey=type+".k-"+theid
+        globals.rproc[pkey]=True
+        return True
     
     #pkey=type+"."+id
     #if not globals.rproc[pkey]:
@@ -84,8 +88,10 @@ def get_aws_kms_alias(type,id,clfn,descfn,topkey,key,filterid):
                 aliasname=j['AliasName']
                 if aliasname.startswith("alias/aws"):
                     if globals.debug: print("Skipping "+aliasname+" "+theid)
-                    pkey=type+".k-"+theid
-                    globals.rproc[pkey]=True
+                    if id is not None: 
+                        if not id.startswith("k-"): id="k-"+id
+                        pkey=type+"."+id
+                        globals.rproc[pkey]=True
                     continue
             except KeyError:
                 continue

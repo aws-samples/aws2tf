@@ -13,6 +13,7 @@ def aws_cloudwatch_event_archive(t1,tt1,tt2,flag1,flag2):
 
 def aws_cloudwatch_event_bus(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	
 	return skip,t1,flag1,flag2
 
 def aws_cloudwatch_event_bus_policy(t1,tt1,tt2,flag1,flag2):

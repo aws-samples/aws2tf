@@ -16,7 +16,9 @@ from get_aws_resources import aws_apigateway
 from get_aws_resources import aws_apigatewayv2
 from get_aws_resources import aws_appmesh
 from get_aws_resources import aws_application_autoscaling
+from get_aws_resources import aws_backup
 from get_aws_resources import aws_cloudfront
+from get_aws_resources import aws_cloudtrail
 from get_aws_resources import aws_codebuild
 from get_aws_resources import aws_cognito_idp
 from get_aws_resources import aws_config
@@ -27,6 +29,7 @@ from get_aws_resources import aws_ec2
 from get_aws_resources import aws_ecs
 from get_aws_resources import aws_eks
 from get_aws_resources import aws_elbv2
+from get_aws_resources import aws_events
 from get_aws_resources import aws_glue
 from get_aws_resources import aws_iam
 from get_aws_resources import aws_kinesis

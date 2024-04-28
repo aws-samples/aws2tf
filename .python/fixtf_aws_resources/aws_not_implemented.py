@@ -1,4 +1,5 @@
 notimplemented = {
+    "aws_apprunner_observability_configuration": True,
     "aws_appstream_directory_config": True,
     "aws_appstream_fleet": True,
     "aws_appstream_fleet_stack_association": True,
@@ -9,6 +10,7 @@ notimplemented = {
     "aws_appsync_api_cache": True,
     "aws_appsync_domain_name_api_association": True,
     "aws_appsync_graphql_api": True,
+    "aws_athena_data_catalog": True,
     "aws_auditmanager_account_registration": True,  ### TODO
     "aws_auditmanager_assessment_delegation": True,
     "aws_auditmanager_framework": True,

@@ -20,6 +20,7 @@ from get_aws_resources import aws_backup
 from get_aws_resources import aws_cloudfront
 from get_aws_resources import aws_cloudtrail
 from get_aws_resources import aws_codebuild
+from get_aws_resources import aws_codeguruprofiler
 from get_aws_resources import aws_cognito_idp
 from get_aws_resources import aws_config
 from get_aws_resources import aws_dms
@@ -460,9 +461,9 @@ def check_python_version():
       print("This program requires Python 3.7 or later.")
       sys.exit(1)
 # check boto3 version 
-   if boto3.__version__ < '1.34.64':
-      print("This program requires boto3 1.34.64 or later.")
-      print("Try: pip install boto3==1.34.64")
+   if boto3.__version__ < '1.34.93':
+      print("This program requires boto3 1.34.93 or later.")
+      print("Try: pip install boto3==1.34.93")
       sys.exit(1)
 
 

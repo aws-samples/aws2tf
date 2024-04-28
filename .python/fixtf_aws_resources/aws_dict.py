@@ -2382,9 +2382,9 @@ aws_codedeploy_deployment_group = {
 aws_codeguruprofiler_profiling_group = {
 	"clfn":		"codeguruprofiler",
 	"descfn":	"list_profiling_groups",
-	"topkey":	"ProfilingGroups",
-	"key":		"Name",
-	"filterid":	"Name"
+	"topkey":	"profilingGroupNames",
+	"key":		"name",
+	"filterid":	"name"
 }
 
 aws_codegurureviewer_repository_association = {

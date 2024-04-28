@@ -17,6 +17,7 @@ from get_aws_resources import aws_apigatewayv2
 from get_aws_resources import aws_appmesh
 from get_aws_resources import aws_application_autoscaling
 from get_aws_resources import aws_backup
+from get_aws_resources import aws_bedrock
 from get_aws_resources import aws_cloudfront
 from get_aws_resources import aws_cloudtrail
 from get_aws_resources import aws_codebuild
@@ -909,15 +910,16 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
             
 
          except botocore.exceptions.OperationNotPageableError as err:
-               print(f"{err=}")
-               print("calling non paginated fn "+str(descfn)+" id="+str(id))
+               if globals.debug:
+                  print(f"{err=}")
+                  print("calling non paginated fn "+str(descfn)+" id="+str(id))
                try:
                   getfn = getattr(client, descfn)                     
                   response1 = getfn()
                   response1=response1[topkey]
                   if globals.debug: print("Non-pag response1="+str(response1))
                   if id is None:
-                     print("id None")
+                     if globals.debug: print("id None")
                      response=response1
                      if globals.debug: print("Non-pag response no ID ="+str(response))
                   else: #try a match

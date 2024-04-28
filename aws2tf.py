@@ -149,8 +149,8 @@ if __name__ == '__main__':
     #    aws_s3.get_all_s3_buckets(fb, region)
 
     all_types = resources.resource_types(type)
-    print("all_types="+str(all_types))
-    print("len all_types="+str(len(all_types)))
+    #print("all_types="+str(all_types))
+    #print("len all_types="+str(len(all_types)))
 
     if len(all_types) == 1:  
         for i in all_types: common.call_resource(i, id)

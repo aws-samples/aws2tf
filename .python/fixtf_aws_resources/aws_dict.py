@@ -2286,9 +2286,9 @@ aws_codebuild_resource_policy = {
 aws_codebuild_source_credential = {
 	"clfn":		"codebuild",
 	"descfn":	"list_source_credentials",
-	"topkey":	"SourceCredentialsInfos",
-	"key":		"Arn",
-	"filterid":	"Arn"
+	"topkey":	"sourceCredentialsInfos",
+	"key":		"arn",
+	"filterid":	"arn"
 }
 
 aws_codebuild_webhook = {
@@ -2326,7 +2326,7 @@ aws_codecatalyst_source_repository = {
 aws_codecommit_approval_rule_template = {
 	"clfn":		"codecommit",
 	"descfn":	"list_approval_rule_templates",
-	"topkey":	"ApprovalRuleTemplates",
+	"topkey":	"approvalRuleTemplateNames",
 	"key":		"Name",
 	"filterid":	"Name"
 }

@@ -20,6 +20,10 @@ def aws_cloudfront_field_level_encryption_profile(t1,tt1,tt2,flag1,flag2):
 
 def aws_cloudfront_function(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="publish" and tt2=="null": 
+		#t1=t1+"\n lifecycle {\n   ignore_changes = [publish]\n}\n"
+		t1=tt1+" = true\n" 
+		t1=t1+"\n lifecycle {\n   ignore_changes = [publish]\n}\n"
 	return skip,t1,flag1,flag2
 
 def aws_cloudfront_key_group(t1,tt1,tt2,flag1,flag2):

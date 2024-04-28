@@ -61,7 +61,7 @@ def call_resource(type, id):
       return
    
    if type in aws_not_implemented.notimplemented:
-      print("WARNING: NOT IMPLEMENTED YET for type: " + type)
+      print("WARNING: Not supported by aws2tf currently : " + type)
       return
    
    elif type=="aws_null":
@@ -628,8 +628,13 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                   except:
                      pass
 
-                  
-                  theid=item[key]
+                  try:
+                     theid=item[key]
+                  except TypeError:
+                     print("ERROR: getresource TypeError: "+str(response)+" key="+key+" type="+type,descfn)
+                     with open('boto3-error.err', 'a') as f:
+                        f.write("ERROR: getresource TypeError: type="+type+" key="+key+" descfn="+descfn+"\n"+str(response)+"\n")
+                     continue
                   pt=type+"."+theid
                   if pt not in globals.rproc:
                      write_import(type,theid,None)

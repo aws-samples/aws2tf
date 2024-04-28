@@ -1918,7 +1918,7 @@ aws_cloudfront_cache_policy = {
 aws_cloudfront_continuous_deployment_policy = {
 	"clfn":		"cloudfront",
 	"descfn":	"list_continuous_deployment_policies",
-	"topkey":	"ContinuousDeploymentPolicies",
+	"topkey":	"ContinuousDeploymentPolicyList",
 	"key":		"ContinuousDeploymentPolicyId",
 	"filterid":	"ContinuousDeploymentPolicyId"
 }
@@ -1934,7 +1934,7 @@ aws_cloudfront_distribution = {
 aws_cloudfront_field_level_encryption_config = {
 	"clfn":		"cloudfront",
 	"descfn":	"list_field_level_encryption_configs",
-	"topkey":	"FieldLevelEncryptionConfigs",
+	"topkey":	"FieldLevelEncryptionList",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -1951,16 +1951,16 @@ aws_cloudfront_function = {
 	"clfn":		"cloudfront",
 	"descfn":	"list_functions",
 	"topkey":	"FunctionList",
-	"key":		"FunctionId",
-	"filterid":	"FunctionId"
+	"key":		"Name",
+	"filterid":	"Name"
 }
 
 aws_cloudfront_key_group = {
 	"clfn":		"cloudfront",
 	"descfn":	"list_key_groups",
 	"topkey":	"KeyGroupList",
-	"key":		"KeyGroupId",
-	"filterid":	"KeyGroupId"
+	"key":		"Id",
+	"filterid":	"Id"
 }
 
 aws_cloudfront_monitoring_subscription = {
@@ -1990,7 +1990,7 @@ aws_cloudfront_origin_access_identity = {
 aws_cloudfront_origin_request_policy = {
 	"clfn":		"cloudfront",
 	"descfn":	"list_cloud_front_origin_access_identities",
-	"topkey":	"CloudFrontOriginAccessIdentityList",
+	"topkey":	"OriginRequestPolicyList",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -2007,8 +2007,8 @@ aws_cloudfront_realtime_log_config = {
 	"clfn":		"cloudfront",
 	"descfn":	"list_realtime_log_configs",
 	"topkey":	"RealtimeLogConfigs",
-	"key":		"Id",
-	"filterid":	"Id"
+	"key":		"ARN",
+	"filterid":	"ARN"
 }
 
 aws_cloudfront_response_headers_policy = {

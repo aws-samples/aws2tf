@@ -78,6 +78,7 @@ from fixtf_aws_resources import fixtf_ds
 from fixtf_aws_resources import fixtf_dynamodb
 from fixtf_aws_resources import fixtf_ebs
 from fixtf_aws_resources import fixtf_ec2
+from fixtf_aws_resources import fixtf_ecr_public
 from fixtf_aws_resources import fixtf_ecr
 from fixtf_aws_resources import fixtf_ecs
 from fixtf_aws_resources import fixtf_efs

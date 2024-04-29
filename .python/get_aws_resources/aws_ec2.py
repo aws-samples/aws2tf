@@ -495,3 +495,16 @@ def get_aws_key_pair(type, id, clfn, descfn, topkey, key, filterid):
 
     return True
 
+def get_aws_ebs_encryption_by_default(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        common.write_import(type,"default",None) 
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+

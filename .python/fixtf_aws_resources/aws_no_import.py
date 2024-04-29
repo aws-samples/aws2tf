@@ -131,5 +131,12 @@ noimport = {
     "aws_cloudwatch_query_definition": True,
     "aws_cloudfront_response_headers_policy": True, ### insufficient block errors on plan
     "aws_db_cluster_snapshot": True, ### id is too long
-    "aws_db_instance_role_association": True ### an association
+    "db_cluster_snapshot_identifier": True, ### only lowercase alphanumeric characters and hyphens allowed in id
+    "aws_db_instance_role_association": True, ### an association
+    "aws_ec2_managed_prefix_list": True, ### max_entries issue
+    "aws_docdb_cluster_snapshot": True,  ### id is too long
+    "aws_ecr_replication_configuration": True, ### unsure how to get in 
+    "aws_ec2_tag": True, ### only use when resources created outside of Terraform
+    "aws_ec2_availability_zone_group": True, ### advanced resource not normally used
+    "aws_ec2_managed_prefix_list_entry": True ### normally use aws_ec2_managed_prefix_list
 }

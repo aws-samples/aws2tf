@@ -721,6 +721,21 @@ aws_ec2_transit_gateway_policy_table = {
   "clfn": "ec2"
 }
 
+aws_ec2_transit_gateway_policy_table_association = {
+  "param": "TransitGatewayPolicyTableId",
+  "clfn": "ec2"
+}
+
+aws_ec2_transit_gateway_prefix_list_reference = {
+  "param": "TransitGatewayRouteTableId",
+  "clfn": "ec2"
+}
+
+aws_ec2_transit_gateway_route_table_association = {
+  "param": "TransitGatewayPolicyTableId",
+  "clfn": "ec2"
+}
+
 
 aws_ecrpublic_repository_policy = {
   "param": "repositoryName",
@@ -1830,6 +1845,9 @@ aws_needid = {
   "aws_ec2_image_block_public_access": aws_ec2_image_block_public_access,
   "aws_ecr_image": aws_ecr_image,
   "aws_ec2_transit_gateway_policy_table": aws_ec2_transit_gateway_policy_table,
+  "aws_ec2_transit_gateway_policy_table_association": aws_ec2_transit_gateway_policy_table_association,
+  "aws_ec2_transit_gateway_prefix_list_reference": aws_ec2_transit_gateway_prefix_list_reference,
+  "aws_ec2_transit_gateway_route_table_association": aws_ec2_transit_gateway_route_table_association,
   "aws_ecr_lifecycle_policy": aws_ecr_lifecycle_policy,
   "aws_ecr_repository_policy": aws_ecr_repository_policy,
   "aws_ecrpublic_repository_policy": aws_ecrpublic_repository_policy,

@@ -3478,9 +3478,9 @@ aws_dx_hosted_transit_virtual_interface_accepter = {
 aws_dx_lag = {
 	"clfn":		"directconnect",
 	"descfn":	"describe_lags",
-	"topkey":	"Lags",
-	"key":		"LagId",
-	"filterid":	"LagId"
+	"topkey":	"lags",
+	"key":		"lagId",
+	"filterid":	"lagId"
 }
 
 aws_dx_macsec_key_association = {
@@ -3951,8 +3951,8 @@ aws_ecr_registry_policy = {
 	"clfn":		"ecr",
 	"descfn":	"get_registry_policy",
 	"topkey":	"",
-	"key":		"policyText",
-	"filterid":	"policyText"
+	"key":		"registryId",
+	"filterid":	"registryId"
 }
 
 aws_ecr_registry_scanning_configuration = {
@@ -3988,7 +3988,7 @@ aws_ecr_repository_policy = {
 }
 
 aws_ecrpublic_repository = {
-	"clfn":		"ecr",
+	"clfn":		"ecr-public",
 	"descfn":	"describe_repositories",
 	"topkey":	"repositories",
 	"key":		"repositoryName",
@@ -3996,7 +3996,7 @@ aws_ecrpublic_repository = {
 }
 
 aws_ecrpublic_repository_policy = {
-	"clfn":		"ecr",
+	"clfn":		"ecr-public",
 	"descfn":	"get_repository_policy",
 	"topkey":	"",
 	"key":		"registryId",

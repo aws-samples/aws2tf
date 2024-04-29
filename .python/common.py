@@ -22,8 +22,10 @@ from get_aws_resources import aws_cloudfront
 from get_aws_resources import aws_cloudtrail
 from get_aws_resources import aws_codebuild
 from get_aws_resources import aws_codeguruprofiler
+from get_aws_resources import aws_cognito_identity
 from get_aws_resources import aws_cognito_idp
 from get_aws_resources import aws_config
+from get_aws_resources import aws_customer_profiles
 from get_aws_resources import aws_dms
 from get_aws_resources import aws_dynamodb
 from get_aws_resources import aws_kms
@@ -115,8 +117,9 @@ def call_resource(type, id):
             else:   
                #print("-1aa- clfn:"+clfn+" type:"+type)
                mclfn=clfn.replace("-","_")
+               #print("-1ab- mclfn:"+mclfn+" type:"+type)
                getfn = getattr(eval("aws_"+mclfn), "get_"+type) 
-               #print("-1ab- clfn:"+clfn+" type:"+type)
+               #print("-1ac- clfn:"+clfn+" type:"+type)
 
             sr=getfn(type, id, clfn, descfn, topkey, key, filterid)
 

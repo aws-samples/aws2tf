@@ -51,6 +51,10 @@ def aws_db_instance_role_association(t1,tt1,tt2,flag1,flag2):
 
 def aws_db_option_group(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="name":
+		if tt2.startswith("default:"):
+			tt2=tt2.split(":")[1] 
+			t1=tt1 + ' = "'+tt2+'"\n'
 	return skip,t1,flag1,flag2
 
 def aws_db_proxy(t1,tt1,tt2,flag1,flag2):

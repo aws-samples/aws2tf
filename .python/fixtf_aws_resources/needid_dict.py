@@ -545,7 +545,27 @@ aws_codedeploy_deployment_group = {
   "clfn": "codedeploy"
 }
 
-aws_cognito_user_group= {
+aws_cognito_identity_provider = {
+  "param": "UserPoolId",
+  "clfn": "cognito-idp"
+}
+
+aws_cognito_managed_user_pool_client = {
+  "param": "UserPoolId",
+  "clfn": "cognito-idp"
+}
+
+aws_cognito_resource_server  = {
+  "param": "UserPoolId",
+  "clfn": "cognito-idp"
+}
+
+aws_cognito_user  = {
+  "param": "UserPoolId",
+  "clfn": "cognito-idp"
+}
+
+aws_cognito_user_group = {
   "param": "UserPoolId",
   "clfn": "cognito-idp"
 }
@@ -614,6 +634,12 @@ aws_connect_user_hierarchy_group = {
   "param": "InstanceId",
   "clfn": "connect"
 }
+
+aws_customerprofiles_profile = {
+  "param": "DomainName",
+  "clfn": "customer-profiles"
+}
+
 
 aws_db_proxy_target = {
   "param": "DBProxyName",
@@ -1770,7 +1796,11 @@ aws_needid = {
   "aws_codecatalyst_source_repository": aws_codecatalyst_source_repository,
   "aws_codedeploy_deployment_group": aws_codedeploy_deployment_group,
   "aws_config_remediation_configuration": aws_config_remediation_configuration,
+  "aws_cognito_identity_provider": aws_cognito_identity_provider,
+  "aws_cognito_managed_user_pool_client": aws_cognito_managed_user_pool_client,
+  "aws_cognito_user": aws_cognito_user,
   "aws_cognito_user_group": aws_cognito_user_group,
+  "aws_cognito_resource_server": aws_cognito_resource_server,
   "aws_cognito_user_pool_client": aws_cognito_user_pool_client,
   "aws_connect_contact_flow": aws_connect_contact_flow,
   "aws_connect_contact_flow_module": aws_connect_contact_flow_module,
@@ -1990,5 +2020,6 @@ aws_needid = {
   "aws_route53_vpc_association_authorization": aws_route53_vpc_association_authorization,
   "aws_route53_zone_association": aws_route53_zone_association,
   "aws_servicecatalog_constraint": aws_servicecatalog_constraint,
-  "aws_vpclattice_auth_policy": aws_vpclattice_auth_policy
+  "aws_vpclattice_auth_policy": aws_vpclattice_auth_policy,
+  "aws_customerprofiles_profile": aws_customerprofiles_profile
 }

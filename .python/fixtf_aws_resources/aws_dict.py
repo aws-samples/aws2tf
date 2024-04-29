@@ -2423,8 +2423,8 @@ aws_codestarconnections_connection = {
 	"clfn":		"codestar-connections",
 	"descfn":	"list_connections",
 	"topkey":	"Connections",
-	"key":		"ConnectionName",
-	"filterid":	"ConnectionName"
+	"key":		"ConnectionArn",
+	"filterid":	"ConnectionArn"
 }
 
 aws_codestarconnections_host = {
@@ -2447,8 +2447,8 @@ aws_cognito_identity_pool = {
 	"clfn":		"cognito-identity",
 	"descfn":	"list_identity_pools",
 	"topkey":	"IdentityPools",
-	"key":		"IdentityPoolName",
-	"filterid":	"IdentityPoolName"
+	"key":		"IdentityPoolId",
+	"filterid":	"IdentityPoolId"
 }
 
 aws_cognito_identity_pool_provider_principal_tag = {
@@ -2484,7 +2484,7 @@ aws_cognito_managed_user_pool_client = {
 }
 
 aws_cognito_resource_server = {
-	"clfn":		"cognito",
+	"clfn":		"cognito-idp",
 	"descfn":	"list_resource_servers",
 	"topkey":	"ResourceServers",
 	"key":		"Identifier",
@@ -2574,7 +2574,7 @@ aws_comprehend_entity_recognizer = {
 aws_config_aggregate_authorization = {
 	"clfn":		"config",
 	"descfn":	"describe_aggregation_authorizations",
-	"topkey":	"AggregateAuthorizations",
+	"topkey":	"AggregationAuthorizations",
 	"key":		"AuthorizedAccountId",
 	"filterid":	"AuthorizedAccountId"
 }
@@ -2814,7 +2814,7 @@ aws_customer_gateway = {
 aws_customerprofiles_domain = {
 	"clfn":		"customer-profiles",
 	"descfn":	"list_domains",
-	"topkey":	"Domains",
+	"topkey":	"Items",
 	"key":		"DomainName",
 	"filterid":	"DomainName"
 }
@@ -3086,9 +3086,9 @@ aws_default_vpc_dhcp_options = {
 aws_detective_graph = {
 	"clfn":		"detective",
 	"descfn":	"list_graphs",
-	"topkey":	"Graphs",
-	"key":		"GraphArn",
-	"filterid":	"GraphArn"
+	"topkey":	"GraphList",
+	"key":		"Arn",
+	"filterid":	"Arn"
 }
 
 aws_detective_invitation_accepter = {

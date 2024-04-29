@@ -129,5 +129,7 @@ noimport = {
     "aws_route53recoveryreadiness_recovery_group": True,
     "aws_route53recoveryreadiness_resource_set": True,
     "aws_cloudwatch_query_definition": True,
-    "aws_cloudfront_response_headers_policy": True ### insufficient block errors on plan
+    "aws_cloudfront_response_headers_policy": True, ### insufficient block errors on plan
+    "aws_db_cluster_snapshot": True, ### id is too long
+    "aws_db_instance_role_association": True ### an association
 }

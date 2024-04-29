@@ -4727,7 +4727,7 @@ aws_glue_data_catalog_encryption_settings = {
 aws_glue_data_quality_ruleset = {
 	"clfn":		"glue",
 	"descfn":	"list_data_quality_rulesets",
-	"topkey":	"RulesetNames",
+	"topkey":	"Rulesets",
 	"key":		"Name",
 	"filterid":	"Name"
 }

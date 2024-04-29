@@ -153,6 +153,7 @@ notimplemented = {
     "aws_finspace_kx_cluster": True,
     "aws_finspace_kx_database": True,
     "aws_finspace_kx_dataview": True,
+    "aws_finspace_kx_environment": True,
     "aws_finspace_kx_scaling_group": True,
     "aws_finspace_kx_user": True,
     "aws_finspace_kx_volume": True,

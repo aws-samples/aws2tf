@@ -337,6 +337,7 @@ def aws_eip(t1,tt1,tt2,flag1,flag2):
 def aws_eip_association(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if tt1 == "instance_id":
+		if tt2 == "null": skip=1
 		t1 = tt1 + " = aws_instance."+tt2+".id\n"
 	elif tt1 == "public_ip": skip=1
 	elif tt1 == "private_ip_address": skip=1

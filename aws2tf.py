@@ -157,8 +157,8 @@ if __name__ == '__main__':
     
     if all_types != None:
         ic=0
-        istart=399
-        it=501
+        istart=499
+        it=601
         for i in all_types:
             ic=ic+1
             if ic > it: break 

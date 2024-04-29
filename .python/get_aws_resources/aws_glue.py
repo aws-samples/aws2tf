@@ -203,3 +203,28 @@ def get_aws_glue_crawler(type, id, clfn, descfn, topkey, key, filterid):
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
+
+# aws_glue_dev_endpoint
+
+def get_aws_glue_dev_endpoint(type, id, clfn, descfn, topkey, key, filterid):
+
+    if globals.debug:
+        print("--> In get_aws_glue_dev_endpoint doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)   
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            response = client.list_dev_endpoints()
+            if response['DevEndpointNames'] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            for j in response['DevEndpointNames']:
+                epn=j
+                if id is None:
+                    common.write_import(type,epn,None) 
+                elif epn==id:
+                    common.write_import(type, epn, None)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True

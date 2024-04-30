@@ -228,3 +228,26 @@ def get_aws_glue_dev_endpoint(type, id, clfn, descfn, topkey, key, filterid):
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
+
+# aws_glue_data_catalog_encryption_settings
+
+def get_aws_glue_data_catalog_encryption_settings(type, id, clfn, descfn, topkey, key, filterid):
+
+    if globals.debug:
+        print("--> In get_aws_glue_dev_endpoint doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)   
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            response = client.get_data_catalog_encryption_settings()
+            if response['DataCatalogEncryptionSettings'] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if id is None:
+                common.write_import(type,globals.acc,"c-"+globals.acc) 
+            else:
+                common.write_import(type,id,"c-"+id)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True

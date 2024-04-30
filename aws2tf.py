@@ -253,9 +253,9 @@ if __name__ == '__main__':
                 detdepstr=detdepstr+str(ti)+" "
 
         print("----------- Completed "+str(lc)+" dependancy check loops --------------") 
-        #print("OLD= "+str(olddetdepstr))
-        #print("NEW= "+str(detdepstr))
-        if olddetdepstr == detdepstr:
+        print("OLD= "+str(olddetdepstr))
+        print("NEW= "+str(detdepstr))
+        if olddetdepstr == detdepstr and detdepstr != "":
             print("ERROR: No change/progress in dependancies exiting")
             for ti in globals.rproc.keys():
                 if not globals.rproc[ti]:

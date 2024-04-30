@@ -4471,9 +4471,9 @@ aws_finspace_kx_volume = {
 aws_fis_experiment_template = {
 	"clfn":		"fis",
 	"descfn":	"list_experiment_templates",
-	"topkey":	"ExperimentTemplates",
-	"key":		"Id",
-	"filterid":	"Id"
+	"topkey":	"experimentTemplates",
+	"key":		"id",
+	"filterid":	"id"
 }
 
 aws_fms_admin_account = {

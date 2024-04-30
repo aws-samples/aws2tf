@@ -132,3 +132,30 @@ def get_aws_ecs_task_definition(type,id,clfn,descfn,topkey,key,filterid):
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
+
+def get_aws_ecs_capacity_provider(type,id,clfn,descfn,topkey,key,filterid):
+
+    if globals.debug:
+        print("--> get_aws_ecs_capacity_provider  doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+        
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            response = client.describe_capacity_providers()
+        else:
+            response = client.describe_capacity_providers(capacityProviders=[id])
+        response=response[topkey]
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+
+        for j in response: 
+            pkey=j[key]
+            if "FARGATE" not in pkey:
+                common.write_import(type,pkey,None) 
+
+    
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True

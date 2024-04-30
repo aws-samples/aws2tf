@@ -208,6 +208,8 @@ if __name__ == '__main__':
         print("No Detected Dependancies") 
 
     lc=0
+    olddetdepstr=""
+    detdepstr=""
     while detdep:
         for ti in list(globals.rproc):
             if not globals.rproc[ti]:
@@ -243,14 +245,27 @@ if __name__ == '__main__':
         #    print(str(ti)+":"+str(globals.rproc[ti]))
 
         #print("********** keys end ***************")  
-
+        detdepstr=""
         for ti in globals.rproc.keys():
             if not globals.rproc[ti]:
                 detdep=True 
                 print(str(ti)+" is False")
+                detdepstr=detdepstr+str(ti)+" "
 
         print("----------- Completed "+str(lc)+" dependancy check loops --------------") 
-        
+        #print("OLD= "+str(olddetdepstr))
+        #print("NEW= "+str(detdepstr))
+        if olddetdepstr == detdepstr:
+            print("ERROR: No change/progress in dependancies exiting")
+            for ti in globals.rproc.keys():
+                if not globals.rproc[ti]:
+                    print("ERROR: Not found "+str(ti)+" - check if this resource still exists in AWS")
+                    print("ERROR: Also check what resource is using it - grep the *.tf files in the generated/tf.* subdirectory")
+            exit()
+
+        olddetdepstr=detdepstr
+
+
         if lc > 9:
             print("ERROR: Too many loops exiting")
             for ti in globals.rproc.keys():

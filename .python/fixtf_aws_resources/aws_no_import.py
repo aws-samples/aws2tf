@@ -138,5 +138,6 @@ noimport = {
     "aws_ecr_replication_configuration": True, ### unsure how to get in 
     "aws_ec2_tag": True, ### only use when resources created outside of Terraform
     "aws_ec2_availability_zone_group": True, ### advanced resource not normally used
-    "aws_ec2_managed_prefix_list_entry": True ### normally use aws_ec2_managed_prefix_list
+    "aws_ec2_managed_prefix_list_entry": True, ### normally use aws_ec2_managed_prefix_list
+    "aws_fsx_data_repository_association": True, ### an association
 }

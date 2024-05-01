@@ -140,4 +140,5 @@ noimport = {
     "aws_ec2_availability_zone_group": True, ### advanced resource not normally used
     "aws_ec2_managed_prefix_list_entry": True, ### normally use aws_ec2_managed_prefix_list
     "aws_fsx_data_repository_association": True, ### an association
+    "aws_iam_account_password_policy": True, ### probably don't want to do in Terraform 
 }

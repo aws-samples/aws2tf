@@ -514,6 +514,22 @@ aws_backup_vault_lock_configuration = {
     "clfn": "backup"  
 }
 
+aws_lex_bot_alias = {
+    "param": "botName",
+    "clfn": "lex-models"  
+}
+
+aws_lexv2models_bot_locale  = {
+    "param": "botId",
+    "clfn": "lex-models"  
+}
+
+aws_lexv2models_bot_version =  {
+    "param": "botId",
+    "clfn": "lex-models"  
+}
+
+
 aws_chime_voice_connector_termination_credentials = {
   "param": "VoiceConnectorId",
   "clfn": "chime"
@@ -1144,6 +1160,12 @@ aws_medialive_multiplex_program = {
   "clfn": "medialive"
 }
 
+aws_msk_scram_secret_association= {
+  "param": "ClusterArn",
+  "clfn": "kafka"
+}
+
+
 aws_neptune_orderable_db_instance = {
   "param": "Engine",
   "clfn": "neptune"
@@ -1184,6 +1206,11 @@ aws_outposts_assets = {
   "clfn": "outposts"
 }
 
+aws_prometheus_rule_group_namespace  = {
+  "param": "workspaceId",
+  "clfn": "amp"
+}
+
 aws_quicksight_analysis = {
   "param": "AwsAccountId",
   "clfn": "quicksight"
@@ -1214,9 +1241,9 @@ aws_quicksight_group = {
   "clfn": "quicksight"
 }
 
-AwsAccountId = {
+aws_quicksight_group_membership = {
   "param": "GroupName",
-  "clfn": "Namespace"
+  "clfn": "quicksight"
 }
 
 aws_quicksight_iam_policy_assignment = {
@@ -1234,6 +1261,11 @@ aws_quicksight_namespace = {
   "clfn": "quicksight"
 }
 
+aws_quicksight_refresh_schedule  = {
+  "param": "AwsAccountId",
+  "clfn": "quicksight"
+}
+
 aws_quicksight_template = {
   "param": "AwsAccountId",
   "clfn": "quicksight"
@@ -1245,6 +1277,11 @@ aws_quicksight_template_alias = {
 }
 
 aws_quicksight_theme = {
+  "param": "AwsAccountId",
+  "clfn": "quicksight"
+}
+
+aws_quicksight_vpc_connection  = {
   "param": "AwsAccountId",
   "clfn": "quicksight"
 }
@@ -1283,6 +1320,17 @@ aws_route53_cidr_location = {
   "param": "CollectionId",
   "clfn": "route53"
 }
+
+aws_route53recoverycontrolconfig_routing_control = {
+  "param": "ontrolPanelArn",
+  "clfn": "route53"
+}
+
+aws_route53recoverycontrolconfig_safety_rule = {
+  "param": "ontrolPanelArn",
+  "clfn": "route53"
+}
+
 
 aws_route53_hosted_zone_dnssec = {
   "param": "HostedZoneId",
@@ -1495,6 +1543,11 @@ secretsmanager_secret_policy = {
   "clfn": "secretsmanager"
 }
 
+aws_secretsmanager_secret_policy  = {
+  "param": "SecretId",
+  "clfn": "secretsmanager"
+}
+
 aws_securityhub_standards_control = {
   "param": "StandardsSubscriptionArn",
   "clfn": "securityhub"
@@ -1503,6 +1556,11 @@ aws_securityhub_standards_control = {
 aws_serverlessapplicationrepository_cloudformation_stack = {
   "param": "ApplicationId",
   "clfn": "serverlessrepo"
+}
+
+aws_servicequotas_service_quota  = {
+  "param": "ServiceCode",
+  "clfn": "service-quotas"
 }
 
 aws_service_discovery_instance = {
@@ -1540,6 +1598,11 @@ aws_ses_receipt_rule_set = {
   "clfn": "ses"
 }
 
+aws_sfn_alias = {
+  "param": "stateMachineArn",
+  "clfn": "stepfunctions"
+}
+
 aws_sns_topic_data_protection_policy = {
   "param": "ResourceArn",
   "clfn": "sns"
@@ -1573,6 +1636,51 @@ aws_sqs_queue_redrive_policy = {
 aws_ssm_service_setting = {
   "param": "SettingId",
   "clfn": "ssm"
+}
+
+aws_ssm_maintenance_window_target = {
+  "param": "WindowId",
+  "clfn": "ssm"
+}
+
+aws_ssm_maintenance_window_task = {
+  "param": "WindowId",
+  "clfn": "ssm"
+}
+
+aws_ssmcontacts_contact_channel = {
+  "param": "ContactId",
+  "clfn": "ssm"
+}
+
+aws_ssmcontacts_plan = {
+  "param": "ContactId",
+  "clfn": "ssm"
+}
+
+aws_ssoadmin_account_assignment = {
+  "param": "AccountId",
+  "clfn": "sso-admin"
+}
+
+aws_ssoadmin_application = {
+  "param": "InstanceArn",
+  "clfn": "sso-admin"
+}
+
+aws_ssoadmin_application_assignment = {
+  "param": "ApplicationArn",
+  "clfn": "sso-admin"
+}
+
+aws_ssoadmin_permission_set = {
+  "param": "InstanceArn",
+  "clfn": "sso-admin"
+}
+
+aws_ssoadmin_trusted_token_issuer  = {
+  "param": "InstanceArn",
+  "clfn": "sso-admin"
 }
 
 aws_storagegateway_cache = {
@@ -1635,6 +1743,21 @@ aws_transfer_user = {
   "clfn": "transfer"
 }
 
+aws_vpc_ipam_pool_cidr = {
+  "param": "IpamPoolId",
+  "clfn": "ec2"
+}
+
+aws_vpc_ipam_pool_cidr_allocation = {
+  "param": "IpamPoolId",
+  "clfn": "ec2"
+}
+
+aws_vpc_ipv6_cidr_block_association = {
+  "param": "PoolId",
+  "clfn": "ec2"
+}
+
 aws_vpclattice_auth_policy = {
   "param": "resourceIdentifier",
   "clfn": "vpc-lattice"
@@ -1688,6 +1811,21 @@ aws_wafv2_rule_group = {
 aws_wafv2_web_acl = {
   "param": "Scope",
   "clfn": "wafv2"
+}
+
+aws_wafv2_web_acl_association = {
+  "param": "Scope",
+  "clfn": "wafv2"
+}
+
+aws_wafv2_web_acl_logging_configuration = {
+  "param": "ResourceArn",
+  "clfn": "wafv2"
+}
+
+aws_worklink_website_certificate_authority_association = {
+  "param": "FleetArn",
+  "clfn": "worklink"
 }
 
 aws_prometheus_alert_manager_definition = {
@@ -1804,6 +1942,9 @@ aws_needid = {
   "aws_backup_vault_policy": aws_backup_vault_policy,
   "aws_backup_vault_notifications": aws_backup_vault_notifications,
   "aws_backup_vault_lock_configuration": aws_backup_vault_lock_configuration,
+  "aws_lex_bot_alias": aws_lex_bot_alias,
+  "aws_lexv2models_bot_locale": aws_lexv2models_bot_locale,
+  "aws_lexv2models_bot_version": aws_lexv2models_bot_version,
   "aws_chime_voice_connector_termination_credentials": aws_chime_voice_connector_termination_credentials,
   "aws_cloudwatch_log_stream": aws_cloudwatch_log_stream,
   "aws_codecatalyst_dev_environment": aws_codecatalyst_dev_environment,
@@ -1928,25 +2069,29 @@ aws_needid = {
   "aws_lightsail_bucket_access_key": aws_lightsail_bucket_access_key,
   "aws_lightsail_container_service_deployment_version": aws_lightsail_container_service_deployment_version,
   "aws_medialive_multiplex_program": aws_medialive_multiplex_program,
+  "aws_msk_scram_secret_association": aws_msk_scram_secret_association,
   "aws_neptune_orderable_db_instance": aws_neptune_orderable_db_instance,
   "aws_organizations_policies": aws_organizations_policies,
   "aws_organizations_policies_for_target": aws_organizations_policies_for_target,
   "aws_organizations_policy": aws_organizations_policy,
   "aws_outposts_asset": aws_outposts_asset,
   "aws_outposts_assets": aws_outposts_assets,
+  "aws_prometheus_rule_group_namespace": aws_prometheus_rule_group_namespace,
   "aws_quicksight_analysis": aws_quicksight_analysis,
   "aws_quicksight_dashboard": aws_quicksight_dashboard,
   "aws_quicksight_data_set": aws_quicksight_data_set,
   "aws_quicksight_data_source": aws_quicksight_data_source,
   "aws_quicksight_folder": aws_quicksight_folder,
   "aws_quicksight_group": aws_quicksight_group,
-  "AwsAccountId": AwsAccountId,
+  "aws_quicksight_group_membership": aws_quicksight_group_membership,
   "aws_quicksight_iam_policy_assignment": aws_quicksight_iam_policy_assignment,
   "aws_quicksight_ingestion": aws_quicksight_ingestion,
   "aws_quicksight_namespace": aws_quicksight_namespace,
+  "aws_quicksight_refresh_schedule": aws_quicksight_refresh_schedule,
   "aws_quicksight_template": aws_quicksight_template,
   "aws_quicksight_template_alias": aws_quicksight_template_alias,
   "aws_quicksight_theme": aws_quicksight_theme,
+  "aws_quicksight_vpc_connection": aws_quicksight_vpc_connection,
   "aws_quicksight_user": aws_quicksight_user,
   "aws_rds_cluster_role_association": aws_rds_cluster_role_association,
   "aws_rds_orderable_db_instance": aws_rds_orderable_db_instance,
@@ -1954,6 +2099,8 @@ aws_needid = {
   "aws_redshift_resource_policy": aws_redshift_resource_policy,
   "aws_redshiftdata_statement": aws_redshiftdata_statement,
   "aws_route53_cidr_location": aws_route53_cidr_location,
+  "aws_route53recoverycontrolconfig_routing_control": aws_route53recoverycontrolconfig_routing_control,
+  "aws_route53recoverycontrolconfig_safety_rule": aws_route53recoverycontrolconfig_safety_rule,
   "aws_route53_record": aws_route53_record,
   "aws_s3_account_public_access_block": aws_s3_account_public_access_block,
   "aws_s3_bucket_accelerate_configuration": aws_s3_bucket_accelerate_configuration,
@@ -1989,17 +2136,20 @@ aws_needid = {
   "aws_sagemaker_image_version": aws_sagemaker_image_version,
   "aws_sagemaker_model_package_group_policy": aws_sagemaker_model_package_group_policy,
   "aws_schemas_schema": aws_schemas_schema,
+  "aws_secretsmanager_secret_policy": aws_secretsmanager_secret_policy,
   "aws_secretsmanager_secret_version": aws_secretsmanager_secret_version,
   "aws_secretsmanager_secret_rotation": aws_secretsmanager_secret_rotation,
   "secretsmanager_secret_policy": secretsmanager_secret_policy,
   "aws_securityhub_standards_control": aws_securityhub_standards_control,
   "aws_serverlessapplicationrepository_cloudformation_stack": aws_serverlessapplicationrepository_cloudformation_stack,
   "aws_service_discovery_instance": aws_service_discovery_instance,
+  "aws_servicequotas_service_quota": aws_servicequotas_service_quota,
   "aws_servicecatalog_launch_paths": aws_servicecatalog_launch_paths,
   "aws_servicecatalog_provisioning_artifact": aws_servicecatalog_provisioning_artifact,
   "aws_servicecatalog_provisioning_artifacts": aws_servicecatalog_provisioning_artifacts,
   "aws_ses_receipt_rule": aws_ses_receipt_rule,
   "aws_ses_receipt_rule_set": aws_ses_receipt_rule_set,
+  "aws_sfn_alias": aws_sfn_alias,
   "aws_sns_topic_data_protection_policy": aws_sns_topic_data_protection_policy,
   "aws_sns_topic_policy": aws_sns_topic_policy,
   "aws_sns_topic_subscription": aws_sns_topic_subscription,
@@ -2007,6 +2157,15 @@ aws_needid = {
   "aws_sqs_queue_redrive_allow_policy": aws_sqs_queue_redrive_allow_policy,
   "aws_sqs_queue_redrive_policy": aws_sqs_queue_redrive_policy,
   "aws_ssm_service_setting": aws_ssm_service_setting,
+  "aws_ssm_maintenance_window_target": aws_ssm_maintenance_window_target,
+  "aws_ssm_maintenance_window_task": aws_ssm_maintenance_window_task,
+  "aws_ssmcontacts_contact_channel": aws_ssmcontacts_contact_channel,
+  "aws_ssmcontacts_plan": aws_ssmcontacts_plan,
+  "aws_ssoadmin_account_assignment": aws_ssoadmin_account_assignment,
+  "aws_ssoadmin_application": aws_ssoadmin_application,
+  "aws_ssoadmin_application_assignment": aws_ssoadmin_application_assignment,
+  "aws_ssoadmin_permission_set": aws_ssoadmin_permission_set,
+  "aws_ssoadmin_trusted_token_issuer": aws_ssoadmin_trusted_token_issuer,
   "aws_storagegateway_cache": aws_storagegateway_cache,
   "aws_storagegateway_cached_iscsi_volume": aws_storagegateway_cached_iscsi_volume,
   "aws_storagegateway_file_system_association": aws_storagegateway_file_system_association,
@@ -2019,6 +2178,9 @@ aws_needid = {
   "aws_transfer_access": aws_transfer_access,
   "aws_transfer_agreement": aws_transfer_agreement,
   "aws_transfer_user": aws_transfer_user,
+  "aws_vpc_ipam_pool_cidr": aws_vpc_ipam_pool_cidr,
+  "aws_vpc_ipam_pool_cidr_allocation": aws_vpc_ipam_pool_cidr_allocation,
+  "aws_vpc_ipv6_cidr_block_association": aws_vpc_ipv6_cidr_block_association,
   "aws_vpclattice_listener": aws_vpclattice_listener,
   "aws_vpclattice_listener_rule": aws_vpclattice_listener_rule,
   "aws_vpclattice_access_log_subscription": aws_vpclattice_access_log_subscription,
@@ -2028,8 +2190,11 @@ aws_needid = {
   "aws_prometheus_alert_manager_definition": aws_prometheus_alert_manager_definition,
   "aws_wafv2_ip_set": aws_wafv2_ip_set,
   "aws_wafv2_regex_pattern_set": aws_wafv2_regex_pattern_set,
+  "aws_wafv2_web_acl_association": aws_wafv2_web_acl_association,
   "aws_wafv2_rule_group": aws_wafv2_rule_group,
   "aws_wafv2_web_acl": aws_wafv2_web_acl,
+  "aws_wafv2_web_acl_logging_configuration": aws_wafv2_web_acl_logging_configuration,
+  "aws_worklink_website_certificate_authority_association": aws_worklink_website_certificate_authority_association,
   "aws_xray_group": aws_xray_group,
   "aws_organizations_organizational_unit": aws_organizations_organizational_unit,
   "aws_organizations_policy_attachment": aws_organizations_policy_attachment,

@@ -443,5 +443,6 @@ notimplemented = {
 	"aws_auditmanager_framework": True,
 	"aws_auditmanager_framework_share": True,
 	"aws_auditmanager_organization_admin_account_registration": True,
-    "aws_ce_cost_allocation_tag": True ### TODO
+    "aws_ce_cost_allocation_tag": True, ### TODO
+    "aws_vpc_endpoint_service": True, ### TODO
 }

@@ -150,15 +150,15 @@ if __name__ == '__main__':
 
     all_types = resources.resource_types(type)
     #print("all_types="+str(all_types))
-    #print("len all_types="+str(len(all_types)))
+    print("len all_types="+str(len(all_types)))
 
     if len(all_types) == 1:  
         for i in all_types: common.call_resource(i, id)
     
     if all_types != None:
         ic=0
-        istart=499
-        it=601
+        istart=599
+        it=len(all_types)
         for i in all_types:
             ic=ic+1
             if ic > it: break 

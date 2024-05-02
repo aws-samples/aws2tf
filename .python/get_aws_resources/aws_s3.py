@@ -131,9 +131,7 @@ def get_s3(s3_fields,type,bucket_name):
       response=s3_fields[type](Bucket=bucket_name)
       
       rl=len(response)
-      if rl > 1 :
-
-         common.write_import(type,bucket_name,"b-"+bucket_name)
+      if rl > 1 : common.write_import(type,bucket_name,"b-"+bucket_name)
 
    except:
       if globals.debug: print("No " + type + " config for bucket " + bucket_name)

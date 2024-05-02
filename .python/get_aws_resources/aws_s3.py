@@ -14,6 +14,12 @@ def get_aws_s3_bucket(type, id, clfn, descfn, topkey, key, filterid):
 def get_all_s3_buckets(fb,my_region):
    print("bucket name="+str(fb))
    type="aws_s3_bucket"
+   if fb =="" or fb =="null":
+      print("bucket name is empty or null")
+      pkey=type+"."+fb
+      globals.rproc[pkey]=True
+      return True
+   
    if globals.debug: print("my_region="+my_region)
    #print("processed=" + str(globals.rproc))
    """Gets all the AWS S3 buckets and saves them to a file."""

@@ -143,19 +143,15 @@ if __name__ == '__main__':
         else:
             stacks.get_stacks(id)
 
-    #if type == "s3":
-    #    com = "rm -f s3-*.tf s3.tf tfplan *s3*.out"
-    #    rout = common.rc(com)
-    #    aws_s3.get_all_s3_buckets(fb, region)
+    elif type.startswith("aws_"):
+        if type in aws_dict.aws_resources:
+            common.call_resource(type, id)
+    
 
     all_types = resources.resource_types(type)
-    #print("all_types="+str(all_types))
-    print("len all_types="+str(len(all_types)))
-
-    if len(all_types) == 1:  
-        for i in all_types: common.call_resource(i, id)
     
     if all_types != None:
+        print("len all_types="+str(len(all_types)))
         ic=0
         istart=599
         it=len(all_types)
@@ -163,13 +159,12 @@ if __name__ == '__main__':
             ic=ic+1
             if ic > it: break 
             if ic < istart: continue
-            
+                
             print(str(ic)+" of "+str(it) +" type="+i)
             common.call_resource(i, id)
             
     else:
         if type in aws_dict.aws_resources:
-            
             common.call_resource(type,id)
 
 #########################################################################################################################

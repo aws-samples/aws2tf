@@ -307,7 +307,7 @@ notimplemented = {
     "aws_route53_resolver_query_log_config_association": True,
     "aws_route53_resolver_rule": True,
     "aws_route53_resolver_rule_association": True,
-    "aws_route53_zone": True, ### TODO
+    #"aws_route53_zone": True, ### TODO
     "aws_rum_app_monitor": True,
     "aws_rum_metrics_destination": True,
     "aws_s3_access_point": True,

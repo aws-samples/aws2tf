@@ -227,7 +227,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::Lambda::EventInvokeConfig": f3.write(type+" "+pid+"  as part of function..\n")   # fetched as part of function
             elif type == "AWS::Lambda::EventSourceMapping": f3.write(type+" "+pid+"  as part of function..\n")  # fetched as part of function
 
-            elif type == "AWS::Logs::LogGroup": common.call_resource("aws_cloudwatch_log_group", parn) 
+            elif type == "AWS::Logs::LogGroup": common.call_resource("aws_cloudwatch_log_group", pid) 
             
             ##### terraform crash !
             elif type == "AWS::RedshiftServerless::Namespace": common.call_resource("aws_redshiftserverless_namespace", pid)
@@ -1144,7 +1144,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::Route53::CidrCollection": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Route53::DNSSEC": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Route53::HealthCheck": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::Route53::HostedZone": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::Route53::HostedZone": common.call_resource("aws_route53_zone", pid)
             elif type == "AWS::Route53::KeySigningKey": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Route53::RecordSet": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Route53::RecordSetGroup": common.call_resource("aws_null", type+" "+pid)

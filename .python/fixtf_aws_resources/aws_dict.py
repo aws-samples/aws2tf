@@ -7866,8 +7866,8 @@ aws_route53_zone = {
 	"clfn":		"route53",
 	"descfn":	"list_hosted_zones",
 	"topkey":	"HostedZones",
-	"key":		"Name",
-	"filterid":	"Name"
+	"key":		"Id",
+	"filterid":	"Id"
 }
 
 

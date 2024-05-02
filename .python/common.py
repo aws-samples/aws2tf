@@ -45,6 +45,7 @@ from get_aws_resources import aws_lambda
 from get_aws_resources import aws_rds
 from get_aws_resources import aws_redshift
 from get_aws_resources import aws_redshift_serverless
+from get_aws_resources import aws_route53
 from get_aws_resources import aws_s3
 from get_aws_resources import aws_sagemaker
 from get_aws_resources import aws_secretsmanager

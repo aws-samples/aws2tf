@@ -28,6 +28,7 @@ from get_aws_resources import aws_config
 from get_aws_resources import aws_customer_profiles
 from get_aws_resources import aws_dms
 from get_aws_resources import aws_docdb
+from get_aws_resources import aws_ds
 from get_aws_resources import aws_dynamodb
 from get_aws_resources import aws_kms
 from get_aws_resources import aws_ec2

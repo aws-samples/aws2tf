@@ -109,7 +109,7 @@ notimplemented = {
 	"aws_devicefarm_test_grid_project": True,
 	"aws_devicefarm_upload": True,
     "aws_directory_service_conditional_forwarder": True,
-    "aws_directory_service_directory": True,  ### TODO
+    #"aws_directory_service_directory": True,  ### TODO
     "aws_directory_service_radius_settings": True,
     "aws_directory_service_region": True,
     "aws_directory_service_shared_directory": True,

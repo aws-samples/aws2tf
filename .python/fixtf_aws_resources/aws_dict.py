@@ -3181,7 +3181,7 @@ aws_directory_service_conditional_forwarder = {
 
 aws_directory_service_directory = {
 	"clfn":		"ds",
-	"descfn":	"list_directories",
+	"descfn":	"describe_directories",
 	"topkey":	"DirectoryDescriptions",
 	"key":		"DirectoryId",
 	"filterid":	"DirectoryId"

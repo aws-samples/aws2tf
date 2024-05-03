@@ -573,7 +573,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::DeviceFarm::Project": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::DeviceFarm::TestGridProject": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::DeviceFarm::VPCEConfiguration": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::DirectoryService::MicrosoftAD": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::DirectoryService::MicrosoftAD": common.call_resource("aws_directory_service_directory", pid)
             elif type == "AWS::DirectoryService::SimpleAD": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::DocDB::DBCluster": common.call_resource("aws_docdb_cluster", pid)
             elif type == "AWS::DocDB::DBClusterParameterGroup": common.call_resource("aws_null", type+" "+pid)

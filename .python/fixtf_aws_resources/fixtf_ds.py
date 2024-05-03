@@ -4,6 +4,9 @@ def aws_directory_service_conditional_forwarder(t1,tt1,tt2,flag1,flag2):
 
 def aws_directory_service_directory(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="password":
+		t1=tt1+' = "set-me"\n'
+		t1=t1+"\n lifecycle {\n   ignore_changes = [password]\n}\n"
 	return skip,t1,flag1,flag2
 
 def aws_directory_service_log_subscription(t1,tt1,tt2,flag1,flag2):

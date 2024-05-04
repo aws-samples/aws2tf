@@ -26,10 +26,6 @@ def aws_route53_query_log(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
 
-def aws_route53_record(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
 def aws_route53_resolver_config(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
@@ -112,3 +108,9 @@ def aws_route53_zone_association(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
 
+def aws_route53_record(t1,tt1,tt2,flag1,flag2):
+	skip=0
+	if tt1=="records" and tt2=="[]": skip=1
+	elif tt1=="ttl" and tt2=="0": skip=1
+	elif tt1=="multivalue_answer_routing_policy" and tt2=="false": skip=1
+	return skip,t1,flag1,flag2

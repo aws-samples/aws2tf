@@ -68,8 +68,8 @@ def get_aws_lb_listener(type,id,clfn,descfn,topkey,key,filterid):
 
 def get_aws_lb_listener_rule(type,id,clfn,descfn,topkey,key,filterid):
 
-    if globals.debug:
-        print("--> get_describe_rules  doing " + type + ' with id ' + str(id) +
+    #if globals.debug:
+    print("--> get_aws_lb_listener_rule  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -81,18 +81,22 @@ def get_aws_lb_listener_rule(type,id,clfn,descfn,topkey,key,filterid):
             response = client.describe_rules(RuleArns=[id])
         if ":listener/" in id:
             response = client.describe_rules(ListenerArn=id)
-        
+
         response=response[topkey]
+        
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         for j in response: 
+            
             retid=j[key] # key is RuleArn
+
             # is it default ?
             isdef=j['IsDefault']
             if isdef==False:
                 common.write_import(type,retid,None) 
-                pkey="aws_lb_listener_rule."+id
-                globals.rproc[pkey]=True
+            pkey="aws_lb_listener_rule."+id
+
+            globals.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

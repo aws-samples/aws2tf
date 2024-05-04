@@ -9274,8 +9274,8 @@ aws_ssm_activation = {
 
 aws_ssm_association = {
     "clfn": "ssm",
-    "descfn": "describe_association", 
-    "topkey": "AssociationDescription",
+    "descfn": "list_associations", 
+    "topkey": "Associations",
     "key": "AssociationId",
     "filterid": "AssociationId"
 }

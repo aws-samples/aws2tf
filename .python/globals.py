@@ -21,6 +21,8 @@ aws_instance_resp=[]
 lbc=0; rbc=0
 asg_azs=False
 plan2=False
+lbskipaacl=False
+lbskipcnxl=False
 ssmparamn=""
 repdbin=False
 gulejobmaxcap=False

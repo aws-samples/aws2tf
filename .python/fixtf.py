@@ -5,6 +5,7 @@ import boto3
 import base64
 import resources
 import common
+import shutil
 
 from fixtf_aws_resources import aws_common
 from fixtf_aws_resources import fixtf_accessanalyzer
@@ -205,6 +206,7 @@ from fixtf_aws_resources import fixtf_wafv2
 from fixtf_aws_resources import fixtf_worklink
 from fixtf_aws_resources import fixtf_workspaces
 from fixtf_aws_resources import fixtf_xray
+import shutil
 
 
 ##############################################
@@ -253,6 +255,7 @@ def fixtf(ttft,tf):
     if globals.debug: print("callfn="+callfn+" ttft="+ttft)
 
     Lines = f1.readlines()
+    f1.close()
     #print("getfn for fixtf2."+ttft+" "+tf2)
     #with open(tf2, "a") as f2:
     ## Prescan    
@@ -280,7 +283,25 @@ def fixtf(ttft,tf):
             if tt1=="destination_arn":
                 if tt2 == "null": globals.levsmap=True
 
-    
+    accessl=0
+    cnxl=0
+    globals.lbskipaacl=False
+    globals.lbskipcnxl=False
+    if ttft=="aws_lb":
+        for t1 in Lines:
+            t1=t1.strip()
+            tt1=t1.split("=")[0].strip()
+            try:
+                tt2=t1.split("=")[1].strip().strip('\"')
+            except:
+                tt2=""
+            if tt1=="access_logs": accessl=1;cnxl=0
+            if tt1=="connection_logs": accessl=0;cnxl=1
+            if tt1=="enabled":
+                if tt2 == "false" and accessl==1: globals.lbskipaacl=True
+                if tt2 == "false" and cnxl==1: globals.lbskipcnxl=True
+                else: globals.lbenabled=True
+
     ## Block stripping init
     globals.lbc=0
     globals.rbc=0
@@ -366,19 +387,60 @@ def fixtf(ttft,tf):
                 print("-- no fixtf for "+tf+" calling generic fixtf2.aws_resource callfn="+callfn)
                 print("t1="+str(t1)) 
                 nofind=2
-                skip,t1,flag1,flag2=aws_resource(t1,tt1,tt2,flag1,flag2)
-
-
-                
+                skip,t1,flag1,flag2=aws_resource(t1,tt1,tt2,flag1,flag2)           
             #### 
 
             if skip == 0:
                 f2.write(t1)
+
+
+        # extra flock removals in aws_lb
+        if type=="aws_lb":
+            if globals.lbskipaacl:
+                shutil.move(tf2, tf2+".saved")
+                globals.stripblock="access_logs"
+                with open(tf2+".saved", "e") as f1:
+                    Lines = f1.readlines()
+                with open(tf2, "w") as f2:
+                    for t1 in Lines:
+                        t1=t1.strip()
+                        tt1=t1.split("=")[0].strip()
+                        if globals.stripblock != "":
+                            if globals.stripblock in t1: globals.lbc=1
+                            elif globals.stripstart in t1 and globals.lbc>0: globals.lbc=globals.lbc+1
+                            
+                            if globals.stripend in t1 and globals.lbc>0:
+                                globals.lbc=globals.lbc-1
+                                skip=1
+                            elif globals.lbc > 0: skip=1
+            if globals.lbskipcnxl:
+                shutil.move(tf2, tf2+".saved")
+                globals.stripblock="connectin_logs"
+                with open(tf2+".saved", "e") as f1:
+                    Lines = f1.readlines()
+                with open(tf2, "w") as f2:
+                    for t1 in Lines:
+                        t1=t1.strip()
+                        tt1=t1.split("=")[0].strip()
+                        if globals.stripblock != "":
+                            if globals.stripblock in t1: globals.lbc=1
+                            elif globals.stripstart in t1 and globals.lbc>0: globals.lbc=globals.lbc+1
+                            
+                            if globals.stripend in t1 and globals.lbc>0:
+                                globals.lbc=globals.lbc-1
+                                skip=1
+                            elif globals.lbc > 0: skip=1
+                        
+
         if nofind > 0:
            print("WARNING: No fixtf for "+tf+" calling generic fixtf2.aws_resource nofind="+str(nofind))
+        
+        
+        
         ## move *.out to impoted
-        com = "mv "+rf+" imported"
-        rout = common.rc(com)
+        shutil.move(rf, "imported/"+rf)
+        #com = "mv "+rf+" imported"
+        #rout = common.rc(com)
            
 
 def aws_resource(t1,tt1,tt2,flag1,flag2):

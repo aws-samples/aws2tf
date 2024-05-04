@@ -62,8 +62,8 @@ def get_aws_lambda_layer_version(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
-    #if globals.debug:
-    print("--> In get_aws_lambda_function doing " + type + ' with id ' + str(id) +
+    if globals.debug:
+        print("--> In get_aws_lambda_function doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     response = common.call_boto3(type,clfn, descfn, topkey, key, id)

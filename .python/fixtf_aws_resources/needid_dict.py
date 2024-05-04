@@ -1352,6 +1352,10 @@ aws_route53_zone_association = {
   "clfn": "route53"
 }
 
+aws_route53_cidr_location = {
+  "param": "CollectionId",
+  "clfn": "route53"
+}
 
 aws_route53_record = {
   "param": "HostedZoneId",
@@ -1631,6 +1635,12 @@ aws_sqs_queue_redrive_allow_policy = {
 aws_sqs_queue_redrive_policy = {
   "param": "QueueUrl",
   "clfn": "sqs"
+}
+
+
+aws_ssm_association = {
+  "param": "AssociationId",
+  "clfn": "ssm"
 }
 
 aws_ssm_service_setting = {
@@ -2156,6 +2166,7 @@ aws_needid = {
   "aws_sqs_queue_policy": aws_sqs_queue_policy,
   "aws_sqs_queue_redrive_allow_policy": aws_sqs_queue_redrive_allow_policy,
   "aws_sqs_queue_redrive_policy": aws_sqs_queue_redrive_policy,
+  "aws_ssm_association": aws_ssm_association,
   "aws_ssm_service_setting": aws_ssm_service_setting,
   "aws_ssm_maintenance_window_target": aws_ssm_maintenance_window_target,
   "aws_ssm_maintenance_window_task": aws_ssm_maintenance_window_task,

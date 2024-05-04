@@ -45,7 +45,7 @@ def get_aws_route53_record(type, id, clfn, descfn, topkey, key, filterid):
             rkey=type+"."+id
             globals.rproc[rkey]=True
             if id.startswith("/hostedzone/"): id=id.split("/")[2]
-            print("id="+id)
+            #print("id="+id)
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate(HostedZoneId=id):
                 response = response + page[topkey]
@@ -57,7 +57,7 @@ def get_aws_route53_record(type, id, clfn, descfn, topkey, key, filterid):
                 if r53name.endswith("."): r53name=r53name[:-1]
                 if r53type=="A":
                     pkey=id+"_"+r53name+"_"+r53type
-                    print("pkey="+pkey)
+                    #print("pkey="+pkey)
                     common.write_import(type,pkey,None) 
 
 

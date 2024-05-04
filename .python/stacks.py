@@ -640,7 +640,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::EC2::TransitGatewayRouteTablePropagation": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::EC2::TransitGatewayVpcAttachment": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::EC2::VPCCidrBlock": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::EC2::VPCDHCPOptionsAssociation": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::EC2::VPCDHCPOptionsAssociation": common.call_resource("aws_vpc_dhcp_options_association",pid)
             elif type == "AWS::EC2::VPCEndpointConnectionNotification": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::EC2::VPCEndpointServicePermissions": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::EC2::VPCPeeringConnection": common.call_resource("aws_null", type+" "+pid)

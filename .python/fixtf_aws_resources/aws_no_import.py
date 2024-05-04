@@ -107,7 +107,7 @@ noimport = {
     "aws_vpn_gateway_route_propagation": True,
     # hand driven exclusions
     "aws_wafregional_web_acl_association": True,    # get it from target rsource
-    "aws_vpc_dhcp_options_association": True,      # get it from target rsource
+    #"aws_vpc_dhcp_options_association": True,      # get it from target rsource
     "aws_vpc_ipam_organization_admin_account": True,
     "aws_grafana_license_association": True,
     # via other resources

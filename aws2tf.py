@@ -176,7 +176,7 @@ if __name__ == '__main__':
                 i = ti.split(".")[0]
                 id = ti.split(".")[1]
                 if id not in str(globals.policyarns):
-                    print("type="+i+" id="+str(id))
+                    if globals.debug: print("type="+i+" id="+str(id))
                     common.call_resource(i, id)
     #else:
     #    print("No Known Dependancies")

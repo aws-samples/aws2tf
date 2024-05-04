@@ -386,9 +386,10 @@ def tfplan3():
                ci=ci+1
 
 
-            print("\n-->> Then if happy with the output changes for the above resources, run this command to complete aws2tf-py tasks:")
-            print("terraform apply -no-color tfplan")
-            exit()
+            if globals.debug is True:
+               print("\n-->> Then if happy with the output changes for the above resources, run this command to complete aws2tf-py tasks:")
+               print("terraform apply -no-color tfplan")
+               exit()
          else:
             print("-->> plan will change resources! - unexpected")
             print("-->> look at plan2.json - or run terraform plan")

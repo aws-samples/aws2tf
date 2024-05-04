@@ -10,8 +10,8 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
     keyclient=boto3.client('kms')
     if id is not None and "arn:" in id:
         id=id.split("/")[-1]
-    #if globals.debug: print("--> In get_aws_kms_key    doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-    print("--> In get_aws_kms_key    doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    if globals.debug: 
+        print("--> In get_aws_kms_key    doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     response=common.call_boto3(type,clfn,descfn,topkey,key,id)
     #print("-9a->"+str(response))
@@ -61,8 +61,8 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
     return True
 
 def get_aws_kms_alias(type,id,clfn,descfn,topkey,key,filterid):
-    #if globals.debug: print("--> In get_aws_kms_key    doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-    print("--> In get_aws_kms_alias  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    if globals.debug:
+        print("--> In get_aws_kms_alias  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     response = []
     client = boto3.client(clfn)
     paginator = client.get_paginator(descfn)

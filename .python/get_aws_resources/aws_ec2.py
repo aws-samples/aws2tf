@@ -508,3 +508,29 @@ def get_aws_ebs_encryption_by_default(type, id, clfn, descfn, topkey, key, filte
 
     return True
 
+
+def get_aws_vpc_dhcp_options_association(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        if id is None:
+            print("WARNING: No id or invalid id provided for "+type)
+        else:
+            if "|" in id:
+                vpcid=id.split("|")[1]
+            elif id.startswith("vpc-"):
+                vpcid=id
+            else:
+                print("WARNING: No id or invalid id provided for "+type)
+                return True
+            
+            print("vpcid="+vpcid)
+            common.write_import(type,vpcid,None) 
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+

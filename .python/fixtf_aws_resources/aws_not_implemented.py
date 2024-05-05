@@ -187,6 +187,8 @@ notimplemented = {
     "aws_ivs_channel": True,
     "aws_ivs_playback_key_pair": True,
     "aws_ivs_recording_configuration": True,
+    "aws_ivschat_logging_configuration": True,
+    "aws_ivschat_room": True,
     "aws_keyspaces_keyspace": True,
     "aws_kinesis_video_stream": True,
     "aws_kms_external_key": True,

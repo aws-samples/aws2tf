@@ -38,8 +38,11 @@ from get_aws_resources import aws_ecr
 from get_aws_resources import aws_eks
 from get_aws_resources import aws_elbv2
 from get_aws_resources import aws_events
+from get_aws_resources import aws_firehose
 from get_aws_resources import aws_glue
+from get_aws_resources import aws_guardduty
 from get_aws_resources import aws_iam
+from get_aws_resources import aws_kendra
 from get_aws_resources import aws_kinesis
 from get_aws_resources import aws_logs
 from get_aws_resources import aws_lambda
@@ -486,7 +489,7 @@ def aws_tf(region):
          f3.write('  required_providers {\n')
          f3.write('    aws = {\n')
          f3.write('      source  = "hashicorp/aws"\n')
-         f3.write('      version = "5.44.0"\n')
+         f3.write('      version = "5.48.0"\n')
          f3.write('    }\n')
          f3.write('  }\n')
          f3.write('}\n')

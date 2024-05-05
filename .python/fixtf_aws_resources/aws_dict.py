@@ -5159,61 +5159,61 @@ aws_identitystore_user = {
 aws_imagebuilder_component = {
 	"clfn":		"imagebuilder",
 	"descfn":	"list_components",
-	"topkey":	"Components",
-	"key":		"ComponentArn",
-	"filterid":	"ComponentArn"
+	"topkey":	"componentVersionList",
+	"key":		"arn",
+	"filterid":	"arn"
 }
 
 
 aws_imagebuilder_container_recipe = {
 	"clfn":		"imagebuilder",
 	"descfn":	"list_container_recipes",
-	"topkey":	"ContainerRecipes",
-	"key":		"ContainerRecipeArn",
-	"filterid":	"ContainerRecipeArn"
+	"topkey":	"containerRecipeSummaryList",
+	"key":		"arn",
+	"filterid":	"arn"
 }
 
 
 aws_imagebuilder_distribution_configuration = {
 	"clfn":		"imagebuilder",
 	"descfn":	"list_distribution_configurations",
-	"topkey":	"DistributionConfigurations",
-	"key":		"DistributionConfigurationArn",
-	"filterid":	"DistributionConfigurationArn"
+	"topkey":	"distributionConfigurationSummaryList",
+	"key":		"arn",
+	"filterid":	"arn"
 }
 
 
 aws_imagebuilder_image = {
 	"clfn":		"imagebuilder",
 	"descfn":	"list_images",
-	"topkey":	"Images",
-	"key":		"ImageArn",
-	"filterid":	"ImageArn"
+	"topkey":	"imageVersionList",
+	"key":		"arn",
+	"filterid":	"arn"
 }
 
 aws_imagebuilder_image_pipeline = {
 	"clfn":		"imagebuilder",
 	"descfn":	"list_image_pipelines",
-	"topkey":	"ImagePipelines",
-	"key":		"ImagePipelineArn",
-	"filterid":	"ImagePipelineArn"
+	"topkey":	"imagePipelineList",
+	"key":		"arn",
+	"filterid":	"arn"
 }
 
 
 aws_imagebuilder_image_recipe = {
 	"clfn":		"imagebuilder",
 	"descfn":	"list_image_recipes",
-	"topkey":	"ImageRecipes",
-	"key":		"ImageRecipeArn",
-	"filterid":	"ImageRecipeArn"
+	"topkey":	"imageRecipeSummaryList",
+	"key":		"arn",
+	"filterid":	"arn"
 }
 
 aws_imagebuilder_infrastructure_configuration = {
 	"clfn":		"imagebuilder",
 	"descfn":	"list_infrastructure_configurations",
-	"topkey":	"InfrastructureConfigurations",
-	"key":		"InfrastructureConfigurationArn",
-	"filterid":	"InfrastructureConfigurationArn"
+	"topkey":	"infrastructureConfigurationSummaryList",
+	"key":		"arn",
+	"filterid":	"arn"
 }
 
 aws_inspector2_delegated_admin_account = {
@@ -5509,7 +5509,7 @@ aws_kendra_faq = {
 aws_kendra_index = {
 	"clfn":		"kendra",
 	"descfn":	"list_indices",
-	"topkey":	"Indices",
+	"topkey":	"IndexConfigurationSummaryItems",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -5558,8 +5558,8 @@ aws_kinesis_firehose_delivery_stream = {
 	"clfn":		"firehose",
 	"descfn":	"list_delivery_streams",
 	"topkey":	"DeliveryStreamNames",
-	"key":		"DeliveryStreamName",
-	"filterid":	"DeliveryStreamName"
+	"key":		"DeliveryStreamARN",
+	"filterid":	"DeliveryStreamARN"
 }
 
 aws_kinesis_stream_consumer = {

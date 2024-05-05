@@ -154,7 +154,8 @@ if __name__ == '__main__':
         print("len all_types="+str(len(all_types)))
         ic=0
         istart=599
-        it=len(all_types)
+        #it=len(all_types)
+        it=701
         for i in all_types:
             ic=ic+1
             if ic > it: break 
@@ -248,8 +249,8 @@ if __name__ == '__main__':
                 detdepstr=detdepstr+str(ti)+" "
 
         print("----------- Completed "+str(lc)+" dependancy check loops --------------") 
-        print("OLD= "+str(olddetdepstr))
-        print("NEW= "+str(detdepstr))
+        #print("OLD= "+str(olddetdepstr))
+        #print("NEW= "+str(detdepstr))
         if olddetdepstr == detdepstr and detdepstr != "":
             print("ERROR: No change/progress in dependancies exiting")
             for ti in globals.rproc.keys():

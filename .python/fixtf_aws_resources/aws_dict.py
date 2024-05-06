@@ -4960,7 +4960,7 @@ aws_iam_access_key = {
 	"clfn":		"iam",
 	"descfn":	"list_access_keys",
 	"topkey":	"AccessKeyMetadata",
-	"key":		"UserName",
+	"key":		"AccessKeyId",
 	"filterid":	"AccessKeyId"
 }
 

@@ -190,9 +190,15 @@ def get_aws_iam_user_group_membership(type,id,clfn,descfn,topkey,key,filterid):
    response=[]
 
    try:
+      grpn=id
       response1 = client.get_group(GroupName=id)
       response=response1[topkey]
-      if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+
+      if response == []: 
+         print("Empty response for "+type+ " id="+str(id)+" returning"); 
+         pkey="aws_iam_user_group_membership."+grpn
+         globals.rproc[pkey]=True
+         return True
       for j in response:
          userid=j[key]
          grpn=id
@@ -301,3 +307,31 @@ def get_aws_iam_role_policy(type, id, clfn, descfn, topkey, key, filterid):
 
 
    return True
+
+def get_aws_iam_service_linked_role(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate():
+                response = response + page[topkey]
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            for j in response:
+                if ":role/aws-service-role" in j[key]:
+                  common.write_import(type,j[key],None) 
+
+        else:      
+            response = client.get_role(RoleName=id)
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            j=response
+            if ":role/aws-service-role" in j[key]:
+               common.write_import(type,j[key],None)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True

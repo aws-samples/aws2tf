@@ -5064,7 +5064,7 @@ aws_iam_service_linked_role = {
     "clfn":		"iam",
 	"descfn":	"list_roles",
 	"topkey":	"Roles",
-	"key":		"RoleName",
+	"key":		"Arn",
 	"filterid":	"RoleName"
 }
 

@@ -1,5 +1,6 @@
 def aws_imagebuilder_component(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="supported_os_versions" and tt2=="[]": skip=1
 	return skip,t1,flag1,flag2
 
 def aws_imagebuilder_components(t1,tt1,tt2,flag1,flag2):

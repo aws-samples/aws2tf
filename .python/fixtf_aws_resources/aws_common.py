@@ -15,7 +15,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             t1=tt1 + " = aws_apigatewayv2_api." + tt2 + ".id\n"
             globals.api_id=tt2
             common.add_dependancy("aws_apigatewayv2_api", tt2)
-        if tt1=="bucket":
+        if tt1=="bucket" or tt1=="s3_bucket_name":
             if type != "aws_s3_bucket":
                 if "." not in tt2:
                     if tt2 != "":
@@ -72,6 +72,21 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                         common.add_dependancy("aws_kms_key",tt2)
                 else:
                     skip=1
+
+        elif tt1 == "instance_profile_name":
+            if tt2 != "null":
+                t1=tt1 + " = aws_iam_instance_profile." + tt2 + ".id\n"
+                common.add_dependancy("aws_iam_instance_profile", tt2)
+            else:
+                skip=1
+
+        elif tt1 == "key_pair":
+            if tt2 != "null":
+                t1=tt1 + " = aws_key_pair." + tt2 + ".id\n"
+                common.add_dependancy("aws_key_pair", tt2)
+            else:
+                skip=1
+
 
         elif tt1 == "role_arn" or tt1=="service_linked_role_arn" or tt1 == "execution_role_arn" or tt1 == "task_role_arn": 
             t1=fixtf.deref_role_arn(t1,tt1,tt2)

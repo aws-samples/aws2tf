@@ -36,7 +36,7 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
                     kstatus=kresp['KeyMetadata']['KeyState']
                     kman=kresp['KeyMetadata']['KeyManager']
 
-                    if kstatus == "Enabled": #and kman != "AWS":
+                    if kstatus == "Enabled" or kstatus == "Disabled": #and kman != "AWS":
                         common.write_import(type,theid,ka) 
                         # unset tracker
                         pkey=type+"."+ka

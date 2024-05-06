@@ -262,7 +262,7 @@ if __name__ == '__main__':
         olddetdepstr=detdepstr
 
 
-        if lc > 9:
+        if lc > 16:
             print("ERROR: Too many loops exiting")
             for ti in globals.rproc.keys():
                 if not globals.rproc[ti]:  

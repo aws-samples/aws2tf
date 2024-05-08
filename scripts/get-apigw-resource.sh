@@ -18,28 +18,27 @@ for c in `seq 0 0`; do
  
     cm=${cmd[$c]}
     ttft=${tft[(${c})]}
-    echo $cm
+    #echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
         exit
     fi
     count=1
-    if [ "$2" != "" ]; then
-        count=`echo $awsout | jq ".${pref[(${c})]} | length"`       
+    if [ "$2" == "" ]; then
+        count=`echo $awsout | jq ".items | length"`       
     fi
-    echo "Count= $count"
+    #echo "-----Count= $count"
     if [ "$count" -gt "0" ]; then
-        count=`expr $count - 1`
+        count=`expr $count - 2`  #### minus 2 as the last is the  parent
         for i in `seq 0 $count`; do
-            echo $i
-            echo $awsout | jq .
+            #echo $i
+            #echo $awsout | jq .
     
-            if [ "$2" != "" ]; then
-                cname=`echo $awsout | jq -r ".id"`             
+            if [ "$2" == "" ]; then
+                cname=`echo $awsout | jq -r ".${pref[(${c})]}[(${i})].id"`
             else
-                cname=`echo $awsout | jq -r ".${pref[(${c})]}[0].id"`
-                #cname=`echo $awsout | jq -r ".id"`     
+                cname=`echo $awsout | jq -r ".id"`     
             fi
 
             fn=`printf "%s__%s__%s.tf" $ttft $1 $cname`
@@ -90,7 +89,8 @@ for c in `seq 0 0`; do
                     
                 done <"$file"   # done while
                 # depoyments - no import support
-                #../../scripts/752-get-apigw-method.sh $1 $cname
+                echo "Get method with $1 $cname"
+                ../../scripts/get-apigw-method.sh $1 $cname
         done # done for i
     fi
 done

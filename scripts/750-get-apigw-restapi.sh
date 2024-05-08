@@ -14,7 +14,7 @@ for c in `seq 0 0`; do
  
     cm=${cmd[$c]}
     ttft=${tft[(${c})]}
-    echo $cm
+    #echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
@@ -30,7 +30,7 @@ for c in `seq 0 0`; do
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
-            echo $i
+            #echo $i
             # is it AWS Managed ?
 
             if [ "$1" != "" ]; then
@@ -72,10 +72,16 @@ for c in `seq 0 0`; do
                         fi
 
                         if [[ ${tt1} == "arn" ]];then skip=1; fi
-                        if [[ ${tt1} == "id" ]];then skip=1; fi
+                        if [[ ${tt1} == "id" ]];then 
+                            skip=1 
+                            tt2=`echo $tt2 | tr -d '"'`
+                            restapi=`echo $tt2`
+                        fi
                         if [[ ${tt1} == "created_date" ]];then skip=1; fi
                         if [[ ${tt1} == "execution_arn" ]];then skip=1; fi
-                        if [[ ${tt1} == "root_resource_id" ]];then skip=1; fi
+                        if [[ ${tt1} == "root_resource_id" ]];then 
+                            skip=1
+                        fi
                         if [[ ${tt1} == "vpc_endpoint_ids" ]];then 
                             tt2=`echo $tt2 | tr -d '"'`
                             if [[ ${tt2} == "[]" ]];then
@@ -90,7 +96,7 @@ for c in `seq 0 0`; do
                     
                 done <"$file"   # done while
                 # depoyments - no import support
-                #../../scripts/751-get-apigw-resource.sh $cname
+                ../../scripts/get-apigw-resource.sh $cname
         done # done for i
     fi
 done

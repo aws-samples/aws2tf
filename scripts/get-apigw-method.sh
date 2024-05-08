@@ -6,58 +6,45 @@ if [ "$1" == "" ]; then
     exit
 fi
 if [ "$2" != "" ]; then
-    cmd[0]="$AWS apigateway get-resource --rest-api-id $1 --resource-id $2"
+    cmd[0]="$AWS apigateway get-method --rest-api-id $1 --resource-id $2 --http-method GET"
 else
-    cmd[0]="$AWS apigateway get-resources --rest-api-id $1"
-    pref[0]="items"
+    echo "must pass resource id exiting ..."
+    exit
 fi
 
-tft[0]="aws_api_gateway_resource"
+tft[0]="aws_api_gateway_method"
+pref[0]="methodIntegration"
 getp=0
 for c in `seq 0 0`; do
  
     cm=${cmd[$c]}
     ttft=${tft[(${c})]}
-    echo $cm
+    #echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
         echo "$cm : You don't have access for this resource"
         exit
     fi
-    if [ "$2" != "" ]; then
-        count=1
-        
-    else
-        count=`echo $awsout | jq ".${pref[(${c})]} | length"`
-       
-    fi
-
+    count=1
     if [ "$count" -gt "0" ]; then
         count=`expr $count - 1`
         for i in `seq 0 $count`; do
-            echo $i
-            # is it AWS Managed ?
+            #echo $i
 
-            if [ "$2" != "" ]; then
-                cname=`echo $awsout | jq -r ".${pref[(${c})]}.id"`
-                
-                
-            else
-                cname=`echo $awsout | jq -r ".id"`
-    
-            fi
+            cname=`echo $awsout | jq -r ".httpMethod"`
 
-            fn=`printf "%s__%s.tf" $ttft $cname`
+            fn=`printf "%s__%s__%s__%s.tf" $ttft $1 $2 $cname`
+            echo "fn=$fn"
             if [ -f "$fn" ] ; then
                     echo "$fn exists already skipping"
                     continue
             fi
 
                 echo "$ttft $cname"
-                printf "resource \"%s\" \"%s__%s\" {}" $ttft $1 $cname > $fn
+                printf "resource \"%s\" \"%s__%s__%s\" {}" $ttft $1 $2 $cname > $fn
 
-                terraform import $ttft.$1__$cname $1/$cname | grep Importing
-                terraform state show -no-color $ttft.$1__$cname > t1.txt
+                terraform import $ttft.$1__$2__$cname $1/$2/$cname | grep Importing
+                terraform state show -no-color $ttft.$1__$2__$cname > t1.txt
                 rm -f $fn
 
                 file="t1.txt"

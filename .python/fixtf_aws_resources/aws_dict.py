@@ -2342,7 +2342,7 @@ aws_codecommit_approval_rule_template_association = {
 aws_codecommit_repository = {
 	"clfn":		"codecommit",
 	"descfn":	"list_repositories",
-	"topkey":	"Repositories",
+	"topkey":	"repositories",
 	"key":		"repositoryName",
 	"filterid":	"repositoryName"
 }

@@ -61,7 +61,7 @@ notimplemented = {
     "aws_codebuild_resource_policy": True,
     "aws_codebuild_webhook": True,
     "aws_codecommit_approval_rule_template_association": True,
-    "aws_codecommit_repository": True,
+    #"aws_codecommit_repository": True,
     "aws_codedeploy_app": True,
     "aws_codedeploy_deployment_config": True,
     "aws_codepipeline": True, ### TODO

@@ -11,6 +11,7 @@ import fixtf
 import inspect
 from datetime import datetime
 import resources
+from get_aws_resources import aws_amplify
 from get_aws_resources import aws_athena
 from get_aws_resources import aws_autoscaling
 from get_aws_resources import aws_apigateway
@@ -22,6 +23,7 @@ from get_aws_resources import aws_bedrock
 from get_aws_resources import aws_cloudfront
 from get_aws_resources import aws_cloudtrail
 from get_aws_resources import aws_codebuild
+from get_aws_resources import aws_codecommit
 from get_aws_resources import aws_codeguruprofiler
 from get_aws_resources import aws_cognito_identity
 from get_aws_resources import aws_cognito_idp

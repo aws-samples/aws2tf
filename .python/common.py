@@ -2,6 +2,7 @@ import boto3
 import sys
 import subprocess
 import os
+import shutil
 import json
 import globals
 import glob
@@ -204,11 +205,10 @@ def tfplan1():
                      i=mess.split('(')[1].split(')')[0].split('/')[-1]
                      print("ERROR: Removing "+i+" import files - plan errors see plan1.json")
                      globals.badlist=globals.badlist+[i]
-                     com="rm -f import__*"+i+"*.tf"
-                     print(com)
-                     rout=rc(com)
-
-
+                     shutil.move("import__*"+i+"*.tf","notimported/import__*"+i+"*.tf")
+                     #com="rm -f import__*"+i+"*.tf"
+                     #print(com)
+                     #rout=rc(com)
 
 
                   elif "Error: Cannot import non-existent remote object" in mess:
@@ -216,10 +216,11 @@ def tfplan1():
                      i=mess.split('(')[1].split(')')[0].split('/')[-1]
                      print("ERROR: Removing "+i+" import files - plan errors see plan1.json")
                      globals.badlist=globals.badlist+[i]
-                     com="mv import__*"+i+"*.tf import__*"+i+"*.tf.error"
-                     print(com)
-                     rout=rc(com)
-                     exit()
+                     shutil.move("import__*"+i+"*.tf","notimported/import__*"+i+"*.tf")
+                     #com="mv import__*"+i+"*.tf import__*"+i+"*.tf.error"
+                     #print(com)
+                     #rout=rc(com)
+                     #exit()
 
                except:
                   pass
@@ -228,10 +229,12 @@ def tfplan1():
                   i=mess.split('(')[2].split(')')[0]
                   print("ERROR: Removing "+i+" files - plan errors see plan1.json")
                   globals.badlist=globals.badlist+[i]
-                  com="rm -f import__*"+i+"*.tf aws_*"+ i +"*.tf"
-                  print(com)
-                  rout=rc(com)
-                  globals.plan2=True
+                  shutil.move("import__*"+i+"*.tf","notimported/import__*"+i+"*.tf")
+                  shutil.move("aws_*"+i+"*.tf","notimported/aws_*"+i+"*.tf")
+                  #com="rm -f import__*"+i+"*.tf aws_*"+ i +"*.tf"
+                  #print(com)
+                  #rout=rc(com)
+                  #globals.plan2=True
                except:
                   if globals.debug is True:
                      print(mess.strip())
@@ -272,10 +275,17 @@ def tfplan2():
    splitf("resources.out")  # generated *.out files
    #zap the badlist
    for i in globals.badlist:
-      com="rm -f aws_*"+i+"*.out"+" aws_*"+i+"*.tf"
+      #com="rm -f aws_*"+i+"*.out"+" aws_*"+i+"*.tf"
       print("ERROR: Removing "+i+" files - plan errors see plan1.json")
-      print(com)
-      rout=rc(com)
+      
+      #print(com)
+      #rout=rc(com)
+      try:
+         shutil.move("aws_*"+i+"*.tf","notimported/aws_*"+i+"*.tf")
+         shutil.move("aws_*"+i+"*.out","notimported/aws_*"+i+"*.out")
+      except FileNotFoundError as e:
+         print(f"{e=}")
+         pass
       # sed to remove references
 
 

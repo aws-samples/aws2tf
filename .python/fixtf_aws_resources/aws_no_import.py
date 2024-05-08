@@ -142,4 +142,6 @@ noimport = {
     "aws_fsx_data_repository_association": True, ### an association
     "aws_iam_account_password_policy": True, ### probably don't want to do in Terraform 
     "aws_imagebuilder_image": True, ### Problems importing with arn
-}
+    "aws_lightsail_distribution": True, ### us-east only  InvalidInputException
+    "aws_lambda_layer_version_permission": True, ### import errors
+} 

@@ -1100,6 +1100,11 @@ aws_lambda_layer_version = {
   "clfn": "lambda"
 }
 
+aws_lambda_layer_version_permission = {
+  "param": "LayerName",
+  "clfn": "lambda"
+}
+
 aws_lambda_provisioned_concurrency_config = {
   "param": "FunctionName",
   "clfn": "lambda"
@@ -2067,6 +2072,7 @@ aws_needid = {
   "aws_lambda_event_source_mapping": aws_lambda_event_source_mapping,
   "aws_lambda_function_url": aws_lambda_function_url,
   "aws_lambda_layer_version": aws_lambda_layer_version,
+  "aws_lambda_layer_version_permission": aws_lambda_layer_version_permission,
   "aws_lambda_permission": aws_lambda_permission,
   "aws_lambda_provisioned_concurrency_config": aws_lambda_provisioned_concurrency_config,
   "aws_lambda_function_event_invoke_config": aws_lambda_function_event_invoke_config,

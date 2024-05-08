@@ -153,9 +153,9 @@ if __name__ == '__main__':
     if all_types != None:
         print("len all_types="+str(len(all_types)))
         ic=0
-        istart=599
+        istart=699
         #it=len(all_types)
-        it=701
+        it=801
         for i in all_types:
             ic=ic+1
             if ic > it: break 

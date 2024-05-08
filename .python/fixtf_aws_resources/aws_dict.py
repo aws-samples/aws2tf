@@ -5719,8 +5719,8 @@ aws_lambda_invocation = {
 
 aws_lambda_layer_version_permission = {
 	"clfn":		"lambda",
-	"descfn":	"list_layers",
-	"topkey":	"Layers",
+	"descfn":	"list_layer_versions",
+	"topkey":	"LayerVersions",
 	"key":		"LayerName",
 	"filterid":	"LayerName"
 }
@@ -5840,24 +5840,24 @@ aws_lex_slot_type = {
 aws_lexv2models_bot = {
 	"clfn":		"lexv2-models",
 	"descfn":	"list_bots",
-	"topkey":	"bots",
-	"key":		"name",
-	"filterid":	"name"
+	"topkey":	"botSummaries",
+	"key":		"botId",
+	"filterid":	"botId"
 }
 
 aws_lexv2models_bot_locale = {
 	"clfn":		"lexv2-models",
 	"descfn":	"list_bot_locales",
-	"topkey":	"botLocales",
-	"key":		"name",
+	"topkey":	"botLocaleSummaries",
+	"key":		"botId",
 	"filterid":	"name"
 }
 
 aws_lexv2models_bot_version = {
 	"clfn":		"lexv2-models",
 	"descfn":	"list_bot_versions",
-	"topkey":	"botVersions",
-	"key":		"name",
+	"topkey":	"botVersionSummaries",
+	"key":		"botId",
 	"filterid":	"name"
 }
 
@@ -5896,7 +5896,7 @@ aws_licensemanager_license_configuration = {
 aws_lightsail_bucket = {
 	"clfn":		"lightsail",
 	"descfn":	"get_buckets",
-	"topkey":	"Buckets",
+	"topkey":	"buckets",
 	"key":		"name",
 	"filterid":	"name"
 }
@@ -5920,17 +5920,17 @@ aws_lightsail_bucket_resource_access = {
 aws_lightsail_certificate = {
 	"clfn":		"lightsail",
 	"descfn":	"get_certificates",
-	"topkey":	"Certificates",
-	"key":		"name",
-	"filterid":	"name"
+	"topkey":	"certificates",
+	"key":		"certificateName",
+	"filterid":	"certificateName"
 }
 
 aws_lightsail_container_service = {
 	"clfn":		"lightsail",
 	"descfn":	"get_container_services",
-	"topkey":	"ContainerServices",
-	"key":		"name",
-	"filterid":	"name"
+	"topkey":	"containerServices",
+	"key":		"containerServiceName",
+	"filterid":	"containerServiceName"
 }
 
 aws_lightsail_container_service_deployment_version = {

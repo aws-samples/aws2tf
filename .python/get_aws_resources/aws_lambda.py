@@ -237,3 +237,41 @@ def get_aws_lambda_event_source_mapping(type, id, clfn, descfn, topkey, key, fil
     
 
     return True
+
+def get_aws_lambda_layer_version_permission(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In get_aws_lambda_layer_version_permission 1 doing " + type + ' with id ' + str(id) +
+            " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
+    #print("-9a->"+str(response))
+    try:
+        # this one no paginate
+
+        client = boto3.client(clfn) 
+        if globals.debug: print("client")
+        getfn = getattr(client, descfn)
+        try:
+            response1 = getfn(LayerName=id)
+            response=response1[topkey]
+        except client.exceptions.ResourceNotFoundException:
+            print("WARNING: ResourceNotFoundException for "+type+ " "+str(id)+" returning")
+            return True
+
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+
+        
+        print("-42a-"+str(response))
+        ### id = "arn:aws:lambda:us-west-2:123456654321:layer:test_layer1,1"
+        
+        for j in response:
+            layn=j['LayerVersionArn']
+            ver=j['Version']
+            theid=id+","+str(ver)
+            altid=theid.replace(",", "_").replace(":", "_").replace("|", "_")
+            common.write_import(type, theid, altid)
+        
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+    
+    return True

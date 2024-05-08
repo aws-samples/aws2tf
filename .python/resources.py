@@ -6,6 +6,7 @@ def resource_types(type):
         rets=["aws_vpc","aws_vpc_dhcp_options","aws_subnet","aws_internet_gateway","aws_nat_gateway","aws_route_table","aws_route_table_association","aws_vpc_endpoint","aws_security_group"]
         return rets
     elif type == "acm": rets=["aws_acm_certificate"]; return rets # tested with tf
+    elif type == "api" or type == "apigw": rets = ["aws_api_gateway_rest_api"]; return rets
     elif type == "appmesh": rets=["aws_appmesh_mesh"]; return rets
     elif type == "appstream": rets=["aws_appstream_image_builder","aws_appstream_stack","aws_appstream_fleet","aws_appstream_user"]; return rets
     elif type == "artifact": rets=["aws_codeartifact_domain","aws_codeartifact_repository"]; return rets

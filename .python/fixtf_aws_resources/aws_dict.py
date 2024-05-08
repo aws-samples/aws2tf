@@ -2343,8 +2343,8 @@ aws_codecommit_repository = {
 	"clfn":		"codecommit",
 	"descfn":	"list_repositories",
 	"topkey":	"Repositories",
-	"key":		"Name",
-	"filterid":	"Name"
+	"key":		"repositoryName",
+	"filterid":	"repositoryName"
 }
 
 aws_codecommit_trigger = {

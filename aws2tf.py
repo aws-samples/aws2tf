@@ -136,7 +136,15 @@ if __name__ == '__main__':
 
 ################# -- now we are calling ----   ###############################
 
-    elif type == "stack":
+    all_types = resources.resource_types(type)
+    try:
+        lall=len(all_types)
+    except:
+        lall=0
+    print("all_types="+str(all_types))
+
+
+    if type == "stack":
         if id is None:
             print("Must pass a stack name as a parameter   -i <stack name>")
             exit()
@@ -148,14 +156,12 @@ if __name__ == '__main__':
             common.call_resource(type, id)
     
 
-    all_types = resources.resource_types(type)
-    
-    if all_types != None:
+
+    elif all_types != None and lall > 1:
         print("len all_types="+str(len(all_types)))
         ic=0
-        istart=699
-        #it=len(all_types)
-        it=801
+        istart=799
+        it=901
         for i in all_types:
             ic=ic+1
             if ic > it: break 
@@ -165,8 +171,13 @@ if __name__ == '__main__':
             common.call_resource(i, id)
             
     else:
-        if type in aws_dict.aws_resources:
-            common.call_resource(type,id)
+        if all_types is not None:
+            for type in all_types:
+                if type in aws_dict.aws_resources:
+                    common.call_resource(type,id)
+        else:
+            print("No resources found")
+            exit()
 
 #########################################################################################################################
 
@@ -255,8 +266,7 @@ if __name__ == '__main__':
             print("ERROR: No change/progress in dependancies exiting")
             for ti in globals.rproc.keys():
                 if not globals.rproc[ti]:
-                    print("ERROR: Not found "+str(ti)+" - check if this resource still exists in AWS")
-                    print("ERROR: Also check what resource is using it - grep the *.tf files in the generated/tf.* subdirectory")
+                    print("ERROR: Not found "+str(ti)+" - check if this resource still exists in AWS. Also check what resource is using it - grep the *.tf files in the generated/tf.* subdirectory")
             exit()
 
         olddetdepstr=detdepstr

@@ -266,7 +266,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::SageMaker::AppImageConfig":  common.call_resource("aws_sagemaker_app_image_config", pid) 
             elif type == "AWS::SageMaker::Domain":  common.call_resource("aws_sagemaker_domain", parn) 
             elif type == "AWS::SageMaker::Image":  common.call_resource("aws_sagemaker_image", pid) 
-            elif type == "AWS::SageMaker::ImageVersion": f3.write(type+" "+pid+"  as part of SageMaker Image..\n")  # fetched as part of function
+            elif type == "AWS::SageMaker::ImageVersion": f3.write(type+" "+pid+"  as part of SageMaker Image..\n")
             elif type == "AWS::SageMaker::NotebookInstance":  common.call_resource("aws_sagemaker_notebook_instance", pid) 
             elif type == "AWS::SageMaker::UserProfile": common.call_resource("aws_sagemaker_user_profile", pid)
 
@@ -293,7 +293,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::AmazonMQ::Configuration": common.call_resource("aws_mq_configuration", pid)
             elif type == "AWS::AmazonMQ::ConfigurationAssociation": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Amplify::App": common.call_resource("aws_amplify_app", pid)
-            elif type == "AWS::Amplify::Branch": common.call_resource("aws_amplify_branch", type+" "+pid)
+            elif type == "AWS::Amplify::Branch": f3.write(type+" "+pid+" as part of Amplify App ..\n")
             elif type == "AWS::Amplify::Domain": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::AmplifyUIBuilder::Component": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::AmplifyUIBuilder::Form": common.call_resource("aws_null", type+" "+pid)

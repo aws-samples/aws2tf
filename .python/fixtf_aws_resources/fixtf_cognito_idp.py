@@ -36,6 +36,8 @@ def aws_cognito_user_pool(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if tt1=="email_verification_message" or tt1=="email_verification_subject" or tt1=="sms_authentication_message" or tt1=="sms_verification_message": 
 		skip=1
+	if tt1=="username_attributes" and tt2=="[]":
+		skip=1
 	return skip,t1,flag1,flag2
 
 def aws_cognito_user_pool_client(t1,tt1,tt2,flag1,flag2):
@@ -43,6 +45,10 @@ def aws_cognito_user_pool_client(t1,tt1,tt2,flag1,flag2):
 	if tt1=="access_token_validity":
 		if tt2=="0":
 			t1=tt1+" = 1\n" + "\nlifecycle {\n" + "   ignore_changes = [access_token_validity]\n" +  "}\n"
+
+	if tt1=="id_token_validity":
+		if tt2=="0": skip=1
+			#t1=tt1+" = 1\n" + "\nlifecycle {\n" + "   ignore_changes = [id_token_validity]\n" +  "}\n"
 
 	elif tt1 == "user_pool_id" and tt2 != "null":
 		t1=tt1+" = aws_cognito_user_pool."+tt2+".id\n"

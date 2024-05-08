@@ -307,7 +307,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::ApiGateway::DocumentationVersion": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::ApiGateway::DomainName": common.call_resource("aws_api_gateway_domain_name", pid)
             elif type == "AWS::ApiGateway::GatewayResponse": common.call_resource("aws_api_gateway_gateway_response",pid)
-            elif type == "AWS::ApiGateway::Method": common.call_resource(" aws_api_gateway_method", pid)
+            elif type == "AWS::ApiGateway::Method": common.call_resource("aws_api_gateway_method", pid)
             elif type == "AWS::ApiGateway::Model": common.call_resource("aws_api_gateway_model", pid)
             elif type == "AWS::ApiGateway::RequestValidator": common.call_resource("aws_api_gateway_request_validator", pid)
             elif type == "AWS::ApiGateway::Stage": common.call_resource("aws_api_gateway_stage", pid)

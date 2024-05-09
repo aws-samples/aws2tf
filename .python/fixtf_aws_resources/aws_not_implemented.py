@@ -70,7 +70,7 @@ notimplemented = {
     "aws_cognito_identity_pool_provider_principal_tag": True,
     "aws_cognito_identity_pool_roles_attachment": True,
     "aws_cognito_risk_configuration": True,
-    "aws_cognito_user_group": True,  ### TODO
+    #"aws_cognito_user_group": True,  ### TODO
     "aws_cognito_user_pool_domain": True,  ### TODO
     "aws_cognito_user_pool_ui_customization": True,
     "aws_comprehend_document_classifier": True,

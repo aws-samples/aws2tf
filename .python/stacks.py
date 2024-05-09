@@ -118,7 +118,7 @@ def getstackresources(stack_name,client):
                 f3.write("skipping "+type+"\n")
 
             elif type == "AWS::ApiGateway::Account": f3.write("Error: **Terraform does not support import of " +type + " skipped**\n") 
-            elif type == "AWS::ApiGateway::RestApi": common.call_resource("aws_apigatewayv2_api", pid) 
+            elif type == "AWS::ApiGateway::RestApi": common.call_resource("aws_api_gateway_rest_api", pid) 
             elif type == "AWS::ApiGateway::Resource": f3.write(type+" "+pid+"  as part of RestApi..\n") 
 
             elif type == "AWS::ApplicationAutoScaling::ScalableTarget": common.call_resource("aws_appautoscaling_target", pid) 
@@ -302,7 +302,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::ApiGateway::Authorizer": common.call_resource("aws_api_gateway_authorizer", pid)
             elif type == "AWS::ApiGateway::BasePathMapping": common.call_resource("aws_api_gateway_base_path_mapping", pid)
             elif type == "AWS::ApiGateway::ClientCertificate": common.call_resource("aws_api_gateway_client_certificate", pid)
-            elif type == "AWS::ApiGateway::Deployment": common.call_resource("aws_api_gateway_deployment", pid)
+            elif type == "AWS::ApiGateway::Deployment": f3.write(type+" "+pid+" as part of API..\n")
             elif type == "AWS::ApiGateway::DocumentationPart": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::ApiGateway::DocumentationVersion": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::ApiGateway::DomainName": common.call_resource("aws_api_gateway_domain_name", pid)

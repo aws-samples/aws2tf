@@ -894,7 +894,7 @@ aws_api_gateway_rest_api_policy = {
 aws_api_gateway_stage = {
 	"clfn":		"apigateway",
 	"descfn":	"get_stages",
-	"topkey":	"items",
+	"topkey":	"item",
 	"key":		"stageName",
 	"filterid":	"stageName"
 }

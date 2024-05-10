@@ -79,6 +79,8 @@ def get_all_s3_buckets(fb,my_region):
          #print('location')
          location = s3.get_bucket_location(Bucket=bucket_name)
          bl=location['LocationConstraint']
+         if bl is None and my_region == 'us-east-1':
+            bl='us-east-1'
          #print("bl="+bl)
          #print ("bucket: " +  bucket_name + " location="+str(bl)+"  my_region="+my_region)
          if bl != my_region:

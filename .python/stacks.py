@@ -117,9 +117,7 @@ def getstackresources(stack_name,client):
             elif "AWS::CloudFormation::WaitCondition" in type: 
                 f3.write("skipping "+type+"\n")
 
-            elif type == "AWS::ApiGateway::Account": f3.write("Error: **Terraform does not support import of " +type + " skipped**\n") 
-            elif type == "AWS::ApiGateway::RestApi": common.call_resource("aws_api_gateway_rest_api", pid) 
-            elif type == "AWS::ApiGateway::Resource": f3.write(type+" "+pid+"  as part of RestApi..\n") 
+
 
             elif type == "AWS::ApplicationAutoScaling::ScalableTarget": common.call_resource("aws_appautoscaling_target", pid) 
             elif type == "AWS::ApplicationAutoScaling::ScalingPolicy": common.call_resource("aws_appautoscaling_policy", pid) 
@@ -298,23 +296,27 @@ def getstackresources(stack_name,client):
             elif type == "AWS::AmplifyUIBuilder::Component": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::AmplifyUIBuilder::Form": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::AmplifyUIBuilder::Theme": common.call_resource("aws_null", type+" "+pid)
+
+            elif type == "AWS::ApiGateway::Account": f3.write("Error: **Terraform does not support import of " +type + " skipped**\n")
             elif type == "AWS::ApiGateway::ApiKey": common.call_resource("aws_api_gateway_api_key", pid)
-            elif type == "AWS::ApiGateway::Authorizer": common.call_resource("aws_api_gateway_authorizer", pid)
+            elif type == "AWS::ApiGateway::Authorizer": f3.write(type+" "+pid+"  as part of RestApi..\n")
             elif type == "AWS::ApiGateway::BasePathMapping": common.call_resource("aws_api_gateway_base_path_mapping", pid)
             elif type == "AWS::ApiGateway::ClientCertificate": common.call_resource("aws_api_gateway_client_certificate", pid)
-            elif type == "AWS::ApiGateway::Deployment": f3.write(type+" "+pid+" as part of API..\n")
+            elif type == "AWS::ApiGateway::Deployment": f3.write(type+" "+pid+" as part of RestApi..\n")
             elif type == "AWS::ApiGateway::DocumentationPart": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::ApiGateway::DocumentationVersion": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::ApiGateway::DomainName": common.call_resource("aws_api_gateway_domain_name", pid)
             elif type == "AWS::ApiGateway::GatewayResponse": common.call_resource("aws_api_gateway_gateway_response",pid)
-            elif type == "AWS::ApiGateway::Method": common.call_resource("aws_api_gateway_method", pid)
+            elif type == "AWS::ApiGateway::Method": f3.write(type+" "+pid+" as part of RestApi..\n") 
             elif type == "AWS::ApiGateway::Model": common.call_resource("aws_api_gateway_model", pid)
             elif type == "AWS::ApiGateway::RequestValidator": common.call_resource("aws_api_gateway_request_validator", pid)
-            elif type == "AWS::ApiGateway::Stage": common.call_resource("aws_api_gateway_stage", pid)
+            elif type == "AWS::ApiGateway::Resource": f3.write(type+" "+pid+"  as part of RestApi..\n") 
+            elif type == "AWS::ApiGateway::Stage": f3.write(type+" "+pid+"  as part of RestApi..\n")
             elif type == "AWS::ApiGateway::UsagePlan": common.call_resource("aws_api_gateway_usage_plan", pid)
             elif type == "AWS::ApiGateway::UsagePlanKey": common.call_resource("aws_api_gateway_usage_plan_key", pid)
             elif type == "AWS::ApiGateway::VpcLink": common.call_resource("aws_api_gateway_vpc_link", pid)
-
+            elif type == "AWS::ApiGateway::RestApi": common.call_resource("aws_api_gateway_rest_api", pid) 
+            
             elif type == "AWS::ApiGatewayV2::Api": common.call_resource("aws_apigatewayv2_api", pid)
             elif type == "AWS::ApiGatewayV2::ApiGatewayManagedOverrides": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::ApiGatewayV2::ApiMapping": f3.write(type+" "+pid+" fetched as part of ApiGatewayV2 Api..\n")

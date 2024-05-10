@@ -22,6 +22,12 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                         t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
                         common.add_dependancy("aws_s3_bucket", tt2)
                         return skip,t1,flag1,flag2
+                    
+        elif tt1 == "rest_api_id" and "aws_api_gateway_" in type:
+            if tt2 != "null":
+                t1=tt1 + " = aws_api_gateway_rest_api." + tt2 + ".id\n"
+                #common.add_dependancy("aws_api_gateway_rest_api", tt2)
+                globals.apigwrestapiid=tt2
 
         elif tt1 == "security_groups" or tt1 == "security_group_ids" or tt1 == "vpc_security_group_ids":
         # avoid circular references

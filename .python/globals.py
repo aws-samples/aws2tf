@@ -31,6 +31,7 @@ api_id=""
 stripblock=""
 stripstart=""
 stripend=""
+apigwrestapiid=""
 
 meshname=""
 

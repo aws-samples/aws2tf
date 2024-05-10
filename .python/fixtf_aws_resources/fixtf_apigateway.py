@@ -1,5 +1,6 @@
 import fixtf
 import common
+import globals
 
 
 def aws_api_gateway_account(t1,tt1,tt2,flag1,flag2):
@@ -54,6 +55,9 @@ def aws_api_gateway_integration_response(t1,tt1,tt2,flag1,flag2):
 
 def aws_api_gateway_method(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="resource_id" and tt2 != "null":
+		#t1=tt1 + " = aws_api_gateway_resource." + tt2 + ".id\n"
+		t1=tt1 + " = aws_api_gateway_resource." + str(globals.apigwrestapiid)+"_" + tt2 + ".id\n"
 	return skip,t1,flag1,flag2
 
 def aws_api_gateway_method_response(t1,tt1,tt2,flag1,flag2):

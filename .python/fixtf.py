@@ -287,6 +287,7 @@ def fixtf(ttft,tf):
     cnxl=0
     globals.lbskipaacl=False
     globals.lbskipcnxl=False
+
     if ttft=="aws_lb":
         for t1 in Lines:
             t1=t1.strip()

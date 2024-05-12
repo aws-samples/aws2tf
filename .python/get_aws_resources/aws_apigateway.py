@@ -37,7 +37,9 @@ def get_aws_api_gateway_deployment(type, id, clfn, descfn, topkey, key, filterid
             if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 pkey=id+"/"+j[key]
-                common.write_import(type,pkey,None)
+                altk="r-"+pkey
+                print(str(altk))
+                common.write_import(type,pkey,altk)
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
         else:
@@ -64,7 +66,8 @@ def get_aws_api_gateway_rest_api(type, id, clfn, descfn, topkey, key, filterid):
                 response = response + page[topkey]
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
-                common.write_import(type,j[key],None) 
+                altk="r-"+j[key]
+                common.write_import(type,j[key],altk) 
                 common.add_dependancy("aws_api_gateway_deployment", j[key])
                 common.add_dependancy("aws_api_gateway_stage", j[key])
                 common.add_dependancy("aws_api_gateway_authorizer", j[key])
@@ -74,7 +77,7 @@ def get_aws_api_gateway_rest_api(type, id, clfn, descfn, topkey, key, filterid):
             response = client.get_rest_api(restApiId=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
-            common.write_import(type,j[key],None)
+            common.write_import(type,j[key],"r-"+j[key])
             common.add_dependancy("aws_api_gateway_deployment", j[key])
             common.add_dependancy("aws_api_gateway_stage", j[key])
             common.add_dependancy("aws_api_gateway_resource", j[key])
@@ -99,7 +102,8 @@ def get_aws_api_gateway_stage(type, id, clfn, descfn, topkey, key, filterid):
             if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 pkey=id+"/"+j[key]
-                common.write_import(type,pkey,None)
+                altk="r-"+pkey
+                common.write_import(type,pkey,altk)
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
         else:
@@ -123,7 +127,8 @@ def get_aws_api_gateway_authorizer(type, id, clfn, descfn, topkey, key, filterid
             if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 pkey=id+"/"+j[key]
-                common.write_import(type,pkey,None)
+                altk="r-"+pkey
+                common.write_import(type,pkey,altk)
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
         else:
@@ -147,7 +152,8 @@ def get_aws_api_gateway_resource(type, id, clfn, descfn, topkey, key, filterid):
             if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 pkey=id+"/"+j[key]
-                common.write_import(type,pkey,None)
+                altk="r-"+pkey
+                common.write_import(type,pkey,altk)
                 common.add_dependancy("aws_api_gateway_method", id+"/"+j[key])
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
@@ -176,7 +182,8 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
                 if response == []: print("Empty GET response for "+type+ " id="+str(id))
                 j=response
                 pkey=restid+"/"+resid+"/"+j[key]
-                common.write_import(type,pkey,None)
+                altk="r-"+pkey
+                common.write_import(type,pkey,altk)
             except:
                 print("Empty GET response for "+type+ " id="+str(id))
                 
@@ -187,7 +194,8 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
                 if response == []: print("Empty POST response for "+type+ " id="+str(id))
                 j=response
                 pkey=restid+"/"+resid+"/"+j[key]
-                common.write_import(type,pkey,None)
+                altk="r-"+pkey
+                common.write_import(type,pkey,altk)
             except:
                 print("Empty POST response for "+type+ " id="+str(id))
 
@@ -197,7 +205,8 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
                 if response == []: print("Empty PUT response for "+type+ " id="+str(id))
                 j=response
                 pkey=restid+"/"+resid+"/"+j[key]
-                common.write_import(type,pkey,None)
+                altk="r-"+pkey
+                common.write_import(type,pkey,altk)
             except:
                 print("Empty PUT response for "+type+ " id="+str(id))
 
@@ -207,7 +216,8 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
                 if response == []: print("Empty PUT response for "+type+ " id="+str(id))
                 j=response
                 pkey=restid+"/"+resid+"/"+j[key]
-                common.write_import(type,pkey,None)
+                altk="r-"+pkey
+                common.write_import(type,pkey,altk)
             except:
                 print("Empty DELETE response for "+type+ " id="+str(id))
 
@@ -218,7 +228,8 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
                 if response == []: print("Empty PUT response for "+type+ " id="+str(id))
                 j=response
                 pkey=restid+"/"+resid+"/"+j[key]
-                common.write_import(type,pkey,None)
+                altk="r-"+pkey
+                common.write_import(type,pkey,altk)
             except:
                 print("Empty PATCH response for "+type+ " id="+str(id))
 

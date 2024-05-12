@@ -25,7 +25,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                     
         elif tt1 == "rest_api_id" and "aws_api_gateway_" in type:
             if tt2 != "null":
-                t1=tt1 + " = aws_api_gateway_rest_api." + tt2 + ".id\n"
+                t1=tt1 + " = aws_api_gateway_rest_api.r-" + tt2 + ".id\n"
                 #common.add_dependancy("aws_api_gateway_rest_api", tt2)
                 globals.apigwrestapiid=tt2
 

@@ -38,7 +38,7 @@ def get_aws_api_gateway_deployment(type, id, clfn, descfn, topkey, key, filterid
             for j in response[topkey]:
                 pkey=id+"/"+j[key]
                 altk="r-"+pkey
-                print(str(altk))
+            
                 common.write_import(type,pkey,altk)
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
@@ -77,10 +77,12 @@ def get_aws_api_gateway_rest_api(type, id, clfn, descfn, topkey, key, filterid):
             response = client.get_rest_api(restApiId=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
-            common.write_import(type,j[key],"r-"+j[key])
+            altk="r-"+j[key]
+            common.write_import(type,j[key],altk)
             common.add_dependancy("aws_api_gateway_deployment", j[key])
             common.add_dependancy("aws_api_gateway_stage", j[key])
             common.add_dependancy("aws_api_gateway_resource", j[key])
+            common.add_dependancy("aws_api_gateway_authorizer", j[key])
 
 
     except Exception as e:
@@ -176,7 +178,7 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
         if id is not None and "/" in id:  
             restid=id.split("/")[0]
             resid=id.split("/")[1]
-            print("restid="+restid+" resid="+resid)
+            #print("restid="+restid+" resid="+resid)
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='GET')
                 if response == []: print("Empty GET response for "+type+ " id="+str(id))

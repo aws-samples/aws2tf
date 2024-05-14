@@ -133,6 +133,7 @@ noimport = {
     "aws_db_cluster_snapshot": True, ### id is too long
     "db_cluster_snapshot_identifier": True, ### only lowercase alphanumeric characters and hyphens allowed in id
     "aws_db_instance_role_association": True, ### an association
+    "aws_vpc_endpoint_subnet_association": True, ### an association
     "aws_ec2_managed_prefix_list": True, ### max_entries issue
     "aws_docdb_cluster_snapshot": True,  ### id is too long
     "aws_ecr_replication_configuration": True, ### unsure how to get in 

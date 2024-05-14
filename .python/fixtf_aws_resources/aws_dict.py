@@ -6562,8 +6562,8 @@ aws_networkfirewall_firewall_policy = {
 	"clfn":		"network-firewall",
 	"descfn":	"list_firewall_policies",
 	"topkey":	"FirewallPolicies",
-	"key":		"FirewallPolicyArn",
-	"filterid":	"FirewallPolicyArn"
+	"key":		"Arn",
+	"filterid":	"Arn"
 }
 
 aws_networkfirewall_logging_configuration = {
@@ -6586,8 +6586,8 @@ aws_networkfirewall_rule_group = {
 	"clfn":		"network-firewall",
 	"descfn":	"list_rule_groups",
 	"topkey":	"RuleGroups",
-	"key":		"RuleGroupArn",
-	"filterid":	"RuleGroupArn"
+	"key":		"Arn",
+	"filterid":	"Arn"
 }
 
 aws_networkmanager_attachment_accepter = {
@@ -6817,7 +6817,7 @@ aws_opensearch_package_association = {
 aws_opensearch_vpc_endpoint = {
 	"clfn":		"opensearch",
 	"descfn":	"list_vpc_endpoints",
-	"topkey":	"VpcEndpoints",
+	"topkey":	"VpcEndpointSummaryList",
 	"key":		"VpcEndpointId",
 	"filterid":	"VpcEndpointId"
 }
@@ -7833,7 +7833,7 @@ aws_route53_resolver_rule_association = {
 aws_route53_traffic_policy = {
 	"clfn":		"route53",
 	"descfn":	"list_traffic_policies",
-	"topkey":	"TrafficPolicies",
+	"topkey":	"TrafficPolicySummaries",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -8287,8 +8287,8 @@ aws_sagemaker_app = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_apps",
 	"topkey":	"Apps",
-	"key":		"AppArn",
-	"filterid":	"AppArn"
+	"key":		"AppName",
+	"filterid":	"AppName"
 }
 
 aws_sagemaker_app_image_config = {
@@ -8454,7 +8454,7 @@ aws_sagemaker_pipeline = {
 aws_sagemaker_project = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_projects",
-	"topkey":	"Projects",
+	"topkey":	"ProjectSummaryList",
 	"key":		"ProjectArn",
 	"filterid":	"ProjectArn"
 }
@@ -8487,8 +8487,8 @@ aws_sagemaker_user_profile = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_user_profiles",
 	"topkey":	"UserProfiles",
-	"key":		"UserProfileArn",
-	"filterid":	"UserProfileArn"
+	"key":		"UserProfileName",
+	"filterid":	"UserProfileName"
 }
 
 aws_sagemaker_workforce = {
@@ -8511,16 +8511,16 @@ aws_scheduler_schedule = {
 	"clfn":		"scheduler",
 	"descfn":	"list_schedules",
 	"topkey":	"Schedules",
-	"key":		"ScheduleArn",
-	"filterid":	"ScheduleArn"
+	"key":		"Arn",
+	"filterid":	"Arn"
 }
 
 aws_scheduler_schedule_group = {
 	"clfn":		"scheduler",
 	"descfn":	"list_schedule_groups",
 	"topkey":	"ScheduleGroups",
-	"key":		"ScheduleGroupArn",
-	"filterid":	"ScheduleGroupArn"
+	"key":		"Arn",
+	"filterid":	"Arn"
 }
 
 aws_schemas_discoverer = {
@@ -8729,8 +8729,8 @@ aws_service_discovery_service = {
 	"clfn":		"servicediscovery",
 	"descfn":	"list_services",
 	"topkey":	"Services",
-	"key":		"ServiceArn",
-	"filterid":	"ServiceArn"
+	"key":		"Arn",
+	"filterid":	"Arn"
 }
 
 aws_servicecatalog_budget_resource_association = {
@@ -8785,7 +8785,7 @@ aws_servicecatalog_principal_portfolio_association = {
 aws_servicecatalog_product = {
 	"clfn":		"servicecatalog",
 	"descfn":	"search_products_as_admin",
-	"topkey":	"Products",
+	"topkey":	"ProductViewDetails",
 	"key":		"ProductViewSummary.ProductId",
 	"filterid":	"ProductViewSummary.ProductId"
 }
@@ -9628,9 +9628,9 @@ aws_timestreamwrite_table = {
 aws_transcribe_language_model = {
 	"clfn":		"transcribe",
 	"descfn":	"list_language_models",
-	"topkey":	"LanguageModels",
-	"key":		"LanguageCode",
-	"filterid":	"LanguageCode"
+	"topkey":	"Models",
+	"key":		"ModelName",
+	"filterid":	"ModelName"
 }
 
 aws_transcribe_medical_vocabulary = {
@@ -10357,7 +10357,7 @@ aws_xray_sampling_rule = {
 	"clfn":		"xray",
 	"descfn":	"get_sampling_rules",
 	"topkey":	"SamplingRuleRecords",
-	"key":		"RuleName",
+	"key":		"SamplingRule.RuleName",
 	"filterid":	"RuleArn"
 }
 

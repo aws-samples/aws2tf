@@ -1,0 +1,226 @@
+
+
+No aws_organizations_delegated_administrator found -empty response
+875 of 1289 type=aws_organizations_organization
+ERROR: getresource TypeError: {'Id': 'o-alvwg80ts9', 'Arn': 'arn:aws:organizations::566972129213:organization/o-alvwg80ts9', 'FeatureSet': 'ALL', 'MasterAccountArn': 'arn:aws:organizations::566972129213:account/o-alvwg80ts9/566972129213', 'MasterAccountId': '566972129213', 'MasterAccountEmail': 'awsandy+Net1@amazon.co.uk', 'AvailablePolicyTypes': [{'Type': 'SERVICE_CONTROL_POLICY', 'Status': 'ENABLED'}]} key=Id type=aws_organizations_organization describe_organization
+ERROR: getresource TypeError: {'Id': 'o-alvwg80ts9', 'Arn': 'arn:aws:organizations::566972129213:organization/o-alvwg80ts9', 'FeatureSet': 'ALL', 'MasterAccountArn': 'arn:aws:organizations::566972129213:account/o-alvwg80ts9/566972129213', 'MasterAccountId': '566972129213', 'MasterAccountEmail': 'awsandy+Net1@amazon.co.uk', 'AvailablePolicyTypes': [{'Type': 'SERVICE_CONTROL_POLICY', 'Status': 'ENABLED'}]} key=Id type=aws_organizations_organization describe_organization
+ERROR: getresource TypeError: {'Id': 'o-alvwg80ts9', 'Arn': 'arn:aws:organizations::566972129213:organization/o-alvwg80ts9', 'FeatureSet': 'ALL', 'MasterAccountArn': 'arn:aws:organizations::566972129213:account/o-alvwg80ts9/566972129213', 'MasterAccountId': '566972129213', 'MasterAccountEmail': 'awsandy+Net1@amazon.co.uk', 'AvailablePolicyTypes': [{'Type': 'SERVICE_CONTROL_POLICY', 'Status': 'ENABLED'}]} key=Id type=aws_organizations_organization describe_organization
+ERROR: getresource TypeError: {'Id': 'o-alvwg80ts9', 'Arn': 'arn:aws:organizations::566972129213:organization/o-alvwg80ts9', 'FeatureSet': 'ALL', 'MasterAccountArn': 'arn:aws:organizations::566972129213:account/o-alvwg80ts9/566972129213', 'MasterAccountId': '566972129213', 'MasterAccountEmail': 'awsandy+Net1@amazon.co.uk', 'AvailablePolicyTypes': [{'Type': 'SERVICE_CONTROL_POLICY', 'Status': 'ENABLED'}]} key=Id type=aws_organizations_organization describe_organization
+ERROR: getresource TypeError: {'Id': 'o-alvwg80ts9', 'Arn': 'arn:aws:organizations::566972129213:organization/o-alvwg80ts9', 'FeatureSet': 'ALL', 'MasterAccountArn': 'arn:aws:organizations::566972129213:account/o-alvwg80ts9/566972129213', 'MasterAccountId': '566972129213', 'MasterAccountEmail': 'awsandy+Net1@amazon.co.uk', 'AvailablePolicyTypes': [{'Type': 'SERVICE_CONTROL_POLICY', 'Status': 'ENABLED'}]} key=Id type=aws_organizations_organization describe_organization
+ERROR: getresource TypeError: {'Id': 'o-alvwg80ts9', 'Arn': 'arn:aws:organizations::566972129213:organization/o-alvwg80ts9', 'FeatureSet': 'ALL', 'MasterAccountArn': 'arn:aws:organizations::566972129213:account/o-alvwg80ts9/566972129213', 'MasterAccountId': '566972129213', 'MasterAccountEmail': 'awsandy+Net1@amazon.co.uk', 'AvailablePolicyTypes': [{'Type': 'SERVICE_CONTROL_POLICY', 'Status': 'ENABLED'}]} key=Id type=aws_organizations_organization describe_organization
+ERROR: getresource TypeError: {'Id': 'o-alvwg80ts9', 'Arn': 'arn:aws:organizations::566972129213:organization/o-alvwg80ts9', 'FeatureSet': 'ALL', 'MasterAccountArn': 'arn:aws:organizations::566972129213:account/o-alvwg80ts9/566972129213', 'MasterAccountId': '566972129213', 'MasterAccountEmail': 'awsandy+Net1@amazon.co.uk', 'AvailablePolicyTypes': [{'Type': 'SERVICE_CONTROL_POLICY', 'Status': 'ENABLED'}]} key=Id type=aws_organizations_organization describe_organization
+
+WARNING: aws_organizations_policy_attachment cannot have null id must pass parameter OrganizationalUnitId
+879 of 1289 type=aws_organizations_resource_policy
+
+ERROR: in call_boto3 clfn=organizations descfn=describe_resource_policy
+topkey=ResourcePolicy id=None
+e=ResourcePolicyNotFoundException('An error occurred (ResourcePolicyNotFoundException) when calling the DescribeResourcePolicy operation: No resource-based policy found.') [e1]  common.py 949
+
+ERROR: in getresource clfn=organizations descfn=describe_resource_policy
+topkey=ResourcePolicy id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 641
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 162
+--->> Could not get resource aws_organizations_resource_policy id=None
+
+No aws_pipes_pipe found -empty response
+
+WARNING: Not supported by aws2tf currently : aws_resourceexplorer2_index
+951 of 1289 type=aws_resourceexplorer2_view
+ERROR: getresource TypeError: ['arn:aws:resource-explorer-2:eu-west-2:566972129213:view/all-resources/6370b26c-c234-4ab7-8838-384e120499df'] key=Name type=aws_resourceexplorer2_view list_views
+952 of 1289 type=aws_resourcegroups_group
+
+WARNING: aws_route53_cidr_location cannot have null id must pass parameter CollectionId
+959 of 1289 type=aws_route53_delegation_set
+
+ERROR: in call_boto3 clfn=route53 descfn=
+topkey=DelegationSets id=None
+e=KeyError('') [e1]  common.py 826
+
+ERROR: in call_boto3 clfn=route53 descfn=
+topkey=DelegationSets id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 978
+
+ERROR: in getresource clfn=route53 descfn=
+topkey=DelegationSets id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 641
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 162
+--->> Could not get resource aws_route53_delegation_set id=None
+960 of 1289 type=aws_route53_health_check
+
+
+1018 of 1289 type=aws_s3control_access_grant
+ParamValidationError 2 in common.call_boto3: type=aws_s3control_access_grant clfn=s3control
+e=ParamValidationError('Parameter validation failed:\nAccountId is required but not set') [pv2]  common.py 949
+No aws_s3control_access_grant found -empty response
+1019 of 1289 type=aws_s3control_access_grants_instance
+ParamValidationError 2 in common.call_boto3: type=aws_s3control_access_grants_instance clfn=s3control
+e=ParamValidationError('Parameter validation failed:\nAccountId is required but not set') [pv2]  common.py 949
+No aws_s3control_access_grants_instance found -empty response
+1020 of 1289 type=aws_s3control_access_grants_instance_resource_policy
+ParamValidationError 2 in common.call_boto3: type=aws_s3control_access_grants_instance_resource_policy clfn=s3control
+e=ParamValidationError('Parameter validation failed:\nAccountId is required but not set') [pv2]  common.py 949
+No aws_s3control_access_grants_instance_resource_policy found -empty response
+1021 of 1289 type=aws_s3control_access_grants_location
+ParamValidationError 2 in common.call_boto3: type=aws_s3control_access_grants_location clfn=s3control
+e=ParamValidationError('Parameter validation failed:\nAccountId is required but not set') [pv2]  common.py 949
+No aws_s3control_access_grants_location found -empty response
+
+
+
+1057 of 1289 type=aws_sagemaker_user_profile
+
+
+ERROR: in getresource clfn=schemas descfn=list_registries
+topkey=Registries id=None
+e=KeyError('RegistryArn') [e1]  common.py 658
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 162
+--->> Could not get resource aws_schemas_registry id=None
+
+1070 of 1289 type=aws_securityhub_account
+
+ERROR: in call_boto3 clfn=securityhub descfn=describe_hub
+topkey=Hub id=None
+e=KeyError('Hub') [e1]  common.py 950
+
+ERROR: in getresource clfn=securityhub descfn=describe_hub
+topkey=Hub id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 641
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 162
+--->> Could not get resource aws_securityhub_account id=None
+
+WARNING: Not supported by aws2tf currently : aws_securityhub_organization_admin_account
+1077 of 1289 type=aws_securityhub_organization_configuration
+
+ERROR: in call_boto3 clfn=securityhub descfn=describe_organization_configuration
+topkey=OrganizationConfiguration id=None
+e=InvalidAccessException('An error occurred (InvalidAccessException) when calling the DescribeOrganizationConfiguration operation: Account 566972129213 is not an administrator for this organization') [e1]  common.py 949
+
+ERROR: in getresource clfn=securityhub descfn=describe_organization_configuration
+topkey=OrganizationConfiguration id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 641
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 162
+--->> Could not get resource aws_securityhub_organization_configuration id=None
+
+1086 of 1289 type=aws_service_discovery_public_dns_namespace
+
+
+WARNING: Not supported by aws2tf currently : aws_servicequotas_template_association
+1104 of 1289 type=aws_ses_active_receipt_rule_set
+
+ERROR: in call_boto3 clfn=ses descfn=describe_active_receipt_rule_set
+topkey=Metadata id=None
+e=KeyError('Metadata') [e1]  common.py 950
+
+ERROR: in getresource clfn=ses descfn=describe_active_receipt_rule_set
+topkey=Metadata id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 641
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 162
+--->> Could not get resource aws_ses_active_receipt_rule_set id=None
+
+WARNING: Not supported by aws2tf currently : aws_shield_protection
+1134 of 1289 type=aws_shield_protection_group
+
+ERROR: in call_boto3 clfn=shield descfn=list_protection_groups
+topkey=ProtectionGroups id=None
+e=ResourceNotFoundException('An error occurred (ResourceNotFoundException) when calling the ListProtectionGroups operation: The subscription does not exist.') [e1]  common.py 949
+
+ERROR: in getresource clfn=shield descfn=list_protection_groups
+topkey=ProtectionGroups id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 641
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 162
+--->> Could not get resource aws_shield_protection_group id=None
+
+WARNING: aws_sns_topic_subscription cannot have null id must pass parameter TopicArn
+1147 of 1289 type=aws_spot_datafeed_subscription
+
+ERROR: in call_boto3 clfn=ec2 descfn=describe_spot_datafeed_subscription
+topkey=SpotDatafeedSubscription id=None
+e=ClientError('An error occurred (InvalidSpotDatafeed.NotFound) when calling the DescribeSpotDatafeedSubscription operation: Spot datafeed subscription does not exist.') [e1]  common.py 949
+
+ERROR: in getresource clfn=ec2 descfn=describe_spot_datafeed_subscription
+topkey=SpotDatafeedSubscription id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 641
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 162
+--->> Could not get resource aws_spot_datafeed_subscription id=None
+1148 of 1289 type=aws_spot_fleet_request
+No aws_spot_fleet_request found -empty response
+
+
+ERROR: in call_boto3 clfn=ssm descfn=get_default_patch_baseline
+topkey=Baseline id=None
+e=KeyError('Baseline') [e1]  common.py 950
+
+ERROR: in getresource clfn=ssm descfn=get_default_patch_baseline
+topkey=Baseline id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 641
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 162
+--->> Could not get resource aws_ssm_default_patch_baseline id=None
+
+WARNING: Not supported by aws2tf currently : aws_synthetics_group_association
+1196 of 1289 type=aws_timestreamwrite_database
+
+ERROR: in call_boto3 clfn=timestream-write descfn=list_databases
+topkey=Databases id=None
+e=EndpointDiscoveryRefreshFailed('Endpoint Discovery failed to refresh the required endpoints.') [e1]  common.py 949
+
+ERROR: in getresource clfn=timestream-write descfn=list_databases
+topkey=Databases id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 641
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 162
+--->> Could not get resource aws_timestreamwrite_database id=None
+1197 of 1289 type=aws_timestreamwrite_table
+
+ERROR: in call_boto3 clfn=timestream-write descfn=list_tables
+topkey=Tables id=None
+e=EndpointDiscoveryRefreshFailed('Endpoint Discovery failed to refresh the required endpoints.') [e1]  common.py 949
+
+ERROR: in getresource clfn=timestream-write descfn=list_tables
+topkey=Tables id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 641
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 162
+
+
+WARNING: Terraform cannot import type: aws_vpc_endpoint_service_allowed_principal
+1227 of 1289 type=aws_vpc_endpoint_subnet_association
+
+ERROR: in call_boto3 clfn=ec2 descfn=describe_vpc_endpoint_subnet_associations
+topkey=SubnetAssociations id=None
+e=KeyError('describe_vpc_endpoint_subnet_associations') [e1]  common.py 826
+
+ERROR: in call_boto3 clfn=ec2 descfn=describe_vpc_endpoint_subnet_associations
+topkey=SubnetAssociations id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 978
+
+ERROR: in getresource clfn=ec2 descfn=describe_vpc_endpoint_subnet_associations
+topkey=SubnetAssociations id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 641
+e=TypeError('can only concatenate str (not "type") to str')
+<class 'TypeError'> common.py 162
+--->> Could not get resource aws_vpc_endpoint_subnet_association id=None
+
+
+
+
+
+1286 of 1289 type=aws_workspaces_workspace
+1287 of 1289 type=aws_xray_encryption_config
+ERROR: getresource TypeError: {'Status': 'ACTIVE', 'Type': 'NONE'} key=EncryptionConfigId type=aws_xray_encryption_config get_encryption_config
+ERROR: getresource TypeError: {'Status': 'ACTIVE', 'Type': 'NONE'} key=EncryptionConfigId type=aws_xray_encryption_config get_encryption_config
+1288 of 1289 type=aws_xray_group
+WARNING: aws_xray_group cannot have null id must pass parameter GroupName
+
+
+
+

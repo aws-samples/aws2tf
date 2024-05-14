@@ -441,4 +441,5 @@ notimplemented = {
 	"aws_auditmanager_organization_admin_account_registration": True,
     "aws_ce_cost_allocation_tag": True, ### TODO
     "aws_vpc_endpoint_service": True, ### TODO
+    "aws_worklink_fleet": True, ### region  
 }

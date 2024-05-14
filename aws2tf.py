@@ -161,7 +161,7 @@ if __name__ == '__main__':
         print("len all_types="+str(len(all_types)))
         ic=0
         istart=799
-        it=901
+        it=1289
         for i in all_types:
             ic=ic+1
             if ic > it: break 

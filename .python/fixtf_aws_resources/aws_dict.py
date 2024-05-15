@@ -5485,7 +5485,7 @@ aws_ivschat_room = {
 aws_kendra_data_source = {
 	"clfn":		"kendra",
 	"descfn":	"list_data_sources",
-	"topkey":	"DataSources",
+	"topkey":	"SummaryItems",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -5493,7 +5493,7 @@ aws_kendra_data_source = {
 aws_kendra_experience = {
 	"clfn":		"kendra",
 	"descfn":	"list_experiences",
-	"topkey":	"Experiences",
+	"topkey":	"SummaryItems",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -5501,7 +5501,7 @@ aws_kendra_experience = {
 aws_kendra_faq = {
 	"clfn":		"kendra",
 	"descfn":	"list_faqs",
-	"topkey":	"Faqs",
+	"topkey":	"FaqSummaryItems",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -5517,7 +5517,7 @@ aws_kendra_index = {
 aws_kendra_query_suggestions_block_list = {
 	"clfn":		"kendra",
 	"descfn":	"list_query_suggestions_block_lists",
-	"topkey":	"QuerySuggestionsBlockLists",
+	"topkey":	"BlockListSummaryItems",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -5525,7 +5525,7 @@ aws_kendra_query_suggestions_block_list = {
 aws_kendra_thesaurus = {
 	"clfn":		"kendra",
 	"descfn":	"list_thesauri",
-	"topkey":	"Thesauri",
+	"topkey":	"ThesaurusSummaryItems",
 	"key":		"Id",
 	"filterid":	"Id"
 }

@@ -32,6 +32,7 @@ def resource_types(type):
     elif type == "glue": rets=["aws_glue_crawler","aws_glue_job","aws_glue_connection"]; return rets
     elif type == "iam": return ["aws_iam_role","aws_iam_policy"]
     elif type == "igw": rets=["aws_internet_gateway"]; return rets
+    elif type == "kendra": rets=["aws_kendra_index"]; return rets
     elif type == "kinesis": rets=["aws_kinesis_stream","aws_kinesis_firehose_delivery_stream"]; return rets
     elif type == "kms": return ["aws_kms_key"]
     elif type == "lambda": rets=["aws_lambda_function"]; return rets

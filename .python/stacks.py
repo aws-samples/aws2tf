@@ -316,7 +316,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::ApiGateway::UsagePlanKey": common.call_resource("aws_api_gateway_usage_plan_key", pid)
             elif type == "AWS::ApiGateway::VpcLink": common.call_resource("aws_api_gateway_vpc_link", pid)
             elif type == "AWS::ApiGateway::RestApi": common.call_resource("aws_api_gateway_rest_api", pid) 
-            
+
             elif type == "AWS::ApiGatewayV2::Api": common.call_resource("aws_apigatewayv2_api", pid)
             elif type == "AWS::ApiGatewayV2::ApiGatewayManagedOverrides": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::ApiGatewayV2::ApiMapping": f3.write(type+" "+pid+" fetched as part of ApiGatewayV2 Api..\n")
@@ -881,9 +881,9 @@ def getstackresources(stack_name,client):
             elif type == "AWS::IoTWireless::WirelessGateway": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::KMS::ReplicaKey": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::KafkaConnect::Connector": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::Kendra::DataSource": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::Kendra::Faq": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::Kendra::Index": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::Kendra::DataSource": f3.write(type+" "+pid+" fetched as part of Kendra Index ..\n")
+            elif type == "AWS::Kendra::Faq": f3.write(type+" "+pid+" fetched as part of Kendra Index ..\n")
+            elif type == "AWS::Kendra::Index": common.call_resource("aws_kendra_index", pid)
             elif type == "AWS::KendraRanking::ExecutionPlan": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Kinesis::StreamConsumer": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::KinesisAnalytics::Application": common.call_resource("aws_null", type+" "+pid)

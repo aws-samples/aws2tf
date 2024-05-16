@@ -7696,7 +7696,7 @@ aws_route53_cidr_location = {
 
 aws_route53_delegation_set = {
 	"clfn":		"route53",
-	"descfn":	"",
+	"descfn":	"list_reusable_delegation_sets",
 	"topkey":	"DelegationSets",
 	"key":		"Id",
 	"filterid":	"Id"

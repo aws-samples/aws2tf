@@ -86,8 +86,8 @@ def get_all_s3_buckets(fb,my_region):
          if bl != my_region:
             print('Skipping bucket '+bucket_name+' in region '+ str(bl)+ " not in configured region "+my_region)     
             if bl is None:  
-               print('passing on None location .......')
-               pass
+               print('skipping on None location (assume us-east-1) .......')
+               continue
             else:
                continue
          elif bl == 'null':  

@@ -145,4 +145,5 @@ noimport = {
     "aws_imagebuilder_image": True, ### Problems importing with arn
     "aws_lightsail_distribution": True, ### us-east only  InvalidInputException
     "aws_lambda_layer_version_permission": True, ### import errors
+    "aws_route": True, ### aws_route_table instead
 } 

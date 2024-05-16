@@ -53,6 +53,7 @@ from get_aws_resources import aws_organizations
 from get_aws_resources import aws_rds
 from get_aws_resources import aws_redshift
 from get_aws_resources import aws_redshift_serverless
+from get_aws_resources import aws_resource_explorer_2
 from get_aws_resources import aws_route53
 from get_aws_resources import aws_s3
 from get_aws_resources import aws_sagemaker

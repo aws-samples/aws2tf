@@ -6823,51 +6823,51 @@ aws_opensearch_vpc_endpoint = {
 }
 
 aws_opensearchserverless_access_policy = {
-	"clfn":		"opensearch",
+	"clfn":		"opensearchserverless",
 	"descfn":	"list_access_policies",
-	"topkey":	"AccessPolicies",
-	"key":		"PolicyId",
-	"filterid":	"PolicyId"
+	"topkey":	"accessPolicySummaries",
+	"key":		"name",
+	"filterid":	"name"
 }
 
 aws_opensearchserverless_collection = {
-	"clfn":		"opensearch",
+	"clfn":		"opensearchserverless",
 	"descfn":	"list_collections",
-	"topkey":	"Collections",
-	"key":		"CollectionId",
-	"filterid":	"CollectionId"
+	"topkey":	"collectionSummaries",
+	"key":		"id",
+	"filterid":	"id"
 }
 
 aws_opensearchserverless_lifecycle_policy = {
-	"clfn":		"opensearch",
+	"clfn":		"opensearchserverless",
 	"descfn":	"list_lifecycle_policies",
-	"topkey":	"LifecyclePolicies",
-	"key":		"PolicyId",
-	"filterid":	"PolicyId"
+	"topkey":	"lifecyclePolicySummaries",
+	"key":		"name",
+	"filterid":	"name"
 }
 
 aws_opensearchserverless_security_config = {
-	"clfn":		"opensearch",
+	"clfn":		"opensearchserverless",
 	"descfn":	"list_security_configs",
-	"topkey":	"SecurityConfigs",
-	"key":		"SecurityConfigId",
-	"filterid":	"SecurityConfigId"
+	"topkey":	"securityConfigSummaries",
+	"key":		"id",
+	"filterid":	"id"
 }
 
 aws_opensearchserverless_security_policy = {
-	"clfn":		"opensearch",
+	"clfn":		"opensearchserverless",
 	"descfn":	"list_security_policies",
-	"topkey":	"SecurityPolicies",
-	"key":		"PolicyId",
-	"filterid":	"PolicyId"
+	"topkey":	"securityPolicySummaries",
+	"key":		"name",
+	"filterid":	"name"
 }
 
 aws_opensearchserverless_vpc_endpoint = {
-	"clfn":		"opensearch",
+	"clfn":		"opensearchserverless",
 	"descfn":	"list_vpc_endpoints",
-	"topkey":	"VpcEndpoints",
-	"key":		"VpcEndpointId",
-	"filterid":	"VpcEndpointId"
+	"topkey":	"vpcEndpointSummaries",
+	"key":		"id",
+	"filterid":	"id"
 }
 
 aws_opsworks_application = {
@@ -7058,8 +7058,8 @@ aws_organizations_resource_policy = {
 	"clfn":		"organizations",
 	"descfn":	"describe_resource_policy",
 	"topkey":	"ResourcePolicy",
-	"key":		"ResourcePolicySummary.Id",
-	"filterid":	"ResourcePolicySummary.Id"
+	"key":		"Id",
+	"filterid":	"Id"
 }
 
 aws_pinpoint_adm_channel = {

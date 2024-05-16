@@ -307,7 +307,12 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
     #print("-9a->"+str(response))
     
     try:
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: 
+            print("Empty response for "+type+ " id="+str(id)+" returning"); 
+            if id is not None:
+                pkey = type+"."+id
+                globals.rproc[pkey] = True
+            return True
         
         if id is None:
             for j in response: common.write_import(type, j[key], None)     

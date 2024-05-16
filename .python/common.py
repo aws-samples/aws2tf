@@ -49,6 +49,7 @@ from get_aws_resources import aws_kendra
 from get_aws_resources import aws_kinesis
 from get_aws_resources import aws_logs
 from get_aws_resources import aws_lambda
+from get_aws_resources import aws_organizations
 from get_aws_resources import aws_rds
 from get_aws_resources import aws_redshift
 from get_aws_resources import aws_redshift_serverless

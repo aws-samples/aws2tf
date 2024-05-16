@@ -141,7 +141,7 @@ if __name__ == '__main__':
         lall=len(all_types)
     except:
         lall=0
-    print("all_types="+str(all_types))
+    #print("all_types="+str(all_types))
 
 
     if type == "stack":
@@ -161,7 +161,7 @@ if __name__ == '__main__':
         print("len all_types="+str(len(all_types)))
         ic=0
         istart=799
-        it=1289
+        it=901
         for i in all_types:
             ic=ic+1
             if ic > it: break 

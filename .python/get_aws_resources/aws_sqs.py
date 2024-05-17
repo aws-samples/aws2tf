@@ -12,12 +12,17 @@ def get_aws_sqs_queue(type, id, clfn, descfn, topkey, key, filterid):
         client = boto3.client(clfn)
         if id is None:
             response = client.list_queues()
+            try:
+                tempr=response[topkey]
+            except:
+                print("No queues found "+type+ " id="+str(id)+" returning")
+                return True
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-            for j in response:
+            for j in response[topkey]:
                 common.write_import(type,j,None) 
 
         else:      
-            response = client.list_queues()
+            response = client.list_queues(QueueNamePrefix=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 if j==id:

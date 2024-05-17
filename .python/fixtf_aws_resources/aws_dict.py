@@ -8535,8 +8535,8 @@ aws_schemas_registry = {
 	"clfn":		"schemas",
 	"descfn":	"list_registries",
 	"topkey":	"Registries",
-	"key":		"RegistryArn",
-	"filterid":	"RegistryArn"
+	"key":		"RegistryName",
+	"filterid":	"RegistryName"
 }
 
 aws_schemas_registry_policy = {
@@ -8786,8 +8786,8 @@ aws_servicecatalog_product = {
 	"clfn":		"servicecatalog",
 	"descfn":	"search_products_as_admin",
 	"topkey":	"ProductViewDetails",
-	"key":		"ProductViewSummary.ProductId",
-	"filterid":	"ProductViewSummary.ProductId"
+	"key":		"ProductId",
+	"filterid":	"ProductId"
 }
 
 aws_servicecatalog_product_portfolio_association = {

@@ -55,6 +55,9 @@ def aws_servicecatalog_provisioning_artifacts(t1,tt1,tt2,flag1,flag2):
 
 def aws_servicecatalog_service_action(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="accept_language" and tt2=="null": 
+		t1 = tt1 + " = \"en\"\n"
+		t1=t1+"\n lifecycle {\n   ignore_changes = [accept_language]\n}\n"
 	return skip,t1,flag1,flag2
 
 def aws_servicecatalog_tag_option(t1,tt1,tt2,flag1,flag2):

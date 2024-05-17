@@ -1367,6 +1367,27 @@ aws_route53_record = {
   "clfn": "route53"
 }
 
+aws_s3control_access_grant = {
+  "param": "AccountId",
+  "clfn": "s3control"  
+}
+
+aws_s3control_access_grants_instance = {
+  "param": "AccountId",
+  "clfn": "s3control"  
+}
+
+aws_s3control_access_grants_instance_resource_policy = {
+  "param": "AccountId",
+  "clfn": "s3control"  
+}
+
+aws_s3control_access_grants_location = {
+  "param": "AccountId",
+  "clfn": "s3control"  
+}
+
+
 aws_s3_account_public_access_block = {
   "param": "Bucket",
   "clfn": "s3"
@@ -2142,6 +2163,10 @@ aws_needid = {
   "aws_s3_object_copy": aws_s3_object_copy,
   "aws_s3_objects": aws_s3_objects,
   "aws_s3control_access_point_policy": aws_s3control_access_point_policy,
+  "aws_s3control_access_grant": aws_s3control_access_grant,
+  "aws_s3control_access_grants_instance": aws_s3control_access_grants_instance,
+  "aws_s3control_access_grants_instance_resource_policy": aws_s3control_access_grants_instance_resource_policy,
+  "aws_s3control_access_grants_location": aws_s3control_access_grants_location,
   "aws_s3control_bucket_lifecycle_configuration": aws_s3control_bucket_lifecycle_configuration,
   "aws_s3control_bucket_policy": aws_s3control_bucket_policy,
   "aws_s3control_multi_region_access_point": aws_s3control_multi_region_access_point,

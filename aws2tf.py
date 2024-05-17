@@ -160,8 +160,8 @@ if __name__ == '__main__':
     elif all_types != None and lall > 1:
         print("len all_types="+str(len(all_types)))
         ic=0
-        istart=999
-        it=1101
+        istart=1099
+        it=len(all_types)
         for i in all_types:
             ic=ic+1
             if ic > it: break 

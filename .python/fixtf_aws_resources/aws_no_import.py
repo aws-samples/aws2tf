@@ -146,4 +146,8 @@ noimport = {
     "aws_lightsail_distribution": True, ### us-east only  InvalidInputException
     "aws_lambda_layer_version_permission": True, ### import errors
     "aws_route": True, ### aws_route_table instead
+    "aws_vpc_security_group_egress_rule": True, ### aws_security_group_rule
+    "aws_vpc_security_group_ingress_rule": True, ### aws_security_group_rule
+    "aws_volume_attachment": True, ### complex needed at all ?
+    "aws_spot_datafeed_subscription": True, ### doesn't work
 } 

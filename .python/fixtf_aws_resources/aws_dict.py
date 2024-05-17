@@ -8866,7 +8866,7 @@ aws_servicequotas_template_association = {
 aws_ses_active_receipt_rule_set = {
 	"clfn":		"ses",
 	"descfn":	"describe_active_receipt_rule_set",
-	"topkey":	"Metadata",
+	"topkey":	"Rules",
 	"key":		"Name",
 	"filterid":	"Name"
 }
@@ -9107,8 +9107,8 @@ aws_shield_protection_group = {
 	"clfn":		"shield",
 	"descfn":	"list_protection_groups",
 	"topkey":	"ProtectionGroups",
-	"key":		"Id",
-	"filterid":	"Id"
+	"key":		"ProtectionGroupId",
+	"filterid":	"ProtectionGroupId"
 }
 
 aws_shield_protection_health_check_association = {
@@ -10357,7 +10357,7 @@ aws_xray_sampling_rule = {
 	"clfn":		"xray",
 	"descfn":	"get_sampling_rules",
 	"topkey":	"SamplingRuleRecords",
-	"key":		"SamplingRule.RuleName",
+	"key":		"RuleName",
 	"filterid":	"RuleArn"
 }
 

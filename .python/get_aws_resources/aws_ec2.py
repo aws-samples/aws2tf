@@ -570,3 +570,52 @@ def get_aws_route(type, id, clfn, descfn, topkey, key, filterid):
 
     return True
 
+
+def get_aws_spot_datafeed_subscription(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        common.write_import(type,"spot-datafeed-subscription",None) 
+
+
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+#aws_vpc_endpoint_route_table_association
+def get_aws_vpc_endpoint_route_table_association(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate():
+                response = response + page[topkey]
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            for j in response:
+                endpid=j[key]
+                for k in j['RouteTableIds']:
+                    theid=endpid+"/"+k
+                    common.write_import(type,theid,None) 
+
+        else:      
+            response = client.describe_vpc_endpoints(VpcEndpointIds=[id])
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            j=response[topkey]
+            endpid=j[key]
+            for k in j['RouteTableIds']:
+                theid=endpid+"/"+k
+                common.write_import(type,theid,None) 
+                common.write_import(type,j[key],None)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True

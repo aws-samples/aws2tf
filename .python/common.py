@@ -63,11 +63,14 @@ from get_aws_resources import aws_securityhub
 from get_aws_resources import aws_secretsmanager
 from get_aws_resources import aws_servicecatalog
 from get_aws_resources import aws_servicediscovery
+from get_aws_resources import aws_shield
+from get_aws_resources import aws_ses
 from get_aws_resources import aws_sns
 from get_aws_resources import aws_sqs
 from get_aws_resources import aws_ssm
 from get_aws_resources import aws_vpc_lattice
 from get_aws_resources import aws_wafv2
+from get_aws_resources import aws_xray
 
 from fixtf_aws_resources import needid_dict
 from fixtf_aws_resources import aws_no_import

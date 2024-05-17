@@ -28,6 +28,8 @@ def aws_ssm_instances(t1,tt1,tt2,flag1,flag2):
 
 def aws_ssm_maintenance_window(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="schedule_offset" and tt2=="0": 
+		t1="lifecycle {\n   ignore_changes = [schedule_offset]\n}\n"
 	return skip,t1,flag1,flag2
 
 def aws_ssm_maintenance_window_target(t1,tt1,tt2,flag1,flag2):

@@ -442,4 +442,6 @@ notimplemented = {
     "aws_ce_cost_allocation_tag": True, ### TODO
     "aws_vpc_endpoint_service": True, ### TODO
     "aws_worklink_fleet": True, ### region  
+    "aws_timestreamwrite_database": True, ### region
+    "aws_timestreamwrite_table": True, ### region
 }

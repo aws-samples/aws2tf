@@ -8295,8 +8295,8 @@ aws_sagemaker_app_image_config = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_app_image_configs",
 	"topkey":	"AppImageConfigs",
-	"key":		"AppImageConfigArn",
-	"filterid":	"AppImageConfigArn"
+	"key":		"AppImageConfigName",
+	"filterid":	"AppImageConfigName"
 }
 
 aws_sagemaker_code_repository = {
@@ -8335,16 +8335,16 @@ aws_sagemaker_domain = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_domains",
 	"topkey":	"Domains",
-	"key":		"DomainArn",
-	"filterid":	"DomainArn"
+	"key":		"DomainId",
+	"filterid":	"DomainId"
 }
 
 aws_sagemaker_endpoint = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_endpoints",
 	"topkey":	"Endpoints",
-	"key":		"EndpointArn",
-	"filterid":	"EndpointArn"
+	"key":		"EndpointName",
+	"filterid":	"EndpointName"
 }
 
 aws_sagemaker_endpoint_configuration = {
@@ -8383,8 +8383,8 @@ aws_sagemaker_image = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_images",
 	"topkey":	"Images",
-	"key":		"ImageArn",
-	"filterid":	"ImageArn"
+	"key":		"ImageName",
+	"filterid":	"ImageName"
 }
 
 aws_sagemaker_image_version = {
@@ -8399,8 +8399,8 @@ aws_sagemaker_model = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_models",
 	"topkey":	"Models",
-	"key":		"ModelArn",
-	"filterid":	"ModelArn"
+	"key":		"ModelName",
+	"filterid":	"ModelName"
 }
 
 aws_sagemaker_model_package_group = {
@@ -8487,8 +8487,8 @@ aws_sagemaker_user_profile = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_user_profiles",
 	"topkey":	"UserProfiles",
-	"key":		"UserProfileName",
-	"filterid":	"UserProfileName"
+	"key":		"UserProfileArn",
+	"filterid":	"UserProfileArn"
 }
 
 aws_sagemaker_workforce = {
@@ -8519,16 +8519,16 @@ aws_scheduler_schedule_group = {
 	"clfn":		"scheduler",
 	"descfn":	"list_schedule_groups",
 	"topkey":	"ScheduleGroups",
-	"key":		"Arn",
-	"filterid":	"Arn"
+	"key":		"Name",
+	"filterid":	"Name"
 }
 
 aws_schemas_discoverer = {
 	"clfn":		"schemas",
 	"descfn":	"list_discoverers",
 	"topkey":	"Discoverers",
-	"key":		"DiscovererArn",
-	"filterid":	"DiscovererArn"
+	"key":		"DiscovererId",
+	"filterid":	"DiscovererId"
 }
 
 aws_schemas_registry = {
@@ -8713,16 +8713,16 @@ aws_service_discovery_private_dns_namespace = {
 	"clfn":		"servicediscovery",
 	"descfn":	"list_namespaces",
 	"topkey":	"Namespaces",
-	"key":		"Arn",
-	"filterid":	"Arn"
+	"key":		"Id",
+	"filterid":	"Id"
 }
 
 aws_service_discovery_public_dns_namespace = {
 	"clfn":		"servicediscovery",
 	"descfn":	"list_namespaces",
 	"topkey":	"Namespaces",
-	"key":		"Arn",
-	"filterid":	"Arn"
+	"key":		"Id",
+	"filterid":	"Id"
 }
 
 aws_service_discovery_service = {

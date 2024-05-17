@@ -19,7 +19,7 @@ def get_aws_appautoscaling_target(type, id, clfn, descfn, topkey, key, filterid)
             response = client.describe_scalable_targets(ServiceNamespace="ecs")
         
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-            print(">>>>>>>>>>>>"+str(response))
+            #print(">>>>>>>>>>>>"+str(response))
             for j in response[topkey]:
                 #print(str(j))
                 sns=j['ServiceNamespace']

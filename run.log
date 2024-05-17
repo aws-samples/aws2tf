@@ -808,3 +808,148 @@ e=TypeError('can only concatenate str (not "type") to str')
 <class 'TypeError'> common.py 172
 --->> Could not get resource aws_applicationinsights_application id=None
 145 of 1289 type=aws_appmesh_gateway_route
+WARNING: aws_appmesh_gateway_route cannot have null id must pass parameter meshName,virtualGatewayName
+146 of 1289 type=aws_appmesh_mesh
+147 of 1289 type=aws_appmesh_route
+WARNING: aws_appmesh_route cannot have null id must pass parameter meshName,virtualRouterName
+148 of 1289 type=aws_appmesh_virtual_gateway
+WARNING: aws_appmesh_virtual_gateway cannot have null id must pass parameter meshName
+149 of 1289 type=aws_appmesh_virtual_node
+WARNING: aws_appmesh_virtual_node cannot have null id must pass parameter meshName
+150 of 1289 type=aws_appmesh_virtual_router
+WARNING: aws_appmesh_virtual_router cannot have null id must pass parameter meshName
+151 of 1289 type=aws_appmesh_virtual_service
+WARNING: aws_appmesh_virtual_service cannot have null id must pass parameter meshName
+152 of 1289 type=aws_apprunner_auto_scaling_configuration_version
+WARNING: aws_apprunner_auto_scaling_configuration_version cannot have null id must pass parameter AutoScalingConfigurationArn
+153 of 1289 type=aws_apprunner_connection
+No aws_apprunner_connection found -empty response
+154 of 1289 type=aws_apprunner_custom_domain_association
+WARNING: aws_apprunner_custom_domain_association cannot have null id must pass parameter ServiceArn
+155 of 1289 type=aws_apprunner_default_auto_scaling_configuration_version
+WARNING: aws_apprunner_default_auto_scaling_configuration_version cannot have null id must pass parameter AutoScalingConfigurationArn
+156 of 1289 type=aws_apprunner_observability_configuration
+WARNING: Not supported by aws2tf currently : aws_apprunner_observability_configuration
+157 of 1289 type=aws_apprunner_service
+No aws_apprunner_service found -empty response
+158 of 1289 type=aws_apprunner_vpc_connector
+No aws_apprunner_vpc_connector found -empty response
+159 of 1289 type=aws_apprunner_vpc_ingress_connection
+No aws_apprunner_vpc_ingress_connection found -empty response
+160 of 1289 type=aws_appstream_directory_config
+WARNING: Not supported by aws2tf currently : aws_appstream_directory_config
+161 of 1289 type=aws_appstream_fleet
+WARNING: Not supported by aws2tf currently : aws_appstream_fleet
+162 of 1289 type=aws_appstream_fleet_stack_association
+WARNING: Not supported by aws2tf currently : aws_appstream_fleet_stack_association
+163 of 1289 type=aws_appstream_image_builder
+WARNING: Not supported by aws2tf currently : aws_appstream_image_builder
+164 of 1289 type=aws_appstream_stack
+WARNING: Not supported by aws2tf currently : aws_appstream_stack
+165 of 1289 type=aws_appstream_user
+WARNING: Not supported by aws2tf currently : aws_appstream_user
+166 of 1289 type=aws_appstream_user_stack_association
+WARNING: Not supported by aws2tf currently : aws_appstream_user_stack_association
+167 of 1289 type=aws_appsync_api_cache
+WARNING: Not supported by aws2tf currently : aws_appsync_api_cache
+168 of 1289 type=aws_appsync_api_key
+WARNING: aws_appsync_api_key cannot have null id must pass parameter apiId
+169 of 1289 type=aws_appsync_datasource
+WARNING: aws_appsync_datasource cannot have null id must pass parameter apiId
+170 of 1289 type=aws_appsync_domain_name
+No aws_appsync_domain_name found -empty response
+171 of 1289 type=aws_appsync_domain_name_api_association
+WARNING: Not supported by aws2tf currently : aws_appsync_domain_name_api_association
+172 of 1289 type=aws_appsync_function
+WARNING: aws_appsync_function cannot have null id must pass parameter apiId
+173 of 1289 type=aws_appsync_graphql_api
+WARNING: Not supported by aws2tf currently : aws_appsync_graphql_api
+174 of 1289 type=aws_appsync_resolver
+WARNING: aws_appsync_resolver cannot have null id must pass parameter apiId,typeName
+175 of 1289 type=aws_appsync_type
+WARNING: aws_appsync_type cannot have null id must pass parameter apiId,format
+176 of 1289 type=aws_athena_data_catalog
+WARNING: Not supported by aws2tf currently : aws_athena_data_catalog
+177 of 1289 type=aws_athena_database
+WARNING: aws_athena_database cannot have null id must pass parameter CatalogName
+178 of 1289 type=aws_athena_named_query
+ERROR: getresource TypeError: ['afa5e9eb-e30c-4af4-b10b-9c4572b6ae06', 'c76fea73-56c1-435e-88af-6c551e568e22', '131e1dad-1088-41b1-90f5-5eb12cfc5b31', 'cde077de-7f8d-43c0-bf6e-76fa85b0be2c', '946d9195-3641-463a-9112-56b4c900c05e', 'faa2a3ff-31d7-46d3-8340-148ab6b27e6e', '7e635285-0dab-4833-8a91-538fb6065eac', 'ffc29dad-7ded-4e29-b4b2-fa7b698fe3a5', 'a4a4f9dc-31d0-4c59-b1f8-ea27a0ef4569'] key= type=aws_athena_named_query list_named_queries
+ERROR: getresource TypeError: ['afa5e9eb-e30c-4af4-b10b-9c4572b6ae06', 'c76fea73-56c1-435e-88af-6c551e568e22', '131e1dad-1088-41b1-90f5-5eb12cfc5b31', 'cde077de-7f8d-43c0-bf6e-76fa85b0be2c', '946d9195-3641-463a-9112-56b4c900c05e', 'faa2a3ff-31d7-46d3-8340-148ab6b27e6e', '7e635285-0dab-4833-8a91-538fb6065eac', 'ffc29dad-7ded-4e29-b4b2-fa7b698fe3a5', 'a4a4f9dc-31d0-4c59-b1f8-ea27a0ef4569'] key= type=aws_athena_named_query list_named_queries
+ERROR: getresource TypeError: ['afa5e9eb-e30c-4af4-b10b-9c4572b6ae06', 'c76fea73-56c1-435e-88af-6c551e568e22', '131e1dad-1088-41b1-90f5-5eb12cfc5b31', 'cde077de-7f8d-43c0-bf6e-76fa85b0be2c', '946d9195-3641-463a-9112-56b4c900c05e', 'faa2a3ff-31d7-46d3-8340-148ab6b27e6e', '7e635285-0dab-4833-8a91-538fb6065eac', 'ffc29dad-7ded-4e29-b4b2-fa7b698fe3a5', 'a4a4f9dc-31d0-4c59-b1f8-ea27a0ef4569'] key= type=aws_athena_named_query list_named_queries
+ERROR: getresource TypeError: ['afa5e9eb-e30c-4af4-b10b-9c4572b6ae06', 'c76fea73-56c1-435e-88af-6c551e568e22', '131e1dad-1088-41b1-90f5-5eb12cfc5b31', 'cde077de-7f8d-43c0-bf6e-76fa85b0be2c', '946d9195-3641-463a-9112-56b4c900c05e', 'faa2a3ff-31d7-46d3-8340-148ab6b27e6e', '7e635285-0dab-4833-8a91-538fb6065eac', 'ffc29dad-7ded-4e29-b4b2-fa7b698fe3a5', 'a4a4f9dc-31d0-4c59-b1f8-ea27a0ef4569'] key= type=aws_athena_named_query list_named_queries
+ERROR: getresource TypeError: ['afa5e9eb-e30c-4af4-b10b-9c4572b6ae06', 'c76fea73-56c1-435e-88af-6c551e568e22', '131e1dad-1088-41b1-90f5-5eb12cfc5b31', 'cde077de-7f8d-43c0-bf6e-76fa85b0be2c', '946d9195-3641-463a-9112-56b4c900c05e', 'faa2a3ff-31d7-46d3-8340-148ab6b27e6e', '7e635285-0dab-4833-8a91-538fb6065eac', 'ffc29dad-7ded-4e29-b4b2-fa7b698fe3a5', 'a4a4f9dc-31d0-4c59-b1f8-ea27a0ef4569'] key= type=aws_athena_named_query list_named_queries
+ERROR: getresource TypeError: ['afa5e9eb-e30c-4af4-b10b-9c4572b6ae06', 'c76fea73-56c1-435e-88af-6c551e568e22', '131e1dad-1088-41b1-90f5-5eb12cfc5b31', 'cde077de-7f8d-43c0-bf6e-76fa85b0be2c', '946d9195-3641-463a-9112-56b4c900c05e', 'faa2a3ff-31d7-46d3-8340-148ab6b27e6e', '7e635285-0dab-4833-8a91-538fb6065eac', 'ffc29dad-7ded-4e29-b4b2-fa7b698fe3a5', 'a4a4f9dc-31d0-4c59-b1f8-ea27a0ef4569'] key= type=aws_athena_named_query list_named_queries
+ERROR: getresource TypeError: ['afa5e9eb-e30c-4af4-b10b-9c4572b6ae06', 'c76fea73-56c1-435e-88af-6c551e568e22', '131e1dad-1088-41b1-90f5-5eb12cfc5b31', 'cde077de-7f8d-43c0-bf6e-76fa85b0be2c', '946d9195-3641-463a-9112-56b4c900c05e', 'faa2a3ff-31d7-46d3-8340-148ab6b27e6e', '7e635285-0dab-4833-8a91-538fb6065eac', 'ffc29dad-7ded-4e29-b4b2-fa7b698fe3a5', 'a4a4f9dc-31d0-4c59-b1f8-ea27a0ef4569'] key= type=aws_athena_named_query list_named_queries
+ERROR: getresource TypeError: ['afa5e9eb-e30c-4af4-b10b-9c4572b6ae06', 'c76fea73-56c1-435e-88af-6c551e568e22', '131e1dad-1088-41b1-90f5-5eb12cfc5b31', 'cde077de-7f8d-43c0-bf6e-76fa85b0be2c', '946d9195-3641-463a-9112-56b4c900c05e', 'faa2a3ff-31d7-46d3-8340-148ab6b27e6e', '7e635285-0dab-4833-8a91-538fb6065eac', 'ffc29dad-7ded-4e29-b4b2-fa7b698fe3a5', 'a4a4f9dc-31d0-4c59-b1f8-ea27a0ef4569'] key= type=aws_athena_named_query list_named_queries
+ERROR: getresource TypeError: ['afa5e9eb-e30c-4af4-b10b-9c4572b6ae06', 'c76fea73-56c1-435e-88af-6c551e568e22', '131e1dad-1088-41b1-90f5-5eb12cfc5b31', 'cde077de-7f8d-43c0-bf6e-76fa85b0be2c', '946d9195-3641-463a-9112-56b4c900c05e', 'faa2a3ff-31d7-46d3-8340-148ab6b27e6e', '7e635285-0dab-4833-8a91-538fb6065eac', 'ffc29dad-7ded-4e29-b4b2-fa7b698fe3a5', 'a4a4f9dc-31d0-4c59-b1f8-ea27a0ef4569'] key= type=aws_athena_named_query list_named_queries
+179 of 1289 type=aws_athena_prepared_statement
+WARNING: aws_athena_prepared_statement cannot have null id must pass parameter WorkGroup
+180 of 1289 type=aws_athena_workgroup
+181 of 1289 type=aws_auditmanager_account_registration
+WARNING: Not supported by aws2tf currently : aws_auditmanager_account_registration
+182 of 1289 type=aws_auditmanager_assessment
+WARNING: Not supported by aws2tf currently : aws_auditmanager_assessment
+183 of 1289 type=aws_auditmanager_assessment_delegation
+WARNING: Not supported by aws2tf currently : aws_auditmanager_assessment_delegation
+184 of 1289 type=aws_auditmanager_assessment_report
+WARNING: Not supported by aws2tf currently : aws_auditmanager_assessment_report
+185 of 1289 type=aws_auditmanager_control
+WARNING: Not supported by aws2tf currently : aws_auditmanager_control
+186 of 1289 type=aws_auditmanager_framework
+WARNING: Not supported by aws2tf currently : aws_auditmanager_framework
+187 of 1289 type=aws_auditmanager_framework_share
+WARNING: Not supported by aws2tf currently : aws_auditmanager_framework_share
+188 of 1289 type=aws_auditmanager_organization_admin_account_registration
+WARNING: Not supported by aws2tf currently : aws_auditmanager_organization_admin_account_registration
+189 of 1289 type=aws_autoscaling_attachment
+WARNING: Terraform cannot import type: aws_autoscaling_attachment
+190 of 1289 type=aws_autoscaling_group
+191 of 1289 type=aws_autoscaling_group_tag
+Found aws_autoscaling_group_tag.AT-5669-WAFWorkshopSampleWebApp-TheInstanceStack-18OSLZDHGCBX4-TheAutoScalingGroup-1wnUeSLThtd7 in processed skipping ...
+Found aws_autoscaling_group_tag.AT-5669-WAFWorkshopSampleWebApp-TheInstanceStack-18OSLZDHGCBX4-TheAutoScalingGroup-1wnUeSLThtd7 in processed skipping ...
+Found aws_autoscaling_group_tag.AT-5669-WAFWorkshopSampleWebApp-TheInstanceStack-18OSLZDHGCBX4-TheAutoScalingGroup-1wnUeSLThtd7 in processed skipping ...
+192 of 1289 type=aws_autoscaling_lifecycle_hook
+WARNING: aws_autoscaling_lifecycle_hook cannot have null id must pass parameter AutoScalingGroupName
+193 of 1289 type=aws_autoscaling_notification
+WARNING: Terraform cannot import type: aws_autoscaling_notification
+194 of 1289 type=aws_autoscaling_policy
+No aws_autoscaling_policy found -empty response
+195 of 1289 type=aws_autoscaling_schedule
+No aws_autoscaling_schedule found -empty response
+196 of 1289 type=aws_autoscaling_traffic_source_attachment
+WARNING: Terraform cannot import type: aws_autoscaling_traffic_source_attachment
+197 of 1289 type=aws_autoscalingplans_scaling_plan
+No aws_autoscalingplans_scaling_plan found -empty response
+198 of 1289 type=aws_backup_framework
+199 of 1289 type=aws_backup_global_settings
+WARNING: Not supported by aws2tf currently : aws_backup_global_settings
+200 of 1289 type=aws_backup_plan
+201 of 1289 type=aws_backup_region_settings
+202 of 1289 type=aws_backup_report_plan
+No aws_backup_report_plan found -empty response
+203 of 1289 type=aws_backup_selection
+WARNING: aws_backup_selection cannot have null id must pass parameter BackupPlanId
+204 of 1289 type=aws_backup_vault
+205 of 1289 type=aws_backup_vault_lock_configuration
+WARNING: aws_backup_vault_lock_configuration cannot have null id must pass parameter BackupVaultName
+206 of 1289 type=aws_backup_vault_notifications
+WARNING: aws_backup_vault_notifications cannot have null id must pass parameter BackupVaultName
+207 of 1289 type=aws_backup_vault_policy
+WARNING: aws_backup_vault_policy cannot have null id must pass parameter BackupVaultName
+208 of 1289 type=aws_batch_compute_environment
+WARNING: Not supported by aws2tf currently : aws_batch_compute_environment
+209 of 1289 type=aws_batch_job_definition
+WARNING: Not supported by aws2tf currently : aws_batch_job_definition
+210 of 1289 type=aws_batch_job_queue
+WARNING: Not supported by aws2tf currently : aws_batch_job_queue
+211 of 1289 type=aws_batch_scheduling_policy
+WARNING: Not supported by aws2tf currently : aws_batch_scheduling_policy
+212 of 1289 type=aws_bedrock_model_invocation_logging_configuration
+
+ERROR: in get_aws_bedrock_model_invocation_logging_configuration clfn=bedrock descfn=get_model_invocation_logging_configuration
+topkey=loggingConfig id=None
+e=EndpointConnectionError('Could not connect to the endpoint URL: "https://bedrock.eu-west-2.amazonaws.com/logging/modelinvocations"') [e1]  aws_bedrock.py 13
+
+ERROR: in call_resource clfn=bedrock descfn=get_model_invocation_logging_configuration
+topkey=loggingConfig id=None
+e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 145

@@ -45,6 +45,8 @@ def get_aws_kendra_data_source(type, id, clfn, descfn, topkey, key, filterid):
             response = client.list_data_sources(IndexId=id)
             if response[topkey] == []: 
                 print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                pkey=type+"."+id
+                globals.rproc[pkey]=True
                 return True
             for j in response[topkey]:
                 theid=j[key]+"/"+id
@@ -71,7 +73,9 @@ def get_aws_kendra_experience(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.list_experiences(IndexId=id)
             if response[topkey] == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                pkey=type+"."+id
+                globals.rproc[pkey]=True
                 return True
             for j in response[topkey]:
                 theid=j[key]+"/"+id
@@ -98,7 +102,9 @@ def get_aws_kendra_faq(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.list_faqs(IndexId=id)
             if response[topkey] == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                pkey=type+"."+id
+                globals.rproc[pkey]=True
                 return True
             for j in response[topkey]:
                 theid=j[key]+"/"+id
@@ -126,7 +132,9 @@ def get_aws_kendra_thesaurus(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.list_thesauri(IndexId=id)
             if response[topkey] == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                pkey=type+"."+id
+                globals.rproc[pkey]=True
                 return True
             for j in response[topkey]:
                 theid=j[key]+"/"+id
@@ -153,7 +161,9 @@ def get_aws_kendra_query_suggestions_block_list(type, id, clfn, descfn, topkey, 
         else:      
             response = client.list_query_suggestions_block_lists(IndexId=id)
             if response[topkey] == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                pkey=type+"."+id
+                globals.rproc[pkey]=True 
                 return True
             for j in response[topkey]:
                 theid=j[key]+"/"+id

@@ -42,3 +42,4 @@ __pycache__
 .python/bugs.md
 .scripts/*
 .python/provider-data/terraform-provider-aws
+run.log

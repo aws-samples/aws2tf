@@ -1143,8 +1143,8 @@ aws_applicationinsights_application = {
 	"clfn":		"application-insights",
 	"descfn":	"list_applications",
 	"topkey":	"ApplicationInfoList",
-	"key":		"Name",
-	"filterid":	"Name"
+	"key":		"ResourceGroupName",
+	"filterid":	"ResourceGroupName"
 }
 
 aws_appmesh_gateway_route = {
@@ -1415,8 +1415,8 @@ aws_athena_named_query = {
 	"clfn":		"athena",
 	"descfn":	"list_named_queries",
 	"topkey":	"NamedQueryIds",
-	"key":		"",
-	"filterid":	""
+	"key":		"NamedQueryId",
+	"filterid":	"NamedQueryId"
 }
 
 aws_athena_prepared_statement = {
@@ -3374,9 +3374,9 @@ aws_dx_bgp_peer = {
 aws_dx_connection = {
 	"clfn":		"directconnect",
 	"descfn":	"describe_connections",
-	"topkey":	"Connections",
-	"key":		"ConnectionId",
-	"filterid":	"ConnectionId"
+	"topkey":	"connections",
+	"key":		"connectionId",
+	"filterid":	"connectionId"
 }
 
 aws_dx_connection_association = {
@@ -3855,16 +3855,16 @@ aws_ec2_transit_gateway_peering_attachment = {
 	"clfn":		"ec2",
 	"descfn":	"describe_transit_gateway_peering_attachments",
 	"topkey":	"TransitGatewayPeeringAttachments",
-	"key":		"TransitGatewayPeeringAttachmentId",
-	"filterid":	"TransitGatewayPeeringAttachmentId"
+	"key":		"TransitGatewayAttachmentId",
+	"filterid":	"TransitGatewayAttachmentId"
 }
 
 aws_ec2_transit_gateway_peering_attachment_accepter = {
 	"clfn":		"ec2",
 	"descfn":	"describe_transit_gateway_peering_attachments",
 	"topkey":	"TransitGatewayPeeringAttachments",
-	"key":		"TransitGatewayPeeringAttachmentId",
-	"filterid":	"TransitGatewayPeeringAttachmentId"
+	"key":		"AccepterTransitGatewayAttachmentId",
+	"filterid":	"AccepterTransitGatewayAttachmentId"
 }
 
 aws_ec2_transit_gateway_policy_table = {
@@ -3919,8 +3919,8 @@ aws_ec2_transit_gateway_vpc_attachment = {
 	"clfn":		"ec2",
 	"descfn":	"describe_transit_gateway_vpc_attachments",
 	"topkey":	"TransitGatewayVpcAttachments",
-	"key":		"TransitGatewayVpcAttachmentId",
-	"filterid":	"TransitGatewayVpcAttachmentId"
+	"key":		"TransitGatewayAttachmentId",
+	"filterid":	"TransitGatewayAttachmentId"
 }
 
 aws_ec2_transit_gateway_vpc_attachment_accepter = {

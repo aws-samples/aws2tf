@@ -945,7 +945,8 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
             print(f"{e=} [pv1] ", fname, exc_tb.tb_lineno)
             with open('boto3-error.err', 'a') as f:
                      f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
-                     f.write(f"{e=} [pv1] "+ +str(fname)+ " "+ str(exc_tb.tb_lineno)+"\n")
+                     f.write(f"{e=} [pv1] \n")
+                     f.write(f"{fname=} {exc_tb.tb_lineno=} [e2] \n")
                      f.write("-----------------------------------------------------------------------------\n")
             return []
             
@@ -979,7 +980,8 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                                     
                   with open('boto3-error.err', 'a') as f:
                      f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
-                     f.write(f"{e=} [pv2] "+ str(fname)+ " "+str(exc_tb.tb_lineno) + "\n")
+                     f.write(f"{e=} [pv2] \n")
+                     f.write(f"{fname=} {exc_tb.tb_lineno=} [e2] \n")
                      f.write("-----------------------------------------------------------------------------\n")
                   return []
                
@@ -1031,16 +1033,30 @@ def get_boto3_resp(descfn):
 
 
 def handle_error(e,frame,clfn,descfn,topkey,id):
-   print("\nERROR: in "+frame+" clfn="+clfn+" descfn="+descfn)
-   print("topkey="+topkey+" id="+str(id))
+   
    exc_type, exc_obj, exc_tb = sys.exc_info()
+   exn=str(exc_type.__name__)
    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-   print(f"{e=} [e1] ", fname, exc_tb.tb_lineno)
-   with open('boto3-error.err', 'a') as f:
-      f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
-      f.write(f"{e=} [e1] " + str(fname) + " "+str(exc_tb.tb_lineno) + "\n")
+   if exn == "EndpointConnectionError":
+      print("No endpoint in this region for "+fname+" - returning")
+      return
+   elif exn=="ForbiddenException":
+      print("Call Forbidden exception for "+fname+" - returning")
+      return
 
+   print("\nERROR: in "+frame+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+   try:   
+      print(f"{e=} [e1]")
+      print(fname, exc_tb.tb_lineno)
+   except:
+      print("except err")
+      pass
+   with open('boto3-error.err', 'a') as f:
+      f.write("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
+      f.write(f"{e=} [e1] \n")
+      f.write(f"{fname=} {exc_tb.tb_lineno=} [e1] \n")
       f.write("-----------------------------------------------------------------------------\n")
+
    exit()
 
 def handle_error2(e,frame,id):
@@ -1048,10 +1064,15 @@ def handle_error2(e,frame,id):
    print("id="+str(id))
    exc_type, exc_obj, exc_tb = sys.exc_info()
    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+   exn=str(exc_type.__name__)
+   if exn == "EndpointConnectionError":
+      print("No endpoint in this region - returning")
+      return
    print(f"{e=} [e2] ", fname, exc_tb.tb_lineno)
    with open('boto3-error.err', 'a') as f:
-      f.write("type="+type+" id="+str(id)+"\n")
-      f.write(f"{e=} [e2] " + str(fname) + " "+str(exc_tb.tb_lineno) + "\n")
+      f.write("id="+str(id)+"\n")
+      f.write(f"{e=} [e2] ")
+      f.write(f"{fname=} {exc_tb.tb_lineno=} [e2] \n")
       f.write("-----------------------------------------------------------------------------\n")
    exit()
 

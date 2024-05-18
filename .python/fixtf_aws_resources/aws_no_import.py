@@ -150,4 +150,6 @@ noimport = {
     "aws_vpc_security_group_ingress_rule": True, ### aws_security_group_rule
     "aws_volume_attachment": True, ### complex needed at all ?
     "aws_spot_datafeed_subscription": True, ### doesn't work
+    "aws_ec2_transit_gateway_peering_attachment_accepter": True, ### unsure how to handle
+    "aws_ec2_transit_gateway_vpc_attachment_accepter": True,  ### unsure how to handle
 } 

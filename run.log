@@ -777,7 +777,6 @@ No aws_app_cookie_stickiness_policy found -empty response
 131 of 1289 type=aws_appautoscaling_scheduled_action
 WARNING: Terraform cannot import type: aws_appautoscaling_scheduled_action
 132 of 1289 type=aws_appautoscaling_target
->>>>>>>>>>>>{'ScalableTargets': [], 'ResponseMetadata': {'RequestId': '8a4bbb01-e778-4c33-b250-47cb7589b198', 'HTTPStatusCode': 200, 'HTTPHeaders': {'x-amzn-requestid': '8a4bbb01-e778-4c33-b250-47cb7589b198', 'content-type': 'application/x-amz-json-1.1', 'content-length': '22', 'date': 'Fri, 17 May 2024 18:22:20 GMT'}, 'RetryAttempts': 0}}
 133 of 1289 type=aws_appconfig_application
 No aws_appconfig_application found -empty response
 134 of 1289 type=aws_appconfig_configuration_profile

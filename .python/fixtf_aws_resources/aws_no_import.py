@@ -152,4 +152,7 @@ noimport = {
     "aws_spot_datafeed_subscription": True, ### doesn't work
     "aws_ec2_transit_gateway_peering_attachment_accepter": True, ### unsure how to handle
     "aws_ec2_transit_gateway_vpc_attachment_accepter": True,  ### unsure how to handle
+    "aws_network_interface_attachment": True, ### problematic
+    "aws_network_acl_association": True, ### problematic
+    "aws_iam_access_key": True, ### probably should not import
 } 

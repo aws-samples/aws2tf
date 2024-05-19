@@ -25,15 +25,13 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, common.ctrl_c_handler)
 
     argParser = argparse.ArgumentParser()
-    #argParser.add_argument("-h", "--help", help="aws2tf help")
     argParser.add_argument("-l", "--list",help="List extra help information" , action='store_true')
-    argParser.add_argument("-b", "--bucket", help="bucket name or matching sting")
     argParser.add_argument("-t", "--type", help="resource type aws_s3, ec2 aws_vpc etc")
-    argParser.add_argument("-r", "--region", help="region")
     argParser.add_argument("-i", "--id", help="resource id")
+    argParser.add_argument("-r", "--region", help="region")
     argParser.add_argument("-m", "--merge", help="merge", action='store_true')
     argParser.add_argument("-d", "--debug", help="debug", action='store_true')
-    argParser.add_argument("-v", "--validate", help="validate", action='store_true')
+    argParser.add_argument("-v", "--validate", help="validate and exit", action='store_true')
     argParser.add_argument("-a", "--apionly", help="boto3 api only (for debugging)", action='store_true')
     argParser.add_argument("-b3", "--boto3error", help="exit on boto3 api error (for debugging)", action='store_true')
     args = argParser.parse_args()
@@ -160,14 +158,14 @@ if __name__ == '__main__':
     elif all_types != None and lall > 1:
         print("len all_types="+str(len(all_types)))
         ic=0
-        istart=470
+        istart=1
         it=len(all_types)
         for i in all_types:
             ic=ic+1
             if ic > it: break 
             if ic < istart: continue
                 
-            print(str(ic)+" of "+str(it) +" type="+i)
+            print(str(ic)+" of "+str(it) +"\t"+i)
             common.call_resource(i, id)
             
     else:

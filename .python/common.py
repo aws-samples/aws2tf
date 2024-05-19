@@ -84,7 +84,7 @@ def call_resource(type, id):
       return
    
    if type in aws_not_implemented.notimplemented:
-      print("WARNING: Not supported by aws2tf currently : " + type)
+      print("Not supported by aws2tf currently: " + type + " please submit github issue to request support")
       return
    
    elif type=="aws_null":
@@ -218,9 +218,7 @@ def tfplan1():
                      print("ERROR: Removing "+i+" import files - plan errors see plan1.json")
                      globals.badlist=globals.badlist+[i]
                      shutil.move("import__*"+i+"*.tf","notimported/import__*"+i+"*.tf")
-                     #com="rm -f import__*"+i+"*.tf"
-                     #print(com)
-                     #rout=rc(com)
+
 
 
                   elif "Error: Cannot import non-existent remote object" in mess:
@@ -229,10 +227,7 @@ def tfplan1():
                      print("ERROR: Removing "+i+" import files - plan errors see plan1.json")
                      globals.badlist=globals.badlist+[i]
                      shutil.move("import__*"+i+"*.tf","notimported/import__*"+i+"*.tf")
-                     #com="mv import__*"+i+"*.tf import__*"+i+"*.tf.error"
-                     #print(com)
-                     #rout=rc(com)
-                     #exit()
+ 
 
                except:
                   pass
@@ -243,10 +238,7 @@ def tfplan1():
                   globals.badlist=globals.badlist+[i]
                   shutil.move("import__*"+i+"*.tf","notimported/import__*"+i+"*.tf")
                   shutil.move("aws_*"+i+"*.tf","notimported/aws_*"+i+"*.tf")
-                  #com="rm -f import__*"+i+"*.tf aws_*"+ i +"*.tf"
-                  #print(com)
-                  #rout=rc(com)
-                  #globals.plan2=True
+
                except:
                   if globals.debug is True:
                      print(mess.strip())
@@ -277,7 +269,7 @@ def tfplan1():
 
 
 def tfplan2():
-   print("fix tf files.....") 
+   #print("fix tf files.....") 
    if not os.path.isfile("resources.out"):
          print("could not find expected resources.out file in tfplan2 - exiting")
          #exit()
@@ -583,6 +575,7 @@ def splitf(file):
       print("could not find expected resources.out file")
       
    # moves resources.out to imported
+   #shutil.move(file,"imported/"+file)
    com="mv "+file +" imported/" +file
    rout=rc(com)  
    #com="terraform fmt"
@@ -1037,11 +1030,15 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    exc_type, exc_obj, exc_tb = sys.exc_info()
    exn=str(exc_type.__name__)
    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+   print(exn)
    if exn == "EndpointConnectionError":
       print("No endpoint in this region for "+fname+" - returning")
       return
    elif exn=="ForbiddenException":
       print("Call Forbidden exception for "+fname+" - returning")
+      return
+   elif exn=="EntityNotFoundException":
+      print("Not found: "+frame.split("get_")[1]+" "+id+" check if it exists and what references it - returning")
       return
 
    print("\nERROR: in "+frame+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))

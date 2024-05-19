@@ -34,7 +34,11 @@ def get_aws_api_gateway_deployment(type, id, clfn, descfn, topkey, key, filterid
         client = boto3.client(clfn)
         if id is not None:  
             response = client.get_deployments(restApiId=id)
-            if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response[topkey] == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                pkey=type+"."+id
+                globals.rproc[pkey]=True 
+                return True
             for j in response[topkey]:
                 pkey=id+"/"+j[key]
                 altk="r-"+pkey
@@ -126,7 +130,11 @@ def get_aws_api_gateway_authorizer(type, id, clfn, descfn, topkey, key, filterid
         client = boto3.client(clfn)
         if id is not None:  
             response = client.get_authorizers(restApiId=id)
-            if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response[topkey] == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning") 
+                pkey=type+"."+id
+                globals.rproc[pkey]=True
+                return True
             for j in response[topkey]:
                 pkey=id+"/"+j[key]
                 altk="r-"+pkey
@@ -151,7 +159,11 @@ def get_aws_api_gateway_resource(type, id, clfn, descfn, topkey, key, filterid):
         client = boto3.client(clfn)
         if id is not None:  
             response = client.get_resources(restApiId=id)
-            if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response[topkey] == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning");
+                pkey=type+"."+id
+                globals.rproc[pkey]=True
+                return True
             for j in response[topkey]:
                 pkey=id+"/"+j[key]
                 altk="r-"+pkey

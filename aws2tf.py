@@ -261,7 +261,7 @@ if __name__ == '__main__':
         #print("OLD= "+str(olddetdepstr))
         #print("NEW= "+str(detdepstr))
         if olddetdepstr == detdepstr and detdepstr != "":
-            print("ERROR: No change/progress in dependancies exiting")
+            print("\nERROR: No change/progress in dependancies exiting... \n")
             for ti in globals.rproc.keys():
                 if not globals.rproc[ti]:
                     print("ERROR: Not found "+str(ti)+" - check if this resource still exists in AWS. Also check what resource is using it - grep the *.tf files in the generated/tf.* subdirectory")

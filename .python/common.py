@@ -20,6 +20,8 @@ from get_aws_resources import aws_appmesh
 from get_aws_resources import aws_application_autoscaling
 from get_aws_resources import aws_backup
 from get_aws_resources import aws_bedrock
+from get_aws_resources import aws_cleanrooms
+from get_aws_resources import aws_cloud9
 from get_aws_resources import aws_cloudfront
 from get_aws_resources import aws_cloudtrail
 from get_aws_resources import aws_codebuild
@@ -587,6 +589,8 @@ def splitf(file):
 #generally pass 3rd param as None - unless overriding
 def write_import(type,theid,tfid):
    try:
+      ## todo -  if theid starts with a number or is an od (but what if its hexdecimal  ?)
+
       if tfid is None:
          tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_")
       else:

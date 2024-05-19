@@ -20,6 +20,7 @@ from fixtf_aws_resources import aws_dict
 
 if __name__ == '__main__':
 
+
     common.check_python_version()
     # print("cwd=%s" % os.getcwd())
     signal.signal(signal.SIGINT, common.ctrl_c_handler)
@@ -122,9 +123,6 @@ if __name__ == '__main__':
         rout = common.rc(com)
 
     id = args.id
-
-    if args.bucket is None: fb = id
-    else:  fb = args.bucket
     
     print("---<><>"+ str(type),str(id))
 

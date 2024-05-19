@@ -155,4 +155,5 @@ noimport = {
     "aws_network_interface_attachment": True, ### problematic
     "aws_network_acl_association": True, ### problematic
     "aws_iam_access_key": True, ### probably should not import
+    "aws_cleanrooms_collaboration": True, ### permission complexities
 } 

@@ -156,4 +156,6 @@ noimport = {
     "aws_network_acl_association": True, ### problematic
     "aws_iam_access_key": True, ### probably should not import
     "aws_cleanrooms_collaboration": True, ### permission complexities
+    "aws_backup_framework": True, ### complex config blocks
+    "aws_config_conformance_pack": True, ### assume pre-defined by AWS
 } 

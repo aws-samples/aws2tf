@@ -207,7 +207,7 @@ def aws_iam_user_ssh_key(t1,tt1,tt2,flag1,flag2):
 def aws_iam_user(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "name":
-        common.add_dependancy("aws_iam_access_key",tt2)
+        #common.add_dependancy("aws_iam_access_key",tt2)
         common.add_dependancy("aws_iam_user_policy",tt2)
 		
     return skip,t1,flag1,flag2

@@ -785,10 +785,6 @@ def get_test(type,id,clfn,descfn,topkey,key,filterid):
    print("--> In get_test doing "+ type + ' with id ' + str(id))   
    return
 
-#def get_aws_vpc_dhcp_options(type,id,clfn,descfn,topkey,key,filterid):
-#   print("in get_aws_vpc_dhcp_options")
-#   print("--> In get_test doing "+ type + ' with id ' + str(id))   
-#   return
 
 
 def add_known_dependancy(type,id):

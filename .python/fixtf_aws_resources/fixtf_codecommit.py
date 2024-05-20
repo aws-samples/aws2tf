@@ -8,6 +8,7 @@ def aws_codecommit_approval_rule_template_association(t1,tt1,tt2,flag1,flag2):
 
 def aws_codecommit_repository(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="kms_key_id" and tt2=="codecommit": skip=1
 	return skip,t1,flag1,flag2
 
 def aws_codecommit_trigger(t1,tt1,tt2,flag1,flag2):

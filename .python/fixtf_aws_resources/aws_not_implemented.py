@@ -444,4 +444,5 @@ notimplemented = {
     "aws_worklink_fleet": True, ### region  
     "aws_timestreamwrite_database": True, ### region
     "aws_timestreamwrite_table": True, ### region
+    "aws_network_acl_rule": True, ### ? worth doing
 }

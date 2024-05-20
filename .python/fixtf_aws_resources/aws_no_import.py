@@ -161,4 +161,6 @@ noimport = {
     "aws_config_conformance_pack": True, ### assume pre-defined by AWS
     "aws_codebuild_source_credential": True, ### questionble if we shpould get this or not
     "aws_default_network_acl": True, ### don't get default acl
+    "aws_ec2_client_vpn_network_association": True, ### an association
+    "aws_autoscaling_group_tag": True, ### don't think this is needed
 } 

@@ -59,8 +59,9 @@ def get_all_s3_buckets(fb,my_region):
    
 
    for buck in buckets: 
-   
+      
      bucket_name=buck.name
+     if globals.debug: print("processing bucket="+bucket_name)
      if "aws_s3_bucket,"+bucket_name in globals.rproc:
         print("Already processed skipping bucket " + bucket_name)
         continue
@@ -73,8 +74,7 @@ def get_all_s3_buckets(fb,my_region):
             continue
 
 
-     #print("Bucket: "+bucket_name + '  ------------------------------')
-
+     print("Processing Bucket: "+bucket_name + '  ............')
      try:
          #print('location')
          location = s3.get_bucket_location(Bucket=bucket_name)
@@ -84,23 +84,39 @@ def get_all_s3_buckets(fb,my_region):
          #print("bl="+bl)
          #print ("bucket: " +  bucket_name + " location="+str(bl)+"  my_region="+my_region)
          if bl != my_region:
-            print('Skipping bucket '+bucket_name+' in region '+ str(bl)+ " not in configured region "+my_region)     
+            print('Skipping bucket '+bucket_name+' in region '+ str(bl)+ " not in configured region "+my_region)  
+            pkey=type+"."+bucket_name
+            globals.rproc[pkey]=True
             if bl is None:  
                print('skipping on None location (assume us-east-1) .......')
-               continue
+               pkey=type+"."+bucket_name
+               globals.rproc[pkey]=True
+               if my_region != "us-east-1": continue
             else:
+               #globals.rproc[pkey]=True
                continue
          elif bl == 'null':  
+               #globals.rproc[pkey]=True
                print('continuing on null location .......')
                continue
          else:
+            #print("skip...."+bucket_name)
+            #globals.rproc[pkey]=True
+            pkey=type+"."+bucket_name
+            globals.rproc[pkey]=True
             pass
             #print(bl)
             
      except Exception as e:
+         exc_type, exc_obj, exc_tb = sys.exc_info()
+         exn=str(exc_type.__name__)
+         if exn == "AccessDenied":
+            print("No Access to Bucket: "+bucket_name + " - continue")
+            continue
+         
          print(f"{e=}")
          print("ERROR: -2->unexpected error in get_all_s3_buckets")
-         exc_type, exc_obj, exc_tb = sys.exc_info()
+         
          fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
          print(exc_type, fname, exc_tb.tb_lineno)
          print('continuing on exception to location .......')
@@ -113,8 +129,7 @@ def get_all_s3_buckets(fb,my_region):
      #except:
      #    print("failed to access bucket " +bucket_name + " " + bl +" skipping ..")
      #    continue
-     #print("Bucket: "+bucket_name)
-
+     #print("write_import for Bucket: "+bucket_name)
      common.write_import(type,bucket_name,"b-"+bucket_name)
 
      for key in s3_fields:
@@ -133,7 +148,8 @@ def get_s3(s3_fields,type,bucket_name):
       response=s3_fields[type](Bucket=bucket_name)
       
       rl=len(response)
-      if rl > 1 : common.write_import(type,bucket_name,"b-"+bucket_name)
+      if rl > 1 :  common.write_import(type,bucket_name,"b-"+bucket_name)
+
 
    except:
       if globals.debug: print("No " + type + " config for bucket " + bucket_name)

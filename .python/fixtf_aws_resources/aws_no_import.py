@@ -153,9 +153,12 @@ noimport = {
     "aws_ec2_transit_gateway_peering_attachment_accepter": True, ### unsure how to handle
     "aws_ec2_transit_gateway_vpc_attachment_accepter": True,  ### unsure how to handle
     "aws_network_interface_attachment": True, ### problematic
+    "aws_network_interface_sg_attachment": True, ### problematic
     "aws_network_acl_association": True, ### problematic
     "aws_iam_access_key": True, ### probably should not import
     "aws_cleanrooms_collaboration": True, ### permission complexities
     "aws_backup_framework": True, ### complex config blocks
     "aws_config_conformance_pack": True, ### assume pre-defined by AWS
+    "aws_codebuild_source_credential": True, ### questionble if we shpould get this or not
+    "aws_default_network_acl": True, ### don't get default acl
 } 

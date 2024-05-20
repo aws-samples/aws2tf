@@ -6,7 +6,6 @@ import botocore
 import inspect
 
 
-
 def get_aws_lambda_layer(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +

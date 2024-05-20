@@ -84,14 +84,13 @@ def aws_iam_principal_policy_simulation(t1,tt1,tt2,flag1,flag2):
 def  aws_iam_role(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "name":
-        
         if len(tt2) > 0: 
             flag1=True
             flag2=tt2
-    if tt1 == "name_prefix" and flag1 is True: skip=1
-    if tt1 == "policy": t1=fixtf.globals_replace(t1,tt1,tt2)
-    if tt1 == "assume_role_policy": t1=fixtf.globals_replace(t1,tt1,tt2)
-    if tt1 == "managed_policy_arns":   
+    elif tt1 == "name_prefix" and flag1 is True: skip=1
+    elif tt1 == "policy": t1=fixtf.globals_replace(t1,tt1,tt2)
+    elif tt1 == "assume_role_policy": t1=fixtf.globals_replace(t1,tt1,tt2)
+    elif tt1 == "managed_policy_arns":   
         if tt2 == "[]": 
             skip=1
         elif ":"+globals.acc+":" in tt2:

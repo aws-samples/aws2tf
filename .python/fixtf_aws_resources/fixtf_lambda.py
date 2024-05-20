@@ -1,14 +1,21 @@
 import common
 import fixtf
 import os
+import globals
 
 def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "role":
-        
         tt2=tt2.split("/")[-1]
-        t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+        if "." in tt2:
+            rn=tt2.replace(".","_")
+            t1=tt1 + " = aws_iam_role." + rn + ".arn\n"
+        else:
+            t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
         common.add_dependancy("aws_iam_role",tt2)
+        pkey="aws_iam_role"+"."+tt2
+        print("pkey="+pkey)
+        #globals.rproc[pkey]=True
     elif tt1 == "filename":
              
         if os.path.isfile(flag2+".zip"):

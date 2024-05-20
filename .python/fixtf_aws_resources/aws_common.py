@@ -98,8 +98,9 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             t1=fixtf.deref_role_arn(t1,tt1,tt2)
 
         elif tt1 == "role" or tt1=="iam_role" or tt1=="role_name":
-            if tt2 !="null" and "arn:" not in tt2:  
-                t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
+            if tt2 !="null" and "arn:" not in tt2: 
+                rn=tt2.replace(".","_")
+                t1=tt1 + " = aws_iam_role." + rn + ".id\n"
                 common.add_dependancy("aws_iam_role",tt2)
 
         elif tt1=="target_group_arn" and tt2 != "null":

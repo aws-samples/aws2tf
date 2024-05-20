@@ -68,8 +68,8 @@ def get_aws_lb_listener(type,id,clfn,descfn,topkey,key,filterid):
 
 def get_aws_lb_listener_rule(type,id,clfn,descfn,topkey,key,filterid):
 
-    #if globals.debug:
-    print("--> get_aws_lb_listener_rule  doing " + type + ' with id ' + str(id) +
+    if globals.debug:
+        print("--> get_aws_lb_listener_rule  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:

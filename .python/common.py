@@ -51,6 +51,7 @@ from get_aws_resources import aws_kendra
 from get_aws_resources import aws_kinesis
 from get_aws_resources import aws_logs
 from get_aws_resources import aws_lambda
+from get_aws_resources import aws_neptune
 from get_aws_resources import aws_organizations
 from get_aws_resources import aws_rds
 from get_aws_resources import aws_redshift
@@ -136,6 +137,7 @@ def call_resource(type, id):
             
             if clfn=="vpc-lattice":  getfn = getattr(eval("aws_vpc_lattice"), "get_"+type) 
             elif clfn=="redshift-serverless":  getfn = getattr(eval("aws_redshift_serverless"), "get_"+type) 
+            elif clfn=="s3":  getfn = getattr(eval("aws_s3"), "get_"+type) 
 
             else:   
                #print("-1aa- clfn:"+clfn+" type:"+type)
@@ -159,8 +161,14 @@ def call_resource(type, id):
       if globals.debug: print("SyntaxError: name 'getfn' - no aws_"+clfn+".py file ?")
       pass
 
-   except NameError:
-      if globals.debug: print("WARNING: NameError: name 'getfn' - no aws_"+clfn+".py file ?")
+   except NameError as e:
+      if globals.debug: 
+         print("WARNING: NameError: name 'getfn' - no aws_"+clfn+".py file ?")
+         print(f"{e=}") 
+         exc_type, exc_obj, exc_tb = sys.exc_info()
+         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+         print(exc_type, fname, exc_tb.tb_lineno)  
+
       pass
 
    except Exception as e:
@@ -217,18 +225,20 @@ def tfplan1():
                   if "VPC Lattice" in mess and "404" in mess:
                      print("ERROR: VPC Lattice 404 error - see plan1.json")
                      i=mess.split('(')[1].split(')')[0].split('/')[-1]
-                     print("ERROR: Removing "+i+" import files - plan errors see plan1.json")
-                     globals.badlist=globals.badlist+[i]
-                     shutil.move("import__*"+i+"*.tf","notimported/import__*"+i+"*.tf")
+                     if i != "":
+                        print("ERROR: Removing "+i+" import files - plan errors see plan1.json [p1]")
+                        globals.badlist=globals.badlist+[i]
+                        shutil.move("import__*"+i+"*.tf","notimported/import__*"+i+"*.tf")
 
 
 
                   elif "Error: Cannot import non-existent remote object" in mess:
                      print("ERROR: Cannot import non-existent remote object - see plan1.json")
                      i=mess.split('(')[1].split(')')[0].split('/')[-1]
-                     print("ERROR: Removing "+i+" import files - plan errors see plan1.json")
-                     globals.badlist=globals.badlist+[i]
-                     shutil.move("import__*"+i+"*.tf","notimported/import__*"+i+"*.tf")
+                     if i != "":
+                        print("ERROR: Removing "+i+" import files - plan errors see plan1.json [p2]")
+                        globals.badlist=globals.badlist+[i]
+                        shutil.move("import__*"+i+"*.tf","notimported/import__*"+i+"*.tf")
  
 
                except:
@@ -236,10 +246,11 @@ def tfplan1():
 
                try:
                   i=mess.split('(')[2].split(')')[0]
-                  print("ERROR: Removing "+i+" files - plan errors see plan1.json")
-                  globals.badlist=globals.badlist+[i]
-                  shutil.move("import__*"+i+"*.tf","notimported/import__*"+i+"*.tf")
-                  shutil.move("aws_*"+i+"*.tf","notimported/aws_*"+i+"*.tf")
+                  if i != "":
+                     print("ERROR: Removing "+i+" files - plan errors see plan1.json [p3]")
+                     globals.badlist=globals.badlist+[i]
+                     shutil.move("import__*"+i+"*.tf","notimported/import__*"+i+"*.tf")
+                     shutil.move("aws_*"+i+"*.tf","notimported/aws_*"+i+"*.tf")
 
                except:
                   if globals.debug is True:
@@ -282,7 +293,7 @@ def tfplan2():
    #zap the badlist
    for i in globals.badlist:
       #com="rm -f aws_*"+i+"*.out"+" aws_*"+i+"*.tf"
-      print("ERROR: Removing "+i+" files - plan errors see plan1.json")
+      print("ERROR: Removing "+i+" files - plan errors see plan1.json [p4]")
       
       #print(com)
       #rout=rc(com)
@@ -578,6 +589,7 @@ def splitf(file):
       
    # moves resources.out to imported
    #shutil.move(file,"imported/"+file)
+   
    com="mv "+file +" imported/" +file
    rout=rc(com)  
    #com="terraform fmt"

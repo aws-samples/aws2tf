@@ -20,7 +20,6 @@ from fixtf_aws_resources import aws_dict
 
 if __name__ == '__main__':
 
-
     common.check_python_version()
     # print("cwd=%s" % os.getcwd())
     signal.signal(signal.SIGINT, common.ctrl_c_handler)
@@ -217,7 +216,7 @@ if __name__ == '__main__':
         for ti in list(globals.rproc):
             if not globals.rproc[ti]:
                 i = ti.split(".")[0]
-                id = ti.split(".")[1]
+                id = ti.split(".",1)[1]
                 if globals.debug: print("DD calling getresource with type="+i+" id="+str(id))
                 #print("----- DD ----  calling getresource with type="+i+" id="+str(id))
                 common.call_resource(i, id)

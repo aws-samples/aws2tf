@@ -2063,8 +2063,8 @@ aws_cloudtrail_event_data_store = {
 	"clfn":		"cloudtrail",
 	"descfn":	"list_event_data_stores",
 	"topkey":	"EventDataStores",
-	"key":		"Name",
-	"filterid":	"Name"
+	"key":		"EventDataStoreArn",
+	"filterid":	"EventDataStoreArn"
 }
 
 aws_cloudwatch_composite_alarm = {

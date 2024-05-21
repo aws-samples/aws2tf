@@ -42,8 +42,11 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
              
                     kstatus=kresp['KeyMetadata']['KeyState']
                     kman=kresp['KeyMetadata']['KeyManager']
-
-                    if kstatus == "Enabled" or kstatus == "Disabled": #and kman != "AWS":
+                    #print(str(kresp))
+                    if kstatus == "Enabled" or kstatus == "Disabled":
+                        if kman == "AWS":
+                            print("key is managed by AWS")
+                            continue 
                         common.write_import(type,theid,ka) 
                         # unset tracker
                         pkey=type+"."+ka
@@ -56,7 +59,7 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
                         continue
                 except Exception as e:
                     print("WARNING: can't access key")
-                    print(f"{e=}")
+                    print(f"{e=} [k1]")
                     exc_type, exc_obj, exc_tb = sys.exc_info()
                     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                     print(exc_type, fname, exc_tb.tb_lineno) 

@@ -1,7 +1,9 @@
 import boto3
-import sys
+import sys, traceback
 import subprocess
 import os
+import re
+from contextlib import suppress
 import shutil
 import json
 import globals
@@ -596,6 +598,45 @@ def splitf(file):
    #rout=rc(com) 
 
 
+
+
+
+def splitf2(file):
+    resource_pattern = r'resource\s*"([^"]+)"\s*"([^"]+)"'
+    output_files = {}
+
+    if os.path.isfile(file):
+        print("split file:", file)
+        with open(file, "r") as f:
+            lines = f.readlines()
+
+        for line in lines:
+            match = re.search(resource_pattern, line)
+            if match:
+                resource_type, resource_address = match.groups()
+                output_file = f"{resource_type}__{resource_address}.out"
+                if output_file not in output_files:
+                    output_files[output_file] = []
+                output_files[output_file].append(line)
+            elif line.startswith("#") or line.strip() == "":
+                continue
+            else:
+                for out_file, out_lines in output_files.items():
+                    with suppress(ValueError):
+                        out_lines.append(line)
+
+        for out_file, out_lines in output_files.items():
+            out_path = os.path.join("imported", out_file)
+            with open(out_path, "w") as f:
+                f.writelines(out_lines)
+
+        os.rename(file, os.path.join("imported", file))
+    else:
+        print("could not find expected resources.out file")
+
+
+
+
 # if type == "aws_vpc_endpoint": return "ec2","describe_vpc_endpoints","VpcEndpoints","VpcEndpointId","vpc-id"
 
 #generally pass 3rd param as None - unless overriding
@@ -767,7 +808,7 @@ def special_deps(ttft,taddr):
    #print("In special deps"+ttft+"  "+taddr)
    if ttft == "aws_security_group": 
       add_known_dependancy("aws_security_group_rule",taddr) 
-      add_dependancy("aws_security_group_rule",taddr) 
+      add_dependancy("aws_security_group_rule",taddr)
    if ttft == "aws_subnet": 
       add_known_dependancy("aws_route_table_association",taddr) 
       add_dependancy("aws_route_table_association",taddr)  
@@ -809,13 +850,18 @@ def add_known_dependancy(type,id):
 
 def add_dependancy(type,id):
     # check if we alredy have it
-    if type=="aws_glue_catalog_database":
-       if ":" not in id: id=globals.acc+":"+id
-    pkey=type+"."+id
-    if pkey not in globals.rproc:
-        print("add_dependancy: " + pkey)
-        globals.rproc[pkey]=False
-    return
+   try:
+      if type=="aws_kms_alias" and id=="k-817bb810-7154-4d9b-b582-7dbb62e77876":
+         raise Exception("aws_kms_alias")
+      if type=="aws_glue_catalog_database":
+         if ":" not in id: id=globals.acc+":"+id
+      pkey=type+"."+id
+      if pkey not in globals.rproc:
+         print("add_dependancy: " + pkey)
+      globals.rproc[pkey]=False
+   except Exception as e:
+      handle_error(e, str(inspect.currentframe().f_code.co_name), type, id)
+   return
 
 
 ## TODO - always get all / paginate all - save in globals - filter on id in get_aws_ ??

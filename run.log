@@ -1,347 +1,10 @@
-type is required eg:  -t aws_vpc
-setting to all
 region set from aws cli as eu-west-2
 args.merge=False
 Using region: eu-west-2 account: 566972129213
 
 skipping terraform init
 No merge - removing terraform.tfstate* and aws_*.tf *.out
----<><> None
-len all_types=1289
-1 of 1289 type=aws_vpc
-add_known_dependancy: aws_route_table_association.vpc-0d18b88f8596b92c3
-add_known_dependancy: aws_subnet.vpc-0d18b88f8596b92c3
-add_dependancy: aws_route_table_association.vpc-0d18b88f8596b92c3
-add_dependancy: aws_vpc_ipv4_cidr_block_association.vpc-0d18b88f8596b92c3
-add_known_dependancy: aws_route_table_association.vpc-db7c09b3
-add_known_dependancy: aws_subnet.vpc-db7c09b3
-add_dependancy: aws_route_table_association.vpc-db7c09b3
-add_dependancy: aws_vpc_ipv4_cidr_block_association.vpc-db7c09b3
-add_known_dependancy: aws_route_table_association.vpc-00f57f0df87b1894b
-add_known_dependancy: aws_subnet.vpc-00f57f0df87b1894b
-add_dependancy: aws_route_table_association.vpc-00f57f0df87b1894b
-add_dependancy: aws_vpc_ipv4_cidr_block_association.vpc-00f57f0df87b1894b
-2 of 1289 type=aws_vpc_ipv4_cidr_block_association
-3 of 1289 type=aws_vpc_endpoint
-4 of 1289 type=aws_subnet
-5 of 1289 type=aws_security_group
-add_known_dependancy: aws_security_group_rule.sg-038283a35e1954752
-add_dependancy: aws_security_group_rule.sg-038283a35e1954752
-add_known_dependancy: aws_security_group_rule.sg-026522411c8040521
-add_dependancy: aws_security_group_rule.sg-026522411c8040521
-add_known_dependancy: aws_security_group_rule.sg-0b70930caea1aac99
-add_dependancy: aws_security_group_rule.sg-0b70930caea1aac99
-add_known_dependancy: aws_security_group_rule.sg-03ef2234013b05f2c
-add_dependancy: aws_security_group_rule.sg-03ef2234013b05f2c
-add_known_dependancy: aws_security_group_rule.sg-01cd7d5b1d7acd95b
-add_dependancy: aws_security_group_rule.sg-01cd7d5b1d7acd95b
-add_known_dependancy: aws_security_group_rule.sg-0db9c2f39e7535c1d
-add_dependancy: aws_security_group_rule.sg-0db9c2f39e7535c1d
-add_known_dependancy: aws_security_group_rule.sg-307a915e
-add_dependancy: aws_security_group_rule.sg-307a915e
-add_known_dependancy: aws_security_group_rule.sg-0581e8343af7a9120
-add_dependancy: aws_security_group_rule.sg-0581e8343af7a9120
-add_known_dependancy: aws_security_group_rule.sg-0586247ebc5f63f83
-add_dependancy: aws_security_group_rule.sg-0586247ebc5f63f83
-add_known_dependancy: aws_security_group_rule.sg-0aa2cd28fed522988
-add_dependancy: aws_security_group_rule.sg-0aa2cd28fed522988
-add_known_dependancy: aws_security_group_rule.sg-046816932ca539c69
-add_dependancy: aws_security_group_rule.sg-046816932ca539c69
-add_known_dependancy: aws_security_group_rule.sg-0a67d4d889051720b
-add_dependancy: aws_security_group_rule.sg-0a67d4d889051720b
-add_known_dependancy: aws_security_group_rule.sg-00be273af6047769f
-add_dependancy: aws_security_group_rule.sg-00be273af6047769f
-add_known_dependancy: aws_security_group_rule.sg-0d38be64861959b75
-add_dependancy: aws_security_group_rule.sg-0d38be64861959b75
-add_known_dependancy: aws_security_group_rule.sg-0f2cd10a0bc80ab2d
-add_dependancy: aws_security_group_rule.sg-0f2cd10a0bc80ab2d
-add_known_dependancy: aws_security_group_rule.sg-09d00a056fea3bcfc
-add_dependancy: aws_security_group_rule.sg-09d00a056fea3bcfc
-add_known_dependancy: aws_security_group_rule.sg-02a6a6ac17f6bfa87
-add_dependancy: aws_security_group_rule.sg-02a6a6ac17f6bfa87
-add_known_dependancy: aws_security_group_rule.sg-02172903712da81f5
-add_dependancy: aws_security_group_rule.sg-02172903712da81f5
-add_known_dependancy: aws_security_group_rule.sg-0e548897048219381
-add_dependancy: aws_security_group_rule.sg-0e548897048219381
-add_known_dependancy: aws_security_group_rule.sg-08024501a8dc1de4d
-add_dependancy: aws_security_group_rule.sg-08024501a8dc1de4d
-add_known_dependancy: aws_security_group_rule.sg-0c8444a8f846d6c50
-add_dependancy: aws_security_group_rule.sg-0c8444a8f846d6c50
-add_known_dependancy: aws_security_group_rule.sg-0b62df338fe6bdd2f
-add_dependancy: aws_security_group_rule.sg-0b62df338fe6bdd2f
-add_known_dependancy: aws_security_group_rule.sg-004d5a3344fe6ec77
-add_dependancy: aws_security_group_rule.sg-004d5a3344fe6ec77
-add_known_dependancy: aws_security_group_rule.sg-04a42b2b1de775e99
-add_dependancy: aws_security_group_rule.sg-04a42b2b1de775e99
-add_known_dependancy: aws_security_group_rule.sg-0491d0311d0d310d0
-add_dependancy: aws_security_group_rule.sg-0491d0311d0d310d0
-add_known_dependancy: aws_security_group_rule.sg-090ec083da79f7217
-add_dependancy: aws_security_group_rule.sg-090ec083da79f7217
-add_known_dependancy: aws_security_group_rule.sg-01c95e5db53bed53a
-add_dependancy: aws_security_group_rule.sg-01c95e5db53bed53a
-add_known_dependancy: aws_security_group_rule.sg-0e785f18b6d793e82
-add_dependancy: aws_security_group_rule.sg-0e785f18b6d793e82
-add_known_dependancy: aws_security_group_rule.sg-0510f118422521f54
-add_dependancy: aws_security_group_rule.sg-0510f118422521f54
-add_known_dependancy: aws_security_group_rule.sg-042bc7787529cd58c
-add_dependancy: aws_security_group_rule.sg-042bc7787529cd58c
-add_known_dependancy: aws_security_group_rule.sg-0b8372b57fad24fbd
-add_dependancy: aws_security_group_rule.sg-0b8372b57fad24fbd
-add_known_dependancy: aws_security_group_rule.sg-051bf45e8ddb0aac3
-add_dependancy: aws_security_group_rule.sg-051bf45e8ddb0aac3
-add_known_dependancy: aws_security_group_rule.sg-0360c865e274deaf2
-add_dependancy: aws_security_group_rule.sg-0360c865e274deaf2
-add_known_dependancy: aws_security_group_rule.sg-0fb176425f37a97ee
-add_dependancy: aws_security_group_rule.sg-0fb176425f37a97ee
-add_known_dependancy: aws_security_group_rule.sg-0873956f061061fba
-add_dependancy: aws_security_group_rule.sg-0873956f061061fba
-add_known_dependancy: aws_security_group_rule.sg-0671b53aec12b68d9
-add_dependancy: aws_security_group_rule.sg-0671b53aec12b68d9
-6 of 1289 type=aws_internet_gateway
-7 of 1289 type=aws_nat_gateway
-8 of 1289 type=aws_network_acl
---> In get_aws_network_acl doing aws_network_acl with id None clfn=ec2 descfn=describe_network_acls topkey=NetworkAcls key=NetworkAclId filterid=NetworkAclId
-Empty response for aws_network_acl id=None returning
-9 of 1289 type=aws_default_network_acl
-10 of 1289 type=aws_route_table
-11 of 1289 type=aws_route_table_association
-Setting aws_route_table_association.vpc-0d18b88f8596b92c3=True
-Setting aws_route_table_association.vpc-00f57f0df87b1894b=True
-Setting aws_route_table_association.vpc-db7c09b3=True
-12 of 1289 type=aws_default_route_table
-WARNING: Terraform cannot import type: aws_default_route_table
-13 of 1289 type=aws_default_security_group
-14 of 1289 type=aws_vpc_dhcp_options
-15 of 1289 type=aws_key_pair
-16 of 1289 type=aws_launch_configuration
-17 of 1289 type=aws_launch_template
-18 of 1289 type=aws_flow_log
-19 of 1289 type=aws_iam_role
-20 of 1289 type=aws_iam_policy
-policy name=CodeBuildCloudWatchLogsPolicy-Terraform-EKS-Workshop-eu-west-2
-policy name=AmazonKendra-APHA
-policy name=at_image_builder
-policy name=AmazonKendra-apha-crawl
-policy name=QBusiness-Application-p2meo
-policy name=ManagedOpenShift-openshift-cloud-network-config-controller-cloud
-policy name=KarpenterIRSA-mycluster1-2023121717253608380000001f
-policy name=ManagedOpenShift-openshift-image-registry-installer-cloud-creden
-policy name=ManagedOpenShift-openshift-cluster-csi-drivers-ebs-cloud-credent
-policy name=SM_ModelManagement_1713794198152
-policy name=AWSLambdaBasicExecutionRole-dab1dc17-7621-4628-973c-8e82da5cbde2
-policy name=ShadowTrooperPolicy-prod
-policy name=AWSLambdaTracerAccessExecutionRole-a4cc6dfa-0e6f-4bc2-be22-2c6a52404ea7
-policy name=alb-controller-20231031111228939400000001
-policy name=AmazonBedrockS3PolicyForKnowledgeBase_s9p8l
-policy name=AWSGlueServiceSageMakerNotebookRole-demo
-policy name=SM_ExperimentsManagement_1713794198152
-policy name=start-pipeline-execution-eu-west-3-pip2
-policy name=Amazon-EventBridge-Scheduler-Execution-Policy-41e67ce0-ab59-4264-9c3b-3916c5ef5310
-policy name=at-deny-eb
-policy name=KendraPolicyForGettingStartedIndex
-policy name=Textract-ReadOnly
-policy name=CloudWatchSyntheticsPolicy-petsiteurl-32c-9aa34bc80651
-policy name=QBusiness-Application-8uerd
-policy name=ServiceRoleForVpcServiceNetworkPreviewPolicy
-policy name=ManagedOpenShift-OCM-Role-12913713-Policy
-policy name=SM_ComputeExecutionRole_1713796769996
-policy name=ALBIngressControllerIAMPolicy
-policy name=AmazonGrafanaSNSPolicy-FlPCEdXY1
-policy name=CodeBuildCloudWatchLogsPolicy-Terraform-EKS-eu-west-1
-policy name=denyNonAccountAMI
-policy name=AmazonBedrockFoundationModelPolicyForKnowledgeBase_s9p8l
-policy name=SM_ExperimentsVisualization_1713794198152
-policy name=SM_ModelMonitoring_1713794198152
-policy name=ResourceConfigurationCollectorPolicy
-policy name=AWSLambdaTracerAccessExecutionRole-e0e31884-11ff-4e9c-b452-b0c1bf17a748
-policy name=myIRSAS3policy
-policy name=AmazonKendra-apha-experience
-policy name=my-sso-policy
-policy name=AWSCodePipelineServiceRole-eu-west-1-pipe-eksworkshop-app
-policy name=AmazonSageMaker-ExecutionPolicy-20210414T092908
-policy name=AmazonSageMaker-ExecutionPolicy-20240509T111880
-policy name=Amazon_EventBridge_Invoke_Create_Ops_Item_1967458536
-policy name=AWSQuickSightRDSPolicy
-policy name=ack-pass-role
-policy name=ManagedOpenShift-Installer-Role-Policy
-policy name=at_assume_role_test_star
-policy name=AmazonSageMaker-ExecutionPolicy-20240512T133115
-policy name=CloudWatchSyntheticsPolicy-asgdemoweb-ce5-0fe3e9b5b6ae
-policy name=QBusiness-DataSource-59ig1
-policy name=AzureAD_SSOUserRole_Policy
-policy name=AWSCodePipelineServiceRole-eu-west-2-ee-tf-eks
-policy name=AmazonBedrockOSSPolicyForKnowledgeBase_s9p8l
-policy name=AssistantBackendStack-sageMakerPostgresDBAccessIAMPolicy69BF39AD-UfATmjGMGz3x
-policy name=CodeBuildBasePolicy-Terraform-EKS-eu-west-1
-policy name=sm-lambda3-LambdaExecutionPolicy-15GBJRY2URBBI
-policy name=AmazonQLDB-ExportJobPolicy-1629207719398
-policy name=CodeBuildVpcPolicy-Terraform-EKS-Code-eu-west-1
-policy name=pinpoint-email-ers-
-policy name=AmazonKendra-eu-west-2-APHA
-policy name=S3Conditionalathmrc
-policy name=VPCLatticeControllerIAMPolicy
-policy name=aws-for-fluent-bit-20231031164758360700000002
-policy name=CodeBuildVpcPolicy-Terraform-EKS-eu-west-1
-policy name=AWSLambdaBasicExecutionRole-c333a457-28fe-47ca-ae28-230b3bd5f7c3
-policy name=CodeBuildBasePolicy-Terraform-EKS-Code-eu-west-1
-policy name=AWSLambdaBasicExecutionRole-39358470-847d-4276-9028-d672ddf2580a
-policy name=EventEngineDefault
-policy name=CloudWatchSyntheticsPolicy-deepracer1-0f7-c94ac41122a1
-policy name=AWSCodePipelineServiceRole-eu-west-2-Hugo-Content
-policy name=instance-lock
-policy name=QBusiness-DataSource-51rsu
-policy name=SM_EndpointDeployment_1713794198152
-policy name=AmazonKendra-andyt1-datasource
-policy name=c1-lattice-fargate-fluentbit-logs-20231031163742123100000005
-policy name=ServiceCatalogLaunchPolicy
-policy name=c1-lattice-cluster-ClusterEncryption2023092514234619120000000b
-policy name=ConfigAccessPolicy
-policy name=AmazonSageMaker-ExecutionPolicy-20201105T120427
-policy name=at-CloudFront-Invalidate
-policy name=AwsGlueDataBrewServicePolicyForOutputS3-databrew1
-policy name=KarpenterIRSA-c1-lattice-2023103109375302870000000b
-policy name=CloudWatchSyntheticsPolicy-apicanary-b80-553ec44f26bf
-policy name=QBusiness-DataSource-pr8o7
-policy name=AmazonEKS_EBS_CSI_Policy-20231217171706091300000003
-policy name=AmazonKendra-apha-crawler
-policy name=at-deny-s3
-policy name=ManagedOpenShift-openshift-cloud-credential-operator-cloud-crede
-policy name=CodeBuildBasePolicy-hugo-build2-submodules-eu-west-2
-policy name=pinpoint-import-from-s3-PinpointRole-3
-policy name=alb-controller-20231219164203227300000001
-policy name=AWSGlueServiceSageMakerNotebookRole-sage1
-policy name=sm-projects-additional
-policy name=at_test_ec2_deny
-policy name=AwsGlueDataBrewServicePolicyForInputS3-databrew1
-policy name=ManagedOpenShift-OCM-Role-12913713-Admin-Policy
-policy name=KendraPolicyForGettingStartedDataSource
-policy name=CodeBuildCloudWatchLogsPolicy-hugo-build2-submodules-eu-west-2
-policy name=studio-vpc-infra-IAM-SageMakerNotebookInstancePolicy
-policy name=CloudWatchSyntheticsPolicy-cjfc-4cb-26e539737892
-policy name=AccessAnalyzerMonitorServicePolicy_SIFLN1BSIN
-policy name=KMS-ALL
-policy name=mycluster1-cluster-ClusterEncryption20231217171719429700000009
-policy name=CodeBuildBasePolicy-Terraform-EKS-Workshop-eu-west-2
-policy name=Amazon_EventBridge_Invoke_Firehose_743462025
-policy name=ManagedOpenShift-openshift-ingress-operator-cloud-credentials
-policy name=SSM-user-with-KMS-CMK
-policy name=admin-ec2-lock
-policy name=QBusiness-Application-jgj1z
-policy name=AmazonSageMaker-ExecutionPolicy-20210415T140700
-policy name=AWSLambdaTracerAccessExecutionRole-582608d2-37b3-45c1-b5df-72c6ec5aeab6
-policy name=AmazonGrafanaPrometheusPolicy-FlPCEdXY1
-policy name=DetectivePolicy
-policy name=QBusiness-Application-z5jt2
-policy name=start-pipeline-execution-eu-west-2-Hugo-Content
-policy name=AWSLambdaBasicExecutionRole-30eb18db-f33a-4e0e-9ba0-25193118be5e
-policy name=dynamodb-access-policy-tenantb-oamkzwyx
-policy name=SSM-deny-KMS-CMK
-policy name=QBusiness-DataSource-mhof9
-policy name=webserver-secrets-policy
-policy name=ProtonRolePolicy-my-fargate-proton-role
-policy name=MyPassAnyRole
-policy name=QBusiness-DataSource-qiy0d
-policy name=AWSQuickSightRedshiftPolicy
-policy name=CodeBuildBasePolicy-testp-eu-west-2
-policy name=CodeBuildBasePolicy-hug-build-eu-west-2
-policy name=start-pipeline-execution-eu-west-1-pipe-eksworkshop-app
-policy name=AWSCodePipelineServiceRole-eu-west-2-testp
-policy name=AWSAmplifyExecutionPolicy-d3cvdbdufbqz0
-policy name=ManagedOpenShift-Worker-Role-Policy
-policy name=AWSLambdaBasicExecutionRole-d171c018-539c-4b12-8add-176aec1599f8
-policy name=s3-contextual-data-access-policy-tenantb-oamkzwyx
-policy name=AmazonGrafanaCloudWatchPolicy-ztrtrZYS5
-policy name=eks-fargate-log-policy-andyt
-policy name=s3-contextual-data-access-policy-tenanta-oamkzwyx
-policy name=AmazonRedshift-CommandsAccessPolicy-20230420T130206
-policy name=SSM-allow-KMS-CMK-decrypt
-policy name=smemr2-sagemaker-policy
-policy name=start-pipeline-execution-eu-west-2-Terraform-EKS-Workshop
-policy name=smemr2-lf-data-access-policy
-policy name=AmazonSageMaker-ExecutionPolicy-20240510T221460
-policy name=DynamoDBconditional
-policy name=ManagedOpenShift-openshift-machine-api-aws-cloud-credentials
-policy name=SCWorkSpacesLaunchPermissions
-policy name=s3-envoy-config-access-policy-oamkzwyx
-policy name=SM_StudioAppPermissions_1713793653333
-policy name=SageMakerS3AllResourcesPolicyTemplate_1713794198152
-policy name=AmazonKendra-andyt1
-policy name=SM_StudioAppPermissions_1713794198152
-policy name=WriteToS3ConfigBuckets
-policy name=ds-notebook-policy-fsi-smteam-dev-dwpmodeler
-policy name=ServiceCatalogAdmin-AdditionalPermissions
-policy name=AmazonKendra-eu-west-1-dwp
-policy name=dynamodb-access-policy-tenanta-oamkzwyx
-policy name=AWSCloudTrailAccessPolicy
-policy name=QBusiness-WebExperience-nnel1
-policy name=QBusiness-Application-qzk7n
-policy name=AWSLambdaBasicExecutionRole-a6cfa399-3a0d-4cb5-922c-a9c4c25d4555
-policy name=AmazonGrafanaPrometheusPolicy-ztrtrZYS5
-policy name=ManagedOpenShift-Support-Role-Policy
-policy name=CloudWatchSyntheticsPolicy-uicanary-c1c-148d25f6be64
-policy name=ManagedOpenShift-ControlPlane-Role-Policy
-policy name=Cloud9-data
-policy name=AmazonKendra-atdata
-policy name=CodeBuildCloudWatchLogsPolicy-Terraform-EKS-Code-eu-west-1
-policy name=AmazonKendra-govuk-crawl
-policy name=CodeBuildCloudWatchLogsPolicy-hug-build-eu-west-2
-policy name=AWSQuickSightS3Policy
-policy name=AwsSecurityNacundaAuditPolicy
-policy name=start-pipeline-execution-eu-west-2-ee-tf-eks
-policy name=myoidc
-policy name=my-rds-policy
-policy name=FluentBitEKSFargate
-policy name=SM_CommonJobManagement_1713794198152
-policy name=AWSLambdaBasicExecutionRole-c19d2578-dced-40f2-a7d6-d9cca9fac8e7
-policy name=AWSQuickSightIAMPolicy
-policy name=lattice-ingress-policy
-policy name=AmazonSageMakerServiceCatalogProductsUseRole-20240509T111992
-policy name=SM_PipelineManagement_1713794198152
-policy name=c1-lattice-cluster-ClusterEncryption2023103109214108350000000a
-21 of 1289 type=aws_iam_role_policy
-WARNING: aws_iam_role_policy cannot have null id must pass parameter RoleName
-22 of 1289 type=aws_iam_role_policy_attachment
-WARNING: aws_iam_role_policy_attachment cannot have null id must pass parameter RoleName
-23 of 1289 type=aws_iam_user
-24 of 1289 type=aws_iam_instance_profile
-WARNING: aws_iam_instance_profile cannot have null id must pass parameter InstanceProfileName
-25 of 1289 type=aws_vpclattice_access_log_subscription
-WARNING: aws_vpclattice_access_log_subscription cannot have null id must pass parameter serviceNetworkIdentifier
-26 of 1289 type=aws_vpclattice_auth_policy
-WARNING: aws_vpclattice_auth_policy cannot have null id must pass parameter resourceIdentifier
-27 of 1289 type=aws_vpclattice_listener
-WARNING: aws_vpclattice_listener cannot have null id must pass parameter serviceNetworkIdentifier
-28 of 1289 type=aws_vpclattice_listener_rule
-WARNING: aws_vpclattice_listener_rule cannot have null id must pass parameter listenerIdentifier,serviceIdentifier
-29 of 1289 type=aws_vpclattice_resource_policy
-WARNING: aws_vpclattice_resource_policy cannot have null id must pass parameter resourceIdentifier
-30 of 1289 type=aws_vpclattice_service
-Empty response for aws_vpclattice_service id=None returning
-31 of 1289 type=aws_vpclattice_service_network
-No aws_vpclattice_service_network found -empty response
-32 of 1289 type=aws_vpclattice_service_network_service_association
-WARNING: aws_vpclattice_service_network_service_association cannot have null id must pass parameter serviceNetworkIdentifier
-33 of 1289 type=aws_vpclattice_service_network_vpc_association
-WARNING: aws_vpclattice_service_network_vpc_association cannot have null id must pass parameter serviceNetworkIdentifier
-34 of 1289 type=aws_vpclattice_target_group
-No aws_vpclattice_target_group found -empty response
-35 of 1289 type=aws_eks_cluster
-Empty response for aws_eks_cluster id=None returning
-36 of 1289 type=aws_eks_fargate_profile
-WARNING: aws_eks_fargate_profile cannot have null id must pass parameter clusterName
-37 of 1289 type=aws_eks_node_group
-WARNING: aws_eks_node_group cannot have null id must pass parameter clusterName
-38 of 1289 type=aws_eks_addon
-WARNING: aws_eks_addon cannot have null id must pass parameter clusterName
-39 of 1289 type=aws_eks_identity_provider_config
-WARNING: aws_eks_identity_provider_config cannot have null id must pass parameter clusterName
-40 of 1289 type=aws_eks_pod_identity_association
-WARNING: aws_eks_pod_identity_association cannot have null id must pass parameter clusterName
-41 of 1289 type=aws_eks_access_entry
-WARNING: aws_eks_access_entry cannot have null id must pass parameter clusterName
-42 of 1289 type=aws_eks_access_policy_association
-WARNING: Not supported by aws2tf currently : aws_eks_access_policy_association
-43 of 1289 type=aws_kms_key
+---<><>aws_kms_key None
 add_dependancy: aws_kms_alias.k-00495339-0eca-4956-b4e5-76662a8320d0
 add_dependancy: aws_kms_alias.k-08fae563-02ed-4854-88ae-aebb202e04af
 add_dependancy: aws_kms_alias.k-0b332548-46fd-47fa-88d6-0a937fcf41be
@@ -371,7 +34,9 @@ add_dependancy: aws_kms_alias.k-5bedfcde-836c-4e8c-8fe2-24d627995a91
 add_dependancy: aws_kms_alias.k-623bfa5b-5ee5-41ba-b119-4c56c7de99d5
 add_dependancy: aws_kms_alias.k-649599bd-8a4f-4331-95a1-54ecaa15ff54
 add_dependancy: aws_kms_alias.k-815272b3-1254-4e82-9860-515b5d4af7a4
-add_dependancy: aws_kms_alias.k-817bb810-7154-4d9b-b582-7dbb62e77876
+WARNING: can't access key
+e=TypeError("handle_error() missing 2 required positional arguments: 'topkey' and 'id'")
+<class 'TypeError'> aws_kms.py 52
 add_dependancy: aws_kms_alias.k-8263ac3a-af0a-4228-b60e-7830969c9786
 add_dependancy: aws_kms_alias.k-85aab31b-7d6d-4b17-aa52-a15fca4bf972
 add_dependancy: aws_kms_alias.k-86271421-0143-4a7d-9637-bf4d92ff17f7
@@ -395,560 +60,142 @@ add_dependancy: aws_kms_alias.k-d894c17c-0404-44c4-95bf-b8cbd75def65
 add_dependancy: aws_kms_alias.k-deb04e86-2a15-4235-9cf0-cea0745ef1bc
 add_dependancy: aws_kms_alias.k-e1fed1d0-6f1b-4333-a484-d9aa119e1262
 add_dependancy: aws_kms_alias.k-e84309dc-cb34-4ab1-84a2-50144691de35
-44 of 1289 type=aws_kms_alias
-KMS ALAIS: Id match importing  None
-KMS ALAIS: Id match importing  None
-KMS ALAIS: Id match importing  None
-KMS ALAIS: Id match importing  None
-KMS ALAIS: Id match importing  None
-KMS ALAIS: Id match importing  None
-KMS ALAIS: Id match importing  None
-KMS ALAIS: Id match importing  None
-KMS ALAIS: Id match importing  None
-KMS ALAIS: Id match importing  None
-KMS ALAIS: Id match importing  None
-KMS ALAIS: Id match importing  None
-KMS ALAIS: Id match importing  None
-KMS ALAIS: Id match importing  None
-KMS ALAIS: Id match importing  None
-KMS ALAIS: Id match importing  None
-KMS ALAIS: Id match importing  None
-KMS ALAIS: Id match importing  None
-45 of 1289 type=aws_ecs_cluster
-Empty response for aws_ecs_cluster id=None returning
-46 of 1289 type=aws_cloudwatch_log_group
-47 of 1289 type=aws_config_config_rule
-48 of 1289 type=aws_instance
-49 of 1289 type=aws_lambda_function
-add_known_dependancy: aws_lambda_alias.find-secrets-without-rotation
-add_known_dependancy: aws_lambda_permission.find-secrets-without-rotation
-add_known_dependancy: aws_lambda_function_event_invoke_config.find-secrets-without-rotation
-add_known_dependancy: aws_lambda_event_source_mapping.find-secrets-without-rotation
-add_known_dependancy: aws_lambda_alias.resourcemap
-add_known_dependancy: aws_lambda_permission.resourcemap
-add_known_dependancy: aws_lambda_function_event_invoke_config.resourcemap
-add_known_dependancy: aws_lambda_event_source_mapping.resourcemap
-add_known_dependancy: aws_lambda_alias.inspector-cve-fix
-add_known_dependancy: aws_lambda_permission.inspector-cve-fix
-add_known_dependancy: aws_lambda_function_event_invoke_config.inspector-cve-fix
-add_known_dependancy: aws_lambda_event_source_mapping.inspector-cve-fix
-add_known_dependancy: aws_lambda_alias.CIS_1-3_1-4_RR
-add_known_dependancy: aws_lambda_permission.CIS_1-3_1-4_RR
-add_known_dependancy: aws_lambda_function_event_invoke_config.CIS_1-3_1-4_RR
-add_known_dependancy: aws_lambda_event_source_mapping.CIS_1-3_1-4_RR
-add_known_dependancy: aws_lambda_alias.PatchingRR
-add_known_dependancy: aws_lambda_permission.PatchingRR
-add_known_dependancy: aws_lambda_function_event_invoke_config.PatchingRR
-add_known_dependancy: aws_lambda_event_source_mapping.PatchingRR
-add_known_dependancy: aws_lambda_alias.CIS_2-2_RR
-add_known_dependancy: aws_lambda_permission.CIS_2-2_RR
-add_known_dependancy: aws_lambda_function_event_invoke_config.CIS_2-2_RR
-add_known_dependancy: aws_lambda_event_source_mapping.CIS_2-2_RR
-add_known_dependancy: aws_lambda_alias.CIS_2-4_RR
-add_known_dependancy: aws_lambda_permission.CIS_2-4_RR
-add_known_dependancy: aws_lambda_function_event_invoke_config.CIS_2-4_RR
-add_known_dependancy: aws_lambda_event_source_mapping.CIS_2-4_RR
-add_known_dependancy: aws_lambda_alias.StorageStack-CustomCDKBucketDeployment8693BB649689-TVWJ3RDI90A2
-add_known_dependancy: aws_lambda_permission.StorageStack-CustomCDKBucketDeployment8693BB649689-TVWJ3RDI90A2
-add_known_dependancy: aws_lambda_function_event_invoke_config.StorageStack-CustomCDKBucketDeployment8693BB649689-TVWJ3RDI90A2
-add_known_dependancy: aws_lambda_event_source_mapping.StorageStack-CustomCDKBucketDeployment8693BB649689-TVWJ3RDI90A2
-add_known_dependancy: aws_lambda_alias.demo-test-frontend-app-EnvControllerFunction-uuL3eTAsN1q9
-add_known_dependancy: aws_lambda_permission.demo-test-frontend-app-EnvControllerFunction-uuL3eTAsN1q9
-add_known_dependancy: aws_lambda_function_event_invoke_config.demo-test-frontend-app-EnvControllerFunction-uuL3eTAsN1q9
-add_known_dependancy: aws_lambda_event_source_mapping.demo-test-frontend-app-EnvControllerFunction-uuL3eTAsN1q9
-add_known_dependancy: aws_lambda_alias.demo-test-frontend-app-RulePriorityFunction-TQm8cw5dmbkW
-add_known_dependancy: aws_lambda_permission.demo-test-frontend-app-RulePriorityFunction-TQm8cw5dmbkW
-add_known_dependancy: aws_lambda_function_event_invoke_config.demo-test-frontend-app-RulePriorityFunction-TQm8cw5dmbkW
-add_known_dependancy: aws_lambda_event_source_mapping.demo-test-frontend-app-RulePriorityFunction-TQm8cw5dmbkW
-add_known_dependancy: aws_lambda_alias.cwsyn-asgdemoweb-4b1458bb-7f93-483c-b4de-6f2682926bc2
-add_known_dependancy: aws_lambda_permission.cwsyn-asgdemoweb-4b1458bb-7f93-483c-b4de-6f2682926bc2
-add_known_dependancy: aws_lambda_function_event_invoke_config.cwsyn-asgdemoweb-4b1458bb-7f93-483c-b4de-6f2682926bc2
-add_known_dependancy: aws_lambda_event_source_mapping.cwsyn-asgdemoweb-4b1458bb-7f93-483c-b4de-6f2682926bc2
-add_known_dependancy: aws_lambda_alias.pp1
-add_known_dependancy: aws_lambda_permission.pp1
-add_known_dependancy: aws_lambda_function_event_invoke_config.pp1
-add_known_dependancy: aws_lambda_event_source_mapping.pp1
-add_known_dependancy: aws_lambda_alias.CIS_4-1_4-2_RR
-add_known_dependancy: aws_lambda_permission.CIS_4-1_4-2_RR
-add_known_dependancy: aws_lambda_function_event_invoke_config.CIS_4-1_4-2_RR
-add_known_dependancy: aws_lambda_event_source_mapping.CIS_4-1_4-2_RR
-add_known_dependancy: aws_lambda_alias.c9-eks-terraform-0d89b4f0b455f5c2
-add_known_dependancy: aws_lambda_permission.c9-eks-terraform-0d89b4f0b455f5c2
-add_known_dependancy: aws_lambda_function_event_invoke_config.c9-eks-terraform-0d89b4f0b455f5c2
-add_known_dependancy: aws_lambda_event_source_mapping.c9-eks-terraform-0d89b4f0b455f5c2
-add_known_dependancy: aws_lambda_alias.CIS_2-9_RR
-add_known_dependancy: aws_lambda_permission.CIS_2-9_RR
-add_known_dependancy: aws_lambda_function_event_invoke_config.CIS_2-9_RR
-add_known_dependancy: aws_lambda_event_source_mapping.CIS_2-9_RR
-add_known_dependancy: aws_lambda_alias.ec2-non-compliant-ami-sechub
-add_known_dependancy: aws_lambda_permission.ec2-non-compliant-ami-sechub
-add_known_dependancy: aws_lambda_function_event_invoke_config.ec2-non-compliant-ami-sechub
-add_known_dependancy: aws_lambda_event_source_mapping.ec2-non-compliant-ami-sechub
-add_known_dependancy: aws_lambda_alias.pp3
-add_known_dependancy: aws_lambda_permission.pp3
-add_known_dependancy: aws_lambda_function_event_invoke_config.pp3
-add_known_dependancy: aws_lambda_event_source_mapping.pp3
-add_known_dependancy: aws_lambda_alias.ec2-catcher
-add_known_dependancy: aws_lambda_permission.ec2-catcher
-add_known_dependancy: aws_lambda_function_event_invoke_config.ec2-catcher
-add_known_dependancy: aws_lambda_event_source_mapping.ec2-catcher
-add_known_dependancy: aws_lambda_alias.cwsyn-cjfc-54d8e832-495d-47ab-9c96-3a727402cbc7
-add_known_dependancy: aws_lambda_permission.cwsyn-cjfc-54d8e832-495d-47ab-9c96-3a727402cbc7
-add_known_dependancy: aws_lambda_function_event_invoke_config.cwsyn-cjfc-54d8e832-495d-47ab-9c96-3a727402cbc7
-add_known_dependancy: aws_lambda_event_source_mapping.cwsyn-cjfc-54d8e832-495d-47ab-9c96-3a727402cbc7
-add_known_dependancy: aws_lambda_alias.qldb-athena-lab-create-s3-CleanupFunction-imSr1CVOQOxh
-add_known_dependancy: aws_lambda_permission.qldb-athena-lab-create-s3-CleanupFunction-imSr1CVOQOxh
-add_known_dependancy: aws_lambda_function_event_invoke_config.qldb-athena-lab-create-s3-CleanupFunction-imSr1CVOQOxh
-add_known_dependancy: aws_lambda_event_source_mapping.qldb-athena-lab-create-s3-CleanupFunction-imSr1CVOQOxh
-add_known_dependancy: aws_lambda_alias.dialycleanup
-add_known_dependancy: aws_lambda_permission.dialycleanup
-add_known_dependancy: aws_lambda_function_event_invoke_config.dialycleanup
-add_known_dependancy: aws_lambda_event_source_mapping.dialycleanup
-add_known_dependancy: aws_lambda_alias.myeventfunction
-add_known_dependancy: aws_lambda_permission.myeventfunction
-add_known_dependancy: aws_lambda_function_event_invoke_config.myeventfunction
-add_known_dependancy: aws_lambda_event_source_mapping.myeventfunction
-add_known_dependancy: aws_lambda_alias.enrich-sec-hub-finding
-add_known_dependancy: aws_lambda_permission.enrich-sec-hub-finding
-add_known_dependancy: aws_lambda_function_event_invoke_config.enrich-sec-hub-finding
-add_known_dependancy: aws_lambda_event_source_mapping.enrich-sec-hub-finding
-add_known_dependancy: aws_lambda_alias.CreateActionTarget
-add_known_dependancy: aws_lambda_permission.CreateActionTarget
-add_known_dependancy: aws_lambda_function_event_invoke_config.CreateActionTarget
-add_known_dependancy: aws_lambda_event_source_mapping.CreateActionTarget
-add_known_dependancy: aws_lambda_alias.isolate-ec2-security-group
-add_known_dependancy: aws_lambda_permission.isolate-ec2-security-group
-add_known_dependancy: aws_lambda_function_event_invoke_config.isolate-ec2-security-group
-add_known_dependancy: aws_lambda_event_source_mapping.isolate-ec2-security-group
-add_known_dependancy: aws_lambda_alias.SageMakerVPCEnforcer
-add_known_dependancy: aws_lambda_permission.SageMakerVPCEnforcer
-add_known_dependancy: aws_lambda_function_event_invoke_config.SageMakerVPCEnforcer
-add_known_dependancy: aws_lambda_event_source_mapping.SageMakerVPCEnforcer
-add_known_dependancy: aws_lambda_alias.SecretsManagerMySQLRotationLambda
-add_known_dependancy: aws_lambda_permission.SecretsManagerMySQLRotationLambda
-add_known_dependancy: aws_lambda_function_event_invoke_config.SecretsManagerMySQLRotationLambda
-add_known_dependancy: aws_lambda_event_source_mapping.SecretsManagerMySQLRotationLambda
-add_known_dependancy: aws_lambda_alias.CIS_2-6_RR
-add_known_dependancy: aws_lambda_permission.CIS_2-6_RR
-add_known_dependancy: aws_lambda_function_event_invoke_config.CIS_2-6_RR
-add_known_dependancy: aws_lambda_event_source_mapping.CIS_2-6_RR
-add_known_dependancy: aws_lambda_alias.CIS_4-3_RR
-add_known_dependancy: aws_lambda_permission.CIS_4-3_RR
-add_known_dependancy: aws_lambda_function_event_invoke_config.CIS_4-3_RR
-add_known_dependancy: aws_lambda_event_source_mapping.CIS_4-3_RR
-add_known_dependancy: aws_lambda_alias.CIS_1-5_1-11_RR
-add_known_dependancy: aws_lambda_permission.CIS_1-5_1-11_RR
-add_known_dependancy: aws_lambda_function_event_invoke_config.CIS_1-5_1-11_RR
-add_known_dependancy: aws_lambda_event_source_mapping.CIS_1-5_1-11_RR
-add_known_dependancy: aws_lambda_alias.CIS_2-3_RR
-add_known_dependancy: aws_lambda_permission.CIS_2-3_RR
-add_known_dependancy: aws_lambda_function_event_invoke_config.CIS_2-3_RR
-add_known_dependancy: aws_lambda_event_source_mapping.CIS_2-3_RR
-add_known_dependancy: aws_lambda_alias.sechub-cve
-add_known_dependancy: aws_lambda_permission.sechub-cve
-add_known_dependancy: aws_lambda_function_event_invoke_config.sechub-cve
-add_known_dependancy: aws_lambda_event_source_mapping.sechub-cve
-add_known_dependancy: aws_lambda_alias.inspector-cis-fix
-add_known_dependancy: aws_lambda_permission.inspector-cis-fix
-add_known_dependancy: aws_lambda_function_event_invoke_config.inspector-cis-fix
-add_known_dependancy: aws_lambda_event_source_mapping.inspector-cis-fix
-add_known_dependancy: aws_lambda_alias.pp2
-add_known_dependancy: aws_lambda_permission.pp2
-add_known_dependancy: aws_lambda_function_event_invoke_config.pp2
-add_known_dependancy: aws_lambda_event_source_mapping.pp2
-add_known_dependancy: aws_lambda_alias.inspector-cve-scan
-add_known_dependancy: aws_lambda_permission.inspector-cve-scan
-add_known_dependancy: aws_lambda_function_event_invoke_config.inspector-cve-scan
-add_known_dependancy: aws_lambda_event_source_mapping.inspector-cve-scan
-add_known_dependancy: aws_lambda_alias.CFEnableSagemakerProjects
-add_known_dependancy: aws_lambda_permission.CFEnableSagemakerProjects
-add_known_dependancy: aws_lambda_function_event_invoke_config.CFEnableSagemakerProjects
-add_known_dependancy: aws_lambda_event_source_mapping.CFEnableSagemakerProjects
-add_known_dependancy: aws_lambda_alias.CreateTableAddRecordsAndRead
-add_known_dependancy: aws_lambda_permission.CreateTableAddRecordsAndRead
-add_known_dependancy: aws_lambda_function_event_invoke_config.CreateTableAddRecordsAndRead
-add_known_dependancy: aws_lambda_event_source_mapping.CreateTableAddRecordsAndRead
-add_known_dependancy: aws_lambda_alias.inspector-run-assessment
-add_known_dependancy: aws_lambda_permission.inspector-run-assessment
-add_known_dependancy: aws_lambda_function_event_invoke_config.inspector-run-assessment
-add_known_dependancy: aws_lambda_event_source_mapping.inspector-run-assessment
-add_known_dependancy: aws_lambda_alias.CIS_2-8_RR
-add_known_dependancy: aws_lambda_permission.CIS_2-8_RR
-add_known_dependancy: aws_lambda_function_event_invoke_config.CIS_2-8_RR
-add_known_dependancy: aws_lambda_event_source_mapping.CIS_2-8_RR
-add_known_dependancy: aws_lambda_alias.SendToJIRA
-add_known_dependancy: aws_lambda_permission.SendToJIRA
-add_known_dependancy: aws_lambda_function_event_invoke_config.SendToJIRA
-add_known_dependancy: aws_lambda_event_source_mapping.SendToJIRA
-add_known_dependancy: aws_lambda_alias.inspector-cis-scan
-add_known_dependancy: aws_lambda_permission.inspector-cis-scan
-add_known_dependancy: aws_lambda_function_event_invoke_config.inspector-cis-scan
-add_known_dependancy: aws_lambda_event_source_mapping.inspector-cis-scan
-add_known_dependancy: aws_lambda_alias.sechub-to-slack
-add_known_dependancy: aws_lambda_permission.sechub-to-slack
-add_known_dependancy: aws_lambda_function_event_invoke_config.sechub-to-slack
-add_known_dependancy: aws_lambda_event_source_mapping.sechub-to-slack
-add_known_dependancy: aws_lambda_alias.GetDashboardEmbedURL
-add_known_dependancy: aws_lambda_permission.GetDashboardEmbedURL
-add_known_dependancy: aws_lambda_function_event_invoke_config.GetDashboardEmbedURL
-add_known_dependancy: aws_lambda_event_source_mapping.GetDashboardEmbedURL
-50 of 1289 type=aws_lambda_alias
-WARNING: aws_lambda_alias cannot have null id must pass parameter FunctionName
-51 of 1289 type=aws_lambda_permission
-WARNING: aws_lambda_permission cannot have null id must pass parameter FunctionName
-52 of 1289 type=aws_lambda_layer_version
-WARNING: aws_lambda_layer_version cannot have null id must pass parameter LayerName
-53 of 1289 type=aws_lambda_function_event_invoke_config
-WARNING: aws_lambda_function_event_invoke_config cannot have null id must pass parameter FunctionName
-54 of 1289 type=aws_lambda_event_source_mapping
-WARNING: aws_lambda_event_source_mapping cannot have null id must pass parameter LayerName
-55 of 1289 type=aws_lb
-add_dependancy: aws_lb_listener.arn:aws:elasticloadbalancing:eu-west-2:566972129213:loadbalancer/net/test-nlb/3a6daea188c96297
-add_dependancy: aws_lb_listener.arn:aws:elasticloadbalancing:eu-west-2:566972129213:loadbalancer/app/lb-atasg/8b765123c80fe922
-add_dependancy: aws_lb_listener.arn:aws:elasticloadbalancing:eu-west-2:566972129213:loadbalancer/app/app-stream/216b0b8b3137e3af
-add_dependancy: aws_lb_listener.arn:aws:elasticloadbalancing:eu-west-2:566972129213:loadbalancer/app/lb-atasg-int/b0b14a3c79a9f242
-add_dependancy: aws_lb_listener.arn:aws:elasticloadbalancing:eu-west-2:566972129213:loadbalancer/app/AT-566-TheLo-XE0fBEExD70U/f59e0cc0c8715a15
-56 of 1289 type=aws_redshiftserverless_workgroup
-Empty response for aws_redshiftserverless_workgroup id=None returning
-57 of 1289 type=aws_redshiftserverless_namespace
-58 of 1289 type=aws_redshift_cluster
-No aws_redshift_cluster found -empty response
-59 of 1289 type=aws_redshift_subnet_group
-No aws_redshift_subnet_group found -empty response
-60 of 1289 type=aws_redshift_parameter_group
-Default param skipping default.redshift-1.0
-61 of 1289 type=aws_rds_cluster
-No aws_rds_cluster found -empty response
-62 of 1289 type=aws_rds_cluster_parameter_group
-63 of 1289 type=aws_rds_cluster_instance
-No aws_rds_cluster_instance found -empty response
-64 of 1289 type=aws_db_parameter_group
-65 of 1289 type=aws_db_subnet_group
-66 of 1289 type=aws_db_instance
-No aws_db_instance found -empty response
-67 of 1289 type=aws_db_event_subscription
-No aws_db_event_subscription found -empty response
-68 of 1289 type=aws_glue_crawler
-add_dependancy: aws_glue_catalog_database.566972129213:tripdata
-add_dependancy: aws_glue_catalog_database.566972129213:nhsbsa
-add_dependancy: aws_glue_catalog_database.566972129213:rtec
-add_dependancy: aws_glue_catalog_database.566972129213:sechub
-add_dependancy: aws_glue_catalog_database.566972129213:tripdata3
-69 of 1289 type=aws_glue_catalog_database
-add_dependancy: aws_glue_catalog_table.566972129213:default
-add_dependancy: aws_glue_catalog_table.566972129213:rtec
-add_dependancy: aws_glue_catalog_table.566972129213:sagemaker_featurestore
-add_dependancy: aws_glue_catalog_table.566972129213:sampledb
-add_dependancy: aws_glue_catalog_table.566972129213:sechub
-add_dependancy: aws_glue_catalog_table.566972129213:tripdata
-add_dependancy: aws_glue_catalog_table.566972129213:tripdata2
-add_dependancy: aws_glue_catalog_table.566972129213:tripdata3
-add_dependancy: aws_glue_catalog_table.566972129213:tripdata4
-70 of 1289 type=aws_kinesis_stream
-Empty response for aws_kinesis_stream id=None returning
-71 of 1289 type=aws_secretsmanager_secret
-72 of 1289 type=aws_cloudwatch_event_rule
-73 of 1289 type=aws_accessanalyzer_analyzer
-74 of 1289 type=aws_accessanalyzer_archive_rule
-WARNING: aws_accessanalyzer_archive_rule cannot have null id must pass parameter analyzerName
-75 of 1289 type=aws_account_alternate_contact
-WARNING: aws_account_alternate_contact cannot have null id must pass parameter AccountId
-76 of 1289 type=aws_account_primary_contact
-WARNING: aws_account_primary_contact cannot have null id must pass parameter AccountId
-77 of 1289 type=aws_acm_certificate
-78 of 1289 type=aws_acm_certificate_validation
-WARNING: Terraform cannot import type: aws_acm_certificate_validation
-79 of 1289 type=aws_acmpca_certificate
-WARNING: aws_acmpca_certificate cannot have null id must pass parameter CertificateAuthorityArn,CertificateArn
-80 of 1289 type=aws_acmpca_certificate_authority
-No aws_acmpca_certificate_authority found -empty response
-81 of 1289 type=aws_acmpca_certificate_authority_certificate
-WARNING: Terraform cannot import type: aws_acmpca_certificate_authority_certificate
-82 of 1289 type=aws_acmpca_permission
-WARNING: Terraform cannot import type: aws_acmpca_permission
-83 of 1289 type=aws_acmpca_policy
-WARNING: aws_acmpca_policy cannot have null id must pass parameter ResourceArn
-84 of 1289 type=aws_ami
-WARNING: aws_ami cannot have null id must pass parameter ImageId
-85 of 1289 type=aws_ami_copy
-WARNING: Terraform cannot import type: aws_ami_copy
-86 of 1289 type=aws_ami_from_instance
-WARNING: Terraform cannot import type: aws_ami_from_instance
-87 of 1289 type=aws_ami_launch_permission
-WARNING: aws_ami_launch_permission cannot have null id must pass parameter ImageId
-88 of 1289 type=aws_amplify_app
---> In get_aws_amplify_app doing aws_amplify_app with id None clfn=amplify descfn=list_apps topkey=apps key=appId filterid=appId
-add_dependancy: aws_amplify_branch.d3cvdbdufbqz0
-89 of 1289 type=aws_amplify_backend_environment
-WARNING: aws_amplify_backend_environment cannot have null id must pass parameter appId
-90 of 1289 type=aws_amplify_branch
-WARNING: aws_amplify_branch cannot have null id must pass parameter appId
-91 of 1289 type=aws_amplify_domain_association
-WARNING: aws_amplify_domain_association cannot have null id must pass parameter appId
-92 of 1289 type=aws_amplify_webhook
-WARNING: aws_amplify_webhook cannot have null id must pass parameter appId
-93 of 1289 type=aws_api_gateway_account
-WARNING: Not supported by aws2tf currently : aws_api_gateway_account
-94 of 1289 type=aws_api_gateway_api_key
-WARNING: Not supported by aws2tf currently : aws_api_gateway_api_key
-95 of 1289 type=aws_api_gateway_authorizer
-WARNING: aws_api_gateway_authorizer cannot have null id must pass parameter restApiId
-96 of 1289 type=aws_api_gateway_base_path_mapping
-WARNING: Not supported by aws2tf currently : aws_api_gateway_base_path_mapping
-97 of 1289 type=aws_api_gateway_client_certificate
-WARNING: Not supported by aws2tf currently : aws_api_gateway_client_certificate
-98 of 1289 type=aws_api_gateway_deployment
-WARNING: aws_api_gateway_deployment cannot have null id must pass parameter restApiId
-99 of 1289 type=aws_api_gateway_documentation_part
-WARNING: Not supported by aws2tf currently : aws_api_gateway_documentation_part
-100 of 1289 type=aws_api_gateway_documentation_version
-WARNING: Not supported by aws2tf currently : aws_api_gateway_documentation_version
-101 of 1289 type=aws_api_gateway_domain_name
-WARNING: Not supported by aws2tf currently : aws_api_gateway_domain_name
-102 of 1289 type=aws_api_gateway_gateway_response
-WARNING: Not supported by aws2tf currently : aws_api_gateway_gateway_response
-103 of 1289 type=aws_api_gateway_integration
-WARNING: Not supported by aws2tf currently : aws_api_gateway_integration
-104 of 1289 type=aws_api_gateway_integration_response
-WARNING: Not supported by aws2tf currently : aws_api_gateway_integration_response
-105 of 1289 type=aws_api_gateway_method
-WARNING: aws_api_gateway_method cannot have null id must pass parameter restApiId,resourceId,httpMethod
-106 of 1289 type=aws_api_gateway_method_response
-WARNING: Terraform cannot import type: aws_api_gateway_method_response
-107 of 1289 type=aws_api_gateway_method_settings
-WARNING: Terraform cannot import type: aws_api_gateway_method_settings
-108 of 1289 type=aws_api_gateway_model
-WARNING: Not supported by aws2tf currently : aws_api_gateway_model
-109 of 1289 type=aws_api_gateway_request_validator
-WARNING: Not supported by aws2tf currently : aws_api_gateway_request_validator
-110 of 1289 type=aws_api_gateway_resource
-WARNING: aws_api_gateway_resource cannot have null id must pass parameter restApiId
-111 of 1289 type=aws_api_gateway_rest_api
-add_dependancy: aws_api_gateway_deployment.uu52chqi28
-add_dependancy: aws_api_gateway_stage.uu52chqi28
-add_dependancy: aws_api_gateway_authorizer.uu52chqi28
-add_dependancy: aws_api_gateway_resource.uu52chqi28
-add_dependancy: aws_api_gateway_deployment.xc89xsk164
-add_dependancy: aws_api_gateway_stage.xc89xsk164
-add_dependancy: aws_api_gateway_authorizer.xc89xsk164
-add_dependancy: aws_api_gateway_resource.xc89xsk164
-112 of 1289 type=aws_api_gateway_rest_api_policy
-WARNING: Not supported by aws2tf currently : aws_api_gateway_rest_api_policy
-113 of 1289 type=aws_api_gateway_stage
-WARNING: aws_api_gateway_stage cannot have null id must pass parameter restApiId
-114 of 1289 type=aws_api_gateway_usage_plan
-WARNING: Not supported by aws2tf currently : aws_api_gateway_usage_plan
-115 of 1289 type=aws_api_gateway_usage_plan_key
-WARNING: Not supported by aws2tf currently : aws_api_gateway_usage_plan_key
-116 of 1289 type=aws_api_gateway_vpc_link
-WARNING: Not supported by aws2tf currently : aws_api_gateway_vpc_link
-117 of 1289 type=aws_apigatewayv2_api
---> In get_aws_apigatewayv2_api doing aws_apigatewayv2_api with id None clfn=apigatewayv2 descfn=get_apis topkey=Items key=ApiId filterid=ApiId
-add_dependancy: aws_apigatewayv2_authorizer.gpaui4ayxk
-add_dependancy: aws_apigatewayv2_deployment.gpaui4ayxk
-add_dependancy: aws_apigatewayv2_integration.gpaui4ayxk
-add_dependancy: aws_apigatewayv2_model.gpaui4ayxk
-add_dependancy: aws_apigatewayv2_route.gpaui4ayxk
-add_dependancy: aws_apigatewayv2_stage.gpaui4ayxk
-118 of 1289 type=aws_apigatewayv2_api_mapping
-WARNING: aws_apigatewayv2_api_mapping cannot have null id must pass parameter DomainName
-119 of 1289 type=aws_apigatewayv2_authorizer
-WARNING: aws_apigatewayv2_authorizer cannot have null id must pass parameter ApiId
-120 of 1289 type=aws_apigatewayv2_deployment
-WARNING: aws_apigatewayv2_deployment cannot have null id must pass parameter ApiId
-121 of 1289 type=aws_apigatewayv2_domain_name
-122 of 1289 type=aws_apigatewayv2_integration
-WARNING: aws_apigatewayv2_integration cannot have null id must pass parameter ApiId
-123 of 1289 type=aws_apigatewayv2_integration_response
-WARNING: aws_apigatewayv2_integration_response cannot have null id must pass parameter IntegrationId,ApiId
-124 of 1289 type=aws_apigatewayv2_model
-WARNING: aws_apigatewayv2_model cannot have null id must pass parameter ApiId
-125 of 1289 type=aws_apigatewayv2_route
-WARNING: aws_apigatewayv2_route cannot have null id must pass parameter ApiId
-126 of 1289 type=aws_apigatewayv2_route_response
-WARNING: aws_apigatewayv2_route_response cannot have null id must pass parameter RouteId,ApiId
-127 of 1289 type=aws_apigatewayv2_stage
-WARNING: aws_apigatewayv2_stage cannot have null id must pass parameter ApiId
-128 of 1289 type=aws_apigatewayv2_vpc_link
-No aws_apigatewayv2_vpc_link found -empty response
-129 of 1289 type=aws_app_cookie_stickiness_policy
-No aws_app_cookie_stickiness_policy found -empty response
-130 of 1289 type=aws_appautoscaling_policy
-131 of 1289 type=aws_appautoscaling_scheduled_action
-WARNING: Terraform cannot import type: aws_appautoscaling_scheduled_action
-132 of 1289 type=aws_appautoscaling_target
-133 of 1289 type=aws_appconfig_application
-No aws_appconfig_application found -empty response
-134 of 1289 type=aws_appconfig_configuration_profile
-WARNING: aws_appconfig_configuration_profile cannot have null id must pass parameter ApplicationId
-135 of 1289 type=aws_appconfig_deployment
-WARNING: aws_appconfig_deployment cannot have null id must pass parameter ApplicationId,EnvironmentId
-136 of 1289 type=aws_appconfig_deployment_strategy
-137 of 1289 type=aws_appconfig_environment
-WARNING: aws_appconfig_environment cannot have null id must pass parameter ApplicationId
-138 of 1289 type=aws_appconfig_extension_association
-No aws_appconfig_extension_association found -empty response
-139 of 1289 type=aws_appconfig_hosted_configuration_version
-WARNING: aws_appconfig_hosted_configuration_version cannot have null id must pass parameter ApplicationId,ConfigurationProfileId
-140 of 1289 type=aws_appflow_connector_profile
-No aws_appflow_connector_profile found -empty response
-141 of 1289 type=aws_appflow_flow
-No aws_appflow_flow found -empty response
-142 of 1289 type=aws_appintegrations_data_integration
-WARNING: Terraform cannot import type: aws_appintegrations_data_integration
-143 of 1289 type=aws_appintegrations_event_integration
-WARNING: Terraform cannot import type: aws_appintegrations_event_integration
-144 of 1289 type=aws_applicationinsights_application
-
-ERROR: in getresource clfn=application-insights descfn=list_applications
-topkey=ApplicationInfoList id=None
-e=KeyError('Name') [e1]  common.py 668
-e=TypeError('can only concatenate str (not "type") to str')
-<class 'TypeError'> common.py 172
---->> Could not get resource aws_applicationinsights_application id=None
-145 of 1289 type=aws_appmesh_gateway_route
-WARNING: aws_appmesh_gateway_route cannot have null id must pass parameter meshName,virtualGatewayName
-146 of 1289 type=aws_appmesh_mesh
-147 of 1289 type=aws_appmesh_route
-WARNING: aws_appmesh_route cannot have null id must pass parameter meshName,virtualRouterName
-148 of 1289 type=aws_appmesh_virtual_gateway
-WARNING: aws_appmesh_virtual_gateway cannot have null id must pass parameter meshName
-149 of 1289 type=aws_appmesh_virtual_node
-WARNING: aws_appmesh_virtual_node cannot have null id must pass parameter meshName
-150 of 1289 type=aws_appmesh_virtual_router
-WARNING: aws_appmesh_virtual_router cannot have null id must pass parameter meshName
-151 of 1289 type=aws_appmesh_virtual_service
-WARNING: aws_appmesh_virtual_service cannot have null id must pass parameter meshName
-152 of 1289 type=aws_apprunner_auto_scaling_configuration_version
-WARNING: aws_apprunner_auto_scaling_configuration_version cannot have null id must pass parameter AutoScalingConfigurationArn
-153 of 1289 type=aws_apprunner_connection
-No aws_apprunner_connection found -empty response
-154 of 1289 type=aws_apprunner_custom_domain_association
-WARNING: aws_apprunner_custom_domain_association cannot have null id must pass parameter ServiceArn
-155 of 1289 type=aws_apprunner_default_auto_scaling_configuration_version
-WARNING: aws_apprunner_default_auto_scaling_configuration_version cannot have null id must pass parameter AutoScalingConfigurationArn
-156 of 1289 type=aws_apprunner_observability_configuration
-WARNING: Not supported by aws2tf currently : aws_apprunner_observability_configuration
-157 of 1289 type=aws_apprunner_service
-No aws_apprunner_service found -empty response
-158 of 1289 type=aws_apprunner_vpc_connector
-No aws_apprunner_vpc_connector found -empty response
-159 of 1289 type=aws_apprunner_vpc_ingress_connection
-No aws_apprunner_vpc_ingress_connection found -empty response
-160 of 1289 type=aws_appstream_directory_config
-WARNING: Not supported by aws2tf currently : aws_appstream_directory_config
-161 of 1289 type=aws_appstream_fleet
-WARNING: Not supported by aws2tf currently : aws_appstream_fleet
-162 of 1289 type=aws_appstream_fleet_stack_association
-WARNING: Not supported by aws2tf currently : aws_appstream_fleet_stack_association
-163 of 1289 type=aws_appstream_image_builder
-WARNING: Not supported by aws2tf currently : aws_appstream_image_builder
-164 of 1289 type=aws_appstream_stack
-WARNING: Not supported by aws2tf currently : aws_appstream_stack
-165 of 1289 type=aws_appstream_user
-WARNING: Not supported by aws2tf currently : aws_appstream_user
-166 of 1289 type=aws_appstream_user_stack_association
-WARNING: Not supported by aws2tf currently : aws_appstream_user_stack_association
-167 of 1289 type=aws_appsync_api_cache
-WARNING: Not supported by aws2tf currently : aws_appsync_api_cache
-168 of 1289 type=aws_appsync_api_key
-WARNING: aws_appsync_api_key cannot have null id must pass parameter apiId
-169 of 1289 type=aws_appsync_datasource
-WARNING: aws_appsync_datasource cannot have null id must pass parameter apiId
-170 of 1289 type=aws_appsync_domain_name
-No aws_appsync_domain_name found -empty response
-171 of 1289 type=aws_appsync_domain_name_api_association
-WARNING: Not supported by aws2tf currently : aws_appsync_domain_name_api_association
-172 of 1289 type=aws_appsync_function
-WARNING: aws_appsync_function cannot have null id must pass parameter apiId
-173 of 1289 type=aws_appsync_graphql_api
-WARNING: Not supported by aws2tf currently : aws_appsync_graphql_api
-174 of 1289 type=aws_appsync_resolver
-WARNING: aws_appsync_resolver cannot have null id must pass parameter apiId,typeName
-175 of 1289 type=aws_appsync_type
-WARNING: aws_appsync_type cannot have null id must pass parameter apiId,format
-176 of 1289 type=aws_athena_data_catalog
-WARNING: Not supported by aws2tf currently : aws_athena_data_catalog
-177 of 1289 type=aws_athena_database
-WARNING: aws_athena_database cannot have null id must pass parameter CatalogName
-178 of 1289 type=aws_athena_named_query
-ERROR: getresource TypeError: ['afa5e9eb-e30c-4af4-b10b-9c4572b6ae06', 'c76fea73-56c1-435e-88af-6c551e568e22', '131e1dad-1088-41b1-90f5-5eb12cfc5b31', 'cde077de-7f8d-43c0-bf6e-76fa85b0be2c', '946d9195-3641-463a-9112-56b4c900c05e', 'faa2a3ff-31d7-46d3-8340-148ab6b27e6e', '7e635285-0dab-4833-8a91-538fb6065eac', 'ffc29dad-7ded-4e29-b4b2-fa7b698fe3a5', 'a4a4f9dc-31d0-4c59-b1f8-ea27a0ef4569'] key= type=aws_athena_named_query list_named_queries
-ERROR: getresource TypeError: ['afa5e9eb-e30c-4af4-b10b-9c4572b6ae06', 'c76fea73-56c1-435e-88af-6c551e568e22', '131e1dad-1088-41b1-90f5-5eb12cfc5b31', 'cde077de-7f8d-43c0-bf6e-76fa85b0be2c', '946d9195-3641-463a-9112-56b4c900c05e', 'faa2a3ff-31d7-46d3-8340-148ab6b27e6e', '7e635285-0dab-4833-8a91-538fb6065eac', 'ffc29dad-7ded-4e29-b4b2-fa7b698fe3a5', 'a4a4f9dc-31d0-4c59-b1f8-ea27a0ef4569'] key= type=aws_athena_named_query list_named_queries
-ERROR: getresource TypeError: ['afa5e9eb-e30c-4af4-b10b-9c4572b6ae06', 'c76fea73-56c1-435e-88af-6c551e568e22', '131e1dad-1088-41b1-90f5-5eb12cfc5b31', 'cde077de-7f8d-43c0-bf6e-76fa85b0be2c', '946d9195-3641-463a-9112-56b4c900c05e', 'faa2a3ff-31d7-46d3-8340-148ab6b27e6e', '7e635285-0dab-4833-8a91-538fb6065eac', 'ffc29dad-7ded-4e29-b4b2-fa7b698fe3a5', 'a4a4f9dc-31d0-4c59-b1f8-ea27a0ef4569'] key= type=aws_athena_named_query list_named_queries
-ERROR: getresource TypeError: ['afa5e9eb-e30c-4af4-b10b-9c4572b6ae06', 'c76fea73-56c1-435e-88af-6c551e568e22', '131e1dad-1088-41b1-90f5-5eb12cfc5b31', 'cde077de-7f8d-43c0-bf6e-76fa85b0be2c', '946d9195-3641-463a-9112-56b4c900c05e', 'faa2a3ff-31d7-46d3-8340-148ab6b27e6e', '7e635285-0dab-4833-8a91-538fb6065eac', 'ffc29dad-7ded-4e29-b4b2-fa7b698fe3a5', 'a4a4f9dc-31d0-4c59-b1f8-ea27a0ef4569'] key= type=aws_athena_named_query list_named_queries
-ERROR: getresource TypeError: ['afa5e9eb-e30c-4af4-b10b-9c4572b6ae06', 'c76fea73-56c1-435e-88af-6c551e568e22', '131e1dad-1088-41b1-90f5-5eb12cfc5b31', 'cde077de-7f8d-43c0-bf6e-76fa85b0be2c', '946d9195-3641-463a-9112-56b4c900c05e', 'faa2a3ff-31d7-46d3-8340-148ab6b27e6e', '7e635285-0dab-4833-8a91-538fb6065eac', 'ffc29dad-7ded-4e29-b4b2-fa7b698fe3a5', 'a4a4f9dc-31d0-4c59-b1f8-ea27a0ef4569'] key= type=aws_athena_named_query list_named_queries
-ERROR: getresource TypeError: ['afa5e9eb-e30c-4af4-b10b-9c4572b6ae06', 'c76fea73-56c1-435e-88af-6c551e568e22', '131e1dad-1088-41b1-90f5-5eb12cfc5b31', 'cde077de-7f8d-43c0-bf6e-76fa85b0be2c', '946d9195-3641-463a-9112-56b4c900c05e', 'faa2a3ff-31d7-46d3-8340-148ab6b27e6e', '7e635285-0dab-4833-8a91-538fb6065eac', 'ffc29dad-7ded-4e29-b4b2-fa7b698fe3a5', 'a4a4f9dc-31d0-4c59-b1f8-ea27a0ef4569'] key= type=aws_athena_named_query list_named_queries
-ERROR: getresource TypeError: ['afa5e9eb-e30c-4af4-b10b-9c4572b6ae06', 'c76fea73-56c1-435e-88af-6c551e568e22', '131e1dad-1088-41b1-90f5-5eb12cfc5b31', 'cde077de-7f8d-43c0-bf6e-76fa85b0be2c', '946d9195-3641-463a-9112-56b4c900c05e', 'faa2a3ff-31d7-46d3-8340-148ab6b27e6e', '7e635285-0dab-4833-8a91-538fb6065eac', 'ffc29dad-7ded-4e29-b4b2-fa7b698fe3a5', 'a4a4f9dc-31d0-4c59-b1f8-ea27a0ef4569'] key= type=aws_athena_named_query list_named_queries
-ERROR: getresource TypeError: ['afa5e9eb-e30c-4af4-b10b-9c4572b6ae06', 'c76fea73-56c1-435e-88af-6c551e568e22', '131e1dad-1088-41b1-90f5-5eb12cfc5b31', 'cde077de-7f8d-43c0-bf6e-76fa85b0be2c', '946d9195-3641-463a-9112-56b4c900c05e', 'faa2a3ff-31d7-46d3-8340-148ab6b27e6e', '7e635285-0dab-4833-8a91-538fb6065eac', 'ffc29dad-7ded-4e29-b4b2-fa7b698fe3a5', 'a4a4f9dc-31d0-4c59-b1f8-ea27a0ef4569'] key= type=aws_athena_named_query list_named_queries
-ERROR: getresource TypeError: ['afa5e9eb-e30c-4af4-b10b-9c4572b6ae06', 'c76fea73-56c1-435e-88af-6c551e568e22', '131e1dad-1088-41b1-90f5-5eb12cfc5b31', 'cde077de-7f8d-43c0-bf6e-76fa85b0be2c', '946d9195-3641-463a-9112-56b4c900c05e', 'faa2a3ff-31d7-46d3-8340-148ab6b27e6e', '7e635285-0dab-4833-8a91-538fb6065eac', 'ffc29dad-7ded-4e29-b4b2-fa7b698fe3a5', 'a4a4f9dc-31d0-4c59-b1f8-ea27a0ef4569'] key= type=aws_athena_named_query list_named_queries
-179 of 1289 type=aws_athena_prepared_statement
-WARNING: aws_athena_prepared_statement cannot have null id must pass parameter WorkGroup
-180 of 1289 type=aws_athena_workgroup
-181 of 1289 type=aws_auditmanager_account_registration
-WARNING: Not supported by aws2tf currently : aws_auditmanager_account_registration
-182 of 1289 type=aws_auditmanager_assessment
-WARNING: Not supported by aws2tf currently : aws_auditmanager_assessment
-183 of 1289 type=aws_auditmanager_assessment_delegation
-WARNING: Not supported by aws2tf currently : aws_auditmanager_assessment_delegation
-184 of 1289 type=aws_auditmanager_assessment_report
-WARNING: Not supported by aws2tf currently : aws_auditmanager_assessment_report
-185 of 1289 type=aws_auditmanager_control
-WARNING: Not supported by aws2tf currently : aws_auditmanager_control
-186 of 1289 type=aws_auditmanager_framework
-WARNING: Not supported by aws2tf currently : aws_auditmanager_framework
-187 of 1289 type=aws_auditmanager_framework_share
-WARNING: Not supported by aws2tf currently : aws_auditmanager_framework_share
-188 of 1289 type=aws_auditmanager_organization_admin_account_registration
-WARNING: Not supported by aws2tf currently : aws_auditmanager_organization_admin_account_registration
-189 of 1289 type=aws_autoscaling_attachment
-WARNING: Terraform cannot import type: aws_autoscaling_attachment
-190 of 1289 type=aws_autoscaling_group
-191 of 1289 type=aws_autoscaling_group_tag
-Found aws_autoscaling_group_tag.AT-5669-WAFWorkshopSampleWebApp-TheInstanceStack-18OSLZDHGCBX4-TheAutoScalingGroup-1wnUeSLThtd7 in processed skipping ...
-Found aws_autoscaling_group_tag.AT-5669-WAFWorkshopSampleWebApp-TheInstanceStack-18OSLZDHGCBX4-TheAutoScalingGroup-1wnUeSLThtd7 in processed skipping ...
-Found aws_autoscaling_group_tag.AT-5669-WAFWorkshopSampleWebApp-TheInstanceStack-18OSLZDHGCBX4-TheAutoScalingGroup-1wnUeSLThtd7 in processed skipping ...
-192 of 1289 type=aws_autoscaling_lifecycle_hook
-WARNING: aws_autoscaling_lifecycle_hook cannot have null id must pass parameter AutoScalingGroupName
-193 of 1289 type=aws_autoscaling_notification
-WARNING: Terraform cannot import type: aws_autoscaling_notification
-194 of 1289 type=aws_autoscaling_policy
-No aws_autoscaling_policy found -empty response
-195 of 1289 type=aws_autoscaling_schedule
-No aws_autoscaling_schedule found -empty response
-196 of 1289 type=aws_autoscaling_traffic_source_attachment
-WARNING: Terraform cannot import type: aws_autoscaling_traffic_source_attachment
-197 of 1289 type=aws_autoscalingplans_scaling_plan
-No aws_autoscalingplans_scaling_plan found -empty response
-198 of 1289 type=aws_backup_framework
-199 of 1289 type=aws_backup_global_settings
-WARNING: Not supported by aws2tf currently : aws_backup_global_settings
-200 of 1289 type=aws_backup_plan
-201 of 1289 type=aws_backup_region_settings
-202 of 1289 type=aws_backup_report_plan
-No aws_backup_report_plan found -empty response
-203 of 1289 type=aws_backup_selection
-WARNING: aws_backup_selection cannot have null id must pass parameter BackupPlanId
-204 of 1289 type=aws_backup_vault
-205 of 1289 type=aws_backup_vault_lock_configuration
-WARNING: aws_backup_vault_lock_configuration cannot have null id must pass parameter BackupVaultName
-206 of 1289 type=aws_backup_vault_notifications
-WARNING: aws_backup_vault_notifications cannot have null id must pass parameter BackupVaultName
-207 of 1289 type=aws_backup_vault_policy
-WARNING: aws_backup_vault_policy cannot have null id must pass parameter BackupVaultName
-208 of 1289 type=aws_batch_compute_environment
-WARNING: Not supported by aws2tf currently : aws_batch_compute_environment
-209 of 1289 type=aws_batch_job_definition
-WARNING: Not supported by aws2tf currently : aws_batch_job_definition
-210 of 1289 type=aws_batch_job_queue
-WARNING: Not supported by aws2tf currently : aws_batch_job_queue
-211 of 1289 type=aws_batch_scheduling_policy
-WARNING: Not supported by aws2tf currently : aws_batch_scheduling_policy
-212 of 1289 type=aws_bedrock_model_invocation_logging_configuration
-
-ERROR: in get_aws_bedrock_model_invocation_logging_configuration clfn=bedrock descfn=get_model_invocation_logging_configuration
-topkey=loggingConfig id=None
-e=EndpointConnectionError('Could not connect to the endpoint URL: "https://bedrock.eu-west-2.amazonaws.com/logging/modelinvocations"') [e1]  aws_bedrock.py 13
-
-ERROR: in call_resource clfn=bedrock descfn=get_model_invocation_logging_configuration
-topkey=loggingConfig id=None
-e=TypeError('can only concatenate str (not "type") to str') [e1]  common.py 145
+Terraform Plan Loop ... 
+terraform plan -generate-config-out=resources.out -out tfplan -json | jq . > plan1.json
+ERROR: Removing 817bb810-7154-4d9b-b582-7dbb62e77876 files - plan errors see plan1.json [p3]
+split file:resources.out
+ERROR: Removing 817bb810-7154-4d9b-b582-7dbb62e77876 files - plan errors see plan1.json [p4]
+e=FileNotFoundError(2, 'No such file or directory')
+Detected Dependancies -----------------------
+aws_kms_alias.k-00495339-0eca-4956-b4e5-76662a8320d0
+aws_kms_alias.k-08fae563-02ed-4854-88ae-aebb202e04af
+aws_kms_alias.k-0b332548-46fd-47fa-88d6-0a937fcf41be
+aws_kms_alias.k-0c054c29-b892-4990-b58a-979245498f07
+aws_kms_alias.k-0c0cdea0-8c40-4666-a201-b5325582bd86
+aws_kms_alias.k-0cbdb8d5-9a1e-4cf8-9c9d-5cc0a050ea47
+aws_kms_alias.k-21b42c4d-462c-46a0-8b01-a18a871d8877
+aws_kms_alias.k-253e95e0-240b-46c2-aa1c-62df98a77f17
+aws_kms_alias.k-26c148d5-197e-4c12-b4cd-42cd01a29965
+aws_kms_alias.k-2af1a278-dbbc-4717-8e53-28e43145a50a
+aws_kms_alias.k-2b45381b-d386-4bf2-bd3a-a26ed2725828
+aws_kms_alias.k-35b8efbb-680a-446d-88e9-9635c0360f48
+aws_kms_alias.k-36c865ff-519d-4734-8eec-edbc5946553a
+aws_kms_alias.k-4023a5df-5609-4d19-b0b6-622a0464fa70
+aws_kms_alias.k-41ed14e4-82c5-4d67-93fa-a7b9d16f8244
+aws_kms_alias.k-42e4f7d3-5aa8-465c-b3da-7b93d97b3841
+aws_kms_alias.k-43ed881c-a891-41e2-95c2-598899242e65
+aws_kms_alias.k-46cb19a3-aad2-4423-88cd-0e0f6228fc6a
+aws_kms_alias.k-4737ccd6-9530-491b-a820-80a14569ff21
+aws_kms_alias.k-478b9394-58bb-4fc7-90a5-1b38156d321d
+aws_kms_alias.k-48945a34-55a3-4550-89a1-694d21a000ca
+aws_kms_alias.k-49bb3268-e6a7-4a5e-adb1-0ff0cf2f1f42
+aws_kms_alias.k-4d854131-c39b-4c91-824e-28f63fe9f56e
+aws_kms_alias.k-51cd5562-b559-4a3a-a296-e5796f569d14
+aws_kms_alias.k-537d3f5f-aedc-4df3-b822-09217db2e95d
+aws_kms_alias.k-5bedfcde-836c-4e8c-8fe2-24d627995a91
+aws_kms_alias.k-623bfa5b-5ee5-41ba-b119-4c56c7de99d5
+aws_kms_alias.k-649599bd-8a4f-4331-95a1-54ecaa15ff54
+aws_kms_alias.k-815272b3-1254-4e82-9860-515b5d4af7a4
+aws_kms_alias.k-8263ac3a-af0a-4228-b60e-7830969c9786
+aws_kms_alias.k-85aab31b-7d6d-4b17-aa52-a15fca4bf972
+aws_kms_alias.k-86271421-0143-4a7d-9637-bf4d92ff17f7
+aws_kms_alias.k-864434b5-ed02-4038-aeff-f4b0bb9117c3
+aws_kms_alias.k-8d110eb1-c9fb-47e7-a31b-68c0cce330d5
+aws_kms_alias.k-8da3ccc3-0da4-490e-a8ed-777a616565f5
+aws_kms_alias.k-9734b81f-cda4-40dc-bf7a-44581ebf2808
+aws_kms_alias.k-9b699b25-1c57-45a5-8fe9-7a8c1a2d2327
+aws_kms_alias.k-a3a8e1b0-782b-42a5-ad81-b4f9a0243de2
+aws_kms_alias.k-a4c6ba9a-b250-4dd1-a439-f0ee665b6a0c
+aws_kms_alias.k-a505f012-0dd8-4302-a13c-74e4f6df46f4
+aws_kms_alias.k-af6d8c0d-daa0-478f-8db8-f0bc86477f5e
+aws_kms_alias.k-b7840db1-03cb-4383-916c-97a491e1c5cc
+aws_kms_alias.k-b9442d0a-9571-4f68-9777-eec935c3e421
+aws_kms_alias.k-bf963bc3-c798-4131-9909-2e4289915f07
+aws_kms_alias.k-c2d7fd04-e746-4ce3-83cb-13380d649408
+aws_kms_alias.k-c7962226-5f1d-409f-af38-3cd23580da38
+aws_kms_alias.k-c9fc3537-7652-4bcc-9829-5b39736c46f9
+aws_kms_alias.k-cefa9ce5-d71d-48eb-9a72-6dbcabbcd380
+aws_kms_alias.k-d894c17c-0404-44c4-95bf-b8cbd75def65
+aws_kms_alias.k-deb04e86-2a15-4235-9cf0-cea0745ef1bc
+aws_kms_alias.k-e1fed1d0-6f1b-4333-a484-d9aa119e1262
+aws_kms_alias.k-e84309dc-cb34-4ab1-84a2-50144691de35
+KMS ALAIS: Id match importing  k-00495339-0eca-4956-b4e5-76662a8320d0
+KMS ALAIS: Id match importing  k-0c0cdea0-8c40-4666-a201-b5325582bd86
+KMS ALAIS: Id match importing  k-26c148d5-197e-4c12-b4cd-42cd01a29965
+KMS ALAIS: Id match importing  k-2af1a278-dbbc-4717-8e53-28e43145a50a
+KMS ALAIS: Id match importing  k-36c865ff-519d-4734-8eec-edbc5946553a
+KMS ALAIS: Id match importing  k-41ed14e4-82c5-4d67-93fa-a7b9d16f8244
+KMS ALAIS: Id match importing  k-43ed881c-a891-41e2-95c2-598899242e65
+KMS ALAIS: Id match importing  k-46cb19a3-aad2-4423-88cd-0e0f6228fc6a
+KMS ALAIS: Id match importing  k-4d854131-c39b-4c91-824e-28f63fe9f56e
+KMS ALAIS: Id match importing  k-537d3f5f-aedc-4df3-b822-09217db2e95d
+KMS ALAIS: Id match importing  k-815272b3-1254-4e82-9860-515b5d4af7a4
+KMS ALAIS: Id match importing  k-85aab31b-7d6d-4b17-aa52-a15fca4bf972
+KMS ALAIS: Id match importing  k-8da3ccc3-0da4-490e-a8ed-777a616565f5
+KMS ALAIS: Id match importing  k-a505f012-0dd8-4302-a13c-74e4f6df46f4
+KMS ALAIS: Id match importing  k-af6d8c0d-daa0-478f-8db8-f0bc86477f5e
+KMS ALAIS: Id match importing  k-b7840db1-03cb-4383-916c-97a491e1c5cc
+KMS ALAIS: Id match importing  k-cefa9ce5-d71d-48eb-9a72-6dbcabbcd380
+KMS ALAIS: Id match importing  k-deb04e86-2a15-4235-9cf0-cea0745ef1bc
+Terraform Plan Loop ... 
+terraform plan -generate-config-out=resources.out -out tfplan -json | jq . > plan1.json
+ERROR: Removing 817bb810-7154-4d9b-b582-7dbb62e77876 files - plan errors see plan1.json [p3]
+split file:resources.out
+ERROR: Removing 817bb810-7154-4d9b-b582-7dbb62e77876 files - plan errors see plan1.json [p4]
+e=FileNotFoundError(2, 'No such file or directory')
+ERROR: Removing 817bb810-7154-4d9b-b582-7dbb62e77876 files - plan errors see plan1.json [p4]
+e=FileNotFoundError(2, 'No such file or directory')
+aws_kms_key.k-00495339-0eca-4956-b4e5-76662a8320d0 is False
+aws_kms_key.k-0c0cdea0-8c40-4666-a201-b5325582bd86 is False
+aws_kms_key.k-26c148d5-197e-4c12-b4cd-42cd01a29965 is False
+aws_kms_key.k-2af1a278-dbbc-4717-8e53-28e43145a50a is False
+aws_kms_key.k-36c865ff-519d-4734-8eec-edbc5946553a is False
+aws_kms_key.k-41ed14e4-82c5-4d67-93fa-a7b9d16f8244 is False
+aws_kms_key.k-43ed881c-a891-41e2-95c2-598899242e65 is False
+aws_kms_key.k-46cb19a3-aad2-4423-88cd-0e0f6228fc6a is False
+aws_kms_key.k-4d854131-c39b-4c91-824e-28f63fe9f56e is False
+aws_kms_key.k-537d3f5f-aedc-4df3-b822-09217db2e95d is False
+aws_kms_key.k-815272b3-1254-4e82-9860-515b5d4af7a4 is False
+aws_kms_key.k-85aab31b-7d6d-4b17-aa52-a15fca4bf972 is False
+aws_kms_key.k-8da3ccc3-0da4-490e-a8ed-777a616565f5 is False
+aws_kms_key.k-a505f012-0dd8-4302-a13c-74e4f6df46f4 is False
+aws_kms_key.k-af6d8c0d-daa0-478f-8db8-f0bc86477f5e is False
+aws_kms_key.k-b7840db1-03cb-4383-916c-97a491e1c5cc is False
+aws_kms_key.k-cefa9ce5-d71d-48eb-9a72-6dbcabbcd380 is False
+aws_kms_key.k-deb04e86-2a15-4235-9cf0-cea0745ef1bc is False
+----------- Completed 1 dependancy check loops --------------
+KMS ALAIS: Id match importing  k-00495339-0eca-4956-b4e5-76662a8320d0
+KMS ALAIS: Id match importing  k-0c0cdea0-8c40-4666-a201-b5325582bd86
+KMS ALAIS: Id match importing  k-26c148d5-197e-4c12-b4cd-42cd01a29965
+KMS ALAIS: Id match importing  k-2af1a278-dbbc-4717-8e53-28e43145a50a
+KMS ALAIS: Id match importing  k-36c865ff-519d-4734-8eec-edbc5946553a
+KMS ALAIS: Id match importing  k-41ed14e4-82c5-4d67-93fa-a7b9d16f8244
+KMS ALAIS: Id match importing  k-43ed881c-a891-41e2-95c2-598899242e65
+KMS ALAIS: Id match importing  k-46cb19a3-aad2-4423-88cd-0e0f6228fc6a
+KMS ALAIS: Id match importing  k-4d854131-c39b-4c91-824e-28f63fe9f56e
+KMS ALAIS: Id match importing  k-537d3f5f-aedc-4df3-b822-09217db2e95d
+KMS ALAIS: Id match importing  k-815272b3-1254-4e82-9860-515b5d4af7a4
+KMS ALAIS: Id match importing  k-85aab31b-7d6d-4b17-aa52-a15fca4bf972
+KMS ALAIS: Id match importing  k-8da3ccc3-0da4-490e-a8ed-777a616565f5
+KMS ALAIS: Id match importing  k-a505f012-0dd8-4302-a13c-74e4f6df46f4
+KMS ALAIS: Id match importing  k-af6d8c0d-daa0-478f-8db8-f0bc86477f5e
+KMS ALAIS: Id match importing  k-b7840db1-03cb-4383-916c-97a491e1c5cc
+KMS ALAIS: Id match importing  k-cefa9ce5-d71d-48eb-9a72-6dbcabbcd380
+KMS ALAIS: Id match importing  k-deb04e86-2a15-4235-9cf0-cea0745ef1bc
+Terraform Plan Loop ... 
+terraform plan -generate-config-out=resources.out -out tfplan -json | jq . > plan1.json
+ERROR: Removing 817bb810-7154-4d9b-b582-7dbb62e77876 files - plan errors see plan1.json [p3]
+split file:resources.out
+ERROR: Removing 817bb810-7154-4d9b-b582-7dbb62e77876 files - plan errors see plan1.json [p4]
+e=FileNotFoundError(2, 'No such file or directory')
+ERROR: Removing 817bb810-7154-4d9b-b582-7dbb62e77876 files - plan errors see plan1.json [p4]
+e=FileNotFoundError(2, 'No such file or directory')
+ERROR: Removing 817bb810-7154-4d9b-b582-7dbb62e77876 files - plan errors see plan1.json [p4]
+e=FileNotFoundError(2, 'No such file or directory')
+----------- Completed 2 dependancy check loops --------------
+Validate and Test Plan  ... 
+Valid Configuration.
+Penultimate Terraform Plan ... 
+rm -f resources.out tfplan
+terraform plan -generate-config-out=resources.out -out tfplan -json > plan2.json
+-->> Plan 2 errors exiting - check plan2.json - or run terraform plan

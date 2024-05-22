@@ -6,6 +6,7 @@ import boto3
 import botocore
 import inspect
 
+
 def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
     keyclient=boto3.client('kms')
     if id is not None and "arn:" in id:
@@ -46,10 +47,19 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
                     if kstatus == "Enabled" or kstatus == "Disabled":
                         if kman == "AWS":
                             print("key is managed by AWS")
+                            pkey=type+"."+theid
+                            if not globals.rproc[pkey]:
+                                globals.rproc[pkey]=True
+                            pkey=type+"."+ka
+                            if not globals.rproc[pkey]:
+                                globals.rproc[pkey]=True
                             continue 
                         common.write_import(type,theid,ka) 
                         # unset tracker
                         pkey=type+"."+ka
+                        if not globals.rproc[pkey]:
+                            globals.rproc[pkey]=True
+                        pkey=type+"."+theid
                         if not globals.rproc[pkey]:
                             globals.rproc[pkey]=True
                         common.add_dependancy("aws_kms_alias","k-"+theid)
@@ -62,13 +72,14 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
                     print(f"{e=} [k1]")
                     exc_type, exc_obj, exc_tb = sys.exc_info()
                     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                    print(exc_type, fname, exc_tb.tb_lineno) 
+                    #print(exc_type, fname, exc_tb.tb_lineno) 
                     continue
                 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
+
 
 def get_aws_kms_alias(type,id,clfn,descfn,topkey,key,filterid):
     if globals.debug:

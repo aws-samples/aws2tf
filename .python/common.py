@@ -855,6 +855,7 @@ def add_dependancy(type,id):
          raise Exception("aws_kms_alias")
       if type=="aws_glue_catalog_database":
          if ":" not in id: id=globals.acc+":"+id
+
       pkey=type+"."+id
       if pkey not in globals.rproc:
          print("add_dependancy: " + pkey)

@@ -12,7 +12,7 @@ def get_aws_s3_bucket(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_all_s3_buckets(fb,my_region):
-   print("bucket name="+str(fb))
+   #print("bucket name="+str(fb))
    type="aws_s3_bucket"
    if fb =="" or fb =="null":
       print("bucket name is empty or null")
@@ -61,7 +61,7 @@ def get_all_s3_buckets(fb,my_region):
    for buck in buckets: 
       
      bucket_name=buck.name
-     if globals.debug: print("processing bucket="+bucket_name)
+     
      if "aws_s3_bucket,"+bucket_name in globals.rproc:
         print("Already processed skipping bucket " + bucket_name)
         continue

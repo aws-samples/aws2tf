@@ -1,11 +1,32 @@
-import common
-import fixtf
+import common,fixtf
 import base64
 import boto3
-import sys
-import os
+import sys,os
 import globals
 import inspect
+
+# returns True if key is one we want - ie not AWS managed
+def check_key(keyid):
+	keyclient=boto3.client('kms')
+	try:
+		kresp=keyclient.describe_key(KeyId=keyid)
+		kstatus=kresp['KeyMetadata']['KeyState']
+		kman=kresp['KeyMetadata']['KeyManager']
+		#print(str(kresp))
+		if kstatus == "Enabled" or kstatus == "Disabled":
+			if kman == "AWS":
+				print("key is managed by AWS")
+				return False
+			return True
+		else:
+			print("WARNING: key is not valid or is managed by AWS")
+			print(str(kresp))
+			return False
+	except Exception as e:
+		print("WARNING: can't access key")
+		print(f"{e=} [k1]")
+		exc_type, exc_obj, exc_tb = sys.exc_info()
+	return False
 
 def aws_common(type,t1,tt1,tt2,flag1,flag2):
     skip=0
@@ -57,25 +78,32 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         elif tt1 == "kms_key_arn":
             if tt2 != "null":     
                 if "arn:" in tt2: 
-                    tt2=tt2.split("/")[-1]	
-                    t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
-                    common.add_dependancy("aws_kms_key",tt2)
+                    tt2=tt2.split("/")[-1]
+                    if check_key(tt2):	
+                        t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
+                        common.add_dependancy("aws_kms_key",tt2)
             else:
                 skip=1
         
-        elif tt1 == "kms_key_id" or tt1=="kms_master_key_id":
+        elif tt1 == "kms_key_id" or tt1=="kms_master_key_id" or tt1=="target_key_id":
             if type != "aws_docdb_cluster":
                 if tt2 != "null": 
+                    skip=1
                     if tt2 == "AWS_OWNED_KMS_KEY":	
                         skip=1
                     else:
-                        if "arn:" in tt2: 
+                        if "arn:" in tt2:   
                             tt2=tt2.split("/")[-1]	
-                            t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
+                            if check_key(tt2):
+                                t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
+                                common.add_dependancy("aws_kms_key",tt2) 
+                                skip=0             
                         else:
-                            tt2=tt2.split("/")[-1]	
-                            t1=tt1 + " = aws_kms_key.k-" + tt2 + ".id\n"
-                        common.add_dependancy("aws_kms_key",tt2)
+                            tt2=tt2.split("/")[-1]
+                            if check_key(tt2):
+                                t1=tt1 + " = aws_kms_key.k-" + tt2 + ".id\n"
+                                common.add_dependancy("aws_kms_key", tt2)
+                                skip=0                   
                 else:
                     skip=1
 

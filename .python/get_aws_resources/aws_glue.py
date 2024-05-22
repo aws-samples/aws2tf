@@ -22,6 +22,8 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
                 tfid="d-"+pkey.replace(":","__")
                 common.write_import(type,pkey,tfid) 
                 common.add_dependancy("aws_glue_catalog_table",pkey)
+                pkey2="aws_glue_catalog_table."+pkey
+                globals.rproc[pkey2]=True
 
         else: 
             if ":" in id:   id =id.split(":")[1]    
@@ -33,6 +35,8 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
             common.write_import(type,pkey,tfid)
             #print("KD add aws_glue_catalog_table "+pkey)
             common.add_dependancy("aws_glue_catalog_table",pkey)
+            pkey2="aws_glue_catalog_table."+pkey
+            globals.rproc[pkey2]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

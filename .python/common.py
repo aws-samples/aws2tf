@@ -851,8 +851,8 @@ def add_known_dependancy(type,id):
 def add_dependancy(type,id):
     # check if we alredy have it
    try:
-      if type=="aws_kms_alias" and id=="k-817bb810-7154-4d9b-b582-7dbb62e77876":
-         raise Exception("aws_kms_alias")
+   #   if type=="aws_kms_alias" and id=="k-817bb810-7154-4d9b-b582-7dbb62e77876":
+   #      raise Exception("aws_kms_alias")
       if type=="aws_glue_catalog_database":
          if ":" not in id: id=globals.acc+":"+id
 

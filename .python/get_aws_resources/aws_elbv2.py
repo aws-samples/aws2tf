@@ -103,3 +103,36 @@ def get_aws_lb_listener_rule(type,id,clfn,descfn,topkey,key,filterid):
 
     return True
 
+def get_aws_lb_target_group(type,id,clfn,descfn,topkey,key,filterid):
+
+    if globals.debug:
+        print("--> get_aws_lb_target_group  doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+        
+    try:
+        client = boto3.client(clfn)
+        response = []
+        if id is None:
+            response = client.describe_target_groups() 
+        elif ":targetgroup/" in id and id is not None:
+                response = client.describe_target_groups(TargetGroupArns=[id])
+        elif ":loadbalancer/" in id and id is not None:
+                response = client.describe_target_groups(LoadBalancerArn=id)
+   
+        response=response[topkey]
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        
+        for j in response: 
+            retid=j[key] # TargetGroupArn
+            common.write_import(type,retid,None) 
+            pkey=type+"."+retid
+            globals.rproc[pkey]=True
+            #common.add_dependancy("aws_lb_listener_rule",retid)
+            #pkey="aws_lb_listener."+id
+            #globals.rproc[pkey]=True
+
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True

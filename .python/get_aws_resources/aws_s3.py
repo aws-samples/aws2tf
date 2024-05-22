@@ -74,7 +74,7 @@ def get_all_s3_buckets(fb,my_region):
             continue
 
 
-     print("Processing Bucket: "+bucket_name + '  ............')
+     
      try:
          #print('location')
          location = s3.get_bucket_location(Bucket=bucket_name)
@@ -130,6 +130,7 @@ def get_all_s3_buckets(fb,my_region):
      #    print("failed to access bucket " +bucket_name + " " + bl +" skipping ..")
      #    continue
      #print("write_import for Bucket: "+bucket_name)
+     print("Processing Bucket: "+bucket_name + '  ............')
      common.write_import(type,bucket_name,"b-"+bucket_name)
 
      for key in s3_fields:

@@ -33,6 +33,8 @@ def aws_glue_classifier(t1,tt1,tt2,flag1,flag2):
 
 def aws_glue_connection(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="connection_properties":
+		t1=t1+"\n lifecycle {\n   ignore_changes = [connection_properties]\n}\n"
 	return skip,t1,flag1,flag2
 
 def aws_glue_data_catalog_encryption_settings(t1,tt1,tt2,flag1,flag2):

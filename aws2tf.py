@@ -17,7 +17,6 @@ import globals
 import stacks
 from fixtf_aws_resources import aws_dict
 
-
 if __name__ == '__main__':
 
     common.check_python_version()

@@ -404,9 +404,11 @@ def tfplan3():
                ctype=pe['change']['resource']['resource_type']
                if ctype=="aws_lb_listener" or ctype=="aws_cognito_user_pool_client":
                   changeList.append(pe['change']['resource']['addr'])
-                  print("Planned changes found in Terraform Plan for typre: "+str(pe['change']['resource']['resource_type']))
+                  print("Planned changes found in Terraform Plan for type: "+str(pe['change']['resource']['resource_type']))
                   allowedchange=True
                   nallowedchanges=nallowedchanges+1
+               else:
+                  print("Unexpected plan changes found in Terraform Plan for type: "+str(pe['change']['resource']['resource_type']))
          if nchanges==nallowedchanges:
             print("\n-->> plan will change "+ str(nchanges)  +" resources! - these are expected changes only (should be non-consequential)")
             ci=1
@@ -590,15 +592,11 @@ def splitf(file):
       print("could not find expected resources.out file")
       
    # moves resources.out to imported
-   #shutil.move(file,"imported/"+file)
+   f2.close()
+   shutil.move(file,"imported/"+file)
    
-   com="mv "+file +" imported/" +file
-   rout=rc(com)  
-   #com="terraform fmt"
-   #rout=rc(com) 
-
-
-
+ 
+################################
 
 
 def splitf2(file):
@@ -614,7 +612,7 @@ def splitf2(file):
             match = re.search(resource_pattern, line)
             if match:
                 resource_type, resource_address = match.groups()
-                output_file = f"{resource_type}__{resource_address}.out"
+                output_file = f"{resource_type}__{resource_address}.tf"
                 if output_file not in output_files:
                     output_files[output_file] = []
                 output_files[output_file].append(line)
@@ -626,7 +624,7 @@ def splitf2(file):
                         out_lines.append(line)
 
         for out_file, out_lines in output_files.items():
-            out_path = os.path.join("imported", out_file)
+            out_path =  out_file
             with open(out_path, "w") as f:
                 f.writelines(out_lines)
 
@@ -859,7 +857,7 @@ def add_dependancy(type,id):
       pkey=type+"."+id
       if pkey not in globals.rproc:
          print("add_dependancy: " + pkey)
-      globals.rproc[pkey]=False
+         globals.rproc[pkey]=False
    except Exception as e:
       handle_error(e, str(inspect.currentframe().f_code.co_name), type, id)
    return

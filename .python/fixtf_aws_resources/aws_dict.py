@@ -3943,8 +3943,8 @@ aws_ecr_pull_through_cache_rule = {
 	"clfn":		"ecr",
 	"descfn":	"describe_pull_through_cache_rules",
 	"topkey":	"pullThroughCacheRules",
-	"key":		"registryId",
-	"filterid":	"registryId"
+	"key":		"ecrRepositoryPrefix",
+	"filterid":	"ecrRepositoryPrefix"
 }
 
 aws_ecr_registry_policy = {

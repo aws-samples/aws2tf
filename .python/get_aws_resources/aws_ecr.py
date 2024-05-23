@@ -74,3 +74,28 @@ def get_aws_ecr_replication_configuration(type, id, clfn, descfn, topkey, key, f
 
     return True
 
+def get_aws_ecr_pull_through_cache_rule(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id in None:
+            response=client.describe_pull_through_cache_rules() ## ???
+        else:
+            response=client.describe_pull_through_cache_rules(ecrRepositoryPrefixes=[id]) ## ???
+        for j in response[topkey]:
+
+            common.write_import(type, j[key], None)
+
+    
+    except client.exceptions.RegistryPolicyNotFoundException:
+        pass
+
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+

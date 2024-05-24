@@ -8455,8 +8455,8 @@ aws_sagemaker_project = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_projects",
 	"topkey":	"ProjectSummaryList",
-	"key":		"ProjectArn",
-	"filterid":	"ProjectArn"
+	"key":		"ProjectName",
+	"filterid":	"ProjectName"
 }
 
 aws_sagemaker_servicecatalog_portfolio_status = {
@@ -8511,8 +8511,8 @@ aws_scheduler_schedule = {
 	"clfn":		"scheduler",
 	"descfn":	"list_schedules",
 	"topkey":	"Schedules",
-	"key":		"Arn",
-	"filterid":	"Arn"
+	"key":		"Name",
+	"filterid":	"Name"
 }
 
 aws_scheduler_schedule_group = {

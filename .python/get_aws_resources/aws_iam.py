@@ -324,7 +324,8 @@ def get_aws_iam_service_linked_role(type, id, clfn, descfn, topkey, key, filteri
                 if ":role/aws-service-role" in j[key]:
                   common.write_import(type,j[key],None) 
 
-        else:      
+        else:   
+              
             response = client.get_role(RoleName=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
@@ -356,7 +357,8 @@ def get_aws_iam_role(type,id,clfn,descfn,topkey,key,filterid):
                 rna=rn.replace(".","_")
                 common.write_import(type,j[key],rna) 
 
-        else:      
+        else:   
+            if "/aws-service-role/" in id: return True    
             response = client.get_role(RoleName=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Role']

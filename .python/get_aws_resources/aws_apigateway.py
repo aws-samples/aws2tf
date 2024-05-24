@@ -14,7 +14,11 @@ def get_aws_api_gateway_account(type, id, clfn, descfn, topkey, key, filterid):
         client = boto3.client(clfn)
         if id is None:         
             response = client.get_account()
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                pkey=type+"."+id
+                globals.rproc[pkey]=True
+                return True
             j=response
             common.write_import(type,"api-gateway-account",None)
 
@@ -68,7 +72,11 @@ def get_aws_api_gateway_rest_api(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                pkey=type+"."+id
+                globals.rproc[pkey]=True
+                return True
             for j in response:
                 altk="r-"+j[key]
                 common.write_import(type,j[key],altk) 
@@ -105,7 +113,11 @@ def get_aws_api_gateway_stage(type, id, clfn, descfn, topkey, key, filterid):
         client = boto3.client(clfn)
         if id is not None:  
             response = client.get_stages(restApiId=id)
-            if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response[topkey] == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                pkey=type+"."+id
+                globals.rproc[pkey]=True
+                return True
             for j in response[topkey]:
                 pkey=id+"/"+j[key]
                 altk="r-"+pkey
@@ -193,7 +205,11 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
             #print("restid="+restid+" resid="+resid)
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='GET')
-                if response == []: print("Empty GET response for "+type+ " id="+str(id))
+                if response == []: 
+                    print("Empty GET response for "+type+ " id="+str(id))
+                    pkey=type+"."+id
+                    globals.rproc[pkey]=True
+                    return True
                 j=response
                 pkey=restid+"/"+resid+"/"+j[key]
                 altk="r-"+pkey
@@ -205,7 +221,11 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
             ## POST
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='POST')
-                if response == []: print("Empty POST response for "+type+ " id="+str(id))
+                if response == []: 
+                    print("Empty POST response for "+type+ " id="+str(id))
+                    pkey=type+"."+id
+                    globals.rproc[pkey]=True
+                    return True
                 j=response
                 pkey=restid+"/"+resid+"/"+j[key]
                 altk="r-"+pkey
@@ -216,7 +236,11 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
             ## PUT
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='PUT')
-                if response == []: print("Empty PUT response for "+type+ " id="+str(id))
+                if response == []: 
+                    print("Empty PUT response for "+type+ " id="+str(id))
+                    pkey=type+"."+id
+                    globals.rproc[pkey]=True
+                    return True
                 j=response
                 pkey=restid+"/"+resid+"/"+j[key]
                 altk="r-"+pkey
@@ -227,7 +251,11 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
             ## DELETE
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='DELETE')
-                if response == []: print("Empty PUT response for "+type+ " id="+str(id))
+                if response == []: 
+                    print("Empty PUT response for "+type+ " id="+str(id))
+                    pkey=type+"."+id
+                    globals.rproc[pkey]=True
+                    return True
                 j=response
                 pkey=restid+"/"+resid+"/"+j[key]
                 altk="r-"+pkey
@@ -239,7 +267,11 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
             ## PATCH
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='PATCH')
-                if response == []: print("Empty PUT response for "+type+ " id="+str(id))
+                if response == []: 
+                    print("Empty PUT response for "+type+ " id="+str(id))
+                    pkey=type+"."+id
+                    globals.rproc[pkey]=True
+                    return True
                 j=response
                 pkey=restid+"/"+resid+"/"+j[key]
                 altk="r-"+pkey

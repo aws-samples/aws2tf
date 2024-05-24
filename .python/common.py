@@ -1095,7 +1095,10 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
       print("Call Forbidden exception for "+fname+" - returning")
       return
    elif exn=="EntityNotFoundException":
-      print("Not found: "+frame.split("get_")[1]+" "+id+" check if it exists and what references it - returning")
+      print("NOT FOUND: "+frame.split("get_")[1]+" "+id+" check if it exists and what references it - returning")
+      return
+   if exn=="NoSuchEntityException":
+      print("NOT FOUND: "+frame.split("get_")[1]+" "+id+" check if it exists and what references it - returning")
       return
 
    print("\nERROR: in "+frame+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))

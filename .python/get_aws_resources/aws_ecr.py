@@ -81,7 +81,7 @@ def get_aws_ecr_pull_through_cache_rule(type, id, clfn, descfn, topkey, key, fil
     try:
         response = []
         client = boto3.client(clfn)
-        if id in None:
+        if id is None:
             response=client.describe_pull_through_cache_rules() ## ???
         else:
             response=client.describe_pull_through_cache_rules(ecrRepositoryPrefixes=[id]) ## ???

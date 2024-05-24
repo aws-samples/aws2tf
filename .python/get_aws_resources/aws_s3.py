@@ -76,8 +76,11 @@ def get_all_s3_buckets(fb,my_region):
 
      
      try:
-         #print('location')
+         #print('location') - no error if no access for getting location
+         
+         objs = s3.list_objects_v2(Bucket=bucket_name,MaxKeys=1)
          location = s3.get_bucket_location(Bucket=bucket_name)
+         #print(str(location))
          bl=location['LocationConstraint']
          if bl is None and my_region == 'us-east-1':
             bl='us-east-1'
@@ -110,8 +113,9 @@ def get_all_s3_buckets(fb,my_region):
      except Exception as e:
          exc_type, exc_obj, exc_tb = sys.exc_info()
          exn=str(exc_type.__name__)
-         if exn == "AccessDenied":
-            print("No Access to Bucket: "+bucket_name + " - continue")
+         #print(f"{exn=}")
+         if exn == "AccessDenied" or exn=="ClientError":
+            print("NO ACCESS: to Bucket: "+bucket_name + " - continue")
             continue
          
          print(f"{e=}")
@@ -133,9 +137,9 @@ def get_all_s3_buckets(fb,my_region):
      print("Processing Bucket: "+bucket_name + '  ............')
      common.write_import(type,bucket_name,"b-"+bucket_name)
 
-     for key in s3_fields:
-            #print("outside get_s3 type=" + key)
-         get_s3(s3_fields,key,bucket_name)
+     #for key in s3_fields:
+         #print("outside get_s3 type=" + key)
+         #get_s3(s3_fields,key,bucket_name)
 
    return True
       

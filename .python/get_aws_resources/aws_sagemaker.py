@@ -99,3 +99,33 @@ def get_aws_sagemaker_app(type, id, clfn, descfn, topkey, key, filterid):
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
+
+def get_aws_sagemaker_project(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In get_aws_sagemaker_project  doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+        
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            # calls list_secrets
+            response = client.list_projects()
+            if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            for j in response[topkey]:
+                if j['ProjectStatus']=="CreateCompleted":
+                    common.write_import(type,j[key],None) 
+
+
+        else:
+            response = client.describe_project(ProjectName=id)
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            j=response
+            if j['ProjectStatus']=="CreateCompleted":
+                common.write_import(type,j[key],None)
+
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True

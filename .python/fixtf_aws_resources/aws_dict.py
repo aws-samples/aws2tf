@@ -5664,8 +5664,8 @@ aws_lakeformation_lf_tag = {
 	"clfn":		"lakeformation",
 	"descfn":	"list_lf_tags",
 	"topkey":	"LFTags",
-	"key":		"LFTagKey",
-	"filterid":	"LFTagKey"
+	"key":		"TagKey",
+	"filterid":	"TagKey"
 }
 
 aws_lakeformation_permissions = {
@@ -7418,8 +7418,8 @@ aws_rds_cluster_endpoint = {
 	"clfn":		"rds",
 	"descfn":	"describe_db_cluster_endpoints",
 	"topkey":	"DBClusterEndpoints",
-	"key":		"DBClusterEndpointIdentifier",
-	"filterid":	"DBClusterEndpointIdentifier"
+	"key":		"Endpoint",
+	"filterid":	"Endpoint"
 }
 
 aws_rds_cluster_role_association= {
@@ -8471,8 +8471,8 @@ aws_sagemaker_space = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_spaces",
 	"topkey":	"Spaces",
-	"key":		"SpaceArn",
-	"filterid":	"SpaceArn"
+	"key":		"Arn",
+	"filterid":	"Arn"
 }
 
 aws_sagemaker_studio_lifecycle_config = {

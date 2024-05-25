@@ -23,9 +23,9 @@ def check_key(keyid):
 			print(str(kresp))
 			return False
 	except Exception as e:
-		print("WARNING: can't access key")
-		print(f"{e=} [k1]")
-		exc_type, exc_obj, exc_tb = sys.exc_info()
+		print("WARNING: can't access key",keyid)
+		#print(f"{e=} [k1]")
+		#exc_type, exc_obj, exc_tb = sys.exc_info()
 	return False
 
 def aws_common(type,t1,tt1,tt2,flag1,flag2):

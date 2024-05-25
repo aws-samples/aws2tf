@@ -74,8 +74,6 @@ def get_aws_api_gateway_rest_api(type, id, clfn, descfn, topkey, key, filterid):
                 response = response + page[topkey]
             if response == []: 
                 print("Empty response for "+type+ " id="+str(id)+" returning")
-                pkey=type+"."+id
-                globals.rproc[pkey]=True
                 return True
             for j in response:
                 altk="r-"+j[key]

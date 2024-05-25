@@ -137,6 +137,9 @@ if __name__ == '__main__':
         lall=0
     #print("all_types="+str(all_types))
 
+    if all_types is None:
+        print("No resources found")
+        exit()
 
     if type == "stack":
         if id is None:

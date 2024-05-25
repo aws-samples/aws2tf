@@ -1,0 +1,40 @@
+aws_appconfig_extension = {
+	"clfn":		"appconfig",
+	"descfn":	"list_extensions",
+	"topkey":	"Items",
+	"key":		"Id",
+	"filterid":	"Id"
+}
+# problem with import id - not is list output
+"aws_appconfig_extension": aws_appconfig_extension,
+
+aws_network_interface = {
+	"clfn":		"ec2",
+	"descfn":	"describe_network_interfaces",
+	"topkey":	"NetworkInterfaces",
+	"key":		"NetworkInterfaceId",
+	"filterid":	"NetworkInterfaceId"
+}
+
+	"aws_network_interface": aws_network_interface,
+
+aws_default_subnet = {
+	"clfn":		"ec2",
+	"descfn":	"describe_subnets",
+	"topkey":	"Subnets",
+	"key":		"SubnetId",
+	"filterid":	"SubnetId"
+}
+
+"aws_default_subnet": aws_default_subnet,
+
+
+aws_default_vpc = {
+	"clfn":		"ec2",
+	"descfn":	"describe_vpcs",
+	"topkey":	"Vpcs",
+	"key":		"VpcId",
+	"filterid":	"KeyError"
+}
+
+	"aws_default_vpc": aws_default_vpc,

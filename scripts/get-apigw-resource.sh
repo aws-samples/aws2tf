@@ -89,8 +89,12 @@ for c in `seq 0 0`; do
                     
                 done <"$file"   # done while
                 # depoyments - no import support
-                echo "Get method with $1 $cname"
-                ../../scripts/get-apigw-method.sh $1 $cname
+               # echo "Get method with $1 $cname"
+                ../../scripts/get-apigw-method.sh $1 $cname "GET"
+                ../../scripts/get-apigw-method.sh $1 $cname "POST"
+                ../../scripts/get-apigw-method.sh $1 $cname "PUT"
+                ../../scripts/get-apigw-method.sh $1 $cname "DELETE"
+                ../../scripts/get-apigw-method.sh $1 $cname "PATCH"
         done # done for i
     fi
 done

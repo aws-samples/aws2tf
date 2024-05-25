@@ -6,7 +6,7 @@ if [ "$1" == "" ]; then
     exit
 fi
 if [ "$2" != "" ]; then
-    cmd[0]="$AWS apigateway get-method --rest-api-id $1 --resource-id $2 --http-method GET"
+    cmd[0]="$AWS apigateway get-method --rest-api-id $1 --resource-id $2 --http-method $3"
 else
     echo "must pass resource id exiting ..."
     exit
@@ -22,7 +22,7 @@ for c in `seq 0 0`; do
     #echo $cm
     awsout=`eval $cm 2> /dev/null`
     if [ "$awsout" == "" ];then
-        echo "$cm : You don't have access for this resource"
+        #echo "$cm : You don't have access for this resource"
         exit
     fi
     count=1
@@ -34,7 +34,7 @@ for c in `seq 0 0`; do
             cname=`echo $awsout | jq -r ".httpMethod"`
 
             fn=`printf "%s__%s__%s__%s.tf" $ttft $1 $2 $cname`
-            echo "fn=$fn"
+            #echo "fn=$fn"
             if [ -f "$fn" ] ; then
                     echo "$fn exists already skipping"
                     continue
@@ -82,8 +82,7 @@ for c in `seq 0 0`; do
                     fi
                     
                 done <"$file"   # done while
-                # depoyments - no import support
-                #../../scripts/752-get-apigw-method.sh $1 $cname
+
         done # done for i
     fi
 done

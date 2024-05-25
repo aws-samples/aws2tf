@@ -1,0 +1,15 @@
+-->> called aws_null for: AWS::IAM::InstanceProfile ant307-zeroetl-EC2InstanceProfile-vUBRRYbuR4RG
+-->> called aws_null for: AWS::Events::Rule ant307-zeroetl-EventRule-m9wzVAqoOcdR
+-->> called aws_null for: AWS::Glue::Crawler CustPaymentTxHistory
+-->> called aws_null for: AWS::Glue::Database spectrumdb
+-->> called aws_null for: AWS::Redshift::ClusterSubnetGroup redshiftclustersubnetgroup-sb5b2zygsvau
+-->> called aws_null for: AWS::SecretsManager::Secret arn:aws:secretsmanager:us-west-2:721997405137:secret:RedshiftServerlessSecret-uFshQt
+-->> called aws_null for: AWS::Redshift::Cluster redshiftstandbyprovisioned-kpbc6f3jzyj6
+-->> called aws_null for: AWS::RDS::DBSubnetGroup ant307-zeroetl-sourceamscluster-1hub5xk8xp1e0-dbsubnetgroup-xfawecykexxf
+-->> called aws_null for: AWS::RDS::DBCluster ant307-zeroetl-sourceamscluster-1hub5xk8xp1e0
+-->> called aws_null for: AWS::RDS::DBClusterParameterGroup ant307-zeroetl-sourceamscluster-1hub5xk8xp1e0-rdsdbclusterparametergroup-rgctxdmkgojg
+-->> called aws_null for: AWS::RDS::DBInstance ant307-zeroetl-sourceamscluster-1hub5xk8xp1e0-instance-1
+-->> called aws_null for: AWS::SecretsManager::Secret arn:aws:secretsmanager:us-west-2:721997405137:secret:aurora-pg-serverless/ant307-zeroetl-aurorapgcluster-1OVJN9AOTS5TZ-1NfWGM
+-->> called aws_null for: AWS::RDS::DBSubnetGroup ant307-zeroetl-aurorapgcluster-1ovjn9aots5tz-dbsubnetgroup-0ftllotjkog8
+-->> called aws_null for: AWS::RDS::DBCluster aurorapg-f00209e5
+-->> called aws_null for: AWS::RDS::DBClusterParameterGroup pg-ant307-zeroetl-aurorapgcluster-1ovjn9aots5tz

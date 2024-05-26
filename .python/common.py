@@ -52,6 +52,7 @@ from get_aws_resources import aws_iam
 from get_aws_resources import aws_kendra
 from get_aws_resources import aws_kinesis
 from get_aws_resources import aws_logs
+from get_aws_resources import aws_lakeformation
 from get_aws_resources import aws_lambda
 from get_aws_resources import aws_neptune
 from get_aws_resources import aws_organizations
@@ -646,7 +647,13 @@ def write_import(type,theid,tfid):
          tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_")
       else:
          tfid=tfid.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_")
+      
+      #catch tfid starts with number
+      if tfid[:1].isdigit(): tfid="r-"+tfid
+      
       fn="import__"+type+"__"+tfid+".tf"
+
+
 
       if globals.debug: print(fn)
       #print(fn)

@@ -24,6 +24,11 @@ def aws_config_conformance_pack(t1,tt1,tt2,flag1,flag2):
 
 def aws_config_delivery_channel(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="s3_bucket_name":
+		print("---t1->>>>", t1)
+		print("---tt2->>>>", tt2)
+		t1=tt1+" = \""+tt2+"\"\n"
+			
 	return skip,t1,flag1,flag2
 
 def aws_config_organization_conformance_pack(t1,tt1,tt2,flag1,flag2):

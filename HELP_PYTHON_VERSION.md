@@ -31,16 +31,16 @@ or for more extensive help
 
 Try a simple run to get all your VPC's:
 
-./aws2tf.py -t vpc   (or ./aws2tf.py -y aws_vpc)
+./aws2tf.py -t vpc   (or)  ./aws2tf.py -t aws_vpc
 
 
-Using the merge mode, you can combine multiple runs of aws2tf to pull togeather resources by using the `-m` flag to enable the merge mode
+Using the merge mode, you can combine multiple runs of aws2tf.py to pull togeather resources by using the `-m` flag - to enable the merge mode:
 
 ./aws2tf -t aws_vpc
 ./aws2tf -t kms -m
 ./aws2tf -t aws_s3_bucket -i my_bucket_name -m
 
-aws2tf can also import the resources associated with a successfully deployed stack set:
+aws2tf can also import the resources associated with a successfully deployed stack set to get the resources of a deployed stack set "mystack_name" use:
 
 ./aws2tf.py -t stack -i mystack_name
 

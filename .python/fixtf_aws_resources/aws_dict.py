@@ -7432,8 +7432,8 @@ aws_rds_cluster_role_association= {
 
 aws_rds_custom_db_engine_version = {
 	"clfn":		"rds",
-	"descfn":	"describe_db_clusters",
-	"topkey":	"DBClusters",
+	"descfn":	"describe_db_engine_versions",
+	"topkey":	"DBEngineVersions",
 	"key":		"Engine",
 	"filterid":	"EngineVersion"
 }

@@ -9,17 +9,13 @@ This Python version has several advantages over the original bash version:
 * Better coverage of stack resources
 
 
-
-aws2tf will also attemnpt to:
+`aws2tf.py` will also attemnpt to:
 
 * De-reference hardcodes values into their Terraform addresses
 * Find depentant resources and import them
 * Where possible remove region and account references and replace with Terraform data values.
 
 You can use `aws2tf.py` in a number of different ways:
-
-
-
 
 
 Getting started:

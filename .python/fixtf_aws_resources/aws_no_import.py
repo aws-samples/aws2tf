@@ -163,4 +163,7 @@ noimport = {
     "aws_default_network_acl": True, ### don't get default acl
     "aws_ec2_client_vpn_network_association": True, ### an association
     "aws_autoscaling_group_tag": True, ### don't think this is needed
+    "aws_neptune_cluster_endpoint": True, # issues with import identifier
+    "aws_rds_cluster_activity_stream": True, # issues with import identifier
+    "aws_ebs_default_kms_key": True # do we need to import ?
 } 

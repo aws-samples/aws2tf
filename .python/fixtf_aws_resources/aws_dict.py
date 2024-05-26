@@ -7410,8 +7410,8 @@ aws_rds_cluster_activity_stream = {
     "clfn":		"rds",
     "descfn":	"describe_db_clusters",
 	"topkey":	"DBClusters",
-	"key":		"DBClusterIdentifier",
-	"filterid":	"DBClusterIdentifier"
+	"key":		"DBClusterArn",
+	"filterid":	"DBClusterArn"
 }
 
 aws_rds_cluster_endpoint = {

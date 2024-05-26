@@ -17,6 +17,7 @@ This Python version has several advantages over the original bash version:
 
 You can use `aws2tf.py` in a number of different ways:
 
+
 Getting started:
 
 To see the command line help use:
@@ -35,7 +36,7 @@ Try a simple run to get all your VPC's:
 
 ./aws2tf.py -t vpc   (or)  ./aws2tf.py -t aws_vpc
 
-or a for a specific vpc:
+or a specific vpc:
 
 ./aws2tf.py -t aws_vpc -i vpc-xxxxxxxxx
 

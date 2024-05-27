@@ -17,6 +17,32 @@ import globals
 import stacks
 from fixtf_aws_resources import aws_dict
 
+
+def extra_help():
+    print("\nExtra help\n")
+    print("Type codes supported - ./aws2tf.py -t [type code]:\n")
+    with open('.python/resources.py', 'r') as f:
+        for line in f.readlines():
+            line3=""
+            if "#" in line:  line3=line.split("#")[1].strip()
+            line=line.strip().split(":")[0]
+            if "type ==" in line and "aws_" not in line:
+                line=line.split("==")[-1].strip().strip("'").strip('"')
+                if line3 != "": 
+                    if len(line) < 3:
+                        print("./aws2tf.py  -t "+line+"     \t\t\t"+str(line3))
+                    elif len(line) > 10:
+                        print("./aws2tf.py  -t "+line+"     \t"+str(line3))
+                    else:
+                        print("./aws2tf.py  -t "+line+"     \t\t"+str(line3))
+                else:
+                    print("./aws2tf.py  -t "+line)
+    print("\nOr instead of the above type codes use the terraform type eg:\n\n./aws2tf.py -t aws_vpc\n")
+    print("\nTo get a deployed stack set:\n\n./aws2tf.py -t stack -i stackname\n")               
+    exit()
+
+
+
 if __name__ == '__main__':
 
     common.check_python_version()
@@ -42,10 +68,7 @@ if __name__ == '__main__':
     # print("args.id=%s" % args.id)
     mg=args.merge
 
-    if args.list:
-        print("Extra Help")
-        exit()
-    
+    if args.list: extra_help()
     if args.debug: globals.debug = True
     if args.validate: globals.validate = True
 
@@ -122,10 +145,8 @@ if __name__ == '__main__':
 
     id = args.id
     
+    if type == "" or type is None: type = "all"
     print("---<><>"+ str(type),str(id))
-
-    if type == "cw" or type == "cloudwatch" or type == "logs": type = "aws_cloudwatch_log_group"
-    elif type == "" or type is None: type = "all"
         
 
 ################# -- now we are calling ----   ###############################
@@ -151,8 +172,6 @@ if __name__ == '__main__':
     elif type.startswith("aws_"):
         if type in aws_dict.aws_resources:
             common.call_resource(type, id)
-    
-
 
     elif all_types != None and lall > 1:
         print("len all_types="+str(len(all_types)))
@@ -227,7 +246,6 @@ if __name__ == '__main__':
 
 # go again plan and split / fix
 
-
         x=glob.glob("import__aws_*.tf")
         #print(str(x))
         #td=""
@@ -238,17 +256,11 @@ if __name__ == '__main__':
 ##########################
             com = "mv "+tf +" imported/"+tf
             rout = common.rc(com)
-        #print(str(td))
-        #com = "rm -f "+td
-        #rout = common.rc(com)
+
          
         common.tfplan1()
         common.tfplan2()
-        #print("********** keys start ***************")
-        #for ti in globals.rproc.keys():
-        #    print(str(ti)+":"+str(globals.rproc[ti]))
-
-        #print("********** keys end ***************")  
+ 
         detdepstr=""
         for ti in globals.rproc.keys():
             if not globals.rproc[ti]:
@@ -257,8 +269,6 @@ if __name__ == '__main__':
                 detdepstr=detdepstr+str(ti)+" "
 
         print("----------- Completed "+str(lc)+" dependancy check loops --------------") 
-        #print("OLD= "+str(olddetdepstr))
-        #print("NEW= "+str(detdepstr))
         if olddetdepstr == detdepstr and detdepstr != "":
             print("\nERROR: No change/progress in dependancies exiting... \n")
             for ti in globals.rproc.keys():
@@ -269,38 +279,26 @@ if __name__ == '__main__':
         olddetdepstr=detdepstr
 
 
-        if lc > 16:
-            print("ERROR: Too many loops exiting")
-            for ti in globals.rproc.keys():
-                if not globals.rproc[ti]:  
-                    print("ERROR: Not found "+str(ti)+" - check if this resource still exists in AWS")
-
-            exit()
-            #detdep=True
-
-
-
+        #if lc > 16:
+        #    print("ERROR: Too many loops exiting")
+        #    for ti in globals.rproc.keys():
+        #        if not globals.rproc[ti]:  
+        #            print("ERROR: Not found "+str(ti)+" - check if this resource still exists in AWS")
+        #    exit()
 
     common.tfplan3()
-    if globals.validate is False:
-        common.wrapup()
+    if globals.validate is False: common.wrapup()
 
 ##########################################################################
 ####### Finish up
 #########################################################################
 
     print("writing pyprocessed.txt")
-    if mg is True:
-        with open("pyprocessed.txt", "a") as f:
-            for i in globals.rproc.keys():
-                if globals.debug: print(str(i))
-                f.write(i+"\n")
-    else:
-        with open("pyprocessed.txt", "w") as f:
-            for i in globals.rproc.keys():
-                if globals.debug: print(str(i))
-                f.write(i+"\n")
-
+    
+    with open("pyprocessed.txt", "a") as f:
+        for i in globals.rproc.keys():
+            if globals.debug: print(str(i))
+            f.write(i+"\n")
     com = "sort -u pyprocessed.txt -o pyprocessed.txt"
     rout = common.rc(com)
 
@@ -315,3 +313,8 @@ if __name__ == '__main__':
     print("\nTerraform files & state in sub-directory: "+ globals.path1+"\n")
 
     exit(0)
+
+
+
+
+

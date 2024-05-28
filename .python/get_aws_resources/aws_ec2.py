@@ -273,9 +273,14 @@ def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key,
     if globals.debug:
         print("--> In get_aws_vpc_ipv4_cidr_block_association doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-    response = common.call_boto3(type,clfn, descfn, topkey, key, id)
-    #print("-9a->"+str(response))
     try:
+        client = boto3.client(clfn)
+        response=[]
+        if id is None:
+            response = client.describe_vpcs()
+        else:
+            response = client.describe_vpcs(VpcIds=[id])
+        #response = common.call_boto3(type,clfn, descfn, topkey, key, id)    
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response:
             cidrb = j['CidrBlockAssociationSet']
@@ -294,6 +299,8 @@ def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key,
                     globals.rproc[pkey] = True
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+        
+
 
     return True
 
@@ -567,6 +574,7 @@ def get_aws_route(type, id, clfn, descfn, topkey, key, filterid):
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
 
     return True
 

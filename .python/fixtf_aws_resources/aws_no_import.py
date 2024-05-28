@@ -1,4 +1,5 @@
 noimport = {
+    ### this section no import - as per Terraform docs
     "aws_acm_certificate_validation": True,
     "aws_acmpca_certificate_authority_certificate": True,
     "aws_acmpca_permission": True,
@@ -105,7 +106,9 @@ noimport = {
     "aws_vpn_connection_route": True,
     "aws_vpn_gateway_attachment": True,
     "aws_vpn_gateway_route_propagation": True,
+    #
     # hand driven exclusions
+    #
     "aws_wafregional_web_acl_association": True,    # get it from target rsource
     #"aws_vpc_dhcp_options_association": True,      # get it from target rsource
     "aws_vpc_ipam_organization_admin_account": True,
@@ -113,7 +116,7 @@ noimport = {
     # via other resources
     "aws_api_gateway_method_response": True,
     "aws_api_gateway_method_settings": True,
-    # API not available
+    # API not available or other problems as described
     "aws_appintegrations_data_integration": True,
     "aws_appintegrations_event_integration": True,
     "aws_connect_instance": True,

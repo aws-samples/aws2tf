@@ -43,3 +43,4 @@ __pycache__
 .scripts/*
 .python/provider-data/terraform-provider-aws
 run.log
+.python/.auto-gen/*.log

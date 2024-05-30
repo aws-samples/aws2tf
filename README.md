@@ -1,6 +1,22 @@
 # aws2tf
 
-**December 2023**
+**May 2024**
+
+Try the new Python version !
+
+Test it out with:
+
+./aws2tf.py -t vpc
+
+TO see the options use:
+
+./aws2tf.py -h
+&
+./aws2tf.py -l
+
+The documentaiton for this version can be found [here](https://github.com/aws-samples/aws2tf/blob/master/HELP_PYTHON_VERSION.md)
+
+
 
 **Porting to Python**
 ----

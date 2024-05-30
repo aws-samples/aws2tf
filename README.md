@@ -33,7 +33,7 @@ There should hopefully be no subsequent additions or deletions reported by the t
 + AWS cli (v2) **version 2.13.0 or higher** needs to be installed and you need a login with at least "Read" privileges.
 + terraform **version v1.5.5** or higher needs to be installed.
 + jq **version 1.6 or higher**
-+ *yq optional for advanced stack processing*
+
 
 ## Optional tooling for security reports (CRITICAL and HIGH issues)
 + tfsec **version 1.27.5 or later**  (https://github.com/aquasecurity/tfsec)

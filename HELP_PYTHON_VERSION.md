@@ -66,12 +66,14 @@ Juat run `aws2tf.py` with no flags , which will look for every resource supporte
 
 This Python version of `aws2tf.py` has not undergone as much testing as the bash version `aws2tf.sh` so please report and problems you find by opening an issue.
 
+-----
+
 ## Supported Terraform Resources (subject to ongoing testing)
 
-see [here]((https://github.com/aws-samples/aws2tf/blob/master/StackSet-Resources.md)) for a list
+see [here](https://github.com/aws-samples/aws2tf/blob/master/StackSet-Resources.md) for a list
 
 ## Supported Stack Set Resources (subject to ongoing testing)
 
-see [here]((https://github.com/aws-samples/aws2tf/blob/master/Terraform-Resources.md)) for a list
+see [here](https://github.com/aws-samples/aws2tf/blob/master/Terraform-Resources.md) for a list
 
 

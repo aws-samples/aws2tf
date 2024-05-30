@@ -9,7 +9,7 @@ This Python version has several advantages over the original bash version:
 * Better coverage of stack resources
 
 
-`aws2tf.py` will also attemnpt to:
+`aws2tf.py` will also attempt to:
 
 * De-reference hardcodes values into their Terraform addresses
 * Find depentant resources and import them
@@ -65,5 +65,13 @@ Juat run `aws2tf.py` with no flags , which will look for every resource supporte
 ## Reporting Problems
 
 This Python version of `aws2tf.py` has not undergone as much testing as the bash version `aws2tf.sh` so please report and problems you find by opening an issue.
+
+## Supported Terraform Resources (subject to ongoing testing)
+
+see [here]((https://github.com/aws-samples/aws2tf/blob/master/StackSet-Resources.md)) for a list
+
+## Supported Stack Set Resources (subject to ongoing testing)
+
+see [here]((https://github.com/aws-samples/aws2tf/blob/master/Terraform-Resources.md)) for a list
 
 

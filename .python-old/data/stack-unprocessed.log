@@ -1,6 +1,0 @@
---UNPROCESSED-- AWS::Redshift::ClusterParameterGroup zeroetlrspg zeroetlrspg 
---UNPROCESSED-- AWS::Kinesis::Stream cust-payment-txn-stream cust-payment-txn-stream 
---UNPROCESSED-- AWS::RedshiftServerless::Namespace zero-etl-destination-dw-ns-f0999c00 zero-etl-destination-dw-ns-f0999c00 
---UNPROCESSED-- AWS::RedshiftServerless::Workgroup zero-etl-destination-dw-wg-f0999c00 zero-etl-destination-dw-wg-f0999c00 
---UNPROCESSED-- Custom::InitAuroraPostgresLoad [$LATEST]771b0930d74b434cb8f3abf9eedbb09c 2023/12/29/[$LATEST]771b0930d74b434cb8f3abf9eedbb09c 
---UNPROCESSED-- Custom::RandomString f00209e5 f00209e5 

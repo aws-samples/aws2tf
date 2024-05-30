@@ -10379,7 +10379,6 @@ aws_resources = {
 	"aws_key_pair": aws_key_pair,
 	"aws_launch_configuration": aws_launch_configuration,
 	"aws_launch_template": aws_launch_template,
-	"aws_vpc_ipv4_cidr_block_association": aws_vpc_ipv4_cidr_block_association,
 	"aws_flow_log": aws_flow_log,
 	"aws_iam_role": aws_iam_role,
 	"aws_iam_policy": aws_iam_policy,

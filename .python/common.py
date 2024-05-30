@@ -1094,17 +1094,25 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    exc_type, exc_obj, exc_tb = sys.exc_info()
    exn=str(exc_type.__name__)
    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-   print(exn)
+   #print("exn="+exn)
    if exn == "EndpointConnectionError":
       print("No endpoint in this region for "+fname+" - returning")
+      return
+   elif exn=="ClientError":
+      #print("ClientError exception for "+fname+" - returning")
+      if "does not exist" in str(e):
+         print(id+" does not exist" )
+         return
+      print("Exception message :"+str(e))
       return
    elif exn=="ForbiddenException":
       print("Call Forbidden exception for "+fname+" - returning")
       return
+   
    elif exn=="EntityNotFoundException":
       print("NOT FOUND: "+frame.split("get_")[1]+" "+id+" check if it exists and what references it - returning")
       return
-   if exn=="NoSuchEntityException":
+   elif exn=="NoSuchEntityException":
       print("NOT FOUND: "+frame.split("get_")[1]+" "+id+" check if it exists and what references it - returning")
       return
 

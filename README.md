@@ -1,14 +1,12 @@
 # aws2tf
 
-**May 2024**
-
-Try the new Python version !
+**May 2024 - Try the new Python version!**
 
 Test it out with:
 
 ./aws2tf.py -t vpc
 
-TO see the options use:
+To see the options use:
 
 ./aws2tf.py -h
 &
@@ -18,14 +16,12 @@ The documentaiton for this version can be found [here](https://github.com/aws-sa
 
 
 
-**Porting to Python**
+**The Python port**
 ----
 
 A port of this tool to Python is underway, greatly aided by Amazon CodeWhisperer.
 The Python version will coexist with this version and will gradually replace the bash shell scripts in this codebase.
 The Python version utilizes the new Terraform v5 method of importing resources, while still dereferencing Terraform addresses and searching for dependencies as aws2tf has always done. It will also be significantly faster, making far fewer calls to Terraform.
-
-Instructions on how to use this new version and phase over to it simply by setting an environment variable will be provided soon...
 
 ----
 

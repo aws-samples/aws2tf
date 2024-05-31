@@ -68,11 +68,12 @@ This Python version of `aws2tf.py` has not undergone as much testing as the bash
 
 -----
 
-## Supported Terraform Resources (subject to ongoing testing)
+
+## Supported Stack Set Resources (subject to ongoing testing)
 
 see [here](https://github.com/aws-samples/aws2tf/blob/master/StackSet-Resources.md) for a list
 
-## Supported Stack Set Resources (subject to ongoing testing)
+## Supported Terraform Resources (subject to ongoing testing)
 
 see [here](https://github.com/aws-samples/aws2tf/blob/master/Terraform-Resources.md) for a list
 

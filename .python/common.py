@@ -1108,13 +1108,20 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    elif exn=="ForbiddenException":
       print("Call Forbidden exception for "+fname+" - returning")
       return
+   elif "NotFoundException" in exn:
+      if frame.startswith("get_"):
+         print("NOT FOUND: "+frame.split("get_")[1]+" "+id+" check if it exists and what references it - returning")
+      else:
+         print("NOT FOUND: "+frame+" "+id+" check if it exists - returning")
+      return    
+
+   elif exn=="ResourceNotFoundException" or exn=="EntityNotFoundException" or exn=="NoSuchEntityException" or exn=="NotFoundException" or exn=="LoadBalancerNotFoundException" or exn=="NamespaceNotFound" or exn=="NoSuchHostedZone":
+      if frame.startswith("get_"):
+         print("NOT FOUND: "+frame.split("get_")[1]+" "+str(id)+" check if it exists and what references it - returning")
+      else:
+         print("NOT FOUND: "+frame+" "+str(id)+" check if it exists - returning")
+      return    
    
-   elif exn=="EntityNotFoundException":
-      print("NOT FOUND: "+frame.split("get_")[1]+" "+id+" check if it exists and what references it - returning")
-      return
-   elif exn=="NoSuchEntityException":
-      print("NOT FOUND: "+frame.split("get_")[1]+" "+id+" check if it exists and what references it - returning")
-      return
 
    print("\nERROR: in "+frame+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
    try:   

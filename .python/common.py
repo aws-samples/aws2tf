@@ -435,10 +435,10 @@ def tfplan3():
          print("-->> look at plan2.json - or run terraform plan")
          exit()
 
-      print("Plan 4 complete")
+      print("Plan complete")
    
    if not os.path.isfile("tfplan"):
-         print("Plan 4 - could not find expected tfplan file - exiting")
+         print("Plan - could not find expected tfplan file - exiting")
          exit()
          
 

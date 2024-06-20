@@ -156,7 +156,7 @@ if __name__ == '__main__':
         lall=len(all_types)
     except:
         lall=0
-    #print("all_types="+str(all_types))
+    print("all_types="+str(all_types))
 
     if all_types is None:
         print("No resources found")

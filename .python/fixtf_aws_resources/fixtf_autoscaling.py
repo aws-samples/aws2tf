@@ -33,8 +33,15 @@ def aws_autoscaling_group(t1,tt1,tt2,flag1,flag2):
 	elif tt1=="launch_configuration":
 		if tt2!="null":
 			t1 = tt1 +" = aws_launch_configuration."+tt2+".id\n"
+			common.add_dependancy("aws_launch_configuration",tt2)
 
-	
+	elif tt1=="launch_template_id":
+		if tt2!="null":
+			t1 = tt1 +" = aws_launch_template."+tt2+".id\n"
+			common.add_dependancy("aws_launch_template",tt2)
+
+	elif tt1=="on_demand_max_price_percentage_over_lowest_price" and tt2=="0": skip=1
+	elif tt1=="spot_max_price_percentage_over_lowest_price" and tt2=="0": skip=1
 
 	return skip,t1,flag1,flag2
 

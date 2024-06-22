@@ -78,3 +78,8 @@ see [here](https://github.com/aws-samples/aws2tf/blob/master/StackSet-Resources.
 see [here](https://github.com/aws-samples/aws2tf/blob/master/Terraform-Resources.md) for a list
 
 
+## Requirements & Prerequisites
++ The tool is written using Python3.8 and has been tested on macOS 14.5.
++ Terraform **version v1.7.5** needs to be installed.
++ Python version 3.8 or later.
++ boto3 1.34.93 or later (pip install boto3==1.34.93).

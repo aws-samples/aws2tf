@@ -49,6 +49,9 @@ def get_aws_lb_listener(type,id,clfn,descfn,topkey,key,filterid):
                 response = client.describe_listeners(ListenerArns=[id])
         elif ":loadbalancer/" in id and id is not None:
                 response = client.describe_listeners(LoadBalancerArn=id)
+        else:
+            print("Invalid id format for "+type+" id="+str(id)+" - returning")
+            return True
    
         response=response[topkey]
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
@@ -77,10 +80,13 @@ def get_aws_lb_listener_rule(type,id,clfn,descfn,topkey,key,filterid):
         response = []
         if id is None:
             response = client.describe_rules() 
-        if ":listener-rule/" in id:
+        elif ":listener-rule/" in id:
             response = client.describe_rules(RuleArns=[id])
-        if ":listener/" in id:
+        elif ":listener/" in id:
             response = client.describe_rules(ListenerArn=id)
+        else:
+            print("Invalid id format for "+type+" id="+str(id)+" - returning")
+            return True
 
         response=response[topkey]
         
@@ -118,6 +124,9 @@ def get_aws_lb_target_group(type,id,clfn,descfn,topkey,key,filterid):
                 response = client.describe_target_groups(TargetGroupArns=[id])
         elif ":loadbalancer/" in id and id is not None:
                 response = client.describe_target_groups(LoadBalancerArn=id)
+        else:
+            print("Invalid id format for "+type+" id="+str(id)+" - returning")
+            return True
    
         response=response[topkey]
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True

@@ -281,7 +281,7 @@ def get_aws_cloudfront_origin_access_control(type, id, clfn, descfn, topkey, key
                 common.write_import(type,oid,"o-"+oid)
 
         else:      
-            response = client.client.get_origin_access_control(Id=id)
+            response = client.get_origin_access_control(Id=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             common.write_import(type,id,"o-"+id) 
 
@@ -312,7 +312,7 @@ def get_aws_cloudfront_origin_request_policy(type, id, clfn, descfn, topkey, key
                 common.write_import(type,oid,"o-"+oid)
 
         else:      
-            response = client.client.get_origin_request_policy(Id=id)
+            response = client.get_origin_request_policy(Id=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             common.write_import(type,id,"o-"+id) 
 
@@ -343,7 +343,7 @@ def get_aws_cloudfront_public_key(type, id, clfn, descfn, topkey, key, filterid)
                 common.write_import(type,oid,"o-"+oid)
 
         else:      
-            response = client.client.get_public_key(Id=id)
+            response = client.get_public_key(Id=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             common.write_import(type,id,"o-"+id) 
 
@@ -374,7 +374,7 @@ def get_aws_cloudfront_realtime_log_config(type, id, clfn, descfn, topkey, key, 
                 common.write_import(type,oid,"o-"+oid)
 
         else:      
-            response = client.client.get_realtime_log_config(Id=id)
+            response = client.get_realtime_log_config(Id=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             common.write_import(type,id,"o-"+id) 
 

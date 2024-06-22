@@ -36,8 +36,11 @@ def get_aws_appautoscaling_target(type, id, clfn, descfn, topkey, key, filterid)
             #print("id="+id)
             if "/" in id:
                 rrid=id.split("/",1)[1]
-            if "|" in id:
+            elif "|" in id:
                 rrid=id.split("|")[2]
+            else:
+                print("Invalid id format for "+type+" id="+str(id)+" - returning")
+                return True
             #print("rrid="+rrid+ " topkey="+topkey)
             response = client.describe_scalable_targets(ServiceNamespace="ecs",ResourceIds=[rrid])
             #print("----------"+str(response))

@@ -153,9 +153,13 @@ def get_aws_appmesh_gateway_route(type, id, clfn, descfn, topkey, key, filterid)
             print("ERROR: must pass mesh name/gateway name")
             return True
 
-        else:      
-            mn=id.split("/")[0]
-            gwn=id.split("/")[1]
+        else:  
+            if "/" in id:    
+                mn=id.split("/")[0]
+                gwn=id.split("/")[1]
+            else:
+                print("Invalid id format for "+type+" id="+str(id)+" - returning")
+                return True
             response = client.list_gateway_routes(meshName=mn,virtualGatewayName=gwn)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:

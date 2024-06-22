@@ -174,10 +174,10 @@ if __name__ == '__main__':
             common.call_resource(type, id)
 
     elif all_types != None and lall > 1:
-        print("len all_types="+str(len(all_types)))
-        id="foobar"
+        #print("len all_types="+str(len(all_types))) # testing only
+        #id="foobar" # testing only
         ic=0
-        istart=1270
+        istart=0
         it=len(all_types)
         
         for i in all_types:

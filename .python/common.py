@@ -795,11 +795,11 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                            pass
       else:
          if id is not None:
-            print("No "+type+" "+id+" found -empty response") 
+            print("No "+type+" "+id+" found - empty response") 
             pkey=type+"."+id  
             globals.rproc[pkey]=True      
          else:
-            print("No "+type+" found -empty response")
+            print("No "+type+" found - empty response")
          return True
    
    except Exception as e:
@@ -1108,6 +1108,14 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    elif exn=="ForbiddenException":
       print("Call Forbidden exception for "+fname+" - returning")
       return
+   elif exn == "ParamValidationError" or exn=="ValidationException" or exn=="InvalidRequestException" or exn =="InvalidParameterValueException" or exn=="InvalidParameterException":
+      print(str(exc_obj)+" for "+frame+" id="+id+" - returning")
+      return
+   elif exn == "BadRequestException" and clfn=="guardduty":
+      print(str(exc_obj)+" for "+frame+" id="+id+" - returning")
+      return  
+
+
    elif "NotFoundException" in exn:
       if frame.startswith("get_"):
          print("NOT FOUND: "+frame.split("get_")[1]+" "+id+" check if it exists and what references it - returning")
@@ -1122,6 +1130,24 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
          print("NOT FOUND: "+frame+" "+str(id)+" check if it exists - returning")
       return    
    
+   elif exn == "KeyError":
+      if "kms" in str(exc_obj):
+         print("KeyError cannot find key for " +fname+" id="+id+" - returning")
+         return
+      
+      if clfn=="sqs":
+         print("KeyError cannot find queue url for " +fname+" id="+id+" - returning")
+         return
+      
+   elif exn == "InvalidDocument":
+      if clfn=="ssm":
+         print("KeyError cannot find ssm document for " +fname+" id="+id+" - returning")
+         return
+
+   elif "NoSuch" in exn and clfn=="cloudfront":
+      print(str(exc_obj)+" for "+frame+" id="+id+" - returning")
+      return
+
 
    print("\nERROR: in "+frame+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
    try:   

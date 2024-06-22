@@ -160,8 +160,6 @@ def get_aws_vpclattice_listener_rule(type,id,clfn,descfn,topkey,key,filterid):
    except Exception as e:
       common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
-      
-   print("***>>>>"+str(response))
    if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
   
    for j in response: 

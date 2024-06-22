@@ -276,13 +276,16 @@ def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key,
     try:
         client = boto3.client(clfn)
         response=[]
+
         if id is None:
             response = client.describe_vpcs()
+            
         else:
             response = client.describe_vpcs(VpcIds=[id])
         #response = common.call_boto3(type,clfn, descfn, topkey, key, id)    
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        for j in response:
+  
+        if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        for j in response[topkey]:
             cidrb = j['CidrBlockAssociationSet']
             vpcid = j['VpcId']
             vpc_cidr = j['CidrBlock']

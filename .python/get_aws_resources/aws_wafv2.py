@@ -20,9 +20,13 @@ def get_aws_wafv2_ip_set(type, id, clfn, descfn, topkey, key, filterid):
                 common.write_import(type,j[key],None) 
 
         else: 
-            nm=id.split("|")[0]
-            idd=id.split("|")[1]
-            sc=id.split("|")[2]  
+            if "|" in id:
+                nm=id.split("|")[0]
+                idd=id.split("|")[1]
+                sc=id.split("|")[2]  
+            else:
+                print("Invalid id format for "+type+" id="+str(id)+" - returning")
+                return True
             response = client.get_ip_set(Scope=sc,Name=nm,Id=idd)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['IPSet']
@@ -53,9 +57,13 @@ def get_aws_wafv2_web_acl(type, id, clfn, descfn, topkey, key, filterid):
                 common.write_import(type,j[key],None) 
 
         else: 
-            nm=id.split("|")[0]
-            idd=id.split("|")[1]
-            sc=id.split("|")[2]  
+            if "|" in id:
+                nm=id.split("|")[0]
+                idd=id.split("|")[1]
+                sc=id.split("|")[2]  
+            else:
+                print("Invalid id format for "+type+" id="+str(id)+" - returning")
+                return True
             response = client.get_web_acl(Scope=sc,Name=nm,Id=idd)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['WebACL']

@@ -175,9 +175,11 @@ if __name__ == '__main__':
 
     elif all_types != None and lall > 1:
         print("len all_types="+str(len(all_types)))
+        id="foobar"
         ic=0
-        istart=1
+        istart=1270
         it=len(all_types)
+        
         for i in all_types:
             ic=ic+1
             if ic > it: break 
@@ -190,6 +192,7 @@ if __name__ == '__main__':
         if all_types is not None:
             for type in all_types:
                 if type in aws_dict.aws_resources:
+                   
                     common.call_resource(type,id)
         else:
             print("No resources found")

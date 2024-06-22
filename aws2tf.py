@@ -177,7 +177,7 @@ if __name__ == '__main__':
         print("len all_types="+str(len(all_types)))
         id="foobar"
         ic=0
-        istart=700
+        istart=1270
         it=len(all_types)
         
         for i in all_types:

@@ -1134,6 +1134,15 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
       if "kms" in str(exc_obj):
          print("KeyError cannot find key for " +fname+" id="+id+" - returning")
          return
+      
+      if clfn=="sqs":
+         print("KeyError cannot find queue url for " +fname+" id="+id+" - returning")
+         return
+      
+   elif exn == "InvalidDocument":
+      if clfn=="ssm":
+         print("KeyError cannot find ssm document for " +fname+" id="+id+" - returning")
+         return
 
    elif "NoSuch" in exn and clfn=="cloudfront":
       print(str(exc_obj)+" for "+frame+" id="+id+" - returning")

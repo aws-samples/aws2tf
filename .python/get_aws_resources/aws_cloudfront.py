@@ -13,7 +13,11 @@ def get_aws_cloudfront_distribution(type, id, clfn, descfn, topkey, key, filteri
         if id is None:
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
-                response = response + page['DistributionList']['Items']
+                try:
+                    response = response + page['DistributionList']['Items']
+                except KeyError:
+                    print("No DistributionList in response for "+type+ " id="+str(id)+" returning"); 
+                    return True
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 common.write_import(type,j[key],None) 

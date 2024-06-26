@@ -30,6 +30,11 @@ def aws_apigatewayv2_domain_name(t1,tt1,tt2,flag1,flag2):
 
 def aws_apigatewayv2_integration(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="payload_format_version":
+		if "1" in tt2:
+			t1=tt1+" = \"1.0\"\n"
+		elif "2" in tt2:
+			t1=tt1+" = \"2.0\"\n"
 	return skip,t1,flag1,flag2
 
 def aws_apigatewayv2_integration_response(t1,tt1,tt2,flag1,flag2):

@@ -46,12 +46,9 @@ def aws_autoscaling_group(t1,tt1,tt2,flag1,flag2):
 			flag1=True
 
 	elif tt1=="name":
-		print("1=",t1,str(flag1))
 		if flag1:
 			skip=1
 			flag1=False
-
-
 
 	elif tt1=="on_demand_max_price_percentage_over_lowest_price" and tt2=="0": skip=1
 	elif tt1=="spot_max_price_percentage_over_lowest_price" and tt2=="0": skip=1

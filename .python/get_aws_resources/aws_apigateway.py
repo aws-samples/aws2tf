@@ -112,7 +112,7 @@ def get_aws_api_gateway_stage(type, id, clfn, descfn, topkey, key, filterid):
         if id is not None:  
             response = client.get_stages(restApiId=id)
             if response[topkey] == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                if globals.degug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
                 return True
@@ -141,7 +141,7 @@ def get_aws_api_gateway_authorizer(type, id, clfn, descfn, topkey, key, filterid
         if id is not None:  
             response = client.get_authorizers(restApiId=id)
             if response[topkey] == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if globals.degug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
                 return True
@@ -170,7 +170,7 @@ def get_aws_api_gateway_resource(type, id, clfn, descfn, topkey, key, filterid):
         if id is not None:  
             response = client.get_resources(restApiId=id)
             if response[topkey] == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning");
+                if globals.degug: print("Empty response for "+type+ " id="+str(id)+" returning");
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
                 return True
@@ -204,7 +204,7 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='GET')
                 if response == []: 
-                    print("Empty GET response for "+type+ " id="+str(id))
+                    if globals.degug: print("Empty GET response for "+type+ " id="+str(id))
                     pkey=type+"."+id
                     globals.rproc[pkey]=True
                     return True
@@ -220,7 +220,7 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='POST')
                 if response == []: 
-                    print("Empty POST response for "+type+ " id="+str(id))
+                    if globals.degug: print("Empty POST response for "+type+ " id="+str(id))
                     pkey=type+"."+id
                     globals.rproc[pkey]=True
                     return True
@@ -235,7 +235,7 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='PUT')
                 if response == []: 
-                    print("Empty PUT response for "+type+ " id="+str(id))
+                    if globals.degug: print("Empty PUT response for "+type+ " id="+str(id))
                     pkey=type+"."+id
                     globals.rproc[pkey]=True
                     return True
@@ -250,7 +250,7 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='DELETE')
                 if response == []: 
-                    print("Empty PUT response for "+type+ " id="+str(id))
+                    if globals.degug: print("Empty PUT response for "+type+ " id="+str(id))
                     pkey=type+"."+id
                     globals.rproc[pkey]=True
                     return True
@@ -266,7 +266,7 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='PATCH')
                 if response == []: 
-                    print("Empty PUT response for "+type+ " id="+str(id))
+                    if globals.degug: print("Empty PUT response for "+type+ " id="+str(id))
                     pkey=type+"."+id
                     globals.rproc[pkey]=True
                     return True

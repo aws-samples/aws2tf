@@ -36,7 +36,7 @@ def get_aws_security_group_rule(type, id, clfn, descfn, topkey, key, filterid):
         
         for j in response[topkey]:
             protocol="";fromport="";toport="";cidr4="";cidr6="";prefixlistid="";refgrp_sgid="";refgrp_peerst="";refgrp_userid="";refgrp_vpcid="";refgrp_peerid=""
-            #print(str(j))
+            
             try:
                 sgid=j['GroupId']
                 if j['IsEgress']:
@@ -90,12 +90,15 @@ def get_aws_security_group_rule(type, id, clfn, descfn, topkey, key, filterid):
             except KeyError:
                 pass
 
-            #print("************1************")
-            #print(sgid+ing+protocol+fromport+toport)
-            #print("************2************")
-            #print(cidr4+cidr6+prefixlistid)
-            #print("************3************")
-            #print(refgrp_sgid+refgrp_peerst+refgrp_userid+refgrp_vpcid+refgrp_peerid)
+
+            #if ing=="ingress" and toport=="8443": 
+            #    print(str(j))
+            #    print("************1************")
+            #    print(sgid+ing+protocol+fromport+toport)
+            #    print("************2************")
+            #    print(cidr4+cidr6+prefixlistid)
+            #    print("************3************")
+            #    print(refgrp_sgid+refgrp_peerst+refgrp_userid+refgrp_vpcid+refgrp_peerid)
 
 
             impstring=sgid+"_"+ing
@@ -106,6 +109,7 @@ def get_aws_security_group_rule(type, id, clfn, descfn, topkey, key, filterid):
             if cidr4 != "": impstring= impstring + "_" + cidr4
             if cidr6 != "": impstring= impstring + "_" + cidr6
             if refgrp_sgid != "": impstring= impstring + "_" + refgrp_sgid
+            if prefixlistid !="": impstring= impstring + "_" + prefixlistid
 
             common.write_import(type,impstring,None) 
             pkey="aws_security_group_rule."+sgid

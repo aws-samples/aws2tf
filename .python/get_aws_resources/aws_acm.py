@@ -18,11 +18,13 @@ def get_aws_acm_certificate(type, id, clfn, descfn, topkey, key, filterid):
             for j in response:
                 if j['Status']=="ISSUED":
                     common.write_import(type,j[key],None) 
+                else:
+                    print("Skipping ACM Certificate "+str(j[key])+" as status is "+str(j['Status']))
 
         else:      
             response = client.describe_certificate(CertificateArn=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-            j=response['Certificate']:
+            j=response['Certificate']
             if j['Status']=="ISSUED":
                 common.write_import(type,id,None)
 

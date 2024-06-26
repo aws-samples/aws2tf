@@ -13,6 +13,7 @@ import fixtf
 import inspect
 from datetime import datetime
 import resources
+from get_aws_resources import aws_acm
 from get_aws_resources import aws_amplify
 from get_aws_resources import aws_athena
 from get_aws_resources import aws_autoscaling

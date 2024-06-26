@@ -74,6 +74,8 @@ def aws_s3_bucket_inventory(t1,tt1,tt2,flag1,flag2):
 
 def aws_s3_bucket_lifecycle_configuration(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1=="bucket":
+        t1=t1+"\n lifecycle {\n   ignore_changes = [rule]\n}\n"
     return skip,t1,flag1,flag2
 
 def aws_s3_bucket_logging(t1,tt1,tt2,flag1,flag2):

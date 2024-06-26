@@ -20,6 +20,8 @@ def aws_ssm_default_patch_baseline(t1,tt1,tt2,flag1,flag2):
 
 def aws_ssm_document(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="content":
+		t1="\n lifecycle {\n   ignore_changes = [content]\n}\n"+t1
 	return skip,t1,flag1,flag2
 
 def aws_ssm_instances(t1,tt1,tt2,flag1,flag2):

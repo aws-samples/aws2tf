@@ -3,8 +3,10 @@ def aws_config_aggregate_authorization(t1,tt1,tt2,flag1,flag2):
 	return skip,t1,flag1,flag2
 
 def aws_config_config_rule(t1,tt1,tt2,flag1,flag2):
-    skip=0
-    return skip,t1,flag1,flag2
+	skip=0
+	if tt1=="input_parameters":
+		t1="\n lifecycle {\n   ignore_changes = [input_parameters]\n}\n"+t1
+	return skip,t1,flag1,flag2
 
 def aws_config_configuration_aggregator(t1,tt1,tt2,flag1,flag2):
 	skip=0

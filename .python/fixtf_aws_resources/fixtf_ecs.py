@@ -65,7 +65,9 @@ def aws_ecs_task_definition(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	
 	if tt1=="awslogs-group" and tt2 !="null":
-		t1=tt1 + " = aws_cloudwatch_log_group." + tt2 + ".id\n"
+		# fixup cw log name
+		lgn=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_")
+		t1=tt1 + " = aws_cloudwatch_log_group." + lgn + ".id\n"
 		common.add_dependancy("aws_cloudwatch_log_group", tt2) 
 	return skip,t1,flag1,flag2
 

@@ -409,7 +409,7 @@ def tfplan3():
                   allowedchange=True
                   nallowedchanges=nallowedchanges+1
                else:
-                  print("Unexpected plan changes found in Terraform Plan for type: "+str(pe['change']['resource']['resource_type']))
+                  print("Unexpected plan changes found in Terraform Plan for type: "+str(pe['change']['resource']['resource_type'])+str(pe['change']['resource']['addr']))
          if nchanges==nallowedchanges:
             print("\n-->> plan will change "+ str(nchanges)  +" resources! - these are expected changes only (should be non-consequential)")
             ci=1

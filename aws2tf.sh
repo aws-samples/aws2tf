@@ -228,9 +228,9 @@ printf "required_version = \"> 1.5.5\"\n" >>aws.tf
 printf "  required_providers {\n" >>aws.tf
 printf "   aws = {\n" >>aws.tf
 printf "     source  = \"hashicorp/aws\"\n" >>aws.tf
-printf "      version = \"= 5.30\"\n" >>aws.tf
+printf "      version = \"= 5.55\"\n" >>aws.tf
+#printf "      version = \"= 5.30\"\n" >>aws.tf
 #printf "      version = \"= 4.67\"\n" >>aws.tf
-#printf "      version = \"= 4.34.0\"\n" >> aws.tf
 printf "    }\n" >>aws.tf
 
 #printf "       awscc = {\n" >> aws.tf

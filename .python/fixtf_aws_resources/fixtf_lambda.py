@@ -19,7 +19,7 @@ def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
     elif tt1 == "filename":
              
         if os.path.isfile(flag2+".zip"):
-            t1=tt1 + " = \""+flag2+".zip\"\n lifecycle {\n   ignore_changes = [filename]\n}\n"
+            t1=tt1 + " = \""+flag2+".zip\"\n lifecycle {\n   ignore_changes = [filename,publish,source_code_hash]\n}\n"
         elif tt2 == "null": skip=1
     elif tt1 == "image_uri":
         

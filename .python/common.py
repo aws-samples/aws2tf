@@ -410,7 +410,7 @@ def tfplan3():
                   allowedchange=True
                   nallowedchanges=nallowedchanges+1
                else:
-                  print("Unexpected plan changes found in Terraform Plan for type: "+str(pe['change']['resource']['resource_type'])+str(pe['change']['resource']['addr']))
+                  print("Unexpected plan changes found in Terraform Plan for resource: "+str(pe['change']['resource']['addr']))
          if nchanges==nallowedchanges:
             print("\n-->> plan will change "+ str(nchanges)  +" resources! - these are expected changes only (should be non-consequential)")
             ci=1
@@ -522,7 +522,8 @@ def aws_tf(region):
          f3.write('  required_providers {\n')
          f3.write('    aws = {\n')
          f3.write('      source  = "hashicorp/aws"\n')
-         f3.write('      version = "5.48.0"\n')
+         #f3.write('      version = "5.48.0"\n')
+         f3.write('      version = "5.55.0"\n')
          f3.write('    }\n')
          f3.write('  }\n')
          f3.write('}\n')

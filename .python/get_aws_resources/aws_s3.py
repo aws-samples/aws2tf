@@ -137,9 +137,9 @@ def get_all_s3_buckets(fb,my_region):
      print("Processing Bucket: "+bucket_name + '  ............')
      common.write_import(type,bucket_name,"b-"+bucket_name)
 
-     #for key in s3_fields:
+     for key in s3_fields:
          #print("outside get_s3 type=" + key)
-         #get_s3(s3_fields,key,bucket_name)
+         get_s3(s3_fields,key,bucket_name)
 
    return True
       

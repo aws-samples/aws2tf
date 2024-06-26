@@ -368,8 +368,19 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 			
 			if tt2 == "[]": skip=1
 
-		elif tt1 == "id":
+
+		elif tt1=="id":
 			flag2=id
+			if tt2.startswith("lt-"):
+				t1 = tt1 +" = aws_launch_template."+tt2+".id\n"
+				common.add_dependancy("aws_launch_template",tt2)
+			flag1=True
+
+
+		elif tt1=="name":
+			if flag1:
+				skip=1
+				flag1=False
 
 		elif tt1 == "user_data":
 			inid=flag2.split("__")[1]

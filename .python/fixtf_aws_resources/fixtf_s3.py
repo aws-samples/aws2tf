@@ -95,8 +95,10 @@ def aws_s3_bucket_object(t1,tt1,tt2,flag1,flag2):
 	return skip,t1,flag1,flag2
 
 def aws_s3_bucket_object_lock_configuration(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+    skip=0
+    if tt1 == "years" and tt2 == "0": skip=1
+    elif tt1 == "days" and tt2 == "0": skip=1
+    return skip,t1,flag1,flag2
 
 def aws_s3_bucket_objects(t1,tt1,tt2,flag1,flag2):
 	skip=0

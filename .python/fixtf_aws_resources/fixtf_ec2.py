@@ -391,7 +391,8 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 				ud2=base64.b64decode(ud).decode('utf-8')
 				with open(flag2+'.sh', 'w') as f:
 					f.write(ud2)
-				t1="user_data_base64 = filebase64sha256(\""+flag2+".sh\")\n lifecycle {\n   ignore_changes = [user_data_replace_on_change,user_data,user_data_base64]\n}\n"
+				t1="user_data_base64 = filebase64sha256(\""+flag2+".sh\")\n lifecycle {\n   ignore_changes = [user_data_replace_on_change,user_data,user_data_base64,metadata_options[0].http_protocol_ipv6]\n}\n"
+				globals.ec2ignore=True
 			except KeyError:
 				pass
 
@@ -408,6 +409,17 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 			if tt2 != "null":
 				t1=tt1 + " = aws_key_pair." + tt2 + ".id\n"
 				common.add_dependancy("aws_key_pair",tt2)
+
+		elif tt1 == "user_data_replace_on_change" and tt2 == "null":
+			t1=tt1 + " = false\n"
+			if globals.ec2ignore==False:
+				globals.ec2ignore=True
+				t1=t1+"\n lifecycle {\n   ignore_changes = [user_data_replace_on_change,user_data,user_data_base64,metadata_options[0].http_protocol_ipv6]\n}\n"		
+
+		elif tt1 == "http_protocol_ipv6" and tt2 == "null":
+			t1=tt1 + " = \"disabled\"\n"
+		
+			#t1=t1+"\n lifecycle {\n   ignore_changes = [user_data_replace_on_change]\n}\n"
 
 
 		

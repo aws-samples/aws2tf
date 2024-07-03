@@ -179,7 +179,9 @@ for c in $(seq 0 0); do
                     fi
                     if [[ ${tt1} == "kms_key_id" ]]; then
                         tt2=$(echo $tt2 | cut -f2 -d'/' | tr -d '"')
-                        t1=$(printf "%s = data.aws_kms_key.k_%s.arn" $tt1 $tt2)
+                        if [[ ${tt2} != "null" ]]; then
+                            t1=$(printf "%s = data.aws_kms_key.k_%s.arn" $tt1 $tt2)
+                        fi
                     fi
 
                 else

@@ -181,6 +181,8 @@ for c in $(seq 0 0); do
                         tt2=$(echo $tt2 | cut -f2 -d'/' | tr -d '"')
                         if [[ ${tt2} != "null" ]]; then
                             t1=$(printf "%s = data.aws_kms_key.k_%s.arn" $tt1 $tt2)
+                        else
+                            skip=1
                         fi
                     fi
 

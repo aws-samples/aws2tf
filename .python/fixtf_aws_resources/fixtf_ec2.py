@@ -409,6 +409,14 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 				t1=tt1 + " = aws_key_pair." + tt2 + ".id\n"
 				common.add_dependancy("aws_key_pair",tt2)
 
+		elif tt1 == "user_data_replace_on_change" and tt2 == "null":
+			t1=tt1 + " = false\n"
+			t1=t1+"\n lifecycle {\n   ignore_changes = [user_data_replace_on_change,metadata_options[0].http_protocol_ipv6]\n}\n"
+		elif tt1 == "http_protocol_ipv6" and tt2 == "null":
+			t1=tt1 + " = \"disabled\"\n"
+		
+			#t1=t1+"\n lifecycle {\n   ignore_changes = [user_data_replace_on_change]\n}\n"
+
 
 		
 	except Exception as e:

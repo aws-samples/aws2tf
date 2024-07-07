@@ -273,6 +273,17 @@ def aws_ec2_transit_gateway_multicast_group_source(t1,tt1,tt2,flag1,flag2):
 
 def aws_ec2_transit_gateway_peering_attachment(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1 == "peer_account_id":
+		if globals.acc in tt2: flag1=True
+	if tt1=="peer_transit_gateway_id" and tt2 != "null":
+		print(str(flag1))
+		if flag1==True:
+			t1=tt1 + " = aws_ec2_transit_gateway." + tt2 + ".id\n"
+			common.add_dependancy("aws_ec2_transit_gateway", tt2)
+	if tt1=="transit_gateway_id" and tt2!="null":
+		if flag1==True:
+			t1=tt1 + " = aws_ec2_transit_gateway." + tt2 + ".id\n"
+			common.add_dependancy("aws_ec2_transit_gateway", tt2)
 	return skip,t1,flag1,flag2
 
 def aws_ec2_transit_gateway_peering_attachment_accepter(t1,tt1,tt2,flag1,flag2):
@@ -599,19 +610,23 @@ def  aws_route_table(t1,tt1,tt2,flag1,flag2):
         
         if tt2 == "": t1=tt1 + " = null\n"
 
-    elif "nat_gateway_id" in tt1:
+
+    elif "nat_gateway_id" in tt1 and tt2 != "null":
         
         if tt2 != "":
             t1=tt1 + " = aws_nat_gateway." + tt2 + ".id\n"
             common.add_dependancy("aws_nat_gateway",tt2)
 
-    elif tt1 == "gateway_id":
+    elif tt1 == "gateway_id" and tt2 != "null":
         
         if tt2 != "":
             t1=tt1 + " = aws_internet_gateway." + tt2 + ".id\n"
             common.add_dependancy("aws_internet_gateway",tt2)
 
+
+
     return skip,t1,flag1,flag2
+
 
 def aws_route_table_association(t1,tt1,tt2,flag1,flag2):
     skip=0

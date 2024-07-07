@@ -44,6 +44,7 @@ meshname=""
 #          "aws_vpclattice_service","aws_vpclattice_listener","aws_vpclattice_listener_rule","aws_vpclattice_auth_policy"]
 
 badlist=[]
+vpclist=[]
 
 
 ## Dicts

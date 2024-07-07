@@ -65,8 +65,9 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         elif tt1 == "iam_roles": t1=fixtf.deref_role_arn_array(t1,tt1,tt2)
         elif tt1 == "vpc_id":
             if tt2 != "null":
-                t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
-                common.add_dependancy("aws_vpc", tt2)
+                if tt2 in globals.vpclist:
+                    t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
+                    common.add_dependancy("aws_vpc", tt2)
 
         elif tt1 == "subnet_id":
             if tt2 != "null":

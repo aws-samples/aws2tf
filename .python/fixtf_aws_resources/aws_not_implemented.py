@@ -135,7 +135,7 @@ notimplemented = {
     "aws_dynamodb_global_table": True,
     "aws_ec2_local_gateway_route": True,
     "aws_ec2_subnet_cidr_reservation": True,
-    "aws_ec2_transit_gateway_route": True,  ### TODO
+    #"aws_ec2_transit_gateway_route": True,  ### TODO
     "aws_efs_mount_target": True,  ### TODO
     "aws_efs_replication_configuration": True,
     "aws_eks_access_policy_association": True, ### TODO

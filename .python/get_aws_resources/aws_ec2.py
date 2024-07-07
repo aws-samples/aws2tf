@@ -687,6 +687,7 @@ def get_aws_ec2_transit_gateway(type, id, clfn, descfn, topkey, key, filterid):
                 common.write_import(type,j[key],None) 
                 common.add_known_dependancy("aws_ec2_transit_gateway_vpc_attachment",j[key])
                 common.add_known_dependancy("aws_ec2_transit_gateway_peering_attachment", j[key])
+                common.add_known_dependancy("aws_ec2_transit_gateway_route_table", j[key])
 
         else: 
             if id.startswith("tgw-"):     
@@ -696,6 +697,8 @@ def get_aws_ec2_transit_gateway(type, id, clfn, descfn, topkey, key, filterid):
                     common.write_import(type,j[key],None)
                     common.add_known_dependancy("aws_ec2_transit_gateway_vpc_attachment",j[key])
                     common.add_known_dependancy("aws_ec2_transit_gateway_peering_attachment", j[key])
+                    common.add_known_dependancy("aws_ec2_transit_gateway_route_table", j[key])
+
 
             else:
                 print("WARNING: "+type+" id must start with tgw-")
@@ -768,6 +771,65 @@ def get_aws_ec2_transit_gateway_peering_attachment(type, id, clfn, descfn, topke
                     common.write_import(type,j[key],None)           
             else:
                 print("WARNING: "+type+" id must start with tgw- or vpc-")
+
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+def get_aws_ec2_transit_gateway_route_table(type, id, clfn, descfn, topkey, key, filterid):
+    #if globals.debug:
+    print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate():
+                response = response + page[topkey]
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            for j in response:
+                common.write_import(type,j[key],None) 
+                common.add_dependancy("aws_ec2_transit_gateway_route",j[key])
+ 
+        else: 
+            if id.startswith("tgw-"):     
+                response = client.describe_transit_gateway_route_tables(Filters=[{'Name': 'transit-gateway-id','Values': [id]}])
+                if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                for j in response[topkey]:
+                    common.write_import(type,j[key],None)   
+                    common.add_dependancy("aws_ec2_transit_gateway_route",j[key])        
+            else:
+                print("WARNING: "+type+" id must start with tgw- or vpc-")
+
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+
+def get_aws_ec2_transit_gateway_route(type, id, clfn, descfn, topkey, key, filterid):
+    #if globals.debug:
+    print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            print("WARNING: "+type+" id must pass Transit gateway route table id")
+ 
+        else: 
+            if id.startswith("tgw-rtb-"):     
+                response = client.search_transit_gateway_routes(TransitGatewayRouteTableId=id,Filters=[{'Name': 'type','Values': ['static']}])
+                if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                for j in response[topkey]:
+                    pkey=id+"_"+j[key]
+                    common.write_import(type,pkey,id)           
+            else:
+                print("WARNING: "+type+" id must start with tgw-rtb-")
 
 
     except Exception as e:

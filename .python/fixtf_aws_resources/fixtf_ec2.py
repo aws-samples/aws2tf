@@ -304,10 +304,16 @@ def aws_ec2_transit_gateway_prefix_list_reference(t1,tt1,tt2,flag1,flag2):
 
 def aws_ec2_transit_gateway_route(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="transit_gateway_route_table_id" and tt2!="null":
+			t1=tt1 + " = aws_ec2_transit_gateway_route_table." + tt2 + ".id\n"
+			common.add_dependancy("aws_ec2_transit_gateway_route_table", tt2)
 	return skip,t1,flag1,flag2
 
 def aws_ec2_transit_gateway_route_table(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="transit_gateway_id" and tt2!="null":
+			t1=tt1 + " = aws_ec2_transit_gateway." + tt2 + ".id\n"
+			common.add_dependancy("aws_ec2_transit_gateway", tt2)
 	return skip,t1,flag1,flag2
 
 def aws_ec2_transit_gateway_route_table_association(t1,tt1,tt2,flag1,flag2):
@@ -320,6 +326,9 @@ def aws_ec2_transit_gateway_route_table_propropagation(t1,tt1,tt2,flag1,flag2):
 
 def aws_ec2_transit_gateway_vpc_attachment(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="transit_gateway_id" and tt2!="null":
+			t1=tt1 + " = aws_ec2_transit_gateway." + tt2 + ".id\n"
+			common.add_dependancy("aws_ec2_transit_gateway", tt2)
 	return skip,t1,flag1,flag2
 
 def aws_ec2_transit_gateway_vpc_attachment_accepter(t1,tt1,tt2,flag1,flag2):

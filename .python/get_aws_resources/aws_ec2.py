@@ -125,9 +125,18 @@ def get_aws_security_group_rule(type, id, clfn, descfn, topkey, key, filterid):
             except KeyError:
                 pass
 
-
-            #if ing=="ingress" and toport=="8443": 
+            #if "icmp" in protocol:
             #    print(str(j))
+
+
+            if "icmp" not in protocol:
+                if protocol=="-1": protocol="all"
+                if fromport=="-1": fromport="0"
+                if toport=="-1": toport="0"
+
+
+            #if ing=="ingress" and sgid=="sg-0b70930caea1aac99": 
+                #print(str(j))
             #    print("************1************")
             #    print(sgid+ing+protocol+fromport+toport)
             #    print("************2************")
@@ -144,6 +153,9 @@ def get_aws_security_group_rule(type, id, clfn, descfn, topkey, key, filterid):
             if cidr4 != "": impstring= impstring + "_" + cidr4
             if cidr6 != "": impstring= impstring + "_" + cidr6
             if refgrp_sgid != "": impstring= impstring + "_" + refgrp_sgid
+            #else:
+            #    if cidr4 != "": impstring= impstring + "_" + cidr4
+            #    if cidr6 != "": impstring= impstring + "_" + cidr6
             if prefixlistid !="": impstring= impstring + "_" + prefixlistid
 
             common.write_import(type,impstring,None) 

@@ -153,7 +153,7 @@ if __name__ == '__main__':
     for page in paginator.paginate(): response = response + page['Vpcs']
     for j in response: globals.vpclist.append(j['VpcId'])
 
-    print(str(globals.vpclist))
+    if globals.debug: print(str(globals.vpclist))
 
     
     if type == "" or type is None: type = "all"

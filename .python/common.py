@@ -548,7 +548,7 @@ def aws_tf(region):
                 
 
 # split resources.out
-def splitf(file):
+def splitf_old(file):
    lhs=0
    rhs=0
    if os.path.isfile(file):
@@ -599,42 +599,57 @@ def splitf(file):
    shutil.move(file,"imported/"+file)
    
  
+#################################
+
+def splitf(file):
+   lhs=0
+   rhs=0
+   if os.path.isfile(file):
+      print("split file:"+ file)
+      with open(file, "r") as f:
+         Lines = f.readlines()
+      for tt1 in Lines:
+         #print(tt1)
+         if "{" in tt1: lhs=lhs+1
+         if "}" in tt1: rhs=rhs+1
+         if lhs > 1:
+               if lhs == rhs:
+                  try:
+                     splitlines.append(tt1)
+                     with open(splitfout, "w") as f:
+                        f.writelines(splitlines)
+                     lhs=0
+                     rhs=0
+                     continue
+                  except:
+                     print("problem writing to file "+splitfout)
+                     exit()
+
+         if tt1.startswith("resource"):
+               #print("resource: " + tt1)
+               ttft=tt1.split('"')[1]
+               taddr=tt1.split('"')[3]
+               splitlines=[]
+               splitfout=ttft+"__"+taddr+".out"
+               splitlines.append(tt1)
+         elif tt1.startswith("#"):
+               continue
+         elif tt1=="" or tt1=="\n":
+               continue
+         else:
+            splitlines.append(tt1)
+
+   else:
+      print("could not find expected resources.out file")
+      
+   # moves resources.out to imported
+   #f2.close()
+   shutil.move(file,"imported/"+file)
+   
+
+
+
 ################################
-
-
-def splitf2(file):
-    resource_pattern = r'resource\s*"([^"]+)"\s*"([^"]+)"'
-    output_files = {}
-
-    if os.path.isfile(file):
-        print("split file:", file)
-        with open(file, "r") as f:
-            lines = f.readlines()
-
-        for line in lines:
-            match = re.search(resource_pattern, line)
-            if match:
-                resource_type, resource_address = match.groups()
-                output_file = f"{resource_type}__{resource_address}.tf"
-                if output_file not in output_files:
-                    output_files[output_file] = []
-                output_files[output_file].append(line)
-            elif line.startswith("#") or line.strip() == "":
-                continue
-            else:
-                for out_file, out_lines in output_files.items():
-                    with suppress(ValueError):
-                        out_lines.append(line)
-
-        for out_file, out_lines in output_files.items():
-            out_path =  out_file
-            with open(out_path, "w") as f:
-                f.writelines(out_lines)
-
-        os.rename(file, os.path.join("imported", file))
-    else:
-        print("could not find expected resources.out file")
-
 
 
 

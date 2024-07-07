@@ -144,13 +144,23 @@ if __name__ == '__main__':
         rout = common.rc(com)
 
     id = args.id
+
+#### setup lists - mainly for tgw
+    client = boto3.client('ec2')
+    response=[]
+    #response = client.describe_vpcs()
+    paginator = client.get_paginator('describe_vpcs')
+    for page in paginator.paginate(): response = response + page['Vpcs']
+    for j in response: globals.vpclist.append(j['VpcId'])
+
+    print(str(globals.vpclist))
+
     
     if type == "" or type is None: type = "all"
     print("---<><>"+ str(type),str(id))
         
 
 ################# -- now we are calling ----   ###############################
-
     all_types = resources.resource_types(type)
     try:
         lall=len(all_types)

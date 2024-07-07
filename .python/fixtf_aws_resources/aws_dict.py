@@ -3893,10 +3893,10 @@ aws_ec2_transit_gateway_prefix_list_reference = {
 
 aws_ec2_transit_gateway_route = {
 	"clfn":		"ec2",
-	"descfn":	"describe_transit_gateway_routes",
-	"topkey":	"TransitGatewayRoutes",
-	"key":		"TransitGatewayRouteId",
-	"filterid":	"TransitGatewayRouteId"
+	"descfn":	"search_transit_gateway_routes",
+	"topkey":	"Routes",
+	"key":		"DestinationCidrBlock",
+	"filterid":	"DestinationCidrBlock"
 }
 
 aws_ec2_transit_gateway_route_table = {

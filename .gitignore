@@ -44,3 +44,4 @@ __pycache__
 .python/provider-data/terraform-provider-aws
 run.log
 .python/.auto-gen/*.log
+TOPORT_from_aws2tf.md

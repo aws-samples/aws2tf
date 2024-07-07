@@ -378,10 +378,14 @@ def tfplan3():
               zeroa=True
 
             if '@level":"error"' in line:
-              if globals.debug is True:
-                 print("Error" + line)
-              print("-->> Plan 2 errors exiting - check plan2.json - or run terraform plan")
-              exit()
+              if "Error: Conflicting configuration arguments" in line and "aws_security_group_rule." in line:
+                 print("WARNING: Conflicting configuration arguments in aws_security_group_rule")
+              else:   
+                  if globals.debug is True:
+                     print("Error" + line)
+
+                  print("-->> Plan 2 errors exiting - check plan2.json - or run terraform plan")
+                  exit()
 
       if not zerod:
          print("-->> plan will destroy resources! - unexpected, is there existing state ?")
@@ -523,7 +527,7 @@ def aws_tf(region):
          f3.write('    aws = {\n')
          f3.write('      source  = "hashicorp/aws"\n')
          #f3.write('      version = "5.48.0"\n')
-         f3.write('      version = "5.55.0"\n')
+         f3.write('      version = "5.57.0"\n')
          f3.write('    }\n')
          f3.write('  }\n')
          f3.write('}\n')
@@ -548,7 +552,7 @@ def aws_tf(region):
                 
 
 # split resources.out
-def splitf_old(file):
+def splitf(file):
    lhs=0
    rhs=0
    if os.path.isfile(file):
@@ -601,7 +605,7 @@ def splitf_old(file):
  
 #################################
 
-def splitf(file):
+def splitf_new(file):
    lhs=0
    rhs=0
    if os.path.isfile(file):

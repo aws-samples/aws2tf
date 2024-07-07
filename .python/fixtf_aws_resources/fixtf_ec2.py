@@ -441,7 +441,7 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 		
 			#t1=t1+"\n lifecycle {\n   ignore_changes = [user_data_replace_on_change]\n}\n"
 
-
+		
 		
 	except Exception as e:
 		common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id)
@@ -502,6 +502,7 @@ def aws_launch_template(t1,tt1,tt2,flag1,flag2):
 
 	elif tt1=="on_demand_max_price_percentage_over_lowest_price" and tt2=="0": skip=1
 	elif tt1=="spot_max_price_percentage_over_lowest_price" and tt2=="0": skip=1
+	elif tt1=="max_spot_price_as_percentage_of_optimal_on_demand_price" and tt2=="0": skip=1
 
 	return skip,t1,flag1,flag2
 
@@ -655,17 +656,13 @@ def aws_route_table_association(t1,tt1,tt2,flag1,flag2):
 
 def aws_security_group_rule(t1,tt1,tt2,flag1,flag2):
 	skip=0
-	if tt1 == "ipv6_cidr_blocks":
-		
+	if tt1 == "ipv6_cidr_blocks":	
 		if tt2 == "[]": skip=1
 	elif tt1 == "cidr_blocks":
-		
 		if tt2 == "[]": skip=1
-	elif tt1 == "self":
-		
+	elif tt1 == "self":	
 		if tt2 == "false": skip=1
 	elif tt1 == "security_group_id" or tt1 == "source_security_group_id": 
-		
 		if "sg-" in tt2:
 			t1=tt1 + " = aws_security_group." + tt2 + ".id\n"
 			common.add_dependancy("aws_security_group",tt2)

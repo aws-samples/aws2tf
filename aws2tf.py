@@ -6,6 +6,8 @@ import argparse
 import glob
 import os
 import sys
+import shutil
+
 
 
 sys.path.insert(0, './.python')
@@ -61,6 +63,14 @@ if __name__ == '__main__':
     argParser.add_argument("-b3", "--boto3error", help="exit on boto3 api error (for debugging)", action='store_true')
     args = argParser.parse_args()
     type=""
+
+
+    path = shutil.which("terraform") 
+
+    if path is None:
+        print("no executable found for command 'terraform'")
+        exit()
+
     # print("args=%s" % args)
     
     # print("args.bucket=%s" % args.bucket)

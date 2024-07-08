@@ -89,6 +89,9 @@ if __name__ == '__main__':
             region = "eu-west-1"
         else:
             region = rout.stdout.decode().rstrip()
+            if len(region) == 0:
+                print("region is required - set in AWS cli or pass with -r")
+                exit()
             print("region set from aws cli as "+region)
     else:
         region = args.region

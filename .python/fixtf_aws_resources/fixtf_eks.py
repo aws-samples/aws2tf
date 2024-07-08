@@ -103,6 +103,9 @@ def aws_eks_node_group(t1,tt1,tt2,flag1,flag2):
             t1=tt1 + " = aws_launch_template." + tt2 + ".name\n"
             common.add_dependancy("aws_launch_template",tt2)
             flag1=False
+        else:
+            skip=1
+        
     
     return skip,t1,flag1,flag2
 

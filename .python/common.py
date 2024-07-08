@@ -1,8 +1,10 @@
 import boto3
-import sys, traceback
+import sys
+import traceback
 import subprocess
 import os
 import re
+from io import StringIO
 from contextlib import suppress
 import shutil
 import json
@@ -13,6 +15,8 @@ import fixtf
 import inspect
 from datetime import datetime
 import resources
+#####################
+
 from get_aws_resources import aws_acm
 from get_aws_resources import aws_amplify
 from get_aws_resources import aws_athena
@@ -21,6 +25,7 @@ from get_aws_resources import aws_apigateway
 from get_aws_resources import aws_apigatewayv2
 from get_aws_resources import aws_appmesh
 from get_aws_resources import aws_application_autoscaling
+from get_aws_resources import aws_appstream
 from get_aws_resources import aws_backup
 from get_aws_resources import aws_bedrock
 from get_aws_resources import aws_cleanrooms
@@ -85,75 +90,75 @@ from fixtf_aws_resources import aws_not_implemented
 
 
 def call_resource(type, id):
-    
+
    if type in aws_no_import.noimport:
       print("WARNING: Terraform cannot import type: " + type)
       return
-   
+
    if type in aws_not_implemented.notimplemented:
-      print("Not supported by aws2tf currently: " + type + " please submit github issue to request support")
+      print("Not supported by aws2tf currently: " + type +
+            " please submit github issue to request support")
       return
-   
-   elif type=="aws_null":
+
+   elif type == "aws_null":
       with open('stack-null.err', 'a') as f3:
          f3.write("-->> called aws_null for: "+id+"\n")
       return
-  
 
    with open('processed-resources.log', 'a') as f4:
-      f4.write(str(type)+ " : " +str(id)+"\n")
-      
-    ## don't get it if we alreay have it
+      f4.write(str(type) + " : " + str(id)+"\n")
+
+    # don't get it if we alreay have it
     # if globals.rproc
    if globals.debug: print("---->>>>> "+type+"   "+str(id))
    if id is not None:
-      ti=type+"."+id
+      ti = type+"."+id
       try:
-         if globals.rproc[ti]: 
+         if globals.rproc[ti]:
             print("Already processed " + ti)
             return
       except:
          pass
    else:
       if type in needid_dict.aws_needid:
-         print("WARNING: " +  type + " cannot have null id must pass parameter "+needid_dict.aws_needid[type]['param'])
-         ### TODO api only
+         print("WARNING: " + type + " cannot have null id must pass parameter " +
+               needid_dict.aws_needid[type]['param'])
+         # TODO api only
          return
 
-   rr=False
-   sr=False
+   rr = False
+   sr = False
    clfn, descfn, topkey, key, filterid = resources.resource_data(type, id)
    if key == "NOIMPORT":
       print("WARNING: Terraform cannot import type: " + type)
       return
 
-   
-   
    if clfn is None:
         print("ERROR: clfn is None with type="+type)
         exit()
-## Try specific    
-    
+# Try specific
+
    try:
             if globals.debug:
                print("calling specific common.get_"+type+" with type="+type+" id="+str(id)+"   clfn=" +
                     clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
-            
-            if clfn=="vpc-lattice":  getfn = getattr(eval("aws_vpc_lattice"), "get_"+type) 
-            elif clfn=="redshift-serverless":  getfn = getattr(eval("aws_redshift_serverless"), "get_"+type) 
-            elif clfn=="s3":  getfn = getattr(eval("aws_s3"), "get_"+type) 
 
-            else:   
-               #print("-1aa- clfn:"+clfn+" type:"+type)
-               mclfn=clfn.replace("-","_")
-               #print("-1ab- mclfn:"+mclfn+" type:"+type)
-               getfn = getattr(eval("aws_"+mclfn), "get_"+type) 
-               #print("-1ac- clfn:"+clfn+" type:"+type)
+            if clfn == "vpc-lattice":  getfn = getattr(
+                eval("aws_vpc_lattice"), "get_"+type)
+            elif clfn == "redshift-serverless":  getfn = getattr(eval("aws_redshift_serverless"), "get_"+type)
+            elif clfn == "s3":  getfn = getattr(eval("aws_s3"), "get_"+type)
 
-            sr=getfn(type, id, clfn, descfn, topkey, key, filterid)
+            else:
+               # print("-1aa- clfn:"+clfn+" type:"+type)
+               mclfn = clfn.replace("-", "_")
+               # print("-1ab- mclfn:"+mclfn+" type:"+type)
+               getfn = getattr(eval("aws_"+mclfn), "get_"+type)
+               # print("-1ac- clfn:"+clfn+" type:"+type)
+
+            sr = getfn(type, id, clfn, descfn, topkey, key, filterid)
 
    except AttributeError as e:
-      if globals.debug: 
+      if globals.debug:
          print("AttributeError: name 'getfn' - no aws_"+clfn+".py file ?")
          print(f"{e=}")
          exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -162,165 +167,166 @@ def call_resource(type, id):
       pass
 
    except SyntaxError:
-      if globals.debug: print("SyntaxError: name 'getfn' - no aws_"+clfn+".py file ?")
+      if globals.debug: print(
+          "SyntaxError: name 'getfn' - no aws_"+clfn+".py file ?")
       pass
 
    except NameError as e:
-      if globals.debug: 
+      if globals.debug:
          print("WARNING: NameError: name 'getfn' - no aws_"+clfn+".py file ?")
-         print(f"{e=}") 
+         print(f"{e=}")
          exc_type, exc_obj, exc_tb = sys.exc_info()
          fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-         print(exc_type, fname, exc_tb.tb_lineno)  
+         print(exc_type, fname, exc_tb.tb_lineno)
 
       pass
 
    except Exception as e:
-      handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)     
-      
+      handle_error(e, str(inspect.currentframe().f_code.co_name),
+                   clfn, descfn, topkey, id)
+
    if not sr:
       try:
          if globals.debug:
                print("calling generic getresource with type="+type+" id="+str(id)+"   clfn="+clfn +
                " descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
-         rr=getresource(type, id, clfn, descfn, topkey, key, filterid)
+         rr = getresource(type, id, clfn, descfn, topkey, key, filterid)
       except Exception as e:
          print(f"{e=}")
-                  
+
          exc_type, exc_obj, exc_tb = sys.exc_info()
          fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-         print(exc_type, fname, exc_tb.tb_lineno)  
+         print(exc_type, fname, exc_tb.tb_lineno)
          if rr is False:
             print("--->> Could not get resource "+type+" id="+str(id))
             pass
-   
+
 
 def tfplan1():
    print("Terraform Plan - Dependancies Detection Loop ...")
-   rf="resources.out"
-   #com="terraform plan -generate-config-out="+ rf + " -out tfplan -json > plan2.json"
-
+   rf = "resources.out"
+   # com="terraform plan -generate-config-out="+ rf + " -out tfplan -json > plan2.json"
 
    if not glob.glob("import*.tf"):
       print("No import*.tf files found for this resource, exiting ....")
       exit()
 
-
-   com="terraform plan -generate-config-out="+ rf + " -out tfplan -json | jq . > plan1.json"
+   com = "terraform plan -generate-config-out=" + \
+       rf + " -out tfplan -json | jq . > plan1.json"
    print(com)
-   rout=rc(com)
+   rout = rc(com)
 
-   file="plan1.json"
-   f2=open(file, "r")
-   plan2=True
-   
+   file = "plan1.json"
+   f2 = open(file, "r")
+   plan2 = True
 
    while True:
       line = f2.readline()
       if not line:
          break
-      #print(line)
+      # print(line)
       if '@level": "error"' in line:
          if globals.debug is True:
             print("Error" + line)
          try:
-               mess=f2.readline()
+               mess = f2.readline()
                try:
                   if "VPC Lattice" in mess and "404" in mess:
                      print("ERROR: VPC Lattice 404 error - see plan1.json")
-                     i=mess.split('(')[1].split(')')[0].split('/')[-1]
+                     i = mess.split('(')[1].split(')')[0].split('/')[-1]
                      if i != "":
-                        print("ERROR: Removing "+i+" import files - plan errors see plan1.json [p1]")
-                        globals.badlist=globals.badlist+[i]
-                        shutil.move("import__*"+i+"*.tf","notimported/import__*"+i+"*.tf")
-
-
+                        print("ERROR: Removing "+i +
+                              " import files - plan errors see plan1.json [p1]")
+                        globals.badlist = globals.badlist+[i]
+                        shutil.move("import__*"+i+"*.tf",
+                                    "notimported/import__*"+i+"*.tf")
 
                   elif "Error: Cannot import non-existent remote object" in mess:
-                     print("ERROR: Cannot import non-existent remote object - see plan1.json")
-                     i=mess.split('(')[1].split(')')[0].split('/')[-1]
+                     print(
+                         "ERROR: Cannot import non-existent remote object - see plan1.json")
+                     i = mess.split('(')[1].split(')')[0].split('/')[-1]
                      if i != "":
-                        print("ERROR: Removing "+i+" import files - plan errors see plan1.json [p2]")
-                        globals.badlist=globals.badlist+[i]
-                        shutil.move("import__*"+i+"*.tf","notimported/import__*"+i+"*.tf")
- 
+                        print("ERROR: Removing "+i +
+                              " import files - plan errors see plan1.json [p2]")
+                        globals.badlist = globals.badlist+[i]
+                        shutil.move("import__*"+i+"*.tf",
+                                    "notimported/import__*"+i+"*.tf")
 
                except:
                   pass
 
                try:
-                  i=mess.split('(')[2].split(')')[0]
+                  i = mess.split('(')[2].split(')')[0]
                   if i != "":
-                     print("ERROR: Removing "+i+" files - plan errors see plan1.json [p3]")
-                     globals.badlist=globals.badlist+[i]
-                     shutil.move("import__*"+i+"*.tf","notimported/import__*"+i+"*.tf")
-                     shutil.move("aws_*"+i+"*.tf","notimported/aws_*"+i+"*.tf")
+                     print("ERROR: Removing "+i +
+                           " files - plan errors see plan1.json [p3]")
+                     globals.badlist = globals.badlist+[i]
+                     shutil.move("import__*"+i+"*.tf",
+                                 "notimported/import__*"+i+"*.tf")
+                     shutil.move("aws_*"+i+"*.tf",
+                                 "notimported/aws_*"+i+"*.tf")
 
                except:
                   if globals.debug is True:
                      print(mess.strip())
-                  globals.plan2=True
-               
+                  globals.plan2 = True
+
          except:
                print("Error - no error message, check plan1.json")
-               dt=datetime.now().isoformat(timespec='seconds') 
-               com="cp plan1.json plan1.json."+dt
+               dt = datetime.now().isoformat(timespec='seconds')
+               com = "cp plan1.json plan1.json."+dt
                print(com)
-               rout=rc(com)
-               #continue
+               rout = rc(com)
+               # continue
                exit()
 
-   #print("Plan 1 complete -- resources.out generated")
+   # print("Plan 1 complete -- resources.out generated")
 
    if not os.path.isfile("resources.out"):
          print("could not find expected resources.out file after Plan 1 - exiting")
-         dt=datetime.now().isoformat(timespec='seconds') 
-         com="cp plan1.json plan1.json."+dt
+         dt = datetime.now().isoformat(timespec='seconds')
+         com = "cp plan1.json plan1.json."+dt
          print(com)
-         rout=rc(com)
-         
-         #exit()  
+         rout = rc(com)
+
+         # exit()
    return
 
 
-
-
 def tfplan2():
-   #print("fix tf files.....") 
+   # print("fix tf files.....")
    if not os.path.isfile("resources.out"):
          print("could not find expected resources.out file in tfplan2 - exiting")
-         #exit()
+         # exit()
          return
 
-   #print("split resources.out")
+   # print("split resources.out")
    splitf("resources.out")  # generated *.out files
-   #zap the badlist
+   # zap the badlist
    for i in globals.badlist:
-      #com="rm -f aws_*"+i+"*.out"+" aws_*"+i+"*.tf"
+      # com="rm -f aws_*"+i+"*.out"+" aws_*"+i+"*.tf"
       print("ERROR: Removing "+i+" files - plan errors see plan1.json [p4]")
-      
-      #print(com)
-      #rout=rc(com)
+
+      # print(com)
+      # rout=rc(com)
       try:
-         shutil.move("aws_*"+i+"*.tf","notimported/aws_*"+i+"*.tf")
-         shutil.move("aws_*"+i+"*.out","notimported/aws_*"+i+"*.out")
+         shutil.move("aws_*"+i+"*.tf", "notimported/aws_*"+i+"*.tf")
+         shutil.move("aws_*"+i+"*.out", "notimported/aws_*"+i+"*.out")
       except FileNotFoundError as e:
          print(f"{e=}")
          pass
       # sed to remove references
 
-
-        
-   x=glob.glob("aws_*__*.out")
+   x = glob.glob("aws_*__*.out")
    for fil in x:
-         type=fil.split('__')[0]
-         tf=fil.split('.')[0]
-         #print("type="+type+" tf="+tf)
-         #if type not in globals.types:
-         #   globals.types=globals.types+[type]             
-         fixtf.fixtf(type,tf)
-   com="terraform fmt"
-   rout=rc(com)
+         type = fil.split('__')[0]
+         tf = fil.split('.')[0]
+         # print("type="+type+" tf="+tf)
+         # if type not in globals.types:
+         #   globals.types=globals.types+[type]
+         fixtf.fixtf(type, tf)
+   com = "terraform fmt"
+   rout = rc(com)
 
 
 def tfplan3():
@@ -329,62 +335,62 @@ def tfplan3():
       print("No aws_*.tf files found for this resource, exiting ....")
       exit()
 
-   rf="resources.out"
-         
-   com="terraform validate -no-color"
-   rout=rc(com)
-   el=len(rout.stderr.decode().rstrip())
-   if el!=0:
-      errm=rout.stderr.decode().rstrip()
-      print(errm)
-      com="terraform validate -no-color -json > validate2.json"
-      rout=rc(com)
+   rf = "resources.out"
 
+   com = "terraform validate -no-color"
+   rout = rc(com)
+   el = len(rout.stderr.decode().rstrip())
+   if el != 0:
+      errm = rout.stderr.decode().rstrip()
+      print(errm)
+      com = "terraform validate -no-color -json > validate2.json"
+      rout = rc(com)
 
    if "Success! The configuration is valid" not in str(rout.stdout.decode().rstrip()):
       print(str(rout.stdout.decode().rstrip()))
       print("Validation after fix failed - exiting")
       exit()
 
-
-   else: 
+   else:
       print("Valid Configuration.")
-      if globals.validate: 
+      if globals.validate:
          print("Validate Only..")
          return
 
-
    if globals.plan2:
-      
+
       print("Penultimate Terraform Plan ... ")
       # redo plan
-      com="rm -f resources.out tfplan"
+      com = "rm -f resources.out tfplan"
       print(com)
-      rout=rc(com)
-      com="terraform plan -generate-config-out="+ rf + " -out tfplan -json > plan2.json"
+      rout = rc(com)
+      com = "terraform plan -generate-config-out=" + \
+          rf + " -out tfplan -json > plan2.json"
       print(com)
-      rout=rc(com)
-      zerod=False
-      zeroc=False
-      zeroa=False
+      rout = rc(com)
+      zerod = False
+      zeroc = False
+      zeroa = False
       with open('plan2.json', 'r') as f:
          for line in f.readlines():
-            #print(line)
+            # print(line)
             if '0 to destroy' in line:
-              zerod=True
+              zerod = True
             if '0 to change' in line:
-              zeroc=True
+              zeroc = True
             if '0 to add' in line:
-              zeroa=True
+              zeroa = True
 
             if '@level":"error"' in line:
               if "Error: Conflicting configuration arguments" in line and "aws_security_group_rule." in line:
-                 print("WARNING: Conflicting configuration arguments in aws_security_group_rule")
-              else:   
+                 print(
+                     "WARNING: Conflicting configuration arguments in aws_security_group_rule")
+              else:
                   if globals.debug is True:
                      print("Error" + line)
 
-                  print("-->> Plan 2 errors exiting - check plan2.json - or run terraform plan")
+                  print(
+                      "-->> Plan 2 errors exiting - check plan2.json - or run terraform plan")
                   exit()
 
       if not zerod:
@@ -393,38 +399,41 @@ def tfplan3():
          exit()
 
       if not zeroc:
-         ## decide if to ignore ot not
-         planList=[]
-         planDict={}
-         changeList=[]
-         allowedchange=False
-         nchanges=0
-         nallowedchanges=0
+         # decide if to ignore ot not
+         planList = []
+         planDict = {}
+         changeList = []
+         allowedchange = False
+         nchanges = 0
+         nallowedchanges = 0
          with open('plan2.json') as f:
             for jsonObj in f:
                planDict = json.loads(jsonObj)
                planList.append(planDict)
          for pe in planList:
-            if pe['type'] == "planned_change" and pe['change']['action']=="update":
-               nchanges=nchanges+1
-               ctype=pe['change']['resource']['resource_type']
-               if ctype=="aws_lb_listener" or ctype=="aws_cognito_user_pool_client":
+            if pe['type'] == "planned_change" and pe['change']['action'] == "update":
+               nchanges = nchanges+1
+               ctype = pe['change']['resource']['resource_type']
+               if ctype == "aws_lb_listener" or ctype == "aws_cognito_user_pool_client":
                   changeList.append(pe['change']['resource']['addr'])
-                  print("Planned changes found in Terraform Plan for type: "+str(pe['change']['resource']['resource_type']))
-                  allowedchange=True
-                  nallowedchanges=nallowedchanges+1
+                  print("Planned changes found in Terraform Plan for type: " +
+                        str(pe['change']['resource']['resource_type']))
+                  allowedchange = True
+                  nallowedchanges = nallowedchanges+1
                else:
-                  print("Unexpected plan changes found in Terraform Plan for resource: "+str(pe['change']['resource']['addr']))
-         if nchanges==nallowedchanges:
-            print("\n-->> plan will change "+ str(nchanges)  +" resources! - these are expected changes only (should be non-consequential)")
-            ci=1
-            
-            print("-->> Check the planned changes in these resources listed below by running: terraform plan\n")   
+                  print("Unexpected plan changes found in Terraform Plan for resource: " +
+                        str(pe['change']['resource']['addr']))
+         if nchanges == nallowedchanges:
+            print("\n-->> plan will change " + str(nchanges) +
+                  " resources! - these are expected changes only (should be non-consequential)")
+            ci = 1
+
+            print(
+                "-->> Check the planned changes in these resources listed below by running: terraform plan\n")
 
             for i in changeList:
                print(str(ci)+": "+str(i))
-               ci=ci+1
-
+               ci = ci+1
 
             if globals.debug is True:
                print("\n-->> Then if happy with the output changes for the above resources, run this command to complete aws2tf-py tasks:")
@@ -441,62 +450,63 @@ def tfplan3():
          exit()
 
       print("Plan complete")
-   
+
    if not os.path.isfile("tfplan"):
          print("Plan - could not find expected tfplan file - exiting")
          exit()
-         
 
 
 def wrapup():
-   #print("split main.tf")
-   #splitf("main.tf")
-   #print("Validate json")
-   #com="terraform validate -no-color -json > validate.json"
-   #rout=rc(com)
+   # print("split main.tf")
+   # splitf("main.tf")
+   # print("Validate json")
+   # com="terraform validate -no-color -json > validate.json"
+   # rout=rc(com)
    print("Final Terraform Validation")
-   com="terraform validate -no-color"
-   rout=rc(com)
-   el=len(rout.stderr.decode().rstrip())
-   if el!=0:
-      errm=rout.stderr.decode().rstrip()
+   com = "terraform validate -no-color"
+   rout = rc(com)
+   el = len(rout.stderr.decode().rstrip())
+   if el != 0:
+      errm = rout.stderr.decode().rstrip()
       print(errm)
    if "Success! The configuration is valid" not in str(rout.stdout.decode().rstrip()):
       print(str(rout.stdout.decode().rstrip()))
       exit()
-   else: 
+   else:
       print("PASS: Valid Configuration.")
-   
+
    print("Terraform Import")
-   #print(str(rout.stdout.decode().rstrip()))
+   # print(str(rout.stdout.decode().rstrip()))
    # do the import via apply
    print("terraform import via apply of tfplan....")
-   com="terraform apply -no-color tfplan"
-   rout=rc(com)
-   zerod=False
-   zeroc=False
+   com = "terraform apply -no-color tfplan"
+   rout = rc(com)
+   zerod = False
+   zeroc = False
    print(str(rout.stdout.decode().rstrip()))
    print("Final Plan Check .....")
-   com="terraform plan -no-color"
-   rout=rc(com)
+   com = "terraform plan -no-color"
+   rout = rc(com)
    if "No changes. Your infrastructure matches the configuration" not in str(rout.stdout.decode().rstrip()):
       print(str(rout.stdout.decode().rstrip()))
-   else: 
+   else:
       print("PASS: No changes in plan")
-      com="mv import__*.tf *.out *.json imported"
-      rout=rc(com)
+      com = "mv import__*.tf *.out *.json imported"
+      rout = rc(com)
+
 
 def rc(cmd):
     out = subprocess.run(cmd, shell=True, capture_output=True)
-    ol=len(out.stdout.decode('utf-8').rstrip())    
-    el=len(out.stderr.decode().rstrip())
-    if el!=0:
-         errm=out.stderr.decode().rstrip()
-         #print(errm)
-         #exit(1)
-    
-    #print(out.stdout.decode().rstrip())
+    ol = len(out.stdout.decode('utf-8').rstrip())
+    el = len(out.stderr.decode().rstrip())
+    if el != 0:
+         errm = out.stderr.decode().rstrip()
+         # print(errm)
+         # exit(1)
+
+    # print(out.stdout.decode().rstrip())
     return out
+
 
 def ctrl_c_handler(signum, frame):
   print("Ctrl-C pressed.")
@@ -510,31 +520,36 @@ def check_python_version():
    if major < 3 or (major == 3 and minor < 7):
       print("This program requires Python 3.7 or later.")
       sys.exit(1)
-# check boto3 version 
+# check boto3 version
    if boto3.__version__ < '1.34.93':
-      print("This program requires boto3 1.34.93 or later.")
-      print("Try: pip install boto3==1.34.93")
-      sys.exit(1)
+      bv = str(boto3.__version__)
+      vs = bv.split(".")
+      v1 = int(vs[0])*100000+int(vs[1])*1000+int(vs[2])
+      if v1 < 134093:
+         print("boto3 version:"+bv)
+         print("This program requires boto3 1.34.93 or later.")
+         print("Try: pip install boto3==1.34.93")
+         sys.exit(1)
 
 
 def aws_tf(region):
-   #os.chdir(globals.path1) 
+   # os.chdir(globals.path1)
    if not os.path.isfile("aws.tf"):
-      with open("aws.tf", 'w') as f3: 
+      with open("aws.tf", 'w') as f3:
          f3.write('terraform {\n')
          f3.write('  required_version = "> 1.5.4"\n')
          f3.write('  required_providers {\n')
          f3.write('    aws = {\n')
          f3.write('      source  = "hashicorp/aws"\n')
-         #f3.write('      version = "5.48.0"\n')
+         # f3.write('      version = "5.48.0"\n')
          f3.write('      version = "5.57.0"\n')
          f3.write('    }\n')
          f3.write('  }\n')
          f3.write('}\n')
          f3.write('provider "aws" {\n')
-         f3.write('  region                   = "' + region +'"\n')
+         f3.write('  region                   = "' + region + '"\n')
          f3.write('  shared_credentials_files = ["~/.aws/credentials"]\n')
-         #f3.write('  profile                  = var.profile\n')
+         # f3.write('  profile                  = var.profile\n')
          f3.write('}\n')
       with open("data-aws.tf", 'w') as f3:
          f3.write('data "aws_region" "current" {}\n')
@@ -542,115 +557,102 @@ def aws_tf(region):
          f3.write('data "aws_availability_zones" "az" {\n')
          f3.write('state = "available"\n')
          f3.write('}\n')
-   if not os.path.isdir(".terraform/providers/registry.terraform.io/hashicorp/aws"): 
+   if not os.path.isdir(".terraform/providers/registry.terraform.io/hashicorp/aws"):
       com = "terraform init"
-      rout = rc(com) 
+      rout = rc(com)
       print(rout.stdout.decode().rstrip())
    else:
       print("skipping terraform init")
-        
-                
+
 
 # split resources.out
-def splitf(file):
-   lhs=0
-   rhs=0
+def splitf_old(file):
+   lhs = 0
+   rhs = 0
    if os.path.isfile(file):
-      print("split file:"+ file)
+      print("split file:" + file)
       with open(file, "r") as f:
          Lines = f.readlines()
       for tt1 in Lines:
-         #print(tt1)
-         if "{" in tt1: lhs=lhs+1
-         if "}" in tt1: rhs=rhs+1
+         # print(tt1)
+         if "{" in tt1: lhs = lhs+1
+         if "}" in tt1: rhs = rhs+1
          if lhs > 1:
                if lhs == rhs:
                   try:
                      f2.write(tt1+"\n")
                      f2.close()
-                     lhs=0
-                     rhs=0
+                     lhs = 0
+                     rhs = 0
                      continue
                   except:
                      pass
 
          if tt1.startswith("resource"):
-               #print("resource: " + tt1)
-               ttft=tt1.split('"')[1]
-               taddr=tt1.split('"')[3]
-               #if globals.acc in taddr:
+               # print("resource: " + tt1)
+               ttft = tt1.split('"')[1]
+               taddr = tt1.split('"')[3]
+               # if globals.acc in taddr:
                #   a1=taddr.find(globals.acc)
                #   taddr=taddr[:a1]+taddr[a1+12:]
                #   #print("taddr="+taddr)
-      
-               f2=open(ttft+"__"+taddr+".out","w")
+
+               f2 = open(ttft+"__"+taddr+".out", "w")
                f2.write(tt1)
 
          elif tt1.startswith("#"):
                continue
-         elif tt1=="" or tt1=="\n":
+         elif tt1 == "" or tt1 == "\n":
                continue
          else:
                try:
                   f2.write(tt1)
                except:
-                  print("tried to write to closed file: >"+ tt1 + "<")
+                  print("tried to write to closed file: >" + tt1 + "<")
    else:
       print("could not find expected resources.out file")
-      
+
    # moves resources.out to imported
    f2.close()
-   shutil.move(file,"imported/"+file)
-   
- 
+   shutil.move(file, "imported/"+file)
+
+
 #################################
 
-def splitf_new(file):
-   lhs=0
-   rhs=0
-   if os.path.isfile(file):
-      print("split file:"+ file)
-      with open(file, "r") as f:
-         Lines = f.readlines()
-      for tt1 in Lines:
-         #print(tt1)
-         if "{" in tt1: lhs=lhs+1
-         if "}" in tt1: rhs=rhs+1
-         if lhs > 1:
-               if lhs == rhs:
-                  try:
-                     splitlines.append(tt1)
-                     with open(splitfout, "w") as f:
-                        f.writelines(splitlines)
-                     lhs=0
-                     rhs=0
-                     continue
-                  except:
-                     print("problem writing to file "+splitfout)
-                     exit()
-
-         if tt1.startswith("resource"):
-               #print("resource: " + tt1)
-               ttft=tt1.split('"')[1]
-               taddr=tt1.split('"')[3]
-               splitlines=[]
-               splitfout=ttft+"__"+taddr+".out"
-               splitlines.append(tt1)
-         elif tt1.startswith("#"):
-               continue
-         elif tt1=="" or tt1=="\n":
-               continue
-         else:
-            splitlines.append(tt1)
-
-   else:
-      print("could not find expected resources.out file")
-      
-   # moves resources.out to imported
-   #f2.close()
-   shutil.move(file,"imported/"+file)
+def splitf(input_file):
+   # Compile regex patterns for better performance
+   resource_pattern = re.compile(r'resource "(\w+)" "(.+?)"')
+   comment_pattern = re.compile(r'^\s*#')
+   print("split file: " + input_file)
+   # Read the entire file content at once
+   with open(input_file, 'r') as f:
+        content = f.read()
    
+    # Use a more efficient splitting method
+   resource_blocks = re.split(r'(?=\nresource ")', '\n' + content)
 
+   for block in resource_blocks[1:]:  # Skip the first (empty) block
+        match = resource_pattern.search(block)
+        if match:
+            resource_type = match.group(1)
+            resource_name = match.group(2)
+
+            # Create filename
+            filename = f"{resource_type}__{resource_name.replace('/', '__')}.out"
+
+            # Use StringIO for efficient string operations
+            output = StringIO()
+
+            for line in block.split('\n'):
+                if not comment_pattern.match(line):
+                    output.write(line + '\n')
+
+            # Write the filtered resource block to a new file
+            with open(filename, 'w') as f:
+                f.write(output.getvalue().strip() + '\n')
+
+            # print(f"Created file: {filename}")
+   shutil.move(input_file,"imported/"+input_file)
 
 
 ################################

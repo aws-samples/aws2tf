@@ -168,7 +168,7 @@ if __name__ == '__main__':
 
     client = boto3.client('iam')
     response=[]
-    paginator = client.get_paginator('list_role')
+    paginator = client.get_paginator('list_roles')
     for page in paginator.paginate(): response = response + page['Roles']
     for j in response: globals.rolelist.append(j['RoleName'])
 

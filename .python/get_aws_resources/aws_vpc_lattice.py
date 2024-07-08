@@ -43,7 +43,7 @@ def get_aws_vpclattice_service_network_vpc_association(type,id,clfn,descfn,topke
 
 def get_aws_vpclattice_service_network_service_association(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug: 
-      print("--> In get_aws_vpclattice_service_network_vpc_association doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+      print("--> In get_aws_vpclattice_service_network_service_association doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    get_aws_vpc_lattice(type,id,clfn,descfn,topkey,key,filterid)
    return True
 
@@ -106,18 +106,16 @@ def get_aws_vpclattice_listener(type,id,clfn,descfn,topkey,key,filterid):
    response=[]
    
    if globals.debug: print("Paginator")
-
-   try:
-      paginator = client.get_paginator(descfn)
-      for page in paginator.paginate():
-         response.extend(page[topkey])
-   except botocore.exceptions.OperationNotPageableError as err:
-         #print(f"{err=}")
-         getfn = getattr(client, descfn)
-         response1 = getfn(serviceIdentifier=id)  ## special
-         response=response1[topkey]
-   except Exception as e:
-      common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+   if id is None:
+      print("WARNING must provide serviceIdentifier as parameter for get_aws_vpclattice_listener")
+   else:
+      try:        
+            getfn = getattr(client, descfn)
+            response1 = getfn(serviceIdentifier=id)  ## special
+        
+            response=response1[topkey]
+      except Exception as e:
+         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
       
    if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
@@ -145,20 +143,21 @@ def get_aws_vpclattice_listener_rule(type,id,clfn,descfn,topkey,key,filterid):
    
    if globals.debug: print("Paginator")
 
-   try:
-      paginator = client.get_paginator(descfn)
-      for page in paginator.paginate():
-         response.extend(page[topkey])
-   except botocore.exceptions.OperationNotPageableError as err:
-         #print(f"{err=}")
-         svid=id.split("/")[0]
-         rlid=id.split("/")[1]
-         print(f"{svid=},{rlid=}")
-         getfn = getattr(client, descfn)
-         response1 = getfn(serviceIdentifier=svid,listenerIdentifier=rlid)  ## special
-         response=response1[topkey]
-   except Exception as e:
-      common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+   if id is None:
+      print("WARNING must provide serviceIdentifier/ListenerId as parameter for get_aws_vpclattice_listener_rule")
+   else:
+      try:
+         if "/" in id:#print(f"{err=}")
+            svid=id.split("/")[0]
+            rlid=id.split("/")[1]
+            print(f"{svid=},{rlid=}")
+            getfn = getattr(client, descfn)
+            response1 = getfn(serviceIdentifier=svid,listenerIdentifier=rlid)  ## special
+            response=response1[topkey]
+         else:
+            print("WARNING must provide serviceIdentifier/ListenerId as parameter for get_aws_vpclattice_listener_rule")
+      except Exception as e:
+         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
    if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
   
@@ -172,30 +171,31 @@ def get_aws_vpclattice_listener_rule(type,id,clfn,descfn,topkey,key,filterid):
 
 
 
-
+##### Generic
 
 def get_aws_vpc_lattice(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug: print("--> In generic get_aws_vpclattice doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-
+   print("--> In generic get_aws_vpclattice doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    client = common.boto3.client(clfn) 
    if globals.debug: print("--client")
    response=[]
    
    if globals.debug: print("Paginator")
-
-   try:
-      paginator = client.get_paginator(descfn)
-      for page in paginator.paginate():
-         response.extend(page[topkey])
-   except botocore.exceptions.OperationNotPageableError as err:
-        #print(f"{err=}")
-        getfn = getattr(client, descfn)
-        response1 = getfn(serviceNetworkIdentifier=id)  ## special
-        response=response1[topkey]
-   except Exception as e:
-      common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
-      #common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id) 
-
+   if id.startswith("sn-"):
+      try:
+         paginator = client.get_paginator(descfn)
+         for page in paginator.paginate(serviceNetworkIdentifier=id):
+            response.extend(page[topkey])
+      except botocore.exceptions.OperationNotPageableError as err:
+         #print(f"{err=}")
+         getfn = getattr(client, descfn)
+         response1 = getfn(serviceNetworkIdentifier=id)  ## special
+         response=response1[topkey]
+      except Exception as e:
+         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+         #common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id) 
+   else:
+      print("WARNING: No id or invalid id provided for "+type,id)
       
    if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
    

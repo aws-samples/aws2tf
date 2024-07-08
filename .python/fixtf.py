@@ -342,7 +342,6 @@ def fixtf(ttft,tf):
                 tt2=""
  
             try:    
-                #print("trying "+callfn+" "+ttft)
                 getfn = getattr(eval(callfn), ttft)           
                 #getfn = getattr(fixtf2, ttft)
             except Exception as e:
@@ -361,7 +360,7 @@ def fixtf(ttft,tf):
                 # : in tt1 for quote it
                 skip,t1,flag1,flag2=aws_common.aws_common(ttft,t1,tt1,tt2,flag1,flag2)
 
-                if skip==0:                    
+                if skip==0:                
                     skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
 
 
@@ -384,6 +383,7 @@ def fixtf(ttft,tf):
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                 print(exc_type, fname, exc_tb.tb_lineno)
+                print("** error in "+ttft+" "+callfn+" OR .....")
                 print("-- no fixtf for type:"+ttft+" callfn:"+callfn)
                 print("-- no fixtf for "+tf+" calling generic fixtf2.aws_resource callfn="+callfn)
                 print("t1="+str(t1)) 

@@ -55,7 +55,7 @@ def resource_types(type):
     elif type == "sqs": rets=["aws_sqs_queue"]; return rets            # SQS queues
     elif type == "spot": rets=["aws_spot_fleet_request"]; return rets # Spot fleet request
     elif type == "tgw": rets=["aws_ec2_transit_gateway"]; return rets # Transit Gateway
-    elif type == "vpclattice": rets=["aws_vpclattice_service_network"]; return rets # VOC Lattice and dependancies
+    elif type == "vpclattice" or type=="lattice": rets=["aws_vpclattice_service_network"]; return rets # VOC Lattice and dependancies
     elif type == "users": rets=["aws_iam_user","aws_iam_group"]; return rets # IAM user and groups
     elif type == "vpc": rets=["aws_vpc"]; return rets # VPC's and its common depandancies
 

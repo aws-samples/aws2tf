@@ -1,6 +1,11 @@
-
 import common
 import fixtf
+import base64
+import boto3
+import sys
+import os
+import globals
+import inspect
 
 def aws_vpclattice_auth_policy(t1,tt1,tt2,flag1,flag2):
     skip=0
@@ -74,23 +79,35 @@ def aws_vpclattice_listener(t1,tt1,tt2,flag1,flag2):
 
 def aws_vpclattice_listener_rule(t1,tt1,tt2,flag1,flag2):
     skip=0
-    if tt1 == "target_group_identifier":
+    try:
+        if tt1 == "target_group_identifier":
+            
+            t1=tt1 + " = aws_vpclattice_target_group." + tt2 + ".id\n"
+            common.add_dependancy("aws_vpclattice_target_group",tt2)
+        elif tt1=="priority":
+            if tt2=="99999": 
+                tt2="100"
+                t1=tt1 + " = " + tt2 + "\n"
+                t1=t1+"\nlifecycle {\n" + "   ignore_changes = [priority]\n" +  "}\n"
+                
         
-        t1=tt1 + " = aws_vpclattice_target_group." + tt2 + ".id\n"
-        common.add_dependancy("aws_vpclattice_target_group",tt2)
-    elif tt1 == "service_identifier":
-        
-        flag2=tt2
-        t1=tt1 + " = aws_vpclattice_service." + tt2 + ".id\n"
-    elif tt1 == "listener_identifier":
-        
-        if flag2 is not False:
-            print("flag2="+flag2)
-            svc=flag2.split('__')[1]
-            ln=flag2.split('__')[2]
-            tt2=svc+"__"+ln
-            print("tt2="+tt2)
-            t1=tt1 + " = aws_vpclattice_listener." + tt2 + ".listener_id\n"
+        elif tt1 == "service_identifier":
+            
+            flag2=tt2
+            t1=tt1 + " = aws_vpclattice_service." + tt2 + ".id\n"
+        elif tt1 == "listener_identifier":
+            
+            if flag2 is not False:
+                #print("flag2="+flag2)
+                rh=flag2.split('__')[1]
+                svc=rh.split('_listener-')[0]
+                ln=flag2.split('_listener-')[1]
+                ln2=ln.split('_rule-')[0]
+                tt2=svc+"_listener-"+ln2
+                #print("---->>>> tt2="+tt2)
+                t1=tt1 + " = aws_vpclattice_listener." + tt2 + ".listener_id\n"
+    except Exception as e:
+        common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id)
 
     return skip,t1,flag1,flag2
 

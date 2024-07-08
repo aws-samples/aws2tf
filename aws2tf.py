@@ -159,12 +159,18 @@ if __name__ == '__main__':
     id = args.id
 
 #### setup lists - mainly for tgw
+    print("Building lists ...")
     client = boto3.client('ec2')
     response=[]
-    #response = client.describe_vpcs()
     paginator = client.get_paginator('describe_vpcs')
     for page in paginator.paginate(): response = response + page['Vpcs']
     for j in response: globals.vpclist.append(j['VpcId'])
+
+    client = boto3.client('iam')
+    response=[]
+    paginator = client.get_paginator('list_role')
+    for page in paginator.paginate(): response = response + page['Roles']
+    for j in response: globals.rolelist.append(j['RoleName'])
 
     if globals.debug: print(str(globals.vpclist))
 

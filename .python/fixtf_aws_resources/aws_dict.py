@@ -1277,7 +1277,7 @@ aws_appstream_directory_config = {
 
 aws_appstream_fleet = {
 	"clfn":		"appstream",
-	"descfn":	"list_fleets",
+	"descfn":	"describe_fleets",
 	"topkey":	"Fleets",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -1293,7 +1293,7 @@ aws_appstream_fleet_stack_association = {
 
 aws_appstream_image_builder = {
 	"clfn":		"appstream",
-	"descfn":	"list_image_builders",
+	"descfn":	"describe_image_builders",
 	"topkey":	"ImageBuilders",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -1301,7 +1301,7 @@ aws_appstream_image_builder = {
 
 aws_appstream_stack = {
 	"clfn":		"appstream",
-	"descfn":	"list_stacks",
+	"descfn":	"describe_stacks",
 	"topkey":	"Stacks",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -1309,7 +1309,7 @@ aws_appstream_stack = {
 
 aws_appstream_user = {
 	"clfn":		"appstream",
-	"descfn":	"list_users",
+	"descfn":	"describe_users",
 	"topkey":	"Users",
 	"key":		"UserName",
 	"filterid":	"UserName"

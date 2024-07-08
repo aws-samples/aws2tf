@@ -6,6 +6,8 @@ import argparse
 import glob
 import os
 import sys
+import shutil
+
 
 
 sys.path.insert(0, './.python')
@@ -61,6 +63,14 @@ if __name__ == '__main__':
     argParser.add_argument("-b3", "--boto3error", help="exit on boto3 api error (for debugging)", action='store_true')
     args = argParser.parse_args()
     type=""
+
+
+    path = shutil.which("terraform") 
+
+    if path is None:
+        print("no executable found for command 'terraform'")
+        exit()
+
     # print("args=%s" % args)
     
     # print("args.bucket=%s" % args.bucket)
@@ -89,6 +99,9 @@ if __name__ == '__main__':
             region = "eu-west-1"
         else:
             region = rout.stdout.decode().rstrip()
+            if len(region) == 0:
+                print("region is required - set in AWS cli or pass with -r")
+                exit()
             print("region set from aws cli as "+region)
     else:
         region = args.region
@@ -146,12 +159,18 @@ if __name__ == '__main__':
     id = args.id
 
 #### setup lists - mainly for tgw
+    print("Building lists ...")
     client = boto3.client('ec2')
     response=[]
-    #response = client.describe_vpcs()
     paginator = client.get_paginator('describe_vpcs')
     for page in paginator.paginate(): response = response + page['Vpcs']
     for j in response: globals.vpclist.append(j['VpcId'])
+
+    client = boto3.client('iam')
+    response=[]
+    paginator = client.get_paginator('list_roles')
+    for page in paginator.paginate(): response = response + page['Roles']
+    for j in response: globals.rolelist.append(j['RoleName'])
 
     if globals.debug: print(str(globals.vpclist))
 

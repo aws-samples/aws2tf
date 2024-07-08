@@ -45,6 +45,7 @@ meshname=""
 
 badlist=[]
 vpclist=[]
+rolelist=[]
 
 
 ## Dicts

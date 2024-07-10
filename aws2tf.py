@@ -9,7 +9,6 @@ import sys
 import shutil
 
 
-
 sys.path.insert(0, './.python')
 from get_aws_resources import aws_s3
 import common
@@ -160,12 +159,13 @@ if __name__ == '__main__':
 
 #### setup lists - mainly for tgw
     print("Building lists ...")
+    ## vpcs
     client = boto3.client('ec2')
     response=[]
     paginator = client.get_paginator('describe_vpcs')
     for page in paginator.paginate(): response = response + page['Vpcs']
     for j in response: globals.vpclist.append(j['VpcId'])
-
+    ## roles
     client = boto3.client('iam')
     response=[]
     paginator = client.get_paginator('list_roles')
@@ -185,11 +185,11 @@ if __name__ == '__main__':
         lall=len(all_types)
     except:
         lall=0
-    print("all_types="+str(all_types))
 
-    if all_types is None:
-        print("No resources found")
-        exit()
+
+    #if all_types is None:
+    #    print("No resources found")
+    #    exit()
 
     if type == "stack":
         if id is None:
@@ -197,6 +197,8 @@ if __name__ == '__main__':
             exit()
         else:
             stacks.get_stacks(id)
+
+        
 
     elif type.startswith("aws_"):
         if type in aws_dict.aws_resources:

@@ -248,11 +248,6 @@ if __name__ == '__main__':
 #########################################################################################################################
 
 
-    if args.merge: 
-        print(str(args.merge))
-        exit()
-
-
 ## Known dependancies section
     
     for ti in list(globals.rdep):
@@ -269,6 +264,11 @@ if __name__ == '__main__':
 
     common.tfplan1()
     common.tfplan2()
+
+
+    if args.merge: 
+        print(str(args.merge))
+        exit()
     
     if ":" in globals.rproc:
         print(": in rproc exiting")

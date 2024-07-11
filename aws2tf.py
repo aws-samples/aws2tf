@@ -343,7 +343,11 @@ if __name__ == '__main__':
         #    exit()
 
     common.tfplan3()
-    if globals.validate is False: common.wrapup()
+    if globals.validate is False: 
+        common.wrapup()
+    else: 
+        print("\nValidation only - no files written")
+        exit()
 
 ##########################################################################
 ####### Finish up

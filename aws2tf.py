@@ -282,10 +282,6 @@ if __name__ == '__main__':
         print("No Detected Dependancies") 
 
 
-    if args.merge: 
-        print(str(args.merge))
-        exit()
-
     lc=0
     olddetdepstr=""
     detdepstr=""
@@ -301,6 +297,10 @@ if __name__ == '__main__':
         lc  = lc + 1
 
 # go again plan and split / fix
+
+        if args.merge: 
+            print("bug track exit"+str(args.merge))
+            exit()
 
         x=glob.glob("import__aws_*.tf")
         #print(str(x))

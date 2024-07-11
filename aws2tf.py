@@ -107,7 +107,7 @@ if __name__ == '__main__':
     # print("args.bucket=%s" % args.bucket)
     # print("args.type=%s" % args.type)
     # print("args.id=%s" % args.id)
-    mg=args.merge
+    globals.merge=args.merge
 
     if args.list: extra_help()
     if args.debug: globals.debug = True
@@ -159,7 +159,7 @@ if __name__ == '__main__':
     print("args.merge="+str(args.merge))
 
     if args.merge:
-        print("Merging "+str(mg))
+        print("Merging "+str(globals.merge))
         try:
             file = open('pyprocessed.txt', 'r')
             while True:
@@ -177,7 +177,7 @@ if __name__ == '__main__':
             print("No pyprocessed.txt found")
             pass
 
-    if mg is False:
+    if globals.merge is False:
         print("No merge - removing terraform.tfstate* and aws_*.tf *.out")
         com = "rm -f aws.tf terraform.tfstate* aws_*.tf s3-*.tf aws_*.zip tfplan *.out *.log aws_*.sh stacks.sh import*.tf imported/* main.tf plan1* plan2* *.txt *.json *.err"
         rout = common.rc(com)

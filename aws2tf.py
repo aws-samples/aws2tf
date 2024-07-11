@@ -10,7 +10,7 @@ import shutil
 
 
 sys.path.insert(0, './.python')
-from get_aws_resources import aws_s3
+#from get_aws_resources import aws_s3
 import common
 import resources
 import globals
@@ -41,6 +41,38 @@ def extra_help():
     print("\nOr instead of the above type codes use the terraform type eg:\n\n./aws2tf.py -t aws_vpc\n")
     print("\nTo get a deployed stack set:\n\n./aws2tf.py -t stack -i stackname\n")               
     exit()
+
+
+def build_lists():
+  
+    print("Building core resource lists ...")
+    ## vpcs
+    client = boto3.client('ec2')
+    response=[]
+    paginator = client.get_paginator('describe_vpcs')
+    for page in paginator.paginate(): response = response + page['Vpcs']
+    for j in response: globals.vpclist[j['VpcId']]=True
+    response=[]
+    paginator = client.get_paginator('describe_security_groups')
+    for page in paginator.paginate(): response = response + page['SecurityGroups']
+    for j in response: globals.sglist[j['GroupId']]=True
+    response=[]
+    paginator = client.get_paginator('describe_subnets')
+    for page in paginator.paginate(): response = response + page['Subnets']
+    for j in response: globals.subnetlist[j['SubnetId']]=True
+    response=[]
+    paginator = client.get_paginator('describe_transit_gateways')
+    for page in paginator.paginate(): response = response + page['TransitGateways']
+    for j in response: globals.tgwlist[j['TransitGatewayId']]=True
+
+    ## roles
+    client = boto3.client('iam')
+    response=[]
+    paginator = client.get_paginator('list_roles')
+    for page in paginator.paginate(): response = response + page['Roles']
+    for j in response: globals.rolelist[j['RoleName']]=True
+    response=[]
+    if globals.debug: print(str(globals.vpclist))
 
 
 
@@ -93,8 +125,7 @@ if __name__ == '__main__':
         rout = common.rc(com)
         el = len(rout.stderr.decode().rstrip())
         if el != 0:
-            print(
-                "region is required eg:  -r eu-west-1  [using eu-west-1 as default]")
+            print("region is required eg:  -r eu-west-1  [using eu-west-1 as default]")
             region = "eu-west-1"
         else:
             region = rout.stdout.decode().rstrip()
@@ -157,23 +188,9 @@ if __name__ == '__main__':
 
     id = args.id
 
-#### setup lists - mainly for tgw
-    print("Building lists ...")
-    ## vpcs
-    client = boto3.client('ec2')
-    response=[]
-    paginator = client.get_paginator('describe_vpcs')
-    for page in paginator.paginate(): response = response + page['Vpcs']
-    for j in response: globals.vpclist.append(j['VpcId'])
-    ## roles
-    client = boto3.client('iam')
-    response=[]
-    paginator = client.get_paginator('list_roles')
-    for page in paginator.paginate(): response = response + page['Roles']
-    for j in response: globals.rolelist.append(j['RoleName'])
+#### setup
 
-    if globals.debug: print(str(globals.vpclist))
-
+    build_lists()
     
     if type == "" or type is None: type = "all"
     print("---<><>"+ str(type),str(id))

@@ -298,9 +298,6 @@ if __name__ == '__main__':
 
 # go again plan and split / fix
 
-        if args.merge: 
-            print("bug track exit"+str(args.merge))
-            exit()
 
         x=glob.glob("import__aws_*.tf")
         #print(str(x))
@@ -316,6 +313,9 @@ if __name__ == '__main__':
          
         common.tfplan1()
         common.tfplan2()
+
+
+
  
         detdepstr=""
         for ti in globals.rproc.keys():

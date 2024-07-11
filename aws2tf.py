@@ -10,7 +10,7 @@ import shutil
 
 
 sys.path.insert(0, './.python')
-from get_aws_resources import aws_s3
+#from get_aws_resources import aws_s3
 import common
 import resources
 import globals

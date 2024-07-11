@@ -514,9 +514,6 @@ def rhs_replace(t1,tt1,tt2):
     return t1
 
 
-
-
-
 def deref_array(t1,tt1,tt2,ttft,prefix,skip):
 
     if tt2 == "null" or tt2 == "[]":
@@ -529,20 +526,30 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
     if cc > 0:
         for i in range(cc+1):
             subn=tt2.split(',')[i]
-            subs=subs + ttft + "." + subn + ".id,"
-            common.add_dependancy(ttft,subn)
+            if ttft == "aws_subnet": 
+                if globals.subnetlist[subn]:
+                    subs=subs + ttft + "." + subn + ".id,"
+                    common.add_dependancy(ttft,subn)
+                else:
+                    print("WARNING: subnet not in subnetlist" + subn)
+            # elif sedurity_group
+            #
+            else:
+                subs=subs + ttft + "." + subn + ".id,"
+                common.add_dependancy(ttft,subn)
 
             
     if cc == 0 and prefix in tt2:
         subs=ttft + "." + tt2 + ".id"
- 
         common.add_dependancy(ttft,tt2)
     else:
-        print("Warning: named item in fixtf deref_array:" + tt2)    
+        print("WARNING: named item in fixtf deref_array:" + tt2)    
              
     t1=tt1 + " = [" + subs + "]\n"
     t1=t1.replace(',]',']')
     return t1,skip
+
+
 
 def deref_role_arn(t1,tt1,tt2):
 

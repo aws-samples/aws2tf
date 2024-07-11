@@ -515,10 +515,9 @@ def  aws_nat_gateway(t1,tt1,tt2,flag1,flag2):
     if "secondary_private_ip_address_count" in tt1:
         
         if tt2 == "0": skip=1
-    elif tt1 == "subnet_id":
-        
-        t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
-        common.add_dependancy("aws_subnet",tt2)
+    #elif tt1 == "subnet_id":      
+    #    t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
+    #    common.add_dependancy("aws_subnet",tt2)
     elif tt1 == "private_ip": skip=1
     elif tt1 == "public_ip": skip=1
     elif tt1 == "allocation_id": 

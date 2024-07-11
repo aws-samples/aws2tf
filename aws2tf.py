@@ -186,10 +186,6 @@ if __name__ == '__main__':
 
     id = args.id
 
-#### setup
-    if args.merge: 
-        print(str(args.merge))
-        exit()
 
 #### setup
 
@@ -250,6 +246,12 @@ if __name__ == '__main__':
             exit()
 
 #########################################################################################################################
+
+
+    if args.merge: 
+        print(str(args.merge))
+        exit()
+
 
 ## Known dependancies section
     

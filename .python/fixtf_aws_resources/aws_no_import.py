@@ -40,6 +40,7 @@ noimport = {
     "aws_iam_group_membership": True,
     "aws_iam_policy_attachment": True,
     "aws_iam_security_token_service_preferences": True,
+    "aws_iam_service_specific_credential": True,
     "aws_inspector2_enabler": True,
     "aws_inspector2_organization_configuration": True,
     "aws_inspector_resource_group": True,

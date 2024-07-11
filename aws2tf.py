@@ -264,11 +264,6 @@ if __name__ == '__main__':
 
     common.tfplan1()
     common.tfplan2()
-
-
-    if args.merge: 
-        print(str(args.merge))
-        exit()
     
     if ":" in globals.rproc:
         print(": in rproc exiting")
@@ -285,6 +280,11 @@ if __name__ == '__main__':
  
     if not detdep:
         print("No Detected Dependancies") 
+
+
+    if args.merge: 
+        print(str(args.merge))
+        exit()
 
     lc=0
     olddetdepstr=""

@@ -138,9 +138,26 @@ if __name__ == '__main__':
 
     globals.region = region
     globals.regionl = len(region)
+ 
+    # get the current env and set directory
+
+    my_session = boto3.setup_default_session(region_name=region)
+    globals.acc = boto3.client('sts').get_caller_identity().get('Account')
+    print('Using region: '+region + ' account: ' + globals.acc+"\n")
+    globals.region = region
+    globals.regionl = len(region)
+    
+    globals.path1="generated/tf-"+globals.acc+"_"+region
+    globals.path2=globals.path1+"/imported"
+    com = "mkdir -p "+globals.path2
+    rout = common.rc(com)
+    globals.cwd=os.getcwd()
+    os.chdir(globals.path1) 
+
+    common.aws_tf(region)
 
     print("args.merge="+str(args.merge))
- 
+
     if args.merge:
         print("Merging "+str(mg))
         try:
@@ -160,25 +177,6 @@ if __name__ == '__main__':
             print("No pyprocessed.txt found")
             pass
 
-
-    # get the current env and set directory
-
-    my_session = boto3.setup_default_session(region_name=region)
-    globals.acc = boto3.client('sts').get_caller_identity().get('Account')
-    print('Using region: '+region + ' account: ' + globals.acc+"\n")
-    globals.region = region
-    globals.regionl = len(region)
-    
-    globals.path1="generated/tf-"+globals.acc+"_"+region
-    globals.path2=globals.path1+"/imported"
-    com = "mkdir -p "+globals.path2
-    rout = common.rc(com)
-    globals.cwd=os.getcwd()
-    os.chdir(globals.path1) 
-
-    common.aws_tf(region)
-
-
     if mg is False:
         print("No merge - removing terraform.tfstate* and aws_*.tf *.out")
         com = "rm -f aws.tf terraform.tfstate* aws_*.tf s3-*.tf aws_*.zip tfplan *.out *.log aws_*.sh stacks.sh import*.tf imported/* main.tf plan1* plan2* *.txt *.json *.err"
@@ -187,6 +185,11 @@ if __name__ == '__main__':
         rout = common.rc(com)
 
     id = args.id
+
+#### setup
+    if args.merge: 
+        print(str(args.merge))
+        exit()
 
 #### setup
 

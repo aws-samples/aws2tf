@@ -517,8 +517,8 @@ def check_python_version():
    version = sys.version_info
    major = version.major
    minor = version.minor
-   if major < 3 or (major == 3 and minor < 7):
-      print("This program requires Python 3.7 or later.")
+   if major < 3 or (major == 3 and minor < 8):
+      print("This program requires Python 3.8 or later.")
       sys.exit(1)
 # check boto3 version
    if boto3.__version__ < '1.34.93':

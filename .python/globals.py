@@ -1,3 +1,4 @@
+merge=False
 cwd=""
 path1=""
 path2=""

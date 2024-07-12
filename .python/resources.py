@@ -43,12 +43,12 @@ def resource_types(type):
     elif type == "privatelink": rets=["aws_vpc_endpoint_service"]; return rets # VPC privatelink resources
     elif type == "ram": rets=["aws_ram_resource_share"]; return rets # RAM shares
     elif type == "route53": rets=["aws_route53_zone"]; return rets # RAM shares
-    elif type == "rds": rets=["aws_db_instance","aws_db_parameter_group","aws_db_event_subscription",""]; return rets # RDS cluster and some dependancies
+    elif type == "rds": rets=["aws_db_instance","aws_db_parameter_group","aws_db_event_subscription"]; return rets # RDS cluster and some dependancies
     elif type == "s3": rets=["aws_s3_bucket"]; return rets # AWS S3 bucket and bucker config
     elif type == "subnet": type = ["aws_subnet"]; return rets # AWS subnet and common dependancies
     elif type == "sagemaker": rets=["aws_sagemaker_domain"]; return rets # SageMaker domain and depandancies
     elif type == "secrets": rets=["aws_secretsmanager_secret"]; return rets # secrets manager secrets
-    elif type == "sc": rets=["aws_servicecatalog_portfolio",""]; return rets     # service catalog
+    elif type == "sc": rets=["aws_servicecatalog_portfolio"]; return rets     # service catalog
     elif type == "sfn": rets=["aws_sfn_state_machine"]; return rets            # State machine
     elif type == "security-group": rets=["aws_security_group"]; return rets # security group
     elif type == "sns": rets=["aws_sns_topic"]; return rets  # SNS topics
@@ -179,7 +179,7 @@ def resource_data(type,id):
     try:
         clfn=aws_dict.aws_resources[type]['clfn']
     except KeyError:
-        print("WARNING: "+ type + " may not be a Terraform resource ? or it might be being skipped deliberately")
+        print("WARNING:  may not be a Terraform resource ? or it might be being skipped deliberately type=",type)
         print("(eg. aws_network_interface is skipped)")
         return clfn,descfn,topkey,key,filterid
 

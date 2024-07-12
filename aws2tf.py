@@ -107,7 +107,7 @@ if __name__ == '__main__':
     # print("args.bucket=%s" % args.bucket)
     # print("args.type=%s" % args.type)
     # print("args.id=%s" % args.id)
-    mg=args.merge
+    globals.merge=args.merge
 
     if args.list: extra_help()
     if args.debug: globals.debug = True
@@ -138,29 +138,7 @@ if __name__ == '__main__':
 
     globals.region = region
     globals.regionl = len(region)
-
-    print("args.merge="+str(args.merge))
  
-    if args.merge:
-        print("Merging "+str(mg))
-        try:
-            file = open('pyprocessed.txt', 'r')
-            while True:
-                line = file.readline()
-                if not line:
-                    break
-                line = line.strip()
-
-                globals.rproc[line] = True
-            print("Pre Processed:")
-            for i in globals.rproc.keys():
-                print(i)
-
-        except:
-            print("No pyprocessed.txt found")
-            pass
-
-
     # get the current env and set directory
 
     my_session = boto3.setup_default_session(region_name=region)
@@ -178,8 +156,32 @@ if __name__ == '__main__':
 
     common.aws_tf(region)
 
+    print("args.merge="+str(args.merge))
 
-    if mg is False:
+    if args.merge:
+        print("Merging "+str(globals.merge))
+        try:
+            file = open('pyprocessed.txt', 'r')
+            while True:
+                line = file.readline()
+                if not line:
+                    break
+                line = line.strip()
+
+                globals.rproc[line] = True
+            if globals.debug:
+                print("Pre Processed:")
+                for i in globals.rproc.keys():
+                    print(i)
+
+            com = "cp imported/*.tf ."
+            rout = common.rc(com) 
+
+        except:
+            print("No pyprocessed.txt found")
+            pass
+
+    if globals.merge is False:
         print("No merge - removing terraform.tfstate* and aws_*.tf *.out")
         com = "rm -f aws.tf terraform.tfstate* aws_*.tf s3-*.tf aws_*.zip tfplan *.out *.log aws_*.sh stacks.sh import*.tf imported/* main.tf plan1* plan2* *.txt *.json *.err"
         rout = common.rc(com)
@@ -187,6 +189,7 @@ if __name__ == '__main__':
         rout = common.rc(com)
 
     id = args.id
+
 
 #### setup
 
@@ -248,6 +251,7 @@ if __name__ == '__main__':
 
 #########################################################################################################################
 
+
 ## Known dependancies section
     
     for ti in list(globals.rdep):
@@ -281,6 +285,7 @@ if __name__ == '__main__':
     if not detdep:
         print("No Detected Dependancies") 
 
+
     lc=0
     olddetdepstr=""
     detdepstr=""
@@ -297,6 +302,7 @@ if __name__ == '__main__':
 
 # go again plan and split / fix
 
+
         x=glob.glob("import__aws_*.tf")
         #print(str(x))
         #td=""
@@ -311,6 +317,9 @@ if __name__ == '__main__':
          
         common.tfplan1()
         common.tfplan2()
+
+
+
  
         detdepstr=""
         for ti in globals.rproc.keys():
@@ -338,7 +347,11 @@ if __name__ == '__main__':
         #    exit()
 
     common.tfplan3()
-    if globals.validate is False: common.wrapup()
+    if globals.validate is False: 
+        common.wrapup()
+    else: 
+        print("\nValidation only - no files written")
+        exit()
 
 ##########################################################################
 ####### Finish up
@@ -364,8 +377,3 @@ if __name__ == '__main__':
     print("\nTerraform files & state in sub-directory: "+ globals.path1+"\n")
 
     exit(0)
-
-
-
-
-

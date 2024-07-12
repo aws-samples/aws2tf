@@ -331,6 +331,9 @@ def tfplan2():
 
 def tfplan3():
    print("Validate and Test Plan  ... ")
+   if globals.merge:
+      com = "cp imported/aws_*.tf ."
+      rout = rc(com)
    if not glob.glob("aws_*.tf"):
       print("No aws_*.tf files found for this resource, exiting ....")
       exit()
@@ -475,6 +478,7 @@ def wrapup():
    else:
       print("PASS: Valid Configuration.")
 
+
    print("Terraform Import")
    # print(str(rout.stdout.decode().rstrip()))
    # do the import via apply
@@ -493,7 +497,10 @@ def wrapup():
       print("PASS: No changes in plan")
       com = "mv import__*.tf *.out *.json imported"
       rout = rc(com)
+      com = "cp aws_*.tf imported"
+      rout = rc(com)
 
+######################################################################
 
 def rc(cmd):
     out = subprocess.run(cmd, shell=True, capture_output=True)
@@ -675,8 +682,6 @@ def write_import(type,theid,tfid):
       if tfid[:1].isdigit(): tfid="r-"+tfid
       
       fn="import__"+type+"__"+tfid+".tf"
-
-
 
       if globals.debug: print(fn)
       #print(fn)

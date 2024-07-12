@@ -173,6 +173,9 @@ if __name__ == '__main__':
             for i in globals.rproc.keys():
                 print(i)
 
+            com = "cp imported/import_*.tf ."
+            rout = common.rc(com) 
+
         except:
             print("No pyprocessed.txt found")
             pass

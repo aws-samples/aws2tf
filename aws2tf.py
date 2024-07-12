@@ -373,8 +373,3 @@ if __name__ == '__main__':
     print("\nTerraform files & state in sub-directory: "+ globals.path1+"\n")
 
     exit(0)
-
-
-
-
-

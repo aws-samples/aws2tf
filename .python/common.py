@@ -478,8 +478,6 @@ def wrapup():
    else:
       print("PASS: Valid Configuration.")
 
-   if globals.merge:
-      exit()
 
    print("Terraform Import")
    # print(str(rout.stdout.decode().rstrip()))

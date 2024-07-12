@@ -496,6 +496,8 @@ def wrapup():
       print("PASS: No changes in plan")
       com = "mv import__*.tf *.out *.json imported"
       rout = rc(com)
+      com = "cp aws_*.tf imported"
+      rout = rc(com)
 
 ######################################################################
 
@@ -679,8 +681,6 @@ def write_import(type,theid,tfid):
       if tfid[:1].isdigit(): tfid="r-"+tfid
       
       fn="import__"+type+"__"+tfid+".tf"
-
-
 
       if globals.debug: print(fn)
       #print(fn)

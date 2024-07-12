@@ -169,9 +169,10 @@ if __name__ == '__main__':
                 line = line.strip()
 
                 globals.rproc[line] = True
-            print("Pre Processed:")
-            for i in globals.rproc.keys():
-                print(i)
+            if globals.debug:
+                print("Pre Processed:")
+                for i in globals.rproc.keys():
+                    print(i)
 
             com = "cp imported/import_*.tf ."
             rout = common.rc(com) 

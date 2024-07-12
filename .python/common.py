@@ -331,6 +331,9 @@ def tfplan2():
 
 def tfplan3():
    print("Validate and Test Plan  ... ")
+   if globals.merge:
+      com = "cp imported/aws_*.tf ."
+      rout = rc(com)
    if not glob.glob("aws_*.tf"):
       print("No aws_*.tf files found for this resource, exiting ....")
       exit()

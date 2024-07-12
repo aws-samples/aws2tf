@@ -174,7 +174,7 @@ if __name__ == '__main__':
                 for i in globals.rproc.keys():
                     print(i)
 
-            com = "cp imported/import_*.tf ."
+            com = "cp imported/*.tf ."
             rout = common.rc(com) 
 
         except:

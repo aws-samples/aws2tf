@@ -46,6 +46,7 @@ from get_aws_resources import aws_dynamodb
 from get_aws_resources import aws_kms
 from get_aws_resources import aws_ec2
 from get_aws_resources import aws_ecs
+from get_aws_resources import aws_efs
 from get_aws_resources import aws_ecr_public
 from get_aws_resources import aws_ecr
 from get_aws_resources import aws_eks

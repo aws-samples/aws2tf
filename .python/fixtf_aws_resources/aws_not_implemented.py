@@ -275,7 +275,7 @@ notimplemented = {
     "aws_opsworks_php_app_layer": True,
     "aws_opsworks_stack": True,
     "aws_opsworks_static_web_layer": True,
-    "aws_organizations_account": True,  ### TODO
+    #"aws_organizations_account": True,  ### TODO
     "aws_pinpoint_adm_channel": True,
     "aws_pinpoint_apns_channel": True,
     "aws_pinpoint_apns_sandbox_channel": True,

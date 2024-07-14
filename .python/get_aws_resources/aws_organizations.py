@@ -219,8 +219,9 @@ def get_aws_organizations_policy_attachment(type, id, clfn, descfn, topkey, key,
                     return True
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
-                
-                common.write_import(type, j[key], None) 
+                tid=j['TargetId']
+                pkey=tid+":"+id
+                common.write_import(type, pkey, id) 
 
         else:
             print("Must pass a policy id as a parmeter - returning True")

@@ -78,50 +78,68 @@ def get_aws_organizations_policy(type, id, clfn, descfn, topkey, key, filterid):
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
+        scpskip=True
         client = boto3.client(clfn)
         try:
             response = client.list_policies(Filter='SERVICE_CONTROL_POLICY')
         except Exception as e:
-            print("No Policy found returning True......")
-            return True
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        for j in response[topkey]:
-            if "AWS" not in j[key]:
-                common.write_import(type,j[key],None) 
-                common.add_dependancy("aws_organizations_policy_attachment", j[key])
+            print("No SCP Policies found ......")
+            scpskip=False
+            
+        if scpskip:
+            print("SCPs")
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            for j in response[topkey]:
+                if "AWS" not in j[key]:
+                    common.write_import(type,j[key],None) 
+                    common.add_known_dependancy("aws_organizations_policy_attachment", j[key])
+
+        response = []
+        tagskip=True
 
         try:
             response = client.list_policies(Filter='TAG_POLICY')
         except Exception as e:
-            print("No Policy found returning True......")
-            return True
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        for j in response[topkey]:
-            #if "AWS" not in j[key]:
-                common.write_import(type,j[key],None) 
-                common.add_dependancy("aws_organizations_policy_attachment", j[key])
+            print("No TAG Policies found ......")
+            tagskip=False
+        if tagskip:
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            for j in response[topkey]:
+                #if "AWS" not in j[key]:
+                    common.write_import(type,j[key],None) 
+                    common.add_known_dependancy("aws_organizations_policy_attachment", j[key])
+
+        response = []
+        backskip=True
 
         try:
             response = client.list_policies(Filter='BACKUP_POLICY')
         except Exception as e:
-            print("No Policy found returning True......")
-            return True
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        for j in response[topkey]:
-            #if "AWS" not in j[key]:
-                common.write_import(type,j[key],None)
-                common.add_dependancy("aws_organizations_policy_attachment", j[key])
+            print("No Backup Policies found ......")
+            backskip=False
+
+        if backskip:    
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            for j in response[topkey]:
+                #if "AWS" not in j[key]:
+                    common.write_import(type,j[key],None)
+                    common.add_known_dependancy("aws_organizations_policy_attachment", j[key])
+
+
+        response = []
+        aiskip=True
 
         try:
             response = client.list_policies(Filter='AISERVICES_OPT_OUT_POLICY')
         except Exception as e:
-            print("No Policy found returning True......")
-            return True
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        for j in response[topkey]:
-            #if "AWS" not in j[key]:
-                common.write_import(type,j[key],None)
-                common.add_dependancy("aws_organizations_policy_attachment", j[key])
+            print("No AI Policies found ......")
+            aislip=False
+        if aiskip:
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            for j in response[topkey]:
+                #if "AWS" not in j[key]:
+                    common.write_import(type,j[key],None)
+                    common.add_known_dependancy("aws_organizations_policy_attachment", j[key])
         
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -172,7 +190,7 @@ def get_aws_organizations_resource_policy(type, id, clfn, descfn, topkey, key, f
             #fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             exn=str(exc_type.__name__)
             if exn == "ResourcePolicyNotFoundException":
-                print("No Resource Policy found - returning True ....")
+                print("No Resource Policies found - returning True ....")
                 return True
             elif exn == "AccessDeniedException":
                     print("Can't describe_resource_policy - no access or not a master account......")              
@@ -201,7 +219,7 @@ def get_aws_organizations_policy_attachment(type, id, clfn, descfn, topkey, key,
         response = []
         client = boto3.client(clfn)
         if id.startswith("p-"):
-            print("--------->>>>>>>>>>ID="+id)
+            #print("--------->>>>>>>>>>ID="+id)
             try:
                 response = client.list_targets_for_policy(PolicyId=id)
             except Exception as e:

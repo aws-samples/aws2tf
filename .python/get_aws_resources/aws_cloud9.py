@@ -32,3 +32,32 @@ def get_aws_cloud9_environment_membership(type, id, clfn, descfn, topkey, key, f
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
+
+def get_aws_cloud9_environment_ec2(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            response = client.list_environments()
+            #print(response)
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            for j in response['environmentIds']:
+                common.write_import(type,j,None) 
+                response2 = client.describe_environments(environmentIds=[j])
+                for k in response2['environments']:    
+                    print(str(k))
+
+
+        else:      
+            response = client.describe_environments(environmentIds=[id])
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            for j in response['environments']:
+                common.write_import(type,j[id],None)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True

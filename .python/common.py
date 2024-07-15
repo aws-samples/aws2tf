@@ -46,6 +46,7 @@ from get_aws_resources import aws_dynamodb
 from get_aws_resources import aws_kms
 from get_aws_resources import aws_ec2
 from get_aws_resources import aws_ecs
+from get_aws_resources import aws_efs
 from get_aws_resources import aws_ecr_public
 from get_aws_resources import aws_ecr
 from get_aws_resources import aws_eks
@@ -693,7 +694,7 @@ def write_import(type,theid,tfid):
          pkey=type+"."+tfid
          globals.rproc[pkey]=True
          return
-      
+      #print("theid=",theid,"  tfid=",tfid)
       with open(fn, "a") as f:
          f.write('import {\n')
          f.write('  to = ' +type + '.' + tfid + '\n')

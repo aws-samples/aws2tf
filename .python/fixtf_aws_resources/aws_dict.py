@@ -7033,7 +7033,7 @@ aws_organizations_organization = {
 aws_organizations_organizational_unit = {
 	"clfn":		"organizations",
 	"descfn":	"describe_organizational_unit",
-	"topkey":	"OrganizationalUnit",
+	"topkey":	"OrganizationalUnits",
 	"key":		"Id",
 	"filterid":	"Id"
 }

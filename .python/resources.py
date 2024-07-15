@@ -17,6 +17,7 @@ def resource_types(type):
     elif type == "cloudfront"or type == "cfront": rets=["aws_cloudfront_distribution"]; return rets # Cloudfront Distribution
     elif type == "cloudtrail": rets=["aws_cloudtrail"]; return rets # CloudTrail
     elif type == "cw" or type == "cloudwatch" or type == "logs": rets=["aws_cloudwatch_log_group","aws_cloudwatch_metric_alarm"]; return rets # Cloudwatch logs groups and alarms
+    elif type == "cloud9" or type =="c9" : rets=["aws_cloud9_environment_ec2"]; return rets # Cloud9 EC2 environments
     elif type == "cloudform": rets=["aws_cloudformation_stack"]; return rets # Cloudformation stacks (use -s stack -i [stackname] instead)
     elif type == "cognito": rets=["aws_cognito_identity_pool","aws_cognito_identity_pool_roles_attachment","aws_cognito_user_pool","aws_cognito_user_pool_client"]; return rets # Cognito pools etc
     elif type == "config": rets=["aws_config_configuration_recorder","aws_config_delivery_channel","aws_config_configuration_recorder_status","aws_config_config_rule"]; return rets # Config rules, recorders etc.
@@ -38,7 +39,7 @@ def resource_types(type):
     elif type == "lambda": rets=["aws_lambda_function"]; return rets # Lambda functions and some dependancies 
     elif type == "lf": rets=["aws_lakeformation_data_lake_settings","aws_lakeformation_resource","aws_lakeformation_permissions"]; return rets # Lake Formation
     elif type == "natgw": rets=["aws_nat_gateway"]; return rets # NAT gateway and dependancies
-    elif type == "org": rets=["aws_organizations_organization","aws_organizations_account","aws_organizations_organizational_unit","aws_organizations_policy"]; return rets # AWS Organisations and some dependancies
+    elif type == "org": rets=["aws_organizations_organization","aws_organizations_account","aws_organizations_resource_policy","aws_organizations_policy"]; return rets # AWS Organisations and some dependancies
     elif type == "params": rets=["aws_ssm_parameter"]; return rets # SSM parameters
     elif type == "privatelink": rets=["aws_vpc_endpoint_service"]; return rets # VPC privatelink resources
     elif type == "ram": rets=["aws_ram_resource_share"]; return rets # RAM shares

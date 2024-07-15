@@ -1196,10 +1196,6 @@ aws_organizations_policies_for_target = {
   "clfn": "organizations"
 }
 
-aws_organizations_policy = {
-  "param": "Filter",
-  "clfn": "organizations"
-}
 
 aws_outposts_asset = {
   "param": "OutpostIdentifier",
@@ -2110,7 +2106,6 @@ aws_needid = {
   "aws_neptune_orderable_db_instance": aws_neptune_orderable_db_instance,
   "aws_organizations_policies": aws_organizations_policies,
   "aws_organizations_policies_for_target": aws_organizations_policies_for_target,
-  "aws_organizations_policy": aws_organizations_policy,
   "aws_outposts_asset": aws_outposts_asset,
   "aws_outposts_assets": aws_outposts_assets,
   "aws_prometheus_rule_group_namespace": aws_prometheus_rule_group_namespace,

@@ -79,7 +79,10 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                 else:
                     print("WARNING: subnet_id not found in subnetlist", tt2)
 
-        
+        elif tt1 == "file_system_id":
+            if tt2 != "null":
+                t1=tt1 + " = aws_efs_file_system." + tt2 + ".id\n"
+                common.add_dependancy("aws_efs_file_system", tt2)
 
         elif tt1 == "kms_key_arn":
             if tt2 != "null":     

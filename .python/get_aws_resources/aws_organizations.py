@@ -201,6 +201,7 @@ def get_aws_organizations_policy_attachment(type, id, clfn, descfn, topkey, key,
         response = []
         client = boto3.client(clfn)
         if id.startswith("p-"):
+            print("--------->>>>>>>>>>ID="+id)
             try:
                 response = client.list_targets_for_policy(PolicyId=id)
             except Exception as e:
@@ -216,12 +217,22 @@ def get_aws_organizations_policy_attachment(type, id, clfn, descfn, topkey, key,
                 else:
                     print(f"{e=} [org1]")
                     print("No Org Resource Policy found returning True......")
+
                     return True
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response[topkey] == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                pkey=type+"."+id
+                globals.rproc[pkey]=True
+                return True
+            
+            if id=="p-pj4vhztq":
+                    print("J=",response)
             for j in response[topkey]:
+                #print("J="+str(j))
                 tid=j['TargetId']
                 pkey=tid+":"+id
-                common.write_import(type, pkey, id) 
+
+                common.write_import(type, pkey, id)            
 
         else:
             print("Must pass a policy id as a parmeter - returning True")

@@ -694,7 +694,7 @@ def write_import(type,theid,tfid):
          pkey=type+"."+tfid
          globals.rproc[pkey]=True
          return
-      
+      #print("theid=",theid,"  tfid=",tfid)
       with open(fn, "a") as f:
          f.write('import {\n')
          f.write('  to = ' +type + '.' + tfid + '\n')

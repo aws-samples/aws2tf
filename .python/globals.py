@@ -34,6 +34,7 @@ stripblock=""
 stripstart=""
 stripend=""
 apigwrestapiid=""
+ssoinstance=None
 
 meshname=""
 

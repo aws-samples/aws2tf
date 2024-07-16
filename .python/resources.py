@@ -56,6 +56,7 @@ def resource_types(type):
     elif type == "sns": rets=["aws_sns_topic"]; return rets  # SNS topics
     elif type == "sqs": rets=["aws_sqs_queue"]; return rets            # SQS queues
     elif type == "spot": rets=["aws_spot_fleet_request"]; return rets # Spot fleet request
+    elif type == "sso": rets=["aws_ssoadmin_instances"]; return rets # Spot fleet request
     elif type == "tgw": rets=["aws_ec2_transit_gateway"]; return rets # Transit Gateway
     elif type == "vpclattice" or type=="lattice": rets=["aws_vpclattice_service_network"]; return rets # VOC Lattice and dependancies
     elif type == "users": rets=["aws_iam_user","aws_iam_group"]; return rets # IAM user and groups

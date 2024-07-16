@@ -82,6 +82,7 @@ from get_aws_resources import aws_ses
 from get_aws_resources import aws_sns
 from get_aws_resources import aws_sqs
 from get_aws_resources import aws_ssm
+from get_aws_resources import aws_sso_admin
 from get_aws_resources import aws_vpc_lattice
 from get_aws_resources import aws_wafv2
 from get_aws_resources import aws_xray
@@ -92,7 +93,7 @@ from fixtf_aws_resources import aws_not_implemented
 
 
 def call_resource(type, id):
-
+   #print("---- in call_resources >>>>> "+type+"   "+str(id))
    if type in aws_no_import.noimport:
       print("WARNING: Terraform cannot import type: " + type)
       return
@@ -145,14 +146,14 @@ def call_resource(type, id):
                print("calling specific common.get_"+type+" with type="+type+" id="+str(id)+"   clfn=" +
                     clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
 
-            if clfn == "vpc-lattice":  getfn = getattr(
-                eval("aws_vpc_lattice"), "get_"+type)
+            if clfn == "vpc-lattice":  getfn = getattr(eval("aws_vpc_lattice"), "get_"+type)
             elif clfn == "redshift-serverless":  getfn = getattr(eval("aws_redshift_serverless"), "get_"+type)
             elif clfn == "s3":  getfn = getattr(eval("aws_s3"), "get_"+type)
 
             else:
                # print("-1aa- clfn:"+clfn+" type:"+type)
                mclfn = clfn.replace("-", "_")
+
                # print("-1ab- mclfn:"+mclfn+" type:"+type)
                getfn = getattr(eval("aws_"+mclfn), "get_"+type)
                # print("-1ac- clfn:"+clfn+" type:"+type)

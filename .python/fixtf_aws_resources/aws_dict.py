@@ -9449,6 +9449,17 @@ aws_ssoadmin_customer_managed_policy_attachment = {
 	"filterid":	"AccountAssignmentCreationTime"
 }
 
+### this one actually a dummy for the data resource
+aws_ssoadmin_instances = {
+	"clfn":		"sso-admin",
+	"descfn":	"list_instances",
+	"topkey":	"Instances",
+	"key":		"Arn",
+	"filterid":	"Arn"
+}
+#########
+
+
 aws_ssoadmin_instance_access_control_attributes = {
 	"clfn":		"sso-admin",
 	"descfn":	"list_instance_access_control_attribute_configuration",
@@ -11539,6 +11550,7 @@ aws_resources = {
 	"aws_ssoadmin_application_assignment": aws_ssoadmin_application_assignment,
 	"aws_ssoadmin_application_assignment_configuration": aws_ssoadmin_application_assignment_configuration,
 	"aws_ssoadmin_customer_managed_policy_attachment": aws_ssoadmin_customer_managed_policy_attachment,
+    "aws_ssoadmin_instances": aws_ssoadmin_instances,
 	"aws_ssoadmin_instance_access_control_attributes": aws_ssoadmin_instance_access_control_attributes,
 	"aws_ssoadmin_managed_policy_attachment": aws_ssoadmin_managed_policy_attachment,
 	"aws_ssoadmin_permission_set": aws_ssoadmin_permission_set,

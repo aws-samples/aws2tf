@@ -20,10 +20,10 @@ notimplemented = {
     "aws_auditmanager_framework_share": True,
     "aws_auditmanager_organization_admin_account_registration": True,
     "aws_backup_global_settings": True,
-    "aws_batch_compute_environment": True,
-    "aws_batch_job_definition": True,
-    "aws_batch_job_queue": True,  ### TODO
-    "aws_batch_scheduling_policy": True,
+    #"aws_batch_compute_environment": True,
+    #"aws_batch_job_definition": True,
+    #"aws_batch_job_queue": True,  ### TODO
+    #"aws_batch_scheduling_policy": True,
     "aws_budgets_budget": True,
     "aws_budgets_budget_action": True,
     "aws_ce_anomaly_monitor": True,

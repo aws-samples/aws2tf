@@ -1653,32 +1653,32 @@ aws_backup_vault_policy = {
 
 aws_batch_compute_environment = {
 	"clfn":		"batch",
-	"descfn":	"list_compute_environments",
-	"topkey":	"ComputeEnvironments",
-	"key":		"ComputeEnvironmentName",
-	"filterid":	"ComputeEnvironmentName"
+	"descfn":	"describe_compute_environments",
+	"topkey":	"computeEnvironments",
+	"key":		"computeEnvironmentName",
+	"filterid":	"computeEnvironmentName"
 }
 
 aws_batch_job_definition = {
 	"clfn":		"batch",
-	"descfn":	"list_job_definitions",
-	"topkey":	"JobDefinitions",
-	"key":		"JobDefinitionName",
-	"filterid":	"JobDefinitionName"
+	"descfn":	"describe_job_definitions",
+	"topkey":	"jobDefinitions",
+	"key":		"jobDefinitionArn",
+	"filterid":	"jobDefinitionArn"
 }
 
 aws_batch_job_queue = {
 	"clfn":		"batch",
-	"descfn":	"list_job_queues",
-	"topkey":	"JobQueues",
-	"key":		"JobQueueName",
-	"filterid":	"JobQueueName"
+	"descfn":	"describe_job_queues",
+	"topkey":	"jobQueues",
+	"key":		"jobQueueArn",
+	"filterid":	"jobQueueArn"
 }
 
 aws_batch_scheduling_policy = {
 	"clfn":		"batch",
 	"descfn":	"list_scheduling_policies",
-	"topkey":	"SchedulingPolicies",
+	"topkey":	"schedulingPolicies",
 	"key":		"SchedulingPolicyName",
 	"filterid":	"SchedulingPolicyName"
 }

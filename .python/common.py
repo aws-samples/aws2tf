@@ -26,6 +26,7 @@ from get_aws_resources import aws_apigatewayv2
 from get_aws_resources import aws_appmesh
 from get_aws_resources import aws_application_autoscaling
 from get_aws_resources import aws_appstream
+from get_aws_resources import aws_batch
 from get_aws_resources import aws_backup
 from get_aws_resources import aws_bedrock
 from get_aws_resources import aws_cleanrooms

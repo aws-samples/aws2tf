@@ -13,6 +13,7 @@ def resource_types(type):
     elif type == "athena": rets=["aws_athena_named_query","aws_athena_data_catalog"]; return rets # Athena Resources
     elif type == "aurora": rets=["aws_rds_cluster"]; return rets # RDS Cluster
     elif type == "autoscaling" or type== "asg": rets=["aws_autoscaling_group"]; return rets # Autoscaling Group
+    elif type == "batch": rets=["aws_batch_compute_environment","aws_batch_job_definition","aws_batch_scheduling_policy"]; return rets # Autoscaling Group
     elif type == "code": rets=["aws_codestarnotifications_notification_rule","aws_codebuild_projec","aws_codeartifact_domain","aws_codeartifact_repository","aws_codecommit_repository","aws_codepipeline"]; return rets  # Codebuild, Code commit etc
     elif type == "cloudfront"or type == "cfront": rets=["aws_cloudfront_distribution"]; return rets # Cloudfront Distribution
     elif type == "cloudtrail": rets=["aws_cloudtrail"]; return rets # CloudTrail
@@ -55,6 +56,7 @@ def resource_types(type):
     elif type == "sns": rets=["aws_sns_topic"]; return rets  # SNS topics
     elif type == "sqs": rets=["aws_sqs_queue"]; return rets            # SQS queues
     elif type == "spot": rets=["aws_spot_fleet_request"]; return rets # Spot fleet request
+    elif type == "sso": rets=["aws_ssoadmin_instances"]; return rets # Spot fleet request
     elif type == "tgw": rets=["aws_ec2_transit_gateway"]; return rets # Transit Gateway
     elif type == "vpclattice" or type=="lattice": rets=["aws_vpclattice_service_network"]; return rets # VOC Lattice and dependancies
     elif type == "users": rets=["aws_iam_user","aws_iam_group"]; return rets # IAM user and groups

@@ -1653,32 +1653,32 @@ aws_backup_vault_policy = {
 
 aws_batch_compute_environment = {
 	"clfn":		"batch",
-	"descfn":	"list_compute_environments",
-	"topkey":	"ComputeEnvironments",
-	"key":		"ComputeEnvironmentName",
-	"filterid":	"ComputeEnvironmentName"
+	"descfn":	"describe_compute_environments",
+	"topkey":	"computeEnvironments",
+	"key":		"computeEnvironmentName",
+	"filterid":	"computeEnvironmentName"
 }
 
 aws_batch_job_definition = {
 	"clfn":		"batch",
-	"descfn":	"list_job_definitions",
-	"topkey":	"JobDefinitions",
-	"key":		"JobDefinitionName",
-	"filterid":	"JobDefinitionName"
+	"descfn":	"describe_job_definitions",
+	"topkey":	"jobDefinitions",
+	"key":		"jobDefinitionArn",
+	"filterid":	"jobDefinitionArn"
 }
 
 aws_batch_job_queue = {
 	"clfn":		"batch",
-	"descfn":	"list_job_queues",
-	"topkey":	"JobQueues",
-	"key":		"JobQueueName",
-	"filterid":	"JobQueueName"
+	"descfn":	"describe_job_queues",
+	"topkey":	"jobQueues",
+	"key":		"jobQueueArn",
+	"filterid":	"jobQueueArn"
 }
 
 aws_batch_scheduling_policy = {
 	"clfn":		"batch",
 	"descfn":	"list_scheduling_policies",
-	"topkey":	"SchedulingPolicies",
+	"topkey":	"schedulingPolicies",
 	"key":		"SchedulingPolicyName",
 	"filterid":	"SchedulingPolicyName"
 }
@@ -9449,6 +9449,17 @@ aws_ssoadmin_customer_managed_policy_attachment = {
 	"filterid":	"AccountAssignmentCreationTime"
 }
 
+### this one actually a dummy for the data resource
+aws_ssoadmin_instances = {
+	"clfn":		"sso-admin",
+	"descfn":	"list_instances",
+	"topkey":	"Instances",
+	"key":		"Arn",
+	"filterid":	"Arn"
+}
+#########
+
+
 aws_ssoadmin_instance_access_control_attributes = {
 	"clfn":		"sso-admin",
 	"descfn":	"list_instance_access_control_attribute_configuration",
@@ -11539,6 +11550,7 @@ aws_resources = {
 	"aws_ssoadmin_application_assignment": aws_ssoadmin_application_assignment,
 	"aws_ssoadmin_application_assignment_configuration": aws_ssoadmin_application_assignment_configuration,
 	"aws_ssoadmin_customer_managed_policy_attachment": aws_ssoadmin_customer_managed_policy_attachment,
+    "aws_ssoadmin_instances": aws_ssoadmin_instances,
 	"aws_ssoadmin_instance_access_control_attributes": aws_ssoadmin_instance_access_control_attributes,
 	"aws_ssoadmin_managed_policy_attachment": aws_ssoadmin_managed_policy_attachment,
 	"aws_ssoadmin_permission_set": aws_ssoadmin_permission_set,

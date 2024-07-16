@@ -394,6 +394,7 @@ if [ "$t" == "sfn" ]; then pre="78*"; fi            # State machine
 if [ "$t" == "security-group" ]; then pre="110"; fi # security group
 if [ "$t" == "sqs" ]; then pre="72*"; fi            # SQS
 if [ "$t" == "spot" ]; then pre="25*"; fi
+if [ "$t" == "sso" ]; then pre="021*"; fi
 if [ "$t" == "vpclattice" ]; then pre="17*"; fi
 if [ "$t" == "users" ]; then pre="03*" && exclude="xxxxxxx"; fi
 

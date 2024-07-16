@@ -72,7 +72,7 @@ def build_lists():
     for page in paginator.paginate(): response = response + page['Roles']
     for j in response: globals.rolelist[j['RoleName']]=True
     response=[]
-    if globals.debug: print(str(globals.vpclist))
+    #if globals.debug: print(str(globals.vpclist))
 
 
 
@@ -201,15 +201,15 @@ if __name__ == '__main__':
 
 ################# -- now we are calling ----   ###############################
     all_types = resources.resource_types(type)
+
     try:
         lall=len(all_types)
     except:
         lall=0
 
 
-    #if all_types is None:
-    #    print("No resources found")
-    #    exit()
+    if all_types is None: print("No resources found all_types=None")
+
 
     if type == "stack":
         if id is None:
@@ -219,8 +219,9 @@ if __name__ == '__main__':
             stacks.get_stacks(id)
 
         
-
+    
     elif type.startswith("aws_"):
+
         if type in aws_dict.aws_resources:
             common.call_resource(type, id)
 

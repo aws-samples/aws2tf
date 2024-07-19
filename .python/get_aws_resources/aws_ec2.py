@@ -824,8 +824,8 @@ def get_aws_ec2_transit_gateway_route_table(type, id, clfn, descfn, topkey, key,
 
 
 def get_aws_ec2_transit_gateway_route(type, id, clfn, descfn, topkey, key, filterid):
-    #if globals.debug:
-    print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []

@@ -886,12 +886,14 @@ def add_known_dependancy(type,id):
 
 def add_dependancy(type,id):
     # check if we alredy have it
+   if id is None: 
+      print("WARNING: add_dependancy: id is None")
+      return
    try:
    #   if type=="aws_kms_alias" and id=="k-817bb810-7154-4d9b-b582-7dbb62e77876":
    #      raise Exception("aws_kms_alias")
       if type=="aws_glue_catalog_database":
          if ":" not in id: id=globals.acc+":"+id
-
       pkey=type+"."+id
       if pkey not in globals.rproc:
          print("add_dependancy: " + pkey)

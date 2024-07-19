@@ -61,6 +61,7 @@ def get_aws_ssoadmin_managed_policy_attachment(type, id, clfn, descfn, topkey, k
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         # id - instid arm /perm arn
+        if id is None: print("No SSO instance found"); return True
         if "," not in id: print("No SSO instance found"); return True
 
         response = []
@@ -94,6 +95,7 @@ def get_aws_ssoadmin_permission_set_inline_policy(type, id, clfn, descfn, topkey
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         # id - instid arm /perm arn
+        if id is None: print("No SSO instance found"); return True
         if "/" not in id: print("No SSO instance found"); return True
 
         response = []

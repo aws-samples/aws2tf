@@ -471,7 +471,11 @@ def globals_replace(t1,tt1,tt2):
                 tt2=tt2[:a1]+":%s:"+tt2[a1+14:]
                 
                 ends=ends+",data.aws_caller_identity.current.account_id"
-            
+                #if "\\" not in tt2:
+                #    tt2=tt2.replace('"', '\\"')
+        
+                #print("t1="+t1)
+                #print("tt2="+tt2)
                 t1 = tt1+' = format("'+tt2+ '"' +ends+')\n'
     
     if tt1 == "managed_policy_arns":

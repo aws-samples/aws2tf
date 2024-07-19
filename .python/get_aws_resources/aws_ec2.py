@@ -824,8 +824,8 @@ def get_aws_ec2_transit_gateway_route_table(type, id, clfn, descfn, topkey, key,
 
 
 def get_aws_ec2_transit_gateway_route(type, id, clfn, descfn, topkey, key, filterid):
-    #if globals.debug:
-    print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -836,7 +836,11 @@ def get_aws_ec2_transit_gateway_route(type, id, clfn, descfn, topkey, key, filte
         else: 
             if id.startswith("tgw-rtb-"):     
                 response = client.search_transit_gateway_routes(TransitGatewayRouteTableId=id,Filters=[{'Name': 'type','Values': ['static']}])
-                if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if response[topkey] == []: 
+                    print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                    pkey=type+"."+id
+                    globals.rproc[pkey]=True
+                    return True
                 for j in response[topkey]:
                     pkey=id+"_"+j[key]
                     common.write_import(type,pkey,id)           

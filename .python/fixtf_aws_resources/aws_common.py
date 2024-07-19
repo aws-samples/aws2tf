@@ -156,9 +156,10 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         ### RHS processing
         ### causes a hang loop
         #if tt2.startswith("s3://"): t1=fixtf.rhs_replace(t1,tt1,tt2)
+        ## replace region and account number on RHS
         elif tt2==globals.acc: t1=tt1 + ' = format("%s",data.aws_caller_identity.current.account_id)\n'
         elif tt2==globals.region: t1=tt1 + ' = format("%s",data.aws_region.current.name)\n'
-        
+        ## fix zones
         elif tt2==globals.region+"a":  t1=tt1 + ' = format("%sa",data.aws_region.current.name)\n'
         elif tt2==globals.region+"b":  t1=tt1 + ' = format("%sb",data.aws_region.current.name)\n'
         elif tt2==globals.region+"c":  t1=tt1 + ' = format("%sc",data.aws_region.current.name)\n'
@@ -167,7 +168,8 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         elif tt2==globals.region+"f":  t1=tt1 + ' = format("%sf",data.aws_region.current.name)\n'
 
         ## tt2 is arn - call globals_replace ?
-        #elif tt2.startswith("arn:"): t1=fixtf.globals_replace(t1, tt1, tt2)
+        elif tt2.startswith("arn:"): 
+            t1=fixtf.globals_replace(t1, tt1, tt2)
 
     except Exception as e:
         common.handle_error2(e,str(inspect.currentframe()),id)

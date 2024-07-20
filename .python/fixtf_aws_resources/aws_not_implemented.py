@@ -4,11 +4,8 @@ notimplemented = {
     #
     "aws_apprunner_observability_configuration": True,
     "aws_appstream_directory_config": True,
-    #"aws_appstream_fleet": True,
+
     "aws_appstream_fleet_stack_association": True,
-    #"aws_appstream_image_builder": True,
-    #"aws_appstream_stack": True,
-    #"aws_appstream_user": True, ### TODO
     "aws_appstream_user_stack_association": True,
     "aws_appsync_api_cache": True,
     "aws_appsync_domain_name_api_association": True,
@@ -20,10 +17,9 @@ notimplemented = {
     "aws_auditmanager_framework_share": True,
     "aws_auditmanager_organization_admin_account_registration": True,
     "aws_backup_global_settings": True,
-    #"aws_batch_compute_environment": True,
-    #"aws_batch_job_definition": True,
+
     #"aws_batch_job_queue": True,  ### TODO
-    #"aws_batch_scheduling_policy": True,
+
     "aws_budgets_budget": True,
     "aws_budgets_budget_action": True,
     "aws_ce_anomaly_monitor": True,
@@ -38,7 +34,6 @@ notimplemented = {
     "aws_cloudformation_stack_set_instance": True,
     "aws_cloudformation_stack": True,
     "aws_cloudfront_monitoring_subscription": True,
-    "aws_cloudfront_origin_access_identity": True,
     "aws_cloudsearch_domain": True,
     "aws_cloudsearch_domain_service_access_policy": True,
     "aws_cloudwatch_composite_alarm": True,
@@ -64,7 +59,7 @@ notimplemented = {
     "aws_codebuild_resource_policy": True,
     "aws_codebuild_webhook": True,
     "aws_codecommit_approval_rule_template_association": True,
-    #"aws_codecommit_repository": True,
+
     "aws_codedeploy_app": True,
     "aws_codedeploy_deployment_config": True,
     "aws_codepipeline": True, ### TODO
@@ -73,7 +68,7 @@ notimplemented = {
     "aws_cognito_identity_pool_provider_principal_tag": True,
     "aws_cognito_identity_pool_roles_attachment": True,
     "aws_cognito_risk_configuration": True,
-    #"aws_cognito_user_group": True,  ### TODO
+
     "aws_cognito_user_pool_domain": True,  ### TODO
     "aws_cognito_user_pool_ui_customization": True,
     "aws_comprehend_document_classifier": True,

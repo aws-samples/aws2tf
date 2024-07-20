@@ -1981,8 +1981,8 @@ aws_cloudfront_origin_access_control = {
 
 aws_cloudfront_origin_access_identity = {
 	"clfn":		"cloudfront",
-	"descfn":	"list_origin_access_identities",
-	"topkey":	"OriginAccessIdentities",
+	"descfn":	"list_cloud_front_origin_access_identities",
+	"topkey":	"CloudFrontOriginAccessIdentityList",
 	"key":		"Id",
 	"filterid":	"Id"
 }

@@ -79,6 +79,8 @@ def get_aws_emr_instance_group(type, id, clfn, descfn, topkey, key, filterid):
                 pkey=id+"/"+j[key]
                 #print(str(j))
                 common.write_import(type,pkey,None)
+            pkey=type+"."+id
+            globals.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

@@ -321,7 +321,7 @@ def get_aws_glue_classifier(type, id, clfn, descfn, topkey, key, filterid):
                 pkey=j['CsvClassifier'][key]
                 common.write_import(type, pkey, None)
             except Exception as e:
-                print(e)
+                print("e=",e)
                 print(str(j))
             try:
                 pkey=j['JsonClassifier'][key]

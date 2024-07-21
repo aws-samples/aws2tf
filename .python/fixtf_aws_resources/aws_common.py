@@ -50,9 +50,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                 #common.add_dependancy("aws_api_gateway_rest_api", tt2)
                 globals.apigwrestapiid=tt2
 
-        elif tt1 == "security_groups" or tt1 == "security_group_ids" or tt1 == "vpc_security_group_ids" \
-            or tt1=="emr_managed_master_security_group" or tt1=="emr_managed_slave_security_group" \
-                or tt1=="service_access_security_group":
+        elif tt1 == "security_groups" or tt1 == "security_group_ids" or tt1 == "vpc_security_group_ids":
         # avoid circular references
             if type != "aws_security_group": 
                 if type != "aws_cloudwatch_log_group":
@@ -72,6 +70,16 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                     common.add_dependancy("aws_vpc", tt2)
                 else:
                     print("WARNING: vpc_id not found in vpclist",tt2)
+
+        elif tt1=="emr_managed_master_security_group" or tt1=="emr_managed_slave_security_group" \
+                or tt1=="service_access_security_group":
+           if tt2 != "null":
+                if globals.sglist[tt2]:
+                    t1=tt1 + " = aws_security_group." + tt2 + ".id\n"
+                    common.add_dependancy("aws_security_group", tt2)
+                else:
+                    print("WARNING: security group not found in sglist", tt2)
+
 
         elif tt1 == "subnet_id":
             if tt2 != "null":

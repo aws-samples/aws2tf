@@ -22,7 +22,7 @@ def get_aws_emr_cluster(type, id, clfn, descfn, topkey, key, filterid):
             response = client.describe_cluster(ClusterId=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Cluster']
-            print(str(j))
+            #print(str(j))
             common.write_import(type,j[key],None)
 
     except Exception as e:

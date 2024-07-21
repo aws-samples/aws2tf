@@ -303,6 +303,12 @@ def get_aws_glue_classifier(type, id, clfn, descfn, topkey, key, filterid):
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 print(str(j))
+                try:
+                    pkey=j['CsvClassifier'][key]
+                    common.write_import(type, pkey, None)
+                except Exception as e:
+                    print(e)
+                    print(str(j))
                 #pkey=globals.acc+":"+j[key]
                 #theid="c-"+pkey.replace(":","_")
                 #common.write_import(type, pkey, theid)

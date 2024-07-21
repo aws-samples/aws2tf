@@ -303,17 +303,28 @@ def get_aws_glue_classifier(type, id, clfn, descfn, topkey, key, filterid):
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 print(str(j))
-                try:
-                    pkey=j['CsvClassifier'][key]
-                    common.write_import(type, pkey, None)
-                except Exception as e:
-                    print(e)
-                    print(str(j))
-                #pkey=globals.acc+":"+j[key]
-                #theid="c-"+pkey.replace(":","_")
-                #common.write_import(type, pkey, theid)
+            try:
+                pkey=j['CsvClassifier'][key]
+                common.write_import(type, pkey, None)
+            except Exception as e:
+                pass
+            try:
+                pkey=j['JsonClassifier'][key]
+                common.write_import(type, pkey, None)
+            except Exception as e:
+                pass
+            try:
+                pkey=j['GrokClassifier'][key]
+                common.write_import(type, pkey, None)
+            except Exception as e:
+                pass
+            try:
+                pkey=j['XMLClassifier'][key]
+                common.write_import(type, pkey, None)
+            except Exception as e:
+                pass
         else:
-            print("ID is "+str(id))
+            #print("ID is "+str(id))
             response = client.get_classifier(Name=id)
             if response['Classifier'] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Classifier']
@@ -321,14 +332,23 @@ def get_aws_glue_classifier(type, id, clfn, descfn, topkey, key, filterid):
                 pkey=j['CsvClassifier'][key]
                 common.write_import(type, pkey, None)
             except Exception as e:
-                print("e=",e)
-                print(str(j))
+                pass
             try:
                 pkey=j['JsonClassifier'][key]
                 common.write_import(type, pkey, None)
             except Exception as e:
-                print("e=",e)
-                print(str(j))
+                pass
+            try:
+                pkey=j['GrokClassifier'][key]
+                common.write_import(type, pkey, None)
+            except Exception as e:
+                pass
+            try:
+                pkey=j['XMLClassifier'][key]
+                common.write_import(type, pkey, None)
+            except Exception as e:
+                pass
+
 
             #theid="c-"+pkey.replace(":","_")
             #common.write_import(type, pkey, theid)

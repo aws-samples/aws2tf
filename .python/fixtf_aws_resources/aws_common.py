@@ -138,7 +138,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                     or tt1=="service_role": 
             t1=fixtf.deref_role_arn(t1,tt1,tt2)
 
-        elif tt1 == "role" or tt1=="iam_role" or tt1=="role_name" or tt1=="autoscaling_role" \
+        elif tt1 == "role" or tt1=="iam_role" or tt1=="role_name" \
             or tt1=="service_role":
 
             if tt2 !="null" and "arn:" not in tt2: 

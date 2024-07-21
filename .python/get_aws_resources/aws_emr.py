@@ -75,10 +75,10 @@ def get_aws_emr_instance_group(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.list_instance_groups(ClusterId=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-            j=response['InstanceGroups']
-            pkey=id+"/"+j[key]
-            #print(str(j))
-            common.write_import(type,pkey,None)
+            for j in response['InstanceGroups']:
+                pkey=id+"/"+j[key]
+                #print(str(j))
+                common.write_import(type,pkey,None)
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

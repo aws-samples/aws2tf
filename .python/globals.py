@@ -35,6 +35,7 @@ stripstart=""
 stripend=""
 apigwrestapiid=""
 ssoinstance=None
+emrsubnetid=False
 
 meshname=""
 

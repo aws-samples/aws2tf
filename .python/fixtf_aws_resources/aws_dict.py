@@ -4318,7 +4318,7 @@ aws_emr_instance_fleet = {
 
 aws_emr_instance_group = {
 	"clfn":		"emr",
-	"descfn":	"describe_instance_groups",
+	"descfn":	"list_instance_groups",
 	"topkey":	"InstanceGroups",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -4326,7 +4326,7 @@ aws_emr_instance_group = {
 
 aws_emr_managed_scaling_policy = {
 	"clfn":		"emr",
-	"descfn":	"describe_managed_scaling_policies",
+	"descfn":	"get_managed_scaling_policy",
 	"topkey":	"ManagedScalingPolicies",
 	"key":		"Id",
 	"filterid":	"Id"

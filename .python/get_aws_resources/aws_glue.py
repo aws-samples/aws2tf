@@ -316,7 +316,6 @@ def get_aws_glue_classifier(type, id, clfn, descfn, topkey, key, filterid):
             response = client.get_classifier(Name=id)
             if response['Classifier'] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Classifier']
-            print(str(j))
             try:
                 pkey=j['CsvClassifier'][key]
                 common.write_import(type, pkey, None)

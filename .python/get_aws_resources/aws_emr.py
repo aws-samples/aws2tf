@@ -108,6 +108,15 @@ def get_aws_emr_managed_scaling_policy(type, id, clfn, descfn, topkey, key, filt
         else:      
             response = client.get_managed_scaling_policy(ClusterId=id)
             print(str(response))
+            try:
+                j=response['ManagedScalingPolicy']
+            except KeyError as e:
+                print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                pkey=type+"."+id
+                globals.rproc[pkey]=True
+                return True 
+
+
             if response['ManagedScalingPolicy'] == []: 
                 print("Empty response for "+type+ " id="+str(id)+" returning"); 
                 pkey=type+"."+id

@@ -2,6 +2,7 @@ import common
 import boto3
 import globals
 import inspect
+import sys
 
 def get_aws_emr_cluster(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
@@ -16,18 +17,21 @@ def get_aws_emr_cluster(type, id, clfn, descfn, topkey, key, filterid):
                 response = response + page[topkey]
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
-                common.write_import(type,j[key],None) 
-                common.add_dependancy("aws_emr_instance_group",j[key])
-                common.add_dependancy("aws_emr_managed_scaling_policy",j[key])
+                if "TERMINATED" not in j['Status']['State']:
+                    #print(str(j))
+                    common.write_import(type,j[key],None) 
+                    common.add_dependancy("aws_emr_instance_group",j[key])
+                    common.add_dependancy("aws_emr_managed_scaling_policy",j[key])
 
         else:      
             response = client.describe_cluster(ClusterId=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Cluster']
             #print(str(j))
-            common.write_import(type,j[key],None)
-            common.add_dependancy("aws_emr_instance_group",j[key])
-            common.add_dependancy("aws_emr_managed_scaling_policy",j[key])
+            if "TERMINATED" not in j['Status']['State']:
+                common.write_import(type,j[key],None)
+                common.add_dependancy("aws_emr_instance_group",j[key])
+                common.add_dependancy("aws_emr_managed_scaling_policy",j[key])
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -74,17 +78,28 @@ def get_aws_emr_instance_group(type, id, clfn, descfn, topkey, key, filterid):
         if id is None:
             print("WARNING: Muse pass cluster is as parameter returning")
             return True 
-        else:      
-            response = client.list_instance_groups(ClusterId=id)
-            if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning"); 
-                pkey=type+"."+id
-                globals.rproc[pkey]=True
-                return True
-            for j in response['InstanceGroups']:
-                pkey=id+"/"+j[key]
-                #print(str(j))
-                common.write_import(type,pkey,None)
+        else:  
+            try:    
+                response = client.list_instance_groups(ClusterId=id)
+                if response == []: 
+                    print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                    pkey=type+"."+id
+                    globals.rproc[pkey]=True
+                    return True
+                for j in response['InstanceGroups']:
+                    pkey=id+"/"+j[key]
+                    #print(str(j))
+                    common.write_import(type,pkey,None)
+            except Exception as e: 
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                exn=str(exc_type.__name__)
+                if exn=="InvalidRequestException":        
+                    print("Empty response for "+type+ " id="+str(id)+" returning")
+                    pkey=type+"."+id
+                    globals.rproc[pkey]=True
+                    return True
+                
+                
             pkey=type+"."+id
             globals.rproc[pkey]=True
 

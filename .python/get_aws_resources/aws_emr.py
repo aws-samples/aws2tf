@@ -18,6 +18,7 @@ def get_aws_emr_cluster(type, id, clfn, descfn, topkey, key, filterid):
             for j in response:
                 common.write_import(type,j[key],None) 
                 common.add_dependancy("aws_emr_instance_group",j[key])
+                common.add_dependancy("aws_emr_managed_scaling_policy",j[key])
 
         else:      
             response = client.describe_cluster(ClusterId=id)
@@ -26,6 +27,7 @@ def get_aws_emr_cluster(type, id, clfn, descfn, topkey, key, filterid):
             #print(str(j))
             common.write_import(type,j[key],None)
             common.add_dependancy("aws_emr_instance_group",j[key])
+            common.add_dependancy("aws_emr_managed_scaling_policy",j[key])
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -105,9 +107,15 @@ def get_aws_emr_managed_scaling_policy(type, id, clfn, descfn, topkey, key, filt
 
         else:      
             response = client.get_managed_scaling_policy(ClusterId=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                pkey=type+"."+id
+                globals.rproc[pkey]=True
+                return True
             #print(str(j))
             common.write_import(type,id,None)
+            pkey=type+"."+id
+            globals.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

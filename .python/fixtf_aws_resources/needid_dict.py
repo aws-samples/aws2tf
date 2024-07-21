@@ -870,11 +870,6 @@ aws_elb_attachment = {
   "clfn": "elb"
 }
 
-aws_emr_cluster = {
-  "param": "ClusterId",
-  "clfn": "emr"
-}
-
 aws_evidently_feature = {
   "param": "project",
   "clfn": "evidently"
@@ -2043,7 +2038,6 @@ aws_needid = {
   "aws_elasticsearch_domain": aws_elasticsearch_domain,
   "aws_elasticsearch_vpc_endpoint": aws_elasticsearch_vpc_endpoint,
   "aws_elb_attachment": aws_elb_attachment,
-  "aws_emr_cluster": aws_emr_cluster,
   "aws_evidently_feature": aws_evidently_feature,
   "aws_evidently_launch": aws_evidently_launch,
   "aws_globalaccelerator_custom_routing_endpoint_group": aws_globalaccelerator_custom_routing_endpoint_group,

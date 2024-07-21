@@ -50,7 +50,9 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                 #common.add_dependancy("aws_api_gateway_rest_api", tt2)
                 globals.apigwrestapiid=tt2
 
-        elif tt1 == "security_groups" or tt1 == "security_group_ids" or tt1 == "vpc_security_group_ids":
+        elif tt1 == "security_groups" or tt1 == "security_group_ids" or tt1 == "vpc_security_group_ids" \
+            or tt1=="emr_managed_master_security_group" or tt1=="emr_managed_slave_security_group" \
+                or tt1=="service_access_security_group":
         # avoid circular references
             if type != "aws_security_group": 
                 if type != "aws_cloudwatch_log_group":
@@ -136,7 +138,9 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                     or tt1=="service_role": 
             t1=fixtf.deref_role_arn(t1,tt1,tt2)
 
-        elif tt1 == "role" or tt1=="iam_role" or tt1=="role_name":
+        elif tt1 == "role" or tt1=="iam_role" or tt1=="role_name" or tt1=="autoscaling_role" \
+            or tt1=="service_role":
+
             if tt2 !="null" and "arn:" not in tt2: 
                 if "/" not in tt2: 
                     if globals.rolelist[tt2]:

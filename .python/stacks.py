@@ -102,7 +102,12 @@ def getstackresources(stack_name,client):
             f3=open('stack-fetched-implicit.log', 'a')
             f4=open('stack-fetched-explicit.log', 'a')
             type=j['ResourceType']
-            pid=j['PhysicalResourceId'].split('/')[-1]
+            try:
+                pid=j['PhysicalResourceId'].split('/')[-1]
+            except KeyError:
+                print("KeyError in getstackresources")
+                print(str(j))
+                
             parn=j['PhysicalResourceId']
             lrid=j['LogicalResourceId']
             stat=j['ResourceStatus']

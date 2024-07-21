@@ -101,12 +101,13 @@ def getstackresources(stack_name,client):
 
             f3=open('stack-fetched-implicit.log', 'a')
             f4=open('stack-fetched-explicit.log', 'a')
+            
             type=j['ResourceType']
             stat=j['ResourceStatus']
             if stat=="CREATE_FAILED":
                 print("CREATE_FAILED status for "+ type + "skipping .....")
                 continue
-                
+            pid=j['PhysicalResourceId'].split('/')[-1]   
             parn=j['PhysicalResourceId']
             lrid=j['LogicalResourceId']
             stat=j['ResourceStatus']

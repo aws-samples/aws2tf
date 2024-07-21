@@ -115,7 +115,9 @@ def getstackresources(stack_name,client):
             if globals.debug:
                 print("type="+type)
             sn=stack_name.split('/')[-2]
+            print("Importing "+ str(ri) + " of "+ str(rl)+ " type="+type)
             print("Importing "+ str(ri) + " of "+ str(rl)+ " type="+type+ " pid="+pid)
+
             f4.write("Type="+type+ " pid="+pid+ " parn="+parn+"\n")
 
 

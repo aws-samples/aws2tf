@@ -74,7 +74,11 @@ def get_aws_emr_instance_group(type, id, clfn, descfn, topkey, key, filterid):
             return True 
         else:      
             response = client.list_instance_groups(ClusterId=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                pkey=type+"."+id
+                globals.rproc[pkey]=True
+                return True
             for j in response['InstanceGroups']:
                 pkey=id+"/"+j[key]
                 #print(str(j))

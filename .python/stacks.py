@@ -753,7 +753,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::GlobalAccelerator::Accelerator": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::GlobalAccelerator::EndpointGroup": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::GlobalAccelerator::Listener": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::Glue::Classifier": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::Glue::Classifier": common.call_resource("aws_glue_classifier", pid)
             elif type == "AWS::Glue::CustomEntityType": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Glue::DataCatalogEncryptionSettings": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Glue::DataQualityRuleset": common.call_resource("aws_null", type+" "+pid)

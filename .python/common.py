@@ -52,6 +52,7 @@ from get_aws_resources import aws_ecr_public
 from get_aws_resources import aws_ecr
 from get_aws_resources import aws_eks
 from get_aws_resources import aws_elbv2
+from get_aws_resources import aws_emr
 from get_aws_resources import aws_events
 from get_aws_resources import aws_firehose
 from get_aws_resources import aws_glue

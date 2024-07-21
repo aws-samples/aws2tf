@@ -116,7 +116,7 @@ def getstackresources(stack_name,client):
             if globals.debug:
                 print("type="+type)
             sn=stack_name.split('/')[-2]
-            print("Importing "+ str(ri) + " of "+ str(rl)+ " type="+type)
+            #print("Importing "+ str(ri) + " of "+ str(rl)+ " type="+type)
             print("Importing "+ str(ri) + " of "+ str(rl)+ " type="+type+ " pid="+pid)
 
             f4.write("Type="+type+ " pid="+pid+ " parn="+parn+"\n")
@@ -1252,6 +1252,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::ServiceCatalog::LaunchRoleConstraint": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::ServiceCatalog::LaunchTemplateConstraint": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::ServiceCatalog::PortfolioProductAssociation": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::ServiceCatalog::Portfolio": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::ServiceCatalog::PortfolioShare": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::ServiceCatalog::ResourceUpdateConstraint": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::ServiceCatalog::ServiceAction": common.call_resource("aws_null", type+" "+pid)

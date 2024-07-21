@@ -4302,8 +4302,8 @@ aws_emr_block_public_access_configuration = {
 
 aws_emr_cluster = {
 	"clfn":		"emr",
-	"descfn":	"describe_cluster",
-	"topkey":	"Cluster",
+	"descfn":	"list_clusters",
+	"topkey":	"Clusters",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -4702,7 +4702,7 @@ aws_glue_catalog_table = {
 
 aws_glue_classifier = {
 	"clfn":		"glue",
-	"descfn":	"list_classifiers",
+	"descfn":	"get_classifiers",
 	"topkey":	"Classifiers",
 	"key":		"Name",
 	"filterid":	"Name"

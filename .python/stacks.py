@@ -154,8 +154,8 @@ def getstackresources(stack_name,client):
             elif type == "AWS::EC2::InternetGateway":       common.call_resource("aws_internet_gateway", pid) 
             elif type == "AWS::EC2::LaunchTemplate":        common.call_resource("aws_launch_template", pid) 
             elif type == "AWS::EC2::SecurityGroup":         common.call_resource("aws_security_group", pid) 
-            elif type == "AWS::EC2::SecurityGroupIngress":  f3.write(type+" "+pid+" fetched as part of SecurityGroup..\n")
-            elif type == "AWS::EC2::SecurityGroupEgress":   f3.write(type+" "+pid+" fetched as part of SecurityGroup..\n")
+            elif type == "AWS::EC2::SecurityGroupIngress":  f3.write(type+" fetched as part of SecurityGroup..\n")
+            elif type == "AWS::EC2::SecurityGroupEgress":   f3.write(type+" fetched as part of SecurityGroup..\n")
 
             elif type == "AWS::EC2::VPCEndpoint":           common.call_resource("aws_vpc_endpoint", pid) 
             elif type == "AWS::EC2::VPC":                   common.call_resource("aws_vpc", pid) 

@@ -71,6 +71,16 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                 else:
                     print("WARNING: vpc_id not found in vpclist",tt2)
 
+        elif tt1=="emr_managed_master_security_group" or tt1=="emr_managed_slave_security_group" \
+                or tt1=="service_access_security_group":
+           if tt2 != "null":
+                if globals.sglist[tt2]:
+                    t1=tt1 + " = aws_security_group." + tt2 + ".id\n"
+                    common.add_dependancy("aws_security_group", tt2)
+                else:
+                    print("WARNING: security group not found in sglist", tt2)
+
+
         elif tt1 == "subnet_id":
             if tt2 != "null":
                 if globals.subnetlist[tt2]:
@@ -132,11 +142,12 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
 
         elif tt1 == "role_arn" or tt1=="service_linked_role_arn" or tt1 == "execution_role_arn" \
             or tt1 == "task_role_arn" or tt1 == "iam_service_role_arn" or tt1 == "execution_role" \
-                or tt1=="source_arn" or tt1 == "cloudwatch_role_arn" or tt1=="service_linked_role_arn" \
-                    or tt1=="service_role": 
+                or tt1=="source_arn" or tt1 == "cloudwatch_role_arn" or tt1=="service_linked_role_arn": 
             t1=fixtf.deref_role_arn(t1,tt1,tt2)
 
-        elif tt1 == "role" or tt1=="iam_role" or tt1=="role_name":
+        elif tt1 == "role" or tt1=="iam_role" or tt1=="role_name" \
+            or tt1=="service_role":
+
             if tt2 !="null" and "arn:" not in tt2: 
                 if "/" not in tt2: 
                     if globals.rolelist[tt2]:

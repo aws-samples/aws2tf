@@ -286,3 +286,74 @@ def get_aws_glue_connection(type, id, clfn, descfn, topkey, key, filterid):
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
+
+
+def get_aws_glue_classifier(type, id, clfn, descfn, topkey, key, filterid):
+
+    if globals.debug:
+        print("--> In get_aws_glue_connection doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)   
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate():
+                response = response + page[topkey]
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            for j in response:
+                print(str(j))
+            try:
+                pkey=j['CsvClassifier'][key]
+                common.write_import(type, pkey, None)
+            except Exception as e:
+                pass
+            try:
+                pkey=j['JsonClassifier'][key]
+                common.write_import(type, pkey, None)
+            except Exception as e:
+                pass
+            try:
+                pkey=j['GrokClassifier'][key]
+                common.write_import(type, pkey, None)
+            except Exception as e:
+                pass
+            try:
+                pkey=j['XMLClassifier'][key]
+                common.write_import(type, pkey, None)
+            except Exception as e:
+                pass
+        else:
+            #print("ID is "+str(id))
+            response = client.get_classifier(Name=id)
+            if response['Classifier'] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            j=response['Classifier']
+            try:
+                pkey=j['CsvClassifier'][key]
+                common.write_import(type, pkey, None)
+            except Exception as e:
+                pass
+            try:
+                pkey=j['JsonClassifier'][key]
+                common.write_import(type, pkey, None)
+            except Exception as e:
+                pass
+            try:
+                pkey=j['GrokClassifier'][key]
+                common.write_import(type, pkey, None)
+            except Exception as e:
+                pass
+            try:
+                pkey=j['XMLClassifier'][key]
+                common.write_import(type, pkey, None)
+            except Exception as e:
+                pass
+
+
+            #theid="c-"+pkey.replace(":","_")
+            #common.write_import(type, pkey, theid)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True

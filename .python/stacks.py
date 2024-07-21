@@ -101,8 +101,13 @@ def getstackresources(stack_name,client):
 
             f3=open('stack-fetched-implicit.log', 'a')
             f4=open('stack-fetched-explicit.log', 'a')
+            
             type=j['ResourceType']
-            pid=j['PhysicalResourceId'].split('/')[-1]
+            stat=j['ResourceStatus']
+            if stat=="CREATE_FAILED":
+                print("CREATE_FAILED status for "+ type + "skipping .....")
+                continue
+            pid=j['PhysicalResourceId'].split('/')[-1]   
             parn=j['PhysicalResourceId']
             lrid=j['LogicalResourceId']
             stat=j['ResourceStatus']
@@ -111,7 +116,9 @@ def getstackresources(stack_name,client):
             if globals.debug:
                 print("type="+type)
             sn=stack_name.split('/')[-2]
+            #print("Importing "+ str(ri) + " of "+ str(rl)+ " type="+type)
             print("Importing "+ str(ri) + " of "+ str(rl)+ " type="+type+ " pid="+pid)
+
             f4.write("Type="+type+ " pid="+pid+ " parn="+parn+"\n")
 
 
@@ -154,8 +161,8 @@ def getstackresources(stack_name,client):
             elif type == "AWS::EC2::InternetGateway":       common.call_resource("aws_internet_gateway", pid) 
             elif type == "AWS::EC2::LaunchTemplate":        common.call_resource("aws_launch_template", pid) 
             elif type == "AWS::EC2::SecurityGroup":         common.call_resource("aws_security_group", pid) 
-            elif type == "AWS::EC2::SecurityGroupIngress":  f3.write(type+" "+pid+" fetched as part of SecurityGroup..\n")
-            elif type == "AWS::EC2::SecurityGroupEgress":   f3.write(type+" "+pid+" fetched as part of SecurityGroup..\n")
+            elif type == "AWS::EC2::SecurityGroupIngress":  f3.write(type+" fetched as part of SecurityGroup..\n")
+            elif type == "AWS::EC2::SecurityGroupEgress":   f3.write(type+" fetched as part of SecurityGroup..\n")
 
             elif type == "AWS::EC2::VPCEndpoint":           common.call_resource("aws_vpc_endpoint", pid) 
             elif type == "AWS::EC2::VPC":                   common.call_resource("aws_vpc", pid) 
@@ -746,7 +753,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::GlobalAccelerator::Accelerator": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::GlobalAccelerator::EndpointGroup": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::GlobalAccelerator::Listener": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::Glue::Classifier": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::Glue::Classifier": common.call_resource("aws_glue_classifier", pid)
             elif type == "AWS::Glue::CustomEntityType": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Glue::DataCatalogEncryptionSettings": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Glue::DataQualityRuleset": common.call_resource("aws_null", type+" "+pid)
@@ -1245,6 +1252,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::ServiceCatalog::LaunchRoleConstraint": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::ServiceCatalog::LaunchTemplateConstraint": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::ServiceCatalog::PortfolioProductAssociation": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::ServiceCatalog::Portfolio": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::ServiceCatalog::PortfolioShare": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::ServiceCatalog::ResourceUpdateConstraint": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::ServiceCatalog::ServiceAction": common.call_resource("aws_null", type+" "+pid)

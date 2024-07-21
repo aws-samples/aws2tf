@@ -49,7 +49,7 @@ def aws_emr_release_labels(t1,tt1,tt2,flag1,flag2):
 
 def aws_emr_security_configuration(t1,tt1,tt2,flag1,flag2):
 	skip=0
-	if tt1=="configuration":
+	if tt1=="creation_date":
 		t1=t1+"\n lifecycle {\n   ignore_changes = [configuration]\n}\n"
 	return skip,t1,flag1,flag2
 

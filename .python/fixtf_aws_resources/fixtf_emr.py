@@ -38,7 +38,7 @@ def aws_emr_instance_fleet(t1,tt1,tt2,flag1,flag2):
 def aws_emr_instance_group(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if tt1=="cluster_id" and tt2 !="null":
-		t1=tt1+" = aws_emr_cluster.c-"+tt2+".id\n"
+		t1=tt1+" = aws_emr_cluster."+tt2+".id\n"
 		common.add_dependancy("aws_emr_cluster", tt2)
 
 	return skip,t1,flag1,flag2

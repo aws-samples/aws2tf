@@ -313,6 +313,7 @@ def get_aws_glue_classifier(type, id, clfn, descfn, topkey, key, filterid):
                 #theid="c-"+pkey.replace(":","_")
                 #common.write_import(type, pkey, theid)
         else:
+            print("ID is "+str(id))
             response = client.get_classifier(Name=id)
             if response['Classifier'] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Classifier']

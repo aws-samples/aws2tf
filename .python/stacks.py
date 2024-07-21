@@ -104,7 +104,7 @@ def getstackresources(stack_name,client):
             type=j['ResourceType']
             stat=j['ResourceStatus']
             if stat=="CREATE_FAILED":
-                print("CREATE_FAILED status for "+ type)
+                print("CREATE_FAILED status for "+ type + "skipping .....")
                 continue
                 
             parn=j['PhysicalResourceId']

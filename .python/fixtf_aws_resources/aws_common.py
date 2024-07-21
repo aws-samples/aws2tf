@@ -126,7 +126,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                 else:
                     skip=1
 
-        elif tt1 == "instance_profile_name":
+        elif tt1 == "instance_profile_name" or tt1=="instance_profile":
             if tt2 != "null":
                 t1=tt1 + " = aws_iam_instance_profile." + tt2 + ".id\n"
                 common.add_dependancy("aws_iam_instance_profile", tt2)

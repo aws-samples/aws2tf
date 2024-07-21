@@ -4334,7 +4334,7 @@ aws_emr_managed_scaling_policy = {
 
 aws_emr_security_configuration = {
 	"clfn":		"emr",
-	"descfn":	"describe_security_configurations",
+	"descfn":	"list_security_configurations",
 	"topkey":	"SecurityConfigurations",
 	"key":		"Name",
 	"filterid":	"Name"

@@ -70,7 +70,9 @@ def getstack(stack_name,nested,client):
         
         # most added here
         if type == "AWS::CloudFormation::Stack":
-            if stat == "CREATE_COMPLETE":
+            if stat == "CREATE_COMPLETE" or stat=="CREATE_FAILED":
+                if stat=="CREATE_FAILED":
+                    print("WARNING: Stack "+stack_name+" status is CREATE_FAILED")
                 stackr=j['PhysicalResourceId']
                 if stackr not in (str(nested)):
                     nested=nested+[stackr]

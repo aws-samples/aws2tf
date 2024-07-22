@@ -2141,9 +2141,9 @@ aws_cloudwatch_event_permission = {
 
 aws_cloudwatch_event_target = {
 	"clfn":		"events",
-	"descfn":	"list_targets",
+	"descfn":	"list_targets_by_rule",
 	"topkey":	"Targets",
-	"key":		"Name",
+	"key":		"Id",
 	"filterid":	"Name"
 }
 

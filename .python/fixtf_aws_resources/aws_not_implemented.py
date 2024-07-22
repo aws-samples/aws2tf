@@ -44,7 +44,7 @@ notimplemented = {
     "aws_cloudwatch_event_connection": True,
     "aws_cloudwatch_event_endpoint": True,
     "aws_cloudwatch_event_permission": True,
-    "aws_cloudwatch_event_target": True,  ### TODO
+    #"aws_cloudwatch_event_target": True,  ### TODO
     "aws_cloudwatch_log_data_protection_policy": True,
     "aws_cloudwatch_log_destination_policy": True,
     "aws_cloudwatch_log_metric_filter": True,
@@ -130,17 +130,9 @@ notimplemented = {
     "aws_dynamodb_global_table": True,
     "aws_ec2_local_gateway_route": True,
     "aws_ec2_subnet_cidr_reservation": True,
-    #"aws_ec2_transit_gateway_route": True,  ### TODO
-    #"aws_efs_mount_target": True,  ### TODO
-    #"aws_efs_replication_configuration": True,
     "aws_eks_access_policy_association": True, ### TODO
     "aws_elasticache_user_group_association": True,
     "aws_elastictranscoder_preset": True,
-    "aws_emr_block_public_access_configuration": True,
-    "aws_emr_instance_fleet": True,  ### TODO
-    "aws_emr_instance_group": True,
-    "aws_emr_managed_scaling_policy": True,
-    "aws_emr_security_configuration": True,
     "aws_emr_studio": True,
     "aws_emr_studio_session_mapping": True,
     "aws_emrcontainers_job_template": True,

@@ -678,7 +678,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::EKS::IdentityProviderConfig": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::EKS::PodIdentityAssociation": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::EMR::InstanceFleetConfig": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::EMR::InstanceGroupConfig": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::EMR::InstanceGroupConfig": f3.write(type+" "+pid+" fetched as part of aws_emr_cluster..\n")
             elif type == "AWS::EMR::Step": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::EMR::Studio": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::EMR::StudioSessionMapping": common.call_resource("aws_null", type+" "+pid)

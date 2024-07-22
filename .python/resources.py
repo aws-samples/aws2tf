@@ -25,7 +25,7 @@ def resource_types(type):
     elif type == "cw-log": rets=["aws_cloudwatch_log_group"]; return rets # Cloudwatch log groups
     elif type == "dms": rets=["aws_dms_replication_instance","aws_dms_endpoint","aws_dms_replication_task"]; return rets # DMS replication tasks and endpoints
     elif type == "dynamodb": rets=["aws_dynamodb_table"]; return rets # dynamodb tables
-    elif type == "eb": rets=["aws_cloudwatch_event_bus","aws_cloudwatch_event_rule"]; return rets # clouswatch event bus and rules
+    elif type == "eb": rets=["aws_cloudwatch_event_bus"]; return rets # clouswatch event bus and rules
     elif type == "ec2": rets=["aws_ec2_host","aws_instance"]; return rets # EC2 hosts and instances
     elif type == "ecs": rets = ["aws_ecs_cluster"]; return rets # ECS clusters
     elif type == "efs": rets=["aws_efs_file_system"]; return rets # EFS filesystems

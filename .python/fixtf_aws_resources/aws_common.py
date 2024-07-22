@@ -126,9 +126,13 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                 else:
                     skip=1
 
-        elif tt1 == "instance_profile_name":
+        elif tt1 == "instance_profile_name" or tt1=="instance_profile":
             if tt2 != "null":
-                t1=tt1 + " = aws_iam_instance_profile." + tt2 + ".id\n"
+                if tt2.startswith("arn:"):
+                    tt2=tt2.split("/")[-1]
+                    t1=tt1 + " = aws_iam_instance_profile." + tt2 + ".arn\n"
+                else:
+                    t1=tt1 + " = aws_iam_instance_profile." + tt2 + ".id\n"
                 common.add_dependancy("aws_iam_instance_profile", tt2)
             else:
                 skip=1
@@ -147,14 +151,17 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
 
         elif tt1 == "role" or tt1=="iam_role" or tt1=="role_name" \
             or tt1=="service_role":
-
+            #print("------>>>>>>",tt2)
             if tt2 !="null" and "arn:" not in tt2: 
                 if "/" not in tt2: 
-                    if globals.rolelist[tt2]:
-                        rn=tt2.replace(".","_")
-                        t1=tt1 + " = aws_iam_role." + rn + ".id\n"
-                        common.add_dependancy("aws_iam_role",tt2)
-                    else:
+                    try:
+                        if globals.rolelist[tt2]:
+                            rn=tt2.replace(".","_")
+                            t1=tt1 + " = aws_iam_role." + rn + ".id\n"
+                            common.add_dependancy("aws_iam_role",tt2)
+                        else:
+                            print("WARNING: role not found in rolelist", tt2)
+                    except KeyError as e:
                         print("WARNING: role not found in rolelist", tt2)
 
         elif tt1=="target_group_arn" and tt2 != "null":

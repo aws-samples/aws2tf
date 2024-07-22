@@ -2141,9 +2141,9 @@ aws_cloudwatch_event_permission = {
 
 aws_cloudwatch_event_target = {
 	"clfn":		"events",
-	"descfn":	"list_targets",
+	"descfn":	"list_targets_by_rule",
 	"topkey":	"Targets",
-	"key":		"Name",
+	"key":		"Id",
 	"filterid":	"Name"
 }
 
@@ -4318,7 +4318,7 @@ aws_emr_instance_fleet = {
 
 aws_emr_instance_group = {
 	"clfn":		"emr",
-	"descfn":	"describe_instance_groups",
+	"descfn":	"list_instance_groups",
 	"topkey":	"InstanceGroups",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -4326,7 +4326,7 @@ aws_emr_instance_group = {
 
 aws_emr_managed_scaling_policy = {
 	"clfn":		"emr",
-	"descfn":	"describe_managed_scaling_policies",
+	"descfn":	"get_managed_scaling_policy",
 	"topkey":	"ManagedScalingPolicies",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -4334,7 +4334,7 @@ aws_emr_managed_scaling_policy = {
 
 aws_emr_security_configuration = {
 	"clfn":		"emr",
-	"descfn":	"describe_security_configurations",
+	"descfn":	"list_security_configurations",
 	"topkey":	"SecurityConfigurations",
 	"key":		"Name",
 	"filterid":	"Name"

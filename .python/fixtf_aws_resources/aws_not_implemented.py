@@ -133,10 +133,6 @@ notimplemented = {
     "aws_eks_access_policy_association": True, ### TODO
     "aws_elasticache_user_group_association": True,
     "aws_elastictranscoder_preset": True,
-    "aws_emr_block_public_access_configuration": True,
-    "aws_emr_instance_fleet": True,  ### TODO
-    #"aws_emr_instance_group": True,
-    #"aws_emr_managed_scaling_policy": True,
     "aws_emr_studio": True,
     "aws_emr_studio_session_mapping": True,
     "aws_emrcontainers_job_template": True,

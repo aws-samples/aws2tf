@@ -562,6 +562,7 @@ def aws_tf(region):
          f3.write('  shared_credentials_files = ["~/.aws/credentials"]\n')
          # f3.write('  profile                  = var.profile\n')
          f3.write('}\n')
+   if not os.path.isfile("data-aws.tf"):   
       with open("data-aws.tf", 'w') as f3:
          f3.write('data "aws_region" "current" {}\n')
          f3.write('data "aws_caller_identity" "current" {}\n')
@@ -569,6 +570,7 @@ def aws_tf(region):
          f3.write('state = "available"\n')
          f3.write('}\n')
    if not os.path.isdir(".terraform/providers/registry.terraform.io/hashicorp/aws"):
+      print("terraform init")
       com = "terraform init"
       rout = rc(com)
       print(rout.stdout.decode().rstrip())

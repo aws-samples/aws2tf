@@ -1153,15 +1153,19 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    elif "NotFoundException" in exn:
       if frame.startswith("get_"):
          print("NOT FOUND: "+frame.split("get_")[1]+" "+id+" check if it exists and what references it - returning")
+         pkey=frame.split("get_")[1]+"."+id
+         globals.rproc[pkey]=True
       else:
          print("NOT FOUND: "+frame+" "+id+" check if it exists - returning")
       return    
 
    elif exn=="ResourceNotFoundException" or exn=="EntityNotFoundException" or exn=="NoSuchEntityException" or exn=="NotFoundException" or exn=="LoadBalancerNotFoundException" or exn=="NamespaceNotFound" or exn=="NoSuchHostedZone":
       if frame.startswith("get_"):
-         print("NOT FOUND: "+frame.split("get_")[1]+" "+str(id)+" check if it exists and what references it - returning")
+         print("RESOURCE NOT FOUND: "+frame.split("get_")[1]+" "+str(id)+" check if it exists and what references it - returning")
+         pkey=frame.split("get_")[1]+"."+id
+         globals.rproc[pkey]=True
       else:
-         print("NOT FOUND: "+frame+" "+str(id)+" check if it exists - returning")
+         print("RESOURCE NOT FOUND: "+frame+" "+str(id)+" check if it exists - returning")
       return    
    
    elif exn == "KeyError":

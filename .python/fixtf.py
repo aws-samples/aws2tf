@@ -440,8 +440,7 @@ def fixtf(ttft,tf):
         
         ## move *.out to impoted
         shutil.move(rf, "imported/"+rf)
-        #com = "mv "+rf+" imported"
-        #rout = common.rc(com)
+
            
 
 def aws_resource(t1,tt1,tt2,flag1,flag2):

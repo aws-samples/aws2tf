@@ -457,6 +457,8 @@ def tfplan3():
          exit()
 
       print("Plan complete")
+      ## if merging get .out files from imported ?
+      
 
    if not os.path.isfile("tfplan"):
          print("Plan - could not find expected tfplan file - exiting")

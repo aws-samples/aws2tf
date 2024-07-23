@@ -187,6 +187,8 @@ if __name__ == '__main__':
         print("No merge - removing terraform.tfstate* and aws_*.tf *.out")
         com = "rm -f aws.tf terraform.tfstate* aws_*.tf s3-*.tf aws_*.zip tfplan *.out *.log aws_*.sh stacks.sh import*.tf imported/* main.tf plan1* plan2* *.txt *.json *.err"
         rout = common.rc(com)
+        com = "rm -rf imported notimported"
+        rout = common.rc(com)
         com = "mkdir -p imported notimported"
         rout = common.rc(com)
 
@@ -312,17 +314,13 @@ if __name__ == '__main__':
         for fil in x:
             tf=fil.split('__',1)[1]
             #td=td+" "+tf
-##########################
-##########################
+
             com = "mv "+tf +" imported/"+tf
             rout = common.rc(com)
 
          
         common.tfplan1()
         common.tfplan2()
-
-
-
  
         detdepstr=""
         for ti in globals.rproc.keys():

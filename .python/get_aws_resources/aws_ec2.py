@@ -292,9 +292,10 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
                         #print("************** Setting " + ti + "=True")
         else:
             print("No response for get_aws_route_table_association")
-            pkey="aws_route_table_association"+"."+id
-            print("Setting " + pkey + "=True")
-            globals.rproc[pkey] = True
+            if id is not None:
+                pkey="aws_route_table_association"+"."+id
+                print("Setting " + pkey + "=True")
+                globals.rproc[pkey] = True
 
 
                         

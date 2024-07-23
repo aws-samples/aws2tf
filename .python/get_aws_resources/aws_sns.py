@@ -66,13 +66,18 @@ def get_aws_sns_topic_subscription(type, id, clfn, descfn, topkey, key, filterid
             return True
 
         else:
+   
             if id.startswith("arn:aws:sns:"):
                 response = client.list_subscriptions_by_topic(TopicArn=id)
                 if response == []: 
                     print("Empty response for "+type+ " id="+str(id)+" returning"); 
                     return True
                 for j in response[topkey]:
-                    common.write_import(type,j[key],None)
+            
+                    if j[key].startswith("arn:"):
+                        common.write_import(type,j[key],None)
+                    elif j[key]=="PendingConfirmation":
+                        print("WARNING: Skipping subscription as status = "+j[key])
                 pkey="aws_sns_topic_subscription."+id
                 globals.rproc[pkey]=True
 

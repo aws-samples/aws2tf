@@ -110,6 +110,9 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                     skip=1
                     if tt2 == "AWS_OWNED_KMS_KEY":	
                         skip=1
+                    elif tt2.startswith("alias/aws/"):
+                        skip=0
+                        t1=tt1 + " = \"" + tt2 + "\"\n"
                     else:
                         if "arn:" in tt2:   
                             tt2=tt2.split("/")[-1]	
@@ -184,7 +187,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         elif tt2==globals.region+"d":  t1=tt1 + ' = format("%sd",data.aws_region.current.name)\n'
         elif tt2==globals.region+"e":  t1=tt1 + ' = format("%se",data.aws_region.current.name)\n'
         elif tt2==globals.region+"f":  t1=tt1 + ' = format("%sf",data.aws_region.current.name)\n'
-
+        
         if globals.debug: print("aws_common tt2="+tt2)
         ## Use a straight if here ?
         ## tt2 is arn - call globals_replace ?

@@ -160,6 +160,8 @@ if __name__ == '__main__':
 
     if args.merge:
         print("Merging "+str(globals.merge))
+        print("Merging capability disabled for now - exiting")
+        exit()
         try:
             file = open('pyprocessed.txt', 'r')
             while True:

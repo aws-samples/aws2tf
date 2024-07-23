@@ -43,7 +43,11 @@ def get_aws_cloudfront_origin_access_identity(type, id, clfn, descfn, topkey, ke
         if id is None:
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
-                response = response + page[topkey]['Items']
+                try:
+                    response = response + page[topkey]['Items']
+                except KeyError:
+                    print("No "+str(topkey)+" items in response for "+type+ " id="+str(id)+" returning")
+                    return True
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 common.write_import(type,j[key],None) 

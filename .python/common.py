@@ -363,10 +363,12 @@ def tfplan3():
       if globals.validate:
          print("Validate Only..")
          return
+        
 
    if globals.plan2:
 
       print("Penultimate Terraform Plan ... ")
+
       # redo plan
       com = "rm -f resources.out tfplan"
       print(com)
@@ -1147,16 +1149,16 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
       print("Call Forbidden exception for "+fname+" - returning")
       return
    elif exn == "ParamValidationError" or exn=="ValidationException" or exn=="InvalidRequestException" or exn =="InvalidParameterValueException" or exn=="InvalidParameterException":
-      print(str(exc_obj)+" for "+frame+" id="+id+" - returning")
+      print(str(exc_obj)+" for "+frame+" id="+str(id)+" - returning")
       return
    elif exn == "BadRequestException" and clfn=="guardduty":
-      print(str(exc_obj)+" for "+frame+" id="+id+" - returning")
+      print(str(exc_obj)+" for "+frame+" id="+str(id)+" - returning")
       return  
 
 
    elif "NotFoundException" in exn:
       if frame.startswith("get_"):
-         print("NOT FOUND: "+frame.split("get_")[1]+" "+id+" check if it exists and what references it - returning")
+         print("NOT FOUND: "+frame.split("get_")[1]+" "+str(id)+" check if it exists and what references it - returning")
          pkey=frame.split("get_")[1]+"."+id
          globals.rproc[pkey]=True
       else:
@@ -1174,20 +1176,20 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    
    elif exn == "KeyError":
       if "kms" in str(exc_obj):
-         print("KeyError cannot find key for " +fname+" id="+id+" - returning")
+         print("KeyError cannot find key for " +fname+" id="+str(id)+" - returning")
          return
       
       if clfn=="sqs":
-         print("KeyError cannot find queue url for " +fname+" id="+id+" - returning")
+         print("KeyError cannot find queue url for " +fname+" id="+str(id)+" - returning")
          return
       
    elif exn == "InvalidDocument":
       if clfn=="ssm":
-         print("KeyError cannot find ssm document for " +fname+" id="+id+" - returning")
+         print("KeyError cannot find ssm document for " +fname+" id="+str(id)+" - returning")
          return
 
    elif "NoSuch" in exn and clfn=="cloudfront":
-      print(str(exc_obj)+" for "+frame+" id="+id+" - returning")
+      print(str(exc_obj)+" for "+frame+" id="+str(id)+" - returning")
       return
 
 

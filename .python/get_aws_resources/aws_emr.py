@@ -187,13 +187,14 @@ def get_aws_emr_managed_scaling_policy(type, id, clfn, descfn, topkey, key, filt
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
-        pkey = type+"."+id
+        
         client = boto3.client(clfn)
         if id is None:
-            print("WARNING: Muse pass cluster is as parameter returning")
+            print("WARNING: Must pass cluster is as parameter returning")
             return True
 
         else:
+            pkey = type+"."+id
             response = client.get_managed_scaling_policy(ClusterId=id)
             try:
                 j = response['ManagedScalingPolicy']

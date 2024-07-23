@@ -46,3 +46,4 @@ run.log
 .python/.auto-gen/*.log
 TOPORT_from_aws2tf.md
 copy-to-aws2tf.sh
+aws3tf.py

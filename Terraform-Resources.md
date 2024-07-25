@@ -62,6 +62,9 @@
 * aws_apprunner_service
 * aws_apprunner_vpc_connector
 * aws_apprunner_vpc_ingress_connection
+* aws_appstream_fleet
+* aws_appstream_image_builder
+* aws_appstream_stack
 * aws_appstream_user
 * aws_appsync_api_key
 * aws_appsync_datasource
@@ -89,7 +92,10 @@
 * aws_backup_vault_lock_configuration
 * aws_backup_vault_notifications
 * aws_backup_vault_policy
+* aws_batch_compute_environment
+* aws_batch_job_definition
 * aws_batch_job_queue
+* aws_batch_scheduling_policy
 * aws_bedrock_model_invocation_logging_configuration
 * aws_ce_cost_allocation_tag
 * aws_chime_voice_connector
@@ -111,6 +117,7 @@
 * aws_cloudfront_function
 * aws_cloudfront_key_group
 * aws_cloudfront_origin_access_control
+* aws_cloudfront_origin_access_identity
 * aws_cloudfront_origin_request_policy
 * aws_cloudfront_public_key
 * aws_cloudfront_realtime_log_config
@@ -279,6 +286,7 @@
 * aws_efs_file_system
 * aws_efs_file_system_policy
 * aws_efs_mount_target
+* aws_efs_replication_configuration
 * aws_egress_only_internet_gateway
 * aws_eip
 * aws_eip_association
@@ -303,8 +311,12 @@
 * aws_elasticsearch_vpc_endpoint
 * aws_elastictranscoder_pipeline
 * aws_elb
+* aws_emr_block_public_access_configuration
 * aws_emr_cluster
 * aws_emr_instance_fleet
+* aws_emr_instance_group
+* aws_emr_managed_scaling_policy
+* aws_emr_security_configuration
 * aws_evidently_feature
 * aws_evidently_launch
 * aws_fis_experiment_template
@@ -369,7 +381,6 @@
 * aws_iam_saml_provider
 * aws_iam_server_certificate
 * aws_iam_service_linked_role
-* aws_iam_service_specific_credential
 * aws_iam_signing_certificate
 * aws_iam_user
 * aws_iam_user_group_membership
@@ -691,7 +702,10 @@
 * aws_ssoadmin_account_assignment
 * aws_ssoadmin_application
 * aws_ssoadmin_application_assignment
+* aws_ssoadmin_instances
+* aws_ssoadmin_managed_policy_attachment
 * aws_ssoadmin_permission_set
+* aws_ssoadmin_permission_set_inline_policy
 * aws_ssoadmin_trusted_token_issuer
 * aws_storagegateway_cache
 * aws_storagegateway_cached_iscsi_volume

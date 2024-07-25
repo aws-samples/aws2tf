@@ -15,6 +15,7 @@ import fixtf
 import inspect
 from datetime import datetime
 import resources
+
 #####################
 
 from get_aws_resources import aws_acm
@@ -363,7 +364,26 @@ def tfplan3():
       if globals.validate:
          print("Validate Only..")
          return
-        
+   zeroi=0    
+
+################################################################################
+
+   x = glob.glob("aws_*__*.tf")
+   awsf=len(x)
+   x = glob.glob("import__*.tf")
+   impf=len(x)
+   if awsf != impf:
+      print("awsf="+str(awsf)+" impf="+str(impf))
+      print("ERROR: "+str(awsf)+ " aws_*.tf and " + str(impf) +" import__*.tf file counts do not match - exiting")
+      exit()
+   else:
+      print("PASSED: aws_*.tf and import__*.tf file counts match")
+
+
+################################################################################
+
+   if globals.merge:
+      globals.plan2=True
 
    if globals.plan2:
 
@@ -373,6 +393,7 @@ def tfplan3():
       com = "rm -f resources.out tfplan"
       print(com)
       rout = rc(com)
+      
       com = "terraform plan -generate-config-out=" + \
           rf + " -out tfplan -json > plan2.json"
       print(com)
@@ -380,16 +401,25 @@ def tfplan3():
       zerod = False
       zeroc = False
       zeroa = False
+      zeroi = -1
+      planList = []
+      planDict = {}
+      changeList = []
+      with open('plan2.json') as f:
+         for jsonObj in f:
+            planDict = json.loads(jsonObj)
+            planList.append(planDict)
+      for pe in planList:
+         if pe['type'] == "change_summary":  
+            zeroi=pe['changes']['import']
+            zeroa=pe['changes']['add']
+            zeroc=pe['changes']['change']
+            zerod=pe['changes']['remove']
+
+      print("Plan:",zeroi, "to import,",zeroa,"to add,",zeroc,"to change,",zerod,"to destroy")
+
       with open('plan2.json', 'r') as f:
          for line in f.readlines():
-            # print(line)
-            if '0 to destroy' in line:
-              zerod = True
-            if '0 to change' in line:
-              zeroc = True
-            if '0 to add' in line:
-              zeroa = True
-
             if '@level":"error"' in line:
               if "Error: Conflicting configuration arguments" in line and "aws_security_group_rule." in line:
                  print(
@@ -398,16 +428,15 @@ def tfplan3():
                   if globals.debug is True:
                      print("Error" + line)
 
-                  print(
-                      "-->> Plan 2 errors exiting - check plan2.json - or run terraform plan")
+                  print("-->> Plan 2 errors exiting - check plan2.json - or run terraform plan")
                   exit()
 
-      if not zerod:
+      if zerod != 0:
          print("-->> plan will destroy resources! - unexpected, is there existing state ?")
          print("-->> look at plan2.json - or run terraform plan")
          exit()
 
-      if not zeroc:
+      if zeroc != 0:
          # decide if to ignore ot not
          planList = []
          planDict = {}
@@ -453,26 +482,57 @@ def tfplan3():
             print("-->> look at plan2.json - or run terraform plan")
             exit()
 
-      if not zeroa:
+      if zeroa !=0:
          print("-->> plan will add resources! - unexpected")
          print("-->> look at plan2.json - or run terraform plan")
          exit()
 
       print("Plan complete")
       ## if merging get .out files from imported ?
-      
+
+   ### validations checks
+   # import__ == aws_*.tf - and import number
+   #   
+   if not globals.merge:
+      if zeroi == awsf:
+         print("PASSED: import count = file counts =",str(zeroi))
+      else:
+         print("INFO: import count "+str(zeroi) +" != file counts "+ str(awsf))
+         
+   if globals.merge:
+         print("Merge check")
+         if zeroi==0:
+            print("Nothing to merge exiting ...")
+            exit()
+         # get imported
+         x = glob.glob("imported/import__*.tf")
+         preimpf=len(x)
+         toimp=impf-preimpf
+         com = "terraform state list | grep ^aws_ | wc -l"
+         rout = rc(com)
+         stc=int(rout.stdout.decode().rstrip())
+         print("Existing import file =",str(preimpf))
+         print("Existing state count =",str(stc))
+         print("Expected import =",str(toimp))
+         if preimpf != stc:
+            print("Miss-matched previous imports",str(preimpf),"and state file resources",str(stc) ,"exiting")
+            exit() 
+         if toimp != zeroi:
+            print("Unexpected import number exiting")
+            exit() 
+         else:
+            print("PASSED: importing expected number of resources")    
 
    if not os.path.isfile("tfplan"):
-         print("Plan - could not find expected tfplan file - exiting")
-         exit()
+      print("Plan - could not find expected tfplan file - exiting")
+      exit()
 
+   #if globals.merge:
+   #   exit()
+   #   print("merge - exit after plan2")
 
 def wrapup():
-   # print("split main.tf")
-   # splitf("main.tf")
-   # print("Validate json")
-   # com="terraform validate -no-color -json > validate.json"
-   # rout=rc(com)
+
    print("Final Terraform Validation")
    com = "terraform validate -no-color"
    rout = rc(com)
@@ -484,25 +544,34 @@ def wrapup():
       print(str(rout.stdout.decode().rstrip()))
       exit()
    else:
-      print("PASS: Valid Configuration.")
+      print("PASSED: Valid Configuration.")
 
-
-   print("Terraform Import")
-   # print(str(rout.stdout.decode().rstrip()))
-   # do the import via apply
-   print("terraform import via apply of tfplan....")
+   if globals.merge:
+      print("Pre apply merge check")
+      if not os.path.isfile("plan2.json"):
+         print("ERROR: Could not find plan2.json, unexpected on merge - exiting ....")
+         exit()
+      
+   print("Terraform import via apply of tfplan....")
    com = "terraform apply -no-color tfplan"
    rout = rc(com)
    zerod = False
    zeroc = False
-   print(str(rout.stdout.decode().rstrip()))
+   if "Error" in str(rout.stderr.decode().rstrip()):
+      print("ERROR: problem in apply exiting ...")
+      print(str(rout.stderr.decode().rstrip()))
+      exit()
+   #print(str(rout.stdout.decode().rstrip()))
    print("Final Plan Check .....")
    com = "terraform plan -no-color"
    rout = rc(com)
    if "No changes. Your infrastructure matches the configuration" not in str(rout.stdout.decode().rstrip()):
+      print("ERROR: unexpected final plan stuff")
       print(str(rout.stdout.decode().rstrip()))
+      print(str(rout.stderr.decode().rstrip()))
+      exit()
    else:
-      print("PASS: No changes in plan")
+      print("PASSED: No changes in plan")
       com = "mv import__*.tf *.out *.json imported"
       rout = rc(com)
       com = "cp aws_*.tf imported"

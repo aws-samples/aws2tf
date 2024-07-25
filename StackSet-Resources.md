@@ -1,4 +1,3 @@
-
 ## AWS Stack set types currectly supported
 
 * AWS::ACMPCA::CertificateAuthority
@@ -34,8 +33,11 @@
 * AWS::AutoScaling::LaunchConfiguration
 * AWS::AutoScaling::LifecycleHook
 * AWS::Cloud9::EnvironmentEC2
+* AWS::CloudFront::CachePolicy
 * AWS::CloudFront::CloudFrontOriginAccessIdentity
 * AWS::CloudFront::Distribution
+* AWS::CloudFront::Function
+* AWS::CloudFront::OriginRequestPolicy
 * AWS::CloudWatch::Alarm
 * AWS::CodeBuild::Project
 * AWS::CodeCommit::Repository
@@ -74,6 +76,7 @@
 * AWS::EFS::FileSystem
 * AWS::EKS::Cluster
 * AWS::EMR::Cluster
+* AWS::EMR::InstanceGroupConfig": f3.write(type+" "+pid+" fetched as part of aws_emr_cluster..\n")
 * AWS::EMR::SecurityConfiguration
 * AWS::ElasticLoadBalancingV2::Listener
 * AWS::ElasticLoadBalancingV2::ListenerRule
@@ -81,6 +84,7 @@
 * AWS::ElasticLoadBalancingV2::TargetGroup
 * AWS::Events::EventBus
 * AWS::Events::Rule
+* AWS::Glue::Classifier
 * AWS::Glue::Connection
 * AWS::Glue::Crawler
 * AWS::Glue::Database

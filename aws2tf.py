@@ -95,7 +95,6 @@ if __name__ == '__main__':
     args = argParser.parse_args()
     type=""
 
-
     path = shutil.which("terraform") 
 
     if path is None:
@@ -156,12 +155,10 @@ if __name__ == '__main__':
 
     common.aws_tf(region)
 
-    print("args.merge="+str(args.merge))
-
     if args.merge:
         print("Merging "+str(globals.merge))
-        print("Merging capability disabled for now - exiting")
-        exit()
+        #print("Merging capability disabled for now - exiting")
+        #exit()
         try:
             file = open('pyprocessed.txt', 'r')
             while True:
@@ -339,14 +336,6 @@ if __name__ == '__main__':
 
         olddetdepstr=detdepstr
 
-
-        #if lc > 16:
-        #    print("ERROR: Too many loops exiting")
-        #    for ti in globals.rproc.keys():
-        #        if not globals.rproc[ti]:  
-        #            print("ERROR: Not found "+str(ti)+" - check if this resource still exists in AWS")
-        #    exit()
-
     common.tfplan3()
     if globals.validate is False: 
         common.wrapup()
@@ -357,8 +346,6 @@ if __name__ == '__main__':
 ##########################################################################
 ####### Finish up
 #########################################################################
-
-    print("writing pyprocessed.txt")
     
     with open("pyprocessed.txt", "a") as f:
         for i in globals.rproc.keys():
@@ -367,14 +354,5 @@ if __name__ == '__main__':
     com = "sort -u pyprocessed.txt -o pyprocessed.txt"
     rout = common.rc(com)
 
-    if globals.debug is True:
-        print("Types -----------------")
-        print(globals.types)
-
-        print("Processed ---------------")
-        for i in globals.rproc.keys():
-            print(i)
-
     print("\nTerraform files & state in sub-directory: "+ globals.path1+"\n")
-
     exit(0)

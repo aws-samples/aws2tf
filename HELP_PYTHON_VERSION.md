@@ -83,5 +83,5 @@ see [here](https://github.com/aws-samples/aws2tf/blob/master/Terraform-Resources
 + Terraform **version v1.5.4** or newer needs to be installed 
 + + Recommend v1.7.5 or 1.8.5+
 + + Avoid early point releases like 1.8.0 & 1.8.1 etc.
-+ Python version 3.8 or later.
-+ boto3 1.34.93 or later (pip install boto3==1.34.93).
++ **Python version 3.8 or later**.
++ boto3 1.34.93 or later (pip3 install -r requirements.txt).

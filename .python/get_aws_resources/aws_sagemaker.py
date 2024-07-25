@@ -6,6 +6,39 @@ import sys
 import inspect
 
 
+def get_aws_sagemaker_domain(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In get_aws_sagemaker_domain  doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            # calls list_secrets
+            response = client.list_domains()
+            if response[topkey] == []:
+                print("Empty response for "+type + " id="+str(id)+" returning")
+                return True
+            for j in response[topkey]:
+                did = j['DomainId']
+                common.write_import(type, did, None)
+                common.add_dependancy("aws_sagemaker_user_profile", did)
+                common.add_dependancy("aws_sagemaker_app", did)
+        else:
+            if id.startswith("d-"):
+                j = client.describe_domain(DomainId=id)
+                did = j['DomainId']
+                common.write_import(type, did, None)
+                common.add_dependancy("aws_sagemaker_user_profile", did)
+                common.add_dependancy("aws_sagemaker_app", did)
+
+    except Exception as e:
+        common.handle_error(
+            e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+
+    return True
+
+
 def get_aws_sagemaker_notebook_instance(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
         print("--> In get_aws_sagemaker_notebook_instance  doing " + type + ' with id ' + str(id) +
@@ -62,6 +95,20 @@ def get_aws_sagemaker_user_profile(type, id, clfn, descfn, topkey, key, filterid
                     DomainId=j['DomainId'], UserProfileName=j['UserProfileName'])
                 common.write_import(type, k['UserProfileArn'], None)
 
+        elif id.startswith("d-"):
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate(DomainIdEquals=id):
+                response = response + page[topkey]
+            if response == []:
+                print("Empty response for "+type + " id="+str(id)+" returning")
+                return True
+            for j in response:
+                k = client.describe_user_profile(
+                    DomainId=j['DomainId'], UserProfileName=j['UserProfileName'])
+                common.write_import(type, k['UserProfileArn'], None)
+            pkey = "aws_sagemaker_user_profile."+id
+            globals.rproc[pkey] = True
+
         else:
             if "/" in id:
                 id0 = id.split("/")[0]
@@ -74,8 +121,8 @@ def get_aws_sagemaker_user_profile(type, id, clfn, descfn, topkey, key, filterid
                     return True
                 j = response
                 common.write_import(type, j['UserProfileArn'], None)
-            else:
-                print("Warning: Must pass domain id / user profile name for "+type)
+                pkey = "aws_sagemaker_user_profile."+id0
+                globals.rproc[pkey] = True
 
     except Exception as e:
         common.handle_error(
@@ -99,19 +146,56 @@ def get_aws_sagemaker_app(type, id, clfn, descfn, topkey, key, filterid):
                 response = response + page[topkey]
             if response == []:
                 print("Empty response for "+type + " id="+str(id)+" returning")
+                pkey="aws_sagemaker_app."+did
                 return True
-            for j in response:
-                if j[key] != "default":
-                    common.write_import(type, j[key], None)
-
-        else:
-            response = client.list_apps(DomainId=id)
+        elif id.startswith("d-"):
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate(DomainIdEquals=id):
+                response = response + page[topkey]
             if response == []:
                 print("Empty response for "+type + " id="+str(id)+" returning")
+                pkey="aws_sagemaker_app."+id
+                globals.rproc[pkey]=True
                 return True
-            j = response
-            if j[key] != "default":
-                common.write_import(type, j[key], None)
+
+
+        else:
+            print("WARNING: must pass doamin id as parameter")
+            return True
+
+        for j in response:
+
+            did = j['DomainId']
+            appt = j['AppType']
+            appn = j['AppName']
+            print("did=",did,"appn=",appn)
+            if appn == "default":
+                pkey="aws_sagemaker_app."+did
+                globals.rproc[pkey]=True
+                continue
+            upn = None
+            spn = None
+            try:
+                upn = j['UserProfileName']
+            except KeyError:
+                upn = None
+
+            try:
+                spn = j['SpaceName']
+            except KeyError:
+                spn = None
+            if spn is None:
+                response = client.describe_app(
+                    DomainId=did, AppType=appt, AppName=appn, UserProfileName=upn)
+            if upn is None:
+                response = client.describe_app(
+                    DomainId=did, AppType=appt, AppName=appn, SpaceName=spn)
+            k = response['AppArn']
+            common.write_import(type, k, None)
+            pkey="aws_sagemaker_app."+did
+            globals.rproc[pkey]=True
+
+        
 
     except Exception as e:
         common.handle_error(

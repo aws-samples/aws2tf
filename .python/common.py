@@ -382,8 +382,8 @@ def tfplan3():
 
 ################################################################################
 
-   if globals.merge:
-      globals.plan2=True
+   #if globals.merge:
+   globals.plan2=True
 
    if globals.plan2:
 

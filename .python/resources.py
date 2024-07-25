@@ -48,7 +48,7 @@ def resource_types(type):
     elif type == "rds": rets=["aws_db_instance","aws_db_parameter_group","aws_db_event_subscription"]; return rets # RDS cluster and some dependancies
     elif type == "s3": rets=["aws_s3_bucket"]; return rets # AWS S3 bucket and bucker config
     elif type == "subnet": type = ["aws_subnet"]; return rets # AWS subnet and common dependancies
-    elif type == "sagemaker": rets=["aws_sagemaker_domain"]; return rets # SageMaker domain and depandancies
+    elif type == "sagemaker": rets=["aws_sagemaker_domain","aws_sagemaker_user_profile","aws_sagemaker_image","aws_sagemaker_app"]; return rets # SageMaker domain and depandancies
     elif type == "secrets": rets=["aws_secretsmanager_secret"]; return rets # secrets manager secrets
     elif type == "sc": rets=["aws_servicecatalog_portfolio"]; return rets     # service catalog
     elif type == "sfn": rets=["aws_sfn_state_machine"]; return rets            # State machine

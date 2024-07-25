@@ -8287,8 +8287,8 @@ aws_sagemaker_app = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_apps",
 	"topkey":	"Apps",
-	"key":		"AppName",
-	"filterid":	"AppName"
+	"key":		"DomainId",
+	"filterid":	"DomainId"
 }
 
 aws_sagemaker_app_image_config = {

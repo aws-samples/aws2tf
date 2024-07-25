@@ -9,6 +9,9 @@ import globals
 
 def aws_sagemaker_app(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="domain_id" and tt2!="null":
+		t1=tt1+" = aws_sagemaker_domain."+tt2+".id\n"
+		common.add_dependancy("aws_sagemaker_domain",tt2)
 	return skip,t1,flag1,flag2
 
 def aws_sagemaker_app_image_config(t1,tt1,tt2,flag1,flag2):
@@ -118,6 +121,9 @@ def aws_sagemaker_studio_lifecycle_config(t1,tt1,tt2,flag1,flag2):
 
 def aws_sagemaker_user_profile(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="domain_id" and tt2!="null":
+		t1=tt1+" = aws_sagemaker_domain."+tt2+".id\n"
+		common.add_dependancy("aws_sagemaker_domain",tt2)
 	return skip,t1,flag1,flag2
 
 def aws_sagemaker_workforce(t1,tt1,tt2,flag1,flag2):

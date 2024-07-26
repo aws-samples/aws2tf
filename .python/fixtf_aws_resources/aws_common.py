@@ -65,7 +65,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         elif tt1 == "iam_roles": t1=fixtf.deref_role_arn_array(t1,tt1,tt2)
         elif tt1 == "vpc_id":
             if tt2 != "null":
-                if globals.vpclist[tt2]:
+                if tt2 in globals.vpclist:
                     t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
                     common.add_dependancy("aws_vpc", tt2)
                 else:
@@ -188,7 +188,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         elif tt2==globals.region+"e":  t1=tt1 + ' = format("%se",data.aws_region.current.name)\n'
         elif tt2==globals.region+"f":  t1=tt1 + ' = format("%sf",data.aws_region.current.name)\n'
         
-        if globals.debug: print("aws_common tt2="+tt2)
+        #if globals.debug: print("aws_common tt2="+tt2)
         ## Use a straight if here ?
         ## tt2 is arn - call globals_replace ?
         if tt2.startswith("arn:"): 

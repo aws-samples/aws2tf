@@ -300,7 +300,7 @@ notimplemented = {
     "aws_route53_resolver_rule_association": True,
     "aws_rum_app_monitor": True,
     "aws_rum_metrics_destination": True,
-    "aws_s3_access_point": True,
+    #"aws_s3_access_point": True,
     "aws_s3_bucket_cors_configuration": True,
     "aws_s3_bucket_server_side_encryption_configuration": True,
     "aws_s3_directory_bucket": True, ### TODO

@@ -167,6 +167,7 @@ def get_aws_vpclattice_target_group(type, id, clfn, descfn, topkey, key, filteri
         for j in response:
             theid = j[key]
             common.write_import(type, theid, None)
+            #common.add_dependancy("aws_vpclattice_target_group_attachment",theid)
             globals.rproc["aws_vpclattice_target_group."+theid] = True
 
     else:
@@ -178,9 +179,36 @@ def get_aws_vpclattice_target_group(type, id, clfn, descfn, topkey, key, filteri
                     e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
 
             common.write_import(type, id, None)
+            #common.add_dependancy("aws_vpclattice_target_group_attachment",id)
             globals.rproc["aws_vpclattice_target_group."+id] = True
 
     return True
+
+
+def get_aws_vpclattice_target_group_attachment(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
+    client = common.boto3.client(clfn)
+    response = []
+
+    if id is None:
+      print("Must pass target group id")
+      return True
+    else:
+        if id.startswith("tg-"):
+            try:
+                response1 = client.get_target_group(targetGroupIdentifier=id)
+            except Exception as e:
+                common.handle_error(
+                    e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+            ## doesn't work
+            #common.write_import(type, id, None)
+            globals.rproc["aws_vpclattice_target_group_attachment."+id] = True
+
+    return True
+
 
 
 def get_aws_vpclattice_resource_policy(type, id, clfn, descfn, topkey, key, filterid):

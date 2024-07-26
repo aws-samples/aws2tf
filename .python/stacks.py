@@ -1200,7 +1200,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::SNS::TopicInlinePolicy": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::SQS::QueueInlinePolicy": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::SSM::Association": common.call_resource("aws_ssm_association", pid)
-            elif type == "AWS::SSM::Document": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::SSM::Document": common.call_resource("aws_ssm_document", pid)
             elif type == "AWS::SSM::MaintenanceWindow": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::SSM::MaintenanceWindowTarget": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::SSM::MaintenanceWindowTask": common.call_resource("aws_null", type+" "+pid)

@@ -8479,8 +8479,8 @@ aws_sagemaker_studio_lifecycle_config = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_studio_lifecycle_configs",
 	"topkey":	"StudioLifecycleConfigs",
-	"key":		"StudioLifecycleConfigArn",
-	"filterid":	"StudioLifecycleConfigArn"
+	"key":		"StudioLifecycleConfigName",
+	"filterid":	"StudioLifecycleConfigName"
 }
 
 aws_sagemaker_user_profile = {

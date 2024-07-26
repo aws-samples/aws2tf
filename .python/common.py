@@ -391,7 +391,7 @@ def tfplan3():
 
       # redo plan
       com = "rm -f resources.out tfplan"
-      print(com)
+      #print(com)
       rout = rc(com)
       
       com = "terraform plan -generate-config-out=" + \
@@ -562,7 +562,7 @@ def wrapup():
       print(str(rout.stderr.decode().rstrip()))
       exit()
    #print(str(rout.stdout.decode().rstrip()))
-   print("Final Plan Check .....")
+   print("Post Import Plan Check .....")
    com = "terraform plan -no-color"
    rout = rc(com)
    if "No changes. Your infrastructure matches the configuration" not in str(rout.stdout.decode().rstrip()):

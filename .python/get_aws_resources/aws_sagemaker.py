@@ -272,3 +272,72 @@ def get_aws_sagemaker_space(type, id, clfn, descfn, topkey, key, filterid):
             e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
 
     return True
+
+
+
+def get_aws_sagemaker_image(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In get_aws_sagemaker_image_version  doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate():
+                response = response + page[topkey]
+            if response == []:
+                print("Empty response for "+type + " id="+str(id)+" returning")
+                pkey="aws_sagemaker_image."+id
+                return True
+            for j in response:
+                common.write_import(type, j[key], None)# calls list_secrets
+                common.add_dependancy("aws_sagemaker_image_version",j[key])
+            
+        else:
+            response = client.describe_image(ImageName=id)
+            if response == []:
+                print("Empty response for "+type + " id="+str(id)+" returning")
+                pkey="aws_sagemaker_image_version."+id
+                common.write_import(type, id, None)
+                globals.rproc[pkey]=True
+            j=response[key]
+            common.write_import(type, j, None)# calls list_secrets
+            common.add_dependancy("aws_sagemaker_image_version",j)
+
+
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+
+    return True
+
+
+
+
+
+
+
+def get_aws_sagemaker_image_version(type, id, clfn, descfn, topkey, key, filterid):
+    #if globals.debug:
+    print("--> In get_aws_sagemaker_image_version  doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            # calls list_secrets
+            print("WARNING: Must pass image id as parameter")
+        else:
+            response = client.list_image_versions(ImageName=id)
+            if response == []:
+                print("Empty response for "+type + " id="+str(id)+" returning")
+                return True
+            pkey="aws_sagemaker_image_version."+id
+            common.write_import(type, id, None)
+            print("************",pkey)
+            globals.rproc[pkey]=True
+
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+
+    return True

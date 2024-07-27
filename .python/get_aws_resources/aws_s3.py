@@ -5,6 +5,7 @@ import globals
 import os
 import sys
 import inspect
+from get_aws_resources import aws_s3control
 
 def get_aws_s3_bucket(type, id, clfn, descfn, topkey, key, filterid):
    get_all_s3_buckets(id,globals.region)
@@ -136,6 +137,7 @@ def get_all_s3_buckets(fb,my_region):
      #print("write_import for Bucket: "+bucket_name)
      print("Processing Bucket: "+bucket_name + '  ............')
      common.write_import(type,bucket_name,"b-"+bucket_name)
+     common.add_dependancy("aws_s3_access_point",bucket_name)
 
      for key in s3_fields:
          #print("outside get_s3 type=" + key)
@@ -159,3 +161,9 @@ def get_s3(s3_fields,type,bucket_name):
    except:
       if globals.debug: print("No " + type + " config for bucket " + bucket_name)
       pass
+
+
+
+def get_s3_access_control(type, id, clfn, descfn, topkey, key, filterid):
+   ret=aws_s3control.get_aws_s3_access_point(type, id, clfn, descfn, topkey, key, filterid)
+   return ret

@@ -7961,9 +7961,9 @@ aws_rum_metrics_destination = {
 }
 
 aws_s3_access_point = {
-	"clfn":		"s3",
+	"clfn":		"s3control",
 	"descfn":	"list_access_points",
-	"topkey":	"AccessPoints",
+	"topkey":	"AccessPointList",
 	"key":		"Name",
 	"filterid":	"Name"
 }

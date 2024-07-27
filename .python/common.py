@@ -72,6 +72,7 @@ from get_aws_resources import aws_redshift_serverless
 from get_aws_resources import aws_resource_explorer_2
 from get_aws_resources import aws_route53
 from get_aws_resources import aws_s3
+from get_aws_resources import aws_s3control
 from get_aws_resources import aws_sagemaker
 from get_aws_resources import aws_schemas
 from get_aws_resources import aws_scheduler

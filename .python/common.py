@@ -1258,9 +1258,14 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
          print("KeyError cannot find ssm document for " +fname+" id="+str(id)+" - returning")
          return
 
+   elif exn == "AWSOrganizationsNotInUseException" or exn =="OrganizationAccessDeniedException":
+      print("NO ORG: "+frame+" this account doesn't appear to be in an AWS Organisation (or you don't have org permissions) - returning")
+      return
+
    elif "NoSuch" in exn and clfn=="cloudfront":
       print(str(exc_obj)+" for "+frame+" id="+str(id)+" - returning")
       return
+
 
 
    print("\nERROR: in "+frame+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))

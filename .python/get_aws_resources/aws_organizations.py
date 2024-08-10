@@ -34,9 +34,9 @@ def get_aws_organizations_organization(type, id, clfn, descfn, topkey, key, filt
                 if exn == "AccessDeniedException":
                     print("Can't list_roots - no access or not a master account......")              
                     return True
-                else:
-                    print(f"{e=} [org1]")
-                    return True
+                #else:
+                #    print(f"{e=} [org1]")
+                #    return True
 
 
     except Exception as e:
@@ -162,9 +162,9 @@ def get_aws_organizations_account(type, id, clfn, descfn, topkey, key, filterid)
                 if exn == "AccessDeniedException":
                     print("Can't list_accounts - no access or not a master account......")              
                     return True
-                else:
-                    print(f"{e=} [org1]")
-                    return True
+                #else:
+                #    print(f"{e=} [org1]")
+                #    return True
 
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response[topkey]:
@@ -195,12 +195,12 @@ def get_aws_organizations_resource_policy(type, id, clfn, descfn, topkey, key, f
             elif exn == "AccessDeniedException":
                     print("Can't describe_resource_policy - no access or not a master account......")              
                     return True
-            else:
-                print(f"{e=} [org1]")
-                print("No Org Resource Policy found returning True......")
-                return True
-        print("RESPONSE2")
-        print(str(response))
+            #else:
+            #    print(f"{e=} [org1]")
+            #    print("No Org Resource Policy found returning True......")
+            #    return True
+        #print("RESPONSE2")
+        #print(str(response))
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response[topkey]:
             common.write_import(type, j[key], None) 
@@ -232,11 +232,11 @@ def get_aws_organizations_policy_attachment(type, id, clfn, descfn, topkey, key,
                 elif exn == "AccessDeniedException":
                         print("Can't describe_resource_policy - no access or not a master account......")              
                         return True
-                else:
-                    print(f"{e=} [org1]")
-                    print("No Org Resource Policy found returning True......")
+                #else:
+                #    print(f"{e=} [org1]")
+                #    print("No Org Resource Policy found returning True......")
 
-                    return True
+                #    return True
             if response[topkey] == []: 
                 print("Empty response for "+type+ " id="+str(id)+" returning"); 
                 pkey=type+"."+id

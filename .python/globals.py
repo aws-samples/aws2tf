@@ -37,6 +37,9 @@ stripend=""
 apigwrestapiid=""
 ssoinstance=None
 emrsubnetid=False
+# secretsmanager secret version
+secid=""
+secvid=""
 
 meshname=""
 

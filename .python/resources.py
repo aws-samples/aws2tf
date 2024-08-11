@@ -49,7 +49,7 @@ def resource_types(type):
     elif type == "s3": rets=["aws_s3_bucket"]; return rets # AWS S3 bucket and bucker config
     elif type == "subnet": type = ["aws_subnet"]; return rets # AWS subnet and common dependancies
     elif type == "sagemaker": rets=["aws_sagemaker_domain","aws_sagemaker_user_profile","aws_sagemaker_image","aws_sagemaker_app","aws_sagemaker_studio_lifecycle_config"]; return rets # SageMaker domain and depandancies
-    elif type == "secrets": rets=["aws_secretsmanager_secret"]; return rets # secrets manager secrets
+    elif type == "secrets" or type == "secret": rets=["aws_secretsmanager_secret"]; return rets # secrets manager secrets
     elif type == "sc": rets=["aws_servicecatalog_portfolio"]; return rets     # service catalog
     elif type == "sfn": rets=["aws_sfn_state_machine"]; return rets            # State machine
     elif type == "security-group": rets=["aws_security_group"]; return rets # security group

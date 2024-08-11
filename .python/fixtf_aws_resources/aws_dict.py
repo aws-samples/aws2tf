@@ -8575,9 +8575,9 @@ aws_secretsmanager_secret_rotation = {
 aws_secretsmanager_secret_version = {
 	"clfn":		"secretsmanager",
 	"descfn":	"list_secret_version_ids",
-	"topkey":	"SecretVersions",
-	"key":		"SecretVersionId",
-	"filterid":	"SecretVersionId"
+	"topkey":	"Versions",
+	"key":		"VersionId",
+	"filterid":	"VersionId"
 }
 
 aws_security_group_rule = {

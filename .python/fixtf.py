@@ -223,11 +223,8 @@ def fixtf(ttft,tf):
         com = "mv rf imported/"+rf
         rout = common.rc(com)
 
-
-
     ## will this check break things ?
     if os.path.isfile(tf2):
-
          if globals.debug:
             print("File exists: " + tf2+ " skipping ...")                 
          return 
@@ -324,6 +321,8 @@ def fixtf(ttft,tf):
 
     globals.gulejobmaxcap=False
     globals.ec2ignore=False
+    globals.secid=""
+    globals.secvid=""
     #if globals.acc in tf2:
     #    tf2=tf2.replace(globals.acc, "__")
 

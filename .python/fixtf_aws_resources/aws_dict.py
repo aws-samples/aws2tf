@@ -2230,9 +2230,9 @@ aws_cloudwatch_query_definition = {
 aws_codeartifact_domain = {
 	"clfn":		"codeartifact",
 	"descfn":	"list_domains",
-	"topkey":	"Domains",
-	"key":		"Name",
-	"filterid":	"Name"
+	"topkey":	"domains",
+	"key":		"arn",
+	"filterid":	"name"
 }
 
 aws_codeartifact_domain_permissions_policy = {
@@ -2246,9 +2246,9 @@ aws_codeartifact_domain_permissions_policy = {
 aws_codeartifact_repository = {
 	"clfn":		"codeartifact",
 	"descfn":	"list_repositories",
-	"topkey":	"Repositories",
-	"key":		"Name",
-	"filterid":	"Name"
+	"topkey":	"repositories",
+	"key":		"arn",
+	"filterid":	"name"
 }
 
 aws_codeartifact_repository_permissions_policy = {
@@ -2398,9 +2398,9 @@ aws_codegurureviewer_repository_association = {
 aws_codepipeline = {
 	"clfn":		"codepipeline",
 	"descfn":	"list_pipelines",
-	"topkey":	"Pipelines",
-	"key":		"Name",
-	"filterid":	"Name"
+	"topkey":	"pipelines",
+	"key":		"name",
+	"filterid":	"name"
 }
 
 aws_codepipeline_custom_action_type = {
@@ -2439,7 +2439,7 @@ aws_codestarnotifications_notification_rule = {
 	"clfn":		"codestar-notifications",
 	"descfn":	"list_notification_rules",
 	"topkey":	"NotificationRules",
-	"key":		"Name",
+	"key":		"Arn",
 	"filterid":	"Name"
 }
 

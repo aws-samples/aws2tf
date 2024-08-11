@@ -18,8 +18,6 @@ notimplemented = {
     "aws_auditmanager_organization_admin_account_registration": True,
     "aws_backup_global_settings": True,
 
-    #"aws_batch_job_queue": True,  ### TODO
-
     "aws_budgets_budget": True,
     "aws_budgets_budget_action": True,
     "aws_ce_anomaly_monitor": True,
@@ -49,19 +47,15 @@ notimplemented = {
     "aws_cloudwatch_log_metric_filter": True,
     "aws_cloudwatch_log_resource_policy": True,
     "aws_cloudwatch_log_subscription_filter": True,
-    "aws_codeartifact_domain": True,
     "aws_codeartifact_domain_permissions_policy": True,
-    "aws_codeartifact_repository": True,
+    #"aws_codeartifact_repository": True,
     "aws_codeartifact_repository_permissions_policy": True,
-    "aws_codebuild_project": True,  ### TODO
     "aws_codebuild_report_group": True,
     "aws_codebuild_resource_policy": True,
     "aws_codebuild_webhook": True,
     "aws_codecommit_approval_rule_template_association": True,
-
     "aws_codedeploy_app": True,
     "aws_codedeploy_deployment_config": True,
-    "aws_codepipeline": True, ### TODO
     "aws_codepipeline_custom_action_type": True,
     "aws_codepipeline_webhook": True,
     "aws_cognito_identity_pool_provider_principal_tag": True,
@@ -261,7 +255,6 @@ notimplemented = {
     "aws_opsworks_php_app_layer": True,
     "aws_opsworks_stack": True,
     "aws_opsworks_static_web_layer": True,
-    #"aws_organizations_account": True,  ### TODO
     "aws_pinpoint_adm_channel": True,
     "aws_pinpoint_apns_channel": True,
     "aws_pinpoint_apns_sandbox_channel": True,

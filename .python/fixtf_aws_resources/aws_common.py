@@ -15,8 +15,8 @@ def check_key(keyid):
 		#print(str(kresp))
 		if kstatus == "Enabled" or kstatus == "Disabled":
 			if kman == "AWS":
-				print("key is managed by AWS")
-				return False
+				print("check_key: key is managed by AWS")
+				return False ## ?? True ??
 			return True
 		else:
 			print("WARNING: key is not valid or is managed by AWS")
@@ -104,7 +104,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             else:
                 skip=1
         
-        elif tt1 == "kms_key_id" or tt1=="kms_master_key_id" or tt1=="target_key_id":
+        elif tt1 == "kms_key_id" or tt1=="kms_master_key_id" or tt1=="target_key_id" or tt1=="encryption_key":
             if type != "aws_docdb_cluster":
                 if tt2 != "null": 
                     skip=1
@@ -125,7 +125,8 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                             if check_key(tt2):
                                 t1=tt1 + " = aws_kms_key.k-" + tt2 + ".id\n"
                                 common.add_dependancy("aws_kms_key", tt2)
-                                skip=0                   
+                                skip=0    
+                                           
                 else:
                     skip=1
 

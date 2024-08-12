@@ -4,7 +4,6 @@ notimplemented = {
     #
     "aws_apprunner_observability_configuration": True,
     "aws_appstream_directory_config": True,
-
     "aws_appstream_fleet_stack_association": True,
     "aws_appstream_user_stack_association": True,
     "aws_appsync_api_cache": True,
@@ -48,7 +47,6 @@ notimplemented = {
     "aws_cloudwatch_log_resource_policy": True,
     "aws_cloudwatch_log_subscription_filter": True,
     "aws_codeartifact_domain_permissions_policy": True,
-    #"aws_codeartifact_repository": True,
     "aws_codeartifact_repository_permissions_policy": True,
     "aws_codebuild_report_group": True,
     "aws_codebuild_resource_policy": True,
@@ -100,7 +98,6 @@ notimplemented = {
 	"aws_devicefarm_test_grid_project": True,
 	"aws_devicefarm_upload": True,
     "aws_directory_service_conditional_forwarder": True,
-    #"aws_directory_service_directory": True,  ### TODO
     "aws_directory_service_radius_settings": True,
     "aws_directory_service_region": True,
     "aws_directory_service_shared_directory": True,
@@ -145,7 +142,6 @@ notimplemented = {
     "aws_gamelift_fleet": True,
     "aws_gamelift_game_session_queue": True,
     "aws_glacier_vault_lock": True,
-    #"aws_glue_classifier": True, ### TODO
     "aws_glue_partition": True,  ### TODO
     "aws_glue_partition_index": True,
     "aws_glue_resource_policy": True,
@@ -293,7 +289,6 @@ notimplemented = {
     "aws_route53_resolver_rule_association": True,
     "aws_rum_app_monitor": True,
     "aws_rum_metrics_destination": True,
-    #"aws_s3_access_point": True,
     "aws_s3_bucket_cors_configuration": True,
     "aws_s3_bucket_server_side_encryption_configuration": True,
     "aws_s3_directory_bucket": True, ### TODO
@@ -357,8 +352,6 @@ notimplemented = {
     "aws_ssoadmin_application_assignment_configuration": True,
     "aws_ssoadmin_customer_managed_policy_attachment": True,
     "aws_ssoadmin_instance_access_control_attributes": True,
-    #"aws_ssoadmin_managed_policy_attachment": True,
-    #"aws_ssoadmin_permission_set_inline_policy": True,
     "aws_ssoadmin_permissions_boundary_attachment": True,
     "aws_storagegateway_gateway": True,
     "aws_storagegateway_tape_pool": True,
@@ -421,7 +414,7 @@ notimplemented = {
 	"aws_auditmanager_framework_share": True,
 	"aws_auditmanager_organization_admin_account_registration": True,
     "aws_ce_cost_allocation_tag": True, ### TODO
-    "aws_vpc_endpoint_service": True, ### TODO
+    #"aws_vpc_endpoint_service": True, ### TODO
     "aws_worklink_fleet": True, ### region  
     "aws_timestreamwrite_database": True, ### region
     "aws_timestreamwrite_table": True, ### region

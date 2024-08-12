@@ -80,6 +80,8 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
                 pkey=catalogn+":"+databasen+":"+j[key]
                 tfid="d-"+pkey.replace(":","__")
                 common.write_import(type,pkey,tfid)
+                #../../scripts/get-glue-partition.sh $catid $dbnam j[key]
+                # common.add_dependancy("aws_glue_partition",pkey)
             
             # set dependency false
             tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
@@ -352,6 +354,54 @@ def get_aws_glue_classifier(type, id, clfn, descfn, topkey, key, filterid):
 
             #theid="c-"+pkey.replace(":","_")
             #common.write_import(type, pkey, theid)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+def get_aws_glue_partition(type, id, clfn, descfn, topkey, key, filterid):
+
+    # need to fetch catalogid and database from id
+
+
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+        
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            print("ID cannot be None")
+ 
+        else:     
+            ## Do not have table name
+            cc=id.count(':')
+            if cc == 2:
+                catalogn=id.split(':')[0]
+                databasen=id.split(':')[1]
+                tabnam=id.split(':')[2]
+            else:
+                print("Invalid id passed")
+                return True
+
+            response = client.get_partitions(CatalogId=catalogn,DatabaseName=databasen,TableName=tabnam)
+
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            
+            for j in response[topkey]:
+                vals=""
+                for k in j[key]: vals=vals+k+"#"
+                vals=vals.rstrip("#")
+                pkey=id+":"+vals
+                tfid="p-"+pkey.replace(":","__")
+                common.write_import(type,pkey,tfid)
+            
+            # set dependency false
+            tkey="aws_glue_partition"+"."+id
+            #print("Setting True "+tkey)
+            globals.rproc[tkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

@@ -4760,8 +4760,8 @@ aws_glue_partition = {
 	"clfn":		"glue",
 	"descfn":	"list_partitions",
 	"topkey":	"Partitions",
-	"key":		"PartitionValues",
-	"filterid":	"PartitionValues"
+	"key":		"Values",
+	"filterid":	"Values"
 }
 
 aws_glue_partition_index = {
@@ -9855,8 +9855,8 @@ aws_vpc_endpoint_security_group_association = {
 aws_vpc_endpoint_service = {
 	"clfn":		"ec2",
 	"descfn":	"describe_vpc_endpoint_services",
-	"topkey":	"ServiceNames",
-	"key":		"ServiceName",
+	"topkey":	"ServiceDetails",
+	"key":		"ServiceId",
 	"filterid":	"ServiceName"
 }
 

@@ -811,6 +811,12 @@ def aws_vpc_endpoint_security_group_association(t1,tt1,tt2,flag1,flag2):
 
 def aws_vpc_endpoint_service(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="gateway_load_balancer_arns" and tt2=="[]": skip=1
+	elif tt1=="network_load_balancer_arns" and tt2=="[]": skip=1
+	elif tt1=="allowed_principal" and tt2=="[]": skip=1
+	elif tt1 == "network_load_balancer_arns": 
+		t1=fixtf.deref_elb_arn_array(t1,tt1,tt2)
+	
 	return skip,t1,flag1,flag2
 
 def aws_vpc_endpoint_service_allowed_principal(t1,tt1,tt2,flag1,flag2):

@@ -62,6 +62,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         elif tt1 == "subnets" or tt1 == "subnet_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
         elif tt1 == "route_table_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_route_table","rtb-",skip)
         
+        
         elif tt1 == "iam_roles": t1=fixtf.deref_role_arn_array(t1,tt1,tt2)
         elif tt1 == "vpc_id":
             if tt2 != "null":
@@ -180,6 +181,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         #if tt2.startswith("s3://"): t1=fixtf.rhs_replace(t1,tt1,tt2)
         ## replace region and account number on RHS
         elif tt2==globals.acc: t1=tt1 + ' = format("%s",data.aws_caller_identity.current.account_id)\n'
+        elif tt2=="jsonencode("+globals.acc+")": t1=tt1 + ' = format("%s",data.aws_caller_identity.current.account_id)\n'
         elif tt2==globals.region: t1=tt1 + ' = format("%s",data.aws_region.current.name)\n'
         ## fix zones
         elif tt2==globals.region+"a":  t1=tt1 + ' = format("%sa",data.aws_region.current.name)\n'

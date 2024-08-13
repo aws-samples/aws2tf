@@ -596,5 +596,33 @@ def deref_role_arn_array(t1,tt1,tt2):
 
     return t1
 
+def deref_elb_arn_array(t1,tt1,tt2):
+    if tt2 == "null" or tt2 == "[]": return t1
+    tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
+    cc=tt2.count(',')
+    subs=""
+    if cc > 0:
+        for i in range(cc+1):
+            subn=tt2.split(',')[i]
+            tarn=subn
+            rarn=tarn.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_")
+
+            subn=subn.strip('/')[-1]
+            subs=subs + "aws_lb." + rarn + ".arn,"
+            common.add_dependancy("aws_lb",tarn)
+
+            
+    if cc == 0:
+        tarn=tt2
+        rarn=tarn.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_")
+        tt2=tt2.split('/')[-1]
+        subs=subs + "aws_lb." + rarn + ".arn,"
+        common.add_dependancy("aws_lb",tarn)
+             
+    t1=tt1 + " = [" + subs + "]\n"
+    t1=t1.replace(',]',']')
+
+    return t1
+
 
 

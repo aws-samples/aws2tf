@@ -10,6 +10,7 @@ def get_aws_service_discovery_private_dns_namespace(type, id, clfn, descfn, topk
     try:
         response = []
         client = boto3.client(clfn)
+        r53client = boto3.client('route53')
         if id is None:
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
@@ -19,7 +20,17 @@ def get_aws_service_discovery_private_dns_namespace(type, id, clfn, descfn, topk
                 # get a vpc-id
                 if j['Type']=="DNS_PRIVATE":
                     print(str(j))
-                    #common.write_import(type,j[key],None) 
+                    nsid=j['Id']
+                    print(nsid)
+                    hzid=j['Properties']['DnsProperties']['HostedZoneId']
+                    response2=r53client.get_hosted_zone(Id=hzid)
+                    vpcid=response2['VPCs'][0]['VPCId']
+                    print(vpcid)
+                    pkey=nsid+":"+vpcid
+                    common.write_import(type,pkey,nsid) 
+                    tkey="aws_service_discovery_private_dns_namespace."+id
+                    globals.rproc[tkey]=True
+
 
         else:      
             response = client.get_namespace(Id=id)
@@ -28,6 +39,18 @@ def get_aws_service_discovery_private_dns_namespace(type, id, clfn, descfn, topk
             if j['Type']=="DNS_PRIVATE":
             # get a vpc-id
                 print(str(j))
+                print(str(j))
+                nsid=j['Id']
+                print(nsid)
+                hzid=j['Properties']['DnsProperties']['HostedZoneId']
+                response2=r53client.get_hosted_zone(Id=hzid)
+                vpcid=response2['VPCs'][0]['VPCId']
+                print(vpcid)
+                pkey=nsid+":"+vpcid
+                common.write_import(type,pkey,nsid) 
+                tkey="aws_service_discovery_private_dns_namespace."+id
+                globals.rproc[tkey]=True
+
                 #common.write_import(type,j[key],None)
 
     except Exception as e:

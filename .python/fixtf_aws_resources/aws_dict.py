@@ -8793,7 +8793,7 @@ aws_servicecatalog_product = {
 aws_servicecatalog_product_portfolio_association = {
 	"clfn":		"servicecatalog",
 	"descfn":	"list_product_portfolio_associations",
-	"topkey":	"ProductPortfolioAssociations",
+	"topkey":	"PortfolioDetails",
 	"key":		"Id",
 	"filterid":	"Id"
 }

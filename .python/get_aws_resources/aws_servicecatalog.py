@@ -57,6 +57,8 @@ def get_aws_servicecatalog_product(type, id, clfn, descfn, topkey, key, filterid
             for j in response:
                 theid=j['ProductViewSummary'][key]
                 common.write_import(type,theid,None) 
+                #../../scripts/get-sc-portfolio-product-associations.sh ${cname}
+                common.add_dependancy("aws_servicecatalog_product_portfolio_association",theid)
 
         else:      
             response = client.search_products_as_admin(PortfolioId=id)
@@ -68,6 +70,7 @@ def get_aws_servicecatalog_product(type, id, clfn, descfn, topkey, key, filterid
             for j in response[topkey]:
                 theid=j['ProductViewSummary'][key]
                 common.write_import(type,theid,None) 
+                common.add_dependancy("aws_servicecatalog_product_portfolio_association",theid)
             pkey=type+"."+id
             globals.rproc[pkey]=True
 
@@ -147,29 +150,30 @@ def get_aws_servicecatalog_product_portfolio_association(type, id, clfn, descfn,
         response = []
         client = boto3.client(clfn)
         if id is None:
-            paginator = client.get_paginator(descfn)
-            for page in paginator.paginate():
-                response = response + page[topkey]
-            if response == []:
-                print("Empty response for "+type+ " id="+str(id)+" returning");
-                return True
-            for j in response:
-                theid=j[key]
-                common.write_import(type, theid, None)
+            print("WARNING: Must pass ProductId for get_aws_servicecatalog_product_portfolio_association")
+
+            return True
 
         else:
-            response = client.describe_portfolio(Id=id)
-            if response['PortfolioDetail'] == []:
-                print("Empty response for "+type+ " id="+str(id)+" returning");
+            response = client.list_portfolios_for_product(ProductId=id)
+            if response[topkey] == []:
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                pkey=type+"."+id
+                globals.rproc[pkey]=True
                 return True
-            j=response['PortfolioDetail']
-            theid=j[key]
-            common.write_import(type, theid, None)
+            for j in response[topkey]:
+                theid=j[key]
+                tkey="en:"+theid+":"+id
+                common.write_import(type, tkey, None)
+            pkey=type+"."+id
+            globals.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
 
     return True
+
+
 
 
 

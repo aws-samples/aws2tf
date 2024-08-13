@@ -4,6 +4,10 @@ def aws_servicecatalog_budget_resource_association(t1,tt1,tt2,flag1,flag2):
 
 def aws_servicecatalog_constraint(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="portfolio_id" and tt2.startswith("port-"):
+		t1=tt1+" = aws_servicecatalog_portfolio."+tt2+".id\n"
+	if tt1=="product_id" and tt2.startswith("pood-"):
+		t1=tt1+" = aws_servicecatalog_product."+tt2+".id\n"	
 	return skip,t1,flag1,flag2
 
 def aws_servicecatalog_launch_paths(t1,tt1,tt2,flag1,flag2):
@@ -28,6 +32,8 @@ def aws_servicecatalog_portfolio_share(t1,tt1,tt2,flag1,flag2):
 
 def aws_servicecatalog_principal_portfolio_association(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="portfolio_id" and tt2.startswith("port-"):
+		t1=tt1+" = aws_servicecatalog_portfolio."+tt2+".id\n"
 	return skip,t1,flag1,flag2
 
 def aws_servicecatalog_product(t1,tt1,tt2,flag1,flag2):
@@ -39,6 +45,10 @@ def aws_servicecatalog_product(t1,tt1,tt2,flag1,flag2):
 
 def aws_servicecatalog_product_portfolio_association(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="portfolio_id" and tt2.startswith("port-"):
+		t1=tt1+" = aws_servicecatalog_portfolio."+tt2+".id\n"
+	if tt1=="product_id" and tt2.startswith("pood-"):
+		t1=tt1+" = aws_servicecatalog_product."+tt2+".id\n"
 	return skip,t1,flag1,flag2
 
 def aws_servicecatalog_provisioned_product(t1,tt1,tt2,flag1,flag2):

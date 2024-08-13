@@ -22,8 +22,8 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
                 tfid="d-"+pkey.replace(":","__")
                 common.write_import(type,pkey,tfid) 
                 common.add_dependancy("aws_glue_catalog_table",pkey)
-                pkey2="aws_glue_catalog_table."+pkey
-                globals.rproc[pkey2]=True
+                #pkey2="aws_glue_catalog_table."+pkey
+                #globals.rproc[pkey2]=True
 
         else: 
             if ":" in id:   id =id.split(":")[1]    
@@ -35,8 +35,7 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
             common.write_import(type,pkey,tfid)
             #print("KD add aws_glue_catalog_table "+pkey)
             common.add_dependancy("aws_glue_catalog_table",pkey)
-            pkey2="aws_glue_catalog_table."+pkey
-            globals.rproc[pkey2]=True
+
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -46,9 +45,6 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
 ## ID must pass catalog/database   or catalog/database/table
 def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
 
-    # need to fetch catalogid and database from id
-
-
     if globals.debug:
         print("--> In get_aws_glue_catalog_table  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
@@ -57,15 +53,20 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
         response = []
         client = boto3.client(clfn)
         if id is None:
-            print("ID cannot be None")
+            print("WARNING: ID cannot be None - must pass catalog:database or catalog:database:tablename" )
  
         else:     
-            ## Do not have table name
+            ## Do have table name
             cc=id.count(':')
+            if cc==0:
+                print("WARNING: ID - must pass catalog:database or catalog:database:tablename" )
+                return True
             if cc == 1:
                 catalogn=id.split(':')[0]
                 databasen=id.split(':')[1]
             if cc == 2:
+                catalogn=id.split(':')[0]
+                databasen=id.split(':')[1]
                 tabnam=id.split(':')[2]
 
             ## Do have table name
@@ -81,7 +82,7 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
                 tfid="d-"+pkey.replace(":","__")
                 common.write_import(type,pkey,tfid)
                 #../../scripts/get-glue-partition.sh $catid $dbnam j[key]
-                # common.add_dependancy("aws_glue_partition",pkey)
+                common.add_dependancy("aws_glue_partition",pkey)
             
             # set dependency false
             tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
@@ -383,7 +384,7 @@ def get_aws_glue_partition(type, id, clfn, descfn, topkey, key, filterid):
                 databasen=id.split(':')[1]
                 tabnam=id.split(':')[2]
             else:
-                print("Invalid id passed")
+                print("WARNING: Invalid id passed must pass catalogid:database:tablename")
                 return True
 
             response = client.get_partitions(CatalogId=catalogn,DatabaseName=databasen,TableName=tabnam)
@@ -393,9 +394,10 @@ def get_aws_glue_partition(type, id, clfn, descfn, topkey, key, filterid):
             for j in response[topkey]:
                 vals=""
                 for k in j[key]: vals=vals+k+"#"
+                print("vals="+vals)
                 vals=vals.rstrip("#")
                 pkey=id+":"+vals
-                tfid="p-"+pkey.replace(":","__")
+                tfid="p-"+pkey.replace(":","__").replace("#","_")
                 common.write_import(type,pkey,tfid)
             
             # set dependency false

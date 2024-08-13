@@ -5,8 +5,8 @@ import inspect
 
 
 def get_aws_codecommit_repository(type, id, clfn, descfn, topkey, key, filterid):
-    # if globals.debug:
-    print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
           " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []

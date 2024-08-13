@@ -1232,6 +1232,8 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
       if frame.startswith("get_"):
          print("NOT FOUND: "+frame.split("get_")[1]+" "+str(id)+" check if it exists and what references it - returning")
          pkey=frame.split("get_")[1]+"."+id
+         if "aws_glue_catalog_database" in pkey:
+            pkey=frame.split("get_")[1]+"."+globals.acc+":"+id
          globals.rproc[pkey]=True
       else:
          print("NOT FOUND: "+frame+" "+id+" check if it exists - returning")

@@ -316,7 +316,7 @@ notimplemented = {
     "aws_securitylake_data_lake": True,  ### TODO
     "aws_servicecatalog_budget_resource_association": True,
     "aws_servicecatalog_portfolio_share": True,
-    "aws_servicecatalog_principal_portfolio_association": True,
+    #"aws_servicecatalog_principal_portfolio_association": True,
     "aws_servicecatalog_product_portfolio_association": True,
     "aws_servicecatalog_provisioned_product": True,
     "aws_servicecatalog_tag_option": True,

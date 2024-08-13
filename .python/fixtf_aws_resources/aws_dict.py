@@ -8729,7 +8729,7 @@ aws_service_discovery_service = {
 	"clfn":		"servicediscovery",
 	"descfn":	"list_services",
 	"topkey":	"Services",
-	"key":		"Arn",
+	"key":		"Id",
 	"filterid":	"Arn"
 }
 
@@ -8777,8 +8777,8 @@ aws_servicecatalog_portfolio_share = {
 aws_servicecatalog_principal_portfolio_association = {
 	"clfn":		"servicecatalog",
 	"descfn":	"list_principal_portfolio_associations",
-	"topkey":	"PrincipalPortfolioAssociations",
-	"key":		"Id",
+	"topkey":	"Principals",
+	"key":		"PrincipalARN",
 	"filterid":	"Id"
 }
 

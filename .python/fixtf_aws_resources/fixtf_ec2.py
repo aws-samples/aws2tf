@@ -726,6 +726,16 @@ def aws_spot_datafeed_subscription(t1,tt1,tt2,flag1,flag2):
 
 def aws_spot_fleet_request(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1 == "load_balancers" and tt2=="null": skip=1
+	elif tt1 == "target_group_arns" and tt2=="null": skip=1
+	elif tt1 == "id" and tt2.startswith("lt-"):
+		t1=tt1 + " = aws_launch_template." + tt2 + ".id\n"
+		common.add_dependancy("aws_launch_template", tt2)
+	elif tt1 == "allocation_strategy" and tt2!="null":
+		t1=t1+"\n lifecycle {\n   ignore_changes = [target_group_arns,load_balancers,wait_for_fulfillment]\n}\n"
+	elif tt1=="key_name" and tt2 != "null":
+		t1=tt1 + " = aws_key_pair." + tt2 + ".id\n"
+		common.add_dependancy("aws_key_pair",tt2)
 	return skip,t1,flag1,flag2
 
 def aws_spot_instance_request(t1,tt1,tt2,flag1,flag2):

@@ -7368,10 +7368,10 @@ aws_quicksight_vpc_connection = {
 
 aws_ram_principal_association = {
 	"clfn":		"ram",
-	"descfn":	"list_principal_associations",
-	"topkey":	"PrincipalAssociations",
-	"key":		"PrincipalAssociationId",
-	"filterid":	"PrincipalAssociationId"
+	"descfn":	"list_principals",
+	"topkey":	"principals",
+	"key":		"id",
+	"filterid":	"id"
 }
 
 aws_ram_resource_association = {
@@ -7384,10 +7384,10 @@ aws_ram_resource_association = {
 
 aws_ram_resource_share = {
 	"clfn":		"ram",
-	"descfn":	"list_resource_shares",
-	"topkey":	"ResourceShares",
-	"key":		"ResourceShareArn",
-	"filterid":	"ResourceShareArn"
+	"descfn":	"list_resources",
+	"topkey":	"resources",
+	"key":		"resourceShareArn",
+	"filterid":	"resourceShareArn"
 }
 
 aws_ram_resource_share_accepter = {

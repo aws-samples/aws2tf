@@ -68,6 +68,7 @@ from get_aws_resources import aws_lakeformation
 from get_aws_resources import aws_lambda
 from get_aws_resources import aws_neptune
 from get_aws_resources import aws_organizations
+from get_aws_resources import aws_ram
 from get_aws_resources import aws_rds
 from get_aws_resources import aws_redshift
 from get_aws_resources import aws_redshift_serverless

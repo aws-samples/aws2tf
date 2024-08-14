@@ -262,9 +262,8 @@ notimplemented = {
     "aws_pinpoint_gcm_channel": True,
     "aws_pinpoint_sms_channel": True,
     "aws_quicksight_folder_membership": True,
-    "aws_ram_principal_association": True,
+    #"aws_ram_principal_association": True,
     "aws_ram_resource_association": True,
-    "aws_ram_resource_share": True,  ### TODO
     "aws_ram_resource_share_accepter": True,
     "aws_ram_sharing_with_organization": True,
     "aws_rbin_rule": True,

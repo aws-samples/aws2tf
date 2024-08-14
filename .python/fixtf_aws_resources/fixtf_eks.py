@@ -43,11 +43,13 @@ def aws_eks_cluster(t1,tt1,tt2,flag1,flag2):
 #        t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
 #        common.add_dependancy("aws_iam_role",tt2)
     if tt1 == "key_arn":
-        
         if ":" in tt2: tt2="k-"+tt2.split("/")[-1]
         t1=tt1 + " = aws_kms_key." + tt2 + ".arn\n"
         common.add_dependancy("aws_kms_key",tt2)
-    
+    elif tt1 == "version" and tt2=="jsonencode(1.3)": 
+        print("******* aws_eks_cluster version 1.3",t1)
+        t1=tt1 + " = \"1.30\"\n"
+    print(tt1,tt2)
     return skip,t1,flag1,flag2
 
 
@@ -109,6 +111,11 @@ def aws_eks_node_group(t1,tt1,tt2,flag1,flag2):
         
     
     return skip,t1,flag1,flag2
+
+
+def aws_eks_identity_provider_config(t1, tt1, tt2, flag1, flag2):
+	skip=0
+	return skip,t1,flag1,flag2
 
 
 

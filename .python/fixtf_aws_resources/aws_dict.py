@@ -3931,6 +3931,14 @@ aws_ec2_transit_gateway_vpc_attachment_accepter = {
 	"filterid":	"TransitGatewayVpcAttachmentId"
 }
 
+aws_ec2_transit_gateway_vpn_attachment = {
+	"clfn":		"ec2",
+	"descfn":	"describe_transit_gateway_attachments",
+	"topkey":	"TransitGatewayAttachments",
+	"key":		"TransitGatewayAttachmentId",
+	"filterid":	"TransitGatewayAttachmentId"
+}
+
 aws_ecr_lifecycle_policy = {
 	"clfn":		"ecr",
 	"descfn":	"get_lifecycle_policy",
@@ -10865,6 +10873,7 @@ aws_resources = {
 	"aws_ec2_transit_gateway_route_table_association": aws_ec2_transit_gateway_route_table_association,
 	"aws_ec2_transit_gateway_vpc_attachment": aws_ec2_transit_gateway_vpc_attachment,
 	"aws_ec2_transit_gateway_vpc_attachment_accepter": aws_ec2_transit_gateway_vpc_attachment_accepter,
+    "aws_ec2_transit_gateway_vpn_attachment": aws_ec2_transit_gateway_vpn_attachment,
 	"aws_ecr_lifecycle_policy": aws_ecr_lifecycle_policy,
 	"aws_ecr_pull_through_cache_rule": aws_ecr_pull_through_cache_rule,
 	"aws_ecr_registry_policy": aws_ecr_registry_policy,

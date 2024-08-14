@@ -699,6 +699,7 @@ def get_aws_ec2_transit_gateway(type, id, clfn, descfn, topkey, key, filterid):
                 common.add_known_dependancy("aws_ec2_transit_gateway_vpc_attachment",j[key])
                 common.add_known_dependancy("aws_ec2_transit_gateway_peering_attachment", j[key])
                 common.add_known_dependancy("aws_ec2_transit_gateway_route_table", j[key])
+                common.add_known_dependancy("aws_ec2_transit_gateway_vpn_attachment", j[key])
 
         else: 
             if id.startswith("tgw-"):     
@@ -709,6 +710,7 @@ def get_aws_ec2_transit_gateway(type, id, clfn, descfn, topkey, key, filterid):
                     common.add_known_dependancy("aws_ec2_transit_gateway_vpc_attachment",j[key])
                     common.add_known_dependancy("aws_ec2_transit_gateway_peering_attachment", j[key])
                     common.add_known_dependancy("aws_ec2_transit_gateway_route_table", j[key])
+                    common.add_known_dependancy("aws_ec2_transit_gateway_vpn_attachment", j[key])
 
 
             else:
@@ -760,8 +762,8 @@ def get_aws_ec2_transit_gateway_vpc_attachment(type, id, clfn, descfn, topkey, k
 
 
 def get_aws_ec2_transit_gateway_peering_attachment(type, id, clfn, descfn, topkey, key, filterid):
-    #if globals.debug:
-    print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -790,8 +792,8 @@ def get_aws_ec2_transit_gateway_peering_attachment(type, id, clfn, descfn, topke
     return True
 
 def get_aws_ec2_transit_gateway_route_table(type, id, clfn, descfn, topkey, key, filterid):
-    #if globals.debug:
-    print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -870,6 +872,94 @@ def get_aws_vpc_endpoint_service(type, id, clfn, descfn, topkey, key, filterid):
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
             common.write_import(type,j[key],None)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+def get_aws_ec2_transit_gateway_vpn_attachment(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate(Filters=[
+                {'Name': 'resource-type','Values': ['vpn']},
+                {'Name': 'state','Values': ['available','pending','pendingAcceptance']}
+                ]):
+                response = response + page[topkey]
+            print(response)
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            for j in response:
+                fn="data_"+type+"-"+j[key]+".tf"
+                if os.path.exists(fn): os.remove(fn)
+                fn="data_"+type+"-"+j[key]+".tfproto"
+                theid=type+"_"+j[key]
+                tgwid=j['TransitGatewayId']
+                vpnid=j['ResourceId']
+                with open(fn, "w") as f:
+                    f.write('data \"aws_ec2_transit_gateway_vpn_attachment\" \"'+theid+'\" {\n')
+                    f.write(' transit_gateway_id = aws_ec2_transit_gateway.'+tgwid+'.id \n')
+                    f.write(' vpn_connection_id  = aws_vpn_connection.'+vpnid+'.id \n')
+                    f.write('}\n')
+                common.add_dependancy("aws_ec2_transit_gateway",tgwid)
+                common.add_dependancy("aws_vpn_connection",vpnid)
+ 
+ 
+        else: 
+            if id.startswith("tgw-"):     
+                response = client.describe_transit_gateway_attachments(Filters=[
+                    {'Name': 'transit-gateway-id','Values': [id]},
+                    {'Name': 'resource-type','Values': ['vpn']},
+                    {'Name': 'state','Values': ['available','pending','pendingAcceptance']}
+                    ])
+                if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                for j in response[topkey]:
+                    fn="data_"+type+"-"+j[key]+".tf"
+                    if os.path.exists(fn): os.remove(fn)
+                    fn="data_"+type+"-"+j[key]+".tfproto"
+                    theid=type+"_"+j[key]
+                    tgwid=j['TransitGatewayId']
+                    vpnid=j['ResourceId']
+                    with open(fn, "w") as f:
+                        f.write('data \"aws_ec2_transit_gateway_vpn_attachment\" \"'+theid+'\" {\n')
+                        f.write(' transit_gateway_id = aws_ec2_transit_gateway.'+tgwid+'.id \n')
+                        f.write(' vpn_connection_id  = aws_vpn_connection.'+vpnid+'.id \n')
+                        f.write('}\n')
+                common.add_dependancy("aws_ec2_transit_gateway",tgwid)
+                common.add_dependancy("aws_vpn_connection",vpnid)
+                        
+              
+            elif id.startswith("vpc-"):     
+                response = client.describe_transit_gateway_attachments(Filters=[
+                    {'Name': 'vpc-id','Values': [id]},
+                    {'Name': 'resource-type','Values': ['vpn']},
+                    {'Name': 'state','Values': ['available','pending','pendingAcceptance']}
+                    ])
+                if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                for j in response[topkey]:
+                    fn="data_"+type+"-"+j[key]+".tf"
+                    if os.path.exists(fn): os.remove(fn)
+                    fn="data_"+type+"-"+j[key]+".tfproto"
+                    theid=type+"_"+j[key]
+                    tgwid=j['TransitGatewayId']
+                    vpnid=j['ResourceId']
+                    with open(fn, "w") as f:
+                        f.write('data \"aws_ec2_transit_gateway_vpn_attachment\" \"'+theid+'\" {\n')
+                        f.write(' transit_gateway_id = aws_ec2_transit_gateway.'+tgwid+'.id \n')
+                        f.write(' vpn_connection_id  = aws_vpn_connection.'+vpnid+'.id \n')
+                        f.write('}\n')
+                    common.add_dependancy("aws_ec2_transit_gateway",tgwid)
+                    common.add_dependancy("aws_vpn_connection",vpnid)
+               
+
+            else:
+                print("WARNING: "+type+" id must start with tgw- or vpc-")
+
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

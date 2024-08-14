@@ -142,7 +142,6 @@ notimplemented = {
     "aws_gamelift_fleet": True,
     "aws_gamelift_game_session_queue": True,
     "aws_glacier_vault_lock": True,
-    #"aws_glue_partition": True,  ### TODO
     "aws_glue_partition_index": True,
     "aws_glue_resource_policy": True,
     "aws_glue_user_defined_function": True,

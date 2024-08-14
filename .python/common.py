@@ -338,6 +338,16 @@ def tfplan2():
 
 
 def tfplan3():
+
+   #### move tfproto files
+   x=glob.glob("data*.tfproto")
+   for fil in x:
+      tf=fil.split('.tfproto',1)[0]
+      com = "mv "+fil +" "+ tf+".tf"
+      print(com)
+      rout = rc(com)
+
+
    print("Validate and Test Plan  ... ")
    if globals.merge:
       com = "cp imported/aws_*.tf ."

@@ -22,15 +22,22 @@ def get_aws_autoscaling_group(type, id, clfn, descfn, topkey, key, filterid):
                 common.write_import(type,j[key],None) 
 
         else:
-             
-            response = client.describe_auto_scaling_groups(AutoScalingGroupNames=[id])
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if id.startswith("arn:aws:autoscaling:"): 
+                qid = id.split("/")[-1]
+            else:
+                qid = id
+            pkey=type+"."+id
+            print("Looking for "+pkey)
+            response = client.describe_auto_scaling_groups(AutoScalingGroupNames=[qid])
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning") 
+                globals.rproc[pkey] = True
+                return True
             for j in response[topkey]:
                 common.write_import(type,j[key],None)
-
-
+            globals.rproc[pkey] = True
+            
     except Exception as e:
             common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
             
-
     return True

@@ -18,10 +18,15 @@ def aws_ecs_account_setting_default(t1,tt1,tt2,flag1,flag2):
 
 def aws_ecs_capacity_provider(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="auto_scaling_group_arn" and tt2.startswith("arn:aws:autoscaling:"):
+		common.add_dependancy("aws_autoscaling_group", tt2)
 	return skip,t1,flag1,flag2
 
 def aws_ecs_cluster_capacity_providers(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="cluster_name":
+		t1=tt1+" = aws_ecs_cluster."+tt2+".name\n"
+		common.add_dependancy("aws_ecs_cluster", tt2)
 	return skip,t1,flag1,flag2
 
 def aws_ecs_container_definition(t1,tt1,tt2,flag1,flag2):

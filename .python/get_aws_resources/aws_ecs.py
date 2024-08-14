@@ -23,6 +23,8 @@ def get_aws_ecs_cluster(type,id,clfn,descfn,topkey,key,filterid):
             common.write_import(type,cln,None) 
             common.add_known_dependancy("aws_ecs_service",cln)
             common.add_known_dependancy("aws_ecs_capacity_provider",cln)
+            common.add_known_dependancy("aws_ecs_cluster_capacity_providers",cln)
+    
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -135,24 +137,51 @@ def get_aws_ecs_task_definition(type,id,clfn,descfn,topkey,key,filterid):
 
 def get_aws_ecs_capacity_provider(type,id,clfn,descfn,topkey,key,filterid):
 
-    if globals.debug:
-        print("--> get_aws_ecs_capacity_provider  doing " + type + ' with id ' + str(id) +
+    #if globals.debug:
+    print("--> get_aws_ecs_capacity_provider  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
         response = []
         client = boto3.client(clfn)
         if id is None:
-            response = client.describe_capacity_providers()
+            print("WARNING: must pass cluster id as parameter for "+type)
+            return True
         else:
-            response = client.describe_capacity_providers(capacityProviders=[id])
-        response=response[topkey]
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            response = client.describe_capacity_providers()
+            response=response[topkey]
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
-        for j in response: 
-            pkey=j[key]
-            if "FARGATE" not in pkey:
-                common.write_import(type,pkey,None) 
+            for j in response: 
+                pkey=j[key]
+                if "FARGATE" not in pkey:    
+                    common.write_import(type,pkey,None) 
+
+    
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+def get_aws_ecs_cluster_capacity_providers(type,id,clfn,descfn,topkey,key,filterid):
+
+    if globals.debug:
+        print("--> get_aws_ecs_cluster_capacity_provider  doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+        
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            print("WARNING: must pass cluster id as parameter for "+type)
+            return True
+        else:
+            response = client.describe_capacity_providers()
+            response=response[topkey]
+            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+
+            common.write_import(type,id,None) 
+
 
     
     except Exception as e:

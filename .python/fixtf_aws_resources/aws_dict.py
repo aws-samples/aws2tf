@@ -7376,10 +7376,10 @@ aws_ram_principal_association = {
 
 aws_ram_resource_association = {
 	"clfn":		"ram",
-	"descfn":	"list_resource_associations",
-	"topkey":	"ResourceAssociations",
-	"key":		"ResourceAssociationId",
-	"filterid":	"ResourceAssociationId"
+	"descfn":	"list_resources",
+	"topkey":	"resources",
+	"key":		"arn",
+	"filterid":	"arn"
 }
 
 aws_ram_resource_share = {

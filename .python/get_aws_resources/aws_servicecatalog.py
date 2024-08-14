@@ -151,7 +151,6 @@ def get_aws_servicecatalog_product_portfolio_association(type, id, clfn, descfn,
         client = boto3.client(clfn)
         if id is None:
             print("WARNING: Must pass ProductId for get_aws_servicecatalog_product_portfolio_association")
-
             return True
 
         else:

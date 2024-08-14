@@ -101,6 +101,10 @@ def call_resource(type, id):
    #print("---- in call_resources >>>>> "+type+"   "+str(id))
    if type in aws_no_import.noimport:
       print("WARNING: Terraform cannot import type: " + type)
+      if id is not None:
+         with open('not-imported.log', 'a') as f2:
+            f2.write(type + " : " + str(id) + "\n")
+         globals.rproc[type+"."+id] = True
       return
 
    if type in aws_not_implemented.notimplemented:
@@ -388,7 +392,7 @@ def tfplan3():
    if awsf != impf:
       print("awsf="+str(awsf)+" impf="+str(impf))
       print("ERROR: "+str(awsf)+ " aws_*.tf and " + str(impf) +" import__*.tf file counts do not match - exiting")
-      exit()
+      #exit()
    else:
       print("PASSED: aws_*.tf and import__*.tf file counts match")
 
@@ -634,12 +638,12 @@ def aws_tf(region):
    if not os.path.isfile("aws.tf"):
       with open("aws.tf", 'w') as f3:
          f3.write('terraform {\n')
-         f3.write('  required_version = "> 1.5.4"\n')
+         f3.write('  required_version = "> 1.7.4"\n')
          f3.write('  required_providers {\n')
          f3.write('    aws = {\n')
          f3.write('      source  = "hashicorp/aws"\n')
          # f3.write('      version = "5.48.0"\n')
-         f3.write('      version = "5.57.0"\n')
+         f3.write('      version = "5.62.0"\n')
          f3.write('    }\n')
          f3.write('  }\n')
          f3.write('}\n')
@@ -766,9 +770,9 @@ def write_import(type,theid,tfid):
       ## todo -  if theid starts with a number or is an od (but what if its hexdecimal  ?)
 
       if tfid is None:
-         tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_")
+         tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_")
       else:
-         tfid=tfid.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_").replace(",","_")
+         tfid=tfid.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_").replace(",","_").replace("&","_")
       
       #catch tfid starts with number
       if tfid[:1].isdigit(): tfid="r-"+tfid

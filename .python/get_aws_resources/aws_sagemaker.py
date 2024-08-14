@@ -312,14 +312,9 @@ def get_aws_sagemaker_image(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 
-
-
-
-
-
 def get_aws_sagemaker_image_version(type, id, clfn, descfn, topkey, key, filterid):
-    #if globals.debug:
-    print("--> In get_aws_sagemaker_image_version  doing " + type + ' with id ' + str(id) +
+    if globals.debug:
+        print("--> In get_aws_sagemaker_image_version  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -334,7 +329,7 @@ def get_aws_sagemaker_image_version(type, id, clfn, descfn, topkey, key, filteri
                 return True
             pkey="aws_sagemaker_image_version."+id
             common.write_import(type, id, None)
-            print("************",pkey)
+            #print("************",pkey)
             globals.rproc[pkey]=True
 
     except Exception as e:

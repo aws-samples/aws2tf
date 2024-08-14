@@ -304,8 +304,7 @@ def get_aws_glue_classifier(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-            for j in response:
-                print(str(j))
+
             try:
                 pkey=j['CsvClassifier'][key]
                 common.write_import(type, pkey, None)
@@ -394,7 +393,7 @@ def get_aws_glue_partition(type, id, clfn, descfn, topkey, key, filterid):
             for j in response[topkey]:
                 vals=""
                 for k in j[key]: vals=vals+k+"#"
-                print("vals="+vals)
+                #print("vals="+vals)
                 vals=vals.rstrip("#")
                 pkey=id+":"+vals
                 tfid="p-"+pkey.replace(":","__").replace("#","_")

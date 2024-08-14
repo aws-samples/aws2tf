@@ -141,7 +141,14 @@ if __name__ == '__main__':
     # get the current env and set directory
 
     my_session = boto3.setup_default_session(region_name=region)
-    globals.acc = boto3.client('sts').get_caller_identity().get('Account')
+    try:
+        globals.acc = boto3.client('sts').get_caller_identity().get('Account')
+    except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        exn=str(exc_type.__name__)
+        if "ExpiredToken" in str(e):
+            print("STS Authorization Error: ExpiredToken, exiting .....")
+        exit()
     print('Using region: '+region + ' account: ' + globals.acc+"\n")
     globals.region = region
     globals.regionl = len(region)
@@ -182,7 +189,7 @@ if __name__ == '__main__':
 
     if globals.merge is False:
         print("No merge - removing terraform.tfstate* and aws_*.tf *.out")
-        com = "rm -f aws.tf terraform.tfstate* aws_*.tf s3-*.tf aws_*.zip tfplan *.out *.log aws_*.sh stacks.sh import*.tf imported/* main.tf plan1* plan2* *.txt *.json *.err"
+        com = "rm -f aws.tf terraform.tfstate* data_aws_*.tf aws_*.tf s3-*.tf aws_*.zip tfplan *.out *.log aws_*.sh stacks.sh import*.tf imported/* main.tf plan1* plan2* *.txt *.json *.err"
         rout = common.rc(com)
         com = "rm -rf imported notimported"
         rout = common.rc(com)

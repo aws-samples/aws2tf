@@ -4029,10 +4029,10 @@ aws_ecs_capacity_provider = {
 
 aws_ecs_cluster_capacity_providers = {
 	"clfn":		"ecs",
-	"descfn":	"describe_clusters",
-	"topkey":	"clusters",
-	"key":		"clusterName",
-	"filterid":	"clusterName"
+	"descfn":	"describe_capacity_providers",
+	"topkey":	"capacityProviders",
+	"key":		"name",
+	"filterid":	"name"
 }
 
 aws_ecs_service = {

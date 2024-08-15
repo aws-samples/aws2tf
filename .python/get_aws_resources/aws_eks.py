@@ -192,8 +192,7 @@ def get_aws_eks_access_entry(type,id,clfn,descfn,topkey,key,filterid):
             retid=j
             theid=id+":"+retid
             pkey=id+","+retid
-            resp2=client.describe_access_entry(clusterName=id,accessEntryId=j)
-            print(resp2)
+            resp2=client.describe_access_entry(clusterName=id,principalArn=j)
             if resp2 == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             if resp2['accessEntry']['type'] == 'STANDARD':
                common.write_import(type,theid,None) 

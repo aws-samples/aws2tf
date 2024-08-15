@@ -498,6 +498,14 @@ aws_rds_cluster_instance = {
 	"filterid":	"DBInstanceIdentifier"
 }
 
+aws_db_event_subscription = {
+    "clfn":		"rds",
+	"descfn":	"describe_event_subscriptions",
+	"topkey":	"EventSubscriptionsList",
+	"key":		"CustSubscriptionId",
+	"filterid":	"CustSubscriptionId"
+}
+
 aws_db_parameter_group = {
 	"clfn":		"rds",
 	"descfn":	"describe_db_parameter_groups",
@@ -520,14 +528,6 @@ aws_db_instance = {
 	"topkey":	"DBInstances",
 	"key":		"DBInstanceIdentifier",
 	"filterid":	"DBInstanceIdentifier"
-}
-
-aws_db_event_subscription = {
-	"clfn":		"rds",
-	"descfn":	"describe_event_subscriptions",
-	"topkey":	"EventSubscriptionsList",
-	"key":		"SubscriptionName",
-	"filterid":	"SubscriptionName"
 }
 
 aws_glue_crawler = {

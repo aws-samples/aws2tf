@@ -977,8 +977,6 @@ elif type == "aws_eip_association":
     clfn="ec2";descfn="describe_addresses";topkey='Addresses';key="PublicIp";filterid=key
 #elif type == "aws_eks_addon":
 #    clfn="eks";descfn="describe_addon_versions";topkey='addonVersions';key="addonVersion";filterid=key
-elif type == "aws_eks_addon_version":
-    clfn="eks";descfn="describe_addon_versions";topkey='addonVersions';key="addonVersion";filterid=key
 #elif type == "aws_eks_cluster":
 #    clfn="eks";descfn="describe_cluster";topkey='cluster';key="name";filterid=key
 elif type == "aws_eks_cluster_auth":

@@ -5,11 +5,9 @@ import globals
 def aws_eks_addon(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "cluster_name":
-        
         t1=tt1 + " = aws_eks_cluster." + tt2 + ".id\n"
         common.add_dependancy("aws_eks_cluster",tt2)
     elif tt1 == "service_account_role_arn":
-        
         if ":role/" in tt2:
             tt2=tt2.split("/")[-1]
             t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
@@ -17,17 +15,21 @@ def aws_eks_addon(t1,tt1,tt2,flag1,flag2):
 
     return skip,t1,flag1,flag2 
 
-def aws_eks_addon_version(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
 def aws_eks_cluster_auth(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+    skip=0
+    if tt1 == "cluster_name":
+        t1=tt1 + " = aws_eks_cluster." + tt2 + ".id\n"
+        common.add_dependancy("aws_eks_cluster",tt2)
+
+    return skip,t1,flag1,flag2
 
 def aws_eks_pod_identity_association(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+    skip=0
+    if tt1 == "cluster_name":
+        t1=tt1 + " = aws_eks_cluster." + tt2 + ".id\n"
+        common.add_dependancy("aws_eks_cluster",tt2)
+    return skip,t1,flag1,flag2
 
 def aws_eks_cluster(t1,tt1,tt2,flag1,flag2):
     skip=0
@@ -49,7 +51,6 @@ def aws_eks_cluster(t1,tt1,tt2,flag1,flag2):
     elif tt1 == "version" and tt2=="jsonencode(1.3)": 
         print("******* aws_eks_cluster version 1.3",t1)
         t1=tt1 + " = \"1.30\"\n"
-    print(tt1,tt2)
     return skip,t1,flag1,flag2
 
 
@@ -61,7 +62,9 @@ def aws_eks_fargate_profile(t1,tt1,tt2,flag1,flag2):
         if tt2 in globals.rolelist:
             t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
             common.add_dependancy("aws_iam_role",tt2)
-
+    elif tt1 == "cluster_name":
+        t1=tt1 + " = aws_eks_cluster." + tt2 + ".id\n"
+        common.add_dependancy("aws_eks_cluster",tt2)
     
     return skip,t1,flag1,flag2
 
@@ -84,7 +87,6 @@ def aws_eks_node_group(t1,tt1,tt2,flag1,flag2):
 
     elif "node_group_name_prefix" in tt1: skip=1
     elif tt1 == "cluster_name":
-        
         t1=tt1 + " = aws_eks_cluster." + tt2 + ".id\n"
         common.add_dependancy("aws_eks_cluster",tt2)
     ##elif tt1 == "subnet_ids":  t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
@@ -114,8 +116,26 @@ def aws_eks_node_group(t1,tt1,tt2,flag1,flag2):
 
 
 def aws_eks_identity_provider_config(t1, tt1, tt2, flag1, flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+    skip=0
+    if tt1 == "cluster_name":
+        t1=tt1 + " = aws_eks_cluster." + tt2 + ".id\n"
+        common.add_dependancy("aws_eks_cluster",tt2)
+    return skip,t1,flag1,flag2
+
+def aws_eks_access_entry(t1, tt1, tt2, flag1, flag2):
+    skip=0
+    if tt1 == "cluster_name":
+        t1=tt1 + " = aws_eks_cluster." + tt2 + ".id\n"
+        common.add_dependancy("aws_eks_cluster",tt2)
+    return skip,t1,flag1,flag2
+
+
+def aws_eks_access_policy_association(t1, tt1, tt2, flag1, flag2):
+    skip=0
+    if tt1 == "cluster_name":
+        t1=tt1 + " = aws_eks_cluster." + tt2 + ".id\n"
+        common.add_dependancy("aws_eks_cluster",tt2)
+    return skip,t1,flag1,flag2
 
 
 

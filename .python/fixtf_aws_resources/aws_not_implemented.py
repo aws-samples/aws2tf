@@ -29,7 +29,7 @@ notimplemented = {
     "aws_chimesdkmediapipelines_media_insights_pipeline_configuration": True,
     "aws_chimesdkvoice_global_settings": True,
     "aws_cloudformation_stack_set_instance": True,
-    "aws_cloudformation_stack": True,
+    #"aws_cloudformation_stack": True,
     "aws_cloudfront_monitoring_subscription": True,
     "aws_cloudsearch_domain": True,
     "aws_cloudsearch_domain_service_access_policy": True,
@@ -118,7 +118,6 @@ notimplemented = {
     "aws_dynamodb_global_table": True,
     "aws_ec2_local_gateway_route": True,
     "aws_ec2_subnet_cidr_reservation": True,
-    "aws_eks_access_policy_association": True, ### TODO
     "aws_elasticache_user_group_association": True,
     "aws_elastictranscoder_preset": True,
     "aws_emr_studio": True,
@@ -260,8 +259,6 @@ notimplemented = {
     "aws_pinpoint_gcm_channel": True,
     "aws_pinpoint_sms_channel": True,
     "aws_quicksight_folder_membership": True,
-    #"aws_ram_principal_association": True,
-    #"aws_ram_resource_association": True,
     "aws_ram_resource_share_accepter": True,
     "aws_ram_sharing_with_organization": True,
     "aws_rbin_rule": True,
@@ -408,7 +405,6 @@ notimplemented = {
 	"aws_auditmanager_framework_share": True,
 	"aws_auditmanager_organization_admin_account_registration": True,
     "aws_ce_cost_allocation_tag": True, ### TODO
-    #"aws_vpc_endpoint_service": True, ### TODO
     "aws_worklink_fleet": True, ### region  
     "aws_timestreamwrite_database": True, ### region
     "aws_timestreamwrite_table": True, ### region

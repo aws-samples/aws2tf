@@ -625,8 +625,6 @@ elif type == "aws_db_cluster_snapshot":
     clfn="rds";descfn="describe_db_cluster_snapshots";topkey='DBClusterSnapshots';key="DBClusterSnapshotIdentifier";filterid=key
 elif type == "aws_db_event_categories":
     clfn="rds";descfn="describe_event_categories";topkey='EventCategoriesMapList';key="SourceType";filterid=key
-elif type == "aws_db_event_subscription":
-    clfn="rds";descfn="describe_event_subscriptions";topkey='EventSubscriptionsList';key="SubscriptionName";filterid=key
 elif type == "aws_db_instance":
     clfn="rds";descfn="describe_db_instances";topkey='DBInstances';key="DBInstanceIdentifier";filterid=key
 elif type == "aws_db_instance_automated_backups_replication":

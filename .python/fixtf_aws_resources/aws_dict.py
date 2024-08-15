@@ -283,10 +283,10 @@ aws_eks_access_entry = {
 
 aws_eks_access_policy_association = {
     "clfn":		"eks",
-	"descfn":	"list_access_policies",  
-    "topkey":	"accessPolicies",
-	"key":		"name",
-	"filterid":	"arn" 
+	"descfn":	"list_associated_access_policies",  
+    "topkey":	"associatedAccessPolicies",
+	"key":		"policyArn",
+	"filterid":	"policyArn" 
 
 }
 

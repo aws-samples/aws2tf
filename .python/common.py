@@ -32,6 +32,7 @@ from get_aws_resources import aws_backup
 from get_aws_resources import aws_bedrock
 from get_aws_resources import aws_cleanrooms
 from get_aws_resources import aws_cloud9
+from get_aws_resources import aws_cloudformation
 from get_aws_resources import aws_cloudfront
 from get_aws_resources import aws_cloudtrail
 from get_aws_resources import aws_codebuild
@@ -353,7 +354,7 @@ def tfplan3():
       rout = rc(com)
 
 
-   print("Validate and Test Plan  ... ")
+   print("\nValidate and Test Plan  ... ")
    if globals.merge:
       com = "cp imported/aws_*.tf ."
       rout = rc(com)
@@ -771,9 +772,9 @@ def write_import(type,theid,tfid):
       ## todo -  if theid starts with a number or is an od (but what if its hexdecimal  ?)
 
       if tfid is None:
-         tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_")
+         tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_")
       else:
-         tfid=tfid.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_").replace(",","_").replace("&","_")
+         tfid=tfid.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_").replace(",","_").replace("&","_").replace("#","_")
       
       #catch tfid starts with number
       if tfid[:1].isdigit(): tfid="r-"+tfid

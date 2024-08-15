@@ -188,11 +188,16 @@ def get_aws_eks_access_entry(type,id,clfn,descfn,topkey,key,filterid):
       if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         #print(str(response))
       for j in response[topkey]:
+            ## need to get the type
             retid=j
             theid=id+":"+retid
-            common.write_import(type,theid,None) 
             pkey=id+","+retid
-            common.add_dependancy("aws_eks_access_policy_association",pkey)
+            resp2=client.describe_access_entry(clusterName=id,accessEntryId=j)
+            print(resp2)
+            if resp2 == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if resp2['accessEntry']['type'] == 'STANDARD':
+               common.write_import(type,theid,None) 
+               common.add_dependancy("aws_eks_access_policy_association",pkey)
 
 
    except Exception as e:

@@ -40,7 +40,6 @@ __pycache__
 .python/data/*.log
 .python/probeout/*
 .python/bugs.md
-.scripts/*
 .python/provider-data/terraform-provider-aws
 run.log
 .python/.auto-gen/*.log

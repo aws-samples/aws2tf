@@ -137,6 +137,7 @@ if __name__ == '__main__':
 
     globals.region = region
     globals.regionl = len(region)
+    os.environ["AWS"] = "aws --region "+region+" "
  
     # get the current env and set directory
 
@@ -361,5 +362,14 @@ if __name__ == '__main__':
     com = "sort -u pyprocessed.txt -o pyprocessed.txt"
     rout = common.rc(com)
 
-    print("\nTerraform files & state in sub-directory: "+ globals.path1+"\n")
+    print("\nTerraform files & state in sub-directory: "+ globals.path1)
+    
+#### Trivy - if installed
+# 
+#        
+    com = "../../.scripts/trivy-check.sh"
+    rout = common.rc(com)  
+    print(rout.stdout.decode())
+    
+    
     exit(0)

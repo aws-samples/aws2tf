@@ -48,35 +48,54 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
         print("--> In get_aws_glue_catalog_table  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-        
+    
     try:
+        print("WORKAROUND: Traditional terraform import for glue tables as import errors with new method currently - This operation can be slow if many resources are involved.")
+        globals.workaround=type
+        if id is None:
+                print("WARNING: ID cannot be None - must pass catalog:database or catalog:database:tablename" )
+        cc=id.count(':')
+        if cc==0:
+                    print("WARNING: ID - must pass catalog:database or catalog:database:tablename" )
+                    return True
+        if cc == 1:
+                    catalogn=id.split(':')[0]
+                    databasen=id.split(':')[1]
+                    com="../../.scripts/get-glue-table.sh "+catalogn+" "+databasen
+        if cc == 2:
+                    catalogn=id.split(':')[0]
+                    databasen=id.split(':')[1]
+                    tabnam=id.split(':')[2]
+                    com="../../.scripts/get-glue-table.sh "+catalogn+" "+databasen+" "+tabnam
+        #print("Running "+com)
+
+        rout=common.rc(com)
+        print(rout.stderr.decode())
+        print(rout.stdout.decode())
+
+        tn=rout.stdout.decode('utf-8').rstrip().split("PARTITION:")[1]
+
+        if tn != "NOTABLE99-99":
+            pkey=catalogn+":"+databasen+":"+tn
+            common.add_dependancy("aws_glue_partition", pkey)
+        
+        tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
+                #print("Setting True "+tkey)
+        globals.rproc[tkey]=True
+    
+
+        return True
+
         response = []
         client = boto3.client(clfn)
-        if id is None:
-            print("WARNING: ID cannot be None - must pass catalog:database or catalog:database:tablename" )
- 
-        else:     
-            ## Do have table name
-            cc=id.count(':')
-            if cc==0:
-                print("WARNING: ID - must pass catalog:database or catalog:database:tablename" )
-                return True
-            if cc == 1:
-                catalogn=id.split(':')[0]
-                databasen=id.split(':')[1]
-            if cc == 2:
-                catalogn=id.split(':')[0]
-                databasen=id.split(':')[1]
-                tabnam=id.split(':')[2]
-
-            ## Do have table name
-            if cc == 1:
+  
+        if cc == 1:
                 response = client.get_tables(CatalogId=catalogn,DatabaseName=databasen)
-            if cc == 2:
+        if cc == 2:
                 response = client.get_tables(CatalogId=catalogn,DatabaseName=databasen,Expression=tabnam)
 
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-            for j in response[topkey]:
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        for j in response[topkey]:
             #Terraform import id = "123456789012:MyDatabase:MyTable"
                 pkey=catalogn+":"+databasen+":"+j[key]
                 tfid="d-"+pkey.replace(":","__")
@@ -85,9 +104,9 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
                 common.add_dependancy("aws_glue_partition",pkey)
             
             # set dependency false
-            tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
+        tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
             #print("Setting True "+tkey)
-            globals.rproc[tkey]=True
+        globals.rproc[tkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

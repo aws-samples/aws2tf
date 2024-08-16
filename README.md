@@ -31,13 +31,14 @@ Finally aws2tf runs a `terraform plan` command and there should hopefully be no 
 + boto3 1.34.93 or later (pip3 install -r requirements.txt).
 + AWS cli (v2) **version 2.17.0 or higher** needs to be installed and you need a login with at least "Read" privileges.
 + Terraform **version v1.7.5** or higher needs to be installed. (recommend you avoid early point releases eg. 1.9.0/1.9.1)
++ jq **version 1.6 or higher**
 
 ## Optional but recommended
 
 + pyenv - to help manage Python versions and environments (https://github.com/pyenv/pyenv)
 + tfenv - - to help manage multiple Terraform versions (https://github.com/tfutils/tfenv)
 + trivy **version 0.48.0 or later**  (https://aquasecurity.github.io/trivy/v0.54/)
-+ jq **version 1.6 or higher**
+
 
 
 (*This tool is currently developed/tested using Python 3.9.16 on macOS 14.6.1*)

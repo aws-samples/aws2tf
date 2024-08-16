@@ -141,10 +141,10 @@ if [[ $? -eq 0 ]]; then
 
             # get the partitons
             ../../.scripts/get-glue-partition.sh $catid $dbnam $rname
-
+            echo "PARTITION: $catid $dbnam $rname"
 
         done # for i
     fi
 
 fi
-#rm -f t*.txt
+rm -f t*.txt

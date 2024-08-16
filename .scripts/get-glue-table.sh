@@ -28,6 +28,7 @@ if [[ $? -eq 0 ]]; then
     awsout=$(eval $cm 2>/dev/null)
     if [ "$awsout" == "" ]; then
         echo "$cm : You don't have access for this resource"
+        echo "PARTITION:NOTABLE99-99"
         exit
     fi
     if [[ "$3" != "" ]]; then
@@ -49,7 +50,7 @@ if [[ $? -eq 0 ]]; then
                 dbnam=$(echo $awsout | jq -r ".${pref[(${c})]}[(${i})].DatabaseName")
             fi
             rname=${cname//:/_} && rname=${rname//./_} && rname=${rname//\//_} && rname=${rname//&/_}
-            echo "$ttft c__${catid}__${dbnam}__${cname}"
+            #echo "$ttft c__${catid}__${dbnam}__${cname}"
             fn=$(printf "%s__c__%s__%s__%s.tf" $ttft $catid ${dbnam} $rname)
             if [ -f "$fn" ]; then echo "$fn exists already skipping" && continue; fi
 
@@ -57,8 +58,6 @@ if [[ $? -eq 0 ]]; then
 
             terraform import $ttft.c__${catid}__${dbnam}__${rname} "${catid}:${dbnam}:${cname}" | grep Importing
             terraform state show -no-color $ttft.c__${catid}__${dbnam}__${rname} >t1.txt
-            tfa=$(printf "%s.c__%s__%s__%s" $ttft $catid $dbnam $rname)
-            terraform show -json | jq --arg myt "$tfa" '.values.root_module.resources[] | select(.address==$myt)' >data/$tfa.json
 
             rm -f $fn
 
@@ -140,11 +139,12 @@ if [[ $? -eq 0 ]]; then
             done <"$file"
 
             # get the partitons
-            ../../.scripts/get-glue-partition.sh $catid $dbnam $rname
-            echo "PARTITION: $catid $dbnam $rname"
+            #../../.scripts/get-glue-partition.sh $catid $dbnam $rname
+            echo "PARTITION:$rname"
 
         done # for i
     fi
 
 fi
 rm -f t*.txt
+cp aws_glue_catalog_table*.tf imported

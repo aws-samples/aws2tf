@@ -137,6 +137,7 @@ if __name__ == '__main__':
 
     globals.region = region
     globals.regionl = len(region)
+    os.environ["AWS"] = "aws --region "+region+" "
  
     # get the current env and set directory
 

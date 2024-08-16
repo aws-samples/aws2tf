@@ -392,9 +392,15 @@ def tfplan3():
    x = glob.glob("import__*.tf")
    impf=len(x)
    if awsf != impf:
-      print("awsf="+str(awsf)+" impf="+str(impf))
-      print("ERROR: "+str(awsf)+ " aws_*.tf and " + str(impf) +" import__*.tf file counts do not match - exiting")
-      #exit()
+      if globals.workaround=="":
+         print("ERROR: "+str(awsf)+ "x aws_*.tf and " + str(impf) +"x import__*.tf file counts do not match - exiting")
+         print("\nLikely import error - do the following and report errors in github issue:")
+         print("cd "+globals.path1)
+         print("terraform plan -generate-config-out=resources.out")
+         exit()
+      else:
+         print("INFO: "+str(awsf)+ "x aws_*.tf and " + str(impf) +"x import__*.tf file counts do not match")
+         print("INFO: Continuing due to workaround "+globals.workaround)
    else:
       print("PASSED: aws_*.tf and import__*.tf file counts match")
 
@@ -517,6 +523,13 @@ def tfplan3():
          print("PASSED: import count = file counts =",str(zeroi))
       else:
          print("INFO: import count "+str(zeroi) +" != file counts "+ str(awsf))
+         if globals.workaround=="":
+            print("\nLikely import error - do the following and report errors in github issue")
+            print("cd "+globals.path1)
+            print("terraform plan -generate-config-out=resources.out")
+            exit()
+         else:
+            print("INFO: Continuing due to workaround "+globals.workaround)
          
    if globals.merge:
          print("Merge check")

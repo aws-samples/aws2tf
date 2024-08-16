@@ -15,7 +15,7 @@
 
 ## Description
 
-aws2tf.py will help import into Terraform exiting AWS infrastructure, and produce the corresponding Terraform HCL files. The end result should be that a terraform plan will show the Terraform code matches the exisitng infrastructure.
+aws2tf.py will import into Terraform exiting AWS infrastructure, and produce the corresponding Terraform HCL files. 
 
 `aws2tf.py` will also attempt to:
 

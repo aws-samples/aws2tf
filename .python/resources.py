@@ -23,6 +23,7 @@ def resource_types(type):
     elif type == "cognito": rets=["aws_cognito_identity_pool","aws_cognito_identity_pool_roles_attachment","aws_cognito_user_pool","aws_cognito_user_pool_client"]; return rets # Cognito pools etc
     elif type == "config": rets=["aws_config_configuration_recorder","aws_config_delivery_channel","aws_config_configuration_recorder_status","aws_config_config_rule"]; return rets # Config rules, recorders etc.
     elif type == "cw-log": rets=["aws_cloudwatch_log_group"]; return rets # Cloudwatch log groups
+    elif type == "datazone" or type == "dz": rets=["aws_datazone_domain"]; return rets # Amazon DataZone
     elif type == "dms": rets=["aws_dms_replication_instance","aws_dms_endpoint","aws_dms_replication_task"]; return rets # DMS replication tasks and endpoints
     elif type == "dynamodb": rets=["aws_dynamodb_table"]; return rets # dynamodb tables
     elif type == "eb": rets=["aws_cloudwatch_event_bus"]; return rets # clouswatch event bus and rules

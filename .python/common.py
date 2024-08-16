@@ -44,6 +44,7 @@ from get_aws_resources import aws_cognito_identity
 from get_aws_resources import aws_cognito_idp
 from get_aws_resources import aws_config
 from get_aws_resources import aws_customer_profiles
+from get_aws_resources import aws_datazone
 from get_aws_resources import aws_dms
 from get_aws_resources import aws_docdb
 from get_aws_resources import aws_ds

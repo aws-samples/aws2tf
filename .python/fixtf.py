@@ -67,6 +67,7 @@ from fixtf_aws_resources import fixtf_customer_profiles
 from fixtf_aws_resources import fixtf_dataexchange
 from fixtf_aws_resources import fixtf_datapipeline
 from fixtf_aws_resources import fixtf_datasync
+from fixtf_aws_resources import fixtf_datazone
 from fixtf_aws_resources import fixtf_dax
 from fixtf_aws_resources import fixtf_detective
 from fixtf_aws_resources import fixtf_devicefarm

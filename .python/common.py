@@ -332,14 +332,21 @@ def tfplan2():
          pass
       # sed to remove references
 
+
+   # copy all imported/aws_*.tf to here ?
+   com = "cp imported/aws_*.tf ."
+   rout = rc(com)
+
    x = glob.glob("aws_*__*.out")
    for fil in x:
          type = fil.split('__')[0]
          tf = fil.split('.')[0]
-         # print("type="+type+" tf="+tf)
-         # if type not in globals.types:
-         #   globals.types=globals.types+[type]
          fixtf.fixtf(type, tf)
+
+   com = "mv aws_*.out imported"
+   rout = rc(com)
+
+
    com = "terraform fmt"
    rout = rc(com)
 
@@ -659,7 +666,7 @@ def aws_tf(region):
          f3.write('    aws = {\n')
          f3.write('      source  = "hashicorp/aws"\n')
          # f3.write('      version = "5.48.0"\n')
-         f3.write('      version = "5.62.0"\n')
+         f3.write('      version = "5.63.0"\n')
          f3.write('    }\n')
          f3.write('  }\n')
          f3.write('}\n')
@@ -675,9 +682,9 @@ def aws_tf(region):
          f3.write('data "aws_availability_zones" "az" {\n')
          f3.write('state = "available"\n')
          f3.write('}\n')
-   if not os.path.isdir(".terraform/providers/registry.terraform.io/hashicorp/aws"):
+   if not globals.merge:
       print("terraform init")
-      com = "terraform init"
+      com = "terraform init -upgrade"
       rout = rc(com)
       print(rout.stdout.decode().rstrip())
    else:

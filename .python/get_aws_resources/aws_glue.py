@@ -21,7 +21,7 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
                 pkey=globals.acc+":"+j[key]
                 tfid="d-"+pkey.replace(":","__")
                 common.write_import(type,pkey,tfid) 
-                common.add_dependancy("aws_glue_catalog_table",pkey)
+                #common.add_dependancy("aws_glue_catalog_table",pkey)
                 #pkey2="aws_glue_catalog_table."+pkey
                 #globals.rproc[pkey2]=True
 
@@ -34,7 +34,7 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
             tfid="d-"+pkey.replace(":","__")
             common.write_import(type,pkey,tfid)
             #print("KD add aws_glue_catalog_table "+pkey)
-            common.add_dependancy("aws_glue_catalog_table",pkey)
+            #common.add_dependancy("aws_glue_catalog_table",pkey)
 
 
     except Exception as e:
@@ -53,7 +53,8 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
         print("WORKAROUND: Traditional terraform import for glue tables as import errors with new method currently - This operation can be slow if many resources are involved.")
         globals.workaround=type
         if id is None:
-                print("WARNING: ID cannot be None - must pass catalog:database or catalog:database:tablename" )
+            print("WARNING: ID cannot be None - must pass catalog:database or catalog:database:tablename" )
+            return True
         cc=id.count(':')
         if cc==0:
                     print("WARNING: ID - must pass catalog:database or catalog:database:tablename" )
@@ -72,8 +73,11 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
         rout=common.rc(com)
         print(rout.stderr.decode())
         print(rout.stdout.decode())
+        try:
+            tn=rout.stdout.decode('utf-8').rstrip().split("PARTITION:")[1]
+        except:
+            tn="NOTABLE99-99"
 
-        tn=rout.stdout.decode('utf-8').rstrip().split("PARTITION:")[1]
 
         if tn != "NOTABLE99-99":
             pkey=catalogn+":"+databasen+":"+tn

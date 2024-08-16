@@ -892,7 +892,7 @@ def get_aws_ec2_transit_gateway_vpn_attachment(type, id, clfn, descfn, topkey, k
                 {'Name': 'state','Values': ['available','pending','pendingAcceptance']}
                 ]):
                 response = response + page[topkey]
-            print(response)
+            #print(response)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 fn="data_"+type+"-"+j[key]+".tf"

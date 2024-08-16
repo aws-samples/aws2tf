@@ -26,6 +26,9 @@ notimplemented = {
     #
     # Many of these need to be done.
     #
+
+    "aws_datazone_glossary": True,
+    #
     "aws_apprunner_observability_configuration": True,
     #
     "aws_appstream_directory_config": True,

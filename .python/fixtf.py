@@ -218,13 +218,14 @@ def fixtf(ttft,tf):
     tf2=tf+".tf"
 
 #### Optimisation ???????
-    if os.path.isfile("imported/"+tf2):
-        com = "cp imported/"+tf2+" ."
-        rout = common.rc(com)
-        com = "mv rf imported/"+rf
-        rout = common.rc(com)
+    #if os.path.isfile("imported/"+tf2):
+    #    com = "cp imported/"+tf2+" ."
+    #    rout = common.rc(com)
+    #    com = "mv rf imported/"+rf
+    #    rout = common.rc(com)
 
     ## will this check break things ?
+    # check if aws_*.tf exists already
     if os.path.isfile(tf2):
          if globals.debug:
             print("File exists: " + tf2+ " skipping ...")                 
@@ -439,7 +440,7 @@ def fixtf(ttft,tf):
         
         
         ## move *.out to impoted
-        shutil.move(rf, "imported/"+rf)
+        #shutil.move(rf, "imported/"+rf)
 
            
 

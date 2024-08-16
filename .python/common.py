@@ -226,7 +226,7 @@ def tfplan1():
       exit()
 
    com = "terraform plan -generate-config-out=" + \
-       rf + " -out tfplan -json | jq . > plan1.json"
+       rf + " -out tfplan -json > plan1.json"
    print(com)
    rout = rc(com)
 

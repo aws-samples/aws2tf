@@ -51,19 +51,23 @@ noimport = {
     "aws_iot_policy_attachment": True,
     "aws_iot_thing_principal_attachment": True,
     "aws_kms_ciphertext": True,
+    #
     "aws_lakeformation_data_lake_settings": True,
     "aws_lakeformation_permissions": True,
     "aws_lakeformation_resource": True,
     "aws_lakeformation_resource_lf_tags": True,
+    #
     "aws_lambda_invocation": True,
     "aws_lb_cookie_stickiness_policy": True,
     "aws_lb_ssl_negotiation_policy": True,
     "aws_lb_target_group_attachment": True,
+    #
     "aws_lightsail_domain": True,
     "aws_lightsail_instance_public_ports": True,
     "aws_lightsail_key_pair": True,
     "aws_lightsail_static_ip": True,
     "aws_lightsail_static_ip_attachment": True,
+    #
     "aws_load_balancer_backend_server_policy": True,
     "aws_load_balancer_listener_policy": True,
     "aws_load_balancer_policy": True,
@@ -171,6 +175,6 @@ noimport = {
     "aws_rds_cluster_activity_stream": True, # issues with import identifier
     "aws_ebs_default_kms_key": True, # do we need to import ?
     "aws_rds_custom_db_engine_version": True, # import crashed provider
-    #"aws_glue_catalog_table": True,   # Error: setting storage_descriptor: Invalid address to set: []string{"storage_descriptor", "0", "additional_locations"}
-    #"aws_glue_partition": True # as child to glue table
+    "aws_glue_catalog_table": True,   # Error: setting storage_descriptor: Invalid address to set: []string{"storage_descriptor", "0", "additional_locations"}
+    "aws_glue_partition": True # as child to glue table
 } 

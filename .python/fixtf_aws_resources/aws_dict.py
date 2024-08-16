@@ -2963,6 +2963,40 @@ aws_datasync_task = {
 	"filterid":	"TaskArn"
 }
 
+aws_datazone_domain = {
+	"clfn":		"datazone",
+	"descfn":	"list_domains",
+ 	"topkey":	"items",
+	"key":		"id",
+	"filterid":	"name"   
+}
+
+aws_datazone_project = {
+	"clfn":		"datazone",
+	"descfn":	"list_projects",
+ 	"topkey":	"items",
+	"key":		"id",
+	"filterid":	"name"   
+}
+
+# get-project has gloassary terms - each term has glossary id
+aws_datazone_glossary = {
+	"clfn":		"datazone",
+	"descfn":	"get_project",
+ 	"topkey":	"items",
+	"key":		"glossaryTerms",
+	"filterid":	"name"   
+}
+
+aws_datazone_environment_blueprint_configuration = {
+	"clfn":		"datazone",
+	"descfn":	"list_environment_blueprint_configurations",
+ 	"topkey":	"items",
+	"key":		"environmentBlueprintId",
+	"filterid":	"name"   
+}
+
+
 aws_dax_cluster = {
 	"clfn":		"dax",
 	"descfn":	"list_clusters",
@@ -10752,6 +10786,10 @@ aws_resources = {
 	"aws_datasync_location_s3": aws_datasync_location_s3,
 	"aws_datasync_location_smb": aws_datasync_location_smb,
 	"aws_datasync_task": aws_datasync_task,
+    "aws_datazone_domain": aws_datazone_domain,
+    "aws_datazone_project": aws_datazone_project,
+    "aws_datazone_glossary": aws_datazone_glossary,
+    "aws_datazone_environment_blueprint_configuration": aws_datazone_environment_blueprint_configuration,
 	"aws_dax_cluster": aws_dax_cluster,
 	"aws_dax_parameter_group": aws_dax_parameter_group,
 	"aws_dax_subnet_group": aws_dax_subnet_group,

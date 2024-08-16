@@ -91,7 +91,7 @@ def get_aws_db_subnet_group(type, id, clfn, descfn, topkey, key, filterid):
         for page in paginator.paginate():
                 response = response + page[topkey]
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        print(str(response))
+        #print(str(response))
 
         for j in response:
             if id is None:

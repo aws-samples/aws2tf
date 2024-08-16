@@ -7,10 +7,10 @@ if [[ "$2" == "" ]]; then
 fi
 
 if [[ "$3" != "" ]]; then
-    cmd[0]="$AWS glue get-table --database-name $2 --name $3"
+    cmd[0]="$AWS glue get-table --catalog-id $1 --database-name $2 --name $3"
     pref[0]="Table"
 else
-    cmd[0]="$AWS glue get-tables --database-name $2"
+    cmd[0]="$AWS glue get-tables --catalog-id $1 --database-name $2"
     pref[0]="TableList"
 fi
 

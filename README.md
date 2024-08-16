@@ -15,16 +15,16 @@
 
 ## Description
 
-aws2tf.py will help import into Terraform exiting AWS infrastructure, and produce the corresponding Terraform HCL files. The end result should be that a terraform plan will show the Terraform code matches the exisitng infrastructure.
+aws2tf.py will import into Terraform existing AWS infrastructure, and produce the corresponding Terraform HCL files. 
 
 `aws2tf.py` will also attempt to:
 
 * De-reference hardcoded values into their Terraform addresses.
-* Find depentant resources and import them.
-* Where possible remove region and account references and replace with Terraform data values.
+* Find dependent resources and import them.
+* Where possible, remove region and account references and replace with Terraform data values.
 
 
-Finally aws2tf runs a `terraform plan` command and there should hopefully be no subsequent additions or deletions reported by the terraform plan command as all the appropriate terraform configuration files will have have automatically been created.
+Finally aws2tf runs a `terraform plan` command and there should hopefully be no subsequent additions or deletions reported by the terraform plan command as all the appropriate terraform configuration files will have automatically been created.
 
 ## Requirements & Prerequisites
 
@@ -42,16 +42,16 @@ Finally aws2tf runs a `terraform plan` command and there should hopefully be no 
 + jq **version 1.6 or higher**
 
 
-(*This tool is currectly developed/tested using Python 3.9.16 on macOS 14.6.1*)
+(*This tool is currently developed/tested using Python 3.9.16 on macOS 14.6.1*)
 
 ----
 
 ## Quickstart guide to using the tool
 
 Running the tool in your local shell (bash) required these steps:
-1. Unzip or clone this git repo into an empty directory
-2. login to the AWS cli  (aws configure)
-3. run the tool - see usage guide below
+1. Unzip or clone this git repo into an empty directory.
+2. login to the AWS cli  (aws configure).
+3. run the tool - see usage guide below.
 
 -----
 
@@ -93,7 +93,7 @@ Run again with out the -v to completion (including the import)
 
 ### Adding (merging) resources:
 
-Now you can add whatever resoiurces you want by using the -m (merge) flag:
+Now you can add whatever resources you want by using the -m (merge) flag:
 
 To add all ECS resources:
 
@@ -103,13 +103,13 @@ To add all ECS resources:
 
 You can see all the supported types (-t [type]) by using -l (long help) option: `./aws2tf.py -l`
 
-You can also import just a specic resource by passing it's AWS resource name, eg:
+You can also import just a specific resource by passing it's AWS resource name, eg:
 
 ```
 ./aws2tf.py -t eks -i my-cluster-name -m
 ```
 
-You can also instead of types use the dorect Terraform resource names:
+You can also instead of using predefined types use the direct Terraform resource names:
 
 ```
 ./aws2tf.py -t aws_sagemaker_domain
@@ -151,7 +151,7 @@ But this of course will take quite some time to complete!
 
 ## Reporting Errors
 
-You may come accross some kind of error as trying to test everyone's AWS combinations in advance isn't possible.
+You may come across some kind of error as trying to test everyone's AWS combinations in advance isn't possible.
 
 **If you happen to find one of these errors please open an issue here and paste in the error and it will get fixed.**
 
@@ -183,7 +183,7 @@ generated/tf.<account-number>.<region>/
 
 When using cumulative mode this same state file is used / added to.
 
-It is not possibel at this time to use your own state location (eg. on s3)
+It is not possible at this time to use your own state location (eg. on s3)
 
 
 ----

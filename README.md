@@ -2,8 +2,6 @@
 
 **August 2024**
 
-**Python Version**
-
 ----
 
 *The python version of this tool `aws2tf.py` has now superceded the old bash script version.*

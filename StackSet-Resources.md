@@ -138,6 +138,7 @@
 * AWS::SNS::TopicPolicy
 * AWS::SQS::Queue
 * AWS::SSM::Association
+* AWS::SSM::Document
 * AWS::SSM::Parameter
 * AWS::SageMaker::AppImageConfig
 * AWS::SageMaker::CodeRepository

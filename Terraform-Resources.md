@@ -1,4 +1,3 @@
-
 ## Terraform resource types currently supported
 
 * aws_accessanalyzer_analyzer
@@ -107,6 +106,7 @@
 * aws_cleanrooms_collaboration
 * aws_cleanrooms_configured_table
 * aws_cloud9_environment_membership
+* aws_cloudformation_stack
 * aws_cloudformation_stack_set
 * aws_cloudformation_type
 * aws_cloudfront_cache_policy
@@ -134,6 +134,8 @@
 * aws_cloudwatch_log_stream
 * aws_cloudwatch_metric_alarm
 * aws_cloudwatch_metric_stream
+* aws_codeartifact_domain
+* aws_codeartifact_repository
 * aws_codebuild_project
 * aws_codebuild_source_credential
 * aws_codecatalyst_project
@@ -147,6 +149,7 @@
 * aws_codestarconnections_host
 * aws_codestarnotifications_notification_rule
 * aws_cognito_identity_pool
+* aws_cognito_identity_pool_roles_attachment
 * aws_cognito_identity_provider
 * aws_cognito_managed_user_pool_client
 * aws_cognito_resource_server
@@ -264,6 +267,7 @@
 * aws_ec2_transit_gateway_route_table_association
 * aws_ec2_transit_gateway_vpc_attachment
 * aws_ec2_transit_gateway_vpc_attachment_accepter
+* aws_ec2_transit_gateway_vpn_attachment
 * aws_ecr_lifecycle_policy
 * aws_ecr_pull_through_cache_rule
 * aws_ecr_registry_policy
@@ -532,6 +536,8 @@
 * aws_quicksight_template_alias
 * aws_quicksight_theme
 * aws_quicksight_vpc_connection
+* aws_ram_principal_association
+* aws_ram_resource_association
 * aws_ram_resource_share
 * aws_rds_cluster
 * aws_rds_cluster_activity_stream
@@ -585,6 +591,7 @@
 * aws_route53recoverycontrolconfig_safety_rule
 * aws_route_table
 * aws_route_table_association
+* aws_s3_access_point
 * aws_s3_account_public_access_block
 * aws_s3_bucket
 * aws_s3_bucket_accelerate_configuration
@@ -662,7 +669,9 @@
 * aws_service_discovery_service
 * aws_servicecatalog_constraint
 * aws_servicecatalog_portfolio
+* aws_servicecatalog_principal_portfolio_association
 * aws_servicecatalog_product
+* aws_servicecatalog_product_portfolio_association
 * aws_servicecatalog_provisioning_artifact
 * aws_servicecatalog_service_action
 * aws_servicequotas_service_quota

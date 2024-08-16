@@ -361,8 +361,6 @@ if __name__ == '__main__':
             f.write(i+"\n")
     com = "sort -u pyprocessed.txt -o pyprocessed.txt"
     rout = common.rc(com)
-
-    print("\nTerraform files & state in sub-directory: "+ globals.path1)
     
 #### Trivy - if installed
 # 
@@ -370,6 +368,6 @@ if __name__ == '__main__':
     com = "../../.scripts/trivy-check.sh"
     rout = common.rc(com)  
     print(rout.stdout.decode())
-    
-    
+
+    print("\nTerraform files & state in sub-directory: "+ globals.path1)
     exit(0)

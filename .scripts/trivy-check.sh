@@ -7,6 +7,7 @@ if [[ $? -eq 0 ]]; then
         ver=$(trivy version | head -1 | cut -f2 -d':' | tr -d ' |.')
         ver=$(expr $ver + 0)
         if [[ $ver -ge 480 ]]; then
+            echo "Generating trivy security report ...."
             echo "trivy security report" >security-report.txt
             echo "CRITICAL:" >>security-report.txt
             trivy fs --scanners misconfig . -s CRITICAL --format json -q | jq '.Results[].Misconfigurations' | grep -v null | jq '.[] | [.CauseMetadata.Resource, .Description, .References]' 2>/dev/null >>security-report.txt

@@ -33,6 +33,7 @@ def resource_types(type):
     elif type == "eks": rets=["aws_eks_cluster"]; return rets # EKS clusters
     elif type == "emr": rets=["aws_emr_cluster","aws_emr_security_configuration"]; return rets # EMR clusters
     elif type == "glue": rets=["aws_glue_crawler","aws_glue_job","aws_glue_connection"]; return rets # Glue crawlers, jobs and connections
+    elif type == "glue2": rets=["aws_glue_catalog_table","aws_glue_partition"]; return rets # Glue crawlers, jobs and connections
     elif type == "iam": rets=["aws_iam_role","aws_iam_policy"]; return rets # IAM riles and policies
     elif type == "igw": rets=["aws_internet_gateway"]; return rets # Internet Gateways
     elif type == "kendra": rets=["aws_kendra_index"]; return rets # Kendra Indexes

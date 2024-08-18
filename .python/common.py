@@ -394,18 +394,19 @@ def tfplan3():
    zeroi=0    
 
 ################################################################################
-
    x = glob.glob("aws_*__*.tf")
    awsf=len(x)
-   x = glob.glob("import__*.tf")
-   impf=len(x)
+   y = glob.glob("import__*.tf")
+   impf=len(y)
+
    if awsf != impf:
       if globals.workaround=="":
-         print("ERROR: "+str(awsf)+ "x aws_*.tf and " + str(impf) +"x import__*.tf file counts do not match - exiting")
-         print("\nLikely import error - do the following and report errors in github issue:")
-         print("cd "+globals.path1)
-         print("terraform plan -generate-config-out=resources.out")
-         exit()
+         print("ERROR: "+str(awsf)+ "x aws_*.tf and " + str(impf) +"x import__*.tf file counts do not match")
+         #print("\nLikely import error [1] - do the following and report errors in github issue:")
+         #print("cd "+globals.path1)
+         #print("terraform plan -generate-config-out=resources.out")
+         fix_imports()
+         #exit()
       else:
          print("INFO: "+str(awsf)+ "x aws_*.tf and " + str(impf) +"x import__*.tf file counts do not match")
          print("INFO: Continuing due to workaround "+globals.workaround)
@@ -532,7 +533,7 @@ def tfplan3():
       else:
          print("INFO: import count "+str(zeroi) +" != file counts "+ str(awsf))
          if globals.workaround=="":
-            print("\nLikely import error - do the following and report errors in github issue")
+            print("\nLikely import error [2] - do the following and report errors in github issue")
             print("cd "+globals.path1)
             print("terraform plan -generate-config-out=resources.out")
             exit()
@@ -630,6 +631,40 @@ def rc(cmd):
 
     # print(out.stdout.decode().rstrip())
     return out
+
+
+def fix_imports():
+   x = glob.glob("aws_*__*.tf")
+   awsf=len(x)
+   y = glob.glob("import__*.tf")
+   impf=len(y)
+   print("\nFix Import Intervention")
+   print("aws_*.tf files =", str(awsf))
+   print("import__*.tf files =", str(impf))
+   if impf > awsf:
+      for fil2 in y:  # all import files  
+         impok=False
+         for fil in x: # all aws_ files
+            
+            tf=fil.split('.tf',1)[0]
+            iseg=fil2.replace("import__","").replace(".tf", "")
+            if tf == iseg:
+                  #print("Match:",iseg,tf)
+                  impok=True
+                  break
+         
+         ## out of for loop
+         #print("impok =", str(impok))
+         if impok is False:
+            com = "mv "+fil2+" "+fil2.replace(".tf",".err")
+            print(fil2.replace(".tf",".err"))
+            rc(com)
+         
+       
+
+
+
+   
 
 
 def ctrl_c_handler(signum, frame):

@@ -364,10 +364,21 @@ if __name__ == '__main__':
     
 #### Trivy - if installed
 # 
-#        
-    com = "../../.scripts/trivy-check.sh"
-    rout = common.rc(com)  
-    print(rout.stdout.decode())
+#       
+    path = shutil.which("trivy") 
+    if path is not None:
+        x = glob.glob("aws_*__*.tf")
+        awsf=len(x)
+        if awsf < 256:
+            print("\nRunning trivy check .....")
+            com = "../../.scripts/trivy-check.sh"
+            rout = common.rc(com)  
+            print(rout.stdout.decode())
+        else:
+            print("\nSkipping security check - too many files.")
+            print("Use trivy manually if required")
+    else:
+        print("trivy not installed, skipping security check")
 
     print("\nTerraform files & state in sub-directory: "+ globals.path1)
     exit(0)

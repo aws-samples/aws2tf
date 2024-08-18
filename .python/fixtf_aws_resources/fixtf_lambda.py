@@ -14,7 +14,6 @@ def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
             t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
         common.add_dependancy("aws_iam_role",tt2)
         pkey="aws_iam_role"+"."+tt2
-        print("pkey="+pkey)
         #globals.rproc[pkey]=True
     elif tt1 == "filename":
              

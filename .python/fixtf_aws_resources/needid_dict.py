@@ -900,6 +900,16 @@ aws_globalaccelerator_listener = {
   "clfn": "globalaccelerator"
 }
 
+aws_glue_catalog_table = {
+  "param": "domainId",
+  "clfn": "glue"
+}
+
+aws_glue_partition = {
+  "param": "domainId",
+  "clfn": "glue"
+}
+
 aws_grafana_workspace_saml_configuration = {
   "param": "workspaceId",
   "clfn": "grafana"

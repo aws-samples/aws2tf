@@ -50,7 +50,6 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     
     try:
-        print("WORKAROUND: Traditional terraform import for glue tables as import errors with new method currently - This operation can be slow if many resources are involved.")
         globals.workaround=type
         if id is None:
             print("WARNING: ID cannot be None - must pass catalog:database or catalog:database:tablename" )
@@ -69,6 +68,7 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
                     tabnam=id.split(':')[2]
                     com="../../.scripts/get-glue-table.sh "+catalogn+" "+databasen+" "+tabnam
         #print("Running "+com)
+        print("WORKAROUND: Traditional terraform import for glue tables as import errors with new method currently - This operation can be slow if many resources are involved.")
 
         rout=common.rc(com)
         print(rout.stderr.decode())
@@ -78,10 +78,14 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
         except:
             tn="NOTABLE99-99"
 
-
+        print("Table name is "+tn)
         if tn != "NOTABLE99-99":
             pkey=catalogn+":"+databasen+":"+tn
-            common.add_dependancy("aws_glue_partition", pkey)
+            cc=pkey.count(':')
+            if cc==2:
+                common.add_dependancy("aws_glue_partition", pkey)
+            else:
+                print("WORKAROUND problem expected 2x \":\" but got",cc, "for string", pkey )
         
         tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
                 #print("Setting True "+tkey)
@@ -386,8 +390,6 @@ def get_aws_glue_classifier(type, id, clfn, descfn, topkey, key, filterid):
 def get_aws_glue_partition(type, id, clfn, descfn, topkey, key, filterid):
 
     # need to fetch catalogid and database from id
-
-
     if globals.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
@@ -397,21 +399,33 @@ def get_aws_glue_partition(type, id, clfn, descfn, topkey, key, filterid):
         client = boto3.client(clfn)
         if id is None:
             print("ID cannot be None")
- 
-        else:     
+        
+        else:  
+            id=id.strip()  
             ## Do not have table name
-            cc=id.count(':')
+            tkey="aws_glue_partition"+"."+id
+            cc=id.count(":")
+            
             if cc == 2:
                 catalogn=id.split(':')[0]
                 databasen=id.split(':')[1]
                 tabnam=id.split(':')[2]
             else:
-                print("WARNING: Invalid id passed must pass catalogid:database:tablename")
+                print("WARNING: Invalid aws_glue_partition id passed must pass catalogid:database:tablename got: " + id +"c="+str(cc))
+                globals.rproc[tkey]=True
                 return True
 
-            response = client.get_partitions(CatalogId=catalogn,DatabaseName=databasen,TableName=tabnam)
+            try:
+                response = client.get_partitions(CatalogId=catalogn,DatabaseName=databasen,TableName=tabnam)
+            except Exception as e:
+                print(e)
+                globals.rproc[tkey]=True
 
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("*-** Empty response for "+type+ " id="+str(id))
+                print("tkey="+tkey+" returning"); 
+                globals.rproc[tkey]=True
+                return True
             
             for j in response[topkey]:
                 vals=""
@@ -424,7 +438,6 @@ def get_aws_glue_partition(type, id, clfn, descfn, topkey, key, filterid):
             
             # set dependency false
             tkey="aws_glue_partition"+"."+id
-            #print("Setting True "+tkey)
             globals.rproc[tkey]=True
 
     except Exception as e:

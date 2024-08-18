@@ -176,5 +176,6 @@ noimport = {
     "aws_ebs_default_kms_key": True, # do we need to import ?
     "aws_rds_custom_db_engine_version": True, # import crashed provider
     "aws_glue_catalog_table": True,   # Error: setting storage_descriptor: Invalid address to set: []string{"storage_descriptor", "0", "additional_locations"}
-    "aws_glue_partition": True # as child to glue table
+    "aws_glue_partition": True, # as child to glue table
+    #"aws_cloudformation_stack": True,
 } 

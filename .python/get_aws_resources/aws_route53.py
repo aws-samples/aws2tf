@@ -57,9 +57,7 @@ def get_aws_route53_record(type, id, clfn, descfn, topkey, key, filterid):
                 if r53name.endswith("."): r53name=r53name[:-1]
                 if r53type=="A":
                     pkey=id+"_"+r53name+"_"+r53type
-                    #print("pkey="+pkey)
                     common.write_import(type,pkey,None) 
-
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

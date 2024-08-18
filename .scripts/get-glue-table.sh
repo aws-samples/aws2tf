@@ -56,91 +56,98 @@ if [[ $? -eq 0 ]]; then
 
             printf "resource \"%s\" \"c__%s__%s__%s\" {}" $ttft $catid $dbnam $rname >$fn
 
-            terraform import $ttft.c__${catid}__${dbnam}__${rname} "${catid}:${dbnam}:${cname}" | grep Importing
-            terraform state show -no-color $ttft.c__${catid}__${dbnam}__${rname} >t1.txt
+            terraform import $ttft.c__${catid}__${dbnam}__${rname} "${catid}:${dbnam}:${cname}" > /dev/null
+            if [[ $? -eq 0 ]]; then
+                echo "Imported $ttft.c__${catid}__${dbnam}__${rname}"
 
-            rm -f $fn
+                terraform state show -no-color $ttft.c__${catid}__${dbnam}__${rname} >t1.txt
 
-            file="t1.txt"
-            fl=$(cat $file | wc -l)
-            if [[ $fl -eq 0 ]]; then echo "** Empty State show for $dbname $rname skipping" && continue; fi
+                rm -f $fn
 
-            echo $aws2tfmess >$fn
-            tarn=""
-            inttl=0
-            doneatt=0
-            while IFS= read line; do
-                skip=0
-                # display $line or do something with $line
-                t1=$(echo "$line")
-                if [[ "$t1" == *"ttl"* ]]; then inttl=1; fi
-                if [[ "$t1" == "}" ]]; then inttl=0; fi
+                file="t1.txt"
+                fl=$(cat $file | wc -l)
+                if [[ $fl -eq 0 ]]; then echo "** Empty State show for $dbname $rname skipping" && continue; fi
 
-                if [[ ${t1} == *"="* ]]; then
-                    tt1=$(echo "$line" | cut -f1 -d'=' | tr -d ' ')
-                    tt2=$(echo "$line" | cut -f2- -d'=')
-                    if [[ ${tt1} == "id" ]]; then skip=1; fi
-                    if [[ ${tt1} == "arn" ]]; then skip=1; fi
-                    if [[ ${tt1} == "owner_id" ]]; then skip=1; fi
-                    # these are difficult to process so skip for now
-                    if [[ ${tt1} == *"grokPattern"* ]]; then
+                echo $aws2tfmess >$fn
+                tarn=""
+                inttl=0
+                doneatt=0
+                while IFS= read line; do
+                    skip=0
+                    # display $line or do something with $line
+                    t1=$(echo "$line")
+                    if [[ "$t1" == *"ttl"* ]]; then inttl=1; fi
+                    if [[ "$t1" == "}" ]]; then inttl=0; fi
 
-                        tt2=$(echo $tt2 | sed 's/^"//')
-                        tt2=$(echo $tt2 | sed 's/"$//')
-                        tt2=${tt2//\\/\\\\}
-                        tt2=${tt2//%\{/%%\{}
-                        tt2=$(echo $tt2 | sed 's/"/\\"/g')
+                    if [[ ${t1} == *"="* ]]; then
+                        tt1=$(echo "$line" | cut -f1 -d'=' | tr -d ' ')
+                        tt2=$(echo "$line" | cut -f2- -d'=')
+                        if [[ ${tt1} == "id" ]]; then skip=1; fi
+                        if [[ ${tt1} == "arn" ]]; then skip=1; fi
+                        if [[ ${tt1} == "owner_id" ]]; then skip=1; fi
+                        # these are difficult to process so skip for now
+                        if [[ ${tt1} == *"grokPattern"* ]]; then
 
-                        t1=$(printf "\"grokPattern\" = \"%s\"" "$tt2")
-                    fi
+                            tt2=$(echo $tt2 | sed 's/^"//')
+                            tt2=$(echo $tt2 | sed 's/"$//')
+                            tt2=${tt2//\\/\\\\}
+                            tt2=${tt2//%\{/%%\{}
+                            tt2=$(echo $tt2 | sed 's/"/\\"/g')
 
-                    if [[ ${tt1} == *"input.format"* ]]; then
+                            t1=$(printf "\"grokPattern\" = \"%s\"" "$tt2")
+                        fi
 
-                        tt2=$(echo $tt2 | sed 's/^"//')
-                        tt2=$(echo $tt2 | sed 's/"$//')
-                        tt2=${tt2//\\/\\\\}
-                        tt2=${tt2//%\{/%%\{}
-                        tt2=$(echo $tt2 | sed 's/"/\\"/g')
-                        t1=$(printf "\"input.format\" = \"%s\"" "$tt2")
+                        if [[ ${tt1} == *"input.format"* ]]; then
 
-                    fi
-                    if [[ ${tt1} == *"input.regex"* ]]; then
+                            tt2=$(echo $tt2 | sed 's/^"//')
+                            tt2=$(echo $tt2 | sed 's/"$//')
+                            tt2=${tt2//\\/\\\\}
+                            tt2=${tt2//%\{/%%\{}
+                            tt2=$(echo $tt2 | sed 's/"/\\"/g')
+                            t1=$(printf "\"input.format\" = \"%s\"" "$tt2")
 
-                        tt2=$(echo $tt2 | sed 's/^"//')
-                        tt2=$(echo $tt2 | sed 's/"$//')
-                        tt2=${tt2//\\/\\\\}
-                        tt2=${tt2//%\{/%%\{}
-                        tt2=$(echo $tt2 | sed 's/"/\\"/g')
-                        t1=$(printf "\"input.regex\" = \"%s\"" "$tt2")
+                        fi
+                        if [[ ${tt1} == *"input.regex"* ]]; then
 
-                    fi
-                    if [[ ${tt1} == "type" ]]; then
-                        tt2=$(echo "$tt2" | tr -d '"')
-                        tt2=${tt2//\\/\\\\}
-                        if [[ ${tt2} == *"struct"* ]]; then
-                            tt2=$(echo $tt2 | sed 's/^ //')
-                            #r1=$(echo $RANDOM | md5sum | head -c 20; echo;)
-                            #gn=`printf "glue-var-%s.tf" $r1`
-                            #printf "variable \"g-%s\" {\n" $r1 > $gn
-                            #printf "    type = string \n" >> $gn
-                            #printf "    default = \"%s\" \n" $tt2 >> $gn
-                            #printf "}\n" >> $gn
-                            #t1=`printf "type = var.g-%s" $r1`
-                            t1=$(printf "type = \"%s\"" "$tt2")
+                            tt2=$(echo $tt2 | sed 's/^"//')
+                            tt2=$(echo $tt2 | sed 's/"$//')
+                            tt2=${tt2//\\/\\\\}
+                            tt2=${tt2//%\{/%%\{}
+                            tt2=$(echo $tt2 | sed 's/"/\\"/g')
+                            t1=$(printf "\"input.regex\" = \"%s\"" "$tt2")
+
+                        fi
+                        if [[ ${tt1} == "type" ]]; then
+                            tt2=$(echo "$tt2" | tr -d '"')
+                            tt2=${tt2//\\/\\\\}
+                            if [[ ${tt2} == *"struct"* ]]; then
+                                tt2=$(echo $tt2 | sed 's/^ //')
+                                #r1=$(echo $RANDOM | md5sum | head -c 20; echo;)
+                                #gn=`printf "glue-var-%s.tf" $r1`
+                                #printf "variable \"g-%s\" {\n" $r1 > $gn
+                                #printf "    type = string \n" >> $gn
+                                #printf "    default = \"%s\" \n" $tt2 >> $gn
+                                #printf "}\n" >> $gn
+                                #t1=`printf "type = var.g-%s" $r1`
+                                t1=$(printf "type = \"%s\"" "$tt2")
+                            fi
                         fi
                     fi
-                fi
 
-                if [ "$skip" == "0" ]; then
-                    #echo $skip $t1
-                    echo "$t1" >>$fn
-                fi
+                    if [ "$skip" == "0" ]; then
+                        #echo $skip $t1
+                        echo "$t1" >>$fn
+                    fi
 
-            done <"$file"
+                done <"$file"
+                echo "PARTITION:$rname"
+            else
+                echo "PARTITION:NOTABLE99-99"
+            fi
 
             # get the partitons
             #../../.scripts/get-glue-partition.sh $catid $dbnam $rname
-            echo "PARTITION:$rname"
+            
 
         done # for i
     fi

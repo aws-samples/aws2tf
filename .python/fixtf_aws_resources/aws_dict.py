@@ -1683,6 +1683,14 @@ aws_batch_scheduling_policy = {
 	"filterid":	"SchedulingPolicyName"
 }
 
+aws_bedrock_guardrail = {
+	"clfn":		"bedrock",
+	"descfn":	"list_guardrails",
+	"topkey":	"guardrails",
+	"key":		"id",
+	"filterid":	"id"
+}
+
 aws_bedrock_model_invocation_logging_configuration = {
 	"clfn":		"bedrock",
 	"descfn":	"get_model_invocation_logging_configuration",
@@ -10626,6 +10634,7 @@ aws_resources = {
 	"aws_batch_job_definition": aws_batch_job_definition,
 	"aws_batch_job_queue": aws_batch_job_queue,
 	"aws_batch_scheduling_policy": aws_batch_scheduling_policy,
+    "aws_bedrock_guardrail": aws_bedrock_guardrail,
 	"aws_bedrock_model_invocation_logging_configuration": aws_bedrock_model_invocation_logging_configuration,
 	"aws_budgets_budget": aws_budgets_budget,
 	"aws_budgets_budget_action": aws_budgets_budget_action,

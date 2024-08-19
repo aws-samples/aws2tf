@@ -370,7 +370,7 @@ if __name__ == '__main__':
         x = glob.glob("aws_*__*.tf")
         awsf=len(x)
         if awsf < 256:
-            print("\nRunning trivy check .....")
+            print("\nRunning trivy security check .....")
             com = "../../.scripts/trivy-check.sh"
             rout = common.rc(com)  
             print(rout.stdout.decode())
@@ -380,5 +380,11 @@ if __name__ == '__main__':
     else:
         print("trivy not installed, skipping security check")
 
-    print("\nTerraform files & state in sub-directory: "+ globals.path1)
+    print("Terraform files & state in sub-directory: "+ globals.path1)
+
+    x = glob.glob("*.err")
+    awsf=len(x)
+    if awsf > 0:
+        print("\nErrors found - see *.err files, and please report via github issue")   
+
     exit(0)

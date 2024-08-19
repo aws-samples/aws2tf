@@ -2971,6 +2971,8 @@ aws_datasync_task = {
 	"filterid":	"TaskArn"
 }
 
+##################
+
 aws_datazone_domain = {
 	"clfn":		"datazone",
 	"descfn":	"list_domains",
@@ -2996,6 +2998,36 @@ aws_datazone_glossary = {
 	"filterid":	"name"   
 }
 
+# aws_datazone_glossary_term
+aws_datazone_glossary_term = {
+	"clfn":		"datazone",
+	"descfn":	"list_glossary_terms",
+ 	"topkey":	"items",
+	"key":		"id",
+	"filterid":	"name"
+}
+
+#aws_datazone_form_type
+aws_datazone_form_type = {
+	"clfn":		"datazone",
+	"descfn":	"get_form_type",
+ 	"topkey":	"",
+	"key":		"name",
+	"filterid":	"name"
+}
+
+
+
+#aws_datazone_environment_profile
+aws_datazone_environment_profile = {
+	"clfn":		"datazone",
+	"descfn":	"list_environment_profiles",
+ 	"topkey":	"items",
+	"key":		"id",
+	"filterid":	"id"
+}
+
+
 aws_datazone_environment_blueprint_configuration = {
 	"clfn":		"datazone",
 	"descfn":	"list_environment_blueprint_configurations",
@@ -3003,6 +3035,8 @@ aws_datazone_environment_blueprint_configuration = {
 	"key":		"environmentBlueprintId",
 	"filterid":	"name"   
 }
+
+################
 
 
 aws_dax_cluster = {
@@ -10798,6 +10832,7 @@ aws_resources = {
     "aws_datazone_domain": aws_datazone_domain,
     "aws_datazone_project": aws_datazone_project,
     "aws_datazone_glossary": aws_datazone_glossary,
+    "aws_datazone_environment_profile": aws_datazone_environment_profile,
     "aws_datazone_environment_blueprint_configuration": aws_datazone_environment_blueprint_configuration,
 	"aws_dax_cluster": aws_dax_cluster,
 	"aws_dax_parameter_group": aws_dax_parameter_group,

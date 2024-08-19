@@ -14,7 +14,7 @@ def resource_types(type):
     elif type == "athena": rets=["aws_athena_named_query","aws_athena_data_catalog"]; return rets # Athena Resources
     elif type == "aurora": rets=["aws_rds_cluster"]; return rets # RDS Cluster
     elif type == "autoscaling" or type== "asg": rets=["aws_autoscaling_group"]; return rets # Autoscaling Group
-    elif type == "bedrock": rets=["aws_bedrock_guardrail"]; return rets # RDS Cluster
+    elif type == "bedrock": rets=["aws_bedrock_guardrail"]; return rets # Bedrock resources
     elif type == "batch": rets=["aws_batch_compute_environment","aws_batch_job_definition","aws_batch_scheduling_policy"]; return rets # Autoscaling Group
     elif type == "code": rets=["aws_codestarnotifications_notification_rule","aws_codebuild_project","aws_codeartifact_domain","aws_codeartifact_repository","aws_codecommit_repository","aws_codepipeline"]; return rets  # Codebuild, Code commit etc
     elif type == "cloudfront"or type == "cf": rets=["aws_cloudfront_distribution","aws_cloudfront_origin_request_policy","aws_cloudfront_origin_access_identity","aws_cloudfront_origin_access_control","aws_cloudfront_cache_policy","aws_cloudfront_function"]; return rets # Cloudfront Distribution
@@ -35,8 +35,8 @@ def resource_types(type):
     elif type == "eks": rets=["aws_eks_cluster"]; return rets # EKS clusters
     elif type == "emr": rets=["aws_emr_cluster","aws_emr_security_configuration"]; return rets # EMR clusters
     elif type == "glue": rets=["aws_glue_crawler","aws_glue_job","aws_glue_connection"]; return rets # Glue crawlers, jobs and connections
-    elif type == "glue2": rets=["aws_glue_catalog_table","aws_glue_partition"]; return rets # Glue crawlers, jobs and connections
-    elif type == "iam": rets=["aws_iam_role","aws_iam_policy"]; return rets # IAM riles and policies
+    elif type == "glue2": rets=["aws_glue_catalog_table","aws_glue_partition"]; return rets # Glue tables and partitions
+    elif type == "iam": rets=["aws_iam_role","aws_iam_policy"]; return rets # IAM roles and policies
     elif type == "igw": rets=["aws_internet_gateway"]; return rets # Internet Gateways
     elif type == "kendra": rets=["aws_kendra_index"]; return rets # Kendra Indexes
     elif type == "kinesis": rets=["aws_kinesis_stream","aws_kinesis_firehose_delivery_stream"]; return rets # Kinesis streams and firehose
@@ -48,19 +48,19 @@ def resource_types(type):
     elif type == "params": rets=["aws_ssm_parameter"]; return rets # SSM parameters
     elif type == "privatelink": rets=["aws_vpc_endpoint_service"]; return rets # VPC privatelink resources
     elif type == "ram": rets=["aws_ram_resource_share"]; return rets # RAM shares
-    elif type == "route53": rets=["aws_route53_zone"]; return rets # RAM shares
+    elif type == "route53": rets=["aws_route53_zone"]; return rets # Route53 Zones
     elif type == "rds": rets=["aws_db_instance","aws_db_parameter_group","aws_db_event_subscription","aws_db_event_subscription"]; return rets # RDS cluster and some dependancies
     elif type == "s3": rets=["aws_s3_bucket"]; return rets # AWS S3 bucket and bucker config
     elif type == "subnet": type = ["aws_subnet"]; return rets # AWS subnet and common dependancies
     elif type == "sagemaker": rets=["aws_sagemaker_domain","aws_sagemaker_user_profile","aws_sagemaker_image","aws_sagemaker_app","aws_sagemaker_studio_lifecycle_config"]; return rets # SageMaker domain and depandancies
     elif type == "secrets" or type == "secret": rets=["aws_secretsmanager_secret"]; return rets # secrets manager secrets
     elif type == "sc": rets=["aws_servicecatalog_portfolio"]; return rets     # service catalog
-    elif type == "sfn": rets=["aws_sfn_state_machine"]; return rets            # State machine
+    elif type == "sfn": rets=["aws_sfn_state_machine"]; return rets  # State machines
     elif type == "security-group": rets=["aws_security_group"]; return rets # security group
     elif type == "sns": rets=["aws_sns_topic"]; return rets  # SNS topics
-    elif type == "sqs": rets=["aws_sqs_queue"]; return rets            # SQS queues
+    elif type == "sqs": rets=["aws_sqs_queue"]; return rets   # SQS queues
     elif type == "spot": rets=["aws_spot_fleet_request"]; return rets # Spot fleet request
-    elif type == "sso": rets=["aws_ssoadmin_instances"]; return rets # Spot fleet request
+    elif type == "sso": rets=["aws_ssoadmin_instances"]; return rets # Single sign on resources
     elif type == "tgw": rets=["aws_ec2_transit_gateway"]; return rets # Transit Gateway
     elif type == "vpclattice" or type=="lattice": rets=["aws_vpclattice_service_network","aws_vpclattice_service","aws_vpclattice_auth_policy"]; return rets # VOC Lattice and dependancies
     elif type == "users": rets=["aws_iam_user","aws_iam_group"]; return rets # IAM user and groups

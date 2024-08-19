@@ -19,6 +19,7 @@ def get_aws_datazone_domain(type, id, clfn, descfn, topkey, key, filterid):
                 common.write_import(type,j[key],None) 
                 # provider crashes on import
                 #common.add_dependancy("aws_datazone_project", j[key])
+                #common.add_dependancy("aws_datazone_environment_profile", j[key])
 
         else:      
             response = client.get_domain(identifier=id)
@@ -27,6 +28,7 @@ def get_aws_datazone_domain(type, id, clfn, descfn, topkey, key, filterid):
             common.write_import(type,j[key],None)
             # provider crashes on import
             #common.add_dependancy("aws_datazone_project", j[key])
+            #common.add_dependancy("aws_datazone_environment_profile", j[key])
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -117,6 +119,34 @@ def get_aws_datazone_environment_blueprint_configuration(type, id, clfn, descfn,
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response:
             theid=id+'/'+j[key]
+            common.write_import(type,theid,None) 
+            pkey=type+"."+id
+            globals.rproc[pkey]=True
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+def get_aws_datazone_environment_profile(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        client = boto3.client(clfn)
+
+        paginator = client.get_paginator(descfn)
+        if id is None:
+            print("WARNING must pass domain id to get_aws_datazone_project")
+            return True
+        else:
+            for page in paginator.paginate(domainIdentifier=id):
+                response = response + page[topkey]
+
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        for j in response:
+            theid=j[key]+","+id
             common.write_import(type,theid,None) 
             pkey=type+"."+id
             globals.rproc[pkey]=True

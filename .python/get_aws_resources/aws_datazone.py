@@ -128,7 +128,38 @@ def get_aws_datazone_glossary_term(type, id, clfn, descfn, topkey, key, filterid
 
     return True
 
+def get_aws_datazone_form_type(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        client = boto3.client(clfn)
 
+        paginator = client.get_paginator(descfn)
+        if id is None:
+            print("WARNING must pass domain id to get_aws_datazone_project")
+            return True
+        else:
+            for page in paginator.paginate(domainIdentifier=id,managed=False,
+                        searchScope='FORM_TYPE',sort={'attribute': 'name','order': 'ASCENDING'}):
+                response = response + page[topkey]
+
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        print(str(response))
+        for k in response:
+
+            j=k['formTypeItem']
+            theid=id+","+j['name']+","+j['revision']
+            print(theid)
+            common.write_import(type,theid,None) 
+            pkey=type+"."+id
+            globals.rproc[pkey]=True
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
 
 
 

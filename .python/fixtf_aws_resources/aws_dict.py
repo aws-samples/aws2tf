@@ -3010,12 +3010,11 @@ aws_datazone_glossary_term = {
 #aws_datazone_form_type
 aws_datazone_form_type = {
 	"clfn":		"datazone",
-	"descfn":	"get_form_type",
- 	"topkey":	"",
-	"key":		"name",
+	"descfn":	"search_types",
+ 	"topkey":	"items",
+	"key":		"id",
 	"filterid":	"name"
 }
-
 
 
 #aws_datazone_environment_profile
@@ -10833,6 +10832,7 @@ aws_resources = {
     "aws_datazone_project": aws_datazone_project,
     "aws_datazone_glossary": aws_datazone_glossary,
     "aws_datazone_glossary_term": aws_datazone_glossary_term,
+    "aws_datazone_form_type": aws_datazone_form_type,
     "aws_datazone_environment_profile": aws_datazone_environment_profile,
     "aws_datazone_environment_blueprint_configuration": aws_datazone_environment_blueprint_configuration,
 	"aws_dax_cluster": aws_dax_cluster,

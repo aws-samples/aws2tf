@@ -62,7 +62,7 @@ def resource_types(type):
     elif type == "spot": rets=["aws_spot_fleet_request"]; return rets # Spot fleet request
     elif type == "sso": rets=["aws_ssoadmin_instances"]; return rets # Single sign on resources
     elif type == "tgw": rets=["aws_ec2_transit_gateway"]; return rets # Transit Gateway
-    elif type == "vpclattice" or type=="lattice": rets=["aws_vpclattice_service_network","aws_vpclattice_service","aws_vpclattice_auth_policy"]; return rets # VOC Lattice and dependancies
+    elif type == "vpclattice" or type=="lattice": rets=["aws_vpclattice_service_network","aws_vpclattice_service","aws_vpclattice_auth_policy"]; return rets # VPC Lattice and dependancies
     elif type == "users": rets=["aws_iam_user","aws_iam_group"]; return rets # IAM user and groups
     elif type == "vpc": rets=["aws_vpc"]; return rets # VPC's and its common depandancies
 

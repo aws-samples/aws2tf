@@ -21,7 +21,7 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
                 pkey=globals.acc+":"+j[key]
                 tfid="d-"+pkey.replace(":","__")
                 common.write_import(type,pkey,tfid) 
-                #common.add_dependancy("aws_glue_catalog_table",pkey)
+                common.add_dependancy("aws_glue_catalog_table",pkey)
                 #pkey2="aws_glue_catalog_table."+pkey
                 #globals.rproc[pkey2]=True
 
@@ -34,7 +34,7 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
             tfid="d-"+pkey.replace(":","__")
             common.write_import(type,pkey,tfid)
             #print("KD add aws_glue_catalog_table "+pkey)
-            #common.add_dependancy("aws_glue_catalog_table",pkey)
+            common.add_dependancy("aws_glue_catalog_table",pkey)
 
 
     except Exception as e:
@@ -61,38 +61,14 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
         if cc == 1:
                     catalogn=id.split(':')[0]
                     databasen=id.split(':')[1]
-                    com="../../.scripts/get-glue-table.sh "+catalogn+" "+databasen
+                    
         if cc == 2:
                     catalogn=id.split(':')[0]
                     databasen=id.split(':')[1]
                     tabnam=id.split(':')[2]
-                    com="../../.scripts/get-glue-table.sh "+catalogn+" "+databasen+" "+tabnam
-        #print("Running "+com)
-        print("WORKAROUND: Traditional terraform import for glue tables as import errors with new method currently - This operation can be slow if many resources are involved.")
-
-        rout=common.rc(com)
-        print(rout.stderr.decode())
-        print(rout.stdout.decode())
-        try:
-            tn=rout.stdout.decode('utf-8').rstrip().split("PARTITION:")[1]
-        except:
-            tn="NOTABLE99-99"
-
-        print("Table name is "+tn)
-        if tn != "NOTABLE99-99":
-            pkey=catalogn+":"+databasen+":"+tn
-            cc=pkey.count(':')
-            if cc==2:
-                common.add_dependancy("aws_glue_partition", pkey)
-            else:
-                print("WORKAROUND problem expected 2x \":\" but got",cc, "for string", pkey )
+                    
         
         tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
-                #print("Setting True "+tkey)
-        globals.rproc[tkey]=True
-    
-
-        return True
 
         response = []
         client = boto3.client(clfn)
@@ -108,8 +84,7 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
                 pkey=catalogn+":"+databasen+":"+j[key]
                 tfid="d-"+pkey.replace(":","__")
                 common.write_import(type,pkey,tfid)
-                #../../scripts/get-glue-partition.sh $catid $dbnam j[key]
-                common.add_dependancy("aws_glue_partition",pkey)
+                #common.add_dependancy("aws_glue_partition",pkey)
             
             # set dependency false
         tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen

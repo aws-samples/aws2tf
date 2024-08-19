@@ -2992,16 +2992,16 @@ aws_datazone_project = {
 # get-project has gloassary terms - each term has glossary id
 aws_datazone_glossary = {
 	"clfn":		"datazone",
-	"descfn":	"get_project",
+	"descfn":	"search",
  	"topkey":	"items",
-	"key":		"glossaryTerms",
+	"key":		"id",
 	"filterid":	"name"   
 }
 
 # aws_datazone_glossary_term
 aws_datazone_glossary_term = {
 	"clfn":		"datazone",
-	"descfn":	"list_glossary_terms",
+	"descfn":	"search",
  	"topkey":	"items",
 	"key":		"id",
 	"filterid":	"name"
@@ -10832,6 +10832,7 @@ aws_resources = {
     "aws_datazone_domain": aws_datazone_domain,
     "aws_datazone_project": aws_datazone_project,
     "aws_datazone_glossary": aws_datazone_glossary,
+    "aws_datazone_glossary_term": aws_datazone_glossary_term,
     "aws_datazone_environment_profile": aws_datazone_environment_profile,
     "aws_datazone_environment_blueprint_configuration": aws_datazone_environment_blueprint_configuration,
 	"aws_dax_cluster": aws_dax_cluster,

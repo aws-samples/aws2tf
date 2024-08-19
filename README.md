@@ -143,7 +143,7 @@ Finally you cn scan everything in your account by simply running:
 
 ./aws2tf.py
 
-But this of course will take quite some time to complete!
+Not recommended as this will take quite some time to complete!
 
 ----------
 

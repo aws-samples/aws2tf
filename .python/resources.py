@@ -1,6 +1,7 @@
 from fixtf_aws_resources import aws_dict
 
 def resource_types(type):
+    
     rets=[]
     if type == "net": # Common VPC networking resources
         rets=["aws_vpc","aws_vpc_dhcp_options","aws_subnet","aws_internet_gateway","aws_nat_gateway","aws_route_table","aws_route_table_association","aws_vpc_endpoint","aws_security_group"]
@@ -13,6 +14,7 @@ def resource_types(type):
     elif type == "athena": rets=["aws_athena_named_query","aws_athena_data_catalog"]; return rets # Athena Resources
     elif type == "aurora": rets=["aws_rds_cluster"]; return rets # RDS Cluster
     elif type == "autoscaling" or type== "asg": rets=["aws_autoscaling_group"]; return rets # Autoscaling Group
+    elif type == "bedrock": rets=["aws_bedrock_guardrail"]; return rets # RDS Cluster
     elif type == "batch": rets=["aws_batch_compute_environment","aws_batch_job_definition","aws_batch_scheduling_policy"]; return rets # Autoscaling Group
     elif type == "code": rets=["aws_codestarnotifications_notification_rule","aws_codebuild_project","aws_codeartifact_domain","aws_codeartifact_repository","aws_codecommit_repository","aws_codepipeline"]; return rets  # Codebuild, Code commit etc
     elif type == "cloudfront"or type == "cf": rets=["aws_cloudfront_distribution","aws_cloudfront_origin_request_policy","aws_cloudfront_origin_access_identity","aws_cloudfront_origin_access_control","aws_cloudfront_cache_policy","aws_cloudfront_function"]; return rets # Cloudfront Distribution

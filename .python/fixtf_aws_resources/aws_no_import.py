@@ -178,4 +178,5 @@ noimport = {
     #"aws_glue_catalog_table": True,   # Error: setting storage_descriptor: Invalid address to set: []string{"storage_descriptor", "0", "additional_locations"}
     "aws_glue_partition": True, # as child to glue table
     #"aws_cloudformation_stack": True,
+    "aws_datazone_form_type": True,
 } 

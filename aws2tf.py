@@ -140,6 +140,7 @@ if __name__ == '__main__':
     #os.environ["AWS"] = "aws --region "+region+" "
  
     # get the current env and set directory
+    if globals.debug: print("setting sesison region="+region)
     try:
         my_session = boto3.setup_default_session(region_name=region)
     except Exception as e: 

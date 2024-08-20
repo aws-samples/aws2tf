@@ -45,7 +45,7 @@ def get_aws_datazone_project(type, id, clfn, descfn, topkey, key, filterid):
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
-        pkey=type+"."+id
+        
         response = []
         client = boto3.client(clfn)
 
@@ -56,7 +56,7 @@ def get_aws_datazone_project(type, id, clfn, descfn, topkey, key, filterid):
         else:
             for page in paginator.paginate(domainIdentifier=id):
                 response = response + page[topkey]
-
+        pkey=type+"."+id
         if response == []: 
             print("Empty response for "+type+ " id="+str(id)+" returning") 
             globals.rproc[pkey]=True
@@ -79,7 +79,7 @@ def get_aws_datazone_glossary(type, id, clfn, descfn, topkey, key, filterid):
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
-        pkey=type+"."+id
+        
         response = []
         client = boto3.client(clfn)
 
@@ -90,7 +90,7 @@ def get_aws_datazone_glossary(type, id, clfn, descfn, topkey, key, filterid):
         else:
             for page in paginator.paginate(domainIdentifier=id,searchScope='GLOSSARY'):
                 response = response + page[topkey]
-
+        pkey=type+"."+id
         if response == []: 
             print("Empty response for "+type+ " id="+str(id)+" returning")
             globals.rproc[pkey]=True
@@ -114,7 +114,6 @@ def get_aws_datazone_glossary_term(type, id, clfn, descfn, topkey, key, filterid
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
-        pkey=type+"."+id
         response = []
         client = boto3.client(clfn)
 
@@ -126,6 +125,7 @@ def get_aws_datazone_glossary_term(type, id, clfn, descfn, topkey, key, filterid
             for page in paginator.paginate(domainIdentifier=id,searchScope='GLOSSARY_TERM'):
                 response = response + page[topkey]
 
+        pkey=type+"."+id
         if response == []: 
             print("Empty response for "+type+ " id="+str(id)+" returning")
             globals.rproc[pkey]=True    
@@ -150,7 +150,7 @@ def get_aws_datazone_form_type(type, id, clfn, descfn, topkey, key, filterid):
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
-        pkey=type+"."+id
+        
         response = []
         client = boto3.client(clfn)
 
@@ -162,7 +162,7 @@ def get_aws_datazone_form_type(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(domainIdentifier=id,managed=False,
                         searchScope='FORM_TYPE',sort={'attribute': 'name','order': 'ASCENDING'}):
                 response = response + page[topkey]
-
+        pkey=type+"."+id
         if response == []: 
             print("Empty response for "+type+ " id="+str(id)+" returning")
             globals.rproc[pkey]=True
@@ -189,7 +189,7 @@ def get_aws_datazone_environment_blueprint_configuration(type, id, clfn, descfn,
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
-        pkey=type+"."+id
+      
         response = []
         client = boto3.client(clfn)
 
@@ -200,7 +200,7 @@ def get_aws_datazone_environment_blueprint_configuration(type, id, clfn, descfn,
         else:
             for page in paginator.paginate(domainIdentifier=id):
                 response = response + page[topkey]
-
+        pkey=type+"."+id
         if response == []: 
             print("Empty response for "+type+ " id="+str(id)+" returning")
             globals.rproc[pkey]=True
@@ -231,13 +231,13 @@ def get_aws_datazone_environment_profile(type, id, clfn, descfn, topkey, key, fi
         else:
             for page in paginator.paginate(domainIdentifier=id):
                 response = response + page[topkey]
-
+        pkey=type+"."+id
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response:
             theid=j[key]+","+id
             common.write_import(type,theid,None) 
-            pkey=type+"."+id
-            globals.rproc[pkey]=True
+
+        globals.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

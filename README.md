@@ -72,21 +72,16 @@ or for more extensive help:
 
 ### The First Run
 
-To generate the terraform files for all the VPC's in your account/region and stop after a "terraform validate":
+To generate the terraform files for all the VPC's in your account/region:
+
 ```
-./aws2tf.py -t vpc -v
+./aws2tf.py -t vpc
 ```
 
 or for a specific VPC:
 
 ```
 ./aws2tf.py -t aws_vpc -i vpc-xxxxxxxxxx -v
-```
-
-Run again with out the -v to completion (including the import)
-
-```
-./aws2tf.py -t vpc
 ```
 
 
@@ -128,7 +123,7 @@ Add a specific S3 bucket:
 
 ### Importing from a deployed stack
 
-Often Organisations (and AWS blogs and workshops) deploy resources for use using a stack.
+Often Organisations (and AWS blogs/workshops) deploy resources for use using a stack.
 
 aws2tf can convert these to terraform for you using the -s [stack set name] option
 
@@ -139,11 +134,11 @@ aws2tf can convert these to terraform for you using the -s [stack set name] opti
 
 ### Getting everything in an account
 
-Finally you cn scan everything in your account by simply running:
+Finally you can scan everything in your account by simply running:
 
 ./aws2tf.py
 
-Not recommended as this will take quite some time to complete!
+But this is **Not recommended** as this will take quite some time to complete!
 
 ----------
 
@@ -152,7 +147,7 @@ Not recommended as this will take quite some time to complete!
 
 You may come across some kind of error as trying to test everyone's AWS combinations in advance isn't possible.
 
-**If you happen to find one of these errors please open an issue here and paste in the error and it will get fixed.**
+**If you happen to find one of these errors please open an issue [here](https://github.com/aws-samples/aws2tf/issues) and paste in the error and it will get fixed.**
 
 For stack sets (-s option) look for these two files in the generated/tf* directory - and paste their contents into the issue:
 

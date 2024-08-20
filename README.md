@@ -6,7 +6,7 @@
 
 *The python version of this tool `aws2tf.py` has now superceded the old bash script version.*
 
-*You can still find and use the old version in the hidden sub-directory `.aws2tf-acrhive`*
+*You can still find and use the old version in the hidden sub-directory `.aws2tf-archive`*
 
 
 ----

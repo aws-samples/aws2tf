@@ -82,7 +82,7 @@ docker build -f Dockerfile.aws2tf --no-cache -t aws2tf .
 ### Create an alias ro run the aws2tf container
 
 ```bash
-alias aws2tf.py="docker run  --name aws2tf --rm -it -v $(pwd)/generated:/aws2tf/generated -v ~/.aws:/home/aws2tf/.aws aws2tf ./aws2tf.py"
+alias aws2tf.py="docker run --security-opt=no-new-privileges --name aws2tf --rm -it -v $(pwd)/generated:/aws2tf/generated -v ~/.aws:/home/aws2tf/.aws:ro aws2tf ./aws2tf.py"
 ```
 
 

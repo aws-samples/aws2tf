@@ -2,6 +2,10 @@
 
 **Note: you do not need to clone this repo to run aws2tf using a container - just follow these instructions instead**
 
+### Pre-requisites
+
+* `docker` installed and available - see [here](https://docs.docker.com/engine/install/)
+
 
 ### Make the required sub directores
 

@@ -1,5 +1,18 @@
+## Running aws2tf using a container
+
+**Note: you do not need to clone this repo to run aws2tf using a container - just follow these instructions instead**
+
+
+### Make the required sub directores
+
+```
 mkdir -p aws2tf/generated
 cd aws2tf
+```
+
+### Create the Dockerfile
+
+```
 cat << 'EOF' > Dockerfile.aws2tf
 FROM python:3.9-alpine3.20
 RUN apk update \
@@ -54,10 +67,25 @@ ENV PYTHONUNBUFFERED=1
 #ENTRYPOINT ["./aws2tf.py"] 
 CMD ["./aws2tf.py"] 
 EOF
-docker build -f Dockerfile.aws2tf --no-cache -t aws2tf . 
-alias aws2tf.py="docker run  --name aws2tf --rm -it -v $(pwd)/generated:/aws2tf/generated -v ~/.aws:/home/aws2tf/.aws aws2tf ./aws2tf.py"
-echo "run with:"
-echo "aws2tf.py -t vpc"
+```
 
+### build the container from the newly created Dockerfile.aws2tf
+
+```
+docker build -f Dockerfile.aws2tf --no-cache -t aws2tf . 
+```
+
+### Create an alias ro run the aws2tf container
+
+```
+alias aws2tf.py="docker run  --name aws2tf --rm -it -v $(pwd)/generated:/aws2tf/generated -v ~/.aws:/home/aws2tf/.aws aws2tf ./aws2tf.py"
+```
+
+
+run aws2tf using the alias to the container:
+
+```
+aws2tf.py -t vpc"
+```
 
 

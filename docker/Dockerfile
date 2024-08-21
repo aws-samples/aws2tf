@@ -19,10 +19,10 @@ RUN curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform
       rm -f terraform_${TERRAFORM_VERSION}_linux_arm64.zip
 
 
-
-
-#create/change working directory
+RUN adduser -D aws2tf
 RUN git clone -b python https://github.com/aws-samples/aws2tf.git /aws2tf
+RUN chown -R aws2tf /aws2tf
+USER aws2tf
 WORKDIR /aws2tf
 #install dependencies
 RUN pip install -r requirements.txt

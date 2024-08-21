@@ -91,6 +91,7 @@ if __name__ == '__main__':
     argParser.add_argument("-d", "--debug", help="debug", action='store_true')
     argParser.add_argument("-v", "--validate", help="validate and exit", action='store_true')
     argParser.add_argument("-a", "--apionly", help="boto3 api only (for debugging)", action='store_true')
+    argParser.add_argument("-e", "--expectedok", help="expected plan changes accepted", action='store_true')
     argParser.add_argument("-b3", "--boto3error", help="exit on boto3 api error (for debugging)", action='store_true')
     args = argParser.parse_args()
     type=""
@@ -100,6 +101,8 @@ if __name__ == '__main__':
     if path is None:
         print("no executable found for command 'terraform'")
         exit()
+
+    globals.expected=args.expectedok
 
     # print("args=%s" % args)
     
@@ -229,6 +232,7 @@ if __name__ == '__main__':
             print("Must pass a stack name as a parameter   -i <stack name>")
             exit()
         else:
+            globals.expected=True
             stacks.get_stacks(id)
 
         
@@ -244,7 +248,7 @@ if __name__ == '__main__':
         ic=0
         istart=0
         it=len(all_types)
-        
+        globals.expected=True
         for i in all_types:
             ic=ic+1
             if ic > it: break 

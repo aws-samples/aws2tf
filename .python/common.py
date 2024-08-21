@@ -516,6 +516,11 @@ def tfplan3():
                ci = ci+1
             print("\n")
 
+            if globals.expected is False:
+               print("You can check the changes by running 'terraform plan' in ",globals.path1+"\n")
+               print("Then rerun the same ./aws2tf.py command and add the '-e' flag to accept these plan changes and continue to import")
+               exit()
+
             if globals.debug is True:
                print("\n-->> Then if happy with the output changes for the above resources, run this command to complete aws2tf-py tasks:")
                print("terraform apply -no-color tfplan")

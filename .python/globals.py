@@ -43,6 +43,7 @@ secvid=""
 
 meshname=""
 workaround=""
+expected=False
 
 
 #specials=["aws_iam_role_policy","aws_route_table_association","aws_iam_policy","aws_iam_policy_attchment",

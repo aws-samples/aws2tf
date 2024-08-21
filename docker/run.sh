@@ -6,4 +6,4 @@ docker run  --name aws2tf -d -t -v $(pwd)/generated:/aws2tf/generated -v ~/.aws:
 docker exec -it aws2tf sh  
 docker stop  aws2tf && docker rm aws2tf
 
-docker run  --name aws2tf -rm -v $(pwd)/generated:/aws2tf/generated -v ~/.aws:/home/aws2tf/.aws aws2tf
+docker run  --name aws2tf -rm -v $(pwd)/generated:/aws2tf/generated -v ~/.aws:/home/aws2tf/.aws:ro aws2tf

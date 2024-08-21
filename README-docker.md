@@ -18,7 +18,7 @@ cd aws2tf
 
 ```bash
 cat << 'EOF' > Dockerfile.aws2tf
-FROM python:3.9-alpine3.20
+FROM python:3.12.5-alpine3.20
 RUN apk update \
     && apk add bash \
     && apk add curl zip git unzip iputils \
@@ -68,8 +68,9 @@ WORKDIR /aws2tf
 #install dependencies
 RUN pip install -r requirements.txt
 ENV PYTHONUNBUFFERED=1
-#ENTRYPOINT ["./aws2tf.py"] 
-CMD ["./aws2tf.py"] 
+# Set the entrypoint
+ENTRYPOINT ["python", "aws2tf.py"]
+CMD []
 EOF
 ```
 
@@ -82,7 +83,7 @@ docker build -f Dockerfile.aws2tf --no-cache -t aws2tf .
 ### Create an alias ro run the aws2tf container
 
 ```bash
-alias aws2tf.py="docker run --security-opt=no-new-privileges --name aws2tf --rm -it -v $(pwd)/generated:/aws2tf/generated -v ~/.aws:/home/aws2tf/.aws:ro aws2tf ./aws2tf.py"
+alias aws2tf.py="docker run --security-opt=no-new-privileges --name aws2tf --rm -it -v $(pwd)/generated:/aws2tf/generated -v ~/.aws:/home/aws2tf/.aws:ro aws2tf"
 ```
 
 

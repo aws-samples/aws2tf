@@ -31,6 +31,7 @@ from fixtf_aws_resources import fixtf_autoscaling_plans
 from fixtf_aws_resources import fixtf_backup
 from fixtf_aws_resources import fixtf_batch
 from fixtf_aws_resources import fixtf_bedrock
+from fixtf_aws_resources import fixtf_bedrock_agent
 from fixtf_aws_resources import fixtf_billingconductor
 from fixtf_aws_resources import fixtf_budgets
 from fixtf_aws_resources import fixtf_ce

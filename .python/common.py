@@ -30,6 +30,7 @@ from get_aws_resources import aws_appstream
 from get_aws_resources import aws_batch
 from get_aws_resources import aws_backup
 from get_aws_resources import aws_bedrock
+from get_aws_resources import aws_bedrock_agent
 from get_aws_resources import aws_cleanrooms
 from get_aws_resources import aws_cloud9
 from get_aws_resources import aws_cloudformation
@@ -416,7 +417,7 @@ def tfplan3():
          print("INFO: "+str(awsf)+ "x aws_*.tf and " + str(impf) +"x import__*.tf file counts do not match")
          print("INFO: Continuing due to workaround "+globals.workaround)
    else:
-      print("PASSED: aws_*.tf and import__*.tf file counts match")
+      print("PASSED: aws_*.tf and import__*.tf file counts match =",awsf)
 
 
 ################################################################################
@@ -491,7 +492,9 @@ def tfplan3():
             if pe['type'] == "planned_change" and pe['change']['action'] == "update":
                nchanges = nchanges+1
                ctype = pe['change']['resource']['resource_type']
-               if ctype == "aws_lb_listener" or ctype == "aws_cognito_user_pool_client":
+               if ctype == "aws_lb_listener" or ctype == "aws_cognito_user_pool_client" \
+                  or ctype=="aws_bedrockagent_agent" or ctype=="aws_bedrockagent_agent_action_group":
+                  
                   changeList.append(pe['change']['resource']['addr'])
                   print("Planned changes found in Terraform Plan for type: " +
                         str(pe['change']['resource']['resource_type']))
@@ -511,6 +514,7 @@ def tfplan3():
             for i in changeList:
                print(str(ci)+": "+str(i))
                ci = ci+1
+            print("\n")
 
             if globals.debug is True:
                print("\n-->> Then if happy with the output changes for the above resources, run this command to complete aws2tf-py tasks:")

@@ -1,5 +1,7 @@
+mkdir -p aws2tf/generated
+cd aws2tf
+cat << 'EOF' > Dockerfile.aws2tf
 FROM python:3.9-alpine3.20
-
 RUN apk update \
     && apk add bash \
     && apk add curl zip git unzip iputils \
@@ -51,3 +53,11 @@ RUN pip install -r requirements.txt
 ENV PYTHONUNBUFFERED=1
 #ENTRYPOINT ["./aws2tf.py"] 
 CMD ["./aws2tf.py"] 
+EOF
+docker build -f Dockerfile.aws2tf --no-cache -t aws2tf . 
+alias aws2tf.py="docker run  --name aws2tf --rm -it -v $(pwd)/generated:/aws2tf/generated -v ~/.aws:/home/aws2tf/.aws aws2tf ./aws2tf.py"
+echo "run with:"
+echo "aws2tf.py -t vpc"
+
+
+

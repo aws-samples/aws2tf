@@ -1,5 +1,6 @@
 FROM python:3.9-alpine3.20
 
+#update, install curl, git, zip/unzip
 RUN apk update \
     && apk add bash \
     && apk add curl zip git unzip iputils \
@@ -49,5 +50,4 @@ WORKDIR /aws2tf
 #install dependencies
 RUN pip install -r requirements.txt
 ENV PYTHONUNBUFFERED=1
-#ENTRYPOINT ["./aws2tf.py"] 
-CMD ["./aws2tf.py"] 
+CMD ["tail", "-f", "/dev/null"]  

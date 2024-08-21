@@ -157,6 +157,14 @@ For stack sets (-s option) look for these two files in the generated/tf* directo
 
 ---
 
+## Running aws2tf as a container
+
+See the instructions [here](https://github.com/aws-samples/aws2tf/blob/master/README-docker.md)
+
+Note you do not need to clone this repo if you want to run aws2tf as a container
+
+---
+
 ## Supported Resources
 
 ### Supported Stack Set Resources (subject to ongoing testing)

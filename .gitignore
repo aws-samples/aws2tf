@@ -46,3 +46,5 @@ run.log
 TOPORT_from_aws2tf.md
 copy-to-aws2tf.sh
 aws3tf.py
+docker/*.sh
+docker/*.test

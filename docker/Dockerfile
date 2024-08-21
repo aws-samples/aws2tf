@@ -1,25 +1,30 @@
-FROM amazonlinux:2023
-RUN yum -y install rpm dnf-plugins-core \
- && yum -y update \
- && yum -y install \
-      initscripts \
-      sudo \
-      which \
-      hostname \
-      unzip \
-      git \
-      python3 \
-      python3-pip \
- && yum clean all
- 
+FROM python:3.9-alpine3.20
 
+#update, install curl, git, zip/unzip
+RUN apk update \
+    && apk add bash \
+    && apk add curl zip git unzip iputils libc6-compat
+
+RUN apk add --no-cache aws-cli
+
+
+#ENV TERRAFORM_VERSION="1.9.3"
+#RUN curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
+#      unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /bin && \
+#      rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+
+ENV TERRAFORM_VERSION="1.9.5"
+RUN curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_arm64.zip > terraform_${TERRAFORM_VERSION}_linux_arm64.zip && \
+      unzip terraform_${TERRAFORM_VERSION}_linux_arm64.zip -d /bin && \
+      rm -f terraform_${TERRAFORM_VERSION}_linux_arm64.zip
+
+
+
+
+#create/change working directory
 RUN git clone -b python https://github.com/aws-samples/aws2tf.git /aws2tf
 WORKDIR /aws2tf
-RUN pip3 install awscli boto3 requests
+#install dependencies
+RUN pip install -r requirements.txt
 ENV PYTHONUNBUFFERED=1
-ENV TERRAFORM_VERSION="1.9.3"
-RUN curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
-  unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /bin && \
-  rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-  
-ENTRYPOINT ["cat"]
+CMD ["tail", "-f", "/dev/null"]  

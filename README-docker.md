@@ -89,7 +89,7 @@ alias aws2tf.py="docker run --security-opt=no-new-privileges --name aws2tf --rm 
 ### run aws2tf using the alias to the container:
 
 ```bash
-aws2tf.py -t vpc"
+aws2tf.py -t vpc
 ```
 
 

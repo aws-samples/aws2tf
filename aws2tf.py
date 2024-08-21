@@ -137,11 +137,15 @@ if __name__ == '__main__':
 
     globals.region = region
     globals.regionl = len(region)
-    os.environ["AWS"] = "aws --region "+region+" "
+    #os.environ["AWS"] = "aws --region "+region+" "
  
     # get the current env and set directory
-
-    my_session = boto3.setup_default_session(region_name=region)
+    if globals.debug: print("setting session region="+region)
+    try:
+        my_session = boto3.setup_default_session(region_name=region)
+    except Exception as e: 
+        print("AWS Authorization Error: "+str(e))
+    if globals.debug: print("getting account")
     try:
         globals.acc = boto3.client('sts').get_caller_identity().get('Account')
     except Exception as e:

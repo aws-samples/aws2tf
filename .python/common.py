@@ -226,6 +226,9 @@ def tfplan1():
       print("No import*.tf files found for this resource, exiting ....")
       exit()
 
+   com = "cp imported/provider.tf provider.tf"
+   rout = rc(com)
+
    com = "terraform plan -generate-config-out=" + \
        rf + " -out tfplan -json > plan1.json"
    print(com)
@@ -371,6 +374,8 @@ def tfplan3():
       exit()
 
    rf = "resources.out"
+   com = "cp imported/provider.tf provider.tf"
+   rout = rc(com)
 
    com = "terraform validate -no-color"
    rout = rc(com)
@@ -693,8 +698,8 @@ def check_python_version():
 
 def aws_tf(region):
    # os.chdir(globals.path1)
-   if not os.path.isfile("aws.tf"):
-      with open("aws.tf", 'w') as f3:
+   #if not os.path.isfile("aws.tf"):
+   with open("provider.tf", 'w') as f3:
          f3.write('terraform {\n')
          f3.write('  required_version = "> 1.7.4"\n')
          f3.write('  required_providers {\n')
@@ -710,6 +715,8 @@ def aws_tf(region):
          f3.write('  shared_credentials_files = ["~/.aws/credentials"]\n')
          # f3.write('  profile                  = var.profile\n')
          f3.write('}\n')
+   com = "cp provider.tf imported/provider.tf"
+   rout = rc(com)
    if not os.path.isfile("data-aws.tf"):   
       with open("data-aws.tf", 'w') as f3:
          f3.write('data "aws_region" "current" {}\n')

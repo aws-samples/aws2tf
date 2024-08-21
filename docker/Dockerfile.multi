@@ -1,0 +1,73 @@
+# Build stage
+FROM python:3.12.5-alpine3.20 AS builder
+
+# Install build dependencies
+RUN apk update && apk add --no-cache \
+    bash \
+    curl \
+    zip \
+    git \
+    unzip \
+    iputils \
+    aws-cli
+
+# Get Terraform
+ARG TF_VERSION=latest
+RUN set -eux \
+    && if [ "${TF_VERSION}" = "latest" ]; then \
+        VERSION="$( curl -sS https://releases.hashicorp.com/terraform/ \
+            | tac | tac \
+            | grep -Eo '/terraform/[.0-9]+/\"' \
+            | grep -Eo '[.0-9]+' \
+            | sort -V \
+            | tail -1 )"; \
+    else \
+        VERSION="$( curl -sS https://releases.hashicorp.com/terraform/ \
+            | tac | tac \
+            | grep -Eo "/terraform/${TF_VERSION}\.[.0-9]+/\"" \
+            | grep -Eo '[.0-9]+' \
+            | sort -V \
+            | tail -1 )"; \
+    fi \
+    && ARCH=$(case $(uname -m) in x86_64) echo "amd64" ;; aarch64) echo "arm64" ;; armv7l) echo "arm" ;; i386) echo "386" ;; *) echo "amd64" ;; esac) \
+    && curl --fail -sS -L -O \
+        https://releases.hashicorp.com/terraform/${VERSION}/terraform_${VERSION}_linux_${ARCH}.zip \
+    && unzip terraform_${VERSION}_linux_${ARCH}.zip -d /usr/bin \
+    && chmod +x /usr/bin/terraform \
+    && rm -f terraform_${VERSION}_linux_${ARCH}.zip
+
+# Clone the repository
+RUN git clone -b python https://github.com/aws-samples/aws2tf.git /aws2tf
+
+# Install Python dependencies
+WORKDIR /aws2tf
+RUN pip install --user -r requirements.txt
+
+# Final stage
+FROM python:3.12.5-alpine3.20
+
+# Install runtime dependencies
+RUN apk update && apk add --no-cache \
+    bash \
+    aws-cli \
+    iputils
+
+# Copy Terraform from builder stage
+COPY --from=builder /usr/bin/terraform /usr/bin/terraform
+
+# Create non-root user
+RUN adduser -D aws2tf
+
+# Copy the application and its dependencies
+COPY --from=builder --chown=aws2tf:aws2tf /aws2tf /aws2tf
+COPY --from=builder --chown=aws2tf:aws2tf /root/.local /home/aws2tf/.local
+
+# Set up environment
+USER aws2tf
+WORKDIR /aws2tf
+ENV PATH=/home/aws2tf/.local/bin:$PATH
+ENV PYTHONUNBUFFERED=1
+
+# Set the entrypoint
+ENTRYPOINT ["python", "aws2tf.py"]
+CMD []

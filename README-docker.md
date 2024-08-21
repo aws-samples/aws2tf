@@ -7,7 +7,7 @@
 * `docker` installed and available - see [here](https://docs.docker.com/engine/install/)
 
 
-### Make the required sub directores
+### Make the required sub directories
 
 ```bash
 mkdir -p aws2tf/generated
@@ -16,7 +16,7 @@ cd aws2tf
 
 ### Create the Dockerfile (tip: use the copy icon, top right)
 
-```
+```bash
 cat << 'EOF' > Dockerfile.aws2tf
 FROM python:3.9-alpine3.20
 RUN apk update \
@@ -75,20 +75,20 @@ EOF
 
 ### build the container from the newly created Dockerfile.aws2tf
 
-```
+```bash
 docker build -f Dockerfile.aws2tf --no-cache -t aws2tf . 
 ```
 
 ### Create an alias ro run the aws2tf container
 
-```
+```bash
 alias aws2tf.py="docker run  --name aws2tf --rm -it -v $(pwd)/generated:/aws2tf/generated -v ~/.aws:/home/aws2tf/.aws aws2tf ./aws2tf.py"
 ```
 
 
-run aws2tf using the alias to the container:
+### run aws2tf using the alias to the container:
 
-```
+```bash
 aws2tf.py -t vpc"
 ```
 

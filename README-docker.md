@@ -9,12 +9,12 @@
 
 ### Make the required sub directores
 
-```
+```bash
 mkdir -p aws2tf/generated
 cd aws2tf
 ```
 
-### Create the Dockerfile
+### Create the Dockerfile (tip: use the copy icon, top right)
 
 ```
 cat << 'EOF' > Dockerfile.aws2tf

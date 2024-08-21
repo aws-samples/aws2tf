@@ -95,7 +95,14 @@
 * aws_batch_job_definition
 * aws_batch_job_queue
 * aws_batch_scheduling_policy
+* aws_bedrock_guardrail
 * aws_bedrock_model_invocation_logging_configuration
+* aws_bedrockagent_agent
+* aws_bedrockagent_agent_action_group
+* aws_bedrockagent_agent_alias
+* aws_bedrockagent_agent_knowledge_base_association
+* aws_bedrockagent_data_source
+* aws_bedrockagent_knowledge_base
 * aws_ce_cost_allocation_tag
 * aws_chime_voice_connector
 * aws_chime_voice_connector_group
@@ -189,6 +196,12 @@
 * aws_datasync_agent
 * aws_datasync_location_s3
 * aws_datasync_task
+* aws_datazone_domain
+* aws_datazone_environment_blueprint_configuration
+* aws_datazone_environment_profile
+* aws_datazone_glossary
+* aws_datazone_glossary_term
+* aws_datazone_project
 * aws_dax_cluster
 * aws_db_cluster_snapshot
 * aws_db_event_subscription

@@ -1699,6 +1699,58 @@ aws_bedrock_model_invocation_logging_configuration = {
 	"filterid":	"null"
 }
 
+aws_bedrockagent_agent = {
+	"clfn":		"bedrock-agent",
+	"descfn":	"list_agents",
+	"topkey":	"agentSummaries",
+	"key":		"agentId",
+	"filterid":	"name"
+}
+# aws_bedrockagent_knowledge_base
+aws_bedrockagent_knowledge_base = {
+	"clfn":		"bedrock-agent",
+	"descfn":	"list_knowledge_bases",
+	"topkey":	"knowledgeBaseSummaries",
+	"key":		"knowledgeBaseId",
+	"filterid":	"name"
+}
+
+#aws_bedrockagent_agent_knowledge_base_association
+aws_bedrockagent_agent_knowledge_base_association = {
+	"clfn":		"bedrock-agent",
+	"descfn":	"list_agent_knowledge_bases",
+	"topkey":	"agentKnowledgeBaseSummaries",
+	"key":		"knowledgeBaseId",
+	"filterid":	"agentKnowledgeBaseAssociationId"
+}
+
+#aws_bedrockagent_data_source
+aws_bedrockagent_data_source = {
+	"clfn":		"bedrock-agent",
+	"descfn":	"list_data_sources",
+	"topkey":	"dataSourceSummaries",
+	"key":		"dataSourceId",
+	"filterid":	"name"
+}
+
+#aws_bedrockagent_agent_alias
+aws_bedrockagent_agent_alias = {
+	"clfn":		"bedrock-agent",
+	"descfn":	"list_agent_aliases",
+	"topkey":	"agentAliasSummaries",
+	"key":		"agentAliasId",
+	"filterid":	"agentAliasId"
+}
+
+#aws_bedrockagent_agent_action_group
+aws_bedrockagent_agent_action_group = {
+	"clfn":		"bedrock-agent",
+	"descfn":	"list_agent_action_groups",
+	"topkey":	"actionGroupSummaries",
+	"key":		"actionGroupId",
+	"filterid":	"actionGroupId"
+}
+
 aws_budgets_budget = {
 	"clfn":		"budgets",
 	"descfn":	"list_budgets",
@@ -10669,6 +10721,12 @@ aws_resources = {
 	"aws_batch_scheduling_policy": aws_batch_scheduling_policy,
     "aws_bedrock_guardrail": aws_bedrock_guardrail,
 	"aws_bedrock_model_invocation_logging_configuration": aws_bedrock_model_invocation_logging_configuration,
+    "aws_bedrockagent_agent": aws_bedrockagent_agent,
+    "aws_bedrockagent_knowledge_base": aws_bedrockagent_knowledge_base,
+    "aws_bedrockagent_agent_knowledge_base_association": aws_bedrockagent_agent_knowledge_base_association,
+    "aws_bedrockagent_data_source": aws_bedrockagent_data_source,
+    "aws_bedrockagent_agent_action_group": aws_bedrockagent_agent_action_group,
+    "aws_bedrockagent_agent_alias": aws_bedrockagent_agent_alias,
 	"aws_budgets_budget": aws_budgets_budget,
 	"aws_budgets_budget_action": aws_budgets_budget_action,
 	"aws_ce_anomaly_monitor": aws_ce_anomaly_monitor,

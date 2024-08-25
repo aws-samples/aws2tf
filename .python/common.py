@@ -858,6 +858,8 @@ def write_import(type,theid,tfid):
       
       fn="import__"+type+"__"+tfid+".tf"
 
+      fn=fn.replace(globals.acc,"012345678912")
+
       if globals.debug: print(fn)
       #print(fn)
       
@@ -869,11 +871,16 @@ def write_import(type,theid,tfid):
          globals.rproc[pkey]=True
          return
       #print("theid=",theid,"  tfid=",tfid)
-      with open(fn, "a") as f:
-         f.write('import {\n')
-         f.write('  to = ' +type + '.' + tfid + '\n')
-         f.write('  id = "'+ theid + '"\n')
-         f.write('}\n')
+
+      output = StringIO()
+      output.write('import {\n')
+      output.write('  to = ' +type + '.' + tfid + '\n')
+      output.write('  id = "'+ theid + '"\n')
+      output.write('}\n')
+
+            # Write the filtered resource block to a new file
+      with open(fn, 'w') as f:
+         f.write(output.getvalue().strip() + '\n')
 
       pkey=type+"."+tfid
       globals.rproc[pkey]=True

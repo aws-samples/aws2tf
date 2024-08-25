@@ -84,6 +84,18 @@ or for a specific VPC:
 ./aws2tf.py -t aws_vpc -i vpc-xxxxxxxxxx -v
 ```
 
+You can also instead of using predefined types use the direct Terraform resource names:
+
+```
+./aws2tf.py -t aws_sagemaker_domain
+```
+
+You can also combine type requests by using a comma delimited list:
+
+```
+./aws2tf.py -t vpc,efs,aws_dagemaker_domain
+```
+
 
 ### Adding (merging) resources:
 
@@ -103,12 +115,6 @@ You can also import just a specific resource by passing it's AWS resource name, 
 ./aws2tf.py -t eks -i my-cluster-name -m
 ```
 
-You can also instead of using predefined types use the direct Terraform resource names:
-
-```
-./aws2tf.py -t aws_sagemaker_domain
-```
-
 or for a specific domain:
 
 ```
@@ -120,6 +126,10 @@ Add a specific S3 bucket:
 ```
 ./aws2tf -t aws_s3_bucket -i my_bucket_name -m
 ```
+
+
+
+
 
 ### Importing from a deployed stack
 

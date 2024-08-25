@@ -20,9 +20,7 @@ cd aws2tf
 cat << 'EOF' > Dockerfile.aws2tf
 FROM python:3.12.5-alpine3.20
 RUN apk update \
-    && apk add bash \
-    && apk add curl zip git unzip iputils \
-    && apk add --no-cache aws-cli
+    && apk add curl zip git unzip
 
 # Get Terraform
 ARG TF_VERSION=latest

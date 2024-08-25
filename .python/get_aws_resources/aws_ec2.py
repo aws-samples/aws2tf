@@ -480,7 +480,7 @@ def get_aws_default_network_acl(type, id, clfn, descfn, topkey, key, filterid):
         paginator = client.get_paginator(descfn)
             # TODO - just get all onlce and use @@@@ globals
         if id is not None:
-            if "acl-" in id:
+            if id .startswith("acl-"):
                 for page in paginator.paginate(Filters=[
                     {
                         'Name': 'association.network-acl-id',
@@ -492,7 +492,7 @@ def get_aws_default_network_acl(type, id, clfn, descfn, topkey, key, filterid):
                     }
                     ]):
                     response.extend(page[topkey])
-            elif "vpc-" in id:
+            elif id.startswith("vpc-"):
                 for page in paginator.paginate(Filters=[
                     {
                         'Name': 'vpc-id',

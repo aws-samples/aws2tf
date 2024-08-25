@@ -90,8 +90,8 @@ if __name__ == '__main__':
     argParser.add_argument("-m", "--merge", help="merge", action='store_true')
     argParser.add_argument("-d", "--debug", help="debug", action='store_true')
     argParser.add_argument("-v", "--validate", help="validate and exit", action='store_true')
-    argParser.add_argument("-a", "--apionly", help="boto3 api only (for debugging)", action='store_true')
-    argParser.add_argument("-e", "--expectedok", help="expected plan changes accepted", action='store_true')
+    argParser.add_argument("-a", "--accept", help="expected plan changes accepted", action='store_true')
+    argParser.add_argument("-e", "--exclude", help="resource types to exclude")
     argParser.add_argument("-b3", "--boto3error", help="exit on boto3 api error (for debugging)", action='store_true')
     args = argParser.parse_args()
     type=""
@@ -102,7 +102,7 @@ if __name__ == '__main__':
         print("no executable found for command 'terraform'")
         exit()
 
-    globals.expected=args.expectedok
+    globals.expected=args.accept
 
     # print("args=%s" % args)
     
@@ -121,6 +121,22 @@ if __name__ == '__main__':
         args.type = "all"
     else:
         type = args.type
+
+    #print("args.exclude="+str(args.exclude))
+   
+ # build exclusion list 
+
+    if args.exclude is not None: 
+        extypes=args.exclude
+        if "," in extypes:
+                extypes = extypes.split(",")
+        else:
+                extypes = [extypes]
+        globals.all_extypes=[]
+        for i in extypes: 
+            globals.all_extypes = globals.all_extypes + resources.resource_types(i)
+    else:
+        globals.all_extypes=[]
 
     if args.region is None:
         com = "aws configure get region"
@@ -212,63 +228,88 @@ if __name__ == '__main__':
     build_lists()
     
     if type == "" or type is None: type = "all"
-    print("---<><>"+ str(type),str(id))
-        
+    
+    print("---<><> "+ str(type),"Id="+str(id)," exclude="+str(globals.all_extypes))  
 
 ################# -- now we are calling ----   ###############################
-    all_types = resources.resource_types(type)
 
-    try:
-        lall=len(all_types)
-    except:
-        lall=0
-
-
-    if all_types is None: print("No resources found all_types=None")
-
-
-    if type == "stack":
-        if id is None:
-            print("Must pass a stack name as a parameter   -i <stack name>")
+    if "," in type:
+        if "stack" in type:
+            print("Cannot mix stack with other types")
             exit()
-        else:
-            globals.expected=True
-            stacks.get_stacks(id)
+        types = type.split(",")
+        all_types = []
+        for type1 in types: all_types = all_types + resources.resource_types(type1)
 
+        for type2 in all_types:
+            if type2 in aws_dict.aws_resources:   
+                if type2 in globals.all_extypes:
+                    print("Excluding", type2) 
+                    continue                 
+                common.call_resource(type2, id)
+            else:
+                print("Resource",type2," not found in aws_dict")
         
-    
-    elif type.startswith("aws_"):
-
-        if type in aws_dict.aws_resources:
-            common.call_resource(type, id)
-
-    elif all_types != None and lall > 1:
-        #print("len all_types="+str(len(all_types))) # testing only
-        #id="foobar" # testing only
-        ic=0
-        istart=0
-        it=len(all_types)
-        globals.expected=True
-        for i in all_types:
-            ic=ic+1
-            if ic > it: break 
-            if ic < istart: continue
-                
-            print(str(ic)+" of "+str(it) +"\t"+i)
-            common.call_resource(i, id)
-            
     else:
-        if all_types is not None:
-            for type in all_types:
-                if type in aws_dict.aws_resources:
-                   
-                    common.call_resource(type,id)
+        all_types = resources.resource_types(type)
+
+        try:
+            lall=len(all_types)
+        except:
+            lall=0
+
+        if all_types is None: print("No resources found all_types=None")
+
+        if type == "stack":
+            if id is None:
+                print("Must pass a stack name as a parameter   -i <stack name>")
+                exit()
+            else:
+                globals.expected=True
+                stacks.get_stacks(id)
+        
+        elif type.startswith("aws_"):
+            if type in aws_dict.aws_resources:
+                if type in globals.all_extypes:
+                    print("Excluding", type) 
+                else:    
+                    common.call_resource(type, id)
+            else:
+                print("Resource",type," not found in aws_dict")
+
+        elif all_types != None and lall > 1:
+            #print("len all_types="+str(len(all_types))) # testing only
+            #id="foobar" # testing only
+            ic=0
+            istart=0
+            it=len(all_types)
+            globals.expected=True
+            for i in all_types:
+                ic=ic+1
+                if ic > it: break 
+                if ic < istart: continue
+                    
+                print(str(ic)+" of "+str(it) +"\t"+i)
+                if i in globals.all_extypes:
+                    print("Excluding", i) 
+                    continue
+                common.call_resource(i, id)
+                
         else:
-            print("No resources found")
-            exit()
+            if all_types is not None:
+                for type in all_types:
+                    if type in aws_dict.aws_resources:
+                        if type in globals.all_extypes:
+                            print("Excluding", type) 
+                            continue 
+                        common.call_resource(type,id)
+                    else:
+                        print("Resource",type," not found in aws_dict")
+            else:
+                print("No resources found")
+                exit()
 
 #########################################################################################################################
-
 
 ## Known dependancies section
     
@@ -281,8 +322,6 @@ if __name__ == '__main__':
                     common.call_resource(i, id)
     #else:
     #    print("No Known Dependancies")
-
-    if args.apionly:   exit(0)
 
     common.tfplan1()
     common.tfplan2()

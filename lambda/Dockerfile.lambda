@@ -1,7 +1,9 @@
 FROM python:3.12.5-alpine3.20
 RUN apk update \
-    && apk add curl zip git unzip
+&& apk add --no-cache curl zip git unzip cmake make automake autoconf build-base g++ libtool binutils linux-headers libgcc libcurl 
+RUN apk add --no-cache --update --repository=https://dl-cdn.alpinelinux.org/alpine/v3.16/main/ libexecinfo-dev
 
+# 
 # Get Terraform
 ARG TF_VERSION=latest
 RUN set -eux \
@@ -44,8 +46,14 @@ RUN chown -R aws2tf /aws2tf
 USER aws2tf
 WORKDIR /aws2tf
 #install dependencies
+RUN pip install awslambdaric
 RUN pip install -r requirements.txt
+
 ENV PYTHONUNBUFFERED=1
+COPY lambda_function.py .
 # Set the entrypoint
-ENTRYPOINT ["python", "aws2tf.py"]
-CMD [] 
+#ENTRYPOINT ["python", "aws2tf.py"]
+#CMD []
+ENTRYPOINT [ "python", "-m", "awslambdaric" ]
+# Pass the name of the function handler as an argument to the runtime
+CMD [ "lambda_function.handler" ]

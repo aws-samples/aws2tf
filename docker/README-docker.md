@@ -7,26 +7,21 @@
 * `docker` installed and available - see [here](https://docs.docker.com/engine/install/)
 
 
-### Make the required sub directores
+### Make the required sub directories
 
-```
+```bash
 mkdir -p aws2tf/generated
 cd aws2tf
 ```
 
-### Create the Dockerfile
+### Create the Dockerfile (tip: use the copy icon, top right)
 
-```
+```bash
 cat << 'EOF' > Dockerfile.aws2tf
-FROM python:3.9-alpine3.20
-RUN apk update \
-    && apk add bash \
-    && apk add curl zip git unzip iputils \
-    && apk add --no-cache aws-cli
-
-# Get Terraform
+FROM python:3.12.5-alpine3.20
 ARG TF_VERSION=latest
 RUN set -eux \
+	&& apk update apk add curl zip git unzip \
 	&& if [ "${TF_VERSION}" = "latest" ]; then \
 		VERSION="$( curl -sS https://releases.hashicorp.com/terraform/ \
 			| tac | tac \
@@ -68,28 +63,29 @@ WORKDIR /aws2tf
 #install dependencies
 RUN pip install -r requirements.txt
 ENV PYTHONUNBUFFERED=1
-#ENTRYPOINT ["./aws2tf.py"] 
-CMD ["./aws2tf.py"] 
+# Set the entrypoint
+ENTRYPOINT ["python", "aws2tf.py"]
+CMD []
 EOF
 ```
 
 ### build the container from the newly created Dockerfile.aws2tf
 
-```
+```bash
 docker build -f Dockerfile.aws2tf --no-cache -t aws2tf . 
 ```
 
 ### Create an alias ro run the aws2tf container
 
-```
-alias aws2tf.py="docker run  --name aws2tf --rm -it -v $(pwd)/generated:/aws2tf/generated -v ~/.aws:/home/aws2tf/.aws aws2tf ./aws2tf.py"
+```bash
+alias aws2tf.py="docker run --security-opt=no-new-privileges --name aws2tf --rm -it -v $(pwd)/generated:/aws2tf/generated -v ~/.aws:/home/aws2tf/.aws:ro aws2tf"
 ```
 
 
-run aws2tf using the alias to the container:
+### run aws2tf using the alias to the container:
 
-```
-aws2tf.py -t vpc"
+```bash
+aws2tf.py -t vpc
 ```
 
 

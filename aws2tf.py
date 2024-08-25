@@ -237,6 +237,11 @@ if __name__ == '__main__':
         if "stack" in type:
             print("Cannot mix stack with other types")
             exit()
+
+        if id is not None:
+            print("Cannot pass id with multiple types")
+            exit()
+            
         types = type.split(",")
         all_types = []
         for type1 in types: all_types = all_types + resources.resource_types(type1)

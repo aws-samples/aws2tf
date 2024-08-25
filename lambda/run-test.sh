@@ -1,0 +1,1 @@
+docker run --platform linux/arm64 -p 9000:8080 laws2tf

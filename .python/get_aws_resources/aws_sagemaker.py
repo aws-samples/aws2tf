@@ -22,14 +22,14 @@ def get_aws_sagemaker_domain(type, id, clfn, descfn, topkey, key, filterid):
             for j in response[topkey]:
                 did = j['DomainId']
                 common.write_import(type, did, None)
-                common.add_dependancy("aws_sagemaker_user_profile", did)
+                #common.add_dependancy("aws_sagemaker_user_profile", did)
                 common.add_dependancy("aws_sagemaker_app", did)
         else:
             if id.startswith("d-"):
                 j = client.describe_domain(DomainId=id)
                 did = j['DomainId']
                 common.write_import(type, did, None)
-                common.add_dependancy("aws_sagemaker_user_profile", did)
+                #common.add_dependancy("aws_sagemaker_user_profile", did)
                 common.add_dependancy("aws_sagemaker_app", did)
 
     except Exception as e:

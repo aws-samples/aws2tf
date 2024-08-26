@@ -235,6 +235,10 @@ def tfplan1():
    com = "cp imported/provider.tf provider.tf"
    rout = rc(com)
 
+   com = "mv aws_*.tf imported"
+   rout = rc(com)
+
+
    com = "terraform plan -generate-config-out=" + \
        rf + " -out tfplan -json > plan1.json"
    print(com)
@@ -1326,12 +1330,17 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    elif exn == "BadRequestException" and clfn=="guardduty":
       print(str(exc_obj)+" for "+frame+" id="+str(id)+" - returning")
       return  
+   
+   elif exn=="AccessDeniedException":
+      pkey=frame.split("get_")[1]
+      print("AccessDeniedException exception for "+fname+" - returning")
+      return
 
 
    elif "NotFoundException" in exn:
       if frame.startswith("get_"):
          print("NOT FOUND: "+frame.split("get_")[1]+" "+str(id)+" check if it exists and what references it - returning")
-         pkey=frame.split("get_")[1]+"."+id
+         pkey=frame.split("get_")[1]+"."+str(id)
          if "aws_glue_catalog_database" in pkey:
             pkey=frame.split("get_")[1]+"."+globals.acc+":"+id
          globals.rproc[pkey]=True
@@ -1342,7 +1351,7 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    elif exn=="ResourceNotFoundException" or exn=="EntityNotFoundException" or exn=="NoSuchEntityException" or exn=="NotFoundException" or exn=="LoadBalancerNotFoundException" or exn=="NamespaceNotFound" or exn=="NoSuchHostedZone":
       if frame.startswith("get_"):
          print("RESOURCE NOT FOUND: "+frame.split("get_")[1]+" "+str(id)+" check if it exists and what references it - returning")
-         pkey=frame.split("get_")[1]+"."+id
+         pkey=frame.split("get_")[1]+"."+str(id)
          globals.rproc[pkey]=True
       else:
          print("RESOURCE NOT FOUND: "+frame+" "+str(id)+" check if it exists - returning")

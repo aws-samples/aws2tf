@@ -527,7 +527,7 @@ def tfplan3():
 
             if globals.expected is False:
                print("You can check the changes by running 'terraform plan' in ",globals.path1+"\n")
-               print("Then rerun the same ./aws2tf.py command and add the '-e' flag to accept these plan changes and continue to import")
+               print("Then rerun the same ./aws2tf.py command and add the '-a' flag to accept these plan changes and continue to import")
                exit()
 
             if globals.debug is True:

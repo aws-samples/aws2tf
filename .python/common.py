@@ -622,15 +622,31 @@ def wrapup():
    zerod = False
    zeroc = False
    if "Error" in str(rout.stderr.decode().rstrip()):
-      print("ERROR: problem in apply exiting ...")
-      print(str(rout.stderr.decode().rstrip()))
-      exit()
+      print("ERROR: problem in apply ... further checks ....")
+      errs=str(rout.stderr.decode().rstrip())
+      ## Plan check
+      print("\nPost Error Import Plan Check .....")
+      com = "terraform plan -no-color"
+      rout = rc(com)
+      if "No changes. Your infrastructure matches the configuration" not in str(rout.stdout.decode().rstrip()):
+         print(errs)
+         print("ERROR: unexpected final plan stuff - exiting")
+         print(str(rout.stdout.decode().rstrip()))
+         print(str(rout.stderr.decode().rstrip()))
+         exit()
+      else:
+         print("PASSED: No changes in plan")
+         com = "mv import__*.tf *.out *.json imported"
+         rout = rc(com)
+         com = "cp aws_*.tf imported"
+         rout = rc(com)
+         return
    #print(str(rout.stdout.decode().rstrip()))
-   print("Post Import Plan Check .....")
+   print("\nPost Import Plan Check .....")
    com = "terraform plan -no-color"
    rout = rc(com)
    if "No changes. Your infrastructure matches the configuration" not in str(rout.stdout.decode().rstrip()):
-      print("ERROR: unexpected final plan stuff")
+      print("ERROR: unexpected final plan failure")
       print(str(rout.stdout.decode().rstrip()))
       print(str(rout.stderr.decode().rstrip()))
       exit()

@@ -42,6 +42,7 @@ def resource_types(type):
     elif type == "kinesis": rets=["aws_kinesis_stream","aws_kinesis_firehose_delivery_stream"]; return rets # Kinesis streams and firehose
     elif type == "kms": rets=["aws_kms_key"]; return rets # KMS keys
     elif type == "lambda": rets=["aws_lambda_function"]; return rets # Lambda functions and some dependancies 
+    elif type == "lb" or type == "elb": rets=["aws_lb"]; return rets # Lambda functions and some dependancies
     elif type == "lf": rets=["aws_lakeformation_data_lake_settings","aws_lakeformation_resource","aws_lakeformation_permissions"]; return rets # Lake Formation
     elif type == "natgw": rets=["aws_nat_gateway"]; return rets # NAT gateway and dependancies
     elif type == "org": rets=["aws_organizations_organization","aws_organizations_account","aws_organizations_resource_policy","aws_organizations_policy"]; return rets # AWS Organisations and some dependancies

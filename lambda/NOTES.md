@@ -53,5 +53,10 @@ aws lambda create-function \
   --role arn:aws:iam::111122223333:role/lambda-ex
 
 
-aws lambda invoke --function-name hello-world response.json
+aws lambda invoke --function-name laws2tf response.json
 
+aws lambda invoke \
+--payload '{"beer": "tasty"}' --function-name laws2tf \
+--invocation-type Event \
+--cli-binary-format raw-in-base64-out \
+/dev/stdout

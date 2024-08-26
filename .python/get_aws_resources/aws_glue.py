@@ -437,8 +437,8 @@ def get_aws_glue_data_quality_ruleset(type, id, clfn, descfn, topkey, key, filte
         else:      
             response = client.list_data_quality_rulesets()
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-            j=response
-            common.write_import(type,j[key],None)
+            for j in response[topkey]:
+                common.write_import(type,j[key],None)
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

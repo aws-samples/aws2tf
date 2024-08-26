@@ -93,6 +93,7 @@ if __name__ == '__main__':
     argParser.add_argument("-a", "--accept", help="expected plan changes accepted", action='store_true')
     argParser.add_argument("-e", "--exclude", help="resource types to exclude")
     argParser.add_argument("-b3", "--boto3error", help="exit on boto3 api error (for debugging)", action='store_true')
+    argParser.add_argument("-la", "--serverless", help="Lambda mode - when running in a Lambda container", action='store_true')
     args = argParser.parse_args()
     type=""
 
@@ -123,7 +124,9 @@ if __name__ == '__main__':
         type = args.type
 
     #print("args.exclude="+str(args.exclude))
-   
+    
+
+
  # build exclusion list 
 
     if args.exclude is not None: 
@@ -176,9 +179,14 @@ if __name__ == '__main__':
     print('Using region: '+region + ' account: ' + globals.acc+"\n")
     globals.region = region
     globals.regionl = len(region)
-    
-    globals.path1="generated/tf-"+globals.acc+"_"+region
-    globals.path2=globals.path1+"/imported"
+    if args.serverless:     
+        globals.serverless=True
+        globals.path1="/tmp/aws2tf/generated/tf-"+globals.acc+"_"+region
+        globals.path2=globals.path1+"/imported"
+    else:
+        globals.serverless=False
+        globals.path1="generated/tf-"+globals.acc+"_"+region
+        globals.path2=globals.path1+"/imported"
     com = "mkdir -p "+globals.path2
     rout = common.rc(com)
     globals.cwd=os.getcwd()
@@ -241,7 +249,7 @@ if __name__ == '__main__':
         if id is not None:
             print("Cannot pass id with multiple types")
             exit()
-            
+
         types = type.split(",")
         all_types = []
         for type1 in types: all_types = all_types + resources.resource_types(type1)

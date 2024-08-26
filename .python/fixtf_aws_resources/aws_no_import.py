@@ -179,5 +179,5 @@ noimport = {
     "aws_glue_partition": True, # as child to glue table
     #"aws_cloudformation_stack": True,
     "aws_datazone_form_type": True,
-    "aws_glue_data_quality_ruleset": True,
+    #"aws_glue_data_quality_ruleset": True,
 } 

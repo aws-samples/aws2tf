@@ -23,6 +23,7 @@ notimplemented = {
     "aws_auditmanager_assessment": True,   ### TODO
     "aws_ce_cost_allocation_tag": True, ### TODO
     "aws_ce_cost_allocation_tag": True, ### TODO
+    "aws_cloudformation_stack": True, #### ? not handled well in Terraform 
     #
     # Many of these need to be done.
     #

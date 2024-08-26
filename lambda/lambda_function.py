@@ -17,11 +17,20 @@ def rc(cmd):
 
 def handler(event, context):
     print("Command line arguments:", str(event))
-    com="ls -al /tmp"
+    cla=str(event['payload'])
+    #os.chdir("/tmp/aws2tf") 
+    com="ls -al"
     rout = rc(com)
     stc=rout.stdout.decode().rstrip() 
     print(str(stc)) 
-    return 'Hello from AWS Lambda using Python ' + str(event['payload'])
+    com="python3 ./aws2tf.py "+cla
+    print("com=",com)
+    rout = rc(com)
+    stc=rout.stdout.decode().rstrip() 
+    ste=rout.stderr.decode().rstrip()
+    print("com err=",str(ste))
+    print("com out=",str(stc))
+    return 'aws2tt: ' + stc
 # get the command line arguments 'cmla' from events
 
 # needs to call aws2tf.py via os

@@ -182,11 +182,11 @@ def main():
     globals.regionl = len(region)
     if args.serverless:     
         globals.serverless=True
-        globals.path1="/tmp/aws2tf/generated/tf-"+globals.acc+"_"+region
+        globals.path1="/tmp/aws2tf/generated/tf-"+globals.acc+"-"+region
         globals.path2=globals.path1+"/imported"
     else:
         globals.serverless=False
-        globals.path1="generated/tf-"+globals.acc+"_"+region
+        globals.path1="generated/tf-"+globals.acc+"-"+region
         globals.path2=globals.path1+"/imported"
     com = "mkdir -p "+globals.path2
     rout = common.rc(com)
@@ -239,10 +239,6 @@ def main():
     if type == "" or type is None: type = "all"
     
     print("---<><> "+ str(type),"Id="+str(id)," exclude="+str(globals.all_extypes))  
-
-
-
-
 
 ################# -- now we are calling ----   ###############################
 

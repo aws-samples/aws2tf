@@ -420,6 +420,7 @@ def main():
 ####### Finish up
 #########################################################################
     
+
     with open("pyprocessed.txt", "a") as f:
         for i in globals.rproc.keys():
             if globals.debug: print(str(i))
@@ -446,6 +447,15 @@ def main():
         print("trivy not installed, skipping security check")
 
     print("Terraform files & state in sub-directory: "+ globals.path1)
+
+
+    if globals.serverless:
+        print("Copy to S3")
+        com = "../../.scripts/copy2s3.sh"
+        print(com)
+        out = common.rc(com)
+        print(rout.stdout.decode().rstrip())
+        print(rout.stderr.decode().rstrip())
 
     x = glob.glob("*.err")
     awsf=len(x)

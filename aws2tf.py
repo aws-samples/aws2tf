@@ -197,7 +197,7 @@ def main():
 
     if globals.serverless:
         print("Serverless -1-")
-        com = "ls -Ral /tmp/aws2tf/generated"
+        com = "cat /tmp/aws2tf/generated/tf-566972129213_eu-west-2/provider.tf"
         print(com)
         rout = common.rc(com)
         print(rout.stdout.decode().rstrip())
@@ -248,6 +248,10 @@ def main():
     if type == "" or type is None: type = "all"
     
     print("---<><> "+ str(type),"Id="+str(id)," exclude="+str(globals.all_extypes))  
+
+
+
+    
 
 ################# -- now we are calling ----   ###############################
 

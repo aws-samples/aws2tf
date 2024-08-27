@@ -238,11 +238,12 @@ def tfplan1():
    com = "mv aws_*.tf imported"
    rout = rc(com)
 
-   #if globals.serverless:
-   #   com = "ls -R /tmp/aws2tf"
-   #   print(com)
-   #   rout = rc(com)
-   #   print(rout.stdout.decode().rstrip())
+   if globals.serverless:
+      com = "terraform init -upgrade"
+      print(com)
+      rout = rc(com)
+      print(rout.stdout.decode().rstrip())
+      print(rout.stderr.decode().rstrip())
 
    com = "terraform plan -generate-config-out=" + \
        rf + " -out tfplan -json > plan1.json"

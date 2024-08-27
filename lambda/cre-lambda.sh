@@ -7,6 +7,6 @@ aws lambda create-function \
   --code ImageUri=$acc.dkr.ecr.$reg.amazonaws.com/laws2tf:latest \
   --role arn:aws:iam::$acc:role/laws2tf \
   --timeout 300 \
-  --memory-size 1024 \
-  --ephemeral-storage Size=4096
+  --memory-size 2048 \
+  --ephemeral-storage Size=8192 \
   --output text

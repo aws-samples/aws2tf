@@ -5,7 +5,7 @@ merge=$(echo $3)
 echo $acc $reg $merge
 if aws s3 ls "s3://aws2tf-${acc}_${reg}" 2>&1 | grep -q 'NoSuchBucket'; then
     echo "Bucket aws2tf-${acc}_${reg} does not exist. Creating..."
-    cmd=$(print "aws s3 mb s3://aws2tf-${acc}_${reg}")
+    cmd=$(printf "aws s3 mb s3://aws2tf-%s_%s" $acc $reg)
     eval $cmd
     if [ $? -ne 0 ]; then
         echo "Error creating bucket aws2tf-${acc}_${reg}"

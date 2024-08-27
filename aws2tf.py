@@ -452,6 +452,10 @@ def main():
     if globals.serverless:
         print("Copy to S3")
         com = "../../.scripts/copy2s3.sh "+globals.acc+" "+globals.region
+        if globals.merge: 
+            com = com + " merge"
+        else:
+            com = com + " nomerge"
         print(com)
         rout = common.rc(com)
         print("s3cop cmd out:",str(rout.stdout.decode().rstrip()))

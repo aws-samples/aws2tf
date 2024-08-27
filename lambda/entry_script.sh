@@ -1,13 +1,13 @@
 #!/bin/sh
-echo "entry 010"
+echo "entry 011"
 #echo "working dir"
 #pwd
 cd /tmp
 cp -r /aws2tf .
 mkdir -p /tmp/aws2tf/generated
 cd /tmp/aws2tf
-df -m /tmp
-echo $@
+#df -m /tmp
+echo $0
 #set
 # make buck etc
 #echo "Starting lambda handler"

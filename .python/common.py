@@ -239,7 +239,7 @@ def tfplan1():
    rout = rc(com)
 
    if globals.serverless:
-      com = "terraform init -upgrade"
+      com = "df -m /tmp"
       print(com)
       rout = rc(com)
       print(rout.stdout.decode().rstrip())

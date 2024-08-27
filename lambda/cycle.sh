@@ -1,3 +1,4 @@
+date
 echo "CLEAN"
 ./clean.sh
 echo "BUILD"
@@ -11,5 +12,5 @@ echo "CREATE LAMBDA"
 echo "Sleep 20"
 sleep 20
 echo "INVOKE LAMBDA"
-date
 ./run-lambda.sh
+date

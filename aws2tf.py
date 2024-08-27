@@ -344,10 +344,10 @@ def main():
     common.tfplan1()
     if globals.serverless:
         print("Serverless -end-")
-        com = "cat plan1.json | jq ."
-        print(com)
-        rout = common.rc(com)
-        print(rout.stdout.decode().rstrip())
+        #com = "cat plan1.json | jq ."
+        #print(com)
+        #rout = common.rc(com)
+        #print(rout.stdout.decode().rstrip())
         print("Exiting with cwd:",str(os.getcwd()))
         exit()
     common.tfplan2()

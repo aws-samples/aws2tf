@@ -201,6 +201,7 @@ def main():
         print(com)
         rout = common.rc(com)
         print(rout.stdout.decode().rstrip())
+        print("Exiting with cwd:",str(os.getcwd()))
         exit()
 
     if args.merge:

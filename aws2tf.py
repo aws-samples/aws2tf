@@ -344,7 +344,7 @@ def main():
     common.tfplan1()
     if globals.serverless:
         print("Serverless -1-")
-        com = "ls /tmp/aws2tf/generated/tf-566972129213_eu-west-2"
+        com = "cat plan1 | jq ."
         print(com)
         rout = common.rc(com)
         print(rout.stdout.decode().rstrip())

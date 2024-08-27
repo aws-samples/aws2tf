@@ -454,8 +454,8 @@ def main():
         com = "../../.scripts/copy2s3.sh "+globals.acc+" "+globals.region
         print(com)
         out = common.rc(com)
-        print(str(rout.stdout.decode().rstrip()))
-        print(str(rout.stderr.decode().rstrip()))
+        print("s3cop cmd out:",str(rout.stdout.decode().rstrip()))
+        print("s3cop cmd err:",str(rout.stderr.decode().rstrip()))
         print("Copy to S3 complete")
 
     x = glob.glob("*.err")

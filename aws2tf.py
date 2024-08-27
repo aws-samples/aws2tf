@@ -343,8 +343,8 @@ def main():
 
     common.tfplan1()
     if globals.serverless:
-        print("Serverless -1-")
-        com = "cat plan1 | jq ."
+        print("Serverless -end-")
+        com = "cat plan1.json | jq ."
         print(com)
         rout = common.rc(com)
         print(rout.stdout.decode().rstrip())

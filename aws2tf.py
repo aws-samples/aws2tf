@@ -453,7 +453,7 @@ def main():
         print("Copy to S3")
         com = "../../.scripts/copy2s3.sh "+globals.acc+" "+globals.region
         print(com)
-        out = common.rc(com)
+        rout = common.rc(com)
         print("s3cop cmd out:",str(rout.stdout.decode().rstrip()))
         print("s3cop cmd err:",str(rout.stderr.decode().rstrip()))
         print("Copy to S3 complete")

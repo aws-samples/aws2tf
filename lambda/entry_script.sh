@@ -8,7 +8,7 @@ mkdir -p /tmp/aws2tf/generated
 cd /tmp/aws2tf
 df -m /tmp
 echo $@
-set
+#set
 # make buck etc
 #echo "Starting lambda handler"
 if [ -z "${AWS_LAMBDA_RUNTIME_API}" ]; then

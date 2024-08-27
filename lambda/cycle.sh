@@ -5,8 +5,8 @@ echo "BUILD"
 ./build.sh
 echo "PUSH"
 ./push.sh
-echo "Sleep 5"
-sleep 5
+echo "Sleep 10"
+sleep 10
 echo "CREATE LAMBDA"
 ./cre-lambda.sh
 echo "Sleep 20"

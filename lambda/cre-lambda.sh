@@ -8,4 +8,5 @@ aws lambda create-function \
   --role arn:aws:iam::$acc:role/laws2tf \
   --timeout 300 \
   --memory-size 1024 \
+  --ephemeral-storage Size=4096
   --output text

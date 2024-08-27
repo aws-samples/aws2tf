@@ -193,6 +193,8 @@ def main():
     globals.cwd=os.getcwd()
     os.chdir(globals.path1) 
 
+    common.aws_tf(region)
+
     if globals.serverless:
         print("Serverless -1-")
         com = "ls -Ral /tmp/aws2tf/generated"
@@ -200,8 +202,6 @@ def main():
         rout = common.rc(com)
         print(rout.stdout.decode().rstrip())
         exit()
-
-    common.aws_tf(region)
 
     if args.merge:
         print("Merging "+str(globals.merge))

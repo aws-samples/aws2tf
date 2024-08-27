@@ -1,5 +1,8 @@
-echo "copy to s3"
-set
+echo "Inside copy to s3"
+echo $1
+echo $2
+aws s3 ls
+
 #reg=$(aws configure get region)
 #acc=$(aws sts get-caller-identity --query Account --output text)
 

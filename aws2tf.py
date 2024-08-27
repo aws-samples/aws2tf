@@ -451,11 +451,12 @@ def main():
 
     if globals.serverless:
         print("Copy to S3")
-        com = "../../.scripts/copy2s3.sh"
+        com = "../../.scripts/copy2s3.sh "+globals.acc+" "+globals.region
         print(com)
         out = common.rc(com)
-        print(rout.stdout.decode().rstrip())
-        print(rout.stderr.decode().rstrip())
+        print(str(rout.stdout.decode().rstrip()))
+        print(str(rout.stderr.decode().rstrip()))
+        print("Copy to S3 complete")
 
     x = glob.glob("*.err")
     awsf=len(x)

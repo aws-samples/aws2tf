@@ -238,11 +238,19 @@ def tfplan1():
    com = "mv aws_*.tf imported"
    rout = rc(com)
 
+   if globals.serverless:
+      com = "ls -R /tmp/aws2tf"
+      print(com)
+      rout = rc(com)
+      print(rout.stdout.decode().rstrip())
 
    com = "terraform plan -generate-config-out=" + \
        rf + " -out tfplan -json > plan1.json"
    print(com)
    rout = rc(com)
+   if globals.serverless:
+      print(rout.stdout.decode().rstrip())
+      print(rout.stderr.decode().rstrip())
 
    file = "plan1.json"
    f2 = open(file, "r")
@@ -698,13 +706,7 @@ def fix_imports():
             com = "mv "+fil2+" "+fil2.replace(".tf",".err")
             print(fil2.replace(".tf",".err"))
             rc(com)
-         
-       
-
-
-
-   
-
+           
 
 def ctrl_c_handler(signum, frame):
   print("Ctrl-C pressed.")
@@ -733,22 +735,38 @@ def check_python_version():
 def aws_tf(region):
    # os.chdir(globals.path1)
    #if not os.path.isfile("aws.tf"):
-   with open("provider.tf", 'w') as f3:
-         f3.write('terraform {\n')
-         f3.write('  required_version = "> 1.7.4"\n')
-         f3.write('  required_providers {\n')
-         f3.write('    aws = {\n')
-         f3.write('      source  = "hashicorp/aws"\n')
-         # f3.write('      version = "5.48.0"\n')
-         f3.write('      version = "5.63.0"\n')
-         f3.write('    }\n')
-         f3.write('  }\n')
-         f3.write('}\n')
-         f3.write('provider "aws" {\n')
-         f3.write('  region                   = "' + region + '"\n')
-         f3.write('  shared_credentials_files = ["~/.aws/credentials"]\n')
-         # f3.write('  profile                  = var.profile\n')
-         f3.write('}\n')
+   if globals.serverless:
+      with open("provider.tf", 'w') as f3:
+            f3.write('terraform {\n')
+            f3.write('  required_version = "> 1.7.4"\n')
+            f3.write('  required_providers {\n')
+            f3.write('    aws = {\n')
+            f3.write('      source  = "hashicorp/aws"\n')
+            # f3.write('      version = "5.48.0"\n')
+            f3.write('      version = "5.63.0"\n')
+            f3.write('    }\n')
+            f3.write('  }\n')
+            f3.write('}\n')
+            f3.write('provider "aws" {\n')
+            f3.write('  region                   = "' + region + '"\n')
+            f3.write('}\n')
+   else:
+      with open("provider.tf", 'w') as f3:
+            f3.write('terraform {\n')
+            f3.write('  required_version = "> 1.7.4"\n')
+            f3.write('  required_providers {\n')
+            f3.write('    aws = {\n')
+            f3.write('      source  = "hashicorp/aws"\n')
+            # f3.write('      version = "5.48.0"\n')
+            f3.write('      version = "5.63.0"\n')
+            f3.write('    }\n')
+            f3.write('  }\n')
+            f3.write('}\n')
+            f3.write('provider "aws" {\n')
+            f3.write('  region                   = "' + region + '"\n')
+            f3.write('  shared_credentials_files = ["~/.aws/credentials"]\n')
+            # f3.write('  profile                  = var.profile\n')
+            f3.write('}\n')
    com = "cp provider.tf imported/provider.tf"
    rout = rc(com)
    if not os.path.isfile("data-aws.tf"):   

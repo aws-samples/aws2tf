@@ -192,6 +192,13 @@ if __name__ == '__main__':
     globals.cwd=os.getcwd()
     os.chdir(globals.path1) 
 
+    if globals.serverless:
+        print("Serverless -1-")
+        com = "ls -R /tmp/aws2tf"
+        print(com)
+        rout = common.rc(com)
+        print(rout.stdout.decode().rstrip())
+
     common.aws_tf(region)
 
     if args.merge:

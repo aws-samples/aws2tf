@@ -1,5 +1,5 @@
 #!/bin/sh
-#echo "entry 002"
+echo "entry 003"
 #echo "working dir"
 #pwd
 cd /tmp

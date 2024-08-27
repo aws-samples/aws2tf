@@ -199,6 +199,7 @@ def main():
         print(com)
         rout = common.rc(com)
         print(rout.stdout.decode().rstrip())
+        exit()
 
     common.aws_tf(region)
 

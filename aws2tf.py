@@ -195,7 +195,7 @@ def main():
 
     if globals.serverless:
         print("Serverless -1-")
-        com = "ls -R /tmp/aws2tf"
+        com = "ls /tmp/aws2tf/generated"
         print(com)
         rout = common.rc(com)
         print(rout.stdout.decode().rstrip())

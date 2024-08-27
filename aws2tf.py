@@ -195,15 +195,6 @@ def main():
 
     common.aws_tf(region)
 
-    if globals.serverless:
-        print("Serverless -1-")
-        com = "cat /tmp/aws2tf/generated/tf-566972129213_eu-west-2/provider.tf"
-        print(com)
-        rout = common.rc(com)
-        print(rout.stdout.decode().rstrip())
-        print("Exiting with cwd:",str(os.getcwd()))
-        exit()
-
     if args.merge:
         print("Merging "+str(globals.merge))
         #print("Merging capability disabled for now - exiting")
@@ -240,7 +231,14 @@ def main():
 
     id = args.id
 
-
+    if globals.serverless:
+        print("Serverless -1-")
+        com = "ls /tmp/aws2tf/generated/tf-566972129213_eu-west-2"
+        print(com)
+        rout = common.rc(com)
+        print(rout.stdout.decode().rstrip())
+        print("Exiting with cwd:",str(os.getcwd()))
+        exit()
 #### setup
 
     build_lists()
@@ -251,7 +249,7 @@ def main():
 
 
 
-    
+
 
 ################# -- now we are calling ----   ###############################
 

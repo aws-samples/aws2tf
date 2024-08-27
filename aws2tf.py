@@ -76,8 +76,9 @@ def build_lists():
 
 
 
-if __name__ == '__main__':
+#if __name__ == '__main__':
 
+def main():
     common.check_python_version()
     # print("cwd=%s" % os.getcwd())
     signal.signal(signal.SIGINT, common.ctrl_c_handler)
@@ -455,3 +456,7 @@ if __name__ == '__main__':
         print("\nErrors found - see *.err files, and please report via github issue")   
 
     exit(0)
+
+
+if __name__ == '__main__':
+    main()

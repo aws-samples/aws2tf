@@ -1,4 +1,5 @@
 #!/bin/sh
+echo "entry 001"
 echo "working dir"
 pwd
 mkdir -p /tmp/aws2tf/generated

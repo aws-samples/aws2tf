@@ -135,10 +135,10 @@ Add a specific S3 bucket:
 
 Often Organisations (and AWS blogs/workshops) deploy resources for use using a stack.
 
-aws2tf can convert these to terraform for you using the -s [stack set name] option
+aws2tf can convert these to terraform for you using the -s [stack name] option
 
 ```
-./aws2tf.sh -s <stack set name>
+./aws2tf.sh -s <stack name>
 ```
 
 
@@ -177,9 +177,9 @@ Note you do not need to clone this repo if you want to run aws2tf as a container
 
 ## Supported Resources
 
-### Supported Stack Set Resources (subject to ongoing testing)
+### Supported Stack Resources (subject to ongoing testing)
 
-see [here](https://github.com/aws-samples/aws2tf/blob/master/StackSet-Resources.md) for a list
+see [here](https://github.com/aws-samples/aws2tf/blob/master/Stack-Resources.md) for a list
 
 ### Supported Terraform Resources (subject to ongoing testing)
 

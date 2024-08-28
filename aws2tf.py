@@ -76,8 +76,9 @@ def build_lists():
 
 
 
-if __name__ == '__main__':
+#if __name__ == '__main__':
 
+def main():
     common.check_python_version()
     # print("cwd=%s" % os.getcwd())
     signal.signal(signal.SIGINT, common.ctrl_c_handler)
@@ -181,11 +182,11 @@ if __name__ == '__main__':
     globals.regionl = len(region)
     if args.serverless:     
         globals.serverless=True
-        globals.path1="/tmp/aws2tf/generated/tf-"+globals.acc+"_"+region
+        globals.path1="/tmp/aws2tf/generated/tf-"+globals.acc+"-"+region
         globals.path2=globals.path1+"/imported"
     else:
         globals.serverless=False
-        globals.path1="generated/tf-"+globals.acc+"_"+region
+        globals.path1="generated/tf-"+globals.acc+"-"+region
         globals.path2=globals.path1+"/imported"
     com = "mkdir -p "+globals.path2
     rout = common.rc(com)
@@ -415,6 +416,7 @@ if __name__ == '__main__':
 ####### Finish up
 #########################################################################
     
+
     with open("pyprocessed.txt", "a") as f:
         for i in globals.rproc.keys():
             if globals.debug: print(str(i))
@@ -442,9 +444,27 @@ if __name__ == '__main__':
 
     print("Terraform files & state in sub-directory: "+ globals.path1)
 
+
+    if globals.serverless:
+        print("Copy to S3")
+        com = "../../.scripts/copy2s3.sh "+globals.acc+" "+globals.region
+        if globals.merge: 
+            com = com + " merge"
+        else:
+            com = com + " nomerge"
+        print(com)
+        rout = common.rc(com)
+        print("s3cop cmd out:",str(rout.stdout.decode().rstrip()))
+        print("s3cop cmd err:",str(rout.stderr.decode().rstrip()))
+        print("Copy to S3 complete")
+
     x = glob.glob("*.err")
     awsf=len(x)
     if awsf > 0:
         print("\nErrors found - see *.err files, and please report via github issue")   
 
     exit(0)
+
+
+if __name__ == '__main__':
+    main()

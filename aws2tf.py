@@ -192,7 +192,11 @@ def main():
     if globals.serverless:
         if args.merge:
             print("Restore S3")
-            com = "../../.scripts/restore-s3.sh "+globals.acc+" "+globals.region + " merge"
+            com = "../../.scripts/restore-s3.sh "+globals.acc+" "+globals.region
+            if globals.merge: 
+                com = com + " merge"
+            else:
+                com = com + " nomerge"
             print(com)
             rout = common.rc(com)
             print("s3restore cmd out:",str(rout.stdout.decode().rstrip()))
@@ -200,7 +204,11 @@ def main():
             print("Restore to S3 complete")
         else:
             print("Del S3")
-            com = "../../.scripts/del-s3.sh "+globals.acc+" "+globals.region + " nomerge"
+            com = "../../.scripts/del-s3.sh "+globals.acc+" "+globals.region
+            if globals.merge: 
+                com = com + " merge"
+            else:
+                com = com + " nomerge"
             print(com)
             rout = common.rc(com)
             print("s3del cmd out:",str(rout.stdout.decode().rstrip()))
@@ -249,7 +257,7 @@ def main():
         com = "mkdir -p imported notimported"
         rout = common.rc(com)
         if globals.serverless:
-            print("Del S3")
+            print("Del S3 - 2")
             com = "../../.scripts/del-s3.sh "+globals.acc+" "+globals.region
             if globals.merge: 
                 com = com + " merge"
@@ -257,9 +265,9 @@ def main():
                 com = com + " nomerge"
             print(com)
             rout = common.rc(com)
-            print("s3cop cmd out:",str(rout.stdout.decode().rstrip()))
-            print("s3cop cmd err:",str(rout.stderr.decode().rstrip()))
-            print("Copy to S3 complete")
+            print("s3del2 cmd out:",str(rout.stdout.decode().rstrip()))
+            print("s3del2 cmd err:",str(rout.stderr.decode().rstrip()))
+            print("Del2 S3 complete")
 
     id = args.id
 

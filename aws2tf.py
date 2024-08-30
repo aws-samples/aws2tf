@@ -125,8 +125,6 @@ def main():
         type = args.type
 
     #print("args.exclude="+str(args.exclude))
-    
-
 
  # build exclusion list 
 
@@ -178,6 +176,8 @@ def main():
             print("STS Authorization Error: ExpiredToken, exiting .....")
         exit()
     print('Using region: '+region + ' account: ' + globals.acc+"\n")
+####  restore form S3 if merging & serverless
+
     globals.region = region
     globals.regionl = len(region)
     if args.serverless:     
@@ -188,6 +188,34 @@ def main():
         globals.serverless=False
         globals.path1="generated/tf-"+globals.acc+"-"+region
         globals.path2=globals.path1+"/imported"
+
+    if globals.serverless:
+        if args.merge:
+            print("Restore S3")
+            com = "../../.scripts/restore-s3.sh "+globals.acc+" "+globals.region
+            if globals.merge: 
+                com = com + " merge"
+            else:
+                com = com + " nomerge"
+            print(com)
+            rout = common.rc(com)
+            print("s3restore cmd out:",str(rout.stdout.decode().rstrip()))
+            print("s3restore cmd err:",str(rout.stderr.decode().rstrip()))
+            print("Restore to S3 complete")
+        else:
+            print("Del S3")
+            com = "../../.scripts/del-s3.sh "+globals.acc+" "+globals.region
+            if globals.merge: 
+                com = com + " merge"
+            else:
+                com = com + " nomerge"
+            print(com)
+            rout = common.rc(com)
+            print("s3del cmd out:",str(rout.stdout.decode().rstrip()))
+            print("s3del cmd err:",str(rout.stderr.decode().rstrip()))
+            print("Delete S3 complete")
+
+
     com = "mkdir -p "+globals.path2
     rout = common.rc(com)
     globals.cwd=os.getcwd()
@@ -228,6 +256,18 @@ def main():
         rout = common.rc(com)
         com = "mkdir -p imported notimported"
         rout = common.rc(com)
+        if globals.serverless:
+            print("Del S3 - 2")
+            com = "../../.scripts/del-s3.sh "+globals.acc+" "+globals.region
+            if globals.merge: 
+                com = com + " merge"
+            else:
+                com = com + " nomerge"
+            print(com)
+            rout = common.rc(com)
+            print("s3del2 cmd out:",str(rout.stdout.decode().rstrip()))
+            print("s3del2 cmd err:",str(rout.stderr.decode().rstrip()))
+            print("Del2 S3 complete")
 
     id = args.id
 

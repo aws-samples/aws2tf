@@ -37,7 +37,11 @@ def get_aws_secretsmanager_secret(type, id, clfn, descfn, topkey, key, filterid)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
             common.write_import(type,j[key],None)
-            common.add_dependancy("aws_secretsmanager_secret_rotation",j[key])
+            try:
+                print(j['RotationEnabled'])
+                common.add_dependancy("aws_secretsmanager_secret_rotation",j[key])
+            except KeyError:
+                print("INFO: No rotation config")
             #common.add_dependancy("aws_secretsmanager_secret_version",j[key])
 
 
@@ -59,14 +63,23 @@ def get_aws_secretsmanager_secret_rotation(type, id, clfn, descfn, topkey, key, 
         if id is None:
             print("ERROR: get_aws_secretsmanager_secret_rotation must be called with SecretID as parameter")
         else:
+            pkey=type+"."+id
+            response = client.describe_secret(SecretId=id)
+            #print(response)
+            try:
+                roten=response['RotationEnabled']
+            except KeyError:
+                print("INFO: No rotation config")
+                
+                globals.rproc[pkey]=True
+                return True
             common.write_import(type,id,None)
+            globals.rproc[pkey]=True
          
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
-
-
 
 
 def get_aws_secretsmanager_secret_version(type, id, clfn, descfn, topkey, key, filterid):

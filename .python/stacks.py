@@ -286,7 +286,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::SSM::Parameter":  common.call_resource("aws_ssm_parameter", pid) 
             elif type == "AWS::ServiceDiscovery::PrivateDnsNamespace": common.call_resource("aws_service_discovery_private_dns_namespace", pid)
             elif type == "AWS::StepFunctions::StateMachine":  common.call_resource("aws_sfn_state_machine", pid) 
-            #elif type == "AWS::SecretsManager::SecretTargetAttachment ;;
+            elif type == "AWS::SecretsManager::SecretTargetAttachment": f3.write(type+" "+pid+" implicit elsewhere ..\n") 
             elif type == "AWS::SecretsManager::Secret": common.call_resource("aws_secretsmanager_secret", parn) 
             elif type == "AWS::ServiceDiscovery::Service": common.call_resource(" aws_service_discovery_service", pid) 
             elif type == "AWS::ACMPCA::CertificateAuthority": common.call_resource("aws_acmpca_certificate_authority", pid)

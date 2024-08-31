@@ -12,5 +12,5 @@ if aws s3 ls "s3://aws2tf-${acc}-${reg}" 2>&1 | grep -q 'NoSuchBucket'; then
     exit 1
 fi
 echo "Copying to /tmp from s3://aws2tf-${acc}-${reg}"
-aws s3 cp /tmp/aws2tf/generated/tf-${acc}-${reg} s3://aws2tf-${acc}-${reg}/ --recursive --exclude ".terraform/*" 
+aws s3 cp s3://aws2tf-${acc}-${reg}/ /tmp/aws2tf/generated/tf-${acc}-${reg} --recursive --exclude ".terraform/*" 
 echo "Done copying to s3"

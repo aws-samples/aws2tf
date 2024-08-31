@@ -150,9 +150,13 @@ def main():
         else:
             region = rout.stdout.decode().rstrip()
             if len(region) == 0:
-                print("region is required - set in AWS cli or pass with -r")
-                exit()
-            print("region set from aws cli as "+region)
+                region=os.getenv("AWS_REGION")
+                if region is None:
+                    region=os.getenv("AWS_DEFAULT_REGION")
+                    if region is None:
+                        print("region is required - set in AWS cli or pass with -r")
+                        exit()
+            print("region set from aws cli / environment variables as "+region)
     else:
         region = args.region
 

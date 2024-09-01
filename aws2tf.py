@@ -7,6 +7,7 @@ import glob
 import os
 import sys
 import shutil
+import datetime
 
 
 sys.path.insert(0, './.python')
@@ -79,6 +80,8 @@ def build_lists():
 #if __name__ == '__main__':
 
 def main():
+    now = datetime.datetime.now()
+    print("aws2tf started at %s" % now)
     common.check_python_version()
     # print("cwd=%s" % os.getcwd())
     signal.signal(signal.SIGINT, common.ctrl_c_handler)
@@ -422,6 +425,8 @@ def main():
 
     common.tfplan3()
     if globals.validate is False: 
+        now = datetime.datetime.now()
+        print("aws2tf wrap up started at %s" % now)
         common.wrapup()
     else: 
         print("\nValidation only - no files written")
@@ -465,6 +470,8 @@ def main():
     if awsf > 0:
         print("\nErrors found - see *.err files, and please report via github issue")   
 
+    now = datetime.datetime.now()
+    print("aws2tf finished at %s" % now)
     exit(0)
 
 

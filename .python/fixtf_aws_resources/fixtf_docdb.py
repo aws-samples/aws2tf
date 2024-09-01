@@ -13,8 +13,9 @@ def aws_docdb_cluster(t1,tt1,tt2,flag1,flag2):
 	if tt1 == "cluster_members": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_docdb_cluster_instance","*",skip)
 
 	elif tt1 == "db_subnet_group_name":
-			t1=tt1 + " = aws_docdb_subnet_group." + tt2 + ".id\n"
-			common.add_dependancy("aws_docdb_subnet_group",tt2)
+			if tt2 != "default":
+				t1=tt1 + " = aws_docdb_subnet_group." + tt2 + ".id\n"
+				common.add_dependancy("aws_docdb_subnet_group",tt2)
 
 	elif tt1 == "engine":
 		t1=tt1+' = "docdb"\n'

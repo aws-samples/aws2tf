@@ -881,28 +881,33 @@ def write_import(type,theid,tfid):
       ## todo -  if theid starts with a number or is an od (but what if its hexdecimal  ?)
 
       if tfid is None:
-         tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_")
+            tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_")
       else:
-         tfid=tfid.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_").replace(",","_").replace("&","_").replace("#","_")
-      
-      #catch tfid starts with number
+            tfid=tfid.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_").replace(",","_").replace("&","_").replace("#","_")
+         
+         #catch tfid starts with number
       if tfid[:1].isdigit(): tfid="r-"+tfid
-      
-      fn="import__"+type+"__"+tfid+".tf"
+
+      if "!" in theid:
+         fn="notimported/import__"+type+"__"+tfid+".tf"
+         print("ERROR: Not importing "+type+" "+theid)
+         print("ERROR: Invalid character ! in name")
+      else:
+         fn="import__"+type+"__"+tfid+".tf"
 
       fn=fn.replace(globals.acc,"012345678912")
 
       if globals.debug: print(fn)
-      #print(fn)
-      
-      # check if file exists:
-      #
+         #print(fn)
+         
+         # check if file exists:
+         #
       if os.path.isfile(fn):
-         if globals.debug: print("File exists: " + fn)
-         pkey=type+"."+tfid
-         globals.rproc[pkey]=True
-         return
-      #print("theid=",theid,"  tfid=",tfid)
+            if globals.debug: print("File exists: " + fn)
+            pkey=type+"."+tfid
+            globals.rproc[pkey]=True
+            return
+         #print("theid=",theid,"  tfid=",tfid)
 
       output = StringIO()
       output.write('import {\n')
@@ -910,7 +915,7 @@ def write_import(type,theid,tfid):
       output.write('  id = "'+ theid + '"\n')
       output.write('}\n')
 
-            # Write the filtered resource block to a new file
+               # Write the filtered resource block to a new file
       with open(fn, 'w') as f:
          f.write(output.getvalue().strip() + '\n')
 

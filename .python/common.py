@@ -1454,11 +1454,11 @@ def create_bucket_if_not_exists(bucket_name):
         if error_code == 404:
             print(f"Bucket {bucket_name} does not exist. Creating now...")
             try:
-                s3_client.create_bucket(Bucket=bucket_name)
-                print(f"Bucket {bucket_name} created successfully.")
+               s3_client.create_bucket(Bucket=bucket_name, CreateBucketConfiguration={'LocationConstraint': globals.region})
+               print(f"Bucket {bucket_name} created successfully.")
             except ClientError as create_error:
-                print(f"Error creating bucket {bucket_name}: {create_error}")
-                return False
+               print(f"Error creating bucket {bucket_name}: {create_error}")
+               return False
         else:
             print(f"Error checking bucket {bucket_name}: {e}")
             return False
@@ -1473,8 +1473,11 @@ def upload_directory_to_s3():
     local_directory="/tmp/aws2tf/generated/tf-"+globals.acc+"-"+globals.region
     bucket_name="aws2tf-"+globals.acc+"-"+globals.region
     s3_prefix=''
+    create_bucket_if_not_exists(bucket_name)
     for root, dirs, files in os.walk(local_directory):
         if '.terraform' in dirs:  dirs.remove('.terraform')
+        if 'tfplan' in files: files.remove('tfplan')
+        if '.terraform.lock.hcl' in files: files.remove('.terraform.lock.hcl')
         for filename in files:
             local_path = os.path.join(root, filename)
             
@@ -1483,17 +1486,19 @@ def upload_directory_to_s3():
             s3_path = os.path.join(s3_prefix, relative_path).replace("\\", "/")
             
             try:
-                print(f"Uploading {local_path} to {bucket_name}/{s3_path}")
+                #print(f"Uploading {local_path} to {bucket_name}/{s3_path}")
                 s3_client.upload_file(local_path, bucket_name, s3_path)
             except ClientError as e:
                 print(f"Error uploading {local_path}: {e}")
+                return False
+    print("Upload to S3 complete.")
 
 def empty_and_delete_bucket():
-    print("Emptying and deleting bucket...")
     bucket_name="aws2tf-"+globals.acc+"-"+globals.region
     s3 = boto3.resource('s3')
     s3_client = boto3.client('s3')
     bucket = s3.Bucket(bucket_name)
+    print("Emptying and deleting bucket...",bucket_name)
     # Check if the bucket exists
     try:
         s3_client.head_bucket(Bucket=bucket_name)
@@ -1507,7 +1512,6 @@ def empty_and_delete_bucket():
             return
 
     # Empty the bucket
-    print(f"Emptying bucket {bucket_name}...")
     try:
         bucket.objects.all().delete()
         print(f"Bucket {bucket_name} emptied successfully.")
@@ -1516,7 +1520,6 @@ def empty_and_delete_bucket():
         return
 
     # Delete the bucket
-    print(f"Deleting bucket {bucket_name}...")
     try:
         bucket.delete()
         print(f"Bucket {bucket_name} deleted successfully.")
@@ -1568,7 +1571,7 @@ def download_from_s3():
 
             # Download the file
             try:
-                print(f"Downloading {obj['Key']} to {local_file_path}")
+                #print(f"Downloading {obj['Key']} to {local_file_path}")
                 s3_client.download_file(bucket_name, obj['Key'], local_file_path)
             except ClientError as e:
                 print(f"Error downloading {obj['Key']}: {e}")

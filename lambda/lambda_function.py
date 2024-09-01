@@ -24,6 +24,7 @@ def handler(event, context):
 
     print("STD OUT aws2tf.py ..........")
     print("aws2tf com out=",str(stc))
+    print("-----------------------------------------------")
     print("STD ERROR aws2tf.py .........")
     print("aws2tf com err=",str(ste))
     return 'aws2tf: ' + stc

@@ -158,14 +158,14 @@ def get_aws_db_event_subscription(type, id, clfn, descfn, topkey, key, filterid)
                 response = response + page[topkey]
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
-                print(j)
+                #print(j)
                 common.write_import(type,j[key],None) 
 
         else:      
             response = client.describe_event_subscriptions(SubscriptionName=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
-                print(j)
+                #print(j)
                 common.write_import(type,j[key],None)
 
     except Exception as e:

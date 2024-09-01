@@ -772,7 +772,7 @@ def aws_tf(region):
          f3.write('}\n')
    if not globals.merge:
       print("terraform init")
-      com = "terraform init -upgrade"
+      com = "terraform init -no-color -upgrade"
       rout = rc(com)
       print(rout.stdout.decode().rstrip())
    else:

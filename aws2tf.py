@@ -121,6 +121,9 @@ def main():
     if args.validate: globals.validate = True
 
     if args.type is None or args.type=="":
+        if args.serverless:
+            print("type is required eg:  -t aws_vpc  when in serverless mode, exiting ....")
+            exit()
         print("type is required eg:  -t aws_vpc")
         print("setting to all")
         args.type = "all"
@@ -261,13 +264,13 @@ def main():
             print("Cannot mix stack with other types")
             exit()
 
-        #if id is not None:
-        #    print("Cannot pass id with multiple types")
-        #    exit()
-
-        if globals.serverless:
-            print("Cannot pass id with multiple types when running on Lambda")
+        if id is not None:
+            print("Cannot pass id with multiple types")
             exit()
+
+        #if globals.serverless:
+        #    print("Cannot pass multiple types when running on serverless")
+        #    exit()
 
         types = type.split(",")
         all_types = []

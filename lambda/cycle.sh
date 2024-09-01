@@ -12,5 +12,5 @@ echo "CREATE LAMBDA"
 echo "Sleep 20"
 sleep 20
 echo "INVOKE LAMBDA"
-./run-lambda.sh
+./run-lambda.sh -t vpc
 date

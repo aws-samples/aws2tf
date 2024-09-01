@@ -195,27 +195,7 @@ def main():
 
     if globals.serverless:
         if args.merge: common.download_from_s3()
-            #com = "../../.scripts/restore-s3.sh "+globals.acc+" "+globals.region
-            #if globals.merge: 
-            #    com = com + " merge"
-            #else:
-            #    com = com + " nomerge"
-            #print(com)
-            #rout = common.rc(com)
-            #print("s3restore cmd out:",str(rout.stdout.decode().rstrip()))
-            #print("s3restore cmd err:",str(rout.stderr.decode().rstrip()))
-            #print("Restore to S3 complete")
         else: common.empty_and_delete_bucket()
-            #com = "../../.scripts/del-s3.sh "+globals.acc+" "+globals.region
-            #if globals.merge: 
-            #    com = com + " merge"
-            #else:
-            #    com = com + " nomerge"
-            #print(com)
-            #rout = common.rc(com)
-            #print("s3del cmd out:",str(rout.stdout.decode().rstrip()))
-            #print("s3del cmd err:",str(rout.stderr.decode().rstrip()))
-            #print("Delete S3 complete")
 
 
     com = "mkdir -p "+globals.path2
@@ -259,17 +239,6 @@ def main():
         com = "mkdir -p imported notimported"
         rout = common.rc(com)
         if globals.serverless: common.empty_and_delete_bucket()
-            #print("Del S3 - 2")
-            #com = "../../.scripts/del-s3.sh "+globals.acc+" "+globals.region
-            #if globals.merge: 
-            #    com = com + " merge"
-            #else:
-            #    com = com + " nomerge"
-            #print(com)
-            #rout = common.rc(com)
-            #print("s3del2 cmd out:",str(rout.stdout.decode().rstrip()))
-            #print("s3del2 cmd err:",str(rout.stderr.decode().rstrip()))
-            #print("Del2 S3 complete")
 
     id = args.id
 
@@ -289,8 +258,12 @@ def main():
             print("Cannot mix stack with other types")
             exit()
 
-        if id is not None:
-            print("Cannot pass id with multiple types")
+        #if id is not None:
+        #    print("Cannot pass id with multiple types")
+        #    exit()
+
+        if globals.serverless:
+            print("Cannot pass id with multiple types when running on Lambda")
             exit()
 
         types = type.split(",")
@@ -476,9 +449,7 @@ def main():
         if awsf < 256:
             print("\nRunning trivy security check .....")
             common.trivy_check()
-            #com = "../../.scripts/trivy-check.sh"
-            #rout = common.rc(com)  
-            #print(rout.stdout.decode())
+
         else:
             print("\nSkipping security check - too many files.")
             print("Use trivy manually if required")
@@ -487,18 +458,7 @@ def main():
 
     print("Terraform files & state in sub-directory: "+ globals.path1)
 
-
     if globals.serverless: common.upload_directory_to_s3()
-        #com = "../../.scripts/copy2s3.sh "+globals.acc+" "+globals.region
-        #if globals.merge: 
-        #    com = com + " merge"
-        #else:
-        #    com = com + " nomerge"
-        #print(com)
-        #rout = common.rc(com)
-        #print("s3cop cmd out:",str(rout.stdout.decode().rstrip()))
-        #print("s3cop cmd err:",str(rout.stderr.decode().rstrip()))
-        #print("Copy to S3 complete")
 
     x = glob.glob("*.err")
     awsf=len(x)
@@ -506,10 +466,6 @@ def main():
         print("\nErrors found - see *.err files, and please report via github issue")   
 
     exit(0)
-
-
-
-
 
 
 if __name__ == '__main__':

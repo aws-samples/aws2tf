@@ -772,7 +772,7 @@ def aws_tf(region):
          f3.write('}\n')
    if not globals.merge:
       print("terraform init")
-      com = "terraform init -upgrade"
+      com = "terraform init -no-color -upgrade"
       rout = rc(com)
       print(rout.stdout.decode().rstrip())
    else:
@@ -1468,30 +1468,36 @@ def create_bucket_if_not_exists(bucket_name):
 
 
 def upload_directory_to_s3():
-    print("Uploading to S3...")
-    s3_client = boto3.client('s3')
-    local_directory="/tmp/aws2tf/generated/tf-"+globals.acc+"-"+globals.region
-    bucket_name="aws2tf-"+globals.acc+"-"+globals.region
-    s3_prefix=''
-    create_bucket_if_not_exists(bucket_name)
-    for root, dirs, files in os.walk(local_directory):
-        if '.terraform' in dirs:  dirs.remove('.terraform')
-        if 'tfplan' in files: files.remove('tfplan')
-        if '.terraform.lock.hcl' in files: files.remove('.terraform.lock.hcl')
-        for filename in files:
-            local_path = os.path.join(root, filename)
-            
-            # Calculate relative path
-            relative_path = os.path.relpath(local_path, local_directory)
-            s3_path = os.path.join(s3_prefix, relative_path).replace("\\", "/")
-            
-            try:
-                #print(f"Uploading {local_path} to {bucket_name}/{s3_path}")
-                s3_client.upload_file(local_path, bucket_name, s3_path)
-            except ClientError as e:
-                print(f"Error uploading {local_path}: {e}")
-                return False
-    print("Upload to S3 complete.")
+   print("Uploading to S3...")
+   s3_client = boto3.client('s3')
+   local_directory="/tmp/aws2tf/generated/tf-"+globals.acc+"-"+globals.region
+   bucket_name="aws2tf-"+globals.acc+"-"+globals.region
+   s3_prefix=''
+   print("Calling create_bucket_if_not_exists for",bucket_name)
+   bret=create_bucket_if_not_exists(bucket_name)
+   if bret:
+      print("Upload files to s3",bucket_name)
+      for root, dirs, files in os.walk(local_directory):
+         if '.terraform' in dirs:  dirs.remove('.terraform')
+         if 'tfplan' in files: files.remove('tfplan')
+         if '.terraform.lock.hcl' in files: files.remove('.terraform.lock.hcl')
+         for filename in files:
+               local_path = os.path.join(root, filename)
+               
+               # Calculate relative path
+               relative_path = os.path.relpath(local_path, local_directory)
+               s3_path = os.path.join(s3_prefix, relative_path).replace("\\", "/")
+               
+               try:
+                  #print(f"Uploading {local_path} to {bucket_name}/{s3_path}")
+                  s3_client.upload_file(local_path, bucket_name, s3_path)
+               except ClientError as e:
+                  print(f"Error uploading {local_path}: {e}")
+                  return False
+      print("Upload to S3 complete.")
+   else:
+      print("Upload to S3 failed - False return from create_bucket_if_not_exists for", bucket_name)
+      return False
 
 def empty_and_delete_bucket():
     bucket_name="aws2tf-"+globals.acc+"-"+globals.region

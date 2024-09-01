@@ -2,6 +2,7 @@
 echo "entry 012"
 #echo "working dir"
 #pwd
+date
 cd /tmp
 cp -r /aws2tf .
 mkdir -p /tmp/aws2tf/generated

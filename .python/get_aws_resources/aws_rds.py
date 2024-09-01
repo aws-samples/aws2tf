@@ -198,7 +198,7 @@ def get_aws_db_instance(type, id, clfn, descfn, topkey, key, filterid):
             response = client.describe_db_instances(DBInstanceIdentifier=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
-                print(j)
+                #print(j)
                 engine=j['Engine']
                 if engine=="docdb" or engine.startswith("aurora"): continue
                 common.write_import(type, j[key], None)
@@ -231,7 +231,7 @@ def get_aws_rds_cluster_instance(type, id, clfn, descfn, topkey, key, filterid):
             response = client.describe_db_instances(DBInstanceIdentifier=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
-                print(j)
+                #print(j)
                 engine=j['Engine']
                 if engine.startswith("aurora"):
                     common.write_import(type, j[key], None)

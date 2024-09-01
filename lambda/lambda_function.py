@@ -21,8 +21,11 @@ def handler(event, context):
     rout = rc(com)
     stc=rout.stdout.decode().rstrip() 
     ste=rout.stderr.decode().rstrip()
-    print("aws2tf com err=",str(ste))
+
+    print("STD OUT aws2tf.py ..........")
     print("aws2tf com out=",str(stc))
+    print("STD ERROR aws2tf.py .........")
+    print("aws2tf com err=",str(ste))
     return 'aws2tf: ' + stc
 # get the command line arguments 'cmla' from events
 

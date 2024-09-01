@@ -109,9 +109,13 @@ def get_aws_docdb_cluster_instance(type, id, clfn, descfn, topkey, key, filterid
             if engine != "docdb": continue
             if id is None:
                 common.write_import(type, j[key], None)
+                pkey=type+"."+j[key]
+                globals.rproc[pkey]=True
             else:
                 if id==j[key]:
                     common.write_import(type, j[key], None)
+                    pkey=type+"."+j[key]
+                    globals.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)

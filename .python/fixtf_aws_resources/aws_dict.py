@@ -3462,8 +3462,8 @@ aws_docdb_event_subscription = {
 	"clfn":		"docdb",
 	"descfn":	"describe_event_subscriptions",
 	"topkey":	"EventSubscriptionsList",
-	"key":		"SubscriptionName",
-	"filterid":	"SubscriptionName"
+	"key":		"CustSubscriptionId",
+	"filterid":	"CustSubscriptionId"
 }
 
 aws_docdb_global_cluster = {

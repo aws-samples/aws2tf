@@ -146,7 +146,6 @@ def get_aws_sagemaker_app(type, id, clfn, descfn, topkey, key, filterid):
                 response = response + page[topkey]
             if response == []:
                 print("Empty response for "+type + " id="+str(id)+" returning")
-                pkey="aws_sagemaker_app."+did
                 return True
         elif id.startswith("d-"):
             paginator = client.get_paginator(descfn)

@@ -30,6 +30,7 @@ def resource_types(type):
     elif type == "dynamodb": rets=["aws_dynamodb_table"]; return rets # dynamodb tables
     elif type == "eb": rets=["aws_cloudwatch_event_bus"]; return rets # clouswatch event bus and rules
     elif type == "ec2": rets=["aws_ec2_host","aws_instance"]; return rets # EC2 hosts and instances
+    elif type == "ecr": rets = ["aws_ecr_repository"]; return rets # ECS clusters
     elif type == "ecs": rets = ["aws_ecs_cluster"]; return rets # ECS clusters
     elif type == "efs": rets=["aws_efs_file_system"]; return rets # EFS filesystems
     elif type == "eks": rets=["aws_eks_cluster"]; return rets # EKS clusters

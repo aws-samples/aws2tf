@@ -38,7 +38,7 @@ notimplemented = {
     "aws_appsync_api_cache": True,
     "aws_appsync_domain_name_api_association": True,
     "aws_appsync_graphql_api": True,
-    "aws_athena_data_catalog": True,
+    #"aws_athena_data_catalog": True,
     #
     "aws_auditmanager_assessment_delegation": True,
     "aws_auditmanager_framework": True,

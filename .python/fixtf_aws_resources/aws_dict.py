@@ -3661,9 +3661,9 @@ aws_dynamodb_global_table = {
 aws_dynamodb_kinesis_streaming_destination = {
 	"clfn":		"dynamodb",
 	"descfn":	"describe_kinesis_streaming_destination",
-	"topkey":	"KinesisStreamingDestination",
-	"key":		"TableName",
-	"filterid":	"TableName"
+	"topkey":	"KinesisDataStreamDestinations",
+	"key":		"StreamArn",
+	"filterid":	"StreamArn"
 }
 
 aws_dynamodb_table = {

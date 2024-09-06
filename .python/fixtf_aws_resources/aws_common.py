@@ -150,8 +150,11 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
 
         elif tt1 == "role_arn" or tt1=="service_linked_role_arn" or tt1 == "execution_role_arn" \
             or tt1 == "task_role_arn" or tt1 == "iam_service_role_arn" or tt1 == "execution_role" \
-                or tt1=="source_arn" or tt1 == "cloudwatch_role_arn" or tt1=="service_linked_role_arn": 
-            t1=fixtf.deref_role_arn(t1,tt1,tt2)
+            or tt1=="source_arn" or tt1 == "cloudwatch_role_arn" or tt1=="service_linked_role_arn" \
+            or tt1=="cloud_watch_logs_role_arn":
+                t1=fixtf.deref_role_arn(t1,tt1,tt2)
+
+            
 
         elif tt1 == "role" or tt1=="iam_role" or tt1=="role_name" \
             or tt1=="service_role":
@@ -174,13 +177,24 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             t1 = tt1 + " = aws_lb_target_group."+tt2+".arn\n"
             common.add_dependancy("aws_lb_target_group",tgarn)
 
-
+        ## redo tt2
+        
+        try:
+            tt2=t1.split("=")[1].strip().strip('\"')
+        except:
+            tt2=""
         ### RHS processing
         ### causes a hang loop
         #if tt2.startswith("s3://"): t1=fixtf.rhs_replace(t1,tt1,tt2)
         ## replace region and account number on RHS
+        # RHS is still an ARN
+        if tt2.startswith("arn:"): 
+            t1=fixtf.globals_replace(t1, tt1, tt2)
+        # RHS is account
         elif tt2==globals.acc: t1=tt1 + ' = format("%s",data.aws_caller_identity.current.account_id)\n'
-        elif tt2=="jsonencode("+globals.acc+")": t1=tt1 + ' = format("%s",data.aws_caller_identity.current.account_id)\n'
+        elif tt2=="jsonencode("+globals.acc+")": 
+            t1=tt1 + ' = format("%s",data.aws_caller_identity.current.account_id)\n'
+        # RHS is region
         elif tt2==globals.region: t1=tt1 + ' = format("%s",data.aws_region.current.name)\n'
         ## fix zones
         elif tt2==globals.region+"a":  t1=tt1 + ' = format("%sa",data.aws_region.current.name)\n'
@@ -193,8 +207,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         #if globals.debug: print("aws_common tt2="+tt2)
         ## Use a straight if here ?
         ## tt2 is arn - call globals_replace ?
-        if tt2.startswith("arn:"): 
-            t1=fixtf.globals_replace(t1, tt1, tt2)
+
         #if tt2.startswith('["arn:'): 
         #    t1=fixtf.globals_replace(t1, tt1, tt2)
 

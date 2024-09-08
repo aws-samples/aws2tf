@@ -151,7 +151,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         elif tt1 == "role_arn" or tt1=="service_linked_role_arn" or tt1 == "execution_role_arn" \
             or tt1 == "task_role_arn" or tt1 == "iam_service_role_arn" or tt1 == "execution_role" \
             or tt1=="source_arn" or tt1 == "cloudwatch_role_arn" or tt1=="service_linked_role_arn" \
-            or tt1=="cloud_watch_logs_role_arn":
+            or tt1=="cloud_watch_logs_role_arn" or tt1=="*_role_arn":
                 t1=fixtf.deref_role_arn(t1,tt1,tt2)
 
             

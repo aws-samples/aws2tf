@@ -3068,6 +3068,16 @@ aws_datazone_form_type = {
 	"filterid":	"name"
 }
 
+#aws_datazone_environment
+aws_datazone_environment = {
+	"clfn":		"datazone",
+	"descfn":	"list_environments",
+ 	"topkey":	"items",
+	"key":		"id",
+	"filterid":	"name"
+}
+
+
 
 #aws_datazone_environment_profile
 aws_datazone_environment_profile = {
@@ -10891,6 +10901,7 @@ aws_resources = {
     "aws_datazone_glossary": aws_datazone_glossary,
     "aws_datazone_glossary_term": aws_datazone_glossary_term,
     "aws_datazone_form_type": aws_datazone_form_type,
+    "aws_datazone_environment": aws_datazone_environment,
     "aws_datazone_environment_profile": aws_datazone_environment_profile,
     "aws_datazone_environment_blueprint_configuration": aws_datazone_environment_blueprint_configuration,
 	"aws_dax_cluster": aws_dax_cluster,

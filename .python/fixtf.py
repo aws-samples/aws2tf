@@ -326,6 +326,7 @@ def fixtf(ttft,tf):
     globals.ec2ignore=False
     globals.secid=""
     globals.secvid=""
+    globals.dzd=""
     #if globals.acc in tf2:
     #    tf2=tf2.replace(globals.acc, "__")
 
@@ -624,6 +625,35 @@ def deref_elb_arn_array(t1,tt1,tt2):
              
     t1=tt1 + " = [" + subs + "]\n"
     t1=t1.replace(',]',']')
+
+    return t1
+
+#### other arn derefs here
+def generic_deref_arn(t1, tt1, tt2, subtype):
+    if "abc" in tt1:
+        if tt2 == "null" or tt2 == "[]": return t1
+        tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
+        cc=tt2.count(',')
+        subs=""
+        if cc > 0:
+            for i in range(cc+1):
+                subn=tt2.split(',')[i]
+                tarn=subn
+                rarn=tarn.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_")
+                subn=subn.strip('/')[-1]
+                subs=subs + subtype+"." + rarn + ".arn,"
+                common.add_dependancy(subtype,tarn)
+
+                
+        if cc == 0:
+            tarn=tt2
+            rarn=tarn.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_")
+            tt2=tt2.split('/')[-1]
+            subs=subs + subtype+"." + rarn + ".arn,"
+            common.add_dependancy(subtype,tarn)
+                
+        t1=tt1 + " = [" + subs + "]\n"
+        t1=t1.replace(',]',']')
 
     return t1
 

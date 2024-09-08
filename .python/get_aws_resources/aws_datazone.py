@@ -22,6 +22,8 @@ def get_aws_datazone_domain(type, id, clfn, descfn, topkey, key, filterid):
                 common.add_dependancy("aws_datazone_glossary", j[key])
                 common.add_dependancy("aws_datazone_glossary_term", j[key])
                 common.add_dependancy("aws_datazone_environment_profile", j[key])
+                common.add_dependancy("aws_datazone_environment_blueprint_configuration", j[key])
+
 
         else:      
             response = client.get_domain(identifier=id)
@@ -33,6 +35,7 @@ def get_aws_datazone_domain(type, id, clfn, descfn, topkey, key, filterid):
             common.add_dependancy("aws_datazone_glossary", j[key])
             common.add_dependancy("aws_datazone_glossary_term", j[key])
             common.add_dependancy("aws_datazone_environment_profile", j[key])
+            common.add_dependancy("aws_datazone_environment_blueprint_configuration", j[key])
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -236,7 +239,8 @@ def get_aws_datazone_environment_profile(type, id, clfn, descfn, topkey, key, fi
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response:
             theid=j[key]+","+id
-            common.write_import(type,theid,None) 
+            altid=id+"_"+j[key]
+            common.write_import(type,theid,altid) 
 
         globals.rproc[pkey]=True
 

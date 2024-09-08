@@ -148,14 +148,6 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             else:
                 skip=1
 
-        elif tt1 == "role_arn" or tt1=="service_linked_role_arn" or tt1 == "execution_role_arn" \
-            or tt1 == "task_role_arn" or tt1 == "iam_service_role_arn" or tt1 == "execution_role" \
-            or tt1=="source_arn" or tt1 == "cloudwatch_role_arn" or tt1=="service_linked_role_arn" \
-            or tt1=="cloud_watch_logs_role_arn" or tt1=="*_role_arn":
-                t1=fixtf.deref_role_arn(t1,tt1,tt2)
-
-            
-
         elif tt1 == "role" or tt1=="iam_role" or tt1=="role_name" \
             or tt1=="service_role":
             #print("------>>>>>>",tt2)
@@ -171,31 +163,45 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                     except KeyError as e:
                         print("WARNING: role not found in rolelist", tt2)
 
+        elif tt1 == "role_arn" or tt1=="service_linked_role_arn" or tt1 == "execution_role_arn" \
+            or tt1 == "task_role_arn" or tt1 == "iam_service_role_arn" or tt1 == "execution_role" \
+            or tt1=="source_arn" or tt1 == "cloudwatch_role_arn" or tt1=="service_linked_role_arn" \
+            or tt1=="cloud_watch_logs_role_arn" or tt1=="*_role_arn":
+                # deref_role_arn - checks ":role/" is in the arn
+                t1=fixtf.deref_role_arn(t1,tt1,tt2)
+
+
+
         elif tt1=="target_group_arn" and tt2 != "null":
             tgarn=tt2
             tt2=tt2.replace("/","_").replace(".","_").replace(":","_")
             t1 = tt1 + " = aws_lb_target_group."+tt2+".arn\n"
             common.add_dependancy("aws_lb_target_group",tgarn)
+            
+        ## generic arn processing note also pass type
+        if tt1=="*_arn" and tt2=="*arn:*":   fixtf.generic_deref_arn(t1, tt1, tt2, type)
 
-        ## redo tt2
-        
+
+        ### RHS processing
+        ## redo tt2   
         try:
             tt2=t1.split("=")[1].strip().strip('\"')
         except:
             tt2=""
-        ### RHS processing
-        ### causes a hang loop
-        #if tt2.startswith("s3://"): t1=fixtf.rhs_replace(t1,tt1,tt2)
-        ## replace region and account number on RHS
-        # RHS is still an ARN
+
+
+        # Catch all RHS is still an ARN
         if tt2.startswith("arn:"): 
             t1=fixtf.globals_replace(t1, tt1, tt2)
+        
+        ## replace region and account number on RHS    
         # RHS is account
         elif tt2==globals.acc: t1=tt1 + ' = format("%s",data.aws_caller_identity.current.account_id)\n'
         elif tt2=="jsonencode("+globals.acc+")": 
             t1=tt1 + ' = format("%s",data.aws_caller_identity.current.account_id)\n'
         # RHS is region
         elif tt2==globals.region: t1=tt1 + ' = format("%s",data.aws_region.current.name)\n'
+        
         ## fix zones
         elif tt2==globals.region+"a":  t1=tt1 + ' = format("%sa",data.aws_region.current.name)\n'
         elif tt2==globals.region+"b":  t1=tt1 + ' = format("%sb",data.aws_region.current.name)\n'
@@ -203,13 +209,9 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         elif tt2==globals.region+"d":  t1=tt1 + ' = format("%sd",data.aws_region.current.name)\n'
         elif tt2==globals.region+"e":  t1=tt1 + ' = format("%se",data.aws_region.current.name)\n'
         elif tt2==globals.region+"f":  t1=tt1 + ' = format("%sf",data.aws_region.current.name)\n'
-        
-        #if globals.debug: print("aws_common tt2="+tt2)
-        ## Use a straight if here ?
-        ## tt2 is arn - call globals_replace ?
 
-        #if tt2.startswith('["arn:'): 
-        #    t1=fixtf.globals_replace(t1, tt1, tt2)
+        ### S3:// processing
+        
 
     except Exception as e:
         common.handle_error2(e,str(inspect.currentframe()),id)

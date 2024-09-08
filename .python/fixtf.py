@@ -630,7 +630,7 @@ def deref_elb_arn_array(t1,tt1,tt2):
 
 #### other arn derefs here
 def generic_deref_arn(t1, tt1, tt2, subtype):
-    if "abc" in tt1:
+    if "abc" in tt1 or "xyz" in tt1:
         if tt2 == "null" or tt2 == "[]": return t1
         tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
         cc=tt2.count(',')

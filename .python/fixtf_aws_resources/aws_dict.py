@@ -2778,9 +2778,9 @@ aws_connect_lambda_function_association = {
 aws_connect_phone_number = {
 	"clfn":		"connect",
 	"descfn":	"list_phone_numbers",
-	"topkey":	"PhoneNumbers",
-	"key":		"PhoneNumber",
-	"filterid":	"PhoneNumber"
+	"topkey":	"PhoneNumberSummaryList",
+	"key":		"Id",
+	"filterid":	"Id"
 }
 
 aws_connect_queue = {

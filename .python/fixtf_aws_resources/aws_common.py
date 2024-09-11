@@ -36,6 +36,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             t1=tt1 + " = aws_apigatewayv2_api." + tt2 + ".id\n"
             globals.api_id=tt2
             common.add_dependancy("aws_apigatewayv2_api", tt2)
+        #if tt1=="bucket" or tt1=="s3_bucket_name" or tt1=="bucket_name":
         if tt1=="bucket" or tt1=="s3_bucket_name":
             if type != "aws_s3_bucket":
                 if "." not in tt2:
@@ -104,7 +105,8 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             else:
                 skip=1
         
-        elif tt1 == "kms_key_id" or tt1=="kms_master_key_id" or tt1=="target_key_id" or tt1=="encryption_key":
+        elif tt1 == "kms_key_id" or tt1=="kms_master_key_id" or tt1=="target_key_id" or tt1=="encryption_key" or tt1=="key_id":
+        #elif "key_id" in tt1:
             if type != "aws_docdb_cluster":
                 if tt2 != "null": 
                     skip=1
@@ -116,19 +118,22 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                     else:
                         if "arn:" in tt2:   
                             tt2=tt2.split("/")[-1]	
+                            skip=0
                             if check_key(tt2):
                                 t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
                                 common.add_dependancy("aws_kms_key",tt2) 
-                                skip=0             
+                                             
                         else:
                             tt2=tt2.split("/")[-1]
+                            skip=0
                             if check_key(tt2):
                                 t1=tt1 + " = aws_kms_key.k-" + tt2 + ".id\n"
                                 common.add_dependancy("aws_kms_key", tt2)
-                                skip=0    
+                                   
                                            
                 else:
                     skip=1
+            #print("---->>>>", t1,skip)        
 
         elif tt1 == "instance_profile_name" or tt1=="instance_profile":
             if tt2 != "null":

@@ -6,7 +6,9 @@ import base64
 import resources
 import common
 import shutil
+import inspect
 
+from fixtf_aws_resources import arn_dict
 from fixtf_aws_resources import aws_common
 from fixtf_aws_resources import fixtf_accessanalyzer
 from fixtf_aws_resources import fixtf_acm
@@ -453,39 +455,92 @@ def aws_resource(t1,tt1,tt2,flag1,flag2):
 
 # generic replace of acct and region in arn
 def globals_replace(t1,tt1,tt2):
-    #print("glob rep " + globals.acc + " "+ tt2)
+    if globals.debug: print("GR start:",t1)
+    if "format(" in tt2: return t1
     ends=""
     tt2=tt2.replace("%", "%%")
+    if tt2.startswith('[') and tt1 != "managed_policy_arns" and "," in tt2:
+        tt2=tt2.replace('[','').replace(']','').replace('"','').replace(' ','')
+        arns=tt2.split(',')
+        print("Globals replace an array:"+str(arns))
+        fins=""
+        for arn in arns:
+            tt2=str(arn)
+            
+            ends=""
+            if ":"+globals.acc+":" in tt2:
+                #print("Globals replace arn:"+str(tt2))
+                while ":"+globals.acc+":" in tt2:
+                    r1=tt2.find(":"+globals.region+":")
+                    a1=tt2.find(":"+globals.acc+":")
+                    #print("--> r1="+ str(r1) + " ")
+                    #print("--> a1="+ str(a1) + " ")
+                    if r1>0 and r1 < a1:
+                            #print("--> 6a")
+                            ends=ends+",data.aws_region.current.name"
+                            tt2=tt2[:r1]+":%s:"+tt2[r1+globals.regionl+2:]
 
-    if ":"+globals.acc+":" in tt2:
-        while ":"+globals.acc+":" in tt2:
-                #print("--> 5")
-                r1=tt2.find(":"+globals.region+":")
-                a1=tt2.find(":"+globals.acc+":")
-                #print("--> r1="+ str(r1) + " ")
-                #print("--> a1="+ str(a1) + " ")
-                if r1>0 and r1 < a1:
-                        #print("--> 6a")
-                        ends=ends+",data.aws_region.current.name"
-                        tt2=tt2[:r1]+":%s:"+tt2[r1+globals.regionl+2:]
+                    a1=tt2.find(":"+globals.acc+":")
+                    tt2=tt2[:a1]+":%s:"+tt2[a1+14:]
+                    
+                    ends=ends+",data.aws_caller_identity.current.account_id"
+                    #if "\\" not in tt2:
+                    #    tt2=tt2.replace('"', '\\"')
+            
+                    #print("t1="+t1)
+                    #print("tt2="+tt2)
+                    
+                    t2 = 'format("'+tt2+ '"' +ends+'),'
+                    fins=fins+t2
+            else:
+                return t1
+        if fins=="":return t1
+        fins=fins.rstrip(',')
+        fins="["+fins+"]\n"
+        fins=tt1+" = "+fins
+        #print("fins=",str(fins))
+        t1=fins
 
-                a1=tt2.find(":"+globals.acc+":")
-                tt2=tt2[:a1]+":%s:"+tt2[a1+14:]
-                
-                ends=ends+",data.aws_caller_identity.current.account_id"
-                #if "\\" not in tt2:
-                #    tt2=tt2.replace('"', '\\"')
-        
-                #print("t1="+t1)
-                #print("tt2="+tt2)
-                t1 = tt1+' = format("'+tt2+ '"' +ends+')\n'
+    else:
+        if ":"+globals.acc+":" in tt2:
+            while ":"+globals.acc+":" in tt2:
+                    #print("--> 5")
+                    r1=tt2.find(":"+globals.region+":")
+                    a1=tt2.find(":"+globals.acc+":")
+                    #print("--> r1="+ str(r1) + " ")
+                    #print("--> a1="+ str(a1) + " ")
+                    if r1>0 and r1 < a1:
+                            #print("--> 6a")
+                            ends=ends+",data.aws_region.current.name"
+                            tt2=tt2[:r1]+":%s:"+tt2[r1+globals.regionl+2:]
+
+                    a1=tt2.find(":"+globals.acc+":")
+                    tt2=tt2[:a1]+":%s:"+tt2[a1+14:]
+                    
+                    ends=ends+",data.aws_caller_identity.current.account_id"
+                    #if "\\" not in tt2:
+                    #    tt2=tt2.replace('"', '\\"')
+            
+                    #print("t1="+t1)
+                    
+                    if globals.debug: print("out tt2="+tt2)
+                    if "[" in tt2:
+                        tt2=tt2.lstrip("[").rstrip("]").lstrip('"').rstrip('"')
+                        if globals.debug: print("in tt2="+tt2)
+                        t1 = tt1+' = [format("' + tt2 + '"' + ends +')]\n'
+                    else:
+                        t1 = tt1+' = format("'+tt2+ '"' +ends+')\n'
+                    
     
-    if tt1 == "managed_policy_arns":
-        tt2=tt2.replace('[','')
-        tt2=tt2.replace(']','')
-        tt2=tt2.replace('"','')
-        t1 = tt1+' = [format("' + tt2 + '"' + ends +')]\n'
+    #if tt1 == "managed_policy_arns":
+    #    tt2=tt2.replace('[','')
+    #    tt2=tt2.replace(']','')
+    #    tt2=tt2.replace('"','')
+    #    t1 = tt1+' = [format("' + tt2 + '"' + ends +')]\n'
+    
+    if globals.debug: print("GR finish:="+t1)
     return t1
+
 
 
 def rhs_replace(t1,tt1,tt2):
@@ -562,9 +617,11 @@ def deref_role_arn(t1,tt1,tt2):
     if ":role/aws-service-role" in tt2:	t1=globals_replace(t1,tt1,tt2)
     
     elif ":role/" in tt2:
-        tt2=tt2.split('/')[-1]
-        t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
-        common.add_dependancy("aws_iam_role",tt2)
+        if tt2.endswith("*"): return t1
+        if tt2 in globals.rolelist:
+            tt2=tt2.split('/')[-1]
+            t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+            common.add_dependancy("aws_iam_role",tt2)
     return t1
 
 def deref_kms_key(t1,tt1,tt2):
@@ -584,16 +641,18 @@ def deref_role_arn_array(t1,tt1,tt2):
     subs=""
     if cc > 0:
         for i in range(cc+1):
-            subn=tt2.split(',')[i]
-            subn=subn.strip('/')[-1]
-            subs=subs + "aws_iam_role." + subn + ".arn,"
-            common.add_dependancy("aws_iam_role",subn)
+            if ":role/" in tt2:
+                subn=tt2.split(',')[i]
+                subn=subn.strip('/')[-1]
+                subs=subs + "aws_iam_role." + subn + ".arn,"
+                common.add_dependancy("aws_iam_role",subn)
 
             
     if cc == 0:
-        tt2=tt2.split('/')[-1]
-        subs=subs + "aws_iam_role." + tt2 + ".arn,"
-        common.add_dependancy("aws_iam_role",tt2)
+        if ":role/" in tt2:
+            tt2=tt2.split('/')[-1]
+            subs=subs + "aws_iam_role." + tt2 + ".arn,"
+            common.add_dependancy("aws_iam_role",tt2)
              
     t1=tt1 + " = [" + subs + "]\n"
     t1=t1.replace(',]',']')
@@ -629,32 +688,100 @@ def deref_elb_arn_array(t1,tt1,tt2):
     return t1
 
 #### other arn derefs here
-def generic_deref_arn(t1, tt1, tt2, subtype):
-    if "abc" in tt1 or "xyz" in tt1:
+def generic_deref_arn(t1, tt1, tt2):
+
+    try:
+        if tt2.endswith("*"): return t1
+        print("*** generic "+t1)
+        isstar=False
+    
         if tt2 == "null" or tt2 == "[]": return t1
         tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
         cc=tt2.count(',')
         subs=""
-        if cc > 0:
-            for i in range(cc+1):
-                subn=tt2.split(',')[i]
-                tarn=subn
+        print("generic",tt2," cc= ",cc)
+        if tt2.endswith("*"): isstar=True
+
+        if cc==0 and ":log-stream:" in tt2:
+            #print("log-stream")
+            logr=tt2.split(':')[3]
+            if logr==globals.region:
+                logn=tt2.split(':log-stream:')[0].split(':')[-1]
+                common.add_dependancy("aws_cloudwatch_log_group", logn)
+                logn2=logn.replace("/", "_")
+                streamn=tt2.split(':log-stream:')[1]
+                if isstar: streamn=streamn.rstrip("*")
+                #print(logn2, streamn, logr)
+                if isstar:
+                    period="."
+                    arnadr="aws_cloudwatch_log_stream."+logn2+"_"+streamn+".arn"
+                    print(arnadr)
+                    t1=tt1 + ' = [format("%s*",'+arnadr+')]\n'
+                    #t1=tt1 + ' = ["' + 'format("%s*",'+arnadr+')"]\n'
+                
+                else:
+                    t1=tt1 + " = aws_cloudwatch_log_stream."+logn2+"_"+streamn+".arn\n" 
+
+        if cc==0 and ":role/" in tt2 and "arn:aws:iam" in tt2:
+            #print("log-stream")
+
+            if "/aws_service_role" not in tt2:
+
+                roln=tt2.split('/')[-1]
+                if not roln.endswith("*"):
+                    common.add_dependancy("aws_iam_role", roln)
+                    arnadr="aws_iam_role."+roln+".arn"
+                    print(arnadr)
+                    t1=tt1 + ' = [format("%s*",'+arnadr+')]\n'
+                
+
+
+    except Exception as e:  
+      common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id)     
+    print("generic out =", t1)
+    return t1
+    if cc == 0:
+        tarn=tt2
+        arn_list=tarn.split(':')[0:3] 
+        arn_fragment=':'.join(arn_list)
+        
+        if arn_fragment in arn_dict: 
+            subtype=arn_dict[arn_fragment]['subtype']
+            if arn_dict[arn_fragment]['named']:
+                subn=tt2.split('/')[-1]
+                subs=subs + subtype+"." + subn + ".arn,"
+            else:
                 rarn=tarn.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_")
-                subn=subn.strip('/')[-1]
                 subs=subs + subtype+"." + rarn + ".arn,"
-                common.add_dependancy(subtype,tarn)
-
-                
-        if cc == 0:
-            tarn=tt2
-            rarn=tarn.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_")
-            tt2=tt2.split('/')[-1]
-            subs=subs + subtype+"." + rarn + ".arn,"
             common.add_dependancy(subtype,tarn)
-                
-        t1=tt1 + " = [" + subs + "]\n"
-        t1=t1.replace(',]',']')
 
+
+
+
+
+    if cc > 0:
+        for i in range(cc+1):
+            subn=tt2.split(',')[i]
+            tarn=subn
+            arn_list=tarn.split(':')[0:3]
+            arn_fragment=':'.join(arn_list)
+
+            if arn_fragment in arn_dict: 
+                subtype=arn_dict[arn_fragment]['subtype']
+                if arn_dict[arn_fragment]['named']:
+                    subn=tt2.split('/')[-1]
+                    subs=subs + subtype+"." + subn + ".arn,"
+                else:
+                    rarn=tarn.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_")
+                    subs=subs + subtype+"." + rarn + ".arn,"
+                common.add_dependancy(subtype,tarn)
+                        
+    if subs == "": return t1
+    
+    t1=tt1 + " = [" + subs + "]\n"
+    t1=t1.replace(',]',']')
+
+    print("exit t1="+t1)
     return t1
 
 

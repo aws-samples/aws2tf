@@ -2754,7 +2754,7 @@ aws_connect_hours_of_operation = {
 aws_connect_instance = {
 	"clfn":		"connect",
 	"descfn":	"list_instances",
-	"topkey":	"Instances",
+	"topkey":	"InstanceSummaryList",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -2762,8 +2762,8 @@ aws_connect_instance = {
 aws_connect_instance_storage_config = {
 	"clfn":		"connect",
 	"descfn":	"list_instance_storage_configs",
-	"topkey":	"InstanceStorageConfigs",
-	"key":		"InstanceId",
+	"topkey":	"StorageConfigs",
+	"key":		"AssociationId",
 	"filterid":	"InstanceId"
 }
 

@@ -123,7 +123,7 @@ noimport = {
     # API not available or other problems as described
     "aws_appintegrations_data_integration": True,
     "aws_appintegrations_event_integration": True,
-    "aws_connect_instance": True,
+    #"aws_connect_instance": True,
     "aws_devicefarm_instance_profile": True,
     "aws_devicefarm_project": True,
     "aws_globalaccelerator_accelerator": True,
@@ -180,4 +180,5 @@ noimport = {
     #"aws_cloudformation_stack": True,
     "aws_datazone_form_type": True,
     #"aws_glue_data_quality_ruleset": True,
+    "aws_codecommit_repository": True,
 } 

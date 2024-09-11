@@ -149,7 +149,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                 skip=1
 
         elif tt1 == "role" or tt1=="iam_role" or tt1=="role_name" \
-            or tt1=="service_role":
+            or tt1=="service_role" or tt1=="domain_execution_role":
             #print("------>>>>>>",tt2)
             if tt2 !="null" and "arn:" not in tt2: 
                 if "/" not in tt2: 
@@ -163,11 +163,15 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                     except KeyError as e:
                         print("WARNING: role not found in rolelist", tt2)
 
+            else:
+                t1=fixtf.deref_role_arn(t1,tt1,tt2)
+
         elif tt1 == "role_arn" or tt1=="service_linked_role_arn" or tt1 == "execution_role_arn" \
             or tt1 == "task_role_arn" or tt1 == "iam_service_role_arn" or tt1 == "execution_role" \
             or tt1=="source_arn" or tt1 == "cloudwatch_role_arn" or tt1=="service_linked_role_arn" \
-            or tt1=="cloud_watch_logs_role_arn" or tt1=="*_role_arn":
+            or tt1=="cloud_watch_logs_role_arn" or "_role_arn" in tt1:
                 # deref_role_arn - checks ":role/" is in the arn
+                print("------defref_role_arn >>>>>>", tt2)
                 t1=fixtf.deref_role_arn(t1,tt1,tt2)
 
 
@@ -178,9 +182,11 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             t1 = tt1 + " = aws_lb_target_group."+tt2+".arn\n"
             common.add_dependancy("aws_lb_target_group",tgarn)
             
-        ## generic arn processing note also pass type
-        if tt1=="*_arn" and tt2=="*arn:*":   fixtf.generic_deref_arn(t1, tt1, tt2, type)
-
+        
+        
+        
+        ## generic arn processing note also pass type - may not get them all
+        #elif "arn:" in tt2:   t1=fixtf.generic_deref_arn(t1, tt1, tt2)
 
         ### RHS processing
         ## redo tt2   
@@ -191,8 +197,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
 
 
         # Catch all RHS is still an ARN
-        if tt2.startswith("arn:"): 
-            t1=fixtf.globals_replace(t1, tt1, tt2)
+        if "arn:" in tt2: t1=fixtf.globals_replace(t1, tt1, tt2)
         
         ## replace region and account number on RHS    
         # RHS is account

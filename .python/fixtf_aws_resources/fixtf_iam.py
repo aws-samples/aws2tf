@@ -124,24 +124,14 @@ def  aws_iam_role(t1,tt1,tt2,flag1,flag2):
 
 def aws_iam_role_policy(t1,tt1,tt2,flag1,flag2):
     skip=0
-    #if tt1 == "role_name":
-    #    t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
-    #    common.add_dependancy("aws_iam_role",tt2)
+
   
     return skip,t1,flag1,flag2
 
 def aws_iam_role_policy_attachment(t1,tt1,tt2,flag1,flag2):
     #print("fixit2.aws_iam_role_policy_attachment")
     skip=0
-    #if tt1 == "role":
-    #    
-    #    t1=tt1 + " = aws_iam_role." + tt2 + ".id\n"
-    #    common.add_dependancy("aws_iam_role",tt2)
-    # skip as using policy arns minus account number etc..
-    #if tt1 == "policy_arn": 
-    #    
-    #    tt2=str(tt2).split("/")[-1]
-    #    t1=tt1 + " = aws_iam_policy." + str(tt2) + ".arn\n"
+
     if tt1 == "policy_arn": t1=fixtf.globals_replace(t1,tt1,tt2)
 
     return skip,t1,flag1,flag2

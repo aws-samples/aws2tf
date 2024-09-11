@@ -204,6 +204,21 @@ def main():
         else: common.empty_and_delete_bucket()
 
 
+    if globals.merge is False:
+        #print("No merge - removing terraform.tfstate* and aws_*.tf *.out")
+        #com = "rm -f aws.tf terraform.tfstate* data_*.tf aws_*.tf s3-*.tf aws_*.zip tfplan *.out *.log aws_*.sh stacks.sh import*.tf imported/* main.tf plan1* plan2* *.txt *.json *.err"
+        #rout = common.rc(com)
+        #com = "rm -rf imported notimported"
+        #rout = common.rc(com)
+        #com = "mkdir -p imported notimported"
+        #rout = common.rc(com)
+        com = "rm -rf "+globals.path1
+        rout = common.rc(com)
+        if globals.serverless: common.empty_and_delete_bucket()
+
+
+
+
     com = "mkdir -p "+globals.path2
     rout = common.rc(com)
     globals.cwd=os.getcwd()
@@ -236,15 +251,7 @@ def main():
             print("No pyprocessed.txt found")
             pass
 
-    if globals.merge is False:
-        print("No merge - removing terraform.tfstate* and aws_*.tf *.out")
-        com = "rm -f aws.tf terraform.tfstate* data_aws_*.tf aws_*.tf s3-*.tf aws_*.zip tfplan *.out *.log aws_*.sh stacks.sh import*.tf imported/* main.tf plan1* plan2* *.txt *.json *.err"
-        rout = common.rc(com)
-        com = "rm -rf imported notimported"
-        rout = common.rc(com)
-        com = "mkdir -p imported notimported"
-        rout = common.rc(com)
-        if globals.serverless: common.empty_and_delete_bucket()
+
 
     id = args.id
 

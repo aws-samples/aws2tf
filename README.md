@@ -150,6 +150,8 @@ Finally you can scan everything in your account by simply running:
 
 But this is **Not recommended** as this will take quite some time to complete!
 
+aws2tf can on occassion find references to resources that no longer exist, (eg a subnet or role). So some housekeeping may be required before aws2tf wil be able to complete successfully.
+
 ----------
 
 

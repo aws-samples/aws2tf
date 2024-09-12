@@ -329,6 +329,7 @@ def fixtf(ttft,tf):
     globals.secid=""
     globals.secvid=""
     globals.dzd=""
+    globals.connectinid=""
     #if globals.acc in tf2:
     #    tf2=tf2.replace(globals.acc, "__")
 

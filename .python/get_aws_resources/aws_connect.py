@@ -22,6 +22,13 @@ def get_aws_connect_instance(type, id, clfn, descfn, topkey, key, filterid):
                 common.write_import(type, j[key], "r-"+j[key])
                 common.add_dependancy("aws_connect_instance_storage_config", j[key])
                 common.add_dependancy("aws_connect_phone_number", j[key])
+                common.add_dependancy("aws_connect_hours_of_operation", j[key])
+                common.add_dependancy("aws_connect_contact_flow", j[key])
+                common.add_dependancy("aws_connect_queue", j[key])
+                common.add_dependancy("aws_connect_routing_profile", j[key])
+                common.add_dependancy("aws_connect_security_profile", j[key])
+                common.add_dependancy("aws_connect_user", j[key])
+                common.add_dependancy("aws_connect_vocabulary", j[key])
 
         else:
             response = client.describe_instance(InstanceId=id)
@@ -32,6 +39,13 @@ def get_aws_connect_instance(type, id, clfn, descfn, topkey, key, filterid):
             common.write_import(type, j[key], "r-"+j[key])
             common.add_dependancy("aws_connect_instance_storage_config", j[key])
             common.add_dependancy("aws_connect_phone_number", j[key])
+            common.add_dependancy("aws_connect_hours_of_operation", j[key])
+            common.add_dependancy("aws_connect_contact_flow", j[key])
+            common.add_dependancy("aws_connect_queue", j[key])
+            common.add_dependancy("aws_connect_routing_profile", j[key])
+            common.add_dependancy("aws_connect_security_profile", j[key])
+            common.add_dependancy("aws_connect_user", j[key])
+            common.add_dependancy("aws_connect_vocabulary", j[key])
 
     except Exception as e:
         common.handle_error(
@@ -112,3 +126,257 @@ def get_aws_connect_phone_number(type, id, clfn, descfn, topkey, key, filterid):
             e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
 
     return True
+
+
+
+def get_aws_connect_hours_of_operation(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+
+        if id is None:
+            print("Must pass instanceid for "+type)
+            return True
+
+        else:
+            client = boto3.client(clfn)
+            paginator = client.get_paginator(descfn)
+            pkey = type+"."+id
+
+            for page in paginator.paginate(InstanceId=id):
+                response = response + page[topkey]
+            if response == []:
+                print("Empty response for "+type + " id="+str(id)+" returning")
+                globals.rproc[pkey] = True
+                return True
+            for j in response:
+                theid = id+":"+j[key]
+                common.write_import(type, theid, "r-"+theid)
+
+            globals.rproc[pkey] = True
+    except Exception as e:
+        common.handle_error(
+            e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+
+    return True
+
+
+
+# aws_connect_contact_flow
+def get_aws_connect_contact_flow(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+
+        if id is None:
+            print("Must pass instanceid for "+type)
+            return True
+
+        else:
+            client = boto3.client(clfn)
+            paginator = client.get_paginator(descfn)
+            pkey = type+"."+id
+            #ContactFlowTypes=['CONTACT_FLOW','CUSTOMER_QUEUE','CUSTOMER_HOLD','CUSTOMER_WHISPER','AGENT_HOLD','AGENT_WHISPER','OUTBOUND_WHISPER','AGENT_TRANSFER','QUEUE_TRANSFER']
+            for page in paginator.paginate(InstanceId=id):
+                response = response + page[topkey]
+            if response == []:
+                print("Empty response for "+type + " id="+str(id)+" returning")
+                globals.rproc[pkey] = True
+                return True
+            for j in response:
+                theid = id+":"+j[key]
+                common.write_import(type, theid, "r-"+theid)
+
+            globals.rproc[pkey] = True
+    except Exception as e:
+        common.handle_error(
+            e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+
+    return True
+
+
+def get_aws_connect_queue(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+
+        if id is None:
+            print("Must pass instanceid for "+type)
+            return True
+
+        else:
+            client = boto3.client(clfn)
+            paginator = client.get_paginator(descfn)
+            pkey = type+"."+id
+            for page in paginator.paginate(InstanceId=id,QueueTypes=['STANDARD']):
+                response = response + page[topkey]
+            if response == []:
+                print("Empty response for "+type + " id="+str(id)+" returning")
+                globals.rproc[pkey] = True
+                return True
+            for j in response:
+                #print(j['Name'])
+                theid = id+":"+j[key]
+                #qn=j['Name']
+                #if qn != "BasicQueue":
+                common.write_import(type, theid, "r-"+theid)
+
+            globals.rproc[pkey] = True
+    except Exception as e:
+        common.handle_error(
+            e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+
+    return True
+
+#aws_connect_routing_profile
+
+def get_aws_connect_routing_profile(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+
+        if id is None:
+            print("Must pass instanceid for "+type)
+            return True
+
+        else:
+            client = boto3.client(clfn)
+            paginator = client.get_paginator(descfn)
+            pkey = type+"."+id
+            for page in paginator.paginate(InstanceId=id):
+                response = response + page[topkey]
+            if response == []:
+                print("Empty response for "+type + " id="+str(id)+" returning")
+                globals.rproc[pkey] = True
+                return True
+            for j in response:
+                #print(j)
+                #resp2=client.describe_routing_profile(InstanceId=id,RoutingProfileId=j[key])
+                #print(resp2['RoutingProfile'])
+                theid = id+":"+j[key]
+                common.write_import(type, theid, "r-"+theid)
+
+            globals.rproc[pkey] = True
+    except Exception as e:
+        common.handle_error(
+            e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+
+    return True
+
+#aws_connect_security_profile
+def get_aws_connect_security_profile(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+
+        if id is None:
+            print("Must pass instanceid for "+type)
+            return True
+
+        else:
+            client = boto3.client(clfn)
+            paginator = client.get_paginator(descfn)
+            pkey = type+"."+id
+            for page in paginator.paginate(InstanceId=id):
+                response = response + page[topkey]
+            if response == []:
+                print("Empty response for "+type + " id="+str(id)+" returning")
+                globals.rproc[pkey] = True
+                return True
+            for j in response:
+                theid = id+":"+j[key]
+                common.write_import(type, theid, "r-"+theid)
+
+            globals.rproc[pkey] = True
+    except Exception as e:
+        common.handle_error(
+            e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+
+    return True
+
+#aws_connect_user
+def get_aws_connect_user(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+
+        if id is None:
+            print("Must pass instanceid for "+type)
+            return True
+
+        else:
+            client = boto3.client(clfn)
+            paginator = client.get_paginator(descfn)
+            pkey = type+"."+id
+            for page in paginator.paginate(InstanceId=id):
+                response = response + page[topkey]
+            if response == []:
+                print("Empty response for "+type + " id="+str(id)+" returning")
+                globals.rproc[pkey] = True
+                return True
+            for j in response:
+                theid = id+":"+j[key]
+                common.write_import(type, theid, "r-"+theid)
+
+            globals.rproc[pkey] = True
+    except Exception as e:
+        common.handle_error(
+            e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+
+    return True
+
+# aws_connect_vocabulary
+
+def get_aws_connect_vocabulary(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+
+        if id is None:
+            print("Must pass instanceid for "+type)
+            return True
+
+        else:
+            client = boto3.client(clfn)
+            paginator = client.get_paginator(descfn)
+            pkey = type+"."+id
+            for page in paginator.paginate(InstanceId=id,State='ACTIVE'):
+                response = response + page[topkey]
+            if response == []:
+                print("Empty response for "+type + " id="+str(id)+" returning")
+                globals.rproc[pkey] = True
+                return True
+            for j in response:
+                theid = id+":"+j[key]
+                common.write_import(type, theid, "r-"+theid)
+
+            globals.rproc[pkey] = True
+    except Exception as e:
+        common.handle_error(
+            e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+
+    return True
+
+
+
+
+# aws_connect_bot_association
+# aws_connect_contact_flow_module
+# aws_connect_lambda_function_association
+# aws_connect_quick_connect
+# aws_connect_user_hierarchy_group
+# aws_connect_user_hierarchy_structure

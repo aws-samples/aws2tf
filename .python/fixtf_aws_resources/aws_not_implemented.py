@@ -103,7 +103,7 @@ notimplemented = {
     "aws_connect_bot_association": True,
 
     "aws_connect_user_hierarchy_structure": True,
-    "aws_connect_vocabulary": True,
+    #"aws_connect_vocabulary": True,
     #
     "aws_controltower_control": True,
     #

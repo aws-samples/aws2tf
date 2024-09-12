@@ -49,6 +49,10 @@ def aws_connect_quick_connect(t1,tt1,tt2,flag1,flag2):
 
 def aws_connect_routing_profile(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="name":
+		t1=t1+"\n lifecycle {\n   ignore_changes = [media_concurrencies]\n}\n"
+	if tt1=="concurrency" and tt2=="0": 
+		t1=tt1+" = 1\n"
 	return skip,t1,flag1,flag2
 
 def aws_connect_security_profile(t1,tt1,tt2,flag1,flag2):

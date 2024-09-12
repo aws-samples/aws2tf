@@ -2719,6 +2719,8 @@ aws_config_remediation_configuration = {
 	"filterid":	"ConfigRuleName"
 }
 
+###########
+
 aws_connect_bot_association = {
 	"clfn":		"connect",
 	"descfn":	"list_bot_associations",
@@ -2730,8 +2732,8 @@ aws_connect_bot_association = {
 aws_connect_contact_flow = {
 	"clfn":		"connect",
 	"descfn":	"list_contact_flows",
-	"topkey":	"ContactFlows",
-	"key":		"Name",
+	"topkey":	"ContactFlowSummaryList",
+	"key":		"Id",
 	"filterid":	"Name"
 }
 
@@ -2746,9 +2748,9 @@ aws_connect_contact_flow_module = {
 aws_connect_hours_of_operation = {
 	"clfn":		"connect",
 	"descfn":	"list_hours_of_operations",
-	"topkey":	"HoursOfOperations",
-	"key":		"Name",
-	"filterid":	"Name"
+	"topkey":	"HoursOfOperationSummaryList",
+	"key":		"Id",
+	"filterid":	"Id"
 }
 
 aws_connect_instance = {
@@ -2786,7 +2788,7 @@ aws_connect_phone_number = {
 aws_connect_queue = {
 	"clfn":		"connect",
 	"descfn":	"list_queues",
-	"topkey":	"Queues",
+	"topkey":	"QueueSummaryList",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -2794,7 +2796,7 @@ aws_connect_queue = {
 aws_connect_quick_connect = {
 	"clfn":		"connect",
 	"descfn":	"list_quick_connects",
-	"topkey":	"QuickConnects",
+	"topkey":	"QuickConnectSummaryList",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -2802,7 +2804,7 @@ aws_connect_quick_connect = {
 aws_connect_routing_profile = {
 	"clfn":		"connect",
 	"descfn":	"list_routing_profiles",
-	"topkey":	"RoutingProfiles",
+	"topkey":	"RoutingProfileSummaryList",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -2810,7 +2812,7 @@ aws_connect_routing_profile = {
 aws_connect_security_profile = {
 	"clfn":		"connect",
 	"descfn":	"list_security_profiles",
-	"topkey":	"SecurityProfiles",
+	"topkey":	"SecurityProfileSummaryList",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -2818,7 +2820,7 @@ aws_connect_security_profile = {
 aws_connect_user = {
 	"clfn":		"connect",
 	"descfn":	"list_users",
-	"topkey":	"Users",
+	"topkey":	"UserSummaryList",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -2841,11 +2843,13 @@ aws_connect_user_hierarchy_structure = {
 
 aws_connect_vocabulary = {
 	"clfn":		"connect",
-	"descfn":	"list_vocabularies",
-	"topkey":	"Vocabularies",
+	"descfn":	"search_vocabularies",
+	"topkey":	"VocabularySummaryList",
 	"key":		"Id",
 	"filterid":	"Id"
 }
+
+#######
 
 aws_controltower_control = {
 	"clfn":		"controltower",
@@ -10859,10 +10863,10 @@ aws_resources = {
 	"aws_config_organization_managed_rule": aws_config_organization_managed_rule,
 	"aws_config_remediation_configuration": aws_config_remediation_configuration,
 	"aws_connect_bot_association": aws_connect_bot_association,
+    "aws_connect_instance": aws_connect_instance,
 	"aws_connect_contact_flow": aws_connect_contact_flow,
 	"aws_connect_contact_flow_module": aws_connect_contact_flow_module,
 	"aws_connect_hours_of_operation": aws_connect_hours_of_operation,
-	"aws_connect_instance": aws_connect_instance,
 	"aws_connect_instance_storage_config": aws_connect_instance_storage_config,
 	"aws_connect_lambda_function_association": aws_connect_lambda_function_association,
 	"aws_connect_phone_number": aws_connect_phone_number,

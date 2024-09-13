@@ -1070,6 +1070,7 @@ def special_deps(ttft,taddr):
       add_known_dependancy("aws_subnet",taddr)  
       add_dependancy("aws_route_table_association",taddr)
       add_dependancy("aws_vpc_ipv4_cidr_block_association",taddr)
+      add_dependancy("aws_vpc_endpoint", taddr)
 
    elif ttft == "aws_vpclattice_service_network":
       add_known_dependancy("aws_vpclattice_service",taddr) 

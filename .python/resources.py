@@ -66,7 +66,8 @@ def resource_types(type):
     elif type == "tgw": rets=["aws_ec2_transit_gateway"]; return rets # Transit Gateway
     elif type == "vpclattice" or type=="lattice": rets=["aws_vpclattice_service_network","aws_vpclattice_service","aws_vpclattice_auth_policy"]; return rets # VPC Lattice and dependancies
     elif type == "users": rets=["aws_iam_user","aws_iam_group"]; return rets # IAM user and groups
-    elif type == "vpc": rets=["aws_vpc"]; return rets # VPC's and its common depandancies
+    elif type == "vpc": rets=["aws_vpc"]; return rets #  VPC's and its common depandancies
+    elif type == "workspaces": rets=["aws_workspaces_workspace"]; return rets # Aamazon Workspaces
 
     elif type =="all": 
         keys_list = aws_dict.aws_resources.keys()

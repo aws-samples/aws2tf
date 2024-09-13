@@ -60,10 +60,12 @@ with open('../../StackSet-Resources.md', 'w') as f2:
     with open('../stacks.py', 'r') as f:
         for line in f.readlines():
             if '#' not in line:
-                if "::" in line and "aws_" in line and "aws_null" not in line:
-                    myline = line.strip('\n').split('==')[-1].split("common.")[0]
-                    myline=myline.strip(' ').strip('"').strip('":')
-                    dictl[myline] = True
+                if "::" in line  and "aws_null" not in line:
+                    if  "aws_" in line or "f3.write(" in line:
+                        myline = line.strip('\n').split('==')[-1].split("common.")[0]
+                        myline=myline.strip(' ').strip('"').strip('":')
+                        if '"' in myline: myline=myline.split('"')[0]
+                        dictl[myline] = True
     dictl=dict(sorted(dictl.items()))
     for j in dictl.keys():
         print("* "+j)

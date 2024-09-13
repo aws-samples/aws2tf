@@ -1,8 +1,7 @@
 notimplemented = {
     "aws_network_acl_rule": True, ### ? worth doing
     "aws_auditmanager_account_registration": True,  ### TODO
-    "aws_cognito_user_pool_domain": True,  ### TODO
-    #"aws_connect_lambda_function_association": True, ### TODO   
+    "aws_cognito_user_pool_domain": True,  ### TODO  
     "aws_datasync_location_s3": True,  ### TODO
     "aws_dax_cluster": True,  ### TODO
     "aws_inspector_assessment_target": True,  ### TODO
@@ -100,10 +99,11 @@ notimplemented = {
     "aws_comprehend_document_classifier": True,
     "aws_comprehend_entity_recognizer": True,
     #
-    #"aws_connect_bot_association": True,
-
     "aws_connect_user_hierarchy_structure": True,
-    #"aws_connect_vocabulary": True,
+    "aws_connect_contact_flow_module": True,
+    "aws_connect_quick_connect": True,
+    "aws_connect_user_hierarchy_group": True,
+    "aws_connect_vocabulary": True,
     #
     "aws_controltower_control": True,
     #

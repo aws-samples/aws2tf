@@ -46,7 +46,7 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
                     #print(str(kresp))
                     if kstatus == "Enabled" or kstatus == "Disabled":
                         if kman == "AWS":
-                            print("key is managed by AWS")
+                            print("key "+str(theid)+" is managed by AWS")
                             pkey=type+"."+theid
                             if not globals.rproc[pkey]:
                                 globals.rproc[pkey]=True

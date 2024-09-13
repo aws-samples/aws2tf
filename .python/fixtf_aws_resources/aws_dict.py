@@ -2723,8 +2723,8 @@ aws_config_remediation_configuration = {
 
 aws_connect_bot_association = {
 	"clfn":		"connect",
-	"descfn":	"list_bot_associations",
-	"topkey":	"BotAssociations",
+	"descfn":	"list_bots",
+	"topkey":	"LexBots",
 	"key":		"Name",
 	"filterid":	"Name"
 }
@@ -2771,10 +2771,10 @@ aws_connect_instance_storage_config = {
 
 aws_connect_lambda_function_association = {
 	"clfn":		"connect",
-	"descfn":	"list_lambda_function_associations",
-	"topkey":	"LambdaFunctionAssociations",
-	"key":		"InstanceId",
-	"filterid":	"InstanceId"
+	"descfn":	"list_lambda_functions",
+	"topkey":	"LambdaFunctions",
+	"key":		"",
+	"filterid":	""
 }
 
 aws_connect_phone_number = {

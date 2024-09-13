@@ -45,6 +45,7 @@ from get_aws_resources import aws_codestar_notifications
 from get_aws_resources import aws_cognito_identity
 from get_aws_resources import aws_cognito_idp
 from get_aws_resources import aws_config
+from get_aws_resources import aws_connect
 from get_aws_resources import aws_customer_profiles
 from get_aws_resources import aws_datazone
 from get_aws_resources import aws_dms
@@ -737,7 +738,7 @@ def aws_tf(region):
             f3.write('    aws = {\n')
             f3.write('      source  = "hashicorp/aws"\n')
             # f3.write('      version = "5.48.0"\n')
-            f3.write('      version = "5.63.0"\n')
+            f3.write('      version = "5.66.0"\n')
             f3.write('    }\n')
             f3.write('  }\n')
             f3.write('}\n')
@@ -752,7 +753,7 @@ def aws_tf(region):
             f3.write('    aws = {\n')
             f3.write('      source  = "hashicorp/aws"\n')
             # f3.write('      version = "5.48.0"\n')
-            f3.write('      version = "5.63.0"\n')
+            f3.write('      version = "5.66.0"\n')
             f3.write('    }\n')
             f3.write('  }\n')
             f3.write('}\n')
@@ -881,9 +882,9 @@ def write_import(type,theid,tfid):
       ## todo -  if theid starts with a number or is an od (but what if its hexdecimal  ?)
 
       if tfid is None:
-            tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_")
+            tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_")
       else:
-            tfid=tfid.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_").replace(",","_").replace("&","_").replace("#","_")
+            tfid=tfid.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_")
          
          #catch tfid starts with number
       if tfid[:1].isdigit(): tfid="r-"+tfid
@@ -1069,6 +1070,7 @@ def special_deps(ttft,taddr):
       add_known_dependancy("aws_subnet",taddr)  
       add_dependancy("aws_route_table_association",taddr)
       add_dependancy("aws_vpc_ipv4_cidr_block_association",taddr)
+      add_dependancy("aws_vpc_endpoint", taddr)
 
    elif ttft == "aws_vpclattice_service_network":
       add_known_dependancy("aws_vpclattice_service",taddr) 

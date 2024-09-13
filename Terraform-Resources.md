@@ -1,3 +1,4 @@
+
 ## Terraform resource types currently supported
 
 * aws_accessanalyzer_analyzer
@@ -71,6 +72,7 @@
 * aws_appsync_function
 * aws_appsync_resolver
 * aws_appsync_type
+* aws_athena_data_catalog
 * aws_athena_database
 * aws_athena_named_query
 * aws_athena_prepared_statement
@@ -148,7 +150,6 @@
 * aws_codecatalyst_project
 * aws_codecatalyst_source_repository
 * aws_codecommit_approval_rule_template
-* aws_codecommit_repository
 * aws_codedeploy_deployment_group
 * aws_codeguruprofiler_profiling_group
 * aws_codepipeline
@@ -177,18 +178,17 @@
 * aws_config_organization_custom_rule
 * aws_config_organization_managed_rule
 * aws_config_remediation_configuration
+* aws_connect_bot_association
 * aws_connect_contact_flow
-* aws_connect_contact_flow_module
 * aws_connect_hours_of_operation
+* aws_connect_instance
 * aws_connect_instance_storage_config
 * aws_connect_lambda_function_association
 * aws_connect_phone_number
 * aws_connect_queue
-* aws_connect_quick_connect
 * aws_connect_routing_profile
 * aws_connect_security_profile
 * aws_connect_user
-* aws_connect_user_hierarchy_group
 * aws_customer_gateway
 * aws_customerprofiles_domain
 * aws_customerprofiles_profile
@@ -197,6 +197,7 @@
 * aws_datasync_location_s3
 * aws_datasync_task
 * aws_datazone_domain
+* aws_datazone_environment
 * aws_datazone_environment_blueprint_configuration
 * aws_datazone_environment_profile
 * aws_datazone_glossary

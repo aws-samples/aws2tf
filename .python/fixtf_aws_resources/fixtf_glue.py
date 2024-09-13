@@ -23,8 +23,6 @@ def aws_glue_catalog_table(t1,tt1,tt2,flag1,flag2):
 	if tt1 == "database_name" and tt2 != "null":
 		t1 = tt1 + " = aws_glue_catalog_database.d-"+globals.acc+"__"+tt2+".name\n"
 		common.add_dependancy("aws_glue_catalog_database",tt2)
-		pkey="aws_glue_catalog_database."+tt2
-		globals.rproc[pkey]=True
 	return skip,t1,flag1,flag2
 
 def aws_glue_classifier(t1,tt1,tt2,flag1,flag2):

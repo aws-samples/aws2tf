@@ -81,7 +81,7 @@ To generate the terraform files for all the VPC's in your account/region:
 or for a specific VPC:
 
 ```
-./aws2tf.py -t aws_vpc -i vpc-xxxxxxxxxx
+./aws2tf.py -t aws_vpc -i vpc-xxxxxxxxxx -v
 ```
 
 You can also instead of using predefined types use the direct Terraform resource names:
@@ -149,8 +149,6 @@ Finally you can scan everything in your account by simply running:
 ./aws2tf.py
 
 But this is **Not recommended** as this will take quite some time to complete!
-
-aws2tf can on occassion find references to resources that no longer exist, (eg a subnet or role). So some housekeeping may be required before aws2tf wil be able to complete successfully.
 
 ----------
 

@@ -7,8 +7,6 @@ def aws_kms_key(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if tt1 == "policy": t1=fixtf.globals_replace(t1,tt1,tt2)
 	elif tt1=="rotation_period_in_days" and tt2=="0": skip=1
-    #if tt1 == "key_id":
-    #    common.add_dependancy("aws_kms_alias","k-"+theid)
 	return skip,t1,flag1,flag2 
 
 def aws_kms_alias(t1,tt1,tt2,flag1,flag2):

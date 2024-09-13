@@ -17,19 +17,20 @@ def resource_types(type):
     elif type == "bedrock": rets=["aws_bedrock_guardrail","aws_bedrockagent_agent"]; return rets # Bedrock resources
     elif type == "batch": rets=["aws_batch_compute_environment","aws_batch_job_definition","aws_batch_scheduling_policy"]; return rets # Autoscaling Group
     elif type == "code": rets=["aws_codestarnotifications_notification_rule","aws_codebuild_project","aws_codeartifact_domain","aws_codeartifact_repository","aws_codecommit_repository","aws_codepipeline"]; return rets  # Codebuild, Code commit etc
-    elif type == "cloudfront"or type == "cf": rets=["aws_cloudfront_distribution","aws_cloudfront_origin_request_policy","aws_cloudfront_origin_access_identity","aws_cloudfront_origin_access_control","aws_cloudfront_cache_policy","aws_cloudfront_function"]; return rets # Cloudfront Distribution
-    elif type == "cloudtrail": rets=["aws_cloudtrail"]; return rets # CloudTrail
+    elif type == "cloudfront" or type == "cf": rets=["aws_cloudfront_distribution","aws_cloudfront_origin_request_policy","aws_cloudfront_origin_access_identity","aws_cloudfront_origin_access_control","aws_cloudfront_cache_policy","aws_cloudfront_function"]; return rets # Cloudfront Distribution
+    elif type == "cloudtrail" or type == "ct": rets=["aws_cloudtrail"]; return rets # CloudTrail
     elif type == "cw" or type == "cloudwatch" or type == "logs": rets=["aws_cloudwatch_log_group","aws_cloudwatch_metric_alarm"]; return rets # Cloudwatch logs groups and alarms
     elif type == "cloud9" or type =="c9" : rets=["aws_cloud9_environment_ec2"]; return rets # Cloud9 EC2 environments
     elif type == "cloudform": rets=["aws_cloudformation_stack"]; return rets # Cloudformation stacks (use -s stack -i [stackname] instead)
     elif type == "cognito": rets=["aws_cognito_identity_pool","aws_cognito_identity_pool_roles_attachment","aws_cognito_user_pool","aws_cognito_user_pool_client"]; return rets # Cognito pools etc
     elif type == "config": rets=["aws_config_configuration_recorder","aws_config_delivery_channel","aws_config_configuration_recorder_status","aws_config_config_rule"]; return rets # Config rules, recorders etc.
-    elif type == "cw-log": rets=["aws_cloudwatch_log_group"]; return rets # Cloudwatch log groups
+    elif type == "connect": rets=["aws_connect_instance"]; return rets # Amazon Connect
     elif type == "datazone" or type == "dz": rets=["aws_datazone_domain"]; return rets # Amazon DataZone
     elif type == "dms": rets=["aws_dms_replication_instance","aws_dms_endpoint","aws_dms_replication_task"]; return rets # DMS replication tasks and endpoints
     elif type == "dynamodb": rets=["aws_dynamodb_table"]; return rets # dynamodb tables
     elif type == "eb": rets=["aws_cloudwatch_event_bus"]; return rets # clouswatch event bus and rules
     elif type == "ec2": rets=["aws_ec2_host","aws_instance"]; return rets # EC2 hosts and instances
+    elif type == "ecr": rets = ["aws_ecr_repository"]; return rets # ECS clusters
     elif type == "ecs": rets = ["aws_ecs_cluster"]; return rets # ECS clusters
     elif type == "efs": rets=["aws_efs_file_system"]; return rets # EFS filesystems
     elif type == "eks": rets=["aws_eks_cluster"]; return rets # EKS clusters
@@ -65,7 +66,8 @@ def resource_types(type):
     elif type == "tgw": rets=["aws_ec2_transit_gateway"]; return rets # Transit Gateway
     elif type == "vpclattice" or type=="lattice": rets=["aws_vpclattice_service_network","aws_vpclattice_service","aws_vpclattice_auth_policy"]; return rets # VPC Lattice and dependancies
     elif type == "users": rets=["aws_iam_user","aws_iam_group"]; return rets # IAM user and groups
-    elif type == "vpc": rets=["aws_vpc"]; return rets # VPC's and its common depandancies
+    elif type == "vpc": rets=["aws_vpc"]; return rets #  VPC's and its common depandancies
+    elif type == "workspaces": rets=["aws_workspaces_workspace"]; return rets # Aamazon Workspaces
 
     elif type =="all": 
         keys_list = aws_dict.aws_resources.keys()

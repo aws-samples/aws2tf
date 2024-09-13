@@ -36,6 +36,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             t1=tt1 + " = aws_apigatewayv2_api." + tt2 + ".id\n"
             globals.api_id=tt2
             common.add_dependancy("aws_apigatewayv2_api", tt2)
+        #if tt1=="bucket" or tt1=="s3_bucket_name" or tt1=="bucket_name":
         if tt1=="bucket" or tt1=="s3_bucket_name":
             if type != "aws_s3_bucket":
                 if "." not in tt2:
@@ -104,7 +105,8 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             else:
                 skip=1
         
-        elif tt1 == "kms_key_id" or tt1=="kms_master_key_id" or tt1=="target_key_id" or tt1=="encryption_key":
+        elif tt1 == "kms_key_id" or tt1=="kms_master_key_id" or tt1=="target_key_id" or tt1=="encryption_key" or tt1=="key_id":
+        #elif "key_id" in tt1:
             if type != "aws_docdb_cluster":
                 if tt2 != "null": 
                     skip=1
@@ -116,19 +118,22 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                     else:
                         if "arn:" in tt2:   
                             tt2=tt2.split("/")[-1]	
+                            skip=0
                             if check_key(tt2):
                                 t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
                                 common.add_dependancy("aws_kms_key",tt2) 
-                                skip=0             
+                                             
                         else:
                             tt2=tt2.split("/")[-1]
+                            skip=0
                             if check_key(tt2):
                                 t1=tt1 + " = aws_kms_key.k-" + tt2 + ".id\n"
                                 common.add_dependancy("aws_kms_key", tt2)
-                                skip=0    
+                                   
                                            
                 else:
                     skip=1
+            #print("---->>>>", t1,skip)        
 
         elif tt1 == "instance_profile_name" or tt1=="instance_profile":
             if tt2 != "null":
@@ -148,13 +153,8 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             else:
                 skip=1
 
-        elif tt1 == "role_arn" or tt1=="service_linked_role_arn" or tt1 == "execution_role_arn" \
-            or tt1 == "task_role_arn" or tt1 == "iam_service_role_arn" or tt1 == "execution_role" \
-                or tt1=="source_arn" or tt1 == "cloudwatch_role_arn" or tt1=="service_linked_role_arn": 
-            t1=fixtf.deref_role_arn(t1,tt1,tt2)
-
         elif tt1 == "role" or tt1=="iam_role" or tt1=="role_name" \
-            or tt1=="service_role":
+            or tt1=="service_role" or tt1=="domain_execution_role":
             #print("------>>>>>>",tt2)
             if tt2 !="null" and "arn:" not in tt2: 
                 if "/" not in tt2: 
@@ -168,20 +168,50 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                     except KeyError as e:
                         print("WARNING: role not found in rolelist", tt2)
 
+            else:
+                t1=fixtf.deref_role_arn(t1,tt1,tt2)
+
+        elif tt1 == "role_arn" or tt1=="service_linked_role_arn" or tt1 == "execution_role_arn" \
+            or tt1 == "task_role_arn" or tt1 == "iam_service_role_arn" or tt1 == "execution_role" \
+            or tt1=="source_arn" or tt1 == "cloudwatch_role_arn" or tt1=="service_linked_role_arn" \
+            or tt1=="cloud_watch_logs_role_arn" or "_role_arn" in tt1:
+                # deref_role_arn - checks ":role/" is in the arn
+                print("------defref_role_arn >>>>>>", tt2)
+                t1=fixtf.deref_role_arn(t1,tt1,tt2)
+
+
+
         elif tt1=="target_group_arn" and tt2 != "null":
             tgarn=tt2
             tt2=tt2.replace("/","_").replace(".","_").replace(":","_")
             t1 = tt1 + " = aws_lb_target_group."+tt2+".arn\n"
             common.add_dependancy("aws_lb_target_group",tgarn)
-
+            
+        
+        
+        
+        ## generic arn processing note also pass type - may not get them all
+        #elif "arn:" in tt2:   t1=fixtf.generic_deref_arn(t1, tt1, tt2)
 
         ### RHS processing
-        ### causes a hang loop
-        #if tt2.startswith("s3://"): t1=fixtf.rhs_replace(t1,tt1,tt2)
-        ## replace region and account number on RHS
+        ## redo tt2   
+        try:
+            tt2=t1.split("=")[1].strip().strip('\"')
+        except:
+            tt2=""
+
+
+        # Catch all RHS is still an ARN
+        if "arn:" in tt2: t1=fixtf.globals_replace(t1, tt1, tt2)
+        
+        ## replace region and account number on RHS    
+        # RHS is account
         elif tt2==globals.acc: t1=tt1 + ' = format("%s",data.aws_caller_identity.current.account_id)\n'
-        elif tt2=="jsonencode("+globals.acc+")": t1=tt1 + ' = format("%s",data.aws_caller_identity.current.account_id)\n'
+        elif tt2=="jsonencode("+globals.acc+")": 
+            t1=tt1 + ' = format("%s",data.aws_caller_identity.current.account_id)\n'
+        # RHS is region
         elif tt2==globals.region: t1=tt1 + ' = format("%s",data.aws_region.current.name)\n'
+        
         ## fix zones
         elif tt2==globals.region+"a":  t1=tt1 + ' = format("%sa",data.aws_region.current.name)\n'
         elif tt2==globals.region+"b":  t1=tt1 + ' = format("%sb",data.aws_region.current.name)\n'
@@ -189,14 +219,9 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         elif tt2==globals.region+"d":  t1=tt1 + ' = format("%sd",data.aws_region.current.name)\n'
         elif tt2==globals.region+"e":  t1=tt1 + ' = format("%se",data.aws_region.current.name)\n'
         elif tt2==globals.region+"f":  t1=tt1 + ' = format("%sf",data.aws_region.current.name)\n'
+
+        ### S3:// processing
         
-        #if globals.debug: print("aws_common tt2="+tt2)
-        ## Use a straight if here ?
-        ## tt2 is arn - call globals_replace ?
-        if tt2.startswith("arn:"): 
-            t1=fixtf.globals_replace(t1, tt1, tt2)
-        #if tt2.startswith('["arn:'): 
-        #    t1=fixtf.globals_replace(t1, tt1, tt2)
 
     except Exception as e:
         common.handle_error2(e,str(inspect.currentframe()),id)

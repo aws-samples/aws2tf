@@ -601,14 +601,14 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
                 common.add_dependancy(ttft,subn)
 
             
-    if cc == 0 and prefix in tt2:
+    elif cc == 0 and prefix in tt2:
         subs=ttft + "." + tt2 + ".id"
         common.add_dependancy(ttft,tt2)
-    else:
-        print("WARNING: named item in fixtf deref_array:" + tt2)    
-             
-    t1=tt1 + " = [" + subs + "]\n"
-    t1=t1.replace(',]',']')
+    
+    if subs !="":         
+        t1=tt1 + " = [" + subs + "]\n"
+        t1=t1.replace(',]',']')
+        
     return t1,skip
 
 

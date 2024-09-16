@@ -81,7 +81,7 @@ To generate the terraform files for all the VPC's in your account/region:
 or for a specific VPC:
 
 ```
-./aws2tf.py -t aws_vpc -i vpc-xxxxxxxxxx -v
+./aws2tf.py -t aws_vpc -i vpc-xxxxxxxxxx
 ```
 
 You can also instead of using predefined types use the direct Terraform resource names:

@@ -730,38 +730,23 @@ def check_python_version():
 def aws_tf(region):
    # os.chdir(globals.path1)
    #if not os.path.isfile("aws.tf"):
-   if globals.serverless:
-      with open("provider.tf", 'w') as f3:
-            f3.write('terraform {\n')
-            f3.write('  required_version = "> 1.7.4"\n')
-            f3.write('  required_providers {\n')
-            f3.write('    aws = {\n')
-            f3.write('      source  = "hashicorp/aws"\n')
-            # f3.write('      version = "5.48.0"\n')
-            f3.write('      version = "5.66.0"\n')
-            f3.write('    }\n')
-            f3.write('  }\n')
-            f3.write('}\n')
-            f3.write('provider "aws" {\n')
-            f3.write('  region                   = "' + region + '"\n')
-            f3.write('}\n')
-   else:
-      with open("provider.tf", 'w') as f3:
-            f3.write('terraform {\n')
-            f3.write('  required_version = "> 1.7.4"\n')
-            f3.write('  required_providers {\n')
-            f3.write('    aws = {\n')
-            f3.write('      source  = "hashicorp/aws"\n')
-            # f3.write('      version = "5.48.0"\n')
-            f3.write('      version = "5.66.0"\n')
-            f3.write('    }\n')
-            f3.write('  }\n')
-            f3.write('}\n')
-            f3.write('provider "aws" {\n')
-            f3.write('  region                   = "' + region + '"\n')
-            f3.write('  shared_credentials_files = ["~/.aws/credentials"]\n')
-            # f3.write('  profile                  = var.profile\n')
-            f3.write('}\n')
+
+   with open("provider.tf", 'w') as f3:
+      f3.write('terraform {\n')
+      f3.write('  required_version = "> 1.7.4"\n')
+      f3.write('  required_providers {\n')
+      f3.write('    aws = {\n')
+      f3.write('      source  = "hashicorp/aws"\n')
+      # f3.write('      version = "5.48.0"\n')
+      f3.write('      version = "5.67.0"\n')
+      f3.write('    }\n')
+      f3.write('  }\n')
+      f3.write('}\n')
+      f3.write('provider "aws" {\n')
+      f3.write('  region                   = "' + region + '"\n')
+      if not globals.serverless: f3.write('  shared_credentials_files = ["~/.aws/credentials"]\n')
+      f3.write('}\n')
+
    com = "cp provider.tf imported/provider.tf"
    rout = rc(com)
    if not os.path.isfile("data-aws.tf"):   

@@ -99,10 +99,10 @@ notimplemented = {
     "aws_comprehend_document_classifier": True,
     "aws_comprehend_entity_recognizer": True,
     #
+    "aws_connect_user_hierarchy_group": True,
     "aws_connect_user_hierarchy_structure": True,
     "aws_connect_contact_flow_module": True,
-    "aws_connect_quick_connect": True,
-    "aws_connect_user_hierarchy_group": True,
+    #"aws_connect_quick_connect": True,
     "aws_connect_vocabulary": True,
     #
     "aws_controltower_control": True,

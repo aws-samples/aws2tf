@@ -54,6 +54,7 @@
 * AWS::AutoScaling::LaunchConfiguration
 * AWS::AutoScaling::LifecycleHook
 * AWS::CDK::Metadata
+* AWS::CertificateManager::Certificate
 * AWS::Cloud9::EnvironmentEC2
 * AWS::CloudFront::CachePolicy
 * AWS::CloudFront::CloudFrontOriginAccessIdentity

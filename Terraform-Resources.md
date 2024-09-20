@@ -186,6 +186,7 @@
 * aws_connect_lambda_function_association
 * aws_connect_phone_number
 * aws_connect_queue
+* aws_connect_quick_connect
 * aws_connect_routing_profile
 * aws_connect_security_profile
 * aws_connect_user

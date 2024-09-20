@@ -417,7 +417,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::Cassandra::Keyspace": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Cassandra::Table": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::CertificateManager::Account": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::CertificateManager::Certificate": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::CertificateManager::Certificate": common.call_resource("aws_acm_certificate", parn)
             elif type == "AWS::Chatbot::MicrosoftTeamsChannelConfiguration": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Chatbot::SlackChannelConfiguration": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::CleanRooms::AnalysisTemplate": common.call_resource("aws_null", type+" "+pid)

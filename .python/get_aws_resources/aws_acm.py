@@ -21,12 +21,15 @@ def get_aws_acm_certificate(type, id, clfn, descfn, topkey, key, filterid):
                 else:
                     print("Skipping ACM Certificate "+str(j[key])+" as status is "+str(j['Status']))
 
-        else:      
+        elif id.startswith("arn:"):      
             response = client.describe_certificate(CertificateArn=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Certificate']
             if j['Status']=="ISSUED":
                 common.write_import(type,id,None)
+
+        else:
+            print("Unhandled id type for "+type+" id="+str(id))            
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

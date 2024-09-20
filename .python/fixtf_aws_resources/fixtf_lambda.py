@@ -46,6 +46,8 @@ def aws_lambda_alias(t1,tt1,tt2,flag1,flag2):
 
 def aws_lambda_permission(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if tt1=="function_name" and tt2 != "null":
+         t1 = tt1 + " = aws_lambda_function." + tt2 + ".function_name\n"
     return skip,t1,flag1,flag2
 
 def aws_lambda_function_event_invoke_configs(t1,tt1,tt2,flag1,flag2):

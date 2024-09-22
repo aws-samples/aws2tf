@@ -82,6 +82,16 @@
 * AWS::Connect::User
 * AWS::DMS::ReplicationInstance
 * AWS::DMS::ReplicationSubnetGroup
+* AWS::DataZone::DataSource
+* AWS::DataZone::Domain
+* AWS::DataZone::Environment
+* AWS::DataZone::EnvironmentActions
+* AWS::DataZone::EnvironmentBlueprintConfiguration
+* AWS::DataZone::EnvironmentProfile
+* AWS::DataZone::Project
+* AWS::DataZone::ProjectMembership
+* AWS::DataZone::SubscriptionTarget
+* AWS::DataZone::UserProfile
 * AWS::DirectoryService::MicrosoftAD
 * AWS::DocDB::DBCluster
 * AWS::DocDB::DBInstance

@@ -8,6 +8,7 @@ import os
 import sys
 import shutil
 import datetime
+import json
 
 
 sys.path.insert(0, './.python')
@@ -71,6 +72,8 @@ def build_lists():
     response=[]
     paginator = client.get_paginator('list_roles')
     for page in paginator.paginate(): response = response + page['Roles']
+    with open('imported/roles.json', 'w') as f: json.dump(response, f, indent=2,default=str)
+
     for j in response: globals.rolelist[j['RoleName']]=True
     response=[]
     #if globals.debug: print(str(globals.vpclist))

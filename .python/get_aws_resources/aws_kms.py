@@ -65,7 +65,7 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
                         common.add_dependancy("aws_kms_alias","k-"+theid)
                     else:
                         print("WARNING: key is not enabled or is managed by AWS")
-                        print(str(kresp))
+                        #print(str(kresp))
                         continue
                 except Exception as e:
                     print("WARNING: can't access key",theid)

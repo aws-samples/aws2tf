@@ -20,7 +20,7 @@ def check_key(keyid):
 			return True
 		else:
 			print("WARNING: key is not valid or is managed by AWS")
-			print(str(kresp))
+			#print(str(kresp))
 			return False
 	except Exception as e:
 		print("WARNING: can't access key",keyid)

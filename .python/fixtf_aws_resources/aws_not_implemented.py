@@ -33,6 +33,7 @@ notimplemented = {
     #
     "aws_appstream_directory_config": True,
     "aws_appstream_fleet_stack_association": True,
+    "aws_appstream_stack": True,
     "aws_appstream_user_stack_association": True,
     "aws_appsync_api_cache": True,
     "aws_appsync_domain_name_api_association": True,

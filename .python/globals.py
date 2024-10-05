@@ -89,3 +89,4 @@ vpclist={}
 rolelist={}
 bucketlist={}
 tgwlist={}
+gluedbs={}

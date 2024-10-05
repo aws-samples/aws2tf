@@ -23,6 +23,8 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
                 tfid="d-"+pkey.replace(":","__")
                 common.write_import(type,pkey,tfid) 
                 common.add_dependancy("aws_glue_catalog_table",pkey)
+                globals.gluedbs[j[key]]=True
+
                 #pkey2="aws_glue_catalog_table."+pkey
                 #globals.rproc[pkey2]=True
 
@@ -38,6 +40,7 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
             pkey=globals.acc+":"+j[key]
             tfid="d-"+pkey.replace(":","__")
             common.write_import(type,pkey,tfid)
+            globals.gluedbs[j[key]]=True
             #print("KD add aws_glue_catalog_table "+pkey)
             common.add_dependancy("aws_glue_catalog_table",pkey)
             gkey="aws_glue_catalog_table."+pkey

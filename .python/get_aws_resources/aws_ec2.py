@@ -975,7 +975,7 @@ def get_aws_vpc_endpoint(type, id, clfn, descfn, topkey, key, filterid):
     try:
         response = []
         client = boto3.client(clfn)
-        pkey=type+"."+id
+        
         if id is None:
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():

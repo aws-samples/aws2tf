@@ -28,13 +28,19 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
         else: 
             if ":" in id:   id =id.split(":")[1]    
             response = client.get_database(Name=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                gkey="aws_glue_catalog_table."+pkey
+                globals.rproc[gkey]=True
+                return True
             j=response['Database']
             pkey=globals.acc+":"+j[key]
             tfid="d-"+pkey.replace(":","__")
             common.write_import(type,pkey,tfid)
             #print("KD add aws_glue_catalog_table "+pkey)
             common.add_dependancy("aws_glue_catalog_table",pkey)
+            gkey="aws_glue_catalog_table."+pkey
+            globals.rproc[gkey]=True
 
 
     except Exception as e:

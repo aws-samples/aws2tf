@@ -20,7 +20,7 @@ def check_key(keyid):
 			return True
 		else:
 			print("WARNING: key is not valid or is managed by AWS")
-			print(str(kresp))
+			#print(str(kresp))
 			return False
 	except Exception as e:
 		print("WARNING: can't access key",keyid)
@@ -176,10 +176,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             or tt1=="source_arn" or tt1 == "cloudwatch_role_arn" or tt1=="service_linked_role_arn" \
             or tt1=="cloud_watch_logs_role_arn" or "_role_arn" in tt1:
                 # deref_role_arn - checks ":role/" is in the arn
-                print("------defref_role_arn >>>>>>", tt2)
                 t1=fixtf.deref_role_arn(t1,tt1,tt2)
-
-
 
         elif tt1=="target_group_arn" and tt2 != "null":
             tgarn=tt2
@@ -187,9 +184,6 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             t1 = tt1 + " = aws_lb_target_group."+tt2+".arn\n"
             common.add_dependancy("aws_lb_target_group",tgarn)
             
-        
-        
-        
         ## generic arn processing note also pass type - may not get them all
         #elif "arn:" in tt2:   t1=fixtf.generic_deref_arn(t1, tt1, tt2)
 

@@ -9,6 +9,7 @@ def resource_types(type):
     elif type == "acm": rets=["aws_acm_certificate"]; return rets # ACM Certificates
     elif type == "api" or type == "apigw": rets = ["aws_api_gateway_rest_api"]; return rets # API Gateway and dependancies
     elif type == "appmesh": rets=["aws_appmesh_mesh"]; return rets # App Mesh and depandancies
+    elif type == "apprunner": rets=["aws_apprunner_service"]; return rets # App Mesh and depandancies
     elif type == "appstream": rets=["aws_appstream_image_builder","aws_appstream_stack","aws_appstream_fleet","aws_appstream_user"]; return rets # Appstream fleet, users etc.
     elif type == "artifact": rets=["aws_codeartifact_domain","aws_codeartifact_repository"]; return rets # Code Artifact
     elif type == "athena": rets=["aws_athena_named_query","aws_athena_data_catalog"]; return rets # Athena Resources

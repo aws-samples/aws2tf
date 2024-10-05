@@ -51,7 +51,8 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
         print(str(e))
         exc_type, exc_obj, exc_tb = sys.exc_info()
         exn=str(exc_type.__name__)
-        print("exn="+exn)
+        if exn=="AccessDeniedException" and "Insufficient Lake Formation permission" in str(e):
+            print("AccessDeniedException - Insufficient Lake Formation permission",type,id)
    
 
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

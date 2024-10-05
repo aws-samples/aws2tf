@@ -100,7 +100,7 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
                 print("2b")
 
         print(str(response))
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response[topkey]:
             #Terraform import id = "123456789012:MyDatabase:MyTable"
                 pkey=catalogn+":"+databasen+":"+j[key]

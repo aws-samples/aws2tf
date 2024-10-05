@@ -2,6 +2,7 @@ import common
 import boto3
 import globals
 import inspect
+import sys
 
 def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid):
 
@@ -48,6 +49,11 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
 
     except Exception as e:
         print(str(e))
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        exn=str(exc_type.__name__)
+        print("exn="+exn)
+   
+
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True

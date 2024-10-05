@@ -4,7 +4,8 @@ import common
 def aws_glue_crawler(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if tt1 == "database_name" and tt2 != "null":
-		t1 = tt1 + " = aws_glue_catalog_database.d-"+globals.acc+"__"+tt2+".name\n"
+		if globals.gluedbs[tt2]:
+			t1 = tt1 + " = aws_glue_catalog_database.d-"+globals.acc+"__"+tt2+".name\n"
 		#common.add_dependancy("aws_glue_catalog_database",tt2)
 
 	elif tt1 == "sample_size":

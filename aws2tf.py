@@ -403,7 +403,7 @@ def main():
         lc  = lc + 1
 
 # go again plan and split / fix
-
+        print("Terraform Plan - Dependancies Detection Loop "+str(lc)+".....")
 
         x=glob.glob("import__aws_*.tf")
         #print(str(x))

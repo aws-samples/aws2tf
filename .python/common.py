@@ -226,7 +226,7 @@ def call_resource(type, id):
 
 
 def tfplan1():
-   print("Terraform Plan - Dependancies Detection Loop ...")
+
    rf = "resources.out"
    # com="terraform plan -generate-config-out="+ rf + " -out tfplan -json > plan2.json"
 
@@ -239,8 +239,6 @@ def tfplan1():
 
    com = "mv aws_*.tf imported"
    rout = rc(com)
-
-
 
    com = "terraform plan -generate-config-out=" + \
        rf + " -out tfplan -json > plan1.json"

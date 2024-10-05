@@ -2,11 +2,12 @@ import common
 import boto3
 import globals
 import inspect
+import sys
 
 def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid):
 
     if globals.debug:
-        print("--> In get_aws_glue_catalog_database  doing " + type + ' with id ' + str(id) +
+        print("--> Inn get_aws_glue_catalog_database  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -22,11 +23,13 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
                 tfid="d-"+pkey.replace(":","__")
                 common.write_import(type,pkey,tfid) 
                 common.add_dependancy("aws_glue_catalog_table",pkey)
+                globals.gluedbs[j[key]]=True
+
                 #pkey2="aws_glue_catalog_table."+pkey
                 #globals.rproc[pkey2]=True
 
         else: 
-            if ":" in id:   id =id.split(":")[1]    
+            if ":" in id:   id =id.split(":")[1]   
             response = client.get_database(Name=id)
             if response == []: 
                 print("Empty response for "+type+ " id="+str(id)+" returning")
@@ -37,6 +40,7 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
             pkey=globals.acc+":"+j[key]
             tfid="d-"+pkey.replace(":","__")
             common.write_import(type,pkey,tfid)
+            globals.gluedbs[j[key]]=True
             #print("KD add aws_glue_catalog_table "+pkey)
             common.add_dependancy("aws_glue_catalog_table",pkey)
             gkey="aws_glue_catalog_table."+pkey
@@ -44,7 +48,18 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
 
 
     except Exception as e:
-        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        exn=str(exc_type.__name__)
+        if exn=="AccessDeniedException" and "Insufficient Lake Formation permission" in str(e):
+            print("AccessDeniedException - Insufficient Lake Formation permission for",type,id)
+            if id is not None:
+                if ":" in id:   id =id.split(":")[1]
+                pkey=globals.acc+":"+id
+                gkey="aws_glue_catalog_database."+pkey
+                
+                globals.rproc[gkey]=True
+        else:
+            common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
 
@@ -75,7 +90,7 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
                     
         
         tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
-
+        #print(catalogn, databasen, tabnam,cc)
         response = []
         client = boto3.client(clfn)
   
@@ -83,8 +98,12 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
                 response = client.get_tables(CatalogId=catalogn,DatabaseName=databasen)
         if cc == 2:
                 response = client.get_tables(CatalogId=catalogn,DatabaseName=databasen,Expression=tabnam)
-
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+ 
+        if response[topkey] == []: 
+            print("Empty response for "+type+ " id="+str(id)+" returning"); 
+            tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
+            globals.rproc[tkey]=True
+            return True
         for j in response[topkey]:
             #Terraform import id = "123456789012:MyDatabase:MyTable"
                 pkey=catalogn+":"+databasen+":"+j[key]

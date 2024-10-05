@@ -86,20 +86,15 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
                     
         
         tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
-        print(catalogn, databasen, tabnam,cc)
+        #print(catalogn, databasen, tabnam,cc)
         response = []
         client = boto3.client(clfn)
   
         if cc == 1:
-                print("1")
                 response = client.get_tables(CatalogId=catalogn,DatabaseName=databasen)
-                print("1a")
         if cc == 2:
-                print("2a")
                 response = client.get_tables(CatalogId=catalogn,DatabaseName=databasen,Expression=tabnam)
-                print("2b")
-
-        print(str(response))
+ 
         if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response[topkey]:
             #Terraform import id = "123456789012:MyDatabase:MyTable"

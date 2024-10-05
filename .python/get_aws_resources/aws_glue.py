@@ -12,10 +12,8 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
         
     try:
         response = []
-        print("HERE 0")  
         client = boto3.client(clfn)
         if id is None:
-            print("HERE 1")  
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
@@ -29,8 +27,7 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
                 #globals.rproc[pkey2]=True
 
         else: 
-            if ":" in id:   id =id.split(":")[1] 
-            print("HERE 2")   
+            if ":" in id:   id =id.split(":")[1]   
             response = client.get_database(Name=id)
             if response == []: 
                 print("Empty response for "+type+ " id="+str(id)+" returning")
@@ -89,7 +86,7 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
                     
         
         tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
-
+        print(catalogn, databasen, tabnam)
         response = []
         client = boto3.client(clfn)
   

@@ -32,6 +32,8 @@ def aws_secretsmanager_secret_version(t1,tt1,tt2,flag1,flag2):
                 client = boto3.client('secretsmanager')
                 response = client.get_secret_value(SecretId=globals.secid,VersionId=globals.secvid)
                 sv=response['SecretString']
+                if '""""' in sv:
+                    sv=sv.replace('""""', '""')
                 t1 = tt1 + " = jsonencode("+sv+")\n"
         if tt1 == "secret_binary": 
             t1="\n lifecycle {\n   ignore_changes = [secret_binary,secret_string]\n}\n"

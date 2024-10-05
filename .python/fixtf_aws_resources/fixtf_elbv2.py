@@ -25,8 +25,8 @@ def aws_lb_listener(t1,tt1,tt2,flag1,flag2):
 
 	if "order" == tt1:
 		if tt2 == "0": skip=1
-	elif "duration" == tt1:
-		if tt2 == "0": t1=tt1+" = 1\n"	
+	#elif "duration" == tt1:
+	#	if tt2 == "0": t1=tt1+" = 1\n"	
 
 	return skip,t1,flag1,flag2
 

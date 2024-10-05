@@ -52,7 +52,8 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
             if id is not None:
                 if ":" in id:   id =id.split(":")[1]
                 pkey=globals.acc+":"+id
-                gkey="aws_glue_catalog_table."+pkey
+                gkey="aws_glue_catalog_database."+pkey
+                
                 globals.rproc[gkey]=True
         else:
             common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

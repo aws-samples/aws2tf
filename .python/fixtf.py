@@ -310,10 +310,10 @@ def fixtf(ttft,tf):
     globals.stripblock=""
     globals.stripstart=""
     globals.stripend=""
-    if ttft=="aws_lb_listener_rule" or ttft=="aws_lb_listener":
-        globals.stripblock="forward {"
-        globals.stripstart="{"
-        globals.stripend="}"
+    #if ttft=="aws_lb_listener_rule" or ttft=="aws_lb_listener":
+    #    globals.stripblock="forward {"
+    #    globals.stripstart="{"
+    #    globals.stripend="}"
     if ttft=="aws_lb":
         globals.stripblock="subnet_mapping {"
         globals.stripstart="{"

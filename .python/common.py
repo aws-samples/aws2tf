@@ -736,7 +736,7 @@ def aws_tf(region):
       f3.write('    aws = {\n')
       f3.write('      source  = "hashicorp/aws"\n')
       # f3.write('      version = "5.48.0"\n')
-      f3.write('      version = "5.67.0"\n')
+      f3.write('      version = "5.70.0"\n')
       f3.write('    }\n')
       f3.write('  }\n')
       f3.write('}\n')

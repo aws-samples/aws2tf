@@ -86,7 +86,7 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
                     
         
         tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
-        print(catalogn, databasen, tabnam,c)
+        print(catalogn, databasen, tabnam,cc)
         response = []
         client = boto3.client(clfn)
   

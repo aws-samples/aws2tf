@@ -21,13 +21,13 @@ def aws_lb_listener(t1,tt1,tt2,flag1,flag2):
 	if "load_balancer_arn" == tt1:
 		tt2=tt2.replace("/","_").replace(".","_").replace(":","_")
 		t1 = tt1 + " = aws_lb."+tt2+".arn\n"
-		#t1=t1+"\n lifecycle {\n   ignore_changes = [default_action[0].forward[0]]\n}\n"
+		t1=t1+"\n lifecycle {\n   ignore_changes = [default_action[0].forward[0]]\n}\n"
 
 	if "order" == tt1:
 		if tt2 == "0": skip=1
 	elif "duration" == tt1:
-		#if tt2 == "0": t1=tt1+" = 1\n"	
-		if tt2 == "0": skip=1
+		if tt2 == "0": t1=tt1+" = 1\n"	
+		#if tt2 == "0": skip=1
 
 	return skip,t1,flag1,flag2
 

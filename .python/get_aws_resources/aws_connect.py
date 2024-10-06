@@ -2,6 +2,7 @@ import common
 import boto3
 import globals
 import inspect
+import sys
 
 
 def get_aws_connect_instance(type, id, clfn, descfn, topkey, key, filterid):
@@ -341,6 +342,8 @@ def get_aws_connect_user(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 # aws_connect_vocabulary
+#AccessDeniedException exception for aws_connect.py - returning
+# ERROR: Not found aws_connect_vocabulary.4de80d0a-3f95-4475-a7bb-86236b92d13c - check if this resource still exists in AWS. Also check what resource is using it - grep the *.tf files in the generated/tf.* subdirectory
 
 def get_aws_connect_vocabulary(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
@@ -354,21 +357,32 @@ def get_aws_connect_vocabulary(type, id, clfn, descfn, topkey, key, filterid):
             return True
 
         else:
-            client = boto3.client(clfn)
-            paginator = client.get_paginator(descfn)
-            pkey = type+"."+id
-            for page in paginator.paginate(InstanceId=id,State='ACTIVE'):
-                response = response + page[topkey]
-            if response == []:
-                print("Empty response for "+type + " id="+str(id)+" returning")
-                globals.rproc[pkey] = True
-                return True
-            for j in response:
-                theid = id+":"+j[key]
-                common.write_import(type, theid, "r-"+theid)
+            try:
+                client = boto3.client(clfn)
+                paginator = client.get_paginator(descfn)
+                pkey = type+"."+id
+                for page in paginator.paginate(InstanceId=id,State='ACTIVE'):
+                    response = response + page[topkey]
+                if response == []:
+                    print("Empty response for "+type + " id="+str(id)+" returning")
+                    globals.rproc[pkey] = True
+                    return True
+                for j in response:
+                    theid = id+":"+j[key]
+                    common.write_import(type, theid, "r-"+theid)
 
-            globals.rproc[pkey] = True
+                globals.rproc[pkey] = True
+            except Exception as e:
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                exn=str(exc_type.__name__)
+                if exn == "AccessDeniedException":
+                    pkey = type+"."+id
+                    globals.rproc[pkey] = True
+                    #print("AccessDeniedException exception for aws_connect.py - returning")
+                    return True
+
     except Exception as e:
+
         common.handle_error(
             e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
 

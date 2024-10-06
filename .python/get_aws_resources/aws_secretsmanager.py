@@ -24,7 +24,7 @@ def get_aws_secretsmanager_secret(type, id, clfn, descfn, topkey, key, filterid)
             for j in response:
                 
                 common.write_import(type,j[key],None) 
-                common.add_dependancy("aws_secretsmanager_secret_version",j[key])
+                #common.add_dependancy("aws_secretsmanager_secret_version",j[key])
                 try:
                     print(j['RotationEnabled'])
                     common.add_dependancy("aws_secretsmanager_secret_rotation",j[key])
@@ -37,12 +37,13 @@ def get_aws_secretsmanager_secret(type, id, clfn, descfn, topkey, key, filterid)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
             common.write_import(type,j[key],None)
+            common.add_dependancy("aws_secretsmanager_secret_version",j[key])
             try:
                 print(j['RotationEnabled'])
                 common.add_dependancy("aws_secretsmanager_secret_rotation",j[key])
             except KeyError:
                 print("INFO: No rotation config")
-            #common.add_dependancy("aws_secretsmanager_secret_version",j[key])
+            
 
 
     except Exception as e:
@@ -97,7 +98,23 @@ def get_aws_secretsmanager_secret_version(type, id, clfn, descfn, topkey, key, f
             response = client.list_secret_version_ids(SecretId=id,IncludeDeprecated=False)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             #print(response)
+
             for j in response[topkey]:
+                #print(j[key])
+                try:
+                    sresponse = client.get_secret_value(SecretId=id,VersionId=j[key])
+                except Exception as e:
+                    exc_type, exc_obj, exc_tb = sys.exc_info()
+                    exn=str(exc_type.__name__)
+                    #print(exn,str(e))
+                    if "(AccessDeniedException) when calling the GetSecretValue" in str(e):
+                        print("INFO: get_secret_value failed - not authorized skipping",type,id.split(':')[-1])
+                        pkey=type+"."+id
+                        globals.rproc[pkey]=True
+                        return True
+                
+                sv=sresponse['SecretString']
+                print(str(sv))
                 pkey=id+"|"+j[key]
                 common.write_import(type,pkey,None) 
             pkey=type+"."+id

@@ -1,6 +1,6 @@
 # aws2tf
 
-<img src="https://github.com/aws-samples/aws2tf/blob/python/.logos/aws2tf-small.png" width="300">
+<img src="https://github.com/aws-samples/aws2tf/blob/python/.logos/aws2tf-header.png" width="300">
 
 **October 2024**
 

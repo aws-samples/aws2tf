@@ -1,13 +1,13 @@
 # aws2tf
 
-**August 2024**
+<img src="https://github.com/aws-samples/aws2tf/blob/python/.logos/aws2tf-small.png" width="300">
+
+**October 2024**
 
 ----
 
 *The python version of this tool `aws2tf.py` has now superceded the old bash script version.*
-
 *You can still find and use the old version in the hidden sub-directory `.aws2tf-archive`*
-
 
 ----
 

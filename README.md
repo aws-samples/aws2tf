@@ -1,5 +1,5 @@
 
-<img src="https://github.com/aws-samples/aws2tf/blob/python/.logos/aws2tf.png" width="200">
+<img src="https://github.com/aws-samples/aws2tf/blob/python/.logos/aws2tf.png" width="300" alt="aws2tf" class="center">
 
 **October 2024**
 

@@ -26,6 +26,7 @@ def get_aws_secretsmanager_secret(type, id, clfn, descfn, topkey, key, filterid)
                 sn=sarn.split(":")[-1]
                 if sn.startswith("rds!"):
                     print("INFO: skipping rds managed secret "+sn+" ...")
+                    return True
                 else:
                     common.write_import(type,j[key],None) 
                     #common.add_dependancy("aws_secretsmanager_secret_version",j[key])

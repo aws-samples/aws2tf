@@ -96,6 +96,7 @@ def main():
     argParser.add_argument("-r", "--region", help="region")
     argParser.add_argument("-m", "--merge", help="merge", action='store_true')
     argParser.add_argument("-d", "--debug", help="debug", action='store_true')
+    argParser.add_argument("-s", "--singlefile", help="singlefile", action='store_true')
     argParser.add_argument("-v", "--validate", help="validate and exit", action='store_true')
     argParser.add_argument("-a", "--accept", help="expected plan changes accepted", action='store_true')
     argParser.add_argument("-e", "--exclude", help="resource types to exclude")
@@ -208,13 +209,6 @@ def main():
 
 
     if globals.merge is False:
-        #print("No merge - removing terraform.tfstate* and aws_*.tf *.out")
-        #com = "rm -f aws.tf terraform.tfstate* data_*.tf aws_*.tf s3-*.tf aws_*.zip tfplan *.out *.log aws_*.sh stacks.sh import*.tf imported/* main.tf plan1* plan2* *.txt *.json *.err"
-        #rout = common.rc(com)
-        #com = "rm -rf imported notimported"
-        #rout = common.rc(com)
-        #com = "mkdir -p imported notimported"
-        #rout = common.rc(com)
         com = "rm -rf "+globals.path1
         rout = common.rc(com)
         if globals.serverless: common.empty_and_delete_bucket()
@@ -247,6 +241,8 @@ def main():
                 for i in globals.rproc.keys():
                     print(i)
 
+            com = "rm -f main.tf"
+            rout = common.rc(com) 
             com = "cp imported/*.tf ."
             rout = common.rc(com) 
 
@@ -482,6 +478,24 @@ def main():
     awsf=len(x)
     if awsf > 0:
         print("\nErrors found - see *.err files, and please report via github issue")   
+
+    if args.singlefile:
+        print("Single file mode .....")
+        tf_files = glob.glob("aws_*__*.tf")
+        if not tf_files:
+            print("No aws_*.tf files found")
+        else:
+            with open('main.tf', 'w') as outfile:
+                for tf_file in sorted(tf_files):
+                    if globals.debug: outfile.write(f"# Source: {tf_file}\n")
+                    with open(tf_file, 'r') as infile:
+                        outfile.write(infile.read())
+                    outfile.write('\n\n')
+                    #com = "mv "+tf_file +" imported/"+tf_file
+                    #rout = common.rc(com)
+        print(f"Successfully merged {len(tf_files)} files into main.tf")
+        com = "mv aws_*__*.tf imported"
+        rout = common.rc(com)
 
     now = datetime.datetime.now()
     print("aws2tf finished at %s" % now)

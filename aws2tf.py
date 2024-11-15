@@ -96,7 +96,7 @@ def main():
     argParser.add_argument("-r", "--region", help="region")
     argParser.add_argument("-m", "--merge", help="merge", action='store_true')
     argParser.add_argument("-d", "--debug", help="debug", action='store_true')
-    argParser.add_argument("-s", "--singlefile", help="singlefile", action='store_true')
+    argParser.add_argument("-s", "--singlefile", help="only a single file main.tf is produced", action='store_true')
     argParser.add_argument("-v", "--validate", help="validate and exit", action='store_true')
     argParser.add_argument("-a", "--accept", help="expected plan changes accepted", action='store_true')
     argParser.add_argument("-e", "--exclude", help="resource types to exclude")

@@ -106,10 +106,9 @@ from fixtf_aws_resources import aws_not_implemented
 
 def call_resource(type, id):
    #print("---- in call_resources >>>>> "+type+"   "+str(id))
-   #if type in globals.all_extypes: 
-   #   print("Type:",type," excluded, skipping ...")
-   #   return
-   
+   if type in globals.all_extypes:
+      print("Excluding", type) 
+      return
    
    if type in aws_no_import.noimport:
       print("WARNING: Terraform cannot import type: " + type)

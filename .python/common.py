@@ -71,6 +71,7 @@ from get_aws_resources import aws_kinesis
 from get_aws_resources import aws_logs
 from get_aws_resources import aws_lakeformation
 from get_aws_resources import aws_lambda
+from get_aws_resources import aws_license_manager
 from get_aws_resources import aws_neptune
 from get_aws_resources import aws_organizations
 from get_aws_resources import aws_ram

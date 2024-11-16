@@ -6,6 +6,10 @@ import os
 import sys
 import inspect
 from get_aws_resources import aws_s3control
+import concurrent.futures
+from typing import List, Dict
+import io
+from concurrent.futures import ThreadPoolExecutor
 
 def get_aws_s3_bucket(type, id, clfn, descfn, topkey, key, filterid):
    get_all_s3_buckets(id,globals.region)
@@ -139,9 +143,17 @@ def get_all_s3_buckets(fb,my_region):
      common.write_import(type,bucket_name,"b-"+bucket_name)
      common.add_dependancy("aws_s3_access_point",bucket_name)
 
-     for key in s3_fields:
-         #print("outside get_s3 type=" + key)
-         get_s3(s3_fields,key,bucket_name)
+
+     if globals.fast:      
+         with ThreadPoolExecutor(max_workers=8) as executor3:
+            futures = [
+               executor3.submit(get_s3,s3_fields,key,bucket_name)
+               for key in s3_fields
+            ]
+            #return [f.result() for f in futures] 
+     else:
+         for key in s3_fields2:
+            get_s3(s3_fields2, key, bucket_name)
 
    return True
       

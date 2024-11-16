@@ -1396,12 +1396,20 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    elif "NoSuch" in exn and clfn=="cloudfront":
       print(str(exc_obj)+" for "+frame+" id="+str(id)+" - returning")
       return
+   
+   elif "BadRequest" in exn:
+      #print(str(exc_obj)+" for "+frame+" id="+str(id)+" - returning")
+      if "The requested feature is not enabled for this AWS account" in str(exc_obj):
+            print(descfn + " returned feature not enabled for this account - returning")
+            return
+      exit()
 
 
 
    print("\nERROR: in "+frame+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
    try:   
       print(f"{e=} [e1]")
+      print(f"{exn=} [e1]")
       print(fname, exc_tb.tb_lineno)
    except:
       print("except err")

@@ -188,7 +188,7 @@ def get_aws_lambda_function_event_invoke_config(type, id, clfn, descfn, topkey, 
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         for j in response: 
-            print(str(j))
+            #print(str(j))
             fn=j['Name']
             theid=id+"/"+fn
             common.write_import(type, theid, None)
@@ -224,7 +224,7 @@ def get_aws_lambda_event_source_mapping(type, id, clfn, descfn, topkey, key, fil
             return True
         
         for j in response: 
-            print(str(j))
+            #print(str(j))
             fn=j['UUID']
             theid="l-"+fn
 
@@ -259,7 +259,7 @@ def get_aws_lambda_layer_version_permission(type, id, clfn, descfn, topkey, key,
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
         
-        print("-42a-"+str(response))
+        #print("-42a-"+str(response))
         ### id = "arn:aws:lambda:us-west-2:123456654321:layer:test_layer1,1"
         
         for j in response:

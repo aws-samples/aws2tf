@@ -95,6 +95,12 @@ You can also combine type requests by using a comma delimited list:
 ./aws2tf.py -t vpc,efs,aws_dagemaker_domain
 ```
 
+By default aws2tf genrates a separate aws_xxxx.tf file for every resource it finds, if you would prefer to have them all merged into a single file (main.tf)
+use the -s option:
+
+```
+./aws2tf.py -t vpc -s
+```
 
 ### Adding (merging) resources:
 
@@ -108,16 +114,16 @@ To add all ECS resources:
 
 You can see all the supported types (-t [type]) by using -l (long help) option: `./aws2tf.py -l`
 
-You can also import just a specific resource by passing it's AWS resource name, eg:
+You can also import just a specific resource by passing it's AWS resource name, in this example all the existing resources and the newly merged resources will be put into a single (main.tf) file as the -s option is included:
 
 ```
-./aws2tf.py -t eks -i my-cluster-name -m
+./aws2tf.py -t eks -i my-cluster-name -m -s
 ```
 
 or for a specific domain:
 
 ```
-./aws2tf.py -t aws_sagemaker_domain -i d-xxxxxxxxx -m
+./aws2tf.py -t aws_sagemaker_domain -i d-xxxxxxxxx -m 
 ```
 
 Add a specific S3 bucket:
@@ -125,9 +131,6 @@ Add a specific S3 bucket:
 ```
 ./aws2tf -t aws_s3_bucket -i my_bucket_name -m
 ```
-
-
-
 
 
 ### Importing from a deployed stack
@@ -148,6 +151,11 @@ Finally you can scan everything in your account by simply running:
 ./aws2tf.py
 
 But this is **Not recommended** as this will take quite some time to complete!
+
+You can also try the experimental fast mode which uses multi threading to spped things up:
+
+./aws2tf.py -f
+
 
 ----------
 

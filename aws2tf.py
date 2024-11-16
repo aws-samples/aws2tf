@@ -161,6 +161,7 @@ def dd_threaded(ti):
 def main():
     now = datetime.datetime.now()
     print("aws2tf started at %s" % now)
+    starttime=now
     common.check_python_version()
     # print("cwd=%s" % os.getcwd())
     signal.signal(signal.SIGINT, common.ctrl_c_handler)
@@ -527,7 +528,7 @@ def main():
         for ti in globals.rproc.keys():
             if not globals.rproc[ti]:
                 detdep=True 
-                print(str(ti)+" is False")
+                #print(str(ti)+" is False")
                 detdepstr=detdepstr+str(ti)+" "
 
         print("\n----------- Completed "+str(lc)+" dependancy check loops --------------") 
@@ -600,7 +601,12 @@ def main():
         rout = common.rc(com)
 
     now = datetime.datetime.now()
+    print("aws2tf started at  %s" % starttime)
     print("aws2tf finished at %s" % now)
+    # print execution time
+    print("aws2tf execution time h:mm:ss :"+ str(now - starttime))
+    
+
     exit(0)
 
 

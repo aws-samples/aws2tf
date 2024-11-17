@@ -16,11 +16,14 @@ from concurrent.futures import ThreadPoolExecutor
 
 
 
+
+
 sys.path.insert(0, './.python')
 #from get_aws_resources import aws_s3
 import common
 import resources
 import globals
+import timed_interrupt
 
 import stacks
 from fixtf_aws_resources import aws_dict
@@ -47,7 +50,10 @@ def extra_help():
                     print("./aws2tf.py  -t "+line)
     print("\nOr instead of the above type codes use the terraform type eg:\n\n./aws2tf.py -t aws_vpc\n")
     print("\nTo get a deployed stack set:\n\n./aws2tf.py -t stack -i stackname\n")               
+    timed_interrupt.timed_int.stop()
     exit()
+
+
 
 
 
@@ -71,7 +77,7 @@ def process_file_operations(files: List[str], output_file: str) -> None:
 
 def build_lists():
     print("Building core resource lists ...")
-    
+    globals.tracking_message="Stage 2 of 10, Building core resource lists ..."
     def fetch_vpc_data():
         client = boto3.client('ec2')
         response = []
@@ -159,9 +165,11 @@ def dd_threaded(ti):
 #if __name__ == '__main__':
 
 def main():
+
     now = datetime.datetime.now()
     print("aws2tf started at %s" % now)
     starttime=now
+    
     common.check_python_version()
     # print("cwd=%s" % os.getcwd())
     signal.signal(signal.SIGINT, common.ctrl_c_handler)
@@ -187,6 +195,7 @@ def main():
 
     if path is None:
         print("no executable found for command 'terraform'")
+        timed_interrupt.timed_int.stop()
         exit()
 
     globals.expected=args.accept
@@ -206,6 +215,7 @@ def main():
     if args.type is None or args.type=="":
         if args.serverless:
             print("type is required eg:  -t aws_vpc  when in serverless mode, exiting ....")
+            timed_interrupt.timed_int.stop()
             exit()
         print("type is required eg:  -t aws_vpc")
         print("setting to all")
@@ -244,6 +254,7 @@ def main():
                     region=os.getenv("AWS_DEFAULT_REGION")
                     if region is None:
                         print("region is required - set in AWS cli or pass with -r")
+                        timed_interrupt.timed_int.stop()
                         exit()
             print("region set from aws cli / environment variables as "+region)
     else:
@@ -267,6 +278,7 @@ def main():
         exn=str(exc_type.__name__)
         if "ExpiredToken" in str(e):
             print("STS Authorization Error: ExpiredToken, exiting .....")
+        timed_interrupt.timed_int.stop()
         exit()
     print('Using region: '+region + ' account: ' + globals.acc+"\n")
 ####  restore form S3 if merging & serverless
@@ -293,13 +305,12 @@ def main():
         if globals.serverless: common.empty_and_delete_bucket()
 
 
-
-
     com = "mkdir -p "+globals.path2
     rout = common.rc(com)
     globals.cwd=os.getcwd()
     os.chdir(globals.path1) 
-
+    print("Terraform Initialise ...")
+    globals.tracking_message="Stage 1 of 10, Terraform Initialise ..."
     common.aws_tf(region)
 
     if args.merge:
@@ -335,7 +346,7 @@ def main():
 
 
 #### setup
-
+    
     build_lists()
     
     if type == "" or type is None: type = "all"
@@ -343,14 +354,18 @@ def main():
     print("---<><> "+ str(type),"Id="+str(id)," exclude="+str(globals.all_extypes))  
 
 ################# -- now we are calling ----   ###############################
+    globals.tracking_message="Stage 3 of 10 getting resources ..."
+
 
     if "," in type:
         if "stack" in type:
             print("Cannot mix stack with other types")
+            timed_interrupt.timed_int.stop()
             exit()
 
         if id is not None:
             print("Cannot pass id with multiple types")
+            timed_interrupt.timed_int.stop()
             exit()
 
         #if globals.serverless:
@@ -381,10 +396,13 @@ def main():
         if all_types is None: print("No resources found all_types=None")
 
         if type == "stack":
+            
             if id is None:
                 print("Must pass a stack name as a parameter   -i <stack name>")
+                timed_interrupt.timed_int.stop()
                 exit()
             else:
+                globals.tracking_message="Stage 3 of 10 getting stack " +id+" resources ..."
                 globals.expected=True
                 stacks.get_stacks(id)
         
@@ -406,7 +424,7 @@ def main():
             globals.expected=True
             
             if args.fast:
-                print("####  Fast mode enabled ####")
+                globals.tracking_message="Stage 3 of 10 getting "+str(it)+" resources multi-threaded"
                 with ThreadPoolExecutor(max_workers=8) as executor:
                     futures = [
                         executor.submit(common.call_resource, i, id)
@@ -419,22 +437,9 @@ def main():
                     if ic > it: break 
                     if ic < istart: continue
                     
-                    print(str(ic)+" of "+str(it) +"\t"+i)
+                    if globals.debug: print(str(ic)+" of "+str(it) +"\t"+i)
+                    globals.tracking_message="Stage 3 of 10, "+ str(ic)+" of "+str(it) +" resource types \t currently getting "+i
                     common.call_resource(i, id)
-
-
-   # Recommended approach:
-   # Implement parallel processing with proper error handling
-   #from concurrent.futures import ThreadPoolExecutor
-   #from typing import List, Tuple
-   
-   #    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-   #        futures = [
-   #            executor.submit(common.call_resource, i, id)
-   #            for i in all_types
-   #        ]
-   #        return [f.result() for f in futures]
-   #```
                                 
         else:
             if all_types is not None:
@@ -445,12 +450,16 @@ def main():
                         print("Resource",type," not found in aws_dict")
             else:
                 print("No resources found")
+                globals.tracking_message="Stage 3 of 10 no resources found exiting ..."
+                timed_interrupt.timed_int.stop()
                 exit()
 
 #########################################################################################################################
 
 ## Known dependancies section
     
+
+    globals.tracking_message="Stage 4 of 10, Known Dependancies"
     for ti in list(globals.rdep):
             if not globals.rdep[ti]:
                 i = ti.split(".")[0]
@@ -466,9 +475,11 @@ def main():
     
     if ":" in globals.rproc:
         print(": in rproc exiting")
+        timed_interrupt.timed_int.stop()
         exit()
     now = datetime.datetime.now()
     print("\naws2tf Detected Dependancies started at %s\n" % now)
+    globals.tracking_message="Stage 5 of 10, Detected Dependancies starting"
     detdep=False
     for ti in globals.rproc.keys():
         if not globals.rproc[ti]: 
@@ -509,7 +520,7 @@ def main():
 
 # go again plan and split / fix
         print("Terraform Plan - Dependancies Detection Loop "+str(lc)+".....")
-
+        globals.tracking_message="Stage 6 of 10, Dependancies Detection - Loop "+str(lc)
         x=glob.glob("import__aws_*.tf")
         #print(str(x))
         #td=""
@@ -520,8 +531,9 @@ def main():
             com = "mv "+tf +" imported/"+tf
             rout = common.rc(com)
 
-         
+        globals.tracking_message="Stage 6 of 10, Dependancies Detection - Loop "+str(lc)+" terrafrom plan"
         common.tfplan1()
+        globals.tracking_message="Stage 6 of 10, Dependancies Detection - Loop "+str(lc)+" moving files"
         common.tfplan2()
  
         detdepstr=""
@@ -532,11 +544,15 @@ def main():
                 detdepstr=detdepstr+str(ti)+" "
 
         print("\n----------- Completed "+str(lc)+" dependancy check loops --------------") 
+        globals.tracking_message="Stage 6 of 10, Completed "+str(lc)+" dependancy check loops"
         if olddetdepstr == detdepstr and detdepstr != "":
+            globals.tracking_message="No change/progress in dependancies exiting..."
             print("\nERROR: No change/progress in dependancies exiting... \n")
             for ti in globals.rproc.keys():
                 if not globals.rproc[ti]:
                     print("ERROR: Not found "+str(ti)+" - check if this resource still exists in AWS. Also check what resource is using it - grep the *.tf files in the generated/tf.* subdirectory")
+                    globals.tracking_message="No change/progress in dependancies exiting..."
+            timed_interrupt.timed_int.stop()
             exit()
 
         olddetdepstr=detdepstr
@@ -548,13 +564,14 @@ def main():
         common.wrapup()
     else: 
         print("\nValidation only - no files written")
+        timed_interrupt.timed_int.stop()
         exit()
 
 ##########################################################################
 ####### Finish up
 #########################################################################
-    
-
+    globals.tracking_message="Stage 10 of 10, Completed"
+    timed_interrupt.timed_int.stop()
     with open("pyprocessed.txt", "a") as f:
         for i in globals.rproc.keys():
             if globals.debug: print(str(i))
@@ -570,6 +587,7 @@ def main():
         x = glob.glob("aws_*__*.tf")
         awsf=len(x)
         if awsf < 256:
+            globals.tracking_message="Running trivy security check"
             print("\nRunning trivy security check .....")
             common.trivy_check()
 
@@ -591,6 +609,7 @@ def main():
 
     if args.singlefile:
         print("Single file mode .....")
+        #globals.tracking_message="Single file mode - merging"
         tf_files = glob.glob("aws_*__*.tf")
         if not tf_files:
             print("No aws_*.tf files found")
@@ -599,7 +618,8 @@ def main():
         print(f"Successfully merged {len(tf_files)} files into main.tf")
         com = "mv aws_*__*.tf imported"
         rout = common.rc(com)
-
+    
+    globals.tracking_message="aws2tf, Completed"
     now = datetime.datetime.now()
     print("aws2tf started at  %s" % starttime)
     print("aws2tf finished at %s" % now)

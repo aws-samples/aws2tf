@@ -93,7 +93,7 @@ def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
                print("pn error")
                print(f"{e=}")
 
-            print("policy name="+str(pn))      
+            if globals.debug: print("policy name="+str(pn))      
             if retid == id:
                if theid not in str(globals.policies):
                   #print("---adding "+theid+" to policies")
@@ -113,7 +113,7 @@ def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
                print("pn error")
                print(f"{e=}")
 
-         print("policy name="+str(pn))
+         if globals.debug: print("policy name="+str(pn))
             #print("response="+str(retid)+" id="+str(id))
          
          if theid not in str(globals.policies):

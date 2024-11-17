@@ -18,6 +18,7 @@ def get_aws_sagemaker_domain(type, id, clfn, descfn, topkey, key, filterid):
             response = client.list_domains()
             if response[topkey] == []:
                 print("Empty response for "+type + " id="+str(id)+" returning")
+
                 return True
             for j in response[topkey]:
                 did = j['DomainId']
@@ -101,6 +102,8 @@ def get_aws_sagemaker_user_profile(type, id, clfn, descfn, topkey, key, filterid
                 response = response + page[topkey]
             if response == []:
                 print("Empty response for "+type + " id="+str(id)+" returning")
+                pkey = "aws_sagemaker_user_profile."+id
+                globals.rproc[pkey] = True
                 return True
             for j in response:
                 k = client.describe_user_profile(

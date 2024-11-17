@@ -9,6 +9,12 @@ def get_aws_securityhub_account(type, id, clfn, descfn, topkey, key, filterid):
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
+        client = boto3.client(clfn)
+        try:
+            client.list_members()
+        except:
+            print("No access to "+type+" returning")
+            return True
 
         if id is None:
             common.write_import(type,globals.acc,"a-"+globals.acc) 

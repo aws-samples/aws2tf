@@ -7,6 +7,7 @@ import resources
 import common
 import shutil
 import inspect
+from timed_interrupt import timed_int
 
 from fixtf_aws_resources import arn_dict
 from fixtf_aws_resources import aws_common
@@ -249,6 +250,7 @@ def fixtf(ttft,tf):
     clfn, descfn, topkey, key, filterid = resources.resource_data(ttft, None)
     if clfn is None:
         print("ERROR: clfn is None with type="+ttft)
+        timed_int.stop()
         exit()
 
     clfn=clfn.replace('-','_')
@@ -578,37 +580,47 @@ def rhs_replace(t1,tt1,tt2):
 
 def deref_array(t1,tt1,tt2,ttft,prefix,skip):
 
-    if tt2 == "null" or tt2 == "[]":
-        skip=1
-        return t1,skip
-    tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
-    cc=tt2.count(',')
-    subs=""
-    #if globals.debug: 
-    if cc > 0:
-        for i in range(cc+1):
-            subn=tt2.split(',')[i]
-            if ttft == "aws_subnet": 
-                if globals.subnetlist[subn]:
+    try:
+        if tt2 == "null" or tt2 == "[]":
+            skip=1
+            return t1,skip
+        tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
+        cc=tt2.count(',')
+        subs=""
+        #if globals.debug: 
+        if cc > 0:
+            for i in range(cc+1):
+                subn=tt2.split(',')[i]
+                if ttft == "aws_subnet": 
+                    try:
+                        if globals.subnetlist[subn]:
+                            subs=subs + ttft + "." + subn + ".id,"
+                            common.add_dependancy(ttft,subn)
+                        else:
+                            print("WARNING: subnet not in subnetlist" + subn)
+                    except KeyError:
+                        print("WARNING: subnet not in subnetlist " + subn+ " Resource may be referencing a subnet that no longer exists")
+
+                # elif sedurity_group
+                #
+                else:
                     subs=subs + ttft + "." + subn + ".id,"
                     common.add_dependancy(ttft,subn)
-                else:
-                    print("WARNING: subnet not in subnetlist" + subn)
-            # elif sedurity_group
-            #
-            else:
-                subs=subs + ttft + "." + subn + ".id,"
-                common.add_dependancy(ttft,subn)
 
-            
-    elif cc == 0 and prefix in tt2:
-        subs=ttft + "." + tt2 + ".id"
-        common.add_dependancy(ttft,tt2)
-    
-    if subs !="":         
-        t1=tt1 + " = [" + subs + "]\n"
-        t1=t1.replace(',]',']')
+                
+        elif cc == 0 and prefix in tt2:
+            subs=ttft + "." + tt2 + ".id"
+            common.add_dependancy(ttft,tt2)
         
+        if subs !="":         
+            t1=tt1 + " = [" + subs + "]\n"
+            t1=t1.replace(',]',']')
+        
+    
+    except Exception as e:  
+      print("t1=",t1)
+      common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id) 
+    
     return t1,skip
 
 

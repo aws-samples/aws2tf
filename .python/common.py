@@ -139,7 +139,7 @@ def call_resource(type, id):
       ti = type+"."+id
       try:
          if globals.rproc[ti]:
-            print("Already processed " + ti)
+            if globals.debug: print("Already processed " + ti)
             return
       except:
          pass

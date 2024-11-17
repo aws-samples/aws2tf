@@ -11,7 +11,7 @@ class Counter():
         self._run()
 
     def _run(self):
-        print("\naws2tf: " + str(self.i*self.increment) + " seconds, "+ globals.tracking_message+"\n")
+        print("\naws2tf: " + str(self.i*self.increment) + " seconds, "+ globals.tracking_message)
         self.next_t+=self.increment
         self.i+=1
         if not self.done:

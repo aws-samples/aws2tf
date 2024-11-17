@@ -195,6 +195,35 @@ def get_aws_eip(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 
+def get_aws_eip_association(type, id, clfn, descfn, topkey, key, filterid):
+
+    if globals.debug:
+        print("--> In get_aws_eip_assocation doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+        
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            response = client.describe_addresses()        
+        else:        
+            response = client.describe_addresses(AllocationIds=[id])
+
+
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        for j in response[topkey]:
+            try:
+                asocid=j['AssociationId']
+                common.write_import(type,j['AssociationId'],None) 
+            except KeyError:
+                return True
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+
 def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filterid):
     #print("--> In get_aws_route_table_association doing " + type + ' with id ' + str(id) +
     #              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)

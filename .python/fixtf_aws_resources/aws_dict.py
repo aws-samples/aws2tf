@@ -4276,7 +4276,7 @@ aws_eip_association = {
 	"clfn":		"ec2",
 	"descfn":	"describe_addresses",
 	"topkey":	"Addresses",
-	"key":		"AssociationId",
+	"key":		"AllocationId",
 	"filterid":	"AssociationId"
 }
 

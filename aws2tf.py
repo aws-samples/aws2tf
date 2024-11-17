@@ -469,8 +469,9 @@ def main():
                     common.call_resource(i, id)
     #else:
     #    print("No Known Dependancies")
-
+    globals.tracking_message="Stage 4 of 10, Known Dependancies - Loop terraform plan"
     common.tfplan1()
+    globals.tracking_message="Stage 4 of 10, Known Dependancies - Loop moving files"
     common.tfplan2()
     
     if ":" in globals.rproc:
@@ -531,7 +532,7 @@ def main():
             com = "mv "+tf +" imported/"+tf
             rout = common.rc(com)
 
-        globals.tracking_message="Stage 6 of 10, Dependancies Detection - Loop "+str(lc)+" terrafrom plan"
+        globals.tracking_message="Stage 6 of 10, Dependancies Detection - Loop "+str(lc)+" terraform plan"
         common.tfplan1()
         globals.tracking_message="Stage 6 of 10, Dependancies Detection - Loop "+str(lc)+" moving files"
         common.tfplan2()

@@ -929,8 +929,14 @@ def write_import(type,theid,tfid):
       output.write('}\n')
 
                # Write the filtered resource block to a new file
-      with open(fn, 'w') as f:
-         f.write(output.getvalue().strip() + '\n')
+      try:
+         with open(fn, 'w') as f:
+            f.write(output.getvalue().strip() + '\n')
+      except:
+         print("ERROR: could not write to file: " + fn)
+         timed_int.stop()
+         exit()
+
 
       pkey=type+"."+tfid
       globals.rproc[pkey]=True
@@ -1458,7 +1464,7 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
       f.write(f"{e=} [e1] \n")
       f.write(f"{fname=} {exc_tb.tb_lineno=} [e1] \n")
       f.write("-----------------------------------------------------------------------------\n")
-   timed_int.stop()
+   #timed_int.stop()
    exit()
 
 def handle_error2(e,frame,id):

@@ -310,7 +310,7 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
 
                      else:
                          pkey="aws_route_table_association"+"."+vpcid
-                         print("Setting " + pkey + "=True")
+                         if globals.debug: print("Setting " + pkey + "=True")
                          globals.rproc[pkey] = True
 
             # set subnet true now ? as there's no assoc.
@@ -323,7 +323,7 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
             print("No response for get_aws_route_table_association")
             if id is not None:
                 pkey="aws_route_table_association"+"."+id
-                print("Setting " + pkey + "=True")
+                if globals.debug: print("Setting " + pkey + "=True")
                 globals.rproc[pkey] = True
 
 

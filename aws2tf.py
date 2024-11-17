@@ -14,10 +14,6 @@ from typing import List, Dict
 import io
 from concurrent.futures import ThreadPoolExecutor
 
-
-
-
-
 sys.path.insert(0, './.python')
 #from get_aws_resources import aws_s3
 import common
@@ -119,7 +115,7 @@ def build_lists():
         return response
 
     # Use ThreadPoolExecutor to parallelize API calls
-    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=globals.cores) as executor:
         futures = [
             executor.submit(fetch_vpc_data),
             executor.submit(fetch_sg_data),
@@ -425,7 +421,7 @@ def main():
             
             if args.fast:
                 globals.tracking_message="Stage 3 of 10 getting "+str(it)+" resources multi-threaded"
-                with ThreadPoolExecutor(max_workers=8) as executor:
+                with ThreadPoolExecutor(max_workers=globals.cores) as executor:
                     futures = [
                         executor.submit(common.call_resource, i, id)
                         for i in all_types
@@ -499,7 +495,7 @@ def main():
 ## mutlithread ?  
         if args.fast:  
             print("\n#### Fast mode - multi-threaded #####")
-            with ThreadPoolExecutor(max_workers=8) as executor2:
+            with ThreadPoolExecutor(max_workers=globals.cores) as executor2:
                 futures2 = [
                     executor2.submit(dd_threaded(ti))
                     for ti in list(globals.rproc)
@@ -596,8 +592,6 @@ def main():
     else:
         print("trivy not installed, skipping security check")
 
-    print("Terraform files & state in sub-directory: "+ globals.path1)
-
     if globals.serverless: common.upload_directory_to_s3()
 
     x = glob.glob("*.err")
@@ -624,7 +618,7 @@ def main():
     print("aws2tf finished at %s" % now)
     # print execution time
     print("aws2tf execution time h:mm:ss :"+ str(now - starttime))
-    
+    print("\nTerraform files & state in sub-directory: "+ globals.path1)
 
     exit(0)
 

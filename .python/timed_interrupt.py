@@ -1,6 +1,7 @@
 import time
 import threading
 import globals
+import multiprocessing
 
 class Counter():
     def __init__(self, increment):
@@ -20,5 +21,9 @@ class Counter():
     def stop(self):
         self.done=True
 
-timed_int=Counter(increment = 15)
+
+logical_cores = multiprocessing.cpu_count()
+print("Logical cores: " + str(logical_cores))
+globals.cores = logical_cores
+timed_int=Counter(increment = 20)
 

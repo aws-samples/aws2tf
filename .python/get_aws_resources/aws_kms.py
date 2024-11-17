@@ -46,7 +46,7 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
                     #print(str(kresp))
                     if kstatus == "Enabled" or kstatus == "Disabled":
                         if kman == "AWS":
-                            print("key "+str(theid)+" is managed by AWS")
+                            if globals.debug: print("key "+str(theid)+" is managed by AWS")
                             pkey=type+"."+theid
                             if not globals.rproc[pkey]:
                                 globals.rproc[pkey]=True
@@ -68,7 +68,7 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
                         #print(str(kresp))
                         continue
                 except Exception as e:
-                    print("WARNING: can't access key",theid)
+                    if globals.debug: print("WARNING: can't access key",theid)
                     #print(f"{e=} [k1]")
                     #exc_type, exc_obj, exc_tb = sys.exc_info()
                     #fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -122,7 +122,7 @@ def get_aws_kms_alias(type,id,clfn,descfn,topkey,key,filterid):
             # if there's an alias match - good enough
             if id is not None:
                 if id==aliasname or "alias/"+id==aliasname:
-                    print("KMS ALAIS: Alias match importing ",id)
+                    if globals.debug: print("KMS ALAIS: Alias match importing ",id)
                     common.write_import(type,aliasname,ka) 
                     pkey=type+".k-"+theid
                     globals.rproc[pkey]=True
@@ -138,7 +138,7 @@ def get_aws_kms_alias(type,id,clfn,descfn,topkey,key,filterid):
                 
                 continue
             else:
-                print("KMS ALAIS: Id match importing ",id)
+                if globals.debug: print("KMS ALAIS: Id match importing ",id)
 
                 common.write_import(type,aliasname,ka) 
 

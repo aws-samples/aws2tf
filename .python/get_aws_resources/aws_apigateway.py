@@ -213,7 +213,7 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
                 altk="r-"+pkey
                 common.write_import(type,pkey,altk)
             except:
-                print("Empty GET response for "+type+ " id="+str(id))
+                if globals.debug: print("Empty GET response for "+type+ " id="+str(id))
                 
 
             ## POST
@@ -244,13 +244,13 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
                 altk="r-"+pkey
                 common.write_import(type,pkey,altk)
             except:
-                print("Empty PUT response for "+type+ " id="+str(id))
+                if globals.debug: print("Empty PUT response for "+type+ " id="+str(id))
 
             ## DELETE
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='DELETE')
                 if response == []: 
-                    if globals.debug: print("Empty PUT response for "+type+ " id="+str(id))
+                    if globals.debug: print("Empty DELETE response for "+type+ " id="+str(id))
                     pkey=type+"."+id
                     globals.rproc[pkey]=True
                     return True
@@ -259,14 +259,14 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
                 altk="r-"+pkey
                 common.write_import(type,pkey,altk)
             except:
-                print("Empty DELETE response for "+type+ " id="+str(id))
+                if globals.debug: print("Empty DELETE response for "+type+ " id="+str(id))
 
 
             ## PATCH
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='PATCH')
                 if response == []: 
-                    if globals.debug: print("Empty PUT response for "+type+ " id="+str(id))
+                    if globals.debug: print("Empty PATCH response for "+type+ " id="+str(id))
                     pkey=type+"."+id
                     globals.rproc[pkey]=True
                     return True
@@ -275,7 +275,7 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
                 altk="r-"+pkey
                 common.write_import(type,pkey,altk)
             except:
-                print("Empty PATCH response for "+type+ " id="+str(id))
+                if globals.debug: print("Empty PATCH response for "+type+ " id="+str(id))
 
 
             

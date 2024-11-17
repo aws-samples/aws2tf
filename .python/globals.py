@@ -1,7 +1,8 @@
 merge=False
 fast=False
 apionly=False
-tracking_message="Starting"
+tracking_message="aws2tf: Starting, update messages every 20 seconds"
+cores=2
 cwd=""
 path1=""
 path2=""

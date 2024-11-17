@@ -55,7 +55,7 @@ def get_aws_cloudwatch_log_stream(type, id, clfn, descfn, topkey, key, filterid)
         if id is not None:    
             response = client.describe_log_streams(logGroupName=id)
             if response[topkey] == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
                 return True

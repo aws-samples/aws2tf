@@ -15,7 +15,9 @@ def get_aws_servicecatalog_portfolio(type, id, clfn, descfn, topkey, key, filter
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                return True
             for j in response:
                 theid=j[key]
                 common.write_import(type,theid,None) 
@@ -52,7 +54,7 @@ def get_aws_servicecatalog_product(type, id, clfn, descfn, topkey, key, filterid
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
                 return True
             for j in response:
                 theid=j['ProductViewSummary'][key]
@@ -63,7 +65,7 @@ def get_aws_servicecatalog_product(type, id, clfn, descfn, topkey, key, filterid
         else:      
             response = client.search_products_as_admin(PortfolioId=id)
             if response[topkey] == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
                 return True
@@ -94,7 +96,7 @@ def get_aws_servicecatalog_constraint(type, id, clfn, descfn, topkey, key, filte
         else:
             response = client.list_constraints_for_portfolio(PortfolioId=id)
             if response[topkey] == []:
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
                 return True
@@ -124,7 +126,7 @@ def get_aws_servicecatalog_principal_portfolio_association(type, id, clfn, descf
         else:
             response = client.list_principals_for_portfolio(PortfolioId=id)
             if response[topkey] == []:
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
                 return True
@@ -156,7 +158,7 @@ def get_aws_servicecatalog_product_portfolio_association(type, id, clfn, descfn,
         else:
             response = client.list_portfolios_for_product(ProductId=id)
             if response[topkey] == []:
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
                 return True

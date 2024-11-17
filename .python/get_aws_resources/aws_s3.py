@@ -145,7 +145,7 @@ def get_all_s3_buckets(fb,my_region):
 
 
      if globals.fast:      
-         with ThreadPoolExecutor(max_workers=8) as executor3:
+         with ThreadPoolExecutor(max_workers=globals.cores) as executor3:
             futures = [
                executor3.submit(get_s3,s3_fields,key,bucket_name)
                for key in s3_fields

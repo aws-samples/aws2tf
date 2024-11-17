@@ -17,7 +17,9 @@ def get_aws_lambda_layer(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator('list_layers')
             for page in paginator.paginate():
                 response = response + page['Layers']
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response:
                 common.write_import(type,j['LayerArn'],None) 
 
@@ -49,7 +51,9 @@ def get_aws_lambda_layer_version(type, id, clfn, descfn, topkey, key, filterid):
             if "arn:" in id:
                 id=id.split(":")[6]  
             response = client.list_layer_versions(LayerName=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                return True
             for j in response[topkey]:
                 common.write_import(type,j[key],None) 
         
@@ -117,7 +121,9 @@ def get_aws_lambda_alias(type, id, clfn, descfn, topkey, key, filterid):
     #print("-9a->"+str(response))
     
     try:
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: 
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+            return True
         
         for j in response: 
             #print(str(j))
@@ -152,7 +158,9 @@ def get_aws_lambda_permission(type, id, clfn, descfn, topkey, key, filterid):
             print("WARNING: ResourceNotFoundException for "+type+ " "+str(id)+" returning")
             return True
 
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: 
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+            return True
 
         
         #print("-42a-"+str(response))
@@ -185,7 +193,9 @@ def get_aws_lambda_function_event_invoke_config(type, id, clfn, descfn, topkey, 
         response1 = getfn(FunctionName=id)
         response=response1[topkey]
 
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: 
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+            return True
         
         for j in response: 
             #print(str(j))
@@ -220,7 +230,7 @@ def get_aws_lambda_event_source_mapping(type, id, clfn, descfn, topkey, key, fil
         response=response1[topkey]
 
         if response == []:
-            print("Empty response for "+type+ " "+str(id)+" returning")
+            if globals.debug: print("Empty response for "+type+ " "+str(id)+" returning")
             return True
         
         for j in response: 
@@ -256,7 +266,9 @@ def get_aws_lambda_layer_version_permission(type, id, clfn, descfn, topkey, key,
             print("WARNING: ResourceNotFoundException for "+type+ " "+str(id)+" returning")
             return True
 
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: 
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+            return True
 
         
         #print("-42a-"+str(response))

@@ -485,12 +485,10 @@ def main():
     for ti in globals.rproc.keys():
         if not globals.rproc[ti]: 
             #print(str(ti)+":"+str(globals.rproc[ti]))  
-            print(str(ti)) 
+            if globals.debug: print(str(ti)) 
             detdep=True
             
- 
-    if not detdep:
-        print("No Detected Dependancies") 
+    if not detdep: print("No Detected Dependancies") 
 
     lc=0
     olddetdepstr=""

@@ -875,8 +875,15 @@ def splitf(input_file):
                     output.write(line + '\n')
 
             # Write the filtered resource block to a new file
-            with open(filename, 'w') as f:
-                f.write(output.getvalue().strip() + '\n')
+            
+            if len(filename) > 255: filename=filename[:250]+".tf"
+            try:
+               with open(filename, 'w') as f:
+                  f.write(output.getvalue().strip() + '\n')
+            except:
+               print("ERROR: could not write to file: " + fn)
+               timed_int.stop()
+               exit()
 
             # print(f"Created file: {filename}")
    shutil.move(input_file,"imported/"+input_file)
@@ -929,6 +936,8 @@ def write_import(type,theid,tfid):
       output.write('}\n')
 
                # Write the filtered resource block to a new file
+      
+      if len(fn) > 255: fn=fn[:250]+".tf"
       try:
          with open(fn, 'w') as f:
             f.write(output.getvalue().strip() + '\n')

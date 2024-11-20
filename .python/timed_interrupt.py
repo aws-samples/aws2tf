@@ -28,6 +28,6 @@ class Counter():
 
 logical_cores = multiprocessing.cpu_count()
 print("Logical cores: " + str(logical_cores))
-globals.cores = logical_cores
+globals.cores = logical_cores * 2
 timed_int=Counter(increment = 20)
 

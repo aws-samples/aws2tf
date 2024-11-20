@@ -1,5 +1,5 @@
 merge=False
-fast=False
+fast=True
 apionly=False
 tracking_message="aws2tf: Starting, update messages every 20 seconds"
 cores=2

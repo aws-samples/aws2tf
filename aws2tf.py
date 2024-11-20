@@ -205,7 +205,10 @@ def main():
 
     if args.list: extra_help()
     if args.fast: globals.fast = True
-    if args.debug: globals.debug = True
+    if args.debug: 
+        globals.debug = True
+        globals.fast = False
+
     if args.validate: globals.validate = True
 
     if args.type is None or args.type=="":
@@ -419,7 +422,7 @@ def main():
             it=len(all_types)
             globals.expected=True
             
-            if args.fast:
+            if globals.fast:
                 globals.tracking_message="Stage 3 of 10 getting "+str(it)+" resources multi-threaded"
                 with ThreadPoolExecutor(max_workers=globals.cores) as executor:
                     futures = [
@@ -475,7 +478,7 @@ def main():
         timed_interrupt.timed_int.stop()
         exit()
     now = datetime.datetime.now()
-    print("\naws2tf Detected Dependancies started at %s\n" % now)
+    if not globals.fast: print("\naws2tf Detected Dependancies started at %s\n" % now)
     globals.tracking_message="Stage 5 of 10, Detected Dependancies starting"
     detdep=False
     for ti in globals.rproc.keys():
@@ -493,8 +496,8 @@ def main():
     while detdep:
         
 ## mutlithread ?  
-        if args.fast:  
-            print("\n#### Fast mode - multi-threaded #####")
+        if globals.fast:  
+            #print("\n#### Fast mode - multi-threaded #####")
             with ThreadPoolExecutor(max_workers=globals.cores) as executor2:
                 futures2 = [
                     executor2.submit(dd_threaded(ti))
@@ -514,7 +517,7 @@ def main():
         lc  = lc + 1
 
 # go again plan and split / fix
-        print("Terraform Plan - Dependancies Detection Loop "+str(lc)+".....")
+        if globals.debug: print("Terraform Plan - Dependancies Detection Loop "+str(lc)+".....")
         globals.tracking_message="Stage 6 of 10, Dependancies Detection - Loop "+str(lc)
         x=glob.glob("import__aws_*.tf")
         #print(str(x))
@@ -538,7 +541,7 @@ def main():
                 #print(str(ti)+" is False")
                 detdepstr=detdepstr+str(ti)+" "
 
-        print("\n----------- Completed "+str(lc)+" dependancy check loops --------------") 
+        if not globals.fast: print("\n----------- Completed "+str(lc)+" dependancy check loops --------------") 
         globals.tracking_message="Stage 6 of 10, Completed "+str(lc)+" dependancy check loops"
         if olddetdepstr == detdepstr and detdepstr != "":
             globals.tracking_message="No change/progress in dependancies exiting..."
@@ -566,7 +569,7 @@ def main():
 ####### Finish up
 #########################################################################
     globals.tracking_message="Stage 10 of 10, Completed"
-    timed_interrupt.timed_int.stop()
+
     with open("pyprocessed.txt", "a") as f:
         for i in globals.rproc.keys():
             if globals.debug: print(str(i))
@@ -619,6 +622,7 @@ def main():
     # print execution time
     print("aws2tf execution time h:mm:ss :"+ str(now - starttime))
     print("\nTerraform files & state in sub-directory: "+ globals.path1)
+    timed_interrupt.timed_int.stop()
 
     exit(0)
 

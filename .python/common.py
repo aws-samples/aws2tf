@@ -246,7 +246,7 @@ def tfplan1():
 
    com = "terraform plan -generate-config-out=" + \
        rf + " -out tfplan -json > plan1.json"
-   print(com)
+   if not globals.fast: print(com)
    rout = rc(com)
       
    file = "plan1.json"
@@ -454,7 +454,7 @@ def tfplan3():
       
       com = "terraform plan -generate-config-out=" + \
           rf + " -out tfplan -json > plan2.json"
-      print(com)
+      if not globals.fast: print(com)
       rout = rc(com)
       zerod = False
       zeroc = False
@@ -797,7 +797,7 @@ def splitf_old(file):
    lhs = 0
    rhs = 0
    if os.path.isfile(file):
-      print("split file:" + file)
+      if globals.debug: print("split file:" + file)
       with open(file, "r") as f:
          Lines = f.readlines()
       for tt1 in Lines:
@@ -850,7 +850,7 @@ def splitf(input_file):
    # Compile regex patterns for better performance
    resource_pattern = re.compile(r'resource "(\w+)" "(.+?)"')
    comment_pattern = re.compile(r'^\s*#')
-   print("split file: " + input_file)
+   if globals.debug: print("split file: " + input_file)
    # Read the entire file content at once
    with open(input_file, 'r') as f:
         content = f.read()

@@ -517,7 +517,7 @@ def main():
         lc  = lc + 1
 
 # go again plan and split / fix
-        if globals.debug: print("Terraform Plan - Dependancies Detection Loop "+str(lc)+".....")
+        if not globals.fast: print("Terraform Plan - Dependancies Detection Loop "+str(lc)+".....")
         globals.tracking_message="Stage 6 of 10, Dependancies Detection - Loop "+str(lc)
         x=glob.glob("import__aws_*.tf")
         #print(str(x))

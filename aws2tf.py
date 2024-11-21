@@ -155,8 +155,7 @@ def dd_threaded(ti):
         i = ti.split(".")[0]
         id = ti.split(".", 1)[1]
         if globals.debug: print("DD calling getresource with type="+i+" id="+str(id))
-        globals.tracking_message="Stage 5 of 10, Processing Dependancy (MT="+str(globals.cores)+"), resource "+str(i)+" "+str(id)
-        #print("----- Thread DD ----  calling getresource with type="+i+" id="+str(id))
+        globals.tracking_message="Stage 5 of 10, Processing Dependancy, "+str(i)+" "+str(id)
         common.call_resource(i, id)
 
     return

@@ -16,7 +16,8 @@ def get_aws_amplify_app(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response:
                 theid=j[key]
                 common.write_import(type,theid,None) 
@@ -25,7 +26,8 @@ def get_aws_amplify_app(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.get_app(appId=id)
             if response['app'] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             j=response['app']
             common.write_import(type,j[key],None)
             common.add_dependancy("aws_amplify_branch", j[key])
@@ -48,7 +50,8 @@ def get_aws_amplify_branch(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(appId=id):
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                return True
             for j in response:
                 theid=id+"/"+j[key]
                 common.write_import(type,theid,None) 
@@ -56,7 +59,8 @@ def get_aws_amplify_branch(type, id, clfn, descfn, topkey, key, filterid):
                 globals.rproc[pkey]=True
 
         else:      
-            print("Must pass id for "+type+" returning"); return True
+            print("Must pass id for "+type+" returning")
+            return True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

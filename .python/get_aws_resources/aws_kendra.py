@@ -46,7 +46,7 @@ def get_aws_kendra_data_source(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.list_data_sources(IndexId=id)
             if response[topkey] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
                 return True

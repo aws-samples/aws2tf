@@ -51,7 +51,8 @@ def get_aws_api_gateway_deployment(type, id, clfn, descfn, topkey, key, filterid
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
         else:
-            print("Must pass id for "+type+" returning"); return True
+            print("Must pass id for "+type+" returning")
+            return True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -86,7 +87,8 @@ def get_aws_api_gateway_rest_api(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.get_rest_api(restApiId=id)
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             j=response
             altk="r-"+j[key]
             common.write_import(type,j[key],altk)
@@ -124,7 +126,8 @@ def get_aws_api_gateway_stage(type, id, clfn, descfn, topkey, key, filterid):
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
         else:
-            print("Must pass id for "+type+" returning"); return True
+            print("Must pass id for "+type+" returning")
+            return True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -153,7 +156,8 @@ def get_aws_api_gateway_authorizer(type, id, clfn, descfn, topkey, key, filterid
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
         else:
-            print("Must pass id for "+type+" returning"); return True
+            print("Must pass id for "+type+" returning")
+            return True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -171,7 +175,7 @@ def get_aws_api_gateway_resource(type, id, clfn, descfn, topkey, key, filterid):
         if id is not None:  
             response = client.get_resources(restApiId=id)
             if response[topkey] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning");
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
                 return True
@@ -183,7 +187,8 @@ def get_aws_api_gateway_resource(type, id, clfn, descfn, topkey, key, filterid):
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
         else:
-            print("Must pass id for "+type+" returning"); return True
+            print("Must pass id for "+type+" returning")
+            return True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -285,7 +290,8 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
             globals.rproc[pkey]=True
 
         else:
-            print("Must pass Rest api id / Resource id for "+type+" returning"); return True
+            print("Must pass Rest api id / Resource id for "+type+" returning")
+            return True
 
     except Exception as e:
         print("--Error in "+str(inspect.currentframe().f_code.co_name)+" doing " + clfn + ' with id ' + str(id),str(descfn),str(topkey))

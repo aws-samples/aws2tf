@@ -54,7 +54,7 @@ def get_aws_servicecatalog_product(type, id, clfn, descfn, topkey, key, filterid
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 theid=j['ProductViewSummary'][key]
@@ -65,7 +65,7 @@ def get_aws_servicecatalog_product(type, id, clfn, descfn, topkey, key, filterid
         else:      
             response = client.search_products_as_admin(PortfolioId=id)
             if response[topkey] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
                 return True

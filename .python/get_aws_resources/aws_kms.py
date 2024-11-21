@@ -90,7 +90,7 @@ def get_aws_kms_alias(type,id,clfn,descfn,topkey,key,filterid):
     for page in paginator.paginate():
         response = response + page[topkey]
     if response == []: 
-        if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
+        if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
         pkey=type+".k-"+theid
         globals.rproc[pkey]=True
         return True

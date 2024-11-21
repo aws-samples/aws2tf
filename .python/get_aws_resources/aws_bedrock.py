@@ -11,19 +11,22 @@ def get_aws_bedrock_model_invocation_logging_configuration(type, id, clfn, descf
     try:
         response = []
         client = boto3.client(clfn)
-    
+        j=[]
         response = client.get_model_invocation_logging_configuration()
-
         try:
             j=response[topkey]
         except KeyError:
-            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+            return True
+        if j == []: 
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+            return True
         common.write_import(type,globals.region,None)
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
-        if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+        return True
     return True
 
 

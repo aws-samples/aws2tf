@@ -39,7 +39,7 @@ def get_aws_securityhub_organization_configuration(type, id, clfn, descfn, topke
         try:    
             response = client.describe_organization_configuration()
         except Exception as e:
-            print("NO access returning"); 
+            print("NO access returning")
             return True
 
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True

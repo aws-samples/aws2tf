@@ -16,15 +16,19 @@ def get_aws_cloudfront_distribution(type, id, clfn, descfn, topkey, key, filteri
                 try:
                     response = response + page['DistributionList']['Items']
                 except KeyError:
-                    print("No DistributionList in response for "+type+ " id="+str(id)+" returning"); 
+                    print("No DistributionList in response for "+type+ " id="+str(id)+" returning") 
                     return True
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response:
                 common.write_import(type,j[key],None) 
 
         else:      
             response = client.get_distribution(Id=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             j=response['Distribution']
             common.write_import(type,j[key],None)
 
@@ -48,13 +52,17 @@ def get_aws_cloudfront_origin_access_identity(type, id, clfn, descfn, topkey, ke
                 except KeyError:
                     print("No "+str(topkey)+" items in response for "+type+ " id="+str(id)+" returning")
                     return True
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response:
                 common.write_import(type,j[key],None) 
 
         else:      
             response = client.get_cloud_front_origin_access_identity(Id=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             j=response['CloudFrontOriginAccessIdentity']
             common.write_import(type,j[key],None)
 
@@ -72,14 +80,16 @@ def get_aws_cloudfront_cache_policy(type, id, clfn, descfn, topkey, key, filteri
         client = boto3.client(clfn)
         if id is None:
             response = client.list_cache_policies()
-            if response[topkey]['Items'] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response[topkey]['Items'] == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]['Items']:
                 oid=j['CachePolicy']['Id']
                 common.write_import(type,oid,"o-"+oid) 
 
         else:      
             response = client.get_cache_policy(Id=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             common.write_import(type,id,"o-"+id) 
 
     except Exception as e:
@@ -96,7 +106,8 @@ def get_aws_cloudfront_continuous_deployment_policy(type, id, clfn, descfn, topk
         client = boto3.client(clfn)
         if id is None:
             response = client.list_continuous_deployment_policies()
-            if response[topkey]['Items'] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response[topkey]['Items'] == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
             for j in response[topkey]['Items']:    
                 oid=j['ContinuousDeploymentPolicy']['Id']
@@ -104,7 +115,8 @@ def get_aws_cloudfront_continuous_deployment_policy(type, id, clfn, descfn, topk
 
         else:      
             response = client.get_continuous_deployment_policy(Id=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
             common.write_import(type,id,"o-"+id) 
 
@@ -126,7 +138,8 @@ def get_aws_cloudfront_field_level_encryption_config(type, id, clfn, descfn, top
                 resp2=response[topkey]['Items']
             except KeyError:
                 if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-            if response[topkey]['Items'] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response[topkey]['Items'] == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]['Items']:
                 oid=j[key]
                 common.write_import(type,oid,"o-"+oid) 

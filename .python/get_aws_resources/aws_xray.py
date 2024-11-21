@@ -15,7 +15,8 @@ def get_aws_xray_sampling_rule(type, id, clfn, descfn, topkey, key, filterid):
         for page in paginator.paginate():
                 response = response + page[topkey]
         if response == []: 
-            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+            return True
         for j in response:
             theid=j['SamplingRule'][key]
             if theid != "Default":

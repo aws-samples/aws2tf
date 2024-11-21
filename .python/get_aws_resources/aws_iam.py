@@ -163,7 +163,7 @@ def get_aws_iam_user_group_membership(type,id,clfn,descfn,topkey,key,filterid):
       response=response1[topkey]
 
       if response == []: 
-         if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
+         if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
          pkey="aws_iam_user_group_membership."+grpn
          globals.rproc[pkey]=True
          return True

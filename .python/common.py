@@ -1075,7 +1075,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
             globals.rproc[pkey]=True      
          else:
             if globals.debug: print("No "+type+" found - empty response (common)")
-         return True
+            return True
    
    except Exception as e:
       handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

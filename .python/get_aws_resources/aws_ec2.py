@@ -397,7 +397,7 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
     
     try:
         if response == []: 
-            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
             if id is not None:
                 pkey = type+"."+id
                 globals.rproc[pkey] = True
@@ -867,7 +867,7 @@ def get_aws_ec2_transit_gateway_route(type, id, clfn, descfn, topkey, key, filte
             if id.startswith("tgw-rtb-"):     
                 response = client.search_transit_gateway_routes(TransitGatewayRouteTableId=id,Filters=[{'Name': 'type','Values': ['static']}])
                 if response[topkey] == []: 
-                    if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                    if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                     pkey=type+"."+id
                     globals.rproc[pkey]=True
                     return True
@@ -1010,7 +1010,7 @@ def get_aws_vpc_endpoint(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type, j[key], None)
@@ -1019,7 +1019,7 @@ def get_aws_vpc_endpoint(type, id, clfn, descfn, topkey, key, filterid):
             pkey=type+"."+id
             response = client.describe_vpc_endpoints(Filters=[{'Name': 'vpc-id','Values': [id]},])
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 globals.rproc[pkey]=True
                 return True
             for j in response[topkey]:
@@ -1031,7 +1031,7 @@ def get_aws_vpc_endpoint(type, id, clfn, descfn, topkey, key, filterid):
             pkey=type+"."+id
             response = client.describe_vpc_endpoints(VpcEndpointIds=[id])
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 globals.rproc[pkey]=True
                 return True
             for j in response[topkey]:

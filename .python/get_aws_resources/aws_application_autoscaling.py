@@ -19,7 +19,8 @@ def get_aws_appautoscaling_target(type, id, clfn, descfn, topkey, key, filterid)
             response = client.describe_scalable_targets(ServiceNamespace="ecs")
         
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             #print(">>>>>>>>>>>>"+str(response))
             for j in response[topkey]:
                 #print(str(j))
@@ -46,7 +47,7 @@ def get_aws_appautoscaling_target(type, id, clfn, descfn, topkey, key, filterid)
             response = client.describe_scalable_targets(ServiceNamespace="ecs",ResourceIds=[rrid])
             #print("----------"+str(response))
             if response[topkey] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 # fix tracking
                 globals.rproc[type+"."+id]=True
                 return True
@@ -85,7 +86,8 @@ def get_aws_appautoscaling_policy(type, id, clfn, descfn, topkey, key, filterid)
             response = client.describe_scaling_policies(ServiceNamespace="ecs")
             #print("----------"+str(response))
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             #print(str(response))
             for j in response[topkey]:
                 #print(str(j))
@@ -109,7 +111,7 @@ def get_aws_appautoscaling_policy(type, id, clfn, descfn, topkey, key, filterid)
             response = client.describe_scaling_policies(ServiceNamespace="ecs",ResourceId=rrid)
             #print(str(response))
             if response[topkey] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 globals.rproc[type+"."+id]=True
                 return True
             for j in response[topkey]:

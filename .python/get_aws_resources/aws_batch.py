@@ -12,7 +12,9 @@ def get_aws_batch_scheduling_policy(type, id, clfn, descfn, topkey, key, filteri
         client = boto3.client(clfn)
       
         response = client.list_scheduling_policies()
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: 
+            print("Empty response for "+type+ " id="+str(id)+" returning")
+            return True
         for j in response['schedulingPolicies']:
             #print(str(j['arn']))
             common.write_import(type,j['arn'],None)
@@ -31,7 +33,9 @@ def get_aws_batch_job_definition(type, id, clfn, descfn, topkey, key, filterid):
         client = boto3.client(clfn)
       
         response = client.describe_job_definitions()
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: 
+            print("Empty response for "+type+ " id="+str(id)+" returning")
+            return True
         for j in response[topkey]:
             if j['status']!="INACTIVE":
                 common.write_import(type,j[key],None)

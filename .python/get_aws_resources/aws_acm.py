@@ -26,7 +26,8 @@ def get_aws_acm_certificate(type, id, clfn, descfn, topkey, key, filterid):
         elif id.startswith("arn:"):      
             response = client.describe_certificate(CertificateArn=id)
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             j=response['Certificate']
             if j['Status']=="ISSUED":
                 common.write_import(type,id,None)

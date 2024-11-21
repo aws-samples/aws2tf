@@ -17,7 +17,8 @@ def get_aws_athena_workgroup(type, id, clfn, descfn, topkey, key, filterid):
         if id is None:
             response = client.list_work_groups()
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response['WorkGroups']:
                 pkey=j[key]
                 common.write_import(type,pkey,None) 
@@ -25,7 +26,8 @@ def get_aws_athena_workgroup(type, id, clfn, descfn, topkey, key, filterid):
         else:          
             response = client.get_work_group(WorkGroup=id)
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                return True
             j=response[topkey]
             pkey=j[key]
             common.write_import(type,pkey,None)
@@ -48,14 +50,16 @@ def get_aws_athena_named_query(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response:
                 common.write_import(type,j,"n-"+j) 
 
         else:      
             response = client.get_named_query(NamedQueryId=id)
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                return True
             j=response['NamedQuery']
             common.write_import(type,j[key],"n-"+j[key])
 
@@ -77,7 +81,8 @@ def get_aws_athena_data_catalog(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             print(response)
             for j in response:
                 if j[key] != "AwsDataCatalog":
@@ -87,7 +92,8 @@ def get_aws_athena_data_catalog(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.get_data_catalog(Name=id)
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             j=response['DataCatalog']
             common.write_import(type,j['Name'],None)
 

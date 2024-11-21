@@ -100,7 +100,7 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
                 response = client.get_tables(CatalogId=catalogn,DatabaseName=databasen,Expression=tabnam)
  
         if response[topkey] == []: 
-            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
             tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
             globals.rproc[tkey]=True
             return True
@@ -422,7 +422,7 @@ def get_aws_glue_partition(type, id, clfn, descfn, topkey, key, filterid):
 
             if response == []: 
                 print("*-** Empty response for "+type+ " id="+str(id))
-                print("tkey="+tkey+" returning"); 
+                print("tkey="+tkey+" returning")
                 globals.rproc[tkey]=True
                 return True
             

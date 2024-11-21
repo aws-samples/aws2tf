@@ -35,8 +35,8 @@ def get_aws_eks_fargate_profile(type,id,clfn,descfn,topkey,key,filterid):
    
    try:
       if id is None:
-            print("No id passed in get_aws_eks_fargate_profile returning")  
-            return True
+         print("No id passed in get_aws_eks_fargate_profile returning")  
+         return True
       
       
       

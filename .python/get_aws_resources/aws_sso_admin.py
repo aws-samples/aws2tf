@@ -96,8 +96,12 @@ def get_aws_ssoadmin_permission_set_inline_policy(type, id, clfn, descfn, topkey
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         # id - instid arm /perm arn
-        if id is None: print("No SSO instance found"); return True
-        if "/" not in id: print("No SSO instance found"); return True
+        if id is None: 
+            print("No SSO instance found")
+            return True
+        if "/" not in id: 
+            print("No SSO instance found") 
+            return True
 
         response = []
         client = boto3.client(clfn)  

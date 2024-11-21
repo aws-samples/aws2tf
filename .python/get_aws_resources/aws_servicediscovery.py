@@ -19,7 +19,7 @@ def get_aws_service_discovery_private_dns_namespace(type, id, clfn, descfn, topk
             for j in response:
                 # get a vpc-id
                 if j['Type']=="DNS_PRIVATE":
-                    print(str(j))
+                    #print(str(j))
                     nsid=j['Id']
                     print(nsid)
                     hzid=j['Properties']['DnsProperties']['HostedZoneId']
@@ -38,8 +38,7 @@ def get_aws_service_discovery_private_dns_namespace(type, id, clfn, descfn, topk
             j=response['Namespace']
             if j['Type']=="DNS_PRIVATE":
             # get a vpc-id
-                print(str(j))
-                print(str(j))
+                #print(str(j))
                 nsid=j['Id']
                 print(nsid)
                 hzid=j['Properties']['DnsProperties']['HostedZoneId']

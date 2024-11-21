@@ -14,7 +14,7 @@ class Counter():
         
 
     def _run(self):
-        print("STATUS: " + str(self.i*self.increment) + " seconds elapsed, "+ globals.tracking_message)
+        print("STATUS: " + str(self.i*self.increment) + "s elapsed, "+ globals.tracking_message)
         self.next_t+=self.increment
         self.i+=1
         if not self.done:

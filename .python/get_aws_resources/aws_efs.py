@@ -109,7 +109,7 @@ def get_aws_efs_replication_configuration(type, id, clfn, descfn, topkey, key, f
                     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                     exn=str(exc_type.__name__)
                     if exn == "ReplicationNotFound":
-                        print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                        if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
                 if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
                 
                 common.write_import(type,id,None)
@@ -138,7 +138,7 @@ def get_aws_efs_file_system_policy(type, id, clfn, descfn, topkey, key, filterid
                     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                     exn=str(exc_type.__name__)
                     if exn == "PolicyNotFound":
-                        print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                        if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
                 if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
                 
                 common.write_import(type,id,None)
@@ -166,7 +166,7 @@ def get_aws_efs_backup_policy(type, id, clfn, descfn, topkey, key, filterid):
                     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                     exn=str(exc_type.__name__)
                     if exn == "PolicyNotFound":
-                        print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                        if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
                 if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
                 
                 common.write_import(type,id,None)

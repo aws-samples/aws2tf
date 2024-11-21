@@ -27,7 +27,8 @@ def get_aws_lambda_layer(type, id, clfn, descfn, topkey, key, filterid):
             if "arn:" in id:
                 id=id.split(":")[6]  
             response = client.list_layer_versions(LayerName=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 common.write_import(type,j[key],None) 
         
@@ -73,7 +74,8 @@ def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
     #print("-9a->"+str(response))
     
     try:
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: 
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
  
         for j in response: 
             fn=j[key]

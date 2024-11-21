@@ -17,7 +17,7 @@ def get_aws_directory_service_directory(type, id, clfn, descfn, topkey, key, fil
             for page in paginator.paginate(DirectoryIds=[id]): response = response + page[topkey]
         
         if response == []: 
-            print("Empty response for "+type+ " id="+str(id)+" returning"); 
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
             return True
         for j in response:
             common.write_import(type,j[key],None) 

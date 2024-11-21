@@ -14,13 +14,15 @@ def get_aws_stub(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 common.write_import(type,j[key],None) 
 
         else:      
             response = client.describe_stream(StreamName=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
             common.write_import(type,j[key],None)
 

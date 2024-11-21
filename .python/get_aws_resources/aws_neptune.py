@@ -48,9 +48,9 @@ def get_aws_neptune_cluster_endpoint(type, id, clfn, descfn, topkey, key, filter
             for page in paginator.paginate(DBClusterIdentifier=id):
                 response = response + page[topkey]
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        print(str(response))
+        #print(str(response))
         for j in response:
-            print(str(j))
+            #print(str(j))
             clid=j['DBClusterIdentifier']
             pkey=clid+":"+j[key]
             common.write_import(type,pkey,None) 

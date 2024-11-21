@@ -51,8 +51,6 @@ def extra_help():
 
 
 
-
-
 def process_file_operations(files: List[str], output_file: str) -> None:
     """Efficiently process multiple files into a single output file."""
     with open(output_file, 'w') as outfile:
@@ -112,7 +110,8 @@ def build_lists():
         paginator = client.get_paginator('list_roles')
         for page in paginator.paginate():
             response.extend(page['Roles'])
-        return response
+        return [('iam', j['RoleName']) for j in response]
+
 
     # Use ThreadPoolExecutor to parallelize API calls
     with concurrent.futures.ThreadPoolExecutor(max_workers=globals.cores) as executor:
@@ -143,6 +142,9 @@ def build_lists():
                     elif resource_type == 'tgw':
                         for _, tgw_id in result:
                             globals.tgwlist[tgw_id] = True
+                    elif resource_type == 'iam':
+                        for _, role_name in result:
+                            globals.rolelist[role_name] = True
                 else:
                     # Handle roles data
                     with open('imported/roles.json', 'w') as f:
@@ -153,7 +155,8 @@ def dd_threaded(ti):
         i = ti.split(".")[0]
         id = ti.split(".", 1)[1]
         if globals.debug: print("DD calling getresource with type="+i+" id="+str(id))
-        #print("----- DD ----  calling getresource with type="+i+" id="+str(id))
+        globals.tracking_message="Stage 5 of 10, Processing Dependancy (MT="+str(globals.cores)+"), resource "+str(i)+" "+str(id)
+        #print("----- Thread DD ----  calling getresource with type="+i+" id="+str(id))
         common.call_resource(i, id)
 
     return
@@ -184,6 +187,7 @@ def main():
     argParser.add_argument("-e", "--exclude", help="resource types to exclude")
     argParser.add_argument("-b3", "--boto3error", help="exit on boto3 api error (for debugging)", action='store_true')
     argParser.add_argument("-la", "--serverless", help="Lambda mode - when running in a Lambda container", action='store_true')
+    argParser.add_argument("-tv", "--tv", help="Specifcy version of Terraform AWS provider default = "+globals.tfver)
     args = argParser.parse_args()
     type=""
 
@@ -497,7 +501,7 @@ def main():
         
 ## mutlithread ?  
         if globals.fast:  
-            #print("\n#### Fast mode - multi-threaded #####")
+            globals.tracking_message="Stage 5 of 10, Detected Dependancies - Multi Threaded "+str(globals.cores)
             with ThreadPoolExecutor(max_workers=globals.cores) as executor2:
                 futures2 = [
                     executor2.submit(dd_threaded(ti))

@@ -5177,6 +5177,7 @@ aws_iam_policy = {
 	"filterid":	"PolicyName"
 }
 
+
 aws_iam_policy_attachment = {
 	"clfn":		"iam",
 	"descfn":	"get_policy",

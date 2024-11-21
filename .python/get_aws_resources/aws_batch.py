@@ -14,7 +14,7 @@ def get_aws_batch_scheduling_policy(type, id, clfn, descfn, topkey, key, filteri
         response = client.list_scheduling_policies()
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response['schedulingPolicies']:
-            print(str(j['arn']))
+            #print(str(j['arn']))
             common.write_import(type,j['arn'],None)
 
     except Exception as e:

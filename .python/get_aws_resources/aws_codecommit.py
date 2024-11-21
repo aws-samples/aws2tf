@@ -16,7 +16,7 @@ def get_aws_codecommit_repository(type, id, clfn, descfn, topkey, key, filterid)
         for page in paginator.paginate():
             response = response + page[topkey]
         if response == []:
-            print("Empty response for "+type + " id="+str(id)+" returning")
+            if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
             return True
         for j in response:
             #print(str(id))

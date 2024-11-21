@@ -14,7 +14,8 @@ def get_aws_appstream_user(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate(AuthenticationType='USERPOOL'):
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 theid=j[key]+"/"+"USERPOOL"
                 pkey=theid.replace("@","_")
@@ -22,7 +23,8 @@ def get_aws_appstream_user(type, id, clfn, descfn, topkey, key, filterid):
 
         else:      
             response = client.describe_users(AuthenticationType=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
             theid=j[key]+"/"+"USERPOOL"
             pkey=theid.replace("@","_")

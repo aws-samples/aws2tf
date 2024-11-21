@@ -17,13 +17,13 @@ def get_aws_bedrock_model_invocation_logging_configuration(type, id, clfn, descf
         try:
             j=response[topkey]
         except KeyError:
-            print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         common.write_import(type,globals.region,None)
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
-        print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
     return True
 
 
@@ -39,7 +39,7 @@ def get_aws_bedrock_guardrail(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response:
                 resp2 = client.list_guardrails(guardrailIdentifier=j[key])
@@ -65,7 +65,7 @@ def get_aws_bedrock_guardrail(type, id, clfn, descfn, topkey, key, filterid):
             response = client.list_guardrails(guardrailIdentifier=id)
             pkey=type+"."+id
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
                 return True

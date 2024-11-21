@@ -46,7 +46,7 @@ def get_aws_sns_topic_policy(type, id, clfn, descfn, topkey, key, filterid):
         else:
             response = client.get_topic_attributes(TopicArn=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
                 pkey="aws_sns_topic_policy."+id
                 globals.rproc[pkey]=True
                 return True
@@ -74,7 +74,7 @@ def get_aws_sns_topic_subscription(type, id, clfn, descfn, topkey, key, filterid
             if id.startswith("arn:aws:sns:"):
                 response = client.list_subscriptions_by_topic(TopicArn=id)
                 if response == []: 
-                    print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                    if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
                     return True
                 for j in response[topkey]:
             

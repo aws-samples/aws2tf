@@ -94,7 +94,7 @@ def get_aws_bedrockagent_agent_knowledge_base_association(type, id, clfn, descfn
                 pkey=type+"."+id
                 response = client.list_agent_knowledge_bases(agentId=aid, agentVersion=vid)
                 if response == []: 
-                    print("Empty response for "+type+ " id="+str(id)+" returning")
+                    if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                     globals.rproc[pkey] = True
                     return True
                 for j in response['agentKnowledgeBaseSummaries']:
@@ -128,7 +128,7 @@ def get_aws_bedrockagent_data_source(type, id, clfn, descfn, topkey, key, filter
             pkey=type+"."+id
             response = client.list_data_sources(knowledgeBaseId=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 globals.rproc[pkey] = True
                 return True
             for j in response[topkey]:
@@ -156,7 +156,7 @@ def get_aws_bedrockagent_agent_alias(type, id, clfn, descfn, topkey, key, filter
             pkey=type+"."+id
             response = client.list_agent_aliases(agentId=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 globals.rproc[pkey] = True
                 return True
             for j in response[topkey]:
@@ -187,7 +187,7 @@ def get_aws_bedrockagent_agent_action_group(type, id, clfn, descfn, topkey, key,
                 pkey=type+"."+id
                 response = client.list_agent_action_groups(agentId=aid,agentVersion=vid)
                 if response == []: 
-                    print("Empty response for "+type+ " id="+str(id)+" returning")
+                    if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                     globals.rproc[pkey] = True
                     return True
                 for j in response['actionGroupSummaries']:

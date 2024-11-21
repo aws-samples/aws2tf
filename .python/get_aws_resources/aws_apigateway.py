@@ -15,7 +15,7 @@ def get_aws_api_gateway_account(type, id, clfn, descfn, topkey, key, filterid):
         if id is None:         
             response = client.get_account()
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
                 return True
@@ -39,7 +39,7 @@ def get_aws_api_gateway_deployment(type, id, clfn, descfn, topkey, key, filterid
         if id is not None:  
             response = client.get_deployments(restApiId=id)
             if response[topkey] == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 globals.rproc[pkey]=True 
                 return True
@@ -73,7 +73,7 @@ def get_aws_api_gateway_rest_api(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 altk="r-"+j[key]
@@ -85,7 +85,8 @@ def get_aws_api_gateway_rest_api(type, id, clfn, descfn, topkey, key, filterid):
 
         else:      
             response = client.get_rest_api(restApiId=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
             altk="r-"+j[key]
             common.write_import(type,j[key],altk)
@@ -229,7 +230,7 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
                 altk="r-"+pkey
                 common.write_import(type,pkey,altk)
             except:
-                print("Empty POST response for "+type+ " id="+str(id))
+                if globals.debug: print("Empty POST response for "+type+ " id="+str(id))
 
             ## PUT
             try:

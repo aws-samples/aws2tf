@@ -3,9 +3,7 @@ import boto3
 import globals
 import inspect
 
-##
-## hmm inline policies are in the aws_iam_role  anyway !
-##
+
 def get_aws_iam_role_policy(type,id,clfn,descfn,topkey,key,filterid):
    print("--> In get_aws_iam_role_policy doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    
@@ -73,12 +71,13 @@ def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
          print(f"{e=}")
    
    elif "arn:" in id:
-      print("hi")
+      #print("hi")
       response1 = client.get_policy(PolicyArn=id)
       #print(str(response1))
       response=response1['Policy']
 
-   if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+   if response == []: 
+      if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
  
     
    if id is None:
@@ -124,39 +123,7 @@ def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
    
    return True
 
-##
-## special due to mandator role name,
-##
-def get_aws_iam_policy_attchment(type,id,clfn,descfn,topkey,key,filterid):
-   #print("--> In get_aws_iam_policy_attachment doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-   if id is None:
-      print("Id must be set to the RoleName")
-      return
-   client = boto3.client(clfn) 
-   response=[]
-   paginator = client.get_paginator(descfn)
-   try:
-      for page in paginator.paginate(RoleName=id):    ## special
-      #for page in paginator.paginate():
-         response.extend(page[topkey])
-   except Exception as e:
-      print(f"{e=}")
 
-   if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-   
-   for j in response: 
-            retid=j['PolicyArn']
-            theid=id+"/"+retid
-            ln=retid.rfind("/")
-            pn=retid[ln+1:]
-            rn=id+"__"+pn
-            # - no as using policy arns (minus account id etc)
-            if "arn:aws:iam::aws:policy" not in theid:
-               common.add_known_dependancy("aws_iam_policy",retid)
-               globals.dependancies=globals.dependancies + ["aws_iam_policy."+retid]
-            #print("adding "+theid+" attachment")
-            common.write_import(type,theid,rn) 
-   return True
 
 
 
@@ -170,7 +137,8 @@ def get_aws_iam_instance_profile(type,id,clfn,descfn,topkey,key,filterid):
    try:
       response1 = client.get_instance_profile(InstanceProfileName=id)
       j=response1[topkey]
-      if j == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+      if j == []: 
+         if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
       #print("get_instance_profile response="+str(j))
  
@@ -195,7 +163,7 @@ def get_aws_iam_user_group_membership(type,id,clfn,descfn,topkey,key,filterid):
       response=response1[topkey]
 
       if response == []: 
-         print("Empty response for "+type+ " id="+str(id)+" returning"); 
+         if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
          pkey="aws_iam_user_group_membership."+grpn
          globals.rproc[pkey]=True
          return True
@@ -227,7 +195,7 @@ def get_aws_iam_user_policy(type,id,clfn,descfn,topkey,key,filterid):
       #print("response1="+str(response1))
       response=response1['PolicyNames']
       if response == []: 
-         print("Empty response for "+type+ " id="+str(id)+" returning")
+         if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
          pkey="aws_iam_user_policy."+id
          globals.rproc[pkey]=True
          return True
@@ -257,7 +225,7 @@ def get_aws_iam_group_policy(type,id,clfn,descfn,topkey,key,filterid):
       #print("response1="+str(response1))
       response=response1['PolicyNames']
       if response == []: 
-         print("Empty response for "+type+ " id="+str(id)+" returning")
+         if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
          pkey="aws_iam_group_policy."+id
          globals.rproc[pkey]=True
          return True
@@ -281,7 +249,7 @@ def get_aws_iam_role_policy(type, id, clfn, descfn, topkey, key, filterid):
       print("--> In get_aws_iam_role_policy  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    try:
       if id is None:
-         print("Empty response for "+type+ " id="+str(id)+" returning")
+         print("Id is None for "+type+ " returning")
          return True
       client = boto3.client(clfn)
       response=[]
@@ -290,7 +258,7 @@ def get_aws_iam_role_policy(type, id, clfn, descfn, topkey, key, filterid):
       #print("response1="+str(response1))
       response=response1['PolicyNames']
       if response == []:
-         print("Empty response for "+type+ " id="+str(id)+" returning")
+         if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
          pkey="aws_iam_role_policy."+id
          globals.rproc[pkey]=True
          return True
@@ -319,7 +287,8 @@ def get_aws_iam_service_linked_role(type, id, clfn, descfn, topkey, key, filteri
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+               if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 if ":role/aws-service-role" in j[key]:
                   common.write_import(type,j[key],None) 
@@ -327,7 +296,8 @@ def get_aws_iam_service_linked_role(type, id, clfn, descfn, topkey, key, filteri
         else:   
               
             response = client.get_role(RoleName=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+               if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
             if ":role/aws-service-role" in j[key]:
                common.write_import(type,j[key],None)
@@ -351,23 +321,85 @@ def get_aws_iam_role(type,id,clfn,descfn,topkey,key,filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+               if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 rn=j[key]  ## RoleName
                 rna=rn.replace(".","_")
-                common.write_import(type,j[key],rna) 
+                common.write_import(type,j[key],rna)
+                common.add_dependancy("aws_iam_role_policy_attachment",rn)
+                common.add_dependancy("aws_iam_role_policy",rn)
 
         else:   
             if "/aws-service-role/" in id: return True    
             response = client.get_role(RoleName=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+               if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Role']
             rn=j[key]
             rna=rn.replace(".","_")
             common.write_import(type,j[key],rna)
+            common.add_dependancy("aws_iam_role_policy_attachment",rn)
+            common.add_dependancy("aws_iam_role_policy",rn)
 
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
+
+
+##
+## special due to mandator role name,
+##
+def get_aws_iam_role_policy_attachment(type,id,clfn,descfn,topkey,key,filterid):
+   if globals.debug:
+      print("--> In get_aws_iam_role_policy_attachment doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   if id is None:
+      print("Id must be set to the RoleName")
+      return
+   client = boto3.client(clfn) 
+   response=[]
+   paginator = client.get_paginator(descfn)
+   try:
+      for page in paginator.paginate(RoleName=id):    ## special
+      #for page in paginator.paginate():
+         response.extend(page[topkey])
+   except Exception as e:
+      print(f"{e=}")
+
+   if response == []: 
+      if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+      pkey="aws_iam_role_policy_attachment."+id
+      globals.rproc[pkey]=True
+      return True
+   
+   for j in response: 
+            retid=j['PolicyArn']
+            theid=id+"/"+retid
+            ln=retid.rfind("/")
+            pn=retid[ln+1:]
+            rn=id+"__"+pn
+            # - no as using policy arns (minus account id etc)
+            if "arn:aws:iam::aws:policy" not in theid:
+               common.add_dependancy("aws_iam_policy",retid)
+               
+            #print("adding "+theid+" attachment")
+            common.write_import(type,theid,rn) 
+   pkey="aws_iam_role_policy_attachment."+id
+   globals.rproc[pkey]=True
+   return True
+
+
+
+
+##
+## special due to mandator role name,
+##
+def get_aws_iam_policy_attchment(type,id,clfn,descfn,topkey,key,filterid):
+   if globals.debug:
+      print("--> In get_aws_iam_policy_attachment doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
+   print("Use alternatives to"+type+" not implemented")
+   return
+   

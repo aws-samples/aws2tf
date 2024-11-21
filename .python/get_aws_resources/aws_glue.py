@@ -32,7 +32,7 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
             if ":" in id:   id =id.split(":")[1]   
             response = client.get_database(Name=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 gkey="aws_glue_catalog_table."+pkey
                 globals.rproc[gkey]=True
                 return True
@@ -100,7 +100,7 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
                 response = client.get_tables(CatalogId=catalogn,DatabaseName=databasen,Expression=tabnam)
  
         if response[topkey] == []: 
-            print("Empty response for "+type+ " id="+str(id)+" returning"); 
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
             tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
             globals.rproc[tkey]=True
             return True

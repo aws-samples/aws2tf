@@ -17,7 +17,7 @@ def get_aws_vpclattice_service_network(type, id, clfn, descfn, topkey, key, filt
             for page in paginator.paginate():
                 response.extend(page[topkey])
             if response == []:
-                print("Empty response for "+type + " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 return True
 
             for j in response:
@@ -30,7 +30,7 @@ def get_aws_vpclattice_service_network(type, id, clfn, descfn, topkey, key, filt
         else:
             response = client.get_service_network(serviceNetworkIdentifier=id)
             if response == []:
-                print("Empty response for "+type + " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             j = response
             common.write_import(type, j[key], None)
@@ -58,7 +58,7 @@ def get_aws_vpclattice_service(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response.extend(page[topkey])
             if response == []:
-                print("Empty response for "+type + " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 return True
 
             for j in response:
@@ -126,7 +126,7 @@ def get_aws_vpclattice_auth_policy(type, id, clfn, descfn, topkey, key, filterid
             e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
 
     if response == []:
-        print("Empty response for "+type + " id="+str(id)+" returning")
+        if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
         return True
 
     else:
@@ -162,7 +162,7 @@ def get_aws_vpclattice_target_group(type, id, clfn, descfn, topkey, key, filteri
             common.handle_error(
                 e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
         if response == []:
-            print("Empty response for "+type + " id="+str(id)+" returning")
+            if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
             return True
         for j in response:
             theid = j[key]
@@ -262,7 +262,7 @@ def get_aws_vpclattice_listener(type, id, clfn, descfn, topkey, key, filterid):
                 e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
 
     if response == []:
-        print("Empty response for "+type + " id="+str(id)+" returning")
+        if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
         return True
 
     for j in response:
@@ -309,7 +309,7 @@ def get_aws_vpclattice_listener_rule(type, id, clfn, descfn, topkey, key, filter
                 e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
 
     if response == []:
-        print("Empty response for "+type + " id="+str(id)+" returning")
+        if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
         return True
 
     for j in response:
@@ -349,7 +349,7 @@ def get_aws_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid):
 
       #print(str(response))
       if response == []:
-         print("Empty response for "+type + " id="+str(id)+" returning")
+         if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
          pkey = type+"."+id
          globals.rproc[pkey] = True
          return True

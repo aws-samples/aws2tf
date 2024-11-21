@@ -15,7 +15,8 @@ def get_aws_amplify_app(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 theid=j[key]
                 common.write_import(type,theid,None) 
@@ -23,7 +24,8 @@ def get_aws_amplify_app(type, id, clfn, descfn, topkey, key, filterid):
 
         else:      
             response = client.get_app(appId=id)
-            if response['app'] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response['app'] == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['app']
             common.write_import(type,j[key],None)
             common.add_dependancy("aws_amplify_branch", j[key])
@@ -45,7 +47,8 @@ def get_aws_amplify_branch(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate(appId=id):
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 theid=id+"/"+j[key]
                 common.write_import(type,theid,None) 

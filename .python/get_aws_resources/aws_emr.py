@@ -17,7 +17,7 @@ def get_aws_emr_cluster(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []:
-                print("Empty response for "+type + " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             for j in response:
                 if "TERMINATED" not in j['Status']['State']:
@@ -33,7 +33,7 @@ def get_aws_emr_cluster(type, id, clfn, descfn, topkey, key, filterid):
         else:
             response = client.describe_cluster(ClusterId=id)
             if response == []:
-                print("Empty response for "+type + " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             j = response['Cluster']
             # print(str(j))
@@ -66,7 +66,7 @@ def get_aws_emr_security_configuration(type, id, clfn, descfn, topkey, key, filt
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []:
-                print("Empty response for "+type + " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type, j[key], None)
@@ -74,7 +74,7 @@ def get_aws_emr_security_configuration(type, id, clfn, descfn, topkey, key, filt
         else:
             response = client.describe_security_configuration(Name=id)
             if response == []:
-                print("Empty response for "+type + " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             j = response
             # print(str(j))
@@ -102,7 +102,7 @@ def get_aws_emr_instance_group(type, id, clfn, descfn, topkey, key, filterid):
             try:
                 response = client.list_instance_groups(ClusterId=id)
                 if response == []:
-                    print("Empty response for "+type +
+                    if globals.debug: print("Empty response for "+type +
                           " id="+str(id)+" returning")
                     pkey = type+"."+id
                     globals.rproc[pkey] = True
@@ -115,7 +115,7 @@ def get_aws_emr_instance_group(type, id, clfn, descfn, topkey, key, filterid):
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 exn = str(exc_type.__name__)
                 if exn == "InvalidRequestException":
-                    print("Empty response for "+type +
+                    if globals.debug: print("Empty response for "+type +
                           " id="+str(id)+" returning")
                     pkey = type+"."+id
                     globals.rproc[pkey] = True
@@ -147,7 +147,7 @@ def get_aws_emr_instance_fleet(type, id, clfn, descfn, topkey, key, filterid):
             try:
                 response = client.list_instance_fleets(ClusterId=id)
                 if response == []:
-                    print("Empty response for "+type +
+                    if globals.debug: print("Empty response for "+type +
                           " id="+str(id)+" returning")
                     pkey = type+"."+id
                     globals.rproc[pkey] = True
@@ -160,7 +160,7 @@ def get_aws_emr_instance_fleet(type, id, clfn, descfn, topkey, key, filterid):
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 exn = str(exc_type.__name__)
                 if exn == "InvalidRequestException":
-                    print("Empty response for "+type +
+                    if globals.debug: print("Empty response for "+type +
                           " id="+str(id)+" returning")
                     pkey = type+"."+id
                     globals.rproc[pkey] = True
@@ -199,7 +199,7 @@ def get_aws_emr_managed_scaling_policy(type, id, clfn, descfn, topkey, key, filt
             try:
                 j = response['ManagedScalingPolicy']
             except KeyError as e:
-                print("Empty response for "+type + " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 globals.rproc[pkey] = True
                 return True
             common.write_import(type, id, None)
@@ -226,7 +226,7 @@ def get_aws_emr_block_public_access_configuration(type, id, clfn, descfn, topkey
         try:
                 j = response['BlockPublicAccessConfiguration']
         except KeyError as e:
-                print("Empty response for "+type + " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 globals.rproc[pkey] = True
                 return True
         common.write_import(type, id, None)

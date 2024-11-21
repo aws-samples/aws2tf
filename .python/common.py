@@ -749,7 +749,7 @@ def check_python_version():
       if v1 < 134093:
          print("boto3 version:"+bv)
          print("This program requires boto3 1.34.93 or later.")
-         print("Try: pip install boto3==1.34.93")
+         print("Try: pip install boto3")
          timed_int.stop()
          sys.exit(1)
 
@@ -765,7 +765,7 @@ def aws_tf(region):
       f3.write('    aws = {\n')
       f3.write('      source  = "hashicorp/aws"\n')
       # f3.write('      version = "5.48.0"\n')
-      f3.write('      version = "5.70.0"\n')
+      f3.write('      version = "'+globals.tfver+'"\n')
       f3.write('    }\n')
       f3.write('  }\n')
       f3.write('}\n')

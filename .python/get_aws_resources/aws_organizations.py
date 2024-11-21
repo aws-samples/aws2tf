@@ -238,7 +238,7 @@ def get_aws_organizations_policy_attachment(type, id, clfn, descfn, topkey, key,
 
                 #    return True
             if response[topkey] == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); 
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
                 return True

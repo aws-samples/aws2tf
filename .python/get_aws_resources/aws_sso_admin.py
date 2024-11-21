@@ -41,7 +41,8 @@ def get_aws_ssoadmin_permission_set(type, id, clfn, descfn, topkey, key, filteri
         response = []
         client = boto3.client(clfn)    
         response = client.list_permission_sets(InstanceArn=id)
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: 
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response['PermissionSets']:
             pkey=j+","+id
             theid=pkey.replace(",", "_")
@@ -70,7 +71,7 @@ def get_aws_ssoadmin_managed_policy_attachment(type, id, clfn, descfn, topkey, k
         print("id="+id)
         response = client.list_managed_policies_in_permission_set(InstanceArn=inid,PermissionSetArn=psarn)
         if response == []: 
-            print("Empty response for "+type+ " id="+str(id)+" returning")
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
             rkey=type+"."+psarn+","+inid
             globals.rproc[rkey] = True
             return True
@@ -103,7 +104,7 @@ def get_aws_ssoadmin_permission_set_inline_policy(type, id, clfn, descfn, topkey
         inid=id.split(",")[1]; psarn=id.split(",")[0]  
         response = client.get_inline_policy_for_permission_set(InstanceArn=inid,PermissionSetArn=psarn)
         if response == []: 
-            print("Empty response for "+type+ " id="+str(id)+" returning")
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
             rkey=type+"."+psarn+","+inid
             globals.rproc[rkey] = True
             return True

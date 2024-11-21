@@ -36,6 +36,9 @@ def aws_sagemaker_device_fleet(t1,tt1,tt2,flag1,flag2):
 
 def aws_sagemaker_domain(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="tag_propagation" and tt2=="null":	
+		t1=tt1 + " = \"DISABLED\"\n"
+		t1=t1+"\n lifecycle {\n   ignore_changes = [tag_propagation]\n}\n"
 	return skip,t1,flag1,flag2
 
 def aws_sagemaker_endpoint(t1,tt1,tt2,flag1,flag2):

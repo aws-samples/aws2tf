@@ -14,7 +14,9 @@ def get_aws_acm_certificate(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                return True
             for j in response:
                 if j['Status']=="ISSUED":
                     common.write_import(type,j[key],None) 
@@ -23,7 +25,8 @@ def get_aws_acm_certificate(type, id, clfn, descfn, topkey, key, filterid):
 
         elif id.startswith("arn:"):      
             response = client.describe_certificate(CertificateArn=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Certificate']
             if j['Status']=="ISSUED":
                 common.write_import(type,id,None)

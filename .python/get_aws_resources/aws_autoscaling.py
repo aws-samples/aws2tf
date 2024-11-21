@@ -30,7 +30,7 @@ def get_aws_autoscaling_group(type, id, clfn, descfn, topkey, key, filterid):
             print("Looking for "+pkey)
             response = client.describe_auto_scaling_groups(AutoScalingGroupNames=[qid])
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 globals.rproc[pkey] = True
                 return True
             for j in response[topkey]:

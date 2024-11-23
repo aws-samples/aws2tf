@@ -197,6 +197,7 @@ def main():
 
     if path is None:
         print("no executable found for command 'terraform'")
+        print("exit 002")
         timed_interrupt.timed_int.stop()
         exit()
 
@@ -220,6 +221,7 @@ def main():
     if args.type is None or args.type=="":
         if args.serverless:
             print("type is required eg:  -t aws_vpc  when in serverless mode, exiting ....")
+            print("exit 003")
             timed_interrupt.timed_int.stop()
             exit()
         print("type is required eg:  -t aws_vpc")
@@ -259,6 +261,7 @@ def main():
                     region=os.getenv("AWS_DEFAULT_REGION")
                     if region is None:
                         print("region is required - set in AWS cli or pass with -r")
+                        print("exit 004")
                         timed_interrupt.timed_int.stop()
                         exit()
             print("region set from aws cli / environment variables as "+region)
@@ -283,6 +286,7 @@ def main():
         exn=str(exc_type.__name__)
         if "ExpiredToken" in str(e):
             print("STS Authorization Error: ExpiredToken, exiting .....")
+            print("exit 005")
         timed_interrupt.timed_int.stop()
         exit()
     print('Using region: '+region + ' account: ' + globals.acc+"\n")
@@ -365,11 +369,13 @@ def main():
     if "," in type:
         if "stack" in type:
             print("Cannot mix stack with other types")
+            print("exit 006")
             timed_interrupt.timed_int.stop()
             exit()
 
         if id is not None:
             print("Cannot pass id with multiple types")
+            print("exit 007")
             timed_interrupt.timed_int.stop()
             exit()
 
@@ -404,6 +410,7 @@ def main():
             
             if id is None:
                 print("Must pass a stack name as a parameter   -i <stack name>")
+                print("exit 008")
                 timed_interrupt.timed_int.stop()
                 exit()
             else:
@@ -457,6 +464,7 @@ def main():
             else:
                 print("No resources found")
                 globals.tracking_message="Stage 3 of 10 no resources found exiting ..."
+                print("exit 009")
                 timed_interrupt.timed_int.stop()
                 exit()
 
@@ -482,6 +490,7 @@ def main():
     
     if ":" in globals.rproc:
         print(": in rproc exiting")
+        print("exit 010")
         timed_interrupt.timed_int.stop()
         exit()
     now = datetime.datetime.now()
@@ -560,6 +569,7 @@ def main():
                 if not globals.rproc[ti]:
                     print("ERROR: Not found "+str(ti)+" - check if this resource still exists in AWS. Also check what resource is using it - grep the *.tf files in the generated/tf.* subdirectory")
                     globals.tracking_message="No change/progress in dependancies exiting..."
+            print("exit 011")
             timed_interrupt.timed_int.stop()
             exit()
 
@@ -572,6 +582,7 @@ def main():
         common.wrapup()
     else: 
         print("\nValidation only - no files written")
+        print("exit 012")
         timed_interrupt.timed_int.stop()
         exit()
 

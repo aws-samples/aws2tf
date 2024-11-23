@@ -431,8 +431,8 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_network_acl(type, id, clfn, descfn, topkey, key, filterid):
-    #if globals.debug:
-    print("--> In get_aws_network_acl doing " + type + ' with id ' + str(id) +
+    if globals.debug:
+        print("--> In get_aws_network_acl doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
 ## vall boto3 with Filter default=false

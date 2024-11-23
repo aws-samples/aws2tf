@@ -1,5 +1,6 @@
 import common
 import boto3
+from botocore.config import Config
 import globals
 import inspect
 import os
@@ -10,7 +11,13 @@ def get_aws_apigatewayv2_api(type, id, clfn, descfn, topkey, key, filterid):
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
-        client = boto3.client(clfn)
+        config = Config(
+            retries = {
+                'max_attempts': 10,
+                'mode': 'standard'
+            }
+        )
+        client = boto3.client(clfn,config=config)
         
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate():

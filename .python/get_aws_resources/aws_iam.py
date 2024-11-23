@@ -25,11 +25,9 @@ def get_aws_iam_role_policy(type,id,clfn,descfn,topkey,key,filterid):
                continue
             #print("--RoleName="+rn+" response="+str(response))
             for k in response: 
-               if k not in str(globals.policies):
-                  print("adding "+k+" to policies for role " + rn)
-                  globals.policies = globals.policies + [k]
-                  theid=rn+":"+k
-                  common.write_import(type,theid,None)
+               print("adding "+k+" to policies for role " + rn)
+               theid=rn+":"+k
+               common.write_import(type,theid,None)
 
 
    else:
@@ -40,11 +38,9 @@ def get_aws_iam_role_policy(type,id,clfn,descfn,topkey,key,filterid):
       print("RoleName="+rn+" response="+str(response))
 
       for j in response: 
-         if j not in str(globals.policies):
-            print("adding "+j+" to policies for role " + rn)
-            globals.policies = globals.policies + [j]
-            theid=rn+":"+j
-            common.write_import(type,theid,None) 
+         print("adding "+j+" to policies for role " + rn)
+         theid=rn+":"+j
+         common.write_import(type,theid,None) 
    
    return True
 
@@ -72,9 +68,19 @@ def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
    
    elif "arn:" in id:
       #print("hi")
+
+      ### test ?
+      ln=id.rfind("/")
+      pn=id[ln+1:]
+
       response1 = client.get_policy(PolicyArn=id)
       #print(str(response1))
       response=response1['Policy']
+
+   else:
+      print("WARNING: must pass arn to get_aws_iam_policy")
+      if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+      return True
 
    if response == []: 
       if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
@@ -93,19 +99,17 @@ def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
                print("pn error")
                print(f"{e=}")
 
-            if globals.debug: print("policy name="+str(pn))      
-            if retid == id:
-               if theid not in str(globals.policies):
-                  #print("---adding "+theid+" to policies")
-                  globals.policies = globals.policies + [theid]
-                  globals.policyarns = globals.policyarns + [retid]
-                  common.write_import(type,retid,pn)
+            if globals.debug: print("policy name="+str(pn))
+
+            globals.policyarns = globals.policyarns + [retid]
+            common.write_import(type,retid,pn)
 
    else:
          j=response
          #print("j="+str(j))
          theid=j[key]
          retid=j["Arn"]
+         pkey=type+"."+retid
          try:
             ln=retid.rfind("/")
             pn=retid[ln+1:]
@@ -115,13 +119,11 @@ def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
 
          if globals.debug: print("policy name="+str(pn))
             #print("response="+str(retid)+" id="+str(id))
-         
-         if theid not in str(globals.policies):
-                  #print("-- adding "+theid+" to policies")
-                  globals.policies = globals.policies + [theid]
-                  globals.policyarns = globals.policyarns + [retid]
-                  common.write_import(type,retid,pn)  
-   
+         globals.policyarns = globals.policyarns + [retid]
+         common.write_import(type,retid,pn)  
+         pkey=type+"."+retid
+         globals.rproc[pkey]=True
+
    return True
 
 
@@ -379,7 +381,7 @@ def get_aws_iam_role_policy_attachment(type,id,clfn,descfn,topkey,key,filterid):
       pkey="aws_iam_role_policy_attachment."+id
       globals.rproc[pkey]=True
       return True
-   
+   ## multi thread ?
    for j in response: 
             retid=j['PolicyArn']
             theid=id+"/"+retid
@@ -387,17 +389,23 @@ def get_aws_iam_role_policy_attachment(type,id,clfn,descfn,topkey,key,filterid):
             pn=retid[ln+1:]
             rn=id+"__"+pn
             # - no as using policy arns (minus account id etc)
+            #if "andyt1" in retid:
+            #   print("********** id="+str(id)+" theid="+str(theid)+" rn="+rn)
             if "arn:aws:iam::aws:policy" not in theid:
+               if "andyt1" in retid:
+                  print("**** adding "+retid+" aws_iam_policy dependancy")
                common.add_dependancy("aws_iam_policy",retid)
                
-            #print("adding "+theid+" attachment")
+            if "andyt1" in theid:
+               print("adding "+theid+" attachment")
             common.write_import(type,theid,rn) 
+            
+   
+   ####
    pkey="aws_iam_role_policy_attachment."+id
    globals.rproc[pkey]=True
+   
    return True
-
-
-
 
 ##
 ## special due to mandator role name,

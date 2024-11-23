@@ -92,6 +92,7 @@ subnetlist={}
 sglist={}
 vpclist={}
 rolelist={}
+policylist={}
 bucketlist={}
 tgwlist={}
 gluedbs={}

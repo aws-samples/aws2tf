@@ -465,7 +465,7 @@ def globals_replace(t1,tt1,tt2):
     if tt2.startswith('[') and tt1 != "managed_policy_arns" and "," in tt2:
         tt2=tt2.replace('[','').replace(']','').replace('"','').replace(' ','')
         arns=tt2.split(',')
-        print("Globals replace an array:"+str(arns))
+        if globals.debug: print("Globals replace an array:"+str(arns))
         fins=""
         for arn in arns:
             tt2=str(arn)

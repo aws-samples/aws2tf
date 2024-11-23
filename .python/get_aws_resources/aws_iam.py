@@ -322,16 +322,16 @@ def get_aws_iam_role(type,id,clfn,descfn,topkey,key,filterid):
         client = boto3.client(clfn)
         response = []
         if id is None:
-            paginator = client.get_paginator(descfn)
-            for page in paginator.paginate():
-                response = response + page[topkey]
-            if response == []: 
-               if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
-               return True
-            for j in response:
-                rn=j[key]  ## RoleName
+            # already done this in build_lists
+            #paginator = client.get_paginator(descfn)
+            #for page in paginator.paginate():
+            #    response = response + page[topkey]
+            #if response == []: 
+            #   if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+            #   return True
+            for rn in globals.rolelist.keys():
                 rna=rn.replace(".","_")
-                common.write_import(type,j[key],rna)
+                common.write_import(type,rn,rna)
                 common.add_dependancy("aws_iam_role_policy_attachment",rn)
                 common.add_dependancy("aws_iam_role_policy",rn)
 

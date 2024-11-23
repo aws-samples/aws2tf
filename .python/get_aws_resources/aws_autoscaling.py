@@ -29,7 +29,7 @@ def get_aws_autoscaling_group(type, id, clfn, descfn, topkey, key, filterid):
             else:
                 qid = id
             pkey=type+"."+id
-            print("Looking for "+pkey)
+            if globals.debug: print("Looking for "+pkey)
             response = client.describe_auto_scaling_groups(AutoScalingGroupNames=[qid])
             if response == []: 
                 if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 

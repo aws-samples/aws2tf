@@ -1,5 +1,5 @@
 tfver="5.76.0"
-esttime=60
+esttime=120.0
 merge=False
 fast=True
 apionly=False

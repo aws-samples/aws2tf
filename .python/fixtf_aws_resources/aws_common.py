@@ -15,7 +15,7 @@ def check_key(keyid):
 		#print(str(kresp))
 		if kstatus == "Enabled" or kstatus == "Disabled":
 			if kman == "AWS":
-				print("check_key: key is managed by AWS")
+				if globals.debug: print("check_key: key is managed by AWS")
 				return False ## ?? True ??
 			return True
 		else:

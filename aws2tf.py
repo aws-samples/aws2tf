@@ -155,6 +155,8 @@ def dd_threaded(ti):
         i = ti.split(".")[0]
         id = ti.split(".", 1)[1]
         if globals.debug: print("DD calling getresource with type="+i+" id="+str(id))
+        if i=="aws_iam_policy" and "andyt1" in id:
+            print("DD calling getresource with type="+i+" id="+str(id))
         globals.tracking_message="Stage 5 of 10, Processing Dependancy, "+str(i)+" "+str(id)
         common.call_resource(i, id)
 
@@ -419,6 +421,7 @@ def main():
 
         elif all_types != None and lall > 1:
             print("len all_types="+str(len(all_types))) # testing only
+            globals.esttime=len(all_types)/4
             #id="foobar" # testing only
             ic=0
             istart=0
@@ -481,6 +484,8 @@ def main():
         timed_interrupt.timed_int.stop()
         exit()
     now = datetime.datetime.now()
+    x=glob.glob("import__aws_*.tf")
+    globals.esttime=len(x)/4
     if not globals.fast: print("\naws2tf Detected Dependancies started at %s\n" % now)
     globals.tracking_message="Stage 5 of 10, Detected Dependancies starting"
     detdep=False
@@ -523,6 +528,7 @@ def main():
         if not globals.fast: print("Terraform Plan - Dependancies Detection Loop "+str(lc)+".....")
         globals.tracking_message="Stage 6 of 10, Dependancies Detection - Loop "+str(lc)
         x=glob.glob("import__aws_*.tf")
+        globals.esttime=len(x)/4
         #print(str(x))
         #td=""
         for fil in x:
@@ -586,6 +592,7 @@ def main():
     path = shutil.which("trivy") 
     if path is not None:
         x = glob.glob("aws_*__*.tf")
+        globals.esttime=len(x)/4
         awsf=len(x)
         if awsf < 256:
             globals.tracking_message="Running trivy security check"

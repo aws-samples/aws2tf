@@ -420,7 +420,7 @@ def tfplan3():
 
 ################################################################################
    x = glob.glob("aws_*__*.tf")
-   globals.esttime=len(x)*4
+   globals.esttime=len(x)/4
    awsf=len(x)
    y = glob.glob("import__*.tf")
    impf=len(y)
@@ -704,7 +704,7 @@ def rc(cmd):
 
 def fix_imports():
    x = glob.glob("aws_*__*.tf")
-   globals.esttime=len(x)*4
+   globals.esttime=len(x)/4
    awsf=len(x)
    y = glob.glob("import__*.tf")
    impf=len(y)

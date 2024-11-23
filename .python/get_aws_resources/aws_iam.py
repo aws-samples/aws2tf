@@ -392,12 +392,8 @@ def get_aws_iam_role_policy_attachment(type,id,clfn,descfn,topkey,key,filterid):
             #if "andyt1" in retid:
             #   print("********** id="+str(id)+" theid="+str(theid)+" rn="+rn)
             if "arn:aws:iam::aws:policy" not in theid:
-               if "andyt1" in retid:
-                  print("**** adding "+retid+" aws_iam_policy dependancy")
                common.add_dependancy("aws_iam_policy",retid)
                
-            if "andyt1" in theid:
-               print("adding "+theid+" attachment")
             common.write_import(type,theid,rn) 
             
    

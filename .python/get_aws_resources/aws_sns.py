@@ -15,14 +15,18 @@ def get_aws_sns_topic(type, id, clfn, descfn, topkey, key, filterid):
         client = boto3.client(clfn)
         if id is None:
             response = client.list_topics()
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response[topkey]:  
                 common.write_import(type, j[key], None)
                 common.add_dependancy("aws_sns_topic_policy",j[key])
                 common.add_dependancy("aws_sns_topic_subscription", j[key])
         else:
             response = client.get_topic_attributes(TopicArn=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             common.write_import(type,id,None)
             common.add_dependancy("aws_sns_topic_policy",id)
             common.add_dependancy("aws_sns_topic_subscription",id)

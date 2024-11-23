@@ -42,7 +42,8 @@ def get_aws_ssoadmin_permission_set(type, id, clfn, descfn, topkey, key, filteri
         client = boto3.client(clfn)    
         response = client.list_permission_sets(InstanceArn=id)
         if response == []: 
-            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+            return True
         for j in response['PermissionSets']:
             pkey=j+","+id
             theid=pkey.replace(",", "_")

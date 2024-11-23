@@ -14,7 +14,9 @@ def get_aws_codestarnotifications_notification_rule(type, id, clfn, descfn, topk
         for page in paginator.paginate():
             response = response + page[topkey]
 
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: 
+            print("Empty response for "+type+ " id="+str(id)+" returning")
+            return True
         for j in response:
             if id is None:
                 common.write_import(type,j[key],None) 

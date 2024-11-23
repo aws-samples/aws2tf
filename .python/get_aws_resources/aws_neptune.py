@@ -16,7 +16,9 @@ def get_aws_neptune_subnet_group(type, id, clfn, descfn, topkey, key, filterid):
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate():
                 response = response + page[topkey]
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: 
+            print("Empty response for "+type+ " id="+str(id)+" returning")
+            return True
         #print(str(response))
         for j in response:
             if id is None:
@@ -47,7 +49,9 @@ def get_aws_neptune_cluster_endpoint(type, id, clfn, descfn, topkey, key, filter
         else:
             for page in paginator.paginate(DBClusterIdentifier=id):
                 response = response + page[topkey]
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: 
+            print("Empty response for "+type+ " id="+str(id)+" returning")
+            return True
         #print(str(response))
         for j in response:
             #print(str(j))

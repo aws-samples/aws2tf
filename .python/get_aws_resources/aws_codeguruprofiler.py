@@ -14,13 +14,17 @@ def get_aws_codeguruprofiler_profiling_group(type, id, clfn, descfn, topkey, key
             response = client.list_profiling_groups(includeDescription=False)
             response=response[topkey]
             print(str(response))
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response:
                 common.write_import(type,j,None) 
 
         else:      
             response = client.describe_profiling_group(profilingGroupName=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             j=response
             common.write_import(type,j['profilingGroup']['name'],None)
 

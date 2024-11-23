@@ -15,14 +15,16 @@ def get_aws_cloudformation_stack(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(StackStatusFilter=['CREATE_COMPLETE']):
                 response = response + page[topkey]
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response:
                 common.write_import(type,j[key],None) 
 
         else:      
             response = client.describe_stacks(StackName=id)
             if response['Stacks'] == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response['Stacks']:
                 #print(j)
                 stat=j['StackStatus']

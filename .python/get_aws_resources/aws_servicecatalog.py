@@ -27,7 +27,9 @@ def get_aws_servicecatalog_portfolio(type, id, clfn, descfn, topkey, key, filter
 
         else:      
             response = client.describe_portfolio(Id=id)
-            if response['PortfolioDetail'] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response['PortfolioDetail'] == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             j=response['PortfolioDetail']
             theid=j[key]
             common.write_import(type,theid,None) 

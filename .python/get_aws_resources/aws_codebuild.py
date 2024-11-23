@@ -13,7 +13,9 @@ def get_aws_codebuild_project(type, id, clfn, descfn, topkey, key, filterid):
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate():
             response = response + page[topkey]
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: 
+            print("Empty response for "+type+ " id="+str(id)+" returning")
+            return True
         for j in response:
             if id is None: 
                 common.write_import(type,j,None) 

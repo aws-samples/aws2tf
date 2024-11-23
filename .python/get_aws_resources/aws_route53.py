@@ -14,14 +14,18 @@ def get_aws_route53_zone(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response:
                 common.write_import(type,j[key],None) 
                 common.add_dependancy("aws_route53_record",j[key])
 
         else:      
             response = client.get_hosted_zone(Id=id)
-            if response['HostedZone'] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response['HostedZone'] == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             j=response['HostedZone']
             common.write_import(type,j[key],None)
             common.add_dependancy("aws_route53_record",j[key])
@@ -49,7 +53,9 @@ def get_aws_route53_record(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate(HostedZoneId=id):
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response:
                 #print("j="+str(j))
                 r53name=j['Name']

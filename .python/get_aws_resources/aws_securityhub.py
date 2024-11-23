@@ -42,7 +42,9 @@ def get_aws_securityhub_organization_configuration(type, id, clfn, descfn, topke
             print("NO access returning")
             return True
 
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: 
+            print("Empty response for "+type+ " id="+str(id)+" returning")
+            return True
         j=response
         common.write_import(type,j[key],None) 
 

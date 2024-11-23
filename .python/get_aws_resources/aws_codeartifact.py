@@ -14,7 +14,9 @@ def get_aws_codeartifact_domain(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response:
                 common.write_import(type,j[key],j['name']) 
                 pkey="aws_codeartifact_domain."+j['name']
@@ -22,7 +24,9 @@ def get_aws_codeartifact_domain(type, id, clfn, descfn, topkey, key, filterid):
 
         else:      
             response = client.describe_domain(domain=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             j=response['domain']
             common.write_import(type,j[key],j['name'])
             pkey="aws_codeartifact_domain."+j['name']

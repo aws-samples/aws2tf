@@ -13,7 +13,8 @@ def get_aws_kendra_index(type, id, clfn, descfn, topkey, key, filterid):
         if id is None:
             response = client.list_indices()
             if response[topkey] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response[topkey]:
                 common.write_import(type,j[key],"k-"+j[key]) 
                 common.add_dependancy("aws_kendra_data_source",j[key])
@@ -22,7 +23,8 @@ def get_aws_kendra_index(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.describe_index(Id=id)
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             j=response
             common.write_import(type,j[key],"k-"+j[key])
             common.add_dependancy("aws_kendra_data_source",j[key])

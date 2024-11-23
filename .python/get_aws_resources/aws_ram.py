@@ -15,7 +15,8 @@ def get_aws_ram_resource_share(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(resourceOwner='SELF'):
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response:
                 common.write_import(type,j[key],None) 
                 common.add_dependancy("aws_ram_principal_association",j[key])

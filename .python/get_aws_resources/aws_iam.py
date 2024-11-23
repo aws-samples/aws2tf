@@ -77,7 +77,8 @@ def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
       response=response1['Policy']
 
    if response == []: 
-      if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+      if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+      return True
  
     
    if id is None:
@@ -138,7 +139,8 @@ def get_aws_iam_instance_profile(type,id,clfn,descfn,topkey,key,filterid):
       response1 = client.get_instance_profile(InstanceProfileName=id)
       j=response1[topkey]
       if j == []: 
-         if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+         if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+         return True
 
       #print("get_instance_profile response="+str(j))
  
@@ -288,7 +290,8 @@ def get_aws_iam_service_linked_role(type, id, clfn, descfn, topkey, key, filteri
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-               if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+               if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+               return True
             for j in response:
                 if ":role/aws-service-role" in j[key]:
                   common.write_import(type,j[key],None) 
@@ -297,7 +300,8 @@ def get_aws_iam_service_linked_role(type, id, clfn, descfn, topkey, key, filteri
               
             response = client.get_role(RoleName=id)
             if response == []: 
-               if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+               if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+               return True
             j=response
             if ":role/aws-service-role" in j[key]:
                common.write_import(type,j[key],None)
@@ -322,7 +326,8 @@ def get_aws_iam_role(type,id,clfn,descfn,topkey,key,filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-               if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+               if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+               return True
             for j in response:
                 rn=j[key]  ## RoleName
                 rna=rn.replace(".","_")
@@ -334,7 +339,8 @@ def get_aws_iam_role(type,id,clfn,descfn,topkey,key,filterid):
             if "/aws-service-role/" in id: return True    
             response = client.get_role(RoleName=id)
             if response == []: 
-               if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+               if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+               return True
             j=response['Role']
             rn=j[key]
             rna=rn.replace(".","_")

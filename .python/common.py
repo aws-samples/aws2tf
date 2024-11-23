@@ -1476,7 +1476,7 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
       print(exn)
       print(str(exc_obj)+" for "+frame+" id="+str(id)+" - exit")
       print("exit 040")
-      timed_int.stop()
+      #timed_int.stop() # as it is multi-threaded
       exit()
 
 

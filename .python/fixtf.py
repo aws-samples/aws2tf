@@ -250,6 +250,7 @@ def fixtf(ttft,tf):
     clfn, descfn, topkey, key, filterid = resources.resource_data(ttft, None)
     if clfn is None:
         print("ERROR: clfn is None with type="+ttft)
+        print("exit 015")
         timed_int.stop()
         exit()
 

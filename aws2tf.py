@@ -46,6 +46,7 @@ def extra_help():
                     print("./aws2tf.py  -t "+line)
     print("\nOr instead of the above type codes use the terraform type eg:\n\n./aws2tf.py -t aws_vpc\n")
     print("\nTo get a deployed stack set:\n\n./aws2tf.py -t stack -i stackname\n")               
+    print("exit 001")
     timed_interrupt.timed_int.stop()
     exit()
 

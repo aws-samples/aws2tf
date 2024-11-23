@@ -290,7 +290,6 @@ def get_aws_sagemaker_image(type, id, clfn, descfn, topkey, key, filterid):
                 response = response + page[topkey]
             if response == []:
                 if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
-                pkey="aws_sagemaker_image."+id
                 return True
             for j in response:
                 common.write_import(type, j[key], None)# calls list_secrets

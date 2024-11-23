@@ -160,6 +160,7 @@ def call_resource(type, id):
 
    if clfn is None:
         print("ERROR: clfn is None with type="+type)
+        print("exit 016")
         timed_int.stop()
         exit()
 # Try specific
@@ -236,6 +237,7 @@ def tfplan1():
    if not glob.glob("import*.tf"):
       print("No import*.tf files found for this resource, exiting ....")
       globals.tracking_message="No import*.tf files found for this resource, exiting ...."
+      print("exit 017")
       timed_int.stop()
       exit()
 
@@ -312,6 +314,7 @@ def tfplan1():
                print(com)
                rout = rc(com)
                # continue
+               print("exit 018")
                timed_int.stop()
                exit()
 
@@ -388,6 +391,7 @@ def tfplan3():
       rout = rc(com)
    if not glob.glob("aws_*.tf"):
       print("No aws_*.tf files found for this resource, exiting ....")
+      print("exit 019")
       timed_int.stop()
       exit()
 
@@ -408,6 +412,7 @@ def tfplan3():
       print(str(rout.stdout.decode().rstrip()))
       print("Validation after fix failed - exiting")
       globals.tracking_message="Validation after fix failed - exiting"
+      print("exit 020")
       timed_int.stop()
       exit()
 
@@ -489,12 +494,14 @@ def tfplan3():
                      print("Error" + line)
 
                   print("-->> Plan 2 errors exiting - check plan2.json - or run terraform plan")
+                  print("exit 021")
                   timed_int.stop()
                   exit()
 
       if zerod != 0:
          print("-->> plan will destroy resources! - unexpected, is there existing state ?")
          print("-->> look at plan2.json - or run terraform plan")
+         print("exit 022")
          timed_int.stop()
          exit()
 
@@ -541,23 +548,27 @@ def tfplan3():
             if globals.expected is False:
                print("You can check the changes by running 'terraform plan' in ",globals.path1+"\n")
                print("Then rerun the same ./aws2tf.py command and add the '-a' flag to accept these plan changes and continue to import")
+               print("exit 023")
                timed_int.stop()
                exit()
 
             if globals.debug is True:
                print("\n-->> Then if happy with the output changes for the above resources, run this command to complete aws2tf-py tasks:")
+               print("exit 024")
                timed_int.stop()
                print("terraform apply -no-color tfplan")
                exit()
          else:
             print("-->> plan will change resources! - unexpected")
             print("-->> look at plan2.json - or run terraform plan")
+            print("exit 025")
             timed_int.stop()
             exit()
 
       if zeroa !=0:
          print("-->> plan will add resources! - unexpected")
          print("-->> look at plan2.json - or run terraform plan")
+         print("exit 026")
          timed_int.stop()
          exit()
 
@@ -576,6 +587,7 @@ def tfplan3():
             print("\nLikely import error [2] - do the following and report errors in github issue")
             print("cd "+globals.path1)
             print("terraform plan -generate-config-out=resources.out")
+            print("exit 027")
             timed_int.stop()
             exit()
          else:
@@ -585,6 +597,7 @@ def tfplan3():
          print("Merge check")
          if zeroi==0:
             print("Nothing to merge exiting ...")
+            print("exit 028")
             timed_int.stop()
             exit()
          # get imported
@@ -599,10 +612,12 @@ def tfplan3():
          print("Expected import =",str(toimp))
          if preimpf != stc:
             print("Miss-matched previous imports",str(preimpf),"and state file resources",str(stc) ,"exiting")
+            print("exit 029")
             timed_int.stop()
             exit() 
          if toimp != zeroi:
             print("Unexpected import number exiting")
+            print("exit 030")
             timed_int.stop()
             exit() 
          else:
@@ -610,6 +625,7 @@ def tfplan3():
 
    if not os.path.isfile("tfplan"):
       print("Plan - could not find expected tfplan file - exiting")
+      print("exit 031")
       timed_int.stop()
       exit()
 
@@ -629,6 +645,7 @@ def wrapup():
       print(errm)
    if "Success! The configuration is valid" not in str(rout.stdout.decode().rstrip()):
       print(str(rout.stdout.decode().rstrip()))
+      print("exit 032")
       timed_int.stop()
       exit()
    else:
@@ -638,6 +655,7 @@ def wrapup():
       print("Pre apply merge check")
       if not os.path.isfile("plan2.json"):
          print("ERROR: Could not find plan2.json, unexpected on merge - exiting ....")
+         print("exit 033")
          timed_int.stop()
          exit()
       
@@ -659,6 +677,7 @@ def wrapup():
          print("ERROR: unexpected final plan stuff - exiting")
          print(str(rout.stdout.decode().rstrip()))
          print(str(rout.stderr.decode().rstrip()))
+         print("exit 034")
          timed_int.stop()
          exit()
       else:
@@ -677,6 +696,7 @@ def wrapup():
       print("ERROR: unexpected final plan failure")
       print(str(rout.stdout.decode().rstrip()))
       print(str(rout.stderr.decode().rstrip()))
+      print("exit 035")
       timed_int.stop()
       exit()
    else:
@@ -733,6 +753,7 @@ def fix_imports():
 
 def ctrl_c_handler(signum, frame):
   print("Ctrl-C pressed.")
+  print("exit 036")
   timed_int.stop()
   exit()
 
@@ -753,6 +774,7 @@ def check_python_version():
          print("boto3 version:"+bv)
          print("This program requires boto3 1.34.93 or later.")
          print("Try: pip install boto3")
+         print("exit 037")
          timed_int.stop()
          sys.exit(1)
 
@@ -885,6 +907,7 @@ def splitf(input_file):
                   f.write(output.getvalue().strip() + '\n')
             except:
                print("ERROR: could not write to file: " + fn)
+               print("exit 038")
                timed_int.stop()
                exit()
 
@@ -946,6 +969,7 @@ def write_import(type,theid,tfid):
             f.write(output.getvalue().strip() + '\n')
       except:
          print("ERROR: could not write to file: " + fn)
+         print("exit 039")
          timed_int.stop()
          exit()
 
@@ -1449,6 +1473,9 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
       if "The requested feature is not enabled for this AWS account" in str(exc_obj):
             print(descfn + " returned feature not enabled for this account - returning")
             return
+      print(exn)
+      print(str(exc_obj)+" for "+frame+" id="+str(id)+" - exit")
+      print("exit 040")
       timed_int.stop()
       exit()
 
@@ -1457,6 +1484,7 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
       if "is not subscribed" in str(exc_obj):
          print(descfn + " returned Not subscribed "+clfn+" - returning")
          return
+      print("exit 041")
       timed_int.stop()
       exit()
       
@@ -1494,6 +1522,7 @@ def handle_error2(e,frame,id):
       f.write(f"{e=} [e2] ")
       f.write(f"{fname=} {exc_tb.tb_lineno=} [e2] \n")
       f.write("-----------------------------------------------------------------------------\n")
+   print("exit 042")
    timed_int.stop()
    exit()
 

@@ -159,7 +159,7 @@ def get_aws_lambda_permission(type, id, clfn, descfn, topkey, key, filterid):
             response1 = getfn(FunctionName=id)
             response=response1[topkey]
         except client.exceptions.ResourceNotFoundException:
-            print("WARNING: ResourceNotFoundException for "+type+ " "+str(id)+" returning")
+            if globals.debug: print("WARNING: ResourceNotFoundException for "+type+ " "+str(id)+" returning")
             return True
 
         if response == []: 
@@ -267,7 +267,7 @@ def get_aws_lambda_layer_version_permission(type, id, clfn, descfn, topkey, key,
             response1 = getfn(LayerName=id)
             response=response1[topkey]
         except client.exceptions.ResourceNotFoundException:
-            print("WARNING: ResourceNotFoundException for "+type+ " "+str(id)+" returning")
+            if globals.debug: print("WARNING: ResourceNotFoundException for "+type+ " "+str(id)+" returning")
             return True
 
         if response == []: 

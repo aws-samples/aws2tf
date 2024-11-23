@@ -1,4 +1,5 @@
 tfver="5.76.0"
+esttime=60
 merge=False
 fast=True
 apionly=False

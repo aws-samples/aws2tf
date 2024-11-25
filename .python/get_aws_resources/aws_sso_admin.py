@@ -35,7 +35,12 @@ def get_aws_ssoadmin_permission_set(type, id, clfn, descfn, topkey, key, filteri
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
-        if id is None and globals.ssoinstance is None: print("No SSO instance found"); return True
+        if id is None and globals.ssoinstance is None: 
+            print("No SSO instance found")
+            return True
+        if id =="":
+            print("No SSO instance found")
+            return True
         if id == globals.ssoinstance: id=globals.ssoinstance
         if globals.ssoinstance is not None: id=globals.ssoinstance
         response = []

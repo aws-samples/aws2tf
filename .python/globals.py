@@ -97,6 +97,7 @@ policylist={}
 bucketlist={}
 tgwlist={}
 gluedbs={}
+attached_role_policies_list={}
 
 
 

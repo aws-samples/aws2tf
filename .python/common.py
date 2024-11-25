@@ -140,7 +140,7 @@ def call_resource(type, id):
       try:
          if globals.rproc[ti]:
             if globals.debug: print("Already processed " + ti)
-            #print("Already processed " + ti)
+            print("Already processed " + ti)
             return
       except:
          pass
@@ -177,10 +177,9 @@ def call_resource(type, id):
             else:
                # print("-1aa- clfn:"+clfn+" type:"+type)
                mclfn = clfn.replace("-", "_")
-
                # print("-1ab- mclfn:"+mclfn+" type:"+type)
                getfn = getattr(eval("aws_"+mclfn), "get_"+type)
-               # print("-1ac- clfn:"+clfn+" type:"+type)
+               #print("-1ac- clfn:"+clfn+" type:"+type)
 
             sr = getfn(type, id, clfn, descfn, topkey, key, filterid)
 
@@ -1187,16 +1186,16 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
    try:
       if globals.debug: 
          print("call_boto3 clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-      if globals.debug: print("pre-response")
+      #if globals.debug: print("pre-response")
       # get any pre-saved response
       response=get_boto3_resp(descfn)  # sets response to [] if nothing saved
       
       if response == []:
          client = boto3.client(clfn) 
-         if globals.debug: print("client")
+         #if globals.debug: print("client")
          try:
             paginator = client.get_paginator(descfn)
-            if globals.debug: print("paginator")
+            #if globals.debug: print("paginator")
     
             if "apigatewayv2" in str(type):
                for page in paginator.paginate(ApiId=id): 
@@ -1472,6 +1471,9 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
       #print(str(exc_obj)+" for "+frame+" id="+str(id)+" - returning")
       if "The requested feature is not enabled for this AWS account" in str(exc_obj):
             print(descfn + " returned feature not enabled for this account - returning")
+            return
+      elif "Your account isn't authorized to call this operation" in str(exc_obj):
+            print(descfn + " returned Your account isn't authorized to call this operation - returning")
             return
       print(exn)
       print(str(exc_obj)+" for "+frame+" id="+str(id)+" - exit")

@@ -1,7 +1,10 @@
+import sys,os
+
+
 tfver="5.76.0"
 esttime=120.0
 merge=False
-fast=True
+fast=False
 apionly=False
 tracking_message="aws2tf: Starting, update messages every 20 seconds"
 cores=2
@@ -89,6 +92,8 @@ tested={
     
 }
 
+# List Dicts
+
 subnetlist={}
 sglist={}
 vpclist={}
@@ -98,6 +103,17 @@ bucketlist={}
 tgwlist={}
 gluedbs={}
 attached_role_policies_list={}
+role_policies_list={}
+
+def exit_aws2tf(mess):
+    if mess is not None or mess!="":
+        print(mess)
+    
+    if globals.fast:
+        os._exit(1) 
+    else:
+        sys.exit(1)
+    
 
 
 

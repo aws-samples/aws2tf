@@ -808,7 +808,7 @@ def aws_tf(region):
          f3.write('state = "available"\n')
          f3.write('}\n')
    if not globals.merge:
-      if globals.debug: print("terraform init")
+      print("terraform init")
       com = "terraform init -no-color -upgrade"
       rout = rc(com)
       if globals.debug: print(rout.stdout.decode().rstrip())

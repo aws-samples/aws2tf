@@ -2,9 +2,6 @@ import time
 import threading
 import globals
 import multiprocessing
-import os
-from ctypes import cdll, byref, create_string_buffer
-import platform
 
 class Counter():
     
@@ -17,7 +14,8 @@ class Counter():
         
 
     def _run(self):
-        print("STATUS: " + str(self.i*self.increment) + "s elapsed (est. "+str(globals.esttime) +"s) "+ globals.tracking_message)
+        #print("STATUS: " + str(self.i*self.increment) + "s elapsed (est. "+str(globals.esttime) +"s) "+ globals.tracking_message)
+        print("STATUS: " + str(self.i*self.increment) + "s elapsed "+ globals.tracking_message)
         self.next_t+=self.increment
         self.i+=1
         if not self.done:

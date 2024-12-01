@@ -115,11 +115,13 @@ def build_lists():
 def build_secondary_lists(id):
     if id is None:
         st1 = datetime.datetime.now()
-        print("Building secondary resource lists ...")
+        print("Building secondary IAM resource lists ...")
         globals.esttime=(len(globals.rolelist)*3)/4
-        globals.tracking_message="Stage 2 of 10, Building secondary resource lists ..."
+        globals.tracking_message="Stage 2 of 10, Building secondary IAM resource lists ..."
         client = boto3.client('iam')
         # attached_role_policies
+        rcl=len(globals.rolelist)
+        rc=1
         for rn in globals.rolelist.keys():
             response=[]
             response1=[]
@@ -140,6 +142,10 @@ def build_secondary_lists(id):
                 globals.role_policies_list[rn]=False
             else:
                 globals.role_policies_list[rn]=response1['PolicyNames']
+
+            globals.tracking_message="Stage 2 of 10, Building secondary IAM resource lists... "+str(rc)+" of "+str(rcl)
+            rc=rc+1
+
         
         st2 = datetime.datetime.now()
         print("secondary lists built in "+ str(st2 - st1))

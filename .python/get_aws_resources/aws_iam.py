@@ -237,37 +237,7 @@ def get_aws_iam_group_policy(type,id,clfn,descfn,topkey,key,filterid):
 
    return True
 
-def get_aws_iam_role_policy(type, id, clfn, descfn, topkey, key, filterid):
-   if globals.debug:
-      print("--> In get_aws_iam_role_policy  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-   try:
-      if id is None:
-         print("Id is None for "+type+ " returning")
-         return True
-      client = boto3.client(clfn)
-      response=[]
 
-      response1 = client.list_role_policies(RoleName=id)
-      #print("response1="+str(response1))
-      response=response1['PolicyNames']
-      if response == []:
-         if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
-         pkey="aws_iam_role_policy."+id
-         globals.rproc[pkey]=True
-         return True
-      #print("response="+str(response))
-      for j in response:
-         polname=j
-         theid=id+":"+polname
-         common.write_import(type, theid, None)
-         pkey="aws_iam_role_policy."+id
-         globals.rproc[pkey]=True
-
-   except Exception as e:
-      common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
-
-
-   return True
 
 def get_aws_iam_service_linked_role(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
@@ -349,35 +319,60 @@ def get_aws_iam_role_policy_attachment(type,id,clfn,descfn,topkey,key,filterid):
    if id is None:
       print("Id must be set to the RoleName")
       return
-   client = boto3.client(clfn) 
-   response=[]
-   paginator = client.get_paginator(descfn)
-   try:
-      for page in paginator.paginate(RoleName=id):    ## special
-      #for page in paginator.paginate():
-         response.extend(page[topkey])
-   except Exception as e:
-      print(f"{e=}")
+   
 
-   if response == []: 
-      if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
-      pkey="aws_iam_role_policy_attachment."+id
-      globals.rproc[pkey]=True
-      return True
-   ## multi thread ?
-   for j in response: 
+   #print(len(globals.attached_role_policies_list))
+   if len(globals.attached_role_policies_list) == 0:
+      client = boto3.client(clfn) 
+      response=[]
+      paginator = client.get_paginator(descfn)
+      try:
+         for page in paginator.paginate(RoleName=id):    ## special
+         #for page in paginator.paginate():
+            response.extend(page[topkey])
+      except Exception as e:
+         print(f"{e=}")
+
+      if response == []: 
+         if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+         pkey="aws_iam_role_policy_attachment."+id
+         globals.rproc[pkey]=True
+         return True
+      ## multi thread ?
+      for j in response: 
+               retid=j['PolicyArn']
+               theid=id+"/"+retid
+               ln=retid.rfind("/")
+               pn=retid[ln+1:]
+               rn=id+"__"+pn
+               # - no as using policy arns (minus account id etc)
+               #if "andyt1" in retid:
+               #   print("********** iarp  id="+str(id)+" theid="+str(theid)+" rn="+rn)
+               if "arn:aws:iam::aws:policy" not in theid:
+                  common.add_dependancy("aws_iam_policy",retid)
+                  
+               common.write_import(type,theid,rn) 
+
+   else:
+      if globals.attached_role_policies_list[id] is not False:
+         for j in globals.attached_role_policies_list[id]:
+            #print("********** irap: "+str(j))
             retid=j['PolicyArn']
             theid=id+"/"+retid
-            ln=retid.rfind("/")
-            pn=retid[ln+1:]
+            #ln=retid.rfind("/")
+            #pn=retid[ln+1:]
+            pn=j['PolicyName']
             rn=id+"__"+pn
             # - no as using policy arns (minus account id etc)
             #if "andyt1" in retid:
-            #   print("********** id="+str(id)+" theid="+str(theid)+" rn="+rn)
+            #print("********** irap id="+str(id)+" theid="+str(theid)+"retid="+str(retid)+" rn="+rn)
             if "arn:aws:iam::aws:policy" not in theid:
-               common.add_dependancy("aws_iam_policy",retid)
-               
-            common.write_import(type,theid,rn) 
+               common.add_dependancy("aws_iam_policy", retid)
+
+            common.write_import(type, theid, rn)
+      else:
+         pkey="aws_iam_role_policy_attachment."+id
+         #print("irap False skipping "+str(id))
             
    
    ####
@@ -385,6 +380,62 @@ def get_aws_iam_role_policy_attachment(type,id,clfn,descfn,topkey,key,filterid):
    globals.rproc[pkey]=True
    
    return True
+
+
+def get_aws_iam_role_policy(type, id, clfn, descfn, topkey, key, filterid):
+   if globals.debug:
+      print("--> In get_aws_iam_role_policy  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   try:
+      if id is None:
+         print("Id is None for "+type+ " returning")
+         return True
+
+      #print(len(globals.role_policies_list))
+      if len(globals.role_policies_list) == 0:
+
+         client = boto3.client(clfn)
+         response=[]
+
+         response1 = client.list_role_policies(RoleName=id)
+         #print("response1="+str(response1))
+         response=response1['PolicyNames']
+         if response == []:
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+            pkey="aws_iam_role_policy."+id
+            globals.rproc[pkey]=True
+            return True
+         #print("response="+str(response))
+         for j in response:
+            polname=j
+            theid=id+":"+polname
+            common.write_import(type, theid, None)
+            pkey="aws_iam_role_policy."+id
+            globals.rproc[pkey]=True
+
+      else:
+         if globals.role_policies_list[id] is not False:
+            for j in globals.role_policies_list[id]:
+               #print("********** irp "+str(j))
+               polname=j
+               theid=id+":"+polname
+               #print("*********  irp adding "+str(theid))
+               common.write_import(type, theid, None)
+               pkey="aws_iam_role_policy."+id
+               globals.rproc[pkey]=True
+         else:
+            #print("*********  irp False skipping "+str(id))
+            pkey="aws_iam_role_policy."+id
+            globals.rproc[pkey]=True
+
+   except Exception as e:
+      common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+
+   return True
+
+
+
+
 
 ##
 ## special due to mandator role name,

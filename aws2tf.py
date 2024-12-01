@@ -23,6 +23,7 @@ import timed_interrupt
 
 import stacks
 from fixtf_aws_resources import aws_dict
+from build_lists import build_lists, build_secondary_lists
 
 
 def extra_help():
@@ -51,7 +52,6 @@ def extra_help():
     exit()
 
 
-
 def process_file_operations(files: List[str], output_file: str) -> None:
     """Efficiently process multiple files into a single output file."""
     with open(output_file, 'w') as outfile:
@@ -67,101 +67,43 @@ def process_file_operations(files: List[str], output_file: str) -> None:
                 buffer.write(infile.read())
             buffer.write('\n\n')
         
-        outfile.write(buffer.getvalue())     
+        outfile.write(buffer.getvalue())  
 
 
-def build_lists():
-    print("Building core resource lists ...")
-    globals.tracking_message="Stage 2 of 10, Building core resource lists ..."
-    def fetch_vpc_data():
-        client = boto3.client('ec2')
-        response = []
-        paginator = client.get_paginator('describe_vpcs')
-        for page in paginator.paginate():
-            response.extend(page['Vpcs'])
-        return [('vpc', j['VpcId']) for j in response]
+def apl_threaded(rn):
+    client = boto3.client('iam') 
+    response=[]
+    
+    try:
+        response=client.list_attached_role_policies(RoleName=rn)
+    except Exception as e:  
+        print(f"{e=}")
+    #print(str(response)+"\n")
+    if response['AttachedPolicies'] == []: 
+        globals.attached_role_policies_list[rn]=False
+    #else:
+    #    globals.attached_role_policies_list[rn]=response['AttachedPolicies']
 
-    def fetch_sg_data():
-        client = boto3.client('ec2')
-        response = []
-        paginator = client.get_paginator('describe_security_groups')
-        for page in paginator.paginate():
-            response.extend(page['SecurityGroups'])
-        return [('sg', j['GroupId']) for j in response]
-
-    def fetch_subnet_data():
-        client = boto3.client('ec2')
-        response = []
-        paginator = client.get_paginator('describe_subnets')
-        for page in paginator.paginate():
-            response.extend(page['Subnets'])
-        return [('subnet', j['SubnetId']) for j in response]
-
-    def fetch_tgw_data():
-        client = boto3.client('ec2')
-        response = []
-        paginator = client.get_paginator('describe_transit_gateways')
-        for page in paginator.paginate():
-            response.extend(page['TransitGateways'])
-        return [('tgw', j['TransitGatewayId']) for j in response]
-
-    def fetch_roles_data():
-        client = boto3.client('iam')
-        response = []
-        paginator = client.get_paginator('list_roles')
-        for page in paginator.paginate():
-            response.extend(page['Roles'])
-        return [('iam', j['RoleName']) for j in response]
-
-
-    # Use ThreadPoolExecutor to parallelize API calls
-    with concurrent.futures.ThreadPoolExecutor(max_workers=globals.cores) as executor:
-        futures = [
-            executor.submit(fetch_vpc_data),
-            executor.submit(fetch_sg_data),
-            executor.submit(fetch_subnet_data),
-            executor.submit(fetch_tgw_data),
-            executor.submit(fetch_roles_data)
-        ]
-        
-        # Process results as they complete
-        for future in concurrent.futures.as_completed(futures):
-            result = future.result()
-            if isinstance(result, list):
-                if result and isinstance(result[0], tuple):
-                    # Handle resource ID lists
-                    resource_type = result[0][0]
-                    if resource_type == 'vpc':
-                        for _, vpc_id in result:
-                            globals.vpclist[vpc_id] = True
-                    elif resource_type == 'sg':
-                        for _, sg_id in result:
-                            globals.sglist[sg_id] = True
-                    elif resource_type == 'subnet':
-                        for _, subnet_id in result:
-                            globals.subnetlist[subnet_id] = True
-                    elif resource_type == 'tgw':
-                        for _, tgw_id in result:
-                            globals.tgwlist[tgw_id] = True
-                    elif resource_type == 'iam':
-                        for _, role_name in result:
-                            globals.rolelist[role_name] = True
-                else:
-                    # Handle roles data
-                    with open('imported/roles.json', 'w') as f:
-                        json.dump(result, f, indent=2, default=str)
 
 def dd_threaded(ti):
     if not globals.rproc[ti]:
         i = ti.split(".")[0]
         id = ti.split(".", 1)[1]
         if globals.debug: print("DD calling getresource with type="+i+" id="+str(id))
-        if i=="aws_iam_policy" and "andyt1" in id:
-            print("DD calling getresource with type="+i+" id="+str(id))
         globals.tracking_message="Stage 5 of 10, Processing Dependancy, "+str(i)+" "+str(id)
         common.call_resource(i, id)
 
     return
+
+
+def kd_threaded(ti):
+    if not globals.rdep[ti]:
+        i = ti.split(".")[0]
+        id = ti.split(".")[1]
+        if globals.debug: print("type="+i+" id="+str(id))
+        common.call_resource(i, id)
+    return
+
 
 #if __name__ == '__main__':
 
@@ -318,9 +260,22 @@ def main():
     rout = common.rc(com)
     globals.cwd=os.getcwd()
     os.chdir(globals.path1) 
-    print("Terraform Initialise ...")
     globals.tracking_message="Stage 1 of 10, Terraform Initialise ..."
     common.aws_tf(region)
+
+    # check we have it
+    foundtf=False
+    for root, dirs, files in os.walk(globals.cwd+"/"+globals.path1):
+        if '.terraform' in dirs:
+            print("PASSED: Terraform Initialise OK")
+            foundtf=True
+            break
+
+    if not foundtf:
+        print("Terraform Initialise may have failed...")
+        timed_interrupt.timed_int.stop()
+        exit()
+            
 
     if args.merge:
         print("Merging "+str(globals.merge))
@@ -355,8 +310,18 @@ def main():
 
 
 #### setup
-    
+    st1 = datetime.datetime.now()
+    print("build lists started at %s" % now)
     build_lists()
+    now = datetime.datetime.now()
+    print("build lists finished at %s" % now)
+    print("build lists took %s" % (now - st1))
+    #print(str(globals.attached_role_policies_list))
+    #for k,v in globals.attached_role_policies_list.items():
+    #    print(k,v)
+
+    
+    
     
     if type == "" or type is None: type = "all"
     
@@ -427,13 +392,23 @@ def main():
             else:
                 print("Resource",type," not found in aws_dict")
 
+        
+################
         elif all_types != None and lall > 1:
+            #all_types=all_types[:10]
             print("len all_types="+str(len(all_types))) # testing only
+            print("INFO: Building secondary lists")
+            build_secondary_lists(id)
+            #print(len(globals.role_policies_list))
+            #print(len(globals.attached_role_policies_list))
+            
             globals.esttime=len(all_types)/4
             #id="foobar" # testing only
+            print("------------------1-------------------------------------------")
             ic=0
             istart=0
             it=len(all_types)
+
             globals.expected=True
             
             if globals.fast:
@@ -469,24 +444,35 @@ def main():
                 exit()
 
 #########################################################################################################################
-
 ## Known dependancies section
-    
+ #########################################################################################################################   
 
     globals.tracking_message="Stage 4 of 10, Known Dependancies"
-    for ti in list(globals.rdep):
+    print("Known Dependancies - Multi Threaded")
+    if globals.fast:
+        globals.tracking_message="Stage 4 of 10, Known Dependancies - Multi Threaded "+str(globals.cores)
+        with ThreadPoolExecutor(max_workers=globals.cores) as executor12:
+            futures2 = [
+                executor12.submit(kd_threaded(ti))
+                for ti in list(globals.rdep)
+            ]     
+
+    else:
+        for ti in list(globals.rdep):
             if not globals.rdep[ti]:
                 i = ti.split(".")[0]
                 id = ti.split(".")[1]
-                if id not in str(globals.policyarns):
-                    if globals.debug: print("type="+i+" id="+str(id))
-                    common.call_resource(i, id)
+                if globals.debug: print("type="+i+" id="+str(id))
+                common.call_resource(i, id)
     #else:
     #    print("No Known Dependancies")
-    globals.tracking_message="Stage 4 of 10, Known Dependancies - Loop terraform plan"
+    globals.tracking_message="Stage 4 of 10, Known Dependancies: terraform plan"
     common.tfplan1()
-    globals.tracking_message="Stage 4 of 10, Known Dependancies - Loop moving files"
+    globals.tracking_message="Stage 4 of 10, Known Dependancies: moving files"
     common.tfplan2()
+    
+    
+    # Detected deps
     
     if ":" in globals.rproc:
         print(": in rproc exiting")
@@ -497,7 +483,7 @@ def main():
     x=glob.glob("import__aws_*.tf")
     globals.esttime=len(x)/4
     if not globals.fast: print("\naws2tf Detected Dependancies started at %s\n" % now)
-    globals.tracking_message="Stage 5 of 10, Detected Dependancies starting"
+    globals.tracking_message="Stage 5 of 10, Detected Dependancies: starting"
     detdep=False
     for ti in globals.rproc.keys():
         if not globals.rproc[ti]: 
@@ -515,7 +501,7 @@ def main():
         
 ## mutlithread ?  
         if globals.fast:  
-            globals.tracking_message="Stage 5 of 10, Detected Dependancies - Multi Threaded "+str(globals.cores)
+            globals.tracking_message="Stage 5 of 10, Detected Dependancies: Multi Threaded "+str(globals.cores)
             with ThreadPoolExecutor(max_workers=globals.cores) as executor2:
                 futures2 = [
                     executor2.submit(dd_threaded(ti))
@@ -536,7 +522,7 @@ def main():
 
 # go again plan and split / fix
         if not globals.fast: print("Terraform Plan - Dependancies Detection Loop "+str(lc)+".....")
-        globals.tracking_message="Stage 6 of 10, Dependancies Detection - Loop "+str(lc)
+        globals.tracking_message="Stage 6 of 10, Dependancies Detection: Loop "+str(lc)
         x=glob.glob("import__aws_*.tf")
         globals.esttime=len(x)/4
         #print(str(x))
@@ -548,9 +534,9 @@ def main():
             com = "mv "+tf +" imported/"+tf
             rout = common.rc(com)
 
-        globals.tracking_message="Stage 6 of 10, Dependancies Detection - Loop "+str(lc)+" terraform plan"
+        globals.tracking_message="Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" terraform plan"
         common.tfplan1()
-        globals.tracking_message="Stage 6 of 10, Dependancies Detection - Loop "+str(lc)+" moving files"
+        globals.tracking_message="Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" moving files"
         common.tfplan2()
  
         detdepstr=""

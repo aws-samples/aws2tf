@@ -36,6 +36,9 @@ def aws_networkmanager_customer_gateway_association(t1,tt1,tt2,flag1,flag2):
 
 def aws_networkmanager_device(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="global_network_id" and tt2 !="null":
+		t1=tt1+" = aws_networkmanager_global_network."+tt2+".id\n"
+		t1=t1+"\nlifecycle {\n" + "   ignore_changes = [location]\n" +  "}\n"
 	return skip,t1,flag1,flag2
 
 def aws_networkmanager_devices(t1,tt1,tt2,flag1,flag2):
@@ -64,6 +67,11 @@ def aws_networkmanager_links(t1,tt1,tt2,flag1,flag2):
 
 def aws_networkmanager_site(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="global_network_id" and tt2 !="null":
+		t1=tt1+" = aws_networkmanager_global_network."+tt2+".id\n"
+		t1=t1+"\nlifecycle {\n" + "   ignore_changes = [location]\n" +  "}\n"
+
+
 	return skip,t1,flag1,flag2
 
 def aws_networkmanager_site_to_site_vpn_attachment(t1,tt1,tt2,flag1,flag2):

@@ -10,12 +10,7 @@ def get_aws_stub(type, id, clfn, descfn, topkey, key, filterid):
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
-        config = Config (
-            retries = {
-                'max_attempts': 10,
-                'mode': 'standard'
-            }
-        )
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
         client = boto3.client(clfn,config=config)
         if id is None:
             paginator = client.get_paginator(descfn)

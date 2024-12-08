@@ -6798,9 +6798,9 @@ aws_networkmanager_customer_gateway_association = {
 
 aws_networkmanager_device = {
 	"clfn":		"networkmanager",
-	"descfn":	"list_devices",
+	"descfn":	"get_devices",
 	"topkey":	"Devices",
-	"key":		"DeviceId",
+	"key":		"DeviceArn",
 	"filterid":	"DeviceId"
 }
 
@@ -6830,9 +6830,9 @@ aws_networkmanager_link_association = {
 
 aws_networkmanager_site = {
 	"clfn":		"networkmanager",
-	"descfn":	"list_sites",
+	"descfn":	"get_sites",
 	"topkey":	"Sites",
-	"key":		"SiteId",
+	"key":		"SiteArn",
 	"filterid":	"SiteId"
 }
 

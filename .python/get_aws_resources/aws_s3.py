@@ -79,12 +79,10 @@ def get_all_s3_buckets(fb,my_region):
       'aws_s3_bucket_website_configuration': s3.get_bucket_website
    }
   
-   s3_fields2 = {
-      'aws_s3_bucket_acl': s3.get_bucket_acl
-   }
+   #s3_fields2 = {
+   #   'aws_s3_bucket_acl': s3.get_bucket_acl
+   #}
   
-   
-
    #buckets = s3a.buckets.all()
 
    if globals.fast:
@@ -184,8 +182,8 @@ def get_all_s3_buckets(fb,my_region):
          common.write_import(type,bucket_name,"b-"+bucket_name)
          common.add_dependancy("aws_s3_access_point",bucket_name)
       
-         for key in s3_fields2:
-            get_s3(s3_fields2, key, bucket_name)
+         for key in s3_fields:
+            get_s3(s3_fields, key, bucket_name)
 
    return True
       

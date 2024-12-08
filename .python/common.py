@@ -74,6 +74,7 @@ from get_aws_resources import aws_lakeformation
 from get_aws_resources import aws_lambda
 from get_aws_resources import aws_license_manager
 from get_aws_resources import aws_neptune
+from get_aws_resources import aws_networkmanager
 from get_aws_resources import aws_organizations
 from get_aws_resources import aws_ram
 from get_aws_resources import aws_rds
@@ -96,6 +97,7 @@ from get_aws_resources import aws_sns
 from get_aws_resources import aws_sqs
 from get_aws_resources import aws_ssm
 from get_aws_resources import aws_sso_admin
+from get_aws_resources import aws_transfer
 from get_aws_resources import aws_vpc_lattice
 from get_aws_resources import aws_wafv2
 from get_aws_resources import aws_xray

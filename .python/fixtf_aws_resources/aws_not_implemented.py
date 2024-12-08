@@ -286,7 +286,7 @@ notimplemented = {
     "aws_networkmanager_core_network_policy_attachment": True,
     "aws_networkmanager_customer_gateway_association": True,
     "aws_networkmanager_device": True,
-    "aws_networkmanager_global_network": True,
+    #"aws_networkmanager_global_network": True,
     "aws_networkmanager_link": True,
     "aws_networkmanager_link_association": True,
     "aws_networkmanager_site": True,

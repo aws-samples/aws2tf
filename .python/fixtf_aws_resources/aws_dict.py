@@ -6806,7 +6806,7 @@ aws_networkmanager_device = {
 
 aws_networkmanager_global_network = {
 	"clfn":		"networkmanager",
-	"descfn":	"list_global_networks",
+	"descfn":	"describe_global_networks",
 	"topkey":	"GlobalNetworks",
 	"key":		"GlobalNetworkId",
 	"filterid":	"GlobalNetworkId"
@@ -9862,7 +9862,7 @@ aws_transfer_server = {
 	"clfn":		"transfer",
 	"descfn":	"list_servers",
 	"topkey":	"Servers",
-	"key":		"Arn",
+	"key":		"ServerId",
 	"filterid":	"Arn"
 }
 

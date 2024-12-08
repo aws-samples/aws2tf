@@ -20,6 +20,7 @@ def resource_types(type):
     elif type == "code": rets=["aws_codestarnotifications_notification_rule","aws_codebuild_project","aws_codeartifact_domain","aws_codeartifact_repository","aws_codecommit_repository","aws_codepipeline"]; return rets  # Codebuild, Code commit etc
     elif type == "cloudfront" or type == "cf": rets=["aws_cloudfront_distribution","aws_cloudfront_origin_request_policy","aws_cloudfront_origin_access_identity","aws_cloudfront_origin_access_control","aws_cloudfront_cache_policy","aws_cloudfront_function"]; return rets # Cloudfront Distribution
     elif type == "cloudtrail" or type == "ct": rets=["aws_cloudtrail"]; return rets # CloudTrail
+    elif type == "cloudwan" or type == "wan": rets=["aws_networkmanager_global_network"]; return rets # CloudWAN
     elif type == "cw" or type == "cloudwatch" or type == "logs": rets=["aws_cloudwatch_log_group","aws_cloudwatch_metric_alarm"]; return rets # Cloudwatch logs groups and alarms
     elif type == "cloud9" or type =="c9" : rets=["aws_cloud9_environment_ec2"]; return rets # Cloud9 EC2 environments
     elif type == "cloudform": rets=["aws_cloudformation_stack"]; return rets # Cloudformation stacks (use -s stack -i [stackname] instead)
@@ -65,6 +66,7 @@ def resource_types(type):
     elif type == "spot": rets=["aws_spot_fleet_request"]; return rets # Spot fleet request
     elif type == "sso": rets=["aws_ssoadmin_instances"]; return rets # Single sign on resources
     elif type == "tgw": rets=["aws_ec2_transit_gateway"]; return rets # Transit Gateway
+    elif type == "transfer": rets=["aws_transfer_server"]; return rets # Transfer
     elif type == "vpclattice" or type=="lattice": rets=["aws_vpclattice_service_network","aws_vpclattice_service","aws_vpclattice_auth_policy"]; return rets # VPC Lattice and dependancies
     elif type == "users": rets=["aws_iam_user","aws_iam_group"]; return rets # IAM user and groups
     elif type == "vpc": rets=["aws_vpc"]; return rets #  VPC's and its common depandancies

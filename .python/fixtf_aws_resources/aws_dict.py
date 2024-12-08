@@ -6862,10 +6862,10 @@ aws_networkmanager_transit_gateway_peering = {
 
 aws_networkmanager_transit_gateway_registration = {
 	"clfn":		"networkmanager",
-	"descfn":	"list_transit_gateway_registrations",
+	"descfn":	"get_transit_gateway_registrations",
 	"topkey":	"TransitGatewayRegistrations",
-	"key":		"TransitGatewayRegistrationId",
-	"filterid":	"TransitGatewayRegistrationId"
+	"key":		"TransitGatewayArn",
+	"filterid":	"TransitGatewaynId"
 }
 
 aws_networkmanager_transit_gateway_route_table_attachment = {

@@ -293,7 +293,7 @@ notimplemented = {
     "aws_networkmanager_site_to_site_vpn_attachment": True,
     "aws_networkmanager_transit_gateway_connect_peer_association": True,
     "aws_networkmanager_transit_gateway_peering": True,
-    "aws_networkmanager_transit_gateway_registration": True,
+    #"aws_networkmanager_transit_gateway_registration": True,
     "aws_networkmanager_transit_gateway_route_table_attachment": True,
     "aws_networkmanager_vpc_attachment": True,
     #

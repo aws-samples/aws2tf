@@ -97,6 +97,7 @@ tested={
 subnetlist={}
 sglist={}
 vpclist={}
+s3list={}
 rolelist={}
 policylist={}
 bucketlist={}

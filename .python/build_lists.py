@@ -15,6 +15,14 @@ def build_lists():
         for page in paginator.paginate():
             response.extend(page['Vpcs'])
         return [('vpc', j['VpcId']) for j in response]
+    
+    def fetch_s3_data():
+        client = boto3.client('s3')
+        response = []
+        paginator = client.get_paginator('list_buckets')
+        for page in paginator.paginate(BucketRegion=globals.region):
+            response.extend(page['Buckets'])
+        return [('s3', j['Name']) for j in response]
 
     def fetch_sg_data():
         client = boto3.client('ec2')
@@ -61,6 +69,7 @@ def build_lists():
     with concurrent.futures.ThreadPoolExecutor(max_workers=globals.cores) as executor:
         futures = [
             executor.submit(fetch_vpc_data),
+            executor.submit(fetch_s3_data),
             executor.submit(fetch_sg_data),
             executor.submit(fetch_subnet_data),
             executor.submit(fetch_tgw_data),
@@ -78,6 +87,9 @@ def build_lists():
                     if resource_type == 'vpc':
                         for _, vpc_id in result:
                             globals.vpclist[vpc_id] = True
+                    elif resource_type == 's3':
+                        for _, bucket in result:
+                            globals.s3list[bucket] = True
                     elif resource_type == 'sg':
                         for _, sg_id in result:
                             globals.sglist[sg_id] = True

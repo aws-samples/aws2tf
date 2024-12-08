@@ -138,14 +138,17 @@ def get_all_s3_buckets(fb,my_region):
   
    
 
-   buckets = s3a.buckets.all()
+   #buckets = s3a.buckets.all()
 
    if globals.fast:
 
-      for bucket in s3a.buckets.all():
-         if fb is not None and fb not in bucket.name: continue
+      for bn in globals.s3list.keys():
+      #for bucket in s3a.buckets.all():
+         #if fb is not None and fb not in bucket.name: continue
+         if fb is not None and fb not in bn: continue
 
-         globals.bucketlist[bucket.name]=True
+         #globals.bucketlist[bucket.name]=True
+         globals.bucketlist[bn]=True
       
       
       #print("----------------------")
@@ -164,11 +167,11 @@ def get_all_s3_buckets(fb,my_region):
    
 
       # check location
-      with ThreadPoolExecutor(max_workers=globals.cores) as executor5:
-         futures = [
-            executor5.submit(check_location,key,my_region)
-            for key in globals.bucketlist.keys()
-         ]
+      #with ThreadPoolExecutor(max_workers=globals.cores) as executor5:
+      #   futures = [
+      #      executor5.submit(check_location,key,my_region)
+      #      for key in globals.bucketlist.keys()
+      #   ]
 
 
       #for k, v in globals.bucketlist.items():
@@ -206,9 +209,11 @@ def get_all_s3_buckets(fb,my_region):
 
    else:
 
-      for buck in buckets: 
+      #for buck in buckets: 
+      for bucket_name in globals.s3list.keys():   
       
-         bucket_name=buck.name
+         #bucket_name=buck.name
+
          
          if "aws_s3_bucket,"+bucket_name in globals.rproc:
             print("Already processed skipping bucket " + bucket_name)

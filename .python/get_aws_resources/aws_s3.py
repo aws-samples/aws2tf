@@ -85,7 +85,7 @@ def get_all_s3_buckets(fb,my_region):
   
    #buckets = s3a.buckets.all()
 
-   if globals.fast:
+   if not globals.debug:
 
       for bn in globals.s3list.keys():
       #for bucket in s3a.buckets.all():

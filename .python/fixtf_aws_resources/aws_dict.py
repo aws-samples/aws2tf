@@ -8433,6 +8433,14 @@ aws_s3outposts_endpoint = {
 	"filterid":	"EndpointArn"
 }
 
+aws_s3tables_table_bucket = {
+  	"clfn":		"s3tables",
+	"descfn":	"list_table_buckets",
+	"topkey":	"tableBuckets",
+	"key":		"arn",
+	"filterid":	"name"  
+}
+
 aws_sagemaker_app = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_apps",
@@ -11572,6 +11580,7 @@ aws_resources = {
 	"aws_s3control_object_lambda_access_point_policy": aws_s3control_object_lambda_access_point_policy,
 	"aws_s3control_storage_lens_configuration": aws_s3control_storage_lens_configuration,
 	"aws_s3outposts_endpoint": aws_s3outposts_endpoint,
+    "aws_s3tables_table_bucket": aws_s3tables_table_bucket,
 	"aws_sagemaker_app": aws_sagemaker_app,
 	"aws_sagemaker_app_image_config": aws_sagemaker_app_image_config,
 	"aws_sagemaker_code_repository": aws_sagemaker_code_repository,

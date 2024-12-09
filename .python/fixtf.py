@@ -175,6 +175,7 @@ from fixtf_aws_resources import fixtf_rum
 from fixtf_aws_resources import fixtf_s3
 from fixtf_aws_resources import fixtf_s3control
 from fixtf_aws_resources import fixtf_s3outposts
+from fixtf_aws_resources import fixtf_s3tables
 from fixtf_aws_resources import fixtf_sagemaker
 from fixtf_aws_resources import fixtf_scheduler
 from fixtf_aws_resources import fixtf_schemas

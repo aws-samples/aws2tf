@@ -64,7 +64,6 @@
 * aws_apprunner_vpc_ingress_connection
 * aws_appstream_fleet
 * aws_appstream_image_builder
-* aws_appstream_stack
 * aws_appstream_user
 * aws_appsync_api_key
 * aws_appsync_datasource
@@ -190,6 +189,7 @@
 * aws_connect_routing_profile
 * aws_connect_security_profile
 * aws_connect_user
+* aws_connect_vocabulary
 * aws_customer_gateway
 * aws_customerprofiles_domain
 * aws_customerprofiles_profile
@@ -394,6 +394,7 @@
 * aws_iam_instance_profile
 * aws_iam_openid_connect_provider
 * aws_iam_policy
+* aws_iam_policy_attachment
 * aws_iam_role
 * aws_iam_role_policy
 * aws_iam_role_policy_attachment
@@ -518,6 +519,10 @@
 * aws_networkfirewall_rule_group
 * aws_networkmanager_connect_peer
 * aws_networkmanager_core_network
+* aws_networkmanager_device
+* aws_networkmanager_global_network
+* aws_networkmanager_site
+* aws_networkmanager_transit_gateway_registration
 * aws_opensearch_domain
 * aws_opensearch_domain_saml_options
 * aws_opensearch_inbound_connection_accepter
@@ -642,6 +647,7 @@
 * aws_s3control_object_lambda_access_point_policy
 * aws_s3control_storage_lens_configuration
 * aws_s3outposts_endpoint
+* aws_s3tables_table_bucket
 * aws_sagemaker_app
 * aws_sagemaker_app_image_config
 * aws_sagemaker_domain

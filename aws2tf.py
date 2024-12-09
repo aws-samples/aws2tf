@@ -319,9 +319,6 @@ def main():
     #print(str(globals.attached_role_policies_list))
     #for k,v in globals.attached_role_policies_list.items():
     #    print(k,v)
-
-    
-    
     
     if type == "" or type is None: type = "all"
     

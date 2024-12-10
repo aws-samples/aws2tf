@@ -8441,6 +8441,22 @@ aws_s3tables_table_bucket = {
 	"filterid":	"name"  
 }
 
+aws_s3tables_table = {
+  	"clfn":		"s3tables",
+	"descfn":	"list_tables",
+	"topkey":	"tables",
+	"key":		"name",
+	"filterid":	"name"  
+}
+
+aws_s3tables_namespace = {
+  	"clfn":		"s3tables",
+	"descfn":	"list_namespaces",
+	"topkey":	"namespaces",
+	"key":		"namespace",
+	"filterid":	"namespace"  
+}
+
 aws_sagemaker_app = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_apps",
@@ -11581,6 +11597,8 @@ aws_resources = {
 	"aws_s3control_storage_lens_configuration": aws_s3control_storage_lens_configuration,
 	"aws_s3outposts_endpoint": aws_s3outposts_endpoint,
     "aws_s3tables_table_bucket": aws_s3tables_table_bucket,
+    "aws_s3tables_table": aws_s3tables_table,
+	"aws_s3tables_namespace": aws_s3tables_namespace,
 	"aws_sagemaker_app": aws_sagemaker_app,
 	"aws_sagemaker_app_image_config": aws_sagemaker_app_image_config,
 	"aws_sagemaker_code_repository": aws_sagemaker_code_repository,

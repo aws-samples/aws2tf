@@ -647,6 +647,8 @@
 * aws_s3control_object_lambda_access_point_policy
 * aws_s3control_storage_lens_configuration
 * aws_s3outposts_endpoint
+* aws_s3tables_namespace
+* aws_s3tables_table
 * aws_s3tables_table_bucket
 * aws_sagemaker_app
 * aws_sagemaker_app_image_config

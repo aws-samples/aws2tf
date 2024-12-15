@@ -20,10 +20,10 @@ Finally aws2tf runs a `terraform plan` command and there should hopefully be no 
 
 ## Requirements & Prerequisites
 
-+ MacOS or Linux
++ MacOS or Linux 
 + Python3 (v3.8+)
-+ boto3 1.34.93 or later (pip3 install -r requirements.txt).
-+ AWS cli (v2) **version 2.17.0 or higher** needs to be installed and you need a login with at least "Read" privileges.
++ boto3 1.35.76 or later (pip3 install -r requirements.txt).
++ AWS cli (v2) **version 2.22.0 or higher** needs to be installed and you need a login with at least "Read" privileges.
 + Terraform **version v1.7.5** or higher needs to be installed. (recommend you avoid early point releases eg. 1.9.0/1.9.1)
 + jq **version 1.6 or higher**
 
@@ -34,8 +34,7 @@ Finally aws2tf runs a `terraform plan` command and there should hopefully be no 
 + trivy **version 0.48.0 or later**  (https://aquasecurity.github.io/trivy/v0.54/)
 
 
-
-(*This tool is currently developed/tested using Python 3.9.16 on macOS 14.6.1*)
+(*This tool is currently developed/tested using Python 3.9.16 on macOS 15.1.1*)
 
 ----
 
@@ -147,7 +146,7 @@ Finally you can scan everything in your account by simply running:
 
 But this is **Not recommended** as this will take quite some time to complete!
 
-You can also try the experimental fast mode which uses multi threading to spped things up:
+You can also try the experimental fast mode which uses multi threading to speed things up:
 
 ./aws2tf.py -f
 

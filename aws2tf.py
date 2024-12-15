@@ -359,6 +359,11 @@ def main():
                 print("Resource",type2," not found in aws_dict")
         
     else:
+        if type=="all" and id is not None:
+            print("Cannot pass an id (-i) with all types")
+            print("exit 007")
+            timed_interrupt.timed_int.stop()
+            exit()
         all_types = resources.resource_types(type)
 
         try:

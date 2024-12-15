@@ -61,7 +61,7 @@ def get_aws_datazone_project(type, id, clfn, descfn, topkey, key, filterid):
                 response = response + page[topkey]
         pkey=type+"."+id
         if response == []: 
-            print("Empty response for "+type+ " id="+str(id)+" returning") 
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
             globals.rproc[pkey]=True
             return True
         for j in response:
@@ -96,7 +96,7 @@ def get_aws_datazone_glossary(type, id, clfn, descfn, topkey, key, filterid):
                 response = response + page[topkey]
         pkey=type+"."+id
         if response == []: 
-            print("Empty response for "+type+ " id="+str(id)+" returning")
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
             globals.rproc[pkey]=True
             return True
         #print(str(response))
@@ -131,7 +131,7 @@ def get_aws_datazone_glossary_term(type, id, clfn, descfn, topkey, key, filterid
 
         pkey=type+"."+id
         if response == []: 
-            print("Empty response for "+type+ " id="+str(id)+" returning")
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
             globals.rproc[pkey]=True    
             return True
         #print(str(response))
@@ -168,7 +168,7 @@ def get_aws_datazone_form_type(type, id, clfn, descfn, topkey, key, filterid):
                 response = response + page[topkey]
         pkey=type+"."+id
         if response == []: 
-            print("Empty response for "+type+ " id="+str(id)+" returning")
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
             globals.rproc[pkey]=True
             return True
         print(str(response))
@@ -206,7 +206,7 @@ def get_aws_datazone_environment_blueprint_configuration(type, id, clfn, descfn,
                 response = response + page[topkey]
         pkey=type+"."+id
         if response == []: 
-            print("Empty response for "+type+ " id="+str(id)+" returning")
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
             globals.rproc[pkey]=True
             return True
         for j in response:

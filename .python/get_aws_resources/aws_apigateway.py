@@ -1,5 +1,6 @@
 import common
 import boto3
+from botocore.config import Config
 import globals
 import inspect
 
@@ -15,7 +16,7 @@ def get_aws_api_gateway_account(type, id, clfn, descfn, topkey, key, filterid):
         if id is None:         
             response = client.get_account()
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
                 return True
@@ -39,7 +40,7 @@ def get_aws_api_gateway_deployment(type, id, clfn, descfn, topkey, key, filterid
         if id is not None:  
             response = client.get_deployments(restApiId=id)
             if response[topkey] == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 globals.rproc[pkey]=True 
                 return True
@@ -51,7 +52,8 @@ def get_aws_api_gateway_deployment(type, id, clfn, descfn, topkey, key, filterid
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
         else:
-            print("Must pass id for "+type+" returning"); return True
+            print("Must pass id for "+type+" returning")
+            return True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -73,7 +75,7 @@ def get_aws_api_gateway_rest_api(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 altk="r-"+j[key]
@@ -85,7 +87,9 @@ def get_aws_api_gateway_rest_api(type, id, clfn, descfn, topkey, key, filterid):
 
         else:      
             response = client.get_rest_api(restApiId=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             j=response
             altk="r-"+j[key]
             common.write_import(type,j[key],altk)
@@ -123,7 +127,8 @@ def get_aws_api_gateway_stage(type, id, clfn, descfn, topkey, key, filterid):
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
         else:
-            print("Must pass id for "+type+" returning"); return True
+            print("Must pass id for "+type+" returning")
+            return True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -152,7 +157,8 @@ def get_aws_api_gateway_authorizer(type, id, clfn, descfn, topkey, key, filterid
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
         else:
-            print("Must pass id for "+type+" returning"); return True
+            print("Must pass id for "+type+" returning")
+            return True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -166,11 +172,17 @@ def get_aws_api_gateway_resource(type, id, clfn, descfn, topkey, key, filterid):
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)    
     try:
         response = []
-        client = boto3.client(clfn)
+        config = Config(
+            retries = {
+                'max_attempts': 10,
+                'mode': 'standard'
+            }
+)
+        client = boto3.client(clfn,config=config)
         if id is not None:  
             response = client.get_resources(restApiId=id)
             if response[topkey] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning");
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
                 return True
@@ -182,7 +194,8 @@ def get_aws_api_gateway_resource(type, id, clfn, descfn, topkey, key, filterid):
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
         else:
-            print("Must pass id for "+type+" returning"); return True
+            print("Must pass id for "+type+" returning")
+            return True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -213,7 +226,7 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
                 altk="r-"+pkey
                 common.write_import(type,pkey,altk)
             except:
-                print("Empty GET response for "+type+ " id="+str(id))
+                if globals.debug: print("Empty GET response for "+type+ " id="+str(id))
                 
 
             ## POST
@@ -229,7 +242,7 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
                 altk="r-"+pkey
                 common.write_import(type,pkey,altk)
             except:
-                print("Empty POST response for "+type+ " id="+str(id))
+                if globals.debug: print("Empty POST response for "+type+ " id="+str(id))
 
             ## PUT
             try:
@@ -244,13 +257,13 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
                 altk="r-"+pkey
                 common.write_import(type,pkey,altk)
             except:
-                print("Empty PUT response for "+type+ " id="+str(id))
+                if globals.debug: print("Empty PUT response for "+type+ " id="+str(id))
 
             ## DELETE
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='DELETE')
                 if response == []: 
-                    if globals.debug: print("Empty PUT response for "+type+ " id="+str(id))
+                    if globals.debug: print("Empty DELETE response for "+type+ " id="+str(id))
                     pkey=type+"."+id
                     globals.rproc[pkey]=True
                     return True
@@ -259,14 +272,14 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
                 altk="r-"+pkey
                 common.write_import(type,pkey,altk)
             except:
-                print("Empty DELETE response for "+type+ " id="+str(id))
+                if globals.debug: print("Empty DELETE response for "+type+ " id="+str(id))
 
 
             ## PATCH
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='PATCH')
                 if response == []: 
-                    if globals.debug: print("Empty PUT response for "+type+ " id="+str(id))
+                    if globals.debug: print("Empty PATCH response for "+type+ " id="+str(id))
                     pkey=type+"."+id
                     globals.rproc[pkey]=True
                     return True
@@ -275,7 +288,7 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
                 altk="r-"+pkey
                 common.write_import(type,pkey,altk)
             except:
-                print("Empty PATCH response for "+type+ " id="+str(id))
+                if globals.debug: print("Empty PATCH response for "+type+ " id="+str(id))
 
 
             
@@ -284,7 +297,8 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
             globals.rproc[pkey]=True
 
         else:
-            print("Must pass Rest api id / Resource id for "+type+" returning"); return True
+            print("Must pass Rest api id / Resource id for "+type+" returning")
+            return True
 
     except Exception as e:
         print("--Error in "+str(inspect.currentframe().f_code.co_name)+" doing " + clfn + ' with id ' + str(id),str(descfn),str(topkey))

@@ -137,8 +137,8 @@ def get_aws_ecs_task_definition(type,id,clfn,descfn,topkey,key,filterid):
 
 def get_aws_ecs_capacity_provider(type,id,clfn,descfn,topkey,key,filterid):
 
-    #if globals.debug:
-    print("--> get_aws_ecs_capacity_provider  doing " + type + ' with id ' + str(id) +
+    if globals.debug:
+        print("--> get_aws_ecs_capacity_provider  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:

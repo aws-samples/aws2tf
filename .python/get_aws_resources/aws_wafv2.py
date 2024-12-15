@@ -15,7 +15,9 @@ def get_aws_wafv2_ip_set(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate(Scope='CLOUDFRONT'):
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response:
                 common.write_import(type,j[key],None) 
 
@@ -28,7 +30,9 @@ def get_aws_wafv2_ip_set(type, id, clfn, descfn, topkey, key, filterid):
                 print("Invalid id format for "+type+" id="+str(id)+" - returning")
                 return True
             response = client.get_ip_set(Scope=sc,Name=nm,Id=idd)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             j=response['IPSet']
             pkey=idd+"/"+nm+"/"+sc
             common.write_import(type,pkey,"i-"+pkey.replace("/","_"))
@@ -52,7 +56,9 @@ def get_aws_wafv2_web_acl(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate(Scope='CLOUDFRONT'):
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response:
                 common.write_import(type,j[key],None) 
 
@@ -65,7 +71,9 @@ def get_aws_wafv2_web_acl(type, id, clfn, descfn, topkey, key, filterid):
                 print("Invalid id format for "+type+" id="+str(id)+" - returning")
                 return True
             response = client.get_web_acl(Scope=sc,Name=nm,Id=idd)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             j=response['WebACL']
             pkey=idd+"/"+nm+"/"+sc
             common.write_import(type,pkey,"w-"+pkey.replace("/","_"))

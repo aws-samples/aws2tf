@@ -19,7 +19,9 @@ def get_aws_blank_namespace(type, id, clfn, descfn, topkey, key, filterid):
             client = boto3.client(clfn)
             response1 = client.list_namespaces()
             response=response1['namespaces']
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response:
                 common.write_import(type,j[key],None) 
 
@@ -46,7 +48,9 @@ def get_aws_blank_workgroup(type, id, clfn, descfn, topkey, key, filterid):
             client = boto3.client(clfn)
             response1 = client.list_workgroups()
             response=response1['workgroups']
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
 
             for j in response:
                 common.write_import(type,j[key],None)
@@ -76,7 +80,9 @@ def get_aws_redshift_parameter_group(type, id, clfn, descfn, topkey, key, filter
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate():
                 response = response + page[topkey]
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: 
+            print("Empty response for "+type+ " id="+str(id)+" returning")
+            return True
         #print(str(response))
         for j in response:
             if id is None:

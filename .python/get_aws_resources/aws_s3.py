@@ -12,8 +12,32 @@ import io
 from concurrent.futures import ThreadPoolExecutor
 
 def get_aws_s3_bucket(type, id, clfn, descfn, topkey, key, filterid):
+   globals.tracking_message="Stage 3 of 10 getting s3 resources ..."
    get_all_s3_buckets(id,globals.region)
    return True
+
+
+def check_access(bucket_name,my_region):
+   s3= boto3.client("s3",region_name=my_region)
+   try:
+      objs = s3.list_objects_v2(Bucket=bucket_name,MaxKeys=1)
+   except Exception as e:
+         exc_type, exc_obj, exc_tb = sys.exc_info()
+         exn=str(exc_type.__name__)
+         #print(f"{exn=}")
+         if exn == "AccessDenied" or exn=="ClientError":
+            print("NO ACCESS: to Bucket: "+bucket_name + " - continue")
+            globals.bucketlist[bucket_name]=False
+            return
+         
+         print(f"{e=}")
+         print("ERROR: -2->unexpected error in get_all_s3_buckets")
+         
+         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+         print(exc_type, fname, exc_tb.tb_lineno)
+         print('continuing on exception to location .......')
+         return
+   return
 
 
 def get_all_s3_buckets(fb,my_region):
@@ -55,105 +79,111 @@ def get_all_s3_buckets(fb,my_region):
       'aws_s3_bucket_website_configuration': s3.get_bucket_website
    }
   
-   s3_fields2 = {
-      'aws_s3_bucket_acl': s3.get_bucket_acl
-   }
+   #s3_fields2 = {
+   #   'aws_s3_bucket_acl': s3.get_bucket_acl
+   #}
   
+   #buckets = s3a.buckets.all()
 
-   buckets = s3a.buckets.all()
-   
+   if not globals.debug:
 
-   for buck in buckets: 
+      for bn in globals.s3list.keys():
+      #for bucket in s3a.buckets.all():
+         #if fb is not None and fb not in bucket.name: continue
+         if fb is not None and fb not in bn: continue
+
+         #globals.bucketlist[bucket.name]=True
+         globals.bucketlist[bn]=True
       
-     bucket_name=buck.name
-     
-     if "aws_s3_bucket,"+bucket_name in globals.rproc:
-        print("Already processed skipping bucket " + bucket_name)
-        continue
-     # jump if bucket name does not match
-     if fb is not None:
-         #print("fb="+fb+" bucket_name="+bucket_name)
-         if fb not in bucket_name:
-            #print("skipping bucket " + bucket_name)
-            
-            continue
+      
+      #print("----------------------")
+      
+      # check can access
+      with ThreadPoolExecutor(max_workers=globals.cores) as executor4:
+         futures = [
+            executor4.submit(check_access,key,my_region)
+            for key in globals.bucketlist.keys()
+         ]
 
 
-     
-     try:
-         #print('location') - no error if no access for getting location
-         
-         objs = s3.list_objects_v2(Bucket=bucket_name,MaxKeys=1)
-         location = s3.get_bucket_location(Bucket=bucket_name)
-         #print(str(location))
-         bl=location['LocationConstraint']
-         if bl is None and my_region == 'us-east-1':
-            bl='us-east-1'
-         #print("bl="+bl)
-         #print ("bucket: " +  bucket_name + " location="+str(bl)+"  my_region="+my_region)
-         if bl != my_region:
-            print('Skipping bucket '+bucket_name+' in region '+ str(bl)+ " not in configured region "+my_region)  
-            pkey=type+"."+bucket_name
-            globals.rproc[pkey]=True
-            if bl is None:  
-               print('skipping on None location (assume us-east-1) .......')
-               pkey=type+"."+bucket_name
-               globals.rproc[pkey]=True
-               if my_region != "us-east-1": continue
-            else:
-               #globals.rproc[pkey]=True
+      for k, v in globals.bucketlist.items():
+         if v is True:
+            #print("true bucket="+k,str(v))
+            bucket_name=k
+            if "aws_s3_bucket,"+bucket_name in globals.rproc:
+               print("Already processed skipping bucket " + bucket_name)
                continue
-         elif bl == 'null':  
-               #globals.rproc[pkey]=True
-               print('continuing on null location .......')
-               continue
-         else:
-            #print("skip...."+bucket_name)
-            #globals.rproc[pkey]=True
-            pkey=type+"."+bucket_name
-            globals.rproc[pkey]=True
-            pass
-            #print(bl)
-            
-     except Exception as e:
-         exc_type, exc_obj, exc_tb = sys.exc_info()
-         exn=str(exc_type.__name__)
-         #print(f"{exn=}")
-         if exn == "AccessDenied" or exn=="ClientError":
-            print("NO ACCESS: to Bucket: "+bucket_name + " - continue")
+            print("Processing Bucket (MT): "+bucket_name + ' ...')
+            common.write_import(type,bucket_name,"b-"+bucket_name)
+            common.add_dependancy("aws_s3_access_point",bucket_name)
+
+
+      globals.tracking_message="Stage 3 of 10 getting s3 bucket properties resources ..."
+      for k, v in globals.bucketlist.items():
+         if v is True:
+            #print("true bucket="+k,str(v))
+            bucket_name=k
+            ### thread thread ?
+            with ThreadPoolExecutor(max_workers=globals.cores) as executor3:
+                     futures = [
+                        executor3.submit(get_s3,s3_fields,key,bucket_name)
+                        for key in s3_fields
+                     ]   
+      
+      return True
+
+
+#### debug not multi-threaded
+
+   else:
+
+      #for buck in buckets: 
+      for bucket_name in globals.s3list.keys():   
+      
+         #bucket_name=buck.name
+         if "aws_s3_bucket,"+bucket_name in globals.rproc:
+            print("Already processed skipping bucket " + bucket_name)
             continue
+         # jump if bucket name does not match
+         if fb is not None:
+               #print("fb="+fb+" bucket_name="+bucket_name)
+               if fb not in bucket_name:
+                  #print("skipping bucket " + bucket_name)
+                  continue
+         try:
+               #print('location') - no error if no access for getting location
+               objs = s3.list_objects_v2(Bucket=bucket_name,MaxKeys=1)
+                  
+         except Exception as e:
+               exc_type, exc_obj, exc_tb = sys.exc_info()
+               exn=str(exc_type.__name__)
+               #print(f"{exn=}")
+               if exn == "AccessDenied" or exn=="ClientError":
+                  print("NO ACCESS: to Bucket: "+bucket_name + " - continue")
+                  continue
+               
+               print(f"{e=}")
+               print("ERROR: -2->unexpected error in get_all_s3_buckets")
+               
+               fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+               print(exc_type, fname, exc_tb.tb_lineno)
+               print('continuing on exception to location .......')
+               continue
          
-         print(f"{e=}")
-         print("ERROR: -2->unexpected error in get_all_s3_buckets")
-         
-         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-         print(exc_type, fname, exc_tb.tb_lineno)
-         print('continuing on exception to location .......')
-         continue
-     
 
-     #try:
-     #    mp="s3://"+buck.name+"/"
-     #    objects = list(buck.objects.all(mp))
-     #except:
-     #    print("failed to access bucket " +bucket_name + " " + bl +" skipping ..")
-     #    continue
-     #print("write_import for Bucket: "+bucket_name)
-     print("Processing Bucket: "+bucket_name + '  ............')
-     common.write_import(type,bucket_name,"b-"+bucket_name)
-     common.add_dependancy("aws_s3_access_point",bucket_name)
-
-
-     if globals.fast:      
-         with ThreadPoolExecutor(max_workers=8) as executor3:
-            futures = [
-               executor3.submit(get_s3,s3_fields,key,bucket_name)
-               for key in s3_fields
-            ]
-            #return [f.result() for f in futures] 
-     else:
-         for key in s3_fields2:
-            get_s3(s3_fields2, key, bucket_name)
+         #try:
+         #    mp="s3://"+buck.name+"/"
+         #    objects = list(buck.objects.all(mp))
+         #except:
+         #    print("failed to access bucket " +bucket_name + " " + bl +" skipping ..")
+         #    continue
+         #print("write_import for Bucket: "+bucket_name)
+         print("Processing Bucket (ST): "+bucket_name + ' ...')
+         common.write_import(type,bucket_name,"b-"+bucket_name)
+         common.add_dependancy("aws_s3_access_point",bucket_name)
+      
+         for key in s3_fields:
+            get_s3(s3_fields, key, bucket_name)
 
    return True
       
@@ -163,7 +193,7 @@ def get_all_s3_buckets(fb,my_region):
 
 def get_s3(s3_fields,type,bucket_name):
    try:
-      #print("in get_s3 type=" + type)
+      if globals.debug: print("get_s3 type=" + type)
       response=s3_fields[type](Bucket=bucket_name)
       
       rl=len(response)

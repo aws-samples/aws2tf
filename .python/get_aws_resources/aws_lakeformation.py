@@ -14,7 +14,9 @@ def get_aws_lakeformation_lf_tag(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response:
                 catid=j['CatalogId']
                 pkey=catid+":"+j[key]
@@ -22,7 +24,9 @@ def get_aws_lakeformation_lf_tag(type, id, clfn, descfn, topkey, key, filterid):
 
         else:      
             response = client.get_lf_tag(TagKey=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             j=response
             catid=j['CatalogId']
             pkey=catid+":"+j[key]

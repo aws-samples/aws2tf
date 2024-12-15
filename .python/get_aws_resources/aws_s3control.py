@@ -19,7 +19,9 @@ def get_aws_s3_access_point(type, id, clfn, descfn, topkey, key, filterid):
 
         else:      
             response = client.list_access_points(AccountId=globals.acc,Bucket=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response[topkey]:
                 pkey=globals.acc+":"+j[key]
                 common.write_import(type,pkey,None)

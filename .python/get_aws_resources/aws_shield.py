@@ -16,13 +16,17 @@ def get_aws_shield_protection_group(type, id, clfn, descfn, topkey, key, filteri
             except Exception as e:
                 print("No shield protection groups")
                 return True
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response:
                 common.write_import(type,j[key],None) 
 
         else:      
             response = client.describe_protection_group(ProtectionGroupId=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             j=response['ProtectionGroup']
       
             common.write_import(type,j[key],None)

@@ -14,7 +14,9 @@ def get_aws_cloudwatch_log_group(type, id, clfn, descfn, topkey, key, filterid):
         if id is None:
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response:
                 logn=j[key]
                 common.write_import(type,logn,None) 
@@ -23,7 +25,9 @@ def get_aws_cloudwatch_log_group(type, id, clfn, descfn, topkey, key, filterid):
         elif "arn:" in id:
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response:
                 if j['arn'] == id:
                     logn=j[key]
@@ -33,7 +37,9 @@ def get_aws_cloudwatch_log_group(type, id, clfn, descfn, topkey, key, filterid):
         else: # assume it's a log name
             for page in paginator.paginate(logGroupNamePattern=id):
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response:
                 logn=j[key]
                 common.write_import(type,logn,None) 
@@ -55,7 +61,7 @@ def get_aws_cloudwatch_log_stream(type, id, clfn, descfn, topkey, key, filterid)
         if id is not None:    
             response = client.describe_log_streams(logGroupName=id)
             if response[topkey] == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
                 return True

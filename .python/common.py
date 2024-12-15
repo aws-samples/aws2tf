@@ -16,6 +16,7 @@ import fixtf
 import inspect
 from datetime import datetime
 import resources
+from timed_interrupt import timed_int
 
 #####################
 
@@ -73,6 +74,7 @@ from get_aws_resources import aws_lakeformation
 from get_aws_resources import aws_lambda
 from get_aws_resources import aws_license_manager
 from get_aws_resources import aws_neptune
+from get_aws_resources import aws_networkmanager
 from get_aws_resources import aws_organizations
 from get_aws_resources import aws_ram
 from get_aws_resources import aws_rds
@@ -82,6 +84,7 @@ from get_aws_resources import aws_resource_explorer_2
 from get_aws_resources import aws_route53
 from get_aws_resources import aws_s3
 from get_aws_resources import aws_s3control
+from get_aws_resources import aws_s3tables
 from get_aws_resources import aws_sagemaker
 from get_aws_resources import aws_schemas
 from get_aws_resources import aws_scheduler
@@ -95,6 +98,7 @@ from get_aws_resources import aws_sns
 from get_aws_resources import aws_sqs
 from get_aws_resources import aws_ssm
 from get_aws_resources import aws_sso_admin
+from get_aws_resources import aws_transfer
 from get_aws_resources import aws_vpc_lattice
 from get_aws_resources import aws_wafv2
 from get_aws_resources import aws_xray
@@ -138,13 +142,14 @@ def call_resource(type, id):
       ti = type+"."+id
       try:
          if globals.rproc[ti]:
+            if globals.debug: print("Already processed " + ti)
             print("Already processed " + ti)
             return
       except:
          pass
    else:
       if type in needid_dict.aws_needid:
-         print("WARNING: " + type + " cannot have null id must pass parameter " +
+         if globals.debug: print("WARNING: " + type + " cannot have null id must pass parameter " +
                needid_dict.aws_needid[type]['param'])
          # TODO api only
          return
@@ -158,6 +163,8 @@ def call_resource(type, id):
 
    if clfn is None:
         print("ERROR: clfn is None with type="+type)
+        print("exit 016")
+        timed_int.stop()
         exit()
 # Try specific
 
@@ -173,10 +180,9 @@ def call_resource(type, id):
             else:
                # print("-1aa- clfn:"+clfn+" type:"+type)
                mclfn = clfn.replace("-", "_")
-
                # print("-1ab- mclfn:"+mclfn+" type:"+type)
                getfn = getattr(eval("aws_"+mclfn), "get_"+type)
-               # print("-1ac- clfn:"+clfn+" type:"+type)
+               #print("-1ac- clfn:"+clfn+" type:"+type)
 
             sr = getfn(type, id, clfn, descfn, topkey, key, filterid)
 
@@ -232,6 +238,9 @@ def tfplan1():
 
    if not glob.glob("import*.tf"):
       print("No import*.tf files found for this resource, exiting ....")
+      globals.tracking_message="No import*.tf files found for this resource, exiting ...."
+      print("exit 017")
+      timed_int.stop()
       exit()
 
    com = "cp imported/provider.tf provider.tf"
@@ -242,7 +251,7 @@ def tfplan1():
 
    com = "terraform plan -generate-config-out=" + \
        rf + " -out tfplan -json > plan1.json"
-   print(com)
+   if not globals.fast: print(com)
    rout = rc(com)
       
    file = "plan1.json"
@@ -307,6 +316,8 @@ def tfplan1():
                print(com)
                rout = rc(com)
                # continue
+               print("exit 018")
+               timed_int.stop()
                exit()
 
    # print("Plan 1 complete -- resources.out generated")
@@ -375,13 +386,15 @@ def tfplan3():
       print(com)
       rout = rc(com)
 
-
+   globals.tracking_message="Validate and Test Plan  ..."
    print("\nValidate and Test Plan  ... ")
    if globals.merge:
       com = "cp imported/aws_*.tf ."
       rout = rc(com)
    if not glob.glob("aws_*.tf"):
       print("No aws_*.tf files found for this resource, exiting ....")
+      print("exit 019")
+      timed_int.stop()
       exit()
 
    rf = "resources.out"
@@ -400,6 +413,9 @@ def tfplan3():
    if "Success! The configuration is valid" not in str(rout.stdout.decode().rstrip()):
       print(str(rout.stdout.decode().rstrip()))
       print("Validation after fix failed - exiting")
+      globals.tracking_message="Validation after fix failed - exiting"
+      print("exit 020")
+      timed_int.stop()
       exit()
 
    else:
@@ -411,6 +427,7 @@ def tfplan3():
 
 ################################################################################
    x = glob.glob("aws_*__*.tf")
+   globals.esttime=len(x)/4
    awsf=len(x)
    y = glob.glob("import__*.tf")
    impf=len(y)
@@ -438,7 +455,7 @@ def tfplan3():
    if globals.plan2:
 
       print("Penultimate Terraform Plan ... ")
-
+      globals.tracking_message="Stage 7 of 10, Penultimate Terraform Plan ..."
       # redo plan
       com = "rm -f resources.out tfplan"
       #print(com)
@@ -446,7 +463,7 @@ def tfplan3():
       
       com = "terraform plan -generate-config-out=" + \
           rf + " -out tfplan -json > plan2.json"
-      print(com)
+      if not globals.fast: print(com)
       rout = rc(com)
       zerod = False
       zeroc = False
@@ -479,11 +496,15 @@ def tfplan3():
                      print("Error" + line)
 
                   print("-->> Plan 2 errors exiting - check plan2.json - or run terraform plan")
+                  print("exit 021")
+                  timed_int.stop()
                   exit()
 
       if zerod != 0:
          print("-->> plan will destroy resources! - unexpected, is there existing state ?")
          print("-->> look at plan2.json - or run terraform plan")
+         print("exit 022")
+         timed_int.stop()
          exit()
 
       if zeroc != 0:
@@ -529,20 +550,28 @@ def tfplan3():
             if globals.expected is False:
                print("You can check the changes by running 'terraform plan' in ",globals.path1+"\n")
                print("Then rerun the same ./aws2tf.py command and add the '-a' flag to accept these plan changes and continue to import")
+               print("exit 023")
+               timed_int.stop()
                exit()
 
             if globals.debug is True:
                print("\n-->> Then if happy with the output changes for the above resources, run this command to complete aws2tf-py tasks:")
+               print("exit 024")
+               timed_int.stop()
                print("terraform apply -no-color tfplan")
                exit()
          else:
             print("-->> plan will change resources! - unexpected")
             print("-->> look at plan2.json - or run terraform plan")
+            print("exit 025")
+            timed_int.stop()
             exit()
 
       if zeroa !=0:
          print("-->> plan will add resources! - unexpected")
          print("-->> look at plan2.json - or run terraform plan")
+         print("exit 026")
+         timed_int.stop()
          exit()
 
       print("Plan complete")
@@ -560,6 +589,8 @@ def tfplan3():
             print("\nLikely import error [2] - do the following and report errors in github issue")
             print("cd "+globals.path1)
             print("terraform plan -generate-config-out=resources.out")
+            print("exit 027")
+            timed_int.stop()
             exit()
          else:
             print("INFO: Continuing due to workaround "+globals.workaround)
@@ -568,6 +599,8 @@ def tfplan3():
          print("Merge check")
          if zeroi==0:
             print("Nothing to merge exiting ...")
+            print("exit 028")
+            timed_int.stop()
             exit()
          # get imported
          x = glob.glob("imported/import__*.tf")
@@ -581,15 +614,21 @@ def tfplan3():
          print("Expected import =",str(toimp))
          if preimpf != stc:
             print("Miss-matched previous imports",str(preimpf),"and state file resources",str(stc) ,"exiting")
+            print("exit 029")
+            timed_int.stop()
             exit() 
          if toimp != zeroi:
             print("Unexpected import number exiting")
+            print("exit 030")
+            timed_int.stop()
             exit() 
          else:
             print("PASSED: importing expected number of resources")    
 
    if not os.path.isfile("tfplan"):
       print("Plan - could not find expected tfplan file - exiting")
+      print("exit 031")
+      timed_int.stop()
       exit()
 
    #if globals.merge:
@@ -597,8 +636,9 @@ def tfplan3():
    #   print("merge - exit after plan2")
 
 def wrapup():
-
+   
    print("Final Terraform Validation")
+   globals.tracking_message="Stage 8 of 10, Final Terraform Validation"
    com = "terraform validate -no-color"
    rout = rc(com)
    el = len(rout.stderr.decode().rstrip())
@@ -607,6 +647,8 @@ def wrapup():
       print(errm)
    if "Success! The configuration is valid" not in str(rout.stdout.decode().rstrip()):
       print(str(rout.stdout.decode().rstrip()))
+      print("exit 032")
+      timed_int.stop()
       exit()
    else:
       print("PASSED: Valid Configuration.")
@@ -615,9 +657,12 @@ def wrapup():
       print("Pre apply merge check")
       if not os.path.isfile("plan2.json"):
          print("ERROR: Could not find plan2.json, unexpected on merge - exiting ....")
+         print("exit 033")
+         timed_int.stop()
          exit()
       
    print("Terraform import via apply of tfplan....")
+   globals.tracking_message="Stage 9 of 10, Terraform import via apply of tfplan...."
    com = "terraform apply -no-color tfplan"
    rout = rc(com)
    zerod = False
@@ -634,6 +679,8 @@ def wrapup():
          print("ERROR: unexpected final plan stuff - exiting")
          print(str(rout.stdout.decode().rstrip()))
          print(str(rout.stderr.decode().rstrip()))
+         print("exit 034")
+         timed_int.stop()
          exit()
       else:
          print("PASSED: No changes in plan")
@@ -644,15 +691,19 @@ def wrapup():
          return
    #print(str(rout.stdout.decode().rstrip()))
    print("\nPost Import Plan Check .....")
+   globals.tracking_message="Stage 10 of 10, Post Import Plan Check ....."
    com = "terraform plan -no-color"
    rout = rc(com)
    if "No changes. Your infrastructure matches the configuration" not in str(rout.stdout.decode().rstrip()):
       print("ERROR: unexpected final plan failure")
       print(str(rout.stdout.decode().rstrip()))
       print(str(rout.stderr.decode().rstrip()))
+      print("exit 035")
+      timed_int.stop()
       exit()
    else:
       print("PASSED: No changes in plan")
+      globals.tracking_message="Stage 10 of 10, Passed post import check - No changes in plan"
       com = "mv import__*.tf *.out *.json imported"
       rout = rc(com)
       com = "cp aws_*.tf imported"
@@ -675,6 +726,7 @@ def rc(cmd):
 
 def fix_imports():
    x = glob.glob("aws_*__*.tf")
+   globals.esttime=len(x)/4
    awsf=len(x)
    y = glob.glob("import__*.tf")
    impf=len(y)
@@ -703,6 +755,8 @@ def fix_imports():
 
 def ctrl_c_handler(signum, frame):
   print("Ctrl-C pressed.")
+  print("exit 036")
+  timed_int.stop()
   exit()
 
 
@@ -714,14 +768,16 @@ def check_python_version():
       print("This program requires Python 3.8 or later.")
       sys.exit(1)
 # check boto3 version
-   if boto3.__version__ < '1.34.93':
+   if boto3.__version__ < '1.35.76':
       bv = str(boto3.__version__)
       vs = bv.split(".")
       v1 = int(vs[0])*100000+int(vs[1])*1000+int(vs[2])
-      if v1 < 134093:
+      if v1 < 135076:
          print("boto3 version:"+bv)
-         print("This program requires boto3 1.34.93 or later.")
-         print("Try: pip install boto3==1.34.93")
+         print("This program requires boto3 1.35.76 or later.")
+         print("Try: pip install boto3")
+         print("exit 037")
+         timed_int.stop()
          sys.exit(1)
 
 
@@ -736,7 +792,7 @@ def aws_tf(region):
       f3.write('    aws = {\n')
       f3.write('      source  = "hashicorp/aws"\n')
       # f3.write('      version = "5.48.0"\n')
-      f3.write('      version = "5.70.0"\n')
+      f3.write('      version = "'+globals.tfver+'"\n')
       f3.write('    }\n')
       f3.write('  }\n')
       f3.write('}\n')
@@ -758,7 +814,7 @@ def aws_tf(region):
       print("terraform init")
       com = "terraform init -no-color -upgrade"
       rout = rc(com)
-      print(rout.stdout.decode().rstrip())
+      if globals.debug: print(rout.stdout.decode().rstrip())
    else:
       print("skipping terraform init")
 
@@ -768,7 +824,7 @@ def splitf_old(file):
    lhs = 0
    rhs = 0
    if os.path.isfile(file):
-      print("split file:" + file)
+      if globals.debug: print("split file:" + file)
       with open(file, "r") as f:
          Lines = f.readlines()
       for tt1 in Lines:
@@ -821,7 +877,7 @@ def splitf(input_file):
    # Compile regex patterns for better performance
    resource_pattern = re.compile(r'resource "(\w+)" "(.+?)"')
    comment_pattern = re.compile(r'^\s*#')
-   print("split file: " + input_file)
+   if globals.debug: print("split file: " + input_file)
    # Read the entire file content at once
    with open(input_file, 'r') as f:
         content = f.read()
@@ -846,8 +902,16 @@ def splitf(input_file):
                     output.write(line + '\n')
 
             # Write the filtered resource block to a new file
-            with open(filename, 'w') as f:
-                f.write(output.getvalue().strip() + '\n')
+            
+            if len(filename) > 255: filename=filename[:250]+".tf"
+            try:
+               with open(filename, 'w') as f:
+                  f.write(output.getvalue().strip() + '\n')
+            except:
+               print("ERROR: could not write to file: " + fn)
+               print("exit 038")
+               timed_int.stop()
+               exit()
 
             # print(f"Created file: {filename}")
    shutil.move(input_file,"imported/"+input_file)
@@ -865,9 +929,9 @@ def write_import(type,theid,tfid):
       ## todo -  if theid starts with a number or is an od (but what if its hexdecimal  ?)
 
       if tfid is None:
-            tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_")
+            tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
       else:
-            tfid=tfid.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_")
+            tfid=tfid.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
          
          #catch tfid starts with number
       if tfid[:1].isdigit(): tfid="r-"+tfid
@@ -900,8 +964,17 @@ def write_import(type,theid,tfid):
       output.write('}\n')
 
                # Write the filtered resource block to a new file
-      with open(fn, 'w') as f:
-         f.write(output.getvalue().strip() + '\n')
+      
+      if len(fn) > 255: fn=fn[:250]+".tf"
+      try:
+         with open(fn, 'w') as f:
+            f.write(output.getvalue().strip() + '\n')
+      except:
+         print("ERROR: could not write to file: " + fn)
+         print("exit 039")
+         timed_int.stop()
+         exit()
+
 
       pkey=type+"."+tfid
       globals.rproc[pkey]=True
@@ -1026,12 +1099,12 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                            pass
       else:
          if id is not None:
-            print("No "+type+" "+id+" found - empty response") 
+            if globals.debug: print("No "+type+" "+id+" found - empty response (common)") 
             pkey=type+"."+id  
             globals.rproc[pkey]=True      
          else:
-            print("No "+type+" found - empty response")
-         return True
+            if globals.debug: print("No "+type+" found - empty response (common)")
+            return True
    
    except Exception as e:
       handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -1081,7 +1154,7 @@ def add_known_dependancy(type,id):
     # check if we alredy have it
     pkey=type+"."+id
     if pkey not in globals.rdep:
-        print("add_known_dependancy: " + pkey)
+        if globals.debug: print("add_known_dependancy: " + pkey)
         globals.rdep[pkey]=False
     return
 
@@ -1097,7 +1170,7 @@ def add_dependancy(type,id):
          if ":" not in id: id=globals.acc+":"+id
       pkey=type+"."+id
       if pkey not in globals.rproc:
-         print("add_dependancy: " + pkey)
+         if globals.debug: print("add_dependancy: " + pkey)
          globals.rproc[pkey]=False
    except Exception as e:
       handle_error(e, str(inspect.currentframe().f_code.co_name), type, id)
@@ -1116,16 +1189,16 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
    try:
       if globals.debug: 
          print("call_boto3 clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-      if globals.debug: print("pre-response")
+      #if globals.debug: print("pre-response")
       # get any pre-saved response
       response=get_boto3_resp(descfn)  # sets response to [] if nothing saved
       
       if response == []:
          client = boto3.client(clfn) 
-         if globals.debug: print("client")
+         #if globals.debug: print("client")
          try:
             paginator = client.get_paginator(descfn)
-            if globals.debug: print("paginator")
+            #if globals.debug: print("paginator")
     
             if "apigatewayv2" in str(type):
                for page in paginator.paginate(ApiId=id): 
@@ -1330,7 +1403,7 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
    #print("exn="+exn)
    if exn == "EndpointConnectionError":
-      print("No endpoint in this region for "+fname+" - returning")
+      print("No endpoint in this region for "+descfn+" - returning")
       return
    elif exn=="ClientError":
       #print("ClientError exception for "+fname+" - returning")
@@ -1402,7 +1475,24 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
       if "The requested feature is not enabled for this AWS account" in str(exc_obj):
             print(descfn + " returned feature not enabled for this account - returning")
             return
+      elif "Your account isn't authorized to call this operation" in str(exc_obj):
+            print(descfn + " returned Your account isn't authorized to call this operation - returning")
+            return
+      print(exn)
+      print(str(exc_obj)+" for "+frame+" id="+str(id)+" - exit")
+      print("exit 040")
+      #timed_int.stop() # as it is multi-threaded
       exit()
+
+
+   elif "InvalidAccessException" in exn:
+      if "is not subscribed" in str(exc_obj):
+         print(descfn + " returned Not subscribed "+clfn+" - returning")
+         return
+      print("exit 041")
+      timed_int.stop()
+      exit()
+      
 
 
 
@@ -1419,7 +1509,7 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
       f.write(f"{e=} [e1] \n")
       f.write(f"{fname=} {exc_tb.tb_lineno=} [e1] \n")
       f.write("-----------------------------------------------------------------------------\n")
-
+   #timed_int.stop()
    exit()
 
 def handle_error2(e,frame,id):
@@ -1437,6 +1527,8 @@ def handle_error2(e,frame,id):
       f.write(f"{e=} [e2] ")
       f.write(f"{fname=} {exc_tb.tb_lineno=} [e2] \n")
       f.write("-----------------------------------------------------------------------------\n")
+   print("exit 042")
+   timed_int.stop()
    exit()
 
 

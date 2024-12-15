@@ -17,7 +17,9 @@ def get_aws_autoscaling_group(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response:
                 common.write_import(type,j[key],None) 
 
@@ -27,10 +29,10 @@ def get_aws_autoscaling_group(type, id, clfn, descfn, topkey, key, filterid):
             else:
                 qid = id
             pkey=type+"."+id
-            print("Looking for "+pkey)
+            if globals.debug: print("Looking for "+pkey)
             response = client.describe_auto_scaling_groups(AutoScalingGroupNames=[qid])
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 globals.rproc[pkey] = True
                 return True
             for j in response[topkey]:

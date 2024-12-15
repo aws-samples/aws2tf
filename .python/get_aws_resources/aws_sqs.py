@@ -17,7 +17,9 @@ def get_aws_sqs_queue(type, id, clfn, descfn, topkey, key, filterid):
             except:
                 print("No queues found "+type+ " id="+str(id)+" returning")
                 return True
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response[topkey]:
                 common.write_import(type,j,None) 
                 common.add_dependancy("aws_sqs_queue_policy",j)
@@ -26,7 +28,9 @@ def get_aws_sqs_queue(type, id, clfn, descfn, topkey, key, filterid):
 
         else:      
             response = client.list_queues()
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             for j in response[topkey]:
                 if j==id:
                     common.write_import(type,j,None)
@@ -61,7 +65,9 @@ def get_aws_sqs_queue_policy(type, id, clfn, descfn, topkey, key, filterid):
                 
                 globals.rproc[pkey]=True
                 return True
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
             common.write_import(type,id,None)
             globals.rproc[pkey]=True
 
@@ -93,7 +99,9 @@ def get_aws_sqs_queue_redrive_allow_policy(type, id, clfn, descfn, topkey, key, 
                 
                 globals.rproc[pkey]=True
                 return True
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
  
             common.write_import(type,id,None)
             globals.rproc[pkey]=True
@@ -125,7 +133,9 @@ def get_aws_sqs_queue_redrive_policy(type, id, clfn, descfn, topkey, key, filter
                 
                 globals.rproc[pkey]=True
                 return True
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
  
             common.write_import(type,id,None)
             globals.rproc[pkey]=True

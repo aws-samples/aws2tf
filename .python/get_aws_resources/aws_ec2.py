@@ -195,6 +195,35 @@ def get_aws_eip(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 
+def get_aws_eip_association(type, id, clfn, descfn, topkey, key, filterid):
+
+    if globals.debug:
+        print("--> In get_aws_eip_assocation doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+        
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            response = client.describe_addresses()        
+        else:        
+            response = client.describe_addresses(AllocationIds=[id])
+
+
+        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        for j in response[topkey]:
+            try:
+                asocid=j['AssociationId']
+                common.write_import(type,j['AssociationId'],None) 
+            except KeyError:
+                return True
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+
 def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filterid):
     #print("--> In get_aws_route_table_association doing " + type + ' with id ' + str(id) +
     #              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
@@ -281,7 +310,7 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
 
                      else:
                          pkey="aws_route_table_association"+"."+vpcid
-                         print("Setting " + pkey + "=True")
+                         if globals.debug: print("Setting " + pkey + "=True")
                          globals.rproc[pkey] = True
 
             # set subnet true now ? as there's no assoc.
@@ -294,7 +323,7 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
             print("No response for get_aws_route_table_association")
             if id is not None:
                 pkey="aws_route_table_association"+"."+id
-                print("Setting " + pkey + "=True")
+                if globals.debug: print("Setting " + pkey + "=True")
                 globals.rproc[pkey] = True
 
 
@@ -368,7 +397,7 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
     
     try:
         if response == []: 
-            print("Empty response for "+type+ " id="+str(id)+" returning"); 
+            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
             if id is not None:
                 pkey = type+"."+id
                 globals.rproc[pkey] = True
@@ -402,8 +431,8 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_network_acl(type, id, clfn, descfn, topkey, key, filterid):
-    #if globals.debug:
-    print("--> In get_aws_network_acl doing " + type + ' with id ' + str(id) +
+    if globals.debug:
+        print("--> In get_aws_network_acl doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
 ## vall boto3 with Filter default=false
@@ -838,7 +867,7 @@ def get_aws_ec2_transit_gateway_route(type, id, clfn, descfn, topkey, key, filte
             if id.startswith("tgw-rtb-"):     
                 response = client.search_transit_gateway_routes(TransitGatewayRouteTableId=id,Filters=[{'Name': 'type','Values': ['static']}])
                 if response[topkey] == []: 
-                    print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                    if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                     pkey=type+"."+id
                     globals.rproc[pkey]=True
                     return True
@@ -981,7 +1010,7 @@ def get_aws_vpc_endpoint(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type, j[key], None)
@@ -990,7 +1019,7 @@ def get_aws_vpc_endpoint(type, id, clfn, descfn, topkey, key, filterid):
             pkey=type+"."+id
             response = client.describe_vpc_endpoints(Filters=[{'Name': 'vpc-id','Values': [id]},])
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 globals.rproc[pkey]=True
                 return True
             for j in response[topkey]:
@@ -1002,7 +1031,7 @@ def get_aws_vpc_endpoint(type, id, clfn, descfn, topkey, key, filterid):
             pkey=type+"."+id
             response = client.describe_vpc_endpoints(VpcEndpointIds=[id])
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning"); 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 globals.rproc[pkey]=True
                 return True
             for j in response[topkey]:

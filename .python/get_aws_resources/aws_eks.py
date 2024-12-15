@@ -35,8 +35,8 @@ def get_aws_eks_fargate_profile(type,id,clfn,descfn,topkey,key,filterid):
    
    try:
       if id is None:
-            print("No id passed in get_aws_eks_fargate_profile returning")  
-            return True
+         print("No id passed in get_aws_eks_fargate_profile returning")  
+         return True
       
       
       
@@ -233,7 +233,7 @@ def get_aws_eks_access_policy_association(type,id,clfn,descfn,topkey,key,filteri
       pkey=type+"."+id
       
       if response[topkey] == []: 
-         print("Empty response for "+type+ " id="+str(id)+" returning")
+         if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
          globals.rproc[pkey]=True
          return True
       

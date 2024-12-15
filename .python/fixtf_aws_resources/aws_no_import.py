@@ -38,7 +38,7 @@ noimport = {
     "aws_guardduty_detector_feature": True,
     "aws_guardduty_organization_configuration_feature": True,
     "aws_iam_group_membership": True,
-    "aws_iam_policy_attachment": True,
+    "aws_iam_policy_attachment": True, # use instead aws_iam_role_policy_attachment, aws_iam_user_policy_attachment , aws_iam_group_policy_attachment 
     "aws_iam_security_token_service_preferences": True,
     "aws_iam_service_specific_credential": True,
     "aws_inspector2_enabler": True,

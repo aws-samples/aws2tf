@@ -20,6 +20,7 @@ def resource_types(type):
     elif type == "code": rets=["aws_codestarnotifications_notification_rule","aws_codebuild_project","aws_codeartifact_domain","aws_codeartifact_repository","aws_codecommit_repository","aws_codepipeline"]; return rets  # Codebuild, Code commit etc
     elif type == "cloudfront" or type == "cf": rets=["aws_cloudfront_distribution","aws_cloudfront_origin_request_policy","aws_cloudfront_origin_access_identity","aws_cloudfront_origin_access_control","aws_cloudfront_cache_policy","aws_cloudfront_function"]; return rets # Cloudfront Distribution
     elif type == "cloudtrail" or type == "ct": rets=["aws_cloudtrail"]; return rets # CloudTrail
+    elif type == "cloudwan" or type == "wan": rets=["aws_networkmanager_global_network"]; return rets # CloudWAN
     elif type == "cw" or type == "cloudwatch" or type == "logs": rets=["aws_cloudwatch_log_group","aws_cloudwatch_metric_alarm"]; return rets # Cloudwatch logs groups and alarms
     elif type == "cloud9" or type =="c9" : rets=["aws_cloud9_environment_ec2"]; return rets # Cloud9 EC2 environments
     elif type == "cloudform": rets=["aws_cloudformation_stack"]; return rets # Cloudformation stacks (use -s stack -i [stackname] instead)
@@ -38,7 +39,7 @@ def resource_types(type):
     elif type == "emr": rets=["aws_emr_cluster","aws_emr_security_configuration"]; return rets # EMR clusters
     elif type == "glue": rets=["aws_glue_crawler","aws_glue_job","aws_glue_connection"]; return rets # Glue crawlers, jobs and connections
     elif type == "glue2": rets=["aws_glue_catalog_table","aws_glue_partition"]; return rets # Glue tables and partitions
-    elif type == "iam": rets=["aws_iam_role","aws_iam_policy"]; return rets # IAM roles and policies
+    elif type == "groups" or type=="group": rets=["aws_iam_group"]; return rets # IAM Groups - aws_iam_group 
     elif type == "igw": rets=["aws_internet_gateway"]; return rets # Internet Gateways
     elif type == "kendra": rets=["aws_kendra_index"]; return rets # Kendra Indexes
     elif type == "kinesis": rets=["aws_kinesis_stream","aws_kinesis_firehose_delivery_stream"]; return rets # Kinesis streams and firehose
@@ -54,6 +55,7 @@ def resource_types(type):
     elif type == "route53": rets=["aws_route53_zone"]; return rets # Route53 Zones
     elif type == "rds": rets=["aws_db_instance","aws_db_parameter_group","aws_db_event_subscription","aws_db_event_subscription"]; return rets # RDS cluster and some dependancies
     elif type == "s3": rets=["aws_s3_bucket"]; return rets # AWS S3 bucket and bucker config
+    elif type == "s3tables": rets=["aws_s3tables_table_bucket"]; return rets # AWS S3 tables
     elif type == "subnet": type = ["aws_subnet"]; return rets # AWS subnet and common dependancies
     elif type == "sagemaker": rets=["aws_sagemaker_domain","aws_sagemaker_user_profile","aws_sagemaker_image","aws_sagemaker_app","aws_sagemaker_studio_lifecycle_config"]; return rets # SageMaker domain and depandancies
     elif type == "secrets" or type == "secret": rets=["aws_secretsmanager_secret"]; return rets # secrets manager secrets
@@ -65,8 +67,9 @@ def resource_types(type):
     elif type == "spot": rets=["aws_spot_fleet_request"]; return rets # Spot fleet request
     elif type == "sso": rets=["aws_ssoadmin_instances"]; return rets # Single sign on resources
     elif type == "tgw": rets=["aws_ec2_transit_gateway"]; return rets # Transit Gateway
+    elif type == "transfer": rets=["aws_transfer_server"]; return rets # Transfer
     elif type == "vpclattice" or type=="lattice": rets=["aws_vpclattice_service_network","aws_vpclattice_service","aws_vpclattice_auth_policy"]; return rets # VPC Lattice and dependancies
-    elif type == "users": rets=["aws_iam_user","aws_iam_group"]; return rets # IAM user and groups
+    elif type == "users" or type=="user": rets=["aws_iam_user","aws_iam_group"]; return rets # IAM user and groups
     elif type == "vpc": rets=["aws_vpc"]; return rets #  VPC's and its common depandancies
     elif type == "workspaces": rets=["aws_workspaces_workspace"]; return rets # Aamazon Workspaces
 

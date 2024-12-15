@@ -1,6 +1,13 @@
+import sys,os
+
+
+tfver="5.80.0"
+esttime=120.0
 merge=False
 fast=False
 apionly=False
+tracking_message="aws2tf: Starting, update messages every 20 seconds"
+cores=2
 cwd=""
 path1=""
 path2=""
@@ -50,6 +57,7 @@ serverless=False
 dzd=""
 connectinid=""
 
+
 #specials=["aws_iam_role_policy","aws_route_table_association","aws_iam_policy","aws_iam_policy_attchment",
 #          "aws_eks_cluster","aws_eks_fagate_profile","aws_kms_key","aws_kms_alias",
 #          "aws_eks_identity_provider_config","aws_eks_addon","aws_vpc_ipv4_cidr_block_association",
@@ -84,10 +92,29 @@ tested={
     
 }
 
+# List Dicts
+
 subnetlist={}
 sglist={}
 vpclist={}
+s3list={}
 rolelist={}
+policylist={}
 bucketlist={}
 tgwlist={}
 gluedbs={}
+attached_role_policies_list={}
+role_policies_list={}
+
+def exit_aws2tf(mess):
+    if mess is not None or mess!="":
+        print(mess)
+    
+    if globals.fast:
+        os._exit(1) 
+    else:
+        sys.exit(1)
+    
+
+
+

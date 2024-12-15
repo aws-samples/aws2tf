@@ -4276,7 +4276,7 @@ aws_eip_association = {
 	"clfn":		"ec2",
 	"descfn":	"describe_addresses",
 	"topkey":	"Addresses",
-	"key":		"AssociationId",
+	"key":		"AllocationId",
 	"filterid":	"AssociationId"
 }
 
@@ -5155,10 +5155,10 @@ aws_iam_group_policy = {
 
 aws_iam_group_policy_attachment = {
 	"clfn":		"iam",
-	"descfn":	"get_group_policy",
-	"topkey":	"GroupPolicy",
-	"key":		"GroupName",
-	"filterid":	"GroupName"
+	"descfn":	"list_attached_group_policies",
+	"topkey":	"AttachedPolicies",
+	"key":		"PolicyArn",
+	"filterid":	"PolicyName"
 }
 
 aws_iam_openid_connect_provider = {
@@ -5176,6 +5176,7 @@ aws_iam_policy = {
 	"key":		"PolicyName",
 	"filterid":	"PolicyName"
 }
+
 
 aws_iam_policy_attachment = {
 	"clfn":		"iam",
@@ -5259,10 +5260,10 @@ aws_iam_user_policy = {
 
 aws_iam_user_policy_attachment = {
 	"clfn":		"iam",
-	"descfn":	"get_user_policy",
-	"topkey":	"Policy",
-	"key":		"UserName",
-	"filterid":	"UserName"
+	"descfn":	"list_attached_user_policies",
+	"topkey":	"AttachedPolicies",
+	"key":		"PolicyArn",
+	"filterid":	"PolicyName"
 }
 
 aws_iam_user_ssh_key = {
@@ -6797,15 +6798,15 @@ aws_networkmanager_customer_gateway_association = {
 
 aws_networkmanager_device = {
 	"clfn":		"networkmanager",
-	"descfn":	"list_devices",
+	"descfn":	"get_devices",
 	"topkey":	"Devices",
-	"key":		"DeviceId",
+	"key":		"DeviceArn",
 	"filterid":	"DeviceId"
 }
 
 aws_networkmanager_global_network = {
 	"clfn":		"networkmanager",
-	"descfn":	"list_global_networks",
+	"descfn":	"describe_global_networks",
 	"topkey":	"GlobalNetworks",
 	"key":		"GlobalNetworkId",
 	"filterid":	"GlobalNetworkId"
@@ -6829,9 +6830,9 @@ aws_networkmanager_link_association = {
 
 aws_networkmanager_site = {
 	"clfn":		"networkmanager",
-	"descfn":	"list_sites",
+	"descfn":	"get_sites",
 	"topkey":	"Sites",
-	"key":		"SiteId",
+	"key":		"SiteArn",
 	"filterid":	"SiteId"
 }
 
@@ -6861,10 +6862,10 @@ aws_networkmanager_transit_gateway_peering = {
 
 aws_networkmanager_transit_gateway_registration = {
 	"clfn":		"networkmanager",
-	"descfn":	"list_transit_gateway_registrations",
+	"descfn":	"get_transit_gateway_registrations",
 	"topkey":	"TransitGatewayRegistrations",
-	"key":		"TransitGatewayRegistrationId",
-	"filterid":	"TransitGatewayRegistrationId"
+	"key":		"TransitGatewayArn",
+	"filterid":	"TransitGatewaynId"
 }
 
 aws_networkmanager_transit_gateway_route_table_attachment = {
@@ -8432,6 +8433,30 @@ aws_s3outposts_endpoint = {
 	"filterid":	"EndpointArn"
 }
 
+aws_s3tables_table_bucket = {
+  	"clfn":		"s3tables",
+	"descfn":	"list_table_buckets",
+	"topkey":	"tableBuckets",
+	"key":		"arn",
+	"filterid":	"name"  
+}
+
+aws_s3tables_table = {
+  	"clfn":		"s3tables",
+	"descfn":	"list_tables",
+	"topkey":	"tables",
+	"key":		"name",
+	"filterid":	"name"  
+}
+
+aws_s3tables_namespace = {
+  	"clfn":		"s3tables",
+	"descfn":	"list_namespaces",
+	"topkey":	"namespaces",
+	"key":		"namespace",
+	"filterid":	"namespace"  
+}
+
 aws_sagemaker_app = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_apps",
@@ -9861,7 +9886,7 @@ aws_transfer_server = {
 	"clfn":		"transfer",
 	"descfn":	"list_servers",
 	"topkey":	"Servers",
-	"key":		"Arn",
+	"key":		"ServerId",
 	"filterid":	"Arn"
 }
 
@@ -11571,6 +11596,9 @@ aws_resources = {
 	"aws_s3control_object_lambda_access_point_policy": aws_s3control_object_lambda_access_point_policy,
 	"aws_s3control_storage_lens_configuration": aws_s3control_storage_lens_configuration,
 	"aws_s3outposts_endpoint": aws_s3outposts_endpoint,
+    "aws_s3tables_table_bucket": aws_s3tables_table_bucket,
+    "aws_s3tables_table": aws_s3tables_table,
+	"aws_s3tables_namespace": aws_s3tables_namespace,
 	"aws_sagemaker_app": aws_sagemaker_app,
 	"aws_sagemaker_app_image_config": aws_sagemaker_app_image_config,
 	"aws_sagemaker_code_repository": aws_sagemaker_code_repository,

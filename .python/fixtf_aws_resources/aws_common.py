@@ -15,7 +15,7 @@ def check_key(keyid):
 		#print(str(kresp))
 		if kstatus == "Enabled" or kstatus == "Disabled":
 			if kman == "AWS":
-				print("check_key: key is managed by AWS")
+				if globals.debug: print("check_key: key is managed by AWS")
 				return False ## ?? True ??
 			return True
 		else:
@@ -23,7 +23,7 @@ def check_key(keyid):
 			#print(str(kresp))
 			return False
 	except Exception as e:
-		print("WARNING: can't access key",keyid)
+		if globals.debug: print("WARNING: can't access key",keyid)
 		#print(f"{e=} [k1]")
 		#exc_type, exc_obj, exc_tb = sys.exc_info()
 	return False
@@ -164,9 +164,12 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                             t1=tt1 + " = aws_iam_role." + rn + ".id\n"
                             common.add_dependancy("aws_iam_role",tt2)
                         else:
+                            
+                        
                             print("WARNING: role not found in rolelist", tt2)
                     except KeyError as e:
-                        print("WARNING: role not found in rolelist", tt2)
+                        print("WARNING: role not found in rolelist [ke]", tt2)
+                        #print(globals.rolelist)
 
             else:
                 t1=fixtf.deref_role_arn(t1,tt1,tt2)

@@ -5155,10 +5155,10 @@ aws_iam_group_policy = {
 
 aws_iam_group_policy_attachment = {
 	"clfn":		"iam",
-	"descfn":	"get_group_policy",
-	"topkey":	"GroupPolicy",
-	"key":		"GroupName",
-	"filterid":	"GroupName"
+	"descfn":	"list_attached_group_policies",
+	"topkey":	"AttachedPolicies",
+	"key":		"PolicyArn",
+	"filterid":	"PolicyName"
 }
 
 aws_iam_openid_connect_provider = {
@@ -5260,10 +5260,10 @@ aws_iam_user_policy = {
 
 aws_iam_user_policy_attachment = {
 	"clfn":		"iam",
-	"descfn":	"get_user_policy",
-	"topkey":	"Policy",
-	"key":		"UserName",
-	"filterid":	"UserName"
+	"descfn":	"list_attached_user_policies",
+	"topkey":	"AttachedPolicies",
+	"key":		"PolicyArn",
+	"filterid":	"PolicyName"
 }
 
 aws_iam_user_ssh_key = {

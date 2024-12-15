@@ -39,7 +39,7 @@ def resource_types(type):
     elif type == "emr": rets=["aws_emr_cluster","aws_emr_security_configuration"]; return rets # EMR clusters
     elif type == "glue": rets=["aws_glue_crawler","aws_glue_job","aws_glue_connection"]; return rets # Glue crawlers, jobs and connections
     elif type == "glue2": rets=["aws_glue_catalog_table","aws_glue_partition"]; return rets # Glue tables and partitions
-    elif type == "iam": rets=["aws_iam_policy","aws_iam_role"]; return rets # IAM roles and policies
+    elif type == "groups" or type=="group": rets=["aws_iam_group"]; return rets # IAM Groups - aws_iam_group 
     elif type == "igw": rets=["aws_internet_gateway"]; return rets # Internet Gateways
     elif type == "kendra": rets=["aws_kendra_index"]; return rets # Kendra Indexes
     elif type == "kinesis": rets=["aws_kinesis_stream","aws_kinesis_firehose_delivery_stream"]; return rets # Kinesis streams and firehose
@@ -69,7 +69,7 @@ def resource_types(type):
     elif type == "tgw": rets=["aws_ec2_transit_gateway"]; return rets # Transit Gateway
     elif type == "transfer": rets=["aws_transfer_server"]; return rets # Transfer
     elif type == "vpclattice" or type=="lattice": rets=["aws_vpclattice_service_network","aws_vpclattice_service","aws_vpclattice_auth_policy"]; return rets # VPC Lattice and dependancies
-    elif type == "users": rets=["aws_iam_user","aws_iam_group"]; return rets # IAM user and groups
+    elif type == "users" or type=="user": rets=["aws_iam_user","aws_iam_group"]; return rets # IAM user and groups
     elif type == "vpc": rets=["aws_vpc"]; return rets #  VPC's and its common depandancies
     elif type == "workspaces": rets=["aws_workspaces_workspace"]; return rets # Aamazon Workspaces
 

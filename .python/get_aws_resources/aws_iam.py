@@ -1,5 +1,6 @@
 import common
 import boto3
+from botocore.config import Config
 import globals
 import inspect
 
@@ -214,6 +215,11 @@ def get_aws_iam_group_policy(type,id,clfn,descfn,topkey,key,filterid):
    response=[]
 
    try:
+
+      if id is None:
+         print("Id must be set to the GroupName")
+         return True
+
       response1 = client.list_group_policies(GroupName=id)
       #print("response1="+str(response1))
       response=response1['PolicyNames']
@@ -446,4 +452,173 @@ def get_aws_iam_policy_attchment(type,id,clfn,descfn,topkey,key,filterid):
 
    print("Use alternatives to"+type+" not implemented")
    return
+
+
+#aws_iam_group_policy_attachment
+def get_aws_iam_group_policy_attachment(type,id,clfn,descfn,topkey,key,filterid):
+   if globals.debug:
+      print("--> In get_aws_iam_group_policy_attachment doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   if id is None:
+      print("Id must be set to the GroupName")
+      return True
    
+
+   #print(len(globals.attached_role_policies_list))
+
+   client = boto3.client(clfn) 
+   response=[]
+   paginator = client.get_paginator(descfn)
+   try:
+         for page in paginator.paginate(GroupName=id):    ## special
+         #for page in paginator.paginate():
+            response.extend(page[topkey])
+   except Exception as e:
+         print(f"{e=}")
+
+   if response == []: 
+         if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+         pkey="aws_iam_group_policy_attachment."+id
+         globals.rproc[pkey]=True
+         return True
+      ## multi thread ?
+   for j in response: 
+               retid=j['PolicyArn']
+               theid=id+"/"+retid
+               ln=retid.rfind("/")
+               pn=retid[ln+1:]
+               rn=id+"__"+pn
+
+               if "arn:aws:iam::aws:policy" not in theid:
+                  common.add_dependancy("aws_iam_policy",retid)
+                  
+               common.write_import(type,theid,rn) 
+
+   
+   ####
+   pkey="aws_iam_group_policy_attachment."+id
+   globals.rproc[pkey]=True
+   
+   return True
+
+def get_aws_iam_group(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn,config=config)
+        if id is None:
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate():
+                response = response + page[topkey]
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                return True
+            for j in response:
+               common.write_import(type,j[key],None) 
+               common.add_dependancy("aws_iam_user_group_membership",j[key])
+               common.add_dependancy("aws_iam_group_policy",j[key])
+               common.add_dependancy("aws_iam_group_policy_attachment",j[key])
+
+        else:      
+            response = client.get_group(GroupName=id)
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                return True
+            j=response['Group']
+            common.write_import(type,j[key],None)
+            common.add_dependancy("aws_iam_user_group_membership",j[key])
+            common.add_dependancy("aws_iam_group_policy",j[key])
+            common.add_dependancy("aws_iam_group_policy_attachment",j[key])
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+
+def get_aws_iam_user(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn,config=config)
+        if id is None:
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate():
+                response = response + page[topkey]
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                return True
+            for j in response:
+               common.write_import(type,j[key],None) 
+               common.add_dependancy("aws_iam_user_policy_attachment",j[key])
+               common.add_dependancy("aws_iam_user_policy",j[key])
+               #list_groups_for_user
+               gresponse = client.list_groups_for_user(UserName=j[key])
+               for k in gresponse['Groups']:
+                common.add_dependancy("aws_iam_user_group_membership", k['GroupName'])
+
+        else:      
+            response = client.get_user(UserName=id)
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                return True
+            j=response['User']
+            common.write_import(type,j[key],None)
+            common.add_dependancy("aws_iam_user_policy_attachment",j[key])
+            common.add_dependancy("aws_iam_user_policy",j[key])
+            #list_groups_for_user
+            gresponse = client.list_groups_for_user(UserName=j[key])
+            for k in gresponse['Groups']:
+                common.add_dependancy("aws_iam_user_group_membership", k['GroupName'])
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+   
+
+   #aws_iam_group_policy_attachment
+def get_aws_iam_user_policy_attachment(type,id,clfn,descfn,topkey,key,filterid):
+   if globals.debug:
+      print("--> In get_aws_iam_user_policy_attachment doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   if id is None:
+      print("Id must be set to the UserName")
+      return True
+
+   client = boto3.client(clfn) 
+   response=[]
+   paginator = client.get_paginator(descfn)
+   try:
+         for page in paginator.paginate(UserName=id):    ## special
+         #for page in paginator.paginate():
+            response.extend(page[topkey])
+   except Exception as e:
+         print(f"{e=}")
+
+   if response == []: 
+         if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+         pkey="aws_iam_user_policy_attachment."+id
+         globals.rproc[pkey]=True
+         return True
+      ## multi thread ?
+   for j in response: 
+               retid=j['PolicyArn']
+               theid=id+"/"+retid
+               ln=retid.rfind("/")
+               pn=retid[ln+1:]
+               rn=id+"__"+pn
+
+               if "arn:aws:iam::aws:policy" not in theid:
+                  common.add_dependancy("aws_iam_policy",retid)
+                  
+               common.write_import(type,theid,rn) 
+
+   pkey="aws_iam_user_policy_attachment."+id
+   globals.rproc[pkey]=True
+   
+   return True

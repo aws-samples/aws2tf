@@ -94,7 +94,7 @@ def get_aws_datazone_user_profile(type, id, clfn, descfn, topkey, key, filterid)
                         response = response + page[topkey]
                 except Exception as e:
                     if "ResourceNotFoundException" in str(e):
-                        print("Resource not found for "+ut)
+                        if globals.debug: print("Resource not found for "+ut)
                         continue
                     else:
                         print("ERROR: "+str(e))

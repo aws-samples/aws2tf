@@ -17,7 +17,13 @@ def aws_datazone_glossary(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	## workaround
 	## 
-	if tt1=="description" and tt2!="null":
+	if tt1=="domain_identifier" and tt2!="null":
+		globals.dzd=tt2
+		t1=tt1+" = aws_datazone_domain."+tt2+".id\n"
+		common.add_dependancy("aws_datazone_domain",tt2)
+	elif tt1=="owning_project_identifier" and tt2!="null":
+		t1=tt1+" = aws_datazone_project."+globals.dzd+"_"+tt2+".id\n"
+	elif tt1=="description" and tt2!="null":
 		t1=tt1+" = \"changeme\"\n"
 		t1=t1+"\n lifecycle {\n   ignore_changes = [description]\n}\n"
 	return skip,t1,flag1,flag2

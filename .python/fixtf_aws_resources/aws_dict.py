@@ -3068,7 +3068,7 @@ aws_datazone_form_type = {
 	"clfn":		"datazone",
 	"descfn":	"search_types",
  	"topkey":	"items",
-	"key":		"id",
+	"key":		"name",
 	"filterid":	"name"
 }
 
@@ -3099,6 +3099,24 @@ aws_datazone_environment_blueprint_configuration = {
  	"topkey":	"items",
 	"key":		"environmentBlueprintId",
 	"filterid":	"name"   
+}
+
+
+# aws_datazone_asset_type
+aws_datazone_asset_type = {
+	"clfn":		"datazone",
+	"descfn":	"search_types",
+ 	"topkey":	"items",
+	"key":		"name",
+	"filterid":	"id"
+}
+# aws_datazone_user_profile
+aws_datazone_user_profile = {
+	"clfn":		"datazone",
+	"descfn":	"search_user_profiles",
+ 	"topkey":	"items",
+	"key":		"id",
+	"filterid":	"id"
 }
 
 ################
@@ -10933,6 +10951,8 @@ aws_resources = {
     "aws_datazone_environment": aws_datazone_environment,
     "aws_datazone_environment_profile": aws_datazone_environment_profile,
     "aws_datazone_environment_blueprint_configuration": aws_datazone_environment_blueprint_configuration,
+    "aws_datazone_asset_type": aws_datazone_asset_type,
+    "aws_datazone_user_profile": aws_datazone_user_profile,
 	"aws_dax_cluster": aws_dax_cluster,
 	"aws_dax_parameter_group": aws_dax_parameter_group,
 	"aws_dax_subnet_group": aws_dax_subnet_group,

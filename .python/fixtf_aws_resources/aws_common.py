@@ -220,7 +220,6 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         ### S3:// processing
         elif tt2.startswith("s3://"):
             sc=tt2.count("/")
-            #print(tt2)
             if sc>=3:
                 bn=tt2.split("/",3)[2] 
                 tn=tt2.split("/",3)[3] 
@@ -231,7 +230,6 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                         t1=tt1 + ' = format("s3://%s/%s",'+bv+',"'+tn+'")\n'
                     else:
                         t1=tt1 + ' = format("s3://%s/",'+bv+')\n'
-                    #print("new t1=",t1)
                     common.add_dependancy("aws_s3_bucket", bn)
         
 

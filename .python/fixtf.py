@@ -628,13 +628,19 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
 
 
 def deref_role_arn(t1,tt1,tt2):
-    if ":role/aws-service-role" in tt2:	t1=globals_replace(t1,tt1,tt2)
+    if ":role/aws-service-role" in tt2:	
+        t1=globals_replace(t1,tt1,tt2)
     elif ":role/" in tt2:
         if tt2.endswith("*"): return t1
         if tt2.startswith("arn:"): tt2=tt2.split('/')[-1]
         if tt2 in globals.rolelist:
             t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
             common.add_dependancy("aws_iam_role",tt2)
+            
+    elif ":" not in tt2 and tt2 != "null": # assume it's a role name
+        t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+        common.add_dependancy("aws_iam_role", tt2)
+
     return t1
 
 def deref_kms_key(t1,tt1,tt2):

@@ -41,12 +41,16 @@ def build_lists():
         return [('subnet', j['SubnetId']) for j in response]
 
     def fetch_tgw_data():
-        client = boto3.client('ec2')
-        response = []
-        paginator = client.get_paginator('describe_transit_gateways')
-        for page in paginator.paginate():
-            response.extend(page['TransitGateways'])
-        return [('tgw', j['TransitGatewayId']) for j in response]
+        try:
+            client = boto3.client('ec2')
+            response = []
+            paginator = client.get_paginator('describe_transit_gateways')
+            for page in paginator.paginate():
+                response.extend(page['TransitGateways'])
+            return [('tgw', j['TransitGatewayId']) for j in response]
+        except Exception as e:
+            print("Error fetching transit gateways:", e)
+            return []
 
     def fetch_roles_data():
         client = boto3.client('iam')

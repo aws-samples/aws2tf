@@ -71,7 +71,7 @@ def aws_glue_job(t1,tt1,tt2,flag1,flag2):
 	if tt1 == "worker_type":
 		if globals.gulejobmaxcap: skip=1
 	if tt1 == "description":
-		t1=t1+"\n lifecycle {\n   ignore_changes = [glue_version,number_of_workers,worker_type]\n}\n"
+		t1=t1+"\n lifecycle {\n   ignore_changes = [glue_version,number_of_workers,worker_type,role_arn]\n}\n"
 	if tt1 == "security_configuration" and tt2 != "null":
 		t1 = tt1 + " = aws_glue_security_configuration."+tt2+".id\n"
 		common.add_dependancy("aws_glue_security_configuration", tt2)

@@ -651,6 +651,23 @@ def deref_kms_key(t1,tt1,tt2):
     return t1
 
 
+def deref_s3(t1, tt1, tt2):
+    if tt2.startswith("s3://"):
+        sc=tt2.count("/")
+        if sc>=3:
+            bn=tt2.split("/",3)[2] 
+            tn=tt2.split("/",3)[3] 
+            #print("s3:",bn,tn)
+            if bn in globals.s3list:
+                bv = "aws_s3_bucket.b-" + bn + ".bucket"
+                if tn !="":
+                    t1=tt1 + ' = format("s3://%s/%s",'+bv+',"'+tn+'")\n'
+                else:
+                    t1=tt1 + ' = format("s3://%s/",'+bv+')\n'
+                common.add_dependancy("aws_s3_bucket", bn)
+    return t1
+
+
 
  #if tt1 == "security_groups": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
 def deref_role_arn_array(t1,tt1,tt2):

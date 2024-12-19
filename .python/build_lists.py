@@ -9,60 +9,88 @@ def build_lists():
     print("Building core resource lists ...")
     globals.tracking_message="Stage 2 of 10, Building core resource lists ..."
     def fetch_vpc_data():
-        client = boto3.client('ec2')
-        response = []
-        paginator = client.get_paginator('describe_vpcs')
-        for page in paginator.paginate():
-            response.extend(page['Vpcs'])
-        return [('vpc', j['VpcId']) for j in response]
+        try:
+            client = boto3.client('ec2')
+            response = []
+            paginator = client.get_paginator('describe_vpcs')
+            for page in paginator.paginate():
+                response.extend(page['Vpcs'])
+            return [('vpc', j['VpcId']) for j in response]
+        except Exception as e:
+            print("Error fetching vpc data:", e)
+            return []
     
     def fetch_s3_data():
-        client = boto3.client('s3')
-        response = []
-        paginator = client.get_paginator('list_buckets')
-        for page in paginator.paginate(BucketRegion=globals.region):
-            response.extend(page['Buckets'])
-        return [('s3', j['Name']) for j in response]
+        try:
+            client = boto3.client('s3')
+            response = []
+            paginator = client.get_paginator('list_buckets')
+            for page in paginator.paginate(BucketRegion=globals.region):
+                response.extend(page['Buckets'])
+            return [('s3', j['Name']) for j in response]
+        except Exception as e:
+            print("Error fetching vpc data:", e)
+            return []
 
     def fetch_sg_data():
-        client = boto3.client('ec2')
-        response = []
-        paginator = client.get_paginator('describe_security_groups')
-        for page in paginator.paginate():
-            response.extend(page['SecurityGroups'])
-        return [('sg', j['GroupId']) for j in response]
+        try:
+            client = boto3.client('ec2')
+            response = []
+            paginator = client.get_paginator('describe_security_groups')
+            for page in paginator.paginate():
+                response.extend(page['SecurityGroups'])
+            return [('sg', j['GroupId']) for j in response]
+        except Exception as e:
+            print("Error fetching vpc data:", e)
+            return []
 
     def fetch_subnet_data():
-        client = boto3.client('ec2')
-        response = []
-        paginator = client.get_paginator('describe_subnets')
-        for page in paginator.paginate():
-            response.extend(page['Subnets'])
-        return [('subnet', j['SubnetId']) for j in response]
+        try:
+            client = boto3.client('ec2')
+            response = []
+            paginator = client.get_paginator('describe_subnets')
+            for page in paginator.paginate():
+                response.extend(page['Subnets'])
+            return [('subnet', j['SubnetId']) for j in response]
+        except Exception as e:
+            print("Error fetching vpc data:", e)
+            return []
 
     def fetch_tgw_data():
-        client = boto3.client('ec2')
-        response = []
-        paginator = client.get_paginator('describe_transit_gateways')
-        for page in paginator.paginate():
-            response.extend(page['TransitGateways'])
-        return [('tgw', j['TransitGatewayId']) for j in response]
+        try:
+            client = boto3.client('ec2')
+            response = []
+            paginator = client.get_paginator('describe_transit_gateways')
+            for page in paginator.paginate():
+                response.extend(page['TransitGateways'])
+            return [('tgw', j['TransitGatewayId']) for j in response]
+        except Exception as e:
+            print("Error fetching transit gateways:", e)
+            return []
 
     def fetch_roles_data():
-        client = boto3.client('iam')
-        response = []
-        paginator = client.get_paginator('list_roles')
-        for page in paginator.paginate():
-            response.extend(page['Roles'])
-        return [('iam', j['RoleName']) for j in response]
+        try:
+            client = boto3.client('iam')
+            response = []
+            paginator = client.get_paginator('list_roles')
+            for page in paginator.paginate():
+                response.extend(page['Roles'])
+            return [('iam', j['RoleName']) for j in response]
+        except Exception as e:
+            print("Error fetching vpc data:", e)
+            return []
     
     def fetch_policies_data():
-        client = boto3.client('iam')
-        response = []
-        paginator = client.get_paginator('list_policies')
-        for page in paginator.paginate(Scope='Local'):
-            response.extend(page['Policies'])
-        return [('pol', j['Arn']) for j in response]
+        try:
+            client = boto3.client('iam')
+            response = []
+            paginator = client.get_paginator('list_policies')
+            for page in paginator.paginate(Scope='Local'):
+                response.extend(page['Policies'])
+            return [('pol', j['Arn']) for j in response]
+        except Exception as e:
+            print("Error fetching vpc data:", e)
+            return []
 
 
     # Use ThreadPoolExecutor to parallelize API calls

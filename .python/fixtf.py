@@ -628,13 +628,19 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
 
 
 def deref_role_arn(t1,tt1,tt2):
-    if ":role/aws-service-role" in tt2:	t1=globals_replace(t1,tt1,tt2)
+    if ":role/aws-service-role" in tt2:	
+        t1=globals_replace(t1,tt1,tt2)
     elif ":role/" in tt2:
         if tt2.endswith("*"): return t1
         if tt2.startswith("arn:"): tt2=tt2.split('/')[-1]
         if tt2 in globals.rolelist:
             t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
             common.add_dependancy("aws_iam_role",tt2)
+            
+    elif ":" not in tt2 and tt2 != "null": # assume it's a role name
+        t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+        common.add_dependancy("aws_iam_role", tt2)
+
     return t1
 
 def deref_kms_key(t1,tt1,tt2):
@@ -642,6 +648,23 @@ def deref_kms_key(t1,tt1,tt2):
     if "arn:aws:kms:" in tt2:
         print("deref_kms_key 2: " + tt2)
         t1=globals_replace(t1,tt1,tt2)
+    return t1
+
+
+def deref_s3(t1, tt1, tt2):
+    if tt2.startswith("s3://"):
+        sc=tt2.count("/")
+        if sc>=3:
+            bn=tt2.split("/",3)[2] 
+            tn=tt2.split("/",3)[3] 
+            #print("s3:",bn,tn)
+            if bn in globals.s3list:
+                bv = "aws_s3_bucket.b-" + bn + ".bucket"
+                if tn !="":
+                    t1=tt1 + ' = format("s3://%s/%s",'+bv+',"'+tn+'")\n'
+                else:
+                    t1=tt1 + ' = format("s3://%s/",'+bv+')\n'
+                common.add_dependancy("aws_s3_bucket", bn)
     return t1
 
 

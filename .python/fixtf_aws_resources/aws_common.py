@@ -218,7 +218,8 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         elif tt2==globals.region+"f":  t1=tt1 + ' = format("%sf",data.aws_region.current.name)\n'
 
         ### s3:// processing
-        elif tt2.startswith("s3://"): fixtf.deref_s3(t1, tt1, tt2)
+        elif tt2.startswith("s3://"): 
+            t1=fixtf.deref_s3(t1, tt1, tt2)
 
     
     except Exception as e:

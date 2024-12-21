@@ -5,6 +5,7 @@ import traceback
 import subprocess
 import os
 import re
+import ast
 from io import StringIO
 from contextlib import suppress
 import shutil
@@ -176,6 +177,7 @@ def call_resource(type, id):
             if clfn == "vpc-lattice":  getfn = getattr(eval("aws_vpc_lattice"), "get_"+type)
             elif clfn == "redshift-serverless":  getfn = getattr(eval("aws_redshift_serverless"), "get_"+type)
             elif clfn == "s3":  getfn = getattr(eval("aws_s3"), "get_"+type)
+            #elif clfn == "s3":  getfn = getattr(ast.literal_eval("aws_s3"), "get_"+type)
 
             else:
                # print("-1aa- clfn:"+clfn+" type:"+type)

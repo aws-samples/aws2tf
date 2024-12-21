@@ -44,7 +44,7 @@ def get_aws_secretsmanager_secret(type, id, clfn, descfn, topkey, key, filterid)
             common.write_import(type,j[key],None)
             common.add_dependancy("aws_secretsmanager_secret_version",j[key])
             try:
-                print(j['RotationEnabled'])
+                #print(j['RotationEnabled'])
                 common.add_dependancy("aws_secretsmanager_secret_rotation",j[key])
             except KeyError:
                 print("INFO: No rotation config")

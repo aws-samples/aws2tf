@@ -4,6 +4,7 @@ import requests
 import globals
 import botocore
 import inspect
+from botocore.config import Config
 
 
 def get_aws_lambda_layer(type, id, clfn, descfn, topkey, key, filterid):
@@ -66,13 +67,77 @@ def get_aws_lambda_layer_version(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 
+
 def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
-        print("--> In get_aws_lambda_function doing " + type + ' with id ' + str(id) +
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn,config=config)
+        if id is None:
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate():
+                response = response + page[topkey]
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                return True
+            for j in response:
+                fn=j[key]
+                common.write_import(type, fn, None)
+                get_lambda_code(fn)
+                common.add_known_dependancy("aws_lambda_alias",fn)
+                common.add_known_dependancy("aws_lambda_permission",fn)
+                common.add_known_dependancy("aws_lambda_function_event_invoke_config",fn)
+                common.add_known_dependancy("aws_lambda_event_source_mapping",fn)
+                common.write_import(type,j[key],None) 
+                #pkey=type+"."+fn
+                #globals.rproc[pkey]=True
+                pkey=type+"."+j['FunctionArn']
+                globals.rproc[pkey]=True
+
+
+        else:      
+            if id.startswith("arn:"): 
+                farn=id
+                id=id.split(":")[-1]
+
+            response = client.get_function(FunctionName=id)
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                return True
+            j=response['Configuration']
+            #print(str(j)+"/n")
+            fn=j[key]
+            common.write_import(type, fn, None)
+            get_lambda_code(fn)
+            common.add_known_dependancy("aws_lambda_alias",fn)
+            common.add_known_dependancy("aws_lambda_permission",fn)
+            common.add_known_dependancy("aws_lambda_function_event_invoke_config",fn)
+            common.add_known_dependancy("aws_lambda_event_source_mapping",fn)
+            pkey=type+"."+j['FunctionArn']
+            globals.rproc[pkey]=True
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+
+
+
+def get_aws_lambda_function_old(type, id, clfn, descfn, topkey, key, filterid):
+    #if globals.debug:
+    print("--> In get_aws_lambda_function doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
+    if id is not None:
+        if id.startswith("arn:"): id=id.split(":")[-1]
+
+
     response = common.call_boto3(type,clfn, descfn, topkey, key, id)
-    #print("-9a->"+str(response))
+    print("-9a->"+str(response))
     
     try:
         if response == []: 
@@ -81,7 +146,10 @@ def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
  
         for j in response: 
             fn=j[key]
-            if id is not None and id!=fn: continue
+            print("******** fn=",fn)
+            if id is not None:
+                if id.startswith("arn:"): id=id.split(":")[-1]
+                if id!=fn: continue
             else:
                 common.write_import(type, fn, None)
                 get_lambda_code(fn)

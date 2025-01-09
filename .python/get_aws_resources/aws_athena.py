@@ -1,5 +1,6 @@
 import common
 import boto3
+from botocore.config import Config
 import globals
 import inspect
 
@@ -96,6 +97,43 @@ def get_aws_athena_data_catalog(type, id, clfn, descfn, topkey, key, filterid):
                 return True
             j=response['DataCatalog']
             common.write_import(type,j['Name'],None)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+def get_aws_athena_database(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn,config=config)
+        catn="AwsDataCatalog"
+        if id is None:
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate(CatalogName=catn):
+                response = response + page[topkey]
+            print(str(response))
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                return True
+            for j in response:
+                if "-" in j[key]:
+                    print("WARNING: Invalid database name: "+j[key]+" so skipping")
+                    continue
+                common.write_import(type,j[key],None) 
+
+        else:     
+            response = client.get_database(CatalogName=catn,DatabaseName=id)
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                return True
+            j=response['Database']
+
+            common.write_import(type,j[key],None)
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

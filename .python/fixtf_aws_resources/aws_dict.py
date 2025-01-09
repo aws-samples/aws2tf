@@ -1406,7 +1406,7 @@ aws_athena_data_catalog = {
 aws_athena_database = {
 	"clfn":		"athena",
 	"descfn":	"list_databases",
-	"topkey":	"Databases",
+	"topkey":	"DatabaseList",
 	"key":		"Name",
 	"filterid":	"Name"
 }

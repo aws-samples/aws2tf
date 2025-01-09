@@ -628,7 +628,17 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
 
 
 def deref_role_arn(t1,tt1,tt2):
-    if ":role/aws-service-role" in tt2:	
+    if tt2.startswith("arn:aws:s3:::"):
+        bn=tt2.split(":::")[-1]
+        t1=tt1 + " = aws_s3_bucket.b-" + bn + ".arn\n"
+        common.add_dependancy("aws_s3_bucket",bn)
+    elif tt2.startswith("arn:aws:events:") and ":rule/" in tt2:
+        rn=tt2.split("/")[-1]
+        t1=tt1 + " = aws_cloudwatch_event_rule.default_" + rn + ".arn\n"
+        #### TODO - note assumption it's on default event bus !
+        common.add_dependancy("aws_cloudwatch_event_rule",rn)
+
+    elif ":role/aws-service-role" in tt2:	
         t1=globals_replace(t1,tt1,tt2)
     elif ":role/" in tt2:
         if tt2.endswith("*"): return t1
@@ -637,6 +647,7 @@ def deref_role_arn(t1,tt1,tt2):
             t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
             common.add_dependancy("aws_iam_role",tt2)
             
+    # it's not an arn - just a name
     elif ":" not in tt2 and tt2 != "null": # assume it's a role name
         t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
         common.add_dependancy("aws_iam_role", tt2)

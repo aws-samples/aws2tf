@@ -61,7 +61,7 @@ def get_aws_cloudwatch_event_rule(type, id, clfn, descfn, topkey, key, filterid)
                 else:
                     
                     response = client.describe_rule(Name=id)
-                    print(str(response))
+                    #print(str(response))
                     j=response
                 #event_bus_name/rule-name
                     pkey=j['EventBusName']+"/"+j[key]

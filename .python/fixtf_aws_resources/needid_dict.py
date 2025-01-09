@@ -1971,7 +1971,7 @@ aws_needid = {
   "aws_appsync_function": aws_appsync_function,
   "aws_appsync_resolver": aws_appsync_resolver,
   "aws_appsync_type": aws_appsync_type,
-  "aws_athena_database": aws_athena_database,
+  #"aws_athena_database": aws_athena_database,
   "aws_athena_prepared_statement": aws_athena_prepared_statement,
   "aws_auditmanager_control": aws_auditmanager_control,
   "aws_autoscaling_lifecycle_hook": aws_autoscaling_lifecycle_hook,

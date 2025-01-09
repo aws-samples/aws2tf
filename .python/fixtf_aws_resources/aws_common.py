@@ -40,7 +40,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         if tt1=="bucket" or tt1=="s3_bucket_name":
             if type != "aws_s3_bucket":
                 if "." not in tt2:
-                    if tt2 != "":
+                    if tt2 != "" and tt2 !="null":
                         t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
                         common.add_dependancy("aws_s3_bucket", tt2)
                         return skip,t1,flag1,flag2

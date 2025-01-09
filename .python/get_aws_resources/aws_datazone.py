@@ -99,7 +99,7 @@ def get_aws_datazone_user_profile(type, id, clfn, descfn, topkey, key, filterid)
                     else:
                         print("ERROR: "+str(e))
                         exit()
-                print("response="+str(response))
+                #print("response="+str(response))
                 if response == []: 
                     if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                     globals.rproc[pkey]=True    
@@ -143,7 +143,7 @@ def get_aws_datazone_domain(type, id, clfn, descfn, topkey, key, filterid):
                 # provider crashes on import
                 common.add_dependancy("aws_datazone_project", j[key])
                 common.add_dependancy("aws_datazone_glossary", j[key])
-                common.add_dependancy("aws_datazone_glossary_term", j[key])
+            
                 common.add_dependancy("aws_datazone_environment_profile", j[key])
                 common.add_dependancy("aws_datazone_environment_blueprint_configuration", j[key])
                 common.add_dependancy("aws_datazone_user_profile", j[key])
@@ -157,7 +157,7 @@ def get_aws_datazone_domain(type, id, clfn, descfn, topkey, key, filterid):
             # provider crashes on import
             common.add_dependancy("aws_datazone_project", j[key])
             common.add_dependancy("aws_datazone_glossary", j[key])
-            common.add_dependancy("aws_datazone_glossary_term", j[key])
+            
             common.add_dependancy("aws_datazone_environment_profile", j[key])
             common.add_dependancy("aws_datazone_environment_blueprint_configuration", j[key])
             common.add_dependancy("aws_datazone_user_profile", j[key])
@@ -230,6 +230,7 @@ def get_aws_datazone_glossary(type, id, clfn, descfn, topkey, key, filterid):
             theid=id+","+j[key]+","+j['owningProjectId']
             #print(theid)
             common.write_import(type,theid,None) 
+            common.add_dependancy("aws_datazone_glossary_term", theid)
 
         globals.rproc[pkey]=True
 
@@ -251,7 +252,11 @@ def get_aws_datazone_glossary_term(type, id, clfn, descfn, topkey, key, filterid
             print("WARNING must pass domain id to get_aws_datazone_glossary_term")
             return True
         else:
-            for page in paginator.paginate(domainIdentifier=id,searchScope='GLOSSARY_TERM'):
+            #print("Glossary terms id ",id)
+            did=id.split(',')[0]
+            pid=id.split(',')[2]
+            #print("Glossary terms for ",did,pid)
+            for page in paginator.paginate(domainIdentifier=did,owningProjectIdentifier=pid,searchScope='GLOSSARY_TERM'):
                 response = response + page[topkey]
 
         pkey=type+"."+id
@@ -262,9 +267,9 @@ def get_aws_datazone_glossary_term(type, id, clfn, descfn, topkey, key, filterid
         #print(str(response))
         for k in response:
             j=k['glossaryTermItem']
-            theid=id+","+j[key]+","+j['glossaryId']
+            theid=did+","+j[key]+","+j['glossaryId']
             #print(theid)
-            common.write_import(type,theid,None) 
+            common.write_import(type,theid,theid+"_"+pid) 
         globals.rproc[pkey]=True
         
         
@@ -296,7 +301,7 @@ def get_aws_datazone_form_type(type, id, clfn, descfn, topkey, key, filterid):
             if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
             globals.rproc[pkey]=True
             return True
-        print(str(response))
+        #print(str(response))
         for k in response:
 
             j=k['formTypeItem']

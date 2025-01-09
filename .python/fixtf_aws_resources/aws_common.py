@@ -104,6 +104,17 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                         common.add_dependancy("aws_kms_key",tt2)
             else:
                 skip=1
+
+
+
+        elif tt1 == "lambda_function_arn":
+            if tt2 != "null":     
+                if "arn:" in tt2: 
+                    tt2=tt2.split(":")[-1]
+                    t1=tt1 + " = aws_lambda_function." + tt2 + ".arn\n"
+                    common.add_dependancy("aws_lambda_function",tt2)
+            else:
+                skip=1        
         
         elif tt1 == "kms_key_id" or tt1=="kms_master_key_id" or tt1=="target_key_id" or tt1=="encryption_key" or tt1=="key_id":
         #elif "key_id" in tt1:

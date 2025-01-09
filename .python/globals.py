@@ -55,6 +55,8 @@ expected=False
 all_extypes=[]
 serverless=False
 dzd=""
+dzgid=""
+dzpid=""
 connectinid=""
 
 

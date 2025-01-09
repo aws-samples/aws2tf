@@ -47,16 +47,30 @@ def get_aws_cloudwatch_event_rule(type, id, clfn, descfn, topkey, key, filterid)
         if id is None:
             print("WARNING: Muse pass event_bus_name as a parameter returning")
             return True
-        else:   
-                response = client.list_rules(EventBusName=id)
-                if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-                for j in response[topkey]:
+        else:  
+                if id == "default":
+                    response = client.list_rules(EventBusName=id)
+                    if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                    for j in response[topkey]:
                 #event_bus_name/rule-name
-                    pkey=id+"/"+j[key]
+                        pkey=id+"/"+j[key]
+                        common.write_import(type,pkey,None)
+                        common.add_dependancy("aws_cloudwatch_event_target", pkey)
+                    pkey="aws_cloudwatch_event_rule."+id
+                    globals.rproc[pkey] = True
+                else:
+                    
+                    response = client.describe_rule(Name=id)
+                    print(str(response))
+                    j=response
+                #event_bus_name/rule-name
+                    pkey=j['EventBusName']+"/"+j[key]
                     common.write_import(type,pkey,None)
                     common.add_dependancy("aws_cloudwatch_event_target", pkey)
-                pkey="aws_cloudwatch_event_rule."+id
-                globals.rproc[pkey] = True
+                    pkey="aws_cloudwatch_event_rule."+id
+                    globals.rproc[pkey] = True
+
+
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

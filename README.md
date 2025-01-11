@@ -53,13 +53,13 @@ Running the tool in your local shell (bash) required these steps:
 
 To see the command line help use:
 
-```
+```bash
 ./aws2tf.py -h
 ```
 
 or for more extensive help:
 
-```
+```bash
 ./aws2tf.py -l
 ```
 
@@ -67,32 +67,32 @@ or for more extensive help:
 
 To generate the terraform files for all the VPC's in your account/region:
 
-```
+```bash
 ./aws2tf.py -t vpc
 ```
 
 or for a specific VPC:
 
-```
+```bash
 ./aws2tf.py -t aws_vpc -i vpc-xxxxxxxxxx
 ```
 
 You can also instead of using predefined types use the direct Terraform resource names:
 
-```
+```bash
 ./aws2tf.py -t aws_sagemaker_domain
 ```
 
 You can also combine type requests by using a comma delimited list:
 
-```
+```bash
 ./aws2tf.py -t vpc,efs,aws_sagemaker_domain
 ```
 
 By default aws2tf genrates a separate aws_xxxx.tf file for every resource it finds, if you would prefer to have them all merged into a single file (main.tf)
 use the -s option:
 
-```
+```bash
 ./aws2tf.py -t vpc -s
 ```
 
@@ -102,7 +102,7 @@ Now you can add whatever resources you want by using the -m (merge) flag:
 
 To add all ECS resources:
 
-```
+```bash
 ./aws2tf.py -t ecs -m
 ```
 
@@ -110,19 +110,19 @@ You can see all the supported types (-t [type]) by using -l (long help) option: 
 
 You can also import just a specific resource by passing it's AWS resource name, in this example all the existing resources and the newly merged resources will be put into a single (main.tf) file as the -s option is included:
 
-```
+```bash
 ./aws2tf.py -t eks -i my-cluster-name -m -s
 ```
 
 or for a specific domain:
 
-```
+```bash
 ./aws2tf.py -t aws_sagemaker_domain -i d-xxxxxxxxx -m 
 ```
 
 Add a specific S3 bucket:
 
-```
+```bash
 ./aws2tf -t aws_s3_bucket -i my_bucket_name -m
 ```
 
@@ -133,7 +133,7 @@ Often Organisations (and AWS blogs/workshops) deploy resources for use using a s
 
 aws2tf can convert these to terraform for you using the -s [stack name] option
 
-```
+```bash
 ./aws2tf.sh -s <stack name>
 ```
 
@@ -142,20 +142,25 @@ aws2tf can convert these to terraform for you using the -s [stack name] option
 
 Finally you can scan everything in your account by simply running:
 
+```bash
 ./aws2tf.py
+```
 
 But this is **Not recommended** as this will take quite some time to complete!
 
 You can also try the experimental fast mode which uses multi threading to speed things up:
 
+```bash
 ./aws2tf.py -f
-
+```
 
 ### Overriding the Terraform version
 
 You can override the default Terraform provider version used by using the -tv flag
 
+```bash
 ./aws2tf.py -t vpc -tv 5.83.1
+```
 
 You need to ensure the provider version you specify is valid, as (currently) the version is just passed straight through without any validation checks 
 

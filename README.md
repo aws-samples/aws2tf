@@ -86,7 +86,7 @@ You can also instead of using predefined types use the direct Terraform resource
 You can also combine type requests by using a comma delimited list:
 
 ```
-./aws2tf.py -t vpc,efs,aws_dagemaker_domain
+./aws2tf.py -t vpc,efs,aws_sagemaker_domain
 ```
 
 By default aws2tf genrates a separate aws_xxxx.tf file for every resource it finds, if you would prefer to have them all merged into a single file (main.tf)
@@ -150,6 +150,14 @@ You can also try the experimental fast mode which uses multi threading to speed 
 
 ./aws2tf.py -f
 
+
+### Overriding the Terraform version
+
+You can override the default Terraform provider version used by using the -tv flag
+
+./aws2tf.py -t vpc -tv 5.83.1
+
+You need to ensure the provider version you specify is valid, as (currently) the version is just passed straight through without any validation checks 
 
 ----------
 

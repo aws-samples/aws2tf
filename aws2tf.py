@@ -158,6 +158,9 @@ def main():
         globals.debug = True
         globals.fast = False
 
+    if args.tv:
+        globals.tfver=args.tv
+
     if args.validate: globals.validate = True
 
     if args.type is None or args.type=="":

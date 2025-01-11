@@ -5,7 +5,6 @@ import globals
 import inspect
 
 
-
 def get_aws_athena_workgroup(type, id, clfn, descfn, topkey, key, filterid):
 
     if globals.debug:

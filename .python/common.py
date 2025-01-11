@@ -18,6 +18,7 @@ import inspect
 from datetime import datetime
 import resources
 from timed_interrupt import timed_int
+import threading
 
 #####################
 
@@ -766,17 +767,20 @@ def check_python_version():
    version = sys.version_info
    major = version.major
    minor = version.minor
+   bv = str(boto3.__version__)
+   print("boto3 version: ",bv)
    if major < 3 or (major == 3 and minor < 8):
       print("This program requires Python 3.8 or later.")
       sys.exit(1)
 # check boto3 version
-   if boto3.__version__ < '1.35.76':
+   if boto3.__version__ < '1.35.97':
       bv = str(boto3.__version__)
+      print("boto3 version: ",bv)
       vs = bv.split(".")
       v1 = int(vs[0])*100000+int(vs[1])*1000+int(vs[2])
-      if v1 < 135076:
+      if v1 < 135097:
          print("boto3 version:"+bv)
-         print("This program requires boto3 1.35.76 or later.")
+         print("This program requires boto3 1.35.97 or later.")
          print("Try: pip install boto3")
          print("exit 037")
          timed_int.stop()
@@ -1511,7 +1515,10 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
       f.write(f"{e=} [e1] \n")
       f.write(f"{fname=} {exc_tb.tb_lineno=} [e1] \n")
       f.write("-----------------------------------------------------------------------------\n")
-   #timed_int.stop()
+   print("stopping process ...")
+   #threading.
+   timed_int.stop()
+   os._exit(1)
    exit()
 
 def handle_error2(e,frame,id):
@@ -1531,6 +1538,7 @@ def handle_error2(e,frame,id):
       f.write("-----------------------------------------------------------------------------\n")
    print("exit 042")
    timed_int.stop()
+   os._exit(1)
    exit()
 
 

@@ -225,6 +225,14 @@ aws_vpclattice_listener_rule = {
 	"filterid":	"name"
 }
 
+aws_vpclattice_resource_gateway = { 
+	"clfn":		"vpc-lattice",
+	"descfn":	"list_resource_gateways",
+	"topkey":	"items",
+	"key":		"id",
+	"filterid":	"name"
+}
+
 aws_vpclattice_resource_policy = {
 	"clfn":		"vpc-lattice",
 	"descfn":	"get_resource_policy",
@@ -10591,6 +10599,7 @@ aws_resources = {
 	"aws_iam_instance_profile": aws_iam_instance_profile,
 	"aws_vpclattice_access_log_subscription": aws_vpclattice_access_log_subscription,
 	"aws_vpclattice_auth_policy": aws_vpclattice_auth_policy,
+    "aws_vpclattice_resource_gateway": aws_vpclattice_resource_gateway,
 	"aws_vpclattice_listener": aws_vpclattice_listener,
 	"aws_vpclattice_listener_rule": aws_vpclattice_listener_rule,
 	"aws_vpclattice_resource_policy": aws_vpclattice_resource_policy,

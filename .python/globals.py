@@ -1,7 +1,6 @@
 import sys,os
 
-
-tfver="5.80.0"
+tfver="5.83.1"
 esttime=120.0
 merge=False
 fast=False

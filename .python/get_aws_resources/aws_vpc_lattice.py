@@ -1,5 +1,6 @@
 import common
 import botocore
+from botocore.config import Config
 import globals
 import inspect
 
@@ -366,3 +367,44 @@ def get_aws_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid):
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
 
    return True
+
+# aws_vpclattice_resource_gateway
+
+def get_aws_vpclattice_resource_gateway(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        #client = common.boto3.client(clfn,config=config)
+        client = common.boto3.client(clfn)
+        if id is None:
+            print("pag")
+            paginator = client.get_paginator(descfn)
+            print("for")
+            for page in paginator.paginate(status="ACTIVE"):
+                response = response + page[topkey]
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                return True
+            for j in response:
+                common.write_import(type,j[key],None) 
+
+        else:      
+            response = client.get_resource_gateway(resourceGatewayIdentifier=id)
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                return True
+            j=response
+            common.write_import(type,j[key],None)
+            pkey=type+"."+id
+            globals.rproc[pkey] = True
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+
+

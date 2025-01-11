@@ -158,6 +158,9 @@ def main():
         globals.debug = True
         globals.fast = False
 
+    if args.tv:
+        globals.tfver=args.tv
+
     if args.validate: globals.validate = True
 
     if args.type is None or args.type=="":
@@ -275,36 +278,35 @@ def main():
         print("Terraform Initialise may have failed...")
         timed_interrupt.timed_int.stop()
         exit()
-            
+
 
     if args.merge:
         print("Merging "+str(globals.merge))
         #print("Merging capability disabled for now - exiting")
         #exit()
         try:
-            file = open('pyprocessed.txt', 'r')
-            while True:
-                line = file.readline()
-                if not line:
-                    break
-                line = line.strip()
+            with open('pyprocessed.txt', 'r') as file:
+                # Your file operations here
+                content = file.readlines()
+                # Process content as needed
 
+
+            for line in content:
                 globals.rproc[line] = True
+                
             if globals.debug:
                 print("Pre Processed:")
-                for i in globals.rproc.keys():
-                    print(i)
+                for i in globals.rproc.keys():   print(i)
 
-            com = "rm -f main.tf"
-            rout = common.rc(com) 
-            com = "cp imported/*.tf ."
-            rout = common.rc(com) 
+                com = "rm -f main.tf"
+                rout = common.rc(com) 
+                com = "cp imported/*.tf ."
+                rout = common.rc(com) 
 
-        except:
-            print("No pyprocessed.txt found")
-            pass
-
-
+        except FileNotFoundError:
+            print("Could not find pyprocessed.txt")
+        except IOError as e:
+            print(f"IO error occurred: {str(e)}")   
 
     id = args.id
 
@@ -396,17 +398,16 @@ def main():
 
         
 ################
-        elif all_types != None and lall > 1:
+        elif all_types is not None and lall > 1:
             #all_types=all_types[:10]
             print("len all_types="+str(len(all_types))) # testing only
             print("INFO: Building secondary lists")
             build_secondary_lists(id)
-            #print(len(globals.role_policies_list))
-            #print(len(globals.attached_role_policies_list))
+
             
             globals.esttime=len(all_types)/4
             #id="foobar" # testing only
-            print("------------------1-------------------------------------------")
+            #print("------------------1-------------------------------------------")
             ic=0
             istart=0
             it=len(all_types)

@@ -784,16 +784,26 @@ def aws_vpc_dhcp_options_association(t1,tt1,tt2,flag1,flag2):
 	return skip,t1,flag1,flag2
 
 def aws_vpc_endpoint(t1,tt1,tt2,flag1,flag2):
-    skip=0
-    if tt1 == "vpc_id":
-        
-        t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
-        common.add_dependancy("aws_vpc",tt2)
+	skip=0
+	if tt1 == "vpc_id":
+		t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
+		common.add_dependancy("aws_vpc",tt2)
 
     ##elif tt1 == "subnet_ids":  t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
     ##elif tt1 == "security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
     ##elif tt1 == "route_table_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_route_table","rtb-",skip)
-    return skip,t1,flag1,flag2
+	elif tt1 == "ip_address_type":
+		if tt2 == "IPV4": 
+			t1=tt1 + " = \"ipv4\"\n"
+			t1=t1+"\n lifecycle {\n   ignore_changes = [ip_address_type]\n}\n"
+		elif tt2 == "IPV6": 
+			t1=tt1 + " = \"ipv6\"\n"
+			t1=t1+"\n lifecycle {\n   ignore_changes = [ip_address_type]\n}\n"
+		elif tt2 == "DUALSTACK": 
+			t1=tt1 + " = \"dualstack\"\n"
+			t1=t1+"\n lifecycle {\n   ignore_changes = [ip_address_type]\n}\n"
+		
+	return skip,t1,flag1,flag2
 
 def aws_vpc_dhcp_options(t1,tt1,tt2,flag1,flag2):
     skip=0

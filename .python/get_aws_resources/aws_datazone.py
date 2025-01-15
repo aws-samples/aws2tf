@@ -390,7 +390,7 @@ def get_aws_datazone_environment(type, id, clfn, descfn, topkey, key, filterid):
     try:
         response = []
         client = boto3.client(clfn)
-        pkey=type+"."+id
+    
         paginator = client.get_paginator(descfn)
         if id is None:
             print("WARNING must pass domain_id:project_id to get_aws_datazone_environment")

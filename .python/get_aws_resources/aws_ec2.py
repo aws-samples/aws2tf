@@ -691,9 +691,15 @@ def get_aws_vpc_endpoint_route_table_association(type, id, clfn, descfn, topkey,
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 endpid=j[key]
-                for k in j['RouteTableIds']:
-                    theid=endpid+"/"+k
-                    common.write_import(type,theid,None) 
+                #print(str(j))
+                try:
+                    for k in j['RouteTableIds']:
+                        theid=endpid+"/"+k
+                        common.write_import(type,theid,None) 
+                except KeyError:
+                    print("No route table ids for endpoint "+endpid)
+                    continue
+                
 
         else:      
             response = client.describe_vpc_endpoints(VpcEndpointIds=[id])

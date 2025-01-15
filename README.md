@@ -217,6 +217,10 @@ It is not possible at this time to use your own state location (eg. on s3)
 **October  2024**
 
 *The python version of this tool `aws2tf.py` has now superceded the old bash script version.*
-*You can still find and use the old version in the hidden sub-directory `.aws2tf-archive`*
+*You can still find and use the old version in the bash-version branch`*
+
+```bash
+git clone -b bash-version https://github.com/aws-samples/aws2tf.git
+``` 
 
 

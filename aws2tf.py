@@ -14,7 +14,7 @@ from typing import List, Dict
 import io
 from concurrent.futures import ThreadPoolExecutor
 
-sys.path.insert(0, './.python')
+sys.path.insert(0, './code')
 #from get_aws_resources import aws_s3
 import common
 import resources
@@ -29,7 +29,7 @@ from build_lists import build_lists, build_secondary_lists
 def extra_help():
     print("\nExtra help\n")
     print("Type codes supported - ./aws2tf.py -t [type code]:\n")
-    with open('.python/resources.py', 'r') as f:
+    with open('code/resources.py', 'r') as f:
         for line in f.readlines():
             line3=""
             if "#" in line:  line3=line.split("#")[1].strip()

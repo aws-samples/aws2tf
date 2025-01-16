@@ -1,4 +1,4 @@
-cd /Users/awsandy/odp/aws/sw/my-aws-samples/aws2tf-py/.python/data
+cd /Users/awsandy/odp/aws/sw/my-aws-samples/aws2tf-py/code/data
 rm -f import__aws_ebs_snapshot__snap-f*.tf
 rm -f import__aws_ebs_snapshot__snap-e*.tf
 rm -f import__aws_ebs_snapshot__snap-d*.tf

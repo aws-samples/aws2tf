@@ -41,8 +41,14 @@ __pycache__
 .python/probeout/*
 .python/bugs.md
 .python/provider-data/terraform-provider-aws
+code/data/tfplan
+code/data/*.log
+code/probeout/*
+code/bugs.md
+code/provider-data/terraform-provider-aws
 run.log
 .python/.auto-gen/*.log
+code/.auto-gen/*.log
 TOPORT_from_aws2tf.md
 copy-to-aws2tf.sh
 aws3tf.py

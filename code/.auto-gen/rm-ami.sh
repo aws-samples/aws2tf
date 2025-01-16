@@ -1,4 +1,4 @@
-cd /Users/awsandy/odp/aws/sw/my-aws-samples/aws2tf-py/.python/data
+cd /Users/awsandy/odp/aws/sw/my-aws-samples/aws2tf-py/code/data
 rm -f import__aws_ami__ami-0f*.tf
 rm -f import__aws_ami__ami-0e*.tf
 rm -f import__aws_ami__ami-0d*.tf

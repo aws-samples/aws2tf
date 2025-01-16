@@ -182,4 +182,5 @@ noimport = {
     #"aws_glue_data_quality_ruleset": True,
     "aws_codecommit_repository": True,
     "aws_vpclattice_resource_gateway": True,
+    "aws_eip_association": True,
 } 

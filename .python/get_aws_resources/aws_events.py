@@ -59,8 +59,15 @@ def get_aws_cloudwatch_event_rule(type, id, clfn, descfn, topkey, key, filterid)
                     pkey="aws_cloudwatch_event_rule."+id
                     globals.rproc[pkey] = True
                 else:
-                    
-                    response = client.describe_rule(Name=id)
+                    try:
+                        response = client.describe_rule(Name=id)
+                    except Exception as e:
+                        print("WARNING: "+str(e)+" for "+type+ " id="+str(id)+" returning")
+                        print("ADVICE: Check if: "+type+ " id="+str(id)+" actually exists ?")
+                        print("ADVICE: Check what other resources may be referring to this resource if it doesn't exist")
+                        pkey="aws_cloudwatch_event_rule."+id
+                        globals.rproc[pkey] = True
+                        return True
                     #print(str(response))
                     j=response
                 #event_bus_name/rule-name

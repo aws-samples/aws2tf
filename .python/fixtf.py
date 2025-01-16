@@ -628,11 +628,13 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
 
 
 def deref_role_arn(t1,tt1,tt2):
+    if tt2.startswith("arn:aws:events:"): print(tt2)
+
     if tt2.startswith("arn:aws:s3:::"):
         bn=tt2.split(":::")[-1]
         t1=tt1 + " = aws_s3_bucket.b-" + bn + ".arn\n"
         common.add_dependancy("aws_s3_bucket",bn)
-    elif tt2.startswith("arn:aws:events:") and ":rule/" in tt2:
+    elif tt2.startswith("arn:aws:events:") and ":rule/" in tt2 and ":rule/aws.partner" not in tt2:
         rn=tt2.split("/")[-1]
         t1=tt1 + " = aws_cloudwatch_event_rule.default_" + rn + ".arn\n"
         #### TODO - note assumption it's on default event bus !

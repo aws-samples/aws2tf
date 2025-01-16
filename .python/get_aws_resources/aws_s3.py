@@ -79,11 +79,7 @@ def get_all_s3_buckets(fb,my_region):
       'aws_s3_bucket_website_configuration': s3.get_bucket_website
    }
   
-   #s3_fields2 = {
-   #   'aws_s3_bucket_acl': s3.get_bucket_acl
-   #}
-  
-   #buckets = s3a.buckets.all()
+
 
    if not globals.debug:
 
@@ -110,12 +106,15 @@ def get_all_s3_buckets(fb,my_region):
          if v is True:
             #print("true bucket="+k,str(v))
             bucket_name=k
-            if "aws_s3_bucket,"+bucket_name in globals.rproc:
+            
+            if "aws_s3_bucket."+bucket_name in str(globals.rproc):
                print("Already processed skipping bucket " + bucket_name)
                continue
             print("Processing Bucket (MT): "+bucket_name + ' ...')
             common.write_import(type,bucket_name,"b-"+bucket_name)
             common.add_dependancy("aws_s3_access_point",bucket_name)
+            pkey=type+"."+bucket_name
+            globals.rproc[pkey]=True
 
 
       globals.tracking_message="Stage 3 of 10 getting s3 bucket properties resources ..."
@@ -178,9 +177,15 @@ def get_all_s3_buckets(fb,my_region):
          #    print("failed to access bucket " +bucket_name + " " + bl +" skipping ..")
          #    continue
          #print("write_import for Bucket: "+bucket_name)
+         print(str(globals.rproc))
+         if "aws_s3_bucket."+bucket_name in str(globals.rproc):
+            print("Already processed skipping bucket " + bucket_name)
+            continue
          print("Processing Bucket (ST): "+bucket_name + ' ...')
          common.write_import(type,bucket_name,"b-"+bucket_name)
          common.add_dependancy("aws_s3_access_point",bucket_name)
+         pkey=type+"."+bucket_name
+         globals.rproc[pkey]=True
       
          for key in s3_fields:
             get_s3(s3_fields, key, bucket_name)

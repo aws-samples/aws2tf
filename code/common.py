@@ -76,6 +76,7 @@ from get_aws_resources import aws_logs
 from get_aws_resources import aws_lakeformation
 from get_aws_resources import aws_lambda
 from get_aws_resources import aws_license_manager
+from get_aws_resources import aws_mwaa
 from get_aws_resources import aws_neptune
 from get_aws_resources import aws_networkmanager
 from get_aws_resources import aws_organizations
@@ -112,7 +113,7 @@ from fixtf_aws_resources import aws_not_implemented
 
 
 def call_resource(type, id):
-   #print("---- in call_resources >>>>> "+type+"   "+str(id))
+   #print("--1-- in call_resources >>>>> "+type+"   "+str(id))
    if type in globals.all_extypes:
       print("Excluding", type) 
       return
@@ -135,9 +136,6 @@ def call_resource(type, id):
          f3.write("-->> called aws_null for: "+id+"\n")
       return
 
-   with open('processed-resources.log', 'a') as f4:
-      f4.write(str(type) + " : " + str(id)+"\n")
-
     # don't get it if we alreay have it
     # if globals.rproc
    if globals.debug: print("---->>>>> "+type+"   "+str(id))
@@ -156,7 +154,7 @@ def call_resource(type, id):
                needid_dict.aws_needid[type]['param'])
          # TODO api only
          return
-
+   #print("--2-- in call_resources >>>>> "+type+"   "+str(id))
    rr = False
    sr = False
    clfn, descfn, topkey, key, filterid = resources.resource_data(type, id)
@@ -234,6 +232,9 @@ def call_resource(type, id):
             print("--->> Could not get resource "+type+" id="+str(id))
             pass
 
+
+   with open('processed-resources.log', 'a') as f4:
+      f4.write(str(type) + " : " + str(id)+"\n")
 
 def tfplan1():
 
@@ -1178,6 +1179,7 @@ def add_dependancy(type,id):
       pkey=type+"."+id
       if pkey not in globals.rproc:
          if globals.debug: print("add_dependancy: " + pkey)
+         print("add_dependancy: " + pkey)
          globals.rproc[pkey]=False
    except Exception as e:
       handle_error(e, str(inspect.currentframe().f_code.co_name), type, id)

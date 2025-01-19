@@ -57,7 +57,7 @@ def get_all_s3_buckets(fb,my_region):
    s3 = boto3.client("s3",region_name=my_region)
    s3_fields = {
       'aws_s3_bucket_accelerate_configuration': s3.get_bucket_accelerate_configuration,
-      'aws_s3_bucket_acl': s3.get_bucket_acl,
+      #'aws_s3_bucket_acl': s3.get_bucket_acl, shouldn't be using anymore
       'aws_s3_bucket_analytics': s3.get_bucket_analytics_configuration,
       'aws_s3_bucket_cors_configuration': s3.get_bucket_cors,
       'aws_s3_bucket_intelligent_tiering_configuration': s3.get_bucket_intelligent_tiering_configuration,
@@ -108,8 +108,10 @@ def get_all_s3_buckets(fb,my_region):
             bucket_name=k
             
             if "aws_s3_bucket."+bucket_name in str(globals.rproc):
-               print("Already processed skipping bucket " + bucket_name)
-               continue
+               if globals.rproc["aws_s3_bucket."+bucket_name] is True:
+                  print("Already processed skipping bucket " + bucket_name + " (MT)")
+                  continue
+               
             print("Processing Bucket (MT): "+bucket_name + ' ...')
             common.write_import(type,bucket_name,"b-"+bucket_name)
             common.add_dependancy("aws_s3_access_point",bucket_name)
@@ -141,7 +143,8 @@ def get_all_s3_buckets(fb,my_region):
       
          #bucket_name=buck.name
          if "aws_s3_bucket,"+bucket_name in globals.rproc:
-            print("Already processed skipping bucket " + bucket_name)
+            print("Already processed skipping bucket " + bucket_name+ " (ST)")
+            os._exit(1)
             continue
          # jump if bucket name does not match
          if fb is not None:
@@ -168,19 +171,12 @@ def get_all_s3_buckets(fb,my_region):
                print(exc_type, fname, exc_tb.tb_lineno)
                print('continuing on exception to location .......')
                continue
-         
 
-         #try:
-         #    mp="s3://"+buck.name+"/"
-         #    objects = list(buck.objects.all(mp))
-         #except:
-         #    print("failed to access bucket " +bucket_name + " " + bl +" skipping ..")
-         #    continue
-         #print("write_import for Bucket: "+bucket_name)
-         print(str(globals.rproc))
          if "aws_s3_bucket."+bucket_name in str(globals.rproc):
-            print("Already processed skipping bucket " + bucket_name)
-            continue
+               if globals.rproc["aws_s3_bucket."+bucket_name] is True:
+                  print("Already processed skipping bucket " + bucket_name + " (MT)")
+                  continue
+
          print("Processing Bucket (ST): "+bucket_name + ' ...')
          common.write_import(type,bucket_name,"b-"+bucket_name)
          common.add_dependancy("aws_s3_access_point",bucket_name)

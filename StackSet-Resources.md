@@ -172,6 +172,7 @@
 * AWS::Lambda::Function
 * AWS::Lambda::LayerVersion
 * AWS::Logs::LogGroup
+* AWS::MSK::Cluster
 * AWS::OpenSearchService::Domain
 * AWS::Pipes::Pipe
 * AWS::RDS::DBCluster

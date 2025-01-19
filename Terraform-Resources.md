@@ -197,6 +197,7 @@
 * aws_datasync_agent
 * aws_datasync_location_s3
 * aws_datasync_task
+* aws_datazone_asset_type
 * aws_datazone_domain
 * aws_datazone_environment
 * aws_datazone_environment_blueprint_configuration
@@ -204,6 +205,7 @@
 * aws_datazone_glossary
 * aws_datazone_glossary_term
 * aws_datazone_project
+* aws_datazone_user_profile
 * aws_dax_cluster
 * aws_db_cluster_snapshot
 * aws_db_event_subscription
@@ -308,7 +310,6 @@
 * aws_efs_replication_configuration
 * aws_egress_only_internet_gateway
 * aws_eip
-* aws_eip_association
 * aws_eks_access_entry
 * aws_eks_access_policy_association
 * aws_eks_addon

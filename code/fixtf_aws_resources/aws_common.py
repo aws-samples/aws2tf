@@ -45,6 +45,12 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                         common.add_dependancy("aws_s3_bucket", tt2)
                         return skip,t1,flag1,flag2
                     
+        if tt1=="source_bucket_arn" and tt2.startswith("arn:"):
+            tt2=tt2.split(":")[-1]
+            t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".arn\n"
+            common.add_dependancy("aws_s3_bucket", tt2)
+            return skip,t1,flag1,flag2
+                    
         elif tt1 == "rest_api_id" and "aws_api_gateway_" in type:
             if tt2 != "null":
                 t1=tt1 + " = aws_api_gateway_rest_api.r-" + tt2 + ".id\n"

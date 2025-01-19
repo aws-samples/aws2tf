@@ -967,7 +967,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::M2::Application": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::M2::Environment": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::MSK::BatchScramSecret": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::MSK::Cluster": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::MSK::Cluster": common.call_resource("aws_msk_cluster", parn)
             elif type == "AWS::MSK::ClusterPolicy": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::MSK::Configuration": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::MSK::Replicator": common.call_resource("aws_null", type+" "+pid)

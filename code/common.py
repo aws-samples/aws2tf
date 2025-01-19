@@ -69,6 +69,7 @@ from get_aws_resources import aws_firehose
 from get_aws_resources import aws_glue
 from get_aws_resources import aws_guardduty
 from get_aws_resources import aws_iam
+from get_aws_resources import aws_kafka
 from get_aws_resources import aws_kendra
 from get_aws_resources import aws_kinesis
 from get_aws_resources import aws_logs

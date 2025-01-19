@@ -9,7 +9,7 @@ notimplemented = {
     "aws_lightsail_database": True,  ### TODO
     "aws_macie2_classification_job": True,  ### TODO
     "aws_memorydb_cluster": True,   ### TODO
-    "aws_msk_cluster": True,  ### TODO
+    #"aws_msk_cluster": True,  ### TODO
     "aws_mskconnect_connector": True,  ### TODO
     "aws_networkfirewall_resource_policy": True, ### TODO
     "aws_opensearch_inbound_connection_accepter": True,  ### TODO

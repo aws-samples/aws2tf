@@ -273,7 +273,7 @@ def get_aws_rds_cluster(type, id, clfn, descfn, topkey, key, filterid):
             
 
         else:
-            response = client.describe_db_instances(DBInstanceIdentifier=id)
+            response = client.describe_db_clusters(DBClusterIdentifier=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 #print(j)

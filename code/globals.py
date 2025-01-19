@@ -32,6 +32,7 @@ asg_azs=False
 plan2=False
 lbskipaacl=False
 lbskipcnxl=False
+mskcfg=False
 ssmparamn=""
 repdbin=False
 gulejobmaxcap=False

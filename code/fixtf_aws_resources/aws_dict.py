@@ -6535,10 +6535,10 @@ aws_mq_configuration = {
 
 aws_msk_cluster = {
 	"clfn":		"kafka",
-	"descfn":	"list_clusters",
-	"topkey":	"Clusters",
-	"key":		"ClusterName",
-	"filterid":	"ClusterName"
+	"descfn":	"list_clusters_v2",
+	"topkey":	"ClusterInfoList",
+	"key":		"ClusterArn",
+	"filterid":	"ClusterArn"
 }
 
 aws_msk_cluster_policy = {

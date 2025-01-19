@@ -60,7 +60,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                     #print("--returned deref array ->>  aws_common: t1="+t1+" skip="+str(skip))
                     return skip,t1,flag1,flag2
 
-        elif tt1 == "subnets" or tt1 == "subnet_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
+        elif tt1 == "subnets" or tt1 == "subnet_ids" or tt1 == "client_subnets": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
         elif tt1 == "route_table_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_route_table","rtb-",skip)
         elif tt1 == "iam_roles": t1=fixtf.deref_role_arn_array(t1,tt1,tt2)
         elif tt1 == "vpc_id" or tt1=="vpc":

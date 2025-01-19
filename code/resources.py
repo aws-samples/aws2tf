@@ -47,6 +47,8 @@ def resource_types(type):
     elif type == "lambda": rets=["aws_lambda_function"]; return rets # Lambda functions and some dependancies 
     elif type == "lb" or type == "elb": rets=["aws_lb"]; return rets # Lambda functions and some dependancies
     elif type == "lf": rets=["aws_lakeformation_data_lake_settings","aws_lakeformation_resource","aws_lakeformation_permissions"]; return rets # Lake Formation
+    elif type == "msk": rets=["aws_msk_cluster"]; return rets # MSK Clusters and dependancies
+    elif type == "mwaa": rets=["aws_mwaa_environment"]; return rets # MWAA Environment and dependancie
     elif type == "natgw": rets=["aws_nat_gateway"]; return rets # NAT gateway and dependancies
     elif type == "org": rets=["aws_organizations_organization","aws_organizations_account","aws_organizations_resource_policy","aws_organizations_policy"]; return rets # AWS Organisations and some dependancies
     elif type == "params": rets=["aws_ssm_parameter"]; return rets # SSM parameters

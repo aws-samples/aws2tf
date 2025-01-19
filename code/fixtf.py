@@ -292,6 +292,7 @@ def fixtf(ttft,tf):
     cnxl=0
     globals.lbskipaacl=False
     globals.lbskipcnxl=False
+    globals.mskcfg=False
 
     if ttft=="aws_lb":
         for t1 in Lines:
@@ -323,6 +324,13 @@ def fixtf(ttft,tf):
         globals.stripstart="{"
         globals.stripend="}"
 
+
+    if ttft=="aws_msk_cluster":
+        globals.stripblock="configuration_info {"
+        globals.stripstart="{"
+        globals.stripend="}"
+
+
     if ttft=="aws_lambda_event_source_mapping" and globals.levsmap:
         globals.stripblock="destination_config {"
         globals.stripstart="{"
@@ -336,6 +344,11 @@ def fixtf(ttft,tf):
     globals.connectinid=""
     #if globals.acc in tf2:
     #    tf2=tf2.replace(globals.acc, "__")
+
+
+########################                       
+###Generic block remover 
+########################
 
     with open(tf2, "w") as f2:
         skip=0
@@ -373,8 +386,10 @@ def fixtf(ttft,tf):
                 if skip==0:                
                     skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
 
-
+                #####
                 ## block strip sections
+                ####
+                
                 if globals.stripblock != "":
                     if globals.stripblock in t1: globals.lbc=1
                     elif globals.stripstart in t1 and globals.lbc>0: globals.lbc=globals.lbc+1
@@ -405,7 +420,7 @@ def fixtf(ttft,tf):
                 f2.write(t1)
 
 
-        # extra flock removals in aws_lb
+        # extra block removals in aws_lb
         if type=="aws_lb":
             if globals.lbskipaacl:
                 shutil.move(tf2, tf2+".saved")
@@ -426,7 +441,7 @@ def fixtf(ttft,tf):
                             elif globals.lbc > 0: skip=1
             if globals.lbskipcnxl:
                 shutil.move(tf2, tf2+".saved")
-                globals.stripblock="connectin_logs"
+                globals.stripblock="connection_logs"
                 with open(tf2+".saved", "e") as f1:
                     Lines = f1.readlines()
                 with open(tf2, "w") as f2:
@@ -441,7 +456,8 @@ def fixtf(ttft,tf):
                                 globals.lbc=globals.lbc-1
                                 skip=1
                             elif globals.lbc > 0: skip=1
-                        
+
+
 
         if nofind > 0:
            print("WARNING: No fixtf for "+tf+" calling generic fixtf2.aws_resource nofind="+str(nofind))

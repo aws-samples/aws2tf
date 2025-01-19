@@ -95,13 +95,14 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                 t1=tt1 + " = aws_efs_file_system." + tt2 + ".id\n"
                 common.add_dependancy("aws_efs_file_system", tt2)
 
-        elif tt1 == "kms_key_arn":
+        elif tt1 == "kms_key_arn" or tt1=="encryption_at_rest_kms_key_arn":
             if tt2 != "null":     
                 if "arn:" in tt2: 
                     tt2=tt2.split("/")[-1]
                     if check_key(tt2):	
                         t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
                         common.add_dependancy("aws_kms_key",tt2)
+                    ## else - it's a AWS managed key so let it fall into format statement later.
             else:
                 skip=1
 

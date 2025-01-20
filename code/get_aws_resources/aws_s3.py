@@ -57,7 +57,7 @@ def get_all_s3_buckets(fb,my_region):
    s3 = boto3.client("s3",region_name=my_region)
    s3_fields = {
       'aws_s3_bucket_accelerate_configuration': s3.get_bucket_accelerate_configuration,
-      #'aws_s3_bucket_acl': s3.get_bucket_acl, shouldn't be using anymore
+      'aws_s3_bucket_acl': s3.get_bucket_acl, 
       'aws_s3_bucket_analytics': s3.get_bucket_analytics_configuration,
       'aws_s3_bucket_cors_configuration': s3.get_bucket_cors,
       'aws_s3_bucket_intelligent_tiering_configuration': s3.get_bucket_intelligent_tiering_configuration,

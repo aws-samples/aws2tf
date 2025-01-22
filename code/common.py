@@ -795,7 +795,7 @@ def aws_tf(region):
 
    with open("provider.tf", 'w') as f3:
       f3.write('terraform {\n')
-      f3.write('  required_version = "> 1.7.4"\n')
+      f3.write('  required_version = "> 1.9.5"\n')
       f3.write('  required_providers {\n')
       f3.write('    aws = {\n')
       f3.write('      source  = "hashicorp/aws"\n')

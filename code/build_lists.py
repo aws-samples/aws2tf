@@ -51,6 +51,9 @@ def build_lists():
             paginator = client.get_paginator('describe_subnets')
             for page in paginator.paginate():
                 response.extend(page['Subnets'])
+            # save response
+            with open('imported/subnets.json', 'w') as f:
+               json.dump(response, f, indent=2, default=str)
             return [('subnet', j['SubnetId']) for j in response]
         except Exception as e:
             print("Error fetching vpc data:", e)
@@ -75,6 +78,7 @@ def build_lists():
             paginator = client.get_paginator('list_roles')
             for page in paginator.paginate():
                 response.extend(page['Roles'])
+            # save
             return [('iam', j['RoleName']) for j in response]
         except Exception as e:
             print("Error fetching vpc data:", e)

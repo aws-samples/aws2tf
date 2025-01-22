@@ -5,4 +5,3 @@ aws iam attach-role-policy --role-name laws2tf --policy-arn arn:aws:iam::aws:pol
 # attach s3 full access policy
 aws iam attach-role-policy --role-name laws2tf --policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess
 aws iam attach-role-policy --role-name laws2tf --policy-arn arn:aws:iam::aws:policy/ReadOnlyAccess
-

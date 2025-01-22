@@ -143,6 +143,30 @@ def main():
         timed_interrupt.timed_int.stop()
         exit()
 
+    # check terraform version
+    
+    com = "terraform version"
+    rout = common.rc(com)
+    tvr=rout.stdout.decode().rstrip()
+    if "." not in tvr:
+        print("Unexpected Terraform version "+str(tvr))
+        timed_interrupt.timed_int.stop()
+        os._exit(1)                                      
+    tv=str(rout.stdout.decode().rstrip()).split("v")[-1].split("\n")[0]
+    
+    tvmaj=int(tv.split(".")[0])
+    tvmin=int(tv.split(".")[1])
+    
+    if tvmaj < 1:
+        print("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
+        timed_interrupt.timed_int.stop()
+        os._exit(1) 
+    if tvmaj==1 and tvmin<8:                                      
+        print("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
+        timed_interrupt.timed_int.stop()
+        os._exit(1)
+    print("Terraform version",tv)
+
     globals.expected=args.accept
 
     # print("args=%s" % args)
@@ -229,9 +253,16 @@ def main():
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         exn=str(exc_type.__name__)
+        
         if "ExpiredToken" in str(e):
             print("STS Authorization Error: ExpiredToken, exiting .....")
-            print("exit 005")
+            
+        elif "EndpointConnectionError" in exn:
+            print("Failed to connect to AWS - check network connectivity, exiting .....")
+            
+        else:
+            print(str(e))
+            print(str(exn))
         timed_interrupt.timed_int.stop()
         exit()
     print('Using region: '+region + ' account: ' + globals.acc+"\n")

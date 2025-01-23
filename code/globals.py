@@ -2,6 +2,7 @@ import sys,os
 
 tfver="5.84.0"
 esttime=120.0
+profile="default"
 merge=False
 fast=False
 apionly=False

@@ -122,6 +122,7 @@ def main():
     argParser.add_argument("-t", "--type", help="resource type aws_s3, ec2 aws_vpc etc")
     argParser.add_argument("-i", "--id", help="resource id")
     argParser.add_argument("-r", "--region", help="region")
+    argParser.add_argument("-p", "--profile", help="profile")
     argParser.add_argument("-m", "--merge", help="merge", action='store_true')
     argParser.add_argument("-d", "--debug", help="debug", action='store_true')
     argParser.add_argument("-s", "--singlefile", help="only a single file main.tf is produced", action='store_true')
@@ -143,6 +144,29 @@ def main():
         timed_interrupt.timed_int.stop()
         exit()
 
+    # check terraform version
+    
+    com = "terraform version"
+    rout = common.rc(com)
+    tvr=rout.stdout.decode().rstrip()
+    if "." not in tvr:
+        print("Unexpected Terraform version "+str(tvr))
+        timed_interrupt.timed_int.stop()
+        os._exit(1)                                      
+    tv=str(rout.stdout.decode().rstrip()).split("rm v")[-1].split("\n")[0]
+    tvmaj=int(tv.split(".")[0])
+    tvmin=int(tv.split(".")[1])
+    
+    if tvmaj < 1:
+        print("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
+        timed_interrupt.timed_int.stop()
+        os._exit(1) 
+    if tvmaj==1 and tvmin<8:                                      
+        print("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
+        timed_interrupt.timed_int.stop()
+        os._exit(1)
+    print("Terraform version",tv)
+
     globals.expected=args.accept
 
     # print("args=%s" % args)
@@ -157,6 +181,9 @@ def main():
     if args.debug: 
         globals.debug = True
         globals.fast = False
+
+    if args.profile: 
+        globals.profile = args.profile
 
     if args.tv:
         globals.tfver=args.tv
@@ -220,7 +247,7 @@ def main():
     # get the current env and set directory
     if globals.debug: print("setting session region="+region)
     try:
-        my_session = boto3.setup_default_session(region_name=region)
+        my_session = boto3.setup_default_session(region_name=region,profile_name=globals.profile)
     except Exception as e: 
         print("AWS Authorization Error: "+str(e))
     if globals.debug: print("getting account")
@@ -229,12 +256,19 @@ def main():
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         exn=str(exc_type.__name__)
+        
         if "ExpiredToken" in str(e):
             print("STS Authorization Error: ExpiredToken, exiting .....")
-            print("exit 005")
+            
+        elif "EndpointConnectionError" in exn:
+            print("Failed to connect to AWS - check network connectivity, exiting .....")
+            
+        else:
+            print(str(e))
+            print(str(exn))
         timed_interrupt.timed_int.stop()
         exit()
-    print('Using region: '+region + ' account: ' + globals.acc+"\n")
+    print('Using region: '+region + ' account: ' + globals.acc+ " profile: "+globals.profile+"\n")
 ####  restore form S3 if merging & serverless
 
     globals.region = region

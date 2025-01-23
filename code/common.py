@@ -795,7 +795,7 @@ def aws_tf(region):
 
    with open("provider.tf", 'w') as f3:
       f3.write('terraform {\n')
-      f3.write('  required_version = "> 1.7.4"\n')
+      f3.write('  required_version = "> 1.9.5"\n')
       f3.write('  required_providers {\n')
       f3.write('    aws = {\n')
       f3.write('      source  = "hashicorp/aws"\n')
@@ -806,6 +806,7 @@ def aws_tf(region):
       f3.write('}\n')
       f3.write('provider "aws" {\n')
       f3.write('  region                   = "' + region + '"\n')
+      f3.write('  profile                  = "' + globals.profile + '"\n')
       if not globals.serverless: f3.write('  shared_credentials_files = ["~/.aws/credentials"]\n')
       f3.write('}\n')
 

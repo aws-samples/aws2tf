@@ -122,6 +122,7 @@ def main():
     argParser.add_argument("-t", "--type", help="resource type aws_s3, ec2 aws_vpc etc")
     argParser.add_argument("-i", "--id", help="resource id")
     argParser.add_argument("-r", "--region", help="region")
+    argParser.add_argument("-p", "--profile", help="profile")
     argParser.add_argument("-m", "--merge", help="merge", action='store_true')
     argParser.add_argument("-d", "--debug", help="debug", action='store_true')
     argParser.add_argument("-s", "--singlefile", help="only a single file main.tf is produced", action='store_true')
@@ -152,8 +153,7 @@ def main():
         print("Unexpected Terraform version "+str(tvr))
         timed_interrupt.timed_int.stop()
         os._exit(1)                                      
-    tv=str(rout.stdout.decode().rstrip()).split("v")[-1].split("\n")[0]
-    
+    tv=str(rout.stdout.decode().rstrip()).split("rm v")[-1].split("\n")[0]
     tvmaj=int(tv.split(".")[0])
     tvmin=int(tv.split(".")[1])
     
@@ -181,6 +181,9 @@ def main():
     if args.debug: 
         globals.debug = True
         globals.fast = False
+
+    if args.profile: 
+        globals.profile = args.profile
 
     if args.tv:
         globals.tfver=args.tv
@@ -244,7 +247,7 @@ def main():
     # get the current env and set directory
     if globals.debug: print("setting session region="+region)
     try:
-        my_session = boto3.setup_default_session(region_name=region)
+        my_session = boto3.setup_default_session(region_name=region,profile_name=globals.profile)
     except Exception as e: 
         print("AWS Authorization Error: "+str(e))
     if globals.debug: print("getting account")
@@ -265,7 +268,7 @@ def main():
             print(str(exn))
         timed_interrupt.timed_int.stop()
         exit()
-    print('Using region: '+region + ' account: ' + globals.acc+"\n")
+    print('Using region: '+region + ' account: ' + globals.acc+ " profile: "+globals.profile+"\n")
 ####  restore form S3 if merging & serverless
 
     globals.region = region

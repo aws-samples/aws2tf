@@ -806,6 +806,7 @@ def aws_tf(region):
       f3.write('}\n')
       f3.write('provider "aws" {\n')
       f3.write('  region                   = "' + region + '"\n')
+      f3.write('  profile                  = "' + globals.profile + '"\n')
       if not globals.serverless: f3.write('  shared_credentials_files = ["~/.aws/credentials"]\n')
       f3.write('}\n')
 

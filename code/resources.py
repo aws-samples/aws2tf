@@ -8,15 +8,15 @@ def resource_types(type):
         return rets
     elif type == "acm": rets=["aws_acm_certificate"]; return rets # ACM Certificates
     elif type == "api" or type == "apigw": rets = ["aws_api_gateway_rest_api"]; return rets # API Gateway and dependancies
-    elif type == "appmesh": rets=["aws_appmesh_mesh"]; return rets # App Mesh and depandancies
-    elif type == "apprunner": rets=["aws_apprunner_service"]; return rets # App Mesh and depandancies
+    elif type == "appmesh": rets=["aws_appmesh_mesh"]; return rets # App Mesh and dependancies
+    elif type == "apprunner": rets=["aws_apprunner_service"]; return rets # AppRunner resources
     elif type == "appstream": rets=["aws_appstream_image_builder","aws_appstream_stack","aws_appstream_fleet","aws_appstream_user"]; return rets # Appstream fleet, users etc.
     elif type == "artifact": rets=["aws_codeartifact_domain","aws_codeartifact_repository"]; return rets # Code Artifact
     elif type == "athena": rets=["aws_athena_named_query","aws_athena_data_catalog"]; return rets # Athena Resources
     elif type == "aurora": rets=["aws_rds_cluster"]; return rets # RDS Cluster
     elif type == "autoscaling" or type== "asg": rets=["aws_autoscaling_group"]; return rets # Autoscaling Group
     elif type == "bedrock": rets=["aws_bedrock_guardrail","aws_bedrockagent_agent"]; return rets # Bedrock resources
-    elif type == "batch": rets=["aws_batch_compute_environment","aws_batch_job_definition","aws_batch_scheduling_policy"]; return rets # Autoscaling Group
+    elif type == "batch": rets=["aws_batch_compute_environment","aws_batch_job_definition","aws_batch_scheduling_policy"]; return rets # AWS Barch resources
     elif type == "code": rets=["aws_codestarnotifications_notification_rule","aws_codebuild_project","aws_codeartifact_domain","aws_codeartifact_repository","aws_codecommit_repository","aws_codepipeline"]; return rets  # Codebuild, Code commit etc
     elif type == "cloudfront" or type == "cf": rets=["aws_cloudfront_distribution","aws_cloudfront_origin_request_policy","aws_cloudfront_origin_access_identity","aws_cloudfront_origin_access_control","aws_cloudfront_cache_policy","aws_cloudfront_function"]; return rets # Cloudfront Distribution
     elif type == "cloudtrail" or type == "ct": rets=["aws_cloudtrail"]; return rets # CloudTrail
@@ -30,9 +30,9 @@ def resource_types(type):
     elif type == "datazone" or type == "dz": rets=["aws_datazone_domain"]; return rets # Amazon DataZone
     elif type == "dms": rets=["aws_dms_replication_instance","aws_dms_endpoint","aws_dms_replication_task"]; return rets # DMS replication tasks and endpoints
     elif type == "dynamodb": rets=["aws_dynamodb_table"]; return rets # dynamodb tables
-    elif type == "eb": rets=["aws_cloudwatch_event_bus"]; return rets # clouswatch event bus and rules
+    elif type == "eb": rets=["aws_cloudwatch_event_bus"]; return rets # cloudwatch event bus and rules
     elif type == "ec2": rets=["aws_ec2_host","aws_instance"]; return rets # EC2 hosts and instances
-    elif type == "ecr": rets = ["aws_ecr_repository"]; return rets # ECS clusters
+    elif type == "ecr": rets = ["aws_ecr_repository"]; return rets # ECR repositories
     elif type == "ecs": rets = ["aws_ecs_cluster"]; return rets # ECS clusters
     elif type == "efs": rets=["aws_efs_file_system"]; return rets # EFS filesystems
     elif type == "eks": rets=["aws_eks_cluster"]; return rets # EKS clusters
@@ -45,7 +45,7 @@ def resource_types(type):
     elif type == "kinesis": rets=["aws_kinesis_stream","aws_kinesis_firehose_delivery_stream"]; return rets # Kinesis streams and firehose
     elif type == "kms": rets=["aws_kms_key"]; return rets # KMS keys
     elif type == "lambda": rets=["aws_lambda_function"]; return rets # Lambda functions and some dependancies 
-    elif type == "lb" or type == "elb": rets=["aws_lb"]; return rets # Lambda functions and some dependancies
+    elif type == "lb" or type == "elb": rets=["aws_lb"]; return rets # load balancers alb/elb
     elif type == "lf": rets=["aws_lakeformation_data_lake_settings","aws_lakeformation_resource","aws_lakeformation_permissions"]; return rets # Lake Formation
     elif type == "msk": rets=["aws_msk_cluster"]; return rets # MSK Clusters and dependancies
     elif type == "mwaa": rets=["aws_mwaa_environment"]; return rets # MWAA Environment and dependancie
@@ -69,10 +69,11 @@ def resource_types(type):
     elif type == "spot": rets=["aws_spot_fleet_request"]; return rets # Spot fleet request
     elif type == "sso": rets=["aws_ssoadmin_instances"]; return rets # Single sign on resources
     elif type == "tgw": rets=["aws_ec2_transit_gateway"]; return rets # Transit Gateway
-    elif type == "transfer": rets=["aws_transfer_server"]; return rets # Transfer
+    elif type == "transfer": rets=["aws_transfer_server"]; return rets # AWS Transfer family
     elif type == "vpclattice" or type=="lattice": rets=["aws_vpclattice_service_network","aws_vpclattice_service","aws_vpclattice_auth_policy"]; return rets # VPC Lattice and dependancies
     elif type == "users" or type=="user": rets=["aws_iam_user","aws_iam_group"]; return rets # IAM user and groups
     elif type == "vpc": rets=["aws_vpc"]; return rets #  VPC's and its common depandancies
+    elif type == "wafv2": rets=["aws_wafv2_web_acl"]; return rets # AWS WAF (v2) acl's
     elif type == "workspaces": rets=["aws_workspaces_workspace"]; return rets # Aamazon Workspaces
 
     elif type =="all": 

@@ -26,6 +26,7 @@ from fixtf_aws_resources import aws_dict
 from build_lists import build_lists, build_secondary_lists
 
 
+
 def extra_help():
     print("\nExtra help\n")
     print("Type codes supported - ./aws2tf.py -t [type code]:\n")
@@ -112,10 +113,8 @@ def main():
     now = datetime.datetime.now()
     print("aws2tf started at %s" % now)
     starttime=now
-    
-    common.check_python_version()
-    # print("cwd=%s" % os.getcwd())
-    signal.signal(signal.SIGINT, common.ctrl_c_handler)
+   
+    if sys.argv[1]=="-h": timed_interrupt.timed_int.stop()
 
     argParser = argparse.ArgumentParser()
     argParser.add_argument("-l", "--list",help="List extra help information" , action='store_true')
@@ -132,9 +131,13 @@ def main():
     argParser.add_argument("-e", "--exclude", help="resource types to exclude")
     argParser.add_argument("-b3", "--boto3error", help="exit on boto3 api error (for debugging)", action='store_true')
     argParser.add_argument("-la", "--serverless", help="Lambda mode - when running in a Lambda container", action='store_true')
-    argParser.add_argument("-tv", "--tv", help="Specifcy version of Terraform AWS provider default = "+globals.tfver)
+    argParser.add_argument("-tv", "--tv", help="Specify version of Terraform AWS provider default = "+globals.tfver)
     args = argParser.parse_args()
     type=""
+
+    common.check_python_version()
+    # print("cwd=%s" % os.getcwd())
+    signal.signal(signal.SIGINT, common.ctrl_c_handler)
 
     path = shutil.which("terraform") 
 
@@ -270,6 +273,7 @@ def main():
         exit()
     print('Using region: '+region + ' account: ' + globals.acc+ " profile: "+globals.profile+"\n")
 ####  restore form S3 if merging & serverless
+
 
     globals.region = region
     globals.regionl = len(region)

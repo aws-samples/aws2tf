@@ -15,7 +15,7 @@ def get_aws_wafv2_ip_set(type, id, clfn, descfn, topkey, key, filterid):
             if globals.region == "us-east-1":
                 response = client.list_ip_sets(Scope=sc)
                 if response == []: 
-                    if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                    if globals.debug: print("Empty response for "+type+ " Scope="+str(sc)+" returning")
                     return True
                 for j in response[topkey]:
                     idd=j["Id"]
@@ -31,7 +31,7 @@ def get_aws_wafv2_ip_set(type, id, clfn, descfn, topkey, key, filterid):
             #print(str(response))
             if response[topkey] == []:
                 if globals.debug: 
-                    print("Empty response for "+type+ " id="+str(id)+" returning")
+                    print("Empty response for "+type+ " Scope="+str(sc)+" returning")
                     print(str(response))
                 return True
             
@@ -78,7 +78,7 @@ def get_aws_wafv2_web_acl(type, id, clfn, descfn, topkey, key, filterid):
             if globals.region == "us-east-1":
                 response = client.list_web_acls(Scope=sc)
                 if response == []: 
-                    if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                    if globals.debug: print("Empty response for "+type+ " Scope="+str(sc)+" returning")
                     return True
                 for j in response[topkey]:
                     idd=j["Id"]
@@ -92,7 +92,9 @@ def get_aws_wafv2_web_acl(type, id, clfn, descfn, topkey, key, filterid):
             sc="REGIONAL"
             response = client.list_web_acls(Scope=sc)
             if response[topkey] == []:
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if globals.debug: 
+                    print("Empty response for "+type+ " Scope="+str(sc)+" returning")
+                    print(str(response))
                 return True
             
             #print(str(response))
@@ -139,7 +141,7 @@ def get_aws_wafv2_rule_group(type, id, clfn, descfn, topkey, key, filterid):
                 response = client.list_rule_groups(Scope=sc)
                 if response == []: 
                     if globals.debug: 
-                        print("Empty response for "+type+ " id="+str(id)+" returning")
+                        print("Empty response for "+type+ " Scope="+str(sc)+" returning")
                     return True
                 for j in response[topkey]:
                     idd=j["Id"]
@@ -154,7 +156,8 @@ def get_aws_wafv2_rule_group(type, id, clfn, descfn, topkey, key, filterid):
             response = client.list_rule_groups(Scope=sc)
             if response[topkey] == []:
                 if globals.debug: 
-                    print("Empty response for "+type+ " id="+str(id)+" returning")
+                    print("Empty response for "+type+ " Scope="+str(sc)+" returning")
+                    print(str(response))
                 return True
             
             #print(str(response))

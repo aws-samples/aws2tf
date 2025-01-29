@@ -73,7 +73,8 @@ def resource_types(type):
     elif type == "vpclattice" or type=="lattice": rets=["aws_vpclattice_service_network","aws_vpclattice_service","aws_vpclattice_auth_policy"]; return rets # VPC Lattice and dependancies
     elif type == "users" or type=="user": rets=["aws_iam_user","aws_iam_group"]; return rets # IAM user and groups
     elif type == "vpc": rets=["aws_vpc"]; return rets #  VPC's and its common depandancies
-    elif type == "wafv2": rets=["aws_wafv2_web_acl","aws_wafv2_ip_set","aws_wafv2_rule_group"]; return rets # AWS WAF (v2) acl's
+    elif type == "waf": rets=["aws_waf_web_acl"]; return rets # AWS WAF Classic acl's, unsupported as of September 2025
+    elif type == "wafv2": rets=["aws_wafv2_web_acl","aws_wafv2_ip_set","aws_wafv2_rule_group"]; return rets # AWS WAF(v2) resources
     elif type == "workspaces": rets=["aws_workspaces_workspace"]; return rets # Aamazon Workspaces
 
     elif type =="all": 

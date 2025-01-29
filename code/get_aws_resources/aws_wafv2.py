@@ -78,7 +78,7 @@ def get_aws_wafv2_web_acl(type, id, clfn, descfn, topkey, key, filterid):
                 if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             
-            print(str(response))
+            #print(str(response))
             for j in response[topkey]:
                 idd=j["Id"]
                 nm=j["Name"]

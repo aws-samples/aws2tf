@@ -387,7 +387,8 @@ def main():
 
         types = type.split(",")
         all_types = []
-        for type1 in types: all_types = all_types + resources.resource_types(type1)
+        for type1 in types: 
+            if type1.startswith("aws_"): all_types = all_types + resources.resource_types(type1)
 
         for type2 in all_types:
             if type2 in aws_dict.aws_resources:   

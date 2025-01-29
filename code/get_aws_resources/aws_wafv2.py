@@ -28,7 +28,7 @@ def get_aws_wafv2_ip_set(type, id, clfn, descfn, topkey, key, filterid):
  
             sc="REGIONAL"
             response = client.list_ip_sets(Scope=sc)
-            print(str(response))
+            #print(str(response))
             if response[topkey] == []:
                 if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True

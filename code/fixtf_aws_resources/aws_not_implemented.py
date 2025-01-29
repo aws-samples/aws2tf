@@ -467,7 +467,7 @@ notimplemented = {
 	"aws_waf_rule_group": True,
 	"aws_waf_size_constraint_set": True,
 	"aws_waf_sql_injection_match_set": True,
-	"aws_waf_web_acl": True,
+	#"aws_waf_web_acl": True,
 	"aws_waf_xss_match_set": True,
 	"aws_wafregional_byte_match_set": True,
 	"aws_wafregional_geo_match_set": True,

@@ -76,15 +76,10 @@ def get_aws_wafv2_web_acl(type, id, clfn, descfn, topkey, key, filterid):
         if id is None: # assume scope = cloudfront
             sc="CLOUDFRONT"
             if globals.region == "us-east-1":
-                #client = boto3.client(clfn, region_name=globals.region)
-
-            #my_session = boto3.setup_default_session(region_name='us-east-1',profile_name=globals.profile)
                 response = client.list_web_acls(Scope=sc)
-                #my_session = boto3.setup_default_session(region_name=globals.region,profile_name=globals.profile)
                 if response == []: 
                     if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                     return True
-                #print(str(response))
                 for j in response[topkey]:
                     idd=j["Id"]
                     nm=j["Name"]

@@ -59,7 +59,9 @@ dzd=""
 dzgid=""
 dzpid=""
 connectinid=""
-
+waf2id=""
+waf2nm=""
+waf2sc=""
 
 badlist=[]
 

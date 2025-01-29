@@ -104,6 +104,7 @@ from get_aws_resources import aws_ssm
 from get_aws_resources import aws_sso_admin
 from get_aws_resources import aws_transfer
 from get_aws_resources import aws_vpc_lattice
+from get_aws_resources import aws_waf
 from get_aws_resources import aws_wafv2
 from get_aws_resources import aws_xray
 
@@ -242,9 +243,10 @@ def tfplan1():
    # com="terraform plan -generate-config-out="+ rf + " -out tfplan -json > plan2.json"
 
    if not glob.glob("import*.tf"):
-      print("No import*.tf files found for this resource, exiting ....")
+      
+      print("INFO: No import*.tf files found for this resource, exiting ....")
+      print("INFO: Confirm the resource type exists in your account & region")
       globals.tracking_message="No import*.tf files found for this resource, exiting ...."
-      print("exit 017")
       timed_int.stop()
       exit()
 

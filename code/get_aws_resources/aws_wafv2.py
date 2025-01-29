@@ -11,15 +11,35 @@ def get_aws_wafv2_ip_set(type, id, clfn, descfn, topkey, key, filterid):
         response = []
         client = boto3.client(clfn)
         if id is None: # assume scope = cloudfront
-
-            paginator = client.get_paginator(descfn)
-            for page in paginator.paginate(Scope='CLOUDFRONT'):
-                response = response + page[topkey]
-            if response == []: 
+            sc="CLOUDFRONT"
+            if globals.region == "us-east-1":
+                response = client.list_ip_sets(Scope=sc)
+                if response == []: 
+                    if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                    return True
+                for j in response[topkey]:
+                    idd=j["Id"]
+                    nm=j["Name"]
+                    sc="CLOUDFRONT"
+                    pkey=idd+"/"+nm+"/"+sc
+                    common.write_import(type,pkey,"w-"+pkey.replace("/","_")) 
+            else:
+                print("WARNING:Can only import CLOUDFRONT ip sets from us-east-1 region")
+ 
+            sc="REGIONAL"
+            response = client.list_ip_sets(Scope=sc)
+            print(str(response))
+            if response[topkey] == []:
                 if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
-            for j in response:
-                common.write_import(type,j[key],None) 
+            
+            #print(str(response))
+            for j in response[topkey]:
+                idd=j["Id"]
+                nm=j["Name"]
+                pkey=idd+"/"+nm+"/"+sc
+                common.write_import(type, pkey, "w-"+pkey.replace("/", "_"))
+
 
         else: 
             if "|" in id:
@@ -35,7 +55,7 @@ def get_aws_wafv2_ip_set(type, id, clfn, descfn, topkey, key, filterid):
                 return True
             j=response['IPSet']
             pkey=idd+"/"+nm+"/"+sc
-            common.write_import(type,pkey,"i-"+pkey.replace("/","_"))
+            common.write_import(type,pkey,"w-"+pkey.replace("/","_"))
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

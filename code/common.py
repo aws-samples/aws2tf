@@ -150,7 +150,7 @@ def call_resource(type, id):
          pass
    else:
       if type in needid_dict.aws_needid:
-         if globals.debug: print("WARNING: " + type + " cannot have null id must pass parameter " +
+         print("WARNING: " + type + " cannot have null id must pass parameter " +
                needid_dict.aws_needid[type]['param'])
          # TODO api only
          return

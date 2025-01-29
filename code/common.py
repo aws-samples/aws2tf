@@ -244,7 +244,7 @@ def tfplan1():
 
    if not glob.glob("import*.tf"):
       
-      print("INFO: No import*.tf files found for this resource, exiting ....")
+      print("INFO: No import*.tf files found - nothing to import, exiting ....")
       print("INFO: Confirm the resource type exists in your account & region")
       globals.tracking_message="No import*.tf files found for this resource, exiting ...."
       timed_int.stop()

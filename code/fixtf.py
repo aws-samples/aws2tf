@@ -724,6 +724,35 @@ def deref_role_arn_array(t1,tt1,tt2):
 
     return t1
 
+def deref_secret_arn_array(t1,tt1,tt2):
+    if tt2 == "null" or tt2 == "[]": return t1
+    tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
+    cc=tt2.count(',')
+    subs=""
+    if cc > 0:
+        for i in range(cc+1):
+            if ":secret:" in tt2:
+                subn=tt2.split(',')[i]
+                sarn=subn
+                tarn=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
+                subs=subs + "aws_secretsmanager_secret." + tarn + ".arn,"
+                common.add_dependancy("aws_secretsmanager_secret",sarn)
+
+            
+    if cc == 0:
+        if ":secret:" in tt2:
+            sarn=tt2
+            tarn=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
+            subs=subs + "aws_secretsmanager_secret." + tarn + ".arn,"
+            common.add_dependancy("aws_secretsmanager_secret",sarn)
+             
+    t1=tt1 + " = [" + subs + "]\n"
+    t1=t1.replace(',]',']')
+
+    return t1
+
+
+
 def deref_elb_arn_array(t1,tt1,tt2):
     if tt2 == "null" or tt2 == "[]": return t1
     tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')

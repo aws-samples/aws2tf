@@ -272,7 +272,7 @@ notimplemented = {
     "aws_memorydb_subnet_group": True,
     "aws_memorydb_user": True,
     #
-    "aws_msk_cluster_policy": True,
+    #"aws_msk_cluster_policy": True,
     "aws_msk_serverless_cluster": True,
     "aws_mskconnect_custom_plugin": True,
     "aws_mskconnect_worker_configuration": True,

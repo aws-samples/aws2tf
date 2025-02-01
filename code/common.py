@@ -245,10 +245,10 @@ def tfplan1():
    if not glob.glob("import*.tf"):
       
       print("INFO: No import*.tf files found - nothing to import, exiting ....")
-      print("INFO: Confirm the resource type exists in your account & region")
+      print("INFO: Confirm the resource type exists in your account: "+globals.acc+" & region: "+globals.region)
       globals.tracking_message="No import*.tf files found for this resource, exiting ...."
       timed_int.stop()
-      exit()
+      os._exit(0)
 
    com = "cp imported/provider.tf provider.tf"
    rout = rc(com)

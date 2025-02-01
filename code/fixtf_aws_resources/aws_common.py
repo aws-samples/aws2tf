@@ -45,7 +45,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                         common.add_dependancy("aws_s3_bucket", tt2)
                         return skip,t1,flag1,flag2
                     
-        if tt1=="source_bucket_arn" and tt2.startswith("arn:"):
+        if tt1.endswith("bucket_arn") and tt2.startswith("arn:"):
             tt2=tt2.split(":")[-1]
             t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".arn\n"
             common.add_dependancy("aws_s3_bucket", tt2)
@@ -69,6 +69,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         elif tt1 == "subnets" or tt1 == "subnet_ids" or tt1 == "client_subnets": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
         elif tt1 == "route_table_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_route_table","rtb-",skip)
         elif tt1 == "iam_roles": t1=fixtf.deref_role_arn_array(t1,tt1,tt2)
+        elif tt1 == "secret_arn_list": t1=fixtf.deref_secret_arn_array(t1,tt1,tt2)
         elif tt1 == "vpc_id" or tt1=="vpc":
             if tt2 != "null":
                 if tt2.startswith('vpc-'):

@@ -8,8 +8,8 @@ import globals
 import inspect
 
 def get_aws_secretsmanager_secret(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
-        print("--> In get_aws_secretsmanager_secret  doing " + type + ' with id ' + str(id) +
+    #if globals.debug:
+    print("--> In get_aws_secretsmanager_secret  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -39,7 +39,9 @@ def get_aws_secretsmanager_secret(type, id, clfn, descfn, topkey, key, filterid)
 
         else:
             response = client.describe_secret(SecretId=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: 
+                print("Empty response for "+type+ " id="+str(id)+" returning") 
+                return True
             j=response
             common.write_import(type,j[key],None)
             common.add_dependancy("aws_secretsmanager_secret_version",j[key])
@@ -71,7 +73,6 @@ def get_aws_secretsmanager_secret_rotation(type, id, clfn, descfn, topkey, key, 
         else:
             pkey=type+"."+id
             response = client.describe_secret(SecretId=id)
-            #print(response)
             try:
                 roten=response['RotationEnabled']
             except KeyError:
@@ -119,7 +120,7 @@ def get_aws_secretsmanager_secret_version(type, id, clfn, descfn, topkey, key, f
                         return True
                 
                 sv=sresponse['SecretString']
-                print(str(sv))
+                #print(str(sv))
                 pkey=id+"|"+j[key]
                 common.write_import(type,pkey,None) 
             pkey=type+"."+id

@@ -2,6 +2,7 @@ import common
 import boto3
 import globals
 import inspect
+from botocore.config import Config
 
 def get_aws_wafv2_ip_set(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
@@ -84,8 +85,10 @@ def get_aws_wafv2_web_acl(type, id, clfn, descfn, topkey, key, filterid):
                     idd=j["Id"]
                     nm=j["Name"]
                     sc="CLOUDFRONT"
+                    arn=j['ARN']
                     pkey=idd+"/"+nm+"/"+sc
                     common.write_import(type,pkey,"w-"+pkey.replace("/","_")) 
+                    common.add_dependancy("aws_wafv2_web_acl_logging_configuration",arn)
             else:
                 print("WARNING:Can only import CLOUDFRONT web ACL's from us-east-1 region")
  
@@ -101,8 +104,10 @@ def get_aws_wafv2_web_acl(type, id, clfn, descfn, topkey, key, filterid):
             for j in response[topkey]:
                 idd=j["Id"]
                 nm=j["Name"]
+                arn=j['ARN']
                 pkey=idd+"/"+nm+"/"+sc
                 common.write_import(type, pkey, "w-"+pkey.replace("/", "_"))
+                common.add_dependancy("aws_wafv2_web_acl_logging_configuration",arn)
 
         else: 
             if "|" in id:
@@ -119,8 +124,10 @@ def get_aws_wafv2_web_acl(type, id, clfn, descfn, topkey, key, filterid):
                     print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response['WebACL']
+            arn=j['ARN']
             pkey=idd+"/"+nm+"/"+sc
             common.write_import(type,pkey,"w-"+pkey.replace("/","_"))
+            common.add_dependancy("aws_wafv2_web_acl_logging_configuration",arn)
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -190,3 +197,28 @@ def get_aws_wafv2_rule_group(type, id, clfn, descfn, topkey, key, filterid):
 
     return True
 
+# aws_wafv2_web_acl_logging_configuration ARN
+def get_aws_wafv2_web_acl_logging_configuration(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn,config=config)
+        if id is None:
+            print("WARNING: Must pass WebACL arn as parameter")
+            return True
+
+        else:      
+            response = client.get_logging_configuration(ResourceArn=id)
+            if response == []: 
+                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                return True
+            j=response
+            common.write_import(type,j[key],None)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True

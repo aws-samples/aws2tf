@@ -1350,7 +1350,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::Wisdom::AssistantAssociation": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Wisdom::KnowledgeBase": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::WorkSpaces::ConnectionAlias": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::WorkSpaces::Workspace": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::WorkSpaces::Workspace": common.call_resource("aws_workspaces_workspace", pid)
             elif type == "AWS::WorkSpacesThinClient::Environment": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::WorkSpacesWeb::BrowserSettings": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::WorkSpacesWeb::IdentityProvider": common.call_resource("aws_null", type+" "+pid)

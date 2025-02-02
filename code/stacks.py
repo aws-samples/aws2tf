@@ -1341,7 +1341,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::WAFRegional::WebACLAssociation": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::WAFRegional::XssMatchSet": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::WAFv2::IPSet": common.call_resource("aws_wafv2_ip_set", pid)
-            elif type == "AWS::WAFv2::LoggingConfiguration": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::WAFv2::LoggingConfiguration": f3.write(type+" "+pid+" fetched as part of wafv2_web__acl..\n") 
             elif type == "AWS::WAFv2::RegexPatternSet": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::WAFv2::RuleGroup": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::WAFv2::WebACL": common.call_resource("aws_wafv2_web_acl", pid)

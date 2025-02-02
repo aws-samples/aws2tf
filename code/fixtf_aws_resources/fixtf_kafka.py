@@ -10,16 +10,20 @@ def aws_msk_cluster(t1,tt1,tt2,flag1,flag2):
 	if tt1=="log_group" and tt2!="null":
 		t1=tt1+" = aws_cloudwatch_log_group."+tt2+".name\n"
 		common.add_dependancy("aws_cloudwatch_log_group",tt2)
-	if tt1=="delivery_stream" and tt2!="null":
+	elif tt1=="delivery_stream" and tt2!="null":
 		karn="arn:aws:firehose:"+globals.region+":"+globals.acc+":deliverystream/"+tt2
 		tarn=karn.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
 		t1=tt1+" = aws_kinesis_firehose_delivery_stream."+tarn+".name\n"
 		common.add_dependancy("aws_kinesis_firehose_delivery_stream",tt2)
-	if tt1=="arn" and tt2.startswith("arn:aws:kafka") and ":configuration:" in tt2:
+	elif tt1=="arn" and tt2.startswith("arn:aws:kafka") and ":configuration:" in tt2:
 		tarn=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
 		t1=tt1+" = aws_msk_configuration."+tarn+".arn\n"
 		# pass the arn
 		common.add_dependancy("aws_msk_configuration", tt2)
+	#elif tt1=="arn" and tt2!="null":
+	#	t1=tt1+" = aws_msk_configuration."+tarn+".arn\n"
+
+
 
 		
 	return skip,t1,flag1,flag2

@@ -9,7 +9,6 @@ notimplemented = {
     "aws_lightsail_database": True,  ### TODO
     "aws_macie2_classification_job": True,  ### TODO
     "aws_memorydb_cluster": True,   ### TODO
-    #"aws_msk_cluster": True,  ### TODO
     "aws_mskconnect_connector": True,  ### TODO
     "aws_networkfirewall_resource_policy": True, ### TODO
     "aws_opensearch_inbound_connection_accepter": True,  ### TODO
@@ -27,7 +26,6 @@ notimplemented = {
     # Many of these need to be done.
     #
 
-    #"aws_datazone_glossary": True,
     #
     "aws_apprunner_observability_configuration": True,
     #
@@ -103,8 +101,6 @@ notimplemented = {
     "aws_connect_user_hierarchy_group": True,
     "aws_connect_user_hierarchy_structure": True,
     "aws_connect_contact_flow_module": True,
-    #"aws_connect_quick_connect": True,
-    #"aws_connect_vocabulary": True,
     #
     "aws_controltower_control": True,
     #
@@ -272,8 +268,6 @@ notimplemented = {
     "aws_memorydb_subnet_group": True,
     "aws_memorydb_user": True,
     #
-    #"aws_msk_cluster_policy": True,
-    "aws_msk_serverless_cluster": True,
     "aws_mskconnect_custom_plugin": True,
     "aws_mskconnect_worker_configuration": True,
     #
@@ -467,7 +461,6 @@ notimplemented = {
 	"aws_waf_rule_group": True,
 	"aws_waf_size_constraint_set": True,
 	"aws_waf_sql_injection_match_set": True,
-	#"aws_waf_web_acl": True,
 	"aws_waf_xss_match_set": True,
 	"aws_wafregional_byte_match_set": True,
 	"aws_wafregional_geo_match_set": True,

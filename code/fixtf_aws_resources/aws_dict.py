@@ -6575,9 +6575,9 @@ aws_msk_scram_secret_association = {
 
 aws_msk_serverless_cluster = {
 	"clfn":		"kafka",
-	"descfn":	"list_serverless_clusters",
-	"topkey":	"ServerlessClusters",
-	"key":		"ClusterName",
+	"descfn":	"list_clusters_v2",
+	"topkey":	"ClusterInfoList",
+	"key":		"ClusterArn",
 	"filterid":	"ClusterName"
 }
 

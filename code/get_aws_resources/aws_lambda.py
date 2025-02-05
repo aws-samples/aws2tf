@@ -48,7 +48,7 @@ def get_aws_lambda_layer_version(type, id, clfn, descfn, topkey, key, filterid):
         response = []
         client = boto3.client(clfn)
         if id is None:
-            print("WARNING: Must pass LayerName as parameter")
+            print("WARNING: Must pass LayerName/ARN as parameter")
 
         else:    
             if "arn:" in id:
@@ -58,6 +58,7 @@ def get_aws_lambda_layer_version(type, id, clfn, descfn, topkey, key, filterid):
                 if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response[topkey]:
+                get_lambdalayer_code(j[key])
                 common.write_import(type,j[key],None) 
         
 
@@ -169,7 +170,8 @@ def get_aws_lambda_function_old(type, id, clfn, descfn, topkey, key, filterid):
 def get_lambda_code(fn):
     
     try:
-        lc = boto3.client("lambda") 
+        clfn="lambda"
+        lc = boto3.client(clfn) 
         resp=lc.get_function(FunctionName=fn)
         if resp['Code']['RepositoryType']=="S3":
             s3loc=resp['Code']['Location']
@@ -177,13 +179,35 @@ def get_lambda_code(fn):
             with open("aws_lambda_function__"+fn+".zip", 'wb') as f:
                 f.write(r.content)
 
-    
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
+    return True
+
+
+def get_lambdalayer_code(fn):
+    
+    try:
+        #print("get_lambdalayer_code fn="+fn)
+        if fn.startswith("arn:"):
+            tarn=fn.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
+            clfn="lambda" 
+            lc = boto3.client(clfn) 
+            resp=lc.get_layer_version_by_arn(Arn=fn)
+            #print(str(resp['Content']))
+            s3loc=resp['Content']['Location']
+            #print("s3loc="+s3loc)
+            r=requests.get(s3loc)
+            with open("aws_lambda_layer_version__"+tarn+".zip", 'wb') as f:
+                f.write(r.content)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
-    
+
+
+
 def get_aws_lambda_alias(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
         print("--> In get_aws_lambda_alias doing " + type + ' with id ' + str(id) +

@@ -52,7 +52,7 @@ def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
         if cc > 0:
             for i in range(cc+1):
                 subn=tt2.split(',')[i]
-                subn=subn.lstrip('"').rstrip('"')
+                subn=subn.strip(" ").lstrip('"').rstrip('"').strip(" ")
                 tarn=subn.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
                 common.add_dependancy("aws_lambda_layer_version",subn)
                 builds=builds+"aws_lambda_layer_version."+tarn+".arn,"

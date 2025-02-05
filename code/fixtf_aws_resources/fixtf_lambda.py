@@ -38,6 +38,35 @@ def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
 
         #t1=tt1 + " = aws_vpc_config." + tt2 + ".arn\n"
         #common.add_dependancy("aws_vpc_config",tt2)
+
+
+    elif tt1 == "layers" and tt2!="[]":
+        if tt2 != "null" and "arn:" in tt2:
+            cc=tt2.count(',')
+            tt2=tt2.lstrip('[').rstrip(']')
+        else:
+             print("WARNING: layers is not an array", tt2)
+             return skip,t1,flag1,flag2
+        #if globals.debug: 
+        builds=""
+        if cc > 0:
+            for i in range(cc+1):
+                subn=tt2.split(',')[i]
+                subn=subn.strip(" ").lstrip('"').rstrip('"').strip(" ")
+                tarn=subn.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
+                common.add_dependancy("aws_lambda_layer_version",subn)
+                builds=builds+"aws_lambda_layer_version."+tarn+".arn,"
+            
+            if builds.endswith(','):
+                builds=builds.rstrip(',')
+            t1 = tt1+" = ["+builds+"]\n"
+                
+        elif cc == 0:
+            tt2=tt2.lstrip('"').rstrip('"')
+            tarn=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
+            t1 = tt1+" = [aws_lambda_layer_version."+tarn+ ".arn]\n"
+            common.add_dependancy("aws_lambda_layer_version",tt2)
+
     return skip,t1,flag1,flag2
 
 def aws_lambda_alias(t1,tt1,tt2,flag1,flag2):
@@ -79,8 +108,14 @@ def aws_lambda_provisioned_concurrency_config(t1,tt1,tt2,flag1,flag2):
 	return skip,t1,flag1,flag2
 
 def aws_lambda_layer_version(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+    skip=0
+    if tt1 == "filename":    
+        if os.path.isfile(flag2+".zip"):
+            t1=tt1 + " = \""+flag2+".zip\"\n lifecycle {\n   ignore_changes = [filename,source_code_hash]\n}\n"
+        
+        elif tt2 == "null": skip=1
+    
+    return skip,t1,flag1,flag2
 
 def aws_lambda_layer_version_permission(t1,tt1,tt2,flag1,flag2):
 	skip=0

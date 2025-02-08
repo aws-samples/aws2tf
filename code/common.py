@@ -968,25 +968,28 @@ def write_import(type,theid,tfid):
             return
          #print("theid=",theid,"  tfid=",tfid)
 
+      done_data=False
+      if globals.dnet:
+         done_data=do_data(type,theid)
 
+      if not done_data:
+         output = StringIO()
+         output.write('import {\n')
+         output.write('  to = ' +type + '.' + tfid + '\n')
+         output.write('  id = "'+ theid + '"\n')
+         output.write('}\n')
 
-      output = StringIO()
-      output.write('import {\n')
-      output.write('  to = ' +type + '.' + tfid + '\n')
-      output.write('  id = "'+ theid + '"\n')
-      output.write('}\n')
-
-               # Write the filtered resource block to a new file
-      
-      if len(fn) > 255: fn=fn[:250]+".tf"
-      try:
-         with open(fn, 'w') as f:
-            f.write(output.getvalue().strip() + '\n')
-      except:
-         print("ERROR: could not write to file: " + fn)
-         print("exit 039")
-         timed_int.stop()
-         exit()
+                  # Write the filtered resource block to a new file
+         
+         if len(fn) > 255: fn=fn[:250]+".tf"
+         try:
+            with open(fn, 'w') as f:
+               f.write(output.getvalue().strip() + '\n')
+         except:
+            print("ERROR: could not write to file: " + fn)
+            print("exit 039")
+            timed_int.stop()
+            exit()
 
 
       pkey=type+"."+tfid
@@ -999,6 +1002,18 @@ def write_import(type,theid,tfid):
       handle_error2(e,str(inspect.currentframe().f_code.co_name),id)    
 
    return
+
+
+def do_data(type,theid):
+   if type == "aws_vpc":
+      fn="data-"+type+"_"+theid+".tf"
+      with open("fn", 'w') as f3:
+         f3.write('data "aws_vpc" "'+theid+'" {\n')
+         f3.write(' id = "'+theid+'"\n')
+         f3.write('}\n')
+      return True
+   
+   return False
 
 #########################################################################################################################
 

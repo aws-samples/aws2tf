@@ -616,10 +616,21 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
                             common.add_dependancy(ttft,subn)
                         else:
                             print("WARNING: subnet not in subnetlist" + subn)
+                            subs=subs+'"'+subn+'"'+","
                     except KeyError:
-                        print("WARNING: subnet not in subnetlist " + subn+ " Resource may be referencing a subnet that no longer exists")
-
-                # elif sedurity_group
+                        print("WARNING: subnet not in subnet list " + subn+ " Resource may be referencing a subnet that no longer exists")
+                        subs=subs+'"'+subn+'"'+","
+                elif ttft == "aws_security_group": 
+                    try:
+                        if globals.sglist[subn]:
+                            subs=subs + ttft + "." + subn + ".id,"
+                            common.add_dependancy(ttft,subn)
+                        else:
+                            print("WARNING: security group not in sg list" + subn)
+                            subs=subs+'"'+subn+'"'+","
+                    except KeyError:
+                        print("WARNING: security group not in sg list " + subn+ " Resource may be referencing a security group that no longer exists")
+                        subs=subs+'"'+subn+'"'+","
                 #
                 else:
                     subs=subs + ttft + "." + subn + ".id,"
@@ -627,10 +638,35 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
 
                 
         elif cc == 0 and prefix in tt2:
-            subs=ttft + "." + tt2 + ".id"
-            common.add_dependancy(ttft,tt2)
+            if ttft == "aws_subnet":
+                try:
+                    if globals.subnetlist[tt2]:
+                        subs=ttft + "." + tt2 + ".id"
+                        common.add_dependancy(ttft, tt2)
+                    else:
+                        print("WARNING: subnet not in subnet list" + tt2)
+                        subs='"'+tt2+'"'
+                except KeyError:
+                    print("WARNING: subnet not in subnet list " + tt2+ " Resource may be referencing a subnet that no longer exists")
+                    subs='"'+tt2+'"'
+
+            elif ttft == "aws_security_group":
+                try:
+                    if globals.sglist[tt2]:
+                        subs=ttft + "." + tt2 + ".id"
+                        common.add_dependancy(ttft, tt2)
+                    else:
+                        print("WARNING: security group not in sg list" + tt2)
+                        subs='"'+tt2+'"'
+                except KeyError:
+                    print("WARNING: security group not in sg list " + tt2+ " Resource may be referencing a security group that no longer exists")
+                    subs='"'+tt2+'"'
+            else:
+                subs=ttft + "." + tt2 + ".id"
+                common.add_dependancy(ttft,tt2)
+
         
-        if subs !="":         
+        if subs !="":       
             t1=tt1 + " = [" + subs + "]\n"
             t1=t1.replace(',]',']')
         

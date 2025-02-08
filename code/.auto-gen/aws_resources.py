@@ -651,16 +651,6 @@ elif type == "aws_db_snapshot":
     clfn="rds";descfn="describe_db_snapshots";topkey='DBSnapshots';key="DBSnapshotIdentifier";filterid=key
 elif type == "aws_db_snapshot_copy":
     clfn="rds";descfn="describe_db_snapshot_attributes";topkey='DBSnapshotAttributesResult';key="DBSnapshotIdentifier";filterid=key
-#elif type == "aws_db_subnet_group":
-#    clfn="rds";descfn="describe_db_subnet_groups";topkey='DBSubnetGroups';key="DBSubnetGroupName";filterid=key
-#elif type == "aws_default_network_acl":
-#    clfn="ec2";descfn="describe_network_acls";topkey='NetworkAcls';key="NetworkAclId";filterid=key
-#elif type == "aws_default_route_table":
-#    clfn="ec2";descfn="describe_route_tables";topkey='RouteTables';key="RouteTableId";filterid=key
-#elif type == "aws_default_security_group":
-#    clfn="ec2";descfn="describe_security_groups";topkey='SecurityGroups';key="GroupId";filterid=key
-#elif type == "aws_default_subnet":
-#    clfn="ec2";descfn="describe_subnets";topkey='Subnets';key="SubnetId";filterid=key
 elif type == "aws_default_tags":
     clfn="ec2";descfn="describe_tags";topkey='Tags';key="ResourceId";filterid=key
 #elif type == "aws_default_vpc":
@@ -2638,8 +2628,6 @@ elif type == "aws_storagegateway_upload_buffer":
     clfn="storagegateway";descfn="describe_upload_buffer";topkey="UploadBuffer";key="UploadBufferARN";filterid=key
 elif type == "aws_storagegateway_working_storage":
     clfn="storagegateway";descfn="describe_working_storage";topkey="WorkingStorage";key="WorkingStorageARN";filterid=key
-#elif type == "aws_subnet":
-#    clfn="ec2";descfn="describe_subnets";topkey="Subnets";key="SubnetId";filterid=key
 elif type == "aws_swf_domain":
     clfn="swf";descfn="list_domains";topkey="domainInfos";key="name";filterid=key
 elif type == "aws_synthetics_canary":

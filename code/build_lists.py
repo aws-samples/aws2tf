@@ -15,6 +15,7 @@ def build_lists():
             paginator = client.get_paginator('describe_vpcs')
             for page in paginator.paginate():
                 response.extend(page['Vpcs'])
+            
             return [('vpc', j['VpcId']) for j in response]
         except Exception as e:
             print("Error fetching vpc data:", e)
@@ -51,6 +52,7 @@ def build_lists():
             paginator = client.get_paginator('describe_subnets')
             for page in paginator.paginate():
                 response.extend(page['Subnets'])
+            globals.subnets=response
             # save response
             with open('imported/subnets.json', 'w') as f:
                json.dump(response, f, indent=2, default=str)

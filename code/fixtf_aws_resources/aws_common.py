@@ -91,11 +91,14 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
 
         elif tt1 == "subnet_id":
             if tt2 != "null":
-                if globals.subnetlist[tt2]:
-                    t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
-                    common.add_dependancy("aws_subnet", tt2)
-                else:
-                    print("WARNING: subnet_id not found in subnetlist", tt2)
+                try:
+                    if globals.subnetlist[tt2]:
+                        t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
+                        common.add_dependancy("aws_subnet", tt2)
+                    else:
+                        print("WARNING: subnet_id not found in subnet list", tt2)
+                except KeyError as e:
+                    print("WARNING: subnet_id not found in subnet list", tt2)
 
         elif tt1 == "file_system_id":
             if tt2 != "null":

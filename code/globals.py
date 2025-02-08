@@ -16,6 +16,7 @@ dependancies=[]
 types=[]
 debug=False
 validate=False
+dnet=False
 acc="xxxxxxxxxxxx"
 region="xx-xxxx-x"
 regionl=0

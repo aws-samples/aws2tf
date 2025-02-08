@@ -21,8 +21,17 @@ def get_aws_instance(type, id, clfn, descfn, topkey, key, filterid):
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 for k in j['Instances']:
-                    if k['State']['Name'] == 'running' or k['State']['Name'] == 'stopped':
-                        common.write_import(type,k[key],None) 
+                    if globals.ec2tag is None:
+                        if k['State']['Name'] == 'running' or k['State']['Name'] == 'stopped':
+                            common.write_import(type,k[key],None) 
+                    else:
+                        tags=k['Tags']
+                        #print(json.dumps(tags, indent=2, default=str))
+                        for tag in tags:
+                            if tag['Key'] == globals.ec2tagk:
+                                if tag['Value'] == globals.ec2tagv:
+                                    if k['State']['Name'] == 'running' or k['State']['Name'] == 'stopped':
+                                        common.write_import(type, k[key], None)
 
         else:  
             if id.startswith("i-"):    
@@ -33,6 +42,8 @@ def get_aws_instance(type, id, clfn, descfn, topkey, key, filterid):
             for j in response['Reservations']:
                 
                 for k in j['Instances']:
+                    #print(json.dumps(k['Tags'],indent=2,default=str))
+                    
                     if k['State']['Name'] == 'running' or k['State']['Name'] == 'stopped':
                         common.write_import(type,k[key],None)
 

@@ -62,6 +62,9 @@ connectinid=""
 waf2id=""
 waf2nm=""
 waf2sc=""
+ec2tag=None
+ec2tagv=None
+ec2tagk=None
 
 badlist=[]
 

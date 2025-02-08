@@ -116,6 +116,8 @@ def main():
    
     if sys.argv[1]=="-h": timed_interrupt.timed_int.stop()
 
+    print("cwd="+str(sys.argv))
+
     argParser = argparse.ArgumentParser()
     argParser.add_argument("-l", "--list",help="List extra help information" , action='store_true')
     argParser.add_argument("-t", "--type", help="resource type aws_s3, ec2 aws_vpc etc")
@@ -129,6 +131,8 @@ def main():
     argParser.add_argument("-v", "--validate", help="validate and exit", action='store_true')
     argParser.add_argument("-a", "--accept", help="expected plan changes accepted", action='store_true')
     argParser.add_argument("-e", "--exclude", help="resource types to exclude")
+    argParser.add_argument("-ec2tag", "--ec2tag", help="ec2 key:value pair to import")
+    argParser.add_argument("-dnet", "--datanet", help="write data statements for aws_vpc")
     argParser.add_argument("-b3", "--boto3error", help="exit on boto3 api error (for debugging)", action='store_true')
     argParser.add_argument("-la", "--serverless", help="Lambda mode - when running in a Lambda container", action='store_true')
     argParser.add_argument("-tv", "--tv", help="Specify version of Terraform AWS provider default = "+globals.tfver)
@@ -191,7 +195,28 @@ def main():
     if args.tv:
         globals.tfver=args.tv
 
+    if args.ec2tag:
+        isinv=True
+        if args.ec2tag!="" and ":" in args.ec2tag:
+            isinv=False             
+            #args.ec2tag = args.ec2tag[1:-1]
+            globals.ec2tag=args.ec2tag
+            globals.ec2tagk=globals.ec2tag.split(":")[0]
+            globals.ec2tagv=globals.ec2tag.split(":")[1]
+        else:
+            isinv=True
+        
+        if isinv:
+            #if len(globals.ec2tagk) < 1 or len(globals.ec2tagv) < 1:
+            print("ec2tag must be in format (with quotes) \"key:value\"")
+            print("exit 005")
+            timed_interrupt.timed_int.stop()
+            exit()
+
+
     if args.validate: globals.validate = True
+    
+    if args.dnet: globals.dnet = True
 
     if args.type is None or args.type=="":
         if args.serverless:

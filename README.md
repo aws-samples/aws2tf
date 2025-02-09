@@ -178,7 +178,7 @@ You can import EC2 instances selectively by using the -ec2tag option
 The above will only import instances that have a tag key/value pair of "project" and a value of "my value"
 
 
-### Using Terraform data resources:
+### Using Terraform data resources
 
 
 ** still under test **

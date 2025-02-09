@@ -173,6 +173,9 @@
 * AWS::Lambda::LayerVersion
 * AWS::Logs::LogGroup
 * AWS::MSK::Cluster
+* AWS::MSK::ClusterPolicy
+* AWS::MSK::ServerlessCluster
+* AWS::MWAA::Environment
 * AWS::OpenSearchService::Domain
 * AWS::Pipes::Pipe
 * AWS::RDS::DBCluster
@@ -241,4 +244,6 @@
 * AWS::VpcLattice::ServiceNetworkVpcAssociation
 * AWS::VpcLattice::TargetGroup
 * AWS::WAFv2::IPSet
+* AWS::WAFv2::LoggingConfiguration
 * AWS::WAFv2::WebACL
+* AWS::WorkSpaces::Workspace

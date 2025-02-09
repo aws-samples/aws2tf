@@ -630,8 +630,12 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
                 elif ttft == "aws_security_group": 
                     try:
                         if globals.sglist[subn]:
-                            subs=subs + ttft + "." + subn + ".id,"
-                            common.add_dependancy(ttft,subn)
+                            if not globals.dnet:
+                                subs=subs + ttft + "." + subn + ".id,"
+                                common.add_dependancy(ttft,subn)
+                            else:
+                                subs=subs + "data."+ttft + "." + subn + ".id,"
+                                common.add_dependancy(ttft,subn)
                         else:
                             print("WARNING: security group not in sg list" + subn)
                             subs=subs+'"'+subn+'"'+","
@@ -664,8 +668,12 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
             elif ttft == "aws_security_group":
                 try:
                     if globals.sglist[tt2]:
-                        subs=ttft + "." + tt2 + ".id"
-                        common.add_dependancy(ttft, tt2)
+                        if not globals.dnet:
+                            subs=ttft + "." + tt2 + ".id"
+                            common.add_dependancy(ttft, tt2)
+                        else:
+                            subs="data."+ttft + "." + tt2 + ".id"
+                            common.add_dependancy(ttft, tt2)
                     else:
                         print("WARNING: security group not in sg list" + tt2)
                         subs='"'+tt2+'"'

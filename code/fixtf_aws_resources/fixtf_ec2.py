@@ -436,7 +436,6 @@ def aws_launch_template(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if tt1 == "security_group_names":    
 		if tt2 == "[]":     skip=1
-	##elif tt1 == "vpc_security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
 	elif tt1 == "throughput":
 		if tt2 == "0": skip=1
 

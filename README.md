@@ -177,15 +177,17 @@ You can import EC2 instances selectively by using the -ec2tag option
 
 The above will only import instances that have a tag key/value pair of "project" and a value of "my value"
 
+
 ### Using Terraform data resources:
+
 
 ** still under test **
 
 These flags will cause aws2tf to use data statements for certain resource types - useful for enterprises where for example networking components are provided by a different team, the available flags are:
 
--dnet:  uses data resources for aws_vpc, aws_subnet and aws_security_group
--dkms:  uses data statements for aws_kms_key
--dkey:  uses data statements for aws_key_pair
+* -dnet:  uses data resources for aws_vpc, aws_subnet and aws_security_group
+* -dkms:  uses data statements for aws_kms_key
+* -dkey:  uses data statements for aws_key_pair
 
 ----------
 

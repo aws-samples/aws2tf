@@ -1083,7 +1083,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                      if globals.rproc[pt] is True:
                         print("Found "+pt+" in processed skipping ...") 
                         continue
-                  special_deps(type,theid)
+                  #special_deps(type,theid)
                
                
                #
@@ -1099,7 +1099,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                         if id == str(item[filterid]):
                            #if globals.debug: print("-gr31 item-"+str(item))
                            theid=item[key]
-                           special_deps(type,theid)
+                           #special_deps(type,theid)
                            write_import(type,theid,None)
                         elif filterid != key:
                            if globals.debug:
@@ -1161,34 +1161,29 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
 
 def special_deps(ttft,taddr):
    #print("In special deps"+ttft+"  "+taddr)
+   """
    if ttft == "aws_security_group": 
       print("##### special dep security group") 
-      add_known_dependancy("aws_security_group_rule",taddr) 
-      add_dependancy("aws_security_group_rule",taddr)
+      #add_known_dependancy("aws_security_group_rule",taddr) 
+      #add_dependancy("aws_security_group_rule",taddr)
    if ttft == "aws_subnet":
       print("##### special dep subnet") 
       #add_known_dependancy("aws_route_table_association",taddr) 
       #add_dependancy("aws_route_table_association",taddr)  
    elif ttft == "aws_vpc": 
       print("##### special dep vpc") 
-      add_known_dependancy("aws_route_table_association",taddr)  
-      add_known_dependancy("aws_subnet",taddr)  
-      add_dependancy("aws_route_table_association",taddr)
-      add_dependancy("aws_vpc_ipv4_cidr_block_association",taddr)
-      add_dependancy("aws_vpc_endpoint", taddr)
-
-   elif ttft == "aws_vpclattice_service_network":
+      #add_known_dependancy("aws_route_table_association",taddr)  
+      #add_known_dependancy("aws_subnet",taddr)  
+      #add_dependancy("aws_route_table_association",taddr)
+      #add_dependancy("aws_vpc_ipv4_cidr_block_association",taddr)
+      #add_dependancy("aws_vpc_endpoint", taddr)
+   
+   if ttft == "aws_vpclattice_service_network":
+      print("##### special lattice sn") 
       add_known_dependancy("aws_vpclattice_service",taddr) 
       add_known_dependancy("aws_vpclattice_service_network_vpc_association",taddr) 
       add_known_dependancy("aws_vpclattice_service_network_service_association",taddr)
-
-      #add_known_dependancy("aws_vpclattice_auth_policy",taddr) get-auth-policy (resource-identifier)
-      #add_known_dependancy("aws_vpclattice_resource_policy",taddr)
-      # add_known_dependancy("aws_vpclattice_access_log_subscription",taddr) (resource-identifier)
-      ## target group
-
-      ## listener
-
+   """
    return  
 
 
@@ -1241,7 +1236,7 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
          print("call_boto3 clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
       #if globals.debug: print("pre-response")
       # get any pre-saved response
-      response=get_boto3_resp(descfn)  # sets response to [] if nothing saved
+      #response=get_boto3_resp(descfn)  # sets response to [] if nothing saved
       
       if response == []:
          client = boto3.client(clfn) 
@@ -1282,7 +1277,7 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                      if len(page[topkey])==0:
                         continue
                      response.extend(page[topkey][0]['Instances'])
-                  sav_boto3_rep(descfn,response)
+                  #sav_boto3_rep(descfn,response)
                
                #print(str(response))
 
@@ -1324,7 +1319,7 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                # main get all call - usually a list- describe- or get- 
                for page in paginator.paginate(): 
                   response.extend(page[topkey])
-               sav_boto3_rep(descfn,response)
+               #sav_boto3_rep(descfn,response)
 
                if id is not None:
                   fresp=response
@@ -1426,6 +1421,7 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
 
    return response
 
+"""
 def sav_boto3_rep(descfn,response):
    if str(descfn)=="describe_subnets" and globals.aws_subnet_resp==[]: globals.aws_subnet_resp=response  
    elif str(descfn)=="describe_vpcs" and globals.aws_vpc_resp==[]: globals.aws_vpc_resp=response  
@@ -1444,6 +1440,7 @@ def get_boto3_resp(descfn):
    elif str(descfn)=="list_roles" and globals.aws_iam_role_resp != []: response=globals.aws_iam_role_resp
    elif str(descfn)=="describe_instances" and globals.aws_instance_resp != []: response=globals.aws_instance_resp
    return response
+"""
 
 
 def handle_error(e,frame,clfn,descfn,topkey,id):

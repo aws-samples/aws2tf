@@ -201,11 +201,11 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             if tt2 != "null":
                 if not globals.dkey:
                     tfil=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
-                    t1=tt1 + " = aws_key_pair." + tfil + ".id\n"
+                    t1=tt1 + " = aws_key_pair." + tfil + ".key_name\n"
                     common.add_dependancy("aws_key_pair", tt2)
                 else:
                     tfil=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
-                    t1=tt1 + " = data.aws_key_pair." + tfil + ".id\n"
+                    t1=tt1 + " = data.aws_key_pair." + tfil + ".key_name\n"
                     common.add_dependancy("aws_key_pair", tt2)
             else:
                 skip=1

@@ -609,17 +609,24 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
         if cc > 0:
             for i in range(cc+1):
                 subn=tt2.split(',')[i]
+                # aws_subnet
                 if ttft == "aws_subnet": 
                     try:
                         if globals.subnetlist[subn]:
-                            subs=subs + ttft + "." + subn + ".id,"
-                            common.add_dependancy(ttft,subn)
+                            if not globals.dnet:
+                                subs=subs + ttft + "." + subn + ".id,"
+                                common.add_dependancy(ttft,subn)
+                            else:
+                                subs=subs + "data."+ttft + "." + subn + ".id,"
+                                common.add_dependancy(ttft,subn)
                         else:
                             print("WARNING: subnet not in subnetlist" + subn)
                             subs=subs+'"'+subn+'"'+","
                     except KeyError:
                         print("WARNING: subnet not in subnet list " + subn+ " Resource may be referencing a subnet that no longer exists")
                         subs=subs+'"'+subn+'"'+","
+                
+                # security_group
                 elif ttft == "aws_security_group": 
                     try:
                         if globals.sglist[subn]:
@@ -641,8 +648,12 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
             if ttft == "aws_subnet":
                 try:
                     if globals.subnetlist[tt2]:
-                        subs=ttft + "." + tt2 + ".id"
-                        common.add_dependancy(ttft, tt2)
+                        if not globals.dnet:
+                            subs=ttft + "." + tt2 + ".id"
+                            common.add_dependancy(ttft, tt2)
+                        else:
+                            subs="data."+ttft + "." + tt2 + ".id"
+                            common.add_dependancy(ttft, tt2)
                     else:
                         print("WARNING: subnet not in subnet list" + tt2)
                         subs='"'+tt2+'"'

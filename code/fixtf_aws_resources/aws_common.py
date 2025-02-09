@@ -72,12 +72,17 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         elif tt1 == "secret_arn_list": t1=fixtf.deref_secret_arn_array(t1,tt1,tt2)
         elif tt1 == "vpc_id" or tt1=="vpc":
             if tt2 != "null":
-                if tt2.startswith('vpc-'):
+                if tt2.startswith('vpc-'): 
                     if tt2 in globals.vpclist:
-                        t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
-                        common.add_dependancy("aws_vpc", tt2)
+                        if not globals.dnet:
+                            t1=tt1 + " = data.aws_vpc." + tt2 + ".id\n"
+                            common.add_dependancy("aws_vpc", tt2)
+                        else:
+                            t1=tt1 + " = data.aws_vpc." + tt2 + ".id\n"
+                            common.add_dependancy("aws_vpc", tt2)
                     else:
                         print("WARNING: vpc_id not found in vpclist",tt2)
+                    
 
         elif tt1=="emr_managed_master_security_group" or tt1=="emr_managed_slave_security_group" \
                 or tt1=="service_access_security_group":
@@ -93,8 +98,12 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             if tt2 != "null":
                 try:
                     if globals.subnetlist[tt2]:
-                        t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
-                        common.add_dependancy("aws_subnet", tt2)
+                        if not globals.dnet:
+                            t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
+                            common.add_dependancy("aws_subnet", tt2)
+                        else:
+                            t1=tt1 + " = data.aws_subnet." + tt2 + ".id\n"
+                            common.add_dependancy("aws_subnet", tt2)
                     else:
                         print("WARNING: subnet_id not found in subnet list", tt2)
                 except KeyError as e:
@@ -104,18 +113,6 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             if tt2 != "null":
                 t1=tt1 + " = aws_efs_file_system." + tt2 + ".id\n"
                 common.add_dependancy("aws_efs_file_system", tt2)
-
-        elif tt1 == "kms_key_arn" or tt1=="encryption_at_rest_kms_key_arn":
-            if tt2 != "null":     
-                if "arn:" in tt2: 
-                    tt2=tt2.split("/")[-1]
-                    if check_key(tt2):	
-                        t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
-                        common.add_dependancy("aws_kms_key",tt2)
-                    ## else - it's a AWS managed key so let it fall into format statement later.
-            else:
-                skip=1
-
 
 
         elif tt1 == "lambda_function_arn":
@@ -127,6 +124,23 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             else:
                 skip=1        
         
+        elif tt1 == "kms_key_arn" or tt1=="encryption_at_rest_kms_key_arn":
+            if tt2 != "null":     
+                if "arn:" in tt2: 
+                    tt2=tt2.split("/")[-1]
+                    if check_key(tt2):	
+                        if not globals.dkms:
+                            t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
+                            common.add_dependancy("aws_kms_key",tt2)
+                        else:
+                            t1=tt1 + " = data.aws_kms_key.k-" + tt2 + ".arn\n"
+                            common.add_dependancy("aws_kms_key", tt2)
+                    ## else - it's a AWS managed key so let it fall into format statement later.
+            else:
+                skip=1
+
+# KMS key id
+
         elif tt1 == "kms_key_id" or tt1=="kms_master_key_id" or tt1=="target_key_id" or tt1=="encryption_key" or tt1=="key_id":
         #elif "key_id" in tt1:
             if type != "aws_docdb_cluster":
@@ -142,16 +156,23 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                             tt2=tt2.split("/")[-1]	
                             skip=0
                             if check_key(tt2):
-                                t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
-                                common.add_dependancy("aws_kms_key",tt2) 
+                                if not globals.dkms:
+                                    t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
+                                    common.add_dependancy("aws_kms_key",tt2) 
+                                else:
+                                    t1=tt1 + " = data.aws_kms_key.k-" + tt2 + ".arn\n"
+                                    common.add_dependancy("aws_kms_key", tt2)
                                              
                         else:
                             tt2=tt2.split("/")[-1]
                             skip=0
                             if check_key(tt2):
-                                t1=tt1 + " = aws_kms_key.k-" + tt2 + ".id\n"
-                                common.add_dependancy("aws_kms_key", tt2)
-                                   
+                                if not globals.dkms:
+                                    t1=tt1 + " = aws_kms_key.k-" + tt2 + ".id\n"
+                                    common.add_dependancy("aws_kms_key", tt2)
+                                else:
+                                    t1=tt1 + " = data.aws_kms_key.k-" + tt2 + ".id\n"
+                                    common.add_dependancy("aws_kms_key", tt2)                                   
                                            
                 else:
                     skip=1
@@ -170,8 +191,12 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
 
         elif tt1 == "key_pair":
             if tt2 != "null":
-                t1=tt1 + " = aws_key_pair." + tt2 + ".id\n"
-                common.add_dependancy("aws_key_pair", tt2)
+                if not globals.dkey:
+                    t1=tt1 + " = aws_key_pair." + tt2 + ".id\n"
+                    common.add_dependancy("aws_key_pair", tt2)
+                else:
+                    t1=tt1 + " = data.aws_key_pair." + tt2 + ".id\n"
+                    common.add_dependancy("aws_key_pair", tt2)
             else:
                 skip=1
 

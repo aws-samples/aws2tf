@@ -969,8 +969,7 @@ def write_import(type,theid,tfid):
          #print("theid=",theid,"  tfid=",tfid)
 
       done_data=False
-      if globals.dnet:
-         done_data=do_data(type,theid)
+      done_data=do_data(type,theid)
 
       if not done_data:
          output = StringIO()
@@ -1005,15 +1004,34 @@ def write_import(type,theid,tfid):
 
 
 def do_data(type,theid):
-   if type == "aws_vpc":
-      fn="data-"+type+"_"+theid+".tf"
-      with open("fn", 'w') as f3:
-         f3.write('data "aws_vpc" "'+theid+'" {\n')
-         f3.write(' id = "'+theid+'"\n')
-         f3.write('}\n')
-      return True
-   
+   if globals.dnet:
+      if type == "aws_vpc" or type=="aws_subnet":
+         fn="data-"+type+"_"+theid+".tf"
+         with open(fn, 'w') as f3:
+            f3.write('data "'+type+'" "'+theid+'" {\n')
+            f3.write(' id = "'+theid+'"\n')
+            f3.write('}\n')
+         return True
+   if globals.dkms:
+      if type == "aws_kms_key":
+         fn="data-"+type+"_"+theid+".tf"
+         with open(fn, 'w') as f3:
+            f3.write('data "'+type+'" "k-'+theid+'" {\n')
+            f3.write(' key_id = "'+theid+'"\n')
+            f3.write('}\n')
+         return True
+   if globals.dkey:
+      if type == "aws_key_pair":
+         fn="data-"+type+"_"+theid+".tf"
+         with open(fn, 'w') as f3:
+            f3.write('data "'+type+'" "'+theid+'" {\n')
+            f3.write(' key_name = "'+theid+'"\n')
+            f3.write('}\n')
+         return True
+
+
    return False
+
 
 #########################################################################################################################
 

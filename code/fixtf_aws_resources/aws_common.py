@@ -65,6 +65,22 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                     t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
                     #print("--returned deref array ->>  aws_common: t1="+t1+" skip="+str(skip))
                     return skip,t1,flag1,flag2
+                
+        elif tt1=="emr_managed_master_security_group" or tt1=="emr_managed_slave_security_group" \
+                or tt1=="service_access_security_group" or tt1 == "security_group_id" or tt1 == "source_security_group_id":
+           if tt2 != "null":
+                if globals.sglist[tt2]:
+                    if globals.dnet:
+                        t1=tt1 + " = data.aws_security_group." + tt2 + ".id\n"
+                        common.add_dependancy("aws_security_group", tt2)
+                    else:
+                        t1=tt1 + " = aws_security_group." + tt2 + ".id\n"
+                        common.add_dependancy("aws_security_group", tt2)
+                else:
+                    print("WARNING: security group not found in sglist", tt2)
+
+
+
 
         elif tt1 == "subnets" or tt1 == "subnet_ids" or tt1 == "client_subnets": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
         elif tt1 == "route_table_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_route_table","rtb-",skip)
@@ -84,14 +100,6 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                         print("WARNING: vpc_id not found in vpclist",tt2)
                     
 
-        elif tt1=="emr_managed_master_security_group" or tt1=="emr_managed_slave_security_group" \
-                or tt1=="service_access_security_group":
-           if tt2 != "null":
-                if globals.sglist[tt2]:
-                    t1=tt1 + " = aws_security_group." + tt2 + ".id\n"
-                    common.add_dependancy("aws_security_group", tt2)
-                else:
-                    print("WARNING: security group not found in sglist", tt2)
 
 
         elif tt1 == "subnet_id":
@@ -193,11 +201,11 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             if tt2 != "null":
                 if not globals.dkey:
                     tfil=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
-                    t1=tt1 + " = aws_key_pair." + tfil + ".id\n"
+                    t1=tt1 + " = aws_key_pair." + tfil + ".key_name\n"
                     common.add_dependancy("aws_key_pair", tt2)
                 else:
                     tfil=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
-                    t1=tt1 + " = data.aws_key_pair." + tfil + ".id\n"
+                    t1=tt1 + " = data.aws_key_pair." + tfil + ".key_name\n"
                     common.add_dependancy("aws_key_pair", tt2)
             else:
                 skip=1

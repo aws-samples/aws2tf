@@ -597,11 +597,12 @@ def aws_security_group_rule(t1,tt1,tt2,flag1,flag2):
 		if tt2 == "[]": skip=1
 	elif tt1 == "self":	
 		if tt2 == "false": skip=1
+	"""	
 	elif tt1 == "security_group_id" or tt1 == "source_security_group_id": 
 		if "sg-" in tt2:
 			t1=tt1 + " = aws_security_group." + tt2 + ".id\n"
 			common.add_dependancy("aws_security_group",tt2)
-
+    """
 
 	return skip,t1,flag1,flag2
 

@@ -1237,7 +1237,7 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
       #if globals.debug: print("pre-response")
       # get any pre-saved response
       #response=get_boto3_resp(descfn)  # sets response to [] if nothing saved
-      
+      response=[]
       if response == []:
          client = boto3.client(clfn) 
          #if globals.debug: print("client")

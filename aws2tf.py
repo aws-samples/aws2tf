@@ -221,8 +221,8 @@ def main():
         globals.validate = True
 
     if args.datanet:  globals.dnet = True
-    if args.datakms:  globals.dnet = True
-    if args.datakey:  globals.dnet = True
+    if args.datakms:  globals.dkms = True
+    if args.datakey:  globals.dkey = True
 
     if args.type is None or args.type=="":
         if args.serverless:
@@ -472,6 +472,7 @@ def main():
             #all_types=all_types[:10]
             print("len all_types="+str(len(all_types))) # testing only
             print("INFO: Building secondary lists")
+            
             build_secondary_lists(id)
 
             

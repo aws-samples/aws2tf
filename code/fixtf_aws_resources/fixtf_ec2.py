@@ -376,8 +376,12 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 		elif tt1 == "security_groups": skip=1
 		elif tt1 == "key_name": 
 			if tt2 != "null":
-				t1=tt1 + " = aws_key_pair." + tt2 + ".id\n"
-				common.add_dependancy("aws_key_pair",tt2)
+				if not globals.dkey:
+					t1=tt1 + " = aws_key_pair." + tt2 + ".id\n"
+					common.add_dependancy("aws_key_pair",tt2)
+				else:
+					t1=tt1 + " = data.aws_key_pair." + tt2 + ".id\n"
+					common.add_dependancy("aws_key_pair", tt2)
 
 		elif tt1 == "user_data_replace_on_change" and tt2 == "null":
 			t1=tt1 + " = false\n"
@@ -413,8 +417,7 @@ def aws_ip_ranges(t1,tt1,tt2,flag1,flag2):
 
 def aws_key_pair(t1,tt1,tt2,flag1,flag2):
 	skip=0
-	if tt1 == "key_name":
-		
+	if tt1 == "key_name":	
 		flag1=tt2
 	if tt1 == "public_key":
 		client = boto3.client("ec2")
@@ -661,8 +664,12 @@ def aws_spot_fleet_request(t1,tt1,tt2,flag1,flag2):
 	elif tt1 == "allocation_strategy" and tt2!="null":
 		t1=t1+"\n lifecycle {\n   ignore_changes = [target_group_arns,load_balancers,wait_for_fulfillment]\n}\n"
 	elif tt1=="key_name" and tt2 != "null":
-		t1=tt1 + " = aws_key_pair." + tt2 + ".id\n"
-		common.add_dependancy("aws_key_pair",tt2)
+		if globals.dkey:
+			t1=tt1 + " = data.aws_key_pair." + tt2 + ".id\n"
+			common.add_dependancy("aws_key_pair",tt2)
+		else:
+			t1=tt1 + " = aws_key_pair." + tt2 + ".id\n"
+			common.add_dependancy("aws_key_pair",tt2)
 	return skip,t1,flag1,flag2
 
 def aws_spot_instance_request(t1,tt1,tt2,flag1,flag2):

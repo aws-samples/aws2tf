@@ -471,9 +471,10 @@ def main():
         elif all_types is not None and lall > 1:
             #all_types=all_types[:10]
             print("len all_types="+str(len(all_types))) # testing only
-            print("INFO: Building secondary lists")
-            
-            build_secondary_lists(id)
+            #print("all_types="+str(all_types))
+            if "aws_iam" in str(all_types) and id is None:
+                print("INFO: Building secondary lists",id)
+                build_secondary_lists(id)
 
             
             globals.esttime=len(all_types)/4

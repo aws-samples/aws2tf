@@ -7,7 +7,7 @@ import inspect
 import json
 
 
-def get_aws_vpc_new(type, id, clfn, descfn, topkey, key, filterid):
+def get_aws_vpc(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
         print("--> In get_aws_subnet doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
@@ -15,12 +15,25 @@ def get_aws_vpc_new(type, id, clfn, descfn, topkey, key, filterid):
     try:    
         if id is None:
             for sn in globals.vpclist.keys():
-               common.write_import(type,sn,None)
+                common.write_import(type,sn,None)
+                common.add_known_dependancy("aws_subnet",sn)
+                if not globals.dnet:
+                    common.add_known_dependancy("aws_route_table_association",sn)   
+                    common.add_dependancy("aws_route_table_association",sn)
+                    common.add_dependancy("aws_vpc_ipv4_cidr_block_association",sn)
+                    common.add_dependancy("aws_vpc_endpoint", sn)
 
         elif id.startswith("vpc-"):
             try:
                 if globals.vpclist[id]:
                     common.write_import(type, id, None)
+                    common.add_known_dependancy("aws_subnet",id)
+                    if not globals.dnet:
+                        common.add_known_dependancy("aws_route_table_association",id)   
+                        common.add_dependancy("aws_route_table_association",id)
+                        common.add_dependancy("aws_vpc_ipv4_cidr_block_association",id)
+                        common.add_dependancy("aws_vpc_endpoint", id)
+
                     pkey = type+"."+id
                     globals.rproc[pkey] = True
                 else:
@@ -29,7 +42,7 @@ def get_aws_vpc_new(type, id, clfn, descfn, topkey, key, filterid):
                     print("WARNING: vpc not in vpclist " + id+ " Resource may be referencing a subnet that no longer exists")  
             
         else:
-            print("WARNING: get_aws_subnet unexpected id value",str(id))
+            print("WARNING: get_aws_vpc unexpected id value",str(id))
             return True
                     
 

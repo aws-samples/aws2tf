@@ -243,7 +243,7 @@ def tfplan1():
    # com="terraform plan -generate-config-out="+ rf + " -out tfplan -json > plan2.json"
 
    if not glob.glob("import*.tf"):
-      
+
       print("INFO: No import*.tf files found - nothing to import, exiting ....")
       print("INFO: Confirm the resource type exists in your account: "+globals.acc+" & region: "+globals.region)
       globals.tracking_message="No import*.tf files found for this resource, exiting ...."

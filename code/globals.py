@@ -1,6 +1,6 @@
 import sys,os
 
-tfver="5.84.0"
+tfver="5.86.0"
 esttime=120.0
 profile="default"
 merge=False
@@ -16,6 +16,9 @@ dependancies=[]
 types=[]
 debug=False
 validate=False
+dnet=False
+dkms=False
+dkey=False
 acc="xxxxxxxxxxxx"
 region="xx-xxxx-x"
 regionl=0
@@ -62,6 +65,9 @@ connectinid=""
 waf2id=""
 waf2nm=""
 waf2sc=""
+ec2tag=None
+ec2tagv=None
+ec2tagk=None
 
 badlist=[]
 
@@ -90,7 +96,8 @@ tested={
 }
 
 # List Dicts
-
+subnets={}
+vpcs={}
 subnetlist={}
 sglist={}
 vpclist={}

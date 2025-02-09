@@ -243,7 +243,7 @@ def tfplan1():
    # com="terraform plan -generate-config-out="+ rf + " -out tfplan -json > plan2.json"
 
    if not glob.glob("import*.tf"):
-      
+
       print("INFO: No import*.tf files found - nothing to import, exiting ....")
       print("INFO: Confirm the resource type exists in your account: "+globals.acc+" & region: "+globals.region)
       globals.tracking_message="No import*.tf files found for this resource, exiting ...."
@@ -777,15 +777,15 @@ def check_python_version():
       print("This program requires Python 3.8 or later.")
       sys.exit(1)
 # check boto3 version
-   if boto3.__version__ < '1.35.97':
+   if boto3.__version__ < '1.36.13':
       bv = str(boto3.__version__)
       print("boto3 version: ",bv)
       vs = bv.split(".")
       v1 = int(vs[0])*100000+int(vs[1])*1000+int(vs[2])
-      if v1 < 135097:
+      if v1 < 136013:
          print("boto3 version:"+bv)
-         print("This program requires boto3 1.35.97 or later.")
-         print("Try: pip install boto3")
+         print("This program requires boto3 1.36.13 or later.")
+         print("Try: pip install boto3  -or-  pip install boto3==1.36.13")
          print("exit 037")
          timed_int.stop()
          sys.exit(1)
@@ -968,23 +968,27 @@ def write_import(type,theid,tfid):
             return
          #print("theid=",theid,"  tfid=",tfid)
 
-      output = StringIO()
-      output.write('import {\n')
-      output.write('  to = ' +type + '.' + tfid + '\n')
-      output.write('  id = "'+ theid + '"\n')
-      output.write('}\n')
+      done_data=False
+      done_data=do_data(type,theid)
 
-               # Write the filtered resource block to a new file
-      
-      if len(fn) > 255: fn=fn[:250]+".tf"
-      try:
-         with open(fn, 'w') as f:
-            f.write(output.getvalue().strip() + '\n')
-      except:
-         print("ERROR: could not write to file: " + fn)
-         print("exit 039")
-         timed_int.stop()
-         exit()
+      if not done_data:
+         output = StringIO()
+         output.write('import {\n')
+         output.write('  to = ' +type + '.' + tfid + '\n')
+         output.write('  id = "'+ theid + '"\n')
+         output.write('}\n')
+
+                  # Write the filtered resource block to a new file
+         
+         if len(fn) > 255: fn=fn[:250]+".tf"
+         try:
+            with open(fn, 'w') as f:
+               f.write(output.getvalue().strip() + '\n')
+         except:
+            print("ERROR: could not write to file: " + fn)
+            print("exit 039")
+            timed_int.stop()
+            exit()
 
 
       pkey=type+"."+tfid
@@ -997,6 +1001,37 @@ def write_import(type,theid,tfid):
       handle_error2(e,str(inspect.currentframe().f_code.co_name),id)    
 
    return
+
+
+def do_data(type,theid):
+   if globals.dnet:
+      if type == "aws_vpc" or type=="aws_subnet" or type=="aws_security_group":
+         fn="data-"+type+"_"+theid+".tf"
+         with open(fn, 'w') as f3:
+            f3.write('data "'+type+'" "'+theid+'" {\n')
+            f3.write(' id = "'+theid+'"\n')
+            f3.write('}\n')
+         return True
+   if globals.dkms:
+      if type == "aws_kms_key":
+         fn="data-"+type+"_"+theid+".tf"
+         with open(fn, 'w') as f3:
+            f3.write('data "'+type+'" "k-'+theid+'" {\n')
+            f3.write(' key_id = "'+theid+'"\n')
+            f3.write('}\n')
+         return True
+   if globals.dkey:
+      if type == "aws_key_pair":
+         fn="data-"+type+"_"+theid+".tf"
+         with open(fn, 'w') as f3:
+            f3.write('data "'+type+'" "'+theid+'" {\n')
+            f3.write(' key_name = "'+theid+'"\n')
+            f3.write('}\n')
+         return True
+
+
+   return False
+
 
 #########################################################################################################################
 
@@ -1048,7 +1083,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                      if globals.rproc[pt] is True:
                         print("Found "+pt+" in processed skipping ...") 
                         continue
-                  special_deps(type,theid)
+                  #special_deps(type,theid)
                
                
                #
@@ -1064,7 +1099,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                         if id == str(item[filterid]):
                            #if globals.debug: print("-gr31 item-"+str(item))
                            theid=item[key]
-                           special_deps(type,theid)
+                           #special_deps(type,theid)
                            write_import(type,theid,None)
                         elif filterid != key:
                            if globals.debug:
@@ -1126,31 +1161,29 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
 
 def special_deps(ttft,taddr):
    #print("In special deps"+ttft+"  "+taddr)
+   """
    if ttft == "aws_security_group": 
-      add_known_dependancy("aws_security_group_rule",taddr) 
-      add_dependancy("aws_security_group_rule",taddr)
-   if ttft == "aws_subnet": 
-      add_known_dependancy("aws_route_table_association",taddr) 
-      add_dependancy("aws_route_table_association",taddr)  
+      print("##### special dep security group") 
+      #add_known_dependancy("aws_security_group_rule",taddr) 
+      #add_dependancy("aws_security_group_rule",taddr)
+   if ttft == "aws_subnet":
+      print("##### special dep subnet") 
+      #add_known_dependancy("aws_route_table_association",taddr) 
+      #add_dependancy("aws_route_table_association",taddr)  
    elif ttft == "aws_vpc": 
-      add_known_dependancy("aws_route_table_association",taddr)  
-      add_known_dependancy("aws_subnet",taddr)  
-      add_dependancy("aws_route_table_association",taddr)
-      add_dependancy("aws_vpc_ipv4_cidr_block_association",taddr)
-      add_dependancy("aws_vpc_endpoint", taddr)
-
-   elif ttft == "aws_vpclattice_service_network":
+      print("##### special dep vpc") 
+      #add_known_dependancy("aws_route_table_association",taddr)  
+      #add_known_dependancy("aws_subnet",taddr)  
+      #add_dependancy("aws_route_table_association",taddr)
+      #add_dependancy("aws_vpc_ipv4_cidr_block_association",taddr)
+      #add_dependancy("aws_vpc_endpoint", taddr)
+   
+   if ttft == "aws_vpclattice_service_network":
+      print("##### special lattice sn") 
       add_known_dependancy("aws_vpclattice_service",taddr) 
       add_known_dependancy("aws_vpclattice_service_network_vpc_association",taddr) 
       add_known_dependancy("aws_vpclattice_service_network_service_association",taddr)
-
-      #add_known_dependancy("aws_vpclattice_auth_policy",taddr) get-auth-policy (resource-identifier)
-      #add_known_dependancy("aws_vpclattice_resource_policy",taddr)
-      # add_known_dependancy("aws_vpclattice_access_log_subscription",taddr) (resource-identifier)
-      ## target group
-
-      ## listener
-
+   """
    return  
 
 
@@ -1182,7 +1215,7 @@ def add_dependancy(type,id):
       pkey=type+"."+id
       if pkey not in globals.rproc:
          if globals.debug: print("add_dependancy: " + pkey)
-         print("add_dependancy: " + pkey)
+         #print("add_dependancy: " + pkey)
          globals.rproc[pkey]=False
    except Exception as e:
       handle_error(e, str(inspect.currentframe().f_code.co_name), type, id)
@@ -1203,8 +1236,8 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
          print("call_boto3 clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
       #if globals.debug: print("pre-response")
       # get any pre-saved response
-      response=get_boto3_resp(descfn)  # sets response to [] if nothing saved
-      
+      #response=get_boto3_resp(descfn)  # sets response to [] if nothing saved
+      response=[]
       if response == []:
          client = boto3.client(clfn) 
          #if globals.debug: print("client")
@@ -1244,7 +1277,7 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                      if len(page[topkey])==0:
                         continue
                      response.extend(page[topkey][0]['Instances'])
-                  sav_boto3_rep(descfn,response)
+                  #sav_boto3_rep(descfn,response)
                
                #print(str(response))
 
@@ -1286,7 +1319,7 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                # main get all call - usually a list- describe- or get- 
                for page in paginator.paginate(): 
                   response.extend(page[topkey])
-               sav_boto3_rep(descfn,response)
+               #sav_boto3_rep(descfn,response)
 
                if id is not None:
                   fresp=response
@@ -1388,6 +1421,7 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
 
    return response
 
+"""
 def sav_boto3_rep(descfn,response):
    if str(descfn)=="describe_subnets" and globals.aws_subnet_resp==[]: globals.aws_subnet_resp=response  
    elif str(descfn)=="describe_vpcs" and globals.aws_vpc_resp==[]: globals.aws_vpc_resp=response  
@@ -1406,6 +1440,7 @@ def get_boto3_resp(descfn):
    elif str(descfn)=="list_roles" and globals.aws_iam_role_resp != []: response=globals.aws_iam_role_resp
    elif str(descfn)=="describe_instances" and globals.aws_instance_resp != []: response=globals.aws_instance_resp
    return response
+"""
 
 
 def handle_error(e,frame,clfn,descfn,topkey,id):

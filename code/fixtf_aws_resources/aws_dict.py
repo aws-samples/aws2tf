@@ -241,6 +241,16 @@ aws_vpclattice_resource_policy = {
 	"filterid":	"resourceArn"
 }
 
+
+aws_vpclattice_resource_configuration ={
+    "clfn":		"vpc-lattice",
+	"descfn":	"list_resource_configurations",
+	"topkey":	"items",
+	"key":		"id",
+	"filterid":	"arn"
+}
+
+
 aws_vpclattice_service = {
 	"clfn":		"vpc-lattice",
 	"descfn":	"list_services",
@@ -268,6 +278,14 @@ aws_vpclattice_service_network_service_association = {
 aws_vpclattice_service_network_vpc_association = {
 	"clfn":		"vpc-lattice",
 	"descfn":	"list_service_network_vpc_associations",
+	"topkey":	"items",
+	"key":		"id",
+	"filterid":	"name"
+}
+
+aws_vpclattice_service_network_resource_association = {
+    "clfn":		"vpc-lattice",
+	"descfn":	"list_service_network_resource_associations",
 	"topkey":	"items",
 	"key":		"id",
 	"filterid":	"name"
@@ -10603,8 +10621,10 @@ aws_resources = {
 	"aws_vpclattice_listener": aws_vpclattice_listener,
 	"aws_vpclattice_listener_rule": aws_vpclattice_listener_rule,
 	"aws_vpclattice_resource_policy": aws_vpclattice_resource_policy,
+    "aws_vpclattice_resource_configuration": aws_vpclattice_resource_configuration,
 	"aws_vpclattice_service": aws_vpclattice_service,
 	"aws_vpclattice_service_network": aws_vpclattice_service_network,
+    "aws_vpclattice_service_network_resource_association": aws_vpclattice_service_network_resource_association,
 	"aws_vpclattice_service_network_service_association": aws_vpclattice_service_network_service_association,
 	"aws_vpclattice_service_network_vpc_association": aws_vpclattice_service_network_vpc_association,
 	"aws_vpclattice_target_group": aws_vpclattice_target_group,

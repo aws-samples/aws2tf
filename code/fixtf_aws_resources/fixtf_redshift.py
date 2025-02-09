@@ -3,8 +3,7 @@ import fixtf
 
 def aws_redshift_cluster(t1,tt1,tt2,flag1,flag2):
 	skip=0
-    ##if tt1 == "vpc_security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
-    ## if tt1 == "iam_roles":    t1=fixtf.deref_role_arn_array(t1,tt1,tt2)
+
 	if tt1 == "cluster_subnet_group_name":
         
 		t1=tt1 + " = aws_redshift_subnet_group." + tt2 + ".id\n"

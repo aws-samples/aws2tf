@@ -114,7 +114,10 @@ def main():
     print("aws2tf started at %s" % now)
     starttime=now
    
-    if sys.argv[1]=="-h": timed_interrupt.timed_int.stop()
+
+    #print("cwd="+str(sys.argv),str(len(sys.argv)))
+    if len(sys.argv) > 1:
+        if sys.argv[1]=="-h": timed_interrupt.timed_int.stop() 
 
     argParser = argparse.ArgumentParser()
     argParser.add_argument("-l", "--list",help="List extra help information" , action='store_true')
@@ -129,6 +132,10 @@ def main():
     argParser.add_argument("-v", "--validate", help="validate and exit", action='store_true')
     argParser.add_argument("-a", "--accept", help="expected plan changes accepted", action='store_true')
     argParser.add_argument("-e", "--exclude", help="resource types to exclude")
+    argParser.add_argument("-ec2tag", "--ec2tag", help="ec2 key:value pair to import")
+    argParser.add_argument("-dnet", "--datanet", help="write data statements for aws_vpc, aws_subnet",action='store_true')
+    argParser.add_argument("-dkms", "--datakms", help="write data statements for aws_kms_key",action='store_true')
+    argParser.add_argument("-dkey", "--datakey", help="write data statements for aws_key_pair",action='store_true')
     argParser.add_argument("-b3", "--boto3error", help="exit on boto3 api error (for debugging)", action='store_true')
     argParser.add_argument("-la", "--serverless", help="Lambda mode - when running in a Lambda container", action='store_true')
     argParser.add_argument("-tv", "--tv", help="Specify version of Terraform AWS provider default = "+globals.tfver)
@@ -191,7 +198,31 @@ def main():
     if args.tv:
         globals.tfver=args.tv
 
-    if args.validate: globals.validate = True
+    if args.ec2tag:
+        isinv=True
+        if args.ec2tag!="" and ":" in args.ec2tag:
+            isinv=False             
+            #args.ec2tag = args.ec2tag[1:-1]
+            globals.ec2tag=args.ec2tag
+            globals.ec2tagk=globals.ec2tag.split(":")[0]
+            globals.ec2tagv=globals.ec2tag.split(":")[1]
+        else:
+            isinv=True
+        
+        if isinv:
+            #if len(globals.ec2tagk) < 1 or len(globals.ec2tagv) < 1:
+            print("ec2tag must be in format (with quotes) \"key:value\"")
+            print("exit 005")
+            timed_interrupt.timed_int.stop()
+            exit()
+
+
+    if args.validate: 
+        globals.validate = True
+
+    if args.datanet:  globals.dnet = True
+    if args.datakms:  globals.dkms = True
+    if args.datakey:  globals.dkey = True
 
     if args.type is None or args.type=="":
         if args.serverless:
@@ -440,8 +471,10 @@ def main():
         elif all_types is not None and lall > 1:
             #all_types=all_types[:10]
             print("len all_types="+str(len(all_types))) # testing only
-            print("INFO: Building secondary lists")
-            build_secondary_lists(id)
+            #print("all_types="+str(all_types))
+            if "aws_iam" in str(all_types) and id is None:
+                print("INFO: Building secondary lists",id)
+                build_secondary_lists(id)
 
             
             globals.esttime=len(all_types)/4

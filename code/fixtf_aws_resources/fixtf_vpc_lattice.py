@@ -130,3 +130,16 @@ def aws_vpclattice_resource_policy(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
 
+def aws_vpclattice_resource_configuration(t1,tt1,tt2,flag1,flag2):
+	skip=0
+	return skip,t1,flag1,flag2
+
+def aws_vpclattice_service_network_resource_association(t1,tt1,tt2,flag1,flag2):
+	skip=0
+	return skip,t1,flag1,flag2
+
+def aws_vpclattice_resource_gateway(t1,tt1,tt2,flag1,flag2):
+	skip=0
+	return skip,t1,flag1,flag2
+
+

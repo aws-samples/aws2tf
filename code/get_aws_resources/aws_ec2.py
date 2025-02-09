@@ -4,6 +4,126 @@ import globals
 import os
 import sys
 import inspect
+import json
+
+
+def get_aws_vpc(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In get_aws_vpc doing " + type + ' with id ' + str(id) +
+            " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
+    try:    
+        if id is None:
+            for sn in globals.vpclist.keys():
+                common.write_import(type,sn,None)
+                common.add_known_dependancy("aws_subnet",sn)
+                if not globals.dnet:
+                    common.add_known_dependancy("aws_route_table_association",sn)   
+                    common.add_dependancy("aws_route_table_association",sn)
+                    common.add_dependancy("aws_vpc_ipv4_cidr_block_association",sn)
+                    common.add_dependancy("aws_vpc_endpoint", sn)
+
+        elif id.startswith("vpc-"):
+            try:
+                if globals.vpclist[id]:
+                    common.write_import(type, id, None)
+                    common.add_known_dependancy("aws_subnet",id)
+                    if not globals.dnet:
+                        common.add_known_dependancy("aws_route_table_association",id)   
+                        common.add_dependancy("aws_route_table_association",id)
+                        common.add_dependancy("aws_vpc_ipv4_cidr_block_association",id)
+                        common.add_dependancy("aws_vpc_endpoint", id)
+
+                    pkey = type+"."+id
+                    globals.rproc[pkey] = True
+                else:
+                    print("WARNING: vpc not in vpclist" + id)
+            except KeyError:
+                    print("WARNING: vpc not in vpclist " + id+ " Resource may be referencing a vpc that no longer exists")  
+            
+        else:
+            print("WARNING: get_aws_vpc unexpected id value",str(id))
+            return True
+                    
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In get_aws_subnet doing " + type + ' with id ' + str(id) +
+            " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
+    try:    
+        if id is None:
+            for sn in globals.subnetlist.keys():
+               common.write_import(type,sn,None)
+
+        elif id.startswith("subnet-"):
+            try:
+                if globals.subnetlist[id]:
+                    common.write_import(type, id, None)
+                    pkey = type+"."+id
+                    globals.rproc[pkey] = True
+                else:
+                    print("WARNING: subnet not in subnetlist" + id)
+            except KeyError:
+                    print("WARNING: subnet not in subnetlist " + id+ " Resource may be referencing a subnet that no longer exists")  
+            
+        elif id.startswith("vpc-"):
+            for j in globals.subnets:
+                if j['VpcId'] == id:
+                    #print("Found subnet in vpc " + id + " " + j['SubnetId'])
+                    common.write_import(type, j['SubnetId'], None)
+        else:
+            print("WARNING: get_aws_subnet unexpected id value",str(id))
+            return True
+                    
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+def get_aws_security_group(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In get_aws_security_group doing " + type + ' with id ' + str(id) +
+            " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
+    try:    
+        if id is None:
+            for sn in globals.sglist.keys():
+                common.write_import(type,sn,None)
+                if not globals.dnet: 
+                    common.add_dependancy("aws_security_group_rule",sn)
+                    pkey = type+"."+id
+                    globals.rproc[pkey] = True
+
+        elif id.startswith("sg-"):
+            try:
+                if globals.sglist[id]:
+                    common.write_import(type, id, None)
+                    if not globals.dnet:
+                        common.add_dependancy("aws_security_group_rule",id)
+
+                    pkey = type+"."+id
+                    globals.rproc[pkey] = True
+                else:
+                    print("WARNING: sg not in sglist" + id)
+            except KeyError:
+                    print("WARNING: sg not in sglist " + id+ " Resource may be referencing a security_group that no longer exists")  
+            
+        else:
+            print("WARNING: get_aws_security_group unexpected id value",str(id))
+            return True
+                    
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
 
 
 def get_aws_instance(type, id, clfn, descfn, topkey, key, filterid):
@@ -20,8 +140,17 @@ def get_aws_instance(type, id, clfn, descfn, topkey, key, filterid):
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 for k in j['Instances']:
-                    if k['State']['Name'] == 'running' or k['State']['Name'] == 'stopped':
-                        common.write_import(type,k[key],None) 
+                    if globals.ec2tag is None:
+                        if k['State']['Name'] == 'running' or k['State']['Name'] == 'stopped':
+                            common.write_import(type,k[key],None) 
+                    else:
+                        tags=k['Tags']
+                        #print(json.dumps(tags, indent=2, default=str))
+                        for tag in tags:
+                            if tag['Key'] == globals.ec2tagk:
+                                if tag['Value'] == globals.ec2tagv:
+                                    if k['State']['Name'] == 'running' or k['State']['Name'] == 'stopped':
+                                        common.write_import(type, k[key], None)
 
         else:  
             if id.startswith("i-"):    
@@ -32,6 +161,8 @@ def get_aws_instance(type, id, clfn, descfn, topkey, key, filterid):
             for j in response['Reservations']:
                 
                 for k in j['Instances']:
+                    #print(json.dumps(k['Tags'],indent=2,default=str))
+                    
                     if k['State']['Name'] == 'running' or k['State']['Name'] == 'stopped':
                         common.write_import(type,k[key],None)
 
@@ -387,7 +518,7 @@ def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key,
     return True
 
 
-def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
+def get_aws_subnet_old(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
         print("--> In get_aws_subnet doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
@@ -404,12 +535,28 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
             return True
         
         if id is None:
-            for j in response: common.write_import(type, j[key], None)     
+            for j in response: 
+                subid=j[key]
+                try:
+                    if globals.subnetlist[subid]:
+                        common.write_import(type, j[key], None) 
+                    else:
+                            print("WARNING: subnet not in subnetlist" + subid)
+                except KeyError:
+                    print("WARNING: subnet not in subnetlist " + subid+ " Resource may be referencing a subnet that no longer exists")    
         
         elif "subnet-" in id:
             for j in response:
                 subid=j['SubnetId']
-                if id==subid: common.write_import(type, j[key], None)
+                
+            if id==subid: 
+                try:
+                    if globals.subnetlist[subid]:
+                        common.write_import(type, j[key], None)
+                    else:
+                            print("WARNING: subnet not in subnetlist" + subid)
+                except KeyError:
+                    print("WARNING: subnet not in subnetlist " + subid+ " Resource may be referencing a subnet that no longer exists")
 
 
         elif "vpc-" in id:
@@ -427,6 +574,7 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
 
 
     return True
+
 
 
 

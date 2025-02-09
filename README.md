@@ -22,9 +22,9 @@ Finally aws2tf runs a `terraform plan` command and there should hopefully be no 
 
 + MacOS or Linux 
 + Python3 (v3.8+)
-+ boto3 1.35.97 or later (pip3 install -r requirements.txt).
++ boto3 1.36.13 or later (pip3 install -r requirements.txt).
 + AWS cli (v2) **version 2.22.33 or higher** needs to be installed and you need a login with at least "Read" privileges.
-+ Terraform **version v1.7.5** or higher needs to be installed. (recommend you avoid early point releases eg. 1.9.0/1.9.1)
++ Terraform **version v1.8.5** or higher needs to be installed. (recommend you avoid early point releases eg. 1.9.0/1.9.1)
 + jq **version 1.6 or higher**
 
 ## Optional but recommended
@@ -154,15 +154,38 @@ You can also try the experimental fast mode which uses multi threading to speed 
 ./aws2tf.py -f
 ```
 
+## Advanced Options
+
 ### Overriding the Terraform version
 
 You can override the default Terraform provider version used by using the -tv flag
 
 ```bash
-./aws2tf.py -t vpc -tv 5.83.1
+./aws2tf.py -t vpc -tv 5.86.0
 ```
 
 You need to ensure the provider version you specify is valid, as (currently) the version is just passed straight through without any validation checks 
+
+
+### Importing EC2 instances by tag
+
+You can import EC2 instances selectively by using the -ec2tag option
+
+```bash
+./aws2tf.py -t aws_instance -ec2tag "project:my value"
+```
+
+The above will only import instances that have a tag key/value pair of "project" and a value of "my value"
+
+### Using Terraform data resources:
+
+** still under test **
+
+These flags will cause aws2tf to use data statements for certain resource types - useful for enterprises where for example networking components are provided by a different team, the available flags are:
+
+-dnet:  uses data resources for aws_vpc, aws_subnet and aws_security_group
+-dkms:  uses data statements for aws_kms_key
+-dkey:  uses data statements for aws_key_pair
 
 ----------
 

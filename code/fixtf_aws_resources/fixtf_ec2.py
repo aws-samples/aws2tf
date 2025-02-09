@@ -84,12 +84,7 @@ def aws_ec2_coip_pool(t1,tt1,tt2,flag1,flag2):
 
 def aws_default_security_group(t1,tt1,tt2,flag1,flag2):
 	skip=0
-    #print("entry t1="+t1+" lbc="+str(globals.lbc))
-	if tt1 == "vpc_id":
-		t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
-		common.add_dependancy("aws_vpc",tt2)
-
-	elif tt1 == "name":
+	if tt1 == "name":
 		if len(tt2) > 0: flag1=True
 
     #CIRCULAR reference problems:
@@ -121,47 +116,6 @@ def aws_default_security_group(t1,tt1,tt2,flag1,flag2):
 
 	elif tt1 == "name_prefix" and flag1 is True: skip=1
 	
-	return skip,t1,flag1,flag2
-
-def  aws_security_group(t1,tt1,tt2,flag1,flag2):
-	skip = 0
-    #print("entry t1="+t1+" lbc="+str(globals.lbc))
-	if tt1 == "vpc_id":
-		t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
-		common.add_dependancy("aws_vpc",tt2)
-
-	elif tt1 == "name":
-		if len(tt2) > 0: flag1=True
-
-    #CIRCULAR reference problems:
-    ##if tt1 == "security_groups": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
-	# fix via ingress /egress rules - ?
-	elif tt1 == "egress" or globals.lbc > 0 :
-            
-		if tt2 == "[]": skip = 1
-		if "[" in t1: globals.lbc=globals.lbc+1
-		if "]" in t1: globals.lbc=globals.lbc-1
-        #print("***t1="+t1+" lbc="+str(globals.lbc))
-	
-		if globals.lbc > 0: skip = 1
-		if globals.lbc == 0:
-           #print("***t1="+t1+" lbc="+str(globals.lbc))
-			if "]" in t1.strip(): skip=1
-
-	elif tt1 == "ingress" or globals.lbc > 0 :
-    
-		if tt2 == "[]": skip = 1
-		if "[" in t1: globals.lbc=globals.lbc+1
-		if "]" in t1: globals.lbc=globals.lbc-1
-        #print("***t1="+t1+" lbc="+str(globals.lbc))
-	
-		if globals.lbc > 0: skip = 1
-		if globals.lbc == 0:
-           #print("***t1="+t1+" lbc="+str(globals.lbc))
-			if "]" in t1.strip(): skip=1
-
-	elif tt1 == "name_prefix" and flag1 is True: skip=1
-		
 	return skip,t1,flag1,flag2
 
 def aws_ec2_fleet(t1,tt1,tt2,flag1,flag2):
@@ -378,11 +332,6 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	
 	try:
-		#print("hi")
-		#if tt1 == "subnet_id":
-	#		t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
-	#		common.add_dependancy("aws_subnet",tt2)
-		##elif tt1 == "vpc_security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
 
 		if tt1 == "ipv6_addresses":
 			
@@ -427,8 +376,12 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 		elif tt1 == "security_groups": skip=1
 		elif tt1 == "key_name": 
 			if tt2 != "null":
-				t1=tt1 + " = aws_key_pair." + tt2 + ".id\n"
-				common.add_dependancy("aws_key_pair",tt2)
+				if not globals.dkey:
+					t1=tt1 + " = aws_key_pair." + tt2 + ".id\n"
+					common.add_dependancy("aws_key_pair",tt2)
+				else:
+					t1=tt1 + " = data.aws_key_pair." + tt2 + ".key_name\n"
+					common.add_dependancy("aws_key_pair", tt2)
 
 		elif tt1 == "user_data_replace_on_change" and tt2 == "null":
 			t1=tt1 + " = false\n"
@@ -452,11 +405,6 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 
 def  aws_internet_gateway(t1,tt1,tt2,flag1,flag2):
     skip=0
-    if tt1 == "vpc_id":
-        
-        t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
-        common.add_dependancy("aws_vpc",tt2)
-
     return skip,t1,flag1,flag2
 
 def aws_internet_gateway_attachment(t1,tt1,tt2,flag1,flag2):
@@ -469,8 +417,7 @@ def aws_ip_ranges(t1,tt1,tt2,flag1,flag2):
 
 def aws_key_pair(t1,tt1,tt2,flag1,flag2):
 	skip=0
-	if tt1 == "key_name":
-		
+	if tt1 == "key_name":	
 		flag1=tt2
 	if tt1 == "public_key":
 		client = boto3.client("ec2")
@@ -489,7 +436,6 @@ def aws_launch_template(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if tt1 == "security_group_names":    
 		if tt2 == "[]":     skip=1
-	##elif tt1 == "vpc_security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
 	elif tt1 == "throughput":
 		if tt2 == "0": skip=1
 
@@ -515,9 +461,7 @@ def  aws_nat_gateway(t1,tt1,tt2,flag1,flag2):
     if "secondary_private_ip_address_count" in tt1:
         
         if tt2 == "0": skip=1
-    #elif tt1 == "subnet_id":      
-    #    t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
-    #    common.add_dependancy("aws_subnet",tt2)
+
     elif tt1 == "private_ip": skip=1
     elif tt1 == "public_ip": skip=1
     elif tt1 == "allocation_id": 
@@ -609,14 +553,7 @@ def aws_route(t1,tt1,tt2,flag1,flag2):
 
 def  aws_route_table(t1,tt1,tt2,flag1,flag2):
     skip=0
-
-    if tt1 == "vpc_id":
-        
-        t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
-        common.add_dependancy("aws_vpc",tt2)
-
-    elif "cidr_block" in tt1:
-        
+    if "cidr_block" in tt1:   
         if tt2 == "": t1=tt1 + " = null\n"
 
 
@@ -639,10 +576,7 @@ def  aws_route_table(t1,tt1,tt2,flag1,flag2):
 
 def aws_route_table_association(t1,tt1,tt2,flag1,flag2):
     skip=0
-    if tt1 == "subnet_id":
-        
-        t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
-        common.add_dependancy("aws_subnet",tt2)
+
     if tt1 == "route_table_id":
         
         t1=tt1 + " = aws_route_table." + tt2 + ".id\n"
@@ -669,16 +603,11 @@ def aws_security_group_rule(t1,tt1,tt2,flag1,flag2):
 
 	return skip,t1,flag1,flag2
 
-def  aws_security_group(t1,tt1,tt2,flag1,flag2):
+def aws_security_group(t1,tt1,tt2,flag1,flag2):
     skip = 0
     #print("entry t1="+t1+" lbc="+str(globals.lbc))
-    if tt1 == "vpc_id":
-        
-        t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
-        common.add_dependancy("aws_vpc",tt2)
 
-    elif tt1 == "name":
-        
+    if tt1 == "name":  
         if len(tt2) > 0: flag1=True
 
     #CIRCULAR reference problems:
@@ -734,8 +663,12 @@ def aws_spot_fleet_request(t1,tt1,tt2,flag1,flag2):
 	elif tt1 == "allocation_strategy" and tt2!="null":
 		t1=t1+"\n lifecycle {\n   ignore_changes = [target_group_arns,load_balancers,wait_for_fulfillment]\n}\n"
 	elif tt1=="key_name" and tt2 != "null":
-		t1=tt1 + " = aws_key_pair." + tt2 + ".id\n"
-		common.add_dependancy("aws_key_pair",tt2)
+		if globals.dkey:
+			t1=tt1 + " = data.aws_key_pair." + tt2 + ".key_name\n"
+			common.add_dependancy("aws_key_pair",tt2)
+		else:
+			t1=tt1 + " = aws_key_pair." + tt2 + ".id\n"
+			common.add_dependancy("aws_key_pair",tt2)
 	return skip,t1,flag1,flag2
 
 def aws_spot_instance_request(t1,tt1,tt2,flag1,flag2):
@@ -744,11 +677,6 @@ def aws_spot_instance_request(t1,tt1,tt2,flag1,flag2):
 
 def aws_subnet(t1,tt1,tt2,flag1,flag2):
     skip=0
-    if tt1 == "vpc_id":
-        
-        t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
-        common.add_dependancy("aws_vpc",tt2)
-        
 
     if tt1 == "enable_lni_at_device_index":
         if tt2 == "0": skip=1
@@ -785,14 +713,8 @@ def aws_vpc_dhcp_options_association(t1,tt1,tt2,flag1,flag2):
 
 def aws_vpc_endpoint(t1,tt1,tt2,flag1,flag2):
 	skip=0
-	if tt1 == "vpc_id":
-		t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
-		common.add_dependancy("aws_vpc",tt2)
 
-    ##elif tt1 == "subnet_ids":  t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
-    ##elif tt1 == "security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
-    ##elif tt1 == "route_table_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_route_table","rtb-",skip)
-	elif tt1 == "ip_address_type":
+	if tt1 == "ip_address_type":
 		if tt2 == "IPV4": 
 			t1=tt1 + " = \"ipv4\"\n"
 			t1=t1+"\n lifecycle {\n   ignore_changes = [ip_address_type]\n}\n"
@@ -885,10 +807,7 @@ def aws_vpc_ipam_scope(t1,tt1,tt2,flag1,flag2):
 
 def aws_vpc_ipv4_cidr_block_association(t1,tt1,tt2,skipipv6,flag2):
     skip = 0         
-    if tt1 == "vpc_id":
-        
-        t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
-        common.add_dependancy("aws_vpc",tt2)
+
     return skip,t1,skipipv6,flag2
 
 def aws_vpc_ipv6_cidr_block_association(t1,tt1,tt2,flag1,flag2):

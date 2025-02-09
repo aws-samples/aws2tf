@@ -41,6 +41,7 @@ def resource_types(type):
     elif type == "glue2": rets=["aws_glue_catalog_table","aws_glue_partition"]; return rets # Glue tables and partitions
     elif type == "groups" or type=="group": rets=["aws_iam_group"]; return rets # IAM Groups - aws_iam_group 
     elif type == "igw": rets=["aws_internet_gateway"]; return rets # Internet Gateways
+    elif type == "iam": rets=["aws_iam_role"]; return rets # IAM Roles
     elif type == "kendra": rets=["aws_kendra_index"]; return rets # Kendra Indexes
     elif type == "kinesis": rets=["aws_kinesis_stream","aws_kinesis_firehose_delivery_stream"]; return rets # Kinesis streams and firehose
     elif type == "kms": rets=["aws_kms_key"]; return rets # KMS keys

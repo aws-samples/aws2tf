@@ -785,7 +785,7 @@ def check_python_version():
       if v1 < 136013:
          print("boto3 version:"+bv)
          print("This program requires boto3 1.36.13 or later.")
-         print("Try: pip install boto3")
+         print("Try: pip install boto3  -or-  pip install boto3==1.36.13")
          print("exit 037")
          timed_int.stop()
          sys.exit(1)

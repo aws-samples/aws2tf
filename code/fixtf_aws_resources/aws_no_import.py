@@ -183,4 +183,5 @@ noimport = {
     "aws_codecommit_repository": True,
     "aws_vpclattice_resource_gateway": True,
     "aws_eip_association": True,
+    "aws_vpclattice_resource_configuration": True, # boto3 doesn't recognize api call
 } 

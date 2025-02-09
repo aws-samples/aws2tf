@@ -339,6 +339,9 @@ def get_aws_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid):
    try:
       client = common.boto3.client(clfn)
       response = []
+      if id is None:
+         print("WARNING: must provide id for "+type)
+         return True
 
       if id.startswith("sn-"):
          try:

@@ -47,19 +47,27 @@ def get_aws_lambda_layer_version(type, id, clfn, descfn, topkey, key, filterid):
     try:
         response = []
         client = boto3.client(clfn)
+        tarn=""
         if id is None:
             print("WARNING: Must pass LayerName/ARN as parameter")
-
+        
         else:    
             if "arn:" in id:
+                tarn=id
                 id=id.split(":")[6]  
             response = client.list_layer_versions(LayerName=id)
             if response == []: 
                 if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if tarn != "":    
+                    pkey=type+"."+tarn
+                    globals.rproc[pkey]=True
                 return True
             for j in response[topkey]:
                 get_lambdalayer_code(j[key])
                 common.write_import(type,j[key],None) 
+                tarn=j['LayerVersionArn']
+                pkey=type+"."+tarn
+                globals.rproc[pkey]=True
         
 
     except Exception as e:

@@ -332,11 +332,6 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	
 	try:
-		#print("hi")
-		#if tt1 == "subnet_id":
-	#		t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
-	#		common.add_dependancy("aws_subnet",tt2)
-		##elif tt1 == "vpc_security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
 
 		if tt1 == "ipv6_addresses":
 			
@@ -464,9 +459,7 @@ def  aws_nat_gateway(t1,tt1,tt2,flag1,flag2):
     if "secondary_private_ip_address_count" in tt1:
         
         if tt2 == "0": skip=1
-    #elif tt1 == "subnet_id":      
-    #    t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
-    #    common.add_dependancy("aws_subnet",tt2)
+
     elif tt1 == "private_ip": skip=1
     elif tt1 == "public_ip": skip=1
     elif tt1 == "allocation_id": 
@@ -581,10 +574,7 @@ def  aws_route_table(t1,tt1,tt2,flag1,flag2):
 
 def aws_route_table_association(t1,tt1,tt2,flag1,flag2):
     skip=0
-    if tt1 == "subnet_id":
-        
-        t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
-        common.add_dependancy("aws_subnet",tt2)
+
     if tt1 == "route_table_id":
         
         t1=tt1 + " = aws_route_table." + tt2 + ".id\n"
@@ -718,9 +708,6 @@ def aws_vpc_dhcp_options_association(t1,tt1,tt2,flag1,flag2):
 def aws_vpc_endpoint(t1,tt1,tt2,flag1,flag2):
 	skip=0
 
-    ##elif tt1 == "subnet_ids":  t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
-    ##elif tt1 == "security_group_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
-    ##elif tt1 == "route_table_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_route_table","rtb-",skip)
 	if tt1 == "ip_address_type":
 		if tt2 == "IPV4": 
 			t1=tt1 + " = \"ipv4\"\n"

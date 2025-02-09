@@ -35,8 +35,7 @@ def aws_ecs_container_definition(t1,tt1,tt2,flag1,flag2):
 
 def aws_ecs_service(t1,tt1,tt2,flag1,flag2):
 	skip=0
-	##if tt1 == "security_groups": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
-	##if tt1 == "subnets":  t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
+
 	if tt1 == "cluster":
 		
 		if "arn:" in tt2: tt2 = tt2.split("/")[-1]

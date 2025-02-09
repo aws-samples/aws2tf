@@ -422,7 +422,7 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
         elif id.startswith("vpc-"):
             for j in globals.subnets:
                 if j['VpcId'] == id:
-                    print("Found subnet in vpc " + id + " " + j['SubnetId'])
+                    #print("Found subnet in vpc " + id + " " + j['SubnetId'])
                     common.write_import(type, j['SubnetId'], None)
         else:
             print("WARNING: get_aws_subnet unexpected id value",str(id))

@@ -74,11 +74,11 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             if tt2 != "null":
                 if tt2.startswith('vpc-'): 
                     if tt2 in globals.vpclist:
-                        if not globals.dnet:
+                        if globals.dnet:
                             t1=tt1 + " = data.aws_vpc." + tt2 + ".id\n"
                             common.add_dependancy("aws_vpc", tt2)
                         else:
-                            t1=tt1 + " = data.aws_vpc." + tt2 + ".id\n"
+                            t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
                             common.add_dependancy("aws_vpc", tt2)
                     else:
                         print("WARNING: vpc_id not found in vpclist",tt2)

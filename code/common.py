@@ -1162,12 +1162,15 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
 def special_deps(ttft,taddr):
    #print("In special deps"+ttft+"  "+taddr)
    if ttft == "aws_security_group": 
+      print("##### special dep security group") 
       add_known_dependancy("aws_security_group_rule",taddr) 
       add_dependancy("aws_security_group_rule",taddr)
-   if ttft == "aws_subnet": 
-      add_known_dependancy("aws_route_table_association",taddr) 
-      add_dependancy("aws_route_table_association",taddr)  
+   if ttft == "aws_subnet":
+      print("##### special dep subnet") 
+      #add_known_dependancy("aws_route_table_association",taddr) 
+      #add_dependancy("aws_route_table_association",taddr)  
    elif ttft == "aws_vpc": 
+      print("##### special dep vpc") 
       add_known_dependancy("aws_route_table_association",taddr)  
       add_known_dependancy("aws_subnet",taddr)  
       add_dependancy("aws_route_table_association",taddr)
@@ -1217,7 +1220,7 @@ def add_dependancy(type,id):
       pkey=type+"."+id
       if pkey not in globals.rproc:
          if globals.debug: print("add_dependancy: " + pkey)
-         print("add_dependancy: " + pkey)
+         #print("add_dependancy: " + pkey)
          globals.rproc[pkey]=False
    except Exception as e:
       handle_error(e, str(inspect.currentframe().f_code.co_name), type, id)

@@ -4,7 +4,9 @@ import requests
 import globals
 import botocore
 import inspect
+import sys
 from botocore.config import Config
+from botocore.exceptions import ClientError
 
 
 def get_aws_lambda_layer(type, id, clfn, descfn, topkey, key, filterid):
@@ -52,22 +54,44 @@ def get_aws_lambda_layer_version(type, id, clfn, descfn, topkey, key, filterid):
             print("WARNING: Must pass LayerName/ARN as parameter")
         
         else:    
-            if "arn:" in id:
-                tarn=id
-                id=id.split(":")[6]  
-            response = client.list_layer_versions(LayerName=id)
-            if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
-                if tarn != "":    
+            if id.startswith("arn:"):
+                larn=id.split(":")[:-1]
+                myarn=""
+                for ta in larn:
+                    myarn=myarn+ta+":"
+              
+                myarn=myarn.rstrip(":")
+            
+                try:
+                    response = client.list_layer_versions(LayerName=myarn)
+                except botocore.exceptions.ClientError as e:
+
+                    print("\nERROR: Lambda function is referencing Lambda Layer - "+ myarn+ " which does not exist")
+                    print("ERROR: This will cause problems later on and should be addressed\n")
+                    #print("ClientError "+str(e))
+                    exc_type, exc_obj, exc_tb = sys.exc_info()
+                    exn=str(exc_type.__name__)
+                    #print("Exception "+exn+" caught")
+                    #if "AccessDeniedException" in exn:
+                    #print("AccessDeniedException for "+type+ " id="+str(id)) 
+                    pkey=type+"."+id
+                    globals.rproc[pkey]=True
+                    return True
+                
+                #print(str(response))
+                #print(str(response[topkey]))
+                if response[topkey] == []: 
+                    if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                    print("Empty response for "+type+ " id="+str(id)+" returning") 
+                    pkey=type+"."+id
+                    globals.rproc[pkey]=True
+                    return True
+                for j in response[topkey]:
+                    get_lambdalayer_code(j[key])
+                    common.write_import(type,j[key],None) 
+                    tarn=j['LayerVersionArn']
                     pkey=type+"."+tarn
                     globals.rproc[pkey]=True
-                return True
-            for j in response[topkey]:
-                get_lambdalayer_code(j[key])
-                common.write_import(type,j[key],None) 
-                tarn=j['LayerVersionArn']
-                pkey=type+"."+tarn
-                globals.rproc[pkey]=True
         
 
     except Exception as e:

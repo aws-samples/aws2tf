@@ -97,7 +97,7 @@ def aws_launch_configuration(t1,tt1,tt2,flag1,flag2):
 				t1=tt1 + " = aws_key_pair." + tt2 + ".id\n"
 				common.add_dependancy("aws_key_pair",tt2)
 			else:
-				t1=tt1 + " = data.aws_key_pair." + tt2 + ".id\n"
+				t1=tt1 + " = data.aws_key_pair." + tt2 + ".key_name\n"
 				common.add_dependancy("aws_key_pair",tt2)
 
 	elif tt1 == "user_data_base64": skip=1

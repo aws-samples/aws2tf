@@ -97,6 +97,7 @@ tested={
 
 # List Dicts
 subnets={}
+vpcs={}
 subnetlist={}
 sglist={}
 vpclist={}

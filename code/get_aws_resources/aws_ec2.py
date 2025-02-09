@@ -7,6 +7,39 @@ import inspect
 import json
 
 
+def get_aws_vpc_new(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In get_aws_subnet doing " + type + ' with id ' + str(id) +
+            " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
+    try:    
+        if id is None:
+            for sn in globals.vpclist.keys():
+               common.write_import(type,sn,None)
+
+        elif id.startswith("vpc-"):
+            try:
+                if globals.vpclist[id]:
+                    common.write_import(type, id, None)
+                    pkey = type+"."+id
+                    globals.rproc[pkey] = True
+                else:
+                    print("WARNING: vpc not in vpclist" + id)
+            except KeyError:
+                    print("WARNING: vpc not in vpclist " + id+ " Resource may be referencing a subnet that no longer exists")  
+            
+        else:
+            print("WARNING: get_aws_subnet unexpected id value",str(id))
+            return True
+                    
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+
+
 def get_aws_instance(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +

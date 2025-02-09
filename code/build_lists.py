@@ -15,7 +15,7 @@ def build_lists():
             paginator = client.get_paginator('describe_vpcs')
             for page in paginator.paginate():
                 response.extend(page['Vpcs'])
-            
+            globals.vpcs=response
             return [('vpc', j['VpcId']) for j in response]
         except Exception as e:
             print("Error fetching vpc data:", e)

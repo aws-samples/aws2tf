@@ -377,10 +377,12 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 		elif tt1 == "key_name": 
 			if tt2 != "null":
 				if not globals.dkey:
-					t1=tt1 + " = aws_key_pair." + tt2 + ".id\n"
+					tfil=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
+					t1=tt1 + " = aws_key_pair." + tfil + ".id\n"
 					common.add_dependancy("aws_key_pair",tt2)
 				else:
-					t1=tt1 + " = data.aws_key_pair." + tt2 + ".key_name\n"
+					tfil=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
+					t1=tt1 + " = data.aws_key_pair." + tfil + ".key_name\n"
 					common.add_dependancy("aws_key_pair", tt2)
 
 		elif tt1 == "user_data_replace_on_change" and tt2 == "null":
@@ -664,10 +666,12 @@ def aws_spot_fleet_request(t1,tt1,tt2,flag1,flag2):
 		t1=t1+"\n lifecycle {\n   ignore_changes = [target_group_arns,load_balancers,wait_for_fulfillment]\n}\n"
 	elif tt1=="key_name" and tt2 != "null":
 		if globals.dkey:
-			t1=tt1 + " = data.aws_key_pair." + tt2 + ".key_name\n"
+			tfil=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
+			t1=tt1 + " = data.aws_key_pair." + tfil + ".key_name\n"
 			common.add_dependancy("aws_key_pair",tt2)
 		else:
-			t1=tt1 + " = aws_key_pair." + tt2 + ".id\n"
+			tfil=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
+			t1=tt1 + " = aws_key_pair." + tfil + ".id\n"
 			common.add_dependancy("aws_key_pair",tt2)
 	return skip,t1,flag1,flag2
 

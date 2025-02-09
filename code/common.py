@@ -1022,9 +1022,10 @@ def do_data(type,theid):
          return True
    if globals.dkey:
       if type == "aws_key_pair":
-         fn="data-"+type+"_"+theid+".tf"
+         tfil=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
+         fn="data-"+type+"_"+tfil+".tf"
          with open(fn, 'w') as f3:
-            f3.write('data "'+type+'" "'+theid+'" {\n')
+            f3.write('data "'+type+'" "'+tfil+'" {\n')
             f3.write(' key_name = "'+theid+'"\n')
             f3.write('}\n')
          return True

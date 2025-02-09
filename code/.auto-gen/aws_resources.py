@@ -1398,8 +1398,7 @@ elif type == "aws_kendra_query_suggestions_block_list":
     clfn="kendra";descfn="list_query_suggestions_block_lists";topkey='QuerySuggestionsBlockLists';key="Id";filterid=key
 elif type == "aws_kendra_thesaurus":
     clfn="kendra";descfn="list_thesauri";topkey='Thesauri';key="Id";filterid=key
-#elif type == "aws_key_pair":
-#    clfn="ec2";descfn="describe_key_pairs";topkey='KeyPairs';key="KeyName";filterid=key
+
 elif type == "aws_keyspaces_keyspace":
     clfn="keyspaces";descfn="list_keyspaces";topkey='Keyspaces';key="Name";filterid=key
 elif type == "aws_keyspaces_table":

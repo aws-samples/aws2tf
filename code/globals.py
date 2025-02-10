@@ -113,7 +113,7 @@ role_policies_list={}
 def exit_aws2tf(mess):
     if mess is not None or mess!="":
         print(mess)
-    
+
     if globals.fast:
         os._exit(1) 
     else:

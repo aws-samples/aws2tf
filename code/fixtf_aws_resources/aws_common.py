@@ -1,9 +1,11 @@
-import common,fixtf
-import base64
+# pylint: skip-file
+import inspect 
+
 import boto3
-import sys,os
+import common
+import fixtf
 import globals
-import inspect
+
 
 # returns True if key is one we want - ie not AWS managed
 def check_key(keyid):

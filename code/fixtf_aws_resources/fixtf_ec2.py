@@ -2,8 +2,6 @@ import common
 import fixtf
 import base64
 import boto3
-import sys
-import os
 import globals
 import inspect
 
@@ -231,7 +229,7 @@ def aws_ec2_transit_gateway_peering_attachment(t1,tt1,tt2,flag1,flag2):
 		if globals.acc in tt2: flag1=True
 	if tt1=="peer_transit_gateway_id" and tt2 != "null":
 		print(str(flag1))
-		if flag1==True:
+		if flag1:
 			t1=tt1 + " = aws_ec2_transit_gateway." + tt2 + ".id\n"
 			common.add_dependancy("aws_ec2_transit_gateway", tt2)
 	if tt1=="transit_gateway_id" and tt2!="null":
@@ -597,12 +595,7 @@ def aws_security_group_rule(t1,tt1,tt2,flag1,flag2):
 		if tt2 == "[]": skip=1
 	elif tt1 == "self":	
 		if tt2 == "false": skip=1
-	"""	
-	elif tt1 == "security_group_id" or tt1 == "source_security_group_id": 
-		if "sg-" in tt2:
-			t1=tt1 + " = aws_security_group." + tt2 + ".id\n"
-			common.add_dependancy("aws_security_group",tt2)
-    """
+
 
 	return skip,t1,flag1,flag2
 

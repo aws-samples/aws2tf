@@ -1,5 +1,5 @@
-import common, fixtf
-import boto3, sys
+import fixtf
+import sys
 
 # returns True if key is one we want - ie not AWS managed
 

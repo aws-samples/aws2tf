@@ -1,9 +1,11 @@
-import common,fixtf
-import base64
+# pylint: skip-file
+import inspect 
+
 import boto3
-import sys,os
+import common
+import fixtf
 import globals
-import inspect
+
 
 # returns True if key is one we want - ie not AWS managed
 def check_key(keyid):
@@ -69,15 +71,18 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         elif tt1=="emr_managed_master_security_group" or tt1=="emr_managed_slave_security_group" \
                 or tt1=="service_access_security_group" or tt1 == "security_group_id" or tt1 == "source_security_group_id":
            if tt2 != "null":
-                if globals.sglist[tt2]:
-                    if globals.dnet:
-                        t1=tt1 + " = data.aws_security_group." + tt2 + ".id\n"
-                        common.add_dependancy("aws_security_group", tt2)
+                try:
+                    if globals.sglist[tt2]:
+                        if globals.dnet:
+                            t1=tt1 + " = data.aws_security_group." + tt2 + ".id\n"
+                            common.add_dependancy("aws_security_group", tt2)
+                        else:
+                            t1=tt1 + " = aws_security_group." + tt2 + ".id\n"
+                            common.add_dependancy("aws_security_group", tt2)
                     else:
-                        t1=tt1 + " = aws_security_group." + tt2 + ".id\n"
-                        common.add_dependancy("aws_security_group", tt2)
-                else:
-                    print("WARNING: security group not found in sglist", tt2)
+                        print("WARNING: security group not found in sglist", tt2)
+                except KeyError as e:
+                    print("WARNING: subnet_id not found in subnet list", tt2)
 
 
 

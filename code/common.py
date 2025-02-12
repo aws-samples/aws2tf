@@ -1005,7 +1005,16 @@ def write_import(type,theid,tfid):
 
 def do_data(type,theid):
    if globals.dnet:
-      if type == "aws_vpc" or type=="aws_subnet" or type=="aws_security_group":
+      if type == "aws_vpc" or type=="aws_subnet":
+         fn="data-"+type+"_"+theid+".tf"
+         with open(fn, 'w') as f3:
+            f3.write('data "'+type+'" "'+theid+'" {\n')
+            f3.write(' id = "'+theid+'"\n')
+            f3.write('}\n')
+         return True
+      
+   if globals.dsgs:
+      if type=="aws_security_groups":
          fn="data-"+type+"_"+theid+".tf"
          with open(fn, 'w') as f3:
             f3.write('data "'+type+'" "'+theid+'" {\n')

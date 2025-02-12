@@ -133,6 +133,7 @@ def main():
     argParser.add_argument("-e", "--exclude", help="resource types to exclude")
     argParser.add_argument("-ec2tag", "--ec2tag", help="ec2 key:value pair to import")
     argParser.add_argument("-dnet", "--datanet", help="write data statements for aws_vpc, aws_subnet",action='store_true')
+    argParser.add_argument("-dsgs", "--datasgs", help="write data statements for aws_security_groups",action='store_true')
     argParser.add_argument("-dkms", "--datakms", help="write data statements for aws_kms_key",action='store_true')
     argParser.add_argument("-dkey", "--datakey", help="write data statements for aws_key_pair",action='store_true')
     argParser.add_argument("-b3", "--boto3error", help="exit on boto3 api error (for debugging)", action='store_true')
@@ -220,6 +221,7 @@ def main():
         globals.validate = True
 
     if args.datanet:  globals.dnet = True
+    if args.datasgs:  globals.dsgs = True
     if args.datakms:  globals.dkms = True
     if args.datakey:  globals.dkey = True
 

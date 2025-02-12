@@ -73,7 +73,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
            if tt2 != "null":
                 try:
                     if globals.sglist[tt2]:
-                        if globals.dnet:
+                        if globals.dsgs:
                             t1=tt1 + " = data.aws_security_group." + tt2 + ".id\n"
                             common.add_dependancy("aws_security_group", tt2)
                         else:

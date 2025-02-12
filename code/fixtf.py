@@ -630,7 +630,7 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
                 elif ttft == "aws_security_group": 
                     try:
                         if globals.sglist[subn]:
-                            if not globals.dnet:
+                            if not globals.dsgs:
                                 subs=subs + ttft + "." + subn + ".id,"
                                 common.add_dependancy(ttft,subn)
                             else:
@@ -668,7 +668,7 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
             elif ttft == "aws_security_group":
                 try:
                     if globals.sglist[tt2]:
-                        if not globals.dnet:
+                        if not globals.dsgs:
                             subs=ttft + "." + tt2 + ".id"
                             common.add_dependancy(ttft, tt2)
                         else:

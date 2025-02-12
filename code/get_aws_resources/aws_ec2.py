@@ -96,7 +96,7 @@ def get_aws_security_group(type, id, clfn, descfn, topkey, key, filterid):
         if id is None:
             for sn in globals.sglist.keys():
                 common.write_import(type,sn,None)
-                if not globals.dnet: 
+                if not globals.dsgs: 
                     common.add_dependancy("aws_security_group_rule",sn)
                     pkey = type+"."+id
                     globals.rproc[pkey] = True
@@ -105,7 +105,7 @@ def get_aws_security_group(type, id, clfn, descfn, topkey, key, filterid):
             try:
                 if globals.sglist[id]:
                     common.write_import(type, id, None)
-                    if not globals.dnet:
+                    if not globals.dsgs:
                         common.add_dependancy("aws_security_group_rule",id)
 
                     pkey = type+"."+id

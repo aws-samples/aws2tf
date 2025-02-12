@@ -19,6 +19,7 @@ validate=False
 dnet=False
 dkms=False
 dkey=False
+dsgs=False
 acc="xxxxxxxxxxxx"
 region="xx-xxxx-x"
 regionl=0

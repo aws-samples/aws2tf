@@ -280,14 +280,22 @@ def main():
     #os.environ["AWS"] = "aws --region "+region+" "
  
     # get the current env and set directory
+   
     if globals.debug: print("setting session region="+region)
+    
     try:
-        my_session = boto3.setup_default_session(region_name=region,profile_name=globals.profile)
+        if args.profile is None:
+            my_session = boto3.setup_default_session(region_name=region)
+        else:
+            my_session = boto3.setup_default_session(region_name=region,profile_name=globals.profile)
+        
     except Exception as e: 
         print("AWS Authorization Error: "+str(e))
+      
     if globals.debug: print("getting account")
     try:
         globals.acc = boto3.client('sts').get_caller_identity().get('Account')
+        print("account="+globals.acc)
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         exn=str(exc_type.__name__)
@@ -306,6 +314,7 @@ def main():
     print('Using region: '+region + ' account: ' + globals.acc+ " profile: "+globals.profile+"\n")
 ####  restore form S3 if merging & serverless
 
+####    
 
     globals.region = region
     globals.regionl = len(region)
@@ -334,7 +343,7 @@ def main():
     globals.cwd=os.getcwd()
     os.chdir(globals.path1) 
     globals.tracking_message="Stage 1 of 10, Terraform Initialise ..."
-    common.aws_tf(region)
+    common.aws_tf(region,args)
 
     # check we have it
     foundtf=False

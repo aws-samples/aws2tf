@@ -791,7 +791,7 @@ def check_python_version():
          sys.exit(1)
 
 
-def aws_tf(region):
+def aws_tf(region,args):
    # os.chdir(globals.path1)
    #if not os.path.isfile("aws.tf"):
 
@@ -808,7 +808,8 @@ def aws_tf(region):
       f3.write('}\n')
       f3.write('provider "aws" {\n')
       f3.write('  region                   = "' + region + '"\n')
-      f3.write('  profile                  = "' + globals.profile + '"\n')
+      if args.profile is not None:
+         f3.write('  profile                  = "' + globals.profile + '"\n')
       if not globals.serverless: f3.write('  shared_credentials_files = ["~/.aws/credentials"]\n')
       f3.write('}\n')
 

@@ -139,28 +139,47 @@ def get_aws_datazone_domain(type, id, clfn, descfn, topkey, key, filterid):
                 response = response + page[topkey]
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
-                common.write_import(type,j[key],None) 
-                # provider crashes on import
-                common.add_dependancy("aws_datazone_project", j[key])
-                common.add_dependancy("aws_datazone_glossary", j[key])
-            
-                common.add_dependancy("aws_datazone_environment_profile", j[key])
-                common.add_dependancy("aws_datazone_environment_blueprint_configuration", j[key])
-                common.add_dependancy("aws_datazone_user_profile", j[key])
-
-
+                dzid=j[key]
+                dv=j['domainVersion']
+                if dv=="V1":
+                    #print(str(j))
+                    resp2=client.get_domain(identifier=j[key])
+                    sso=resp2['singleSignOn']['type']
+                    dst=resp2['status']
+                    #print("sso="+str(sso)+" dst="+str(dst)," dzid=",dzid)
+                    common.write_import(type,j[key],None)
+                    common.add_dependancy("aws_datazone_project", j[key])
+                    common.add_dependancy("aws_datazone_glossary", j[key])
+                    common.add_dependancy("aws_datazone_environment_profile", j[key])
+                    common.add_dependancy("aws_datazone_environment_blueprint_configuration", j[key])
+                    
+                    if sso!="DISABLED":
+                        common.add_dependancy("aws_datazone_user_profile", j[key])
+                    else:
+                        print("skipping sso="+str(sso)+" dst="+str(dst)+" dzid="+dzid)
+                        return True
+                    
         else:      
             response = client.get_domain(identifier=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
-            common.write_import(type,j[key],None)
-            # provider crashes on import
-            common.add_dependancy("aws_datazone_project", j[key])
-            common.add_dependancy("aws_datazone_glossary", j[key])
-            
-            common.add_dependancy("aws_datazone_environment_profile", j[key])
-            common.add_dependancy("aws_datazone_environment_blueprint_configuration", j[key])
-            common.add_dependancy("aws_datazone_user_profile", j[key])
+            dv=j['domainVersion']
+            if dv=="V1":
+                resp2=client.get_domain(identifier=j[key])
+                sso=resp2['singleSignOn']['type']
+                dst=resp2['status']
+                #print("sso="+str(sso)+" dst="+str(dst)," dzid=",dzid)
+                common.write_import(type,j[key],None)
+                # provider crashes on import
+                common.add_dependancy("aws_datazone_project", j[key])
+                common.add_dependancy("aws_datazone_glossary", j[key])
+                common.add_dependancy("aws_datazone_environment_profile", j[key])
+                common.add_dependancy("aws_datazone_environment_blueprint_configuration", j[key])
+                if sso!="DISABLED":
+                    common.add_dependancy("aws_datazone_user_profile", j[key])
+                else:
+                    print("skipping sso="+str(sso)+" dst="+str(dst)+" dzid="+dzid)
+                    return True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -363,8 +382,15 @@ def get_aws_datazone_environment_profile(type, id, clfn, descfn, topkey, key, fi
             print("WARNING must pass domain id to get_aws_datazone_environment_profile")
             return True
         else:
-            for page in paginator.paginate(domainIdentifier=id):
-                response = response + page[topkey]
+            try:
+                for page in paginator.paginate(domainIdentifier=id):
+                    response = response + page[topkey]
+            except Exception as e:
+                print(str(e))
+                print("WARNING: no environment profiles found for domain id "+id)
+                globals.rproc[type+"."+id]=True
+                return True
+
         pkey=type+"."+id
         if response == []: 
             if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 

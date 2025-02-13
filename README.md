@@ -181,13 +181,14 @@ The above will only import instances that have a tag key/value pair of "project"
 ### Using Terraform data resources
 
 
-** still under test **
+These flags will cause aws2tf to use data sources (rather than resources) for certain types - useful for enterprises where for example networking components are provided by a different team, the available flags are:
 
-These flags will cause aws2tf to use data statements for certain resource types - useful for enterprises where for example networking components are provided by a different team, the available flags are:
+* -dnet:  uses Terraform data sources for aws_vpc, aws_subnet
+* -dsgs:  uses Terraform data sources for aws_security_group
+* -dkms:  uses Terraform data sources for aws_kms_key
+* -dkey:  uses Terraform data sources for aws_key_pair
 
-* -dnet:  uses data resources for aws_vpc, aws_subnet and aws_security_group
-* -dkms:  uses data statements for aws_kms_key
-* -dkey:  uses data statements for aws_key_pair
+Please raise an issues if you'd like to see this expanded to other types.
 
 ----------
 

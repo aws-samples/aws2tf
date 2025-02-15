@@ -69,6 +69,7 @@ waf2sc=""
 ec2tag=None
 ec2tagv=None
 ec2tagk=None
+subnetid=""
 
 badlist=[]
 

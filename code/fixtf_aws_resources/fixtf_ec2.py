@@ -4,6 +4,7 @@ import base64
 import boto3
 import globals
 import inspect
+import json
 
 def aws_ami(t1,tt1,tt2,flag1,flag2):
 	skip=0
@@ -330,11 +331,8 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	
 	try:
-
-		if tt1 == "ipv6_addresses":
-			
+		if tt1 == "ipv6_addresses":	
 			if tt2 == "[]": skip=1
-
 
 		elif tt1=="id":
 			flag2=id
@@ -674,16 +672,30 @@ def aws_spot_instance_request(t1,tt1,tt2,flag1,flag2):
 	return skip,t1,flag1,flag2
 
 def aws_subnet(t1,tt1,tt2,flag1,flag2):
-    skip=0
+	skip=0
+	if "resource" in t1 and "{" in t1 and "aws_subnet" in t1:
+		globals.subnetid=""
+		inid=t1.split('aws_subnet"')[1].split("{")[0].strip().strip('"')
+		globals.subnetid=inid
+	elif tt1 == "enable_lni_at_device_index":
+		if tt2 == "0": skip=1
+	elif tt1 == "availability_zone_id": skip=1
+	#
+	elif tt1 == "map_customer_owned_ip_on_launch":
+		if tt2 == "false": skip=1
 
-    if tt1 == "enable_lni_at_device_index":
-        if tt2 == "0": skip=1
-    if tt1 == "availability_zone_id": skip=1
-    #
-    if tt1 == "map_customer_owned_ip_on_launch":
-        if tt2 == "false": skip=1
+	elif tt1=="ipv6_cidr_block" and tt2.endswith("/64"):
+		try:
+			nbs=tt2.split("::")[0].split(":")[-1]
+			nb=int(nbs[-2:])
+			for j in globals.subnets:
+				if j['SubnetId'] == globals.subnetid:
+					vpcid=j['VpcId']
+					t1=tt1 + " = cidrsubnet(aws_vpc." + vpcid + ".ipv6_cidr_block, 8, "+str(nb)+")\n"
+		except Exception as e:
+			print("ERROR in ipv6_cidr_block, fix aws_subnet: "+str(e))
 
-    return skip,t1,flag1,flag2
+	return skip,t1,flag1,flag2
 
 def aws_volume_attachment(t1,tt1,tt2,flag1,flag2):
 	skip=0

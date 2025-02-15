@@ -23,7 +23,7 @@ def get_aws_eks_cluster(type,id,clfn,descfn,topkey,key,filterid):
         common.add_known_dependancy("aws_eks_node_group",theid) 
         common.add_known_dependancy("aws_eks_identity_provider_config",theid)
         common.add_known_dependancy("aws_eks_addon",theid)
-        common.add_known_dependancy("aws_eks_pod_identity_association", theid)
+        #common.add_known_dependancy("aws_eks_pod_identity_association", theid)
         common.add_known_dependancy("aws_eks_access_entry", theid)
 
    return True

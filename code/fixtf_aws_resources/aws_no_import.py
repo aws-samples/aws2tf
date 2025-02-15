@@ -184,4 +184,5 @@ noimport = {
     "aws_vpclattice_resource_gateway": True,
     "aws_eip_association": True,
     "aws_vpclattice_resource_configuration": True, # boto3 doesn't recognize api call
+    "aws_eks_pod_identity_association": True, # association done elsewhere
 } 

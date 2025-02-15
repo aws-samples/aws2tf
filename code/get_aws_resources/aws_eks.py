@@ -192,6 +192,11 @@ def get_aws_eks_access_entry(type,id,clfn,descfn,topkey,key,filterid):
             retid=j
             theid=id+":"+retid
             pkey=id+","+retid
+            if "aws-service-role" in j:
+               print("INFO: aws-service-role in get_aws_eks_access_entry returning")
+               globals.rproc[pkey]=True
+               continue
+
             resp2=client.describe_access_entry(clusterName=id,principalArn=j)
             if resp2 == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             if resp2['accessEntry']['type'] == 'STANDARD':
@@ -227,10 +232,14 @@ def get_aws_eks_access_policy_association(type,id,clfn,descfn,topkey,key,filteri
       
       cln=id.split(',')[0]
       parn=id.split(',')[1]
-                 
+      pkey=type+"."+id
+      if "aws-service-role" in parn: 
+         print("INFO: aws-service-role in get_aws_eks_access_policy_association returning")
+         globals.rproc[pkey]=True
+         return True           
       client = boto3.client(clfn)  
       response = client.list_associated_access_policies(clusterName=cln,principalArn=parn)
-      pkey=type+"."+id
+      
       
       if response[topkey] == []: 
          if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")

@@ -415,26 +415,32 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
                      if not ismain:
                         #print("Trying .......")
                         try:
-                           subid = str(item['Associations'][r]['SubnetId'])
-                            
-                           #print("in pre-rproc.... subid="+str(subid)+" ismain="+str(ismain)+" vpcid="+str(vpcid))
+                            if 'SubnetId' in item['Associations'][r]:
+                                subid = str(item['Associations'][r]['SubnetId'])
+                                #print("in pre-rproc.... subid="+str(subid)+" ismain="+str(ismain)+" vpcid="+str(vpcid))
 
-                           # TODO wrong check ? if don't have subnet should add as dependancy
-                           # if subid in str(globals.rproc):
+                                # TODO wrong check ? if don't have subnet should add as dependancy
+                                # if subid in str(globals.rproc):
 
-                           # TODO check if already have the association
-                           #print("--10a--- id="+str(id)+" subid="+subid+" rtid="+rtid)
-                           if id is not None and "subnet-" in id:
-                              if subid == id:
-                                 theid = subid+"/"+rtid
-                                 common.write_import(type, theid, None)
-                                 pkey = type+"."+subid
-                                 globals.rproc[pkey] = True
-                           else:
-                              theid = subid+"/"+rtid
-                              common.write_import(type, theid, None)
-                              pkey = type+"."+subid
-                              globals.rproc[pkey] = True
+                                # TODO check if already have the association
+                                #print("--10a--- id="+str(id)+" subid="+subid+" rtid="+rtid)
+                                if id is not None and "subnet-" in id:
+                                    if subid == id:
+                                        theid = subid+"/"+rtid
+                                        common.write_import(type, theid, None)
+                                        pkey = type+"."+subid
+                                        globals.rproc[pkey] = True
+                                else:
+                                    theid = subid+"/"+rtid
+                                    common.write_import(type, theid, None)
+                                    pkey = type+"."+subid
+                                    globals.rproc[pkey] = True
+                            elif 'GatewayId' in item['Associations'][r]:
+                                gwid = str(item['Associations'][r]['GatewayId'])
+                                theid = gwid+"/"+rtid
+                                common.write_import(type, theid, None)
+                                pkey = type+"."+gwid
+                                globals.rproc[pkey] = True
 
                         except Exception as e:
                            common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

@@ -10,6 +10,8 @@ import concurrent.futures
 from typing import List, Dict
 import io
 from concurrent.futures import ThreadPoolExecutor
+from botocore.exceptions import NoCredentialsError, ClientError
+
 
 def get_aws_s3_bucket(type, id, clfn, descfn, topkey, key, filterid):
    globals.tracking_message="Stage 3 of 10 getting s3 resources ..."
@@ -18,9 +20,43 @@ def get_aws_s3_bucket(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def check_access(bucket_name,my_region):
-   s3= boto3.client("s3",region_name=my_region)
+   
    try:
+      session = boto3.Session(region_name=my_region,profile_name=globals.profile)
+      s3 = session.client('s3')
+
+      ####### problematic call
       objs = s3.list_objects_v2(Bucket=bucket_name,MaxKeys=1)
+
+   
+   except NoCredentialsError as e:
+        print(f"CREDENTIAL ERROR: Unable to locate credentials for SSO session")
+        print("Please ensure you have an active SSO session (run 'aws sso login')")
+        print(f"Error details: {e}")
+        globals.bucketlist[bucket_name] = False
+        return False
+
+   except ClientError as e:
+      error_code = e.response['Error']['Code']
+      if error_code == 'AccessDenied':
+            print(f"NO ACCESS: to Bucket: {bucket_name} - continue")
+            globals.bucketlist[bucket_name] = False
+            return False
+        
+      elif error_code == 'ExpiredToken':
+            print(f"TOKEN EXPIRED: Your AWS session token has expired")
+            print("Please renew your session (run 'aws sso login')")
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            exn=str(exc_type.__name__)
+            print((f"{fname=} {exc_tb.tb_lineno=} \n"))
+            globals.bucketlist[bucket_name] = False
+            return False
+      else:
+            print(f"AWS Error: {error_code} - {e}")
+            globals.bucketlist[bucket_name] = False
+            return False
+
    except Exception as e:
          exc_type, exc_obj, exc_tb = sys.exc_info()
          exn=str(exc_type.__name__)
@@ -35,7 +71,7 @@ def check_access(bucket_name,my_region):
          
          fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
          print(exc_type, fname, exc_tb.tb_lineno)
-         print('continuing on exception to location .......')
+         print('continuing on exception .......')
          return
    return
 

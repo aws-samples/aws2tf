@@ -9,7 +9,12 @@ def get_aws_s3_access_point(type, id, clfn, descfn, topkey, key, filterid):
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
-        client = boto3.client(clfn)
+        #client = boto3.client(clfn)
+        my_region=globals.region
+        session = boto3.Session(region_name=my_region,profile_name=globals.profile)
+        client = session.client(clfn)
+
+
         if id is None:
             response = client.list_access_points(AccountId=globals.acc)
         

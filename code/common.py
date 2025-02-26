@@ -955,7 +955,7 @@ def write_import(type,theid,tfid):
       else:
          fn="import__"+type+"__"+tfid+".tf"
 
-      fn=fn.replace(globals.acc,"012345678912")
+      #fn=fn.replace(globals.acc,"012345678912")
 
       if globals.debug: print(fn)
          #print(fn)

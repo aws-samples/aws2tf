@@ -494,7 +494,10 @@ def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key,
         print("--> In get_aws_vpc_ipv4_cidr_block_association doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
-        client = boto3.client(clfn)
+        session = boto3.Session(region_name=globals.region,profile_name=globals.profile)
+        client = session.client(clfn)
+        
+        #client = boto3.client(clfn)
         response=[]
 
         if id is None:

@@ -292,9 +292,12 @@ def get_aws_iam_role(type,id,clfn,descfn,topkey,key,filterid):
 
             for rn in globals.rolelist.keys():
                rna=rn.replace(".","_")
-               common.write_import(type,rn,rna)
-               common.add_dependancy("aws_iam_role_policy_attachment",rn)
-               common.add_dependancy("aws_iam_role_policy",rn)
+               if rna!="":
+                  common.write_import(type,rn,rna)
+                  common.add_dependancy("aws_iam_role_policy_attachment",rn)
+                  common.add_dependancy("aws_iam_role_policy",rn)
+               else:
+                   print("WARNING: empty rolename")
 
         else:   
             if "/aws-service-role/" in id: return True    
@@ -305,10 +308,12 @@ def get_aws_iam_role(type,id,clfn,descfn,topkey,key,filterid):
             j=response['Role']
             rn=j[key]
             rna=rn.replace(".","_")
-            common.write_import(type,j[key],rna)
-            common.add_dependancy("aws_iam_role_policy_attachment",rn)
-            common.add_dependancy("aws_iam_role_policy",rn)
-
+            if rna!="":
+               common.write_import(type,j[key],rna)
+               common.add_dependancy("aws_iam_role_policy_attachment",rn)
+               common.add_dependancy("aws_iam_role_policy",rn)
+            else:
+               print("WARNING: empty rolename")
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

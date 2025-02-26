@@ -132,7 +132,9 @@ def get_aws_instance(type, id, clfn, descfn, topkey, key, filterid):
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
-        client = boto3.client(clfn)
+        session = boto3.Session(region_name=globals.region,profile_name=globals.profile)
+        client = session.client(clfn)
+        #client = boto3.client(clfn)
         if id is None:
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():

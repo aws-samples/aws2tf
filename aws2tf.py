@@ -322,10 +322,12 @@ def main():
         globals.serverless=True
         globals.path1="/tmp/aws2tf/generated/tf-"+globals.acc+"-"+region
         globals.path2=globals.path1+"/imported"
+        globals.path3=globals.path1+"/notimported"
     else:
         globals.serverless=False
         globals.path1="generated/tf-"+globals.acc+"-"+region
         globals.path2=globals.path1+"/imported"
+        globals.path3=globals.path1+"/notimported"
 
     if globals.serverless:
         if args.merge: common.download_from_s3()
@@ -340,6 +342,10 @@ def main():
 
     com = "mkdir -p "+globals.path2
     rout = common.rc(com)
+
+    com = "mkdir -p "+globals.path3
+    rout = common.rc(com)
+
     globals.cwd=os.getcwd()
     os.chdir(globals.path1) 
     globals.tracking_message="Stage 1 of 10, Terraform Initialise ..."

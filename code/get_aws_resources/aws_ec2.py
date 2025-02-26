@@ -98,7 +98,7 @@ def get_aws_security_group(type, id, clfn, descfn, topkey, key, filterid):
                 common.write_import(type,sn,None)
                 if not globals.dsgs: 
                     common.add_dependancy("aws_security_group_rule",sn)
-                    pkey = type+"."+id
+                    pkey = type+"."+sn
                     globals.rproc[pkey] = True
 
         elif id.startswith("sg-"):
@@ -132,7 +132,9 @@ def get_aws_instance(type, id, clfn, descfn, topkey, key, filterid):
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
-        client = boto3.client(clfn)
+        session = boto3.Session(region_name=globals.region,profile_name=globals.profile)
+        client = session.client(clfn)
+        #client = boto3.client(clfn)
         if id is None:
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
@@ -502,7 +504,14 @@ def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key,
             response = client.describe_vpcs(VpcIds=[id])
         #response = common.call_boto3(type,clfn, descfn, topkey, key, id)    
   
-        if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response[topkey] == []: 
+            print("Empty response for "+type+ " id="+str(id)+" returning")
+            if id is None:
+                return True
+            else:
+                pkey=type+"."+id
+                globals.rproc[pkey]=True
+                return True
         for j in response[topkey]:
             cidrb = j['CidrBlockAssociationSet']
             vpcid = j['VpcId']

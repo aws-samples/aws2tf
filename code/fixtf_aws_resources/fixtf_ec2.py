@@ -349,7 +349,8 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 
 		elif tt1 == "user_data":
 			inid=flag2.split("__")[1]
-			client = boto3.client("ec2")
+			session = boto3.Session(region_name=globals.region,profile_name=globals.profile)
+			client = session.client("ec2")
 			resp = client.describe_instance_attribute(Attribute="userData",InstanceId=inid)
 			try:
 				ud=resp['UserData']['Value']

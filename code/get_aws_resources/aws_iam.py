@@ -51,7 +51,8 @@ def get_aws_iam_role_policy(type,id,clfn,descfn,topkey,key,filterid):
 ## special due to scope local
 ##
 def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
-   if globals.debug: print("--> In get_aws_iam_policy doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   if globals.debug: 
+      print("--> In get_aws_iam_policy doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    
    try:
    
@@ -334,7 +335,9 @@ def get_aws_iam_role_policy_attachment(type,id,clfn,descfn,topkey,key,filterid):
 
    #print(len(globals.attached_role_policies_list))
    if len(globals.attached_role_policies_list) == 0:
-      client = boto3.client(clfn) 
+      session = boto3.Session(region_name=globals.region,profile_name=globals.profile)
+      client = session.client(clfn)
+      #client = boto3.client(clfn) 
       response=[]
       paginator = client.get_paginator(descfn)
       try:
@@ -358,7 +361,7 @@ def get_aws_iam_role_policy_attachment(type,id,clfn,descfn,topkey,key,filterid):
                rn=id+"__"+pn
                # - no as using policy arns (minus account id etc)
                #if "andyt1" in retid:
-               #   print("********** iarp  id="+str(id)+" theid="+str(theid)+" rn="+rn)
+               #print("********** iarp  id="+str(id)+" theid="+str(theid)+" rn="+rn)
                if "arn:aws:iam::aws:policy" not in theid:
                   common.add_dependancy("aws_iam_policy",retid)
                   

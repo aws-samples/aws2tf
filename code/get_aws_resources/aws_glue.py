@@ -115,6 +115,17 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
         tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
         globals.rproc[tkey]=True
 
+    except boto3.exceptions.botocore.exceptions.ClientError as e:
+        if e.response['Error']['Code'] == 'AccessDeniedException':
+            print(f"AccessDeniedException for aws_glue.py - returning. Resource: {id}")
+            tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
+            globals.rproc[tkey]=True
+            return True
+        else:
+            common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+
+    
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 

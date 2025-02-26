@@ -11,6 +11,7 @@ cores=2
 cwd=""
 path1=""
 path2=""
+path3=""
 processed=[]
 dependancies=[]
 types=[]

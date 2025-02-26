@@ -98,7 +98,7 @@ def get_aws_security_group(type, id, clfn, descfn, topkey, key, filterid):
                 common.write_import(type,sn,None)
                 if not globals.dsgs: 
                     common.add_dependancy("aws_security_group_rule",sn)
-                    pkey = type+"."+id
+                    pkey = type+"."+sn
                     globals.rproc[pkey] = True
 
         elif id.startswith("sg-"):

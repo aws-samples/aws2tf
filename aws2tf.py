@@ -460,6 +460,7 @@ def main():
             lall=0
 
         if all_types is None: print("No resources found all_types=None")
+        print("all_types="+str(all_types))
 
         if type == "stack":
             
@@ -484,6 +485,7 @@ def main():
 
         
 ################
+        
         elif all_types is not None and lall > 1:
             #all_types=all_types[:10]
             print("len all_types="+str(len(all_types))) # testing only

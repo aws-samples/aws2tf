@@ -460,6 +460,7 @@ def main():
             lall=0
 
         if all_types is None: print("No resources found all_types=None")
+        print("all_types="+str(all_types))
 
         if type == "stack":
             
@@ -484,6 +485,7 @@ def main():
 
         
 ################
+        
         elif all_types is not None and lall > 1:
             #all_types=all_types[:10]
             print("len all_types="+str(len(all_types))) # testing only
@@ -717,7 +719,7 @@ def main():
     globals.tracking_message="aws2tf, Completed"
     now = datetime.datetime.now()
     print("aws2tf started at  %s" % starttime)
-    print("aws2tf finished at %s" % now)
+    #print("aws2tf finished at %s" % now)
     # print execution time
     print("aws2tf execution time h:mm:ss :"+ str(now - starttime))
     print("\nTerraform files & state in sub-directory: "+ globals.path1)

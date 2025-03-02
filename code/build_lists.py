@@ -81,6 +81,8 @@ def build_lists():
             for page in paginator.paginate():
                 response.extend(page['Roles'])
             # save
+            with open('imported/roles.json', 'w') as f:
+               json.dump(response, f, indent=2, default=str)
             return [('iam', j['RoleName']) for j in response]
         except Exception as e:
             print("Error fetching vpc data:", e)
@@ -158,42 +160,59 @@ def build_lists():
          
     return True
 
-def build_secondary_lists(id):
+def build_secondary_lists(id=None):
     if id is None:
         st1 = datetime.datetime.now()
         print("Building secondary IAM resource lists ...")
-        globals.esttime=(len(globals.rolelist)*3)/4
-        globals.tracking_message="Stage 2 of 10, Building secondary IAM resource lists ..."
-        client = boto3.client('iam')
-        # attached_role_policies
-        rcl=len(globals.rolelist)
-        rc=1
-        for rn in globals.rolelist.keys():
-            response=[]
-            response1=[]
-            #paginator = client.get_paginator('list_attached_role_policies')
-            #paginator2 = client.get_paginator('list_role_policies')
+        globals.esttime = (len(globals.rolelist) * 3) / 4
+        globals.tracking_message = "Stage 2 of 10, Building secondary IAM resource lists ..."
+        
+        def fetch_role_policies(role_name):
+            client = boto3.client('iam')
             try:
-                response=client.list_attached_role_policies(RoleName=rn)
-                response1 = client.list_role_policies(RoleName=rn)
-            except Exception as e:  
-                print(f"{e=}")
-            #print(str(response)+"\n")
-            if response['AttachedPolicies'] == []: 
-                globals.attached_role_policies_list[rn]=False
-            else:
-                globals.attached_role_policies_list[rn]=response['AttachedPolicies']
+                # Get attached policies
+                attached_policies = client.list_attached_role_policies(RoleName=role_name)
+                
+                # Get inline policies
+                inline_policies = client.list_role_policies(RoleName=role_name)
+                
+                return {
+                    'role_name': role_name,
+                    'attached_policies': attached_policies['AttachedPolicies'] if attached_policies['AttachedPolicies'] else False,
+                    'inline_policies': inline_policies['PolicyNames'] if inline_policies['PolicyNames'] else False
+                }
+            except Exception as e:
+                print(f"Error fetching policies for role {role_name}: {e}")
+                return {
+                    'role_name': role_name,
+                    'attached_policies': False,
+                    'inline_policies': False
+                }
+        
+        # Use ThreadPoolExecutor to parallelize API calls
+        rcl = len(globals.rolelist)
+        with concurrent.futures.ThreadPoolExecutor(max_workers=globals.cores) as executor:
+            # Submit all role policy fetch tasks
+            future_to_role = {
+                executor.submit(fetch_role_policies, role_name): role_name 
+                for role_name in globals.rolelist.keys()
+            }
             
-            if response1['PolicyNames'] == []: 
-                globals.role_policies_list[rn]=False
-            else:
-                globals.role_policies_list[rn]=response1['PolicyNames']
-
-            globals.tracking_message="Stage 2 of 10, Building secondary IAM resource lists... "+str(rc)+" of "+str(rcl)
-            rc=rc+1
-
+            # Process results as they complete
+            completed = 0
+            for future in concurrent.futures.as_completed(future_to_role):
+                completed += 1
+                globals.tracking_message = f"Stage 2 of 10, Building secondary IAM resource lists... {completed} of {rcl}"
+                
+                try:
+                    result = future.result()
+                    role_name = result['role_name']
+                    globals.attached_role_policies_list[role_name] = result['attached_policies']
+                    globals.role_policies_list[role_name] = result['inline_policies']
+                except Exception as e:
+                    print(f"Error processing result: {e}")
         
         st2 = datetime.datetime.now()
-        print("secondary lists built in "+ str(st2 - st1))
-
+        print("secondary lists built in " + str(st2 - st1))
+    
     return

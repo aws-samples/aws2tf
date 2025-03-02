@@ -719,7 +719,7 @@ def main():
     globals.tracking_message="aws2tf, Completed"
     now = datetime.datetime.now()
     print("aws2tf started at  %s" % starttime)
-    print("aws2tf finished at %s" % now)
+    #print("aws2tf finished at %s" % now)
     # print execution time
     print("aws2tf execution time h:mm:ss :"+ str(now - starttime))
     print("\nTerraform files & state in sub-directory: "+ globals.path1)

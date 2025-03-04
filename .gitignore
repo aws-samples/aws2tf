@@ -54,3 +54,4 @@ copy-to-aws2tf.sh
 aws3tf.py
 docker/*.sh
 docker/*.test
+aws3tf.py.ok*

@@ -574,17 +574,17 @@ def  aws_route_table(t1,tt1,tt2,flag1,flag2):
 
 
 def aws_route_table_association(t1,tt1,tt2,flag1,flag2):
-    skip=0
-
-    if tt1 == "route_table_id":
-        
-        t1=tt1 + " = aws_route_table." + tt2 + ".id\n"
-        common.add_dependancy("aws_route_table",tt2)
-    if tt1 == "gateway_id":
-        
-        if tt2 == "null": skip=1
+	skip=0
+	if tt1 == "route_table_id":
+		t1=tt1 + " = aws_route_table." + tt2 + ".id\n"
+		common.add_dependancy("aws_route_table",tt2)
+	elif tt1 == "gateway_id":
+		if tt2.startswith("igw-"):
+			t1 = tt1 + " = aws_internet_gateway." + tt2 + ".id\n"
+		if tt2 == "null":
+			skip=1
     #print("------Yo t1="+t1)
-    return skip,t1,flag1,flag2
+	return skip,t1,flag1,flag2
 
 def aws_security_group_rule(t1,tt1,tt2,flag1,flag2):
 	skip=0

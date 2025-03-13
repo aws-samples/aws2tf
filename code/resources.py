@@ -51,6 +51,7 @@ def resource_types(type):
     elif type == "msk": rets=["aws_msk_cluster","aws_msk_configuration"]; return rets # MSK Clusters and dependancies
     elif type == "mwaa": rets=["aws_mwaa_environment"]; return rets # MWAA Environment and dependancie
     elif type == "natgw": rets=["aws_nat_gateway"]; return rets # NAT gateway and dependancies
+    elif type == "nfw": rets=["aws_networkfirewall_firewall"]; return rets # AWS Network Firewall
     elif type == "org": rets=["aws_organizations_organization","aws_organizations_account","aws_organizations_resource_policy","aws_organizations_policy"]; return rets # AWS Organisations and some dependancies
     elif type == "params": rets=["aws_ssm_parameter"]; return rets # SSM parameters
     elif type == "privatelink": rets=["aws_vpc_endpoint_service"]; return rets # VPC privatelink resources

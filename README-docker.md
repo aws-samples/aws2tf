@@ -17,8 +17,8 @@ cd aws2tf
 ### Create the Dockerfile (tip: use the copy icon, top right)
 
 ```bash
-cat << 'EOF' > Dockerfile.aws2tf
-FROM python:3.12.5-alpine3.20
+cat << 'EOF' > Dockerfile
+FROM python:3.12.9-alpine3.21
 RUN apk update \
     && apk add curl zip git unzip
 
@@ -75,7 +75,7 @@ EOF
 ### build the container from the newly created Dockerfile.aws2tf
 
 ```bash
-docker build -f Dockerfile.aws2tf --no-cache -t aws2tf . 
+docker build --no-cache -t aws2tf . 
 ```
 
 ### Create an alias ro run the aws2tf container
@@ -88,7 +88,7 @@ alias aws2tf.py="docker run --security-opt=no-new-privileges --name aws2tf --rm 
 ### run aws2tf using the alias to the container:
 
 ```bash
-aws2tf.py -t vpc
+./aws2tf.py -t vpc
 ```
 
 

@@ -1,4 +1,4 @@
-FROM python:3.12.5-alpine3.20
+FROM python:3.12.9-alpine3.21
 RUN apk update \
     && apk add curl zip git unzip
 

@@ -101,6 +101,7 @@
 * AWS::EC2::EIP
 * AWS::EC2::EIPAssociation
 * AWS::EC2::FlowLog
+* AWS::EC2::GatewayRouteTableAssociation
 * AWS::EC2::Instance
 * AWS::EC2::InternetGateway
 * AWS::EC2::KeyPair
@@ -176,6 +177,10 @@
 * AWS::MSK::ClusterPolicy
 * AWS::MSK::ServerlessCluster
 * AWS::MWAA::Environment
+* AWS::NetworkFirewall::Firewall
+* AWS::NetworkFirewall::FirewallPolicy
+* AWS::NetworkFirewall::LoggingConfiguration
+* AWS::NetworkFirewall::RuleGroup
 * AWS::OpenSearchService::Domain
 * AWS::Pipes::Pipe
 * AWS::RDS::DBCluster

@@ -285,10 +285,9 @@ def main():
     
     try:
         if args.profile is None:
-            my_session = boto3.setup_default_session(region_name=region)
+            boto3.setup_default_session(region_name=region)
         else:
-            my_session = boto3.setup_default_session(region_name=region,profile_name=globals.profile)
-        
+            boto3.setup_default_session(region_name=region,profile_name=globals.profile)
     except Exception as e: 
         print("AWS Authorization Error: "+str(e))
       

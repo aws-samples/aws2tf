@@ -78,6 +78,7 @@ from get_aws_resources import aws_lambda
 from get_aws_resources import aws_license_manager
 from get_aws_resources import aws_mwaa
 from get_aws_resources import aws_neptune
+from get_aws_resources import aws_network_firewall
 from get_aws_resources import aws_networkmanager
 from get_aws_resources import aws_organizations
 from get_aws_resources import aws_ram

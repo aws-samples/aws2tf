@@ -6728,6 +6728,14 @@ aws_network_acl_rule = {
 	"filterid":	"NetworkAclId"
 }
 
+aws_network_interface = {
+	"clfn":		"ec2",
+	"descfn":	"describe_network_interfaces",
+	"topkey":	"NetworkInterfaces",
+	"key":		"NetworkInterfaceId",
+	"filterid":	"NetworkInterfaceId"
+}
+
 aws_network_interface_attachment = {
 	"clfn":		"ec2",
 	"descfn":	"describe_network_interfaces",

@@ -23,6 +23,11 @@ def aws_networkfirewall_logging_configuration(t1,tt1,tt2,flag1,flag2):
 		tarn=tt2.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_").replace(", ", "_").replace("&", "_").replace("#", "_").replace("[", "_").replace("]", "_").replace("=", "_").replace("!", "_").replace(";", "_")
 		t1=tt1 + " = aws_networkfirewall_firewall." + tarn + ".arn\n"
 		common.add_dependancy("aws_networkfirewall_firewall", tt2)
+
+	elif tt1==" tls_inspection_configuration_arn" and tt2!="null" and tt2.startswith("arn:"):
+		tarn=tt2.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_").replace(", ", "_").replace("&", "_").replace("#", "_").replace("[", "_").replace("]", "_").replace("=", "_").replace("!", "_").replace(";", "_")
+		t1=tt1 + " = aws_networkfirewall_tls_inspection_configuration." + tarn + ".arn\n"
+		common.add_dependancy("aws_networkfirewall_tls_inspection_configuration", tt2)
 	return skip,t1,flag1,flag2
 
 def aws_networkfirewall_resource_policy(t1,tt1,tt2,flag1,flag2):

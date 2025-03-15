@@ -551,26 +551,29 @@ def aws_route(t1,tt1,tt2,flag1,flag2):
 	return skip,t1,flag1,flag2
 
 def  aws_route_table(t1,tt1,tt2,flag1,flag2):
-    skip=0
-    if "cidr_block" in tt1:   
-        if tt2 == "": t1=tt1 + " = null\n"
+	skip=0
+	if "cidr_block" in tt1:   
+		if tt2 == "": t1=tt1 + " = null\n"
 
-
-    elif "nat_gateway_id" in tt1 and tt2 != "null":
+	elif "nat_gateway_id" in tt1 and tt2 != "null":
         
-        if tt2 != "":
-            t1=tt1 + " = aws_nat_gateway." + tt2 + ".id\n"
-            common.add_dependancy("aws_nat_gateway",tt2)
-
-    elif tt1 == "gateway_id" and tt2 != "null":
+		if tt2 != "":
+			t1=tt1 + " = aws_nat_gateway." + tt2 + ".id\n"
+			common.add_dependancy("aws_nat_gateway",tt2)
+	elif tt1 == "gateway_id" and tt2 != "null":
         
-        if tt2 != "":
-            t1=tt1 + " = aws_internet_gateway." + tt2 + ".id\n"
-            common.add_dependancy("aws_internet_gateway",tt2)
+		if tt2 != "":
+			t1=tt1 + " = aws_internet_gateway." + tt2 + ".id\n"
+			common.add_dependancy("aws_internet_gateway",tt2)
+	elif tt1 == "vpc_peering_connection_id" and tt2 != "null":
+        
+		if tt2.startswith("pcx-"):
+			t1=tt1 + " = aws_vpc_peering_connection." + tt2 + ".id\n"
+			common.add_dependancy("aws_vpc_peering_connection",tt2)
 
 
 
-    return skip,t1,flag1,flag2
+	return skip,t1,flag1,flag2
 
 
 def aws_route_table_association(t1,tt1,tt2,flag1,flag2):

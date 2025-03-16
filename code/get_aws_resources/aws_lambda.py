@@ -270,9 +270,6 @@ def get_aws_lambda_permission(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
         print("--> In get_aws_lambda_permission doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-
-    #response = common.call_boto3(type,clfn, descfn, topkey, key, id)
-    #print("-9a->"+str(response))
     try:
         # this one no paginate
 
@@ -310,8 +307,6 @@ def get_aws_lambda_function_event_invoke_config(type, id, clfn, descfn, topkey, 
         print("--> In get_aws_lambda_function_event_invoke_config doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
-    #response = common.call_boto3(type,clfn, descfn, topkey, key, id)
-    #print("-9a->"+str(response))
     try:
         # this one no paginate
 
@@ -327,12 +322,10 @@ def get_aws_lambda_function_event_invoke_config(type, id, clfn, descfn, topkey, 
         
         for j in response: 
             #print(str(j))
-            fn=j['Name']
-            theid=id+"/"+fn
+            fn=j['FunctionArn']
+            theid=fn
             common.write_import(type, theid, None)
-        
 
-        
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
         

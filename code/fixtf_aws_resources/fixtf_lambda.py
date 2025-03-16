@@ -126,3 +126,13 @@ def aws_lambda_layer_version_permission(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
 
+def aws_lambda_function_event_invoke_config(t1, tt1, tt2, flag1, flag2):
+    skip=0
+    if tt1=="maximum_event_age_in_seconds" and tt2=="0": skip=1
+    elif tt1=="function_name" and tt2 != "null":
+        if tt2.startswith("arn:"):
+            fname=tt2.split(":")[-1]
+            t1 = tt1 + " = aws_lambda_function." + fname + ".arn\n"
+        else:
+            t1 = tt1 + " = aws_lambda_function." + tt2 + ".function_name\n"
+    return skip,t1,flag1,flag2

@@ -214,8 +214,10 @@ def get_aws_wafv2_web_acl_logging_configuration(type, id, clfn, descfn, topkey, 
             response = client.get_logging_configuration(ResourceArn=id)
             if response == []: 
                 if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                pkey=type+"."+id
+                globals.rproc[pkey]=True
                 return True
-            j=response
+            j=response['LoggingConfiguration']
             common.write_import(type,j[key],None)
 
     except Exception as e:

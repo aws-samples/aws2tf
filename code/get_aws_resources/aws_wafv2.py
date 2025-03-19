@@ -88,7 +88,8 @@ def get_aws_wafv2_web_acl(type, id, clfn, descfn, topkey, key, filterid):
                     arn=j['ARN']
                     pkey=idd+"/"+nm+"/"+sc
                     common.write_import(type,pkey,"w-"+pkey.replace("/","_")) 
-                    common.add_dependancy("aws_wafv2_web_acl_logging_configuration",arn)
+                    if type not in globals.all_extypes:
+                        common.add_dependancy("aws_wafv2_web_acl_logging_configuration",arn)
             else:
                 print("WARNING:Can only import CLOUDFRONT web ACL's from us-east-1 region")
  
@@ -107,7 +108,8 @@ def get_aws_wafv2_web_acl(type, id, clfn, descfn, topkey, key, filterid):
                 arn=j['ARN']
                 pkey=idd+"/"+nm+"/"+sc
                 common.write_import(type, pkey, "w-"+pkey.replace("/", "_"))
-                common.add_dependancy("aws_wafv2_web_acl_logging_configuration",arn)
+                if type not in globals.all_extypes:
+                    common.add_dependancy("aws_wafv2_web_acl_logging_configuration",arn)
 
         else: 
             if "|" in id:
@@ -127,7 +129,8 @@ def get_aws_wafv2_web_acl(type, id, clfn, descfn, topkey, key, filterid):
             arn=j['ARN']
             pkey=idd+"/"+nm+"/"+sc
             common.write_import(type,pkey,"w-"+pkey.replace("/","_"))
-            common.add_dependancy("aws_wafv2_web_acl_logging_configuration",arn)
+            if type not in globals.all_extypes:
+                common.add_dependancy("aws_wafv2_web_acl_logging_configuration",arn)
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -214,8 +217,10 @@ def get_aws_wafv2_web_acl_logging_configuration(type, id, clfn, descfn, topkey, 
             response = client.get_logging_configuration(ResourceArn=id)
             if response == []: 
                 if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                pkey=type+"."+id
+                globals.rproc[pkey]=True
                 return True
-            j=response
+            j=response['LoggingConfiguration']
             common.write_import(type,j[key],None)
 
     except Exception as e:

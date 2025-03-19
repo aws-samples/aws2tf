@@ -56,6 +56,7 @@ def resource_types(type):
     elif type == "params": rets=["aws_ssm_parameter"]; return rets # SSM parameters
     elif type == "privatelink": rets=["aws_vpc_endpoint_service"]; return rets # VPC privatelink resources
     elif type == "ram": rets=["aws_ram_resource_share"]; return rets # RAM shares
+    elif type == "redshift": rets=["aws_redshift_cluster","aws_redshiftserverless_workgroup"]; return rets # Redshift
     elif type == "route53": rets=["aws_route53_zone"]; return rets # Route53 Zones
     elif type == "rds": rets=["aws_db_instance","aws_db_parameter_group","aws_db_event_subscription","aws_db_event_subscription"]; return rets # RDS cluster and some dependancies
     elif type == "s3": rets=["aws_s3_bucket"]; return rets # AWS S3 bucket and bucker config

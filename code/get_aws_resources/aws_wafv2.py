@@ -3,6 +3,7 @@ import boto3
 import globals
 import inspect
 from botocore.config import Config
+from botocore.exceptions import ClientError
 
 def get_aws_wafv2_ip_set(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
@@ -213,13 +214,18 @@ def get_aws_wafv2_web_acl_logging_configuration(type, id, clfn, descfn, topkey, 
             print("WARNING: Must pass WebACL arn as parameter")
             return True
 
-        else:      
-            response = client.get_logging_configuration(ResourceArn=id)
+        else:   
+            try:   
+                response = client.get_logging_configuration(ResourceArn=id)
+            except ClientError as error:
+                if error.response['Error']['Code'] == 'WAFNonexistentItemException':
+                    print("The WAF resource you're trying to access doesn't exist.")
+                    response=[]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
-                pkey=type+"."+id
-                globals.rproc[pkey]=True
-                return True
+                    if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                    pkey=type+"."+id
+                    globals.rproc[pkey]=True
+                    return True
             j=response['LoggingConfiguration']
             common.write_import(type,j[key],None)
 

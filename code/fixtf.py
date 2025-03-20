@@ -336,6 +336,12 @@ def fixtf(ttft,tf):
         globals.stripstart="{"
         globals.stripend="}"
 
+    if ttft=="aws_wafv2_web_acl":
+        globals.stripblock="rule {"
+        globals.stripstart="{"
+        globals.stripend="}"
+    
+
     globals.gulejobmaxcap=False
     globals.ec2ignore=False
     globals.secid=""

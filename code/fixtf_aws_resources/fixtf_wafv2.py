@@ -35,6 +35,7 @@ def aws_wafv2_web_acl(t1,tt1,tt2,flag1,flag2):
 		globals.waf2id=aclid
 		globals.waf2nm=aclnm
 		globals.waf2sc=aclsc
+		#t1=t1+"\n lifecycle {\n   ignore_changes = [rule]\n}\n"
 
 	if tt1=="rule_json" and tt2=="null":
 		# call get_web_acl
@@ -47,12 +48,13 @@ def aws_wafv2_web_acl(t1,tt1,tt2,flag1,flag2):
 				if os.path.exists(fn):os.remove(fn)
 				with open(fn, 'w') as f: json.dump(rules, f, indent=2, default=str)
 				t1 = tt1 + ' = file("'+fn+'")\n'
-				t1=t1+"\n lifecycle {\n   ignore_changes = [rule_json]\n}\n"
+				t1=t1+"\n lifecycle {\n   ignore_changes = [rule_json,rule]\n}\n"
 			else:
 				print("empty rule",globals.waf2nm,globals.waf2sc,globals.waf2id)
 		except Exception as e:
 			print("Error in get_web_acl",e)
 			os._exit(1)
+
 
 	return skip,t1,flag1,flag2
 

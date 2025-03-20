@@ -476,7 +476,7 @@ def main():
         elif type.startswith("aws_"):
             if type in aws_dict.aws_resources:
                 if type in globals.all_extypes:
-                    print("Excluding", type) 
+                    print("Excluding type", type) 
                 else:    
                     common.call_resource(type, id)
             else:

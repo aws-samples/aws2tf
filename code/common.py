@@ -117,7 +117,9 @@ from fixtf_aws_resources import aws_not_implemented
 def call_resource(type, id):
    #print("--1-- in call_resources >>>>> "+type+"   "+str(id))
    if type in globals.all_extypes:
-      print("Excluding:", type) 
+      if globals.debug: print("Common Excluding:", type,id) 
+      pkey=type+"."+id
+      globals.rproc[pkey] = True
       return
    
    if type in aws_no_import.noimport:

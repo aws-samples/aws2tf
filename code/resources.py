@@ -70,6 +70,7 @@ def resource_types(type):
     elif type == "sns": rets=["aws_sns_topic"]; return rets  # SNS topics
     elif type == "sqs": rets=["aws_sqs_queue"]; return rets   # SQS queues
     elif type == "spot": rets=["aws_spot_fleet_request"]; return rets # Spot fleet request
+    elif type == "ssmpatches": rets=["aws_ssm_patch_baseline","aws_ssm_default_patch_baseline"]; return rets # ssm patch baselines
     elif type == "sso": rets=["aws_ssoadmin_instances"]; return rets # Single sign on resources
     elif type == "tgw": rets=["aws_ec2_transit_gateway"]; return rets # Transit Gateway
     elif type == "transfer": rets=["aws_transfer_server"]; return rets # AWS Transfer family

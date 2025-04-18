@@ -78,6 +78,10 @@ def aws_glue_job(t1,tt1,tt2,flag1,flag2):
 	if "--output_s3_bucket_name" in tt1:
 		t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
 		common.add_dependancy("aws_s3_bucket",tt2)
+	if tt1=="script_location" and tt2.endswith(".py"):
+		com="aws s3 cp "+tt2+" ."
+		print("executing: "+com)
+		rout = common.rc(com) 
 	
 	return skip,t1,flag1,flag2
 

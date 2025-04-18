@@ -30,7 +30,7 @@ def build_lists():
                 response.extend(page['Buckets'])
             return [('s3', j['Name']) for j in response]
         except Exception as e:
-            print("Error fetching vpc data:", e)
+            print("Error fetching s3 data:", e)
             return []
 
     def fetch_sg_data():
@@ -124,7 +124,16 @@ def build_lists():
                         for _, vpc_id in result:
                             globals.vpclist[vpc_id] = True
                     elif resource_type == 's3':
+                        client = boto3.client('s3')
                         for _, bucket in result:
+                            #here ?    
+                            try:
+                                ####### problematic call
+                                objs = client.list_objects_v2(Bucket=bucket,MaxKeys=1)      
+                            except Exception as e:
+                                print(f"Error details: {e}")
+                                continue
+
                             globals.s3list[bucket] = True
                     elif resource_type == 'sg':
                         for _, sg_id in result:

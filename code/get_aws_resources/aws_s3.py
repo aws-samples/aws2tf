@@ -22,9 +22,9 @@ def get_aws_s3_bucket(type, id, clfn, descfn, topkey, key, filterid):
 def check_access(bucket_name,my_region):
    
    try:
-      session = boto3.Session(region_name=my_region,profile_name=globals.profile)
-      s3 = session.client('s3')
-
+      #session = boto3.Session(region_name=my_region,profile_name=globals.profile)
+      #s3 = session.client('s3')
+      s3 = boto3.client('s3')
       ####### problematic call
       objs = s3.list_objects_v2(Bucket=bucket_name,MaxKeys=1)
 
@@ -39,8 +39,11 @@ def check_access(bucket_name,my_region):
    except ClientError as e:
       error_code = e.response['Error']['Code']
       if error_code == 'AccessDenied':
-            print(f"NO ACCESS: to Bucket: {bucket_name} - continue")
+            print(f"NO ACCESS (1): to Bucket: {bucket_name} - continue")
             globals.bucketlist[bucket_name] = False
+            globals.s3list[bucket_name] = False
+            pkey="aws_s3_bucket."+bucket_name
+            globals.rproc[pkey]=True
             return False
         
       elif error_code == 'ExpiredToken':
@@ -62,7 +65,7 @@ def check_access(bucket_name,my_region):
          exn=str(exc_type.__name__)
          #print(f"{exn=}")
          if exn == "AccessDenied" or exn=="ClientError":
-            print("NO ACCESS: to Bucket: "+bucket_name + " - continue")
+            print("NO ACCESS (2): to Bucket: "+bucket_name + " - continue")
             globals.bucketlist[bucket_name]=False
             return
          
@@ -197,7 +200,7 @@ def get_all_s3_buckets(fb,my_region):
                exn=str(exc_type.__name__)
                #print(f"{exn=}")
                if exn == "AccessDenied" or exn=="ClientError":
-                  print("NO ACCESS: to Bucket: "+bucket_name + " - continue")
+                  print("NO ACCESS (3): to Bucket: "+bucket_name + " - continue")
                   continue
                
                print(f"{e=}")

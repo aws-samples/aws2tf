@@ -231,8 +231,7 @@ def main():
             print("exit 003")
             timed_interrupt.timed_int.stop()
             exit()
-        print("type is required eg:  -t aws_vpc")
-        print("setting to all")
+        print("type is recommended eg:  -t aws_vpc    \nsetting to all")
         args.type = "all"
     else:
         type = args.type
@@ -459,7 +458,7 @@ def main():
             lall=0
 
         if all_types is None: print("No resources found all_types=None")
-        print("all_types="+str(all_types))
+        #print("all_types="+str(all_types))
 
         if type == "stack":
             
@@ -487,7 +486,7 @@ def main():
         
         elif all_types is not None and lall > 1:
             #all_types=all_types[:10]
-            print("len all_types="+str(len(all_types))) # testing only
+            #print("len all_types="+str(len(all_types))) # testing only
             #print("all_types="+str(all_types))
             if "aws_iam" in str(all_types) and id is None:
                 print("INFO: Building secondary lists",id)

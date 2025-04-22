@@ -8,8 +8,8 @@ import globals
 import inspect
 
 def get_aws_secretsmanager_secret(type, id, clfn, descfn, topkey, key, filterid):
-    #if globals.debug:
-    print("--> In get_aws_secretsmanager_secret  doing " + type + ' with id ' + str(id) +
+    if globals.debug:
+        print("--> In get_aws_secretsmanager_secret  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:

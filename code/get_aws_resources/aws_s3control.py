@@ -16,16 +16,28 @@ def get_aws_s3_access_point(type, id, clfn, descfn, topkey, key, filterid):
 
 
         if id is None:
-            response = client.list_access_points(AccountId=globals.acc)
+            try:
+                response = client.list_access_points(AccountId=globals.acc)
+            except Exception as e:
+                print("Access Point 1 ClientError "+str(e))
+                return True
         
             for j in response[topkey]:
                 pkey=globals.acc+":"+j[key]
                 common.write_import(type,pkey,None) 
 
         else:      
-            response = client.list_access_points(AccountId=globals.acc,Bucket=id)
+            try:
+                response = client.list_access_points(AccountId=globals.acc,Bucket=id)
+            except Exception as e:    
+                print("Access Point 2 ClientError "+str(e))
+                pkey=type+"."+id
+                globals.rproc[pkey]=True
+                return True
             if response == []: 
                 print("Empty response for "+type+ " id="+str(id)+" returning")
+                pkey=type+"."+id
+                globals.rproc[pkey]=True
                 return True
             for j in response[topkey]:
                 pkey=globals.acc+":"+j[key]

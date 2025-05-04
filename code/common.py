@@ -440,15 +440,17 @@ def tfplan3():
    globals.esttime=len(x)/4
    awsf=len(x)
    y = glob.glob("import__*.tf")
+   #print("new import files="+str(y))
    impf=len(y)
 
    if awsf != impf:
       if globals.workaround=="":
-         print("ERROR: "+str(awsf)+ "x aws_*.tf and " + str(impf) +"x import__*.tf file counts do not match")
-         #print("\nLikely import error [1] - do the following and report errors in github issue:")
-         #print("cd "+globals.path1)
-         #print("terraform plan -generate-config-out=resources.out")
-         fix_imports()
+         if not globals.merge:
+            print("ERROR: "+str(awsf)+ "x aws_*.tf and " + str(impf) +"x import__*.tf file counts do not match")      
+            #print("\nLikely import error [1] - do the following and report errors in github issue:")
+            #print("cd "+globals.path1)
+            #print("terraform plan -generate-config-out=resources.out")
+            fix_imports()
          #exit()
       else:
          print("INFO: "+str(awsf)+ "x aws_*.tf and " + str(impf) +"x import__*.tf file counts do not match")
@@ -614,26 +616,29 @@ def tfplan3():
             exit()
          # get imported
          x = glob.glob("imported/import__*.tf")
+         #print("Imported files ="+str(x))
          preimpf=len(x)
-         toimp=impf-preimpf
+         # impf-preimpf  (num import* files - number import files in imported)
+         #toimp=impf-preimpf
+         toimp=awsf-preimpf
          com = "terraform state list | grep ^aws_ | wc -l"
          rout = rc(com)
          stc=int(rout.stdout.decode().rstrip())
-         print("Existing import file =",str(preimpf))
-         print("Existing state count =",str(stc))
-         print("Expected import =",str(toimp))
+
          if preimpf != stc:
             print("Miss-matched previous imports",str(preimpf),"and state file resources",str(stc) ,"exiting")
             print("exit 029")
             timed_int.stop()
             exit() 
+         else:
+            print("Existing import file = Existing state count =",str(stc))
          if toimp != zeroi:
             print("Unexpected import number exiting")
-            print("exit 030")
-            timed_int.stop()
-            exit() 
+            #print("exit 030")
+            #timed_int.stop()
+            #exit() 
          else:
-            print("PASSED: importing expected number of resources")    
+            print("PASSED: importing expected number of resources =",str(toimp))    
 
    if not os.path.isfile("tfplan"):
       print("Plan - could not find expected tfplan file - exiting")
@@ -741,26 +746,39 @@ def fix_imports():
    y = glob.glob("import__*.tf")
    impf=len(y)
    print("\nFix Import Intervention")
-   print("aws_*.tf files =", str(awsf))
-   print("import__*.tf files =", str(impf))
-   if impf > awsf:
-      for fil2 in y:  # all import files  
+   #print("aws_*.tf files =", str(awsf))
+   #print("import__*.tf files =", str(impf))
+   #print("Fix aws files",str(x))
+   #print("Fix import files",str(y))
+
+
+
+   #more import files than aws files - picked up via dependancies
+   #if impf > awsf:
+   for fil2 in y:  # all import files  
          impok=False
          for fil in x: # all aws_ files
             
             tf=fil.split('.tf',1)[0]
             iseg=fil2.replace("import__","").replace(".tf", "")
             if tf == iseg:
-                  #print("Match:",iseg,tf)
+                  #print("Found a Match imp and aws:",iseg,tf)
+                  #com = "mv "+fil2+" imported/"+fil2
+                  #rc(com)
                   impok=True
                   break
          
          ## out of for loop
          #print("impok =", str(impok))
+         # got an import file we 
          if impok is False:
             com = "mv "+fil2+" "+fil2.replace(".tf",".err")
             print(fil2.replace(".tf",".err"))
             rc(com)
+
+   y = glob.glob("import__*.tf")
+   impf=len(y)  
+
            
 
 def ctrl_c_handler(signum, frame):
@@ -965,8 +983,16 @@ def write_import(type,theid,tfid):
          
          # check if file exists:
          #
+      if globals.merge:   
+         #y = glob.glob("imported/import__*.tf")
+         #print("Pre imp check:", str(y))
+         if os.path.isfile("imported/"+fn):
+            #print("File exists: imorted/" + fn)
+            return
+         
       if os.path.isfile(fn):
             if globals.debug: print("File exists: " + fn)
+            #print("File exists: " + fn)
             pkey=type+"."+tfid
             globals.rproc[pkey]=True
             return
@@ -985,6 +1011,7 @@ def write_import(type,theid,tfid):
                   # Write the filtered resource block to a new file
          
          if len(fn) > 255: fn=fn[:250]+".tf"
+         #if globals.merge:   print("Merge import",fn)
          try:
             with open(fn, 'w') as f:
                f.write(output.getvalue().strip() + '\n')

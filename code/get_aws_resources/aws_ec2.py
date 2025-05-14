@@ -494,19 +494,20 @@ def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key,
         print("--> In get_aws_vpc_ipv4_cidr_block_association doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
-        session = boto3.Session(region_name=globals.region,profile_name=globals.profile)
-        client = session.client(clfn)
+        #session = boto3.Session(region_name=globals.region,profile_name=globals.profile)
+        #client = session.client(clfn)
         
-        #client = boto3.client(clfn)
+        client = boto3.client(clfn)
         response=[]
 
         if id is None:
             response = client.describe_vpcs()
             
         else:
+            #print("id="+str(id))
             response = client.describe_vpcs(VpcIds=[id])
         #response = common.call_boto3(type,clfn, descfn, topkey, key, id)    
-  
+        #print("-ip4->"+str(response))
         if response[topkey] == []: 
             print("Empty response for "+type+ " id="+str(id)+" returning")
             if id is None:
@@ -517,6 +518,7 @@ def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key,
                 return True
         for j in response[topkey]:
             cidrb = j['CidrBlockAssociationSet']
+            #print("cidrb="+str(cidrb))
             vpcid = j['VpcId']
             vpc_cidr = j['CidrBlock']
             if id==vpcid:

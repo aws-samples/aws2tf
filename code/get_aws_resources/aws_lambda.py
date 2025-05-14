@@ -118,6 +118,7 @@ def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
                 return True
             for j in response:
                 fn=j[key]
+                ## try access here first 
                 common.write_import(type, fn, None)
                 get_lambda_code(fn)
                 common.add_known_dependancy("aws_lambda_alias",fn)
@@ -212,7 +213,10 @@ def get_lambda_code(fn):
                 f.write(r.content)
 
     except Exception as e:
+        descfn="get_lambda_code"
+        topkey=fn
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+        #print(str(e))
 
     return True
 
@@ -234,6 +238,8 @@ def get_lambdalayer_code(fn):
                 f.write(r.content)
 
     except Exception as e:
+        descfn="get_lambdalayer_code"
+        topkey=fn
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True

@@ -1496,7 +1496,7 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    elif exn=="ClientError":
       #print("ClientError exception for "+fname+" - returning")
       if "does not exist" in str(e):
-         print(id+" does not exist" )
+         print(id+" does not exist " + fname + " " + str(exc_tb.tb_lineno) )
          return
       print("Exception message :"+str(e))
       return

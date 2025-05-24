@@ -24,7 +24,7 @@ Finally aws2tf runs a `terraform plan` command and there should hopefully be no 
 + Python3 (v3.8+)
 + boto3 1.36.13 or later (pip3 install -r requirements.txt).
 + AWS cli (v2) **version 2.22.33 or higher** needs to be installed and you need a login with at least "Read" privileges.
-+ Terraform **version v1.8.5** or higher needs to be installed. (recommend you avoid early point releases eg. 1.9.0/1.9.1)
++ Terraform **version v1.10.4** or higher needs to be installed. (recommend you avoid early point releases eg. 1.9.0/1.9.1)
 + jq **version 1.6 or higher**
 
 ## Optional but recommended

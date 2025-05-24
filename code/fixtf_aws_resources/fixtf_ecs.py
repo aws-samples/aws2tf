@@ -8,8 +8,6 @@ def aws_ecs_cluster(t1,tt1,tt2,flag1,flag2):
 	if tt1 == "namespace":
 		if "arn:" in tt2: t1=fixtf.globals_replace(t1,tt1,tt2)
 			
-
-
 	return skip,t1,flag1,flag2
 
 def aws_ecs_account_setting_default(t1,tt1,tt2,flag1,flag2):

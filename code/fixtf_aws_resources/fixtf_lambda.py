@@ -35,7 +35,7 @@ def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
         
         if tt2 == "null": skip=1
 
-
+    ###### layers code
     elif tt1 == "layers" and tt2!="[]":
         if tt2 != "null" and "arn:" in tt2:
             cc=tt2.count(',')
@@ -49,28 +49,31 @@ def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
             for i in range(cc+1):
                 subn=tt2.split(',')[i]
                 subn=subn.strip(" ").lstrip('"').rstrip('"').strip(" ")
-
-                tarn=subn.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
-                common.add_dependancy("aws_lambda_layer_version",subn)
-                builds=builds+"aws_lambda_layer_version."+tarn+".arn,"
+                if globals.acc in subn:
+                    tarn=subn.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
+                    common.add_dependancy("aws_lambda_layer_version",subn)
+                    builds=builds+"aws_lambda_layer_version."+tarn+".arn,"
+                else:
+                    builds=builds+"\""+subn+"\", "
             
             if builds.endswith(','):
                 builds=builds.rstrip(',')
             t1 = tt1+" = ["+builds+"]\n"
                 
         elif cc == 0:
-            tt2=tt2.lstrip('"').rstrip('"')
-            larn=tt2.split(":")[:-1]
-            myarn=""
-            for ta in larn:
-                myarn=myarn+ta+":"
-              
-            myarn=myarn.rstrip(":")
-            tarn=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
-            # test we can get at it before sub
-            
-            t1 = tt1+" = [aws_lambda_layer_version."+tarn+ ".arn]\n"
-            common.add_dependancy("aws_lambda_layer_version",tt2)
+            if globals.acc in tt2:  
+                tt2=tt2.lstrip('"').rstrip('"')
+                larn=tt2.split(":")[:-1]
+                myarn=""
+                for ta in larn:
+                    myarn=myarn+ta+":"
+                
+                myarn=myarn.rstrip(":")
+                tarn=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
+                # test we can get at it before sub
+                
+                t1 = tt1+" = [aws_lambda_layer_version."+tarn+ ".arn]\n"
+                common.add_dependancy("aws_lambda_layer_version",tt2)
 
     return skip,t1,flag1,flag2
 

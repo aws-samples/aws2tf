@@ -126,7 +126,8 @@ def build_lists():
                     elif resource_type == 's3':
                         client = boto3.client('s3')
                         for _, bucket in result:
-                            #here ?    
+                            #here ? 
+                            #print("Buck from result=",bucket)   
                             try:
                                 ####### problematic call
                                 objs = client.list_objects_v2(Bucket=bucket,MaxKeys=1)      
@@ -154,7 +155,6 @@ def build_lists():
                     # Handle roles data
                     with open('imported/roles.json', 'w') as f:
                         json.dump(result, f, indent=2, default=str)
-
     # slower - 3m 29s
     ####    role attachments stuff
 

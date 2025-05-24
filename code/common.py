@@ -180,16 +180,19 @@ def call_resource(type, id):
 
             if clfn == "vpc-lattice":  getfn = getattr(eval("aws_vpc_lattice"), "get_"+type)
             elif clfn == "redshift-serverless":  getfn = getattr(eval("aws_redshift_serverless"), "get_"+type)
-            elif clfn == "s3":  getfn = getattr(eval("aws_s3"), "get_"+type)
+            elif clfn == "s3":  
+               #print("-1aa- clfn:"+clfn+" type:"+type)
+               getfn = getattr(eval("aws_s3"), "get_"+type)
             #elif clfn == "s3":  getfn = getattr(ast.literal_eval("aws_s3"), "get_"+type)
 
             else:
-               # print("-1aa- clfn:"+clfn+" type:"+type)
+               #print("-1aa- clfn:"+clfn+" type:"+type)
                mclfn = clfn.replace("-", "_")
-               # print("-1ab- mclfn:"+mclfn+" type:"+type)
+               #print("-1ab- mclfn:"+mclfn+" type:"+type)
                getfn = getattr(eval("aws_"+mclfn), "get_"+type)
                #print("-1ac- clfn:"+clfn+" type:"+type)
 
+            #print("type",type, "id",id, "clfn",clfn, "descfn",descfn, "topkey", topkey,"key",key, "filterid",filterid)   
             sr = getfn(type, id, clfn, descfn, topkey, key, filterid)
 
    except AttributeError as e:

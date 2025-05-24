@@ -705,6 +705,8 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
 
 
 def deref_role_arn(t1,tt1,tt2):
+    if tt2 == "null" or tt2 == "[]": return t1
+
     if tt2.startswith("arn:aws:events:"): print(tt2)
 
     if tt2.startswith("arn:aws:s3:::"):
@@ -761,6 +763,7 @@ def deref_s3(t1, tt1, tt2):
 
  #if tt1 == "security_groups": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
 def deref_role_arn_array(t1,tt1,tt2):
+
     if tt2 == "null" or tt2 == "[]": return t1
     tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
     cc=tt2.count(',')
@@ -844,7 +847,7 @@ def deref_elb_arn_array(t1,tt1,tt2):
 
 #### other arn derefs here
 def generic_deref_arn(t1, tt1, tt2):
-
+    print("Here",t1)
     try:
         if tt2.endswith("*"): return t1
         print("*** generic "+t1)

@@ -75,7 +75,7 @@ def build_lists():
 
     def fetch_roles_data():
         try:
-            client = boto3.client('iam')
+            client = boto3.client('iam',region_name='us-east-1')
             response = []
             paginator = client.get_paginator('list_roles')
             for page in paginator.paginate():
@@ -90,7 +90,7 @@ def build_lists():
     
     def fetch_policies_data():
         try:
-            client = boto3.client('iam')
+            client = boto3.client('iam',region_name='us-east-1')
             response = []
             paginator = client.get_paginator('list_policies')
             for page in paginator.paginate(Scope='Local'):
@@ -126,7 +126,8 @@ def build_lists():
                     elif resource_type == 's3':
                         client = boto3.client('s3')
                         for _, bucket in result:
-                            #here ?    
+                            #here ? 
+                            #print("Buck from result=",bucket)   
                             try:
                                 ####### problematic call
                                 objs = client.list_objects_v2(Bucket=bucket,MaxKeys=1)      
@@ -154,7 +155,6 @@ def build_lists():
                     # Handle roles data
                     with open('imported/roles.json', 'w') as f:
                         json.dump(result, f, indent=2, default=str)
-
     # slower - 3m 29s
     ####    role attachments stuff
 
@@ -177,7 +177,7 @@ def build_secondary_lists(id=None):
         globals.tracking_message = "Stage 2 of 10, Building secondary IAM resource lists ..."
         
         def fetch_role_policies(role_name):
-            client = boto3.client('iam')
+            client = boto3.client('iam',region_name='us-east-1')
             try:
                 # Get attached policies
                 attached_policies = client.list_attached_role_policies(RoleName=role_name)

@@ -82,11 +82,18 @@ def check_access(bucket_name,my_region):
 def get_all_s3_buckets(fb,my_region):
    #print("bucket name="+str(fb))
    type="aws_s3_bucket"
-   if fb =="" or fb =="null":
-      print("bucket name is empty or null")
-      pkey=type+"."+fb
-      globals.rproc[pkey]=True
-      return True
+   if fb is not None:
+      if fb =="" or fb =="null":
+         print("bucket name is empty or null")
+         pkey=type+"."+fb
+         globals.rproc[pkey]=True
+         return True
+      
+      if fb not in str(globals.s3list.keys()):
+            print("Bucket ",fb, "not in s3list")
+            pkey=type+"."+fb
+            globals.rproc[pkey]=True
+            return True
    
    if globals.debug: print("my_region="+my_region)
    #print("processed=" + str(globals.rproc))

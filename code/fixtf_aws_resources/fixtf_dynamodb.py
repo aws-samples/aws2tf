@@ -14,6 +14,8 @@ def aws_dynamodb_kinesis_streaming_destination(t1,tt1,tt2,flag1,flag2):
 
 def aws_dynamodb_table(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="recovery_period_in_days" and tt2=="0":
+		skip=1
 	return skip,t1,flag1,flag2
 
 def aws_dynamodb_table_item(t1,tt1,tt2,flag1,flag2):

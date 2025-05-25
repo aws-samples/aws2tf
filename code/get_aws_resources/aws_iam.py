@@ -287,7 +287,8 @@ def get_aws_iam_role(type,id,clfn,descfn,topkey,key,filterid):
 
         
     try:
-        client = boto3.client(clfn)
+        # hardcode to us-east-1 for iam
+        client = boto3.client(clfn,region_name='us-east-1')
         response = []
         if id is None:
 

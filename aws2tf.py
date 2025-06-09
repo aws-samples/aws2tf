@@ -368,7 +368,8 @@ def main():
             break
 
     if not foundtf:
-        print("Terraform Initialise may have failed...")
+        print("failed to find .terraform in "+globals.cwd+"/"+globals.path1)
+        print("Terraform Initialise may have failed exiting ...")
         timed_interrupt.timed_int.stop()
         exit()
 

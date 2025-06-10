@@ -850,7 +850,11 @@ def aws_tf(region,args):
       print("terraform init")
       com = "terraform init -no-color -upgrade"
       rout = rc(com)
-      if globals.debug: print(rout.stdout.decode().rstrip())
+      if globals.debug: 
+         print(rout.stdout.decode().rstrip())
+         el = len(rout.stderr.decode().rstrip())
+         if el != 0:
+            print(str(rout.stderr.decode().rstrip()))
    else:
       print("skipping terraform init")
 

@@ -20,6 +20,7 @@ def aws_msk_cluster(t1,tt1,tt2,flag1,flag2):
 		t1=tt1+" = aws_msk_configuration."+tarn+".arn\n"
 		# pass the arn
 		common.add_dependancy("aws_msk_configuration", tt2)
+	elif tt1=="volume_throughput" and tt2=="0": skip=1
 	#elif tt1=="arn" and tt2!="null":
 	#	t1=tt1+" = aws_msk_configuration."+tarn+".arn\n"
 

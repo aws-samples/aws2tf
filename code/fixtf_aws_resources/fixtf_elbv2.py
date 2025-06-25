@@ -42,10 +42,10 @@ def aws_lb_listener_rule(t1,tt1,tt2,flag1,flag2):
 		tt2=tt2.replace("/","_").replace(".","_").replace(":","_")
 		t1 = tt1 + " = aws_lb_listener."+tt2+".arn\n"
 		#t1=t1+ "\nlifecycle {\n" + "   ignore_changes = [action[0].target_group_arn,action[0].forward[0].stickiness[0].duration]\n" +  "}\n"
-	if "order" == tt1:
+	elif "order" == tt1:
 		if tt2 == "0": skip=1
-	#elif "duration" == tt1:
-#		if tt2 == "0": 
+	elif "duration" == tt1:
+		if tt2 == "0": skip=1
 #			t1=tt1+" = 1\n"
 
 

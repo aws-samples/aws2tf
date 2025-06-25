@@ -376,8 +376,7 @@ def main():
 
     if args.merge:
         print("Merging "+str(globals.merge))
-        #print("Merging capability disabled for now - exiting")
-        #exit()
+                    
         try:
             with open('pyprocessed.txt', 'r') as file:
                 # Your file operations here
@@ -386,16 +385,18 @@ def main():
 
 
             for line in content:
+                line=line.strip()
                 globals.rproc[line] = True
+                
                 
             if globals.debug:
                 print("Pre Processed:")
-                for i in globals.rproc.keys():   print(i)
+                print(str(globals.rproc))
 
-                com = "rm -f main.tf"
-                rout = common.rc(com) 
-                com = "cp imported/*.tf ."
-                rout = common.rc(com) 
+            com = "rm -f main.tf"
+            rout = common.rc(com) 
+            com = "cp imported/*.tf ."
+            rout = common.rc(com) 
 
         except FileNotFoundError:
             print("Could not find pyprocessed.txt")
@@ -425,6 +426,7 @@ def main():
 
 
     if "," in type:
+        #print("type=",type)
         if "stack" in type:
             print("Cannot mix stack with other types")
             print("exit 006")
@@ -442,11 +444,17 @@ def main():
         #    exit()
 
         types = type.split(",")
+        #print("types=",str(types))
         all_types = []
-        for type1 in types: 
-            if type1.startswith("aws_"): all_types = all_types + resources.resource_types(type1)
+        for type1 in types:
+            #print("type1=",type1)
+            if type1.startswith("aws_"): 
+                all_types = all_types + resources.resource_types(type1)
+            else:
+                all_types = all_types + resources.resource_types(type1)
 
         for type2 in all_types:
+            #print("type2=",type2)
             if type2 in aws_dict.aws_resources:   
                 if type2 in globals.all_extypes:
                     print("Excluding", type2) 

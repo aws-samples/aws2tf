@@ -26,6 +26,10 @@ def aws_db_instance(t1,tt1,tt2,flag1,flag2):
 		if "default" not in tt2:
 			t1=tt1 + " = aws_db_subnet_group." + tt2 + ".id\n"
 			common.add_dependancy("aws_db_subnet_group",tt2)
+	elif tt1 == "replicate_source_db" and tt2 != "null":
+		t1=tt1 + " = aws_db_instance." + tt2 + ".arn\n"
+		common.add_dependancy("aws_db_instance", tt2)
+
 
 	return skip,t1,flag1,flag2
 

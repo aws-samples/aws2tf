@@ -37,6 +37,7 @@ def resource_types(type):
     elif type == "efs": rets=["aws_efs_file_system"]; return rets # EFS filesystems
     elif type == "eks": rets=["aws_eks_cluster"]; return rets # EKS clusters
     elif type == "emr": rets=["aws_emr_cluster","aws_emr_security_configuration"]; return rets # EMR clusters
+    elif type == "elasticache": rets=["aws_elasticache_cluster","aws_elasticache_serverless_cache"]; return rets # elasticache clusters
     elif type == "glue": rets=["aws_glue_crawler","aws_glue_job","aws_glue_connection"]; return rets # Glue crawlers, jobs and connections
     elif type == "glue2": rets=["aws_glue_catalog_table","aws_glue_partition"]; return rets # Glue tables and partitions
     elif type == "groups" or type=="group": rets=["aws_iam_group"]; return rets # IAM Groups - aws_iam_group 

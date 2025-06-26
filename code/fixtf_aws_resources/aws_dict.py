@@ -3136,7 +3136,8 @@ aws_datazone_asset_type = {
 	"key":		"name",
 	"filterid":	"id"
 }
-# aws_datazone_user_profile
+
+
 aws_datazone_user_profile = {
 	"clfn":		"datazone",
 	"descfn":	"search_user_profiles",
@@ -3144,9 +3145,6 @@ aws_datazone_user_profile = {
 	"key":		"id",
 	"filterid":	"id"
 }
-
-################
-
 
 aws_dax_cluster = {
 	"clfn":		"dax",
@@ -3180,13 +3178,6 @@ aws_db_cluster_snapshot = {
 	"filterid":	"DBClusterSnapshotIdentifier"
 }
 
-aws_db_instance = {
-	"clfn":		"rds",
-	"descfn":	"describe_db_instances",
-	"topkey":	"DBInstances",
-	"key":		"DBInstanceIdentifier",
-	"filterid":	"DBInstanceIdentifier"
-}
 
 aws_db_instance_automated_backups_replication = {
 	"clfn":		"rds",
@@ -4372,6 +4363,13 @@ aws_elasticache_cluster = {
 	"key":		"CacheClusterId",
 	"filterid":	"CacheClusterId"
 }
+aws_elasticache_serverless_cache = {
+	"clfn":		"elasticache",
+	"descfn":	"describe_serverless_caches",
+	"topkey":	"ServerlessCaches",
+	"key":		"ServerlessCacheName",
+	"filterid":	"ServerlessCacheName"
+}
 
 aws_elasticache_global_replication_group = {
 	"clfn":		"elasticache",
@@ -5212,15 +5210,6 @@ aws_iam_openid_connect_provider = {
 	"key":		"Arn",
 	"filterid":	"Arn"
 }
-
-aws_iam_policy = {
-	"clfn":		"iam",
-	"descfn":	"list_policies",
-	"topkey":	"Policies",
-	"key":		"PolicyName",
-	"filterid":	"PolicyName"
-}
-
 
 aws_iam_policy_attachment = {
 	"clfn":		"iam",
@@ -10994,7 +10983,6 @@ aws_resources = {
 	"aws_dax_parameter_group": aws_dax_parameter_group,
 	"aws_dax_subnet_group": aws_dax_subnet_group,
 	"aws_db_cluster_snapshot": aws_db_cluster_snapshot,
-	"aws_db_instance": aws_db_instance,
 	"aws_db_instance_automated_backups_replication": aws_db_instance_automated_backups_replication,
 	"aws_db_instance_role_association": aws_db_instance_role_association,
 	"aws_db_option_group": aws_db_option_group,
@@ -11146,6 +11134,7 @@ aws_resources = {
 	"aws_elasticache_parameter_group": aws_elasticache_parameter_group,
 	"aws_elasticache_replication_group": aws_elasticache_replication_group,
 	"aws_elasticache_subnet_group": aws_elasticache_subnet_group,
+    "aws_elasticache_serverless_cache": aws_elasticache_serverless_cache,
 	"aws_elasticache_user": aws_elasticache_user,
 	"aws_elasticache_user_group": aws_elasticache_user_group,
 	"aws_elasticache_user_group_association": aws_elasticache_user_group_association,
@@ -11247,7 +11236,6 @@ aws_resources = {
 	"aws_iam_group_policy": aws_iam_group_policy,
 	"aws_iam_group_policy_attachment": aws_iam_group_policy_attachment,
 	"aws_iam_openid_connect_provider": aws_iam_openid_connect_provider,
-	"aws_iam_policy": aws_iam_policy,
 	"aws_iam_policy_attachment": aws_iam_policy_attachment,
 	"aws_iam_saml_provider": aws_iam_saml_provider,
 	"aws_iam_security_token_service_preferences": aws_iam_security_token_service_preferences,

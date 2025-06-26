@@ -2,6 +2,10 @@ def aws_elasticache_cluster(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
 
+def aws_elasticache_serverless_cache(t1,tt1,tt2,flag1,flag2):
+	skip=0
+	return skip,t1,flag1,flag2
+
 def aws_elasticache_global_replication_group(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2

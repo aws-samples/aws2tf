@@ -31,12 +31,25 @@ def get_aws_sqs_queue(type, id, clfn, descfn, topkey, key, filterid):
             if response == []: 
                 print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
-            for j in response[topkey]:
-                if j==id:
-                    common.write_import(type,j,None)
-                    common.add_dependancy("aws_sqs_queue_policy",j)
-                    common.add_dependancy("aws_sqs_queue_redrive_allow_policy", j)
-                    common.add_dependancy("aws_sqs_queue_redrive_policy", j)
+            if "://" not in id:
+                # assume it s a queue name and get url:
+                try:
+                    if globals.debug: print("Getting URL for queue",id)
+                    response2 = client.get_queue_url(QueueName=id)
+                    id=response2['QueueUrl']
+                except Exception as e:
+                    if "NonExistentQueue" in str(e):
+                        print("Unable to find queue:",id)
+                    return True
+
+
+            if "://" in id:
+                for j in response[topkey]:
+                    if j==id:
+                        common.write_import(type,j,None)
+                        common.add_dependancy("aws_sqs_queue_policy",j)
+                        common.add_dependancy("aws_sqs_queue_redrive_allow_policy", j)
+                        common.add_dependancy("aws_sqs_queue_redrive_policy", j)
 
 
     except Exception as e:

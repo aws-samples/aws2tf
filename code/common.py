@@ -62,6 +62,7 @@ from get_aws_resources import aws_efs
 from get_aws_resources import aws_ecr_public
 from get_aws_resources import aws_ecr
 from get_aws_resources import aws_eks
+from get_aws_resources import aws_elasticache
 from get_aws_resources import aws_elbv2
 from get_aws_resources import aws_emr
 from get_aws_resources import aws_events

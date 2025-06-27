@@ -118,9 +118,6 @@ def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
    return True
 
 
-
-
-
 def get_aws_iam_instance_profile(type,id,clfn,descfn,topkey,key,filterid):
    if globals.debug:
        print("--> In get_aws_iam_instance_profile  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
@@ -336,9 +333,11 @@ def get_aws_iam_role_policy_attachment(type,id,clfn,descfn,topkey,key,filterid):
 
    #print(len(globals.attached_role_policies_list))
    if len(globals.attached_role_policies_list) == 0:
-      session = boto3.Session(region_name=globals.region,profile_name=globals.profile)
-      client = session.client(clfn)
-      #client = boto3.client(clfn) 
+      if globals.sso:
+         session = boto3.Session(region_name=globals.region,profile_name=globals.profile)
+         client = session.client(clfn)
+      else:
+         client = boto3.client(clfn) 
       response=[]
       paginator = client.get_paginator(descfn)
       try:

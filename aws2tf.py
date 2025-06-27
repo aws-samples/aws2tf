@@ -112,7 +112,7 @@ def main():
     now = datetime.datetime.now()
     print("aws2tf started at %s" % now)
     starttime=now
-   
+
 
     #print("cwd="+str(sys.argv),str(len(sys.argv)))
     if len(sys.argv) > 1:
@@ -154,6 +154,23 @@ def main():
         timed_interrupt.timed_int.stop()
         exit()
 
+    if args.profile: 
+        globals.profile = args.profile
+        
+
+        
+    info = common.detect_aws_credentials(globals.profile)
+    
+    globals.credtype=info['credential_type']
+    globals.sso=info['is_sso']
+    print("Credentials Type =",globals.credtype)
+    print("Is SSO login =",info['is_sso'])
+    if globals.credtype=="unknown":
+        print("count not find valid login creds")
+        common.print_credentials_info(globals.profile)
+        timed_interrupt.timed_int.stop()
+        exit()
+
     # check terraform version
     
     com = "terraform version"
@@ -192,8 +209,7 @@ def main():
         globals.debug = True
         globals.fast = False
 
-    if args.profile: 
-        globals.profile = args.profile
+
 
     if args.tv:
         globals.tfver=args.tv

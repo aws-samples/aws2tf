@@ -3,6 +3,7 @@ import sys,os
 tfver="5.98.0"
 esttime=120.0
 profile="default"
+sso=False
 merge=False
 fast=False
 apionly=False
@@ -71,6 +72,7 @@ ec2tag=None
 ec2tagv=None
 ec2tagk=None
 subnetid=""
+credtype="invalid"
 
 badlist=[]
 

@@ -55,6 +55,7 @@ emrsubnetid=False
 # secretsmanager secret version
 secid=""
 secvid=""
+pathadd=""
 
 meshname=""
 workaround=""

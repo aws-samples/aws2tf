@@ -124,6 +124,7 @@ def main():
     argParser.add_argument("-i", "--id", help="resource id")
     argParser.add_argument("-r", "--region", help="region")
     argParser.add_argument("-p", "--profile", help="profile")
+    argParser.add_argument("-o", "--output", help="add custom string to output folder")
     argParser.add_argument("-m", "--merge", help="merge", action='store_true')
     argParser.add_argument("-d", "--debug", help="debug", action='store_true')
     argParser.add_argument("-s", "--singlefile", help="only a single file main.tf is produced", action='store_true')
@@ -329,16 +330,22 @@ def main():
 
 ####    
 
+    if args.output:
+        if isinstance(args.output, str):
+            globals.pathadd=args.output+"-"
+        else:
+            print("output path modifier may not be a valid string",(str(args.output))," ignoring ")
+
     globals.region = region
     globals.regionl = len(region)
     if args.serverless:     
         globals.serverless=True
-        globals.path1="/tmp/aws2tf/generated/tf-"+globals.acc+"-"+region
+        globals.path1="/tmp/aws2tf/generated/tf-"+globals.pathadd+globals.acc+"-"+region
         globals.path2=globals.path1+"/imported"
         globals.path3=globals.path1+"/notimported"
     else:
         globals.serverless=False
-        globals.path1="generated/tf-"+globals.acc+"-"+region
+        globals.path1="generated/tf-"+globals.pathadd+globals.acc+"-"+region
         globals.path2=globals.path1+"/imported"
         globals.path3=globals.path1+"/notimported"
 

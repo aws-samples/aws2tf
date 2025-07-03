@@ -309,7 +309,6 @@ def main():
     if globals.debug: print("getting account")
     try:
         globals.acc = boto3.client('sts').get_caller_identity().get('Account')
-        print("account="+globals.acc)
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         exn=str(exc_type.__name__)

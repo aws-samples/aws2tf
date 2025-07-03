@@ -1661,7 +1661,7 @@ def create_bucket_if_not_exists(bucket_name):
 def upload_directory_to_s3():
    print("Uploading to S3...")
    s3_client = boto3.client('s3')
-   local_directory="/tmp/aws2tf/generated/tf-"+globals.acc+"-"+globals.region
+   local_directory="/tmp/aws2tf/generated/tf-"+globals.pathadd+globals.acc+"-"+globals.region
    bucket_name="aws2tf-"+globals.acc+"-"+globals.region
    s3_prefix=''
    print("Calling create_bucket_if_not_exists for",bucket_name)
@@ -1730,7 +1730,7 @@ def empty_and_delete_bucket():
 def download_from_s3():
     print("Restore S3")
     s3_client = boto3.client('s3')
-    local_directory="/tmp/aws2tf/generated/tf-"+globals.acc+"-"+globals.region
+    local_directory="/tmp/aws2tf/generated/tf-"+globals.pathadd+globals.acc+"-"+globals.region
     bucket_name="aws2tf-"+globals.acc+"-"+globals.region
     s3_prefix=''
     # Check if the bucket exists

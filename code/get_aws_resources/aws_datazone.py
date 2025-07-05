@@ -127,7 +127,6 @@ def get_aws_datazone_user_profile(type, id, clfn, descfn, topkey, key, filterid)
 
 #####
 
-
 def get_aws_datazone_domain(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +

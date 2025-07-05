@@ -168,7 +168,7 @@ def get_aws_datazone_domain(type, id, clfn, descfn, topkey, key, filterid):
 def dz_common(resp2,dzid,type,client):
     sso=resp2['singleSignOn']['type']
     dst=resp2['status']
-    print("DataZone sso="+str(sso)+" dst="+str(dst)," dzid="+dzid)
+    if globals.debug: print("DataZone sso="+str(sso)+" dst="+str(dst)," dzid="+dzid)
     common.write_import(type,dzid,None)
     common.add_dependancy("aws_datazone_project", dzid)
     common.add_dependancy("aws_datazone_glossary", dzid)

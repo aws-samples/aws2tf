@@ -694,6 +694,11 @@ def main():
         olddetdepstr=detdepstr
 
     common.tfplan3()
+    ### restore data files
+    com="cp imported/data-dz*.tf ."
+    rout = common.rc(com)
+
+
     if globals.validate is False: 
         now = datetime.datetime.now()
         print("aws2tf wrap up started at %s" % now)

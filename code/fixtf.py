@@ -713,6 +713,18 @@ def deref_role_arn(t1,tt1,tt2):
         bn=tt2.split(":::")[-1]
         t1=tt1 + " = aws_s3_bucket.b-" + bn + ".arn\n"
         common.add_dependancy("aws_s3_bucket",bn)
+    elif tt2.startswith("arn:aws:elasticloadbalancing"):
+        tarn=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_").replace(" ","_").replace("*","star").replace("\\052","star").replace("@","_").replace("\\64","_")
+        t1=tt1 + " = aws_lb." + tarn + ".arn\n"
+        common.add_dependancy("aws_lb",tt2)
+    elif tt2.startswith("arn:aws:wafv2") and ":regional/webacl" in tt2:
+        tarn=tt2.split("/webacl/")[-1]
+        wn=tarn.split("/")[0]
+        wi=tarn.split("/")[-1]
+        tarn2="w-"+wi+"_"+wn+"_REGIONAL"
+        t1=tt1 + " = aws_wafv2_web_acl." + tarn2 + ".arn\n"
+
+
     elif tt2.startswith("arn:aws:events:") and ":rule/" in tt2 and ":rule/aws.partner" not in tt2:
         rn=tt2.split("/")[-1]
         t1=tt1 + " = aws_cloudwatch_event_rule.default_" + rn + ".arn\n"

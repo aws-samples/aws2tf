@@ -111,6 +111,7 @@ def get_aws_wafv2_web_acl(type, id, clfn, descfn, topkey, key, filterid):
                 common.write_import(type, pkey, "w-"+pkey.replace("/", "_"))
                 if type not in globals.all_extypes:
                     common.add_dependancy("aws_wafv2_web_acl_logging_configuration",arn)
+                    common.add_dependancy("aws_wafv2_web_acl_association",arn)
 
         else: 
             if "|" in id:
@@ -132,6 +133,7 @@ def get_aws_wafv2_web_acl(type, id, clfn, descfn, topkey, key, filterid):
             common.write_import(type,pkey,"w-"+pkey.replace("/","_"))
             if type not in globals.all_extypes:
                 common.add_dependancy("aws_wafv2_web_acl_logging_configuration",arn)
+                common.add_dependancy("aws_wafv2_web_acl_association",arn)
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -228,6 +230,45 @@ def get_aws_wafv2_web_acl_logging_configuration(type, id, clfn, descfn, topkey, 
                     return True
             j=response['LoggingConfiguration']
             common.write_import(type,j[key],None)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+#aws_wafv2_web_acl_association
+
+# needs scope
+
+def get_aws_wafv2_web_acl_association(type, id, clfn, descfn, topkey, key, filterid):
+    if globals.debug:
+        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn,config=config)
+        if id is None:
+            print("Must pass webacl arn as parameter")
+            return True
+
+        else: 
+            if id.startswith("arn:"):
+                #rtypes=['APPLICATION_LOAD_BALANCER','API_GATEWAY','APPSYNC','COGNITO_USER_POOL','APP_RUNNER_SERVICE','VERIFIED_ACCESS_INSTANCE','AMPLIFY']
+                rtypes=['APPLICATION_LOAD_BALANCER','API_GATEWAY','COGNITO_USER_POOL','APP_RUNNER_SERVICE']
+
+                for rtype in rtypes:
+                    response = client.list_resources_for_web_acl(WebACLArn=id,ResourceType=rtype)
+                    if response['ResourceArns'] == []: 
+                        if globals.debug: print("Empty response for "+type+ " id="+str(id)+" continue") 
+                        continue
+                    for j in response['ResourceArns']:
+                        pkey=id+","+j
+                        common.write_import(type,pkey,None)
+                        if j.startswith("arn:aws:elasticloadbalancing"):
+                            common.add_dependancy("aws_lb",j)
+                pkey=type+"."+id
+                globals.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

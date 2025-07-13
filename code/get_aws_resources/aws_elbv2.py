@@ -7,7 +7,7 @@ import inspect
 def get_aws_lb(type,id,clfn,descfn,topkey,key,filterid):
 
     if globals.debug:
-        print("--> get_describe_rules  doing " + type + ' with id ' + str(id) +
+        print("--> get_aws_lb  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:

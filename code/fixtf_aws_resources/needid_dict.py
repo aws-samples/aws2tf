@@ -2231,7 +2231,7 @@ aws_needid = {
   "aws_prometheus_alert_manager_definition": aws_prometheus_alert_manager_definition,
   #"aws_wafv2_ip_set": aws_wafv2_ip_set,
   "aws_wafv2_regex_pattern_set": aws_wafv2_regex_pattern_set,
-  "aws_wafv2_web_acl_association": aws_wafv2_web_acl_association,
+  #"aws_wafv2_web_acl_association": aws_wafv2_web_acl_association,
   #"aws_wafv2_rule_group": aws_wafv2_rule_group,
   #"aws_wafv2_web_acl": aws_wafv2_web_acl,
   "aws_wafv2_web_acl_logging_configuration": aws_wafv2_web_acl_logging_configuration,

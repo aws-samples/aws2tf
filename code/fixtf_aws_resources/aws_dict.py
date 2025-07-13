@@ -10501,10 +10501,10 @@ aws_wafv2_web_acl = {
 
 aws_wafv2_web_acl_association = {
 	"clfn":		"wafv2",
-	"descfn":	"get_web_acl",
-	"topkey":	"WebACL",
-	"key":		"AssociationConfig",
-	"filterid":	"AssociationConfig"
+	"descfn":	"list_resources_for_web_acl",
+	"topkey":	"ResourceArns",
+	"key":		"ResourceArns",
+	"filterid":	"ResourceArns"
 }
 
 aws_wafv2_web_acl_logging_configuration = {

@@ -657,7 +657,7 @@ def tfplan3():
    #   print("merge - exit after plan2")
 
 def wrapup():
-   
+   ### copy predefined import files
    print("Final Terraform Validation")
    globals.tracking_message="Stage 8 of 10, Final Terraform Validation"
    com = "terraform validate -no-color"

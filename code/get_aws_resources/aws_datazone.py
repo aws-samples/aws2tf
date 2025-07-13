@@ -2,6 +2,8 @@ import common
 import boto3
 import globals
 import inspect
+from io import StringIO
+from timed_interrupt import timed_int
 
 
 # aws_datazone_asset_type
@@ -125,7 +127,6 @@ def get_aws_datazone_user_profile(type, id, clfn, descfn, topkey, key, filterid)
 
 #####
 
-
 def get_aws_datazone_domain(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
@@ -143,46 +144,69 @@ def get_aws_datazone_domain(type, id, clfn, descfn, topkey, key, filterid):
                 dv=j['domainVersion']
                 if dv=="V1":
                     #print(str(j))
-                    resp2=client.get_domain(identifier=j[key])
-                    sso=resp2['singleSignOn']['type']
-                    dst=resp2['status']
-                    #print("sso="+str(sso)+" dst="+str(dst)," dzid=",dzid)
-                    common.write_import(type,j[key],None)
-                    common.add_dependancy("aws_datazone_project", j[key])
-                    common.add_dependancy("aws_datazone_glossary", j[key])
-                    common.add_dependancy("aws_datazone_environment_profile", j[key])
-                    common.add_dependancy("aws_datazone_environment_blueprint_configuration", j[key])
-                    
-                    if sso!="DISABLED":
-                        common.add_dependancy("aws_datazone_user_profile", j[key])
-                    else:
-                        print("skipping sso="+str(sso)+" dst="+str(dst)+" dzid="+dzid)
-                        return True
+                    resp2=client.get_domain(identifier=dzid)
+                    dz_common(resp2,dzid,type,client)
                     
         else:      
             response = client.get_domain(identifier=id)
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
+            dzid=j[key]
             dv=j['domainVersion']
             if dv=="V1":
                 resp2=client.get_domain(identifier=j[key])
-                sso=resp2['singleSignOn']['type']
-                dst=resp2['status']
-                #print("sso="+str(sso)+" dst="+str(dst)," dzid=",dzid)
-                common.write_import(type,j[key],None)
-                # provider crashes on import
-                common.add_dependancy("aws_datazone_project", j[key])
-                common.add_dependancy("aws_datazone_glossary", j[key])
-                common.add_dependancy("aws_datazone_environment_profile", j[key])
-                common.add_dependancy("aws_datazone_environment_blueprint_configuration", j[key])
-                if sso!="DISABLED":
-                    common.add_dependancy("aws_datazone_user_profile", j[key])
-                else:
-                    print("skipping sso="+str(sso)+" dst="+str(dst)+" dzid="+dzid)
-                    return True
+                dz_common(resp2,dzid,type,client)
+
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+
+def dz_common(resp2,dzid,type,client):
+    sso=resp2['singleSignOn']['type']
+    dst=resp2['status']
+    if globals.debug: print("DataZone sso="+str(sso)+" dst="+str(dst)," dzid="+dzid)
+    common.write_import(type,dzid,None)
+    common.add_dependancy("aws_datazone_project", dzid)
+    common.add_dependancy("aws_datazone_glossary", dzid)
+    common.add_dependancy("aws_datazone_environment_profile", dzid)
+    common.add_dependancy("aws_datazone_environment_blueprint_configuration", dzid)
+
+# write data files
+
+    resp3=client.list_environment_blueprints(domainIdentifier=dzid,managed=True)
+    for k in resp3['items']:
+        bid=k['id']
+        bn=k['name']
+        pn=k['provider']
+        if globals.debug: print(str(bid),str(bn),str(pn))
+        output = StringIO()
+        output.write('data "aws_datazone_environment_blueprint" "' + str(dzid)+"_"+str(bid)+ '" {\n')
+        output.write('  domain_id = aws_datazone_domain.' + str(dzid) + '.id\n') ## error undefined
+        #output.write('  domain_id = "' + str(dzid) + '"\n')
+        output.write('  name = "'+ bn + '"\n')
+        output.write('  managed = true\n')
+        output.write('}\n')
+        fn="imported/data-dz_"+str(dzid)+"_"+str(bid)+".tf"
+        try:
+            with open(fn, 'w') as f:
+               f.write(output.getvalue().strip() + '\n')
+        except:
+            print("ERROR: could not write to file: " + fn)
+            print("exit 139")
+            timed_int.stop()
+            exit()
+
+    if sso!="DISABLED":
+        common.add_dependancy("aws_datazone_user_profile", dzid)
+    else:
+        print("skipping sso="+str(sso)+" dst="+str(dst)+" dzid="+dzid)
+        return True
+
+
+
 
     return True
 

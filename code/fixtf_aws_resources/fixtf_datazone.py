@@ -3,6 +3,7 @@ import globals
 
 def aws_datazone_domain(t1,tt1,tt2,flag1,flag2):
 	skip=0
+
 	return skip,t1,flag1,flag2
 
 def aws_datazone_project(t1,tt1,tt2,flag1,flag2):
@@ -83,8 +84,8 @@ def aws_datazone_environment_profile(t1,tt1,tt2,flag1,flag2):
 	elif tt1=="project_identifier" and tt2!="null":
 		t1=tt1+" = aws_datazone_project."+globals.dzd+"_"+tt2+".id\n"
 		#common.add_dependancy("aws_datazone_project",tt2)
-	elif tt1=="environment_blueprint_identifier":	
-		t1=tt1+" = aws_datazone_environment_blueprint_configuration."+globals.dzd+"_"+tt2+".environment_blueprint_id\n"
+	#elif tt1=="environment_blueprint_identifier":	
+	#	t1=tt1+" = aws_datazone_environment_blueprint_configuration."+globals.dzd+"_"+tt2+".environment_blueprint_id\n"
 
 
 	return skip,t1,flag1,flag2
@@ -107,8 +108,8 @@ def aws_datazone_environment(t1,tt1,tt2,flag1,flag2):
 	elif tt1=="project_identifier" and tt2!="null":
 		t1=tt1+" = aws_datazone_project."+globals.dzd+"_"+tt2+".id\n"
 		#common.add_dependancy("aws_datazone_project",tt2)
-	elif tt1=="blueprint_identifier":
-		t1=tt1+" = aws_datazone_environment_blueprint_configuration."+globals.dzd+"_"+tt2+".environment_blueprint_id\n"
+	#elif tt1=="blueprint_identifier":
+	#	t1=tt1+" = aws_datazone_environment_blueprint_configuration."+globals.dzd+"_"+tt2+".environment_blueprint_id\n"
 
 	return skip,t1,flag1,flag2
 

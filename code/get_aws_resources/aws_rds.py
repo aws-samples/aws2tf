@@ -207,8 +207,9 @@ def get_aws_db_instance(type, id, clfn, descfn, topkey, key, filterid):
                 if engine=="docdb" or engine.startswith("aurora"): continue
                 common.write_import(type, j[key], None)
 
-    except client.exceptions.InvalidParameterValue:
-            if globals.debug: print("WARNING: InvalidParameterValue for "+type+ " "+str(id)+" returning")
+    except client.exceptions.InvalidParameterValue as error:
+            print("WARNING: InvalidParameterValue for "+type+ " "+str(id)+" returning")
+            print(str(error.response['Error']['Code']))
             pkey=type+"."+str(id)
             globals.rproc[pkey]=True
             return True

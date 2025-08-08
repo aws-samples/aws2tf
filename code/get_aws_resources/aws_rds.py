@@ -2,7 +2,11 @@ import common
 import boto3
 import globals
 import inspect
-
+import botocore
+import inspect
+import sys
+from botocore.config import Config
+from botocore.exceptions import ClientError
 
 def get_aws_db_parameter_group(type, id, clfn, descfn, topkey, key, filterid):
 
@@ -203,6 +207,13 @@ def get_aws_db_instance(type, id, clfn, descfn, topkey, key, filterid):
                 if engine=="docdb" or engine.startswith("aurora"): continue
                 common.write_import(type, j[key], None)
 
+    except client.exceptions.InvalidParameterValue:
+            if globals.debug: print("WARNING: InvalidParameterValue for "+type+ " "+str(id)+" returning")
+            pkey=type+"."+str(id)
+            globals.rproc[pkey]=True
+            return True
+    
+    
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
 

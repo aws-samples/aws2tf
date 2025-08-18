@@ -8,7 +8,7 @@ def aws_elasticache_cluster(t1,tt1,tt2,flag1,flag2):
 	
 	if tt1 == "replication_group_id" and tt2 != "null":
 		ot1=tt1+' = aws_elasticache_replication_group.'+'_'+tt2+'.id\n'
-		print("fix elasticache",ot1)
+		
 
 	elif tt1 == "engine" and globals.elastirep: skip=1
 	elif tt1 == "az_mode" and globals.elastirep: skip=1
@@ -44,7 +44,6 @@ def aws_elasticache_replication_group(t1,tt1,tt2,flag1,flag2):
 
 	if tt1 == "global_replication_group_id" and tt2 != "null":
 		ot1=tt1+' = aws_elasticache_global_replication_group.'+'_'+tt2+'.id\n'
-		print("fix elasticache", ot1)
 		globals.elastigrep=True
 	elif tt1 == "num_node_groups" and globals.elastigrep: skip=1
 	elif tt1 == "parameter_group_name" and globals.elastigrep: skip=1

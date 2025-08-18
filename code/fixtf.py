@@ -268,6 +268,7 @@ def fixtf(ttft,tf):
     ## Prescan blocks   
     ##
     globals.elastirep=False
+    globals.elastigrep=False
 
     if ttft=="aws_elasticache_cluster":
         for t1 in Lines:
@@ -282,7 +283,22 @@ def fixtf(ttft,tf):
                 if tt2 != "null": 
                     globals.elastirep=True
                     #print("***** set true *****")
-                
+
+    if ttft=="aws_elasticache_replication_group":
+        for t1 in Lines:
+            t1=t1.strip()
+            skip=0
+            tt1=t1.split("=")[0].strip()
+            try:
+                tt2=t1.split("=")[1].strip().strip('\"')
+            except:
+                tt2=""
+            if tt1=="global_replication_group_id":
+                if tt2 != "null": 
+                    globals.elastigrep=True
+                    #print("***** set true *****")
+
+
 
     if ttft=="aws_db_instance":
         for t1 in Lines:

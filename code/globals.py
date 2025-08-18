@@ -1,6 +1,6 @@
 import sys,os
 
-tfver="5.98.0"
+tfver="5.100.0"
 esttime=120.0
 profile="default"
 sso=False
@@ -75,6 +75,7 @@ ec2tagk=None
 subnetid=""
 credtype="invalid"
 elastirep=False
+elastigrep=False
 
 badlist=[]
 

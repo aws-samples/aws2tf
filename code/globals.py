@@ -74,6 +74,7 @@ ec2tagv=None
 ec2tagk=None
 subnetid=""
 credtype="invalid"
+elastirep=False
 
 badlist=[]
 

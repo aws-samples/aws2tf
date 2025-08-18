@@ -118,8 +118,12 @@ def aws_s3_bucket_public_access_block(t1,tt1,tt2,flag1,flag2):
 	return skip,t1,flag1,flag2
 
 def aws_s3_bucket_replication_configuration(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+    skip=0
+    if tt1 == "bucket": 
+         if tt2.startswith("arn:"):
+              t1="bucket = \""+tt2+"\"\n"
+
+    return skip,t1,flag1,flag2
 
 def aws_s3_bucket_request_payment_configuration(t1,tt1,tt2,flag1,flag2):
     skip=0

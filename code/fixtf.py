@@ -263,7 +263,27 @@ def fixtf(ttft,tf):
     f1.close()
     #print("getfn for fixtf2."+ttft+" "+tf2)
     #with open(tf2, "a") as f2:
-    ## Prescan    
+
+    ##
+    ## Prescan blocks   
+    ##
+    globals.elastirep=False
+
+    if ttft=="aws_elasticache_cluster":
+        for t1 in Lines:
+            t1=t1.strip()
+            skip=0
+            tt1=t1.split("=")[0].strip()
+            try:
+                tt2=t1.split("=")[1].strip().strip('\"')
+            except:
+                tt2=""
+            if tt1=="replication_group_id":
+                if tt2 != "null": 
+                    globals.elastirep=True
+                    print("***** set true *****")
+                
+
     if ttft=="aws_db_instance":
         for t1 in Lines:
             t1=t1.strip()
@@ -348,6 +368,7 @@ def fixtf(ttft,tf):
     globals.secvid=""
     globals.dzd=""
     globals.connectinid=""
+
     #if globals.acc in tf2:
     #    tf2=tf2.replace(globals.acc, "__")
 
@@ -355,7 +376,7 @@ def fixtf(ttft,tf):
 ########################                       
 ###Generic block remover 
 ########################
-
+    print("early ",tf2)
     with open(tf2, "w") as f2:
         skip=0
         flag1=False
@@ -370,7 +391,8 @@ def fixtf(ttft,tf):
             except:
                 tt2=""
  
-            try:    
+            try:   
+                # call fixtf_aws_rsource
                 getfn = getattr(eval(callfn), ttft)           
                 #getfn = getattr(fixtf2, ttft)
             except Exception as e:
@@ -387,8 +409,11 @@ def fixtf(ttft,tf):
                 # rhs=account number
                 # rhs is still an arn
                 # : in tt1 for quote it
+
+                #call aws_common. fixtf
                 skip,t1,flag1,flag2=aws_common.aws_common(ttft,t1,tt1,tt2,flag1,flag2)
 
+                # call fixtf_aws_rsource if skip=0
                 if skip==0:                
                     skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
 
@@ -424,6 +449,7 @@ def fixtf(ttft,tf):
 
             if skip == 0:
                 f2.write(t1)
+
 
 
         # extra block removals in aws_lb

@@ -126,7 +126,7 @@ def call_resource(type, id):
       return
    
    if type in aws_no_import.noimport:
-      print("WARNING: Terraform cannot import type: " + type)
+      print("WARNING: Can not import type: " + type)
       if id is not None:
          with open('not-imported.log', 'a') as f2:
             f2.write(type + " : " + str(id) + "\n")
@@ -157,7 +157,7 @@ def call_resource(type, id):
          pass
    else:
       if type in needid_dict.aws_needid:
-         print("WARNING: " + type + " cannot have null id must pass parameter " +
+         print("WARNING: " + type + " can not have null id must pass parameter " +
                needid_dict.aws_needid[type]['param'])
          # TODO api only
          return
@@ -166,7 +166,7 @@ def call_resource(type, id):
    sr = False
    clfn, descfn, topkey, key, filterid = resources.resource_data(type, id)
    if key == "NOIMPORT":
-      print("WARNING: Terraform cannot import type: " + type)
+      print("WARNING: Can not import type: " + type)
       return
 
    if clfn is None:
@@ -1547,16 +1547,16 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    
    elif exn == "KeyError":
       if "kms" in str(exc_obj):
-         print("KeyError cannot find key for " +fname+" id="+str(id)+" - returning")
+         print("KeyError can not find key for " +fname+" id="+str(id)+" - returning")
          return
       
       if clfn=="sqs":
-         print("KeyError cannot find queue url for " +fname+" id="+str(id)+" - returning")
+         print("KeyError can not find queue url for " +fname+" id="+str(id)+" - returning")
          return
       
    elif exn == "InvalidDocument":
       if clfn=="ssm":
-         print("KeyError cannot find ssm document for " +fname+" id="+str(id)+" - returning")
+         print("KeyError can not find ssm document for " +fname+" id="+str(id)+" - returning")
          return
 
    elif exn == "AWSOrganizationsNotInUseException" or exn =="OrganizationAccessDeniedException":

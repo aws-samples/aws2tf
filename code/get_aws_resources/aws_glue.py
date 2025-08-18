@@ -73,7 +73,7 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
     try:
         globals.workaround=type
         if id is None:
-            print("WARNING: ID cannot be None - must pass catalog:database or catalog:database:tablename" )
+            print("WARNING: ID can not be None - must pass catalog:database or catalog:database:tablename" )
             return True
         cc=id.count(':')
         if cc==0:
@@ -408,7 +408,7 @@ def get_aws_glue_partition(type, id, clfn, descfn, topkey, key, filterid):
         response = []
         client = boto3.client(clfn)
         if id is None:
-            print("ID cannot be None")
+            print("ID can not be None")
         
         else:  
             id=id.strip()  

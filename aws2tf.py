@@ -356,7 +356,7 @@ def main():
 
         # does a terraform.tfstate file exist in globals.path1 directory ?
     if not os.path.isfile(globals.path1+"/terraform.tfstate") and globals.merge:
-            print("No terraform.tfstate file found in "+globals.path1+" - cannot merge")
+            print("No terraform.tfstate file found in "+globals.path1+" - can not merge")
             globals.merge=False
             com = "rm -rf "+globals.path1
             rout = common.rc(com)

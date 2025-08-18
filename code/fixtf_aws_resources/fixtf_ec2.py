@@ -444,6 +444,7 @@ def aws_launch_template(t1,tt1,tt2,flag1,flag2):
 
 	elif tt1=="excluded_instance_types" and tt2=="[]": skip=1
 	elif tt1=="included_instance_types" and tt2=="[]": skip=1
+	elif tt1=="volume_initialization_rate" and tt2=="0": skip=1
 
 	elif tt1=="on_demand_max_price_percentage_over_lowest_price" and tt2=="0": skip=1
 	elif tt1=="spot_max_price_percentage_over_lowest_price" and tt2=="0": skip=1

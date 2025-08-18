@@ -281,7 +281,7 @@ def fixtf(ttft,tf):
             if tt1=="replication_group_id":
                 if tt2 != "null": 
                     globals.elastirep=True
-                    print("***** set true *****")
+                    #print("***** set true *****")
                 
 
     if ttft=="aws_db_instance":
@@ -376,7 +376,7 @@ def fixtf(ttft,tf):
 ########################                       
 ###Generic block remover 
 ########################
-    print("early ",tf2)
+    
     with open(tf2, "w") as f2:
         skip=0
         flag1=False

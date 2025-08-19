@@ -804,13 +804,16 @@ def deref_s3(t1, tt1, tt2):
             bn=tt2.split("/",3)[2] 
             tn=tt2.split("/",3)[3] 
             #print("s3:",bn,tn)
-            if bn in globals.s3list:
-                bv = "aws_s3_bucket.b-" + bn + ".bucket"
-                if tn !="":
-                    t1=tt1 + ' = format("s3://%s/%s",'+bv+',"'+tn+'")\n'
-                else:
-                    t1=tt1 + ' = format("s3://%s/",'+bv+')\n'
-                common.add_dependancy("aws_s3_bucket", bn)
+            try:
+                if globals.bucketlist[tt2]:
+                    bv = "aws_s3_bucket.b-" + bn + ".bucket"
+                    if tn !="":
+                        t1=tt1 + ' = format("s3://%s/%s",'+bv+',"'+tn+'")\n'
+                    else:
+                        t1=tt1 + ' = format("s3://%s/",'+bv+')\n'
+            except KeyError as e:
+                return t1
+
     return t1
 
 

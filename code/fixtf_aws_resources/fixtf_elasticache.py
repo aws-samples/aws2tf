@@ -23,6 +23,7 @@ def aws_elasticache_cluster(t1,tt1,tt2,flag1,flag2):
 	elif tt1 == "snapshot_retention_limit" and globals.elastirep: skip=1
 	elif tt1 == "snapshot_window" and globals.elastirep: skip=1
 	elif tt1 == "subnet_group_name" and globals.elastirep: skip=1
+	elif tt1 == "security_group_ids" and globals.elastigrep: skip=1
 
 	return skip,t1,flag1,flag2
 
@@ -51,6 +52,7 @@ def aws_elasticache_replication_group(t1,tt1,tt2,flag1,flag2):
 	elif tt1 == "engine_version" and globals.elastigrep: skip=1
 	elif tt1 == "node_type" and globals.elastigrep: skip=1
 	elif tt1 == "security_group_names" and globals.elastigrep: skip=1
+	elif tt1 == "security_group_ids" and globals.elastigrep: skip=1
 	elif tt1 == "transit_encryption_enabled" and globals.elastigrep: skip=1
 	elif tt1 == "at_rest_encryption_enabled" and globals.elastigrep: skip=1
 	elif tt1 == "replicas_per_node_group" and tt2=="0": skip=1

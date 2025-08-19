@@ -140,6 +140,7 @@ def main():
     argParser.add_argument("-b3", "--boto3error", help="exit on boto3 api error (for debugging)", action='store_true')
     argParser.add_argument("-la", "--serverless", help="Lambda mode - when running in a Lambda container", action='store_true')
     argParser.add_argument("-tv", "--tv", help="Specify version of Terraform AWS provider default = "+globals.tfver)
+    argParser.add_argument("-d5", "--debug5", help="debug5 special debug flag", action='store_true')
     args = argParser.parse_args()
     type=""
 
@@ -210,7 +211,9 @@ def main():
         globals.debug = True
         globals.fast = False
 
-
+    if args.debug5: 
+        globals.debug5 = True
+        globals.fast = False
 
     if args.tv:
         globals.tfver=args.tv

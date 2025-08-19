@@ -17,6 +17,7 @@ processed=[]
 dependancies=[]
 types=[]
 debug=False
+debug5=False
 validate=False
 dnet=False
 dkms=False

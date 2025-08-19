@@ -1,5 +1,7 @@
 import common
 import fixtf
+import inspect
+import globals
 
 def aws_s3_access_point(t1,tt1,tt2,flag1,flag2):
 	skip=0
@@ -28,7 +30,6 @@ def  aws_s3_bucket(t1,tt1,tt2,flag1,flag2):
             "aws_s3_bucket_policy" in tt1 or \
             "aws_s3_bucket_replication_configuration" in tt1 or \
             "aws_s3_bucket_request_payment_configuration" in tt1 or \
-            "aws_s3_bucket_replication_configuration" in tt1 or \
             "aws_s3_bucket_server_side_encryption_configuration" in tt1 or \
             "aws_s3_bucket_versioning" in tt1 or \
             "aws_s3_bucket_website_configuration"in tt1 :
@@ -119,9 +120,11 @@ def aws_s3_bucket_public_access_block(t1,tt1,tt2,flag1,flag2):
 
 def aws_s3_bucket_replication_configuration(t1,tt1,tt2,flag1,flag2):
     skip=0
-    if tt1 == "bucket": 
-         if tt2.startswith("arn:"):
-              t1="bucket = \""+tt2+"\"\n"
+    try:
+        if tt1 == "bucket" and globals.debug5:
+            print("aws_s3_bucket_replication_configuration: "+tt2) 
+    except Exception as e:
+        common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id)
 
     return skip,t1,flag1,flag2
 

@@ -44,9 +44,10 @@ def aws_ebs_encryption_by_default(t1,tt1,tt2,flag1,flag2):
 
 def aws_ebs_volume(t1,tt1,tt2,flag1,flag2):
 	skip=0
-	if "throughput" in tt1:
-		
+	if "throughput" in tt1:	
 		if tt2 == "0": skip=1
+	elif tt1=="volume_initialization_rate" and tt2=="0": skip=1
+	
 	return skip,t1,flag1,flag2
 
 def aws_ec2_availability_zone_group(t1,tt1,tt2,flag1,flag2):

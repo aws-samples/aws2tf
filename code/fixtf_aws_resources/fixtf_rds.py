@@ -27,8 +27,14 @@ def aws_db_instance(t1,tt1,tt2,flag1,flag2):
 			t1=tt1 + " = aws_db_subnet_group." + tt2 + ".id\n"
 			common.add_dependancy("aws_db_subnet_group",tt2)
 	elif tt1 == "replicate_source_db" and tt2 != "null":
-		t1=tt1 + " = aws_db_instance." + tt2 + ".arn\n"
-		common.add_dependancy("aws_db_instance", tt2)
+		if tt2.startswith("arn:"):
+			if globals.region in tt2:
+				tt2=tt2.split(":")[-1]
+				t1=tt1 + " = aws_db_instance." + tt2.split(":")[1] + ".arn\n"
+				common.add_dependancy("aws_db_instance", tt2.split(":")[1])
+		else:
+			t1=tt1 + " = aws_db_instance." + tt2 + ".arn\n"
+			common.add_dependancy("aws_db_instance", tt2)
 
 
 	return skip,t1,flag1,flag2

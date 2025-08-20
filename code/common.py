@@ -430,7 +430,7 @@ def tfplan3():
       print(str(rout.stdout.decode().rstrip()))
       print("Validation after fix failed - exiting")
       globals.tracking_message="Validation after fix failed - exiting"
-      print("exit 020")
+      print("exit 020",str(globals.aws2tfver))
       timed_int.stop()
       exit()
 

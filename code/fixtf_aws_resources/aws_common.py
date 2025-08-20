@@ -63,6 +63,10 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                     
         if tt1.endswith("bucket_arn") and tt2.startswith("arn:aws:s3"):
             tt2=tt2.split(":")[-1]
+            if globals.debug5: 
+                print("DEBUG5: aws_common: bucket_name=", tt2)
+                for k, v in globals.bucketlist.items():
+                    print("DEBUG5: aws_common: bucketlist k,v=",k,v)
             try:
                 if globals.bucketlist[tt2]:
                     t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".arn\n"

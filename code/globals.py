@@ -78,6 +78,7 @@ subnetid=""
 credtype="invalid"
 elastirep=False
 elastigrep=False
+kinesismsk=False
 
 badlist=[]
 

@@ -8,6 +8,7 @@ def aws_elasticache_cluster(t1,tt1,tt2,flag1,flag2):
 	
 	if tt1 == "replication_group_id" and tt2 != "null":
 		ot1=tt1+' = aws_elasticache_replication_group.'+'_'+tt2+'.id\n'
+		globals.elastirep=True
 		
 
 	elif tt1 == "engine" and globals.elastirep: skip=1

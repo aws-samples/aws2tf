@@ -23,7 +23,7 @@ def aws_elasticache_cluster(t1,tt1,tt2,flag1,flag2):
 	elif tt1 == "snapshot_retention_limit" and globals.elastirep: skip=1
 	elif tt1 == "snapshot_window" and globals.elastirep: skip=1
 	elif tt1 == "subnet_group_name" and globals.elastirep: skip=1
-	elif tt1 == "security_group_ids" and globals.elastigrep: skip=1
+	elif tt1 == "security_group_ids" and globals.elastirep: skip=1
 
 	return skip,t1,flag1,flag2
 

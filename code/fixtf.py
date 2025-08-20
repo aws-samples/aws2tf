@@ -242,6 +242,8 @@ def fixtf(ttft,tf):
     if globals.debug:
         print(ttft+" fixtf "+tf+".out") 
    
+# open the *.out file
+
     try:
         f1 = open(rf, 'r')
     except:
@@ -361,7 +363,9 @@ def fixtf(ttft,tf):
                 if tt2 == "false" and cnxl==1: globals.lbskipcnxl=True
                 else: globals.lbenabled=True
 
+    ##
     ## Block stripping init
+    ##
     globals.lbc=0
     globals.rbc=0
     globals.stripblock=""
@@ -415,6 +419,8 @@ def fixtf(ttft,tf):
         flag2=tf
         nofind=0
         f2.write("##START,"+ttft+"\n")
+        
+        # And off we go around the out file again
         for t1 in Lines:
             skip=0
             tt1=t1.split("=")[0].strip()
@@ -424,7 +430,7 @@ def fixtf(ttft,tf):
                 tt2=""
  
             try:   
-                # call fixtf_aws_rsource
+                # does fixtf_aws_rsource exist ??
                 getfn = getattr(eval(callfn), ttft)           
                 #getfn = getattr(fixtf2, ttft)
             except Exception as e:
@@ -450,7 +456,7 @@ def fixtf(ttft,tf):
                     skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
 
                 #####
-                ## block strip sections
+                ## block strip sections - 
                 ####
                 
                 if globals.stripblock != "":

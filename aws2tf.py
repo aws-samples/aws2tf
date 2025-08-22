@@ -198,7 +198,7 @@ def main():
         print("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
         timed_interrupt.timed_int.stop()
         os._exit(1)
-    print("Terraform version: ",tv,"AWS provider version: ",globals.tfver)
+    print("Terraform version:",tv,"AWS provider version:",globals.tfver)
 
     globals.expected=args.accept
 

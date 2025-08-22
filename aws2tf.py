@@ -110,7 +110,7 @@ def kd_threaded(ti):
 def main():
 
     now = datetime.datetime.now()
-    print("aws2tf started at %s" % now)
+    print("aws2tf "+globals.aws2tfver+" started at %s" % now)
     starttime=now
 
 
@@ -174,6 +174,10 @@ def main():
         exit()
 
     # check terraform version
+
+    # provider version
+    if args.tv:
+        globals.tfver=args.tv
     
     com = "terraform version"
     rout = common.rc(com)
@@ -194,7 +198,7 @@ def main():
         print("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
         timed_interrupt.timed_int.stop()
         os._exit(1)
-    print("Terraform version",tv)
+    print("Terraform version: ",tv,"AWS provider version: ",globals.tfver)
 
     globals.expected=args.accept
 
@@ -215,8 +219,7 @@ def main():
         globals.debug5 = True
         globals.fast = False
 
-    if args.tv:
-        globals.tfver=args.tv
+
 
     if args.ec2tag:
         isinv=True

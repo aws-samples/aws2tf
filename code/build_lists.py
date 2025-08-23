@@ -8,6 +8,22 @@ import datetime
 def build_lists():
     print("Building core resource lists ...")
     globals.tracking_message="Stage 2 of 10, Building core resource lists ..."
+    
+    
+    
+    def fetch_lambda_data():
+        try:
+            client = boto3.client('lambda')
+            response = []
+            paginator = client.get_paginator('list_functions')
+            for page in paginator.paginate():
+                response.extend(page['Functions'])
+            return [('lambda', j['FunctionName']) for j in response]
+        except Exception as e:
+            print("Error fetching Lambda data:", e)
+            return []
+      
+    
     def fetch_vpc_data():
         try:
             client = boto3.client('ec2')
@@ -18,7 +34,7 @@ def build_lists():
             globals.vpcs=response
             return [('vpc', j['VpcId']) for j in response]
         except Exception as e:
-            print("Error fetching vpc data:", e)
+            print("Error fetching ec2 data:", e)
             return []
     
     def fetch_s3_data():
@@ -42,8 +58,9 @@ def build_lists():
                 response.extend(page['SecurityGroups'])
             return [('sg', j['GroupId']) for j in response]
         except Exception as e:
-            print("Error fetching vpc data:", e)
+            print("Error fetching SG data:", e)
             return []
+        
 
     def fetch_subnet_data():
         try:
@@ -105,6 +122,7 @@ def build_lists():
     with concurrent.futures.ThreadPoolExecutor(max_workers=globals.cores) as executor:
         futures = [
             executor.submit(fetch_vpc_data),
+            executor.submit(fetch_lambda_data),
             executor.submit(fetch_s3_data),
             executor.submit(fetch_sg_data),
             executor.submit(fetch_subnet_data),
@@ -123,6 +141,11 @@ def build_lists():
                     if resource_type == 'vpc':
                         for _, vpc_id in result:
                             globals.vpclist[vpc_id] = True
+
+                    if resource_type == 'lambda':
+                        for _, lambda_id in result:
+                            globals.lambdalist[lambda_id] = True
+
                     elif resource_type == 's3':
                         client = boto3.client('s3')
                         for _, bucket in result:

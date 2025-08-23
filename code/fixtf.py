@@ -271,6 +271,7 @@ def fixtf(ttft,tf):
     ##
     globals.elastirep=False
     globals.elastigrep=False
+    globals.elasticc=False
     globals.kinesismsk=False
 
     if ttft=="aws_elasticache_cluster":
@@ -297,9 +298,10 @@ def fixtf(ttft,tf):
             except:
                 tt2=""
             if tt1=="global_replication_group_id":
-                if tt2 != "null": 
-                    globals.elastigrep=True
+                if tt2 != "null": globals.elastigrep=True
                     #print("***** set true *****")
+            if tt1=="num_cache_clusters":
+                    if tt2 != "null": globals.elasticc=True
 
 
     if ttft=="aws_kinesis_firehose_delivery_stream":

@@ -1,6 +1,6 @@
 import sys,os
 
-aws2tfver="v1003"
+aws2tfver="v1004"
 tfver="5.100.0"
 esttime=120.0
 profile="default"
@@ -78,6 +78,7 @@ subnetid=""
 credtype="invalid"
 elastirep=False
 elastigrep=False
+elasticc=False
 kinesismsk=False
 
 badlist=[]
@@ -112,6 +113,7 @@ vpcs={}
 subnetlist={}
 sglist={}
 vpclist={}
+lambdalist={}
 s3list={}
 rolelist={}
 policylist={}

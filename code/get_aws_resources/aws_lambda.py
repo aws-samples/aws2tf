@@ -144,7 +144,7 @@ def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
 
 
             except KeyError:
-                    print("WARNING: function not in lambdalist " + id+ " Resource may be referencing a lambda that no longer exists") 
+                    print("WARNING: function not in lambda list " + id+ " Resource may be referencing a lambda that no longer exists") 
 
 
     except Exception as e:

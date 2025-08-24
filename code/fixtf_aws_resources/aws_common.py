@@ -151,10 +151,16 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
 
         elif tt1 == "lambda_function_arn":
             if tt2 != "null":     
-                if "arn:" in tt2: 
-                    tt2=tt2.split(":")[-1]
-                    t1=tt1 + " = aws_lambda_function." + tt2 + ".arn\n"
-                    common.add_dependancy("aws_lambda_function",tt2)
+                if "arn:" in tt2: tt2=tt2.split(":")[-1]
+                try:
+                    if globals.lambdalist[tt2]:
+                        t1=tt1 + " = aws_lambda_function." + tt2 + ".arn\n"
+                        common.add_dependancy("aws_lambda_function",tt2)
+                        return skip,t1,flag1,flag2
+                except KeyError as e:
+                    print("WARNING: lambda_function_arn not found in lambda list", tt2)
+                    return skip,t1,flag1,flag2
+
             else:
                 skip=1        
         

@@ -271,6 +271,7 @@ def fixtf(ttft,tf):
     ##
     globals.elastirep=False
     globals.elastigrep=False
+    globals.elasticc=False
     globals.kinesismsk=False
 
     if ttft=="aws_elasticache_cluster":
@@ -297,9 +298,10 @@ def fixtf(ttft,tf):
             except:
                 tt2=""
             if tt1=="global_replication_group_id":
-                if tt2 != "null": 
-                    globals.elastigrep=True
+                if tt2 != "null": globals.elastigrep=True
                     #print("***** set true *****")
+            if tt1=="num_cache_clusters":
+                    if tt2 != "null": globals.elasticc=True
 
 
     if ttft=="aws_kinesis_firehose_delivery_stream":
@@ -311,8 +313,7 @@ def fixtf(ttft,tf):
                 tt2=t1.split("=")[1].strip().strip('\"')
             except:
                 tt2=""
-            if tt1=="msk_source_configuration":
-                if tt2 != "null": 
+            if "msk_source_configuration" in tt1:
                     globals.kinesismsk=True
                     #print("***** set true *****")
 
@@ -369,6 +370,7 @@ def fixtf(ttft,tf):
     globals.lbc=0
     globals.rbc=0
     globals.stripblock=""
+    globals.stripblock2=""
     globals.stripstart=""
     globals.stripend=""
     #if ttft=="aws_lb_listener_rule" or ttft=="aws_lb_listener":
@@ -396,6 +398,17 @@ def fixtf(ttft,tf):
         globals.stripblock="rule {"
         globals.stripstart="{"
         globals.stripend="}"
+
+    if ttft=="aws_kinesis_firehose_delivery_stream":
+        if globals.kinesismsk:
+            globals.stripblock="server_side_encryption {"
+            globals.stripstart="{"
+            globals.stripend="}"
+    
+    
+    
+    
+    
     
 
     globals.gulejobmaxcap=False
@@ -537,7 +550,13 @@ def fixtf(ttft,tf):
         ## move *.out to impoted
         #shutil.move(rf, "imported/"+rf)
 
-           
+def remove_block():
+
+
+
+
+
+    return        
 
 def aws_resource(t1,tt1,tt2,flag1,flag2):
     skip=0

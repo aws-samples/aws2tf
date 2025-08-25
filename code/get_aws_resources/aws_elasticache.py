@@ -2,7 +2,7 @@ import common
 import boto3
 from botocore.config import Config
 import globals
-import inspect
+import inspect, sys
 
 def get_aws_elasticache_cluster(type, id, clfn, descfn, topkey, key, filterid):
     if globals.debug:
@@ -23,12 +23,21 @@ def get_aws_elasticache_cluster(type, id, clfn, descfn, topkey, key, filterid):
                 common.write_import(type,j[key],None) 
 
         else:      
-            response = client.describe_cache_clusters(CacheClusterId=id)
+            try:
+                response = client.describe_cache_clusters(CacheClusterId=id)
+            except Exception as e:
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                exn=str(exc_type.__name__)
+                if exn=="CacheClusterNotFoundFault":
+                    if globals.debug: print("CacheClusterNotFoundFault for "+type+ " id="+str(id)+" returning")
+                    return True
+                return True
+            #print(str(response))
             if response['CacheClusters'] == []: 
                 if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
-            j=response['CacheClusters']
-            common.write_import(type,j[key],None)
+            for j in response[topkey]:
+                common.write_import(type,j[key],None)
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -55,8 +64,16 @@ def get_aws_elasticache_serverless_cache(type, id, clfn, descfn, topkey, key, fi
             for j in response:
                 common.write_import(type,j[key],None) 
 
-        else:      
-            response = client.describe_serverless_caches(ServerlessCacheName=id)
+        else:    
+            try:
+                response = client.describe_serverless_caches(ServerlessCacheName=id)  
+            except Exception as e:
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                exn=str(exc_type.__name__)
+                if exn=="CacheClusterNotFoundFault":
+                    if globals.debug: print("CacheClusterNotFoundFault for "+type+ " id="+str(id)+" returning")
+                    return True
+                return True
             if response['ServerlessCaches'] == []: 
                 if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True

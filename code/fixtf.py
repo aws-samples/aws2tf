@@ -301,7 +301,7 @@ def fixtf(ttft,tf):
                 if tt2 != "null": globals.elastigrep=True
                     #print("***** set true *****")
             if tt1=="num_cache_clusters":
-                    if tt2 != "null": globals.elasticc=True
+                if tt2 != "null": globals.elasticc=True
 
 
     if ttft=="aws_kinesis_firehose_delivery_stream":

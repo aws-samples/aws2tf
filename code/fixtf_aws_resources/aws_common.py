@@ -61,18 +61,20 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                         except KeyError as e:
                             return skip,t1,flag1,flag2
                     
-        if tt1.endswith("bucket_arn") and tt2.startswith("arn:aws:s3"):
-            tt2=tt2.split(":")[-1]
-            if globals.debug5: 
-                print("DEBUG5: aws_common: bucket_name=", tt2)
-                for k, v in globals.bucketlist.items():
-                    print("DEBUG5: aws_common: bucketlist k,v=",k,v)
-            try:
-                if globals.bucketlist[tt2]:
-                    t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".arn\n"
+        if tt1.endswith("bucket_arn"):
+            if globals.debug5: print("DEBUG5: aws_common: bucket_name=", tt2, "lhs=",tt1)
+            if tt2.startswith("arn:aws:s3"):
+                tt2=tt2.split(":")[-1]
+                if globals.debug5: 
+                    print("DEBUG5: aws_common: bucket_name=", tt2)
+                    for k, v in globals.bucketlist.items():
+                        print("DEBUG5: aws_common: bucketlist k,v=",k,v)
+                try:
+                    if globals.bucketlist[tt2]:
+                        t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".arn\n"
+                        return skip,t1,flag1,flag2
+                except KeyError as e:
                     return skip,t1,flag1,flag2
-            except KeyError as e:
-                return skip,t1,flag1,flag2
                     
         elif tt1 == "rest_api_id" and "aws_api_gateway_" in type:
             if tt2 != "null":

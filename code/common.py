@@ -514,7 +514,7 @@ def tfplan3():
                      print("Error" + line)
 
                   print("-->> Plan 2 errors exiting - check plan2.json - or run terraform plan")
-                  print("exit 021")
+                  print("exit 021",str(globals.aws2tfver))
                   timed_int.stop()
                   exit()
 
@@ -581,7 +581,7 @@ def tfplan3():
          else:
             print("-->> plan will change resources! - unexpected")
             print("-->> look at plan2.json - or run terraform plan")
-            print("exit 025")
+            print("exit 025",str(globals.aws2tfver))
             timed_int.stop()
             exit()
 

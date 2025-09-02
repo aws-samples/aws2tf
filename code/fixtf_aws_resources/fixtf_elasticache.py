@@ -48,9 +48,8 @@ def aws_elasticache_replication_group(t1,tt1,tt2,flag1,flag2):
 		t1=tt1+' = aws_elasticache_global_replication_group.'+tt2+'.id\n'
 		globals.elastigrep=True
 		common.add_dependancy("aws_elasticache_global_replication_group", tt2)
-	if tt1 == "num_cache_clusters" and tt1 != "0":
-		globals.elasticc=True
-	elif tt1 == "num_node_groups" and globals.elasticc: skip=1
+	elif tt1 == "num_cache_clusters" and tt1 != "0": globals.elasticc=True
+	elif tt1 == "num_node_groups" and globals.elastigrep: skip=1
 	elif tt1 == "parameter_group_name" and globals.elastigrep: skip=1
 	elif tt1 == "engine" and globals.elastigrep: skip=1
 	elif tt1 == "engine_version" and globals.elastigrep: skip=1
@@ -59,8 +58,9 @@ def aws_elasticache_replication_group(t1,tt1,tt2,flag1,flag2):
 	elif tt1 == "security_group_ids" and globals.elastigrep: skip=1
 	elif tt1 == "transit_encryption_enabled" and globals.elastigrep: skip=1
 	elif tt1 == "at_rest_encryption_enabled" and globals.elastigrep: skip=1
-	elif tt1 == "replicas_per_node_group" and globals.elasticc: skip=1
-	elif tt1 == "replicas_per_node_group" and tt2=="0": skip=1
+	elif tt1 == "replicas_per_node_group":
+		if globals.elasticc: skip=1
+		elif tt2=="0": skip=1
 	elif tt1 == "auth_token_update_strategy" and tt2=="null": 
 		t1 = tt1+' = "ROTATE"\n'
 		t1=t1+"\n lifecycle {\n   ignore_changes = [auth_token_update_strategy]\n}\n"

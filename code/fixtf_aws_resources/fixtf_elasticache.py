@@ -49,7 +49,9 @@ def aws_elasticache_replication_group(t1,tt1,tt2,flag1,flag2):
 		globals.elastigrep=True
 		common.add_dependancy("aws_elasticache_global_replication_group", tt2)
 	elif tt1 == "num_cache_clusters" and tt1 != "0": globals.elasticc=True
-	elif tt1 == "num_node_groups" and globals.elastigrep: skip=1
+	elif tt1 == "num_node_groups":
+		if globals.elastigrep: skip=1
+		elif globals.elasticc: skip=1
 	elif tt1 == "parameter_group_name" and globals.elastigrep: skip=1
 	elif tt1 == "engine" and globals.elastigrep: skip=1
 	elif tt1 == "engine_version" and globals.elastigrep: skip=1

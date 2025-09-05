@@ -10,6 +10,8 @@ def aws_elasticache_cluster(t1,tt1,tt2,flag1,flag2):
 		globals.elastirep=True
 		common.add_dependancy("aws_elasticache_replication_group", tt2)
 		
+	elif tt1 == "cluster_id":
+		t1=t1+"\n lifecycle {\n   ignore_changes = [snapshot_retention_limit]\n}\n"
 
 	elif tt1 == "engine" and globals.elastirep: skip=1
 	elif tt1 == "az_mode" and globals.elastirep: skip=1

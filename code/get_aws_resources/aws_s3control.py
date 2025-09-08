@@ -32,6 +32,7 @@ def get_aws_s3_access_point(type, id, clfn, descfn, topkey, key, filterid):
                 response = client.list_access_points(AccountId=globals.acc,Bucket=id)
             except Exception as e:    
                 print("Access Point 2 ClientError "+str(e))
+                print("INFO: If using endpoints - check the endpoint policy returning")
                 pkey=type+"."+id
                 globals.rproc[pkey]=True
                 return True

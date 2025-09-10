@@ -80,6 +80,7 @@ elastirep=False
 elastigrep=False
 elasticc=False
 kinesismsk=False
+destbuck=False
 
 badlist=[]
 

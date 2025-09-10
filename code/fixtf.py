@@ -273,6 +273,7 @@ def fixtf(ttft,tf):
     globals.elastigrep=False
     globals.elasticc=False
     globals.kinesismsk=False
+    globals.destbuck=False
 
     if ttft=="aws_elasticache_cluster":
         for t1 in Lines:
@@ -796,8 +797,13 @@ def deref_role_arn(t1,tt1,tt2):
 
     if tt2.startswith("arn:aws:s3:::"):
         bn=tt2.split(":::")[-1]
-        t1=tt1 + " = aws_s3_bucket.b-" + bn + ".arn\n"
-        common.add_dependancy("aws_s3_bucket",bn)
+        try:
+            if globals.bucketlist[bn]:
+                t1=tt1 + " = aws_s3_bucket.b-" + bn + ".arn\n"
+                common.add_dependancy("aws_s3_bucket",bn)
+        except KeyError as e:
+            return t1
+        
     elif tt2.startswith("arn:aws:elasticloadbalancing"):
         tarn=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_").replace(" ","_").replace("*","star").replace("\\052","star").replace("@","_").replace("\\64","_")
         t1=tt1 + " = aws_lb." + tarn + ".arn\n"

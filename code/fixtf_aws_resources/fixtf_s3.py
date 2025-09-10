@@ -120,11 +120,16 @@ def aws_s3_bucket_public_access_block(t1,tt1,tt2,flag1,flag2):
 
 def aws_s3_bucket_replication_configuration(t1,tt1,tt2,flag1,flag2):
     skip=0
+    if "destination" in t1:
+         globals.destbuck=True
     try:
-        if tt1 == "bucket" and globals.debug5:
-            print("aws_s3_bucket_replication_configuration: "+tt2) 
+        if tt1 == "bucket" and globals.debug5:  print("aws_s3_bucket_replication_configuration: "+tt2) 
     except Exception as e:
         common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id)
+
+    if tt1 == "bucket" and globals.destbuck is True:
+        t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".arn\n"
+        globals.destbuck=False
 
     return skip,t1,flag1,flag2
 

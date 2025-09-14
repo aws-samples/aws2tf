@@ -1,0 +1,1 @@
+# AWS Resources module for aws2tf

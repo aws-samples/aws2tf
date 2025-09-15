@@ -40,7 +40,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             common.add_dependancy("aws_apigatewayv2_api", tt2)
         #if tt1=="bucket" or tt1=="s3_bucket_name" or tt1=="bucket_name":
         if tt1=="bucket" or tt1=="s3_bucket_name":
-            if globals.debug5: print("DEBUG5: aws_common: type=", type, "tt1=", tt1, "tt2=", tt2)
+            #if globals.debug5: print("DEBUG5: aws_common: type=", type, "tt1=", tt1, "tt2=", tt2)
             if type != "aws_s3_bucket":
                 if "." not in tt2:
                     if tt2 != "" and tt2 !="null":

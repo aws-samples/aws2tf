@@ -240,9 +240,19 @@ def get_all_s3_buckets(fb,my_region):
 
 def get_s3(s3_fields,type,bucket_name):
    try:
-      if globals.debug: print("get_s3 type=" + type)
+      if globals.debug: 
+         print("get_s3 type=" + type)
       response=s3_fields[type](Bucket=bucket_name)
-      
+      if type=="aws_s3_bucket_replication_configuration": 
+         try:
+            #print("HERE ....")
+            barn=str(response['ReplicationConfiguration']['Rules'][0]['Destination']['Bucket'])
+            #print("replication bucket="+barn)
+            repbuck=barn.split(":")[-1]
+            #print("replication bucket="+repbuck)
+            common.add_known_dependancy("aws_s3_bucket",repbuck)
+         except:
+             response=response
       rl=len(response)
       if rl > 1 :  common.write_import(type,bucket_name,"b-"+bucket_name)
 

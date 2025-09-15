@@ -122,19 +122,12 @@ def aws_s3_bucket_replication_configuration(t1,tt1,tt2,flag1,flag2):
     skip=0
     if "destination" in t1:
          globals.destbuck=True
-    try:
-        if tt1 == "bucket" and globals.debug5:  print("-- aws_s3_bucket_replication_configuration: "+tt2) 
-    except Exception as e:
-        common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id)
 
-
-    if tt1 == "bucket" and globals.destbuck is True:
-        if not tt2.startswith("arn:"):
-            print("WARNING: bucket is not an arn", t1)
-            return skip,t1,flag1,flag2
-        else:
-            bn=tt2.split(":")[-1]
-        
+    if tt1 == "bucket" and "arn:aws:s3" in tt2:
+        bn=tt2.split(":")[-1]
+        if globals.debug5: 
+             print("-- aws_s3_bucket_replication_configuration: "+bn)
+             print("-- " + str(globals.bucketlist))
         try:
             if globals.bucketlist[bn]:
                 t1=tt1 + " = aws_s3_bucket.b-" + bn + ".arn\n"

@@ -275,6 +275,23 @@ def fixtf(ttft,tf):
     globals.kinesismsk=False
     globals.destbuck=False
 
+
+    if ttft=="aws_s3_bucket_replication_configuration":
+        for t1 in Lines:
+            t1=t1.strip()
+            #if globals.debug5: print("DEBUG5: pre scan block: t1=", t1)
+            skip=0
+            tt1=t1.split("=")[0].strip()
+            if tt1=="bucket":
+                try:
+                    tt2=t1.split("=")[1].strip().strip('\"')
+                    if "arn:aws:s3" in tt2:
+                        tt2=tt2.split(":")[-1]
+                        if globals.debug5: print("DEBUG5: pre scan block: common.add_dep bucket_name=", tt2)
+                        common.add_dependancy("aws_s3_bucket", tt2)
+                except:
+                    tt2=""
+
     if ttft=="aws_elasticache_cluster":
         for t1 in Lines:
             t1=t1.strip()
@@ -953,10 +970,10 @@ def deref_elb_arn_array(t1,tt1,tt2):
 
 #### other arn derefs here
 def generic_deref_arn(t1, tt1, tt2):
-    print("Here",t1)
+    if globals.debug: print("Here",t1)
     try:
         if tt2.endswith("*"): return t1
-        print("*** generic "+t1)
+        if globals.debug: print("*** generic "+t1)
         isstar=False
     
         if tt2 == "null" or tt2 == "[]": return t1

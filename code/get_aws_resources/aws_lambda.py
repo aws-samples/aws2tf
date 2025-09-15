@@ -130,7 +130,7 @@ def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
                 id=id.split(":")[-1]
 
             try:
-                if globals.vpclist[id]:
+                if globals.lambdalist[id]:
                     fn=id
                     common.write_import(type, fn, None)
                     get_lambda_code(fn)
@@ -145,6 +145,8 @@ def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
 
             except KeyError:
                     print("WARNING: function not in lambda list " + id+ " Resource may be referencing a lambda that no longer exists") 
+                    pkey=type+"."+id
+                    globals.rproc[pkey]=True
 
 
     except Exception as e:

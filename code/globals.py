@@ -1,6 +1,6 @@
 import sys,os
 
-aws2tfver="v1011"
+aws2tfver="v1012"
 tfver="5.100.0"
 esttime=120.0
 profile="default"

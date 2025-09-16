@@ -247,7 +247,7 @@ def get_s3(s3_fields,type,bucket_name):
          try:
             #print("HERE ....")
             barn=str(response['ReplicationConfiguration']['Rules'][0]['Destination']['Bucket'])
-            #print("replication bucket="+barn)
+            if globals.debug5: print("get_s3: replication bucket="+barn)
             repbuck=barn.split(":")[-1]
             #print("replication bucket="+repbuck)
             common.add_known_dependancy("aws_s3_bucket",repbuck)

@@ -279,7 +279,7 @@ def fixtf(ttft,tf):
     if ttft=="aws_s3_bucket_replication_configuration":
         for t1 in Lines:
             t1=t1.strip()
-            #if globals.debug5: print("DEBUG5: pre scan block: t1=", t1)
+            if globals.debug5: print("DEBUG5: pre scan block: t1=", t1)
             skip=0
             tt1=t1.split("=")[0].strip()
             if tt1=="bucket":

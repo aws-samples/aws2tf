@@ -279,7 +279,7 @@ def fixtf(ttft,tf):
     if ttft=="aws_s3_bucket_replication_configuration":
         for t1 in Lines:
             t1=t1.strip()
-            #if globals.debug5: print("DEBUG5: pre scan block: t1=", t1)
+            if globals.debug5: print("DEBUG5: pre scan block1 : t1=", t1)
             skip=0
             tt1=t1.split("=")[0].strip()
             if tt1=="bucket":
@@ -287,7 +287,7 @@ def fixtf(ttft,tf):
                     tt2=t1.split("=")[1].strip().strip('\"')
                     if "arn:aws:s3" in tt2:
                         tt2=tt2.split(":")[-1]
-                        if globals.debug5: print("DEBUG5: pre scan block: common.add_dep bucket_name=", tt2)
+                        if globals.debug5: print("DEBUG5: pre scan block 2: common.add_dep bucket_name=", tt2)
                         common.add_dependancy("aws_s3_bucket", tt2)
                 except:
                     tt2=""

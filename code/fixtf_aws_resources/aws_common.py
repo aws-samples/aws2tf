@@ -40,26 +40,39 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             common.add_dependancy("aws_apigatewayv2_api", tt2)
         #if tt1=="bucket" or tt1=="s3_bucket_name" or tt1=="bucket_name":
         if tt1=="bucket" or tt1=="s3_bucket_name":
-            #if globals.debug5: print("DEBUG5: aws_common: type=", type, "tt1=", tt1, "tt2=", tt2)
+            if globals.debug5: print("DEBUG5: aws_common: type=", type, "tt1=", tt1, "tt2=", tt2)
             if type != "aws_s3_bucket":
                 if "." not in tt2:
                     if tt2 != "" and tt2 !="null":
-                        if tt2.startswith("arn:aws:s3"):  tt2=tt2.split(":")[-1]
                         if globals.debug5: 
                             print("DEBUG5: aws_common: bucket_name=", tt2)
                             for k, v in globals.bucketlist.items():
                                 print("DEBUG5: aws_common: bucketlist k,v=",k,v)
-                        if tt2 == "":
-                            print("WARNING: bucket name from arn " +tt2 +" is empty")
-                            return skip,t1,flag1,flag2
-                        
-                        try:
-                            if globals.bucketlist[tt2]:
-                                t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
-                                #common.add_dependancy("aws_s3_bucket", tt2)
+
+                        if tt2.startswith("arn:aws:s3"):  
+                            tt2=tt2.split(":")[-1]
+                            try:
+                                if globals.bucketlist[tt2]:
+                                    t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".arn\n"
+                                    #common.add_dependancy("aws_s3_bucket", tt2)
+                                    return skip,t1,flag1,flag2
+                            except KeyError as e:
                                 return skip,t1,flag1,flag2
-                        except KeyError as e:
-                            return skip,t1,flag1,flag2
+
+                        else:                        
+                            try:
+                                if globals.bucketlist[tt2]:
+                                    t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
+                                    #common.add_dependancy("aws_s3_bucket", tt2)
+                                    return skip,t1,flag1,flag2
+                            except KeyError as e:
+                                return skip,t1,flag1,flag2
+                        
+                    else:
+                        print("WARNING: bucket name from arn " +tt2 +" is empty or null")
+                        return skip,t1,flag1,flag2
+
+                    
                     
         if tt1.endswith("bucket_arn"):
             if globals.debug5: print("DEBUG5: aws_common: bucket_name=", tt2, "lhs=",tt1)

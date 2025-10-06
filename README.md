@@ -42,8 +42,27 @@ Finally aws2tf runs a `terraform plan` command and there should hopefully be no 
 
 Running the tool in your local shell (bash) required these steps:
 1. Unzip or clone this git repo into an empty directory.
+    
+    For AWS provider version 6.0.0 and above use:
+
+    ```bash
+    git clone https://github.com/aws-samples/aws2tf.git
+    ```
+
+    *For the legacy version 5.x of the AWS provider use:*
+
+    ```bash
+    git clone -b v5 https://github.com/aws-samples/aws2tf.git
+    ```
+
 2. login to the AWS cli  (aws configure).
-3. run the tool - see usage guide below.
+3. Install th4 requirements:
+
+```bash
+pip3 install -r requirements.txt
+```
+
+4. run the tool - see usage guide below.
 
 -----
 

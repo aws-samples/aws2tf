@@ -50,6 +50,12 @@ def aws_elasticache_replication_group(t1,tt1,tt2,flag1,flag2):
 		t1=tt1+' = aws_elasticache_global_replication_group.'+tt2+'.id\n'
 		globals.elastigrep=True
 		common.add_dependancy("aws_elasticache_global_replication_group", tt2)
+
+	elif tt1=="auth_token" and tt2=="null # sensitive": skip=1
+	elif tt1=="auth_token_update_strategy" and tt2=="null": skip=1
+
+
+
 	elif tt1 == "num_cache_clusters" and tt1 != "0": globals.elasticc=True
 	elif tt1 == "num_node_groups":
 		if globals.elastigrep: skip=1
@@ -79,7 +85,7 @@ def aws_elasticache_subnet_group(t1,tt1,tt2,flag1,flag2):
 def aws_elasticache_user(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if tt1 == "engine" and tt2=="redis":
-		t1=tt1+' = "REDIS"\n'
+		t1=tt1+' = "redis"\n'
 		t1=t1+"\n lifecycle {\n   ignore_changes = [engine,authentication_mode[0].type]\n}\n"
 	if tt1 == "type" and tt2=="no-password":
 		tt2="no-password-required"

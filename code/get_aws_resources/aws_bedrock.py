@@ -49,7 +49,7 @@ def get_aws_bedrock_guardrail(type, id, clfn, descfn, topkey, key, filterid):
                 for k in resp2[topkey]:
                     try:
                         tresp=client.list_tags_for_resource(resourceARN=k['arn'])
-                        print(str(tresp))
+                        #print(str(tresp))
                     except Exception as e:
                         exc_type, exc_obj, exc_tb = sys.exc_info()
                         exn=str(exc_type.__name__)

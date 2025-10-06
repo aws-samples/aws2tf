@@ -17,6 +17,7 @@ def get_aws_bedrockagent_agent(type, id, clfn, descfn, topkey, key, filterid):
             if response == []: 
                 print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
+            #print(str(response))
             for j in response:
                 aid=j[key]
                 common.write_import(type,j[key],"r-"+aid) 

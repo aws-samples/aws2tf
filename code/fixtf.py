@@ -419,17 +419,16 @@ def fixtf(ttft,tf):
         globals.stripstart="{"
         globals.stripend="}"
 
+    if ttft=="aws_instance":
+        globals.stripblock="primary_network_interface {"
+        globals.stripstart="{"
+        globals.stripend="}"
+
     if ttft=="aws_kinesis_firehose_delivery_stream":
         if globals.kinesismsk:
             globals.stripblock="server_side_encryption {"
             globals.stripstart="{"
             globals.stripend="}"
-    
-    
-    
-    
-    
-    
 
     globals.gulejobmaxcap=False
     globals.ec2ignore=False
@@ -607,7 +606,7 @@ def globals_replace(t1,tt1,tt2):
                     #print("--> a1="+ str(a1) + " ")
                     if r1>0 and r1 < a1:
                             #print("--> 6a")
-                            ends=ends+",data.aws_region.current.name"
+                            ends=ends+",data.aws_region.current.region"
                             tt2=tt2[:r1]+":%s:"+tt2[r1+globals.regionl+2:]
 
                     a1=tt2.find(":"+globals.acc+":")
@@ -641,7 +640,7 @@ def globals_replace(t1,tt1,tt2):
                     #print("--> a1="+ str(a1) + " ")
                     if r1>0 and r1 < a1:
                             #print("--> 6a")
-                            ends=ends+",data.aws_region.current.name"
+                            ends=ends+",data.aws_region.current.region"
                             tt2=tt2[:r1]+":%s:"+tt2[r1+globals.regionl+2:]
 
                     a1=tt2.find(":"+globals.acc+":")
@@ -686,7 +685,7 @@ def rhs_replace(t1,tt1,tt2):
                     #print("--> a1="+ str(a1) + " ")
                     if r1>0 and a1>0 and r1 < a1: # there is region and it comes 1st
                             #print("--> 6a")
-                            ends=ends+",data.aws_region.current.name"
+                            ends=ends+",data.aws_region.current.region"
                             tt2=tt2[:r1]+"%s"+tt2[r1+globals.regionl:]
                             a1=tt2.find(globals.acc)
                             tt2=tt2[:a1]+"%s"+tt2[a1+12:]
@@ -697,7 +696,7 @@ def rhs_replace(t1,tt1,tt2):
                             tt2=tt2[:r1]+"%s"+tt2[r1+globals.regionl:]
                             a1=tt2.find(globals.acc)
                             tt2=tt2[:a1]+"%s"+tt2[a1+12:]
-                            ends=ends+",data.aws_region.current.name"
+                            ends=ends+",data.aws_region.current.region"
                 
                     t1 = tt1+' = format("'+tt2+ '"' +ends+')\n'
         #print("t1="+t1)

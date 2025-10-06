@@ -312,15 +312,15 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         elif tt2=="jsonencode("+globals.acc+")": 
             t1=tt1 + ' = format("%s",data.aws_caller_identity.current.account_id)\n'
         # RHS is region
-        elif tt2==globals.region: t1=tt1 + ' = format("%s",data.aws_region.current.name)\n'
+        elif tt2==globals.region: t1=tt1 + ' = format("%s",data.aws_region.current.region)\n'
         
         ## fix zones
-        elif tt2==globals.region+"a":  t1=tt1 + ' = format("%sa",data.aws_region.current.name)\n'
-        elif tt2==globals.region+"b":  t1=tt1 + ' = format("%sb",data.aws_region.current.name)\n'
-        elif tt2==globals.region+"c":  t1=tt1 + ' = format("%sc",data.aws_region.current.name)\n'
-        elif tt2==globals.region+"d":  t1=tt1 + ' = format("%sd",data.aws_region.current.name)\n'
-        elif tt2==globals.region+"e":  t1=tt1 + ' = format("%se",data.aws_region.current.name)\n'
-        elif tt2==globals.region+"f":  t1=tt1 + ' = format("%sf",data.aws_region.current.name)\n'
+        elif tt2==globals.region+"a":  t1=tt1 + ' = format("%sa",data.aws_region.current.region)\n'
+        elif tt2==globals.region+"b":  t1=tt1 + ' = format("%sb",data.aws_region.current.region)\n'
+        elif tt2==globals.region+"c":  t1=tt1 + ' = format("%sc",data.aws_region.current.region)\n'
+        elif tt2==globals.region+"d":  t1=tt1 + ' = format("%sd",data.aws_region.current.region)\n'
+        elif tt2==globals.region+"e":  t1=tt1 + ' = format("%se",data.aws_region.current.region)\n'
+        elif tt2==globals.region+"f":  t1=tt1 + ' = format("%sf",data.aws_region.current.region)\n'
 
         ### s3:// processing
         elif tt2.startswith("s3://"): 

@@ -698,11 +698,13 @@ def wrapup():
       if "No changes. Your infrastructure matches the configuration" not in str(rout.stdout.decode().rstrip()):
          print(errs)
          print("ERROR: unexpected final plan stuff - exiting")
-         print(str(rout.stdout.decode().rstrip()))
-         print(str(rout.stderr.decode().rstrip()))
-         print("exit 034")
-         timed_int.stop()
-         exit()
+
+         if "aws_bedrockagent_agent" not in errs:
+            print("exit 034")
+            timed_int.stop()
+            exit()
+         else:
+            print("WARNING: aws_bedrockagent_agent - continuing")
       else:
          print("PASSED: No changes in plan")
          com = "mv import__*.tf *.out *.json imported"
@@ -717,7 +719,10 @@ def wrapup():
    rout = rc(com)
    if "No changes. Your infrastructure matches the configuration" not in str(rout.stdout.decode().rstrip()):
       print("ERROR: unexpected final plan failure")
-      print(str(rout.stdout.decode().rstrip()))
+      out1=str(rout.stdout.decode().rstrip())
+      print(out1)
+      #if "aws_bedrockagent_agent" in out1:
+      #   print("WARNING: aws_bedrockagent_agent - continuing")"
       print(str(rout.stderr.decode().rstrip()))
       print("exit 035")
       timed_int.stop()

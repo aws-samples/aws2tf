@@ -467,7 +467,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::CloudWatch::MetricStream": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::CodeArtifact::Domain": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::CodeArtifact::Repository": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::CodeBuild::Project": common.call_resource("aws_codebuild_project", pid)
+            #elif type == "AWS::CodeBuild::Project": common.call_resource("aws_codebuild_project", pid)
             elif type == "AWS::CodeBuild::ReportGroup": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::CodeBuild::SourceCredential": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::CodeCommit::Repository": common.call_resource("aws_codecommit_repository",pid)

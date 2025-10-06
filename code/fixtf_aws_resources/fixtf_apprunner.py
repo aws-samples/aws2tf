@@ -27,7 +27,7 @@ def aws_apprunner_service(t1,tt1,tt2,flag1,flag2):
 		print(tt2)
 		if tt2.startswith(globals.acc) and globals.region in tt2:
 			backend=tt2.split("/")[-1]
-			t1=tt1 + " = format(\"%s.dkr.ecr.%s.amazonaws.com/%s\",data.aws_caller_identity.current.account_id,data.aws_region.current.name,\""+backend+"\")\n"
+			t1=tt1 + " = format(\"%s.dkr.ecr.%s.amazonaws.com/%s\",data.aws_caller_identity.current.account_id,data.aws_region.current.region,\""+backend+"\")\n"
 			
 	return skip,t1,flag1,flag2
 

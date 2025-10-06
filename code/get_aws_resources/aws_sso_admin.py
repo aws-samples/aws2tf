@@ -74,7 +74,7 @@ def get_aws_ssoadmin_managed_policy_attachment(type, id, clfn, descfn, topkey, k
         response = []
         client = boto3.client(clfn)  
         inid=id.split(",")[1]; psarn=id.split(",")[0] 
-        print("id="+id)
+        #print("id="+id)
         response = client.list_managed_policies_in_permission_set(InstanceArn=inid,PermissionSetArn=psarn)
         if response == []: 
             if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
@@ -83,7 +83,7 @@ def get_aws_ssoadmin_managed_policy_attachment(type, id, clfn, descfn, topkey, k
             return True
         for j in response['AttachedManagedPolicies']:
             mparn=j['Arn']
-            print("----->>>>>> mparn="+mparn)
+            #print("----->>>>>> mparn="+mparn)
             pkey=mparn+","+psarn+","+inid
             theid=pkey.replace(",", "_")
             common.write_import(type,pkey,theid)

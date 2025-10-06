@@ -325,12 +325,17 @@ def get_aws_sagemaker_image_version(type, id, clfn, descfn, topkey, key, filteri
             print("WARNING: Must pass image id as parameter")
         else:
             response = client.list_image_versions(ImageName=id)
+            #print("list_image_versions=",response)
             if response == []:
                 if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             pkey="aws_sagemaker_image_version."+id
-            common.write_import(type, id, None)
-            #print("************",pkey)
+            for j in response[topkey]:
+                if j['ImageVersionStatus']=="CREATED":
+                    iv=j['Version']
+                    theid=id+","+str(iv)
+                    common.write_import(type, theid, None)
+                #print("************",pkey)
             globals.rproc[pkey]=True
 
     except Exception as e:

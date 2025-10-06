@@ -105,16 +105,21 @@ def get_aws_datazone_user_profile(type, id, clfn, descfn, topkey, key, filterid)
                 if response == []: 
                     if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                     globals.rproc[pkey]=True    
-                #print(str(response))
+              
                 for k in response:
-                    if k['type']=="IAM":
-                        uarn=k['details']['iam']['arn']
-                        theid=uarn+","+id+','+k['type']
-                    else:
-                        j=k[key]
-                        theid=j+","+id+','+k['type']
+                    if str(k['status'])=="ACTIVATED":
+                        if k['type']=="IAM":
+                            uarn=k['details']['iam']['arn']
+                            theid=uarn+","+id+','+k['type']
+                            common.write_import(type,theid,None)
+                        else:
+                            if globals.debug: 
+                                print(str(k))
+                            j=k[key]
+                            theid=j+","+id+','+k['type']
+                            common.write_import(type,theid,None) 
                     #print(theid)
-                    common.write_import(type,theid,None) 
+                    #common.write_import(type,theid,None) 
                 
         globals.rproc[pkey]=True
 

@@ -1,8 +1,6 @@
 
 <img src="https://github.com/aws-samples/aws2tf/blob/python/.logos/aws2tf.png" width="300" alt="aws2tf" class="center">
 
-
-
 ----
 
 ## Description
@@ -34,7 +32,7 @@ Finally aws2tf runs a `terraform plan` command and there should hopefully be no 
 + trivy **version 0.67.0 or later**  (https://aquasecurity.github.io/trivy/v0.54/)
 
 
-(*This tool is currently developed/tested using Python 3.9.16 on macOS 15.7*)
+(*This tool is currently developed/tested using Python 3.13.7 on macOS 15.7*)
 
 ----
 

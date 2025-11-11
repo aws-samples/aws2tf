@@ -1,7 +1,7 @@
 import sys,os
 
-aws2tfver="v1012"
-tfver="5.100.0"
+aws2tfver="v6002"
+tfver="6.20.0"
 esttime=120.0
 profile="default"
 sso=False
@@ -128,7 +128,7 @@ def exit_aws2tf(mess):
     if mess is not None or mess!="":
         print(mess)
 
-    if globals.fast:
+    if context.fast:
         os._exit(1) 
     else:
         sys.exit(1)

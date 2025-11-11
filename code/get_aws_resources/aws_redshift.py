@@ -1,11 +1,11 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 
 def get_aws_blank_namespace(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_redshiftserverless_namespace  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -35,7 +35,7 @@ def get_aws_blank_namespace(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_blank_workgroup(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In _aws_redshiftserverless_workgroup  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -67,7 +67,7 @@ def get_aws_blank_workgroup(type, id, clfn, descfn, topkey, key, filterid):
 def get_aws_redshift_parameter_group(type, id, clfn, descfn, topkey, key, filterid):
 
 
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_redshift_parameter_group  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         

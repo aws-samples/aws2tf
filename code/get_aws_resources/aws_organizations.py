@@ -1,12 +1,12 @@
 import common
 import boto3
-import globals
+import context
 import os
 import sys
 import inspect
 
 def get_aws_organizations_organization(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -46,7 +46,7 @@ def get_aws_organizations_organization(type, id, clfn, descfn, topkey, key, filt
 
 
 def get_aws_organizations_organizational_unit(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -73,7 +73,7 @@ def get_aws_organizations_organizational_unit(type, id, clfn, descfn, topkey, ke
 
 
 def get_aws_organizations_policy(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -147,7 +147,7 @@ def get_aws_organizations_policy(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 def get_aws_organizations_account(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -177,7 +177,7 @@ def get_aws_organizations_account(type, id, clfn, descfn, topkey, key, filterid)
 
 
 def get_aws_organizations_resource_policy(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -212,7 +212,7 @@ def get_aws_organizations_resource_policy(type, id, clfn, descfn, topkey, key, f
 
 #aws_organizations_policy_attachment
 def get_aws_organizations_policy_attachment(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -239,9 +239,9 @@ def get_aws_organizations_policy_attachment(type, id, clfn, descfn, topkey, key,
                 #    return True
             #print("aws_organizations_policy_attachment response: "+str(response))
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
                 return True
             
             if id=="p-pj4vhztq":

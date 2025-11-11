@@ -1,10 +1,10 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 def get_aws_cloudformation_stack(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:

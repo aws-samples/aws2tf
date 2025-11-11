@@ -1,10 +1,10 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 def get_aws_xray_sampling_rule(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -15,7 +15,7 @@ def get_aws_xray_sampling_rule(type, id, clfn, descfn, topkey, key, filterid):
         for page in paginator.paginate():
                 response = response + page[topkey]
         if response == []: 
-            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
             return True
         for j in response:
             theid=j['SamplingRule'][key]
@@ -30,12 +30,12 @@ def get_aws_xray_sampling_rule(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 def get_aws_xray_encryption_config(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
-        common.write_import(type,globals.region,None) 
+        common.write_import(type,context.region,None) 
 
 
 

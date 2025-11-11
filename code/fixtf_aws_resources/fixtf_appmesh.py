@@ -1,5 +1,5 @@
 import common
-import globals
+import context
 
 
 
@@ -51,12 +51,12 @@ def aws_appmesh_virtual_service(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if tt1=="mesh_name" and tt2 != "null": 
 		t1=tt1+" = aws_appmesh_mesh."+tt2+".id\n"
-		globals.meshname=tt2
+		context.meshname=tt2
 	if tt1=="virtual_node_name" and tt2 != "null": 
-		t1=tt1+" = aws_appmesh_virtual_node."+globals.meshname+"_"+tt2+".name\n"
+		t1=tt1+" = aws_appmesh_virtual_node."+context.meshname+"_"+tt2+".name\n"
 
 	if tt1=="virtual_router_name" and tt2 != "null": 
-		t1=tt1+" = aws_appmesh_virtual_router."+globals.meshname+"_"+tt2+".name\n"
+		t1=tt1+" = aws_appmesh_virtual_router."+context.meshname+"_"+tt2+".name\n"
 	
 	return skip,t1,flag1,flag2
 

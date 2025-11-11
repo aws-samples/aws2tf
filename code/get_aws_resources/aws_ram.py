@@ -1,10 +1,10 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 def get_aws_ram_resource_share(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -15,7 +15,7 @@ def get_aws_ram_resource_share(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(resourceOwner='SELF'):
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -37,7 +37,7 @@ def get_aws_ram_resource_share(type, id, clfn, descfn, topkey, key, filterid):
 
 # aws_ram_principal_association #
 def get_aws_ram_principal_association(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -52,7 +52,7 @@ def get_aws_ram_principal_association(type, id, clfn, descfn, topkey, key, filte
                 pkey=j['resourceShareArn']+","+j[key]
                 common.write_import(type, pkey, None)
                 pkey=type+"."+j['resourceShareArn']
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
 
         else:
             if id.startswith("arn:"):
@@ -62,7 +62,7 @@ def get_aws_ram_principal_association(type, id, clfn, descfn, topkey, key, filte
                     pkey=j['resourceShareArn']+","+j[key]
                     common.write_import(type, pkey, None)
                     pkey=type+"."+id
-                    globals.rproc[pkey]=True
+                    context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
@@ -70,7 +70,7 @@ def get_aws_ram_principal_association(type, id, clfn, descfn, topkey, key, filte
     return True
 
 def get_aws_ram_resource_association(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -85,7 +85,7 @@ def get_aws_ram_resource_association(type, id, clfn, descfn, topkey, key, filter
                 pkey=j['resourceShareArn']+","+j[key]
                 common.write_import(type, pkey, None)
                 pkey=type+"."+j['resourceShareArn']
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
 
         else:
             if id.startswith("arn:"):
@@ -96,7 +96,7 @@ def get_aws_ram_resource_association(type, id, clfn, descfn, topkey, key, filter
                     pkey=j['resourceShareArn']+","+j[key]
                     common.write_import(type, pkey, None)
                     pkey=type+"."+id
-                    globals.rproc[pkey]=True
+                    context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)

@@ -1,5 +1,5 @@
 import common
-import globals
+import context
 
 def aws_networkmanager_attachment_accepter(t1,tt1,tt2,flag1,flag2):
 	skip=0
@@ -100,7 +100,7 @@ def aws_networkmanager_transit_gateway_registration(t1,tt1,tt2,flag1,flag2):
 	elif tt1=="transit_gateway_arn" and tt2 !="null":
 		if tt2.startswith("arn:"):
 			tgid=tt2.split("/")[-1]
-			if tgid in str(globals.tgwlist.keys()):
+			if tgid in str(context.tgwlist.keys()):
 				t1=tt1+" = aws_ec2_transit_gateway."+tgid+".arn\n"
 				common.add_dependancy("aws_ec2_transit_gateway",tgid)
 	return skip,t1,flag1,flag2

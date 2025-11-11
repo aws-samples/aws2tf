@@ -1,10 +1,10 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 def get_aws_cloudtrail(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -18,7 +18,7 @@ def get_aws_cloudtrail(type, id, clfn, descfn, topkey, key, filterid):
                 print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
-                if j['HomeRegion']==globals.region:
+                if j['HomeRegion']==context.region:
                     common.write_import(type,j[key],None) 
 
         else:      
@@ -26,7 +26,7 @@ def get_aws_cloudtrail(type, id, clfn, descfn, topkey, key, filterid):
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning")
             return True
             j=response['Trail']
-            if j['HomeRegion']==globals.region:
+            if j['HomeRegion']==context.region:
                 common.write_import(type,j[key],None)
 
     except Exception as e:

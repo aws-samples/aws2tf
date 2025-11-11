@@ -1,11 +1,11 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 
 def get_aws_kinesis_stream(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_kinesis_stream  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         

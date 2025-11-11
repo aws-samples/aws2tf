@@ -1,11 +1,11 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 
 def get_aws_servicecatalog_portfolio(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -16,7 +16,7 @@ def get_aws_servicecatalog_portfolio(type, id, clfn, descfn, topkey, key, filter
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response:
                 theid=j[key]
@@ -45,7 +45,7 @@ def get_aws_servicecatalog_portfolio(type, id, clfn, descfn, topkey, key, filter
 
 
 def get_aws_servicecatalog_product(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -56,7 +56,7 @@ def get_aws_servicecatalog_product(type, id, clfn, descfn, topkey, key, filterid
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 theid=j['ProductViewSummary'][key]
@@ -67,16 +67,16 @@ def get_aws_servicecatalog_product(type, id, clfn, descfn, topkey, key, filterid
         else:      
             response = client.search_products_as_admin(PortfolioId=id)
             if response[topkey] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
                 return True
             for j in response[topkey]:
                 theid=j['ProductViewSummary'][key]
                 common.write_import(type,theid,None) 
                 common.add_dependancy("aws_servicecatalog_product_portfolio_association",theid)
             pkey=type+"."+id
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -86,7 +86,7 @@ def get_aws_servicecatalog_product(type, id, clfn, descfn, topkey, key, filterid
 
 #aws_servicecatalog_constraint#
 def get_aws_servicecatalog_constraint(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -98,15 +98,15 @@ def get_aws_servicecatalog_constraint(type, id, clfn, descfn, topkey, key, filte
         else:
             response = client.list_constraints_for_portfolio(PortfolioId=id)
             if response[topkey] == []:
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
                 return True
             for j in response[topkey]:
                 theid=j[key]
                 common.write_import(type, theid, None)
             pkey=type+"."+id
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
@@ -115,7 +115,7 @@ def get_aws_servicecatalog_constraint(type, id, clfn, descfn, topkey, key, filte
 
 
 def get_aws_servicecatalog_principal_portfolio_association(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -128,9 +128,9 @@ def get_aws_servicecatalog_principal_portfolio_association(type, id, clfn, descf
         else:
             response = client.list_principals_for_portfolio(PortfolioId=id)
             if response[topkey] == []:
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
                 return True
             
             for j in response[topkey]:
@@ -138,7 +138,7 @@ def get_aws_servicecatalog_principal_portfolio_association(type, id, clfn, descf
                 tkey="en,"+theid+","+id+","+j['PrincipalType']
                 common.write_import(type, tkey, None)
             pkey=type+"."+id
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
@@ -147,7 +147,7 @@ def get_aws_servicecatalog_principal_portfolio_association(type, id, clfn, descf
 
 #aws_servicecatalog_product_portfolio_association#
 def get_aws_servicecatalog_product_portfolio_association(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -160,16 +160,16 @@ def get_aws_servicecatalog_product_portfolio_association(type, id, clfn, descfn,
         else:
             response = client.list_portfolios_for_product(ProductId=id)
             if response[topkey] == []:
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
                 return True
             for j in response[topkey]:
                 theid=j[key]
                 tkey="en:"+theid+":"+id
                 common.write_import(type, tkey, None)
             pkey=type+"."+id
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)

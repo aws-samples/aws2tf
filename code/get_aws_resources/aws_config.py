@@ -1,10 +1,10 @@
 import common
-import globals
+import context
 import inspect
 
 # "$AWS configservice describe-config-rules  --config-rule-names $1"
 def get_aws_config_config_rule(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_config_config_rule  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -32,7 +32,7 @@ def get_aws_config_config_rule(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_config_aggregate_authorization(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_config_config_rule  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -40,7 +40,7 @@ def get_aws_config_aggregate_authorization(type, id, clfn, descfn, topkey, key, 
         if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
         if id is None:
-                theid=globals.acc+":"+globals.region
+                theid=context.acc+":"+context.region
                 common.write_import(type, theid, id)
 
                     

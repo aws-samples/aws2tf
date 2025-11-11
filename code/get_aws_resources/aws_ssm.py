@@ -1,10 +1,10 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 def get_aws_ssm_document(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -34,7 +34,7 @@ def get_aws_ssm_document(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 def get_aws_ssm_association(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -61,7 +61,7 @@ def get_aws_ssm_association(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 def get_aws_ssm_default_patch_baseline(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -89,7 +89,7 @@ def get_aws_ssm_default_patch_baseline(type, id, clfn, descfn, topkey, key, filt
     return True
 
 def get_aws_ssm_patch_baseline(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:

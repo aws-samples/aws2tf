@@ -1,4 +1,4 @@
-import globals
+import context
 import common
 import fixtf
 import base64
@@ -17,9 +17,9 @@ def aws_autoscaling_group(t1,tt1,tt2,flag1,flag2):
 	elif tt1 == "load_balancers" and tt2 == "[]": skip=1
 	elif tt1 == "target_group_arns": skip=1
 	elif tt1 == "availability_zones":
-		if len(tt2) > 4: globals.asg_azs=True
+		if len(tt2) > 4: context.asg_azs=True
 	elif tt1 == "vpc_zone_identifier":
-		if globals.asg_azs: skip=1
+		if context.asg_azs: skip=1
 
 	elif tt1 == "force_delete" or tt1=="force_delete_warm_pool" or tt1=="ignore_failed_scaling_activities":
 		if tt2=="null":
@@ -93,7 +93,7 @@ def aws_launch_configuration(t1,tt1,tt2,flag1,flag2):
 
 	elif tt1 == "key_name": 
 		if tt2 != "null":
-			if not globals.dkey:
+			if not context.dkey:
 				tfil=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
 				t1=tt1 + " = aws_key_pair." + tfil + ".id\n"
 				common.add_dependancy("aws_key_pair",tt2)

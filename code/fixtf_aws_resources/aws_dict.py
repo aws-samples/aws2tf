@@ -2141,7 +2141,7 @@ aws_cloudtrail = {
 	"clfn":		"cloudtrail",
 	"descfn":	"list_trails",
 	"topkey":	"Trails",
-	"key":		"Name",
+	"key":		"TrailARN",
 	"filterid":	"Name"
 }
 

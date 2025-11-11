@@ -1,8 +1,6 @@
 
 <img src="https://github.com/aws-samples/aws2tf/blob/python/.logos/aws2tf.png" width="300" alt="aws2tf" class="center">
 
-
-
 ----
 
 ## Description
@@ -22,8 +20,8 @@ Finally aws2tf runs a `terraform plan` command and there should hopefully be no 
 
 + MacOS or Linux 
 + Python3 (v3.12.0+)
-+ boto3 1.36.13 or later (pip3 install -r requirements.txt).
-+ AWS cli (v2) **version 2.22.33 or higher** needs to be installed and you need a login with at least "Read" privileges.
++ boto3 1.40.44 or later (pip3 install -r requirements.txt).
++ AWS cli (v2) **version 2.31.4 or higher** needs to be installed and you need a login with at least "Read" privileges.
 + Terraform **version v1.12.0** or higher needs to be installed. (recommend you avoid early point releases eg. 1.9.0/1.9.1)
 + jq **version 1.6 or higher**
 
@@ -31,10 +29,10 @@ Finally aws2tf runs a `terraform plan` command and there should hopefully be no 
 
 + pyenv - to help manage Python versions and environments (https://github.com/pyenv/pyenv)
 + tfenv - - to help manage multiple Terraform versions (https://github.com/tfutils/tfenv)
-+ trivy **version 0.48.0 or later**  (https://aquasecurity.github.io/trivy/v0.54/)
++ trivy **version 0.67.0 or later**  (https://aquasecurity.github.io/trivy/v0.54/)
 
 
-(*This tool is currently developed/tested using Python 3.9.16 on macOS 15.1.1*)
+(*This tool is currently developed/tested using Python 3.13.7 on macOS 15.7*)
 
 ----
 
@@ -42,8 +40,27 @@ Finally aws2tf runs a `terraform plan` command and there should hopefully be no 
 
 Running the tool in your local shell (bash) required these steps:
 1. Unzip or clone this git repo into an empty directory.
+    
+    For AWS provider version 6.0.0 and above use:
+
+    ```bash
+    git clone https://github.com/aws-samples/aws2tf.git
+    ```
+
+    *For the legacy version 5.x of the AWS provider use:*
+
+    ```bash
+    git clone -b v5 https://github.com/aws-samples/aws2tf.git
+    ```
+
 2. login to the AWS cli  (aws configure).
-3. run the tool - see usage guide below.
+3. Install th4 requirements:
+
+```bash
+pip3 install -r requirements.txt
+```
+
+4. run the tool - see usage guide below.
 
 -----
 

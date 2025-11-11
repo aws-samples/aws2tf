@@ -1,4 +1,4 @@
-import globals 
+import context 
 import common
 import fixtf
 import base64
@@ -12,8 +12,8 @@ def aws_glue_crawler(t1,tt1,tt2,flag1,flag2):
 	
 	try:
 		if tt1 == "database_name" and tt2 != "null":
-			if tt2 in str(globals.gluedbs):
-				t1 = tt1 + " = aws_glue_catalog_database.d-"+globals.acc+"__"+tt2+".name\n"
+			if tt2 in str(context.gluedbs):
+				t1 = tt1 + " = aws_glue_catalog_database.d-"+context.acc+"__"+tt2+".name\n"
 			#common.add_dependancy("aws_glue_catalog_database",tt2)
 
 		elif tt1 == "sample_size":
@@ -35,7 +35,7 @@ def aws_glue_catalog_database(t1,tt1,tt2,flag1,flag2):
 def aws_glue_catalog_table(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if tt1 == "database_name" and tt2 != "null":
-		t1 = tt1 + " = aws_glue_catalog_database.d-"+globals.acc+"__"+tt2+".name\n"
+		t1 = tt1 + " = aws_glue_catalog_database.d-"+context.acc+"__"+tt2+".name\n"
 		common.add_dependancy("aws_glue_catalog_database",tt2)
 	return skip,t1,flag1,flag2
 
@@ -65,11 +65,11 @@ def aws_glue_job(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	#print("aws_glue_job t1=",t1)
 	if tt1 == "max_capacity" and tt2 != "null":
-		globals.gulejobmaxcap=True
+		context.gulejobmaxcap=True
 	if tt1 == "number_of_workers":
-		if globals.gulejobmaxcap: skip=1
+		if context.gulejobmaxcap: skip=1
 	if tt1 == "worker_type":
-		if globals.gulejobmaxcap: skip=1
+		if context.gulejobmaxcap: skip=1
 	if tt1 == "description":
 		t1=t1+"\n lifecycle {\n   ignore_changes = [glue_version,number_of_workers,worker_type,role_arn]\n}\n"
 	if tt1 == "security_configuration" and tt2 != "null":

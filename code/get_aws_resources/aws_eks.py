@@ -1,12 +1,12 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 from botocore.config import Config
 
 # as list_clusters is awkward
 def get_aws_eks_cluster(type,id,clfn,descfn,topkey,key,filterid):
-   if globals.debug:
+   if context.debug:
       print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
  
@@ -19,7 +19,7 @@ def get_aws_eks_cluster(type,id,clfn,descfn,topkey,key,filterid):
       for page in paginator.paginate():
          response = response + page[topkey]
       if response == []: 
-         #if globals.debug: 
+         #if context.debug: 
          print("Empty response for "+type+ " id="+str(id)+" returning") 
          return True
       
@@ -38,7 +38,7 @@ def get_aws_eks_cluster(type,id,clfn,descfn,topkey,key,filterid):
    else:      
       response = client.describe_cluster(name=id)
       if response == []: 
-         #if globals.debug: 
+         #if context.debug: 
          print("Empty response for "+type+ " id="+str(id)+" returning") 
          return True
       
@@ -58,7 +58,7 @@ def get_aws_eks_cluster(type,id,clfn,descfn,topkey,key,filterid):
    return True
 
 def get_aws_eks_fargate_profile(type,id,clfn,descfn,topkey,key,filterid):
-   if globals.debug:
+   if context.debug:
       print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    
@@ -85,7 +85,7 @@ def get_aws_eks_fargate_profile(type,id,clfn,descfn,topkey,key,filterid):
    return True
 
 def get_aws_eks_node_group(type,id,clfn,descfn,topkey,key,filterid):
-   if globals.debug:
+   if context.debug:
       print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -111,7 +111,7 @@ def get_aws_eks_node_group(type,id,clfn,descfn,topkey,key,filterid):
    return True
 
 def get_aws_eks_addon(type,id,clfn,descfn,topkey,key,filterid):
-   if globals.debug:
+   if context.debug:
       print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
       
@@ -141,7 +141,7 @@ def get_aws_eks_addon(type,id,clfn,descfn,topkey,key,filterid):
 
 
 def get_aws_eks_identity_provider_config(type,id,clfn,descfn,topkey,key,filterid):
-   if globals.debug:
+   if context.debug:
       print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    try:   
@@ -167,7 +167,7 @@ def get_aws_eks_identity_provider_config(type,id,clfn,descfn,topkey,key,filterid
    return True
 
 def get_aws_eks_pod_identity_association(type,id,clfn,descfn,topkey,key,filterid):
-   if globals.debug:
+   if context.debug:
       print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -199,7 +199,7 @@ def get_aws_eks_pod_identity_association(type,id,clfn,descfn,topkey,key,filterid
    
       
 def get_aws_eks_access_entry(type,id,clfn,descfn,topkey,key,filterid):
-   if globals.debug:
+   if context.debug:
       print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -223,7 +223,7 @@ def get_aws_eks_access_entry(type,id,clfn,descfn,topkey,key,filterid):
             pkey=id+","+retid
             if "aws-service-role" in j:
                print("INFO: aws-service-role in get_aws_eks_access_entry returning")
-               globals.rproc[pkey]=True
+               context.rproc[pkey]=True
                continue
 
             resp2=client.describe_access_entry(clusterName=id,principalArn=j)
@@ -240,7 +240,7 @@ def get_aws_eks_access_entry(type,id,clfn,descfn,topkey,key,filterid):
   
 
 def get_aws_eks_access_policy_association(type,id,clfn,descfn,topkey,key,filterid):
-   if globals.debug:
+   if context.debug:
       print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -264,15 +264,15 @@ def get_aws_eks_access_policy_association(type,id,clfn,descfn,topkey,key,filteri
       pkey=type+"."+id
       if "aws-service-role" in parn: 
          print("INFO: aws-service-role in get_aws_eks_access_policy_association returning")
-         globals.rproc[pkey]=True
+         context.rproc[pkey]=True
          return True           
       client = boto3.client(clfn)  
       response = client.list_associated_access_policies(clusterName=cln,principalArn=parn)
       
       
       if response[topkey] == []: 
-         if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
-         globals.rproc[pkey]=True
+         if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+         context.rproc[pkey]=True
          return True
       
       for j in response[topkey]:
@@ -281,7 +281,7 @@ def get_aws_eks_access_policy_association(type,id,clfn,descfn,topkey,key,filteri
             
             common.write_import(type,theid,None) 
             
-      globals.rproc[pkey]=True
+      context.rproc[pkey]=True
 
    except Exception as e:
       common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

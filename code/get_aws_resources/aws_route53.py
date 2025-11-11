@@ -1,10 +1,10 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 def get_aws_route53_zone(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -37,7 +37,7 @@ def get_aws_route53_zone(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_route53_record(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -47,7 +47,7 @@ def get_aws_route53_record(type, id, clfn, descfn, topkey, key, filterid):
             print("WARNING: No id or invalid provided for "+type)
         else:
             rkey=type+"."+id
-            globals.rproc[rkey]=True
+            context.rproc[rkey]=True
             if id.startswith("/hostedzone/"): id=id.split("/")[2]
             #print("id="+id)
             paginator = client.get_paginator(descfn)

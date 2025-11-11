@@ -1,11 +1,11 @@
 import common
 import boto3
 from botocore.config import Config
-import globals
+import context
 import inspect, sys
 
 def get_aws_elasticache_cluster(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -17,7 +17,7 @@ def get_aws_elasticache_cluster(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -29,12 +29,12 @@ def get_aws_elasticache_cluster(type, id, clfn, descfn, topkey, key, filterid):
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 exn=str(exc_type.__name__)
                 if exn=="CacheClusterNotFoundFault":
-                    if globals.debug: print("CacheClusterNotFoundFault for "+type+ " id="+str(id)+" returning")
+                    if context.debug: print("CacheClusterNotFoundFault for "+type+ " id="+str(id)+" returning")
                     return True
                 return True
             #print(str(response))
             if response['CacheClusters'] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response[topkey]:
                 common.write_import(type,j[key],None)
@@ -47,7 +47,7 @@ def get_aws_elasticache_cluster(type, id, clfn, descfn, topkey, key, filterid):
 # aws_elasticache_serverless_cache
 
 def get_aws_elasticache_serverless_cache(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -59,7 +59,7 @@ def get_aws_elasticache_serverless_cache(type, id, clfn, descfn, topkey, key, fi
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -71,11 +71,11 @@ def get_aws_elasticache_serverless_cache(type, id, clfn, descfn, topkey, key, fi
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 exn=str(exc_type.__name__)
                 if exn=="CacheClusterNotFoundFault":
-                    if globals.debug: print("CacheClusterNotFoundFault for "+type+ " id="+str(id)+" returning")
+                    if context.debug: print("CacheClusterNotFoundFault for "+type+ " id="+str(id)+" returning")
                     return True
                 return True
             if response['ServerlessCaches'] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             j=response['ServerlessCaches']
             common.write_import(type,j[key],None)

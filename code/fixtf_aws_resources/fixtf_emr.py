@@ -4,7 +4,7 @@ import base64
 import boto3
 import sys
 import os
-import globals
+import context
 import inspect
 
 
@@ -19,11 +19,11 @@ def aws_emr_cluster(t1,tt1,tt2,flag1,flag2):
 			t1=tt1+" = \"CHANGE_ME\"\n"
 	elif tt1=="applications":
 		t1=t1+"\n lifecycle {\n   ignore_changes = [kerberos_attributes[0].kdc_admin_password]\n}\n"
-		globals.emrsubnetid=False
+		context.emrsubnetid=False
 	elif tt1=="subnet_id":
-		if "subnet" in tt2: globals.emrsubnetid=True
+		if "subnet" in tt2: context.emrsubnetid=True
 	elif tt1=="subnet_ids":
-		if globals.emrsubnetid: skip=1
+		if context.emrsubnetid: skip=1
 	elif tt1=="security_configuration" and tt2!="null":
 		t1=tt1+" = aws_emr_security_configuration."+tt2+".name\n"
 		common.add_dependancy("aws_emr_security_configuration", tt2)

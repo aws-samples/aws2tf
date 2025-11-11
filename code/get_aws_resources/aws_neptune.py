@@ -1,10 +1,10 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 def get_aws_neptune_subnet_group(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     
@@ -35,7 +35,7 @@ def get_aws_neptune_subnet_group(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 def get_aws_neptune_cluster_endpoint(type, id, clfn, descfn, topkey, key, filterid):
-    #if globals.debug:
+    #if context.debug:
     print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     

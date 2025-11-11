@@ -1,6 +1,6 @@
 import common
 import fixtf
-import globals
+import context
 
 def aws_eks_addon(t1,tt1,tt2,flag1,flag2):
     skip=0
@@ -49,7 +49,7 @@ def aws_eks_fargate_profile(t1,tt1,tt2,flag1,flag2):
     ##if tt1 == "subnet_ids":  t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
     if tt1 == "pod_execution_role_arn":     
         if ":" in tt2: tt2=tt2.split("/")[-1]
-        if tt2 in globals.rolelist:
+        if tt2 in context.rolelist:
             t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
             common.add_dependancy("aws_iam_role",tt2)
     elif tt1 == "cluster_name":

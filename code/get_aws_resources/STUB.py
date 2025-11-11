@@ -1,11 +1,11 @@
 import common
 import boto3
 from botocore.config import Config
-import globals
+import context
 import inspect
 
 def get_aws_stub(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -17,7 +17,7 @@ def get_aws_stub(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -25,7 +25,7 @@ def get_aws_stub(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.describe_stream(StreamName=id)
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             j=response
             common.write_import(type,j[key],None)

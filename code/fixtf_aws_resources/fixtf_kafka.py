@@ -1,5 +1,5 @@
 import common
-import globals
+import context
 
 def aws_msk_broker_nodes(t1,tt1,tt2,flag1,flag2):
 	skip=0
@@ -8,10 +8,11 @@ def aws_msk_broker_nodes(t1,tt1,tt2,flag1,flag2):
 def aws_msk_cluster(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if tt1=="log_group" and tt2!="null":
-		t1=tt1+" = aws_cloudwatch_log_group."+tt2+".name\n"
+		lgn=tt2.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_").replace(", ", "_").replace("&", "_").replace("#", "_").replace("[", "_").replace("]", "_").replace("=", "_").replace("!", "_").replace(";", "_")
+		t1=tt1+" = aws_cloudwatch_log_group."+lgn+".name\n"
 		common.add_dependancy("aws_cloudwatch_log_group",tt2)
 	elif tt1=="delivery_stream" and tt2!="null":
-		karn="arn:aws:firehose:"+globals.region+":"+globals.acc+":deliverystream/"+tt2
+		karn="arn:aws:firehose:"+context.region+":"+context.acc+":deliverystream/"+tt2
 		tarn=karn.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
 		t1=tt1+" = aws_kinesis_firehose_delivery_stream."+tarn+".name\n"
 		common.add_dependancy("aws_kinesis_firehose_delivery_stream",tt2)

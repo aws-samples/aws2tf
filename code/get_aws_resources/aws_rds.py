@@ -1,6 +1,6 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 import botocore
 import inspect
@@ -11,7 +11,7 @@ from botocore.exceptions import ClientError
 def get_aws_db_parameter_group(type, id, clfn, descfn, topkey, key, filterid):
 
 
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_db_parameter_group  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -48,7 +48,7 @@ def get_aws_db_parameter_group(type, id, clfn, descfn, topkey, key, filterid):
 def get_aws_db_option_group(type, id, clfn, descfn, topkey, key, filterid):
 
 
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_db_option_group  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -82,7 +82,7 @@ def get_aws_db_option_group(type, id, clfn, descfn, topkey, key, filterid):
 #aws_db_subnet_group
 
 def get_aws_db_subnet_group(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     
@@ -107,7 +107,7 @@ def get_aws_db_subnet_group(type, id, clfn, descfn, topkey, key, filterid):
                         common.write_import(type,j[key],None)
                 else:
                     pkey="aws_db_subnet_group."+id
-                    globals.rproc[pkey]=True
+                    context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -118,7 +118,7 @@ def get_aws_db_subnet_group(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_rds_custom_db_engine_version(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -150,7 +150,7 @@ def get_aws_rds_custom_db_engine_version(type, id, clfn, descfn, topkey, key, fi
 #aws_db_event_subscription#
 
 def get_aws_db_event_subscription(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -182,7 +182,7 @@ def get_aws_db_event_subscription(type, id, clfn, descfn, topkey, key, filterid)
 
 
 def get_aws_db_instance(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -211,7 +211,7 @@ def get_aws_db_instance(type, id, clfn, descfn, topkey, key, filterid):
             print("WARNING: InvalidParameterValue for "+type+ " "+str(id)+" returning")
             print(str(error.response['Error']['Code']))
             pkey=type+"."+str(id)
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
             return True
     
     
@@ -221,7 +221,7 @@ def get_aws_db_instance(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 def get_aws_rds_cluster_instance(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -237,7 +237,7 @@ def get_aws_rds_cluster_instance(type, id, clfn, descfn, topkey, key, filterid):
                 if engine.startswith("aurora"): 
                     common.write_import(type, j[key], None)
                     pkey=type+"."+j[key]
-                    globals.rproc[pkey]=True
+                    context.rproc[pkey]=True
                     
                 else:
                     continue
@@ -252,7 +252,7 @@ def get_aws_rds_cluster_instance(type, id, clfn, descfn, topkey, key, filterid):
                 if engine.startswith("aurora"):
                     common.write_import(type, j[key], None)
                     pkey=type+"."+j[key]
-                    globals.rproc[pkey]=True
+                    context.rproc[pkey]=True
                 else:
                     continue
 
@@ -262,7 +262,7 @@ def get_aws_rds_cluster_instance(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 def get_aws_rds_cluster(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -278,7 +278,7 @@ def get_aws_rds_cluster(type, id, clfn, descfn, topkey, key, filterid):
                 if engine.startswith("aurora"): 
                     common.write_import(type, j[key], None)
                     pkey=type+"."+j[key]
-                    globals.rproc[pkey]=True
+                    context.rproc[pkey]=True
                     
                 else:
                     continue
@@ -293,7 +293,7 @@ def get_aws_rds_cluster(type, id, clfn, descfn, topkey, key, filterid):
                 if engine.startswith("aurora"):
                     common.write_import(type, j[key], None)
                     pkey=type+"."+j[key]
-                    globals.rproc[pkey]=True
+                    context.rproc[pkey]=True
                 else:
                     continue
 

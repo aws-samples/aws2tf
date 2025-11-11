@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import boto3
 import common
-import globals
+import context
 import os
 import sys
 import inspect
@@ -14,15 +14,15 @@ from botocore.exceptions import NoCredentialsError, ClientError
 
 
 def get_aws_s3_bucket(type, id, clfn, descfn, topkey, key, filterid):
-   globals.tracking_message="Stage 3 of 10 getting s3 resources ..."
-   get_all_s3_buckets(id,globals.region)
+   context.tracking_message="Stage 3 of 10 getting s3 resources ..."
+   get_all_s3_buckets(id,context.region)
    return True
 
 
 def check_access(bucket_name,my_region):
    
    try:
-      #session = boto3.Session(region_name=my_region,profile_name=globals.profile)
+      #session = boto3.Session(region_name=my_region,profile_name=context.profile)
       #s3 = session.client('s3')
       s3 = boto3.client('s3')
       ####### problematic call
@@ -33,17 +33,17 @@ def check_access(bucket_name,my_region):
         print(f"CREDENTIAL ERROR: Unable to locate credentials for SSO session")
         print("Please ensure you have an active SSO session (run 'aws sso login')")
         print(f"Error details: {e}")
-        globals.bucketlist[bucket_name] = False
+        context.bucketlist[bucket_name] = False
         return False
 
    except ClientError as e:
       error_code = e.response['Error']['Code']
       if error_code == 'AccessDenied':
             print(f"NO ACCESS (1): to Bucket: {bucket_name} - continue")
-            globals.bucketlist[bucket_name] = False
-            globals.s3list[bucket_name] = False
+            context.bucketlist[bucket_name] = False
+            context.s3list[bucket_name] = False
             pkey="aws_s3_bucket."+bucket_name
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
             return False
         
       elif error_code == 'ExpiredToken':
@@ -53,11 +53,11 @@ def check_access(bucket_name,my_region):
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             exn=str(exc_type.__name__)
             print((f"{fname=} {exc_tb.tb_lineno=} \n"))
-            globals.bucketlist[bucket_name] = False
+            context.bucketlist[bucket_name] = False
             return False
       else:
             print(f"AWS Error: {error_code} - {e}")
-            globals.bucketlist[bucket_name] = False
+            context.bucketlist[bucket_name] = False
             return False
 
    except Exception as e:
@@ -66,7 +66,7 @@ def check_access(bucket_name,my_region):
          #print(f"{exn=}")
          if exn == "AccessDenied" or exn=="ClientError":
             print("NO ACCESS (2): to Bucket: "+bucket_name + " - continue")
-            globals.bucketlist[bucket_name]=False
+            context.bucketlist[bucket_name]=False
             return
          
          print(f"{e=}")
@@ -86,17 +86,17 @@ def get_all_s3_buckets(fb,my_region):
       if fb =="" or fb =="null":
          print("bucket name is empty or null")
          pkey=type+"."+fb
-         globals.rproc[pkey]=True
+         context.rproc[pkey]=True
          return True
       
-      if fb not in str(globals.s3list.keys()):
+      if fb not in str(context.s3list.keys()):
             print("Bucket ",fb, "not in s3list")
             pkey=type+"."+fb
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
             return True
    
-   if globals.debug: print("my_region="+my_region)
-   #print("processed=" + str(globals.rproc))
+   if context.debug: print("my_region="+my_region)
+   #print("processed=" + str(context.rproc))
    """Gets all the AWS S3 buckets and saves them to a file."""
    boto3.setup_default_session(region_name=my_region)
    s3a = boto3.resource("s3",region_name=my_region) 
@@ -127,34 +127,34 @@ def get_all_s3_buckets(fb,my_region):
   
 
 
-   if not globals.debug:
+   if not context.debug:
 
-      for bn in globals.s3list.keys():
+      for bn in context.s3list.keys():
       #for bucket in s3a.buckets.all():
          #if fb is not None and fb not in bucket.name: continue
          if fb is not None and fb not in bn: continue
 
-         #globals.bucketlist[bucket.name]=True
-         globals.bucketlist[bn]=True
+         #context.bucketlist[bucket.name]=True
+         context.bucketlist[bn]=True
       
       
       #print("----------------------")
       
       # check can access
-      with ThreadPoolExecutor(max_workers=globals.cores) as executor4:
+      with ThreadPoolExecutor(max_workers=context.cores) as executor4:
          futures = [
             executor4.submit(check_access,key,my_region)
-            for key in globals.bucketlist.keys()
+            for key in context.bucketlist.keys()
          ]
 
 
-      for k, v in globals.bucketlist.items():
+      for k, v in context.bucketlist.items():
          if v is True:
             #print("true bucket="+k,str(v))
             bucket_name=k
             
-            if "aws_s3_bucket."+bucket_name in str(globals.rproc):
-               if globals.rproc["aws_s3_bucket."+bucket_name] is True:
+            if "aws_s3_bucket."+bucket_name in str(context.rproc):
+               if context.rproc["aws_s3_bucket."+bucket_name] is True:
                   print("Already processed skipping bucket " + bucket_name + " (MT)")
                   continue
                
@@ -162,16 +162,16 @@ def get_all_s3_buckets(fb,my_region):
             common.write_import(type,bucket_name,"b-"+bucket_name)
             common.add_dependancy("aws_s3_access_point",bucket_name)
             pkey=type+"."+bucket_name
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
 
 
-      globals.tracking_message="Stage 3 of 10 getting s3 bucket properties resources ..."
-      for k, v in globals.bucketlist.items():
+      context.tracking_message="Stage 3 of 10 getting s3 bucket properties resources ..."
+      for k, v in context.bucketlist.items():
          if v is True:
             #print("true bucket="+k,str(v))
             bucket_name=k
             ### thread thread ?
-            with ThreadPoolExecutor(max_workers=globals.cores) as executor3:
+            with ThreadPoolExecutor(max_workers=context.cores) as executor3:
                      futures = [
                         executor3.submit(get_s3,s3_fields,key,bucket_name)
                         for key in s3_fields
@@ -185,10 +185,10 @@ def get_all_s3_buckets(fb,my_region):
    else:
 
       #for buck in buckets: 
-      for bucket_name in globals.s3list.keys():   
+      for bucket_name in context.s3list.keys():   
       
          #bucket_name=buck.name
-         if "aws_s3_bucket,"+bucket_name in globals.rproc:
+         if "aws_s3_bucket,"+bucket_name in context.rproc:
             print("Already processed skipping bucket " + bucket_name+ " (ST)")
             os._exit(1)
             continue
@@ -218,8 +218,8 @@ def get_all_s3_buckets(fb,my_region):
                print('continuing on exception to location .......')
                continue
 
-         if "aws_s3_bucket."+bucket_name in str(globals.rproc):
-               if globals.rproc["aws_s3_bucket."+bucket_name] is True:
+         if "aws_s3_bucket."+bucket_name in str(context.rproc):
+               if context.rproc["aws_s3_bucket."+bucket_name] is True:
                   print("Already processed skipping bucket " + bucket_name + " (MT)")
                   continue
 
@@ -227,7 +227,7 @@ def get_all_s3_buckets(fb,my_region):
          common.write_import(type,bucket_name,"b-"+bucket_name)
          common.add_dependancy("aws_s3_access_point",bucket_name)
          pkey=type+"."+bucket_name
-         globals.rproc[pkey]=True
+         context.rproc[pkey]=True
       
          for key in s3_fields:
             get_s3(s3_fields, key, bucket_name)
@@ -240,7 +240,7 @@ def get_all_s3_buckets(fb,my_region):
 
 def get_s3(s3_fields,type,bucket_name):
    try:
-      if globals.debug: 
+      if context.debug: 
          print("get_s3 type=" + type)
       response=s3_fields[type](Bucket=bucket_name)
       if type=="aws_s3_bucket_replication_configuration": 
@@ -258,7 +258,7 @@ def get_s3(s3_fields,type,bucket_name):
 
 
    except:
-      if globals.debug: print("No " + type + " config for bucket " + bucket_name)
+      if context.debug: print("No " + type + " config for bucket " + bucket_name)
       pass
 
 

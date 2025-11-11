@@ -9,7 +9,7 @@ from io import StringIO
 from contextlib import suppress
 import shutil
 import json
-import globals
+import context
 import glob
 import botocore
 import fixtf
@@ -119,10 +119,10 @@ from fixtf_aws_resources import aws_not_implemented
 
 def call_resource(type, id):
    #print("--1-- in call_resources >>>>> "+type+"   "+str(id))
-   if type in globals.all_extypes:
-      if globals.debug: print("Common Excluding:", type,id) 
+   if type in context.all_extypes:
+      if context.debug: print("Common Excluding:", type,id) 
       pkey=type+"."+id
-      globals.rproc[pkey] = True
+      context.rproc[pkey] = True
       return
    
    if type in aws_no_import.noimport:
@@ -130,7 +130,7 @@ def call_resource(type, id):
       if id is not None:
          with open('not-imported.log', 'a') as f2:
             f2.write(type + " : " + str(id) + "\n")
-         globals.rproc[type+"."+id] = True
+         context.rproc[type+"."+id] = True
       return
 
    if type in aws_not_implemented.notimplemented:
@@ -144,13 +144,13 @@ def call_resource(type, id):
       return
 
     # don't get it if we alreay have it
-    # if globals.rproc
-   if globals.debug: print("---->>>>> "+type+"   "+str(id))
+    # if context.rproc
+   if context.debug: print("---->>>>> "+type+"   "+str(id))
    if id is not None:
       ti = type+"."+id
       try:
-         if globals.rproc[ti]:
-            if globals.debug: print("Already processed " + ti)
+         if context.rproc[ti]:
+            if context.debug: print("Already processed " + ti)
             print("Already processed " + ti)
             return
       except:
@@ -177,7 +177,7 @@ def call_resource(type, id):
 # Try specific
 
    try:
-            if globals.debug:
+            if context.debug:
                print("calling specific common.get_"+type+" with type="+type+" id="+str(id)+"   clfn=" +
                     clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
 
@@ -199,7 +199,7 @@ def call_resource(type, id):
             sr = getfn(type, id, clfn, descfn, topkey, key, filterid)
 
    except AttributeError as e:
-      if globals.debug:
+      if context.debug:
          print("AttributeError: name 'getfn' - no aws_"+clfn+".py file ?")
          print(f"{e=}")
          exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -208,12 +208,12 @@ def call_resource(type, id):
       pass
 
    except SyntaxError:
-      if globals.debug: print(
+      if context.debug: print(
           "SyntaxError: name 'getfn' - no aws_"+clfn+".py file ?")
       pass
 
    except NameError as e:
-      if globals.debug:
+      if context.debug:
          print("WARNING: NameError: name 'getfn' - no aws_"+clfn+".py file ?")
          print(f"{e=}")
          exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -228,7 +228,7 @@ def call_resource(type, id):
 
    if not sr:
       try:
-         if globals.debug:
+         if context.debug:
                print("calling generic getresource with type="+type+" id="+str(id)+"   clfn="+clfn +
                " descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
          rr = getresource(type, id, clfn, descfn, topkey, key, filterid)
@@ -254,8 +254,8 @@ def tfplan1():
    if not glob.glob("import*.tf"):
 
       print("INFO: No import*.tf files found - nothing to import, exiting ....")
-      print("INFO: Confirm the resource type exists in your account: "+globals.acc+" & region: "+globals.region)
-      globals.tracking_message="No import*.tf files found for this resource, exiting ...."
+      print("INFO: Confirm the resource type exists in your account: "+context.acc+" & region: "+context.region)
+      context.tracking_message="No import*.tf files found for this resource, exiting ...."
       timed_int.stop()
       os._exit(0)
 
@@ -267,7 +267,7 @@ def tfplan1():
 
    com = "terraform plan -generate-config-out=" + \
        rf + " -out tfplan -json > plan1.json"
-   if not globals.fast: print(com)
+   if not context.fast: print(com)
    rout = rc(com)
       
    file = "plan1.json"
@@ -280,7 +280,7 @@ def tfplan1():
          break
       # print(line)
       if '@level": "error"' in line:
-         if globals.debug is True:
+         if context.debug is True:
             print("Error" + line)
          try:
                mess = f2.readline()
@@ -291,7 +291,7 @@ def tfplan1():
                      if i != "":
                         print("ERROR: Removing "+i +
                               " import files - plan errors see plan1.json [p1]")
-                        globals.badlist = globals.badlist+[i]
+                        context.badlist = context.badlist+[i]
                         shutil.move("import__*"+i+"*.tf",
                                     "notimported/import__*"+i+"*.tf")
 
@@ -302,7 +302,7 @@ def tfplan1():
                      if i != "":
                         print("ERROR: Removing "+i +
                               " import files - plan errors see plan1.json [p2]")
-                        globals.badlist = globals.badlist+[i]
+                        context.badlist = context.badlist+[i]
                         shutil.move("import__*"+i+"*.tf",
                                     "notimported/import__*"+i+"*.tf")
 
@@ -314,16 +314,16 @@ def tfplan1():
                   if i != "":
                      print("ERROR: Removing "+i +
                            " files - plan errors see plan1.json [p3]")
-                     globals.badlist = globals.badlist+[i]
+                     context.badlist = context.badlist+[i]
                      shutil.move("import__*"+i+"*.tf",
                                  "notimported/import__*"+i+"*.tf")
                      shutil.move("aws_*"+i+"*.tf",
                                  "notimported/aws_*"+i+"*.tf")
 
                except:
-                  if globals.debug is True:
+                  if context.debug is True:
                      print(mess.strip())
-                  globals.plan2 = True
+                  context.plan2 = True
 
          except:
                print("Error - no error message, check plan1.json")
@@ -359,7 +359,7 @@ def tfplan2():
    # print("split resources.out")
    splitf("resources.out")  # generated *.out files
    # zap the badlist
-   for i in globals.badlist:
+   for i in context.badlist:
       # com="rm -f aws_*"+i+"*.out"+" aws_*"+i+"*.tf"
       print("ERROR: Removing "+i+" files - plan errors see plan1.json [p4]")
 
@@ -402,9 +402,9 @@ def tfplan3():
       print(com)
       rout = rc(com)
 
-   globals.tracking_message="Validate and Test Plan  ..."
+   context.tracking_message="Validate and Test Plan  ..."
    print("\nValidate and Test Plan  ... ")
-   if globals.merge:
+   if context.merge:
       com = "cp imported/aws_*.tf ."
       rout = rc(com)
    if not glob.glob("aws_*.tf"):
@@ -429,51 +429,51 @@ def tfplan3():
    if "Success! The configuration is valid" not in str(rout.stdout.decode().rstrip()):
       print(str(rout.stdout.decode().rstrip()))
       print("Validation after fix failed - exiting")
-      globals.tracking_message="Validation after fix failed - exiting"
-      print("exit 020",str(globals.aws2tfver))
+      context.tracking_message="Validation after fix failed - exiting"
+      print("exit 020",str(context.aws2tfver))
       timed_int.stop()
       exit()
 
    else:
       print("Valid Configuration.")
-      if globals.validate:
+      if context.validate:
          print("Validate Only..")
          return
    zeroi=0    
 
 ################################################################################
    x = glob.glob("aws_*__*.tf")
-   globals.esttime=len(x)/4
+   context.esttime=len(x)/4
    awsf=len(x)
    y = glob.glob("import__*.tf")
    #print("new import files="+str(y))
    impf=len(y)
 
    if awsf != impf:
-      if globals.workaround=="":
-         if not globals.merge:
+      if context.workaround=="":
+         if not context.merge:
             print("ERROR: "+str(awsf)+ "x aws_*.tf and " + str(impf) +"x import__*.tf file counts do not match")      
             #print("\nLikely import error [1] - do the following and report errors in github issue:")
-            #print("cd "+globals.path1)
+            #print("cd "+context.path1)
             #print("terraform plan -generate-config-out=resources.out")
             fix_imports()
          #exit()
       else:
          print("INFO: "+str(awsf)+ "x aws_*.tf and " + str(impf) +"x import__*.tf file counts do not match")
-         print("INFO: Continuing due to workaround "+globals.workaround)
+         print("INFO: Continuing due to workaround "+context.workaround)
    else:
       print("PASSED: aws_*.tf and import__*.tf file counts match =",awsf)
 
 
 ################################################################################
 
-   #if globals.merge:
-   globals.plan2=True
+   #if context.merge:
+   context.plan2=True
 
-   if globals.plan2:
+   if context.plan2:
 
       print("Penultimate Terraform Plan ... ")
-      globals.tracking_message="Stage 7 of 10, Penultimate Terraform Plan ..."
+      context.tracking_message="Stage 7 of 10, Penultimate Terraform Plan ..."
       # redo plan
       com = "rm -f resources.out tfplan"
       #print(com)
@@ -481,7 +481,7 @@ def tfplan3():
       
       com = "terraform plan -generate-config-out=" + \
           rf + " -out tfplan -json > plan2.json"
-      if not globals.fast: print(com)
+      if not context.fast: print(com)
       rout = rc(com)
       zerod = False
       zeroc = False
@@ -510,11 +510,11 @@ def tfplan3():
                  print(
                      "WARNING: Conflicting configuration arguments in aws_security_group_rule")
               else:
-                  if globals.debug is True:
+                  if context.debug is True:
                      print("Error" + line)
 
                   print("-->> Plan 2 errors exiting - check plan2.json - or run terraform plan")
-                  print("exit 021",str(globals.aws2tfver))
+                  print("exit 021",str(context.aws2tfver))
                   timed_int.stop()
                   exit()
 
@@ -565,14 +565,14 @@ def tfplan3():
                ci = ci+1
             print("\n")
 
-            if globals.expected is False:
-               print("You can check the changes by running 'terraform plan' in ",globals.path1+"\n")
+            if context.expected is False:
+               print("You can check the changes by running 'terraform plan' in ",context.path1+"\n")
                print("Then rerun the same ./aws2tf.py command and add the '-a' flag to accept these plan changes and continue to import")
                print("exit 023")
                timed_int.stop()
                exit()
 
-            if globals.debug is True:
+            if context.debug is True:
                print("\n-->> Then if happy with the output changes for the above resources, run this command to complete aws2tf-py tasks:")
                print("exit 024")
                timed_int.stop()
@@ -581,7 +581,7 @@ def tfplan3():
          else:
             print("-->> plan will change resources! - unexpected")
             print("-->> look at plan2.json - or run terraform plan")
-            print("exit 025",str(globals.aws2tfver))
+            print("exit 025",str(context.aws2tfver))
             timed_int.stop()
             exit()
 
@@ -598,22 +598,22 @@ def tfplan3():
    ### validations checks
    # import__ == aws_*.tf - and import number
    #   
-   if not globals.merge:
+   if not context.merge:
       if zeroi == awsf:
          print("PASSED: import count = file counts =",str(zeroi))
       else:
          print("INFO: import count "+str(zeroi) +" != file counts "+ str(awsf))
-         if globals.workaround=="":
+         if context.workaround=="":
             print("\nLikely import error [2] - do the following and report errors in github issue")
-            print("cd "+globals.path1)
+            print("cd "+context.path1)
             print("terraform plan -generate-config-out=resources.out")
             print("exit 027")
             timed_int.stop()
             exit()
          else:
-            print("INFO: Continuing due to workaround "+globals.workaround)
+            print("INFO: Continuing due to workaround "+context.workaround)
          
-   if globals.merge:
+   if context.merge:
          print("Merge check")
          if zeroi==0:
             print("Nothing to merge exiting ...")
@@ -652,14 +652,14 @@ def tfplan3():
       timed_int.stop()
       exit()
 
-   #if globals.merge:
+   #if context.merge:
    #   exit()
    #   print("merge - exit after plan2")
 
 def wrapup():
    ### copy predefined import files
    print("Final Terraform Validation")
-   globals.tracking_message="Stage 8 of 10, Final Terraform Validation"
+   context.tracking_message="Stage 8 of 10, Final Terraform Validation"
    com = "terraform validate -no-color"
    rout = rc(com)
    el = len(rout.stderr.decode().rstrip())
@@ -674,7 +674,7 @@ def wrapup():
    else:
       print("PASSED: Valid Configuration.")
 
-   if globals.merge:
+   if context.merge:
       print("Pre apply merge check")
       if not os.path.isfile("plan2.json"):
          print("ERROR: Could not find plan2.json, unexpected on merge - exiting ....")
@@ -683,7 +683,7 @@ def wrapup():
          exit()
       
    print("Terraform import via apply of tfplan....")
-   globals.tracking_message="Stage 9 of 10, Terraform import via apply of tfplan...."
+   context.tracking_message="Stage 9 of 10, Terraform import via apply of tfplan...."
    com = "terraform apply -no-color tfplan"
    rout = rc(com)
    zerod = False
@@ -698,11 +698,13 @@ def wrapup():
       if "No changes. Your infrastructure matches the configuration" not in str(rout.stdout.decode().rstrip()):
          print(errs)
          print("ERROR: unexpected final plan stuff - exiting")
-         print(str(rout.stdout.decode().rstrip()))
-         print(str(rout.stderr.decode().rstrip()))
-         print("exit 034")
-         timed_int.stop()
-         exit()
+
+         if "aws_bedrockagent_agent" not in errs:
+            print("exit 034")
+            timed_int.stop()
+            exit()
+         else:
+            print("WARNING: aws_bedrockagent_agent - continuing")
       else:
          print("PASSED: No changes in plan")
          com = "mv import__*.tf *.out *.json imported"
@@ -712,19 +714,22 @@ def wrapup():
          return
    #print(str(rout.stdout.decode().rstrip()))
    print("\nPost Import Plan Check .....")
-   globals.tracking_message="Stage 10 of 10, Post Import Plan Check ....."
+   context.tracking_message="Stage 10 of 10, Post Import Plan Check ....."
    com = "terraform plan -no-color"
    rout = rc(com)
    if "No changes. Your infrastructure matches the configuration" not in str(rout.stdout.decode().rstrip()):
       print("ERROR: unexpected final plan failure")
-      print(str(rout.stdout.decode().rstrip()))
+      out1=str(rout.stdout.decode().rstrip())
+      print(out1)
+      #if "aws_bedrockagent_agent" in out1:
+      #   print("WARNING: aws_bedrockagent_agent - continuing")"
       print(str(rout.stderr.decode().rstrip()))
       print("exit 035")
       timed_int.stop()
       exit()
    else:
       print("PASSED: No changes in plan")
-      globals.tracking_message="Stage 10 of 10, Passed post import check - No changes in plan"
+      context.tracking_message="Stage 10 of 10, Passed post import check - No changes in plan"
       com = "mv import__*.tf *.out *.json imported"
       rout = rc(com)
       com = "cp aws_*.tf imported"
@@ -747,7 +752,7 @@ def rc(cmd):
 
 def fix_imports():
    x = glob.glob("aws_*__*.tf")
-   globals.esttime=len(x)/4
+   context.esttime=len(x)/4
    awsf=len(x)
    y = glob.glob("import__*.tf")
    impf=len(y)
@@ -819,7 +824,7 @@ def check_python_version():
 
 
 def aws_tf(region,args):
-   # os.chdir(globals.path1)
+   # os.chdir(context.path1)
    #if not os.path.isfile("aws.tf"):
 
    with open("provider.tf", 'w') as f3:
@@ -829,15 +834,15 @@ def aws_tf(region,args):
       f3.write('    aws = {\n')
       f3.write('      source  = "hashicorp/aws"\n')
       # f3.write('      version = "5.48.0"\n')
-      f3.write('      version = "'+globals.tfver+'"\n')
+      f3.write('      version = "'+context.tfver+'"\n')
       f3.write('    }\n')
       f3.write('  }\n')
       f3.write('}\n')
       f3.write('provider "aws" {\n')
       f3.write('  region                   = "' + region + '"\n')
       if args.profile is not None:
-         f3.write('  profile                  = "' + globals.profile + '"\n')
-      if not globals.serverless: f3.write('  shared_credentials_files = ["~/.aws/credentials"]\n')
+         f3.write('  profile                  = "' + context.profile + '"\n')
+      if not context.serverless: f3.write('  shared_credentials_files = ["~/.aws/credentials"]\n')
       f3.write('}\n')
 
    com = "cp provider.tf imported/provider.tf"
@@ -849,7 +854,7 @@ def aws_tf(region,args):
          f3.write('data "aws_availability_zones" "az" {\n')
          f3.write('state = "available"\n')
          f3.write('}\n')
-   if not globals.merge:
+   if not context.merge:
       print("terraform init")
       com = "terraform init -no-color -upgrade"
       rout = rc(com)
@@ -866,7 +871,7 @@ def splitf_old(file):
    lhs = 0
    rhs = 0
    if os.path.isfile(file):
-      if globals.debug: print("split file:" + file)
+      if context.debug: print("split file:" + file)
       with open(file, "r") as f:
          Lines = f.readlines()
       for tt1 in Lines:
@@ -888,8 +893,8 @@ def splitf_old(file):
                # print("resource: " + tt1)
                ttft = tt1.split('"')[1]
                taddr = tt1.split('"')[3]
-               # if globals.acc in taddr:
-               #   a1=taddr.find(globals.acc)
+               # if context.acc in taddr:
+               #   a1=taddr.find(context.acc)
                #   taddr=taddr[:a1]+taddr[a1+12:]
                #   #print("taddr="+taddr)
 
@@ -919,7 +924,7 @@ def splitf(input_file):
    # Compile regex patterns for better performance
    resource_pattern = re.compile(r'resource "(\w+)" "(.+?)"')
    comment_pattern = re.compile(r'^\s*#')
-   if globals.debug: print("split file: " + input_file)
+   if context.debug: print("split file: " + input_file)
    # Read the entire file content at once
    with open(input_file, 'r') as f:
         content = f.read()
@@ -985,14 +990,14 @@ def write_import(type,theid,tfid):
       else:
          fn="import__"+type+"__"+tfid+".tf"
 
-      #fn=fn.replace(globals.acc,"012345678912")
+      #fn=fn.replace(context.acc,"012345678912")
 
-      if globals.debug: print(fn)
+      if context.debug: print(fn)
          #print(fn)
          
          # check if file exists:
          #
-      if globals.merge:   
+      if context.merge:   
          #y = glob.glob("imported/import__*.tf")
          #print("Pre imp check:", str(y))
          if os.path.isfile("imported/"+fn):
@@ -1000,10 +1005,10 @@ def write_import(type,theid,tfid):
             return
          
       if os.path.isfile(fn):
-            if globals.debug: print("File exists: " + fn)
+            if context.debug: print("File exists: " + fn)
             #print("File exists: " + fn)
             pkey=type+"."+tfid
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
             return
          #print("theid=",theid,"  tfid=",tfid)
 
@@ -1020,7 +1025,7 @@ def write_import(type,theid,tfid):
                   # Write the filtered resource block to a new file
          
          if len(fn) > 255: fn=fn[:250]+".tf"
-         #if globals.merge:   print("Merge import",fn)
+         #if context.merge:   print("Merge import",fn)
          try:
             with open(fn, 'w') as f:
                f.write(output.getvalue().strip() + '\n')
@@ -1032,9 +1037,9 @@ def write_import(type,theid,tfid):
 
 
       pkey=type+"."+tfid
-      globals.rproc[pkey]=True
+      context.rproc[pkey]=True
       pkey=type+"."+theid
-      globals.rproc[pkey]=True
+      context.rproc[pkey]=True
 
 
    except Exception as e:  
@@ -1044,7 +1049,7 @@ def write_import(type,theid,tfid):
 
 
 def do_data(type,theid):
-   if globals.dnet:
+   if context.dnet:
       if type == "aws_vpc" or type=="aws_subnet":
          fn="data-"+type+"_"+theid+".tf"
          with open(fn, 'w') as f3:
@@ -1053,7 +1058,7 @@ def do_data(type,theid):
             f3.write('}\n')
          return True
       
-   if globals.dsgs:
+   if context.dsgs:
       if type=="aws_security_groups":
          fn="data-"+type+"_"+theid+".tf"
          with open(fn, 'w') as f3:
@@ -1061,7 +1066,7 @@ def do_data(type,theid):
             f3.write(' id = "'+theid+'"\n')
             f3.write('}\n')
          return True
-   if globals.dkms:
+   if context.dkms:
       if type == "aws_kms_key":
          fn="data-"+type+"_"+theid+".tf"
          with open(fn, 'w') as f3:
@@ -1069,7 +1074,7 @@ def do_data(type,theid):
             f3.write(' key_id = "'+theid+'"\n')
             f3.write('}\n')
          return True
-   if globals.dkey:
+   if context.dkey:
       if type == "aws_key_pair":
          tfil=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
          fn="data-"+type+"_"+tfil+".tf"
@@ -1086,21 +1091,21 @@ def do_data(type,theid):
 #########################################################################################################################
 
 def getresource(type,id,clfn,descfn,topkey,key,filterid):
-   #for j in globals.specials:
+   #for j in context.specials:
    #   if type == j: 
    #      print(type + " in specials list returning ..")
    #      return False
-   if globals.debug: print("-1-> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   if context.debug: print("-1-> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
-   if type in str(globals.types): 
+   if type in str(context.types): 
       print("Found "+type+"in types skipping ...")
       return True
    #print("--4 >")
    try:
       if id is not None:
          pt=type+"."+id
-         if pt in globals.rproc:
-            if globals.rproc[pt] is True:
+         if pt in context.rproc:
+            if context.rproc[pt] is True:
                print("Found "+pt+" in processed skipping ...") 
                return True
       response=call_boto3(type,clfn,descfn,topkey,key,id)   
@@ -1111,10 +1116,10 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                #print("-gr01-")
                if id is None or filterid=="": # do it all
                   #print("-gr21-")
-                  if globals.debug: print("--"+str(item))
+                  if context.debug: print("--"+str(item))
                   try:
                      if "aws-service-role" in str(item["Path"]): 
-                        if globals.debug:  print("Skipping service role " + str(item[key])) 
+                        if context.debug:  print("Skipping service role " + str(item[key])) 
                         continue
                   except:
                      pass
@@ -1127,10 +1132,10 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                         f.write("ERROR: getresource TypeError: type="+type+" key="+key+" descfn="+descfn+"\n"+str(response)+"\n")
                      continue
                   pt=type+"."+theid
-                  if pt not in globals.rproc:
+                  if pt not in context.rproc:
                      write_import(type,theid,None)
                   else:
-                     if globals.rproc[pt] is True:
+                     if context.rproc[pt] is True:
                         print("Found "+pt+" in processed skipping ...") 
                         continue
                   #special_deps(type,theid)
@@ -1140,27 +1145,27 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                # id has something
                #
                else:  
-                  if globals.debug: 
+                  if context.debug: 
                      print("-gr31-"+"filterid="+str(filterid)+" id="+str(id)+"  key="+key)
                      print(str(item))
                   if "." not in filterid:
                      #print("***item=" + str(item))
                      try:
                         if id == str(item[filterid]):
-                           #if globals.debug: print("-gr31 item-"+str(item))
+                           #if context.debug: print("-gr31 item-"+str(item))
                            theid=item[key]
                            #special_deps(type,theid)
                            write_import(type,theid,None)
                         elif filterid != key:
-                           if globals.debug:
+                           if context.debug:
                               print("id="+id+" filterid="+filterid)
                               print("item="+str(item))
                            theid=item[filterid]
                            write_import(type,theid,None)
                      except Exception as e:
                         print(f"{e=}")
-                        if globals.mopup.get(type) is not None:
-                           if id.startswith(globals.mopup[type]):
+                        if context.mopup.get(type) is not None:
+                           if id.startswith(context.mopup[type]):
                               write_import(type,id,None)
                               return True
 
@@ -1195,11 +1200,11 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                            pass
       else:
          if id is not None:
-            if globals.debug: print("No "+type+" "+id+" found - empty response (common)") 
+            if context.debug: print("No "+type+" "+id+" found - empty response (common)") 
             pkey=type+"."+id  
-            globals.rproc[pkey]=True      
+            context.rproc[pkey]=True      
          else:
-            if globals.debug: print("No "+type+" found - empty response (common)")
+            if context.debug: print("No "+type+" found - empty response (common)")
             return True
    
    except Exception as e:
@@ -1247,9 +1252,9 @@ def get_test(type,id,clfn,descfn,topkey,key,filterid):
 def add_known_dependancy(type,id):
     # check if we alredy have it
     pkey=type+"."+id
-    if pkey not in globals.rdep:
-        if globals.debug: print("add_known_dependancy: " + pkey)
-        globals.rdep[pkey]=False
+    if pkey not in context.rdep:
+        if context.debug: print("add_known_dependancy: " + pkey)
+        context.rdep[pkey]=False
     return
 
 def add_dependancy(type,id):
@@ -1261,12 +1266,12 @@ def add_dependancy(type,id):
    #   if type=="aws_kms_alias" and id=="k-817bb810-7154-4d9b-b582-7dbb62e77876":
    #      raise Exception("aws_kms_alias")
       if type=="aws_glue_catalog_database":
-         if ":" not in id: id=globals.acc+":"+id
+         if ":" not in id: id=context.acc+":"+id
       pkey=type+"."+id
-      if pkey not in globals.rproc:
-         if globals.debug: print("add_dependancy: " + pkey)
+      if pkey not in context.rproc:
+         if context.debug: print("add_dependancy: " + pkey)
          #print("add_dependancy: " + pkey)
-         globals.rproc[pkey]=False
+         context.rproc[pkey]=False
    except Exception as e:
       handle_error(e, str(inspect.currentframe().f_code.co_name), type, id)
    return
@@ -1282,24 +1287,24 @@ def add_dependancy(type,id):
 
 def call_boto3(type,clfn,descfn,topkey,key,id): 
    try:
-      if globals.debug: 
+      if context.debug: 
          print("call_boto3 clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
-      #if globals.debug: print("pre-response")
+      #if context.debug: print("pre-response")
       # get any pre-saved response
       #response=get_boto3_resp(descfn)  # sets response to [] if nothing saved
       response=[]
       if response == []:
          client = boto3.client(clfn) 
-         #if globals.debug: print("client")
+         #if context.debug: print("client")
          try:
             paginator = client.get_paginator(descfn)
-            #if globals.debug: print("paginator")
+            #if context.debug: print("paginator")
     
             if "apigatewayv2" in str(type):
                for page in paginator.paginate(ApiId=id): 
                   response.extend(page[topkey]) 
                pkey=type+"."+id
-               globals.rproc[pkey]=True
+               context.rproc[pkey]=True
                #if response != []:
                #   print(str(response))
                
@@ -1365,7 +1370,7 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                
             
             else:
-               if globals.debug: print("--1b")
+               if context.debug: print("--1b")
                # main get all call - usually a list- describe- or get- 
                for page in paginator.paginate(): 
                   response.extend(page[topkey])
@@ -1373,12 +1378,12 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
 
                if id is not None:
                   fresp=response
-                  if globals.debug:print("--2")
+                  if context.debug:print("--2")
                   response=[]
-                  if globals.debug: print(str(fresp))
+                  if context.debug: print(str(fresp))
                   # get by id - useually a describe- or get-
                   for i in fresp:
-                     if globals.debug: 
+                     if context.debug: 
                         try:
                            print(i[key],id)
                         except TypeError:
@@ -1411,23 +1416,23 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
             
 
          except botocore.exceptions.OperationNotPageableError as err:
-               if globals.debug:
+               if context.debug:
                   print(f"{err=}")
                   print("calling non paginated fn "+str(descfn)+" id="+str(id))
                try:
                   getfn = getattr(client, descfn)                     
                   response1 = getfn()
                   response1=response1[topkey]
-                  if globals.debug: print("Non-pag response1="+str(response1))
+                  if context.debug: print("Non-pag response1="+str(response1))
                   if id is None:
-                     if globals.debug: print("id None")
+                     if context.debug: print("id None")
                      response=response1
-                     if globals.debug: print("Non-pag response no ID ="+str(response))
+                     if context.debug: print("Non-pag response no ID ="+str(response))
                   else: #try a match
                      for j in response1:
                         if id==j[key]:
                            response=[j]
-                           if globals.debug: print("Non-pag response with ID ="+str(response))
+                           if context.debug: print("Non-pag response with ID ="+str(response))
                            
 
                except botocore.exceptions.ParamValidationError as e:
@@ -1452,10 +1457,10 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
          rl=len(response)
          #print("--2b" + str(rl)) 
          if rl==0:
-            if globals.debug: print("** zero response length for "+ descfn + " in call_boto3 returning .. []")
+            if context.debug: print("** zero response length for "+ descfn + " in call_boto3 returning .. []")
             return []
 
-         if globals.debug:
+         if context.debug:
             print("response length="+str(len(response)))
             
             for item in response:
@@ -1473,22 +1478,22 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
 
 """
 def sav_boto3_rep(descfn,response):
-   if str(descfn)=="describe_subnets" and globals.aws_subnet_resp==[]: globals.aws_subnet_resp=response  
-   elif str(descfn)=="describe_vpcs" and globals.aws_vpc_resp==[]: globals.aws_vpc_resp=response  
-   elif str(descfn)=="describe_route_tables" and globals.aws_route_table_resp==[]: globals.aws_route_table_resp=response  
-   elif str(descfn)=="list_aliases" and globals.aws_kms_alias_resp==[]: globals.aws_kms_alias_resp=response  
-   elif str(descfn)=="list_roles" and globals.aws_iam_role_resp==[]: globals.aws_iam_role_resp=response  
-   elif str(descfn)=="describe_instances" and globals.aws_instance_resp==[]: globals.aws_instance_resp=response  
+   if str(descfn)=="describe_subnets" and context.aws_subnet_resp==[]: context.aws_subnet_resp=response  
+   elif str(descfn)=="describe_vpcs" and context.aws_vpc_resp==[]: context.aws_vpc_resp=response  
+   elif str(descfn)=="describe_route_tables" and context.aws_route_table_resp==[]: context.aws_route_table_resp=response  
+   elif str(descfn)=="list_aliases" and context.aws_kms_alias_resp==[]: context.aws_kms_alias_resp=response  
+   elif str(descfn)=="list_roles" and context.aws_iam_role_resp==[]: context.aws_iam_role_resp=response  
+   elif str(descfn)=="describe_instances" and context.aws_instance_resp==[]: context.aws_instance_resp=response  
    return 
 
 def get_boto3_resp(descfn):
    response=[]
-   if str(descfn)=="describe_subnets" and globals.aws_subnet_resp != []: response=globals.aws_subnet_resp
-   elif str(descfn)=="describe_vpcs" and globals.aws_vpc_resp != []: response=globals.aws_vpc_resp
-   elif str(descfn)=="describe_route_tables" and globals.aws_route_table_resp != []: response=globals.aws_route_table_resp 
-   elif str(descfn)=="list_aliases" and globals.aws_kms_alias_resp != []: response=globals.aws_kms_alias_resp 
-   elif str(descfn)=="list_roles" and globals.aws_iam_role_resp != []: response=globals.aws_iam_role_resp
-   elif str(descfn)=="describe_instances" and globals.aws_instance_resp != []: response=globals.aws_instance_resp
+   if str(descfn)=="describe_subnets" and context.aws_subnet_resp != []: response=context.aws_subnet_resp
+   elif str(descfn)=="describe_vpcs" and context.aws_vpc_resp != []: response=context.aws_vpc_resp
+   elif str(descfn)=="describe_route_tables" and context.aws_route_table_resp != []: response=context.aws_route_table_resp 
+   elif str(descfn)=="list_aliases" and context.aws_kms_alias_resp != []: response=context.aws_kms_alias_resp 
+   elif str(descfn)=="list_roles" and context.aws_iam_role_resp != []: response=context.aws_iam_role_resp
+   elif str(descfn)=="describe_instances" and context.aws_instance_resp != []: response=context.aws_instance_resp
    return response
 """
 
@@ -1530,8 +1535,8 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
          print("NOT FOUND: "+frame.split("get_")[1]+" "+str(id)+" check if it exists and what references it - returning")
          pkey=frame.split("get_")[1]+"."+str(id)
          if "aws_glue_catalog_database" in pkey:
-            pkey=frame.split("get_")[1]+"."+globals.acc+":"+id
-         globals.rproc[pkey]=True
+            pkey=frame.split("get_")[1]+"."+context.acc+":"+id
+         context.rproc[pkey]=True
       else:
          print("NOT FOUND: "+frame+" "+id+" check if it exists - returning")
       return    
@@ -1540,7 +1545,7 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
       if frame.startswith("get_"):
          print("RESOURCE NOT FOUND: "+frame.split("get_")[1]+" "+str(id)+" check if it exists and what references it - returning")
          pkey=frame.split("get_")[1]+"."+str(id)
-         globals.rproc[pkey]=True
+         context.rproc[pkey]=True
       else:
          print("RESOURCE NOT FOUND: "+frame+" "+str(id)+" check if it exists - returning")
       return    
@@ -1645,7 +1650,7 @@ def create_bucket_if_not_exists(bucket_name):
         if error_code == 404:
             print(f"Bucket {bucket_name} does not exist. Creating now...")
             try:
-               s3_client.create_bucket(Bucket=bucket_name, CreateBucketConfiguration={'LocationConstraint': globals.region})
+               s3_client.create_bucket(Bucket=bucket_name, CreateBucketConfiguration={'LocationConstraint': context.region})
                print(f"Bucket {bucket_name} created successfully.")
             except ClientError as create_error:
                print(f"Error creating bucket {bucket_name}: {create_error}")
@@ -1661,8 +1666,8 @@ def create_bucket_if_not_exists(bucket_name):
 def upload_directory_to_s3():
    print("Uploading to S3...")
    s3_client = boto3.client('s3')
-   local_directory="/tmp/aws2tf/generated/tf-"+globals.pathadd+globals.acc+"-"+globals.region
-   bucket_name="aws2tf-"+globals.acc+"-"+globals.region
+   local_directory="/tmp/aws2tf/generated/tf-"+context.pathadd+context.acc+"-"+context.region
+   bucket_name="aws2tf-"+context.acc+"-"+context.region
    s3_prefix=''
    print("Calling create_bucket_if_not_exists for",bucket_name)
    bret=create_bucket_if_not_exists(bucket_name)
@@ -1691,7 +1696,7 @@ def upload_directory_to_s3():
       return False
 
 def empty_and_delete_bucket():
-    bucket_name="aws2tf-"+globals.acc+"-"+globals.region
+    bucket_name="aws2tf-"+context.acc+"-"+context.region
     s3 = boto3.resource('s3')
     s3_client = boto3.client('s3')
     bucket = s3.Bucket(bucket_name)
@@ -1730,8 +1735,8 @@ def empty_and_delete_bucket():
 def download_from_s3():
     print("Restore S3")
     s3_client = boto3.client('s3')
-    local_directory="/tmp/aws2tf/generated/tf-"+globals.pathadd+globals.acc+"-"+globals.region
-    bucket_name="aws2tf-"+globals.acc+"-"+globals.region
+    local_directory="/tmp/aws2tf/generated/tf-"+context.pathadd+context.acc+"-"+context.region
+    bucket_name="aws2tf-"+context.acc+"-"+context.region
     s3_prefix=''
     # Check if the bucket exists
     try:

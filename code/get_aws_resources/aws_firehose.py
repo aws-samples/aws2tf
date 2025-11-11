@@ -1,10 +1,10 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 def get_aws_kinesis_firehose_delivery_stream(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -20,19 +20,19 @@ def get_aws_kinesis_firehose_delivery_stream(type, id, clfn, descfn, topkey, key
                 k=response['DeliveryStreamDescription']
                 common.write_import(type,k[key],None) 
                 pkey=type+"."+j
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
 
         else:      
             response = client.describe_delivery_stream(DeliveryStreamName=id)
             if response == []: 
                 print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
                 return True
             j=response['DeliveryStreamDescription']
             common.write_import(type,j[key],None)
             pkey=type+"."+id
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
             
 
     except Exception as e:

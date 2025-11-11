@@ -1,11 +1,11 @@
 import common
 import boto3
 from botocore.config import Config
-import globals
+import context
 import inspect
 
 def get_aws_s3tables_table_bucket(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -17,7 +17,7 @@ def get_aws_s3tables_table_bucket(type, id, clfn, descfn, topkey, key, filterid)
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -26,7 +26,7 @@ def get_aws_s3tables_table_bucket(type, id, clfn, descfn, topkey, key, filterid)
         else:      
             response = client.get_table_bucket(tableBucketARN=id)
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             j=response
             common.write_import(type,j[key],None)
@@ -38,7 +38,7 @@ def get_aws_s3tables_table_bucket(type, id, clfn, descfn, topkey, key, filterid)
     return True
 
 def get_aws_s3tables_namespace(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -54,9 +54,9 @@ def get_aws_s3tables_namespace(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(tableBucketARN=id):
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 pkey=type+"."+id
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
                 return True
             #print("response="+str(response))
             for j in response:
@@ -65,7 +65,7 @@ def get_aws_s3tables_namespace(type, id, clfn, descfn, topkey, key, filterid):
                     common.write_import(type,theid,None) 
                     common.add_dependancy("aws_s3tables_table", theid)
             pkey=type+"."+id
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -74,7 +74,7 @@ def get_aws_s3tables_namespace(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_s3tables_table(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -95,15 +95,15 @@ def get_aws_s3tables_table(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(tableBucketARN=barn,namespace=namespace):
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 pkey=type+"."+id
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
                 return True
             for j in response:
                 theid=id+";"+j[key]
                 common.write_import(type,theid,None) 
             pkey=type+"."+id
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
             
 
     except Exception as e:

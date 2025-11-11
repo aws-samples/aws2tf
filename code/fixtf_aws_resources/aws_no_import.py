@@ -186,4 +186,6 @@ noimport = {
     "aws_vpclattice_resource_configuration": True, # boto3 doesn't recognize api call
     "aws_eks_pod_identity_association": True, # association done elsewhere
     "aws_s3_bucket_acl": True, # should not be using anymore
+    # issues with import - seems to need arn - but no obvious boto3 call to get it
+    "aws_codebuild_project": True, # needs arn for import - boto3 call for it ??
 } 

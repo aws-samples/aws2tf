@@ -1,7 +1,7 @@
 import boto3
 import os
 import sys
-import globals
+import context
 
 from get_aws_resources import aws_s3
 import botocore
@@ -49,7 +49,7 @@ def getstack(stack_name,nested,client):
     
     except botocore.exceptions.ClientError as err:
         print("ValidationError error in getstack")
-        print("Stack "+stack_name+" may not exist in region "+globals.region)
+        print("Stack "+stack_name+" may not exist in region "+context.region)
         return
     
     
@@ -117,7 +117,7 @@ def getstackresources(stack_name,client):
             stat=j['ResourceStatus']
             ri=ri+1
 
-            if globals.debug:
+            if context.debug:
                 print("type="+type)
             sn=stack_name.split('/')[-2]
             #print("Importing "+ str(ri) + " of "+ str(rl)+ " type="+type)
@@ -467,7 +467,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::CloudWatch::MetricStream": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::CodeArtifact::Domain": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::CodeArtifact::Repository": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::CodeBuild::Project": common.call_resource("aws_codebuild_project", pid)
+            #elif type == "AWS::CodeBuild::Project": common.call_resource("aws_codebuild_project", pid)
             elif type == "AWS::CodeBuild::ReportGroup": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::CodeBuild::SourceCredential": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::CodeCommit::Repository": common.call_resource("aws_codecommit_repository",pid)

@@ -1,12 +1,12 @@
 import common
-import globals
+import context
 import boto3
 import botocore
 import inspect
 
 def get_aws_ecs_cluster(type,id,clfn,descfn,topkey,key,filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> get_aws_ecs_cluster  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -35,7 +35,7 @@ def get_aws_ecs_cluster(type,id,clfn,descfn,topkey,key,filterid):
 
 def get_aws_ecs_service(type,id,clfn,descfn,topkey,key,filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> get_aws_ecs_service  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -69,15 +69,13 @@ def get_aws_ecs_service(type,id,clfn,descfn,topkey,key,filterid):
         
         for j in response: 
             retid=j # no key
-            #print("*********"+str(retid))
             srvn=retid.split('/')[-1]
             cln=retid.split('/')[-2]
-            #print("*********srvn="+str(srvn))
-            #print("*********cln="+str(cln))
+
             pkey=cln+"/"+srvn   # clustername/servicename
             common.write_import(type,pkey,None) 
             tid="ecs/service/"+pkey
-            #print("********** tid="+tid)
+
             common.add_dependancy("aws_appautoscaling_target",tid)
             common.add_dependancy("aws_appautoscaling_policy",tid)
 
@@ -89,7 +87,7 @@ def get_aws_ecs_service(type,id,clfn,descfn,topkey,key,filterid):
 
 def get_aws_ecs_task_definition(type,id,clfn,descfn,topkey,key,filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> get_aws_ecs_task_definition  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -104,8 +102,7 @@ def get_aws_ecs_task_definition(type,id,clfn,descfn,topkey,key,filterid):
             tid=id
             if "arn:" in id:
                  tid=id.split(":")[-2]+":"+id.split(":")[-1]
-            #print("************tid="+tid)     
-            
+                
             response = client.describe_task_definition(taskDefinition=tid) 
             response=response[topkey]
 
@@ -119,7 +116,7 @@ def get_aws_ecs_task_definition(type,id,clfn,descfn,topkey,key,filterid):
         else:
             pkey=response['taskDefinitionArn']
             common.write_import(type,pkey,None) 
-            globals.rproc["aws_ecs_task_definition."+id]=True
+            context.rproc["aws_ecs_task_definition."+id]=True
 
 
     except botocore.exceptions.ClientError as err:
@@ -137,7 +134,7 @@ def get_aws_ecs_task_definition(type,id,clfn,descfn,topkey,key,filterid):
 
 def get_aws_ecs_capacity_provider(type,id,clfn,descfn,topkey,key,filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> get_aws_ecs_capacity_provider  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -165,7 +162,7 @@ def get_aws_ecs_capacity_provider(type,id,clfn,descfn,topkey,key,filterid):
 
 def get_aws_ecs_cluster_capacity_providers(type,id,clfn,descfn,topkey,key,filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> get_aws_ecs_cluster_capacity_provider  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         

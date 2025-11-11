@@ -4,7 +4,7 @@ import base64
 import boto3
 import sys
 import os
-import globals
+import context
 import inspect
 import json
 
@@ -32,25 +32,25 @@ def aws_wafv2_web_acl(t1,tt1,tt2,flag1,flag2):
 		aclnm=wid.split("_")[1]
 		aclsc=wid.split("_")[2]
 		#print("web acl:",aclid,aclnm,aclsc)
-		globals.waf2id=aclid
-		globals.waf2nm=aclnm
-		globals.waf2sc=aclsc
+		context.waf2id=aclid
+		context.waf2nm=aclnm
+		context.waf2sc=aclsc
 		#t1=t1+"\n lifecycle {\n   ignore_changes = [rule]\n}\n"
 
 	if tt1=="rule_json" and tt2=="null":
 		# call get_web_acl
 		try:
 			client=boto3.client("wafv2")
-			response = client.get_web_acl(Id=globals.waf2id,Name=globals.waf2nm,Scope=globals.waf2sc)
+			response = client.get_web_acl(Id=context.waf2id,Name=context.waf2nm,Scope=context.waf2sc)
 			rules=response['WebACL']['Rules']
 			if rules != []:
-				fn='w-'+globals.waf2id+'_'+globals.waf2nm+'_'+globals.waf2sc+'.webacl'
+				fn='w-'+context.waf2id+'_'+context.waf2nm+'_'+context.waf2sc+'.webacl'
 				if os.path.exists(fn):os.remove(fn)
 				with open(fn, 'w') as f: json.dump(rules, f, indent=2, default=str)
 				t1 = tt1 + ' = file("'+fn+'")\n'
 				t1=t1+"\n lifecycle {\n   ignore_changes = [rule_json,rule]\n}\n"
 			else:
-				print("empty rule",globals.waf2nm,globals.waf2sc,globals.waf2id)
+				print("empty rule",context.waf2nm,context.waf2sc,context.waf2id)
 		except Exception as e:
 			print("Error in get_web_acl",e)
 			os._exit(1)

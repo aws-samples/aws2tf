@@ -1,6 +1,6 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 from io import StringIO
 from timed_interrupt import timed_int
@@ -10,7 +10,7 @@ from timed_interrupt import timed_int
 # ASSET_TYPE FORM_TYPE LINEAGE_NODE_TYPE
 
 def get_aws_datazone_asset_type(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -39,8 +39,8 @@ def get_aws_datazone_asset_type(type, id, clfn, descfn, topkey, key, filterid):
                     #    exit()
  
                 if response == []: 
-                    if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
-                    globals.rproc[pkey]=True  
+                    if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                    context.rproc[pkey]=True  
                     continue  
                     
                 
@@ -62,7 +62,7 @@ def get_aws_datazone_asset_type(type, id, clfn, descfn, topkey, key, filterid):
                     print("SKIPPING: "+str(type)+" "+str(theid)+" due to import issues")
                     #common.write_import(type,theid,None) 
                 
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
@@ -74,7 +74,7 @@ def get_aws_datazone_asset_type(type, id, clfn, descfn, topkey, key, filterid):
 # DATAZONE_SSO_USER, DATAZONE_USER, SSO_USER, DATAZONE_IAM_USER
 
 def get_aws_datazone_user_profile(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     
@@ -96,27 +96,32 @@ def get_aws_datazone_user_profile(type, id, clfn, descfn, topkey, key, filterid)
                         response = response + page[topkey]
                 except Exception as e:
                     if "ResourceNotFoundException" in str(e):
-                        if globals.debug: print("Resource not found for "+ut)
+                        if context.debug: print("Resource not found for "+ut)
                         continue
                     else:
                         print("ERROR: "+str(e))
                         exit()
                 #print("response="+str(response))
                 if response == []: 
-                    if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
-                    globals.rproc[pkey]=True    
-                #print(str(response))
+                    if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                    context.rproc[pkey]=True    
+              
                 for k in response:
-                    if k['type']=="IAM":
-                        uarn=k['details']['iam']['arn']
-                        theid=uarn+","+id+','+k['type']
-                    else:
-                        j=k[key]
-                        theid=j+","+id+','+k['type']
+                    if str(k['status'])=="ACTIVATED":
+                        if k['type']=="IAM":
+                            uarn=k['details']['iam']['arn']
+                            theid=uarn+","+id+','+k['type']
+                            common.write_import(type,theid,None)
+                        else:
+                            if context.debug: 
+                                print(str(k))
+                            j=k[key]
+                            theid=j+","+id+','+k['type']
+                            common.write_import(type,theid,None) 
                     #print(theid)
-                    common.write_import(type,theid,None) 
+                    #common.write_import(type,theid,None) 
                 
-        globals.rproc[pkey]=True
+        context.rproc[pkey]=True
 
 
     except Exception as e:
@@ -128,7 +133,7 @@ def get_aws_datazone_user_profile(type, id, clfn, descfn, topkey, key, filterid)
 #####
 
 def get_aws_datazone_domain(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -167,7 +172,7 @@ def get_aws_datazone_domain(type, id, clfn, descfn, topkey, key, filterid):
 def dz_common(resp2,dzid,type,client):
     sso=resp2['singleSignOn']['type']
     dst=resp2['status']
-    if globals.debug: print("DataZone sso="+str(sso)+" dst="+str(dst)," dzid="+dzid)
+    if context.debug: print("DataZone sso="+str(sso)+" dst="+str(dst)," dzid="+dzid)
     common.write_import(type,dzid,None)
     common.add_dependancy("aws_datazone_project", dzid)
     common.add_dependancy("aws_datazone_glossary", dzid)
@@ -181,7 +186,7 @@ def dz_common(resp2,dzid,type,client):
         bid=k['id']
         bn=k['name']
         pn=k['provider']
-        if globals.debug: print(str(bid),str(bn),str(pn))
+        if context.debug: print(str(bid),str(bn),str(pn))
         output = StringIO()
         output.write('data "aws_datazone_environment_blueprint" "' + str(dzid)+"_"+str(bid)+ '" {\n')
         output.write('  domain_id = aws_datazone_domain.' + str(dzid) + '.id\n') ## error undefined
@@ -212,7 +217,7 @@ def dz_common(resp2,dzid,type,client):
 
 
 def get_aws_datazone_project(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -229,15 +234,15 @@ def get_aws_datazone_project(type, id, clfn, descfn, topkey, key, filterid):
                 response = response + page[topkey]
         pkey=type+"."+id
         if response == []: 
-            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
-            globals.rproc[pkey]=True
+            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+            context.rproc[pkey]=True
             return True
         for j in response:
             theid=id+":"+j[key]
             common.write_import(type,theid,None) 
             common.add_dependancy("aws_datazone_environment", theid)
             
-        globals.rproc[pkey]=True
+        context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -247,7 +252,7 @@ def get_aws_datazone_project(type, id, clfn, descfn, topkey, key, filterid):
 
 # get-project has gloassary terms - each term has glossary id
 def get_aws_datazone_glossary(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -264,8 +269,8 @@ def get_aws_datazone_glossary(type, id, clfn, descfn, topkey, key, filterid):
                 response = response + page[topkey]
         pkey=type+"."+id
         if response == []: 
-            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
-            globals.rproc[pkey]=True
+            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+            context.rproc[pkey]=True
             return True
         #print(str(response))
         for k in response:
@@ -275,7 +280,7 @@ def get_aws_datazone_glossary(type, id, clfn, descfn, topkey, key, filterid):
             common.write_import(type,theid,None) 
             common.add_dependancy("aws_datazone_glossary_term", theid)
 
-        globals.rproc[pkey]=True
+        context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -283,7 +288,7 @@ def get_aws_datazone_glossary(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 def get_aws_datazone_glossary_term(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -304,8 +309,8 @@ def get_aws_datazone_glossary_term(type, id, clfn, descfn, topkey, key, filterid
 
         pkey=type+"."+id
         if response == []: 
-            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
-            globals.rproc[pkey]=True    
+            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+            context.rproc[pkey]=True    
             return True
         #print(str(response))
         for k in response:
@@ -313,7 +318,7 @@ def get_aws_datazone_glossary_term(type, id, clfn, descfn, topkey, key, filterid
             theid=did+","+j[key]+","+j['glossaryId']
             #print(theid)
             common.write_import(type,theid,theid+"_"+pid) 
-        globals.rproc[pkey]=True
+        context.rproc[pkey]=True
         
         
 
@@ -323,7 +328,7 @@ def get_aws_datazone_glossary_term(type, id, clfn, descfn, topkey, key, filterid
     return True
 
 def get_aws_datazone_form_type(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -341,8 +346,8 @@ def get_aws_datazone_form_type(type, id, clfn, descfn, topkey, key, filterid):
                 response = response + page[topkey]
         pkey=type+"."+id
         if response == []: 
-            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
-            globals.rproc[pkey]=True
+            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+            context.rproc[pkey]=True
             return True
         #print(str(response))
         for k in response:
@@ -352,7 +357,7 @@ def get_aws_datazone_form_type(type, id, clfn, descfn, topkey, key, filterid):
             #print(theid)
             common.write_import(type,theid,None) 
 
-        globals.rproc[pkey]=True
+        context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -362,7 +367,7 @@ def get_aws_datazone_form_type(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_datazone_environment_blueprint_configuration(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -379,14 +384,14 @@ def get_aws_datazone_environment_blueprint_configuration(type, id, clfn, descfn,
                 response = response + page[topkey]
         pkey=type+"."+id
         if response == []: 
-            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
-            globals.rproc[pkey]=True
+            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+            context.rproc[pkey]=True
             return True
         for j in response:
             theid=id+'/'+j[key]
             common.write_import(type,theid,None) 
             
-        globals.rproc[pkey]=True
+        context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -394,7 +399,7 @@ def get_aws_datazone_environment_blueprint_configuration(type, id, clfn, descfn,
     return True
 
 def get_aws_datazone_environment_profile(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -412,20 +417,20 @@ def get_aws_datazone_environment_profile(type, id, clfn, descfn, topkey, key, fi
             except Exception as e:
                 print(str(e))
                 print("WARNING: no environment profiles found for domain id "+id)
-                globals.rproc[type+"."+id]=True
+                context.rproc[type+"."+id]=True
                 return True
 
         pkey=type+"."+id
         if response == []: 
-            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
-            globals.rproc[pkey]=True
+            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+            context.rproc[pkey]=True
             return True
         for j in response:
             theid=j[key]+","+id
             altid=id+"_"+j[key]
             common.write_import(type,theid,altid) 
 
-        globals.rproc[pkey]=True
+        context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -434,7 +439,7 @@ def get_aws_datazone_environment_profile(type, id, clfn, descfn, topkey, key, fi
 
 
 def get_aws_datazone_environment(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -452,14 +457,14 @@ def get_aws_datazone_environment(type, id, clfn, descfn, topkey, key, filterid):
                 response = response + page[topkey]
         pkey=type+"."+id
         if response == []: 
-            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
-            globals.rproc[pkey]=True
+            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+            context.rproc[pkey]=True
             return True
         for j in response:
             theid=dzd+","+j[key]
             common.write_import(type,theid,None) 
 
-        globals.rproc[pkey]=True
+        context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

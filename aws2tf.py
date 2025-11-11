@@ -124,7 +124,6 @@ def main():
     argParser.add_argument("-i", "--id", help="resource id")
     argParser.add_argument("-r", "--region", help="region")
     argParser.add_argument("-p", "--profile", help="profile")
-    argParser.add_argument("-o", "--output", help="add custom string to output folder")
     argParser.add_argument("-m", "--merge", help="merge", action='store_true')
     argParser.add_argument("-d", "--debug", help="debug", action='store_true')
     argParser.add_argument("-s", "--singlefile", help="only a single file main.tf is produced", action='store_true')
@@ -141,7 +140,13 @@ def main():
     argParser.add_argument("-la", "--serverless", help="Lambda mode - when running in a Lambda container", action='store_true')
     argParser.add_argument("-tv", "--tv", help="Specify version of Terraform AWS provider default = "+globals.tfver)
     argParser.add_argument("-d5", "--debug5", help="debug5 special debug flag", action='store_true')
-    args = argParser.parse_args()
+
+    try:
+        args = argParser.parse_args()
+    except SystemExit as e:
+        timed_interrupt.timed_int.stop()
+        exit()
+        
     type=""
 
     common.check_python_version()
@@ -335,12 +340,6 @@ def main():
 ####  restore form S3 if merging & serverless
 
 ####    
-
-    if args.output:
-        if isinstance(args.output, str):
-            globals.pathadd=args.output+"-"
-        else:
-            print("output path modifier may not be a valid string",(str(args.output))," ignoring ")
 
     globals.region = region
     globals.regionl = len(region)

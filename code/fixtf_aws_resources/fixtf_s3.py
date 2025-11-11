@@ -1,7 +1,7 @@
 import common
 import fixtf
 import inspect
-import globals
+import context
 
 def aws_s3_access_point(t1,tt1,tt2,flag1,flag2):
 	skip=0
@@ -121,23 +121,23 @@ def aws_s3_bucket_public_access_block(t1,tt1,tt2,flag1,flag2):
 def aws_s3_bucket_replication_configuration(t1,tt1,tt2,flag1,flag2):
     skip=0
     if "destination" in t1:
-         globals.destbuck=True
+         context.destbuck=True
 
     if tt1 == "bucket" and "arn:aws:s3" in tt2:
         bn=tt2.split(":")[-1]
-        if globals.debug5: 
+        if context.debug5: 
              print("DEBUG5: fix aws_s3_bucket_replication_configuration: "+bn)
-             print("DEBUG5: " + str(globals.bucketlist))
+             print("DEBUG5: " + str(context.bucketlist))
         try:
-            if globals.bucketlist[bn]:
+            if context.bucketlist[bn]:
                 t1=tt1 + " = aws_s3_bucket.b-" + bn + ".arn\n"
-                globals.destbuck=False
+                context.destbuck=False
                 return skip,t1,flag1,flag2
         except KeyError as e:
-            globals.destbuck=False
+            context.destbuck=False
             return skip,t1,flag1,flag2
                     
-        globals.destbuck=False
+        context.destbuck=False
 
     return skip,t1,flag1,flag2
 

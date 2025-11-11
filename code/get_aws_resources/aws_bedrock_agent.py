@@ -1,10 +1,10 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 def get_aws_bedrockagent_agent(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -55,7 +55,7 @@ def get_aws_bedrockagent_agent(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 def get_aws_bedrockagent_knowledge_base(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -87,7 +87,7 @@ def get_aws_bedrockagent_knowledge_base(type, id, clfn, descfn, topkey, key, fil
 
 #aws_bedrockagent_agent_knowledge_base_association
 def get_aws_bedrockagent_agent_knowledge_base_association(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -103,15 +103,15 @@ def get_aws_bedrockagent_agent_knowledge_base_association(type, id, clfn, descfn
                 pkey=type+"."+id
                 response = client.list_agent_knowledge_bases(agentId=aid, agentVersion=vid)
                 if response == []: 
-                    if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
-                    globals.rproc[pkey] = True
+                    if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                    context.rproc[pkey] = True
                     return True
                 for j in response['agentKnowledgeBaseSummaries']:
                     kid=j['knowledgeBaseId']
                     theid=aid+","+vid+","+kid
                     common.write_import(type, theid, None)
                     common.add_dependancy("aws_bedrockagent_knowledge_base", kid)
-                globals.rproc[pkey] = True
+                context.rproc[pkey] = True
             else:
                 print("ERROR: with id - expected agentid,versionid got",id)
 
@@ -123,7 +123,7 @@ def get_aws_bedrockagent_agent_knowledge_base_association(type, id, clfn, descfn
 
 #aws_bedrockagent_data_source
 def get_aws_bedrockagent_data_source(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -137,13 +137,13 @@ def get_aws_bedrockagent_data_source(type, id, clfn, descfn, topkey, key, filter
             pkey=type+"."+id
             response = client.list_data_sources(knowledgeBaseId=id)
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
-                globals.rproc[pkey] = True
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                context.rproc[pkey] = True
                 return True
             for j in response[topkey]:
                 theid=j[key]+","+id
                 common.write_import(type, theid, None)
-            globals.rproc[pkey] = True
+            context.rproc[pkey] = True
 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
@@ -151,7 +151,7 @@ def get_aws_bedrockagent_data_source(type, id, clfn, descfn, topkey, key, filter
     return True
 
 def get_aws_bedrockagent_agent_alias(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -165,13 +165,13 @@ def get_aws_bedrockagent_agent_alias(type, id, clfn, descfn, topkey, key, filter
             pkey=type+"."+id
             response = client.list_agent_aliases(agentId=id)
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
-                globals.rproc[pkey] = True
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                context.rproc[pkey] = True
                 return True
             for j in response[topkey]:
                 theid=j[key]+","+id
                 common.write_import(type, theid, None)
-            globals.rproc[pkey] = True
+            context.rproc[pkey] = True
 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
@@ -180,7 +180,7 @@ def get_aws_bedrockagent_agent_alias(type, id, clfn, descfn, topkey, key, filter
     
 
 def get_aws_bedrockagent_agent_action_group(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -196,14 +196,14 @@ def get_aws_bedrockagent_agent_action_group(type, id, clfn, descfn, topkey, key,
                 pkey=type+"."+id
                 response = client.list_agent_action_groups(agentId=aid,agentVersion=vid)
                 if response == []: 
-                    if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
-                    globals.rproc[pkey] = True
+                    if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                    context.rproc[pkey] = True
                     return True
                 for j in response['actionGroupSummaries']:
                     gid=j['actionGroupId']
                     theid=gid+","+aid+","+vid
                     common.write_import(type, theid, None)
-                globals.rproc[pkey] = True
+                context.rproc[pkey] = True
             else:
                 print("ERROR: with id - expected agentid,versionid got",id)
 

@@ -1,12 +1,12 @@
 import common
 import boto3
 from botocore.config import Config
-import globals
+import context
 import inspect
 
 def get_aws_api_gateway_account(type, id, clfn, descfn, topkey, key, filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -16,9 +16,9 @@ def get_aws_api_gateway_account(type, id, clfn, descfn, topkey, key, filterid):
         if id is None:         
             response = client.get_account()
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
                 return True
             j=response
             common.write_import(type,"api-gateway-account",None)
@@ -31,7 +31,7 @@ def get_aws_api_gateway_account(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_api_gateway_deployment(type, id, clfn, descfn, topkey, key, filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -40,9 +40,9 @@ def get_aws_api_gateway_deployment(type, id, clfn, descfn, topkey, key, filterid
         if id is not None:  
             response = client.get_deployments(restApiId=id)
             if response[topkey] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
-                globals.rproc[pkey]=True 
+                context.rproc[pkey]=True 
                 return True
             for j in response[topkey]:
                 pkey=id+"/"+j[key]
@@ -50,7 +50,7 @@ def get_aws_api_gateway_deployment(type, id, clfn, descfn, topkey, key, filterid
             
                 common.write_import(type,pkey,altk)
                 pkey=type+"."+id
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
         else:
             print("Must pass id for "+type+" returning")
             return True
@@ -62,7 +62,7 @@ def get_aws_api_gateway_deployment(type, id, clfn, descfn, topkey, key, filterid
 
 def get_aws_api_gateway_rest_api(type, id, clfn, descfn, topkey, key, filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -75,7 +75,7 @@ def get_aws_api_gateway_rest_api(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 altk="r-"+j[key]
@@ -88,7 +88,7 @@ def get_aws_api_gateway_rest_api(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.get_rest_api(restApiId=id)
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response
             altk="r-"+j[key]
@@ -107,7 +107,7 @@ def get_aws_api_gateway_rest_api(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_api_gateway_stage(type, id, clfn, descfn, topkey, key, filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)    
     try:
@@ -116,16 +116,16 @@ def get_aws_api_gateway_stage(type, id, clfn, descfn, topkey, key, filterid):
         if id is not None:  
             response = client.get_stages(restApiId=id)
             if response[topkey] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
                 return True
             for j in response[topkey]:
                 pkey=id+"/"+j[key]
                 altk="r-"+pkey
                 common.write_import(type,pkey,altk)
                 pkey=type+"."+id
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
         else:
             print("Must pass id for "+type+" returning")
             return True
@@ -137,7 +137,7 @@ def get_aws_api_gateway_stage(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_api_gateway_authorizer(type, id, clfn, descfn, topkey, key, filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)    
     try:
@@ -146,16 +146,16 @@ def get_aws_api_gateway_authorizer(type, id, clfn, descfn, topkey, key, filterid
         if id is not None:  
             response = client.get_authorizers(restApiId=id)
             if response[topkey] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 pkey=type+"."+id
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
                 return True
             for j in response[topkey]:
                 pkey=id+"/"+j[key]
                 altk="r-"+pkey
                 common.write_import(type,pkey,altk)
                 pkey=type+"."+id
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
         else:
             print("Must pass id for "+type+" returning")
             return True
@@ -167,7 +167,7 @@ def get_aws_api_gateway_authorizer(type, id, clfn, descfn, topkey, key, filterid
 
 def get_aws_api_gateway_resource(type, id, clfn, descfn, topkey, key, filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)    
     try:
@@ -182,9 +182,9 @@ def get_aws_api_gateway_resource(type, id, clfn, descfn, topkey, key, filterid):
         if id is not None:  
             response = client.get_resources(restApiId=id)
             if response[topkey] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
                 return True
             for j in response[topkey]:
                 pkey=id+"/"+j[key]
@@ -192,7 +192,7 @@ def get_aws_api_gateway_resource(type, id, clfn, descfn, topkey, key, filterid):
                 common.write_import(type,pkey,altk)
                 common.add_dependancy("aws_api_gateway_method", id+"/"+j[key])
                 pkey=type+"."+id
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
         else:
             print("Must pass id for "+type+" returning")
             return True
@@ -204,7 +204,7 @@ def get_aws_api_gateway_resource(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)    
     try:
@@ -217,84 +217,84 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='GET')
                 if response == []: 
-                    if globals.debug: print("Empty GET response for "+type+ " id="+str(id))
+                    if context.debug: print("Empty GET response for "+type+ " id="+str(id))
                     pkey=type+"."+id
-                    globals.rproc[pkey]=True
+                    context.rproc[pkey]=True
                     return True
                 j=response
                 pkey=restid+"/"+resid+"/"+j[key]
                 altk="r-"+pkey
                 common.write_import(type,pkey,altk)
             except:
-                if globals.debug: print("Empty GET response for "+type+ " id="+str(id))
+                if context.debug: print("Empty GET response for "+type+ " id="+str(id))
                 
 
             ## POST
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='POST')
                 if response == []: 
-                    if globals.debug: print("Empty POST response for "+type+ " id="+str(id))
+                    if context.debug: print("Empty POST response for "+type+ " id="+str(id))
                     pkey=type+"."+id
-                    globals.rproc[pkey]=True
+                    context.rproc[pkey]=True
                     return True
                 j=response
                 pkey=restid+"/"+resid+"/"+j[key]
                 altk="r-"+pkey
                 common.write_import(type,pkey,altk)
             except:
-                if globals.debug: print("Empty POST response for "+type+ " id="+str(id))
+                if context.debug: print("Empty POST response for "+type+ " id="+str(id))
 
             ## PUT
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='PUT')
                 if response == []: 
-                    if globals.debug: print("Empty PUT response for "+type+ " id="+str(id))
+                    if context.debug: print("Empty PUT response for "+type+ " id="+str(id))
                     pkey=type+"."+id
-                    globals.rproc[pkey]=True
+                    context.rproc[pkey]=True
                     return True
                 j=response
                 pkey=restid+"/"+resid+"/"+j[key]
                 altk="r-"+pkey
                 common.write_import(type,pkey,altk)
             except:
-                if globals.debug: print("Empty PUT response for "+type+ " id="+str(id))
+                if context.debug: print("Empty PUT response for "+type+ " id="+str(id))
 
             ## DELETE
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='DELETE')
                 if response == []: 
-                    if globals.debug: print("Empty DELETE response for "+type+ " id="+str(id))
+                    if context.debug: print("Empty DELETE response for "+type+ " id="+str(id))
                     pkey=type+"."+id
-                    globals.rproc[pkey]=True
+                    context.rproc[pkey]=True
                     return True
                 j=response
                 pkey=restid+"/"+resid+"/"+j[key]
                 altk="r-"+pkey
                 common.write_import(type,pkey,altk)
             except:
-                if globals.debug: print("Empty DELETE response for "+type+ " id="+str(id))
+                if context.debug: print("Empty DELETE response for "+type+ " id="+str(id))
 
 
             ## PATCH
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='PATCH')
                 if response == []: 
-                    if globals.debug: print("Empty PATCH response for "+type+ " id="+str(id))
+                    if context.debug: print("Empty PATCH response for "+type+ " id="+str(id))
                     pkey=type+"."+id
-                    globals.rproc[pkey]=True
+                    context.rproc[pkey]=True
                     return True
                 j=response
                 pkey=restid+"/"+resid+"/"+j[key]
                 altk="r-"+pkey
                 common.write_import(type,pkey,altk)
             except:
-                if globals.debug: print("Empty PATCH response for "+type+ " id="+str(id))
+                if context.debug: print("Empty PATCH response for "+type+ " id="+str(id))
 
 
             
             pkey=restid+"/"+resid
             pkey=type+"."+pkey
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
 
         else:
             print("Must pass Rest api id / Resource id for "+type+" returning")

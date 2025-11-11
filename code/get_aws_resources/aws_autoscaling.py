@@ -1,11 +1,11 @@
 
 import common
 import boto3
-import globals
+import context
 import inspect
 
 def get_aws_autoscaling_group(type, id, clfn, descfn, topkey, key, filterid):    
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -18,7 +18,7 @@ def get_aws_autoscaling_group(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -29,15 +29,15 @@ def get_aws_autoscaling_group(type, id, clfn, descfn, topkey, key, filterid):
             else:
                 qid = id
             pkey=type+"."+id
-            if globals.debug: print("Looking for "+pkey)
+            if context.debug: print("Looking for "+pkey)
             response = client.describe_auto_scaling_groups(AutoScalingGroupNames=[qid])
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
-                globals.rproc[pkey] = True
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                context.rproc[pkey] = True
                 return True
             for j in response[topkey]:
                 common.write_import(type,j[key],None)
-            globals.rproc[pkey] = True
+            context.rproc[pkey] = True
             
     except Exception as e:
             common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

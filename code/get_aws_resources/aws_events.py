@@ -1,10 +1,10 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 def get_aws_cloudwatch_event_bus(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -37,7 +37,7 @@ def get_aws_cloudwatch_event_bus(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_cloudwatch_event_rule(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -57,7 +57,7 @@ def get_aws_cloudwatch_event_rule(type, id, clfn, descfn, topkey, key, filterid)
                         common.write_import(type,pkey,None)
                         common.add_dependancy("aws_cloudwatch_event_target", pkey)
                     pkey="aws_cloudwatch_event_rule."+id
-                    globals.rproc[pkey] = True
+                    context.rproc[pkey] = True
                 else:
                     try:
                         response = client.describe_rule(Name=id)
@@ -66,7 +66,7 @@ def get_aws_cloudwatch_event_rule(type, id, clfn, descfn, topkey, key, filterid)
                         print("ADVICE: Check if: "+type+ " id="+str(id)+" actually exists ?")
                         print("ADVICE: Check what other resources may be referring to this resource if it doesn't exist")
                         pkey="aws_cloudwatch_event_rule."+id
-                        globals.rproc[pkey] = True
+                        context.rproc[pkey] = True
                         return True
                     #print(str(response))
                     j=response
@@ -75,7 +75,7 @@ def get_aws_cloudwatch_event_rule(type, id, clfn, descfn, topkey, key, filterid)
                     common.write_import(type,pkey,None)
                     common.add_dependancy("aws_cloudwatch_event_target", pkey)
                     pkey="aws_cloudwatch_event_rule."+id
-                    globals.rproc[pkey] = True
+                    context.rproc[pkey] = True
 
 
 
@@ -85,7 +85,7 @@ def get_aws_cloudwatch_event_rule(type, id, clfn, descfn, topkey, key, filterid)
     return True
 
 def get_aws_cloudwatch_event_target(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -109,7 +109,7 @@ def get_aws_cloudwatch_event_target(type, id, clfn, descfn, topkey, key, filteri
                         pkey=id+"/"+j[key]
                         common.write_import(type,pkey,None)
                 pkey="aws_cloudwatch_event_target."+id
-                globals.rproc[pkey] = True
+                context.rproc[pkey] = True
             else:
                 print("WARNING: Must pass event_bus_name/rule-name as a parameter returning")
 

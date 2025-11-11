@@ -1,12 +1,12 @@
 import common
-import globals
+import context
 import boto3
 import botocore
 import inspect
 
 def get_aws_lb(type,id,clfn,descfn,topkey,key,filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> get_aws_lb  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -36,7 +36,7 @@ def get_aws_lb(type,id,clfn,descfn,topkey,key,filterid):
 
 def get_aws_lb_listener(type,id,clfn,descfn,topkey,key,filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> get_aws_lb_listener  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -61,7 +61,7 @@ def get_aws_lb_listener(type,id,clfn,descfn,topkey,key,filterid):
             common.write_import(type,retid,None) 
             common.add_dependancy("aws_lb_listener_rule",retid)
             pkey="aws_lb_listener."+id
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
 
 
     except Exception as e:
@@ -71,7 +71,7 @@ def get_aws_lb_listener(type,id,clfn,descfn,topkey,key,filterid):
 
 def get_aws_lb_listener_rule(type,id,clfn,descfn,topkey,key,filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> get_aws_lb_listener_rule  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -102,7 +102,7 @@ def get_aws_lb_listener_rule(type,id,clfn,descfn,topkey,key,filterid):
                 common.write_import(type,retid,None) 
             pkey="aws_lb_listener_rule."+id
 
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -111,7 +111,7 @@ def get_aws_lb_listener_rule(type,id,clfn,descfn,topkey,key,filterid):
 
 def get_aws_lb_target_group(type,id,clfn,descfn,topkey,key,filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> get_aws_lb_target_group  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -135,10 +135,10 @@ def get_aws_lb_target_group(type,id,clfn,descfn,topkey,key,filterid):
             retid=j[key] # TargetGroupArn
             common.write_import(type,retid,None) 
             pkey=type+"."+retid
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
             #common.add_dependancy("aws_lb_listener_rule",retid)
             #pkey="aws_lb_listener."+id
-            #globals.rproc[pkey]=True
+            #context.rproc[pkey]=True
 
 
     except Exception as e:

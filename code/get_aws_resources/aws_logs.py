@@ -1,10 +1,10 @@
 import common
-import globals
+import context
 import inspect
 import boto3
 
 def get_aws_cloudwatch_log_group(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_cloudwatch_log_group  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -15,7 +15,7 @@ def get_aws_cloudwatch_log_group(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 logn=j[key]
@@ -26,7 +26,7 @@ def get_aws_cloudwatch_log_group(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 if j['arn'] == id:
@@ -38,7 +38,7 @@ def get_aws_cloudwatch_log_group(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(logGroupNamePattern=id):
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 logn=j[key]
@@ -53,7 +53,7 @@ def get_aws_cloudwatch_log_group(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_cloudwatch_log_stream(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_cloudwatch_log_stream  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -61,9 +61,9 @@ def get_aws_cloudwatch_log_stream(type, id, clfn, descfn, topkey, key, filterid)
         if id is not None:    
             response = client.describe_log_streams(logGroupName=id)
             if response[topkey] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
                 return True
             for j in response[topkey]:
                 sn = j[key]
@@ -71,7 +71,7 @@ def get_aws_cloudwatch_log_stream(type, id, clfn, descfn, topkey, key, filterid)
                 theid=lgn+":"+sn
                 common.write_import(type, theid, None)
             pkey=type+"."+id
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
  
         else:
             print("WARNING: No id provided for get_aws_cloudwatch_log_stream")

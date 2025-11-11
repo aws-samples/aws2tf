@@ -1,12 +1,12 @@
 import common
 import boto3
 from botocore.config import Config
-import globals
+import context
 import inspect
 
 # aws_msk_cluster arn
 def get_aws_msk_cluster(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -18,7 +18,7 @@ def get_aws_msk_cluster(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response:
                 if j['ClusterType']=='PROVISIONED' and j['State']=="ACTIVE":
@@ -29,7 +29,7 @@ def get_aws_msk_cluster(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.describe_cluster_v2(ClusterArn=id)
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             j=response['ClusterInfo']
             if j['ClusterType']=='PROVISIONED' and j['State']=="ACTIVE":
@@ -44,7 +44,7 @@ def get_aws_msk_cluster(type, id, clfn, descfn, topkey, key, filterid):
 
 # aws_msk_configuration config arn
 def get_aws_msk_configuration(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -56,7 +56,7 @@ def get_aws_msk_configuration(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []:
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type, j[key], None)
@@ -64,7 +64,7 @@ def get_aws_msk_configuration(type, id, clfn, descfn, topkey, key, filterid):
         else:
             response = client.describe_configuration(Arn=id)
             if response == []:
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response
             common.write_import(type, j[key], None)
@@ -76,7 +76,7 @@ def get_aws_msk_configuration(type, id, clfn, descfn, topkey, key, filterid):
 
 # aws_msk_cluster_policy cluster arn
 def get_aws_msk_cluster_policy(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -92,13 +92,13 @@ def get_aws_msk_cluster_policy(type, id, clfn, descfn, topkey, key, filterid):
                 pkey=type+"."+id
                 response = client.get_cluster_policy(ClusterArn=id)
                 if response == []:
-                    if globals.debug: 
+                    if context.debug: 
                         print("Empty response for "+type+ " id="+str(id)+" returning")
-                        globals.rproc[pkey]=True
+                        context.rproc[pkey]=True
                         return True
                 j=response
                 common.write_import(type, id, None)
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
                 
             else:
                 print("WARNING: Must pass Cluster arn as parameter")
@@ -114,7 +114,7 @@ def get_aws_msk_cluster_policy(type, id, clfn, descfn, topkey, key, filterid):
 
 # aws_msk_serverless_cluster arn
 def get_aws_msk_serverless_cluster(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -126,7 +126,7 @@ def get_aws_msk_serverless_cluster(type, id, clfn, descfn, topkey, key, filterid
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []:
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 if j['ClusterType']=='SERVERLESS'and j['State']=="ACTIVE": 
@@ -137,14 +137,14 @@ def get_aws_msk_serverless_cluster(type, id, clfn, descfn, topkey, key, filterid
                 pkey=type+"."+id
                 response = client.describe_cluster_v2(ClusterArn=id)
                 if response == []:
-                    if globals.debug:
+                    if context.debug:
                         print("Empty response for "+type+ " id="+str(id)+" returning")
-                        globals.rproc[pkey]=True
+                        context.rproc[pkey]=True
                         return True
                 j=response['ClusterInfo']
                 if j['ClusterType']=='SERVERLESS' and j['State']=="ACTIVE":
                     common.write_import(type, j[key], None)
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
 
             else:
                 print("WARNING: Must pass Cluster arn as parameter")
@@ -160,7 +160,7 @@ def get_aws_msk_serverless_cluster(type, id, clfn, descfn, topkey, key, filterid
 
 # aws_msk_scram_secret_association id or arn ?
 def get_aws_msk_scram_secret_association(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -176,14 +176,14 @@ def get_aws_msk_scram_secret_association(type, id, clfn, descfn, topkey, key, fi
                 pkey=type+"."+id
                 response = client.list_scram_secrets(ClusterArn=id)
                 if response == []:
-                    if globals.debug: 
+                    if context.debug: 
                         print("Empty response for "+type+ " id="+str(id)+" returning")
-                        globals.rproc[pkey]=True
+                        context.rproc[pkey]=True
                         return True
                 for j in response['SecretArnList']:
                     theid=id
                     common.write_import(type, id, None)
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
             else:
                 print("WARNING: Must pass Cluster arn as parameter")
                 return True

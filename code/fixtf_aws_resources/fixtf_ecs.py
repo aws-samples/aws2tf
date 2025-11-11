@@ -1,6 +1,6 @@
 import fixtf
 import common
-import globals
+import context
 
 def aws_ecs_cluster(t1,tt1,tt2,flag1,flag2):
 	skip=0
@@ -51,7 +51,7 @@ def aws_ecs_service(t1,tt1,tt2,flag1,flag2):
 			t1=tt1 + " = aws_ecs_task_definition." + tt2 + ".arn\n"
 			common.add_dependancy("aws_ecs_task_definition",tt2)
 		else:
-			tdarn="arn:aws:ecs:"+globals.region+":"+globals.acc+":"+"task-definition:"+tt2
+			tdarn="arn:aws:ecs:"+context.region+":"+context.acc+":"+"task-definition:"+tt2
 			#print("--->>>>"+tt2,tdarn)
 			#tdn=tdarn.replace("/","_").replace(".","_").replace(":","_")
 			#t1=tt1+" = aws_ecs_task_definition."+tdn+".id\n"

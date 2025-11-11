@@ -4,7 +4,7 @@ import base64
 import boto3
 import sys
 import os
-import globals
+import context
 
 
 def aws_docdb_cluster(t1,tt1,tt2,flag1,flag2):

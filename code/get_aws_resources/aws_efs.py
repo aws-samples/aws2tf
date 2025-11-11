@@ -1,12 +1,12 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 import sys,os
 
 
 def get_aws_efs_file_system(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -47,7 +47,7 @@ def get_aws_efs_file_system(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_efs_mount_target(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -69,7 +69,7 @@ def get_aws_efs_mount_target(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 def get_aws_efs_access_point(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -91,7 +91,7 @@ def get_aws_efs_access_point(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 def get_aws_efs_replication_configuration(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -109,7 +109,7 @@ def get_aws_efs_replication_configuration(type, id, clfn, descfn, topkey, key, f
                     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                     exn=str(exc_type.__name__)
                     if exn == "ReplicationNotFound":
-                        if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                        if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                         return True
                 if response == []: 
                     print("Empty response for "+type+ " id="+str(id)+" returning")
@@ -123,7 +123,7 @@ def get_aws_efs_replication_configuration(type, id, clfn, descfn, topkey, key, f
     return True
 
 def get_aws_efs_file_system_policy(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -141,7 +141,7 @@ def get_aws_efs_file_system_policy(type, id, clfn, descfn, topkey, key, filterid
                     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                     exn=str(exc_type.__name__)
                     if exn == "PolicyNotFound":
-                        if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                        if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                         return True
                 if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
                 
@@ -153,7 +153,7 @@ def get_aws_efs_file_system_policy(type, id, clfn, descfn, topkey, key, filterid
     return True
 
 def get_aws_efs_backup_policy(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -170,7 +170,7 @@ def get_aws_efs_backup_policy(type, id, clfn, descfn, topkey, key, filterid):
                     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                     exn=str(exc_type.__name__)
                     if exn == "PolicyNotFound":
-                        if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                        if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                         return True
                 if response == []: 
                     print("Empty response for "+type+ " id="+str(id)+" returning")
@@ -185,7 +185,7 @@ def get_aws_efs_backup_policy(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_efs_lifecycle_configuration(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:

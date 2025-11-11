@@ -1,10 +1,10 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 def get_aws_service_discovery_private_dns_namespace(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -29,7 +29,7 @@ def get_aws_service_discovery_private_dns_namespace(type, id, clfn, descfn, topk
                     pkey=nsid+":"+vpcid
                     common.write_import(type,pkey,nsid) 
                     tkey="aws_service_discovery_private_dns_namespace."+id
-                    globals.rproc[tkey]=True
+                    context.rproc[tkey]=True
 
 
         else:      
@@ -48,7 +48,7 @@ def get_aws_service_discovery_private_dns_namespace(type, id, clfn, descfn, topk
                 pkey=nsid+":"+vpcid
                 common.write_import(type,pkey,nsid) 
                 tkey="aws_service_discovery_private_dns_namespace."+id
-                globals.rproc[tkey]=True
+                context.rproc[tkey]=True
 
                 #common.write_import(type,j[key],None)
 
@@ -58,7 +58,7 @@ def get_aws_service_discovery_private_dns_namespace(type, id, clfn, descfn, topk
     return True
 
 def get_aws_service_discovery_public_dns_namespace(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:

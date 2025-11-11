@@ -4,7 +4,7 @@ import base64
 import boto3
 import sys
 import os
-import globals
+import context
 import inspect
 
 def aws_vpclattice_auth_policy(t1,tt1,tt2,flag1,flag2):

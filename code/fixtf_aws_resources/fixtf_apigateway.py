@@ -1,6 +1,6 @@
 import fixtf
 import common
-import globals
+import context
 
 
 def aws_api_gateway_account(t1,tt1,tt2,flag1,flag2):
@@ -54,11 +54,11 @@ def aws_api_gateway_integration_response(t1,tt1,tt2,flag1,flag2):
 def aws_api_gateway_method(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if t1.startswith("resource"):
-		globals.apigwrestapiid=t1.split("r-")[1].split("_")[0]
+		context.apigwrestapiid=t1.split("r-")[1].split("_")[0]
 	if tt1=="resource_id" and tt2 != "null":
-		t1=tt1 + " = aws_api_gateway_resource.r-" + str(globals.apigwrestapiid)+"_" + tt2 + ".id\n"
+		t1=tt1 + " = aws_api_gateway_resource.r-" + str(context.apigwrestapiid)+"_" + tt2 + ".id\n"
 	if tt1=="authorizer_id" and tt2 != "null":
-		t1=tt1 + " = aws_api_gateway_authorizer.r-" + str(globals.apigwrestapiid)+"_" + tt2 + ".id\n"
+		t1=tt1 + " = aws_api_gateway_authorizer.r-" + str(context.apigwrestapiid)+"_" + tt2 + ".id\n"
 	return skip,t1,flag1,flag2
 
 def aws_api_gateway_method_response(t1,tt1,tt2,flag1,flag2):
@@ -94,9 +94,9 @@ def aws_api_gateway_rest_api_policy(t1,tt1,tt2,flag1,flag2):
 def aws_api_gateway_stage(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if t1.startswith("resource"):
-		globals.apigwrestapiid=t1.split("r-")[1].split("_")[0]
+		context.apigwrestapiid=t1.split("r-")[1].split("_")[0]
 	if tt1=="deployment_id" and tt2 != "null":
-		t1=tt1 + " = aws_api_gateway_deployment.r-" + str(globals.apigwrestapiid)+"_" + tt2 + ".id\n"
+		t1=tt1 + " = aws_api_gateway_deployment.r-" + str(context.apigwrestapiid)+"_" + tt2 + ".id\n"
 	return skip,t1,flag1,flag2
 
 def aws_api_gateway_usage_plan(t1,tt1,tt2,flag1,flag2):

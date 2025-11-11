@@ -1,4 +1,4 @@
-import globals
+import context
 import common
 
 def aws_lb_cookie_stickiness_policy(t1,tt1,tt2,flag1,flag2):

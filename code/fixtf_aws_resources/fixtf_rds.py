@@ -1,6 +1,6 @@
 import common
 import fixtf
-import globals
+import context
 import inspect
 
 def aws_db_parameter_group(t1,tt1,tt2,flag1,flag2):
@@ -17,7 +17,7 @@ def aws_db_instance(t1,tt1,tt2,flag1,flag2):
 	if tt1 == "domain_dns_ips":
 		if tt2 == "[]": skip=1
 	elif tt1 == "db_name" or tt1 ==  "username":
-		if globals.repdbin: skip=1
+		if context.repdbin: skip=1
 	elif tt1 == "parameter_group_name" and tt2 != "null":
 		if "default" not in tt2:
 			t1=tt1 + " = aws_db_parameter_group." + tt2 + ".id\n"
@@ -28,7 +28,7 @@ def aws_db_instance(t1,tt1,tt2,flag1,flag2):
 			common.add_dependancy("aws_db_subnet_group",tt2)
 	elif tt1 == "replicate_source_db" and tt2 != "null":
 		if tt2.startswith("arn:"):
-			if globals.region in tt2:
+			if context.region in tt2:
 				tt2=tt2.split(":")[-1]
 				t1=tt1 + " = aws_db_instance." + tt2.split(":")[1] + ".arn\n"
 				common.add_dependancy("aws_db_instance", tt2.split(":")[1])

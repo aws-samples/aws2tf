@@ -1,12 +1,12 @@
 import common
 import botocore
 from botocore.config import Config
-import globals
+import context
 import inspect
 
 
 def get_aws_vpclattice_service_network(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -18,7 +18,7 @@ def get_aws_vpclattice_service_network(type, id, clfn, descfn, topkey, key, filt
             for page in paginator.paginate():
                 response.extend(page[topkey])
             if response == []:
-                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 return True
 
             for j in response:
@@ -31,7 +31,7 @@ def get_aws_vpclattice_service_network(type, id, clfn, descfn, topkey, key, filt
         else:
             response = client.get_service_network(serviceNetworkIdentifier=id)
             if response == []:
-                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             j = response
             common.write_import(type, j[key], None)
@@ -47,7 +47,7 @@ def get_aws_vpclattice_service_network(type, id, clfn, descfn, topkey, key, filt
 
 
 def get_aws_vpclattice_service(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -59,7 +59,7 @@ def get_aws_vpclattice_service(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response.extend(page[topkey])
             if response == []:
-                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 return True
 
             for j in response:
@@ -77,7 +77,7 @@ def get_aws_vpclattice_service(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_vpclattice_service_network_vpc_association(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_vpclattice_service_network_vpc_association doing " + type + ' with id ' +
               str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     get_aws_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid)
@@ -85,14 +85,14 @@ def get_aws_vpclattice_service_network_vpc_association(type, id, clfn, descfn, t
 
 
 def get_aws_vpclattice_service_network_service_association(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_vpclattice_service_network_service_association doing " + type + ' with id ' +
               str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     get_aws_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid)
     return True
 
 def get_aws_vpclattice_service_network_resource_association(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_vpclattice_service_network_service_association doing " + type + ' with id ' +
               str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     get_aws_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid)
@@ -100,7 +100,7 @@ def get_aws_vpclattice_service_network_resource_association(type, id, clfn, desc
 
 
 def get_aws_vpclattice_access_log_subscription(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_vpclattice_service_network_vpc_association doing " + type + ' with id ' +
               str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     get_aws_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid)
@@ -108,16 +108,16 @@ def get_aws_vpclattice_access_log_subscription(type, id, clfn, descfn, topkey, k
 
 
 def get_aws_vpclattice_auth_policy(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_vpclattice_auth_policy doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     client = common.boto3.client(clfn)
-    if globals.debug:
+    if context.debug:
         print("--client")
     response = []
 
-    if globals.debug:
+    if context.debug:
         print("Paginator")
 
     try:
@@ -134,7 +134,7 @@ def get_aws_vpclattice_auth_policy(type, id, clfn, descfn, topkey, key, filterid
             e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
 
     if response == []:
-        if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+        if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
         return True
 
     else:
@@ -143,18 +143,18 @@ def get_aws_vpclattice_auth_policy(type, id, clfn, descfn, topkey, key, filterid
         # retid=j['id']
         # theid=retid
         # turn id into an arn ?
-        thearn = "arn:aws:vpclattice:"+globals.region+":"+globals.acc+":auth-policy/"+id
+        thearn = "arn:aws:vpclattice:"+context.region+":"+context.acc+":auth-policy/"+id
         # can use the arn - wants to import with id
 
         common.write_import(type, id, None)
         # common.add_dependancy("aws_vpclattice_listener_rule",theid)
-        # globals.rproc["aws_vpclattice_listener."+id]=True
+        # context.rproc["aws_vpclattice_listener."+id]=True
 
     return True
 
 
 def get_aws_vpclattice_target_group(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -170,13 +170,13 @@ def get_aws_vpclattice_target_group(type, id, clfn, descfn, topkey, key, filteri
             common.handle_error(
                 e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
         if response == []:
-            if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+            if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
             return True
         for j in response:
             theid = j[key]
             common.write_import(type, theid, None)
             #common.add_dependancy("aws_vpclattice_target_group_attachment",theid)
-            globals.rproc["aws_vpclattice_target_group."+theid] = True
+            context.rproc["aws_vpclattice_target_group."+theid] = True
 
     else:
         if id.startswith("tg-"):
@@ -188,13 +188,13 @@ def get_aws_vpclattice_target_group(type, id, clfn, descfn, topkey, key, filteri
 
             common.write_import(type, id, None)
             #common.add_dependancy("aws_vpclattice_target_group_attachment",id)
-            globals.rproc["aws_vpclattice_target_group."+id] = True
+            context.rproc["aws_vpclattice_target_group."+id] = True
 
     return True
 
 
 def get_aws_vpclattice_target_group_attachment(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -213,14 +213,14 @@ def get_aws_vpclattice_target_group_attachment(type, id, clfn, descfn, topkey, k
                     e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
             ## doesn't work
             #common.write_import(type, id, None)
-            globals.rproc["aws_vpclattice_target_group_attachment."+id] = True
+            context.rproc["aws_vpclattice_target_group_attachment."+id] = True
 
     return True
 
 
 
 def get_aws_vpclattice_resource_policy(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -240,22 +240,22 @@ def get_aws_vpclattice_resource_policy(type, id, clfn, descfn, topkey, key, filt
                     e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
 
             common.write_import(type, id, None)
-            globals.rproc["aws_vpclattice_resource_policy."+id] = True
+            context.rproc["aws_vpclattice_resource_policy."+id] = True
 
     return True
 
 
 def get_aws_vpclattice_listener(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     client = common.boto3.client(clfn)
-    if globals.debug:
+    if context.debug:
         print("--client")
     response = []
 
-    if globals.debug:
+    if context.debug:
         print("Paginator")
     if id is None:
         print("WARNING must provide serviceIdentifier as parameter for get_aws_vpclattice_listener")
@@ -270,7 +270,7 @@ def get_aws_vpclattice_listener(type, id, clfn, descfn, topkey, key, filterid):
                 e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
 
     if response == []:
-        if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+        if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
         return True
 
     for j in response:
@@ -278,23 +278,23 @@ def get_aws_vpclattice_listener(type, id, clfn, descfn, topkey, key, filterid):
         theid = id+"/"+retid
         common.write_import(type, theid, None)
         common.add_dependancy("aws_vpclattice_listener_rule", theid)
-        globals.rproc["aws_vpclattice_listener."+id] = True
+        context.rproc["aws_vpclattice_listener."+id] = True
 
     return True
 
 
 #  need to deal with id  svc/ruleid - extract ruleid
 def get_aws_vpclattice_listener_rule(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     client = common.boto3.client(clfn)
-    if globals.debug:
+    if context.debug:
         print("--client")
     response = []
 
-    if globals.debug:
+    if context.debug:
         print("Paginator")
 
     if id is None:
@@ -317,14 +317,14 @@ def get_aws_vpclattice_listener_rule(type, id, clfn, descfn, topkey, key, filter
                 e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
 
     if response == []:
-        if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+        if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
         return True
 
     for j in response:
         retid = j['id']
         theid = svid+"/"+rlid+"/"+retid
         common.write_import(type, theid, None)
-    globals.rproc["aws_vpclattice_listener_rule."+id] = True
+    context.rproc["aws_vpclattice_listener_rule."+id] = True
 
     return True
 
@@ -332,7 +332,7 @@ def get_aws_vpclattice_listener_rule(type, id, clfn, descfn, topkey, key, filter
 
 
 def get_aws_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid):
-   if globals.debug:
+   if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -360,9 +360,9 @@ def get_aws_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid):
 
       #print(str(response))
       if response == []:
-         if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+         if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
          pkey = type+"."+id
-         globals.rproc[pkey] = True
+         context.rproc[pkey] = True
          return True
 
       for j in response:
@@ -371,7 +371,7 @@ def get_aws_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid):
          theid = retid
          common.write_import(type, theid, None)
       pkey = type+"."+id
-      globals.rproc[pkey] = True
+      context.rproc[pkey] = True
 
    except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
@@ -381,7 +381,7 @@ def get_aws_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid):
 # aws_vpclattice_resource_gateway
 
 def get_aws_vpclattice_resource_gateway(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -396,7 +396,7 @@ def get_aws_vpclattice_resource_gateway(type, id, clfn, descfn, topkey, key, fil
             for page in paginator.paginate(status="ACTIVE"):
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -405,13 +405,13 @@ def get_aws_vpclattice_resource_gateway(type, id, clfn, descfn, topkey, key, fil
         else:      
             response = client.get_resource_gateway(resourceGatewayIdentifier=id)
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             j=response
             common.write_import(type,j[key],None)
             common.add_dependancy("aws_vpclattice_resource_configuration", j[key])
             pkey=type+"."+id
-            globals.rproc[pkey] = True
+            context.rproc[pkey] = True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -420,7 +420,7 @@ def get_aws_vpclattice_resource_gateway(type, id, clfn, descfn, topkey, key, fil
 
 # aws_vpclattice_resource_configuration
 def get_aws_vpclattice_resource_configuration(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -433,7 +433,7 @@ def get_aws_vpclattice_resource_configuration(type, id, clfn, descfn, topkey, ke
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []:
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type, j[key], None)
@@ -442,21 +442,21 @@ def get_aws_vpclattice_resource_configuration(type, id, clfn, descfn, topkey, ke
             if id.startswith("rcfg-"):
                 response = client.get_resource_configuration(resourceConfigurationIdentifier=id)
                 if response == []:
-                    if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                    if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                     return True
                 j=response
                 common.write_import(type, j[key], None)
                 pkey=type+"."+id
-                globals.rproc[pkey] = True
+                context.rproc[pkey] = True
             elif id.startswith("rgw-"):
                 response = client.list_resource_configurations(resourceGatewayIdentifier=id)
                 if response == []:
-                    if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                    if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                     return True
                 j=response
                 common.write_import(type, j[key], None)
                 pkey=type+"."+id
-                globals.rproc[pkey] = True
+                context.rproc[pkey] = True
 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)

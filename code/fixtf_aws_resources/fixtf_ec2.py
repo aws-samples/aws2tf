@@ -2,7 +2,7 @@ import common
 import fixtf
 import base64
 import boto3
-import globals
+import context
 import inspect
 import json
 
@@ -90,28 +90,28 @@ def aws_default_security_group(t1,tt1,tt2,flag1,flag2):
     #CIRCULAR reference problems:
     ##if tt1 == "security_groups": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
 	# fix via ingress /egress rules - ?
-	elif tt1 == "egress" or globals.lbc > 0 :
+	elif tt1 == "egress" or context.lbc > 0 :
             
 		if tt2 == "[]": skip = 1
-		if "[" in t1: globals.lbc=globals.lbc+1
-		if "]" in t1: globals.lbc=globals.lbc-1
-        #print("***t1="+t1+" lbc="+str(globals.lbc))
+		if "[" in t1: context.lbc=context.lbc+1
+		if "]" in t1: context.lbc=context.lbc-1
+        #print("***t1="+t1+" lbc="+str(context.lbc))
 	
-		if globals.lbc > 0: skip = 1
-		if globals.lbc == 0:
-           #print("***t1="+t1+" lbc="+str(globals.lbc))
+		if context.lbc > 0: skip = 1
+		if context.lbc == 0:
+           #print("***t1="+t1+" lbc="+str(context.lbc))
 			if "]" in t1.strip(): skip=1
 
-	elif tt1 == "ingress" or globals.lbc > 0 :
+	elif tt1 == "ingress" or context.lbc > 0 :
     
 		if tt2 == "[]": skip = 1
-		if "[" in t1: globals.lbc=globals.lbc+1
-		if "]" in t1: globals.lbc=globals.lbc-1
-        #print("***t1="+t1+" lbc="+str(globals.lbc))
+		if "[" in t1: context.lbc=context.lbc+1
+		if "]" in t1: context.lbc=context.lbc-1
+        #print("***t1="+t1+" lbc="+str(context.lbc))
 	
-		if globals.lbc > 0: skip = 1
-		if globals.lbc == 0:
-           #print("***t1="+t1+" lbc="+str(globals.lbc))
+		if context.lbc > 0: skip = 1
+		if context.lbc == 0:
+           #print("***t1="+t1+" lbc="+str(context.lbc))
 			if "]" in t1.strip(): skip=1
 
 	elif tt1 == "name_prefix" and flag1 is True: skip=1
@@ -228,7 +228,7 @@ def aws_ec2_transit_gateway_multicast_group_source(t1,tt1,tt2,flag1,flag2):
 def aws_ec2_transit_gateway_peering_attachment(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if tt1 == "peer_account_id":
-		if globals.acc in tt2: flag1=True
+		if context.acc in tt2: flag1=True
 	if tt1=="peer_transit_gateway_id" and tt2 != "null":
 		print(str(flag1))
 		if flag1:
@@ -350,7 +350,7 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 
 		elif tt1 == "user_data":
 			inid=flag2.split("__")[1]
-			session = boto3.Session(region_name=globals.region,profile_name=globals.profile)
+			session = boto3.Session(region_name=context.region,profile_name=context.profile)
 			client = session.client("ec2")
 			resp = client.describe_instance_attribute(Attribute="userData",InstanceId=inid)
 			try:
@@ -359,7 +359,7 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 				with open(flag2+'.sh', 'w') as f:
 					f.write(ud2)
 				t1="user_data_base64 = filebase64sha256(\""+flag2+".sh\")\n lifecycle {\n   ignore_changes = [user_data_replace_on_change,user_data,user_data_base64,metadata_options[0].http_protocol_ipv6,launch_template[0].version]\n}\n"
-				globals.ec2ignore=True
+				context.ec2ignore=True
 			except KeyError:
 				pass
 
@@ -374,7 +374,7 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 		elif tt1 == "security_groups": skip=1
 		elif tt1 == "key_name": 
 			if tt2 != "null":
-				if not globals.dkey:
+				if not context.dkey:
 					tfil=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
 					t1=tt1 + " = aws_key_pair." + tfil + ".id\n"
 					common.add_dependancy("aws_key_pair",tt2)
@@ -385,8 +385,8 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 
 		elif tt1 == "user_data_replace_on_change" and tt2 == "null":
 			t1=tt1 + " = false\n"
-			if globals.ec2ignore==False:
-				globals.ec2ignore=True
+			if context.ec2ignore==False:
+				context.ec2ignore=True
 				t1=t1+"\n lifecycle {\n   ignore_changes = [user_data_replace_on_change,user_data,user_data_base64,metadata_options[0].http_protocol_ipv6,launch_template[0].version]\n}\n"		
 
 		elif tt1 == "http_protocol_ipv6" and tt2 == "null":
@@ -604,7 +604,7 @@ def aws_security_group_rule(t1,tt1,tt2,flag1,flag2):
 
 def aws_security_group(t1,tt1,tt2,flag1,flag2):
     skip = 0
-    #print("entry t1="+t1+" lbc="+str(globals.lbc))
+    #print("entry t1="+t1+" lbc="+str(context.lbc))
 
     if tt1 == "name":  
         if len(tt2) > 0: flag1=True
@@ -612,36 +612,36 @@ def aws_security_group(t1,tt1,tt2,flag1,flag2):
     #CIRCULAR reference problems:
     ##if tt1 == "security_groups": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
 	# fix via ingress /egress rules - ?
-    elif tt1 == "egress" or globals.lbc > 0 :
+    elif tt1 == "egress" or context.lbc > 0 :
         
         
         if tt2 == "[]": skip = 1
-        if "[" in t1: globals.lbc=globals.lbc+1
-        if "]" in t1: globals.lbc=globals.lbc-1
-        #print("***t1="+t1+" lbc="+str(globals.lbc))
+        if "[" in t1: context.lbc=context.lbc+1
+        if "]" in t1: context.lbc=context.lbc-1
+        #print("***t1="+t1+" lbc="+str(context.lbc))
 	
-        if globals.lbc > 0: skip = 1
-        if globals.lbc == 0:
-           #print("***t1="+t1+" lbc="+str(globals.lbc))
+        if context.lbc > 0: skip = 1
+        if context.lbc == 0:
+           #print("***t1="+t1+" lbc="+str(context.lbc))
            if "]" in t1.strip(): skip=1
 
-    elif tt1 == "ingress" or globals.lbc > 0 :
+    elif tt1 == "ingress" or context.lbc > 0 :
         
         
         if tt2 == "[]": skip = 1
-        if "[" in t1: globals.lbc=globals.lbc+1
-        if "]" in t1: globals.lbc=globals.lbc-1
-        #print("***t1="+t1+" lbc="+str(globals.lbc))
+        if "[" in t1: context.lbc=context.lbc+1
+        if "]" in t1: context.lbc=context.lbc-1
+        #print("***t1="+t1+" lbc="+str(context.lbc))
 	
-        if globals.lbc > 0: skip = 1
-        if globals.lbc == 0:
-           #print("***t1="+t1+" lbc="+str(globals.lbc))
+        if context.lbc > 0: skip = 1
+        if context.lbc == 0:
+           #print("***t1="+t1+" lbc="+str(context.lbc))
            if "]" in t1.strip(): skip=1
 
     elif tt1 == "name_prefix" and flag1 is True: skip=1
        
     #  
-    #print("exit t1="+t1+" lbc="+str(globals.lbc))          
+    #print("exit t1="+t1+" lbc="+str(context.lbc))          
     return skip,t1,flag1,flag2
 
 def aws_snapshot_create_volume_permission(t1,tt1,tt2,flag1,flag2):
@@ -662,7 +662,7 @@ def aws_spot_fleet_request(t1,tt1,tt2,flag1,flag2):
 	elif tt1 == "allocation_strategy" and tt2!="null":
 		t1=t1+"\n lifecycle {\n   ignore_changes = [target_group_arns,load_balancers,wait_for_fulfillment]\n}\n"
 	elif tt1=="key_name" and tt2 != "null":
-		if globals.dkey:
+		if context.dkey:
 			tfil=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
 			t1=tt1 + " = data.aws_key_pair." + tfil + ".key_name\n"
 			common.add_dependancy("aws_key_pair",tt2)
@@ -679,9 +679,9 @@ def aws_spot_instance_request(t1,tt1,tt2,flag1,flag2):
 def aws_subnet(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if "resource" in t1 and "{" in t1 and "aws_subnet" in t1:
-		globals.subnetid=""
+		context.subnetid=""
 		inid=t1.split('aws_subnet"')[1].split("{")[0].strip().strip('"')
-		globals.subnetid=inid
+		context.subnetid=inid
 	elif tt1 == "enable_lni_at_device_index":
 		if tt2 == "0": skip=1
 	elif tt1 == "availability_zone_id": skip=1
@@ -693,8 +693,8 @@ def aws_subnet(t1,tt1,tt2,flag1,flag2):
 		try:
 			nbs=tt2.split("::")[0].split(":")[-1]
 			nb=int(nbs[-2:])
-			for j in globals.subnets:
-				if j['SubnetId'] == globals.subnetid:
+			for j in context.subnets:
+				if j['SubnetId'] == context.subnetid:
 					vpcid=j['VpcId']
 					t1=tt1 + " = cidrsubnet(aws_vpc." + vpcid + ".ipv6_cidr_block, 8, "+str(nb)+")\n"
 		except Exception as e:

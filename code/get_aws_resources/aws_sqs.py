@@ -1,10 +1,10 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 def get_aws_sqs_queue(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -34,7 +34,7 @@ def get_aws_sqs_queue(type, id, clfn, descfn, topkey, key, filterid):
             if "://" not in id:
                 # assume it s a queue name and get url:
                 try:
-                    if globals.debug: print("Getting URL for queue",id)
+                    if context.debug: print("Getting URL for queue",id)
                     response2 = client.get_queue_url(QueueName=id)
                     id=response2['QueueUrl']
                 except Exception as e:
@@ -58,7 +58,7 @@ def get_aws_sqs_queue(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 def get_aws_sqs_queue_policy(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -76,13 +76,13 @@ def get_aws_sqs_queue_policy(type, id, clfn, descfn, topkey, key, filterid):
                 #print(f"{e=}")
                 print("No policy found for "+type+ " id="+str(id)+" returning")
                 
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
                 return True
             if response == []: 
                 print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             common.write_import(type,id,None)
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
 
 
     except Exception as e:
@@ -92,7 +92,7 @@ def get_aws_sqs_queue_policy(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_sqs_queue_redrive_allow_policy(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -110,14 +110,14 @@ def get_aws_sqs_queue_redrive_allow_policy(type, id, clfn, descfn, topkey, key, 
                 #print(f"{e=}")
                 print("No redrive allow policy found for "+type+ " id="+str(id)+" returning")
                 
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
                 return True
             if response == []: 
                 print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
  
             common.write_import(type,id,None)
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -126,7 +126,7 @@ def get_aws_sqs_queue_redrive_allow_policy(type, id, clfn, descfn, topkey, key, 
 
 
 def get_aws_sqs_queue_redrive_policy(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -144,14 +144,14 @@ def get_aws_sqs_queue_redrive_policy(type, id, clfn, descfn, topkey, key, filter
                 #print(f"{e=}")
                 print("No redrive policy found for "+type+ " id="+str(id)+" returning")
                 
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
                 return True
             if response == []: 
                 print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
  
             common.write_import(type,id,None)
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

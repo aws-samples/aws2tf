@@ -1,4 +1,4 @@
-import globals
+import context
 import os
 import sys
 import boto3
@@ -232,14 +232,14 @@ def fixtf(ttft,tf):
     ## will this check break things ?
     # check if aws_*.tf exists already
     if os.path.isfile(tf2):
-         if globals.debug:
+         if context.debug:
             print("File exists: " + tf2+ " skipping ...")                 
          return 
     else:
-        if globals.debug:  print("processing "+tf2)
+        if context.debug:  print("processing "+tf2)
 
 
-    if globals.debug:
+    if context.debug:
         print(ttft+" fixtf "+tf+".out") 
    
 # open the *.out file
@@ -259,7 +259,7 @@ def fixtf(ttft,tf):
 
     clfn=clfn.replace('-','_')
     callfn="fixtf_"+clfn
-    if globals.debug: print("callfn="+callfn+" ttft="+ttft)
+    if context.debug: print("callfn="+callfn+" ttft="+ttft)
 
     Lines = f1.readlines()
     f1.close()
@@ -269,17 +269,17 @@ def fixtf(ttft,tf):
     ##
     ## Prescan blocks   
     ##
-    globals.elastirep=False
-    globals.elastigrep=False
-    globals.elasticc=False
-    globals.kinesismsk=False
-    globals.destbuck=False
+    context.elastirep=False
+    context.elastigrep=False
+    context.elasticc=False
+    context.kinesismsk=False
+    context.destbuck=False
 
 
     if ttft=="aws_s3_bucket_replication_configuration":
         for t1 in Lines:
             t1=t1.strip()
-            if globals.debug5: print("DEBUG5: pre scan block1 : t1=", t1)
+            if context.debug5: print("DEBUG5: pre scan block1 : t1=", t1)
             skip=0
             tt1=t1.split("=")[0].strip()
             if tt1=="bucket":
@@ -287,7 +287,7 @@ def fixtf(ttft,tf):
                     tt2=t1.split("=")[1].strip().strip('\"')
                     if "arn:aws:s3" in tt2:
                         tt2=tt2.split(":")[-1]
-                        if globals.debug5: print("DEBUG5: pre scan block 2: common.add_dep bucket_name=", tt2)
+                        if context.debug5: print("DEBUG5: pre scan block 2: common.add_dep bucket_name=", tt2)
                         common.add_dependancy("aws_s3_bucket", tt2)
                 except:
                     tt2=""
@@ -303,8 +303,8 @@ def fixtf(ttft,tf):
                 tt2=""
             if tt1=="replication_group_id":
                 if tt2 != "null": 
-                    globals.elastirep=True
-                    if globals.debug5: print("***** set true *****")
+                    context.elastirep=True
+                    if context.debug5: print("***** set true *****")
 
     if ttft=="aws_elasticache_replication_group":
         for t1 in Lines:
@@ -317,11 +317,11 @@ def fixtf(ttft,tf):
                 tt2=""
             if tt1=="global_replication_group_id":
                 if tt2 != "null": 
-                    globals.elastigrep=True
+                    context.elastigrep=True
                     #print("***** set true *****")
             elif tt1=="num_cache_clusters":
                 if tt2 != "null": 
-                    globals.elasticc=True
+                    context.elasticc=True
 
 
     if ttft=="aws_kinesis_firehose_delivery_stream":
@@ -334,7 +334,7 @@ def fixtf(ttft,tf):
             except:
                 tt2=""
             if "msk_source_configuration" in tt1:
-                    globals.kinesismsk=True
+                    context.kinesismsk=True
                     #print("***** set true *****")
 
 
@@ -349,7 +349,7 @@ def fixtf(ttft,tf):
             except:
                 tt2=""
             if tt1=="replicate_source_db":
-                if tt2 != "null": globals.repdbin=True
+                if tt2 != "null": context.repdbin=True
 
     elif ttft=="aws_lambda_event_source_mapping":
         for t1 in Lines:
@@ -361,13 +361,13 @@ def fixtf(ttft,tf):
             except:
                 tt2=""
             if tt1=="destination_arn":
-                if tt2 == "null": globals.levsmap=True
+                if tt2 == "null": context.levsmap=True
 
     accessl=0
     cnxl=0
-    globals.lbskipaacl=False
-    globals.lbskipcnxl=False
-    globals.mskcfg=False
+    context.lbskipaacl=False
+    context.lbskipcnxl=False
+    context.mskcfg=False
 
     if ttft=="aws_lb":
         for t1 in Lines:
@@ -380,65 +380,65 @@ def fixtf(ttft,tf):
             if tt1=="access_logs": accessl=1;cnxl=0
             if tt1=="connection_logs": accessl=0;cnxl=1
             if tt1=="enabled":
-                if tt2 == "false" and accessl==1: globals.lbskipaacl=True
-                if tt2 == "false" and cnxl==1: globals.lbskipcnxl=True
-                else: globals.lbenabled=True
+                if tt2 == "false" and accessl==1: context.lbskipaacl=True
+                if tt2 == "false" and cnxl==1: context.lbskipcnxl=True
+                else: context.lbenabled=True
 
     ##
     ## Block stripping init
     ##
-    globals.lbc=0
-    globals.rbc=0
-    globals.stripblock=""
-    globals.stripblock2=""
-    globals.stripstart=""
-    globals.stripend=""
+    context.lbc=0
+    context.rbc=0
+    context.stripblock=""
+    context.stripblock2=""
+    context.stripstart=""
+    context.stripend=""
     #if ttft=="aws_lb_listener_rule" or ttft=="aws_lb_listener":
-    #    globals.stripblock="forward {"
-    #    globals.stripstart="{"
-    #    globals.stripend="}"
+    #    context.stripblock="forward {"
+    #    context.stripstart="{"
+    #    context.stripend="}"
     if ttft=="aws_lb":
-        globals.stripblock="subnet_mapping {"
-        globals.stripstart="{"
-        globals.stripend="}"
+        context.stripblock="subnet_mapping {"
+        context.stripstart="{"
+        context.stripend="}"
 
 
     if ttft=="aws_msk_cluster":
-        globals.stripblock="configuration_info {"
-        globals.stripstart="{"
-        globals.stripend="}"
+        context.stripblock="configuration_info {"
+        context.stripstart="{"
+        context.stripend="}"
 
 
-    if ttft=="aws_lambda_event_source_mapping" and globals.levsmap:
-        globals.stripblock="destination_config {"
-        globals.stripstart="{"
-        globals.stripend="}"
+    if ttft=="aws_lambda_event_source_mapping" and context.levsmap:
+        context.stripblock="destination_config {"
+        context.stripstart="{"
+        context.stripend="}"
 
     if ttft=="aws_wafv2_web_acl":
-        globals.stripblock="rule {"
-        globals.stripstart="{"
-        globals.stripend="}"
+        context.stripblock="rule {"
+        context.stripstart="{"
+        context.stripend="}"
 
     if ttft=="aws_instance":
-        globals.stripblock="primary_network_interface {"
-        globals.stripstart="{"
-        globals.stripend="}"
+        context.stripblock="primary_network_interface {"
+        context.stripstart="{"
+        context.stripend="}"
 
     if ttft=="aws_kinesis_firehose_delivery_stream":
-        if globals.kinesismsk:
-            globals.stripblock="server_side_encryption {"
-            globals.stripstart="{"
-            globals.stripend="}"
+        if context.kinesismsk:
+            context.stripblock="server_side_encryption {"
+            context.stripstart="{"
+            context.stripend="}"
 
-    globals.gulejobmaxcap=False
-    globals.ec2ignore=False
-    globals.secid=""
-    globals.secvid=""
-    globals.dzd=""
-    globals.connectinid=""
+    context.gulejobmaxcap=False
+    context.ec2ignore=False
+    context.secid=""
+    context.secvid=""
+    context.dzd=""
+    context.connectinid=""
 
-    #if globals.acc in tf2:
-    #    tf2=tf2.replace(globals.acc, "__")
+    #if context.acc in tf2:
+    #    tf2=tf2.replace(context.acc, "__")
 
 
 ########################                       
@@ -491,17 +491,17 @@ def fixtf(ttft,tf):
                 ## block strip sections - 
                 ####
                 
-                if globals.stripblock != "":
-                    if globals.stripblock in t1: globals.lbc=1
-                    elif globals.stripstart in t1 and globals.lbc>0: globals.lbc=globals.lbc+1
+                if context.stripblock != "":
+                    if context.stripblock in t1: context.lbc=1
+                    elif context.stripstart in t1 and context.lbc>0: context.lbc=context.lbc+1
                     
-                    if globals.stripend in t1 and globals.lbc>0:
-                        globals.lbc=globals.lbc-1
+                    if context.stripend in t1 and context.lbc>0:
+                        context.lbc=context.lbc-1
                         skip=1
-                    elif globals.lbc > 0: skip=1
+                    elif context.lbc > 0: skip=1
                 
                 #print("t1="+t1)
-	            #print("lbc="+str(globals.lbc)+" rbc="+str(globals.rbc)+" skip="+str(skip))
+	            #print("lbc="+str(context.lbc)+" rbc="+str(context.rbc)+" skip="+str(skip))
 
                 #print("t1="+t1)
             except Exception as e:
@@ -524,40 +524,40 @@ def fixtf(ttft,tf):
 
         # extra block removals in aws_lb
         if type=="aws_lb":
-            if globals.lbskipaacl:
+            if context.lbskipaacl:
                 shutil.move(tf2, tf2+".saved")
-                globals.stripblock="access_logs"
+                context.stripblock="access_logs"
                 with open(tf2+".saved", "e") as f1:
                     Lines = f1.readlines()
                 with open(tf2, "w") as f2:
                     for t1 in Lines:
                         t1=t1.strip()
                         tt1=t1.split("=")[0].strip()
-                        if globals.stripblock != "":
-                            if globals.stripblock in t1: globals.lbc=1
-                            elif globals.stripstart in t1 and globals.lbc>0: globals.lbc=globals.lbc+1
+                        if context.stripblock != "":
+                            if context.stripblock in t1: context.lbc=1
+                            elif context.stripstart in t1 and context.lbc>0: context.lbc=context.lbc+1
                             
-                            if globals.stripend in t1 and globals.lbc>0:
-                                globals.lbc=globals.lbc-1
+                            if context.stripend in t1 and context.lbc>0:
+                                context.lbc=context.lbc-1
                                 skip=1
-                            elif globals.lbc > 0: skip=1
-            if globals.lbskipcnxl:
+                            elif context.lbc > 0: skip=1
+            if context.lbskipcnxl:
                 shutil.move(tf2, tf2+".saved")
-                globals.stripblock="connection_logs"
+                context.stripblock="connection_logs"
                 with open(tf2+".saved", "e") as f1:
                     Lines = f1.readlines()
                 with open(tf2, "w") as f2:
                     for t1 in Lines:
                         t1=t1.strip()
                         tt1=t1.split("=")[0].strip()
-                        if globals.stripblock != "":
-                            if globals.stripblock in t1: globals.lbc=1
-                            elif globals.stripstart in t1 and globals.lbc>0: globals.lbc=globals.lbc+1
+                        if context.stripblock != "":
+                            if context.stripblock in t1: context.lbc=1
+                            elif context.stripstart in t1 and context.lbc>0: context.lbc=context.lbc+1
                             
-                            if globals.stripend in t1 and globals.lbc>0:
-                                globals.lbc=globals.lbc-1
+                            if context.stripend in t1 and context.lbc>0:
+                                context.lbc=context.lbc-1
                                 skip=1
-                            elif globals.lbc > 0: skip=1
+                            elif context.lbc > 0: skip=1
 
 
 
@@ -584,32 +584,32 @@ def aws_resource(t1,tt1,tt2,flag1,flag2):
 
 # generic replace of acct and region in arn
 def globals_replace(t1,tt1,tt2):
-    if globals.debug: print("GR start:",t1)
+    if context.debug: print("GR start:",t1)
     if "format(" in tt2: return t1
     ends=""
     tt2=tt2.replace("%", "%%")
     if tt2.startswith('[') and tt1 != "managed_policy_arns" and "," in tt2:
         tt2=tt2.replace('[','').replace(']','').replace('"','').replace(' ','')
         arns=tt2.split(',')
-        if globals.debug: print("Globals replace an array:"+str(arns))
+        if context.debug: print("Globals replace an array:"+str(arns))
         fins=""
         for arn in arns:
             tt2=str(arn)
             
             ends=""
-            if ":"+globals.acc+":" in tt2:
+            if ":"+context.acc+":" in tt2:
                 #print("Globals replace arn:"+str(tt2))
-                while ":"+globals.acc+":" in tt2:
-                    r1=tt2.find(":"+globals.region+":")
-                    a1=tt2.find(":"+globals.acc+":")
+                while ":"+context.acc+":" in tt2:
+                    r1=tt2.find(":"+context.region+":")
+                    a1=tt2.find(":"+context.acc+":")
                     #print("--> r1="+ str(r1) + " ")
                     #print("--> a1="+ str(a1) + " ")
                     if r1>0 and r1 < a1:
                             #print("--> 6a")
                             ends=ends+",data.aws_region.current.region"
-                            tt2=tt2[:r1]+":%s:"+tt2[r1+globals.regionl+2:]
+                            tt2=tt2[:r1]+":%s:"+tt2[r1+context.regionl+2:]
 
-                    a1=tt2.find(":"+globals.acc+":")
+                    a1=tt2.find(":"+context.acc+":")
                     tt2=tt2[:a1]+":%s:"+tt2[a1+14:]
                     
                     ends=ends+",data.aws_caller_identity.current.account_id"
@@ -631,19 +631,19 @@ def globals_replace(t1,tt1,tt2):
         t1=fins
 
     else:
-        if ":"+globals.acc+":" in tt2:
-            while ":"+globals.acc+":" in tt2:
+        if ":"+context.acc+":" in tt2:
+            while ":"+context.acc+":" in tt2:
                     #print("--> 5")
-                    r1=tt2.find(":"+globals.region+":")
-                    a1=tt2.find(":"+globals.acc+":")
+                    r1=tt2.find(":"+context.region+":")
+                    a1=tt2.find(":"+context.acc+":")
                     #print("--> r1="+ str(r1) + " ")
                     #print("--> a1="+ str(a1) + " ")
                     if r1>0 and r1 < a1:
                             #print("--> 6a")
                             ends=ends+",data.aws_region.current.region"
-                            tt2=tt2[:r1]+":%s:"+tt2[r1+globals.regionl+2:]
+                            tt2=tt2[:r1]+":%s:"+tt2[r1+context.regionl+2:]
 
-                    a1=tt2.find(":"+globals.acc+":")
+                    a1=tt2.find(":"+context.acc+":")
                     tt2=tt2[:a1]+":%s:"+tt2[a1+14:]
                     
                     ends=ends+",data.aws_caller_identity.current.account_id"
@@ -652,10 +652,10 @@ def globals_replace(t1,tt1,tt2):
             
                     #print("t1="+t1)
                     
-                    if globals.debug: print("out tt2="+tt2)
+                    if context.debug: print("out tt2="+tt2)
                     if "[" in tt2:
                         tt2=tt2.lstrip("[").rstrip("]").lstrip('"').rstrip('"')
-                        if globals.debug: print("in tt2="+tt2)
+                        if context.debug: print("in tt2="+tt2)
                         t1 = tt1+' = [format("' + tt2 + '"' + ends +')]\n'
                     else:
                         t1 = tt1+' = format("'+tt2+ '"' +ends+')\n'
@@ -667,7 +667,7 @@ def globals_replace(t1,tt1,tt2):
     #    tt2=tt2.replace('"','')
     #    t1 = tt1+' = [format("' + tt2 + '"' + ends +')]\n'
     
-    if globals.debug: print("GR finish:="+t1)
+    if context.debug: print("GR finish:="+t1)
     return t1
 
 
@@ -677,24 +677,24 @@ def rhs_replace(t1,tt1,tt2):
 
     if "{" not in tt2 and "[" not in tt2:  # so probably not a policy 
 
-        while globals.acc in tt2:
+        while context.acc in tt2:
                     #print("--> 5b",tt2)
-                    r1=tt2.find(globals.region)
-                    a1=tt2.find(globals.acc)
+                    r1=tt2.find(context.region)
+                    a1=tt2.find(context.acc)
                     #print("--> r1="+ str(r1) + " ")
                     #print("--> a1="+ str(a1) + " ")
                     if r1>0 and a1>0 and r1 < a1: # there is region and it comes 1st
                             #print("--> 6a")
                             ends=ends+",data.aws_region.current.region"
-                            tt2=tt2[:r1]+"%s"+tt2[r1+globals.regionl:]
-                            a1=tt2.find(globals.acc)
+                            tt2=tt2[:r1]+"%s"+tt2[r1+context.regionl:]
+                            a1=tt2.find(context.acc)
                             tt2=tt2[:a1]+"%s"+tt2[a1+12:]
                             ends=ends+",data.aws_caller_identity.current.account_id"
                     if r1>0 and a1>0 and r1 > a1: # there is region and it comes 2nd
                             #print("--> 6b")
                             ends=ends+",data.aws_caller_identity.current.account_id"         
-                            tt2=tt2[:r1]+"%s"+tt2[r1+globals.regionl:]
-                            a1=tt2.find(globals.acc)
+                            tt2=tt2[:r1]+"%s"+tt2[r1+context.regionl:]
+                            a1=tt2.find(context.acc)
                             tt2=tt2[:a1]+"%s"+tt2[a1+12:]
                             ends=ends+",data.aws_region.current.region"
                 
@@ -713,15 +713,15 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
         tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
         cc=tt2.count(',')
         subs=""
-        #if globals.debug: 
+        #if context.debug: 
         if cc > 0:
             for i in range(cc+1):
                 subn=tt2.split(',')[i]
                 # aws_subnet
                 if ttft == "aws_subnet": 
                     try:
-                        if globals.subnetlist[subn]:
-                            if not globals.dnet:
+                        if context.subnetlist[subn]:
+                            if not context.dnet:
                                 subs=subs + ttft + "." + subn + ".id,"
                                 common.add_dependancy(ttft,subn)
                             else:
@@ -737,8 +737,8 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
                 # security_group
                 elif ttft == "aws_security_group": 
                     try:
-                        if globals.sglist[subn]:
-                            if not globals.dsgs:
+                        if context.sglist[subn]:
+                            if not context.dsgs:
                                 subs=subs + ttft + "." + subn + ".id,"
                                 common.add_dependancy(ttft,subn)
                             else:
@@ -759,8 +759,8 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
         elif cc == 0 and prefix in tt2:
             if ttft == "aws_subnet":
                 try:
-                    if globals.subnetlist[tt2]:
-                        if not globals.dnet:
+                    if context.subnetlist[tt2]:
+                        if not context.dnet:
                             subs=ttft + "." + tt2 + ".id"
                             common.add_dependancy(ttft, tt2)
                         else:
@@ -775,8 +775,8 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
 
             elif ttft == "aws_security_group":
                 try:
-                    if globals.sglist[tt2]:
-                        if not globals.dsgs:
+                    if context.sglist[tt2]:
+                        if not context.dsgs:
                             subs=ttft + "." + tt2 + ".id"
                             common.add_dependancy(ttft, tt2)
                         else:
@@ -814,7 +814,7 @@ def deref_role_arn(t1,tt1,tt2):
     if tt2.startswith("arn:aws:s3:::"):
         bn=tt2.split(":::")[-1]
         try:
-            if globals.bucketlist[bn]:
+            if context.bucketlist[bn]:
                 t1=tt1 + " = aws_s3_bucket.b-" + bn + ".arn\n"
                 common.add_dependancy("aws_s3_bucket",bn)
         except KeyError as e:
@@ -843,7 +843,7 @@ def deref_role_arn(t1,tt1,tt2):
     elif ":role/" in tt2:
         if tt2.endswith("*"): return t1
         if tt2.startswith("arn:"): tt2=tt2.split('/')[-1]
-        if tt2 in globals.rolelist:
+        if tt2 in context.rolelist:
             t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
             common.add_dependancy("aws_iam_role",tt2)
             
@@ -870,7 +870,7 @@ def deref_s3(t1, tt1, tt2):
             tn=tt2.split("/",3)[3] 
             #print("s3:",bn,tn)
             try:
-                if globals.bucketlist[tt2]:
+                if context.bucketlist[tt2]:
                     bv = "aws_s3_bucket.b-" + bn + ".bucket"
                     if tn !="":
                         t1=tt1 + ' = format("s3://%s/%s",'+bv+',"'+tn+'")\n'
@@ -969,10 +969,10 @@ def deref_elb_arn_array(t1,tt1,tt2):
 
 #### other arn derefs here
 def generic_deref_arn(t1, tt1, tt2):
-    if globals.debug: print("Here",t1)
+    if context.debug: print("Here",t1)
     try:
         if tt2.endswith("*"): return t1
-        if globals.debug: print("*** generic "+t1)
+        if context.debug: print("*** generic "+t1)
         isstar=False
     
         if tt2 == "null" or tt2 == "[]": return t1
@@ -985,7 +985,7 @@ def generic_deref_arn(t1, tt1, tt2):
         if cc==0 and ":log-stream:" in tt2:
             #print("log-stream")
             logr=tt2.split(':')[3]
-            if logr==globals.region:
+            if logr==context.region:
                 logn=tt2.split(':log-stream:')[0].split(':')[-1]
                 common.add_dependancy("aws_cloudwatch_log_group", logn)
                 logn2=logn.replace("/", "_")

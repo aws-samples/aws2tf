@@ -1,5 +1,5 @@
 import common
-import globals
+import context
 
 def aws_athena_data_catalog(t1,tt1,tt2,flag1,flag2):
 	skip=0

@@ -1,13 +1,13 @@
 import common
 import boto3
-import globals
+import context
 import os
 import sys
 import inspect
 
 
 def get_aws_sagemaker_domain(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_sagemaker_domain  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -17,7 +17,7 @@ def get_aws_sagemaker_domain(type, id, clfn, descfn, topkey, key, filterid):
             # calls list_secrets
             response = client.list_domains()
             if response[topkey] == []:
-                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
 
                 return True
             for j in response[topkey]:
@@ -41,7 +41,7 @@ def get_aws_sagemaker_domain(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_sagemaker_notebook_instance(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_sagemaker_notebook_instance  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -54,7 +54,7 @@ def get_aws_sagemaker_notebook_instance(type, id, clfn, descfn, topkey, key, fil
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []:
-                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type, j[key], None)
@@ -63,7 +63,7 @@ def get_aws_sagemaker_notebook_instance(type, id, clfn, descfn, topkey, key, fil
             response = client.describe_notebook_instance(
                 NotebookInstanceName=id)
             if response == []:
-                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             j = response
             common.write_import(type, j[key], None)
@@ -76,7 +76,7 @@ def get_aws_sagemaker_notebook_instance(type, id, clfn, descfn, topkey, key, fil
 
 
 def get_aws_sagemaker_user_profile(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_sagemaker_notebook_instance  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -89,7 +89,7 @@ def get_aws_sagemaker_user_profile(type, id, clfn, descfn, topkey, key, filterid
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []:
-                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             for j in response:
                 k = client.describe_user_profile(
@@ -101,16 +101,16 @@ def get_aws_sagemaker_user_profile(type, id, clfn, descfn, topkey, key, filterid
             for page in paginator.paginate(DomainIdEquals=id):
                 response = response + page[topkey]
             if response == []:
-                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 pkey = "aws_sagemaker_user_profile."+id
-                globals.rproc[pkey] = True
+                context.rproc[pkey] = True
                 return True
             for j in response:
                 k = client.describe_user_profile(
                     DomainId=j['DomainId'], UserProfileName=j['UserProfileName'])
                 common.write_import(type, k['UserProfileArn'], None)
             pkey = "aws_sagemaker_user_profile."+id
-            globals.rproc[pkey] = True
+            context.rproc[pkey] = True
 
         else:
             if "/" in id:
@@ -119,13 +119,13 @@ def get_aws_sagemaker_user_profile(type, id, clfn, descfn, topkey, key, filterid
                 response = client.describe_user_profile(
                     DomainId=id0, UserProfileName=id1)
                 if response == []:
-                    if globals.debug: print("Empty response for "+type +
+                    if context.debug: print("Empty response for "+type +
                           " id="+str(id)+" returning")
                     return True
                 j = response
                 common.write_import(type, j['UserProfileArn'], None)
                 pkey = "aws_sagemaker_user_profile."+id0
-                globals.rproc[pkey] = True
+                context.rproc[pkey] = True
 
     except Exception as e:
         common.handle_error(
@@ -135,7 +135,7 @@ def get_aws_sagemaker_user_profile(type, id, clfn, descfn, topkey, key, filterid
 
 
 def get_aws_sagemaker_app(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_sagemaker_notebook_instance  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -148,16 +148,16 @@ def get_aws_sagemaker_app(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []:
-                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 return True
         elif id.startswith("d-"):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate(DomainIdEquals=id):
                 response = response + page[topkey]
             if response == []:
-                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 pkey="aws_sagemaker_app."+id
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
                 return True
 
 
@@ -173,7 +173,7 @@ def get_aws_sagemaker_app(type, id, clfn, descfn, topkey, key, filterid):
             print("did=",did,"appn=",appn)
             if appn == "default":
                 pkey="aws_sagemaker_app."+did
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
                 continue
             upn = None
             spn = None
@@ -195,7 +195,7 @@ def get_aws_sagemaker_app(type, id, clfn, descfn, topkey, key, filterid):
             k = response['AppArn']
             common.write_import(type, k, None)
             pkey="aws_sagemaker_app."+did
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
 
         
 
@@ -207,7 +207,7 @@ def get_aws_sagemaker_app(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_sagemaker_project(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_sagemaker_project  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -218,7 +218,7 @@ def get_aws_sagemaker_project(type, id, clfn, descfn, topkey, key, filterid):
             # calls list_secrets
             response = client.list_projects()
             if response[topkey] == []:
-                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             for j in response[topkey]:
                 if j['ProjectStatus'] == "CreateCompleted":
@@ -227,7 +227,7 @@ def get_aws_sagemaker_project(type, id, clfn, descfn, topkey, key, filterid):
         else:
             response = client.describe_project(ProjectName=id)
             if response == []:
-                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             j = response
             if j['ProjectStatus'] == "CreateCompleted":
@@ -241,7 +241,7 @@ def get_aws_sagemaker_project(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_sagemaker_space(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_sagemaker_project  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -257,7 +257,7 @@ def get_aws_sagemaker_space(type, id, clfn, descfn, topkey, key, filterid):
             else:
                 response = client.list_spaces(SpaceNameContains=id)
         if response[topkey] == []:
-            if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+            if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
             return True
         for j in response[topkey]:
             spn = j['SpaceName']
@@ -265,7 +265,7 @@ def get_aws_sagemaker_space(type, id, clfn, descfn, topkey, key, filterid):
             response2 = client.describe_space(DomainId=did, SpaceName=spn)
             sparn = response2['SpaceArn']
             if sparn == "":
-                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             common.write_import(type, sparn, None)
 
@@ -278,7 +278,7 @@ def get_aws_sagemaker_space(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_sagemaker_image(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_sagemaker_image_version  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -289,7 +289,7 @@ def get_aws_sagemaker_image(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []:
-                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type, j[key], None)# calls list_secrets
@@ -298,10 +298,10 @@ def get_aws_sagemaker_image(type, id, clfn, descfn, topkey, key, filterid):
         else:
             response = client.describe_image(ImageName=id)
             if response == []:
-                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 pkey="aws_sagemaker_image_version."+id
                 common.write_import(type, id, None)
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
             j=response[key]
             common.write_import(type, j, None)# calls list_secrets
             common.add_dependancy("aws_sagemaker_image_version",j)
@@ -314,7 +314,7 @@ def get_aws_sagemaker_image(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_sagemaker_image_version(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_sagemaker_image_version  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -327,7 +327,7 @@ def get_aws_sagemaker_image_version(type, id, clfn, descfn, topkey, key, filteri
             response = client.list_image_versions(ImageName=id)
             #print("list_image_versions=",response)
             if response == []:
-                if globals.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             pkey="aws_sagemaker_image_version."+id
             for j in response[topkey]:
@@ -336,7 +336,7 @@ def get_aws_sagemaker_image_version(type, id, clfn, descfn, topkey, key, filteri
                     theid=id+","+str(iv)
                     common.write_import(type, theid, None)
                 #print("************",pkey)
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)

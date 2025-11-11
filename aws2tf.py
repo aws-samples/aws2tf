@@ -17,7 +17,7 @@ sys.path.insert(0, './code')
 #from get_aws_resources import aws_s3
 import common
 import resources
-import globals
+import context
 import timed_interrupt
 
 import stacks
@@ -61,7 +61,7 @@ def process_file_operations(files: List[str], output_file: str) -> None:
         # Use a buffer to reduce I/O operations
         buffer = io.StringIO()
         for tf_file in sorted(files):
-            if globals.debug:
+            if context.debug:
                 buffer.write(f"# Source: {tf_file}\n")
             with open(tf_file, 'r') as infile:
                 buffer.write(infile.read())
@@ -80,27 +80,27 @@ def apl_threaded(rn):
         print(f"{e=}")
     #print(str(response)+"\n")
     if response['AttachedPolicies'] == []: 
-        globals.attached_role_policies_list[rn]=False
+        context.attached_role_policies_list[rn]=False
     #else:
-    #    globals.attached_role_policies_list[rn]=response['AttachedPolicies']
+    #    context.attached_role_policies_list[rn]=response['AttachedPolicies']
 
 
 def dd_threaded(ti):
-    if not globals.rproc[ti]:
+    if not context.rproc[ti]:
         i = ti.split(".")[0]
         id = ti.split(".", 1)[1]
-        if globals.debug: print("DD calling getresource with type="+i+" id="+str(id))
-        globals.tracking_message="Stage 5 of 10, Processing Dependancy, "+str(i)+" "+str(id)
+        if context.debug: print("DD calling getresource with type="+i+" id="+str(id))
+        context.tracking_message="Stage 5 of 10, Processing Dependancy, "+str(i)+" "+str(id)
         common.call_resource(i, id)
 
     return
 
 
 def kd_threaded(ti):
-    if not globals.rdep[ti]:
+    if not context.rdep[ti]:
         i = ti.split(".")[0]
         id = ti.split(".")[1]
-        if globals.debug: print("type="+i+" id="+str(id))
+        if context.debug: print("type="+i+" id="+str(id))
         common.call_resource(i, id)
     return
 
@@ -110,7 +110,7 @@ def kd_threaded(ti):
 def main():
 
     now = datetime.datetime.now()
-    print("aws2tf "+globals.aws2tfver+" started at %s" % now)
+    print("aws2tf "+context.aws2tfver+" started at %s" % now)
     starttime=now
 
 
@@ -139,7 +139,7 @@ def main():
     argParser.add_argument("-dkey", "--datakey", help="write data statements for aws_key_pair",action='store_true')
     argParser.add_argument("-b3", "--boto3error", help="exit on boto3 api error (for debugging)", action='store_true')
     argParser.add_argument("-la", "--serverless", help="Lambda mode - when running in a Lambda container", action='store_true')
-    argParser.add_argument("-tv", "--tv", help="Specify version of Terraform AWS provider default = "+globals.tfver)
+    argParser.add_argument("-tv", "--tv", help="Specify version of Terraform AWS provider default = "+context.tfver)
     argParser.add_argument("-d5", "--debug5", help="debug5 special debug flag", action='store_true')
     args = argParser.parse_args()
     type=""
@@ -157,19 +157,19 @@ def main():
         exit()
 
     if args.profile: 
-        globals.profile = args.profile
+        context.profile = args.profile
         
 
         
-    info = common.detect_aws_credentials(globals.profile)
+    info = common.detect_aws_credentials(context.profile)
     
-    globals.credtype=info['credential_type']
-    globals.sso=info['is_sso']
-    print("Credentials Type =",globals.credtype)
+    context.credtype=info['credential_type']
+    context.sso=info['is_sso']
+    print("Credentials Type =",context.credtype)
     print("Is SSO login =",info['is_sso'])
-    if globals.credtype=="unknown":
+    if context.credtype=="unknown":
         print("count not find valid login creds")
-        common.print_credentials_info(globals.profile)
+        common.print_credentials_info(context.profile)
         timed_interrupt.timed_int.stop()
         exit()
 
@@ -177,7 +177,7 @@ def main():
 
     # provider version
     if args.tv:
-        globals.tfver=args.tv
+        context.tfver=args.tv
     
     com = "terraform version"
     rout = common.rc(com)
@@ -198,26 +198,26 @@ def main():
         print("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
         timed_interrupt.timed_int.stop()
         os._exit(1)
-    print("Terraform version:",tv,"AWS provider version:",globals.tfver)
+    print("Terraform version:",tv,"AWS provider version:",context.tfver)
 
-    globals.expected=args.accept
+    context.expected=args.accept
 
     # print("args=%s" % args)
     
     # print("args.bucket=%s" % args.bucket)
     # print("args.type=%s" % args.type)
     # print("args.id=%s" % args.id)
-    globals.merge=args.merge
+    context.merge=args.merge
 
     if args.list: extra_help()
-    if args.fast: globals.fast = True
+    if args.fast: context.fast = True
     if args.debug: 
-        globals.debug = True
-        globals.fast = False
+        context.debug = True
+        context.fast = False
 
     if args.debug5: 
-        globals.debug5 = True
-        globals.fast = False
+        context.debug5 = True
+        context.fast = False
 
 
 
@@ -226,14 +226,14 @@ def main():
         if args.ec2tag!="" and ":" in args.ec2tag:
             isinv=False             
             #args.ec2tag = args.ec2tag[1:-1]
-            globals.ec2tag=args.ec2tag
-            globals.ec2tagk=globals.ec2tag.split(":")[0]
-            globals.ec2tagv=globals.ec2tag.split(":")[1]
+            context.ec2tag=args.ec2tag
+            context.ec2tagk=context.ec2tag.split(":")[0]
+            context.ec2tagv=context.ec2tag.split(":")[1]
         else:
             isinv=True
         
         if isinv:
-            #if len(globals.ec2tagk) < 1 or len(globals.ec2tagv) < 1:
+            #if len(context.ec2tagk) < 1 or len(context.ec2tagv) < 1:
             print("ec2tag must be in format (with quotes) \"key:value\"")
             print("exit 005")
             timed_interrupt.timed_int.stop()
@@ -241,12 +241,12 @@ def main():
 
 
     if args.validate: 
-        globals.validate = True
+        context.validate = True
 
-    if args.datanet:  globals.dnet = True
-    if args.datasgs:  globals.dsgs = True
-    if args.datakms:  globals.dkms = True
-    if args.datakey:  globals.dkey = True
+    if args.datanet:  context.dnet = True
+    if args.datasgs:  context.dsgs = True
+    if args.datakms:  context.dkms = True
+    if args.datakey:  context.dkey = True
 
     if args.type is None or args.type=="":
         if args.serverless:
@@ -269,11 +269,11 @@ def main():
                 extypes = extypes.split(",")
         else:
                 extypes = [extypes]
-        globals.all_extypes=[]
+        context.all_extypes=[]
         for i in extypes: 
-            globals.all_extypes = globals.all_extypes + resources.resource_types(i)
+            context.all_extypes = context.all_extypes + resources.resource_types(i)
     else:
-        globals.all_extypes=[]
+        context.all_extypes=[]
 
     if args.region is None:
         com = "aws configure get region"
@@ -297,25 +297,25 @@ def main():
     else:
         region = args.region
 
-    globals.region = region
-    globals.regionl = len(region)
+    context.region = region
+    context.regionl = len(region)
     #os.environ["AWS"] = "aws --region "+region+" "
  
     # get the current env and set directory
    
-    if globals.debug: print("setting session region="+region)
+    if context.debug: print("setting session region="+region)
     
     try:
         if args.profile is None:
             boto3.setup_default_session(region_name=region)
         else:
-            boto3.setup_default_session(region_name=region,profile_name=globals.profile)
+            boto3.setup_default_session(region_name=region,profile_name=context.profile)
     except Exception as e: 
         print("AWS Authorization Error: "+str(e))
       
-    if globals.debug: print("getting account")
+    if context.debug: print("getting account")
     try:
-        globals.acc = boto3.client('sts').get_caller_identity().get('Account')
+        context.acc = boto3.client('sts').get_caller_identity().get('Account')
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         exn=str(exc_type.__name__)
@@ -331,79 +331,79 @@ def main():
             print(str(exn))
         timed_interrupt.timed_int.stop()
         exit()
-    print('Using region: '+region + ' account: ' + globals.acc+ " profile: "+globals.profile+"\n")
+    print('Using region: '+region + ' account: ' + context.acc+ " profile: "+context.profile+"\n")
 ####  restore form S3 if merging & serverless
 
 ####    
 
     if args.output:
         if isinstance(args.output, str):
-            globals.pathadd=args.output+"-"
+            context.pathadd=args.output+"-"
         else:
             print("output path modifier may not be a valid string",(str(args.output))," ignoring ")
 
-    globals.region = region
-    globals.regionl = len(region)
+    context.region = region
+    context.regionl = len(region)
     if args.serverless:     
-        globals.serverless=True
-        globals.path1="/tmp/aws2tf/generated/tf-"+globals.pathadd+globals.acc+"-"+region
-        globals.path2=globals.path1+"/imported"
-        globals.path3=globals.path1+"/notimported"
+        context.serverless=True
+        context.path1="/tmp/aws2tf/generated/tf-"+context.pathadd+context.acc+"-"+region
+        context.path2=context.path1+"/imported"
+        context.path3=context.path1+"/notimported"
     else:
-        globals.serverless=False
-        globals.path1="generated/tf-"+globals.pathadd+globals.acc+"-"+region
-        globals.path2=globals.path1+"/imported"
-        globals.path3=globals.path1+"/notimported"
+        context.serverless=False
+        context.path1="generated/tf-"+context.pathadd+context.acc+"-"+region
+        context.path2=context.path1+"/imported"
+        context.path3=context.path1+"/notimported"
 
-    if globals.serverless:
+    if context.serverless:
         if args.merge: common.download_from_s3()
         else: common.empty_and_delete_bucket()
 
 
-        # does a terraform.tfstate file exist in globals.path1 directory ?
-    if not os.path.isfile(globals.path1+"/terraform.tfstate") and globals.merge:
-            print("No terraform.tfstate file found in "+globals.path1+" - can not merge")
-            globals.merge=False
-            com = "rm -rf "+globals.path1
+        # does a terraform.tfstate file exist in context.path1 directory ?
+    if not os.path.isfile(context.path1+"/terraform.tfstate") and context.merge:
+            print("No terraform.tfstate file found in "+context.path1+" - can not merge")
+            context.merge=False
+            com = "rm -rf "+context.path1
             rout = common.rc(com)
-            if globals.serverless: common.empty_and_delete_bucket()
+            if context.serverless: common.empty_and_delete_bucket()
 
 
-    if globals.merge is False:
-        com = "rm -rf "+globals.path1
+    if context.merge is False:
+        com = "rm -rf "+context.path1
         rout = common.rc(com)
-        if globals.serverless: common.empty_and_delete_bucket()
+        if context.serverless: common.empty_and_delete_bucket()
 
 
 
-    com = "mkdir -p "+globals.path2
+    com = "mkdir -p "+context.path2
     rout = common.rc(com)
 
-    com = "mkdir -p "+globals.path3
+    com = "mkdir -p "+context.path3
     rout = common.rc(com)
 
-    globals.cwd=os.getcwd()
-    os.chdir(globals.path1) 
-    globals.tracking_message="Stage 1 of 10, Terraform Initialise ..."
+    context.cwd=os.getcwd()
+    os.chdir(context.path1) 
+    context.tracking_message="Stage 1 of 10, Terraform Initialise ..."
     common.aws_tf(region,args)
 
     # check we have it
     foundtf=False
-    for root, dirs, files in os.walk(globals.cwd+"/"+globals.path1):
+    for root, dirs, files in os.walk(context.cwd+"/"+context.path1):
         if '.terraform' in dirs:
             print("PASSED: Terraform Initialise OK")
             foundtf=True
             break
 
     if not foundtf:
-        print("failed to find .terraform in "+globals.cwd+"/"+globals.path1)
+        print("failed to find .terraform in "+context.cwd+"/"+context.path1)
         print("Terraform Initialise may have failed exiting ...")
         timed_interrupt.timed_int.stop()
         exit()
 
 
     if args.merge:
-        print("Merging "+str(globals.merge))
+        print("Merging "+str(context.merge))
                     
         try:
             with open('pyprocessed.txt', 'r') as file:
@@ -414,12 +414,12 @@ def main():
 
             for line in content:
                 line=line.strip()
-                globals.rproc[line] = True
+                context.rproc[line] = True
                 
                 
-            if globals.debug:
+            if context.debug:
                 print("Pre Processed:")
-                print(str(globals.rproc))
+                print(str(context.rproc))
 
             com = "rm -f main.tf"
             rout = common.rc(com) 
@@ -441,16 +441,16 @@ def main():
     now = datetime.datetime.now()
     print("build lists finished at %s" % now)
     print("build lists took %s" % (now - st1))
-    #print(str(globals.attached_role_policies_list))
-    #for k,v in globals.attached_role_policies_list.items():
+    #print(str(context.attached_role_policies_list))
+    #for k,v in context.attached_role_policies_list.items():
     #    print(k,v)
     
     if type == "" or type is None: type = "all"
     
-    print("---<><> "+ str(type),"Id="+str(id)," exclude="+str(globals.all_extypes))  
+    print("---<><> "+ str(type),"Id="+str(id)," exclude="+str(context.all_extypes))  
 
 ################# -- now we are calling ----   ###############################
-    globals.tracking_message="Stage 3 of 10 getting resources ..."
+    context.tracking_message="Stage 3 of 10 getting resources ..."
 
 
     if "," in type:
@@ -467,7 +467,7 @@ def main():
             timed_interrupt.timed_int.stop()
             exit()
 
-        #if globals.serverless:
+        #if context.serverless:
         #    print("Cannot pass multiple types when running on serverless")
         #    exit()
 
@@ -484,7 +484,7 @@ def main():
         for type2 in all_types:
             #print("type2=",type2)
             if type2 in aws_dict.aws_resources:   
-                if type2 in globals.all_extypes:
+                if type2 in context.all_extypes:
                     print("Excluding", type2) 
                     continue                 
                 common.call_resource(type2, id)
@@ -515,13 +515,13 @@ def main():
                 timed_interrupt.timed_int.stop()
                 exit()
             else:
-                globals.tracking_message="Stage 3 of 10 getting stack " +id+" resources ..."
-                globals.expected=True
+                context.tracking_message="Stage 3 of 10 getting stack " +id+" resources ..."
+                context.expected=True
                 stacks.get_stacks(id)
         
         elif type.startswith("aws_"):
             if type in aws_dict.aws_resources:
-                if type in globals.all_extypes:
+                if type in context.all_extypes:
                     print("Excluding type", type) 
                 else:    
                     common.call_resource(type, id)
@@ -540,18 +540,18 @@ def main():
                 build_secondary_lists(id)
 
             
-            globals.esttime=len(all_types)/4
+            context.esttime=len(all_types)/4
             #id="foobar" # testing only
             #print("------------------1-------------------------------------------")
             ic=0
             istart=0
             it=len(all_types)
 
-            globals.expected=True
+            context.expected=True
             
-            if globals.fast:
-                globals.tracking_message="Stage 3 of 10 getting "+str(it)+" resources multi-threaded"
-                with ThreadPoolExecutor(max_workers=globals.cores) as executor:
+            if context.fast:
+                context.tracking_message="Stage 3 of 10 getting "+str(it)+" resources multi-threaded"
+                with ThreadPoolExecutor(max_workers=context.cores) as executor:
                     futures = [
                         executor.submit(common.call_resource, i, id)
                         for i in all_types
@@ -563,8 +563,8 @@ def main():
                     if ic > it: break 
                     if ic < istart: continue
                     
-                    if globals.debug: print(str(ic)+" of "+str(it) +"\t"+i)
-                    globals.tracking_message="Stage 3 of 10, "+ str(ic)+" of "+str(it) +" resource types \t currently getting "+i
+                    if context.debug: print(str(ic)+" of "+str(it) +"\t"+i)
+                    context.tracking_message="Stage 3 of 10, "+ str(ic)+" of "+str(it) +" resource types \t currently getting "+i
                     common.call_resource(i, id)
                                 
         else:
@@ -576,7 +576,7 @@ def main():
                         print("Resource",type," not found in aws_dict")
             else:
                 print("No resources found")
-                globals.tracking_message="Stage 3 of 10 no resources found exiting ..."
+                context.tracking_message="Stage 3 of 10 no resources found exiting ..."
                 print("exit 009")
                 timed_interrupt.timed_int.stop()
                 exit()
@@ -585,48 +585,48 @@ def main():
 ## Known dependancies section
  #########################################################################################################################   
 
-    globals.tracking_message="Stage 4 of 10, Known Dependancies"
+    context.tracking_message="Stage 4 of 10, Known Dependancies"
     print("Known Dependancies - Multi Threaded")
-    if globals.fast:
-        globals.tracking_message="Stage 4 of 10, Known Dependancies - Multi Threaded "+str(globals.cores)
-        with ThreadPoolExecutor(max_workers=globals.cores) as executor12:
+    if context.fast:
+        context.tracking_message="Stage 4 of 10, Known Dependancies - Multi Threaded "+str(context.cores)
+        with ThreadPoolExecutor(max_workers=context.cores) as executor12:
             futures2 = [
                 executor12.submit(kd_threaded(ti))
-                for ti in list(globals.rdep)
+                for ti in list(context.rdep)
             ]     
 
     else:
-        for ti in list(globals.rdep):
-            if not globals.rdep[ti]:
+        for ti in list(context.rdep):
+            if not context.rdep[ti]:
                 i = ti.split(".")[0]
                 id = ti.split(".")[1]
-                if globals.debug: print("type="+i+" id="+str(id))
+                if context.debug: print("type="+i+" id="+str(id))
                 common.call_resource(i, id)
     #else:
     #    print("No Known Dependancies")
-    globals.tracking_message="Stage 4 of 10, Known Dependancies: terraform plan"
+    context.tracking_message="Stage 4 of 10, Known Dependancies: terraform plan"
     common.tfplan1()
-    globals.tracking_message="Stage 4 of 10, Known Dependancies: moving files"
+    context.tracking_message="Stage 4 of 10, Known Dependancies: moving files"
     common.tfplan2()
     
     
     # Detected deps
     
-    if ":" in globals.rproc:
+    if ":" in context.rproc:
         print(": in rproc exiting")
         print("exit 010")
         timed_interrupt.timed_int.stop()
         exit()
     now = datetime.datetime.now()
     x=glob.glob("import__aws_*.tf")
-    globals.esttime=len(x)/4
-    if not globals.fast: print("\naws2tf Detected Dependancies started at %s\n" % now)
-    globals.tracking_message="Stage 5 of 10, Detected Dependancies: starting"
+    context.esttime=len(x)/4
+    if not context.fast: print("\naws2tf Detected Dependancies started at %s\n" % now)
+    context.tracking_message="Stage 5 of 10, Detected Dependancies: starting"
     detdep=False
-    for ti in globals.rproc.keys():
-        if not globals.rproc[ti]: 
-            #print(str(ti)+":"+str(globals.rproc[ti]))  
-            if globals.debug: print(str(ti)) 
+    for ti in context.rproc.keys():
+        if not context.rproc[ti]: 
+            #print(str(ti)+":"+str(context.rproc[ti]))  
+            if context.debug: print(str(ti)) 
             detdep=True
             
     if not detdep: print("No Detected Dependancies") 
@@ -638,20 +638,20 @@ def main():
     while detdep:
         
 ## mutlithread ?  
-        if globals.fast:  
-            globals.tracking_message="Stage 5 of 10, Detected Dependancies: Multi Threaded "+str(globals.cores)
-            with ThreadPoolExecutor(max_workers=globals.cores) as executor2:
+        if context.fast:  
+            context.tracking_message="Stage 5 of 10, Detected Dependancies: Multi Threaded "+str(context.cores)
+            with ThreadPoolExecutor(max_workers=context.cores) as executor2:
                 futures2 = [
                     executor2.submit(dd_threaded(ti))
-                    for ti in list(globals.rproc)
+                    for ti in list(context.rproc)
                 ]
 
         else:
-            for ti in list(globals.rproc):
-                if not globals.rproc[ti]:
+            for ti in list(context.rproc):
+                if not context.rproc[ti]:
                     i = ti.split(".")[0]
                     id = ti.split(".", 1)[1]
-                    if globals.debug: print("DD calling getresource with type="+i+" id="+str(id))
+                    if context.debug: print("DD calling getresource with type="+i+" id="+str(id))
                     #print("----- DD ----  calling getresource with type="+i+" id="+str(id))
                     common.call_resource(i, id)   
         
@@ -659,10 +659,10 @@ def main():
         lc  = lc + 1
 
 # go again plan and split / fix
-        if not globals.fast: print("Terraform Plan - Dependancies Detection Loop "+str(lc)+".....")
-        globals.tracking_message="Stage 6 of 10, Dependancies Detection: Loop "+str(lc)
+        if not context.fast: print("Terraform Plan - Dependancies Detection Loop "+str(lc)+".....")
+        context.tracking_message="Stage 6 of 10, Dependancies Detection: Loop "+str(lc)
         x=glob.glob("import__aws_*.tf")
-        globals.esttime=len(x)/4
+        context.esttime=len(x)/4
         #print(str(x))
         #td=""
         for fil in x:
@@ -672,27 +672,27 @@ def main():
             com = "mv "+tf +" imported/"+tf
             rout = common.rc(com)
 
-        globals.tracking_message="Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" terraform plan"
+        context.tracking_message="Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" terraform plan"
         common.tfplan1()
-        globals.tracking_message="Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" moving files"
+        context.tracking_message="Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" moving files"
         common.tfplan2()
  
         detdepstr=""
-        for ti in globals.rproc.keys():
-            if not globals.rproc[ti]:
+        for ti in context.rproc.keys():
+            if not context.rproc[ti]:
                 detdep=True 
                 #print(str(ti)+" is False")
                 detdepstr=detdepstr+str(ti)+" "
 
-        if not globals.fast: print("\n----------- Completed "+str(lc)+" dependancy check loops --------------") 
-        globals.tracking_message="Stage 6 of 10, Completed "+str(lc)+" dependancy check loops"
+        if not context.fast: print("\n----------- Completed "+str(lc)+" dependancy check loops --------------") 
+        context.tracking_message="Stage 6 of 10, Completed "+str(lc)+" dependancy check loops"
         if olddetdepstr == detdepstr and detdepstr != "":
-            globals.tracking_message="No change/progress in dependancies exiting..."
+            context.tracking_message="No change/progress in dependancies exiting..."
             print("\nERROR: No change/progress in dependancies exiting... \n")
-            for ti in globals.rproc.keys():
-                if not globals.rproc[ti]:
+            for ti in context.rproc.keys():
+                if not context.rproc[ti]:
                     print("ERROR: Not found "+str(ti)+" - check if this resource still exists in AWS. Also check what resource is using it - grep the *.tf files in the generated/tf.* subdirectory")
-                    globals.tracking_message="No change/progress in dependancies exiting..."
+                    context.tracking_message="No change/progress in dependancies exiting..."
             print("exit 011")
             timed_interrupt.timed_int.stop()
             exit()
@@ -705,7 +705,7 @@ def main():
     rout = common.rc(com)
 
 
-    if globals.validate is False: 
+    if context.validate is False: 
         now = datetime.datetime.now()
         print("aws2tf wrap up started at %s" % now)
         common.wrapup()
@@ -718,11 +718,11 @@ def main():
 ##########################################################################
 ####### Finish up
 #########################################################################
-    globals.tracking_message="Stage 10 of 10, Completed"
+    context.tracking_message="Stage 10 of 10, Completed"
 
     with open("pyprocessed.txt", "a") as f:
-        for i in globals.rproc.keys():
-            if globals.debug: print(str(i))
+        for i in context.rproc.keys():
+            if context.debug: print(str(i))
             f.write(i+"\n")
     com = "sort -u pyprocessed.txt -o pyprocessed.txt"
     rout = common.rc(com)
@@ -733,10 +733,10 @@ def main():
     path = shutil.which("trivy") 
     if path is not None:
         x = glob.glob("aws_*__*.tf")
-        globals.esttime=len(x)/4
+        context.esttime=len(x)/4
         awsf=len(x)
         if awsf < 256:
-            globals.tracking_message="Running trivy security check"
+            context.tracking_message="Running trivy security check"
             print("\nRunning trivy security check .....")
             common.trivy_check()
 
@@ -746,7 +746,7 @@ def main():
     else:
         print("trivy not installed, skipping security check")
 
-    if globals.serverless: common.upload_directory_to_s3()
+    if context.serverless: common.upload_directory_to_s3()
 
     x = glob.glob("*.err")
     awsf=len(x)
@@ -756,7 +756,7 @@ def main():
 
     if args.singlefile:
         print("Single file mode .....")
-        #globals.tracking_message="Single file mode - merging"
+        #context.tracking_message="Single file mode - merging"
         tf_files = glob.glob("aws_*__*.tf")
         if not tf_files:
             print("No aws_*.tf files found")
@@ -766,13 +766,13 @@ def main():
         com = "mv aws_*__*.tf imported"
         rout = common.rc(com)
     
-    globals.tracking_message="aws2tf, Completed"
+    context.tracking_message="aws2tf, Completed"
     now = datetime.datetime.now()
     print("aws2tf started at  %s" % starttime)
     #print("aws2tf finished at %s" % now)
     # print execution time
     print("aws2tf execution time h:mm:ss :"+ str(now - starttime))
-    print("\nTerraform files & state in sub-directory: "+ globals.path1)
+    print("\nTerraform files & state in sub-directory: "+ context.path1)
     timed_interrupt.timed_int.stop()
 
     exit(0)

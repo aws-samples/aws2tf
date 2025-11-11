@@ -4,7 +4,7 @@ import inspect
 import boto3
 import common
 import fixtf
-import globals
+import context
 
 
 # returns True if key is one we want - ie not AWS managed
@@ -17,7 +17,7 @@ def check_key(keyid):
 		#print(str(kresp))
 		if kstatus == "Enabled" or kstatus == "Disabled":
 			if kman == "AWS":
-				if globals.debug: print("check_key: key is managed by AWS")
+				if context.debug: print("check_key: key is managed by AWS")
 				return False ## ?? True ??
 			return True
 		else:
@@ -25,34 +25,34 @@ def check_key(keyid):
 			#print(str(kresp))
 			return False
 	except Exception as e:
-		if globals.debug: print("WARNING: can't access key",keyid)
+		if context.debug: print("WARNING: can't access key",keyid)
 		#print(f"{e=} [k1]")
 		#exc_type, exc_obj, exc_tb = sys.exc_info()
 	return False
 
 def aws_common(type,t1,tt1,tt2,flag1,flag2):
     skip=0
-    #if globals.debug: print("aws_common t1=",t1)
+    #if context.debug: print("aws_common t1=",t1)
     try:
         if tt1=="api_id" and "apigatewayv2" in type:
             t1=tt1 + " = aws_apigatewayv2_api." + tt2 + ".id\n"
-            globals.api_id=tt2
+            context.api_id=tt2
             common.add_dependancy("aws_apigatewayv2_api", tt2)
         #if tt1=="bucket" or tt1=="s3_bucket_name" or tt1=="bucket_name":
         if tt1=="bucket" or tt1=="s3_bucket_name":
-            if globals.debug5: print("DEBUG5: aws_common: type=", type, "tt1=", tt1, "tt2=", tt2)
+            if context.debug5: print("DEBUG5: aws_common: type=", type, "tt1=", tt1, "tt2=", tt2)
             if type != "aws_s3_bucket":
                 if "." not in tt2:
                     if tt2 != "" and tt2 !="null":
-                        if globals.debug5: 
+                        if context.debug5: 
                             print("DEBUG5: aws_common: bucket_name=", tt2)
-                            for k, v in globals.bucketlist.items():
+                            for k, v in context.bucketlist.items():
                                 print("DEBUG5: aws_common: bucketlist k,v=",k,v)
 
                         if tt2.startswith("arn:aws:s3"):  
                             tt2=tt2.split(":")[-1]
                             try:
-                                if globals.bucketlist[tt2]:
+                                if context.bucketlist[tt2]:
                                     t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".arn\n"
                                     #common.add_dependancy("aws_s3_bucket", tt2)
                                     return skip,t1,flag1,flag2
@@ -61,7 +61,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
 
                         else:                        
                             try:
-                                if globals.bucketlist[tt2]:
+                                if context.bucketlist[tt2]:
                                     t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
                                     #common.add_dependancy("aws_s3_bucket", tt2)
                                     return skip,t1,flag1,flag2
@@ -75,15 +75,15 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                     
                     
         if tt1.endswith("bucket_arn"):
-            if globals.debug5: print("DEBUG5: aws_common: bucket_name=", tt2, "lhs=",tt1)
+            if context.debug5: print("DEBUG5: aws_common: bucket_name=", tt2, "lhs=",tt1)
             if tt2.startswith("arn:aws:s3"):
                 tt2=tt2.split(":")[-1]
-                if globals.debug5: 
+                if context.debug5: 
                     print("DEBUG5: aws_common: bucket_name=", tt2)
-                    for k, v in globals.bucketlist.items():
+                    for k, v in context.bucketlist.items():
                         print("DEBUG5: aws_common: bucketlist k,v=",k,v)
                 try:
-                    if globals.bucketlist[tt2]:
+                    if context.bucketlist[tt2]:
                         t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".arn\n"
                         return skip,t1,flag1,flag2
                 except KeyError as e:
@@ -93,7 +93,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             if tt2 != "null":
                 t1=tt1 + " = aws_api_gateway_rest_api.r-" + tt2 + ".id\n"
                 #common.add_dependancy("aws_api_gateway_rest_api", tt2)
-                globals.apigwrestapiid=tt2
+                context.apigwrestapiid=tt2
 
         elif tt1 == "security_groups" or tt1 == "security_group_ids" or tt1 == "vpc_security_group_ids":
         # avoid circular references
@@ -108,8 +108,8 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                 or tt1=="service_access_security_group" or tt1 == "security_group_id" or tt1 == "source_security_group_id":
            if tt2 != "null":
                 try:
-                    if globals.sglist[tt2]:
-                        if globals.dsgs:
+                    if context.sglist[tt2]:
+                        if context.dsgs:
                             t1=tt1 + " = data.aws_security_group." + tt2 + ".id\n"
                             common.add_dependancy("aws_security_group", tt2)
                         else:
@@ -130,8 +130,8 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         elif tt1 == "vpc_id" or tt1=="vpc":
             if tt2 != "null":
                 if tt2.startswith('vpc-'): 
-                    if tt2 in globals.vpclist:
-                        if globals.dnet:
+                    if tt2 in context.vpclist:
+                        if context.dnet:
                             t1=tt1 + " = data.aws_vpc." + tt2 + ".id\n"
                             common.add_dependancy("aws_vpc", tt2)
                         else:
@@ -146,8 +146,8 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         elif tt1 == "subnet_id":
             if tt2 != "null":
                 try:
-                    if globals.subnetlist[tt2]:
-                        if not globals.dnet:
+                    if context.subnetlist[tt2]:
+                        if not context.dnet:
                             t1=tt1 + " = aws_subnet." + tt2 + ".id\n"
                             common.add_dependancy("aws_subnet", tt2)
                         else:
@@ -168,7 +168,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             if tt2 != "null":     
                 if "arn:" in tt2: tt2=tt2.split(":")[-1]
                 try:
-                    if globals.lambdalist[tt2]:
+                    if context.lambdalist[tt2]:
                         t1=tt1 + " = aws_lambda_function." + tt2 + ".arn\n"
                         common.add_dependancy("aws_lambda_function",tt2)
                         return skip,t1,flag1,flag2
@@ -184,7 +184,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                 if "arn:" in tt2: 
                     tt2=tt2.split("/")[-1]
                     if check_key(tt2):	
-                        if not globals.dkms:
+                        if not context.dkms:
                             t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
                             common.add_dependancy("aws_kms_key",tt2)
                         else:
@@ -211,7 +211,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                             tt2=tt2.split("/")[-1]	
                             skip=0
                             if check_key(tt2):
-                                if not globals.dkms:
+                                if not context.dkms:
                                     t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
                                     common.add_dependancy("aws_kms_key",tt2) 
                                 else:
@@ -222,7 +222,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                             tt2=tt2.split("/")[-1]
                             skip=0
                             if check_key(tt2):
-                                if not globals.dkms:
+                                if not context.dkms:
                                     t1=tt1 + " = aws_kms_key.k-" + tt2 + ".id\n"
                                     common.add_dependancy("aws_kms_key", tt2)
                                 else:
@@ -246,7 +246,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
 
         elif tt1 == "key_pair":
             if tt2 != "null":
-                if not globals.dkey:
+                if not context.dkey:
                     tfil=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
                     t1=tt1 + " = aws_key_pair." + tfil + ".key_name\n"
                     common.add_dependancy("aws_key_pair", tt2)
@@ -263,7 +263,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             if tt2 !="null" and "arn:" not in tt2: 
                 if "/" not in tt2: 
                     try:
-                        if globals.rolelist[tt2]:
+                        if context.rolelist[tt2]:
                             rn=tt2.replace(".","_")
                             t1=tt1 + " = aws_iam_role." + rn + ".id\n"
                             common.add_dependancy("aws_iam_role",tt2)
@@ -273,7 +273,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                             print("WARNING: role not found in rolelist", tt2)
                     except KeyError as e:
                         print("WARNING: role not found in rolelist [ke]", tt2)
-                        #print(globals.rolelist)
+                        #print(context.rolelist)
 
             else:
                 t1=fixtf.deref_role_arn(t1,tt1,tt2)
@@ -308,19 +308,19 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         
         ## replace region and account number on RHS    
         # RHS is account
-        elif tt2==globals.acc: t1=tt1 + ' = format("%s",data.aws_caller_identity.current.account_id)\n'
-        elif tt2=="jsonencode("+globals.acc+")": 
+        elif tt2==context.acc: t1=tt1 + ' = format("%s",data.aws_caller_identity.current.account_id)\n'
+        elif tt2=="jsonencode("+context.acc+")": 
             t1=tt1 + ' = format("%s",data.aws_caller_identity.current.account_id)\n'
         # RHS is region
-        elif tt2==globals.region: t1=tt1 + ' = format("%s",data.aws_region.current.region)\n'
+        elif tt2==context.region: t1=tt1 + ' = format("%s",data.aws_region.current.region)\n'
         
         ## fix zones
-        elif tt2==globals.region+"a":  t1=tt1 + ' = format("%sa",data.aws_region.current.region)\n'
-        elif tt2==globals.region+"b":  t1=tt1 + ' = format("%sb",data.aws_region.current.region)\n'
-        elif tt2==globals.region+"c":  t1=tt1 + ' = format("%sc",data.aws_region.current.region)\n'
-        elif tt2==globals.region+"d":  t1=tt1 + ' = format("%sd",data.aws_region.current.region)\n'
-        elif tt2==globals.region+"e":  t1=tt1 + ' = format("%se",data.aws_region.current.region)\n'
-        elif tt2==globals.region+"f":  t1=tt1 + ' = format("%sf",data.aws_region.current.region)\n'
+        elif tt2==context.region+"a":  t1=tt1 + ' = format("%sa",data.aws_region.current.region)\n'
+        elif tt2==context.region+"b":  t1=tt1 + ' = format("%sb",data.aws_region.current.region)\n'
+        elif tt2==context.region+"c":  t1=tt1 + ' = format("%sc",data.aws_region.current.region)\n'
+        elif tt2==context.region+"d":  t1=tt1 + ' = format("%sd",data.aws_region.current.region)\n'
+        elif tt2==context.region+"e":  t1=tt1 + ' = format("%se",data.aws_region.current.region)\n'
+        elif tt2==context.region+"f":  t1=tt1 + ' = format("%sf",data.aws_region.current.region)\n'
 
         ### s3:// processing
         elif tt2.startswith("s3://"): 

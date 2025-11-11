@@ -128,7 +128,7 @@ def exit_aws2tf(mess):
     if mess is not None or mess!="":
         print(mess)
 
-    if globals.fast:
+    if context.fast:
         os._exit(1) 
     else:
         sys.exit(1)

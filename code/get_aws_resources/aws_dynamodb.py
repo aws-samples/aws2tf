@@ -1,11 +1,11 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 def get_aws_dynamodb_table(type, id, clfn, descfn, topkey, key, filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_dynamodb_table  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -36,7 +36,7 @@ def get_aws_dynamodb_table(type, id, clfn, descfn, topkey, key, filterid):
 
 # aws_dynamodb_kinesis_streaming_destination
 def get_aws_dynamodb_kinesis_streaming_destination(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -51,13 +51,13 @@ def get_aws_dynamodb_kinesis_streaming_destination(type, id, clfn, descfn, topke
             response = client.describe_kinesis_streaming_destination(TableName=id)
             print(response[topkey])
             if response[topkey] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
-                globals.rproc[pkey]=True
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                context.rproc[pkey]=True
                 return True
             for j in response[topkey]:
                 tkey=id+","+j[key]
                 common.write_import(type,tkey,None)
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

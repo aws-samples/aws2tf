@@ -1,10 +1,10 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 def get_aws_securityhub_account(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -17,7 +17,7 @@ def get_aws_securityhub_account(type, id, clfn, descfn, topkey, key, filterid):
             return True
 
         if id is None:
-            common.write_import(type,globals.acc,"a-"+globals.acc) 
+            common.write_import(type,context.acc,"a-"+context.acc) 
         else:
             common.write_import(type,id,"a-"+id) 
 
@@ -29,7 +29,7 @@ def get_aws_securityhub_account(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 def get_aws_securityhub_organization_configuration(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:

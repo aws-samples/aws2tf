@@ -1,10 +1,10 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 def get_aws_docdb_cluster_parameter_group(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     
@@ -33,7 +33,7 @@ def get_aws_docdb_cluster_parameter_group(type, id, clfn, descfn, topkey, key, f
     return True
 
 def get_aws_docdb_subnet_group(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     
@@ -62,7 +62,7 @@ def get_aws_docdb_subnet_group(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 def get_aws_docdb_event_subscription(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     
@@ -90,7 +90,7 @@ def get_aws_docdb_event_subscription(type, id, clfn, descfn, topkey, key, filter
 
 #aws_docdb_cluster_instance
 def get_aws_docdb_cluster_instance(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -110,12 +110,12 @@ def get_aws_docdb_cluster_instance(type, id, clfn, descfn, topkey, key, filterid
             if id is None:
                 common.write_import(type, j[key], None)
                 pkey=type+"."+j[key]
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
             else:
                 if id==j[key]:
                     common.write_import(type, j[key], None)
                     pkey=type+"."+j[key]
-                    globals.rproc[pkey]=True
+                    context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
@@ -124,7 +124,7 @@ def get_aws_docdb_cluster_instance(type, id, clfn, descfn, topkey, key, filterid
 
 # aws_docdb_cluster
 def get_aws_docdb_cluster(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 

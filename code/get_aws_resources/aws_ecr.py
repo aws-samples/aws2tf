@@ -1,11 +1,11 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 import botocore
 
 def get_aws_ecr_registry_policy(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -28,7 +28,7 @@ def get_aws_ecr_registry_policy(type, id, clfn, descfn, topkey, key, filterid):
 #aws_ecr_registry_scanning_configuration  client.get_registry_scanning_configuration()
 
 def get_aws_ecr_registry_scanning_configuration(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -55,7 +55,7 @@ def get_aws_ecr_registry_scanning_configuration(type, id, clfn, descfn, topkey, 
 # aws_ecr_replication_configuration   client.describe_image_replication_status(  repositoryName='string',
 
 def get_aws_ecr_replication_configuration(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -63,7 +63,7 @@ def get_aws_ecr_replication_configuration(type, id, clfn, descfn, topkey, key, f
         client = boto3.client(clfn)
         response=client.describe_replication_configuration() ## ???
 
-        common.write_import(type,globals.acc,"r-"+globals.acc) 
+        common.write_import(type,context.acc,"r-"+context.acc) 
     
     except client.exceptions.RegistryPolicyNotFoundException:
         pass
@@ -75,7 +75,7 @@ def get_aws_ecr_replication_configuration(type, id, clfn, descfn, topkey, key, f
     return True
 
 def get_aws_ecr_pull_through_cache_rule(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -101,7 +101,7 @@ def get_aws_ecr_pull_through_cache_rule(type, id, clfn, descfn, topkey, key, fil
 
 # aws_ecr_repository
 def get_aws_ecr_repository(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:

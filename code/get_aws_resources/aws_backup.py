@@ -1,14 +1,14 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 def get_aws_backup_region_settings(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
-        common.write_import(type,globals.region,None)
+        common.write_import(type,context.region,None)
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -16,7 +16,7 @@ def get_aws_backup_region_settings(type, id, clfn, descfn, topkey, key, filterid
     return True
 
 def get_aws_backup_vault(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -51,7 +51,7 @@ def get_aws_backup_vault(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_backup_plan(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:

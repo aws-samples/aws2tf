@@ -1,6 +1,6 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 def aws_secretsmanager_random_password(t1,tt1,tt2,flag1,flag2):
@@ -24,13 +24,13 @@ def aws_secretsmanager_secret_version(t1,tt1,tt2,flag1,flag2):
         if t1.startswith("resource"):
             vid=t1.split("_")[-1]
             vid=vid.replace("\"","").replace("{","").replace(" ","").replace("\n","")
-            globals.secvid=vid
+            context.secvid=vid
         elif tt1 == "secret_id":
-            globals.secid=tt2
+            context.secid=tt2
         elif tt1 == "secret_string":
             if "null" in tt2:
                 client = boto3.client('secretsmanager')
-                response = client.get_secret_value(SecretId=globals.secid,VersionId=globals.secvid)
+                response = client.get_secret_value(SecretId=context.secid,VersionId=context.secvid)
                 sv=response['SecretString']
                 if '""""' in sv:
                     sv=sv.replace('""""', '""')

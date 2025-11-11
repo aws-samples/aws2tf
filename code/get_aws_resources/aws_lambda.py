@@ -1,7 +1,7 @@
 import common
 import boto3
 import requests
-import globals
+import context
 import botocore
 import inspect
 import sys
@@ -10,7 +10,7 @@ from botocore.exceptions import ClientError
 
 
 def get_aws_lambda_layer(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -21,7 +21,7 @@ def get_aws_lambda_layer(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page['Layers']
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type,j['LayerArn'],None) 
@@ -31,7 +31,7 @@ def get_aws_lambda_layer(type, id, clfn, descfn, topkey, key, filterid):
                 id=id.split(":")[6]  
             response = client.list_layer_versions(LayerName=id)
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]:
                 common.write_import(type,j[key],None) 
@@ -43,7 +43,7 @@ def get_aws_lambda_layer(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 def get_aws_lambda_layer_version(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -75,23 +75,23 @@ def get_aws_lambda_layer_version(type, id, clfn, descfn, topkey, key, filterid):
                     #if "AccessDeniedException" in exn:
                     #print("AccessDeniedException for "+type+ " id="+str(id)) 
                     pkey=type+"."+id
-                    globals.rproc[pkey]=True
+                    context.rproc[pkey]=True
                     return True
                 
                 #print(str(response))
                 #print(str(response[topkey]))
                 if response[topkey] == []: 
-                    if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                    if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                     print("Empty response for "+type+ " id="+str(id)+" returning") 
                     pkey=type+"."+id
-                    globals.rproc[pkey]=True
+                    context.rproc[pkey]=True
                     return True
                 for j in response[topkey]:
                     get_lambdalayer_code(j[key])
                     common.write_import(type,j[key],None) 
                     tarn=j['LayerVersionArn']
                     pkey=type+"."+tarn
-                    globals.rproc[pkey]=True
+                    context.rproc[pkey]=True
         
 
     except Exception as e:
@@ -101,7 +101,7 @@ def get_aws_lambda_layer_version(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -109,7 +109,7 @@ def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
         config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
         client = boto3.client(clfn,config=config)
         if id is None:
-            for fn in globals.lambdalist.keys():
+            for fn in context.lambdalist.keys():
                 ## try access here first 
                 common.write_import(type, fn, None)
                 get_lambda_code(fn)
@@ -119,10 +119,10 @@ def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
                 common.add_known_dependancy("aws_lambda_event_source_mapping",fn)
                 common.write_import(type,fn,None) 
                 #pkey=type+"."+fn
-                #globals.rproc[pkey]=True
+                #context.rproc[pkey]=True
                 #pkey=type+"."+j['FunctionArn']
                 pkey=type+"."+fn
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
 
         else:      
             if id.startswith("arn:"): 
@@ -130,7 +130,7 @@ def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
                 id=id.split(":")[-1]
 
             try:
-                if globals.lambdalist[id]:
+                if context.lambdalist[id]:
                     fn=id
                     common.write_import(type, fn, None)
                     get_lambda_code(fn)
@@ -140,13 +140,13 @@ def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
                     common.add_known_dependancy("aws_lambda_event_source_mapping",fn)
                     #pkey=type+"."+j['FunctionArn']
                     pkey=type+"."+fn
-                    globals.rproc[pkey]=True
+                    context.rproc[pkey]=True
 
 
             except KeyError:
                     print("WARNING: function not in lambda list " + id+ " Resource may be referencing a lambda that no longer exists") 
                     pkey=type+"."+id
-                    globals.rproc[pkey]=True
+                    context.rproc[pkey]=True
 
 
     except Exception as e:
@@ -158,7 +158,7 @@ def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_lambda_function_old(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -170,7 +170,7 @@ def get_aws_lambda_function_old(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response:
                 fn=j[key]
@@ -183,9 +183,9 @@ def get_aws_lambda_function_old(type, id, clfn, descfn, topkey, key, filterid):
                 common.add_known_dependancy("aws_lambda_event_source_mapping",fn)
                 common.write_import(type,j[key],None) 
                 #pkey=type+"."+fn
-                #globals.rproc[pkey]=True
+                #context.rproc[pkey]=True
                 pkey=type+"."+j['FunctionArn']
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
 
 
         else:      
@@ -195,7 +195,7 @@ def get_aws_lambda_function_old(type, id, clfn, descfn, topkey, key, filterid):
 
             response = client.get_function(FunctionName=id)
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             j=response['Configuration']
             #print(str(j)+"/n")
@@ -207,7 +207,7 @@ def get_aws_lambda_function_old(type, id, clfn, descfn, topkey, key, filterid):
             common.add_known_dependancy("aws_lambda_function_event_invoke_config",fn)
             common.add_known_dependancy("aws_lambda_event_source_mapping",fn)
             pkey=type+"."+j['FunctionArn']
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -262,7 +262,7 @@ def get_lambdalayer_code(fn):
 
 
 def get_aws_lambda_alias(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_lambda_alias doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -271,7 +271,7 @@ def get_aws_lambda_alias(type, id, clfn, descfn, topkey, key, filterid):
     
     try:
         if response == []: 
-            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
             return True
         
         for j in response: 
@@ -288,24 +288,24 @@ def get_aws_lambda_alias(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_lambda_permission(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_lambda_permission doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         # this one no paginate
 
         client = boto3.client(clfn) 
-        if globals.debug: print("client")
+        if context.debug: print("client")
         getfn = getattr(client, descfn)
         try:
             response1 = getfn(FunctionName=id)
             response=response1[topkey]
         except client.exceptions.ResourceNotFoundException:
-            if globals.debug: print("WARNING: ResourceNotFoundException for "+type+ " "+str(id)+" returning")
+            if context.debug: print("WARNING: ResourceNotFoundException for "+type+ " "+str(id)+" returning")
             return True
 
         if response == []: 
-            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
             return True
 
         
@@ -324,7 +324,7 @@ def get_aws_lambda_permission(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_lambda_function_event_invoke_config(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_lambda_function_event_invoke_config doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -332,13 +332,13 @@ def get_aws_lambda_function_event_invoke_config(type, id, clfn, descfn, topkey, 
         # this one no paginate
 
         client = boto3.client(clfn) 
-        if globals.debug: print("client")
+        if context.debug: print("client")
         getfn = getattr(client, descfn)
         response1 = getfn(FunctionName=id)
         response=response1[topkey]
 
         if response == []: 
-            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
             return True
         
         for j in response: 
@@ -356,7 +356,7 @@ def get_aws_lambda_function_event_invoke_config(type, id, clfn, descfn, topkey, 
 
 
 def get_aws_lambda_event_source_mapping(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_lambda_event_source_mapping doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -366,13 +366,13 @@ def get_aws_lambda_event_source_mapping(type, id, clfn, descfn, topkey, key, fil
         # this one no paginate
 
         client = boto3.client(clfn) 
-        if globals.debug: print("client")
+        if context.debug: print("client")
         getfn = getattr(client, descfn)
         response1 = getfn(FunctionName=id)
         response=response1[topkey]
 
         if response == []:
-            if globals.debug: print("Empty response for "+type+ " "+str(id)+" returning")
+            if context.debug: print("Empty response for "+type+ " "+str(id)+" returning")
             return True
         
         for j in response: 
@@ -390,7 +390,7 @@ def get_aws_lambda_event_source_mapping(type, id, clfn, descfn, topkey, key, fil
     return True
 
 def get_aws_lambda_layer_version_permission(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_lambda_layer_version_permission 1 doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
@@ -399,17 +399,17 @@ def get_aws_lambda_layer_version_permission(type, id, clfn, descfn, topkey, key,
         # this one no paginate
 
         client = boto3.client(clfn) 
-        if globals.debug: print("client")
+        if context.debug: print("client")
         getfn = getattr(client, descfn)
         try:
             response1 = getfn(LayerName=id)
             response=response1[topkey]
         except client.exceptions.ResourceNotFoundException:
-            if globals.debug: print("WARNING: ResourceNotFoundException for "+type+ " "+str(id)+" returning")
+            if context.debug: print("WARNING: ResourceNotFoundException for "+type+ " "+str(id)+" returning")
             return True
 
         if response == []: 
-            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
             return True
 
         

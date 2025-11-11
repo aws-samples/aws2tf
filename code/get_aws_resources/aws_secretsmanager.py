@@ -4,11 +4,11 @@ import base64
 import boto3
 import sys
 import os
-import globals
+import context
 import inspect
 
 def get_aws_secretsmanager_secret(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_secretsmanager_secret  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -61,7 +61,7 @@ def get_aws_secretsmanager_secret(type, id, clfn, descfn, topkey, key, filterid)
 
 
 def get_aws_secretsmanager_secret_rotation(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_secretsmanager_secret_rotation  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -78,10 +78,10 @@ def get_aws_secretsmanager_secret_rotation(type, id, clfn, descfn, topkey, key, 
             except KeyError:
                 print("INFO: No rotation config")
                 
-                globals.rproc[pkey]=True
+                context.rproc[pkey]=True
                 return True
             common.write_import(type,id,None)
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
          
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -90,7 +90,7 @@ def get_aws_secretsmanager_secret_rotation(type, id, clfn, descfn, topkey, key, 
 
 
 def get_aws_secretsmanager_secret_version(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_secretsmanager_secret_version  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -116,7 +116,7 @@ def get_aws_secretsmanager_secret_version(type, id, clfn, descfn, topkey, key, f
                     if "(AccessDeniedException) when calling the GetSecretValue" in str(e):
                         print("INFO: get_secret_value failed - not authorized skipping",type,id.split(':')[-1])
                         pkey=type+"."+id
-                        globals.rproc[pkey]=True
+                        context.rproc[pkey]=True
                         return True
                 
                 sv=sresponse['SecretString']
@@ -124,7 +124,7 @@ def get_aws_secretsmanager_secret_version(type, id, clfn, descfn, topkey, key, f
                 pkey=id+"|"+j[key]
                 common.write_import(type,pkey,None) 
             pkey=type+"."+id
-            globals.rproc[pkey]=True
+            context.rproc[pkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -132,7 +132,7 @@ def get_aws_secretsmanager_secret_version(type, id, clfn, descfn, topkey, key, f
     return True
 
 def get_aws_secretsmanager_secret_policy(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_secretsmanager_secret_policy  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         

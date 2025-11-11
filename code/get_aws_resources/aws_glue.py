@@ -1,12 +1,12 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 import sys
 
 def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> Inn get_aws_glue_catalog_database  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -19,32 +19,32 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
                 response = response + page[topkey]
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
-                pkey=globals.acc+":"+j[key]
+                pkey=context.acc+":"+j[key]
                 tfid="d-"+pkey.replace(":","__")
                 common.write_import(type,pkey,tfid) 
                 common.add_dependancy("aws_glue_catalog_table",pkey)
-                globals.gluedbs[j[key]]=True
+                context.gluedbs[j[key]]=True
 
                 #pkey2="aws_glue_catalog_table."+pkey
-                #globals.rproc[pkey2]=True
+                #context.rproc[pkey2]=True
 
         else: 
             if ":" in id:   id =id.split(":")[1]   
             response = client.get_database(Name=id)
             if response == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 gkey="aws_glue_catalog_table."+pkey
-                globals.rproc[gkey]=True
+                context.rproc[gkey]=True
                 return True
             j=response['Database']
-            pkey=globals.acc+":"+j[key]
+            pkey=context.acc+":"+j[key]
             tfid="d-"+pkey.replace(":","__")
             common.write_import(type,pkey,tfid)
-            globals.gluedbs[j[key]]=True
+            context.gluedbs[j[key]]=True
             #print("KD add aws_glue_catalog_table "+pkey)
             common.add_dependancy("aws_glue_catalog_table",pkey)
             gkey="aws_glue_catalog_table."+pkey
-            globals.rproc[gkey]=True
+            context.rproc[gkey]=True
 
 
     except Exception as e:
@@ -54,10 +54,10 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
             print("AccessDeniedException - Insufficient Lake Formation permission for",type,id)
             if id is not None:
                 if ":" in id:   id =id.split(":")[1]
-                pkey=globals.acc+":"+id
+                pkey=context.acc+":"+id
                 gkey="aws_glue_catalog_database."+pkey
                 
-                globals.rproc[gkey]=True
+                context.rproc[gkey]=True
         else:
             common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
@@ -66,12 +66,12 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
 ## ID must pass catalog/database   or catalog/database/table
 def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_glue_catalog_table  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     
     try:
-        globals.workaround=type
+        context.workaround=type
         if id is None:
             print("WARNING: ID can not be None - must pass catalog:database or catalog:database:tablename" )
             return True
@@ -100,9 +100,9 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
                 response = client.get_tables(CatalogId=catalogn,DatabaseName=databasen,Expression=tabnam)
  
         if response[topkey] == []: 
-            if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
             tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
-            globals.rproc[tkey]=True
+            context.rproc[tkey]=True
             return True
         for j in response[topkey]:
             #Terraform import id = "123456789012:MyDatabase:MyTable"
@@ -113,13 +113,13 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
             
             # set dependency false
         tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
-        globals.rproc[tkey]=True
+        context.rproc[tkey]=True
 
     except boto3.exceptions.botocore.exceptions.ClientError as e:
         if e.response['Error']['Code'] == 'AccessDeniedException':
             print(f"AccessDeniedException for aws_glue.py - returning. Resource: {id}")
             tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
-            globals.rproc[tkey]=True
+            context.rproc[tkey]=True
             return True
         else:
             common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -134,7 +134,7 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_glue_trigger(type, id, clfn, descfn, topkey, key, filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_glue_trigger  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -163,7 +163,7 @@ def get_aws_glue_trigger(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_glue_job(type, id, clfn, descfn, topkey, key, filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_glue_job  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -188,7 +188,7 @@ def get_aws_glue_job(type, id, clfn, descfn, topkey, key, filterid):
     return True
 
 def get_aws_glue_security_configuration(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -216,7 +216,7 @@ def get_aws_glue_security_configuration(type, id, clfn, descfn, topkey, key, fil
 
 def get_aws_glue_crawler(type, id, clfn, descfn, topkey, key, filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_glue_crawler doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -252,7 +252,7 @@ def get_aws_glue_crawler(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_glue_dev_endpoint(type, id, clfn, descfn, topkey, key, filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_glue_dev_endpoint doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)   
     try:
@@ -277,7 +277,7 @@ def get_aws_glue_dev_endpoint(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_glue_data_catalog_encryption_settings(type, id, clfn, descfn, topkey, key, filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_glue_dev_endpoint doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)   
     try:
@@ -287,7 +287,7 @@ def get_aws_glue_data_catalog_encryption_settings(type, id, clfn, descfn, topkey
             response = client.get_data_catalog_encryption_settings()
             if response['DataCatalogEncryptionSettings'] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             if id is None:
-                common.write_import(type,globals.acc,"c-"+globals.acc) 
+                common.write_import(type,context.acc,"c-"+context.acc) 
             else:
                 common.write_import(type,id,"c-"+id)
 
@@ -299,7 +299,7 @@ def get_aws_glue_data_catalog_encryption_settings(type, id, clfn, descfn, topkey
 # aws_glue_connection
 def get_aws_glue_connection(type, id, clfn, descfn, topkey, key, filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_glue_connection doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)   
     try:
@@ -311,14 +311,14 @@ def get_aws_glue_connection(type, id, clfn, descfn, topkey, key, filterid):
                 response = response + page[topkey]
             if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
-                pkey=globals.acc+":"+j[key]
+                pkey=context.acc+":"+j[key]
                 theid="c-"+pkey.replace(":","_")
                 common.write_import(type, pkey, theid)
         else:
             response = client.get_connection(Name=id)
             if response['Connection'] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Connection'][key]
-            pkey=globals.acc+":"+j
+            pkey=context.acc+":"+j
             theid="c-"+pkey.replace(":","_")
             common.write_import(type, pkey, theid)
 
@@ -330,7 +330,7 @@ def get_aws_glue_connection(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_glue_classifier(type, id, clfn, descfn, topkey, key, filterid):
 
-    if globals.debug:
+    if context.debug:
         print("--> In get_aws_glue_connection doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)   
     try:
@@ -400,7 +400,7 @@ def get_aws_glue_classifier(type, id, clfn, descfn, topkey, key, filterid):
 def get_aws_glue_partition(type, id, clfn, descfn, topkey, key, filterid):
 
     # need to fetch catalogid and database from id
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
@@ -422,19 +422,19 @@ def get_aws_glue_partition(type, id, clfn, descfn, topkey, key, filterid):
                 tabnam=id.split(':')[2]
             else:
                 print("WARNING: Invalid aws_glue_partition id passed must pass catalogid:database:tablename got: " + id +"c="+str(cc))
-                globals.rproc[tkey]=True
+                context.rproc[tkey]=True
                 return True
 
             try:
                 response = client.get_partitions(CatalogId=catalogn,DatabaseName=databasen,TableName=tabnam)
             except Exception as e:
                 print(e)
-                globals.rproc[tkey]=True
+                context.rproc[tkey]=True
 
             if response == []: 
                 print("*-** Empty response for "+type+ " id="+str(id))
                 print("tkey="+tkey+" returning")
-                globals.rproc[tkey]=True
+                context.rproc[tkey]=True
                 return True
             
             for j in response[topkey]:
@@ -448,7 +448,7 @@ def get_aws_glue_partition(type, id, clfn, descfn, topkey, key, filterid):
             
             # set dependency false
             tkey="aws_glue_partition"+"."+id
-            globals.rproc[tkey]=True
+            context.rproc[tkey]=True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
@@ -457,7 +457,7 @@ def get_aws_glue_partition(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_glue_data_quality_ruleset(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -482,7 +482,7 @@ def get_aws_glue_data_quality_ruleset(type, id, clfn, descfn, topkey, key, filte
 
 # aws_glue_workflow
 def get_aws_glue_workflow(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:

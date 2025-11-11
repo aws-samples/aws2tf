@@ -1,5 +1,5 @@
 import boto3
-import globals
+import context
 import concurrent.futures
 import json
 import datetime
@@ -7,7 +7,7 @@ import datetime
 
 def build_lists():
     print("Building core resource lists ...")
-    globals.tracking_message="Stage 2 of 10, Building core resource lists ..."
+    context.tracking_message="Stage 2 of 10, Building core resource lists ..."
     
     
     
@@ -31,7 +31,7 @@ def build_lists():
             paginator = client.get_paginator('describe_vpcs')
             for page in paginator.paginate():
                 response.extend(page['Vpcs'])
-            globals.vpcs=response
+            context.vpcs=response
             return [('vpc', j['VpcId']) for j in response]
         except Exception as e:
             print("Error fetching ec2 data:", e)
@@ -42,7 +42,7 @@ def build_lists():
             client = boto3.client('s3')
             response = []
             paginator = client.get_paginator('list_buckets')
-            for page in paginator.paginate(BucketRegion=globals.region):
+            for page in paginator.paginate(BucketRegion=context.region):
                 response.extend(page['Buckets'])
             return [('s3', j['Name']) for j in response]
         except Exception as e:
@@ -69,7 +69,7 @@ def build_lists():
             paginator = client.get_paginator('describe_subnets')
             for page in paginator.paginate():
                 response.extend(page['Subnets'])
-            globals.subnets=response
+            context.subnets=response
             # save response
             with open('imported/subnets.json', 'w') as f:
                json.dump(response, f, indent=2, default=str)
@@ -119,7 +119,7 @@ def build_lists():
 
 
     # Use ThreadPoolExecutor to parallelize API calls
-    with concurrent.futures.ThreadPoolExecutor(max_workers=globals.cores) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=context.cores) as executor:
         futures = [
             executor.submit(fetch_vpc_data),
             executor.submit(fetch_lambda_data),
@@ -140,11 +140,11 @@ def build_lists():
                     resource_type = result[0][0]
                     if resource_type == 'vpc':
                         for _, vpc_id in result:
-                            globals.vpclist[vpc_id] = True
+                            context.vpclist[vpc_id] = True
 
                     if resource_type == 'lambda':
                         for _, lambda_id in result:
-                            globals.lambdalist[lambda_id] = True
+                            context.lambdalist[lambda_id] = True
 
                     elif resource_type == 's3':
                         client = boto3.client('s3')
@@ -158,22 +158,22 @@ def build_lists():
                                 print(f"Error details: {e}")
                                 continue
 
-                            globals.s3list[bucket] = True
+                            context.s3list[bucket] = True
                     elif resource_type == 'sg':
                         for _, sg_id in result:
-                            globals.sglist[sg_id] = True
+                            context.sglist[sg_id] = True
                     elif resource_type == 'subnet':
                         for _, subnet_id in result:
-                            globals.subnetlist[subnet_id] = True
+                            context.subnetlist[subnet_id] = True
                     elif resource_type == 'tgw':
                         for _, tgw_id in result:
-                            globals.tgwlist[tgw_id] = True
+                            context.tgwlist[tgw_id] = True
                     elif resource_type == 'iam':
                         for _, role_name in result:
-                            globals.rolelist[role_name] = True
+                            context.rolelist[role_name] = True
                     elif resource_type == 'pol':
                         for _, policy_arn in result:
-                            globals.policylist[policy_arn] = True
+                            context.policylist[policy_arn] = True
                 else:
                     # Handle roles data
                     with open('imported/roles.json', 'w') as f:
@@ -182,11 +182,11 @@ def build_lists():
     ####    role attachments stuff
 
 
-    #with ThreadPoolExecutor(max_workers=globals.cores) as executor14:
+    #with ThreadPoolExecutor(max_workers=context.cores) as executor14:
     #with ThreadPoolExecutor(max_workers=1) as executor14:
     #    futures = [
     #        executor14.submit(apl_threaded(rn))
-    #        for rn in globals.rolelist.keys()
+    #        for rn in context.rolelist.keys()
     #    ]
     #                #return [f.result() for f in futures]
          
@@ -196,8 +196,8 @@ def build_secondary_lists(id=None):
     if id is None:
         st1 = datetime.datetime.now()
         print("Building secondary IAM resource lists ...")
-        globals.esttime = (len(globals.rolelist) * 3) / 4
-        globals.tracking_message = "Stage 2 of 10, Building secondary IAM resource lists ..."
+        context.esttime = (len(context.rolelist) * 3) / 4
+        context.tracking_message = "Stage 2 of 10, Building secondary IAM resource lists ..."
         
         def fetch_role_policies(role_name):
             client = boto3.client('iam',region_name='us-east-1')
@@ -222,25 +222,25 @@ def build_secondary_lists(id=None):
                 }
         
         # Use ThreadPoolExecutor to parallelize API calls
-        rcl = len(globals.rolelist)
-        with concurrent.futures.ThreadPoolExecutor(max_workers=globals.cores) as executor:
+        rcl = len(context.rolelist)
+        with concurrent.futures.ThreadPoolExecutor(max_workers=context.cores) as executor:
             # Submit all role policy fetch tasks
             future_to_role = {
                 executor.submit(fetch_role_policies, role_name): role_name 
-                for role_name in globals.rolelist.keys()
+                for role_name in context.rolelist.keys()
             }
             
             # Process results as they complete
             completed = 0
             for future in concurrent.futures.as_completed(future_to_role):
                 completed += 1
-                globals.tracking_message = f"Stage 2 of 10, Building secondary IAM resource lists... {completed} of {rcl}"
+                context.tracking_message = f"Stage 2 of 10, Building secondary IAM resource lists... {completed} of {rcl}"
                 
                 try:
                     result = future.result()
                     role_name = result['role_name']
-                    globals.attached_role_policies_list[role_name] = result['attached_policies']
-                    globals.role_policies_list[role_name] = result['inline_policies']
+                    context.attached_role_policies_list[role_name] = result['attached_policies']
+                    context.role_policies_list[role_name] = result['inline_policies']
                 except Exception as e:
                     print(f"Error processing result: {e}")
         

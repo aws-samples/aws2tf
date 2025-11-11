@@ -1,13 +1,13 @@
 import common
 import fixtf
-import globals
+import context
 
 
 def aws_iam_access_key(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "user":
         pkey="aws_iam_access_key."+tt2
-        globals.rproc[pkey]=True
+        context.rproc[pkey]=True
         t1=tt1+" = aws_iam_user."+tt2+".id\n"
     return skip,t1,flag1,flag2
 
@@ -100,7 +100,7 @@ def  aws_iam_role(t1,tt1,tt2,flag1,flag2):
     elif tt1 == "managed_policy_arns":   
         if tt2 == "[]": 
             skip=1
-        elif ":"+globals.acc+":" in tt2:
+        elif ":"+context.acc+":" in tt2:
             fs=""
             ends=",data.aws_caller_identity.current.account_id"
             tt2=tt2.replace("[","").replace("]","")
@@ -111,9 +111,9 @@ def  aws_iam_role(t1,tt1,tt2,flag1,flag2):
                 #print("-- tt2 "+str(j)+" split ="+tt2.split(",")[j])
                 #print("-- tt2 "+j+" split ="+tt2.split(",")[j])
                 ps=tt2.split(",")[j]
-                if ":"+globals.acc+":" in ps:
+                if ":"+context.acc+":" in ps:
                     #print("ps1="+ps)
-                    a1=ps.find(":"+globals.acc+":")
+                    a1=ps.find(":"+context.acc+":")
                     #print("a1="+str(a1))
                     ps=ps[:a1]+":%s:"+ps[a1+14:]
                     #print("ps2="+ps)
@@ -122,7 +122,7 @@ def  aws_iam_role(t1,tt1,tt2,flag1,flag2):
                 pt1=pt1+ps+","
             pt1=pt1+"]\n"
             t1=pt1.replace(",]","]")
-            globals.roles=globals.roles+[flag2]
+            context.roles=context.roles+[flag2]
         else:
             pass
     #    else:

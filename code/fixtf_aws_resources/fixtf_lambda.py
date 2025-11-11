@@ -1,7 +1,7 @@
 import common
 import fixtf
 import os
-import globals
+import context
 import boto3
 from botocore.exceptions import ClientError
 
@@ -16,7 +16,7 @@ def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
             t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
         common.add_dependancy("aws_iam_role",tt2)
         pkey="aws_iam_role"+"."+tt2
-        #globals.rproc[pkey]=True
+        #context.rproc[pkey]=True
     elif tt1 == "filename":
              
         if os.path.isfile(flag2+".zip"):
@@ -43,13 +43,13 @@ def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
         else:
              print("WARNING: layers is not an array", tt2)
              return skip,t1,flag1,flag2
-        #if globals.debug: 
+        #if context.debug: 
         builds=""
         if cc > 0:
             for i in range(cc+1):
                 subn=tt2.split(',')[i]
                 subn=subn.strip(" ").lstrip('"').rstrip('"').strip(" ")
-                if globals.acc in subn:
+                if context.acc in subn:
                     tarn=subn.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
                     common.add_dependancy("aws_lambda_layer_version",subn)
                     builds=builds+"aws_lambda_layer_version."+tarn+".arn,"
@@ -61,7 +61,7 @@ def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
             t1 = tt1+" = ["+builds+"]\n"
                 
         elif cc == 0:
-            if globals.acc in tt2:  
+            if context.acc in tt2:  
                 tt2=tt2.lstrip('"').rstrip('"')
                 larn=tt2.split(":")[:-1]
                 myarn=""

@@ -1,5 +1,5 @@
 import common
-import globals
+import context
 
 def aws_datazone_domain(t1,tt1,tt2,flag1,flag2):
 	skip=0
@@ -10,7 +10,7 @@ def aws_datazone_project(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if tt1=="domain_identifier" and tt2!="null":
 		t1=tt1+" = aws_datazone_domain."+tt2+".id\n"
-		globals.dzd=tt2
+		context.dzd=tt2
 		common.add_dependancy("aws_datazone_domain",tt2)
 	return skip,t1,flag1,flag2
 
@@ -19,11 +19,11 @@ def aws_datazone_glossary(t1,tt1,tt2,flag1,flag2):
 	## workaround
 	## 
 	if tt1=="domain_identifier" and tt2!="null":
-		globals.dzd=tt2
+		context.dzd=tt2
 		t1=tt1+" = aws_datazone_domain."+tt2+".id\n"
 		common.add_dependancy("aws_datazone_domain",tt2)
 	elif tt1=="owning_project_identifier" and tt2!="null":
-		t1=tt1+" = aws_datazone_project."+globals.dzd+"_"+tt2+".id\n"
+		t1=tt1+" = aws_datazone_project."+context.dzd+"_"+tt2+".id\n"
 	elif tt1=="description" and tt2!="null":
 		t1=tt1+" = \"changeme\"\n"
 		t1=t1+"\n lifecycle {\n   ignore_changes = [description]\n}\n"
@@ -37,37 +37,37 @@ def aws_datazone_glossary_term(t1,tt1,tt2,flag1,flag2):
 		gid=t1.split("dzd_")[1].split("_")[2]
 		
 		pid=t1.split("dzd_")[1].split("_")[3].split('"')[0]
-		globals.dzd=did
-		globals.dzgid=gid
-		globals.dzpid=pid
+		context.dzd=did
+		context.dzgid=gid
+		context.dzpid=pid
 		#print("did,gid,pid",did,gid,pid)
 
 
 	if tt1=="domain_identifier" and tt2!="null":
-		globals.dzd=tt2
+		context.dzd=tt2
 		t1=tt1+" = aws_datazone_domain."+tt2+".id\n"
 	elif tt1=="glossary_identifier" and tt2!="null":
-		#print("fix term",globals.dzd,globals.dzgid,globals.dzpid)
-		t1=tt1+" = aws_datazone_glossary."+globals.dzd+"_"+globals.dzgid+"_"+globals.dzpid+".id\n"
+		#print("fix term",context.dzd,context.dzgid,context.dzpid)
+		t1=tt1+" = aws_datazone_glossary."+context.dzd+"_"+context.dzgid+"_"+context.dzpid+".id\n"
 	elif tt1=="is_a" and tt2!="null":
-		#print("fix term",globals.dzd,globals.dzgid,globals.dzpid)
+		#print("fix term",context.dzd,context.dzgid,context.dzpid)
 		if "," not in tt2:
 			tid=tt2.split('"')[1]
-			t1=tt1+" = [aws_datazone_glossary_term."+globals.dzd+"_"+tid+"_"+globals.dzgid+"_"+globals.dzpid+".id]\n"
+			t1=tt1+" = [aws_datazone_glossary_term."+context.dzd+"_"+tid+"_"+context.dzgid+"_"+context.dzpid+".id]\n"
 	#	common.add_dependancy("aws_datazone_glossary", tt2)
 	# Will cause Terraform Error: cycle issues
 	#elif tt1=="classifies" and tt2!="null":
-#		#print("fix term",globals.dzd,globals.dzgid,globals.dzpid)
+#		#print("fix term",context.dzd,context.dzgid,context.dzpid)
 	#	if "," not in tt2:
 #			tid=tt2.split('"')[1]
-#			t1=tt1+" = [aws_datazone_glossary_term."+globals.dzd+"_"+tid+"_"+globals.dzgid+"_"+globals.dzpid+".id]\n"
+#			t1=tt1+" = [aws_datazone_glossary_term."+context.dzd+"_"+tid+"_"+context.dzgid+"_"+context.dzpid+".id]\n"
 	#	common.add_dependancy("aws_datazone_glossary", tt2)
 	return skip,t1,flag1,flag2
 
 def aws_datazone_environment_blueprint_configuration(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if tt1=="domain_id" and tt2!="null":
-		globals.dzd=tt2
+		context.dzd=tt2
 		t1=tt1+" = aws_datazone_domain."+tt2+".id\n"
 		common.add_dependancy("aws_datazone_domain",tt2)
 
@@ -76,16 +76,16 @@ def aws_datazone_environment_blueprint_configuration(t1,tt1,tt2,flag1,flag2):
 def aws_datazone_environment_profile(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	if tt1=="domain_identifier" and tt2!="null":
-		globals.dzd=tt2
+		context.dzd=tt2
 		t1=tt1+" = aws_datazone_domain."+tt2+".id\n"
 		common.add_dependancy("aws_datazone_domain",tt2)
 
 
 	elif tt1=="project_identifier" and tt2!="null":
-		t1=tt1+" = aws_datazone_project."+globals.dzd+"_"+tt2+".id\n"
+		t1=tt1+" = aws_datazone_project."+context.dzd+"_"+tt2+".id\n"
 		#common.add_dependancy("aws_datazone_project",tt2)
 	#elif tt1=="environment_blueprint_identifier":	
-	#	t1=tt1+" = aws_datazone_environment_blueprint_configuration."+globals.dzd+"_"+tt2+".environment_blueprint_id\n"
+	#	t1=tt1+" = aws_datazone_environment_blueprint_configuration."+context.dzd+"_"+tt2+".environment_blueprint_id\n"
 
 
 	return skip,t1,flag1,flag2
@@ -95,21 +95,21 @@ def aws_datazone_environment(t1,tt1,tt2,flag1,flag2):
 	
 	if "resource" in t1 and "{" in t1 and "aws_datazone_environment" in t1:
 		did="dzd_"+t1.split("dzd_")[1].split("_")[0]
-		globals.dzd=did
+		context.dzd=did
 	if tt1=="domain_identifier" and tt2!="null":
 		t1=tt1+" = aws_datazone_domain."+tt2+".id\n"
-		globals.dzd=tt2
+		context.dzd=tt2
 		common.add_dependancy("aws_datazone_domain",tt2)
 
 	elif tt1=="profile_identifier" and tt2!="null":
-		t1=tt1+" = aws_datazone_environment_profile."+globals.dzd+"_"+tt2+".id\n"
+		t1=tt1+" = aws_datazone_environment_profile."+context.dzd+"_"+tt2+".id\n"
 		#common.add_dependancy("aws_datazone_project",tt2)
 
 	elif tt1=="project_identifier" and tt2!="null":
-		t1=tt1+" = aws_datazone_project."+globals.dzd+"_"+tt2+".id\n"
+		t1=tt1+" = aws_datazone_project."+context.dzd+"_"+tt2+".id\n"
 		#common.add_dependancy("aws_datazone_project",tt2)
 	#elif tt1=="blueprint_identifier":
-	#	t1=tt1+" = aws_datazone_environment_blueprint_configuration."+globals.dzd+"_"+tt2+".environment_blueprint_id\n"
+	#	t1=tt1+" = aws_datazone_environment_blueprint_configuration."+context.dzd+"_"+tt2+".environment_blueprint_id\n"
 
 	return skip,t1,flag1,flag2
 

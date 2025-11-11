@@ -1,10 +1,10 @@
 import common
 import boto3
-import globals
+import context
 import inspect
 
 def get_aws_cloudfront_distribution(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -38,7 +38,7 @@ def get_aws_cloudfront_distribution(type, id, clfn, descfn, topkey, key, filteri
     return True
 
 def get_aws_cloudfront_origin_access_identity(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -72,7 +72,7 @@ def get_aws_cloudfront_origin_access_identity(type, id, clfn, descfn, topkey, ke
     return True
 
 def get_aws_cloudfront_cache_policy(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -100,7 +100,7 @@ def get_aws_cloudfront_cache_policy(type, id, clfn, descfn, topkey, key, filteri
     return True
 
 def get_aws_cloudfront_continuous_deployment_policy(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -130,7 +130,7 @@ def get_aws_cloudfront_continuous_deployment_policy(type, id, clfn, descfn, topk
     return True
 
 def get_aws_cloudfront_field_level_encryption_config(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -141,7 +141,7 @@ def get_aws_cloudfront_field_level_encryption_config(type, id, clfn, descfn, top
             try:
                 resp2=response[topkey]['Items']
             except KeyError:
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             if response[topkey]['Items'] == []: 
                 print("Empty response for "+type+ " id="+str(id)+" returning")
@@ -164,7 +164,7 @@ def get_aws_cloudfront_field_level_encryption_config(type, id, clfn, descfn, top
 
 
 def get_aws_cloudfront_field_level_encryption_profile(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -175,7 +175,7 @@ def get_aws_cloudfront_field_level_encryption_profile(type, id, clfn, descfn, to
             try:
                 resp2=response[topkey]['Items']
             except KeyError:
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             if response[topkey]['Items'] == []: 
                 print("Empty response for "+type+ " id="+str(id)+" returning")
@@ -201,7 +201,7 @@ def get_aws_cloudfront_field_level_encryption_profile(type, id, clfn, descfn, to
  
 #aws_cloudfront_response_headers_policy
 def get_aws_cloudfront_response_headers_policy(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -212,11 +212,11 @@ def get_aws_cloudfront_response_headers_policy(type, id, clfn, descfn, topkey, k
             try:
                 resp2=response[topkey]['Items']
             except KeyError:
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             
             if response[topkey]['Items'] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]['Items']:
                 oid=j['ResponseHeadersPolicy'][key]
@@ -236,7 +236,7 @@ def get_aws_cloudfront_response_headers_policy(type, id, clfn, descfn, topkey, k
 
 ##aws_cloudfront_function
 def get_aws_cloudfront_function(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -247,11 +247,11 @@ def get_aws_cloudfront_function(type, id, clfn, descfn, topkey, key, filterid):
             try:
                 resp2=response[topkey]['Items']
             except KeyError:
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             
             if response[topkey]['Items'] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]['Items']:
                 oid=j[key]
@@ -271,7 +271,7 @@ def get_aws_cloudfront_function(type, id, clfn, descfn, topkey, key, filterid):
 
 ##aws_cloudfront_key_group
 def get_aws_cloudfront_key_group(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -282,11 +282,11 @@ def get_aws_cloudfront_key_group(type, id, clfn, descfn, topkey, key, filterid):
             try:
                 resp2=response[topkey]['Items']
             except KeyError:
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             
             if response[topkey]['Items'] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]['Items']:
                 oid=j['KeyGroup'][key]
@@ -307,7 +307,7 @@ def get_aws_cloudfront_key_group(type, id, clfn, descfn, topkey, key, filterid):
 
 ## aws_cloudfront_origin_access_control
 def get_aws_cloudfront_origin_access_control(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -318,11 +318,11 @@ def get_aws_cloudfront_origin_access_control(type, id, clfn, descfn, topkey, key
             try:
                 resp2=response[topkey]['Items']
             except KeyError:
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             
             if response[topkey]['Items'] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]['Items']:
                 oid=j[key]
@@ -342,7 +342,7 @@ def get_aws_cloudfront_origin_access_control(type, id, clfn, descfn, topkey, key
 
 ## aws_cloudfront_origin_request_policy
 def get_aws_cloudfront_origin_request_policy(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -353,11 +353,11 @@ def get_aws_cloudfront_origin_request_policy(type, id, clfn, descfn, topkey, key
             try:
                 resp2=response[topkey]['Items']
             except KeyError:
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             
             if response[topkey]['Items'] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]['Items']:
                 oid=j['OriginRequestPolicy'][key]
@@ -376,7 +376,7 @@ def get_aws_cloudfront_origin_request_policy(type, id, clfn, descfn, topkey, key
 
 ## aws_cloudfront_public_key
 def get_aws_cloudfront_public_key(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -387,11 +387,11 @@ def get_aws_cloudfront_public_key(type, id, clfn, descfn, topkey, key, filterid)
             try:
                 resp2=response[topkey]['Items']
             except KeyError:
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             
             if response[topkey]['Items'] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]['Items']:
                 oid=j[key]
@@ -411,7 +411,7 @@ def get_aws_cloudfront_public_key(type, id, clfn, descfn, topkey, key, filterid)
 
 ## aws_cloudfront_realtime_log_config
 def get_aws_cloudfront_realtime_log_config(type, id, clfn, descfn, topkey, key, filterid):
-    if globals.debug:
+    if context.debug:
         print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
@@ -422,11 +422,11 @@ def get_aws_cloudfront_realtime_log_config(type, id, clfn, descfn, topkey, key, 
             try:
                 resp2=response[topkey]['Items']
             except KeyError:
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             
             if response[topkey]['Items'] == []: 
-                if globals.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]['Items']:
                 oid=j[key]

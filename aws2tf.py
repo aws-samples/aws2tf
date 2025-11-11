@@ -140,8 +140,16 @@ def main():
     argParser.add_argument("-la", "--serverless", help="Lambda mode - when running in a Lambda container", action='store_true')
     argParser.add_argument("-tv", "--tv", help="Specify version of Terraform AWS provider default = "+context.tfver)
     argParser.add_argument("-d5", "--debug5", help="debug5 special debug flag", action='store_true')
-    args = argParser.parse_args()
+
+    try:
+        args = argParser.parse_args()
+    except SystemExit as e:
+        timed_interrupt.timed_int.stop()
+        exit()
+        
+    print("here3")
     type=""
+
 
     common.check_python_version()
     # print("cwd=%s" % os.getcwd())

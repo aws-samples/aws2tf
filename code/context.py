@@ -1,7 +1,7 @@
 import sys,os
 
-aws2tfver="v6001"
-tfver="6.15.0"
+aws2tfver="v6002"
+tfver="6.20.0"
 esttime=120.0
 profile="default"
 sso=False

@@ -147,7 +147,6 @@ def main():
         timed_interrupt.timed_int.stop()
         exit()
         
-    print("here3")
     type=""
 
 

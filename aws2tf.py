@@ -124,7 +124,6 @@ def main():
     argParser.add_argument("-i", "--id", help="resource id")
     argParser.add_argument("-r", "--region", help="region")
     argParser.add_argument("-p", "--profile", help="profile")
-    argParser.add_argument("-o", "--output", help="add custom string to output folder")
     argParser.add_argument("-m", "--merge", help="merge", action='store_true')
     argParser.add_argument("-d", "--debug", help="debug", action='store_true')
     argParser.add_argument("-s", "--singlefile", help="only a single file main.tf is produced", action='store_true')
@@ -148,7 +147,7 @@ def main():
     # print("cwd=%s" % os.getcwd())
     signal.signal(signal.SIGINT, common.ctrl_c_handler)
 
-    path = shutil.which("terraform") 
+    path = shutil.which("terraform")
 
     if path is None:
         print("no executable found for command 'terraform'")
@@ -335,12 +334,6 @@ def main():
 ####  restore form S3 if merging & serverless
 
 ####    
-
-    if args.output:
-        if isinstance(args.output, str):
-            context.pathadd=args.output+"-"
-        else:
-            print("output path modifier may not be a valid string",(str(args.output))," ignoring ")
 
     context.region = region
     context.regionl = len(region)

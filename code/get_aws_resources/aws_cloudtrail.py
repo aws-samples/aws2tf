@@ -1,11 +1,13 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
 
 def get_aws_cloudtrail(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -15,7 +17,7 @@ def get_aws_cloudtrail(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.info("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 if j['HomeRegion']==context.region:
@@ -23,7 +25,7 @@ def get_aws_cloudtrail(type, id, clfn, descfn, topkey, key, filterid):
 
         else:      
             response = client.get_trail(Name=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning")
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning")
             return True
             j=response['Trail']
             if j['HomeRegion']==context.region:

@@ -1,5 +1,7 @@
 import common
 import fixtf
+import logging
+log = logging.getLogger('aws2tf')
 import os
 import context
 import boto3
@@ -41,7 +43,7 @@ def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
             cc=tt2.count(',')
             tt2=tt2.lstrip('[').rstrip(']')
         else:
-             print("WARNING: layers is not an array", tt2)
+             log.warning("WARNING: layers is not an array", tt2)
              return skip,t1,flag1,flag2
         #if context.debug: 
         builds=""

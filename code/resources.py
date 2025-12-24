@@ -1,4 +1,7 @@
 from fixtf_aws_resources import aws_dict
+import logging
+
+log = logging.getLogger('aws2tf')
 
 def resource_types(type):
     
@@ -202,8 +205,8 @@ def resource_data(type,id):
     try:
         clfn=aws_dict.aws_resources[type]['clfn']
     except KeyError:
-        print("WARNING:  may not be a Terraform resource ? or it might be being skipped deliberately type=",type)
-        print("(eg. aws_network_interface is skipped)")
+        log.warning("WARNING:  may not be a Terraform resource ? or it might be being skipped deliberately type=%s", type)
+        log.warning("(eg. aws_network_interface is skipped)")
         return clfn,descfn,topkey,key,filterid
 
 

@@ -1,11 +1,13 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
 
 def get_aws_ram_resource_share(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -15,7 +17,7 @@ def get_aws_ram_resource_share(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(resourceOwner='SELF'):
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -24,7 +26,7 @@ def get_aws_ram_resource_share(type, id, clfn, descfn, topkey, key, filterid):
 
         else:      
             response = client.get_resource_shares(resourceOwner='SELF')
-            if response['resourceShares'] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response['resourceShares'] == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response['resourceShares']:
                 common.write_import(type,j['resourceShareArn'],None)
                 common.add_dependancy("aws_ram_principal_association",j['resourceShareArn'])
@@ -38,7 +40,7 @@ def get_aws_ram_resource_share(type, id, clfn, descfn, topkey, key, filterid):
 # aws_ram_principal_association #
 def get_aws_ram_principal_association(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -47,7 +49,7 @@ def get_aws_ram_principal_association(type, id, clfn, descfn, topkey, key, filte
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate(resourceOwner='SELF'):
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 pkey=j['resourceShareArn']+","+j[key]
                 common.write_import(type, pkey, None)
@@ -57,7 +59,7 @@ def get_aws_ram_principal_association(type, id, clfn, descfn, topkey, key, filte
         else:
             if id.startswith("arn:"):
                 response = client.list_principals(resourceOwner='SELF',resourceShareArns=[id])
-                if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if response[topkey] == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
                 for j in response[topkey]:
                     pkey=j['resourceShareArn']+","+j[key]
                     common.write_import(type, pkey, None)
@@ -71,7 +73,7 @@ def get_aws_ram_principal_association(type, id, clfn, descfn, topkey, key, filte
 
 def get_aws_ram_resource_association(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -80,7 +82,7 @@ def get_aws_ram_resource_association(type, id, clfn, descfn, topkey, key, filter
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate(resourceOwner='SELF'):
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 pkey=j['resourceShareArn']+","+j[key]
                 common.write_import(type, pkey, None)
@@ -91,7 +93,7 @@ def get_aws_ram_resource_association(type, id, clfn, descfn, topkey, key, filter
             if id.startswith("arn:"):
                 response = client.list_resources(resourceOwner='SELF',resourceShareArns=[id])
               
-                if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if response[topkey] == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
                 for j in response[topkey]:
                     pkey=j['resourceShareArn']+","+j[key]
                     common.write_import(type, pkey, None)

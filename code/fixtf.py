@@ -7,7 +7,10 @@ import resources
 import common
 import shutil
 import inspect
+import logging
 from timed_interrupt import timed_int
+
+log = logging.getLogger('aws2tf')
 
 from fixtf_aws_resources import arn_dict
 from fixtf_aws_resources import aws_common
@@ -233,33 +236,33 @@ def fixtf(ttft,tf):
     # check if aws_*.tf exists already
     if os.path.isfile(tf2):
          if context.debug:
-            print("File exists: " + tf2+ " skipping ...")                 
+            log.debug("File exists: " + tf2+ " skipping ...")                 
          return 
     else:
-        if context.debug:  print("processing "+tf2)
+        if context.debug:  log.debug("processing "+tf2)
 
 
     if context.debug:
-        print(ttft+" fixtf "+tf+".out") 
+        log.debug(ttft+" fixtf "+tf+".out") 
    
 # open the *.out file
 
     try:
         f1 = open(rf, 'r')
     except:
-        print("no "+rf)
+        log.warning("no "+rf)
         return
     
     clfn, descfn, topkey, key, filterid = resources.resource_data(ttft, None)
     if clfn is None:
-        print("ERROR: clfn is None with type="+ttft)
-        print("exit 015")
+        log.error("ERROR: clfn is None with type="+ttft)
+        log.info("exit 015")
         timed_int.stop()
         exit()
 
     clfn=clfn.replace('-','_')
     callfn="fixtf_"+clfn
-    if context.debug: print("callfn="+callfn+" ttft="+ttft)
+    if context.debug: log.debug("callfn="+callfn+" ttft="+ttft)
 
     Lines = f1.readlines()
     f1.close()
@@ -279,7 +282,7 @@ def fixtf(ttft,tf):
     if ttft=="aws_s3_bucket_replication_configuration":
         for t1 in Lines:
             t1=t1.strip()
-            if context.debug5: print("DEBUG5: pre scan block1 : t1=", t1)
+            if context.debug5: log.debug("DEBUG5: pre scan block1 : t1=%s", t1)
             skip=0
             tt1=t1.split("=")[0].strip()
             if tt1=="bucket":
@@ -287,7 +290,7 @@ def fixtf(ttft,tf):
                     tt2=t1.split("=")[1].strip().strip('\"')
                     if "arn:aws:s3" in tt2:
                         tt2=tt2.split(":")[-1]
-                        if context.debug5: print("DEBUG5: pre scan block 2: common.add_dep bucket_name=", tt2)
+                        if context.debug5: log.debug("DEBUG5: pre scan block 2: common.add_dep bucket_name=%s", tt2)
                         common.add_dependancy("aws_s3_bucket", tt2)
                 except:
                     tt2=""
@@ -304,7 +307,7 @@ def fixtf(ttft,tf):
             if tt1=="replication_group_id":
                 if tt2 != "null": 
                     context.elastirep=True
-                    if context.debug5: print("***** set true *****")
+                    if context.debug5: log.debug("***** set true *****")
 
     if ttft=="aws_elasticache_replication_group":
         for t1 in Lines:
@@ -466,11 +469,11 @@ def fixtf(ttft,tf):
                 getfn = getattr(eval(callfn), ttft)           
                 #getfn = getattr(fixtf2, ttft)
             except Exception as e:
-                print(f"{e=}")
+                log.error(f"{e=}")
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                print(exc_type, fname, exc_tb.tb_lineno)
-                print("** no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
+                log.error("%s %s %s", exc_type, fname, exc_tb.tb_lineno)
+                log.warning("** no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
                 nofind=1
                 
             try:
@@ -505,14 +508,14 @@ def fixtf(ttft,tf):
 
                 #print("t1="+t1)
             except Exception as e:
-                print(f"{e=}")
+                log.error(f"{e=}")
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                print(exc_type, fname, exc_tb.tb_lineno)
-                print("** error in "+ttft+" "+callfn+" OR .....")
-                print("-- no fixtf for type:"+ttft+" callfn:"+callfn)
-                print("-- no fixtf for "+tf+" calling generic fixtf2.aws_resource callfn="+callfn)
-                print("t1="+str(t1)) 
+                log.error("%s %s %s", exc_type, fname, exc_tb.tb_lineno)
+                log.error("** error in "+ttft+" "+callfn+" OR .....")
+                log.error("-- no fixtf for type:"+ttft+" callfn:"+callfn)
+                log.error("-- no fixtf for "+tf+" calling generic fixtf2.aws_resource callfn="+callfn)
+                log.error("t1="+str(t1)) 
                 nofind=2
                 skip,t1,flag1,flag2=aws_resource(t1,tt1,tt2,flag1,flag2)           
             #### 
@@ -562,7 +565,7 @@ def fixtf(ttft,tf):
 
 
         if nofind > 0:
-           print("WARNING: No fixtf for "+tf+" calling generic fixtf2.aws_resource nofind="+str(nofind))
+           log.warning("WARNING: No fixtf for "+tf+" calling generic fixtf2.aws_resource nofind="+str(nofind))
         
         
         
@@ -584,14 +587,14 @@ def aws_resource(t1,tt1,tt2,flag1,flag2):
 
 # generic replace of acct and region in arn
 def globals_replace(t1,tt1,tt2):
-    if context.debug: print("GR start:",t1)
+    if context.debug: log.debug("GR start:%s", t1)
     if "format(" in tt2: return t1
     ends=""
     tt2=tt2.replace("%", "%%")
     if tt2.startswith('[') and tt1 != "managed_policy_arns" and "," in tt2:
         tt2=tt2.replace('[','').replace(']','').replace('"','').replace(' ','')
         arns=tt2.split(',')
-        if context.debug: print("Globals replace an array:"+str(arns))
+        if context.debug: log.debug("Globals replace an array:"+str(arns))
         fins=""
         for arn in arns:
             tt2=str(arn)
@@ -652,10 +655,10 @@ def globals_replace(t1,tt1,tt2):
             
                     #print("t1="+t1)
                     
-                    if context.debug: print("out tt2="+tt2)
+                    if context.debug: log.debug("out tt2="+tt2)
                     if "[" in tt2:
                         tt2=tt2.lstrip("[").rstrip("]").lstrip('"').rstrip('"')
-                        if context.debug: print("in tt2="+tt2)
+                        if context.debug: log.debug("in tt2="+tt2)
                         t1 = tt1+' = [format("' + tt2 + '"' + ends +')]\n'
                     else:
                         t1 = tt1+' = format("'+tt2+ '"' +ends+')\n'
@@ -667,7 +670,7 @@ def globals_replace(t1,tt1,tt2):
     #    tt2=tt2.replace('"','')
     #    t1 = tt1+' = [format("' + tt2 + '"' + ends +')]\n'
     
-    if context.debug: print("GR finish:="+t1)
+    if context.debug: log.debug("GR finish:="+t1)
     return t1
 
 
@@ -728,10 +731,10 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
                                 subs=subs + "data."+ttft + "." + subn + ".id,"
                                 common.add_dependancy(ttft,subn)
                         else:
-                            print("WARNING: subnet not in subnetlist" + subn)
+                            log.warning("WARNING: subnet not in subnetlist" + subn)
                             subs=subs+'"'+subn+'"'+","
                     except KeyError:
-                        print("WARNING: subnet not in subnet list " + subn+ " Resource may be referencing a subnet that no longer exists")
+                        log.warning("WARNING: subnet not in subnet list " + subn+ " Resource may be referencing a subnet that no longer exists")
                         subs=subs+'"'+subn+'"'+","
                 
                 # security_group
@@ -745,10 +748,10 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
                                 subs=subs + "data."+ttft + "." + subn + ".id,"
                                 common.add_dependancy(ttft,subn)
                         else:
-                            print("WARNING: security group not in sg list" + subn)
+                            log.warning("WARNING: security group not in sg list" + subn)
                             subs=subs+'"'+subn+'"'+","
                     except KeyError:
-                        print("WARNING: security group not in sg list " + subn+ " Resource may be referencing a security group that no longer exists")
+                        log.warning("WARNING: security group not in sg list " + subn+ " Resource may be referencing a security group that no longer exists")
                         subs=subs+'"'+subn+'"'+","
                 #
                 else:
@@ -767,10 +770,10 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
                             subs="data."+ttft + "." + tt2 + ".id"
                             common.add_dependancy(ttft, tt2)
                     else:
-                        print("WARNING: subnet not in subnet list" + tt2)
+                        log.warning("WARNING: subnet not in subnet list" + tt2)
                         subs='"'+tt2+'"'
                 except KeyError:
-                    print("WARNING: subnet not in subnet list " + tt2+ " Resource may be referencing a subnet that no longer exists")
+                    log.warning("WARNING: subnet not in subnet list " + tt2+ " Resource may be referencing a subnet that no longer exists")
                     subs='"'+tt2+'"'
 
             elif ttft == "aws_security_group":
@@ -783,10 +786,10 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
                             subs="data."+ttft + "." + tt2 + ".id"
                             common.add_dependancy(ttft, tt2)
                     else:
-                        print("WARNING: security group not in sg list" + tt2)
+                        log.warning("WARNING: security group not in sg list" + tt2)
                         subs='"'+tt2+'"'
                 except KeyError:
-                    print("WARNING: security group not in sg list " + tt2+ " Resource may be referencing a security group that no longer exists")
+                    log.warning("WARNING: security group not in sg list " + tt2+ " Resource may be referencing a security group that no longer exists")
                     subs='"'+tt2+'"'
             else:
                 subs=ttft + "." + tt2 + ".id"
@@ -799,7 +802,7 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
         
     
     except Exception as e:  
-      print("t1=",t1)
+      log.error("t1=%s", t1)
       common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id) 
     
     return t1,skip
@@ -809,7 +812,7 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
 def deref_role_arn(t1,tt1,tt2):
     if tt2 == "null" or tt2 == "[]": return t1
 
-    if tt2.startswith("arn:aws:events:"): print(tt2)
+    if tt2.startswith("arn:aws:events:"): log.debug(tt2)
 
     if tt2.startswith("arn:aws:s3:::"):
         bn=tt2.split(":::")[-1]
@@ -855,9 +858,9 @@ def deref_role_arn(t1,tt1,tt2):
     return t1
 
 def deref_kms_key(t1,tt1,tt2):
-    print("deref_kms_key 1: " + tt2)
+    log.debug("deref_kms_key 1: " + tt2)
     if "arn:aws:kms:" in tt2:
-        print("deref_kms_key 2: " + tt2)
+        log.debug("deref_kms_key 2: " + tt2)
         t1=globals_replace(t1,tt1,tt2)
     return t1
 
@@ -969,17 +972,17 @@ def deref_elb_arn_array(t1,tt1,tt2):
 
 #### other arn derefs here
 def generic_deref_arn(t1, tt1, tt2):
-    if context.debug: print("Here",t1)
+    if context.debug: log.debug("Here %s", t1)
     try:
         if tt2.endswith("*"): return t1
-        if context.debug: print("*** generic "+t1)
+        if context.debug: log.debug("*** generic "+t1)
         isstar=False
     
         if tt2 == "null" or tt2 == "[]": return t1
         tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
         cc=tt2.count(',')
         subs=""
-        print("generic",tt2," cc= ",cc)
+        log.debug("generic %s cc= %s", tt2, cc)
         if tt2.endswith("*"): isstar=True
 
         if cc==0 and ":log-stream:" in tt2:
@@ -995,7 +998,7 @@ def generic_deref_arn(t1, tt1, tt2):
                 if isstar:
                     period="."
                     arnadr="aws_cloudwatch_log_stream."+logn2+"_"+streamn+".arn"
-                    print(arnadr)
+                    log.debug(arnadr)
                     t1=tt1 + ' = [format("%s*",'+arnadr+')]\n'
                     #t1=tt1 + ' = ["' + 'format("%s*",'+arnadr+')"]\n'
                 
@@ -1011,14 +1014,14 @@ def generic_deref_arn(t1, tt1, tt2):
                 if not roln.endswith("*"):
                     common.add_dependancy("aws_iam_role", roln)
                     arnadr="aws_iam_role."+roln+".arn"
-                    print(arnadr)
+                    log.debug(arnadr)
                     t1=tt1 + ' = [format("%s*",'+arnadr+')]\n'
                 
 
 
     except Exception as e:  
       common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id)     
-    print("generic out =", t1)
+    log.debug("generic out = %s", t1)
     return t1
     if cc == 0:
         tarn=tt2
@@ -1061,7 +1064,7 @@ def generic_deref_arn(t1, tt1, tt2):
     t1=tt1 + " = [" + subs + "]\n"
     t1=t1.replace(',]',']')
 
-    print("exit t1="+t1)
+    log.debug("exit t1="+t1)
     return t1
 
 

@@ -1,4 +1,6 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import os
@@ -9,7 +11,7 @@ import json
 
 def get_aws_vpc(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In get_aws_vpc doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_vpc doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     try:    
@@ -37,12 +39,12 @@ def get_aws_vpc(type, id, clfn, descfn, topkey, key, filterid):
                     pkey = type+"."+id
                     context.rproc[pkey] = True
                 else:
-                    print("WARNING: vpc not in vpclist" + id)
+                    log.warning("WARNING: vpc not in vpclist" + id)
             except KeyError:
-                    print("WARNING: vpc not in vpclist " + id+ " Resource may be referencing a vpc that no longer exists")  
+                    log.warning("WARNING: vpc not in vpclist " + id+ " Resource may be referencing a vpc that no longer exists")  
             
         else:
-            print("WARNING: get_aws_vpc unexpected id value",str(id))
+            log.warning("WARNING: get_aws_vpc unexpected id value",str(id))
             return True
                     
 
@@ -53,7 +55,7 @@ def get_aws_vpc(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In get_aws_subnet doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_subnet doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     try:    
@@ -68,9 +70,9 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
                     pkey = type+"."+id
                     context.rproc[pkey] = True
                 else:
-                    print("WARNING: subnet not in subnetlist" + id)
+                    log.warning("WARNING: subnet not in subnetlist" + id)
             except KeyError:
-                    print("WARNING: subnet not in subnetlist " + id+ " Resource may be referencing a subnet that no longer exists")  
+                    log.warning("WARNING: subnet not in subnetlist " + id+ " Resource may be referencing a subnet that no longer exists")  
             
         elif id.startswith("vpc-"):
             for j in context.subnets:
@@ -78,7 +80,7 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
                     #print("Found subnet in vpc " + id + " " + j['SubnetId'])
                     common.write_import(type, j['SubnetId'], None)
         else:
-            print("WARNING: get_aws_subnet unexpected id value",str(id))
+            log.warning("WARNING: get_aws_subnet unexpected id value",str(id))
             return True
                     
 
@@ -89,7 +91,7 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_security_group(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In get_aws_security_group doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_security_group doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     try:    
@@ -111,12 +113,12 @@ def get_aws_security_group(type, id, clfn, descfn, topkey, key, filterid):
                     pkey = type+"."+id
                     context.rproc[pkey] = True
                 else:
-                    print("WARNING: sg not in sglist" + id)
+                    log.warning("WARNING: sg not in sglist" + id)
             except KeyError:
-                    print("WARNING: sg not in sglist " + id+ " Resource may be referencing a security_group that no longer exists")  
+                    log.warning("WARNING: sg not in sglist " + id+ " Resource may be referencing a security_group that no longer exists")  
             
         else:
-            print("WARNING: get_aws_security_group unexpected id value",str(id))
+            log.warning("WARNING: get_aws_security_group unexpected id value",str(id))
             return True
                     
 
@@ -128,7 +130,7 @@ def get_aws_security_group(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_instance(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -139,7 +141,7 @@ def get_aws_instance(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 for k in j['Instances']:
                     if context.ec2tag is None:
@@ -159,7 +161,7 @@ def get_aws_instance(type, id, clfn, descfn, topkey, key, filterid):
                 response = client.describe_instances(InstanceIds=[id])
             else:
                 response = client.describe_instances(Filters=[{'Name': 'tag:Name','Values': [id]},])
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response['Reservations']:
                 
                 for k in j['Instances']:
@@ -176,7 +178,7 @@ def get_aws_instance(type, id, clfn, descfn, topkey, key, filterid):
 def get_aws_security_group_rule(type, id, clfn, descfn, topkey, key, filterid):
 
     if context.debug:
-        print("--> In get_security_group_rule doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_security_group_rule doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -198,7 +200,7 @@ def get_aws_security_group_rule(type, id, clfn, descfn, topkey, key, filterid):
 
 
 
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
 
         
@@ -306,7 +308,7 @@ def get_aws_security_group_rule(type, id, clfn, descfn, topkey, key, filterid):
 def get_aws_eip(type, id, clfn, descfn, topkey, key, filterid):
 
     if context.debug:
-        print("--> In get_aws_eip doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_eip doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -318,7 +320,7 @@ def get_aws_eip(type, id, clfn, descfn, topkey, key, filterid):
             response = client.describe_addresses(AllocationIds=[id])
 
 
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response[topkey]:
             common.write_import(type,j[key],None) 
 
@@ -331,7 +333,7 @@ def get_aws_eip(type, id, clfn, descfn, topkey, key, filterid):
 def get_aws_eip_association(type, id, clfn, descfn, topkey, key, filterid):
 
     if context.debug:
-        print("--> In get_aws_eip_assocation doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_eip_assocation doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -343,7 +345,7 @@ def get_aws_eip_association(type, id, clfn, descfn, topkey, key, filterid):
             response = client.describe_addresses(AllocationIds=[id])
 
 
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response[topkey]:
             try:
                 asocid=j['AssociationId']
@@ -362,10 +364,10 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
     #              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         if context.debug:
-            print("--> In get_aws_route_table_association doing " + type + ' with id ' + str(id) +
+            log.debug("--> In get_aws_route_table_association doing " + type + ' with id ' + str(id) +
                   " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         if type in str(context.types):
-            print("Found "+type+"in types skipping ...")
+            log.info("Found "+type+"in types skipping ...")
             return
 
         response = []
@@ -390,7 +392,7 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
                 ]):
                     response.extend(page[topkey])
             else:
-                print("Error in get_aws_route_table_association unexpected id value")
+                log.info("Error in get_aws_route_table_association unexpected id value")
         else:
             for page in paginator.paginate():
                 response.extend(page[topkey])
@@ -449,7 +451,7 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
 
                      else:
                          pkey="aws_route_table_association"+"."+vpcid
-                         if context.debug: print("Setting " + pkey + "=True")
+                         if context.debug: log.debug("Setting " + pkey + "=True")
                          context.rproc[pkey] = True
 
             # set subnet true now ? as there's no assoc.
@@ -459,10 +461,10 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
                         context.rproc[ti] = True
                         #print("************** Setting " + ti + "=True")
         else:
-            print("No response for get_aws_route_table_association")
+            log.info("No response for get_aws_route_table_association")
             if id is not None:
                 pkey="aws_route_table_association"+"."+id
-                if context.debug: print("Setting " + pkey + "=True")
+                if context.debug: log.debug("Setting " + pkey + "=True")
                 context.rproc[pkey] = True
 
 
@@ -476,11 +478,11 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
 
 def get_aws_launch_template(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In get_aws_launch_template    doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_launch_template    doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     response = common.call_boto3(type,clfn, descfn, topkey, key, id)
     # print("-9a->"+str(response))
-    if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+    if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
     for j in response:
         retid = j['LaunchTemplateId']
@@ -491,7 +493,7 @@ def get_aws_launch_template(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In get_aws_vpc_ipv4_cidr_block_association doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_vpc_ipv4_cidr_block_association doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         #session = boto3.Session(region_name=context.region,profile_name=context.profile)
@@ -509,7 +511,7 @@ def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key,
         #response = common.call_boto3(type,clfn, descfn, topkey, key, id)    
         #print("-ip4->"+str(response))
         if response[topkey] == []: 
-            print("Empty response for "+type+ " id="+str(id)+" returning")
+            log.info("Empty response for "+type+ " id="+str(id)+" returning")
             if id is None:
                 return True
             else:
@@ -540,7 +542,7 @@ def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key,
 
 def get_aws_subnet_old(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In get_aws_subnet doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_subnet doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     response = common.call_boto3(type,clfn, descfn, topkey, key, id)
@@ -548,7 +550,7 @@ def get_aws_subnet_old(type, id, clfn, descfn, topkey, key, filterid):
     
     try:
         if response == []: 
-            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+            if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             if id is not None:
                 pkey = type+"."+id
                 context.rproc[pkey] = True
@@ -561,9 +563,9 @@ def get_aws_subnet_old(type, id, clfn, descfn, topkey, key, filterid):
                     if context.subnetlist[subid]:
                         common.write_import(type, j[key], None) 
                     else:
-                            print("WARNING: subnet not in subnetlist" + subid)
+                            log.warning("WARNING: subnet not in subnetlist" + subid)
                 except KeyError:
-                    print("WARNING: subnet not in subnetlist " + subid+ " Resource may be referencing a subnet that no longer exists")    
+                    log.warning("WARNING: subnet not in subnetlist " + subid+ " Resource may be referencing a subnet that no longer exists")    
         
         elif "subnet-" in id:
             for j in response:
@@ -574,9 +576,9 @@ def get_aws_subnet_old(type, id, clfn, descfn, topkey, key, filterid):
                     if context.subnetlist[subid]:
                         common.write_import(type, j[key], None)
                     else:
-                            print("WARNING: subnet not in subnetlist" + subid)
+                            log.warning("WARNING: subnet not in subnetlist" + subid)
                 except KeyError:
-                    print("WARNING: subnet not in subnetlist " + subid+ " Resource may be referencing a subnet that no longer exists")
+                    log.warning("WARNING: subnet not in subnetlist " + subid+ " Resource may be referencing a subnet that no longer exists")
 
 
         elif "vpc-" in id:
@@ -600,7 +602,7 @@ def get_aws_subnet_old(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_network_acl(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In get_aws_network_acl doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_network_acl doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
 ## vall boto3 with Filter default=false
@@ -637,7 +639,7 @@ def get_aws_network_acl(type, id, clfn, descfn, topkey, key, filterid):
                     ]):
                     response.extend(page[topkey])
             else:
-                print("Error in get_aws_route_table_association unexpected id value")
+                log.info("Error in get_aws_route_table_association unexpected id value")
         else:
             for page in paginator.paginate(Filters=[{'Name': 'default', 'Values': ['false']}]):
                 response.extend(page[topkey])
@@ -647,7 +649,7 @@ def get_aws_network_acl(type, id, clfn, descfn, topkey, key, filterid):
 ################################################################
 
 
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         if id is None:
             for j in response: common.write_import(type, j[key], None)     
@@ -667,7 +669,7 @@ def get_aws_network_acl(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_default_network_acl(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In get_aws_default_network_acl doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_default_network_acl doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
 ## vall boto3 with Filter default=false
@@ -702,7 +704,7 @@ def get_aws_default_network_acl(type, id, clfn, descfn, topkey, key, filterid):
                     ]):
                     response.extend(page[topkey])
             else:
-                print("Error in get_aws_route_table_association unexpected id value")
+                log.info("Error in get_aws_route_table_association unexpected id value")
         else:
             for page in paginator.paginate(Filters=[
                     {
@@ -712,7 +714,7 @@ def get_aws_default_network_acl(type, id, clfn, descfn, topkey, key, filterid):
                     ]):
                     response.extend(page[topkey])    
 
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         if id is None:
             for j in response: common.write_import(type, j[key], None)     
@@ -733,7 +735,7 @@ def get_aws_default_network_acl(type, id, clfn, descfn, topkey, key, filterid):
 def get_aws_key_pair(type, id, clfn, descfn, topkey, key, filterid):
 
     if context.debug:
-        print("--> In get_aws_key_pair  doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_key_pair  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -742,13 +744,13 @@ def get_aws_key_pair(type, id, clfn, descfn, topkey, key, filterid):
         client = boto3.client(clfn)
         if id is None:
             response = client.describe_key_pairs()
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 common.write_import(type,j[key],None) 
 
         else:            
             response = client.describe_key_pairs(KeyNames=[id])
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 common.write_import(type,j[key],None) 
 
@@ -759,7 +761,7 @@ def get_aws_key_pair(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_ebs_encryption_by_default(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -773,22 +775,22 @@ def get_aws_ebs_encryption_by_default(type, id, clfn, descfn, topkey, key, filte
 
 def get_aws_vpc_dhcp_options_association(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         if id is None:
-            print("WARNING: No id or invalid id provided for "+type)
+            log.warning("WARNING: No id or invalid id provided for "+type)
         else:
             if "|" in id:
                 vpcid=id.split("|")[1]
             elif id.startswith("vpc-"):
                 vpcid=id
             else:
-                print("WARNING: No id or invalid id provided for "+type)
+                log.warning("WARNING: No id or invalid id provided for "+type)
                 return True
             
-            print("vpcid="+vpcid)
+            log.info("vpcid="+vpcid)
             common.write_import(type,vpcid,None) 
 
     except Exception as e:
@@ -799,7 +801,7 @@ def get_aws_vpc_dhcp_options_association(type, id, clfn, descfn, topkey, key, fi
 
 def get_aws_route(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -808,18 +810,18 @@ def get_aws_route(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 routes=j['Routes']
-                print(str(routes))
+                log.info(str(routes))
                 common.write_import(type,j[key],None) 
 
         else:      
             response = client.describe_route_tables(RouteTableIds=[id])
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response[topkey]:
             routes=j['Routes']
-            print(str(routes))
+            log.info(str(routes))
             common.write_import(type,j[key],None)
 
     except Exception as e:
@@ -831,7 +833,7 @@ def get_aws_route(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_spot_datafeed_subscription(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -847,7 +849,7 @@ def get_aws_spot_datafeed_subscription(type, id, clfn, descfn, topkey, key, filt
 #aws_vpc_endpoint_route_table_association
 def get_aws_vpc_endpoint_route_table_association(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -856,7 +858,7 @@ def get_aws_vpc_endpoint_route_table_association(type, id, clfn, descfn, topkey,
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 endpid=j[key]
                 #print(str(j))
@@ -865,13 +867,13 @@ def get_aws_vpc_endpoint_route_table_association(type, id, clfn, descfn, topkey,
                         theid=endpid+"/"+k
                         common.write_import(type,theid,None) 
                 except KeyError:
-                    print("No route table ids for endpoint "+endpid)
+                    log.info("No route table ids for endpoint "+endpid)
                     continue
                 
 
         else:      
             response = client.describe_vpc_endpoints(VpcEndpointIds=[id])
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response[topkey]
             endpid=j[key]
             for k in j['RouteTableIds']:
@@ -887,7 +889,7 @@ def get_aws_vpc_endpoint_route_table_association(type, id, clfn, descfn, topkey,
 
 def get_aws_ec2_transit_gateway(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -896,7 +898,7 @@ def get_aws_ec2_transit_gateway(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 common.write_import(type,j[key],None) 
                 common.add_known_dependancy("aws_ec2_transit_gateway_vpc_attachment",j[key])
@@ -907,7 +909,7 @@ def get_aws_ec2_transit_gateway(type, id, clfn, descfn, topkey, key, filterid):
         else: 
             if id.startswith("tgw-"):     
                 response = client.describe_transit_gateways(TransitGatewayIds=[id,],)
-                if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if response[topkey] == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
                 for j in response[topkey]:
                     common.write_import(type,j[key],None)
                     common.add_known_dependancy("aws_ec2_transit_gateway_vpc_attachment",j[key])
@@ -917,7 +919,7 @@ def get_aws_ec2_transit_gateway(type, id, clfn, descfn, topkey, key, filterid):
 
 
             else:
-                print("WARNING: "+type+" id must start with tgw-")
+                log.warning("WARNING: "+type+" id must start with tgw-")
 
 
     except Exception as e:
@@ -928,7 +930,7 @@ def get_aws_ec2_transit_gateway(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_ec2_transit_gateway_vpc_attachment(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -937,25 +939,25 @@ def get_aws_ec2_transit_gateway_vpc_attachment(type, id, clfn, descfn, topkey, k
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 common.write_import(type,j[key],None) 
  
         else: 
             if id.startswith("tgw-"):     
                 response = client.describe_transit_gateway_vpc_attachments(Filters=[{'Name': 'transit-gateway-id','Values': [id]}])
-                if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if response[topkey] == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
                 for j in response[topkey]:
                     common.write_import(type,j[key],None)
               
             elif id.startswith("vpc-"):     
                 response = client.describe_transit_gateway_vpc_attachments(Filters=[{'Name': 'vpc-id','Values': [id]}])
-                if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if response[topkey] == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
                 for j in response[topkey]:
                     common.write_import(type,j[key],None)
 
             else:
-                print("WARNING: "+type+" id must start with tgw- or vpc-")
+                log.warning("WARNING: "+type+" id must start with tgw- or vpc-")
 
 
     except Exception as e:
@@ -966,7 +968,7 @@ def get_aws_ec2_transit_gateway_vpc_attachment(type, id, clfn, descfn, topkey, k
 
 def get_aws_ec2_transit_gateway_peering_attachment(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -975,18 +977,18 @@ def get_aws_ec2_transit_gateway_peering_attachment(type, id, clfn, descfn, topke
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 common.write_import(type,j[key],None) 
  
         else: 
             if id.startswith("tgw-"):     
                 response = client.describe_transit_gateway_peering_attachments(Filters=[{'Name': 'transit-gateway-id','Values': [id]}])
-                if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if response[topkey] == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
                 for j in response[topkey]:
                     common.write_import(type,j[key],None)           
             else:
-                print("WARNING: "+type+" id must start with tgw- or vpc-")
+                log.warning("WARNING: "+type+" id must start with tgw- or vpc-")
 
 
     except Exception as e:
@@ -996,7 +998,7 @@ def get_aws_ec2_transit_gateway_peering_attachment(type, id, clfn, descfn, topke
 
 def get_aws_ec2_transit_gateway_route_table(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -1005,7 +1007,7 @@ def get_aws_ec2_transit_gateway_route_table(type, id, clfn, descfn, topkey, key,
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 common.write_import(type,j[key],None) 
                 common.add_dependancy("aws_ec2_transit_gateway_route",j[key])
@@ -1013,12 +1015,12 @@ def get_aws_ec2_transit_gateway_route_table(type, id, clfn, descfn, topkey, key,
         else: 
             if id.startswith("tgw-"):     
                 response = client.describe_transit_gateway_route_tables(Filters=[{'Name': 'transit-gateway-id','Values': [id]}])
-                if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if response[topkey] == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
                 for j in response[topkey]:
                     common.write_import(type,j[key],None)   
                     common.add_dependancy("aws_ec2_transit_gateway_route",j[key])        
             else:
-                print("WARNING: "+type+" id must start with tgw- or vpc-")
+                log.warning("WARNING: "+type+" id must start with tgw- or vpc-")
 
 
     except Exception as e:
@@ -1029,19 +1031,19 @@ def get_aws_ec2_transit_gateway_route_table(type, id, clfn, descfn, topkey, key,
 
 def get_aws_ec2_transit_gateway_route(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         client = boto3.client(clfn)
         if id is None:
-            print("WARNING: "+type+" id must pass Transit gateway route table id")
+            log.warning("WARNING: "+type+" id must pass Transit gateway route table id")
  
         else: 
             if id.startswith("tgw-rtb-"):     
                 response = client.search_transit_gateway_routes(TransitGatewayRouteTableId=id,Filters=[{'Name': 'type','Values': ['static']}])
                 if response[topkey] == []: 
-                    if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                    if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                     pkey=type+"."+id
                     context.rproc[pkey]=True
                     return True
@@ -1049,7 +1051,7 @@ def get_aws_ec2_transit_gateway_route(type, id, clfn, descfn, topkey, key, filte
                     pkey=id+"_"+j[key]
                     common.write_import(type,pkey,id)           
             else:
-                print("WARNING: "+type+" id must start with tgw-rtb-")
+                log.warning("WARNING: "+type+" id must start with tgw-rtb-")
 
 
     except Exception as e:
@@ -1059,20 +1061,20 @@ def get_aws_ec2_transit_gateway_route(type, id, clfn, descfn, topkey, key, filte
 
 def get_aws_vpc_endpoint_service(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         client = boto3.client(clfn)
         if id is None:
             response = client.describe_vpc_endpoint_services(Filters=[{'Name': 'owner','Values': [context.acc]},],)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 common.write_import(type,j[key],None) 
 
         else:      
             response = client.describe_vpc_endpoint_services(ServiceNames=[id])
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
             common.write_import(type,j[key],None)
 
@@ -1083,7 +1085,7 @@ def get_aws_vpc_endpoint_service(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_ec2_transit_gateway_vpn_attachment(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -1096,7 +1098,7 @@ def get_aws_ec2_transit_gateway_vpn_attachment(type, id, clfn, descfn, topkey, k
                 ]):
                 response = response + page[topkey]
             #print(response)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 fn="data_"+type+"-"+j[key]+".tf"
                 if os.path.exists(fn): os.remove(fn)
@@ -1120,7 +1122,7 @@ def get_aws_ec2_transit_gateway_vpn_attachment(type, id, clfn, descfn, topkey, k
                     {'Name': 'resource-type','Values': ['vpn']},
                     {'Name': 'state','Values': ['available','pending','pendingAcceptance']}
                     ])
-                if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if response[topkey] == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
                 for j in response[topkey]:
                     fn="data_"+type+"-"+j[key]+".tf"
                     if os.path.exists(fn): os.remove(fn)
@@ -1143,7 +1145,7 @@ def get_aws_ec2_transit_gateway_vpn_attachment(type, id, clfn, descfn, topkey, k
                     {'Name': 'resource-type','Values': ['vpn']},
                     {'Name': 'state','Values': ['available','pending','pendingAcceptance']}
                     ])
-                if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if response[topkey] == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
                 for j in response[topkey]:
                     fn="data_"+type+"-"+j[key]+".tf"
                     if os.path.exists(fn): os.remove(fn)
@@ -1161,7 +1163,7 @@ def get_aws_ec2_transit_gateway_vpn_attachment(type, id, clfn, descfn, topkey, k
                
 
             else:
-                print("WARNING: "+type+" id must start with tgw- or vpc-")
+                log.warning("WARNING: "+type+" id must start with tgw- or vpc-")
 
 
     except Exception as e:
@@ -1173,7 +1175,7 @@ def get_aws_ec2_transit_gateway_vpn_attachment(type, id, clfn, descfn, topkey, k
 # get_aws_vpc_endpoint
 def get_aws_vpc_endpoint(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -1184,7 +1186,7 @@ def get_aws_vpc_endpoint(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type, j[key], None)
@@ -1193,7 +1195,7 @@ def get_aws_vpc_endpoint(type, id, clfn, descfn, topkey, key, filterid):
             pkey=type+"."+id
             response = client.describe_vpc_endpoints(Filters=[{'Name': 'vpc-id','Values': [id]},])
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 context.rproc[pkey]=True
                 return True
             for j in response[topkey]:
@@ -1205,7 +1207,7 @@ def get_aws_vpc_endpoint(type, id, clfn, descfn, topkey, key, filterid):
             pkey=type+"."+id
             response = client.describe_vpc_endpoints(VpcEndpointIds=[id])
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 context.rproc[pkey]=True
                 return True
             for j in response[topkey]:
@@ -1213,7 +1215,7 @@ def get_aws_vpc_endpoint(type, id, clfn, descfn, topkey, key, filterid):
             context.rproc[pkey]=True
 
         else:
-            print("WARNING: "+type+" id unexpected = "+ str(id))
+            log.warning("WARNING: "+type+" id unexpected = "+ str(id))
 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
@@ -1223,7 +1225,7 @@ def get_aws_vpc_endpoint(type, id, clfn, descfn, topkey, key, filterid):
 #  aws_vpc_peering_connection
 def get_aws_vpc_peering_connection(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -1233,7 +1235,7 @@ def get_aws_vpc_peering_connection(type, id, clfn, descfn, topkey, key, filterid
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []:
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type, j[key], None)
@@ -1241,7 +1243,7 @@ def get_aws_vpc_peering_connection(type, id, clfn, descfn, topkey, key, filterid
         elif id.startswith("pcx-"):
             response = client.describe_vpc_peering_connections(VpcPeeringConnectionIds=[id])
             if response == []:
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]:
                 common.write_import(type, j[key], None)
@@ -1249,13 +1251,13 @@ def get_aws_vpc_peering_connection(type, id, clfn, descfn, topkey, key, filterid
         elif id.startswith("vpc-"):
             response = client.describe_vpc_peering_connections(Filters=[{'Name': 'requester-vpc-info.vpc-id', 'Values': [id]}, ])
             if response == []:
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]:
                 common.write_import(type, j[key], None)
 
         else:
-            print("WARNING: "+type+" id unexpected = "+ str(id))
+            log.warning("WARNING: "+type+" id unexpected = "+ str(id))
 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
@@ -1265,19 +1267,19 @@ def get_aws_vpc_peering_connection(type, id, clfn, descfn, topkey, key, filterid
 # aws_network_interface
 def get_aws_network_interface(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         client = boto3.client(clfn)
         if id is None:
-            print("WARNING: "+type+" id is None - must pass eni-xxxxxxxxxx as paramter returning")
+            log.warning("WARNING: "+type+" id is None - must pass eni-xxxxxxxxxx as paramter returning")
             return True
 
         if id.startswith("eni-"):
             response = client.describe_network_interfaces(NetworkInterfaceIds=[id])
             if response == []:
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]:
                 common.write_import(type, j[key], None)

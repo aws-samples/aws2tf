@@ -1,11 +1,13 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
 
 def get_aws_bedrockagent_agent(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -15,7 +17,7 @@ def get_aws_bedrockagent_agent(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.info("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             #print(str(response))
             for j in response:
@@ -33,7 +35,7 @@ def get_aws_bedrockagent_agent(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.get_agent(agentId=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.info("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response['agent']
             aid=j['agentId']
@@ -56,7 +58,7 @@ def get_aws_bedrockagent_agent(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_bedrockagent_knowledge_base(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -66,7 +68,7 @@ def get_aws_bedrockagent_knowledge_base(type, id, clfn, descfn, topkey, key, fil
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.info("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type,j[key],"r-"+j[key]) 
@@ -74,7 +76,7 @@ def get_aws_bedrockagent_knowledge_base(type, id, clfn, descfn, topkey, key, fil
         else:      
             response = client.get_knowledge_base(knowledgeBaseId=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.info("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response['knowledgeBase']
             common.write_import(type,j[key],"r-"+j[key])
@@ -88,13 +90,13 @@ def get_aws_bedrockagent_knowledge_base(type, id, clfn, descfn, topkey, key, fil
 #aws_bedrockagent_agent_knowledge_base_association
 def get_aws_bedrockagent_agent_knowledge_base_association(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         client = boto3.client(clfn)
         if id is None:
-            print("ERROR: id is None with type="+type)
+            log.info("ERROR: id is None with type="+type)
             return True
 
         else:
@@ -103,7 +105,7 @@ def get_aws_bedrockagent_agent_knowledge_base_association(type, id, clfn, descfn
                 pkey=type+"."+id
                 response = client.list_agent_knowledge_bases(agentId=aid, agentVersion=vid)
                 if response == []: 
-                    if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                    if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                     context.rproc[pkey] = True
                     return True
                 for j in response['agentKnowledgeBaseSummaries']:
@@ -113,7 +115,7 @@ def get_aws_bedrockagent_agent_knowledge_base_association(type, id, clfn, descfn
                     common.add_dependancy("aws_bedrockagent_knowledge_base", kid)
                 context.rproc[pkey] = True
             else:
-                print("ERROR: with id - expected agentid,versionid got",id)
+                log.info("ERROR: with id - expected agentid,versionid got",id)
 
 
     except Exception as e:
@@ -124,20 +126,20 @@ def get_aws_bedrockagent_agent_knowledge_base_association(type, id, clfn, descfn
 #aws_bedrockagent_data_source
 def get_aws_bedrockagent_data_source(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         client = boto3.client(clfn)
         if id is None:
-            print("ERROR: id is None with type="+type)
+            log.info("ERROR: id is None with type="+type)
             return True
 
         else:
             pkey=type+"."+id
             response = client.list_data_sources(knowledgeBaseId=id)
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 context.rproc[pkey] = True
                 return True
             for j in response[topkey]:
@@ -152,20 +154,20 @@ def get_aws_bedrockagent_data_source(type, id, clfn, descfn, topkey, key, filter
 
 def get_aws_bedrockagent_agent_alias(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         client = boto3.client(clfn)
         if id is None:
-            print("ERROR: id is None with type="+type)
+            log.info("ERROR: id is None with type="+type)
             return True
 
         else:
             pkey=type+"."+id
             response = client.list_agent_aliases(agentId=id)
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 context.rproc[pkey] = True
                 return True
             for j in response[topkey]:
@@ -181,13 +183,13 @@ def get_aws_bedrockagent_agent_alias(type, id, clfn, descfn, topkey, key, filter
 
 def get_aws_bedrockagent_agent_action_group(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         client = boto3.client(clfn)
         if id is None:
-            print("ERROR: id is None with type="+type)
+            log.info("ERROR: id is None with type="+type)
             return True
 
         else:
@@ -196,7 +198,7 @@ def get_aws_bedrockagent_agent_action_group(type, id, clfn, descfn, topkey, key,
                 pkey=type+"."+id
                 response = client.list_agent_action_groups(agentId=aid,agentVersion=vid)
                 if response == []: 
-                    if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                    if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                     context.rproc[pkey] = True
                     return True
                 for j in response['actionGroupSummaries']:
@@ -205,7 +207,7 @@ def get_aws_bedrockagent_agent_action_group(type, id, clfn, descfn, topkey, key,
                     common.write_import(type, theid, None)
                 context.rproc[pkey] = True
             else:
-                print("ERROR: with id - expected agentid,versionid got",id)
+                log.info("ERROR: with id - expected agentid,versionid got",id)
 
 
     except Exception as e:

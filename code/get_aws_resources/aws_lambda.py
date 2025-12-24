@@ -1,4 +1,6 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import requests
 import context
@@ -11,7 +13,7 @@ from botocore.exceptions import ClientError
 
 def get_aws_lambda_layer(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -21,7 +23,7 @@ def get_aws_lambda_layer(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page['Layers']
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type,j['LayerArn'],None) 
@@ -31,7 +33,7 @@ def get_aws_lambda_layer(type, id, clfn, descfn, topkey, key, filterid):
                 id=id.split(":")[6]  
             response = client.list_layer_versions(LayerName=id)
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]:
                 common.write_import(type,j[key],None) 
@@ -44,14 +46,14 @@ def get_aws_lambda_layer(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_lambda_layer_version(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         client = boto3.client(clfn)
         tarn=""
         if id is None:
-            print("WARNING: Must pass LayerName/ARN as parameter")
+            log.warning("WARNING: Must pass LayerName/ARN as parameter")
         
         else:    
             if id.startswith("arn:"):
@@ -66,8 +68,8 @@ def get_aws_lambda_layer_version(type, id, clfn, descfn, topkey, key, filterid):
                     response = client.list_layer_versions(LayerName=myarn)
                 except botocore.exceptions.ClientError as e:
 
-                    print("\nERROR: Lambda function is referencing Lambda Layer - "+ myarn+ " which does not exist")
-                    print("ERROR: This will cause problems later on and should be addressed\n")
+                    log.info("\nERROR: Lambda function is referencing Lambda Layer - "+ myarn+ " which does not exist")
+                    log.info("ERROR: This will cause problems later on and should be addressed\n")
                     #print("ClientError "+str(e))
                     exc_type, exc_obj, exc_tb = sys.exc_info()
                     exn=str(exc_type.__name__)
@@ -81,8 +83,8 @@ def get_aws_lambda_layer_version(type, id, clfn, descfn, topkey, key, filterid):
                 #print(str(response))
                 #print(str(response[topkey]))
                 if response[topkey] == []: 
-                    if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
-                    print("Empty response for "+type+ " id="+str(id)+" returning") 
+                    if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
+                    log.info("Empty response for "+type+ " id="+str(id)+" returning") 
                     pkey=type+"."+id
                     context.rproc[pkey]=True
                     return True
@@ -102,7 +104,7 @@ def get_aws_lambda_layer_version(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -144,7 +146,7 @@ def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
 
 
             except KeyError:
-                    print("WARNING: function not in lambda list " + id+ " Resource may be referencing a lambda that no longer exists") 
+                    log.warning("WARNING: function not in lambda list " + id+ " Resource may be referencing a lambda that no longer exists") 
                     pkey=type+"."+id
                     context.rproc[pkey]=True
 
@@ -159,7 +161,7 @@ def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_lambda_function_old(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -170,7 +172,7 @@ def get_aws_lambda_function_old(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response:
                 fn=j[key]
@@ -195,7 +197,7 @@ def get_aws_lambda_function_old(type, id, clfn, descfn, topkey, key, filterid):
 
             response = client.get_function(FunctionName=id)
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             j=response['Configuration']
             #print(str(j)+"/n")
@@ -263,7 +265,7 @@ def get_lambdalayer_code(fn):
 
 def get_aws_lambda_alias(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In get_aws_lambda_alias doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_lambda_alias doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     response = common.call_boto3(type,clfn, descfn, topkey, key, id)
@@ -271,7 +273,7 @@ def get_aws_lambda_alias(type, id, clfn, descfn, topkey, key, filterid):
     
     try:
         if response == []: 
-            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+            if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
             return True
         
         for j in response: 
@@ -289,23 +291,23 @@ def get_aws_lambda_alias(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_lambda_permission(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In get_aws_lambda_permission doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_lambda_permission doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         # this one no paginate
 
         client = boto3.client(clfn) 
-        if context.debug: print("client")
+        if context.debug: log.debug("client")
         getfn = getattr(client, descfn)
         try:
             response1 = getfn(FunctionName=id)
             response=response1[topkey]
         except client.exceptions.ResourceNotFoundException:
-            if context.debug: print("WARNING: ResourceNotFoundException for "+type+ " "+str(id)+" returning")
+            if context.debug: log.warning("WARNING: ResourceNotFoundException for "+type+ " "+str(id)+" returning")
             return True
 
         if response == []: 
-            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+            if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
             return True
 
         
@@ -325,20 +327,20 @@ def get_aws_lambda_permission(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_lambda_function_event_invoke_config(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In get_aws_lambda_function_event_invoke_config doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_lambda_function_event_invoke_config doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     try:
         # this one no paginate
 
         client = boto3.client(clfn) 
-        if context.debug: print("client")
+        if context.debug: log.debug("client")
         getfn = getattr(client, descfn)
         response1 = getfn(FunctionName=id)
         response=response1[topkey]
 
         if response == []: 
-            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+            if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
             return True
         
         for j in response: 
@@ -357,7 +359,7 @@ def get_aws_lambda_function_event_invoke_config(type, id, clfn, descfn, topkey, 
 
 def get_aws_lambda_event_source_mapping(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In get_aws_lambda_event_source_mapping doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_lambda_event_source_mapping doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     #response = common.call_boto3(type,clfn, descfn, topkey, key, id)
@@ -366,13 +368,13 @@ def get_aws_lambda_event_source_mapping(type, id, clfn, descfn, topkey, key, fil
         # this one no paginate
 
         client = boto3.client(clfn) 
-        if context.debug: print("client")
+        if context.debug: log.debug("client")
         getfn = getattr(client, descfn)
         response1 = getfn(FunctionName=id)
         response=response1[topkey]
 
         if response == []:
-            if context.debug: print("Empty response for "+type+ " "+str(id)+" returning")
+            if context.debug: log.debug("Empty response for "+type+ " "+str(id)+" returning")
             return True
         
         for j in response: 
@@ -391,7 +393,7 @@ def get_aws_lambda_event_source_mapping(type, id, clfn, descfn, topkey, key, fil
 
 def get_aws_lambda_layer_version_permission(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In get_aws_lambda_layer_version_permission 1 doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_lambda_layer_version_permission 1 doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     #print("-9a->"+str(response))
@@ -399,17 +401,17 @@ def get_aws_lambda_layer_version_permission(type, id, clfn, descfn, topkey, key,
         # this one no paginate
 
         client = boto3.client(clfn) 
-        if context.debug: print("client")
+        if context.debug: log.debug("client")
         getfn = getattr(client, descfn)
         try:
             response1 = getfn(LayerName=id)
             response=response1[topkey]
         except client.exceptions.ResourceNotFoundException:
-            if context.debug: print("WARNING: ResourceNotFoundException for "+type+ " "+str(id)+" returning")
+            if context.debug: log.warning("WARNING: ResourceNotFoundException for "+type+ " "+str(id)+" returning")
             return True
 
         if response == []: 
-            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+            if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
             return True
 
         

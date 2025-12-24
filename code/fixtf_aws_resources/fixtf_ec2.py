@@ -1,5 +1,7 @@
 import common
 import fixtf
+import logging
+log = logging.getLogger('aws2tf')
 import base64
 import boto3
 import context
@@ -230,7 +232,7 @@ def aws_ec2_transit_gateway_peering_attachment(t1,tt1,tt2,flag1,flag2):
 	if tt1 == "peer_account_id":
 		if context.acc in tt2: flag1=True
 	if tt1=="peer_transit_gateway_id" and tt2 != "null":
-		print(str(flag1))
+		log.debug(str(flag1))
 		if flag1:
 			t1=tt1 + " = aws_ec2_transit_gateway." + tt2 + ".id\n"
 			common.add_dependancy("aws_ec2_transit_gateway", tt2)
@@ -698,7 +700,7 @@ def aws_subnet(t1,tt1,tt2,flag1,flag2):
 					vpcid=j['VpcId']
 					t1=tt1 + " = cidrsubnet(aws_vpc." + vpcid + ".ipv6_cidr_block, 8, "+str(nb)+")\n"
 		except Exception as e:
-			print("ERROR in ipv6_cidr_block, fix aws_subnet: "+str(e))
+			log.error("ERROR in ipv6_cidr_block, fix aws_subnet: "+str(e))
 
 	return skip,t1,flag1,flag2
 

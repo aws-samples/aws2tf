@@ -1,4 +1,6 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
@@ -7,7 +9,7 @@ import sys
 
 def get_aws_emr_cluster(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -17,7 +19,7 @@ def get_aws_emr_cluster(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []:
-                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             for j in response:
                 if "TERMINATED" not in j['Status']['State']:
@@ -33,7 +35,7 @@ def get_aws_emr_cluster(type, id, clfn, descfn, topkey, key, filterid):
         else:
             response = client.describe_cluster(ClusterId=id)
             if response == []:
-                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             j = response['Cluster']
             # print(str(j))
@@ -56,7 +58,7 @@ def get_aws_emr_cluster(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_emr_security_configuration(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -66,7 +68,7 @@ def get_aws_emr_security_configuration(type, id, clfn, descfn, topkey, key, filt
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []:
-                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type, j[key], None)
@@ -74,7 +76,7 @@ def get_aws_emr_security_configuration(type, id, clfn, descfn, topkey, key, filt
         else:
             response = client.describe_security_configuration(Name=id)
             if response == []:
-                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             j = response
             # print(str(j))
@@ -90,19 +92,19 @@ def get_aws_emr_security_configuration(type, id, clfn, descfn, topkey, key, filt
 # aws_emr_instance_group
 def get_aws_emr_instance_group(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         client = boto3.client(clfn)
         if id is None:
-            print("WARNING: Muse pass cluster is as parameter returning")
+            log.warning("WARNING: Muse pass cluster is as parameter returning")
             return True
         else:
             try:
                 response = client.list_instance_groups(ClusterId=id)
                 if response == []:
-                    if context.debug: print("Empty response for "+type +
+                    if context.debug: log.debug("Empty response for "+type +
                           " id="+str(id)+" returning")
                     pkey = type+"."+id
                     context.rproc[pkey] = True
@@ -115,7 +117,7 @@ def get_aws_emr_instance_group(type, id, clfn, descfn, topkey, key, filterid):
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 exn = str(exc_type.__name__)
                 if exn == "InvalidRequestException":
-                    if context.debug: print("Empty response for "+type +
+                    if context.debug: log.debug("Empty response for "+type +
                           " id="+str(id)+" returning")
                     pkey = type+"."+id
                     context.rproc[pkey] = True
@@ -135,19 +137,19 @@ def get_aws_emr_instance_group(type, id, clfn, descfn, topkey, key, filterid):
 # aws_emr_instance_group
 def get_aws_emr_instance_fleet(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         client = boto3.client(clfn)
         if id is None:
-            print("WARNING: Muse pass cluster is as parameter returning")
+            log.warning("WARNING: Muse pass cluster is as parameter returning")
             return True
         else:
             try:
                 response = client.list_instance_fleets(ClusterId=id)
                 if response == []:
-                    if context.debug: print("Empty response for "+type +
+                    if context.debug: log.debug("Empty response for "+type +
                           " id="+str(id)+" returning")
                     pkey = type+"."+id
                     context.rproc[pkey] = True
@@ -160,7 +162,7 @@ def get_aws_emr_instance_fleet(type, id, clfn, descfn, topkey, key, filterid):
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 exn = str(exc_type.__name__)
                 if exn == "InvalidRequestException":
-                    if context.debug: print("Empty response for "+type +
+                    if context.debug: log.debug("Empty response for "+type +
                           " id="+str(id)+" returning")
                     pkey = type+"."+id
                     context.rproc[pkey] = True
@@ -183,14 +185,14 @@ def get_aws_emr_instance_fleet(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_emr_managed_scaling_policy(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         
         client = boto3.client(clfn)
         if id is None:
-            print("WARNING: Must pass cluster is as parameter returning")
+            log.warning("WARNING: Must pass cluster is as parameter returning")
             return True
 
         else:
@@ -199,7 +201,7 @@ def get_aws_emr_managed_scaling_policy(type, id, clfn, descfn, topkey, key, filt
             try:
                 j = response['ManagedScalingPolicy']
             except KeyError as e:
-                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                 context.rproc[pkey] = True
                 return True
             common.write_import(type, id, None)
@@ -214,7 +216,7 @@ def get_aws_emr_managed_scaling_policy(type, id, clfn, descfn, topkey, key, filt
 
 def get_aws_emr_block_public_access_configuration(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         id = "current"
@@ -226,7 +228,7 @@ def get_aws_emr_block_public_access_configuration(type, id, clfn, descfn, topkey
         try:
                 j = response['BlockPublicAccessConfiguration']
         except KeyError as e:
-                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                 context.rproc[pkey] = True
                 return True
         common.write_import(type, id, None)

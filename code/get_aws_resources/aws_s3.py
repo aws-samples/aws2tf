@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import common
 import context
@@ -30,16 +32,16 @@ def check_access(bucket_name,my_region):
 
    
    except NoCredentialsError as e:
-        print(f"CREDENTIAL ERROR: Unable to locate credentials for SSO session")
-        print("Please ensure you have an active SSO session (run 'aws sso login')")
-        print(f"Error details: {e}")
+        log.info(f"CREDENTIAL ERROR: Unable to locate credentials for SSO session")
+        log.info("Please ensure you have an active SSO session (run 'aws sso login')")
+        log.info(f"Error details: {e}")
         context.bucketlist[bucket_name] = False
         return False
 
    except ClientError as e:
       error_code = e.response['Error']['Code']
       if error_code == 'AccessDenied':
-            print(f"NO ACCESS (1): to Bucket: {bucket_name} - continue")
+            log.info(f"NO ACCESS (1): to Bucket: {bucket_name} - continue")
             context.bucketlist[bucket_name] = False
             context.s3list[bucket_name] = False
             pkey="aws_s3_bucket."+bucket_name
@@ -47,16 +49,16 @@ def check_access(bucket_name,my_region):
             return False
         
       elif error_code == 'ExpiredToken':
-            print(f"TOKEN EXPIRED: Your AWS session token has expired")
-            print("Please renew your session (run 'aws sso login')")
+            log.info(f"TOKEN EXPIRED: Your AWS session token has expired")
+            log.info("Please renew your session (run 'aws sso login')")
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             exn=str(exc_type.__name__)
-            print((f"{fname=} {exc_tb.tb_lineno=} \n"))
+            log.info((f"{fname=} {exc_tb.tb_lineno=} \n"))
             context.bucketlist[bucket_name] = False
             return False
       else:
-            print(f"AWS Error: {error_code} - {e}")
+            log.info(f"AWS Error: {error_code} - {e}")
             context.bucketlist[bucket_name] = False
             return False
 
@@ -65,16 +67,16 @@ def check_access(bucket_name,my_region):
          exn=str(exc_type.__name__)
          #print(f"{exn=}")
          if exn == "AccessDenied" or exn=="ClientError":
-            print("NO ACCESS (2): to Bucket: "+bucket_name + " - continue")
+            log.info("NO ACCESS (2): to Bucket: "+bucket_name + " - continue")
             context.bucketlist[bucket_name]=False
             return
          
-         print(f"{e=}")
-         print("ERROR: -2->unexpected error in get_all_s3_buckets")
+         log.info(f"{e=}")
+         log.info("ERROR: -2->unexpected error in get_all_s3_buckets")
          
          fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-         print(exc_type, fname, exc_tb.tb_lineno)
-         print('continuing on exception .......')
+         log.info(exc_type, fname, exc_tb.tb_lineno)
+         log.info('continuing on exception .......')
          return
    return
 
@@ -84,18 +86,18 @@ def get_all_s3_buckets(fb,my_region):
    type="aws_s3_bucket"
    if fb is not None:
       if fb =="" or fb =="null":
-         print("bucket name is empty or null")
+         log.info("bucket name is empty or null")
          pkey=type+"."+fb
          context.rproc[pkey]=True
          return True
       
       if fb not in str(context.s3list.keys()):
-            print("Bucket ",fb, "not in s3list")
+            log.info("Bucket ",fb, "not in s3list")
             pkey=type+"."+fb
             context.rproc[pkey]=True
             return True
    
-   if context.debug: print("my_region="+my_region)
+   if context.debug: log.debug("my_region="+my_region)
    #print("processed=" + str(context.rproc))
    """Gets all the AWS S3 buckets and saves them to a file."""
    boto3.setup_default_session(region_name=my_region)
@@ -155,10 +157,10 @@ def get_all_s3_buckets(fb,my_region):
             
             if "aws_s3_bucket."+bucket_name in str(context.rproc):
                if context.rproc["aws_s3_bucket."+bucket_name] is True:
-                  print("Already processed skipping bucket " + bucket_name + " (MT)")
+                  log.info("Already processed skipping bucket " + bucket_name + " (MT)")
                   continue
                
-            print("Processing Bucket (MT): "+bucket_name + ' ...')
+            log.info("Processing Bucket (MT): "+bucket_name + ' ...')
             common.write_import(type,bucket_name,"b-"+bucket_name)
             common.add_dependancy("aws_s3_access_point",bucket_name)
             pkey=type+"."+bucket_name
@@ -189,7 +191,7 @@ def get_all_s3_buckets(fb,my_region):
       
          #bucket_name=buck.name
          if "aws_s3_bucket,"+bucket_name in context.rproc:
-            print("Already processed skipping bucket " + bucket_name+ " (ST)")
+            log.info("Already processed skipping bucket " + bucket_name+ " (ST)")
             os._exit(1)
             continue
          # jump if bucket name does not match
@@ -207,23 +209,23 @@ def get_all_s3_buckets(fb,my_region):
                exn=str(exc_type.__name__)
                #print(f"{exn=}")
                if exn == "AccessDenied" or exn=="ClientError":
-                  print("NO ACCESS (3): to Bucket: "+bucket_name + " - continue")
+                  log.info("NO ACCESS (3): to Bucket: "+bucket_name + " - continue")
                   continue
                
-               print(f"{e=}")
-               print("ERROR: -2->unexpected error in get_all_s3_buckets")
+               log.info(f"{e=}")
+               log.info("ERROR: -2->unexpected error in get_all_s3_buckets")
                
                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-               print(exc_type, fname, exc_tb.tb_lineno)
-               print('continuing on exception to location .......')
+               log.info(exc_type, fname, exc_tb.tb_lineno)
+               log.info('continuing on exception to location .......')
                continue
 
          if "aws_s3_bucket."+bucket_name in str(context.rproc):
                if context.rproc["aws_s3_bucket."+bucket_name] is True:
-                  print("Already processed skipping bucket " + bucket_name + " (MT)")
+                  log.info("Already processed skipping bucket " + bucket_name + " (MT)")
                   continue
 
-         print("Processing Bucket (ST): "+bucket_name + ' ...')
+         log.info("Processing Bucket (ST): "+bucket_name + ' ...')
          common.write_import(type,bucket_name,"b-"+bucket_name)
          common.add_dependancy("aws_s3_access_point",bucket_name)
          pkey=type+"."+bucket_name
@@ -241,7 +243,7 @@ def get_all_s3_buckets(fb,my_region):
 def get_s3(s3_fields,type,bucket_name):
    try:
       if context.debug: 
-         print("get_s3 type=" + type)
+         log.debug("get_s3 type=" + type)
       response=s3_fields[type](Bucket=bucket_name)
       if type=="aws_s3_bucket_replication_configuration": 
          try:
@@ -258,7 +260,7 @@ def get_s3(s3_fields,type,bucket_name):
 
 
    except:
-      if context.debug: print("No " + type + " config for bucket " + bucket_name)
+      if context.debug: log.debug("No " + type + " config for bucket " + bucket_name)
       pass
 
 

@@ -1,4 +1,6 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
@@ -7,7 +9,7 @@ import sys
 
 def get_aws_connect_instance(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -17,7 +19,7 @@ def get_aws_connect_instance(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []:
-                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type, j[key], "r-"+j[key])
@@ -36,7 +38,7 @@ def get_aws_connect_instance(type, id, clfn, descfn, topkey, key, filterid):
         else:
             response = client.describe_instance(InstanceId=id)
             if response == []:
-                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             j = response['Instance']
             common.write_import(type, j[key], "r-"+j[key])
@@ -61,12 +63,12 @@ def get_aws_connect_instance(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_connect_instance_storage_config(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         if id is None:
-            print("Must pass instanceid for "+type)
+            log.info("Must pass instanceid for "+type)
             return True
         else:
             client = boto3.client(clfn)
@@ -80,7 +82,7 @@ def get_aws_connect_instance_storage_config(type, id, clfn, descfn, topkey, key,
                 for page in paginator.paginate(InstanceId=id, ResourceType=rt):
                     response = response + page[topkey]
                 if response == []:
-                    if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                    if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                     context.rproc[pkey] = True
                     return True
                 for j in response:
@@ -100,13 +102,13 @@ def get_aws_connect_instance_storage_config(type, id, clfn, descfn, topkey, key,
 
 def get_aws_connect_phone_number(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
 
         if id is None:
-            print("Must pass instanceid for "+type)
+            log.info("Must pass instanceid for "+type)
             return True
 
         else:
@@ -117,7 +119,7 @@ def get_aws_connect_phone_number(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(InstanceId=id):
                 response = response + page[topkey]
             if response == []:
-                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                 context.rproc[pkey] = True
                 return True
             for j in response:
@@ -135,13 +137,13 @@ def get_aws_connect_phone_number(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_connect_hours_of_operation(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
 
         if id is None:
-            print("Must pass instanceid for "+type)
+            log.info("Must pass instanceid for "+type)
             return True
 
         else:
@@ -152,7 +154,7 @@ def get_aws_connect_hours_of_operation(type, id, clfn, descfn, topkey, key, filt
             for page in paginator.paginate(InstanceId=id):
                 response = response + page[topkey]
             if response == []:
-                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                 context.rproc[pkey] = True
                 return True
             for j in response:
@@ -171,13 +173,13 @@ def get_aws_connect_hours_of_operation(type, id, clfn, descfn, topkey, key, filt
 # aws_connect_contact_flow
 def get_aws_connect_contact_flow(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
 
         if id is None:
-            print("Must pass instanceid for "+type)
+            log.info("Must pass instanceid for "+type)
             return True
 
         else:
@@ -188,7 +190,7 @@ def get_aws_connect_contact_flow(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(InstanceId=id):
                 response = response + page[topkey]
             if response == []:
-                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                 context.rproc[pkey] = True
                 return True
             for j in response:
@@ -205,13 +207,13 @@ def get_aws_connect_contact_flow(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_connect_queue(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
 
         if id is None:
-            print("Must pass instanceid for "+type)
+            log.info("Must pass instanceid for "+type)
             return True
 
         else:
@@ -221,7 +223,7 @@ def get_aws_connect_queue(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(InstanceId=id,QueueTypes=['STANDARD']):
                 response = response + page[topkey]
             if response == []:
-                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                 context.rproc[pkey] = True
                 return True
             for j in response:
@@ -242,13 +244,13 @@ def get_aws_connect_queue(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_connect_routing_profile(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
 
         if id is None:
-            print("Must pass instanceid for "+type)
+            log.info("Must pass instanceid for "+type)
             return True
 
         else:
@@ -258,7 +260,7 @@ def get_aws_connect_routing_profile(type, id, clfn, descfn, topkey, key, filteri
             for page in paginator.paginate(InstanceId=id):
                 response = response + page[topkey]
             if response == []:
-                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                 context.rproc[pkey] = True
                 return True
             for j in response:
@@ -278,13 +280,13 @@ def get_aws_connect_routing_profile(type, id, clfn, descfn, topkey, key, filteri
 #aws_connect_security_profile
 def get_aws_connect_security_profile(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
 
         if id is None:
-            print("Must pass instanceid for "+type)
+            log.info("Must pass instanceid for "+type)
             return True
 
         else:
@@ -294,7 +296,7 @@ def get_aws_connect_security_profile(type, id, clfn, descfn, topkey, key, filter
             for page in paginator.paginate(InstanceId=id):
                 response = response + page[topkey]
             if response == []:
-                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                 context.rproc[pkey] = True
                 return True
             for j in response:
@@ -311,13 +313,13 @@ def get_aws_connect_security_profile(type, id, clfn, descfn, topkey, key, filter
 #aws_connect_user
 def get_aws_connect_user(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
 
         if id is None:
-            print("Must pass instanceid for "+type)
+            log.info("Must pass instanceid for "+type)
             return True
 
         else:
@@ -327,7 +329,7 @@ def get_aws_connect_user(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(InstanceId=id):
                 response = response + page[topkey]
             if response == []:
-                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                 context.rproc[pkey] = True
                 return True
             for j in response:
@@ -347,13 +349,13 @@ def get_aws_connect_user(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_connect_vocabulary(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
 
         if id is None:
-            print("Must pass instanceid for "+type)
+            log.info("Must pass instanceid for "+type)
             return True
 
         else:
@@ -364,7 +366,7 @@ def get_aws_connect_vocabulary(type, id, clfn, descfn, topkey, key, filterid):
                 for page in paginator.paginate(InstanceId=id,State='ACTIVE'):
                     response = response + page[topkey]
                 if response == []:
-                    if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                    if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                     context.rproc[pkey] = True
                     return True
                 for j in response:
@@ -395,13 +397,13 @@ def get_aws_connect_vocabulary(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_connect_bot_association(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
 
         if id is None:
-            print("Must pass instanceid for "+type)
+            log.info("Must pass instanceid for "+type)
             return True
 
         else:
@@ -413,7 +415,7 @@ def get_aws_connect_bot_association(type, id, clfn, descfn, topkey, key, filteri
                 response = response + page[topkey]
           
             if response == []:
-                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                 context.rproc[pkey] = True
                 return True
             for j in response:
@@ -434,13 +436,13 @@ def get_aws_connect_bot_association(type, id, clfn, descfn, topkey, key, filteri
 # aws_connect_lambda_function_association
 def get_aws_connect_lambda_function_association(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
 
         if id is None:
-            print("Must pass instanceid for "+type)
+            log.info("Must pass instanceid for "+type)
             return True
 
         else:
@@ -450,7 +452,7 @@ def get_aws_connect_lambda_function_association(type, id, clfn, descfn, topkey, 
             for page in paginator.paginate(InstanceId=id):
                 response = response + page[topkey]
             if response == []:
-                if context.debug: print("Empty response for "+type + " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                 context.rproc[pkey] = True
                 return True
             

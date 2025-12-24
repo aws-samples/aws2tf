@@ -1,4 +1,6 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
@@ -7,7 +9,7 @@ import inspect
 def get_aws_appmesh_virtual_service(type, id, clfn, descfn, topkey, key, filterid):
 
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -16,7 +18,7 @@ def get_aws_appmesh_virtual_service(type, id, clfn, descfn, topkey, key, filteri
         if id is None:
             response = client.list_virtual_services()
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response[topkey]:
                 pkey=j['meshName']+"/"+j['virtualServiceName']
@@ -27,7 +29,7 @@ def get_aws_appmesh_virtual_service(type, id, clfn, descfn, topkey, key, filteri
         else:          
             response = client.list_virtual_services(meshName=id)
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]:
                 pkey=j['meshName']+"/"+j['virtualServiceName']
@@ -44,7 +46,7 @@ def get_aws_appmesh_virtual_service(type, id, clfn, descfn, topkey, key, filteri
 def get_aws_appmesh_virtual_router(type, id, clfn, descfn, topkey, key, filterid):
 
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -54,7 +56,7 @@ def get_aws_appmesh_virtual_router(type, id, clfn, descfn, topkey, key, filterid
         if id is None:
             response = client.list_virtual_routers()
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]:
                 pkey=j['meshName']+"/"+j['virtualRouterName']
@@ -65,7 +67,7 @@ def get_aws_appmesh_virtual_router(type, id, clfn, descfn, topkey, key, filterid
         else:      
             response = client.list_virtual_routers(meshName=id)
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]:
                 pkey=j['meshName']+"/"+j['virtualRouterName']
@@ -82,7 +84,7 @@ def get_aws_appmesh_virtual_router(type, id, clfn, descfn, topkey, key, filterid
 def get_aws_appmesh_virtual_node(type, id, clfn, descfn, topkey, key, filterid):
 
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -92,7 +94,7 @@ def get_aws_appmesh_virtual_node(type, id, clfn, descfn, topkey, key, filterid):
         if id is None:
             response = client.list_virtual_nodes()
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]:
                 pkey=j['meshName']+"/"+j['virtualNodeName']
@@ -103,7 +105,7 @@ def get_aws_appmesh_virtual_node(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.list_virtual_nodes(meshName=id)
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]:
                 pkey=j['meshName']+"/"+j['virtualNodeName']
@@ -120,7 +122,7 @@ def get_aws_appmesh_virtual_node(type, id, clfn, descfn, topkey, key, filterid):
 def get_aws_appmesh_virtual_gateway(type, id, clfn, descfn, topkey, key, filterid):
 
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -129,7 +131,7 @@ def get_aws_appmesh_virtual_gateway(type, id, clfn, descfn, topkey, key, filteri
         if id is None:
             response = client.list_virtual_gateways()
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]:
                 pkey=j['meshName']+"/"+j['virtualGatewayName']
@@ -140,7 +142,7 @@ def get_aws_appmesh_virtual_gateway(type, id, clfn, descfn, topkey, key, filteri
         else:      
             response = client.list_virtual_gateways(meshName=id)
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]:
                 pkey=j['meshName']+"/"+j['virtualGatewayName']
@@ -159,14 +161,14 @@ def get_aws_appmesh_virtual_gateway(type, id, clfn, descfn, topkey, key, filteri
 def get_aws_appmesh_gateway_route(type, id, clfn, descfn, topkey, key, filterid):
 
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
         response = []
         client = boto3.client(clfn)
         if id is None:
-            print("ERROR: must pass mesh name/gateway name")
+            log.info("ERROR: must pass mesh name/gateway name")
             return True
 
         else:  
@@ -174,11 +176,11 @@ def get_aws_appmesh_gateway_route(type, id, clfn, descfn, topkey, key, filterid)
                 mn=id.split("/")[0]
                 gwn=id.split("/")[1]
             else:
-                print("Invalid id format for "+type+" id="+str(id)+" - returning")
+                log.info("Invalid id format for "+type+" id="+str(id)+" - returning")
                 return True
             response = client.list_gateway_routes(meshName=mn,virtualGatewayName=gwn)
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]:
                 pkey=mn+"/"+gwn+"/"+j['gatewayRouteName']

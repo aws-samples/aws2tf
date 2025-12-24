@@ -1,4 +1,6 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
@@ -6,7 +8,7 @@ import inspect
 
 def get_aws_servicecatalog_portfolio(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -16,7 +18,7 @@ def get_aws_servicecatalog_portfolio(type, id, clfn, descfn, topkey, key, filter
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response:
                 theid=j[key]
@@ -28,7 +30,7 @@ def get_aws_servicecatalog_portfolio(type, id, clfn, descfn, topkey, key, filter
         else:      
             response = client.describe_portfolio(Id=id)
             if response['PortfolioDetail'] == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.info("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response['PortfolioDetail']
             theid=j[key]
@@ -46,7 +48,7 @@ def get_aws_servicecatalog_portfolio(type, id, clfn, descfn, topkey, key, filter
 
 def get_aws_servicecatalog_product(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -56,7 +58,7 @@ def get_aws_servicecatalog_product(type, id, clfn, descfn, topkey, key, filterid
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 theid=j['ProductViewSummary'][key]
@@ -67,7 +69,7 @@ def get_aws_servicecatalog_product(type, id, clfn, descfn, topkey, key, filterid
         else:      
             response = client.search_products_as_admin(PortfolioId=id)
             if response[topkey] == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 context.rproc[pkey]=True
                 return True
@@ -87,18 +89,18 @@ def get_aws_servicecatalog_product(type, id, clfn, descfn, topkey, key, filterid
 #aws_servicecatalog_constraint#
 def get_aws_servicecatalog_constraint(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         client = boto3.client(clfn)
         if id is None:
-            print("WARNING: Must pass PortfolioId for get_aws_servicecatalog_constraint")
+            log.warning("WARNING: Must pass PortfolioId for get_aws_servicecatalog_constraint")
             return True
         else:
             response = client.list_constraints_for_portfolio(PortfolioId=id)
             if response[topkey] == []:
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 context.rproc[pkey]=True
                 return True
@@ -116,19 +118,19 @@ def get_aws_servicecatalog_constraint(type, id, clfn, descfn, topkey, key, filte
 
 def get_aws_servicecatalog_principal_portfolio_association(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         client = boto3.client(clfn)
         if id is None:
-            print("WARNING: Must pass PortfolioId for get_aws_servicecatalog_constraint")
+            log.warning("WARNING: Must pass PortfolioId for get_aws_servicecatalog_constraint")
             return True
 
         else:
             response = client.list_principals_for_portfolio(PortfolioId=id)
             if response[topkey] == []:
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 context.rproc[pkey]=True
                 return True
@@ -148,19 +150,19 @@ def get_aws_servicecatalog_principal_portfolio_association(type, id, clfn, descf
 #aws_servicecatalog_product_portfolio_association#
 def get_aws_servicecatalog_product_portfolio_association(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         client = boto3.client(clfn)
         if id is None:
-            print("WARNING: Must pass ProductId for get_aws_servicecatalog_product_portfolio_association")
+            log.warning("WARNING: Must pass ProductId for get_aws_servicecatalog_product_portfolio_association")
             return True
 
         else:
             response = client.list_portfolios_for_product(ProductId=id)
             if response[topkey] == []:
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 context.rproc[pkey]=True
                 return True

@@ -2,24 +2,26 @@ import boto3
 import os
 import sys
 import context
+import logging
 
 from get_aws_resources import aws_s3
 import botocore
 import common
 from timed_interrupt import timed_int
 
+log = logging.getLogger('aws2tf')
 
 
 ## Enter here:
 def get_stacks(stack_name):
     client = boto3.client('cloudformation')
     nested=[]
-    print("Level 1 stack nesting for "+ stack_name)
+    log.info("Level 1 stack nesting for "+ stack_name)
     nested=getstack(stack_name,nested,client)
     
 
     if nested is not None:
-        print("Level 2 stack nesting")
+        log.info("Level 2 stack nesting")
         for nest in nested:
             sn=nest.split("/")[1]
             if sn != stack_name:
@@ -28,17 +30,17 @@ def get_stacks(stack_name):
                 #print("Level 3 stack nesting")
 
 
-        print("-------------------------------------------")
+        log.info("-------------------------------------------")
         nst=len(nested)
         i=1
         with open("stacks.sh", "a") as f6:         
             for nest in nested:
                 sn=nest.split("/")[1]
                 f6.write("../../aws2tf.py -t stack -i "+sn+"\n")
-                print("\n############## Getting resources for stack " + sn + " "+str(i)+" of "+str(nst)+" ##############")
+                log.info("\n############## Getting resources for stack " + sn + " "+str(i)+" of "+str(nst)+" ##############")
                 getstackresources(nest,client)
                 i=i+1
-            print("Stack "+stack_name+" done")
+            log.info("Stack "+stack_name+" done")
 
 
 
@@ -48,17 +50,17 @@ def getstack(stack_name,nested,client):
         response=resp['StackResources']
     
     except botocore.exceptions.ClientError as err:
-        print("ValidationError error in getstack")
-        print("Stack "+stack_name+" may not exist in region "+context.region)
+        log.error("ValidationError error in getstack")
+        log.error("Stack "+stack_name+" may not exist in region "+context.region)
         return
     
     
     except Exception as e:
-        print(f"{e=}")
-        print("-1->unexpected error in getstack")
+        log.error(f"{e=}")
+        log.error("-1->unexpected error in getstack")
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
+        log.error("%s %s %s", exc_type, fname, exc_tb.tb_lineno)
         return
 
 
@@ -73,7 +75,7 @@ def getstack(stack_name,nested,client):
         if type == "AWS::CloudFormation::Stack":
             if stat == "CREATE_COMPLETE" or stat=="CREATE_FAILED":
                 if stat=="CREATE_FAILED":
-                    print("WARNING: Stack "+stack_name+" status is CREATE_FAILED")
+                    log.warning("WARNING: Stack "+stack_name+" status is CREATE_FAILED")
                 stackr=j['PhysicalResourceId']
                 if stackr not in (str(nested)):
                     nested=nested+[stackr]
@@ -83,18 +85,18 @@ def getstack(stack_name,nested,client):
 
 def getstackresources(stack_name,client):
     try:
-        print("Getting resources for stack: "+stack_name.split("/")[1])
+        log.info("Getting resources for stack: "+stack_name.split("/")[1])
         
         resp = client.describe_stack_resources(StackName=stack_name)
         response=resp['StackResources']
     except Exception as e:
         
-        print(f"{e=}")
-        print("-1->unexpected error in getstack")
+        log.error(f"{e=}")
+        log.error("-1->unexpected error in getstack")
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
-        print("exit 014")
+        log.error("%s %s %s", exc_type, fname, exc_tb.tb_lineno)
+        log.info("exit 014")
         timed_int.stop()
         exit()
     ri=0
@@ -109,7 +111,7 @@ def getstackresources(stack_name,client):
             type=j['ResourceType']
             stat=j['ResourceStatus']
             if stat=="CREATE_FAILED":
-                print("CREATE_FAILED status for "+ type + "skipping .....")
+                log.warning("CREATE_FAILED status for "+ type + "skipping .....")
                 continue
             pid=j['PhysicalResourceId'].split('/')[-1]   
             parn=j['PhysicalResourceId']
@@ -118,10 +120,10 @@ def getstackresources(stack_name,client):
             ri=ri+1
 
             if context.debug:
-                print("type="+type)
+                log.debug("type="+type)
             sn=stack_name.split('/')[-2]
             #print("Importing "+ str(ri) + " of "+ str(rl)+ " type="+type)
-            print("Importing "+ str(ri) + " of "+ str(rl)+ " type="+type+ " pid="+pid)
+            log.info("Importing "+ str(ri) + " of "+ str(rl)+ " type="+type+ " pid="+pid)
 
             f4.write("Type="+type+ " pid="+pid+ " parn="+parn+"\n")
 
@@ -1368,7 +1370,7 @@ def getstackresources(stack_name,client):
             elif "Custom::" in type: 
                 f3.write(type +" fetched as Lambda function ..."+ pid +"\n")
             else:
-                print("--UNPROCESSED-- "+type + " "+ pid +" "+ parn)
+                log.warning("--UNPROCESSED-- "+type + " "+ pid +" "+ parn)
                 with open('stack-unprocessed.err', 'a') as f:
                     f.write("--UNPROCESSED-- "+type + " "+ pid +" "+ parn+" \n")
 

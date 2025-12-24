@@ -1,4 +1,6 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 from botocore.config import Config
 import context
@@ -6,7 +8,7 @@ import inspect
 
 def get_aws_networkfirewall_firewall(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -17,7 +19,7 @@ def get_aws_networkfirewall_firewall(type, id, clfn, descfn, topkey, key, filter
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -29,7 +31,7 @@ def get_aws_networkfirewall_firewall(type, id, clfn, descfn, topkey, key, filter
             else:      
                 response = client.describe_firewall(FirewallName=id)
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             #print(str(response))
             j=response['Firewall']
@@ -43,7 +45,7 @@ def get_aws_networkfirewall_firewall(type, id, clfn, descfn, topkey, key, filter
 
 def get_aws_networkfirewall_firewall_policy(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -54,7 +56,7 @@ def get_aws_networkfirewall_firewall_policy(type, id, clfn, descfn, topkey, key,
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -65,7 +67,7 @@ def get_aws_networkfirewall_firewall_policy(type, id, clfn, descfn, topkey, key,
             else:      
                 response = client.describe_firewall_policy(FirewallPolicyName=id)
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             #print(str(response))
             j=response['FirewallPolicyResponse']
@@ -79,7 +81,7 @@ def get_aws_networkfirewall_firewall_policy(type, id, clfn, descfn, topkey, key,
 
 def get_aws_networkfirewall_rule_group(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -90,7 +92,7 @@ def get_aws_networkfirewall_rule_group(type, id, clfn, descfn, topkey, key, filt
             for page in paginator.paginate(Type='STATELESS'):
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
             else:    
                 for j in response:
                     common.write_import(type,j[key],None) 
@@ -98,7 +100,7 @@ def get_aws_networkfirewall_rule_group(type, id, clfn, descfn, topkey, key, filt
             for page in paginator.paginate(Type='STATEFUL'):
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -108,9 +110,9 @@ def get_aws_networkfirewall_rule_group(type, id, clfn, descfn, topkey, key, filt
                 if ":stateless-rulegroup/" in id:
                     response = client.describe_rule_group(RuleGroupArn=id,AnalyzeRuleGroup=False,Type='STATELESS')
             else:      
-                print("INFO: must pass arn for rule group")
+                log.info("INFO: must pass arn for rule group")
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
             else:
                 j=response['RuleGroupResponse']
                 common.write_import(type, j['RuleGroupArn'], None)
@@ -118,9 +120,9 @@ def get_aws_networkfirewall_rule_group(type, id, clfn, descfn, topkey, key, filt
                 if ":stateful-rulegroup/" in id:
                     response = client.describe_rule_group(RuleGroupArn=id,AnalyzeRuleGroup=False,Type='STATEFUL')
             else:      
-                print("INFO: must pass arn for rule group")
+                log.info("INFO: must pass arn for rule group")
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
             else:
                 j=response['RuleGroupResponse']
                 common.write_import(type, j['RuleGroupArn'], None)
@@ -134,7 +136,7 @@ def get_aws_networkfirewall_rule_group(type, id, clfn, descfn, topkey, key, filt
 # aws_networkfirewall_tls_inspection_configuration
 def get_aws_networkfirewall_tls_inspection_configuration(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -145,7 +147,7 @@ def get_aws_networkfirewall_tls_inspection_configuration(type, id, clfn, descfn,
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []:
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type, j[key], None)
@@ -156,7 +158,7 @@ def get_aws_networkfirewall_tls_inspection_configuration(type, id, clfn, descfn,
             else:
                 response = client.describe_tls_inspection_configuration(TlsInspectionConfigurationName=id)
             if response == []:
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             #print(str(response))
             j=response['TlsInspectionConfigurationResponse']

@@ -1,11 +1,13 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
 
 def get_aws_batch_scheduling_policy(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -13,7 +15,7 @@ def get_aws_batch_scheduling_policy(type, id, clfn, descfn, topkey, key, filteri
       
         response = client.list_scheduling_policies()
         if response == []: 
-            print("Empty response for "+type+ " id="+str(id)+" returning")
+            log.info("Empty response for "+type+ " id="+str(id)+" returning")
             return True
         for j in response['schedulingPolicies']:
             #print(str(j['arn']))
@@ -26,7 +28,7 @@ def get_aws_batch_scheduling_policy(type, id, clfn, descfn, topkey, key, filteri
 
 def get_aws_batch_job_definition(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -34,7 +36,7 @@ def get_aws_batch_job_definition(type, id, clfn, descfn, topkey, key, filterid):
       
         response = client.describe_job_definitions()
         if response == []: 
-            print("Empty response for "+type+ " id="+str(id)+" returning")
+            log.info("Empty response for "+type+ " id="+str(id)+" returning")
             return True
         for j in response[topkey]:
             if j['status']!="INACTIVE":

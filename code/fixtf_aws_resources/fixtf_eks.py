@@ -1,5 +1,7 @@
 import common
 import fixtf
+import logging
+log = logging.getLogger('aws2tf')
 import context
 
 def aws_eks_addon(t1,tt1,tt2,flag1,flag2):
@@ -39,7 +41,7 @@ def aws_eks_cluster(t1,tt1,tt2,flag1,flag2):
         t1=tt1 + " = aws_kms_key." + tt2 + ".arn\n"
         common.add_dependancy("aws_kms_key",tt2)
     elif tt1 == "version" and tt2=="jsonencode(1.3)": 
-        print("******* aws_eks_cluster version 1.3",t1)
+        log.warning("******* aws_eks_cluster version 1.3",t1)
         t1=tt1 + " = \"1.30\"\n"
     return skip,t1,flag1,flag2
 

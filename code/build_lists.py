@@ -3,10 +3,13 @@ import context
 import concurrent.futures
 import json
 import datetime
+import logging
+
+log = logging.getLogger('aws2tf')
 
 
 def build_lists():
-    print("Building core resource lists ...")
+    log.info("Building core resource lists ...")
     context.tracking_message="Stage 2 of 10, Building core resource lists ..."
     
     
@@ -20,7 +23,7 @@ def build_lists():
                 response.extend(page['Functions'])
             return [('lambda', j['FunctionName']) for j in response]
         except Exception as e:
-            print("Error fetching Lambda data:", e)
+            log.error("Error fetching Lambda data: %s", e)
             return []
       
     
@@ -34,7 +37,7 @@ def build_lists():
             context.vpcs=response
             return [('vpc', j['VpcId']) for j in response]
         except Exception as e:
-            print("Error fetching ec2 data:", e)
+            log.error("Error fetching ec2 data: %s", e)
             return []
     
     def fetch_s3_data():
@@ -46,7 +49,7 @@ def build_lists():
                 response.extend(page['Buckets'])
             return [('s3', j['Name']) for j in response]
         except Exception as e:
-            print("Error fetching s3 data:", e)
+            log.error("Error fetching s3 data: %s", e)
             return []
 
     def fetch_sg_data():
@@ -58,7 +61,7 @@ def build_lists():
                 response.extend(page['SecurityGroups'])
             return [('sg', j['GroupId']) for j in response]
         except Exception as e:
-            print("Error fetching SG data:", e)
+            log.error("Error fetching SG data: %s", e)
             return []
         
 
@@ -75,7 +78,7 @@ def build_lists():
                json.dump(response, f, indent=2, default=str)
             return [('subnet', j['SubnetId']) for j in response]
         except Exception as e:
-            print("Error fetching vpc data:", e)
+            log.error("Error fetching vpc data: %s", e)
             return []
 
     def fetch_tgw_data():
@@ -87,7 +90,7 @@ def build_lists():
                 response.extend(page['TransitGateways'])
             return [('tgw', j['TransitGatewayId']) for j in response]
         except Exception as e:
-            print("Error fetching transit gateways:", e)
+            log.error("Error fetching transit gateways: %s", e)
             return []
 
     def fetch_roles_data():
@@ -102,7 +105,7 @@ def build_lists():
                json.dump(response, f, indent=2, default=str)
             return [('iam', j['RoleName']) for j in response]
         except Exception as e:
-            print("Error fetching vpc data:", e)
+            log.error("Error fetching vpc data: %s", e)
             return []
     
     def fetch_policies_data():
@@ -114,7 +117,7 @@ def build_lists():
                 response.extend(page['Policies'])
             return [('pol', j['Arn']) for j in response]
         except Exception as e:
-            print("Error fetching vpc data:", e)
+            log.error("Error fetching vpc data: %s", e)
             return []
 
 
@@ -155,7 +158,7 @@ def build_lists():
                                 ####### problematic call
                                 objs = client.list_objects_v2(Bucket=bucket,MaxKeys=1)      
                             except Exception as e:
-                                print(f"Error details: {e}")
+                                log.error(f"Error details: {e}")
                                 continue
 
                             context.s3list[bucket] = True
@@ -195,7 +198,7 @@ def build_lists():
 def build_secondary_lists(id=None):
     if id is None:
         st1 = datetime.datetime.now()
-        print("Building secondary IAM resource lists ...")
+        log.info("Building secondary IAM resource lists ...")
         context.esttime = (len(context.rolelist) * 3) / 4
         context.tracking_message = "Stage 2 of 10, Building secondary IAM resource lists ..."
         
@@ -214,7 +217,7 @@ def build_secondary_lists(id=None):
                     'inline_policies': inline_policies['PolicyNames'] if inline_policies['PolicyNames'] else False
                 }
             except Exception as e:
-                print(f"Error fetching policies for role {role_name}: {e}")
+                log.error(f"Error fetching policies for role {role_name}: {e}")
                 return {
                     'role_name': role_name,
                     'attached_policies': False,
@@ -242,9 +245,9 @@ def build_secondary_lists(id=None):
                     context.attached_role_policies_list[role_name] = result['attached_policies']
                     context.role_policies_list[role_name] = result['inline_policies']
                 except Exception as e:
-                    print(f"Error processing result: {e}")
+                    log.error(f"Error processing result: {e}")
         
         st2 = datetime.datetime.now()
-        print("secondary lists built in " + str(st2 - st1))
+        log.info("secondary lists built in " + str(st2 - st1))
     
     return

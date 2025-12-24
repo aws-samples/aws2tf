@@ -1,11 +1,13 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
 
 def get_aws_waf_web_acl(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -16,7 +18,7 @@ def get_aws_waf_web_acl(type, id, clfn, descfn, topkey, key, filterid):
             response = client.list_web_acls()
                 
             if response == []: 
-                    if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                    if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                     return True
                 #print(str(response))
             for j in response[topkey]:
@@ -29,7 +31,7 @@ def get_aws_waf_web_acl(type, id, clfn, descfn, topkey, key, filterid):
             client = boto3.client(clfn)
             response = client.get_web_acl(WebACLId=id)
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response['WebACL']
             pkey=j[key]

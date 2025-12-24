@@ -1,4 +1,6 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import os
@@ -7,7 +9,7 @@ import inspect
 
 def get_aws_organizations_organization(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -15,7 +17,7 @@ def get_aws_organizations_organization(type, id, clfn, descfn, topkey, key, filt
         if id is None:
             response = client.describe_organization()
 
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j = response[topkey]
   
             common.write_import(type,j[key],None) 
@@ -23,7 +25,7 @@ def get_aws_organizations_organization(type, id, clfn, descfn, topkey, key, filt
             try:
                 response2=client.list_roots()
 
-                if response2 == []: print("Empty response2 for list_roots id="+str(id)+" returning"); return True
+                if response2 == []: log.info("Empty response2 for list_roots id="+str(id)+" returning"); return True
                 for j in response2['Roots']:
                     #common.add_known_dependancy("aws_organizations_policy", j[key])
                     common.add_known_dependancy("aws_organizations_organizational_unit", j['Id'])
@@ -32,7 +34,7 @@ def get_aws_organizations_organization(type, id, clfn, descfn, topkey, key, filt
             #fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                 exn=str(exc_type.__name__)
                 if exn == "AccessDeniedException":
-                    print("Can't list_roots - no access or not a master account......")              
+                    log.info("Can't list_roots - no access or not a master account......")              
                     return True
                 #else:
                 #    print(f"{e=} [org1]")
@@ -47,20 +49,20 @@ def get_aws_organizations_organization(type, id, clfn, descfn, topkey, key, filt
 
 def get_aws_organizations_organizational_unit(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         client = boto3.client(clfn)
         if id is None:
-            print("WARNING must pass parent org id as paremter returning ....")
+            log.info("WARNING must pass parent org id as paremter returning ....")
             return True
         #try:
         response = client.list_organizational_units_for_parent(ParentId=id)
         #except Exception as e:
         #    print("No Org unit found returning True......")
         #    return True
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         for j in response[topkey]:
             common.write_import(type, j[key], None)
@@ -74,7 +76,7 @@ def get_aws_organizations_organizational_unit(type, id, clfn, descfn, topkey, ke
 
 def get_aws_organizations_policy(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -83,12 +85,12 @@ def get_aws_organizations_policy(type, id, clfn, descfn, topkey, key, filterid):
         try:
             response = client.list_policies(Filter='SERVICE_CONTROL_POLICY')
         except Exception as e:
-            print("No SCP Policies found ......")
+            log.info("No SCP Policies found ......")
             scpskip=False
             
         if scpskip:
-            print("SCPs")
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            log.info("SCPs")
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 if "AWS" not in j[key]:
                     common.write_import(type,j[key],None) 
@@ -100,10 +102,10 @@ def get_aws_organizations_policy(type, id, clfn, descfn, topkey, key, filterid):
         try:
             response = client.list_policies(Filter='TAG_POLICY')
         except Exception as e:
-            print("No TAG Policies found ......")
+            log.info("No TAG Policies found ......")
             tagskip=False
         if tagskip:
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 #if "AWS" not in j[key]:
                     common.write_import(type,j[key],None) 
@@ -115,11 +117,11 @@ def get_aws_organizations_policy(type, id, clfn, descfn, topkey, key, filterid):
         try:
             response = client.list_policies(Filter='BACKUP_POLICY')
         except Exception as e:
-            print("No Backup Policies found ......")
+            log.info("No Backup Policies found ......")
             backskip=False
 
         if backskip:    
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 #if "AWS" not in j[key]:
                     common.write_import(type,j[key],None)
@@ -132,10 +134,10 @@ def get_aws_organizations_policy(type, id, clfn, descfn, topkey, key, filterid):
         try:
             response = client.list_policies(Filter='AISERVICES_OPT_OUT_POLICY')
         except Exception as e:
-            print("No AI Policies found ......")
+            log.info("No AI Policies found ......")
             aislip=False
         if aiskip:
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 #if "AWS" not in j[key]:
                     common.write_import(type,j[key],None)
@@ -148,7 +150,7 @@ def get_aws_organizations_policy(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_organizations_account(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -160,13 +162,13 @@ def get_aws_organizations_account(type, id, clfn, descfn, topkey, key, filterid)
             #fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                 exn=str(exc_type.__name__)
                 if exn == "AccessDeniedException":
-                    print("Can't list_accounts - no access or not a master account......")              
+                    log.info("Can't list_accounts - no access or not a master account......")              
                     return True
                 #else:
                 #    print(f"{e=} [org1]")
                 #    return True
 
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response[topkey]:
             common.write_import(type, j[key], None)   
 
@@ -178,7 +180,7 @@ def get_aws_organizations_account(type, id, clfn, descfn, topkey, key, filterid)
 
 def get_aws_organizations_resource_policy(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -190,10 +192,10 @@ def get_aws_organizations_resource_policy(type, id, clfn, descfn, topkey, key, f
             #fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             exn=str(exc_type.__name__)
             if exn == "ResourcePolicyNotFoundException":
-                print("No Resource Policies found - returning True ....")
+                log.info("No Resource Policies found - returning True ....")
                 return True
             elif exn == "AccessDeniedException":
-                    print("Can't describe_resource_policy - no access or not a master account......")              
+                    log.info("Can't describe_resource_policy - no access or not a master account......")              
                     return True
             #else:
             #    print(f"{e=} [org1]")
@@ -201,7 +203,7 @@ def get_aws_organizations_resource_policy(type, id, clfn, descfn, topkey, key, f
             #    return True
         #print("RESPONSE2")
         #print(str(response))
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response[topkey]:
             common.write_import(type, j[key], None) 
 
@@ -213,7 +215,7 @@ def get_aws_organizations_resource_policy(type, id, clfn, descfn, topkey, key, f
 #aws_organizations_policy_attachment
 def get_aws_organizations_policy_attachment(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -227,10 +229,10 @@ def get_aws_organizations_policy_attachment(type, id, clfn, descfn, topkey, key,
                 #fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                 exn=str(exc_type.__name__)
                 if exn == "ResourcePolicyNotFoundException":
-                    print("No Resource Policy found - returning True ....")
+                    log.info("No Resource Policy found - returning True ....")
                     return True
                 elif exn == "AccessDeniedException":
-                        print("Can't describe_resource_policy - no access or not a master account......")              
+                        log.info("Can't describe_resource_policy - no access or not a master account......")              
                         return True
                 #else:
                 #    print(f"{e=} [org1]")
@@ -239,13 +241,13 @@ def get_aws_organizations_policy_attachment(type, id, clfn, descfn, topkey, key,
                 #    return True
             #print("aws_organizations_policy_attachment response: "+str(response))
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 context.rproc[pkey]=True
                 return True
             
             if id=="p-pj4vhztq":
-                    print("J=",response)
+                    log.info("J=",response)
             for j in response[topkey]:
                 #print("J="+str(j))
                 tid=j['TargetId']
@@ -254,7 +256,7 @@ def get_aws_organizations_policy_attachment(type, id, clfn, descfn, topkey, key,
                 common.write_import(type, pkey, id)            
 
         else:
-            print("Must pass a policy id as a parmeter - returning True")
+            log.info("Must pass a policy id as a parmeter - returning True")
 
 
     except Exception as e:

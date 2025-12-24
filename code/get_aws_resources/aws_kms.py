@@ -1,4 +1,6 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import context
 import os
 import sys
@@ -14,12 +16,12 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
     if id is not None and id.startswith("k-"):
         id=id.split("k-")[1]
     if context.debug: 
-        print("--> In get_aws_kms_key    doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+        log.debug("--> In get_aws_kms_key    doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     response=common.call_boto3(type,clfn,descfn,topkey,key,id)
     #print("-9a->"+str(response))
     if response == []: 
-        if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+        if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
         pkey=type+"."+id
         if not context.rproc[pkey]:
             context.rproc[pkey]=True
@@ -46,7 +48,7 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
                     #print(str(kresp))
                     if kstatus == "Enabled" or kstatus == "Disabled":
                         if kman == "AWS":
-                            if context.debug: print("key "+str(theid)+" is managed by AWS")
+                            if context.debug: log.debug("key "+str(theid)+" is managed by AWS")
                             pkey=type+"."+theid
                             if not context.rproc[pkey]:
                                 context.rproc[pkey]=True
@@ -64,11 +66,11 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
                             context.rproc[pkey]=True
                         common.add_dependancy("aws_kms_alias","k-"+theid)
                     else:
-                        print("WARNING: key is not enabled or is managed by AWS")
+                        log.warning("WARNING: key is not enabled or is managed by AWS")
                         #print(str(kresp))
                         continue
                 except Exception as e:
-                    if context.debug: print("WARNING: can't access key",theid)
+                    if context.debug: log.warning("WARNING: can't access key",theid)
                     #print(f"{e=} [k1]")
                     #exc_type, exc_obj, exc_tb = sys.exc_info()
                     #fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -83,14 +85,14 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
 
 def get_aws_kms_alias(type,id,clfn,descfn,topkey,key,filterid):
     if context.debug:
-        print("--> In get_aws_kms_alias  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+        log.debug("--> In get_aws_kms_alias  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     response = []
     client = boto3.client(clfn)
     paginator = client.get_paginator(descfn)
     for page in paginator.paginate():
         response = response + page[topkey]
     if response == []: 
-        if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+        if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
         pkey=type+".k-"+theid
         context.rproc[pkey]=True
         return True
@@ -108,7 +110,7 @@ def get_aws_kms_alias(type,id,clfn,descfn,topkey,key,filterid):
                 theid=j[key] # this will be an id
                 aliasname=j['AliasName']
                 if aliasname.startswith("alias/aws"):
-                    if context.debug: print("Skipping "+aliasname+" "+theid)
+                    if context.debug: log.debug("Skipping "+aliasname+" "+theid)
                     if id is not None: 
                         if not id.startswith("k-"): id="k-"+id
                         pkey=type+"."+id
@@ -122,7 +124,7 @@ def get_aws_kms_alias(type,id,clfn,descfn,topkey,key,filterid):
             # if there's an alias match - good enough
             if id is not None:
                 if id==aliasname or "alias/"+id==aliasname:
-                    if context.debug: print("KMS ALAIS: Alias match importing ",id)
+                    if context.debug: log.debug("KMS ALAIS: Alias match importing ",id)
                     common.write_import(type,aliasname,ka) 
                     pkey=type+".k-"+theid
                     context.rproc[pkey]=True
@@ -138,7 +140,7 @@ def get_aws_kms_alias(type,id,clfn,descfn,topkey,key,filterid):
                 
                 continue
             else:
-                if context.debug: print("KMS ALAIS: Id match importing ",id)
+                if context.debug: log.debug("KMS ALAIS: Id match importing ",id)
 
                 common.write_import(type,aliasname,ka) 
 

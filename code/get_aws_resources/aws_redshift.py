@@ -1,4 +1,6 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
@@ -6,7 +8,7 @@ import inspect
 
 def get_aws_blank_namespace(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In get_aws_redshiftserverless_namespace  doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_redshiftserverless_namespace  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     # Directly get id
@@ -20,7 +22,7 @@ def get_aws_blank_namespace(type, id, clfn, descfn, topkey, key, filterid):
             response1 = client.list_namespaces()
             response=response1['namespaces']
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.info("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -36,7 +38,7 @@ def get_aws_blank_namespace(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_blank_workgroup(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In _aws_redshiftserverless_workgroup  doing " + type + ' with id ' + str(id) +
+        log.debug("--> In _aws_redshiftserverless_workgroup  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     # Directly get id
@@ -49,7 +51,7 @@ def get_aws_blank_workgroup(type, id, clfn, descfn, topkey, key, filterid):
             response1 = client.list_workgroups()
             response=response1['workgroups']
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.info("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
 
             for j in response:
@@ -68,7 +70,7 @@ def get_aws_redshift_parameter_group(type, id, clfn, descfn, topkey, key, filter
 
 
     if context.debug:
-        print("--> In get_aws_redshift_parameter_group  doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_redshift_parameter_group  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -81,7 +83,7 @@ def get_aws_redshift_parameter_group(type, id, clfn, descfn, topkey, key, filter
         for page in paginator.paginate():
                 response = response + page[topkey]
         if response == []: 
-            print("Empty response for "+type+ " id="+str(id)+" returning")
+            log.info("Empty response for "+type+ " id="+str(id)+" returning")
             return True
         #print(str(response))
         for j in response:
@@ -89,12 +91,12 @@ def get_aws_redshift_parameter_group(type, id, clfn, descfn, topkey, key, filter
                 if "default." not in j[key]: 
                     common.write_import(type,j[key],None) 
                 else:
-                     print("Default param skipping "+j[key])
+                     log.info("Default param skipping "+j[key])
             else:
                 if "default." not in id: 
                     if id==j[key]: common.write_import(type,j[key],None)
                 else:
-                    print("Default param skipping "+j[key])
+                    log.info("Default param skipping "+j[key])
    
 
     except Exception as e:

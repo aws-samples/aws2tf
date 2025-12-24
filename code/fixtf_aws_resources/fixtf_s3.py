@@ -1,5 +1,7 @@
 import common
 import fixtf
+import logging
+log = logging.getLogger('aws2tf')
 import inspect
 import context
 
@@ -126,8 +128,8 @@ def aws_s3_bucket_replication_configuration(t1,tt1,tt2,flag1,flag2):
     if tt1 == "bucket" and "arn:aws:s3" in tt2:
         bn=tt2.split(":")[-1]
         if context.debug5: 
-             print("DEBUG5: fix aws_s3_bucket_replication_configuration: "+bn)
-             print("DEBUG5: " + str(context.bucketlist))
+             log.debug("DEBUG5: fix aws_s3_bucket_replication_configuration: "+bn)
+             log.debug("DEBUG5: " + str(context.bucketlist))
         try:
             if context.bucketlist[bn]:
                 t1=tt1 + " = aws_s3_bucket.b-" + bn + ".arn\n"

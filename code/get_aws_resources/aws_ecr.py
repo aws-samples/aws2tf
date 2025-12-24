@@ -1,4 +1,6 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
@@ -6,14 +8,14 @@ import botocore
 
 def get_aws_ecr_registry_policy(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         client = boto3.client(clfn)
         if id is None:
             response = client.get_registry_policy()
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
             common.write_import(type,j[key],None) 
     except client.exceptions.RegistryPolicyNotFoundException:
@@ -29,14 +31,14 @@ def get_aws_ecr_registry_policy(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_ecr_registry_scanning_configuration(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         client = boto3.client(clfn)
         if id is None:
             response = client.get_registry_policy()
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
             common.write_import(type,j[key],None) 
     except client.exceptions.RegistryPolicyNotFoundException:
@@ -56,7 +58,7 @@ def get_aws_ecr_registry_scanning_configuration(type, id, clfn, descfn, topkey, 
 
 def get_aws_ecr_replication_configuration(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -76,7 +78,7 @@ def get_aws_ecr_replication_configuration(type, id, clfn, descfn, topkey, key, f
 
 def get_aws_ecr_pull_through_cache_rule(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -102,19 +104,19 @@ def get_aws_ecr_pull_through_cache_rule(type, id, clfn, descfn, topkey, key, fil
 # aws_ecr_repository
 def get_aws_ecr_repository(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         client = boto3.client(clfn)
         if id is None:
             response = client.describe_repositories()
-            if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response[topkey] == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 common.write_import(type, j[key], None)
         else:
             response = client.describe_repositories(repositoryNames=[id])
-            if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response[topkey] == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 common.write_import(type, j[key], None)
 

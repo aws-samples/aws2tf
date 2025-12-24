@@ -1,4 +1,6 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import context
 import boto3
 import botocore
@@ -7,14 +9,14 @@ import inspect
 def get_aws_ecs_cluster(type,id,clfn,descfn,topkey,key,filterid):
 
     if context.debug:
-        print("--> get_aws_ecs_cluster  doing " + type + ' with id ' + str(id) +
+        log.debug("--> get_aws_ecs_cluster  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
         
         response = []
         response=common.call_boto3(type,clfn,descfn,topkey,key,id)
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         for j in response: 
             retid=j # no key
@@ -36,7 +38,7 @@ def get_aws_ecs_cluster(type,id,clfn,descfn,topkey,key,filterid):
 def get_aws_ecs_service(type,id,clfn,descfn,topkey,key,filterid):
 
     if context.debug:
-        print("--> get_aws_ecs_service  doing " + type + ' with id ' + str(id) +
+        log.debug("--> get_aws_ecs_service  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -63,7 +65,7 @@ def get_aws_ecs_service(type,id,clfn,descfn,topkey,key,filterid):
             response = client.list_services(cluster=id) 
 
         response=response[topkey]
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         # a list of arns is returned
         
@@ -88,7 +90,7 @@ def get_aws_ecs_service(type,id,clfn,descfn,topkey,key,filterid):
 def get_aws_ecs_task_definition(type,id,clfn,descfn,topkey,key,filterid):
 
     if context.debug:
-        print("--> get_aws_ecs_task_definition  doing " + type + ' with id ' + str(id) +
+        log.debug("--> get_aws_ecs_task_definition  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -107,7 +109,7 @@ def get_aws_ecs_task_definition(type,id,clfn,descfn,topkey,key,filterid):
             response=response[topkey]
 
         
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
         #print(str(response))
         if id is None:
             for j in response: 
@@ -120,13 +122,13 @@ def get_aws_ecs_task_definition(type,id,clfn,descfn,topkey,key,filterid):
 
 
     except botocore.exceptions.ClientError as err:
-         print("Cannot find Task desciption with decription" + id)
+         log.info("Cannot find Task desciption with decription" + id)
          return True
          
     
     except Exception as e:
         if "Unable to describe task definition" in e:
-            print("ERROR: -1->"+e)
+            log.info("ERROR: -1->"+e)
             return True
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
@@ -135,19 +137,19 @@ def get_aws_ecs_task_definition(type,id,clfn,descfn,topkey,key,filterid):
 def get_aws_ecs_capacity_provider(type,id,clfn,descfn,topkey,key,filterid):
 
     if context.debug:
-        print("--> get_aws_ecs_capacity_provider  doing " + type + ' with id ' + str(id) +
+        log.debug("--> get_aws_ecs_capacity_provider  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
         response = []
         client = boto3.client(clfn)
         if id is None:
-            print("WARNING: must pass cluster id as parameter for "+type)
+            log.warning("WARNING: must pass cluster id as parameter for "+type)
             return True
         else:
             response = client.describe_capacity_providers()
             response=response[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
             for j in response: 
                 pkey=j[key]
@@ -163,19 +165,19 @@ def get_aws_ecs_capacity_provider(type,id,clfn,descfn,topkey,key,filterid):
 def get_aws_ecs_cluster_capacity_providers(type,id,clfn,descfn,topkey,key,filterid):
 
     if context.debug:
-        print("--> get_aws_ecs_cluster_capacity_provider  doing " + type + ' with id ' + str(id) +
+        log.debug("--> get_aws_ecs_cluster_capacity_provider  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
         response = []
         client = boto3.client(clfn)
         if id is None:
-            print("WARNING: must pass cluster id as parameter for "+type)
+            log.warning("WARNING: must pass cluster id as parameter for "+type)
             return True
         else:
             response = client.describe_capacity_providers()
             response=response[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
             common.write_import(type,id,None) 
 

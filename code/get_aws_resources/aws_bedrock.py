@@ -1,4 +1,6 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect,sys
@@ -6,7 +8,7 @@ import inspect,sys
 
 def get_aws_bedrock_model_invocation_logging_configuration(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -16,23 +18,23 @@ def get_aws_bedrock_model_invocation_logging_configuration(type, id, clfn, descf
         try:
             j=response[topkey]
         except KeyError:
-            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+            if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
             return True
         if j == []: 
-            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+            if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             return True
         common.write_import(type,context.region,None)
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
-        if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+        if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
         return True
     return True
 
 
 def get_aws_bedrock_guardrail(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -42,7 +44,7 @@ def get_aws_bedrock_guardrail(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response:
                 resp2 = client.list_guardrails(guardrailIdentifier=j[key])
@@ -54,7 +56,7 @@ def get_aws_bedrock_guardrail(type, id, clfn, descfn, topkey, key, filterid):
                         exc_type, exc_obj, exc_tb = sys.exc_info()
                         exn=str(exc_type.__name__)
                         if exn=="AccessDeniedException":
-                            print("No Access to tags for "+k['arn']+" returning ...")
+                            log.info("No Access to tags for "+k['arn']+" returning ...")
                             pkey=type+"."+k[key]
                             context.rproc[pkey]=True
                             return True
@@ -68,7 +70,7 @@ def get_aws_bedrock_guardrail(type, id, clfn, descfn, topkey, key, filterid):
             response = client.list_guardrails(guardrailIdentifier=id)
             pkey=type+"."+id
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 pkey=type+"."+id
                 context.rproc[pkey]=True
                 return True
@@ -77,12 +79,12 @@ def get_aws_bedrock_guardrail(type, id, clfn, descfn, topkey, key, filterid):
                 tkey=j[key]+","+j['version']
                 try:
                     tresp=client.list_tags_for_resource(resourceARN=j['arn'])
-                    print(str(tresp))
+                    log.info(str(tresp))
                 except Exception as e:
                     exc_type, exc_obj, exc_tb = sys.exc_info()
                     exn=str(exc_type.__name__)
                     if exn=="AccessDeniedException":
-                        print("No Access to tags for "+j['arn']+" returning ...")
+                        log.info("No Access to tags for "+j['arn']+" returning ...")
                         pkey=type+"."+j[key]
                         context.rproc[pkey]=True
                         return True

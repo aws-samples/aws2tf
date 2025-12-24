@@ -1,4 +1,6 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import context
 import boto3
 import botocore
@@ -7,7 +9,7 @@ import inspect
 def get_aws_lb(type,id,clfn,descfn,topkey,key,filterid):
 
     if context.debug:
-        print("--> get_aws_lb  doing " + type + ' with id ' + str(id) +
+        log.debug("--> get_aws_lb  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -21,7 +23,7 @@ def get_aws_lb(type,id,clfn,descfn,topkey,key,filterid):
             response = client.describe_load_balancers(Names=[id])
         
         response=response[topkey]
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         for j in response: 
             retid=j[key] # key is LoadBalancerArn
@@ -37,7 +39,7 @@ def get_aws_lb(type,id,clfn,descfn,topkey,key,filterid):
 def get_aws_lb_listener(type,id,clfn,descfn,topkey,key,filterid):
 
     if context.debug:
-        print("--> get_aws_lb_listener  doing " + type + ' with id ' + str(id) +
+        log.debug("--> get_aws_lb_listener  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -50,11 +52,11 @@ def get_aws_lb_listener(type,id,clfn,descfn,topkey,key,filterid):
         elif ":loadbalancer/" in id and id is not None:
                 response = client.describe_listeners(LoadBalancerArn=id)
         else:
-            print("Invalid id format for "+type+" id="+str(id)+" - returning")
+            log.info("Invalid id format for "+type+" id="+str(id)+" - returning")
             return True
    
         response=response[topkey]
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         for j in response: 
             retid=j[key] # ListenerARN
@@ -72,7 +74,7 @@ def get_aws_lb_listener(type,id,clfn,descfn,topkey,key,filterid):
 def get_aws_lb_listener_rule(type,id,clfn,descfn,topkey,key,filterid):
 
     if context.debug:
-        print("--> get_aws_lb_listener_rule  doing " + type + ' with id ' + str(id) +
+        log.debug("--> get_aws_lb_listener_rule  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -85,12 +87,12 @@ def get_aws_lb_listener_rule(type,id,clfn,descfn,topkey,key,filterid):
         elif ":listener/" in id:
             response = client.describe_rules(ListenerArn=id)
         else:
-            print("Invalid id format for "+type+" id="+str(id)+" - returning")
+            log.info("Invalid id format for "+type+" id="+str(id)+" - returning")
             return True
 
         response=response[topkey]
         
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         for j in response: 
             
@@ -112,7 +114,7 @@ def get_aws_lb_listener_rule(type,id,clfn,descfn,topkey,key,filterid):
 def get_aws_lb_target_group(type,id,clfn,descfn,topkey,key,filterid):
 
     if context.debug:
-        print("--> get_aws_lb_target_group  doing " + type + ' with id ' + str(id) +
+        log.debug("--> get_aws_lb_target_group  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -125,11 +127,11 @@ def get_aws_lb_target_group(type,id,clfn,descfn,topkey,key,filterid):
         elif ":loadbalancer/" in id and id is not None:
                 response = client.describe_target_groups(LoadBalancerArn=id)
         else:
-            print("Invalid id format for "+type+" id="+str(id)+" - returning")
+            log.info("Invalid id format for "+type+" id="+str(id)+" - returning")
             return True
    
         response=response[topkey]
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         for j in response: 
             retid=j[key] # TargetGroupArn

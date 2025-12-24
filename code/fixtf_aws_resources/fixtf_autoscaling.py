@@ -1,5 +1,7 @@
 import context
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import fixtf
 import base64
 import boto3
@@ -106,11 +108,11 @@ def aws_launch_configuration(t1,tt1,tt2,flag1,flag2):
 	elif tt1 == "user_data":
 		#inid=flag2.split("__")[1]
 		client = boto3.client("autoscaling")
-		print(str(flag2))
+		log.debug(str(flag2))
 		inid=flag2.split("__")[1]
 		resp = client.describe_launch_configurations(LaunchConfigurationNames=[inid])
 		if len(resp['LaunchConfigurations']) >1:
-			print("WARNING Got >1 launch configuations in fixtf_autoscaling aws_launch_configuration")
+			log.warning("WARNING Got >1 launch configuations in fixtf_autoscaling aws_launch_configuration")
 		try:
 			ud=resp['LaunchConfigurations'][0]['UserData']
 			ud2=base64.b64decode(ud).decode('utf-8')

@@ -1,4 +1,6 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 from botocore.config import Config
 import context
@@ -6,7 +8,7 @@ import inspect
 
 def get_aws_s3tables_table_bucket(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -17,7 +19,7 @@ def get_aws_s3tables_table_bucket(type, id, clfn, descfn, topkey, key, filterid)
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -26,7 +28,7 @@ def get_aws_s3tables_table_bucket(type, id, clfn, descfn, topkey, key, filterid)
         else:      
             response = client.get_table_bucket(tableBucketARN=id)
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             j=response
             common.write_import(type,j[key],None)
@@ -39,14 +41,14 @@ def get_aws_s3tables_table_bucket(type, id, clfn, descfn, topkey, key, filterid)
 
 def get_aws_s3tables_namespace(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
         client = boto3.client(clfn,config=config)
         if id is None:
-            print("WARNING: must pass table bucket ARN as parameter")
+            log.warning("WARNING: must pass table bucket ARN as parameter")
             return True
 
         else:      
@@ -54,7 +56,7 @@ def get_aws_s3tables_namespace(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(tableBucketARN=id):
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 pkey=type+"."+id
                 context.rproc[pkey]=True
                 return True
@@ -75,19 +77,19 @@ def get_aws_s3tables_namespace(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_s3tables_table(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
         client = boto3.client(clfn,config=config)
         if id is None:
-            print("WARNING: must pass table bucket ARN and namespace as parameters")
+            log.warning("WARNING: must pass table bucket ARN and namespace as parameters")
             return True
 
         else:   
             if ";" not in id:
-                print("WARNING: must pass table bucket ARN and namespace as parameters")
+                log.warning("WARNING: must pass table bucket ARN and namespace as parameters")
                 return True  
             barn=id.split(";")[0]
             namespace=id.split(";")[1] 
@@ -95,7 +97,7 @@ def get_aws_s3tables_table(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(tableBucketARN=barn,namespace=namespace):
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 pkey=type+"."+id
                 context.rproc[pkey]=True
                 return True

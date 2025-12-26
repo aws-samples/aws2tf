@@ -7377,7 +7377,7 @@ aws_prometheus_workspace = {
 	"clfn":		"amp",
 	"descfn":	"list_workspaces",
 	"topkey":	"workspaces",
-	"key":		"arn",
+	"key":		"workspaceId",
 	"filterid":	"arn"
 }
 
@@ -9966,7 +9966,7 @@ aws_transfer_workflow = {
 aws_verifiedaccess_endpoint = {
 	"clfn":		"ec2",
 	"descfn":	"describe_verified_access_endpoints",
-	"topkey":	"VerifiedAccessEndpoints",
+	"topkey":	"VerifiedAccessInstanceIds",
 	"key":		"VerifiedAccessEndpointId",
 	"filterid":	"VerifiedAccessEndpointId"
 }

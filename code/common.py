@@ -1969,7 +1969,7 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    try:   
       log.error(f"{e=} [e1]")
       log.error(f"{exn=} [e1]")
-      log.error("%s %s %s",  fname, exc_tb.tb_lineno)
+      log.error("%s %s", fname, exc_tb.tb_lineno)
    except:
       log.error("except err")
       pass

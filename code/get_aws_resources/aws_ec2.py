@@ -1289,3 +1289,78 @@ def get_aws_network_interface(type, id, clfn, descfn, topkey, key, filterid):
 
     return True
 
+
+# aws_verifiedaccess_instance
+def get_aws_verifiedaccess_instance(type, id, clfn, descfn, topkey, key, filterid):
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        client = boto3.client(clfn)
+        if id is None:
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate():
+                response = response + page[topkey]
+            if response == []:
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
+            for j in response:
+                k=j['VerifiedAccessTrustProviders']
+                common.write_import(type, j[key], None)
+                for kk in k:    
+                    pkey=j[key]+"/"+kk['VerifiedAccessTrustProviderId']
+                    common.add_dependancy("aws_verifiedaccess_instance_trust_provider_attachment",pkey)
+
+        elif id.startswith("vai-"):
+            response = client.describe_verified_access_instances(Filters=[{'Name': 'instance-id', 'Values': [id]}, ])
+            if response == []:
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
+            for j in response[topkey]:
+                k=j['VerifiedAccessTrustProviders']
+                common.write_import(type, j[key], None)
+                for kk in k:   
+                    pkey=j[key]+"/"+kk['VerifiedAccessTrustProviderId']
+                    common.add_dependancy("aws_verifiedaccess_instance_trust_provider_attachment", pkey)
+
+        else:
+            log.warning("WARNING: "+type+" id unexpected = "+ str(id))
+
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+
+    return True
+
+
+# aws_verifiedaccess_instance_trust_provider_attachment
+def get_aws_verifiedaccess_instance_trust_provider_attachment(type, id, clfn, descfn, topkey, key, filterid):
+    #if context.debug:
+    log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        pkey=id
+        pid=id.split('/')[1]
+        client = boto3.client(clfn)
+        if id is None:
+            log.warning("WARNING: "+type+" id must pass verified instance id")
+
+
+        elif pid.startswith("vatp-"):
+            pkey=id
+            response = client.describe_verified_access_trust_providers(VerifiedAccessTrustProviderIds=[pid])
+            if response == []:
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
+            for j in response[topkey]:
+                
+                common.write_import(type, pkey, None)
+
+        else:
+            log.warning("WARNING: "+type+" id unexpected = "+ str(id))
+
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+
+    return True

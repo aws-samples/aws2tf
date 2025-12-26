@@ -9966,7 +9966,7 @@ aws_transfer_workflow = {
 aws_verifiedaccess_endpoint = {
 	"clfn":		"ec2",
 	"descfn":	"describe_verified_access_endpoints",
-	"topkey":	"VerifiedAccessInstanceIds",
+	"topkey":	"VerifiedAccessEndpoints",
 	"key":		"VerifiedAccessEndpointId",
 	"filterid":	"VerifiedAccessEndpointId"
 }

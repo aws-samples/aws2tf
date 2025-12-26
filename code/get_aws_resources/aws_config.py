@@ -12,7 +12,7 @@ def get_aws_config_config_rule(type, id, clfn, descfn, topkey, key, filterid):
     try:
         response = common.call_boto3(type,clfn, descfn, topkey, key, id)
         #print("-9a->"+str(response))
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
         if id is None:
             for j in response:
@@ -39,7 +39,7 @@ def get_aws_config_aggregate_authorization(type, id, clfn, descfn, topkey, key, 
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = common.call_boto3(type,clfn, descfn, topkey, key, id)
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
         if id is None:
                 theid=context.acc+":"+context.region

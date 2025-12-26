@@ -15,7 +15,7 @@ def get_aws_ecr_registry_policy(type, id, clfn, descfn, topkey, key, filterid):
         client = boto3.client(clfn)
         if id is None:
             response = client.get_registry_policy()
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
             common.write_import(type,j[key],None) 
     except client.exceptions.RegistryPolicyNotFoundException:
@@ -38,7 +38,7 @@ def get_aws_ecr_registry_scanning_configuration(type, id, clfn, descfn, topkey, 
         client = boto3.client(clfn)
         if id is None:
             response = client.get_registry_policy()
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
             common.write_import(type,j[key],None) 
     except client.exceptions.RegistryPolicyNotFoundException:
@@ -111,12 +111,12 @@ def get_aws_ecr_repository(type, id, clfn, descfn, topkey, key, filterid):
         client = boto3.client(clfn)
         if id is None:
             response = client.describe_repositories()
-            if response[topkey] == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response[topkey] == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 common.write_import(type, j[key], None)
         else:
             response = client.describe_repositories(repositoryNames=[id])
-            if response[topkey] == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response[topkey] == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 common.write_import(type, j[key], None)
 

@@ -17,7 +17,7 @@ def get_aws_ssm_document(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(Filters=[{'Key': 'Owner','Values': ['Self']}]):
                 response = response + page[topkey]
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -25,7 +25,7 @@ def get_aws_ssm_document(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.describe_document(Name=id)
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response['Document']
             common.write_import(type,id,None)
@@ -47,7 +47,7 @@ def get_aws_ssm_association(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(AssociationFilterList=[{'key': 'AssociationId','value': id}]):
                 response = response + page[topkey]
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 log.info("Here ......."+j[key])
@@ -72,7 +72,7 @@ def get_aws_ssm_default_patch_baseline(type, id, clfn, descfn, topkey, key, filt
         if id is None:
             response = client.get_default_patch_baseline()
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j= response
             common.write_import(type,j['BaselineId'],None) 
@@ -80,7 +80,7 @@ def get_aws_ssm_default_patch_baseline(type, id, clfn, descfn, topkey, key, filt
         else:      
             response = client.get_default_patch_baseline(OperatingSystem=id)
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j= response
             common.write_import(type,j['BaselineId'],None) 
@@ -102,7 +102,7 @@ def get_aws_ssm_patch_baseline(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 theid=j[key]
@@ -112,7 +112,7 @@ def get_aws_ssm_patch_baseline(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.get_patch_baseline(BaselineId=id)
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j= response
             common.write_import(type,j['BaselineId'],None) 

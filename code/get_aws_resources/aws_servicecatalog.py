@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -30,7 +31,7 @@ def get_aws_servicecatalog_portfolio(type, id, clfn, descfn, topkey, key, filter
         else:      
             response = client.describe_portfolio(Id=id)
             if response['PortfolioDetail'] == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response['PortfolioDetail']
             theid=j[key]
@@ -95,7 +96,7 @@ def get_aws_servicecatalog_constraint(type, id, clfn, descfn, topkey, key, filte
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.warning("WARNING: Must pass PortfolioId for get_aws_servicecatalog_constraint")
+            log_warning("WARNING: Must pass PortfolioId for get_aws_servicecatalog_constraint")
             return True
         else:
             response = client.list_constraints_for_portfolio(PortfolioId=id)
@@ -124,7 +125,7 @@ def get_aws_servicecatalog_principal_portfolio_association(type, id, clfn, descf
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.warning("WARNING: Must pass PortfolioId for get_aws_servicecatalog_constraint")
+            log_warning("WARNING: Must pass PortfolioId for get_aws_servicecatalog_constraint")
             return True
 
         else:
@@ -156,7 +157,7 @@ def get_aws_servicecatalog_product_portfolio_association(type, id, clfn, descfn,
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.warning("WARNING: Must pass ProductId for get_aws_servicecatalog_product_portfolio_association")
+            log_warning("WARNING: Must pass ProductId for get_aws_servicecatalog_product_portfolio_association")
             return True
 
         else:

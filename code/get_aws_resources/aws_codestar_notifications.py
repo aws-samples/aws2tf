@@ -17,7 +17,7 @@ def get_aws_codestarnotifications_notification_rule(type, id, clfn, descfn, topk
             response = response + page[topkey]
 
         if response == []: 
-            log.info("Empty response for "+type+ " id="+str(id)+" returning")
+            log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             return True
         for j in response:
             if id is None:

@@ -17,7 +17,7 @@ def get_aws_codeguruprofiler_profiling_group(type, id, clfn, descfn, topkey, key
             response=response[topkey]
             #print(str(response))
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type,j,None) 
@@ -25,7 +25,7 @@ def get_aws_codeguruprofiler_profiling_group(type, id, clfn, descfn, topkey, key
         else:      
             response = client.describe_profiling_group(profilingGroupName=id)
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response
             common.write_import(type,j['profilingGroup']['name'],None)

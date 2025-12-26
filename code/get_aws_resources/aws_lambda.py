@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -53,7 +54,7 @@ def get_aws_lambda_layer_version(type, id, clfn, descfn, topkey, key, filterid):
         client = boto3.client(clfn)
         tarn=""
         if id is None:
-            log.warning("WARNING: Must pass LayerName/ARN as parameter")
+            log_warning("WARNING: Must pass LayerName/ARN as parameter")
         
         else:    
             if id.startswith("arn:"):
@@ -84,7 +85,7 @@ def get_aws_lambda_layer_version(type, id, clfn, descfn, topkey, key, filterid):
                 #print(str(response[topkey]))
                 if response[topkey] == []: 
                     if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
-                    log.info("Empty response for "+type+ " id="+str(id)+" returning") 
+                    log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                     pkey=type+"."+id
                     context.rproc[pkey]=True
                     return True

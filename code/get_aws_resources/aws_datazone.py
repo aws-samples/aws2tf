@@ -145,7 +145,7 @@ def get_aws_datazone_domain(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate(status='AVAILABLE'):
                 response = response + page[topkey]
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 dzid=j[key]
                 dv=j['domainVersion']
@@ -156,7 +156,7 @@ def get_aws_datazone_domain(type, id, clfn, descfn, topkey, key, filterid):
                     
         else:      
             response = client.get_domain(identifier=id)
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
             dzid=j[key]
             dv=j['domainVersion']

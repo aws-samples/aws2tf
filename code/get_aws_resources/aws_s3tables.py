@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -48,7 +49,7 @@ def get_aws_s3tables_namespace(type, id, clfn, descfn, topkey, key, filterid):
         config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
         client = boto3.client(clfn,config=config)
         if id is None:
-            log.warning("WARNING: must pass table bucket ARN as parameter")
+            log_warning("WARNING: must pass table bucket ARN as parameter")
             return True
 
         else:      
@@ -84,12 +85,12 @@ def get_aws_s3tables_table(type, id, clfn, descfn, topkey, key, filterid):
         config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
         client = boto3.client(clfn,config=config)
         if id is None:
-            log.warning("WARNING: must pass table bucket ARN and namespace as parameters")
+            log_warning("WARNING: must pass table bucket ARN and namespace as parameters")
             return True
 
         else:   
             if ";" not in id:
-                log.warning("WARNING: must pass table bucket ARN and namespace as parameters")
+                log_warning("WARNING: must pass table bucket ARN and namespace as parameters")
                 return True  
             barn=id.split(";")[0]
             namespace=id.split(";")[1] 

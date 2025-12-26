@@ -14,13 +14,13 @@ def get_aws_customerprofiles_domain(type, id, clfn, descfn, topkey, key, filteri
         client = boto3.client(clfn)
         if id is None:
             response = client.list_domains()
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 common.write_import(type,j[key],None) 
 
         else:      
             response = client.get_domain(DomainmName=id)
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
             common.write_import(type,id,None)
 
@@ -41,7 +41,7 @@ def get_aws_customerprofiles_profile(type, id, clfn, descfn, topkey, key, filter
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate(DomainmName=id):
                 response = response + page[topkey]
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 common.write_import(type,j[key],None) 
 

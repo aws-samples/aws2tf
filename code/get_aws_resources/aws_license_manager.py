@@ -16,7 +16,7 @@ def get_aws_licensemanager_license_configuration(type, id, clfn, descfn, topkey,
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 common.write_import(type,j[key],None) 
 
@@ -26,7 +26,7 @@ def get_aws_licensemanager_license_configuration(type, id, clfn, descfn, topkey,
             else:
                 log.info("Parameter must be an arn. Returning")
                 return True
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 common.write_import(type,j[key],None) 
 

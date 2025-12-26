@@ -17,7 +17,7 @@ def get_aws_route53_zone(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []:
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type,j[key],None)
@@ -26,7 +26,7 @@ def get_aws_route53_zone(type, id, clfn, descfn, topkey, key, filterid):
         else:
             response = client.get_hosted_zone(Id=id)
             if response['HostedZone'] == []:
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response['HostedZone']
             common.write_import(type,j[key],None)
@@ -56,7 +56,7 @@ def get_aws_route53_record(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(HostedZoneId=id):
                 response = response + page[topkey]
             if response == []:
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 #print("j="+str(j))

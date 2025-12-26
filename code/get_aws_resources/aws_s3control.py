@@ -39,7 +39,7 @@ def get_aws_s3_access_point(type, id, clfn, descfn, topkey, key, filterid):
                 context.rproc[pkey]=True
                 return True
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 context.rproc[pkey]=True
                 return True

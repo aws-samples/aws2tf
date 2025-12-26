@@ -16,7 +16,7 @@ def get_aws_ses_active_receipt_rule_set(type, id, clfn, descfn, topkey, key, fil
         response=client.describe_active_receipt_rule_set()
         try:
                 if response[topkey] == []: 
-                    log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                    log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                     return True
         except Exception as e:
                 log.info("No ses rule sets returning "+type)

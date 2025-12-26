@@ -15,7 +15,7 @@ def get_aws_batch_scheduling_policy(type, id, clfn, descfn, topkey, key, filteri
       
         response = client.list_scheduling_policies()
         if response == []: 
-            log.info("Empty response for "+type+ " id="+str(id)+" returning")
+            log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             return True
         for j in response['schedulingPolicies']:
             #print(str(j['arn']))
@@ -36,7 +36,7 @@ def get_aws_batch_job_definition(type, id, clfn, descfn, topkey, key, filterid):
       
         response = client.describe_job_definitions()
         if response == []: 
-            log.info("Empty response for "+type+ " id="+str(id)+" returning")
+            log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             return True
         for j in response[topkey]:
             if j['status']!="INACTIVE":

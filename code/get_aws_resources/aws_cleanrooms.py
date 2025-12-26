@@ -17,7 +17,7 @@ def get_aws_cleanrooms_collaboration(type, id, clfn, descfn, topkey, key, filter
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type,j[key],"c-"+j[key]) 
@@ -25,7 +25,7 @@ def get_aws_cleanrooms_collaboration(type, id, clfn, descfn, topkey, key, filter
         else:      
             response = client.get_collaboration(collaborationIdentifier=id)
             if response['response'] == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response['collaboration']
             common.write_import(type,j[key],"c-"+j[key])

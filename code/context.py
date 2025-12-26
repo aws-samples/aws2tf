@@ -23,6 +23,7 @@ types=[]
 debug=False
 debug5=False
 validate=False
+warnings=False
 dnet=False
 dkms=False
 dkey=False

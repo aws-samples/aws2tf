@@ -15,7 +15,7 @@ def get_aws_cognito_user_pool(type, id, clfn, descfn, topkey, key, filterid):
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate(MaxResults=32):
             response = response + page[topkey]
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response:
             if id is None: 
                 #print("---->>>>>"+str(j))
@@ -51,7 +51,7 @@ def get_aws_cognito_user_group(type, id, clfn, descfn, topkey, key, filterid):
         for page in paginator.paginate(UserPoolId=id):
             response = response + page[topkey]
 
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response:
             pkey=id+"/"+j[key]
             common.write_import(type,pkey,None) 
@@ -79,7 +79,7 @@ def get_aws_cognito_user_pool_client(type, id, clfn, descfn, topkey, key, filter
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate(UserPoolId=id):
             response = response + page[topkey]
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response:
             pkey=id+"/"+j[key]
             common.write_import(type,pkey,None) 
@@ -100,7 +100,7 @@ def get_aws_cognito_identity_pool(type, id, clfn, descfn, topkey, key, filterid)
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate(MaxResults=32):
             response = response + page[topkey]
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response:
             if id is None: 
                 common.write_import(type,j[key],None) 

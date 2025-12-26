@@ -16,14 +16,14 @@ def get_aws_scheduler_schedule_group(type, id, clfn, descfn, topkey, key, filter
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 if j[key] != "default":
                     common.write_import(type,j[key],None) 
 
         else:      
             response = client.get_schedule_group(Name=id)
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
             common.write_import(type,j[key],None)
 
@@ -43,7 +43,7 @@ def get_aws_scheduler_schedule(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 sn=j[key] ## Name
                 gn=j['GroupName']
@@ -52,7 +52,7 @@ def get_aws_scheduler_schedule(type, id, clfn, descfn, topkey, key, filterid):
 
         else:      
             response = client.get_schedule(Name=id)
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
             sn=j[key] ## Name
             gn=j['GroupName']

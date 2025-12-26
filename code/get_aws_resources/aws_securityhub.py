@@ -45,7 +45,7 @@ def get_aws_securityhub_organization_configuration(type, id, clfn, descfn, topke
             return True
 
         if response == []: 
-            log.info("Empty response for "+type+ " id="+str(id)+" returning")
+            log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             return True
         j=response
         common.write_import(type,j[key],None) 

@@ -72,7 +72,7 @@ def get_aws_eks_fargate_profile(type,id,clfn,descfn,topkey,key,filterid):
       
       
       response=common.call_boto3(type,clfn,descfn,topkey,key,id)
-      if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+      if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
       for j in response: 
          retid=j # no key
@@ -98,7 +98,7 @@ def get_aws_eks_node_group(type,id,clfn,descfn,topkey,key,filterid):
       
       
       response=common.call_boto3(type,clfn,descfn,topkey,key,id)
-      if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+      if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
    
       for j in response: 
          retid=j # no key
@@ -126,7 +126,7 @@ def get_aws_eks_addon(type,id,clfn,descfn,topkey,key,filterid):
       
       response=common.call_boto3(type,clfn,descfn,topkey,key,id)
 
-      if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+      if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
       for j in response:
          retid=j # no key
@@ -152,7 +152,7 @@ def get_aws_eks_identity_provider_config(type,id,clfn,descfn,topkey,key,filterid
             return True
       
       response=common.call_boto3(type,clfn,descfn,topkey,key,id)
-      if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+      if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
       
       for j in response: 
          log.info(j)  
@@ -185,7 +185,7 @@ def get_aws_eks_pod_identity_association(type,id,clfn,descfn,topkey,key,filterid
       response = client.list_pod_identity_associations(clusterName=id)
 
 
-      if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+      if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         #print(str(response))
       for j in response[topkey]:
             retid=j['associationId']
@@ -216,7 +216,7 @@ def get_aws_eks_access_entry(type,id,clfn,descfn,topkey,key,filterid):
       client = boto3.client(clfn)  
       response = client.list_access_entries(clusterName=id)
    
-      if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+      if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         #print(str(response))
       for j in response[topkey]:
             ## need to get the type
@@ -229,7 +229,7 @@ def get_aws_eks_access_entry(type,id,clfn,descfn,topkey,key,filterid):
                continue
 
             resp2=client.describe_access_entry(clusterName=id,principalArn=j)
-            if resp2 == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if resp2 == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             if resp2['accessEntry']['type'] == 'STANDARD':
                common.write_import(type,theid,None) 
                common.add_dependancy("aws_eks_access_policy_association",pkey)

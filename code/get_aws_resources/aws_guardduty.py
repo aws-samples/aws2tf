@@ -16,14 +16,14 @@ def get_aws_guardduty_detector(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             #print(str(response))
             for j in response:
                 common.write_import(type,j,"d-"+j) 
 
         else:      
             response = client.get_detector(DetectorId=id)
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             common.write_import(type,id,"d-"+id)
 
     except Exception as e:

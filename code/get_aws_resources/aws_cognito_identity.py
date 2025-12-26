@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -17,7 +18,7 @@ def get_aws_cognito_identity_pool(type, id, clfn, descfn, topkey, key, filterid)
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate(MaxResults=32):
             response = response + page[topkey]
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response:
             if id is None: 
                 common.write_import(type,j[key],None) 
@@ -44,12 +45,12 @@ def get_aws_cognito_identity_pool_roles_attachment(type, id, clfn, descfn, topke
     try:
         response = []
         if id is None:
-            log.warning("WARNING: Must pass Pool Identity as a parameter") 
+            log_warning("WARNING: Must pass Pool Identity as a parameter") 
             return True
         else:
             client = boto3.client(clfn)
             response = client.get_identity_pool_roles(IdentityPoolId=id)
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             common.write_import(type,id,None) 
 
     except Exception as e:

@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -164,7 +165,7 @@ def get_aws_sagemaker_app(type, id, clfn, descfn, topkey, key, filterid):
 
 
         else:
-            log.warning("WARNING: must pass doamin id as parameter")
+            log_warning("WARNING: must pass doamin id as parameter")
             return True
 
         for j in response:
@@ -324,7 +325,7 @@ def get_aws_sagemaker_image_version(type, id, clfn, descfn, topkey, key, filteri
         client = boto3.client(clfn)
         if id is None:
             # calls list_secrets
-            log.warning("WARNING: Must pass image id as parameter")
+            log_warning("WARNING: Must pass image id as parameter")
         else:
             response = client.list_image_versions(ImageName=id)
             #print("list_image_versions=",response)

@@ -22,7 +22,7 @@ def get_aws_secretsmanager_secret(type, id, clfn, descfn, topkey, key, filterid)
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate(IncludePlannedDeletion=False):
                 response = response + page[topkey]
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 sarn=j[key]
                 sn=sarn.split(":")[-1]
@@ -42,7 +42,7 @@ def get_aws_secretsmanager_secret(type, id, clfn, descfn, topkey, key, filterid)
         else:
             response = client.describe_secret(SecretId=id)
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning") 
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             j=response
             common.write_import(type,j[key],None)
@@ -104,7 +104,7 @@ def get_aws_secretsmanager_secret_version(type, id, clfn, descfn, topkey, key, f
             log.info("ERROR: get_aws_secretsmanager_secret_verion must be called with SecretID as parameter")
         else:
             response = client.list_secret_version_ids(SecretId=id,IncludeDeprecated=False)
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             #print(response)
 
             for j in response[topkey]:

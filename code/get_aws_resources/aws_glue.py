@@ -19,7 +19,7 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 pkey=context.acc+":"+j[key]
                 tfid="d-"+pkey.replace(":","__")
@@ -145,14 +145,14 @@ def get_aws_glue_trigger(type, id, clfn, descfn, topkey, key, filterid):
         client = boto3.client(clfn)
         if id is None:
             response = client.list_triggers()
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response['TriggerNames']:
                 pkey=j
                 common.write_import(type,pkey,None) 
 
         else:          
             response = client.get_trigger(Name=id)
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Trigger']
             pkey=j[key]
             common.write_import(type,pkey,None)
@@ -174,7 +174,7 @@ def get_aws_glue_job(type, id, clfn, descfn, topkey, key, filterid):
         client = boto3.client(clfn)
         
         response = client.list_jobs()
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response['JobNames']:
             pkey=j
             if id is None:
@@ -200,13 +200,13 @@ def get_aws_glue_security_configuration(type, id, clfn, descfn, topkey, key, fil
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 common.write_import(type,j[key],None) 
 
         else:      
             response = client.get_security_configuration(Name=id)
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['SecurityConfiguration']
             common.write_import(type,j[key],None)
 
@@ -229,7 +229,7 @@ def get_aws_glue_crawler(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 crn=j[key]
                 dbn=j['DatabaseName']
@@ -238,7 +238,7 @@ def get_aws_glue_crawler(type, id, clfn, descfn, topkey, key, filterid):
 
         else:          
             response = client.get_crawler(Name=id)
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Crawler']
             crn=j[key]
             dbn=j['DatabaseName']
@@ -262,7 +262,7 @@ def get_aws_glue_dev_endpoint(type, id, clfn, descfn, topkey, key, filterid):
         client = boto3.client(clfn)
         if id is None:
             response = client.list_dev_endpoints()
-            if response['DevEndpointNames'] == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response['DevEndpointNames'] == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response['DevEndpointNames']:
                 epn=j
                 if id is None:
@@ -287,7 +287,7 @@ def get_aws_glue_data_catalog_encryption_settings(type, id, clfn, descfn, topkey
         client = boto3.client(clfn)
         if id is None:
             response = client.get_data_catalog_encryption_settings()
-            if response['DataCatalogEncryptionSettings'] == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response['DataCatalogEncryptionSettings'] == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             if id is None:
                 common.write_import(type,context.acc,"c-"+context.acc) 
             else:
@@ -311,14 +311,14 @@ def get_aws_glue_connection(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 pkey=context.acc+":"+j[key]
                 theid="c-"+pkey.replace(":","_")
                 common.write_import(type, pkey, theid)
         else:
             response = client.get_connection(Name=id)
-            if response['Connection'] == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response['Connection'] == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Connection'][key]
             pkey=context.acc+":"+j
             theid="c-"+pkey.replace(":","_")
@@ -342,7 +342,7 @@ def get_aws_glue_classifier(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
             try:
                 pkey=j['CsvClassifier'][key]
@@ -367,7 +367,7 @@ def get_aws_glue_classifier(type, id, clfn, descfn, topkey, key, filterid):
         else:
             #print("ID is "+str(id))
             response = client.get_classifier(Name=id)
-            if response['Classifier'] == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response['Classifier'] == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Classifier']
             try:
                 pkey=j['CsvClassifier'][key]
@@ -467,13 +467,13 @@ def get_aws_glue_data_quality_ruleset(type, id, clfn, descfn, topkey, key, filte
         client = boto3.client(clfn)
         if id is None:
             response = client.list_data_quality_rulesets()
-            if response[topkey] == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response[topkey] == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 common.write_import(type,j[key],None) 
 
         else:      
             response = client.list_data_quality_rulesets()
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 common.write_import(type,j[key],None)
 
@@ -494,14 +494,14 @@ def get_aws_glue_workflow(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 log.info(j)
                 common.write_import(type, j, None)
 
         else:
             response = client.get_workflow(Name=id)
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Workflow']
             common.write_import(type, j[key], None)
 

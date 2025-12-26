@@ -16,7 +16,7 @@ def get_aws_dms_replication_instance(type, id, clfn, descfn, topkey, key, filter
         for page in paginator.paginate():
                 response = response + page[topkey]
        
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response:
             if id is None:
                 common.write_import(type,j[key],None) 

@@ -17,7 +17,7 @@ def get_aws_bedrockagent_agent(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             #print(str(response))
             for j in response:
@@ -35,7 +35,7 @@ def get_aws_bedrockagent_agent(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.get_agent(agentId=id)
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response['agent']
             aid=j['agentId']
@@ -68,7 +68,7 @@ def get_aws_bedrockagent_knowledge_base(type, id, clfn, descfn, topkey, key, fil
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type,j[key],"r-"+j[key]) 
@@ -76,7 +76,7 @@ def get_aws_bedrockagent_knowledge_base(type, id, clfn, descfn, topkey, key, fil
         else:      
             response = client.get_knowledge_base(knowledgeBaseId=id)
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response['knowledgeBase']
             common.write_import(type,j[key],"r-"+j[key])

@@ -17,7 +17,7 @@ def get_aws_redshiftserverless_workgroup(type, id, clfn, descfn, topkey, key, fi
         for page in paginator.paginate():
                 response = response + page[topkey]
         if response == []: 
-            log.info("Empty response for "+type+ " id="+str(id)+" returning")
+            log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             return True
   
         for j in response:
@@ -44,7 +44,7 @@ def get_aws_redshiftserverless_namespace(type, id, clfn, descfn, topkey, key, fi
         for page in paginator.paginate():
                 response = response + page[topkey]
         if response == []: 
-            log.info("Empty response for "+type+ " id="+str(id)+" returning")
+            log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             return True
   
         for j in response:

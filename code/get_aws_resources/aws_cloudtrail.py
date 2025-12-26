@@ -17,7 +17,7 @@ def get_aws_cloudtrail(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 if j['HomeRegion']==context.region:
@@ -25,7 +25,7 @@ def get_aws_cloudtrail(type, id, clfn, descfn, topkey, key, filterid):
 
         else:      
             response = client.get_trail(Name=id)
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning")
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             return True
             j=response['Trail']
             if j['HomeRegion']==context.region:

@@ -26,6 +26,15 @@ from pathlib import Path
 # Get logger from parent aws2tf module
 log = logging.getLogger('aws2tf')
 
+# Conditional warning function
+def log_warning(message, *args, **kwargs):
+    """
+    Log warning only if warnings are enabled via -w flag.
+    Always logs in debug mode.
+    """
+    if context.warnings or context.debug:
+        log.warning(message, *args, **kwargs)
+
 # Security Fix #3: Path traversal prevention
 def safe_filename(filename: str, base_dir: str = None) -> str:
     """
@@ -438,7 +447,7 @@ def call_resource(type, id):
       return
    
    if type in aws_no_import.noimport:
-      log.warning("WARNING: Can not import type: " + type)
+      log_warning("WARNING: Can not import type: " + type)
       if id is not None:
          with open('not-imported.log', 'a') as f2:
             f2.write(type + " : " + str(id) + "\n")
@@ -446,7 +455,7 @@ def call_resource(type, id):
       return
 
    if type in aws_not_implemented.notimplemented:
-      log.warning("Not supported by aws2tf currently: " + type +
+      log_warning("Not supported by aws2tf currently: " + type +
             " please submit github issue to request support")
       return
 
@@ -469,7 +478,7 @@ def call_resource(type, id):
          pass
    else:
       if type in needid_dict.aws_needid:
-         log.warning("WARNING: " + type + " can not have null id must pass parameter " +
+         log_warning("WARNING: " + type + " can not have null id must pass parameter " +
                needid_dict.aws_needid[type]['param'])
          # TODO api only
          return
@@ -478,7 +487,7 @@ def call_resource(type, id):
    sr = False
    clfn, descfn, topkey, key, filterid = resources.resource_data(type, id)
    if key == "NOIMPORT":
-      log.warning("WARNING: Can not import type: " + type)
+      log_warning("WARNING: Can not import type: " + type)
       return
 
    if clfn is None:

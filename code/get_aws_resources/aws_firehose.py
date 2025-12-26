@@ -15,7 +15,7 @@ def get_aws_kinesis_firehose_delivery_stream(type, id, clfn, descfn, topkey, key
         if id is None:
             response = client.list_delivery_streams()
             if response[topkey] == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 # have the name - not must get the arn
                 response = client.describe_delivery_stream(DeliveryStreamName=j)
@@ -27,7 +27,7 @@ def get_aws_kinesis_firehose_delivery_stream(type, id, clfn, descfn, topkey, key
         else:      
             response = client.describe_delivery_stream(DeliveryStreamName=id)
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 context.rproc[pkey]=True
                 return True

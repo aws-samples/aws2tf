@@ -23,7 +23,7 @@ def get_aws_lb(type,id,clfn,descfn,topkey,key,filterid):
             response = client.describe_load_balancers(Names=[id])
         
         response=response[topkey]
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         for j in response: 
             retid=j[key] # key is LoadBalancerArn
@@ -56,7 +56,7 @@ def get_aws_lb_listener(type,id,clfn,descfn,topkey,key,filterid):
             return True
    
         response=response[topkey]
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         for j in response: 
             retid=j[key] # ListenerARN
@@ -92,7 +92,7 @@ def get_aws_lb_listener_rule(type,id,clfn,descfn,topkey,key,filterid):
 
         response=response[topkey]
         
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         for j in response: 
             
@@ -131,7 +131,7 @@ def get_aws_lb_target_group(type,id,clfn,descfn,topkey,key,filterid):
             return True
    
         response=response[topkey]
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         for j in response: 
             retid=j[key] # TargetGroupArn

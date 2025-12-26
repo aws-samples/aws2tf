@@ -17,12 +17,12 @@ def get_aws_ecrpublic_repository(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 common.write_import(type,j[key],None) 
         else:
             response = client.describe_repositories(repositoryNames=[id])
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['repositories']
             if j[key]==id:
                 common.write_import(type,j[key],None)

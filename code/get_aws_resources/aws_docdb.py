@@ -18,7 +18,7 @@ def get_aws_docdb_cluster_parameter_group(type, id, clfn, descfn, topkey, key, f
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate():
                 response = response + page[topkey]
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         #print(str(response))
         for j in response:
             if id is None:
@@ -47,7 +47,7 @@ def get_aws_docdb_subnet_group(type, id, clfn, descfn, topkey, key, filterid):
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate():
                 response = response + page[topkey]
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         #print(str(response))
         for j in response:
             if id is None:
@@ -74,7 +74,7 @@ def get_aws_docdb_event_subscription(type, id, clfn, descfn, topkey, key, filter
 
         response=client.describe_event_subscriptions()
 
-        if response[topkey] == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response[topkey] == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         #print(str(response))
         for j in response[topkey]:
             if id is None:
@@ -104,7 +104,7 @@ def get_aws_docdb_cluster_instance(type, id, clfn, descfn, topkey, key, filterid
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate():
                 response = response + page[topkey]
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         #print(str(response))
         for j in response:
             engine=j['Engine']
@@ -138,7 +138,7 @@ def get_aws_docdb_cluster(type, id, clfn, descfn, topkey, key, filterid):
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate():
                 response = response + page[topkey]
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         #print(str(response))
         for j in response:
             engine=j['Engine']

@@ -30,7 +30,7 @@ def get_aws_backup_vault(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 if "/" not in j[key]:
@@ -39,7 +39,7 @@ def get_aws_backup_vault(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.describe_backup_vault(BackupVaultName=id)
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response
             common.write_import(type,j[key],None)
@@ -65,7 +65,7 @@ def get_aws_backup_plan(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 if "/" not in j['BackupPlanName']:
@@ -74,7 +74,7 @@ def get_aws_backup_plan(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.get_backup_plan(BackupPlanId=id)
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response
             common.write_import(type,j[key],None)

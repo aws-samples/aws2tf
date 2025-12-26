@@ -832,8 +832,7 @@ def globals_replace(t1,tt1,tt2):
                     #if "\\" not in tt2:
                     #    tt2=tt2.replace('"', '\\"')
             
-                    #print("t1="+t1)
-                    #print("tt2="+tt2)
+
                     
                     t2 = 'format("'+tt2+ '"' +ends+'),'
                     fins=fins+t2
@@ -866,7 +865,7 @@ def globals_replace(t1,tt1,tt2):
                     #if "\\" not in tt2:
                     #    tt2=tt2.replace('"', '\\"')
             
-                    #print("t1="+t1)
+
                     
                     if context.debug: log.debug("out tt2="+tt2)
                     if "[" in tt2:
@@ -915,7 +914,7 @@ def rhs_replace(t1,tt1,tt2):
                             ends=ends+",data.aws_region.current.region"
                 
                     t1 = tt1+' = format("'+tt2+ '"' +ends+')\n'
-        #print("t1="+t1)
+
 
     return t1
 

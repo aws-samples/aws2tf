@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -86,7 +87,7 @@ def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
          response=response1['Policy']
 
       else:
-         log.warning("WARNING: must pass arn to get_aws_iam_policy")
+         log_warning("WARNING: must pass arn to get_aws_iam_policy")
          if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
          return True
 
@@ -124,6 +125,8 @@ def get_aws_iam_instance_profile(type,id,clfn,descfn,topkey,key,filterid):
    if context.debug:
        log.debug("--> In get_aws_iam_instance_profile  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    
+   log.info("--> In get_aws_iam_instance_profile  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
    client = boto3.client(clfn) 
    response=[]
 

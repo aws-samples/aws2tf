@@ -20,7 +20,7 @@ def get_aws_sqs_queue(type, id, clfn, descfn, topkey, key, filterid):
                 log.info("No queues found "+type+ " id="+str(id)+" returning")
                 return True
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]:
                 common.write_import(type,j,None) 
@@ -31,7 +31,7 @@ def get_aws_sqs_queue(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.list_queues()
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             if "://" not in id:
                 # assume it s a queue name and get url:
@@ -81,7 +81,7 @@ def get_aws_sqs_queue_policy(type, id, clfn, descfn, topkey, key, filterid):
                 context.rproc[pkey]=True
                 return True
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             common.write_import(type,id,None)
             context.rproc[pkey]=True
@@ -115,7 +115,7 @@ def get_aws_sqs_queue_redrive_allow_policy(type, id, clfn, descfn, topkey, key, 
                 context.rproc[pkey]=True
                 return True
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
  
             common.write_import(type,id,None)
@@ -149,7 +149,7 @@ def get_aws_sqs_queue_redrive_policy(type, id, clfn, descfn, topkey, key, filter
                 context.rproc[pkey]=True
                 return True
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
  
             common.write_import(type,id,None)

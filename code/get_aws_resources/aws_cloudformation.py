@@ -17,7 +17,7 @@ def get_aws_cloudformation_stack(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(StackStatusFilter=['CREATE_COMPLETE']):
                 response = response + page[topkey]
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -25,7 +25,7 @@ def get_aws_cloudformation_stack(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.describe_stacks(StackName=id)
             if response['Stacks'] == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response['Stacks']:
                 #print(j)

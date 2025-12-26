@@ -25,7 +25,7 @@ def get_aws_db_parameter_group(type, id, clfn, descfn, topkey, key, filterid):
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate():
                 response = response + page[topkey]
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         #print(str(response))
         for j in response:
             if id is None:
@@ -62,7 +62,7 @@ def get_aws_db_option_group(type, id, clfn, descfn, topkey, key, filterid):
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate():
                 response = response + page[topkey]
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         #print(str(response))
         for j in response:
             if id is None:
@@ -96,7 +96,7 @@ def get_aws_db_subnet_group(type, id, clfn, descfn, topkey, key, filterid):
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate():
                 response = response + page[topkey]
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         #print(str(response))
 
         for j in response:
@@ -134,7 +134,7 @@ def get_aws_rds_custom_db_engine_version(type, id, clfn, descfn, topkey, key, fi
             for page in paginator.paginate(Engine=id):
                 response = response + page[topkey]
 
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response:
             eng=j['Engine']
             engv=j['EngineVersion']
@@ -162,14 +162,14 @@ def get_aws_db_event_subscription(type, id, clfn, descfn, topkey, key, filterid)
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 #print(j)
                 common.write_import(type,j[key],None) 
 
         else:      
             response = client.describe_event_subscriptions(SubscriptionName=id)
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 #print(j)
                 common.write_import(type,j[key],None)
@@ -194,7 +194,7 @@ def get_aws_db_instance(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response: 
                 engine=j['Engine']
                 if engine=="docdb" or engine.startswith("aurora"): continue
@@ -202,7 +202,7 @@ def get_aws_db_instance(type, id, clfn, descfn, topkey, key, filterid):
 
         else:
             response = client.describe_db_instances(DBInstanceIdentifier=id)
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 #print(j)
                 engine=j['Engine']
@@ -233,7 +233,7 @@ def get_aws_rds_cluster_instance(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response: 
                 engine=j['Engine']
                 if engine.startswith("aurora"): 
@@ -247,7 +247,7 @@ def get_aws_rds_cluster_instance(type, id, clfn, descfn, topkey, key, filterid):
 
         else:
             response = client.describe_db_instances(DBInstanceIdentifier=id)
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 #print(j)
                 engine=j['Engine']
@@ -274,7 +274,7 @@ def get_aws_rds_cluster(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response: 
                 engine=j['Engine']
                 if engine.startswith("aurora"): 
@@ -288,7 +288,7 @@ def get_aws_rds_cluster(type, id, clfn, descfn, topkey, key, filterid):
 
         else:
             response = client.describe_db_clusters(DBClusterIdentifier=id)
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 #print(j)
                 engine=j['Engine']

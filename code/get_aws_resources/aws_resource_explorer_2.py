@@ -17,7 +17,7 @@ def get_aws_resourceexplorer2_view(type, id, clfn, descfn, topkey, key, filterid
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type,j,None) 

@@ -17,7 +17,7 @@ def get_aws_organizations_organization(type, id, clfn, descfn, topkey, key, filt
         if id is None:
             response = client.describe_organization()
 
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j = response[topkey]
   
             common.write_import(type,j[key],None) 
@@ -62,7 +62,7 @@ def get_aws_organizations_organizational_unit(type, id, clfn, descfn, topkey, ke
         #except Exception as e:
         #    print("No Org unit found returning True......")
         #    return True
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         
         for j in response[topkey]:
             common.write_import(type, j[key], None)
@@ -90,7 +90,7 @@ def get_aws_organizations_policy(type, id, clfn, descfn, topkey, key, filterid):
             
         if scpskip:
             log.info("SCPs")
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 if "AWS" not in j[key]:
                     common.write_import(type,j[key],None) 
@@ -105,7 +105,7 @@ def get_aws_organizations_policy(type, id, clfn, descfn, topkey, key, filterid):
             log.info("No TAG Policies found ......")
             tagskip=False
         if tagskip:
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 #if "AWS" not in j[key]:
                     common.write_import(type,j[key],None) 
@@ -121,7 +121,7 @@ def get_aws_organizations_policy(type, id, clfn, descfn, topkey, key, filterid):
             backskip=False
 
         if backskip:    
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 #if "AWS" not in j[key]:
                     common.write_import(type,j[key],None)
@@ -137,7 +137,7 @@ def get_aws_organizations_policy(type, id, clfn, descfn, topkey, key, filterid):
             log.info("No AI Policies found ......")
             aislip=False
         if aiskip:
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 #if "AWS" not in j[key]:
                     common.write_import(type,j[key],None)
@@ -168,7 +168,7 @@ def get_aws_organizations_account(type, id, clfn, descfn, topkey, key, filterid)
                 #    print(f"{e=} [org1]")
                 #    return True
 
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response[topkey]:
             common.write_import(type, j[key], None)   
 
@@ -203,7 +203,7 @@ def get_aws_organizations_resource_policy(type, id, clfn, descfn, topkey, key, f
             #    return True
         #print("RESPONSE2")
         #print(str(response))
-        if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response[topkey]:
             common.write_import(type, j[key], None) 
 

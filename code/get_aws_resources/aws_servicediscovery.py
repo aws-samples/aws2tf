@@ -17,7 +17,7 @@ def get_aws_service_discovery_private_dns_namespace(type, id, clfn, descfn, topk
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 # get a vpc-id
                 if j['Type']=="DNS_PRIVATE":
@@ -36,7 +36,7 @@ def get_aws_service_discovery_private_dns_namespace(type, id, clfn, descfn, topk
 
         else:      
             response = client.get_namespace(Id=id)
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Namespace']
             if j['Type']=="DNS_PRIVATE":
             # get a vpc-id
@@ -70,14 +70,14 @@ def get_aws_service_discovery_public_dns_namespace(type, id, clfn, descfn, topke
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 if j['Type']=="DNS_PUBLIC":
                     common.write_import(type,j[key],"n-"+j[key]) 
 
         else:      
             response = client.get_namespace(Id=id)
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Namespace']
             if j['Type']=="DNS_PUBLIC":
                 common.write_import(type,j[key],"n-"+j[key])

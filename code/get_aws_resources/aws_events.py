@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -14,7 +15,7 @@ def get_aws_cloudwatch_event_bus(type, id, clfn, descfn, topkey, key, filterid):
         client = boto3.client(clfn)
         if id is None:
             response = client.list_event_buses()
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 if j[key] != "default":
                     common.write_import(type,j[key],None) 
@@ -25,7 +26,7 @@ def get_aws_cloudwatch_event_bus(type, id, clfn, descfn, topkey, key, filterid):
         else:   
             if id != "default":   
                 response = client.describe_event_bus(Name=id)
-                if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
                 j=response
                 common.write_import(type,j[key],None)
                 common.add_dependancy("aws_cloudwatch_event_rule",j[key])
@@ -47,12 +48,12 @@ def get_aws_cloudwatch_event_rule(type, id, clfn, descfn, topkey, key, filterid)
         client = boto3.client(clfn)
         #event_bus_name
         if id is None:
-            log.warning("WARNING: Muse pass event_bus_name as a parameter returning")
+            log_warning("WARNING: Muse pass event_bus_name as a parameter returning")
             return True
         else:  
                 if id == "default":
                     response = client.list_rules(EventBusName=id)
-                    if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                    if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
                     for j in response[topkey]:
                 #event_bus_name/rule-name
                         pkey=id+"/"+j[key]
@@ -95,7 +96,7 @@ def get_aws_cloudwatch_event_target(type, id, clfn, descfn, topkey, key, filteri
         client = boto3.client(clfn)
         #event_bus_name/rule-name/target-id
         if id is None:
-            log.warning("WARNING: Must pass event_bus_name/rule-name as a parameter returning")
+            log_warning("WARNING: Must pass event_bus_name/rule-name as a parameter returning")
             return True
 
         else:   
@@ -105,7 +106,7 @@ def get_aws_cloudwatch_event_target(type, id, clfn, descfn, topkey, key, filteri
                 if not ebn.startswith("aws."):
                     response = client.list_targets_by_rule(EventBusName=ebn,Rule=rn)
                     
-                    if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                    if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
                     for j in response[topkey]:
                     #event_bus_name/rule-name/target-id
                         pkey=id+"/"+j[key]
@@ -113,7 +114,7 @@ def get_aws_cloudwatch_event_target(type, id, clfn, descfn, topkey, key, filteri
                 pkey="aws_cloudwatch_event_target."+id
                 context.rproc[pkey] = True
             else:
-                log.warning("WARNING: Must pass event_bus_name/rule-name as a parameter returning")
+                log_warning("WARNING: Must pass event_bus_name/rule-name as a parameter returning")
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

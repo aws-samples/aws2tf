@@ -19,7 +19,7 @@ def get_aws_shield_protection_group(type, id, clfn, descfn, topkey, key, filteri
                 log.info("No shield protection groups")
                 return True
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -27,7 +27,7 @@ def get_aws_shield_protection_group(type, id, clfn, descfn, topkey, key, filteri
         else:      
             response = client.describe_protection_group(ProtectionGroupId=id)
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response['ProtectionGroup']
       

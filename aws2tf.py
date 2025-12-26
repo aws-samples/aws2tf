@@ -354,6 +354,7 @@ def parse_and_validate_arguments():
     argParser.add_argument("-s", "--singlefile", help="only a single file main.tf is produced", action='store_true')
     argParser.add_argument("-f", "--fast", help="fast multi-threaded mode", action='store_true')
     argParser.add_argument("-v", "--validate", help="validate and exit", action='store_true')
+    argParser.add_argument("-w", "--warn", help="show warning messages", action='store_true')
     argParser.add_argument("-a", "--accept", help="expected plan changes accepted", action='store_true')
     argParser.add_argument("-e", "--exclude", help="resource types to exclude")
     argParser.add_argument("-ec2tag", "--ec2tag", help="ec2 key:value pair to import")
@@ -460,6 +461,8 @@ def setup_environment_and_context(args):
     if args.debug5:
         context.debug5 = True
         context.fast = False
+    if args.warn:
+        context.warnings = True
     
     # Validate EC2 tag if provided
     if args.ec2tag:
@@ -1174,6 +1177,7 @@ def main():
     argParser.add_argument("-s", "--singlefile", help="only a single file main.tf is produced", action='store_true')
     argParser.add_argument("-f", "--fast", help="fast multi-threaded mode", action='store_true')
     argParser.add_argument("-v", "--validate", help="validate and exit", action='store_true')
+    argParser.add_argument("-w", "--warn", help="show warning messages", action='store_true')
     argParser.add_argument("-a", "--accept", help="expected plan changes accepted", action='store_true')
     argParser.add_argument("-e", "--exclude", help="resource types to exclude")
     argParser.add_argument("-ec2tag", "--ec2tag", help="ec2 key:value pair to import")
@@ -1326,6 +1330,8 @@ def main():
 
     if args.validate: 
         context.validate = True
+    if args.warn:
+        context.warnings = True
 
     if args.datanet:  context.dnet = True
     if args.datasgs:  context.dsgs = True

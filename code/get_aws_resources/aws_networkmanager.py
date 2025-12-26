@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -57,7 +58,7 @@ def get_aws_networkmanager_site(type, id, clfn, descfn, topkey, key, filterid):
     try:
         response = []
         if id is None:
-            log.warning("WARNING: must pass global network id as parameter")
+            log_warning("WARNING: must pass global network id as parameter")
             return True
         else:  
             pkey=type+"."+id
@@ -86,7 +87,7 @@ def get_aws_networkmanager_device(type, id, clfn, descfn, topkey, key, filterid)
     try:
         response = []
         if id is None:
-            log.warning("WARNING: must pass global network id as parameter")
+            log_warning("WARNING: must pass global network id as parameter")
             return True
         else:  
             pkey=type+"."+id
@@ -115,7 +116,7 @@ def get_aws_networkmanager_transit_gateway_registration(type, id, clfn, descfn, 
     try:
         response = []
         if id is None:
-            log.warning("WARNING: must pass global network id as parameter")
+            log_warning("WARNING: must pass global network id as parameter")
             return True
         else:  
             pkey=type+"."+id

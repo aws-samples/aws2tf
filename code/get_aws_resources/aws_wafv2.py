@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -215,7 +216,7 @@ def get_aws_wafv2_web_acl_logging_configuration(type, id, clfn, descfn, topkey, 
         config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
         client = boto3.client(clfn,config=config)
         if id is None:
-            log.warning("WARNING: Must pass WebACL arn as parameter")
+            log_warning("WARNING: Must pass WebACL arn as parameter")
             return True
 
         else:   

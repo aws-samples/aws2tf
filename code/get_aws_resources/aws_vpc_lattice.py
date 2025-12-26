@@ -1,6 +1,7 @@
 import common
 import logging
 log = logging.getLogger('aws2tf')
+from common import log_warning
 import botocore
 from botocore.config import Config
 import context
@@ -230,7 +231,7 @@ def get_aws_vpclattice_resource_policy(type, id, clfn, descfn, topkey, key, filt
     response = []
 
     if id is None:
-        log.warning("WARNING: must pass ARN of service network or service")
+        log_warning("WARNING: must pass ARN of service network or service")
         return True
 
     else:
@@ -342,7 +343,7 @@ def get_aws_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid):
       client = common.boto3.client(clfn)
       response = []
       if id is None:
-         log.warning("WARNING: must provide id for "+type)
+         log_warning("WARNING: must provide id for "+type)
          return True
 
       if id.startswith("sn-"):

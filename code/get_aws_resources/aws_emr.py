@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -98,7 +99,7 @@ def get_aws_emr_instance_group(type, id, clfn, descfn, topkey, key, filterid):
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.warning("WARNING: Muse pass cluster is as parameter returning")
+            log_warning("WARNING: Muse pass cluster is as parameter returning")
             return True
         else:
             try:
@@ -143,7 +144,7 @@ def get_aws_emr_instance_fleet(type, id, clfn, descfn, topkey, key, filterid):
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.warning("WARNING: Muse pass cluster is as parameter returning")
+            log_warning("WARNING: Muse pass cluster is as parameter returning")
             return True
         else:
             try:
@@ -192,7 +193,7 @@ def get_aws_emr_managed_scaling_policy(type, id, clfn, descfn, topkey, key, filt
         
         client = boto3.client(clfn)
         if id is None:
-            log.warning("WARNING: Must pass cluster is as parameter returning")
+            log_warning("WARNING: Must pass cluster is as parameter returning")
             return True
 
         else:

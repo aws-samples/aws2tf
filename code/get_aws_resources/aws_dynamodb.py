@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -17,14 +18,14 @@ def get_aws_dynamodb_table(type, id, clfn, descfn, topkey, key, filterid):
         client = boto3.client(clfn)
         if id is None:
             response = client.list_tables()
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response['TableNames']:
                 common.write_import(type,j,None) 
                 common.add_dependancy("aws_dynamodb_kinesis_streaming_destination",j)
 
         else:
             response = client.describe_table(TableName=id)
-            if response == []: log.info("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response[topkey] # 'Table
             common.write_import(type,j[key],None) # key=TableName
             common.add_dependancy("aws_dynamodb_kinesis_streaming_destination",j[key])
@@ -45,7 +46,7 @@ def get_aws_dynamodb_kinesis_streaming_destination(type, id, clfn, descfn, topke
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.warning("WARNING: Must pass table name as paramter for %s", type); 
+            log_warning("WARNING: Must pass table name as paramter for %s", type); 
             return True
 
         else:      

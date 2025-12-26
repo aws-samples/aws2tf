@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -86,7 +87,7 @@ def get_aws_msk_cluster_policy(type, id, clfn, descfn, topkey, key, filterid):
         config = Config(retries = {'max_attempts': 10, 'mode': 'standard'})
         client = boto3.client(clfn, config=config)
         if id is None:
-            log.warning("WARNING: Must pass Cluster arn as parameter")
+            log_warning("WARNING: Must pass Cluster arn as parameter")
             return True
 
         else:
@@ -103,7 +104,7 @@ def get_aws_msk_cluster_policy(type, id, clfn, descfn, topkey, key, filterid):
                 context.rproc[pkey]=True
                 
             else:
-                log.warning("WARNING: Must pass Cluster arn as parameter")
+                log_warning("WARNING: Must pass Cluster arn as parameter")
                 return True
 
     except Exception as e:
@@ -149,7 +150,7 @@ def get_aws_msk_serverless_cluster(type, id, clfn, descfn, topkey, key, filterid
                 context.rproc[pkey]=True
 
             else:
-                log.warning("WARNING: Must pass Cluster arn as parameter")
+                log_warning("WARNING: Must pass Cluster arn as parameter")
                 return True
 
 
@@ -170,7 +171,7 @@ def get_aws_msk_scram_secret_association(type, id, clfn, descfn, topkey, key, fi
         config = Config(retries = {'max_attempts': 10, 'mode': 'standard'})
         client = boto3.client(clfn, config=config)
         if id is None:
-            log.warning("WARNING: Must pass Cluster arn as parameter")
+            log_warning("WARNING: Must pass Cluster arn as parameter")
             return True
 
         else:
@@ -187,7 +188,7 @@ def get_aws_msk_scram_secret_association(type, id, clfn, descfn, topkey, key, fi
                     common.write_import(type, id, None)
                 context.rproc[pkey]=True
             else:
-                log.warning("WARNING: Must pass Cluster arn as parameter")
+                log_warning("WARNING: Must pass Cluster arn as parameter")
                 return True
 
     except Exception as e:

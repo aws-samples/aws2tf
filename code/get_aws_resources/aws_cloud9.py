@@ -17,7 +17,7 @@ def get_aws_cloud9_environment_membership(type, id, clfn, descfn, topkey, key, f
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 uarn=j['userArn']
@@ -27,7 +27,7 @@ def get_aws_cloud9_environment_membership(type, id, clfn, descfn, topkey, key, f
         else:      
             response = client.describe_environment_memberships(environmentId=id)
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]:
                 uarn=j['userArn']
@@ -50,7 +50,7 @@ def get_aws_cloud9_environment_ec2(type, id, clfn, descfn, topkey, key, filterid
             response = client.list_environments()
             #print(response)
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response['environmentIds']:
                 common.write_import(type,j,None) 
@@ -62,7 +62,7 @@ def get_aws_cloud9_environment_ec2(type, id, clfn, descfn, topkey, key, filterid
         else:      
             response = client.describe_environments(environmentIds=[id])
             if response == []: 
-                log.info("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response['environments']:
                 common.write_import(type,j[id],None)

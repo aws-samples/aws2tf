@@ -13,6 +13,7 @@ from typing import List, Dict
 import io
 from concurrent.futures import ThreadPoolExecutor
 import logging
+from tqdm import tqdm
 
 sys.path.insert(0, './code')
 
@@ -823,14 +824,27 @@ def main():
             
             if context.fast:
                 context.tracking_message="Stage 3 of 10 getting "+str(it)+" resources multi-threaded"
+                log.info(f"Processing {it} resource types (multi-threaded)...")
                 with ThreadPoolExecutor(max_workers=context.cores) as executor:
+                    # Use tqdm for progress bar
                     futures = [
                         executor.submit(common.call_resource, i, id)
                         for i in all_types
                     ]
-                    #return [f.result() for f in futures]     
+                    # Show progress as futures complete
+                    for future in tqdm(concurrent.futures.as_completed(futures), 
+                                      total=len(futures),
+                                      desc="Processing resources",
+                                      unit="resource",
+                                      disable=context.debug):
+                        future.result()
             else:
-                for i in all_types:
+                log.info(f"Processing {it} resource types...")
+                # Use tqdm for progress bar in non-fast mode
+                for i in tqdm(all_types, 
+                             desc="Processing resources",
+                             unit="type",
+                             disable=context.debug):
                     ic=ic+1
                     if ic > it: break 
                     if ic < istart: continue

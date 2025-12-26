@@ -13,6 +13,7 @@ from typing import List, Dict
 import io
 from concurrent.futures import ThreadPoolExecutor
 from botocore.exceptions import NoCredentialsError, ClientError
+from tqdm import tqdm
 
 
 def get_aws_s3_bucket(type, id, clfn, descfn, topkey, key, filterid):
@@ -143,41 +144,54 @@ def get_all_s3_buckets(fb,my_region):
       #print("----------------------")
       
       # check can access
+      log.info(f"Checking access to {len(context.bucketlist)} S3 buckets...")
       with ThreadPoolExecutor(max_workers=context.cores) as executor4:
          futures = [
             executor4.submit(check_access,key,my_region)
             for key in context.bucketlist.keys()
          ]
+         # Show progress
+         for future in tqdm(concurrent.futures.as_completed(futures),
+                           total=len(futures),
+                           desc="Checking bucket access",
+                           unit="bucket"):
+            future.result()
 
 
-      for k, v in context.bucketlist.items():
-         if v is True:
-            #print("true bucket="+k,str(v))
-            bucket_name=k
+      # Process accessible buckets
+      accessible_buckets = [k for k, v in context.bucketlist.items() if v is True]
+      log.info(f"Processing {len(accessible_buckets)} accessible S3 buckets...")
+      
+      for bucket_name in tqdm(accessible_buckets,
+                             desc="Processing S3 buckets",
+                             unit="bucket"):
+         
+         if "aws_s3_bucket."+bucket_name in str(context.rproc):
+            if context.rproc["aws_s3_bucket."+bucket_name] is True:
+               if context.debug:
+                  log.debug("Already processed skipping bucket " + bucket_name + " (MT)")
+               continue
             
-            if "aws_s3_bucket."+bucket_name in str(context.rproc):
-               if context.rproc["aws_s3_bucket."+bucket_name] is True:
-                  log.info("Already processed skipping bucket " + bucket_name + " (MT)")
-                  continue
-               
-            log.info("Processing Bucket (MT): "+bucket_name + ' ...')
-            common.write_import(type,bucket_name,"b-"+bucket_name)
-            common.add_dependancy("aws_s3_access_point",bucket_name)
-            pkey=type+"."+bucket_name
-            context.rproc[pkey]=True
+         if context.debug:
+            log.debug("Processing Bucket (MT): "+bucket_name + ' ...')
+         common.write_import(type,bucket_name,"b-"+bucket_name)
+         common.add_dependancy("aws_s3_access_point",bucket_name)
+         pkey=type+"."+bucket_name
+         context.rproc[pkey]=True
 
 
       context.tracking_message="Stage 3 of 10 getting s3 bucket properties resources ..."
-      for k, v in context.bucketlist.items():
-         if v is True:
-            #print("true bucket="+k,str(v))
-            bucket_name=k
-            ### thread thread ?
-            with ThreadPoolExecutor(max_workers=context.cores) as executor3:
-                     futures = [
-                        executor3.submit(get_s3,s3_fields,key,bucket_name)
-                        for key in s3_fields
-                     ]   
+      log.info(f"Getting S3 bucket properties for {len(accessible_buckets)} buckets...")
+      
+      for bucket_name in tqdm(accessible_buckets,
+                             desc="Getting bucket properties",
+                             unit="bucket"):
+         ### thread thread ?
+         with ThreadPoolExecutor(max_workers=context.cores) as executor3:
+                  futures = [
+                     executor3.submit(get_s3,s3_fields,key,bucket_name)
+                     for key in s3_fields
+                  ]   
       
       return True
 

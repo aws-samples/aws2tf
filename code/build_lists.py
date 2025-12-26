@@ -4,6 +4,7 @@ import concurrent.futures
 import json
 import datetime
 import logging
+from tqdm import tqdm
 
 log = logging.getLogger('aws2tf')
 
@@ -226,6 +227,8 @@ def build_secondary_lists(id=None):
         
         # Use ThreadPoolExecutor to parallelize API calls
         rcl = len(context.rolelist)
+        log.info(f"Fetching policies for {rcl} IAM roles...")
+        
         with concurrent.futures.ThreadPoolExecutor(max_workers=context.cores) as executor:
             # Submit all role policy fetch tasks
             future_to_role = {
@@ -233,12 +236,11 @@ def build_secondary_lists(id=None):
                 for role_name in context.rolelist.keys()
             }
             
-            # Process results as they complete
-            completed = 0
-            for future in concurrent.futures.as_completed(future_to_role):
-                completed += 1
-                context.tracking_message = f"Stage 2 of 10, Building secondary IAM resource lists... {completed} of {rcl}"
-                
+            # Process results with progress bar
+            for future in tqdm(concurrent.futures.as_completed(future_to_role),
+                              total=len(future_to_role),
+                              desc="Fetching IAM policies",
+                              unit="role"):
                 try:
                     result = future.result()
                     role_name = result['role_name']

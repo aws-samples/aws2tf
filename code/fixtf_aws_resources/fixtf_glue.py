@@ -25,8 +25,8 @@ def aws_glue_crawler(t1,tt1,tt2,flag1,flag2):
 			common.add_dependancy("aws_glue_security_configuration",tt2)
 	except Exception as e:
 		log.error(e)
-		log.error("fixtf_glue.py aws_glue_crawler Exception=", str(e))
-		log.error("fixtf_glue.py t1=", t1)
+		log.error("fixtf_glue.py aws_glue_crawler Exception= %s",  str(e))
+		log.error("fixtf_glue.py t1= %s",  t1)
 	
 	return skip,t1,flag1,flag2
 

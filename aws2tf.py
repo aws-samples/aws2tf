@@ -34,10 +34,21 @@ def setup_logging(debug=False, log_file='aws2tf.log'):
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
     
-    # File handler
+    # File handler with secure permissions (Security Fix #7)
+    # Create log file with restricted permissions (0o600 = rw-------)
+    # This prevents other users from reading potentially sensitive log data
+    if os.path.exists(log_file):
+        os.chmod(log_file, 0o600)
+    
     file_handler = logging.FileHandler(log_file, mode='w')
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
+    
+    # Set secure permissions on the log file after creation
+    try:
+        os.chmod(log_file, 0o600)
+    except Exception:
+        pass  # Ignore if we can't set permissions
     
     return logger
 
@@ -47,7 +58,7 @@ log = setup_logging()
 import common
 import resources
 import context
-import timed_interrupt
+# Note: timed_interrupt imported later after validation to avoid orphaned threads
 
 import stacks
 from fixtf_aws_resources import aws_dict
@@ -56,6 +67,9 @@ from build_lists import build_lists, build_secondary_lists
 
 
 def extra_help():
+    # Import here since it's needed for this function
+    import timed_interrupt
+    
     log.info("\nExtra help\n")
     log.info("Type codes supported - ./aws2tf.py -t [type code]:\n")
     with open('code/resources.py', 'r') as f:
@@ -77,7 +91,7 @@ def extra_help():
     log.info("\nOr instead of the above type codes use the terraform type eg:\n\n./aws2tf.py -t aws_vpc\n")
     log.info("\nTo get a deployed stack set:\n\n./aws2tf.py -t stack -i stackname\n")               
     log.info("exit 001")
-    timed_interrupt.timed_int.stop()
+    timed_interrupt.stop_timer()
     exit()
 
 
@@ -134,6 +148,193 @@ def kd_threaded(ti):
     return
 
 
+# Security Fix #4 & #6: Input validation functions
+def validate_region(region: str) -> str:
+    """
+    Validate AWS region format.
+    
+    Args:
+        region: AWS region string
+        
+    Returns:
+        Validated region string
+        
+    Raises:
+        ValueError: If region format is invalid
+    """
+    import re
+    # AWS region format: 2 letters, dash, direction, dash, 1-2 digits
+    # Examples: us-east-1, eu-west-2, ap-southeast-1
+    if not re.match(r'^[a-z]{2}-[a-z]+-\d{1,2}$', region):
+        raise ValueError(f"Invalid AWS region format: {region}")
+    return region
+
+
+def validate_profile(profile: str) -> str:
+    """
+    Validate AWS profile name.
+    
+    Args:
+        profile: AWS profile name
+        
+    Returns:
+        Validated profile string
+        
+    Raises:
+        ValueError: If profile contains invalid characters
+    """
+    import re
+    # Profile names should be alphanumeric with hyphens and underscores
+    if not re.match(r'^[a-zA-Z0-9_-]+$', profile):
+        raise ValueError(f"Invalid AWS profile name: {profile}")
+    return profile
+
+
+def validate_resource_type(resource_type: str) -> str:
+    """
+    Validate Terraform resource type format.
+    
+    Args:
+        resource_type: Terraform resource type (e.g., aws_vpc, aws_s3_bucket)
+        
+    Returns:
+        Validated resource type
+        
+    Raises:
+        ValueError: If resource type format is invalid
+    """
+    import re
+    # Resource types should be alphanumeric with underscores
+    # Can be comma-separated list
+    if ',' in resource_type:
+        types = resource_type.split(',')
+        for t in types:
+            validate_resource_type(t.strip())
+        return resource_type
+    
+    # Single resource type validation
+    if not re.match(r'^[a-z][a-z0-9_]*$', resource_type):
+        raise ValueError(f"Invalid resource type format: {resource_type}")
+    
+    return resource_type
+
+
+def validate_resource_id(resource_id: str, resource_type: str = None) -> str:
+    """
+    Validate AWS resource ID format.
+    
+    Args:
+        resource_id: AWS resource ID
+        resource_type: Optional resource type for specific validation
+        
+    Returns:
+        Validated resource ID
+        
+    Raises:
+        ValueError: If resource ID contains dangerous characters
+    """
+    import re
+    
+    # Check for path traversal attempts
+    if '..' in resource_id:
+        raise ValueError(f"Path traversal detected in resource ID: {resource_id}")
+    
+    # Check for shell metacharacters that could be dangerous
+    dangerous_chars = [';', '|', '&', '$', '`', '\n', '\r']
+    for char in dangerous_chars:
+        if char in resource_id:
+            raise ValueError(f"Invalid character '{char}' in resource ID: {resource_id}")
+    
+    # AWS resource IDs typically contain: alphanumeric, hyphens, underscores, colons, slashes, dots
+    # ARNs can contain: arn:aws:service:region:account:resource
+    if not re.match(r'^[a-zA-Z0-9:/_.\-*]+$', resource_id):
+        raise ValueError(f"Invalid characters in resource ID: {resource_id}")
+    
+    return resource_id
+
+
+def validate_ec2_tag(tag: str) -> tuple:
+    """
+    Validate EC2 tag format (key:value).
+    
+    Args:
+        tag: Tag string in format "key:value"
+        
+    Returns:
+        Tuple of (key, value)
+        
+    Raises:
+        ValueError: If tag format is invalid
+    """
+    if ':' not in tag:
+        raise ValueError(f"Invalid tag format: {tag}. Expected 'key:value'")
+    
+    parts = tag.split(':', 1)
+    if len(parts) != 2:
+        raise ValueError(f"Invalid tag format: {tag}. Expected 'key:value'")
+    
+    key, value = parts
+    
+    if not key or not value:
+        raise ValueError(f"Tag key and value cannot be empty: {tag}")
+    
+    # AWS tag keys and values have specific character restrictions
+    import re
+    if not re.match(r'^[a-zA-Z0-9+\-=._:/@\s]+$', key):
+        raise ValueError(f"Invalid characters in tag key: {key}")
+    
+    if not re.match(r'^[a-zA-Z0-9+\-=._:/@\s]+$', value):
+        raise ValueError(f"Invalid characters in tag value: {value}")
+    
+    return (key, value)
+
+
+def validate_terraform_version(version: str) -> str:
+    """
+    Validate Terraform provider version format.
+    
+    Args:
+        version: Version string (e.g., "6.20.0")
+        
+    Returns:
+        Validated version string
+        
+    Raises:
+        ValueError: If version format is invalid
+    """
+    import re
+    # Version format: major.minor.patch
+    if not re.match(r'^\d+\.\d+\.\d+$', version):
+        raise ValueError(f"Invalid version format: {version}. Expected X.Y.Z")
+    
+    return version
+
+
+def validate_exclude_list(exclude: str) -> list:
+    """
+    Validate and parse exclude list.
+    
+    Args:
+        exclude: Comma-separated list of resource types to exclude
+        
+    Returns:
+        List of validated resource types
+        
+    Raises:
+        ValueError: If any resource type is invalid
+    """
+    if not exclude:
+        return []
+    
+    types = [t.strip() for t in exclude.split(',')]
+    validated = []
+    
+    for t in types:
+        validated.append(validate_resource_type(t))
+    
+    return validated
+
+
 #if __name__ == '__main__':
 
 def main():
@@ -145,8 +346,8 @@ def main():
 
 
     #log.debug("cwd="+str(sys.argv),str(len(sys.argv)))
-    if len(sys.argv) > 1:
-        if sys.argv[1]=="-h": timed_interrupt.timed_int.stop() 
+    # Note: Don't check for -h here since timed_interrupt isn't imported yet
+    # argparse will handle -h automatically
 
     argParser = argparse.ArgumentParser()
     argParser.add_argument("-l", "--list",help="List extra help information" , action='store_true')
@@ -174,11 +375,49 @@ def main():
     try:
         args = argParser.parse_args()
     except SystemExit as e:
-        timed_interrupt.timed_int.stop()
+        # Don't try to stop timer here - it hasn't been imported yet
+        # argparse handles -h and exits cleanly
         exit()
         
     type=""
 
+    # Security Fix #4 & #6: Validate CLI arguments
+    try:
+        if args.region:
+            args.region = validate_region(args.region)
+        
+        if args.profile:
+            args.profile = validate_profile(args.profile)
+        
+        if args.type:
+            args.type = validate_resource_type(args.type)
+        
+        if args.id:
+            args.id = validate_resource_id(args.id)
+        
+        if args.exclude:
+            # validate_exclude_list will validate each type
+            validate_exclude_list(args.exclude)
+        
+        if args.ec2tag:
+            # Will validate later when processing
+            pass
+        
+        if args.tv:
+            args.tv = validate_terraform_version(args.tv)
+            
+    except ValueError as e:
+        log.error(f"ERROR: Invalid input - {e}")
+        log.info("exit 001")
+        # Don't need to stop timed_interrupt here as it hasn't been imported yet
+        exit(1)
+
+    # Import timed_interrupt after validation to avoid orphaned threads
+    # Security Fix: Prevents background threads when validation fails
+    import timed_interrupt
+    
+    # Initialize the timer now that validation passed
+    timed_interrupt.initialize_timer(increment=20)
 
     common.check_python_version()
     # log.debug("cwd=%s" % os.getcwd())
@@ -189,7 +428,7 @@ def main():
     if path is None:
         log.error("no executable found for command 'terraform'")
         log.info("exit 002")
-        timed_interrupt.timed_int.stop()
+        timed_interrupt.stop_timer()
         exit()
 
     if args.profile: 
@@ -206,7 +445,7 @@ def main():
     if context.credtype=="unknown":
         log.error("could not find valid login creds")
         common.print_credentials_info(context.profile)
-        timed_interrupt.timed_int.stop()
+        timed_interrupt.stop_timer()
         exit()
 
     # check terraform version
@@ -220,7 +459,7 @@ def main():
     tvr=rout.stdout.decode().rstrip()
     if "." not in tvr:
         log.error("Unexpected Terraform version "+str(tvr))
-        timed_interrupt.timed_int.stop()
+        timed_interrupt.stop_timer()
         os._exit(1)                                      
     tv=str(rout.stdout.decode().rstrip()).split("rm v")[-1].split("\n")[0]
     tvmaj=int(tv.split(".")[0])
@@ -228,11 +467,11 @@ def main():
     
     if tvmaj < 1:
         log.error("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
-        timed_interrupt.timed_int.stop()
+        timed_interrupt.stop_timer()
         os._exit(1) 
     if tvmaj==1 and tvmin<8:                                      
         log.error("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
-        timed_interrupt.timed_int.stop()
+        timed_interrupt.stop_timer()
         os._exit(1)
     log.info("Terraform version: %s AWS provider version: %s", tv, context.tfver)
 
@@ -260,21 +499,14 @@ def main():
 
 
     if args.ec2tag:
-        isinv=True
-        if args.ec2tag!="" and ":" in args.ec2tag:
-            isinv=False             
-            #args.ec2tag = args.ec2tag[1:-1]
-            context.ec2tag=args.ec2tag
-            context.ec2tagk=context.ec2tag.split(":")[0]
-            context.ec2tagv=context.ec2tag.split(":")[1]
-        else:
-            isinv=True
-        
-        if isinv:
-            #if len(context.ec2tagk) < 1 or len(context.ec2tagv) < 1:
-            log.error("ec2tag must be in format (with quotes) \"key:value\"")
+        # Security Fix #6: Validate EC2 tag format
+        try:
+            context.ec2tagk, context.ec2tagv = validate_ec2_tag(args.ec2tag)
+            context.ec2tag = args.ec2tag
+        except ValueError as e:
+            log.error(f"ERROR: {e}")
             log.info("exit 005")
-            timed_interrupt.timed_int.stop()
+            timed_interrupt.stop_timer()
             exit()
 
 
@@ -290,7 +522,7 @@ def main():
         if args.serverless:
             log.error("type is required eg:  -t aws_vpc  when in serverless mode, exiting ....")
             log.info("exit 003")
-            timed_interrupt.timed_int.stop()
+            timed_interrupt.stop_timer()
             exit()
         log.info("type is recommended eg:  -t aws_vpc    \nsetting to all")
         args.type = "all"
@@ -329,9 +561,17 @@ def main():
                     if region is None:
                         log.error("region is required - set in AWS cli or pass with -r")
                         log.info("exit 004")
-                        timed_interrupt.timed_int.stop()
+                        timed_interrupt.stop_timer()
                         exit()
             log.info("region set from aws cli / environment variables as "+region)
+            # Security Fix #6: Validate region from environment
+            try:
+                region = validate_region(region)
+            except ValueError as e:
+                log.error(f"ERROR: Invalid region from environment - {e}")
+                log.info("exit 004")
+                timed_interrupt.stop_timer()
+                exit()
     else:
         region = args.region
 
@@ -367,7 +607,7 @@ def main():
         else:
             log.error(str(e))
             log.error(str(exn))
-        timed_interrupt.timed_int.stop()
+        timed_interrupt.stop_timer()
         exit()
     log.info('Using region: '+region + ' account: ' + context.acc+ " profile: "+context.profile+"\n")
 ####  restore form S3 if merging & serverless
@@ -430,7 +670,7 @@ def main():
     if not foundtf:
         log.error("failed to find .terraform in "+context.cwd+"/"+context.path1)
         log.error("Terraform Initialise may have failed exiting ...")
-        timed_interrupt.timed_int.stop()
+        timed_interrupt.stop_timer()
         exit()
 
 
@@ -490,13 +730,13 @@ def main():
         if "stack" in type:
             log.error("Cannot mix stack with other types")
             log.info("exit 006")
-            timed_interrupt.timed_int.stop()
+            timed_interrupt.stop_timer()
             exit()
 
         if id is not None:
             log.error("Cannot pass id with multiple types")
             log.info("exit 007")
-            timed_interrupt.timed_int.stop()
+            timed_interrupt.stop_timer()
             exit()
 
         #if context.serverless:
@@ -527,7 +767,7 @@ def main():
         if type=="all" and id is not None:
             log.error("Cannot pass an id (-i) with all types")
             log.info("exit 007")
-            timed_interrupt.timed_int.stop()
+            timed_interrupt.stop_timer()
             exit()
         all_types = resources.resource_types(type)
 
@@ -544,7 +784,7 @@ def main():
             if id is None:
                 log.error("Must pass a stack name as a parameter   -i <stack name>")
                 log.info("exit 008")
-                timed_interrupt.timed_int.stop()
+                timed_interrupt.stop_timer()
                 exit()
             else:
                 context.tracking_message="Stage 3 of 10 getting stack " +id+" resources ..."
@@ -610,7 +850,7 @@ def main():
                 log.warning("No resources found")
                 context.tracking_message="Stage 3 of 10 no resources found exiting ..."
                 log.info("exit 009")
-                timed_interrupt.timed_int.stop()
+                timed_interrupt.stop_timer()
                 exit()
 
 #########################################################################################################################
@@ -647,7 +887,7 @@ def main():
     if ":" in context.rproc:
         log.error(": in rproc exiting")
         log.info("exit 010")
-        timed_interrupt.timed_int.stop()
+        timed_interrupt.stop_timer()
         exit()
     now = datetime.datetime.now()
     x=glob.glob("import__aws_*.tf")
@@ -726,7 +966,7 @@ def main():
                     log.error("ERROR: Not found "+str(ti)+" - check if this resource still exists in AWS. Also check what resource is using it - grep the *.tf files in the generated/tf.* subdirectory")
                     context.tracking_message="No change/progress in dependancies exiting..."
             log.info("exit 011")
-            timed_interrupt.timed_int.stop()
+            timed_interrupt.stop_timer()
             exit()
 
         olddetdepstr=detdepstr
@@ -744,7 +984,7 @@ def main():
     else: 
         log.info("\nValidation only - no files written")
         log.info("exit 012")
-        timed_interrupt.timed_int.stop()
+        timed_interrupt.stop_timer()
         exit()
 
 ##########################################################################
@@ -798,6 +1038,10 @@ def main():
         com = "mv aws_*__*.tf imported"
         rout = common.rc(com)
     
+    # Security Fix #7: Secure sensitive files with appropriate permissions
+    log.info("Securing sensitive files...")
+    common.secure_terraform_files(context.path1)
+    
     context.tracking_message="aws2tf, Completed"
     now = datetime.datetime.now()
     log.info("aws2tf started at  %s" % starttime)
@@ -805,7 +1049,7 @@ def main():
     # print execution time
     log.info("aws2tf execution time h:mm:ss :"+ str(now - starttime))
     log.info("\nTerraform files & state in sub-directory: "+ context.path1)
-    timed_interrupt.timed_int.stop()
+    timed_interrupt.stop_timer()
 
     exit(0)
 

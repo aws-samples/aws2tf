@@ -44,7 +44,7 @@ def get_aws_vpc(type, id, clfn, descfn, topkey, key, filterid):
                     log.warning("WARNING: vpc not in vpclist " + id+ " Resource may be referencing a vpc that no longer exists")  
             
         else:
-            log.warning("WARNING: get_aws_vpc unexpected id value",str(id))
+            log.warning("WARNING: get_aws_vpc unexpected id value %s", tr(id))
             return True
                     
 
@@ -80,7 +80,7 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
                     #print("Found subnet in vpc " + id + " " + j['SubnetId'])
                     common.write_import(type, j['SubnetId'], None)
         else:
-            log.warning("WARNING: get_aws_subnet unexpected id value",str(id))
+            log.warning("WARNING: get_aws_subnet unexpected id value %s", tr(id))
             return True
                     
 
@@ -118,7 +118,7 @@ def get_aws_security_group(type, id, clfn, descfn, topkey, key, filterid):
                     log.warning("WARNING: sg not in sglist " + id+ " Resource may be referencing a security_group that no longer exists")  
             
         else:
-            log.warning("WARNING: get_aws_security_group unexpected id value",str(id))
+            log.warning("WARNING: get_aws_security_group unexpected id value %s", tr(id))
             return True
                     
 

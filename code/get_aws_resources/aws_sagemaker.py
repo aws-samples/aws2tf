@@ -172,7 +172,7 @@ def get_aws_sagemaker_app(type, id, clfn, descfn, topkey, key, filterid):
             did = j['DomainId']
             appt = j['AppType']
             appn = j['AppName']
-            log.info("did=",did,"appn=",appn)
+            log.info("did=%s appn=%s", did, appn)
             if appn == "default":
                 pkey="aws_sagemaker_app."+did
                 context.rproc[pkey]=True

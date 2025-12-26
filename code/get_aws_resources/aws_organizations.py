@@ -247,7 +247,7 @@ def get_aws_organizations_policy_attachment(type, id, clfn, descfn, topkey, key,
                 return True
             
             if id=="p-pj4vhztq":
-                    log.info("J=",response)
+                    log.info("J= %s", response)
             for j in response[topkey]:
                 #print("J="+str(j))
                 tid=j['TargetId']

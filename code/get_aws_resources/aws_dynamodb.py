@@ -45,7 +45,7 @@ def get_aws_dynamodb_kinesis_streaming_destination(type, id, clfn, descfn, topke
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.warning("WARNING: Must pass table name as paramter for",type); 
+            log.warning("WARNING: Must pass table name as paramter for %s", type); 
             return True
 
         else:      

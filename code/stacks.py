@@ -60,7 +60,7 @@ def getstack(stack_name,nested,client):
         log.error("-1->unexpected error in getstack")
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        log.error("%s %s %s", exc_type, fname, exc_tb.tb_lineno)
+        log.error("%s %s %s %s",  exc_type, fname, exc_tb.tb_lineno)
         return
 
 
@@ -95,7 +95,7 @@ def getstackresources(stack_name,client):
         log.error("-1->unexpected error in getstack")
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        log.error("%s %s %s", exc_type, fname, exc_tb.tb_lineno)
+        log.error("%s %s %s %s",  exc_type, fname, exc_tb.tb_lineno)
         log.info("exit 014")
         timed_int.stop()
         exit()

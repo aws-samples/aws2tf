@@ -51,7 +51,7 @@ def apigw2_dep(id):
         log.info("in apigw2_dep: type="+type)
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        log.info(f"{e=}", fname, exc_tb.tb_lineno)
+        log.info("%s %s %s", f"{e=}", fname, exc_tb.tb_lineno)
     return
 
 

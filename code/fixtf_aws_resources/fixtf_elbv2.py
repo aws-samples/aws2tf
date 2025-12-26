@@ -66,6 +66,9 @@ def aws_lb_target_group(t1,tt1,tt2,flag1,flag2):
 	if "enable_unhealthy_connection_termination" in tt1:
 		if tt2 == "null": t1=tt1+" = true\n"
 
+	if "target_control_port" in tt1:
+		if tt2 == "0": skip=1 
+
 	if "name" == tt1:
 		t1=t1+"\n lifecycle {\n   ignore_changes = [target_failover[0].on_deregistration,target_failover[0].on_unhealthy,target_health_state[0].enable_unhealthy_connection_termination]\n}\n"
 

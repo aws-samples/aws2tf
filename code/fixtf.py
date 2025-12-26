@@ -216,6 +216,212 @@ from fixtf_aws_resources import fixtf_worklink
 from fixtf_aws_resources import fixtf_workspaces
 from fixtf_aws_resources import fixtf_xray
 
+# Security Fix #2: Module registry to replace eval()
+# This prevents arbitrary code execution via eval()
+FIXTF_MODULES = {
+    'fixtf_accessanalyzer': fixtf_accessanalyzer,
+    'fixtf_acm': fixtf_acm,
+    'fixtf_acm_pca': fixtf_acm_pca,
+    'fixtf_amp': fixtf_amp,
+    'fixtf_amplify': fixtf_amplify,
+    'fixtf_apigateway': fixtf_apigateway,
+    'fixtf_apigatewayv2': fixtf_apigatewayv2,
+    'fixtf_appconfig': fixtf_appconfig,
+    'fixtf_appflow': fixtf_appflow,
+    'fixtf_appintegrations': fixtf_appintegrations,
+    'fixtf_application_autoscaling': fixtf_application_autoscaling,
+    'fixtf_application_insights': fixtf_application_insights,
+    'fixtf_appmesh': fixtf_appmesh,
+    'fixtf_apprunner': fixtf_apprunner,
+    'fixtf_appstream': fixtf_appstream,
+    'fixtf_appsync': fixtf_appsync,
+    'fixtf_athena': fixtf_athena,
+    'fixtf_auditmanager': fixtf_auditmanager,
+    'fixtf_autoscaling': fixtf_autoscaling,
+    'fixtf_autoscaling_plans': fixtf_autoscaling_plans,
+    'fixtf_backup': fixtf_backup,
+    'fixtf_batch': fixtf_batch,
+    'fixtf_bedrock': fixtf_bedrock,
+    'fixtf_bedrock_agent': fixtf_bedrock_agent,
+    'fixtf_billingconductor': fixtf_billingconductor,
+    'fixtf_budgets': fixtf_budgets,
+    'fixtf_ce': fixtf_ce,
+    'fixtf_chime': fixtf_chime,
+    'fixtf_chime_sdk_media_pipelines': fixtf_chime_sdk_media_pipelines,
+    'fixtf_chime_sdk_voice': fixtf_chime_sdk_voice,
+    'fixtf_cleanrooms': fixtf_cleanrooms,
+    'fixtf_cloud9': fixtf_cloud9,
+    'fixtf_cloudcontrol': fixtf_cloudcontrol,
+    'fixtf_cloudformation': fixtf_cloudformation,
+    'fixtf_cloudfront': fixtf_cloudfront,
+    'fixtf_cloudhsmv2': fixtf_cloudhsmv2,
+    'fixtf_cloudsearch': fixtf_cloudsearch,
+    'fixtf_cloudtrail': fixtf_cloudtrail,
+    'fixtf_logs': fixtf_logs,
+    'fixtf_codeartifact': fixtf_codeartifact,
+    'fixtf_codebuild': fixtf_codebuild,
+    'fixtf_codecatalyst': fixtf_codecatalyst,
+    'fixtf_codecommit': fixtf_codecommit,
+    'fixtf_codedeploy': fixtf_codedeploy,
+    'fixtf_codeguru_reviewer': fixtf_codeguru_reviewer,
+    'fixtf_codeguruprofiler': fixtf_codeguruprofiler,
+    'fixtf_codepipeline': fixtf_codepipeline,
+    'fixtf_codestar_connections': fixtf_codestar_connections,
+    'fixtf_codestar_notifications': fixtf_codestar_notifications,
+    'fixtf_cognito_identity': fixtf_cognito_identity,
+    'fixtf_cognito_idp': fixtf_cognito_idp,
+    'fixtf_comprehend': fixtf_comprehend,
+    'fixtf_config': fixtf_config,
+    'fixtf_connect': fixtf_connect,
+    'fixtf_controltower': fixtf_controltower,
+    'fixtf_cur': fixtf_cur,
+    'fixtf_customer_profiles': fixtf_customer_profiles,
+    'fixtf_dataexchange': fixtf_dataexchange,
+    'fixtf_datapipeline': fixtf_datapipeline,
+    'fixtf_datasync': fixtf_datasync,
+    'fixtf_datazone': fixtf_datazone,
+    'fixtf_dax': fixtf_dax,
+    'fixtf_detective': fixtf_detective,
+    'fixtf_devicefarm': fixtf_devicefarm,
+    'fixtf_directconnect': fixtf_directconnect,
+    'fixtf_dlm': fixtf_dlm,
+    'fixtf_dms': fixtf_dms,
+    'fixtf_docdb': fixtf_docdb,
+    'fixtf_docdb_elastic': fixtf_docdb_elastic,
+    'fixtf_ds': fixtf_ds,
+    'fixtf_dynamodb': fixtf_dynamodb,
+    'fixtf_ebs': fixtf_ebs,
+    'fixtf_ec2': fixtf_ec2,
+    'fixtf_ecr_public': fixtf_ecr_public,
+    'fixtf_ecr': fixtf_ecr,
+    'fixtf_ecs': fixtf_ecs,
+    'fixtf_efs': fixtf_efs,
+    'fixtf_eks': fixtf_eks,
+    'fixtf_elasticache': fixtf_elasticache,
+    'fixtf_elasticbeanstalk': fixtf_elasticbeanstalk,
+    'fixtf_elastictranscoder': fixtf_elastictranscoder,
+    'fixtf_elb': fixtf_elb,
+    'fixtf_elbv2': fixtf_elbv2,
+    'fixtf_emr': fixtf_emr,
+    'fixtf_emr_containers': fixtf_emr_containers,
+    'fixtf_emrserverless': fixtf_emrserverless,
+    'fixtf_es': fixtf_es,
+    'fixtf_events': fixtf_events,
+    'fixtf_evidently': fixtf_evidently,
+    'fixtf_finspace': fixtf_finspace,
+    'fixtf_firehose': fixtf_firehose,
+    'fixtf_fis': fixtf_fis,
+    'fixtf_fms': fixtf_fms,
+    'fixtf_fsx': fixtf_fsx,
+    'fixtf_gamelift': fixtf_gamelift,
+    'fixtf_glacier': fixtf_glacier,
+    'fixtf_globalaccelerator': fixtf_globalaccelerator,
+    'fixtf_glue': fixtf_glue,
+    'fixtf_grafana': fixtf_grafana,
+    'fixtf_guardduty': fixtf_guardduty,
+    'fixtf_iam': fixtf_iam,
+    'fixtf_identitystore': fixtf_identitystore,
+    'fixtf_imagebuilder': fixtf_imagebuilder,
+    'fixtf_inspector': fixtf_inspector,
+    'fixtf_inspector2': fixtf_inspector2,
+    'fixtf_internetmonitor': fixtf_internetmonitor,
+    'fixtf_iot': fixtf_iot,
+    'fixtf_ivs': fixtf_ivs,
+    'fixtf_ivschat': fixtf_ivschat,
+    'fixtf_kafka': fixtf_kafka,
+    'fixtf_kafkaconnect': fixtf_kafkaconnect,
+    'fixtf_kendra': fixtf_kendra,
+    'fixtf_keyspaces': fixtf_keyspaces,
+    'fixtf_kinesis': fixtf_kinesis,
+    'fixtf_kinesisanalytics': fixtf_kinesisanalytics,
+    'fixtf_kinesisanalyticsv2': fixtf_kinesisanalyticsv2,
+    'fixtf_kinesisvideo': fixtf_kinesisvideo,
+    'fixtf_kms': fixtf_kms,
+    'fixtf_lakeformation': fixtf_lakeformation,
+    'fixtf_lambda': fixtf_lambda,
+    'fixtf_lex': fixtf_lex,
+    'fixtf_lexv2_models': fixtf_lexv2_models,
+    'fixtf_license_manager': fixtf_license_manager,
+    'fixtf_lightsail': fixtf_lightsail,
+    'fixtf_location': fixtf_location,
+    'fixtf_macie2': fixtf_macie2,
+    'fixtf_mediaconvert': fixtf_mediaconvert,
+    'fixtf_medialive': fixtf_medialive,
+    'fixtf_mediapackage': fixtf_mediapackage,
+    'fixtf_mediastore': fixtf_mediastore,
+    'fixtf_memorydb': fixtf_memorydb,
+    'fixtf_mq': fixtf_mq,
+    'fixtf_mwaa': fixtf_mwaa,
+    'fixtf_neptune': fixtf_neptune,
+    'fixtf_network_firewall': fixtf_network_firewall,
+    'fixtf_networkmanager': fixtf_networkmanager,
+    'fixtf_opensearch': fixtf_opensearch,
+    'fixtf_opsworks': fixtf_opsworks,
+    'fixtf_organizations': fixtf_organizations,
+    'fixtf_outposts': fixtf_outposts,
+    'fixtf_pinpoint': fixtf_pinpoint,
+    'fixtf_pipes': fixtf_pipes,
+    'fixtf_polly': fixtf_polly,
+    'fixtf_pricing': fixtf_pricing,
+    'fixtf_qldb': fixtf_qldb,
+    'fixtf_quicksight': fixtf_quicksight,
+    'fixtf_ram': fixtf_ram,
+    'fixtf_rds': fixtf_rds,
+    'fixtf_redshift': fixtf_redshift,
+    'fixtf_redshift_data': fixtf_redshift_data,
+    'fixtf_redshift_serverless': fixtf_redshift_serverless,
+    'fixtf_resource_explorer_2': fixtf_resource_explorer_2,
+    'fixtf_resource_groups': fixtf_resource_groups,
+    'fixtf_resourcegroupstaggingapi': fixtf_resourcegroupstaggingapi,
+    'fixtf_rolesanywhere': fixtf_rolesanywhere,
+    'fixtf_route53': fixtf_route53,
+    'fixtf_route53_recovery_control_config': fixtf_route53_recovery_control_config,
+    'fixtf_route53_recovery_readiness': fixtf_route53_recovery_readiness,
+    'fixtf_route53domains': fixtf_route53domains,
+    'fixtf_route53resolver': fixtf_route53resolver,
+    'fixtf_rum': fixtf_rum,
+    'fixtf_s3': fixtf_s3,
+    'fixtf_s3control': fixtf_s3control,
+    'fixtf_s3outposts': fixtf_s3outposts,
+    'fixtf_s3tables': fixtf_s3tables,
+    'fixtf_sagemaker': fixtf_sagemaker,
+    'fixtf_scheduler': fixtf_scheduler,
+    'fixtf_schemas': fixtf_schemas,
+    'fixtf_secretsmanager': fixtf_secretsmanager,
+    'fixtf_securityhub': fixtf_securityhub,
+    'fixtf_securitylake': fixtf_securitylake,
+    'fixtf_serverlessrepo': fixtf_serverlessrepo,
+    'fixtf_servicecatalog': fixtf_servicecatalog,
+    'fixtf_servicediscovery': fixtf_servicediscovery,
+    'fixtf_servicequotas': fixtf_servicequotas,
+    'fixtf_ses': fixtf_ses,
+    'fixtf_sesv2': fixtf_sesv2,
+    'fixtf_shield': fixtf_shield,
+    'fixtf_signer': fixtf_signer,
+    'fixtf_simpledb': fixtf_simpledb,
+    'fixtf_sns': fixtf_sns,
+    'fixtf_sqs': fixtf_sqs,
+    'fixtf_ssm': fixtf_ssm,
+    'fixtf_ssm_contacts': fixtf_ssm_contacts,
+    'fixtf_ssm_incidents': fixtf_ssm_incidents,
+    'fixtf_sso_admin': fixtf_sso_admin,
+    'fixtf_stepfunctions': fixtf_stepfunctions,
+    'fixtf_storagegateway': fixtf_storagegateway,
+    'fixtf_sts': fixtf_sts,
+    'fixtf_swf': fixtf_swf,
+    'fixtf_synthetics': fixtf_synthetics,
+    'fixtf_timestreamwrite': fixtf_timestreamwrite,
+    'fixtf_transcribe': fixtf_transcribe,
+    'fixtf_transfer': fixtf_transfer,
+    'fixtf_vpc_lattice': fixtf_vpc_lattice,
+    'fixtf_waf': fixtf_waf,
+    'fixtf_waf_regional': fixtf_waf_regional,
+    'fixtf_wafv2': fixtf_wafv2,
+    'fixtf_worklink': fixtf_worklink,
+    'fixtf_workspaces': fixtf_workspaces,
+    'fixtf_xray': fixtf_xray,
+}
+
 
 ##############################################
 
@@ -282,7 +488,7 @@ def fixtf(ttft,tf):
     if ttft=="aws_s3_bucket_replication_configuration":
         for t1 in Lines:
             t1=t1.strip()
-            if context.debug5: log.debug("DEBUG5: pre scan block1 : t1=%s", t1)
+            if context.debug5: log.debug("DEBUG5: pre scan block1 : t1=%s %s",  t1)
             skip=0
             tt1=t1.split("=")[0].strip()
             if tt1=="bucket":
@@ -290,7 +496,7 @@ def fixtf(ttft,tf):
                     tt2=t1.split("=")[1].strip().strip('\"')
                     if "arn:aws:s3" in tt2:
                         tt2=tt2.split(":")[-1]
-                        if context.debug5: log.debug("DEBUG5: pre scan block 2: common.add_dep bucket_name=%s", tt2)
+                        if context.debug5: log.debug("DEBUG5: pre scan block 2: common.add_dep bucket_name=%s %s",  tt2)
                         common.add_dependancy("aws_s3_bucket", tt2)
                 except:
                     tt2=""
@@ -465,14 +671,21 @@ def fixtf(ttft,tf):
                 tt2=""
  
             try:   
-                # does fixtf_aws_rsource exist ??
-                getfn = getattr(eval(callfn), ttft)           
-                #getfn = getattr(fixtf2, ttft)
+                # Security Fix #2: Use module registry instead of eval()
+                # Look up module in registry
+                module = FIXTF_MODULES.get(callfn)
+                
+                if module is None:
+                    log.warning(f"** Module not found in registry for callfn={callfn}")
+                    nofind = 1
+                else:
+                    # Get the function from the module
+                    getfn = getattr(module, ttft)
             except Exception as e:
                 log.error(f"{e=}")
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                log.error("%s %s %s", exc_type, fname, exc_tb.tb_lineno)
+                log.error("%s %s %s %s",  exc_type, fname, exc_tb.tb_lineno)
                 log.warning("** no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
                 nofind=1
                 
@@ -511,7 +724,7 @@ def fixtf(ttft,tf):
                 log.error(f"{e=}")
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                log.error("%s %s %s", exc_type, fname, exc_tb.tb_lineno)
+                log.error("%s %s %s %s",  exc_type, fname, exc_tb.tb_lineno)
                 log.error("** error in "+ttft+" "+callfn+" OR .....")
                 log.error("-- no fixtf for type:"+ttft+" callfn:"+callfn)
                 log.error("-- no fixtf for "+tf+" calling generic fixtf2.aws_resource callfn="+callfn)
@@ -587,7 +800,7 @@ def aws_resource(t1,tt1,tt2,flag1,flag2):
 
 # generic replace of acct and region in arn
 def globals_replace(t1,tt1,tt2):
-    if context.debug: log.debug("GR start:%s", t1)
+    if context.debug: log.debug("GR start:%s %s",  t1)
     if "format(" in tt2: return t1
     ends=""
     tt2=tt2.replace("%", "%%")
@@ -802,7 +1015,7 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
         
     
     except Exception as e:  
-      log.error("t1=%s", t1)
+      log.error("t1=%s %s",  t1)
       common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id) 
     
     return t1,skip
@@ -972,7 +1185,7 @@ def deref_elb_arn_array(t1,tt1,tt2):
 
 #### other arn derefs here
 def generic_deref_arn(t1, tt1, tt2):
-    if context.debug: log.debug("Here %s", t1)
+    if context.debug: log.debug("Here %s %s",  t1)
     try:
         if tt2.endswith("*"): return t1
         if context.debug: log.debug("*** generic "+t1)
@@ -982,7 +1195,7 @@ def generic_deref_arn(t1, tt1, tt2):
         tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
         cc=tt2.count(',')
         subs=""
-        log.debug("generic %s cc= %s", tt2, cc)
+        log.debug("generic %s cc= %s %s",  tt2, cc)
         if tt2.endswith("*"): isstar=True
 
         if cc==0 and ":log-stream:" in tt2:
@@ -1021,7 +1234,7 @@ def generic_deref_arn(t1, tt1, tt2):
 
     except Exception as e:  
       common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id)     
-    log.debug("generic out = %s", t1)
+    log.debug("generic out = %s %s",  t1)
     return t1
     if cc == 0:
         tarn=tt2

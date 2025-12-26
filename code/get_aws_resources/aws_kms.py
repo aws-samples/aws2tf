@@ -70,7 +70,7 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
                         #print(str(kresp))
                         continue
                 except Exception as e:
-                    if context.debug: log.warning("WARNING: can't access key",theid)
+                    if context.debug: log.warning("WARNING: can't access key %s", theid)
                     #print(f"{e=} [k1]")
                     #exc_type, exc_obj, exc_tb = sys.exc_info()
                     #fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -124,7 +124,7 @@ def get_aws_kms_alias(type,id,clfn,descfn,topkey,key,filterid):
             # if there's an alias match - good enough
             if id is not None:
                 if id==aliasname or "alias/"+id==aliasname:
-                    if context.debug: log.debug("KMS ALAIS: Alias match importing ",id)
+                    if context.debug: log.debug("KMS ALAIS: Alias match importing  %s", id)
                     common.write_import(type,aliasname,ka) 
                     pkey=type+".k-"+theid
                     context.rproc[pkey]=True
@@ -140,7 +140,7 @@ def get_aws_kms_alias(type,id,clfn,descfn,topkey,key,filterid):
                 
                 continue
             else:
-                if context.debug: log.debug("KMS ALAIS: Id match importing ",id)
+                if context.debug: log.debug("KMS ALAIS: Id match importing  %s", id)
 
                 common.write_import(type,aliasname,ka) 
 

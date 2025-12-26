@@ -75,7 +75,7 @@ def check_access(bucket_name,my_region):
          log.info("ERROR: -2->unexpected error in get_all_s3_buckets")
          
          fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-         log.info(exc_type, fname, exc_tb.tb_lineno)
+         log.info("%s %s %s", exc_type, fname, exc_tb.tb_lineno)
          log.info('continuing on exception .......')
          return
    return
@@ -92,7 +92,7 @@ def get_all_s3_buckets(fb,my_region):
          return True
       
       if fb not in str(context.s3list.keys()):
-            log.info("Bucket ",fb, "not in s3list")
+            log.info("Bucket %s not in s3list %s",  fb)
             pkey=type+"."+fb
             context.rproc[pkey]=True
             return True
@@ -216,7 +216,7 @@ def get_all_s3_buckets(fb,my_region):
                log.info("ERROR: -2->unexpected error in get_all_s3_buckets")
                
                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-               log.info(exc_type, fname, exc_tb.tb_lineno)
+               log.info("%s %s %s", exc_type, fname, exc_tb.tb_lineno)
                log.info('continuing on exception to location .......')
                continue
 

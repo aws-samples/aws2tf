@@ -43,7 +43,7 @@ def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
             cc=tt2.count(',')
             tt2=tt2.lstrip('[').rstrip(']')
         else:
-             log.warning("WARNING: layers is not an array", tt2)
+             log.warning("WARNING: layers is not an array %s",  tt2)
              return skip,t1,flag1,flag2
         #if context.debug: 
         builds=""

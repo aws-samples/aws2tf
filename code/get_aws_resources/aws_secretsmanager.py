@@ -116,7 +116,7 @@ def get_aws_secretsmanager_secret_version(type, id, clfn, descfn, topkey, key, f
                     exn=str(exc_type.__name__)
                     #print(exn,str(e))
                     if "(AccessDeniedException) when calling the GetSecretValue" in str(e):
-                        log.info("INFO: get_secret_value failed - not authorized skipping",type,id.split(':')[-1])
+                        log.info("INFO: get_secret_value failed - not authorized skipping %s %s", type, id.split(":")[-1])
                         pkey=type+"."+id
                         context.rproc[pkey]=True
                         return True

@@ -28,14 +28,14 @@ def check_key(keyid):
 			#print(str(kresp))
 			return False
 	except Exception as e:
-		if context.debug: log.debug("WARNING: can't access key",keyid)
+		if context.debug: log.debug("WARNING: can't access key %s", keyid)
 		#print(f"{e=} [k1]")
 		#exc_type, exc_obj, exc_tb = sys.exc_info()
 	return False
 
 def aws_common(type,t1,tt1,tt2,flag1,flag2):
     skip=0
-    #if context.debug: log.debug("aws_common t1=",t1)
+    #if context.debug: log.debug("aws_common t1= %s", t1)
     try:
         if tt1=="api_id" and "apigatewayv2" in type:
             t1=tt1 + " = aws_apigatewayv2_api." + tt2 + ".id\n"
@@ -43,7 +43,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             common.add_dependancy("aws_apigatewayv2_api", tt2)
         #if tt1=="bucket" or tt1=="s3_bucket_name" or tt1=="bucket_name":
         if tt1=="bucket" or tt1=="s3_bucket_name":
-            if context.debug5: log.debug("DEBUG5: aws_common: type=", type, "tt1=", tt1, "tt2=", tt2)
+            if context.debug5: log.debug("DEBUG5: aws_common: type=%s tt1=%s tt2=%s", type, tt1, tt2)
             if type != "aws_s3_bucket":
                 if "." not in tt2:
                     if tt2 != "" and tt2 !="null":
@@ -78,7 +78,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                     
                     
         if tt1.endswith("bucket_arn"):
-            if context.debug5: log.debug("DEBUG5: aws_common: bucket_name=", tt2, "lhs=",tt1)
+            if context.debug5: log.debug("DEBUG5: aws_common: bucket_name=%s lhs=%s", tt2, tt1)
             if tt2.startswith("arn:aws:s3"):
                 tt2=tt2.split(":")[-1]
                 if context.debug5: 
@@ -119,9 +119,9 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                             t1=tt1 + " = aws_security_group." + tt2 + ".id\n"
                             common.add_dependancy("aws_security_group", tt2)
                     else:
-                        log.warning("WARNING: security group not found in sglist", tt2)
+                        log.warning("WARNING: security group not found in sglist %s",  tt2)
                 except KeyError as e:
-                    log.warning("WARNING: subnet_id not found in subnet list", tt2)
+                    log.warning("WARNING: subnet_id not found in subnet list %s",  tt2)
 
 
 
@@ -141,7 +141,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                             t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
                             common.add_dependancy("aws_vpc", tt2)
                     else:
-                        log.warning("WARNING: vpc_id not found in vpclist",tt2)
+                        log.warning("WARNING: vpc_id not found in vpclist %s", tt2)
                     
 
 
@@ -157,9 +157,9 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                             t1=tt1 + " = data.aws_subnet." + tt2 + ".id\n"
                             common.add_dependancy("aws_subnet", tt2)
                     else:
-                        log.warning("WARNING: subnet_id not found in subnet list", tt2)
+                        log.warning("WARNING: subnet_id not found in subnet list %s",  tt2)
                 except KeyError as e:
-                    log.warning("WARNING: subnet_id not found in subnet list", tt2)
+                    log.warning("WARNING: subnet_id not found in subnet list %s",  tt2)
 
         elif tt1 == "file_system_id":
             if tt2 != "null":
@@ -176,7 +176,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                         common.add_dependancy("aws_lambda_function",tt2)
                         return skip,t1,flag1,flag2
                 except KeyError as e:
-                    log.warning("WARNING: lambda_function_arn not found in lambda list", tt2)
+                    log.warning("WARNING: lambda_function_arn not found in lambda list %s", tt2)
                     return skip,t1,flag1,flag2
 
             else:
@@ -273,9 +273,9 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                         else:
                             
                         
-                            log.warning("WARNING: role not found in rolelist", tt2)
+                            log.warning("WARNING: role not found in rolelist %s",  tt2)
                     except KeyError as e:
-                        log.warning("WARNING: role not found in rolelist [ke]", tt2)
+                        log.warning("WARNING: role not found in rolelist [ke] %s",  tt2)
                         #print(context.rolelist)
 
             else:

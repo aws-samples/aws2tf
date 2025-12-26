@@ -36,12 +36,12 @@ def get_aws_sqs_queue(type, id, clfn, descfn, topkey, key, filterid):
             if "://" not in id:
                 # assume it s a queue name and get url:
                 try:
-                    if context.debug: log.debug("Getting URL for queue",id)
+                    if context.debug: log.debug("Getting URL for queue %s", id)
                     response2 = client.get_queue_url(QueueName=id)
                     id=response2['QueueUrl']
                 except Exception as e:
                     if "NonExistentQueue" in str(e):
-                        log.info("Unable to find queue:",id)
+                        log.info("Unable to find queue: %s", id)
                     return True
 
 

@@ -23,7 +23,7 @@ def build_lists():
                 response.extend(page['Functions'])
             return [('lambda', j['FunctionName']) for j in response]
         except Exception as e:
-            log.error("Error fetching Lambda data: %s", e)
+            log.error("Error fetching Lambda data: %s %s",  e)
             return []
       
     
@@ -37,7 +37,7 @@ def build_lists():
             context.vpcs=response
             return [('vpc', j['VpcId']) for j in response]
         except Exception as e:
-            log.error("Error fetching ec2 data: %s", e)
+            log.error("Error fetching ec2 data: %s %s",  e)
             return []
     
     def fetch_s3_data():
@@ -49,7 +49,7 @@ def build_lists():
                 response.extend(page['Buckets'])
             return [('s3', j['Name']) for j in response]
         except Exception as e:
-            log.error("Error fetching s3 data: %s", e)
+            log.error("Error fetching s3 data: %s %s",  e)
             return []
 
     def fetch_sg_data():
@@ -61,7 +61,7 @@ def build_lists():
                 response.extend(page['SecurityGroups'])
             return [('sg', j['GroupId']) for j in response]
         except Exception as e:
-            log.error("Error fetching SG data: %s", e)
+            log.error("Error fetching SG data: %s %s",  e)
             return []
         
 
@@ -78,7 +78,7 @@ def build_lists():
                json.dump(response, f, indent=2, default=str)
             return [('subnet', j['SubnetId']) for j in response]
         except Exception as e:
-            log.error("Error fetching vpc data: %s", e)
+            log.error("Error fetching vpc data: %s %s",  e)
             return []
 
     def fetch_tgw_data():
@@ -90,7 +90,7 @@ def build_lists():
                 response.extend(page['TransitGateways'])
             return [('tgw', j['TransitGatewayId']) for j in response]
         except Exception as e:
-            log.error("Error fetching transit gateways: %s", e)
+            log.error("Error fetching transit gateways: %s %s",  e)
             return []
 
     def fetch_roles_data():
@@ -105,7 +105,7 @@ def build_lists():
                json.dump(response, f, indent=2, default=str)
             return [('iam', j['RoleName']) for j in response]
         except Exception as e:
-            log.error("Error fetching vpc data: %s", e)
+            log.error("Error fetching vpc data: %s %s",  e)
             return []
     
     def fetch_policies_data():
@@ -117,7 +117,7 @@ def build_lists():
                 response.extend(page['Policies'])
             return [('pol', j['Arn']) for j in response]
         except Exception as e:
-            log.error("Error fetching vpc data: %s", e)
+            log.error("Error fetching vpc data: %s %s",  e)
             return []
 
 

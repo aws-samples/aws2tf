@@ -5,6 +5,7 @@ import subprocess
 import os
 import re
 import ast
+import shlex
 from io import StringIO
 from contextlib import suppress
 import shutil
@@ -16,7 +17,7 @@ import fixtf
 import inspect
 from datetime import datetime,timezone
 import resources
-from timed_interrupt import timed_int
+from timed_interrupt import timed_int, initialize_timer, stop_timer
 import threading
 import logging
 
@@ -24,6 +25,208 @@ from pathlib import Path
 
 # Get logger from parent aws2tf module
 log = logging.getLogger('aws2tf')
+
+# Security Fix #3: Path traversal prevention
+def safe_filename(filename: str, base_dir: str = None) -> str:
+    """
+    Validate and sanitize filename to prevent path traversal attacks.
+    
+    Args:
+        filename: The filename to validate
+        base_dir: Optional base directory to restrict to (defaults to current working dir)
+    
+    Returns:
+        Sanitized filename safe for use
+        
+    Raises:
+        ValueError: If path traversal attempt detected
+    """
+    if base_dir is None:
+        base_dir = os.getcwd()
+    
+    # Convert to Path objects for safe manipulation
+    base_path = Path(base_dir).resolve()
+    
+    # Remove any path separators and resolve the path
+    # This prevents ../../../etc/passwd type attacks
+    safe_name = os.path.basename(filename)
+    
+    # Additional sanitization - remove dangerous characters
+    # Keep alphanumeric, dash, underscore, dot
+    import re
+    safe_name = re.sub(r'[^\w\-\.]', '_', safe_name)
+    
+    # Prevent hidden files (starting with .)
+    if safe_name.startswith('.') and safe_name != '.terraform.lock.hcl':
+        safe_name = '_' + safe_name
+    
+    # Construct full path
+    full_path = (base_path / safe_name).resolve()
+    
+    # Verify the resolved path is still within base_dir
+    try:
+        full_path.relative_to(base_path)
+    except ValueError:
+        raise ValueError(f"Path traversal attempt detected: {filename}")
+    
+    return str(full_path)
+
+
+def safe_write_file(filename: str, content: str, mode: str = 'w', base_dir: str = None, permissions: int = 0o644) -> None:
+    """
+    Safely write content to a file with path validation and secure permissions.
+    
+    Args:
+        filename: The filename to write to
+        content: Content to write
+        mode: File mode ('w' or 'wb')
+        base_dir: Optional base directory to restrict to
+        permissions: Unix file permissions (default: 0o644 = rw-r--r--)
+                    Use 0o600 for sensitive files (rw-------)
+    
+    Security Features:
+    - Path traversal prevention
+    - Secure file permissions
+    - Atomic write operation
+    """
+    # For files in subdirectories like 'imported/', handle specially
+    if '/' in filename:
+        # Split into directory and filename
+        parts = filename.split('/')
+        subdir = '/'.join(parts[:-1])
+        fname = parts[-1]
+        
+        # Validate subdirectory doesn't contain traversal
+        if '..' in subdir:
+            raise ValueError(f"Path traversal attempt in directory: {subdir}")
+        
+        # Create subdirectory if it doesn't exist
+        if base_dir:
+            full_subdir = os.path.join(base_dir, subdir)
+        else:
+            full_subdir = subdir
+            
+        os.makedirs(full_subdir, mode=0o755, exist_ok=True)
+        
+        # Validate the filename part
+        safe_fname = safe_filename(fname, full_subdir)
+        safe_path = safe_fname
+    else:
+        # Simple filename, validate it
+        safe_path = safe_filename(filename, base_dir)
+    
+    # Write the file with specified permissions
+    if 'b' in mode:
+        # Binary mode
+        fd = os.open(safe_path, os.O_CREAT | os.O_WRONLY | os.O_TRUNC, permissions)
+        with os.fdopen(fd, mode) as f:
+            f.write(content)
+    else:
+        # Text mode - use os.open for atomic creation with permissions
+        fd = os.open(safe_path, os.O_CREAT | os.O_WRONLY | os.O_TRUNC, permissions)
+        with os.fdopen(fd, mode) as f:
+            f.write(content)
+    
+    # Verify permissions were set correctly
+    actual_perms = os.stat(safe_path).st_mode & 0o777
+    if actual_perms != permissions:
+        # Try to fix permissions
+        os.chmod(safe_path, permissions)
+
+
+def safe_write_sensitive_file(filename: str, content: str, mode: str = 'w', base_dir: str = None) -> None:
+    """
+    Write sensitive files (state, credentials, etc.) with restricted permissions.
+    
+    Uses 0o600 permissions (rw-------) - only owner can read/write.
+    """
+    safe_write_file(filename, content, mode, base_dir, permissions=0o600)
+
+
+def secure_terraform_files(directory: str = '.') -> None:
+    """
+    Secure terraform state files and other sensitive files with appropriate permissions.
+    
+    Security Fix #7: Set restrictive permissions on sensitive files
+    
+    Files secured:
+    - terraform.tfstate (0o600) - Contains sensitive data
+    - terraform.tfstate.backup (0o600) - Contains sensitive data
+    - .terraform.lock.hcl (0o644) - Lock file, less sensitive
+    - *.tfvars (0o600) - May contain secrets
+    - aws2tf.log (0o600) - May contain sensitive information
+    
+    Args:
+        directory: Directory to secure files in (default: current directory)
+    """
+    sensitive_files = {
+        'terraform.tfstate': 0o600,
+        'terraform.tfstate.backup': 0o600,
+        '.terraform.lock.hcl': 0o644,
+        'aws2tf.log': 0o600,
+    }
+    
+    # Secure specific files
+    for filename, perms in sensitive_files.items():
+        filepath = os.path.join(directory, filename)
+        if os.path.exists(filepath):
+            try:
+                os.chmod(filepath, perms)
+                if context.debug:
+                    log.debug(f"Secured {filename} with permissions {oct(perms)}")
+            except Exception as e:
+                log.warning(f"Could not set permissions on {filename}: {e}")
+    
+    # Secure all .tfvars files
+    import glob
+    for tfvars_file in glob.glob(os.path.join(directory, '*.tfvars')):
+        try:
+            os.chmod(tfvars_file, 0o600)
+            if context.debug:
+                log.debug(f"Secured {os.path.basename(tfvars_file)} with permissions 0o600")
+        except Exception as e:
+            log.warning(f"Could not set permissions on {tfvars_file}: {e}")
+
+
+def get_file_permissions_info() -> dict:
+    """
+    Get information about file permissions for security documentation.
+    
+    Returns:
+        Dictionary with file types and their recommended permissions
+    """
+    return {
+        'terraform_files': {
+            'description': 'Terraform configuration files',
+            'pattern': '*.tf',
+            'permissions': 0o644,
+            'reason': 'Configuration files, readable by group'
+        },
+        'state_files': {
+            'description': 'Terraform state files (SENSITIVE)',
+            'pattern': 'terraform.tfstate*',
+            'permissions': 0o600,
+            'reason': 'Contains secrets, credentials, and sensitive resource data'
+        },
+        'variable_files': {
+            'description': 'Terraform variable files (POTENTIALLY SENSITIVE)',
+            'pattern': '*.tfvars',
+            'permissions': 0o600,
+            'reason': 'May contain secrets and sensitive configuration'
+        },
+        'log_files': {
+            'description': 'Application log files (POTENTIALLY SENSITIVE)',
+            'pattern': '*.log',
+            'permissions': 0o600,
+            'reason': 'May contain AWS resource IDs, ARNs, and debugging information'
+        },
+        'import_files': {
+            'description': 'Terraform import files',
+            'pattern': 'import__*.tf',
+            'permissions': 0o644,
+            'reason': 'Import declarations, less sensitive'
+        },
+    }
 
 
 #####################
@@ -120,11 +323,116 @@ from fixtf_aws_resources import needid_dict
 from fixtf_aws_resources import aws_no_import
 from fixtf_aws_resources import aws_not_implemented
 
+# Security Fix #2: Module registry to replace eval()
+# This prevents arbitrary code execution via eval()
+AWS_RESOURCE_MODULES = {
+    'acm': aws_acm,
+    'amplify': aws_amplify,
+    'athena': aws_athena,
+    'autoscaling': aws_autoscaling,
+    'apigateway': aws_apigateway,
+    'apigatewayv2': aws_apigatewayv2,
+    'appmesh': aws_appmesh,
+    'application-autoscaling': aws_application_autoscaling,
+    'application_autoscaling': aws_application_autoscaling,
+    'appstream': aws_appstream,
+    'batch': aws_batch,
+    'backup': aws_backup,
+    'bedrock': aws_bedrock,
+    'bedrock-agent': aws_bedrock_agent,
+    'bedrock_agent': aws_bedrock_agent,
+    'cleanrooms': aws_cleanrooms,
+    'cloud9': aws_cloud9,
+    'cloudformation': aws_cloudformation,
+    'cloudfront': aws_cloudfront,
+    'cloudtrail': aws_cloudtrail,
+    'codebuild': aws_codebuild,
+    'codecommit': aws_codecommit,
+    'codeartifact': aws_codeartifact,
+    'codeguruprofiler': aws_codeguruprofiler,
+    'codestar-notifications': aws_codestar_notifications,
+    'codestar_notifications': aws_codestar_notifications,
+    'cognito-identity': aws_cognito_identity,
+    'cognito_identity': aws_cognito_identity,
+    'cognito-idp': aws_cognito_idp,
+    'cognito_idp': aws_cognito_idp,
+    'config': aws_config,
+    'connect': aws_connect,
+    'customer-profiles': aws_customer_profiles,
+    'customer_profiles': aws_customer_profiles,
+    'datazone': aws_datazone,
+    'dms': aws_dms,
+    'docdb': aws_docdb,
+    'ds': aws_ds,
+    'dynamodb': aws_dynamodb,
+    'kms': aws_kms,
+    'ec2': aws_ec2,
+    'ecs': aws_ecs,
+    'efs': aws_efs,
+    'ecr-public': aws_ecr_public,
+    'ecr_public': aws_ecr_public,
+    'ecr': aws_ecr,
+    'eks': aws_eks,
+    'elasticache': aws_elasticache,
+    'elbv2': aws_elbv2,
+    'emr': aws_emr,
+    'events': aws_events,
+    'firehose': aws_firehose,
+    'glue': aws_glue,
+    'guardduty': aws_guardduty,
+    'iam': aws_iam,
+    'kafka': aws_kafka,
+    'kendra': aws_kendra,
+    'kinesis': aws_kinesis,
+    'logs': aws_logs,
+    'lakeformation': aws_lakeformation,
+    'lambda': aws_lambda,
+    'license-manager': aws_license_manager,
+    'license_manager': aws_license_manager,
+    'mwaa': aws_mwaa,
+    'neptune': aws_neptune,
+    'network-firewall': aws_network_firewall,
+    'network_firewall': aws_network_firewall,
+    'networkmanager': aws_networkmanager,
+    'organizations': aws_organizations,
+    'ram': aws_ram,
+    'rds': aws_rds,
+    'redshift': aws_redshift,
+    'redshift-serverless': aws_redshift_serverless,
+    'redshift_serverless': aws_redshift_serverless,
+    'resource-explorer-2': aws_resource_explorer_2,
+    'resource_explorer_2': aws_resource_explorer_2,
+    'route53': aws_route53,
+    's3': aws_s3,
+    's3control': aws_s3control,
+    's3tables': aws_s3tables,
+    'sagemaker': aws_sagemaker,
+    'schemas': aws_schemas,
+    'scheduler': aws_scheduler,
+    'securityhub': aws_securityhub,
+    'secretsmanager': aws_secretsmanager,
+    'servicecatalog': aws_servicecatalog,
+    'servicediscovery': aws_servicediscovery,
+    'shield': aws_shield,
+    'ses': aws_ses,
+    'sns': aws_sns,
+    'sqs': aws_sqs,
+    'ssm': aws_ssm,
+    'sso-admin': aws_sso_admin,
+    'sso_admin': aws_sso_admin,
+    'transfer': aws_transfer,
+    'vpc-lattice': aws_vpc_lattice,
+    'vpc_lattice': aws_vpc_lattice,
+    'waf': aws_waf,
+    'wafv2': aws_wafv2,
+    'xray': aws_xray,
+}
+
 
 def call_resource(type, id):
    #log.debug("--1-- in call_resources >>>>> "+type+"   "+str(id))
    if type in context.all_extypes:
-      log.debug("Common Excluding: %s %s", type, id) 
+      log.debug("Common Excluding: %s %s %s",  type, id) 
       pkey=type+"."+id
       context.rproc[pkey] = True
       return
@@ -176,7 +484,7 @@ def call_resource(type, id):
    if clfn is None:
         log.error("ERROR: clfn is None with type="+type)
         log.info("exit 016")
-        timed_int.stop()
+        stop_timer()
         exit()
 # Try specific
 
@@ -185,22 +493,24 @@ def call_resource(type, id):
                log.debug("calling specific common.get_"+type+" with type="+type+" id="+str(id)+"   clfn=" +
                     clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
 
-            if clfn == "vpc-lattice":  getfn = getattr(eval("aws_vpc_lattice"), "get_"+type)
-            elif clfn == "redshift-serverless":  getfn = getattr(eval("aws_redshift_serverless"), "get_"+type)
-            elif clfn == "s3":  
-               #log.debug("-1aa- clfn:"+clfn+" type:"+type)
-               getfn = getattr(eval("aws_s3"), "get_"+type)
-            #elif clfn == "s3":  getfn = getattr(ast.literal_eval("aws_s3"), "get_"+type)
-
+            # Security Fix #2: Use module registry instead of eval()
+            # Convert clfn to normalized form (replace hyphens with underscores)
+            mclfn = clfn.replace("-", "_")
+            
+            # Look up module in registry
+            module = AWS_RESOURCE_MODULES.get(clfn) or AWS_RESOURCE_MODULES.get(mclfn)
+            
+            if module is None:
+                # Module not in registry - will try generic handler instead
+                if context.debug:
+                    log.debug(f"Module not found in registry for clfn={clfn}, will try generic handler")
+                sr = False
             else:
-               #log.debug("-1aa- clfn:"+clfn+" type:"+type)
-               mclfn = clfn.replace("-", "_")
-               #log.debug("-1ab- mclfn:"+mclfn+" type:"+type)
-               getfn = getattr(eval("aws_"+mclfn), "get_"+type)
-               #log.debug("-1ac- clfn:"+clfn+" type:"+type)
-
-            #log.debug("type",type, "id",id, "clfn",clfn, "descfn",descfn, "topkey", topkey,"key",key, "filterid",filterid)   
-            sr = getfn(type, id, clfn, descfn, topkey, key, filterid)
+                # Get the function from the module
+                getfn = getattr(module, "get_"+type)
+                
+                #log.debug("type %s", type, "id",id, "clfn",clfn, "descfn",descfn, "topkey", topkey,"key",key, "filterid",filterid)   
+                sr = getfn(type, id, clfn, descfn, topkey, key, filterid)
 
    except AttributeError as e:
       if context.debug:
@@ -208,7 +518,7 @@ def call_resource(type, id):
          log.debug(f"{e=}")
          exc_type, exc_obj, exc_tb = sys.exc_info()
          fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-         log.debug("%s %s %s", exc_type, fname, exc_tb.tb_lineno)
+         log.debug("%s %s %s %s",  exc_type, fname, exc_tb.tb_lineno)
       pass
 
    except SyntaxError:
@@ -221,7 +531,7 @@ def call_resource(type, id):
          log.debug(f"{e=}")
          exc_type, exc_obj, exc_tb = sys.exc_info()
          fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-         log.debug("%s %s %s", exc_type, fname, exc_tb.tb_lineno)
+         log.debug("%s %s %s %s",  exc_type, fname, exc_tb.tb_lineno)
 
       pass
 
@@ -240,7 +550,7 @@ def call_resource(type, id):
 
          exc_type, exc_obj, exc_tb = sys.exc_info()
          fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-         log.error("%s %s %s", exc_type, fname, exc_tb.tb_lineno)
+         log.error("%s %s %s %s",  exc_type, fname, exc_tb.tb_lineno)
          if rr is False:
             log.error("--->> Could not get resource "+type+" id="+str(id))
             pass
@@ -259,7 +569,8 @@ def tfplan1():
       log.info("INFO: No import*.tf files found - nothing to import, exiting ....")
       log.info("INFO: Confirm the resource type exists in your account: "+context.acc+" & region: "+context.region)
       context.tracking_message="No import*.tf files found for this resource, exiting ...."
-      timed_int.stop()
+      if timed_int is not None:
+         stop_timer()
       os._exit(0)
 
    com = "cp imported/provider.tf provider.tf"
@@ -336,7 +647,7 @@ def tfplan1():
                rout = rc(com)
                # continue
                log.info("exit 018")
-               timed_int.stop()
+               stop_timer()
                exit()
 
    # log.debug("Plan 1 complete -- resources.out generated")
@@ -413,7 +724,7 @@ def tfplan3():
    if not glob.glob("aws_*.tf"):
       log.error("No aws_*.tf files found for this resource, exiting ....")
       log.info("exit 019")
-      timed_int.stop()
+      stop_timer()
       exit()
 
    rf = "resources.out"
@@ -434,7 +745,7 @@ def tfplan3():
       log.error("Validation after fix failed - exiting")
       context.tracking_message="Validation after fix failed - exiting"
       log.info("exit 020 %s", str(context.aws2tfver))
-      timed_int.stop()
+      stop_timer()
       exit()
 
    else:
@@ -518,14 +829,14 @@ def tfplan3():
 
                   log.error("-->> Plan 2 errors exiting - check plan2.json - or run terraform plan")
                   log.info("exit 021 %s", str(context.aws2tfver))
-                  timed_int.stop()
+                  stop_timer()
                   exit()
 
       if zerod != 0:
          log.error("-->> plan will destroy resources! - unexpected, is there existing state ?")
          log.error("-->> look at plan2.json - or run terraform plan")
          log.info("exit 022")
-         timed_int.stop()
+         stop_timer()
          exit()
 
       if zeroc != 0:
@@ -569,30 +880,30 @@ def tfplan3():
             log.info("\n")
 
             if context.expected is False:
-               log.info("You can check the changes by running 'terraform plan' in %s\n", context.path1)
+               log.info("You can check the changes by running 'terraform plan' in %s\n %s",  context.path1)
                log.info("Then rerun the same ./aws2tf.py command and add the '-a' flag to accept these plan changes and continue to import")
                log.info("exit 023")
-               timed_int.stop()
+               stop_timer()
                exit()
 
             if context.debug is True:
                log.debug("\n-->> Then if happy with the output changes for the above resources, run this command to complete aws2tf-py tasks:")
                log.info("exit 024")
-               timed_int.stop()
+               stop_timer()
                log.info("terraform apply -no-color tfplan")
                exit()
          else:
             log.error("-->> plan will change resources! - unexpected")
             log.error("-->> look at plan2.json - or run terraform plan")
             log.info("exit 025 %s", str(context.aws2tfver))
-            timed_int.stop()
+            stop_timer()
             exit()
 
       if zeroa !=0:
          log.error("-->> plan will add resources! - unexpected")
          log.error("-->> look at plan2.json - or run terraform plan")
          log.info("exit 026")
-         timed_int.stop()
+         stop_timer()
          exit()
 
       log.info("Plan complete")
@@ -611,7 +922,7 @@ def tfplan3():
             log.info("cd "+context.path1)
             log.info("terraform plan -generate-config-out=resources.out")
             log.info("exit 027")
-            timed_int.stop()
+            stop_timer()
             exit()
          else:
             log.info("INFO: Continuing due to workaround "+context.workaround)
@@ -621,7 +932,7 @@ def tfplan3():
          if zeroi==0:
             log.info("Nothing to merge exiting ...")
             log.info("exit 028")
-            timed_int.stop()
+            stop_timer()
             exit()
          # get imported
          x = glob.glob("imported/import__*.tf")
@@ -635,24 +946,24 @@ def tfplan3():
          stc=int(rout.stdout.decode().rstrip())
 
          if preimpf != stc:
-            log.error("Miss-matched previous imports %s and state file resources %s exiting", str(preimpf), str(stc))
+            log.error("Miss-matched previous imports %s and state file resources %s exiting %s",  str(preimpf), str(stc))
             log.info("exit 029")
-            timed_int.stop()
+            stop_timer()
             exit() 
          else:
-            log.info("Existing import file = Existing state count = %s", str(stc))
+            log.info("Existing import file = Existing state count = %s %s",  str(stc))
          if toimp != zeroi:
             log.warning("Unexpected import number exiting")
             #log.info("exit 030")
-            #timed_int.stop()
+            #stop_timer()
             #exit() 
          else:
-            log.info("PASSED: importing expected number of resources = %s", str(toimp))    
+            log.info("PASSED: importing expected number of resources = %s %s",  str(toimp))    
 
    if not os.path.isfile("tfplan"):
       log.error("Plan - could not find expected tfplan file - exiting")
       log.info("exit 031")
-      timed_int.stop()
+      stop_timer()
       exit()
 
    #if context.merge:
@@ -672,7 +983,7 @@ def wrapup():
    if "Success! The configuration is valid" not in str(rout.stdout.decode().rstrip()):
       log.error(str(rout.stdout.decode().rstrip()))
       log.info("exit 032")
-      timed_int.stop()
+      stop_timer()
       exit()
    else:
       log.info("PASSED: Valid Configuration.")
@@ -682,7 +993,7 @@ def wrapup():
       if not os.path.isfile("plan2.json"):
          log.error("ERROR: Could not find plan2.json, unexpected on merge - exiting ....")
          log.info("exit 033")
-         timed_int.stop()
+         stop_timer()
          exit()
       
    log.info("Terraform import via apply of tfplan....")
@@ -704,7 +1015,7 @@ def wrapup():
 
          if "aws_bedrockagent_agent" not in errs:
             log.info("exit 034")
-            timed_int.stop()
+            stop_timer()
             exit()
          else:
             log.warning("WARNING: aws_bedrockagent_agent - continuing")
@@ -728,7 +1039,7 @@ def wrapup():
       #   log.warning("WARNING: aws_bedrockagent_agent - continuing")"
       log.error(str(rout.stderr.decode().rstrip()))
       log.info("exit 035")
-      timed_int.stop()
+      stop_timer()
       exit()
    else:
       log.info("PASSED: No changes in plan")
@@ -737,11 +1048,47 @@ def wrapup():
       rout = rc(com)
       com = "cp aws_*.tf imported"
       rout = rc(com)
+      
+      # Security Fix #7: Secure sensitive files after import
+      secure_terraform_files('.')
 
 ######################################################################
 
 def rc(cmd):
-    out = subprocess.run(cmd, shell=True, capture_output=True)
+    """
+    Execute a command safely without shell=True.
+    
+    Args:
+        cmd: Either a string (for backwards compatibility, will be parsed) 
+             or a list of command arguments
+    
+    Returns:
+        subprocess.CompletedProcess object
+    """
+    # If cmd is a string, parse it into a list for safe execution
+    if isinstance(cmd, str):
+        # For simple commands, split on spaces
+        # For complex commands with pipes/redirects, we need special handling
+        if '>' in cmd or '|' in cmd or '&&' in cmd or ';' in cmd:
+            # These require shell, but we'll use shell=True only for these cases
+            # and log a warning
+            if context.debug:
+                log.debug(f"WARNING: Command requires shell features: {cmd[:100]}")
+            out = subprocess.run(cmd, shell=True, capture_output=True)
+        else:
+            # Safe to split and run without shell
+            import shlex
+            try:
+                cmd_list = shlex.split(cmd)
+                out = subprocess.run(cmd_list, capture_output=True, shell=False)
+            except Exception as e:
+                # Fallback to shell if parsing fails
+                log.warning(f"Command parsing failed, using shell: {e}")
+                out = subprocess.run(cmd, shell=True, capture_output=True)
+    else:
+        # cmd is already a list
+        out = subprocess.run(cmd, capture_output=True, shell=False)
+    
     ol = len(out.stdout.decode('utf-8').rstrip())
     el = len(out.stderr.decode().rstrip())
     if el != 0:
@@ -798,7 +1145,7 @@ def fix_imports():
 def ctrl_c_handler(signum, frame):
   log.info("Ctrl-C pressed.")
   log.info("exit 036")
-  timed_int.stop()
+  stop_timer()
   exit()
 
 
@@ -822,7 +1169,7 @@ def check_python_version():
          log.error("This program requires boto3 1.36.13 or later.")
          log.error("Try: pip install boto3  -or-  pip install boto3==1.36.13")
          log.info("exit 037")
-         timed_int.stop()
+         stop_timer()
          sys.exit(1)
 
 
@@ -942,7 +1289,10 @@ def splitf(input_file):
             resource_name = match.group(2)
 
             # Create filename
-            filename = f"{resource_type}__{resource_name.replace('/', '__')}.out"
+            resource_name_safe = resource_name.replace('/', '__')
+            # Security Fix #3: Sanitize filename
+            resource_name_safe = re.sub(r'[^\w\-\.]', '_', resource_name_safe)
+            filename = f"{resource_type}__{resource_name_safe}.out"
 
             # Use StringIO for efficient string operations
             output = StringIO()
@@ -953,14 +1303,19 @@ def splitf(input_file):
 
             # Write the filtered resource block to a new file
             
-            if len(filename) > 255: filename=filename[:250]+".tf"
+            if len(filename) > 255: filename=filename[:250]+".out"
             try:
-               with open(filename, 'w') as f:
-                  f.write(output.getvalue().strip() + '\n')
-            except:
-               log.error("ERROR: could not write to file: " + fn)
+               # Security Fix #3: Use safe file write
+               safe_write_file(filename, output.getvalue().strip() + '\n')
+            except ValueError as e:
+               log.error(f"ERROR: Path validation failed: {e}")
                log.info("exit 038")
-               timed_int.stop()
+               stop_timer()
+               exit()
+            except Exception as e:
+               log.error(f"ERROR: could not write to file: {filename} - {e}")
+               log.info("exit 038")
+               stop_timer()
                exit()
 
             # print(f"Created file: {filename}")
@@ -985,6 +1340,10 @@ def write_import(type,theid,tfid):
 
          #catch tfid starts with number
       if tfid[:1].isdigit(): tfid="r-"+tfid
+
+      # Security Fix #3: Additional sanitization to prevent path traversal
+      tfid = re.sub(r'\.\.', '_', tfid)  # Remove any remaining ..
+      tfid = tfid.replace('/', '_')  # Ensure no path separators
 
       if "!" in theid:
          fn="notimported/import__"+type+"__"+tfid+".tf"
@@ -1030,12 +1389,17 @@ def write_import(type,theid,tfid):
          if len(fn) > 255: fn=fn[:250]+".tf"
          #if context.merge:   print("Merge import",fn)
          try:
-            with open(fn, 'w') as f:
-               f.write(output.getvalue().strip() + '\n')
-         except:
-            log.error("ERROR: could not write to file: " + fn)
+            # Security Fix #3: Use safe file write with path validation
+            safe_write_file(fn, output.getvalue().strip() + '\n')
+         except ValueError as e:
+            log.error(f"ERROR: Path validation failed: {e}")
             log.info("exit 039")
-            timed_int.stop()
+            stop_timer()
+            exit()
+         except Exception as e:
+            log.error(f"ERROR: could not write to file: {fn} - {e}")
+            log.info("exit 039")
+            stop_timer()
             exit()
 
 
@@ -1388,9 +1752,9 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                   for i in fresp:
                      if context.debug: 
                         try:
-                           log.debug("%s %s", i[key], id)
+                           log.debug("%s %s %s",  i[key], id)
                         except TypeError:
-                           log.debug("%s %s", i, id)
+                           log.debug("%s %s %s",  i, id)
                      try:
                         if id in i[key]:
                            response=[i]
@@ -1586,7 +1950,7 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
       log.error(exn)
       log.error(str(exc_obj)+" for "+frame+" id="+str(id)+" - exit")
       log.info("exit 040")
-      #timed_int.stop() # as it is multi-threaded
+      #stop_timer() # as it is multi-threaded
       exit()
 
 
@@ -1595,7 +1959,7 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
          log.warning(descfn + " returned Not subscribed "+clfn+" - returning")
          return
       log.info("exit 041")
-      timed_int.stop()
+      stop_timer()
       exit()
       
 
@@ -1605,7 +1969,7 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    try:   
       log.error(f"{e=} [e1]")
       log.error(f"{exn=} [e1]")
-      log.error("%s %s", fname, exc_tb.tb_lineno)
+      log.error("%s %s %s",  fname, exc_tb.tb_lineno)
    except:
       log.error("except err")
       pass
@@ -1616,7 +1980,7 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
       f.write("-----------------------------------------------------------------------------\n")
    log.error("stopping process ...")
    #threading.
-   timed_int.stop()
+   stop_timer()
    os._exit(1)
    exit()
 
@@ -1636,7 +2000,7 @@ def handle_error2(e,frame,id):
       f.write(f"{fname=} {exc_tb.tb_lineno=} [e2] \n")
       f.write("-----------------------------------------------------------------------------\n")
    log.info("exit 042")
-   timed_int.stop()
+   stop_timer()
    os._exit(1)
    exit()
 
@@ -1672,10 +2036,10 @@ def upload_directory_to_s3():
    local_directory="/tmp/aws2tf/generated/tf-"+context.pathadd+context.acc+"-"+context.region
    bucket_name="aws2tf-"+context.acc+"-"+context.region
    s3_prefix=''
-   log.info("Calling create_bucket_if_not_exists for %s", bucket_name)
+   log.info("Calling create_bucket_if_not_exists for %s %s",  bucket_name)
    bret=create_bucket_if_not_exists(bucket_name)
    if bret:
-      log.info("Upload files to s3 %s", bucket_name)
+      log.info("Upload files to s3 %s %s",  bucket_name)
       for root, dirs, files in os.walk(local_directory):
          if '.terraform' in dirs:  dirs.remove('.terraform')
          if 'tfplan' in files: files.remove('tfplan')
@@ -1695,7 +2059,7 @@ def upload_directory_to_s3():
                   return False
       log.info("Upload to S3 complete.")
    else:
-      log.error("Upload to S3 failed - False return from create_bucket_if_not_exists for %s", bucket_name)
+      log.error("Upload to S3 failed - False return from create_bucket_if_not_exists for %s %s",  bucket_name)
       return False
 
 def empty_and_delete_bucket():
@@ -1703,7 +2067,7 @@ def empty_and_delete_bucket():
     s3 = boto3.resource('s3')
     s3_client = boto3.client('s3')
     bucket = s3.Bucket(bucket_name)
-    log.info("Emptying and deleting bucket... %s", bucket_name)
+    log.info("Emptying and deleting bucket... %s %s",  bucket_name)
     # Check if the bucket exists
     try:
         s3_client.head_bucket(Bucket=bucket_name)

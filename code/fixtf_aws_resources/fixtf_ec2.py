@@ -464,13 +464,17 @@ def  aws_nat_gateway(t1,tt1,tt2,flag1,flag2):
     if "secondary_private_ip_address_count" in tt1:
         
         if tt2 == "0": skip=1
-
+    elif tt1=="regional_nat_gateway_address": skip=1
     elif tt1 == "private_ip": skip=1
     elif tt1 == "public_ip": skip=1
     elif tt1 == "allocation_id": 
         
         t1=tt1 + " = aws_eip." + tt2 + ".id\n"
         common.add_dependancy("aws_eip",tt2)
+    elif tt1=="vpc_id":
+        t1 = t1 + "\n lifecycle {\n   ignore_changes = [regional_nat_gateway_address]\n}\n"
+
+
     return skip,t1,flag1,flag2 
 
 def  aws_network_acl(t1,tt1,tt2,flag1,flag2):
@@ -887,6 +891,8 @@ def aws_verifiedaccess_group(t1,tt1,tt2,flag1,flag2):
 
 def aws_verifiedaccess_instance(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="region":
+		t1 = t1+"\n lifecycle {\n   ignore_changes = [name_servers]\n}\n"
 	return skip,t1,flag1,flag2
 
 def aws_verifiedaccess_instance_logging_configuration(t1,tt1,tt2,flag1,flag2):
@@ -899,4 +905,18 @@ def aws_verifiedaccess_instance_trust_provider_attachment(t1,tt1,tt2,flag1,flag2
 
 def aws_verifiedaccess_trust_provider(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	# Handle required sensitive fields that can't be retrieved
+	if tt1 == "description":
+		# Skip this line and add lifecycle ignore
+		#skip = 1
+		# Add lifecycle block to ignore changes
+		#if not flag1:
+	#		flag1 = True
+		t1 = t1+"\n lifecycle {\n   ignore_changes = [oidc_options[0].client_secret]\n}\n"
+	
+	if tt1 == "client_secret":
+		if "null" in tt2:
+		    t1 = tt1 + ' = "PLACEHOLDER_UPDATE_MANUALLY" # TODO: Update with actual secret\n'
+		    log.warning("WARNING: client_secret for %s must be manually updated", flag2)
+
 	return skip,t1,flag1,flag2

@@ -919,6 +919,6 @@ def aws_verifiedaccess_trust_provider(t1,tt1,tt2,flag1,flag2):
 	if tt1 == "client_secret":
 		if "null" in tt2:
 		    t1 = tt1 + ' = "PLACEHOLDER_UPDATE_MANUALLY" # TODO: Update with actual secret\n'
-		    log.warning("WARNING: client_secret for %s must be manually updated", flag2)
+		    common.log_warning("WARNING: client_secret for %s must be manually updated", flag2)
 
 	return skip,t1,flag1,flag2

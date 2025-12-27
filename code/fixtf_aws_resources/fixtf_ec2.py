@@ -369,8 +369,10 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 	
 		elif tt1 == "iam_instance_profile":
 			if tt2 != "null":
-				t1=tt1 + " = aws_iam_instance_profile." + tt2 + ".name\n"
-				common.add_dependancy("aws_iam_instance_profile",tt2)
+				if tt2 in str(context.inplist.keys()):
+				#if context.inplist[tt2]:	
+					t1=tt1 + " = aws_iam_instance_profile." + tt2 + ".name\n"
+					common.add_dependancy("aws_iam_instance_profile",tt2)
 
 
 		elif tt1 == "security_groups": skip=1

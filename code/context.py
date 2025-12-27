@@ -122,6 +122,7 @@ lambdalist={}
 s3list={}
 rolelist={}
 policylist={}
+inplist={}
 bucketlist={}
 tgwlist={}
 gluedbs={}

@@ -121,6 +121,18 @@ def build_lists():
             log.error("Error fetching vpc data: %s %s",  e)
             return []
 
+    def fetch_instprof_data():
+        try:
+            client = boto3.client('iam',region_name='us-east-1')
+            response = []
+            paginator = client.get_paginator('list_instance_profiles')
+            for page in paginator.paginate():
+                response.extend(page['InstanceProfiles'])
+            return [('inp', j['InstanceProfileName']) for j in response]
+        except Exception as e:
+            log.error("Error fetching vpc data: %s %s",  e)
+            return []
+
 
     # Use ThreadPoolExecutor to parallelize API calls
     with concurrent.futures.ThreadPoolExecutor(max_workers=context.cores) as executor:
@@ -132,7 +144,8 @@ def build_lists():
             executor.submit(fetch_subnet_data),
             executor.submit(fetch_tgw_data),
             executor.submit(fetch_roles_data),
-            executor.submit(fetch_policies_data)
+            executor.submit(fetch_policies_data),
+            executor.submit(fetch_instprof_data)
         ]
         
         # Process results as they complete
@@ -178,6 +191,9 @@ def build_lists():
                     elif resource_type == 'pol':
                         for _, policy_arn in result:
                             context.policylist[policy_arn] = True
+                    elif resource_type == 'inp':
+                        for _, inst_prof in result:
+                            context.inplist[inst_prof] = True
                 else:
                     # Handle roles data
                     with open('imported/roles.json', 'w') as f:

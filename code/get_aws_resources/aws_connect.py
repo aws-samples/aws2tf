@@ -228,7 +228,6 @@ def get_aws_connect_queue(type, id, clfn, descfn, topkey, key, filterid):
                 context.rproc[pkey] = True
                 return True
             for j in response:
-                #print(j['Name'])
                 theid = id+":"+j[key]
                 #qn=j['Name']
                 #if qn != "BasicQueue":
@@ -265,9 +264,7 @@ def get_aws_connect_routing_profile(type, id, clfn, descfn, topkey, key, filteri
                 context.rproc[pkey] = True
                 return True
             for j in response:
-                #print(j)
                 #resp2=client.describe_routing_profile(InstanceId=id,RoutingProfileId=j[key])
-                #print(resp2['RoutingProfile'])
                 theid = id+":"+j[key]
                 common.write_import(type, theid, "r-"+theid)
 
@@ -381,7 +378,6 @@ def get_aws_connect_vocabulary(type, id, clfn, descfn, topkey, key, filterid):
                 if exn == "AccessDeniedException":
                     pkey = type+"."+id
                     context.rproc[pkey] = True
-                    #print("AccessDeniedException exception for aws_connect.py - returning")
                     return True
 
     except Exception as e:

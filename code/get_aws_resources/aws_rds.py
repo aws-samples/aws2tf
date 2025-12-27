@@ -27,7 +27,6 @@ def get_aws_db_parameter_group(type, id, clfn, descfn, topkey, key, filterid):
         for page in paginator.paginate():
                 response = response + page[topkey]
         if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        #print(str(response))
         for j in response:
             if id is None:
                 common.write_import(type,j[key],None) 
@@ -64,7 +63,6 @@ def get_aws_db_option_group(type, id, clfn, descfn, topkey, key, filterid):
         for page in paginator.paginate():
                 response = response + page[topkey]
         if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        #print(str(response))
         for j in response:
             if id is None:
                 if "default:" not in j[key]:
@@ -98,7 +96,6 @@ def get_aws_db_subnet_group(type, id, clfn, descfn, topkey, key, filterid):
         for page in paginator.paginate():
                 response = response + page[topkey]
         if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        #print(str(response))
 
         for j in response:
             if id is None:
@@ -165,14 +162,12 @@ def get_aws_db_event_subscription(type, id, clfn, descfn, topkey, key, filterid)
                 response = response + page[topkey]
             if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
-                #print(j)
                 common.write_import(type,j[key],None) 
 
         else:      
             response = client.describe_event_subscriptions(SubscriptionName=id)
             if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
-                #print(j)
                 common.write_import(type,j[key],None)
 
     except Exception as e:
@@ -205,7 +200,6 @@ def get_aws_db_instance(type, id, clfn, descfn, topkey, key, filterid):
             response = client.describe_db_instances(DBInstanceIdentifier=id)
             if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
-                #print(j)
                 engine=j['Engine']
                 if engine=="docdb" or engine.startswith("aurora"): continue
                 common.write_import(type, j[key], None)
@@ -250,7 +244,6 @@ def get_aws_rds_cluster_instance(type, id, clfn, descfn, topkey, key, filterid):
             response = client.describe_db_instances(DBInstanceIdentifier=id)
             if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
-                #print(j)
                 engine=j['Engine']
                 if engine.startswith("aurora"):
                     common.write_import(type, j[key], None)
@@ -291,7 +284,6 @@ def get_aws_rds_cluster(type, id, clfn, descfn, topkey, key, filterid):
             response = client.describe_db_clusters(DBClusterIdentifier=id)
             if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
-                #print(j)
                 engine=j['Engine']
                 if engine.startswith("aurora"):
                     common.write_import(type, j[key], None)

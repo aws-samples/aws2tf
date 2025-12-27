@@ -48,7 +48,6 @@ def get_aws_cloud9_environment_ec2(type, id, clfn, descfn, topkey, key, filterid
         client = boto3.client(clfn)
         if id is None:
             response = client.list_environments()
-            #print(response)
             if response == []: 
                 log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True

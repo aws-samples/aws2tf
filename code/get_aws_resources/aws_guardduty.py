@@ -17,7 +17,6 @@ def get_aws_guardduty_detector(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
-            #print(str(response))
             for j in response:
                 common.write_import(type,j,"d-"+j) 
 

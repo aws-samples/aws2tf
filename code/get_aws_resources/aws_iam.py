@@ -27,7 +27,6 @@ def get_aws_iam_role_policy(type,id,clfn,descfn,topkey,key,filterid):
                response.extend(page[topkey])
             if response == []: 
                continue
-            #print("--RoleName="+rn+" response="+str(response))
             for k in response: 
                log.info("adding "+k+" to policies for role " + rn)
                theid=rn+":"+k
@@ -83,7 +82,6 @@ def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
          ln=id.rfind("/")
          pn=id[ln+1:]
          response1 = client.get_policy(PolicyArn=id)
-         #print(str(response1))
          response=response1['Policy']
 
       else:
@@ -101,7 +99,6 @@ def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
 ### we have a response
       else:
             j=response
-            #print("j="+str(j))
             theid=j[key]
             retid=j["Arn"]
             pkey=type+"."+retid
@@ -110,7 +107,6 @@ def get_aws_iam_policy(type,id,clfn,descfn,topkey,key,filterid):
             pn=retid[ln+1:]
 
             if context.debug: log.debug("policy name="+str(pn))
-               #print("response="+str(retid)+" id="+str(id))
             common.write_import(type,retid,pn)  
             pkey=type+"."+retid
             context.rproc[pkey]=True
@@ -135,7 +131,6 @@ def get_aws_iam_instance_profile(type,id,clfn,descfn,topkey,key,filterid):
          if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
          return True
 
-      #print("get_instance_profile response="+str(j))
  
       theid=j[key]
       common.write_import(type,theid,None) 
@@ -187,7 +182,6 @@ def get_aws_iam_user_policy(type,id,clfn,descfn,topkey,key,filterid):
 
    try:
       response1 = client.list_user_policies(UserName=id)
-      #print("response1="+str(response1))
       response=response1['PolicyNames']
       if response == []: 
          if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
@@ -222,14 +216,12 @@ def get_aws_iam_group_policy(type,id,clfn,descfn,topkey,key,filterid):
          return True
 
       response1 = client.list_group_policies(GroupName=id)
-      #print("response1="+str(response1))
       response=response1['PolicyNames']
       if response == []: 
          if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
          pkey="aws_iam_group_policy."+id
          context.rproc[pkey]=True
          return True
-      #print("response="+str(response))
       for j in response:
          polname=j
          theid=id+":"+polname
@@ -334,7 +326,6 @@ def get_aws_iam_role_policy_attachment(type,id,clfn,descfn,topkey,key,filterid):
       return
    
 
-   #print(len(context.attached_role_policies_list))
    if len(context.attached_role_policies_list) == 0:
       if context.sso:
          session = boto3.Session(region_name=context.region,profile_name=context.profile)
@@ -364,7 +355,6 @@ def get_aws_iam_role_policy_attachment(type,id,clfn,descfn,topkey,key,filterid):
                rn=id+"__"+pn
                # - no as using policy arns (minus account id etc)
                #if "andyt1" in retid:
-               #print("********** iarp  id="+str(id)+" theid="+str(theid)+" rn="+rn)
                if "arn:aws:iam::aws:policy" not in theid:
                   common.add_dependancy("aws_iam_policy",retid)
                   
@@ -373,7 +363,6 @@ def get_aws_iam_role_policy_attachment(type,id,clfn,descfn,topkey,key,filterid):
    else:
       if context.attached_role_policies_list[id] is not False:
          for j in context.attached_role_policies_list[id]:
-            #print("********** irap: "+str(j))
             retid=j['PolicyArn']
             theid=id+"/"+retid
             #ln=retid.rfind("/")
@@ -382,14 +371,12 @@ def get_aws_iam_role_policy_attachment(type,id,clfn,descfn,topkey,key,filterid):
             rn=id+"__"+pn
             # - no as using policy arns (minus account id etc)
             #if "andyt1" in retid:
-            #print("********** irap id="+str(id)+" theid="+str(theid)+"retid="+str(retid)+" rn="+rn)
             if "arn:aws:iam::aws:policy" not in theid:
                common.add_dependancy("aws_iam_policy", retid)
 
             common.write_import(type, theid, rn)
       else:
          pkey="aws_iam_role_policy_attachment."+id
-         #print("irap False skipping "+str(id))
             
    
    ####
@@ -404,24 +391,21 @@ def get_aws_iam_role_policy(type, id, clfn, descfn, topkey, key, filterid):
       log.debug("--> In get_aws_iam_role_policy  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    try:
       if id is None:
-         log.info("Id is None for "+type+ " returning")
+         log.warning("Id is None for "+type+ " returning")
          return True
 
-      #print(len(context.role_policies_list))
       if len(context.role_policies_list) == 0:
 
          client = boto3.client(clfn)
          response=[]
 
          response1 = client.list_role_policies(RoleName=id)
-         #print("response1="+str(response1))
          response=response1['PolicyNames']
          if response == []:
             if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             pkey="aws_iam_role_policy."+id
             context.rproc[pkey]=True
             return True
-         #print("response="+str(response))
          for j in response:
             polname=j
             theid=id+":"+polname
@@ -432,15 +416,12 @@ def get_aws_iam_role_policy(type, id, clfn, descfn, topkey, key, filterid):
       else:
          if context.role_policies_list[id] is not False:
             for j in context.role_policies_list[id]:
-               #print("********** irp "+str(j))
                polname=j
                theid=id+":"+polname
-               #print("*********  irp adding "+str(theid))
                common.write_import(type, theid, None)
                pkey="aws_iam_role_policy."+id
                context.rproc[pkey]=True
          else:
-            #print("*********  irp False skipping "+str(id))
             pkey="aws_iam_role_policy."+id
             context.rproc[pkey]=True
 
@@ -474,7 +455,6 @@ def get_aws_iam_group_policy_attachment(type,id,clfn,descfn,topkey,key,filterid)
       return True
    
 
-   #print(len(context.attached_role_policies_list))
 
    client = boto3.client(clfn) 
    response=[]

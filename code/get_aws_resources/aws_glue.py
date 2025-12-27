@@ -44,7 +44,6 @@ def get_aws_glue_catalog_database(type, id, clfn, descfn, topkey, key, filterid)
             tfid="d-"+pkey.replace(":","__")
             common.write_import(type,pkey,tfid)
             context.gluedbs[j[key]]=True
-            #print("KD add aws_glue_catalog_table "+pkey)
             common.add_dependancy("aws_glue_catalog_table",pkey)
             gkey="aws_glue_catalog_table."+pkey
             context.rproc[gkey]=True
@@ -93,7 +92,6 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
                     
         
         tkey="aws_glue_catalog_table"+"."+catalogn+":"+databasen
-        #print(catalogn, databasen, tabnam,cc)
         response = []
         client = boto3.client(clfn)
   
@@ -366,7 +364,6 @@ def get_aws_glue_classifier(type, id, clfn, descfn, topkey, key, filterid):
             except Exception as e:
                 pass
         else:
-            #print("ID is "+str(id))
             response = client.get_classifier(Name=id)
             if response['Classifier'] == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Classifier']
@@ -443,7 +440,6 @@ def get_aws_glue_partition(type, id, clfn, descfn, topkey, key, filterid):
             for j in response[topkey]:
                 vals=""
                 for k in j[key]: vals=vals+k+"#"
-                #print("vals="+vals)
                 vals=vals.rstrip("#")
                 pkey=id+":"+vals
                 tfid="p-"+pkey.replace(":","__").replace("#","_")

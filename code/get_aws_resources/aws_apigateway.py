@@ -216,7 +216,6 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
         if id is not None and "/" in id:  
             restid=id.split("/")[0]
             resid=id.split("/")[1]
-            #print("restid="+restid+" resid="+resid)
             try:
                 response = client.get_method(restApiId=restid,resourceId=resid,httpMethod='GET')
                 if response == []: 

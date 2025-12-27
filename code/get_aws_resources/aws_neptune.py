@@ -21,7 +21,6 @@ def get_aws_neptune_subnet_group(type, id, clfn, descfn, topkey, key, filterid):
         if response == []: 
             log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             return True
-        #print(str(response))
         for j in response:
             if id is None:
                 if "default" != j[key]:
@@ -54,9 +53,7 @@ def get_aws_neptune_cluster_endpoint(type, id, clfn, descfn, topkey, key, filter
         if response == []: 
             log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             return True
-        #print(str(response))
         for j in response:
-            #print(str(j))
             clid=j['DBClusterIdentifier']
             pkey=clid+":"+j[key]
             common.write_import(type,pkey,None) 

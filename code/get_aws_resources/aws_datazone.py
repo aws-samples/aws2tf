@@ -48,9 +48,6 @@ def get_aws_datazone_asset_type(type, id, clfn, descfn, topkey, key, filterid):
                     
                 
                 for k in response:
-                    #print("----------------------------------------------------------")
-                    #print("ut="+ut)
-                    #print("\nk="+str(k))
                     try:
                         if ut == 'ASSET_TYPE': 
                             j=k['assetTypeItem']
@@ -59,7 +56,6 @@ def get_aws_datazone_asset_type(type, id, clfn, descfn, topkey, key, filterid):
                         elif ut == 'LINEAGE_NODE_TYPE': 
                             j=k['lineageNodeTypeItem']
                     except KeyError:
-                        #print("KeyError: "+str(k))
                         continue
                     theid=id+','+j[key]
                     log.info("SKIPPING: "+str(type)+" "+str(theid)+" due to import issues")
@@ -92,7 +88,6 @@ def get_aws_datazone_user_profile(type, id, clfn, descfn, topkey, key, filterid)
         else:
             pkey=type+"."+id
             for ut in ['SSO_USER','DATAZONE_USER','DATAZONE_SSO_USER','DATAZONE_IAM_USER']:
-                #print("ut="+ut)
                 response == []
                 try:
                     for page in paginator.paginate(domainIdentifier=id,userType=ut):
@@ -104,7 +99,6 @@ def get_aws_datazone_user_profile(type, id, clfn, descfn, topkey, key, filterid)
                     else:
                         log.info("ERROR: "+str(e))
                         exit()
-                #print("response="+str(response))
                 if response == []: 
                     if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                     context.rproc[pkey]=True    
@@ -121,7 +115,6 @@ def get_aws_datazone_user_profile(type, id, clfn, descfn, topkey, key, filterid)
                             j=k[key]
                             theid=j+","+id+','+k['type']
                             common.write_import(type,theid,None) 
-                    #print(theid)
                     #common.write_import(type,theid,None) 
                 
         context.rproc[pkey]=True
@@ -151,7 +144,6 @@ def get_aws_datazone_domain(type, id, clfn, descfn, topkey, key, filterid):
                 dzid=j[key]
                 dv=j['domainVersion']
                 if dv=="V1":
-                    #print(str(j))
                     resp2=client.get_domain(identifier=dzid)
                     dz_common(resp2,dzid,type,client)
                     
@@ -275,11 +267,9 @@ def get_aws_datazone_glossary(type, id, clfn, descfn, topkey, key, filterid):
             if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             context.rproc[pkey]=True
             return True
-        #print(str(response))
         for k in response:
             j=k['glossaryItem']
             theid=id+","+j[key]+","+j['owningProjectId']
-            #print(theid)
             common.write_import(type,theid,None) 
             common.add_dependancy("aws_datazone_glossary_term", theid)
 
@@ -303,10 +293,8 @@ def get_aws_datazone_glossary_term(type, id, clfn, descfn, topkey, key, filterid
             log_warning("WARNING must pass domain id to get_aws_datazone_glossary_term")
             return True
         else:
-            #print("Glossary terms id ",id)
             did=id.split(',')[0]
             pid=id.split(',')[2]
-            #print("Glossary terms for ",did,pid)
             for page in paginator.paginate(domainIdentifier=did,owningProjectIdentifier=pid,searchScope='GLOSSARY_TERM'):
                 response = response + page[topkey]
 
@@ -315,11 +303,9 @@ def get_aws_datazone_glossary_term(type, id, clfn, descfn, topkey, key, filterid
             if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             context.rproc[pkey]=True    
             return True
-        #print(str(response))
         for k in response:
             j=k['glossaryTermItem']
             theid=did+","+j[key]+","+j['glossaryId']
-            #print(theid)
             common.write_import(type,theid,theid+"_"+pid) 
         context.rproc[pkey]=True
         
@@ -352,12 +338,10 @@ def get_aws_datazone_form_type(type, id, clfn, descfn, topkey, key, filterid):
             if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             context.rproc[pkey]=True
             return True
-        #print(str(response))
         for k in response:
 
             j=k['formTypeItem']
             theid=id+","+j['name']+","+j['revision']
-            #print(theid)
             common.write_import(type,theid,None) 
 
         context.rproc[pkey]=True

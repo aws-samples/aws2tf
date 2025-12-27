@@ -19,7 +19,6 @@ def get_aws_docdb_cluster_parameter_group(type, id, clfn, descfn, topkey, key, f
         for page in paginator.paginate():
                 response = response + page[topkey]
         if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        #print(str(response))
         for j in response:
             if id is None:
                 if "default." not in j[key]:
@@ -48,7 +47,6 @@ def get_aws_docdb_subnet_group(type, id, clfn, descfn, topkey, key, filterid):
         for page in paginator.paginate():
                 response = response + page[topkey]
         if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        #print(str(response))
         for j in response:
             if id is None:
                 if "default" != j[key]:
@@ -75,7 +73,6 @@ def get_aws_docdb_event_subscription(type, id, clfn, descfn, topkey, key, filter
         response=client.describe_event_subscriptions()
 
         if response[topkey] == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        #print(str(response))
         for j in response[topkey]:
             if id is None:
                 if "default" != j[key]:
@@ -105,7 +102,6 @@ def get_aws_docdb_cluster_instance(type, id, clfn, descfn, topkey, key, filterid
         for page in paginator.paginate():
                 response = response + page[topkey]
         if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        #print(str(response))
         for j in response:
             engine=j['Engine']
             if engine != "docdb": continue
@@ -139,7 +135,6 @@ def get_aws_docdb_cluster(type, id, clfn, descfn, topkey, key, filterid):
         for page in paginator.paginate():
                 response = response + page[topkey]
         if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        #print(str(response))
         for j in response:
             engine=j['Engine']
             if engine != "docdb": continue

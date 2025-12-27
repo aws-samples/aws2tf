@@ -1768,7 +1768,7 @@ def main():
         context.tracking_message="Stage 6 of 10, Dependancies Detection: Loop "+str(lc)
         x=glob.glob("import__aws_*.tf")
         context.esttime=len(x)/4
-        #print(str(x))
+
         #td=""
         for fil in x:
             tf=fil.split('__',1)[1]
@@ -1786,7 +1786,7 @@ def main():
         for ti in context.rproc.keys():
             if not context.rproc[ti]:
                 detdep=True 
-                #print(str(ti)+" is False")
+         
                 detdepstr=detdepstr+str(ti)+" "
 
         if not context.fast: log.info("\n----------- Completed "+str(lc)+" dependancy check loops --------------") 
@@ -1879,7 +1879,7 @@ def main():
     now = datetime.datetime.now()
     log.info("aws2tf started at  %s" % starttime)
     #log.info("aws2tf finished at %s" % now)
-    # print execution time
+
     log.info("aws2tf execution time h:mm:ss :"+ str(now - starttime))
     log.info("\nTerraform files & state in sub-directory: "+ context.path1)
     timed_interrupt.stop_timer()

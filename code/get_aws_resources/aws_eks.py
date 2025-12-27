@@ -187,7 +187,6 @@ def get_aws_eks_pod_identity_association(type,id,clfn,descfn,topkey,key,filterid
 
 
       if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        #print(str(response))
       for j in response[topkey]:
             retid=j['associationId']
             theid=id+","+retid
@@ -218,7 +217,6 @@ def get_aws_eks_access_entry(type,id,clfn,descfn,topkey,key,filterid):
       response = client.list_access_entries(clusterName=id)
    
       if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        #print(str(response))
       for j in response[topkey]:
             ## need to get the type
             retid=j

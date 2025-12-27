@@ -18,7 +18,6 @@ class Counter():
         
 
     def _run(self):
-        #print("STATUS: " + str(self.i*self.increment) + "s elapsed (est. "+str(context.esttime) +"s) "+ context.tracking_message)
         log.info("STATUS: " + str(self.i*self.increment) + "s elapsed "+ context.tracking_message)
         self.next_t+=self.increment
         self.i+=1

@@ -63,18 +63,15 @@ def aws_eks_fargate_profile(t1,tt1,tt2,flag1,flag2):
 def aws_eks_node_group(t1,tt1,tt2,flag1,flag2):
     skip=0
     if "launch_template {" in t1: 
-        #print("******* flag1 true launch_template")
         flag1=True
 
 
     if "max_unavailable_percentage" in tt1:
         
-        #print(tt1+" "+tt2)
         if tt2 == "0": skip=1
 
     elif "max_unavailable" in tt1:
         
-        #print(tt1+" "+tt2)
         if tt2 == "0": skip=1
 
     elif "node_group_name_prefix" in tt1: skip=1
@@ -96,7 +93,6 @@ def aws_eks_node_group(t1,tt1,tt2,flag1,flag2):
     
     elif tt1 == "name":
         if flag1 is True: 
-            #print("----********"+tt2)
             t1=tt1 + " = aws_launch_template." + tt2 + ".name\n"
             common.add_dependancy("aws_launch_template",tt2)
             flag1=False

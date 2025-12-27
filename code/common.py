@@ -769,7 +769,6 @@ def tfplan3():
    context.esttime=len(x)/4
    awsf=len(x)
    y = glob.glob("import__*.tf")
-   #print("new import files="+str(y))
    impf=len(y)
 
    if awsf != impf:
@@ -1035,7 +1034,6 @@ def wrapup():
          com = "cp aws_*.tf imported"
          rout = rc(com)
          return
-   #print(str(rout.stdout.decode().rstrip()))
    log.info("\nPost Import Plan Check .....")
    context.tracking_message="Stage 10 of 10, Post Import Plan Check ....."
    com = "terraform plan -no-color"
@@ -1105,7 +1103,6 @@ def rc(cmd):
          # log.error(errm)
          # exit(1)
 
-    # print(out.stdout.decode().rstrip())
     return out
 
 
@@ -1116,10 +1113,6 @@ def fix_imports():
    y = glob.glob("import__*.tf")
    impf=len(y)
    log.info("\nFix Import Intervention")
-   #print("aws_*.tf files =", str(awsf))
-   #print("import__*.tf files =", str(impf))
-   #print("Fix aws files",str(x))
-   #print("Fix import files",str(y))
 
 
 
@@ -1132,14 +1125,12 @@ def fix_imports():
             tf=fil.split('.tf',1)[0]
             iseg=fil2.replace("import__","").replace(".tf", "")
             if tf == iseg:
-                  #print("Found a Match imp and aws:",iseg,tf)
                   #com = "mv "+fil2+" imported/"+fil2
                   #rc(com)
                   impok=True
                   break
          
          ## out of for loop
-         #print("impok =", str(impok))
          # got an import file we 
          if impok is False:
             com = "mv "+fil2+" "+fil2.replace(".tf",".err")
@@ -1234,7 +1225,6 @@ def splitf_old(file):
       with open(file, "r") as f:
          Lines = f.readlines()
       for tt1 in Lines:
-         # print(tt1)
          if "{" in tt1: lhs = lhs+1
          if "}" in tt1: rhs = rhs+1
          if lhs > 1:
@@ -1249,13 +1239,12 @@ def splitf_old(file):
                      pass
 
          if tt1.startswith("resource"):
-               # print("resource: " + tt1)
                ttft = tt1.split('"')[1]
                taddr = tt1.split('"')[3]
                # if context.acc in taddr:
                #   a1=taddr.find(context.acc)
                #   taddr=taddr[:a1]+taddr[a1+12:]
-               #   #print("taddr="+taddr)
+
 
                f2 = open(ttft+"__"+taddr+".out", "w")
                f2.write(tt1)
@@ -1326,8 +1315,6 @@ def splitf(input_file):
                log.info("exit 038")
                stop_timer()
                exit()
-
-            # print(f"Created file: {filename}")
    shutil.move(input_file,"imported/"+input_file)
 
 
@@ -1364,24 +1351,19 @@ def write_import(type,theid,tfid):
       #fn=fn.replace(context.acc,"012345678912")
 
       if context.debug: log.debug(fn)
-         #print(fn)
          
          # check if file exists:
          #
       if context.merge:   
          #y = glob.glob("imported/import__*.tf")
-         #print("Pre imp check:", str(y))
          if os.path.isfile("imported/"+fn):
-            #print("File exists: imorted/" + fn)
             return
          
       if os.path.isfile(fn):
             if context.debug: log.debug("File exists: " + fn)
-            #print("File exists: " + fn)
             pkey=type+"."+tfid
             context.rproc[pkey]=True
             return
-         #print("theid=",theid,"  tfid=",tfid)
 
       done_data=False
       done_data=do_data(type,theid)
@@ -1476,7 +1458,6 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
    if type in str(context.types): 
       log.info("Found "+type+"in types skipping ...")
       return True
-   #print("--4 >")
    try:
       if id is not None:
          pt=type+"."+id
@@ -1485,13 +1466,9 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                log.info("Found "+pt+" in processed skipping ...") 
                return True
       response=call_boto3(type,clfn,descfn,topkey,key,id)   
-      #print("-->"+str(response))
       if str(response) != "[]":
             for item in response:
-               #print("-"+str(item))
-               #print("-gr01-")
                if id is None or filterid=="": # do it all
-                  #print("-gr21-")
                   if context.debug: log.debug("--"+str(item))
                   try:
                      if "aws-service-role" in str(item["Path"]): 
@@ -1525,7 +1502,6 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                      log.debug("-gr31-"+"filterid="+str(filterid)+" id="+str(id)+"  key="+key)
                      log.debug(str(item))
                   if "." not in filterid:
-                     #print("***item=" + str(item))
                      try:
                         if id == str(item[filterid]):
                            #if context.debug: print("-gr31 item-"+str(item))
@@ -1560,7 +1536,6 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                      log.debug("dotc="+str(dotc))
 
                      for j in range(0,dotc):
-                        #print(str(item[filt1][j]))
                         try:
                            val=str(item[filt1][j][filt2])
                            log.debug("val="+val + " id=" + id)
@@ -1591,7 +1566,6 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
     #tfplan(type)
 
 def special_deps(ttft,taddr):
-   #print("In special deps"+ttft+"  "+taddr)
    """
    if ttft == "aws_security_group": 
       print("##### special dep security group") 
@@ -1646,7 +1620,6 @@ def add_dependancy(type,id):
       pkey=type+"."+id
       if pkey not in context.rproc:
          if context.debug: log.debug("add_dependancy: " + pkey)
-         #print("add_dependancy: " + pkey)
          context.rproc[pkey]=False
    except Exception as e:
       handle_error(e, str(inspect.currentframe().f_code.co_name), type, id)
@@ -1686,20 +1659,15 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                
 
             elif descfn == "describe_launch_templates":
-               #print("*******  describe_launch_templates  ********" )
-               #print(">> id="+str(id))
                if id is not None:
                   if id.startswith("lt-"):
-                     #print("--->>> id="+str(id))
                      for page in paginator.paginate(LaunchTemplateIds=[id]): response.extend(page[topkey])
                   else:
-                     #print("-->> id="+str(id))
                      for page in paginator.paginate(LaunchTemplateNames=[id]): response.extend(page[topkey])
                else:
                   for page in paginator.paginate(): response.extend(page[topkey])
 
             elif descfn == "describe_instances":
-               #print("call_boto3 clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
                if id is not None:
                   if "i-" in id:
                      for page in paginator.paginate(InstanceIds=[id]): response.extend(page[topkey][0]['Instances'])
@@ -1710,10 +1678,8 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                      response.extend(page[topkey][0]['Instances'])
                   #sav_boto3_rep(descfn,response)
                
-               #print(str(response))
 
             elif descfn == "describe_pod_identity_association" or descfn == "list_fargate_profiles" or descfn == "list_nodegroups" or descfn == "list_identity_provider_configs" or descfn == "list_addons":
-               #print("--1a "+str(id))
                for page in paginator.paginate(clusterName=id): response.extend(page[topkey])
             
             
@@ -1723,7 +1689,6 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
             
             elif clfn=="kms" and descfn=="list_aliases" and id is not None:
                if id.startswith("k-"): id=id[2:]
-               #print("-- call boto3 --"+str(id))
                for page in paginator.paginate(KeyId=id): response.extend(page[topkey])
                return response
             
@@ -1772,7 +1737,6 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                         if id in i:
                            response=[i]
                            break
-                  #print("--3")
                   # get by filter - useually a list- describe- or get-   
                # save a full paginate as we don't want to do it many times
                
@@ -1829,9 +1793,7 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
          except Exception as e:
             handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
-         #print("--2a")  
          rl=len(response)
-         #print("--2b" + str(rl)) 
          if rl==0:
             if context.debug: log.debug("** zero response length for "+ descfn + " in call_boto3 returning .. []")
             return []
@@ -1844,7 +1806,6 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
             log.debug("--------------------------------------")
    
       else:
-         #print("Global response ")
          return response
       
    except Exception as e:
@@ -1879,12 +1840,10 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    exc_type, exc_obj, exc_tb = sys.exc_info()
    exn=str(exc_type.__name__)
    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-   #print("exn="+exn)
    if exn == "EndpointConnectionError":
       log.warning("No endpoint in this region for "+descfn+" - returning")
       return
    elif exn=="ClientError":
-      #print("ClientError exception for "+fname+" - returning")
       if "does not exist" in str(e):
          log.warning(id+" does not exist " + fname + " " + str(exc_tb.tb_lineno) )
          return
@@ -1949,7 +1908,6 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
       return
    
    elif "BadRequest" in exn:
-      #print(str(exc_obj)+" for "+frame+" id="+str(id)+" - returning")
       if "The requested feature is not enabled for this AWS account" in str(exc_obj):
             log.warning(descfn + " returned feature not enabled for this account - returning")
             return
@@ -2061,7 +2019,6 @@ def upload_directory_to_s3():
                s3_path = os.path.join(s3_prefix, relative_path).replace("\\", "/")
                
                try:
-                  #print(f"Uploading {local_path} to {bucket_name}/{s3_path}")
                   s3_client.upload_file(local_path, bucket_name, s3_path)
                except ClientError as e:
                   log.error(f"Error uploading {local_path}: {e}")
@@ -2149,7 +2106,6 @@ def download_from_s3():
 
             # Download the file
             try:
-                #print(f"Downloading {obj['Key']} to {local_file_path}")
                 s3_client.download_file(bucket_name, obj['Key'], local_file_path)
             except ClientError as e:
                 log.error(f"Error downloading {obj['Key']}: {e}")

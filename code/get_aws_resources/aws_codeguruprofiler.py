@@ -15,7 +15,6 @@ def get_aws_codeguruprofiler_profiling_group(type, id, clfn, descfn, topkey, key
         if id is None:
             response = client.list_profiling_groups(includeDescription=False)
             response=response[topkey]
-            #print(str(response))
             if response == []: 
                 log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True

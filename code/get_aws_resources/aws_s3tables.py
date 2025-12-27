@@ -61,7 +61,6 @@ def get_aws_s3tables_namespace(type, id, clfn, descfn, topkey, key, filterid):
                 pkey=type+"."+id
                 context.rproc[pkey]=True
                 return True
-            #print("response="+str(response))
             for j in response:
                 for k in j[key]:
                     theid=id+";"+k

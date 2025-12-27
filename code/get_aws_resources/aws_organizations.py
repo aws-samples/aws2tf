@@ -202,8 +202,6 @@ def get_aws_organizations_resource_policy(type, id, clfn, descfn, topkey, key, f
             #    print(f"{e=} [org1]")
             #    print("No Org Resource Policy found returning True......")
             #    return True
-        #print("RESPONSE2")
-        #print(str(response))
         if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response[topkey]:
             common.write_import(type, j[key], None) 
@@ -222,7 +220,6 @@ def get_aws_organizations_policy_attachment(type, id, clfn, descfn, topkey, key,
         response = []
         client = boto3.client(clfn)
         if id.startswith("p-"):
-            #print("--------->>>>>>>>>>ID="+id)
             try:
                 response = client.list_targets_for_policy(PolicyId=id)
             except Exception as e:
@@ -240,7 +237,6 @@ def get_aws_organizations_policy_attachment(type, id, clfn, descfn, topkey, key,
                 #    print("No Org Resource Policy found returning True......")
 
                 #    return True
-            #print("aws_organizations_policy_attachment response: "+str(response))
             if response == []: 
                 if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
@@ -250,7 +246,6 @@ def get_aws_organizations_policy_attachment(type, id, clfn, descfn, topkey, key,
             if id=="p-pj4vhztq":
                     log.info("J= %s", response)
             for j in response[topkey]:
-                #print("J="+str(j))
                 tid=j['TargetId']
                 pkey=tid+":"+id
 

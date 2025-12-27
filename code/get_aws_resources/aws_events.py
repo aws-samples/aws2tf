@@ -71,7 +71,6 @@ def get_aws_cloudwatch_event_rule(type, id, clfn, descfn, topkey, key, filterid)
                         pkey="aws_cloudwatch_event_rule."+id
                         context.rproc[pkey] = True
                         return True
-                    #print(str(response))
                     j=response
                 #event_bus_name/rule-name
                     pkey=j['EventBusName']+"/"+j[key]

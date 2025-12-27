@@ -97,11 +97,9 @@ def aws_default_security_group(t1,tt1,tt2,flag1,flag2):
 		if tt2 == "[]": skip = 1
 		if "[" in t1: context.lbc=context.lbc+1
 		if "]" in t1: context.lbc=context.lbc-1
-        #print("***t1="+t1+" lbc="+str(context.lbc))
 	
 		if context.lbc > 0: skip = 1
 		if context.lbc == 0:
-           #print("***t1="+t1+" lbc="+str(context.lbc))
 			if "]" in t1.strip(): skip=1
 
 	elif tt1 == "ingress" or context.lbc > 0 :
@@ -109,11 +107,9 @@ def aws_default_security_group(t1,tt1,tt2,flag1,flag2):
 		if tt2 == "[]": skip = 1
 		if "[" in t1: context.lbc=context.lbc+1
 		if "]" in t1: context.lbc=context.lbc-1
-        #print("***t1="+t1+" lbc="+str(context.lbc))
 	
 		if context.lbc > 0: skip = 1
 		if context.lbc == 0:
-           #print("***t1="+t1+" lbc="+str(context.lbc))
 			if "]" in t1.strip(): skip=1
 
 	elif tt1 == "name_prefix" and flag1 is True: skip=1
@@ -595,7 +591,6 @@ def aws_route_table_association(t1,tt1,tt2,flag1,flag2):
 			t1 = tt1 + " = aws_internet_gateway." + tt2 + ".id\n"
 		if tt2 == "null":
 			skip=1
-    #print("------Yo t1="+t1)
 	return skip,t1,flag1,flag2
 
 def aws_security_group_rule(t1,tt1,tt2,flag1,flag2):
@@ -612,7 +607,6 @@ def aws_security_group_rule(t1,tt1,tt2,flag1,flag2):
 
 def aws_security_group(t1,tt1,tt2,flag1,flag2):
     skip = 0
-    #print("entry t1="+t1+" lbc="+str(context.lbc))
 
     if tt1 == "name":  
         if len(tt2) > 0: flag1=True
@@ -626,11 +620,9 @@ def aws_security_group(t1,tt1,tt2,flag1,flag2):
         if tt2 == "[]": skip = 1
         if "[" in t1: context.lbc=context.lbc+1
         if "]" in t1: context.lbc=context.lbc-1
-        #print("***t1="+t1+" lbc="+str(context.lbc))
 	
         if context.lbc > 0: skip = 1
         if context.lbc == 0:
-           #print("***t1="+t1+" lbc="+str(context.lbc))
            if "]" in t1.strip(): skip=1
 
     elif tt1 == "ingress" or context.lbc > 0 :
@@ -639,17 +631,14 @@ def aws_security_group(t1,tt1,tt2,flag1,flag2):
         if tt2 == "[]": skip = 1
         if "[" in t1: context.lbc=context.lbc+1
         if "]" in t1: context.lbc=context.lbc-1
-        #print("***t1="+t1+" lbc="+str(context.lbc))
 	
         if context.lbc > 0: skip = 1
         if context.lbc == 0:
-           #print("***t1="+t1+" lbc="+str(context.lbc))
            if "]" in t1.strip(): skip=1
 
     elif tt1 == "name_prefix" and flag1 is True: skip=1
        
     #  
-    #print("exit t1="+t1+" lbc="+str(context.lbc))          
     return skip,t1,flag1,flag2
 
 def aws_snapshot_create_volume_permission(t1,tt1,tt2,flag1,flag2):

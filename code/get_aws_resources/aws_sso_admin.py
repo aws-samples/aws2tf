@@ -16,8 +16,6 @@ def get_aws_ssoadmin_instances(type, id, clfn, descfn, topkey, key, filterid):
         log.info("Running terraform refresh")
         com = "terraform refresh -no-color -target=data.aws_ssoadmin_instances.sso > /dev/null"
         rout = common.rc(com) 
-        #print(rout.stdout.decode().rstrip())
-        #print("Running state show")
         com="terraform state show -no-color data.aws_ssoadmin_instances.sso | grep :instance"
         rout = common.rc(com) 
         ins=rout.stdout.decode().strip().strip('\"').strip(",").replace('"', '')
@@ -76,7 +74,6 @@ def get_aws_ssoadmin_managed_policy_attachment(type, id, clfn, descfn, topkey, k
         response = []
         client = boto3.client(clfn)  
         inid=id.split(",")[1]; psarn=id.split(",")[0] 
-        #print("id="+id)
         response = client.list_managed_policies_in_permission_set(InstanceArn=inid,PermissionSetArn=psarn)
         if response == []: 
             if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
@@ -85,7 +82,6 @@ def get_aws_ssoadmin_managed_policy_attachment(type, id, clfn, descfn, topkey, k
             return True
         for j in response['AttachedManagedPolicies']:
             mparn=j['Arn']
-            #print("----->>>>>> mparn="+mparn)
             pkey=mparn+","+psarn+","+inid
             theid=pkey.replace(",", "_")
             common.write_import(type,pkey,theid)

@@ -71,18 +71,13 @@ def get_aws_lambda_layer_version(type, id, clfn, descfn, topkey, key, filterid):
 
                     log.info("\nERROR: Lambda function is referencing Lambda Layer - "+ myarn+ " which does not exist")
                     log.info("ERROR: This will cause problems later on and should be addressed\n")
-                    #print("ClientError "+str(e))
                     exc_type, exc_obj, exc_tb = sys.exc_info()
                     exn=str(exc_type.__name__)
-                    #print("Exception "+exn+" caught")
                     #if "AccessDeniedException" in exn:
-                    #print("AccessDeniedException for "+type+ " id="+str(id)) 
                     pkey=type+"."+id
                     context.rproc[pkey]=True
                     return True
                 
-                #print(str(response))
-                #print(str(response[topkey]))
                 if response[topkey] == []: 
                     if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                     log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
@@ -201,7 +196,6 @@ def get_aws_lambda_function_old(type, id, clfn, descfn, topkey, key, filterid):
                 if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             j=response['Configuration']
-            #print(str(j)+"/n")
             fn=j[key]
             common.write_import(type, fn, None)
             get_lambda_code(fn)
@@ -234,7 +228,6 @@ def get_lambda_code(fn):
         descfn="get_lambda_code"
         topkey=fn
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
-        #print(str(e))
 
     return True
 
@@ -242,15 +235,12 @@ def get_lambda_code(fn):
 def get_lambdalayer_code(fn):
     
     try:
-        #print("get_lambdalayer_code fn="+fn)
         if fn.startswith("arn:"):
             tarn=fn.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
             clfn="lambda" 
             lc = boto3.client(clfn) 
             resp=lc.get_layer_version_by_arn(Arn=fn)
-            #print(str(resp['Content']))
             s3loc=resp['Content']['Location']
-            #print("s3loc="+s3loc)
             r=requests.get(s3loc)
             with open("aws_lambda_layer_version__"+tarn+".zip", 'wb') as f:
                 f.write(r.content)
@@ -270,7 +260,6 @@ def get_aws_lambda_alias(type, id, clfn, descfn, topkey, key, filterid):
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     response = common.call_boto3(type,clfn, descfn, topkey, key, id)
-    #print("-9a->"+str(response))
     
     try:
         if response == []: 
@@ -278,7 +267,6 @@ def get_aws_lambda_alias(type, id, clfn, descfn, topkey, key, filterid):
             return True
         
         for j in response: 
-            #print(str(j))
             fn=j['Name']
             theid=id+"/"+fn
             common.write_import(type, theid, None)
@@ -312,10 +300,8 @@ def get_aws_lambda_permission(type, id, clfn, descfn, topkey, key, filterid):
             return True
 
         
-        #print("-42a-"+str(response))
            
         fn=response.split('Sid":')[-1].split(',')[0].strip('"')
-        #print(str(fn))
         theid=id+"/"+fn
         common.write_import(type, theid, None)
         
@@ -345,7 +331,6 @@ def get_aws_lambda_function_event_invoke_config(type, id, clfn, descfn, topkey, 
             return True
         
         for j in response: 
-            #print(str(j))
             fn=j['FunctionArn']
             theid=fn
             common.write_import(type, theid, None)
@@ -364,7 +349,6 @@ def get_aws_lambda_event_source_mapping(type, id, clfn, descfn, topkey, key, fil
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     #response = common.call_boto3(type,clfn, descfn, topkey, key, id)
-    #print("-9a->"+str(response))
     try:
         # this one no paginate
 
@@ -379,7 +363,6 @@ def get_aws_lambda_event_source_mapping(type, id, clfn, descfn, topkey, key, fil
             return True
         
         for j in response: 
-            #print(str(j))
             fn=j['UUID']
             theid="l-"+fn
 
@@ -397,7 +380,6 @@ def get_aws_lambda_layer_version_permission(type, id, clfn, descfn, topkey, key,
         log.debug("--> In get_aws_lambda_layer_version_permission 1 doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
-    #print("-9a->"+str(response))
     try:
         # this one no paginate
 
@@ -416,7 +398,6 @@ def get_aws_lambda_layer_version_permission(type, id, clfn, descfn, topkey, key,
             return True
 
         
-        #print("-42a-"+str(response))
         ### id = "arn:aws:lambda:us-west-2:123456654321:layer:test_layer1,1"
         
         for j in response:

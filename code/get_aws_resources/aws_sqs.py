@@ -76,7 +76,6 @@ def get_aws_sqs_queue_policy(type, id, clfn, descfn, topkey, key, filterid):
             try:
                 tempr=response[topkey]
             except KeyError as e:
-                #print(f"{e=}")
                 log.info("No policy found for "+type+ " id="+str(id)+" returning")
                 
                 context.rproc[pkey]=True
@@ -110,7 +109,6 @@ def get_aws_sqs_queue_redrive_allow_policy(type, id, clfn, descfn, topkey, key, 
             try:
                 tempr=response[topkey]
             except KeyError as e:
-                #print(f"{e=}")
                 log.info("No redrive allow policy found for "+type+ " id="+str(id)+" returning")
                 
                 context.rproc[pkey]=True
@@ -144,7 +142,6 @@ def get_aws_sqs_queue_redrive_policy(type, id, clfn, descfn, topkey, key, filter
             try:
                 tempr=response[topkey]
             except KeyError as e:
-                #print(f"{e=}")
                 log.info("No redrive policy found for "+type+ " id="+str(id)+" returning")
                 
                 context.rproc[pkey]=True

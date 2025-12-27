@@ -48,7 +48,6 @@ def get_aws_secretsmanager_secret(type, id, clfn, descfn, topkey, key, filterid)
             common.write_import(type,j[key],None)
             common.add_dependancy("aws_secretsmanager_secret_version",j[key])
             try:
-                #print(j['RotationEnabled'])
                 common.add_dependancy("aws_secretsmanager_secret_rotation",j[key])
             except KeyError:
                 log.info("INFO: No rotation config")
@@ -105,16 +104,13 @@ def get_aws_secretsmanager_secret_version(type, id, clfn, descfn, topkey, key, f
         else:
             response = client.list_secret_version_ids(SecretId=id,IncludeDeprecated=False)
             if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
-            #print(response)
 
             for j in response[topkey]:
-                #print(j[key])
                 try:
                     sresponse = client.get_secret_value(SecretId=id,VersionId=j[key])
                 except Exception as e:
                     exc_type, exc_obj, exc_tb = sys.exc_info()
                     exn=str(exc_type.__name__)
-                    #print(exn,str(e))
                     if "(AccessDeniedException) when calling the GetSecretValue" in str(e):
                         log.info("INFO: get_secret_value failed - not authorized skipping %s %s", type, id.split(":")[-1])
                         pkey=type+"."+id
@@ -122,7 +118,6 @@ def get_aws_secretsmanager_secret_version(type, id, clfn, descfn, topkey, key, f
                         return True
                 
                 sv=sresponse['SecretString']
-                #print(str(sv))
                 pkey=id+"|"+j[key]
                 common.write_import(type,pkey,None) 
             pkey=type+"."+id

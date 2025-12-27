@@ -66,7 +66,6 @@ def check_access(bucket_name,my_region):
    except Exception as e:
          exc_type, exc_obj, exc_tb = sys.exc_info()
          exn=str(exc_type.__name__)
-         #print(f"{exn=}")
          if exn == "AccessDenied" or exn=="ClientError":
             log.info("NO ACCESS (2): to Bucket: "+bucket_name + " - continue")
             context.bucketlist[bucket_name]=False
@@ -83,7 +82,6 @@ def check_access(bucket_name,my_region):
 
 
 def get_all_s3_buckets(fb,my_region):
-   #print("bucket name="+str(fb))
    type="aws_s3_bucket"
    if fb is not None:
       if fb =="" or fb =="null":
@@ -99,7 +97,6 @@ def get_all_s3_buckets(fb,my_region):
             return True
    
    if context.debug: log.debug("my_region="+my_region)
-   #print("processed=" + str(context.rproc))
    """Gets all the AWS S3 buckets and saves them to a file."""
    boto3.setup_default_session(region_name=my_region)
    s3a = boto3.resource("s3",region_name=my_region) 
@@ -141,7 +138,6 @@ def get_all_s3_buckets(fb,my_region):
          context.bucketlist[bn]=True
       
       
-      #print("----------------------")
       
       # check can access
       log.info(f"Checking access to {len(context.bucketlist)} S3 buckets...")
@@ -210,18 +206,14 @@ def get_all_s3_buckets(fb,my_region):
             continue
          # jump if bucket name does not match
          if fb is not None:
-               #print("fb="+fb+" bucket_name="+bucket_name)
                if fb not in bucket_name:
-                  #print("skipping bucket " + bucket_name)
                   continue
          try:
-               #print('location') - no error if no access for getting location
                objs = s3.list_objects_v2(Bucket=bucket_name,MaxKeys=1)
                   
          except Exception as e:
                exc_type, exc_obj, exc_tb = sys.exc_info()
                exn=str(exc_type.__name__)
-               #print(f"{exn=}")
                if exn == "AccessDenied" or exn=="ClientError":
                   log.info("NO ACCESS (3): to Bucket: "+bucket_name + " - continue")
                   continue
@@ -261,11 +253,8 @@ def get_s3(s3_fields,type,bucket_name):
       response=s3_fields[type](Bucket=bucket_name)
       if type=="aws_s3_bucket_replication_configuration": 
          try:
-            #print("HERE ....")
             barn=str(response['ReplicationConfiguration']['Rules'][0]['Destination']['Bucket'])
-            #print("replication bucket="+barn)
             repbuck=barn.split(":")[-1]
-            #print("replication bucket="+repbuck)
             common.add_known_dependancy("aws_s3_bucket",repbuck)
          except:
              response=response

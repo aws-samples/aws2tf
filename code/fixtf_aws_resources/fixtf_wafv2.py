@@ -33,7 +33,6 @@ def aws_wafv2_web_acl(t1,tt1,tt2,flag1,flag2):
 		aclid=wid.split("_")[0].split("w-")[1]
 		aclnm=wid.split("_")[1]
 		aclsc=wid.split("_")[2]
-		#print("web acl:",aclid,aclnm,aclsc)
 		context.waf2id=aclid
 		context.waf2nm=aclnm
 		context.waf2sc=aclsc

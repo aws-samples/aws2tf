@@ -21,7 +21,6 @@ def get_aws_codecommit_repository(type, id, clfn, descfn, topkey, key, filterid)
             if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
             return True
         for j in response:
-            #print(str(id))
             if id is None:
                 common.write_import(type, j[key], None)
             elif "-" in id:

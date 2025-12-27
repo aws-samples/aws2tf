@@ -20,7 +20,6 @@ def get_aws_waf_web_acl(type, id, clfn, descfn, topkey, key, filterid):
             if response == []: 
                     if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                     return True
-                #print(str(response))
             for j in response[topkey]:
                     idd=j[key]
                     pkey=idd

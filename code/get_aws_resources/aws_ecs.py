@@ -98,7 +98,6 @@ def get_aws_ecs_task_definition(type,id,clfn,descfn,topkey,key,filterid):
         response = []
         client = boto3.client(clfn)
         if id is None:         
-            #print("ERROR: must pass task id as parameter for "+type)
             response = client.list_task_definitions()
             response=response['taskDefinitionArns']
         else:
@@ -111,7 +110,6 @@ def get_aws_ecs_task_definition(type,id,clfn,descfn,topkey,key,filterid):
 
         
         if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        #print(str(response))
         if id is None:
             for j in response: 
                 pkey=j

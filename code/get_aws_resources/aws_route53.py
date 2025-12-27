@@ -52,7 +52,6 @@ def get_aws_route53_record(type, id, clfn, descfn, topkey, key, filterid):
             rkey=type+"."+id
             context.rproc[rkey]=True
             if id.startswith("/hostedzone/"): id=id.split("/")[2]
-            #print("id="+id)
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate(HostedZoneId=id):
                 response = response + page[topkey]
@@ -60,7 +59,6 @@ def get_aws_route53_record(type, id, clfn, descfn, topkey, key, filterid):
                 log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
-                #print("j="+str(j))
                 r53name=j['Name']
                 r53type=j['Type']
                 if r53name.endswith("."): r53name=r53name[:-1]

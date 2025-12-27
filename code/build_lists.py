@@ -166,8 +166,6 @@ def build_lists():
                     elif resource_type == 's3':
                         client = boto3.client('s3')
                         for _, bucket in result:
-                            #here ? 
-                            #print("Buck from result=",bucket)   
                             try:
                                 ####### problematic call
                                 objs = client.list_objects_v2(Bucket=bucket,MaxKeys=1)      

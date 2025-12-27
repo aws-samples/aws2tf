@@ -33,7 +33,6 @@ def get_aws_networkfirewall_firewall(type, id, clfn, descfn, topkey, key, filter
             if response == []: 
                 if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
-            #print(str(response))
             j=response['Firewall']
             common.write_import(type,j[key],None)
             common.write_import("aws_networkfirewall_logging_configuration",j[key],None) 
@@ -69,7 +68,6 @@ def get_aws_networkfirewall_firewall_policy(type, id, clfn, descfn, topkey, key,
             if response == []: 
                 if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
-            #print(str(response))
             j=response['FirewallPolicyResponse']
             common.write_import(type,j['FirewallPolicyArn'],None)
 
@@ -160,7 +158,6 @@ def get_aws_networkfirewall_tls_inspection_configuration(type, id, clfn, descfn,
             if response == []:
                 if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
-            #print(str(response))
             j=response['TlsInspectionConfigurationResponse']
             common.write_import(type, j['TlsInspectionConfigurationArn'], None)
 

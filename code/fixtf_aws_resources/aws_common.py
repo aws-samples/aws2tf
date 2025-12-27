@@ -99,9 +99,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
         # avoid circular references
             if type != "aws_security_group": 
                 if type != "aws_cloudwatch_log_group":
-                    #print("--->>  aws_common: type=",type,"tt1=",tt1,"tt2=",tt2)
                     t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
-                    #print("--returned deref array ->>  aws_common: t1="+t1+" skip="+str(skip))
                     return skip,t1,flag1,flag2
                 
         elif tt1=="emr_managed_master_security_group" or tt1=="emr_managed_slave_security_group" \
@@ -231,7 +229,6 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                                            
                 else:
                     skip=1
-            #print("---->>>>", t1,skip)        
 
         elif tt1 == "instance_profile_name" or tt1=="instance_profile":
             if tt2 != "null":
@@ -259,7 +256,6 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
 
         elif tt1 == "role" or tt1=="iam_role" or tt1=="role_name" \
             or tt1=="service_role" or tt1=="domain_execution_role":
-            #print("------>>>>>>",tt2)
             if tt2 !="null" and "arn:" not in tt2: 
                 if "/" not in tt2: 
                     try:
@@ -273,7 +269,6 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                             common.common.log_warning("WARNING: role not found in rolelist %s",  tt2)
                     except KeyError as e:
                         common.common.log_warning("WARNING: role not found in rolelist [ke] %s",  tt2)
-                        #print(context.rolelist)
 
             else:
                 t1=fixtf.deref_role_arn(t1,tt1,tt2)

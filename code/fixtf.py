@@ -472,7 +472,6 @@ def fixtf(ttft,tf):
 
     Lines = f1.readlines()
     f1.close()
-    #print("getfn for fixtf2."+ttft+" "+tf2)
     #with open(tf2, "a") as f2:
 
     ##
@@ -527,7 +526,6 @@ def fixtf(ttft,tf):
             if tt1=="global_replication_group_id":
                 if tt2 != "null": 
                     context.elastigrep=True
-                    #print("***** set true *****")
             elif tt1=="num_cache_clusters":
                 if tt2 != "null": 
                     context.elasticc=True
@@ -544,7 +542,6 @@ def fixtf(ttft,tf):
                 tt2=""
             if "msk_source_configuration" in tt1:
                     context.kinesismsk=True
-                    #print("***** set true *****")
 
 
 
@@ -716,10 +713,7 @@ def fixtf(ttft,tf):
                         skip=1
                     elif context.lbc > 0: skip=1
                 
-                #print("t1="+t1)
-	            #print("lbc="+str(context.lbc)+" rbc="+str(context.rbc)+" skip="+str(skip))
 
-                #print("t1="+t1)
             except Exception as e:
                 log.error(f"{e=}")
                 exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -814,14 +808,10 @@ def globals_replace(t1,tt1,tt2):
             
             ends=""
             if ":"+context.acc+":" in tt2:
-                #print("Globals replace arn:"+str(tt2))
                 while ":"+context.acc+":" in tt2:
                     r1=tt2.find(":"+context.region+":")
                     a1=tt2.find(":"+context.acc+":")
-                    #print("--> r1="+ str(r1) + " ")
-                    #print("--> a1="+ str(a1) + " ")
                     if r1>0 and r1 < a1:
-                            #print("--> 6a")
                             ends=ends+",data.aws_region.current.region"
                             tt2=tt2[:r1]+":%s:"+tt2[r1+context.regionl+2:]
 
@@ -842,19 +832,14 @@ def globals_replace(t1,tt1,tt2):
         fins=fins.rstrip(',')
         fins="["+fins+"]\n"
         fins=tt1+" = "+fins
-        #print("fins=",str(fins))
         t1=fins
 
     else:
         if ":"+context.acc+":" in tt2:
             while ":"+context.acc+":" in tt2:
-                    #print("--> 5")
                     r1=tt2.find(":"+context.region+":")
                     a1=tt2.find(":"+context.acc+":")
-                    #print("--> r1="+ str(r1) + " ")
-                    #print("--> a1="+ str(a1) + " ")
                     if r1>0 and r1 < a1:
-                            #print("--> 6a")
                             ends=ends+",data.aws_region.current.region"
                             tt2=tt2[:r1]+":%s:"+tt2[r1+context.regionl+2:]
 
@@ -893,20 +878,15 @@ def rhs_replace(t1,tt1,tt2):
     if "{" not in tt2 and "[" not in tt2:  # so probably not a policy 
 
         while context.acc in tt2:
-                    #print("--> 5b",tt2)
                     r1=tt2.find(context.region)
                     a1=tt2.find(context.acc)
-                    #print("--> r1="+ str(r1) + " ")
-                    #print("--> a1="+ str(a1) + " ")
                     if r1>0 and a1>0 and r1 < a1: # there is region and it comes 1st
-                            #print("--> 6a")
                             ends=ends+",data.aws_region.current.region"
                             tt2=tt2[:r1]+"%s"+tt2[r1+context.regionl:]
                             a1=tt2.find(context.acc)
                             tt2=tt2[:a1]+"%s"+tt2[a1+12:]
                             ends=ends+",data.aws_caller_identity.current.account_id"
                     if r1>0 and a1>0 and r1 > a1: # there is region and it comes 2nd
-                            #print("--> 6b")
                             ends=ends+",data.aws_caller_identity.current.account_id"         
                             tt2=tt2[:r1]+"%s"+tt2[r1+context.regionl:]
                             a1=tt2.find(context.acc)
@@ -1083,7 +1063,6 @@ def deref_s3(t1, tt1, tt2):
         if sc>=3:
             bn=tt2.split("/",3)[2] 
             tn=tt2.split("/",3)[3] 
-            #print("s3:",bn,tn)
             try:
                 if context.bucketlist[tt2]:
                     bv = "aws_s3_bucket.b-" + bn + ".bucket"
@@ -1198,7 +1177,6 @@ def generic_deref_arn(t1, tt1, tt2):
         if tt2.endswith("*"): isstar=True
 
         if cc==0 and ":log-stream:" in tt2:
-            #print("log-stream")
             logr=tt2.split(':')[3]
             if logr==context.region:
                 logn=tt2.split(':log-stream:')[0].split(':')[-1]
@@ -1206,7 +1184,6 @@ def generic_deref_arn(t1, tt1, tt2):
                 logn2=logn.replace("/", "_")
                 streamn=tt2.split(':log-stream:')[1]
                 if isstar: streamn=streamn.rstrip("*")
-                #print(logn2, streamn, logr)
                 if isstar:
                     period="."
                     arnadr="aws_cloudwatch_log_stream."+logn2+"_"+streamn+".arn"
@@ -1218,7 +1195,6 @@ def generic_deref_arn(t1, tt1, tt2):
                     t1=tt1 + " = aws_cloudwatch_log_stream."+logn2+"_"+streamn+".arn\n" 
 
         if cc==0 and ":role/" in tt2 and "arn:aws:iam" in tt2:
-            #print("log-stream")
 
             if "/aws_service_role" not in tt2:
 

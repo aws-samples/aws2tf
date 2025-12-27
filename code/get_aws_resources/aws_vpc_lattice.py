@@ -128,7 +128,7 @@ def get_aws_vpclattice_auth_policy(type, id, clfn, descfn, topkey, key, filterid
         for page in paginator.paginate():
             response.extend(page[topkey])
     except botocore.exceptions.OperationNotPageableError as err:
-        # print(f"{err=}")
+  
         getfn = getattr(client, descfn)
         response = getfn(resourceIdentifier=id)  # special
         # response=response1[topkey]
@@ -304,10 +304,9 @@ def get_aws_vpclattice_listener_rule(type, id, clfn, descfn, topkey, key, filter
         log_warning("WARNING must provide serviceIdentifier/ListenerId as parameter for get_aws_vpclattice_listener_rule")
     else:
         try:
-            if "/" in id:  # print(f"{err=}")
+            if "/" in id: 
                 svid = id.split("/")[0]
                 rlid = id.split("/")[1]
-                #print(f"{svid=},{rlid=}")
                 getfn = getattr(client, descfn)
                 response1 = getfn(serviceIdentifier=svid,
                                   listenerIdentifier=rlid)  # special
@@ -352,7 +351,7 @@ def get_aws_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid):
                for page in paginator.paginate(serviceNetworkIdentifier=id):
                   response.extend(page[topkey])
          except botocore.exceptions.OperationNotPageableError as err:
-               # print(f"{err=}")
+
                getfn = getattr(client, descfn)
                response1 = getfn(serviceNetworkIdentifier=id)  # special
                response = response1[topkey]
@@ -361,7 +360,6 @@ def get_aws_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid):
          log_warning("WARNING: No id or invalid id provided for "+type, id)
          return True
 
-      #print(str(response))
       if response == []:
          if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
          pkey = type+"."+id
@@ -369,7 +367,6 @@ def get_aws_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid):
          return True
 
       for j in response:
-         #print("j=", str(j))
          retid = j['id']
          theid = retid
          common.write_import(type, theid, None)

@@ -21,13 +21,10 @@ def get_aws_service_discovery_private_dns_namespace(type, id, clfn, descfn, topk
             for j in response:
                 # get a vpc-id
                 if j['Type']=="DNS_PRIVATE":
-                    #print(str(j))
                     nsid=j['Id']
-                    #print(nsid)
                     hzid=j['Properties']['DnsProperties']['HostedZoneId']
                     response2=r53client.get_hosted_zone(Id=hzid)
                     vpcid=response2['VPCs'][0]['VPCId']
-                    #print(vpcid)
                     pkey=nsid+":"+vpcid
                     common.write_import(type,pkey,nsid) 
                     tkey="aws_service_discovery_private_dns_namespace."+id
@@ -40,13 +37,10 @@ def get_aws_service_discovery_private_dns_namespace(type, id, clfn, descfn, topk
             j=response['Namespace']
             if j['Type']=="DNS_PRIVATE":
             # get a vpc-id
-                #print(str(j))
                 nsid=j['Id']
-                #print(nsid)
                 hzid=j['Properties']['DnsProperties']['HostedZoneId']
                 response2=r53client.get_hosted_zone(Id=hzid)
                 vpcid=response2['VPCs'][0]['VPCId']
-                #print(vpcid)
                 pkey=nsid+":"+vpcid
                 common.write_import(type,pkey,nsid) 
                 tkey="aws_service_discovery_private_dns_namespace."+id

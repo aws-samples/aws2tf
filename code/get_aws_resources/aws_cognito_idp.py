@@ -18,7 +18,6 @@ def get_aws_cognito_user_pool(type, id, clfn, descfn, topkey, key, filterid):
         if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response:
             if id is None: 
-                #print("---->>>>>"+str(j))
                 common.write_import(type,j[key],None) 
                 common.add_known_dependancy("aws_cognito_user_group", j[key])
                 common.add_known_dependancy("aws_cognito_user_pool_client", j[key])

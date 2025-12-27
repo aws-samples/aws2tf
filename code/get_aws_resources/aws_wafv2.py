@@ -33,14 +33,12 @@ def get_aws_wafv2_ip_set(type, id, clfn, descfn, topkey, key, filterid):
             log.info("INFO: Getting Regional resources")
             sc="REGIONAL"
             response = client.list_ip_sets(Scope=sc)
-            #print(str(response))
             if response[topkey] == []:
                 if context.debug: 
                     log.debug("Empty response for "+type+ " Scope="+str(sc)+" returning")
                     log.info(str(response))
                 return True
             
-            #print(str(response))
             for j in response[topkey]:
                 idd=j["Id"]
                 nm=j["Name"]
@@ -105,7 +103,6 @@ def get_aws_wafv2_web_acl(type, id, clfn, descfn, topkey, key, filterid):
                     log.info(str(response))
                 return True
             
-            #print(str(response))
             for j in response[topkey]:
                 idd=j["Id"]
                 nm=j["Name"]
@@ -176,7 +173,6 @@ def get_aws_wafv2_rule_group(type, id, clfn, descfn, topkey, key, filterid):
                     log.info(str(response))
                 return True
             
-            #print(str(response))
             for j in response[topkey]:
                 idd=j["Id"]
                 nm=j["Name"]

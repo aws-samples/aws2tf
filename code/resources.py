@@ -90,7 +90,6 @@ def resource_types(type):
         
         for i in keys_list:
             rets.append(i)
-        #print(str(rets))
         return rets
         
     elif type =="test":    
@@ -199,7 +198,6 @@ def resource_types(type):
 
 
 def resource_data(type,id):
-    #print("type:",type,"id:",id)
     clfn=None;descfn=None;topkey=None;key=None;filterid=None
 
     try:
@@ -215,7 +213,6 @@ def resource_data(type,id):
     key=aws_dict.aws_resources[type]['key']
     filterid=aws_dict.aws_resources[type]['filterid']
 
-    #print("type:",type,"id:",id,"clfn:",clfn,"descfn:",descfn,"topkey:",topkey,"key:",key,"filterid:",filterid)
     
     # filterid over-rides - depending on what's in id
     if id is not None:

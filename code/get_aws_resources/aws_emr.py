@@ -24,7 +24,7 @@ def get_aws_emr_cluster(type, id, clfn, descfn, topkey, key, filterid):
                 return True
             for j in response:
                 if "TERMINATED" not in j['Status']['State']:
-                    # print(str(j))
+      
                     common.write_import(type, j[key], None)
                     common.add_dependancy("aws_emr_instance_group", j[key])
                     common.add_dependancy("aws_emr_instance_fleet", j[key])
@@ -39,7 +39,7 @@ def get_aws_emr_cluster(type, id, clfn, descfn, topkey, key, filterid):
                 if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             j = response['Cluster']
-            # print(str(j))
+
             if "TERMINATED" not in j['Status']['State']:
                 common.write_import(type, j[key], None)
                 common.add_dependancy("aws_emr_instance_group", j[key])
@@ -80,7 +80,7 @@ def get_aws_emr_security_configuration(type, id, clfn, descfn, topkey, key, filt
                 if context.debug: log.debug("Empty response for "+type + " id="+str(id)+" returning")
                 return True
             j = response
-            # print(str(j))
+
             common.write_import(type, j[key], None)
 
     except Exception as e:
@@ -112,7 +112,7 @@ def get_aws_emr_instance_group(type, id, clfn, descfn, topkey, key, filterid):
                     return True
                 for j in response['InstanceGroups']:
                     pkey = id+"/"+j[key]
-                    # print(str(j))
+
                     common.write_import(type, pkey, None)
             except Exception as e:
                 exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -157,7 +157,7 @@ def get_aws_emr_instance_fleet(type, id, clfn, descfn, topkey, key, filterid):
                     return True
                 for j in response['InstanceFleets']:
                     pkey = id+"/"+j[key]
-                    # print(str(j))
+       
                     common.write_import(type, pkey, None)
             except Exception as e:
                 exc_type, exc_obj, exc_tb = sys.exc_info()

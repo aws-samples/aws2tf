@@ -118,7 +118,6 @@ def get_aws_athena_database(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate(CatalogName=catn):
                 response = response + page[topkey]
-            #print(str(response))
             if response == []: 
                 if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True

@@ -85,7 +85,6 @@ def get_aws_redshift_parameter_group(type, id, clfn, descfn, topkey, key, filter
         if response == []: 
             log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             return True
-        #print(str(response))
         for j in response:
             if id is None:
                 if "default." not in j[key]: 

@@ -34,7 +34,6 @@ def get_aws_elasticache_cluster(type, id, clfn, descfn, topkey, key, filterid):
                     if context.debug: log.debug("CacheClusterNotFoundFault for "+type+ " id="+str(id)+" returning")
                     return True
                 return True
-            #print(str(response))
             if response['CacheClusters'] == []: 
                 if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True

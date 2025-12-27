@@ -26,7 +26,6 @@ def aws_iam_account_password_policy(t1,tt1,tt2,flag1,flag2):
 def aws_iam_group(t1,tt1,tt2,flag1,flag2):
     skip=0
     #if tt1 == "name":
-		#print("get users in group "+tt2)
     #    common.add_dependancy("aws_iam_user_group_membership",tt2)
     #    common.add_dependancy("aws_iam_group_policy",tt2)
     #    common.add_dependancy("aws_iam_group_policy_attachment",tt2)
@@ -105,20 +104,13 @@ def  aws_iam_role(t1,tt1,tt2,flag1,flag2):
             ends=",data.aws_caller_identity.current.account_id"
             tt2=tt2.replace("[","").replace("]","")
             cc=tt2.count(",")
-            #print(str(tt2)+"cc="+str(cc))
             pt1=tt1+" = ["
             for j in range(0,cc+1):
-                #print("-- tt2 "+str(j)+" split ="+tt2.split(",")[j])
-                #print("-- tt2 "+j+" split ="+tt2.split(",")[j])
                 ps=tt2.split(",")[j]
                 if ":"+context.acc+":" in ps:
-                    #print("ps1="+ps)
                     a1=ps.find(":"+context.acc+":")
-                    #print("a1="+str(a1))
                     ps=ps[:a1]+":%s:"+ps[a1+14:]
-                    #print("ps2="+ps)
                     ps = 'format('+ps+ends+')'
-                    #print("ps3="+ps)         
                 pt1=pt1+ps+","
             pt1=pt1+"]\n"
             t1=pt1.replace(",]","]")
@@ -133,7 +125,6 @@ def aws_iam_role_policy(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "name_prefix" and flag1 is True: skip=1
     
-    #print(t1)
     #if tt1 == "name_prefix":  skip=1
     if tt1 == "name":
         if len(tt2) > 0: 
@@ -145,7 +136,6 @@ def aws_iam_role_policy(t1,tt1,tt2,flag1,flag2):
     return skip,t1,flag1,flag2
 
 def aws_iam_role_policy_attachment(t1,tt1,tt2,flag1,flag2):
-    #print("fixit2.aws_iam_role_policy_attachment")
     skip=0
 
     if tt1 == "policy_arn": t1=fixtf.globals_replace(t1,tt1,tt2)
@@ -183,7 +173,6 @@ def aws_iam_signing_certificate(t1,tt1,tt2,flag1,flag2):
 
 def aws_iam_user_group_membership(t1,tt1,tt2,flag1,flag2):
     skip=0
-    #print(t1)
     if tt1 == "user":
         t1=tt1+" = aws_iam_user."+tt2+".id\n"
         common.add_dependancy("aws_iam_user", tt2)

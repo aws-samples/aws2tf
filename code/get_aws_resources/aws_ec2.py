@@ -78,7 +78,6 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
         elif id.startswith("vpc-"):
             for j in context.subnets:
                 if j['VpcId'] == id:
-                    #print("Found subnet in vpc " + id + " " + j['SubnetId'])
                     common.write_import(type, j['SubnetId'], None)
         else:
             log_warning("WARNING: get_aws_subnet unexpected id value %s", tr(id))
@@ -150,7 +149,6 @@ def get_aws_instance(type, id, clfn, descfn, topkey, key, filterid):
                             common.write_import(type,k[key],None) 
                     else:
                         tags=k['Tags']
-                        #print(json.dumps(tags, indent=2, default=str))
                         for tag in tags:
                             if tag['Key'] == context.ec2tagk:
                                 if tag['Value'] == context.ec2tagv:
@@ -166,7 +164,6 @@ def get_aws_instance(type, id, clfn, descfn, topkey, key, filterid):
             for j in response['Reservations']:
                 
                 for k in j['Instances']:
-                    #print(json.dumps(k['Tags'],indent=2,default=str))
                     
                     if k['State']['Name'] == 'running' or k['State']['Name'] == 'stopped':
                         common.write_import(type,k[key],None)
@@ -272,7 +269,6 @@ def get_aws_security_group_rule(type, id, clfn, descfn, topkey, key, filterid):
 
 
             #if ing=="ingress" and sgid=="sg-0b70930caea1aac99": 
-                #print(str(j))
             #    print("************1************")
             #    print(sgid+ing+protocol+fromport+toport)
             #    print("************2************")
@@ -282,7 +278,6 @@ def get_aws_security_group_rule(type, id, clfn, descfn, topkey, key, filterid):
 
 
             impstring=sgid+"_"+ing
-            #print("protocol="+protocol)
             if protocol != "": impstring=impstring + "_" + protocol
             if fromport != "": impstring=impstring + "_" + fromport
             if toport != "": impstring= impstring + "_" + toport
@@ -361,7 +356,6 @@ def get_aws_eip_association(type, id, clfn, descfn, topkey, key, filterid):
 
 
 def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filterid):
-    #print("--> In get_aws_route_table_association doing " + type + ' with id ' + str(id) +
     #              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         if context.debug:
@@ -398,37 +392,23 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
             for page in paginator.paginate():
                 response.extend(page[topkey])
 
-        #print("@@ response length="+str(len(response)))
-        #print(str(response))
-        #print("-aa-"+id)
         if str(response) != "[]":
-            #print ("-bb-")
             for item in response:
-                #print(str(item))
                 il = len(item['Associations'])
-                #print("Associations length="+str(il))
                 for r in range(0, il):
-                    # print(str(r))
-                    # print(str(item['Associations'][r]))
                      rtid = (str(item['Associations'][r]['RouteTableId']))
                      vpcid = str(item['VpcId'])
-                     
-                        # print(str(item['Associations'][r]['SubnetId']))
                      ismain=item['Associations'][r]['Main']
-                     #print("in pre-rproc.... ismain="+str(ismain)+" vpcid="+str(vpcid))
 
                      if not ismain:
-                        #print("Trying .......")
                         try:
                             if 'SubnetId' in item['Associations'][r]:
                                 subid = str(item['Associations'][r]['SubnetId'])
-                                #print("in pre-rproc.... subid="+str(subid)+" ismain="+str(ismain)+" vpcid="+str(vpcid))
 
                                 # TODO wrong check ? if don't have subnet should add as dependancy
                                 # if subid in str(context.rproc):
 
                                 # TODO check if already have the association
-                                #print("--10a--- id="+str(id)+" subid="+subid+" rtid="+rtid)
                                 if id is not None and "subnet-" in id:
                                     if subid == id:
                                         theid = subid+"/"+rtid
@@ -460,7 +440,6 @@ def get_aws_route_table_association(type, id, clfn, descfn, topkey, key, filteri
                 if not context.rproc[ti]:
                     if "aws_route_table_association.subnet" in str(ti):
                         context.rproc[ti] = True
-                        #print("************** Setting " + ti + "=True")
         else:
             log.info("No response for get_aws_route_table_association")
             if id is not None:
@@ -482,7 +461,7 @@ def get_aws_launch_template(type, id, clfn, descfn, topkey, key, filterid):
         log.debug("--> In get_aws_launch_template    doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     response = common.call_boto3(type,clfn, descfn, topkey, key, id)
-    # print("-9a->"+str(response))
+
     if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
     for j in response:
@@ -507,10 +486,8 @@ def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key,
             response = client.describe_vpcs()
             
         else:
-            #print("id="+str(id))
             response = client.describe_vpcs(VpcIds=[id])
         #response = common.call_boto3(type,clfn, descfn, topkey, key, id)    
-        #print("-ip4->"+str(response))
         if response[topkey] == []: 
             log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             if id is None:
@@ -521,7 +498,6 @@ def get_aws_vpc_ipv4_cidr_block_association(type, id, clfn, descfn, topkey, key,
                 return True
         for j in response[topkey]:
             cidrb = j['CidrBlockAssociationSet']
-            #print("cidrb="+str(cidrb))
             vpcid = j['VpcId']
             vpc_cidr = j['CidrBlock']
             if id==vpcid:
@@ -547,7 +523,6 @@ def get_aws_subnet_old(type, id, clfn, descfn, topkey, key, filterid):
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     response = common.call_boto3(type,clfn, descfn, topkey, key, id)
-    #print("-9a->"+str(response))
     
     try:
         if response == []: 
@@ -611,7 +586,6 @@ def get_aws_network_acl(type, id, clfn, descfn, topkey, key, filterid):
     response = []
     client = boto3.client(clfn)
     paginator = client.get_paginator(descfn)
-    #print("51a paginator")
     # TODO - just get all onlce and use @@@@ globals
     try:
         if id is not None:
@@ -862,7 +836,6 @@ def get_aws_vpc_endpoint_route_table_association(type, id, clfn, descfn, topkey,
             if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 endpid=j[key]
-                #print(str(j))
                 try:
                     for k in j['RouteTableIds']:
                         theid=endpid+"/"+k
@@ -1098,7 +1071,6 @@ def get_aws_ec2_transit_gateway_vpn_attachment(type, id, clfn, descfn, topkey, k
                 {'Name': 'state','Values': ['available','pending','pendingAcceptance']}
                 ]):
                 response = response + page[topkey]
-            #print(response)
             if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 fn="data_"+type+"-"+j[key]+".tf"

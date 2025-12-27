@@ -25,9 +25,7 @@ def get_stacks(stack_name):
         for nest in nested:
             sn=nest.split("/")[1]
             if sn != stack_name:
-                #print("nest= "+sn)
                 nested=getstack(sn,nested,client)
-                #print("Level 3 stack nesting")
 
 
         log.info("-------------------------------------------")
@@ -122,7 +120,6 @@ def getstackresources(stack_name,client):
             if context.debug:
                 log.debug("type="+type)
             sn=stack_name.split('/')[-2]
-            #print("Importing "+ str(ri) + " of "+ str(rl)+ " type="+type)
             log.info("Importing "+ str(ri) + " of "+ str(rl)+ " type="+type+ " pid="+pid)
 
             f4.write("Type="+type+ " pid="+pid+ " parn="+parn+"\n")

@@ -23,7 +23,7 @@ def check_key(keyid):
 				return False ## ?? True ??
 			return True
 		else:
-			common.common.log_warning("WARNING: key is not valid or is managed by AWS")
+			common.log_warning("WARNING: key is not valid or is managed by AWS")
 			return False
 	except Exception as e:
 		if context.debug: log.debug("WARNING: can't access key %s", keyid)
@@ -69,7 +69,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                                 return skip,t1,flag1,flag2
                         
                     else:
-                        common.common.log_warning("WARNING: bucket name from arn " +tt2 +" is empty or null")
+                        common.log_warning("WARNING: bucket name from arn " +tt2 +" is empty or null")
                         return skip,t1,flag1,flag2
 
                     
@@ -114,9 +114,9 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                             t1=tt1 + " = aws_security_group." + tt2 + ".id\n"
                             common.add_dependancy("aws_security_group", tt2)
                     else:
-                        common.common.log_warning("WARNING: security group not found in sglist %s",  tt2)
+                        common.log_warning("WARNING: security group not found in sglist %s",  tt2)
                 except KeyError as e:
-                    common.common.log_warning("WARNING: subnet_id not found in subnet list %s",  tt2)
+                    common.log_warning("WARNING: subnet_id not found in subnet list %s",  tt2)
 
 
 
@@ -136,7 +136,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                             t1=tt1 + " = aws_vpc." + tt2 + ".id\n"
                             common.add_dependancy("aws_vpc", tt2)
                     else:
-                        common.common.log_warning("WARNING: vpc_id not found in vpclist %s", tt2)
+                        common.log_warning("WARNING: vpc_id not found in vpclist %s", tt2)
                     
 
 
@@ -152,9 +152,9 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                             t1=tt1 + " = data.aws_subnet." + tt2 + ".id\n"
                             common.add_dependancy("aws_subnet", tt2)
                     else:
-                        common.common.log_warning("WARNING: subnet_id not found in subnet list %s",  tt2)
+                        common.log_warning("WARNING: subnet_id not found in subnet list %s",  tt2)
                 except KeyError as e:
-                    common.common.log_warning("WARNING: subnet_id not found in subnet list %s",  tt2)
+                    common.log_warning("WARNING: subnet_id not found in subnet list %s",  tt2)
 
         elif tt1 == "file_system_id":
             if tt2 != "null":
@@ -171,7 +171,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                         common.add_dependancy("aws_lambda_function",tt2)
                         return skip,t1,flag1,flag2
                 except KeyError as e:
-                    common.common.log_warning("WARNING: lambda_function_arn not found in lambda list %s", tt2)
+                    common.log_warning("WARNING: lambda_function_arn not found in lambda list %s", tt2)
                     return skip,t1,flag1,flag2
 
             else:
@@ -266,9 +266,9 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                         else:
                             
                         
-                            common.common.log_warning("WARNING: role not found in rolelist %s",  tt2)
+                            common.log_warning("WARNING: role not found in rolelist %s",  tt2)
                     except KeyError as e:
-                        common.common.log_warning("WARNING: role not found in rolelist [ke] %s",  tt2)
+                        common.log_warning("WARNING: role not found in rolelist [ke] %s",  tt2)
 
             else:
                 t1=fixtf.deref_role_arn(t1,tt1,tt2)

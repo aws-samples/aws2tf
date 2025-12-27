@@ -17,7 +17,6 @@ def check_key(keyid):
 		kresp=keyclient.describe_key(KeyId=keyid)
 		kstatus=kresp['KeyMetadata']['KeyState']
 		kman=kresp['KeyMetadata']['KeyManager']
-		#print(str(kresp))
 		if kstatus == "Enabled" or kstatus == "Disabled":
 			if kman == "AWS":
 				if context.debug: log.debug("check_key: key is managed by AWS")
@@ -25,11 +24,9 @@ def check_key(keyid):
 			return True
 		else:
 			log.warning("WARNING: key is not valid or is managed by AWS")
-			#print(str(kresp))
 			return False
 	except Exception as e:
 		if context.debug: log.debug("WARNING: can't access key %s", keyid)
-		#print(f"{e=} [k1]")
 		#exc_type, exc_obj, exc_tb = sys.exc_info()
 	return False
 

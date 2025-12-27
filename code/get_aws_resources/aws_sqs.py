@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -67,7 +68,7 @@ def get_aws_sqs_queue_policy(type, id, clfn, descfn, topkey, key, filterid):
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.info("Must pass queue url as parameter")
+            log.warning("Must pass queue url as parameter")
             return True
         else:   
             pkey="aws_sqs_queue_policy."+id
@@ -101,7 +102,7 @@ def get_aws_sqs_queue_redrive_allow_policy(type, id, clfn, descfn, topkey, key, 
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.info("Must pass queue url as parameter")
+            log.warning("Must pass queue url as parameter")
             return True
         else:      
             response = client.get_queue_attributes(QueueUrl=id,AttributeNames=['RedriveAllowPolicy'])
@@ -135,7 +136,7 @@ def get_aws_sqs_queue_redrive_policy(type, id, clfn, descfn, topkey, key, filter
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.info("Must pass queue url as parameter")
+            log.warning("Must pass queue url as parameter")
             return True
         else: 
             pkey="aws_sqs_queue_redrive_policy."+id     

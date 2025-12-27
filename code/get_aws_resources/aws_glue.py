@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -75,11 +76,11 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
     try:
         context.workaround=type
         if id is None:
-            log.warning("WARNING: ID can not be None - must pass catalog:database or catalog:database:tablename" )
+            log_warning("WARNING: ID can not be None - must pass catalog:database or catalog:database:tablename" )
             return True
         cc=id.count(':')
         if cc==0:
-                    log.warning("WARNING: ID - must pass catalog:database or catalog:database:tablename" )
+                    log_warning("WARNING: ID - must pass catalog:database or catalog:database:tablename" )
                     return True
         if cc == 1:
                     catalogn=id.split(':')[0]
@@ -423,7 +424,7 @@ def get_aws_glue_partition(type, id, clfn, descfn, topkey, key, filterid):
                 databasen=id.split(':')[1]
                 tabnam=id.split(':')[2]
             else:
-                log.warning("WARNING: Invalid aws_glue_partition id passed must pass catalogid:database:tablename got: " + id +"c="+str(cc))
+                log_warning("WARNING: Invalid aws_glue_partition id passed must pass catalogid:database:tablename got: " + id +"c="+str(cc))
                 context.rproc[tkey]=True
                 return True
 

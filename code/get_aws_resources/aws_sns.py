@@ -88,7 +88,7 @@ def get_aws_sns_topic_subscription(type, id, clfn, descfn, topkey, key, filterid
                     if j[key].startswith("arn:"):
                         common.write_import(type,j[key],None)
                     elif j[key]=="PendingConfirmation":
-                        log.warning("WARNING: Skipping subscription as status = "+j[key])
+                        log_warning("WARNING: Skipping subscription as status = "+j[key])
                 pkey="aws_sns_topic_subscription."+id
                 context.rproc[pkey]=True
 

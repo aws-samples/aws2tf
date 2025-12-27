@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -123,7 +124,7 @@ def get_aws_athena_database(type, id, clfn, descfn, topkey, key, filterid):
                 return True
             for j in response:
                 if "-" in j[key]:
-                    log.warning("WARNING: Invalid database name: "+j[key]+" so skipping")
+                    log_warning("WARNING: Invalid database name: "+j[key]+" so skipping")
                     continue
                 common.write_import(type,j[key],None) 
 

@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -54,7 +55,7 @@ def get_aws_ssm_association(type, id, clfn, descfn, topkey, key, filterid):
                 common.write_import(type,j[key],"a-"+j[key]) 
 
         else:      
-            log.warning("WARNING: No id or invalid provided for "+type)
+            log_warning("WARNING: No id or invalid provided for "+type)
             return True
 
     except Exception as e:

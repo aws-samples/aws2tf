@@ -205,7 +205,7 @@ def get_aws_vpclattice_target_group_attachment(type, id, clfn, descfn, topkey, k
     response = []
 
     if id is None:
-      log.info("Must pass target group id")
+      log.warning("Must pass target group id")
       return True
     else:
         if id.startswith("tg-"):
@@ -261,7 +261,7 @@ def get_aws_vpclattice_listener(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
         log.debug("Paginator")
     if id is None:
-        log.info("WARNING must provide serviceIdentifier as parameter for get_aws_vpclattice_listener")
+        log_warning("WARNING must provide serviceIdentifier as parameter for get_aws_vpclattice_listener")
     else:
         try:
             getfn = getattr(client, descfn)
@@ -301,7 +301,7 @@ def get_aws_vpclattice_listener_rule(type, id, clfn, descfn, topkey, key, filter
         log.debug("Paginator")
 
     if id is None:
-        log.info("WARNING must provide serviceIdentifier/ListenerId as parameter for get_aws_vpclattice_listener_rule")
+        log_warning("WARNING must provide serviceIdentifier/ListenerId as parameter for get_aws_vpclattice_listener_rule")
     else:
         try:
             if "/" in id:  # print(f"{err=}")
@@ -358,7 +358,7 @@ def get_aws_vpc_lattice(type, id, clfn, descfn, topkey, key, filterid):
                response = response1[topkey]
 
       else:
-         log.warning("WARNING: No id or invalid id provided for "+type, id)
+         log_warning("WARNING: No id or invalid id provided for "+type, id)
          return True
 
       #print(str(response))

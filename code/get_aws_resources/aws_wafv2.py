@@ -29,7 +29,7 @@ def get_aws_wafv2_ip_set(type, id, clfn, descfn, topkey, key, filterid):
                     pkey=idd+"/"+nm+"/"+sc
                     common.write_import(type,pkey,"w-"+pkey.replace("/","_")) 
             else:
-                log.warning("WARNING:Can only import CLOUDFRONT ip sets from us-east-1 region")
+                log_warning("WARNING:Can only import CLOUDFRONT ip sets from us-east-1 region")
             log.info("INFO: Getting Regional resources")
             sc="REGIONAL"
             response = client.list_ip_sets(Scope=sc)
@@ -95,7 +95,7 @@ def get_aws_wafv2_web_acl(type, id, clfn, descfn, topkey, key, filterid):
                     if type not in context.all_extypes:
                         common.add_dependancy("aws_wafv2_web_acl_logging_configuration",arn)
             else:
-                log.warning("WARNING:Can only import CLOUDFRONT web ACL's from us-east-1 region")
+                log_warning("WARNING:Can only import CLOUDFRONT web ACL's from us-east-1 region")
  
             sc="REGIONAL"
             response = client.list_web_acls(Scope=sc)
@@ -166,7 +166,7 @@ def get_aws_wafv2_rule_group(type, id, clfn, descfn, topkey, key, filterid):
                     pkey=idd+"/"+nm+"/"+sc
                     common.write_import(type,pkey,"w-"+pkey.replace("/","_")) 
             else:
-                log.warning("WARNING:Can only import CLOUDFRONT web ACL's from us-east-1 region")
+                log_warning("WARNING:Can only import CLOUDFRONT web ACL's from us-east-1 region")
  
             sc="REGIONAL"
             response = client.list_rule_groups(Scope=sc)
@@ -252,7 +252,7 @@ def get_aws_wafv2_web_acl_association(type, id, clfn, descfn, topkey, key, filte
         config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
         client = boto3.client(clfn,config=config)
         if id is None:
-            log.info("Must pass webacl arn as parameter")
+            log.warning("Must pass webacl arn as parameter")
             return True
 
         else: 

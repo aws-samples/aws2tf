@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -46,7 +47,7 @@ def get_aws_route53_record(type, id, clfn, descfn, topkey, key, filterid):
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.warning("WARNING: No id or invalid provided for "+type)
+            log_warning("WARNING: No id or invalid provided for "+type)
         else:
             rkey=type+"."+id
             context.rproc[rkey]=True

@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import context
@@ -66,11 +67,11 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
                             context.rproc[pkey]=True
                         common.add_dependancy("aws_kms_alias","k-"+theid)
                     else:
-                        log.warning("WARNING: key is not enabled or is managed by AWS")
+                        log_warning("WARNING: key is not enabled or is managed by AWS")
                         #print(str(kresp))
                         continue
                 except Exception as e:
-                    if context.debug: log.warning("WARNING: can't access key %s", theid)
+                    if context.debug: log_warning("WARNING: can't access key %s", theid)
                     #print(f"{e=} [k1]")
                     #exc_type, exc_obj, exc_tb = sys.exc_info()
                     #fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]

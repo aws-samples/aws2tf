@@ -168,7 +168,7 @@ def get_aws_appmesh_gateway_route(type, id, clfn, descfn, topkey, key, filterid)
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.info("ERROR: must pass mesh name/gateway name")
+            log_warning("ERROR: must pass mesh name/gateway name")
             return True
 
         else:  

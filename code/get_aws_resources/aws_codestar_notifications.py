@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -26,7 +27,7 @@ def get_aws_codestarnotifications_notification_rule(type, id, clfn, descfn, topk
                 if j[key] == id:
                     common.write_import(type, j[key], None)
             else:
-                log.info("WARNING must pass ARN as id for aws_codestarnotifications_notification_rule") 
+                log_warning("WARNING must pass ARN as id for aws_codestarnotifications_notification_rule") 
                 return True
 
     except Exception as e:

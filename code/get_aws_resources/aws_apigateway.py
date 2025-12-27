@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -54,7 +55,7 @@ def get_aws_api_gateway_deployment(type, id, clfn, descfn, topkey, key, filterid
                 pkey=type+"."+id
                 context.rproc[pkey]=True
         else:
-            log.info("Must pass id for "+type+" returning")
+            log.warning("Must pass id for "+type+" returning")
             return True
 
     except Exception as e:
@@ -129,7 +130,7 @@ def get_aws_api_gateway_stage(type, id, clfn, descfn, topkey, key, filterid):
                 pkey=type+"."+id
                 context.rproc[pkey]=True
         else:
-            log.info("Must pass id for "+type+" returning")
+            log.warning("Must pass id for "+type+" returning")
             return True
 
     except Exception as e:
@@ -159,7 +160,7 @@ def get_aws_api_gateway_authorizer(type, id, clfn, descfn, topkey, key, filterid
                 pkey=type+"."+id
                 context.rproc[pkey]=True
         else:
-            log.info("Must pass id for "+type+" returning")
+            log.warning("Must pass id for "+type+" returning")
             return True
 
     except Exception as e:
@@ -196,7 +197,7 @@ def get_aws_api_gateway_resource(type, id, clfn, descfn, topkey, key, filterid):
                 pkey=type+"."+id
                 context.rproc[pkey]=True
         else:
-            log.info("Must pass id for "+type+" returning")
+            log.warning("Must pass id for "+type+" returning")
             return True
 
     except Exception as e:
@@ -299,7 +300,7 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
             context.rproc[pkey]=True
 
         else:
-            log.info("Must pass Rest api id / Resource id for "+type+" returning")
+            log.warning("Must pass Rest api id / Resource id for "+type+" returning")
             return True
 
     except Exception as e:

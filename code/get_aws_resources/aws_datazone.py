@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -21,7 +22,7 @@ def get_aws_datazone_asset_type(type, id, clfn, descfn, topkey, key, filterid):
         paginator = client.get_paginator(descfn)
 
         if id is None:
-            log.info("WARNING must pass domain id to get_aws_datazone_asset_type")
+            log_warning("WARNING must pass domain id to get_aws_datazone_asset_type")
             return True
         else:
 
@@ -86,7 +87,7 @@ def get_aws_datazone_user_profile(type, id, clfn, descfn, topkey, key, filterid)
         paginator = client.get_paginator(descfn)
 
         if id is None:
-            log.info("WARNING must pass domain id to get_aws_datazone_user_profile")
+            log_warning("WARNING must pass domain id to get_aws_datazone_user_profile")
             return True
         else:
             pkey=type+"."+id
@@ -229,7 +230,7 @@ def get_aws_datazone_project(type, id, clfn, descfn, topkey, key, filterid):
 
         paginator = client.get_paginator(descfn)
         if id is None:
-            log.info("WARNING must pass domain id to get_aws_datazone_project")
+            log_warning("WARNING must pass domain id to get_aws_datazone_project")
             return True
         else:
             for page in paginator.paginate(domainIdentifier=id):
@@ -264,7 +265,7 @@ def get_aws_datazone_glossary(type, id, clfn, descfn, topkey, key, filterid):
 
         paginator = client.get_paginator(descfn)
         if id is None:
-            log.info("WARNING must pass domain id to get_aws_datazone_glossary")
+            log_warning("WARNING must pass domain id to get_aws_datazone_glossary")
             return True
         else:
             for page in paginator.paginate(domainIdentifier=id,searchScope='GLOSSARY'):
@@ -299,7 +300,7 @@ def get_aws_datazone_glossary_term(type, id, clfn, descfn, topkey, key, filterid
 
         paginator = client.get_paginator(descfn)
         if id is None:
-            log.info("WARNING must pass domain id to get_aws_datazone_glossary_term")
+            log_warning("WARNING must pass domain id to get_aws_datazone_glossary_term")
             return True
         else:
             #print("Glossary terms id ",id)
@@ -340,7 +341,7 @@ def get_aws_datazone_form_type(type, id, clfn, descfn, topkey, key, filterid):
 
         paginator = client.get_paginator(descfn)
         if id is None:
-            log.info("WARNING must pass domain id to get_aws_datazone_form_type")
+            log_warning("WARNING must pass domain id to get_aws_datazone_form_type")
             return True
         else:
             for page in paginator.paginate(domainIdentifier=id,managed=False,
@@ -379,7 +380,7 @@ def get_aws_datazone_environment_blueprint_configuration(type, id, clfn, descfn,
 
         paginator = client.get_paginator(descfn)
         if id is None:
-            log.info("WARNING must pass domain id to get_aws_datazone_environment_blueprint_configuration")
+            log_warning("WARNING must pass domain id to get_aws_datazone_environment_blueprint_configuration")
             return True
         else:
             for page in paginator.paginate(domainIdentifier=id):
@@ -410,7 +411,7 @@ def get_aws_datazone_environment_profile(type, id, clfn, descfn, topkey, key, fi
 
         paginator = client.get_paginator(descfn)
         if id is None:
-            log.info("WARNING must pass domain id to get_aws_datazone_environment_profile")
+            log_warning("WARNING must pass domain id to get_aws_datazone_environment_profile")
             return True
         else:
             try:
@@ -418,7 +419,7 @@ def get_aws_datazone_environment_profile(type, id, clfn, descfn, topkey, key, fi
                     response = response + page[topkey]
             except Exception as e:
                 log.info(str(e))
-                log.warning("WARNING: no environment profiles found for domain id "+id)
+                log_warning("WARNING: no environment profiles found for domain id "+id)
                 context.rproc[type+"."+id]=True
                 return True
 
@@ -450,7 +451,7 @@ def get_aws_datazone_environment(type, id, clfn, descfn, topkey, key, filterid):
     
         paginator = client.get_paginator(descfn)
         if id is None:
-            log.info("WARNING must pass domain_id:project_id to get_aws_datazone_environment")
+            log_warning("WARNING must pass domain_id:project_id to get_aws_datazone_environment")
             return True
         else:
             dzd=id.split(':')[0]

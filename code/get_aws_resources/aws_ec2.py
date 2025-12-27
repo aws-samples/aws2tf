@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -39,12 +40,12 @@ def get_aws_vpc(type, id, clfn, descfn, topkey, key, filterid):
                     pkey = type+"."+id
                     context.rproc[pkey] = True
                 else:
-                    log.warning("WARNING: vpc not in vpclist" + id)
+                    log_warning("WARNING: vpc not in vpclist" + id)
             except KeyError:
-                    log.warning("WARNING: vpc not in vpclist " + id+ " Resource may be referencing a vpc that no longer exists")  
+                    log_warning("WARNING: vpc not in vpclist " + id+ " Resource may be referencing a vpc that no longer exists")  
             
         else:
-            log.warning("WARNING: get_aws_vpc unexpected id value %s", tr(id))
+            log_warning("WARNING: get_aws_vpc unexpected id value %s", tr(id))
             return True
                     
 
@@ -70,9 +71,9 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
                     pkey = type+"."+id
                     context.rproc[pkey] = True
                 else:
-                    log.warning("WARNING: subnet not in subnetlist" + id)
+                    log_warning("WARNING: subnet not in subnetlist" + id)
             except KeyError:
-                    log.warning("WARNING: subnet not in subnetlist " + id+ " Resource may be referencing a subnet that no longer exists")  
+                    log_warning("WARNING: subnet not in subnetlist " + id+ " Resource may be referencing a subnet that no longer exists")  
             
         elif id.startswith("vpc-"):
             for j in context.subnets:
@@ -80,7 +81,7 @@ def get_aws_subnet(type, id, clfn, descfn, topkey, key, filterid):
                     #print("Found subnet in vpc " + id + " " + j['SubnetId'])
                     common.write_import(type, j['SubnetId'], None)
         else:
-            log.warning("WARNING: get_aws_subnet unexpected id value %s", tr(id))
+            log_warning("WARNING: get_aws_subnet unexpected id value %s", tr(id))
             return True
                     
 
@@ -113,12 +114,12 @@ def get_aws_security_group(type, id, clfn, descfn, topkey, key, filterid):
                     pkey = type+"."+id
                     context.rproc[pkey] = True
                 else:
-                    log.warning("WARNING: sg not in sglist" + id)
+                    log_warning("WARNING: sg not in sglist" + id)
             except KeyError:
-                    log.warning("WARNING: sg not in sglist " + id+ " Resource may be referencing a security_group that no longer exists")  
+                    log_warning("WARNING: sg not in sglist " + id+ " Resource may be referencing a security_group that no longer exists")  
             
         else:
-            log.warning("WARNING: get_aws_security_group unexpected id value %s", tr(id))
+            log_warning("WARNING: get_aws_security_group unexpected id value %s", tr(id))
             return True
                     
 
@@ -563,9 +564,9 @@ def get_aws_subnet_old(type, id, clfn, descfn, topkey, key, filterid):
                     if context.subnetlist[subid]:
                         common.write_import(type, j[key], None) 
                     else:
-                            log.warning("WARNING: subnet not in subnetlist" + subid)
+                            log_warning("WARNING: subnet not in subnetlist" + subid)
                 except KeyError:
-                    log.warning("WARNING: subnet not in subnetlist " + subid+ " Resource may be referencing a subnet that no longer exists")    
+                    log_warning("WARNING: subnet not in subnetlist " + subid+ " Resource may be referencing a subnet that no longer exists")    
         
         elif "subnet-" in id:
             for j in response:
@@ -576,9 +577,9 @@ def get_aws_subnet_old(type, id, clfn, descfn, topkey, key, filterid):
                     if context.subnetlist[subid]:
                         common.write_import(type, j[key], None)
                     else:
-                            log.warning("WARNING: subnet not in subnetlist" + subid)
+                            log_warning("WARNING: subnet not in subnetlist" + subid)
                 except KeyError:
-                    log.warning("WARNING: subnet not in subnetlist " + subid+ " Resource may be referencing a subnet that no longer exists")
+                    log_warning("WARNING: subnet not in subnetlist " + subid+ " Resource may be referencing a subnet that no longer exists")
 
 
         elif "vpc-" in id:
@@ -780,14 +781,14 @@ def get_aws_vpc_dhcp_options_association(type, id, clfn, descfn, topkey, key, fi
     try:
         response = []
         if id is None:
-            log.warning("WARNING: No id or invalid id provided for "+type)
+            log_warning("WARNING: No id or invalid id provided for "+type)
         else:
             if "|" in id:
                 vpcid=id.split("|")[1]
             elif id.startswith("vpc-"):
                 vpcid=id
             else:
-                log.warning("WARNING: No id or invalid id provided for "+type)
+                log_warning("WARNING: No id or invalid id provided for "+type)
                 return True
             
             log.info("vpcid="+vpcid)
@@ -919,7 +920,7 @@ def get_aws_ec2_transit_gateway(type, id, clfn, descfn, topkey, key, filterid):
 
 
             else:
-                log.warning("WARNING: "+type+" id must start with tgw-")
+                log_warning("WARNING: "+type+" id must start with tgw-")
 
 
     except Exception as e:
@@ -957,7 +958,7 @@ def get_aws_ec2_transit_gateway_vpc_attachment(type, id, clfn, descfn, topkey, k
                     common.write_import(type,j[key],None)
 
             else:
-                log.warning("WARNING: "+type+" id must start with tgw- or vpc-")
+                log_warning("WARNING: "+type+" id must start with tgw- or vpc-")
 
 
     except Exception as e:
@@ -988,7 +989,7 @@ def get_aws_ec2_transit_gateway_peering_attachment(type, id, clfn, descfn, topke
                 for j in response[topkey]:
                     common.write_import(type,j[key],None)           
             else:
-                log.warning("WARNING: "+type+" id must start with tgw- or vpc-")
+                log_warning("WARNING: "+type+" id must start with tgw- or vpc-")
 
 
     except Exception as e:
@@ -1020,7 +1021,7 @@ def get_aws_ec2_transit_gateway_route_table(type, id, clfn, descfn, topkey, key,
                     common.write_import(type,j[key],None)   
                     common.add_dependancy("aws_ec2_transit_gateway_route",j[key])        
             else:
-                log.warning("WARNING: "+type+" id must start with tgw- or vpc-")
+                log_warning("WARNING: "+type+" id must start with tgw- or vpc-")
 
 
     except Exception as e:
@@ -1037,7 +1038,7 @@ def get_aws_ec2_transit_gateway_route(type, id, clfn, descfn, topkey, key, filte
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.warning("WARNING: "+type+" id must pass Transit gateway route table id")
+            log_warning("WARNING: "+type+" id must pass Transit gateway route table id")
  
         else: 
             if id.startswith("tgw-rtb-"):     
@@ -1051,7 +1052,7 @@ def get_aws_ec2_transit_gateway_route(type, id, clfn, descfn, topkey, key, filte
                     pkey=id+"_"+j[key]
                     common.write_import(type,pkey,id)           
             else:
-                log.warning("WARNING: "+type+" id must start with tgw-rtb-")
+                log_warning("WARNING: "+type+" id must start with tgw-rtb-")
 
 
     except Exception as e:
@@ -1163,7 +1164,7 @@ def get_aws_ec2_transit_gateway_vpn_attachment(type, id, clfn, descfn, topkey, k
                
 
             else:
-                log.warning("WARNING: "+type+" id must start with tgw- or vpc-")
+                log_warning("WARNING: "+type+" id must start with tgw- or vpc-")
 
 
     except Exception as e:
@@ -1215,7 +1216,7 @@ def get_aws_vpc_endpoint(type, id, clfn, descfn, topkey, key, filterid):
             context.rproc[pkey]=True
 
         else:
-            log.warning("WARNING: "+type+" id unexpected = "+ str(id))
+            log_warning("WARNING: "+type+" id unexpected = "+ str(id))
 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
@@ -1257,7 +1258,7 @@ def get_aws_vpc_peering_connection(type, id, clfn, descfn, topkey, key, filterid
                 common.write_import(type, j[key], None)
 
         else:
-            log.warning("WARNING: "+type+" id unexpected = "+ str(id))
+            log_warning("WARNING: "+type+" id unexpected = "+ str(id))
 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
@@ -1273,7 +1274,7 @@ def get_aws_network_interface(type, id, clfn, descfn, topkey, key, filterid):
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.warning("WARNING: "+type+" id is None - must pass eni-xxxxxxxxxx as paramter returning")
+            log_warning("WARNING: "+type+" id is None - must pass eni-xxxxxxxxxx as paramter returning")
             return True
 
         if id.startswith("eni-"):
@@ -1325,7 +1326,7 @@ def get_aws_verifiedaccess_instance(type, id, clfn, descfn, topkey, key, filteri
                     common.add_dependancy("aws_verifiedaccess_instance_trust_provider_attachment", pkey)
 
         else:
-            log.warning("WARNING: "+type+" id unexpected = "+ str(id))
+            log_warning("WARNING: "+type+" id unexpected = "+ str(id))
 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
@@ -1344,7 +1345,7 @@ def get_aws_verifiedaccess_instance_trust_provider_attachment(type, id, clfn, de
         pid=id.split('/')[1]
         client = boto3.client(clfn)
         if id is None:
-            log.warning("WARNING: "+type+" id must pass verified instance id")
+            log_warning("WARNING: "+type+" id must pass verified instance id")
 
 
         elif pid.startswith("vatp-"):
@@ -1358,7 +1359,7 @@ def get_aws_verifiedaccess_instance_trust_provider_attachment(type, id, clfn, de
                 common.write_import(type, pkey, None)
 
         else:
-            log.warning("WARNING: "+type+" id unexpected = "+ str(id))
+            log_warning("WARNING: "+type+" id unexpected = "+ str(id))
 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
@@ -1392,7 +1393,7 @@ def get_aws_verifiedaccess_endpoint(type, id, clfn, descfn, topkey, key, filteri
                 common.write_import(type, j[key], None)
 
         else:
-            log.warning("WARNING: "+type+" id unexpected = "+ str(id))
+            log_warning("WARNING: "+type+" id unexpected = "+ str(id))
 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)

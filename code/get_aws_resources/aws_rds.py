@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -210,7 +211,7 @@ def get_aws_db_instance(type, id, clfn, descfn, topkey, key, filterid):
                 common.write_import(type, j[key], None)
 
     except client.exceptions.InvalidParameterValue as error:
-            log.warning("WARNING: InvalidParameterValue for "+type+ " "+str(id)+" returning")
+            log_warning("WARNING: InvalidParameterValue for "+type+ " "+str(id)+" returning")
             log.info(str(error.response['Error']['Code']))
             pkey=type+"."+str(id)
             context.rproc[pkey]=True

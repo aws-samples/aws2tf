@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -68,7 +69,7 @@ def get_aws_connect_instance_storage_config(type, id, clfn, descfn, topkey, key,
     try:
         response = []
         if id is None:
-            log.info("Must pass instanceid for "+type)
+            log.warning("Must pass instanceid for "+type)
             return True
         else:
             client = boto3.client(clfn)
@@ -108,7 +109,7 @@ def get_aws_connect_phone_number(type, id, clfn, descfn, topkey, key, filterid):
         response = []
 
         if id is None:
-            log.info("Must pass instanceid for "+type)
+            log.warning("Must pass instanceid for "+type)
             return True
 
         else:
@@ -143,7 +144,7 @@ def get_aws_connect_hours_of_operation(type, id, clfn, descfn, topkey, key, filt
         response = []
 
         if id is None:
-            log.info("Must pass instanceid for "+type)
+            log.warning("Must pass instanceid for "+type)
             return True
 
         else:
@@ -179,7 +180,7 @@ def get_aws_connect_contact_flow(type, id, clfn, descfn, topkey, key, filterid):
         response = []
 
         if id is None:
-            log.info("Must pass instanceid for "+type)
+            log.warning("Must pass instanceid for "+type)
             return True
 
         else:
@@ -213,7 +214,7 @@ def get_aws_connect_queue(type, id, clfn, descfn, topkey, key, filterid):
         response = []
 
         if id is None:
-            log.info("Must pass instanceid for "+type)
+            log.warning("Must pass instanceid for "+type)
             return True
 
         else:
@@ -250,7 +251,7 @@ def get_aws_connect_routing_profile(type, id, clfn, descfn, topkey, key, filteri
         response = []
 
         if id is None:
-            log.info("Must pass instanceid for "+type)
+            log.warning("Must pass instanceid for "+type)
             return True
 
         else:
@@ -286,7 +287,7 @@ def get_aws_connect_security_profile(type, id, clfn, descfn, topkey, key, filter
         response = []
 
         if id is None:
-            log.info("Must pass instanceid for "+type)
+            log.warning("Must pass instanceid for "+type)
             return True
 
         else:
@@ -319,7 +320,7 @@ def get_aws_connect_user(type, id, clfn, descfn, topkey, key, filterid):
         response = []
 
         if id is None:
-            log.info("Must pass instanceid for "+type)
+            log.warning("Must pass instanceid for "+type)
             return True
 
         else:
@@ -355,7 +356,7 @@ def get_aws_connect_vocabulary(type, id, clfn, descfn, topkey, key, filterid):
         response = []
 
         if id is None:
-            log.info("Must pass instanceid for "+type)
+            log.warning("Must pass instanceid for "+type)
             return True
 
         else:
@@ -403,7 +404,7 @@ def get_aws_connect_bot_association(type, id, clfn, descfn, topkey, key, filteri
         response = []
 
         if id is None:
-            log.info("Must pass instanceid for "+type)
+            log.warning("Must pass instanceid for "+type)
             return True
 
         else:
@@ -442,7 +443,7 @@ def get_aws_connect_lambda_function_association(type, id, clfn, descfn, topkey, 
         response = []
 
         if id is None:
-            log.info("Must pass instanceid for "+type)
+            log.warning("Must pass instanceid for "+type)
             return True
 
         else:

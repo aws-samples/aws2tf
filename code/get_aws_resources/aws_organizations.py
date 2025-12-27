@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -55,7 +56,7 @@ def get_aws_organizations_organizational_unit(type, id, clfn, descfn, topkey, ke
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.info("WARNING must pass parent org id as paremter returning ....")
+            log_warning("WARNING must pass parent org id as paremter returning ....")
             return True
         #try:
         response = client.list_organizational_units_for_parent(ParentId=id)
@@ -256,7 +257,7 @@ def get_aws_organizations_policy_attachment(type, id, clfn, descfn, topkey, key,
                 common.write_import(type, pkey, id)            
 
         else:
-            log.info("Must pass a policy id as a parmeter - returning True")
+            log.warning("Must pass a policy id as a parmeter - returning True")
 
 
     except Exception as e:

@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -61,7 +62,7 @@ def get_aws_amplify_branch(type, id, clfn, descfn, topkey, key, filterid):
                 context.rproc[pkey]=True
 
         else:      
-            log.info("Must pass id for "+type+" returning")
+            log.warning("Must pass id for "+type+" returning")
             return True
 
     except Exception as e:

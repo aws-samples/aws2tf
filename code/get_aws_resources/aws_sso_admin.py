@@ -38,10 +38,10 @@ def get_aws_ssoadmin_permission_set(type, id, clfn, descfn, topkey, key, filteri
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         if id is None and context.ssoinstance is None: 
-            log.info("No SSO instance found")
+            log.debug("No SSO instance found")
             return True
         if id =="":
-            log.info("No SSO instance found")
+            log.debug("No SSO instance found")
             return True
         if id == context.ssoinstance: id=context.ssoinstance
         if context.ssoinstance is not None: id=context.ssoinstance
@@ -70,8 +70,8 @@ def get_aws_ssoadmin_managed_policy_attachment(type, id, clfn, descfn, topkey, k
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         # id - instid arm /perm arn
-        if id is None: log.info("No SSO instance found"); return True
-        if "," not in id: log.info("No SSO instance found"); return True
+        if id is None: log.debug("No SSO instance found"); return True
+        if "," not in id: log.debug("No SSO instance found"); return True
 
         response = []
         client = boto3.client(clfn)  
@@ -105,10 +105,10 @@ def get_aws_ssoadmin_permission_set_inline_policy(type, id, clfn, descfn, topkey
     try:
         # id - instid arm /perm arn
         if id is None: 
-            log.info("No SSO instance found")
+            log.debug("No SSO instance found")
             return True
         if "/" not in id: 
-            log.info("No SSO instance found") 
+            log.debug("No SSO instance found") 
             return True
 
         response = []

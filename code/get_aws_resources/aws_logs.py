@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import context
@@ -76,7 +77,7 @@ def get_aws_cloudwatch_log_stream(type, id, clfn, descfn, topkey, key, filterid)
             context.rproc[pkey]=True
  
         else:
-            log.warning("WARNING: No id provided for get_aws_cloudwatch_log_stream")
+            log_warning("WARNING: No id provided for get_aws_cloudwatch_log_stream")
             return True
     
     except Exception as e:

@@ -125,8 +125,6 @@ def get_aws_iam_instance_profile(type,id,clfn,descfn,topkey,key,filterid):
    if context.debug:
        log.debug("--> In get_aws_iam_instance_profile  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    
-   log.info("--> In get_aws_iam_instance_profile  doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
-
    client = boto3.client(clfn) 
    response=[]
 
@@ -301,7 +299,7 @@ def get_aws_iam_role(type,id,clfn,descfn,topkey,key,filterid):
                   common.add_dependancy("aws_iam_role_policy_attachment",rn)
                   common.add_dependancy("aws_iam_role_policy",rn)
                else:
-                   log.warning("WARNING: empty rolename")
+                   log_warning("WARNING: empty rolename")
 
         else:   
             if "/aws-service-role/" in id: return True    
@@ -317,7 +315,7 @@ def get_aws_iam_role(type,id,clfn,descfn,topkey,key,filterid):
                common.add_dependancy("aws_iam_role_policy_attachment",rn)
                common.add_dependancy("aws_iam_role_policy",rn)
             else:
-               log.warning("WARNING: empty rolename")
+               log_warning("WARNING: empty rolename")
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

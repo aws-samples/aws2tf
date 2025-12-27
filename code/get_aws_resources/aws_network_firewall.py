@@ -110,7 +110,7 @@ def get_aws_networkfirewall_rule_group(type, id, clfn, descfn, topkey, key, filt
                 if ":stateless-rulegroup/" in id:
                     response = client.describe_rule_group(RuleGroupArn=id,AnalyzeRuleGroup=False,Type='STATELESS')
             else:      
-                log.info("INFO: must pass arn for rule group")
+                log_warning("INFO: must pass arn for rule group")
             if response == []: 
                 if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
             else:
@@ -120,7 +120,7 @@ def get_aws_networkfirewall_rule_group(type, id, clfn, descfn, topkey, key, filt
                 if ":stateful-rulegroup/" in id:
                     response = client.describe_rule_group(RuleGroupArn=id,AnalyzeRuleGroup=False,Type='STATEFUL')
             else:      
-                log.info("INFO: must pass arn for rule group")
+                log_warning("INFO: must pass arn for rule group")
             if response == []: 
                 if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
             else:

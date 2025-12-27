@@ -65,7 +65,7 @@ def get_aws_cloudwatch_event_rule(type, id, clfn, descfn, topkey, key, filterid)
                     try:
                         response = client.describe_rule(Name=id)
                     except Exception as e:
-                        log.warning("WARNING: "+str(e)+" for "+type+ " id="+str(id)+" returning")
+                        log_warning("WARNING: "+str(e)+" for "+type+ " id="+str(id)+" returning")
                         log.info("ADVICE: Check if: "+type+ " id="+str(id)+" actually exists ?")
                         log.info("ADVICE: Check what other resources may be referring to this resource if it doesn't exist")
                         pkey="aws_cloudwatch_event_rule."+id

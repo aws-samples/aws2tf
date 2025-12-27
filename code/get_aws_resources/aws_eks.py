@@ -1,4 +1,5 @@
 import common
+from common import log_warning
 import logging
 log = logging.getLogger('aws2tf')
 import boto3
@@ -254,11 +255,11 @@ def get_aws_eks_access_policy_association(type,id,clfn,descfn,topkey,key,filteri
          return True      
  
       if "," not in id:
-         log.info("Must pass cluster-name,principa_arn to get_aws_eks_access_policy_association returning")  
+         log.warning("Must pass cluster-name,principa_arn to get_aws_eks_access_policy_association returning")  
          return True
       
       if "arn:" not in id:
-         log.info("Must pass cluster-name,principa_arn to get_aws_eks_access_policy_association returning")  
+         log.warning("Must pass cluster-name,principa_arn to get_aws_eks_access_policy_association returning")  
          return True
       
       cln=id.split(',')[0]

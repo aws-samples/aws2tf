@@ -472,7 +472,7 @@ def call_resource(type, id):
       try:
          if context.rproc[ti]:
             log.debug("Already processed " + ti)
-            log.info("Already processed " + ti)
+            log.debug("Already processed " + ti)
             return
       except:
          pass

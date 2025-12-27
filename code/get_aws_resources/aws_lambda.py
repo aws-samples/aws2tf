@@ -147,7 +147,7 @@ def get_aws_lambda_function(type, id, clfn, descfn, topkey, key, filterid):
 
 
             except KeyError:
-                    log.warning("WARNING: function not in lambda list " + id+ " Resource may be referencing a lambda that no longer exists") 
+                    log_warning("WARNING: function not in lambda list " + id+ " Resource may be referencing a lambda that no longer exists") 
                     pkey=type+"."+id
                     context.rproc[pkey]=True
 
@@ -304,7 +304,7 @@ def get_aws_lambda_permission(type, id, clfn, descfn, topkey, key, filterid):
             response1 = getfn(FunctionName=id)
             response=response1[topkey]
         except client.exceptions.ResourceNotFoundException:
-            if context.debug: log.warning("WARNING: ResourceNotFoundException for "+type+ " "+str(id)+" returning")
+            if context.debug: log_warning("WARNING: ResourceNotFoundException for "+type+ " "+str(id)+" returning")
             return True
 
         if response == []: 
@@ -408,7 +408,7 @@ def get_aws_lambda_layer_version_permission(type, id, clfn, descfn, topkey, key,
             response1 = getfn(LayerName=id)
             response=response1[topkey]
         except client.exceptions.ResourceNotFoundException:
-            if context.debug: log.warning("WARNING: ResourceNotFoundException for "+type+ " "+str(id)+" returning")
+            if context.debug: log_warning("WARNING: ResourceNotFoundException for "+type+ " "+str(id)+" returning")
             return True
 
         if response == []: 

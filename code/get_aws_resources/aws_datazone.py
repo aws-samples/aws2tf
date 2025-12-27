@@ -440,7 +440,7 @@ def get_aws_datazone_environment(type, id, clfn, descfn, topkey, key, filterid):
         else:
             dzd=id.split(':')[0]
             pid=id.split(':')[1]
-            for page in paginator.paginate(domainIdentifier=dzd,projectIdentifier=pid):
+            for page in paginator.paginate(domainIdentifier=dzd,projectIdentifier=pid,status='ACTIVE'):
                 response = response + page[topkey]
         pkey=type+"."+id
         if response == []: 
@@ -448,6 +448,7 @@ def get_aws_datazone_environment(type, id, clfn, descfn, topkey, key, filterid):
             context.rproc[pkey]=True
             return True
         for j in response:
+            #print(j)
             theid=dzd+","+j[key]
             common.write_import(type,theid,None) 
 

@@ -888,7 +888,7 @@ def tfplan3():
             log.info("\n")
 
             if context.expected is False:
-               log.info("You can check the changes by running 'terraform plan' in %s\n %s",  context.path1)
+               log.info("You can check the changes by running 'terraform plan' in %s\n", context.path1)
                log.info("Then rerun the same ./aws2tf.py command and add the '-a' flag to accept these plan changes and continue to import")
                log.info("exit 023")
                stop_timer()

@@ -3,7 +3,7 @@ import logging
 
 log = logging.getLogger('aws2tf')
 
-aws2tfver="v6003"
+aws2tfver="v6270"
 tfver="6.27.0"
 esttime=120.0
 profile="default"

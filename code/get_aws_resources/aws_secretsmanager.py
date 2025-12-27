@@ -36,7 +36,7 @@ def get_aws_secretsmanager_secret(type, id, clfn, descfn, topkey, key, filterid)
                         log.info(j['RotationEnabled'])
                         common.add_dependancy("aws_secretsmanager_secret_rotation",j[key])
                     except KeyError:
-                        log.info("INFO: No rotation config")
+                        log.warning("INFO: No rotation config")
 
 
         else:
@@ -50,7 +50,7 @@ def get_aws_secretsmanager_secret(type, id, clfn, descfn, topkey, key, filterid)
             try:
                 common.add_dependancy("aws_secretsmanager_secret_rotation",j[key])
             except KeyError:
-                log.info("INFO: No rotation config")
+                log.warning("INFO: No rotation config")
             
 
 
@@ -77,7 +77,7 @@ def get_aws_secretsmanager_secret_rotation(type, id, clfn, descfn, topkey, key, 
             try:
                 roten=response['RotationEnabled']
             except KeyError:
-                log.info("INFO: No rotation config")
+                log.warning("INFO: No rotation config")
                 
                 context.rproc[pkey]=True
                 return True

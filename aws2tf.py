@@ -975,7 +975,7 @@ def process_detected_dependencies():
     context.esttime = len(x)/4
     
     if not context.fast:
-        log.info("\naws2tf Detected Dependancies started at %s\n" % now)
+        log.debug("\naws2tf Detected Dependancies started at %s\n" % now)
     
     context.tracking_message = "Stage 5 of 10, Detected Dependancies: starting"
     
@@ -1013,7 +1013,7 @@ def process_detected_dependencies():
                     # Show progress as dependencies are processed
                     for future in tqdm(concurrent.futures.as_completed(futures),
                                       total=len(futures),
-                                      desc="Processing dependencies",
+                                      desc="Processing detected dependencies (mt)",
                                       unit="resource",
                                       disable=context.debug):
                         future.result()
@@ -1021,9 +1021,9 @@ def process_detected_dependencies():
             if total_deps > 0:
                 log.info(f"Processing {total_deps} detected dependencies...")
                 for ti in tqdm(unprocessed_deps,
-                              desc="Processing dependencies",
+                              desc="Processing detected dependencies (st)",
                               unit="resource",
-                              disable=context.debug):
+                              disable=context.debug,leave=False):
                     i = ti.split(".")[0]
                     id = ti.split(".", 1)[1]
                     log.debug("DD calling getresource with type="+i+" id="+str(id))

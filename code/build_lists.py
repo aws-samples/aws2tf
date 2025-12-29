@@ -157,7 +157,7 @@ def build_lists():
         # Process results with progress bar
         with tqdm(total=len(fetch_tasks),
                  desc="Fetching resource lists",
-                 unit="type") as pbar:
+                 unit="type",leave=False) as pbar:
             
             for future in concurrent.futures.as_completed(future_to_name):
                 resource_name = future_to_name[future]
@@ -261,7 +261,7 @@ def build_secondary_lists(id=None):
         
         # Use ThreadPoolExecutor to parallelize API calls
         rcl = len(context.rolelist)
-        log.info(f"Fetching policies for {rcl} IAM roles...")
+        log.debug(f"Fetching policies for {rcl} IAM roles...")
         
         with concurrent.futures.ThreadPoolExecutor(max_workers=context.cores) as executor:
             # Submit all role policy fetch tasks
@@ -274,7 +274,7 @@ def build_secondary_lists(id=None):
             for future in tqdm(concurrent.futures.as_completed(future_to_role),
                               total=len(future_to_role),
                               desc="Fetching IAM policies",
-                              unit="role"):
+                              unit="role",leave=False):
                 try:
                     result = future.result()
                     role_name = result['role_name']
@@ -284,6 +284,6 @@ def build_secondary_lists(id=None):
                     log.error(f"Error processing result: {e}")
         
         st2 = datetime.datetime.now()
-        log.info("secondary lists built in " + str(st2 - st1))
+        log.debug("secondary lists built in " + str(st2 - st1))
     
     return

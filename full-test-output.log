@@ -1,0 +1,14 @@
+Logical cores: 10
+aws2tf v6270 started at 2025-12-29 12:58:23.151664
+boto3 version: 1.42.16
+Credentials Type = iam_user
+Is SSO login = False
+Terraform version: 1.13.3 AWS provider version: 6.27.0
+type is recommended eg:  -t aws_vpc    
+setting to all
+region set from aws cli / environment variables as eu-west-2
+/Users/awsandy/.local/lib/python3.9/site-packages/boto3/compat.py:89: PythonDeprecationWarning: Boto3 will no longer support Python 3.9 starting April 29, 2026. To continue receiving service updates, bug fixes, and security updates please upgrade to Python 3.10 or later. More information can be found here: https://aws.amazon.com/blogs/developer/python-support-policy-updates-for-aws-sdks-and-tools/
+  warnings.warn(warning, PythonDeprecationWarning)
+Using region: eu-west-2 account: 566972129213 profile: default
+
+terraform init

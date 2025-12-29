@@ -150,7 +150,7 @@ def get_all_s3_buckets(fb,my_region):
          for future in tqdm(concurrent.futures.as_completed(futures),
                            total=len(futures),
                            desc="Checking bucket access",
-                           unit="bucket"):
+                           unit="bucket", leave=False):
             future.result()
 
 
@@ -160,7 +160,7 @@ def get_all_s3_buckets(fb,my_region):
       
       for bucket_name in tqdm(accessible_buckets,
                              desc="Processing S3 buckets",
-                             unit="bucket"):
+                             unit="bucket", leave=False):
          
          if "aws_s3_bucket."+bucket_name in str(context.rproc):
             if context.rproc["aws_s3_bucket."+bucket_name] is True:
@@ -181,7 +181,7 @@ def get_all_s3_buckets(fb,my_region):
       
       for bucket_name in tqdm(accessible_buckets,
                              desc="Getting bucket properties",
-                             unit="bucket"):
+                             unit="bucket", leave=False):
          ### thread thread ?
          with ThreadPoolExecutor(max_workers=context.cores) as executor3:
                   futures = [

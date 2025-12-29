@@ -84,7 +84,7 @@ def run_terraform_plan_with_progress(command, description="Terraform plan", reco
         with tqdm(total=100, 
                  desc=description,
                  unit="%",
-                 leave=True,
+                 leave=False,
                  bar_format='{desc}: {percentage:3.0f}%|{bar}| [{elapsed}<{remaining}]') as pbar:
             
             start = time.time()
@@ -282,7 +282,7 @@ def run_terraform_apply_with_progress(tfplan_file, plan_json='plan2.json'):
         with tqdm(total=100,
                  desc="Importing resources",
                  unit="%",
-                 leave=True,
+                 leave=False,
                  bar_format='{desc}: {percentage:3.0f}%|{bar}| [{elapsed}<{remaining}]') as pbar:
             
             start = time.time()
@@ -1055,7 +1055,6 @@ def tfplan2():
 
    com = "mv aws_*.out imported"
    rout = rc(com)
-
 
    com = "terraform fmt"
    rout = rc(com)

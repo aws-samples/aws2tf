@@ -38,6 +38,7 @@ terraform_plan_rate = 25.0  # Initial estimate: resources per second
 terraform_plan_samples = 0  # Number of samples collected
 terraform_apply_rate = 50.0  # Initial estimate: resources per second for apply
 terraform_apply_samples = 0  # Number of apply samples collected
+last_plan_time = 0.0  # Time taken for last terraform plan (for post-import estimate)
 policies=[]
 policyarns=[]
 roles=[]

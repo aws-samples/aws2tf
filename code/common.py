@@ -38,7 +38,7 @@ def log_warning(message, *args, **kwargs):
         log.warning(message, *args, **kwargs)
 
 
-def run_terraform_plan_with_progress(command, description="Terraform plan"):
+def run_terraform_plan_with_progress(command, description="Terraform plan", record_time=False):
     """
     Run terraform plan command and show estimated progress with adaptive learning.
     
@@ -46,10 +46,12 @@ def run_terraform_plan_with_progress(command, description="Terraform plan"):
     - Caps at 75% until completion
     - Learns from previous plan executions to improve estimates
     - Adapts to actual system performance
+    - Optionally records execution time for post-import estimates
     
     Args:
         command: Terraform plan command to execute
         description: Description for progress bar
+        record_time: If True, records execution time in context.last_plan_time
         
     Returns:
         subprocess.CompletedProcess object
@@ -123,8 +125,14 @@ def run_terraform_plan_with_progress(command, description="Terraform plan"):
             
             context.terraform_plan_samples += 1
             
+            # Record time if requested (for post-import estimate)
+            if record_time:
+                context.last_plan_time = actual_time
+            
             if context.debug:
                 log.debug(f"Terraform plan rate updated: {context.terraform_plan_rate:.2f} resources/sec (sample #{context.terraform_plan_samples})")
+                if record_time:
+                    log.debug(f"Recorded plan time: {actual_time:.2f} seconds")
         
         # Collect output
         stdout, stderr = process.communicate()
@@ -1144,7 +1152,7 @@ def tfplan3():
       if not context.fast: log.info(com)
       
       # Use progress bar for terraform plan
-      rout = run_terraform_plan_with_progress(com, "Terraform plan (validation)")
+      rout = run_terraform_plan_with_progress(com, "Terraform plan (validation)", record_time=True)
       
       zerod = False
       zeroc = False

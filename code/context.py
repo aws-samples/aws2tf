@@ -24,6 +24,7 @@ debug=False
 debug5=False
 validate=False
 warnings=False
+show_status=False  # Show STATUS messages (controlled by --status flag)
 dnet=False
 dkms=False
 dkey=False
@@ -31,6 +32,12 @@ dsgs=False
 acc="xxxxxxxxxxxx"
 region="xx-xxxx-x"
 regionl=0
+
+# Adaptive progress tracking
+terraform_plan_rate = 25.0  # Initial estimate: resources per second
+terraform_plan_samples = 0  # Number of samples collected
+terraform_apply_rate = 50.0  # Initial estimate: resources per second for apply
+terraform_apply_samples = 0  # Number of apply samples collected
 policies=[]
 policyarns=[]
 roles=[]

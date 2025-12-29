@@ -402,7 +402,7 @@ def get_aws_datazone_environment_profile(type, id, clfn, descfn, topkey, key, fi
                 for page in paginator.paginate(domainIdentifier=id):
                     response = response + page[topkey]
             except Exception as e:
-                log.info(str(e))
+                log.debug(str(e))
                 log_warning("WARNING: no environment profiles found for domain id "+id)
                 context.rproc[type+"."+id]=True
                 return True

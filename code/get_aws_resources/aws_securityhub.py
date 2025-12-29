@@ -15,7 +15,7 @@ def get_aws_securityhub_account(type, id, clfn, descfn, topkey, key, filterid):
         try:
             client.list_members()
         except:
-            log.info("No access to "+type+" returning")
+            log.debug("No access to "+type+" returning")
             return True
 
         if id is None:
@@ -41,7 +41,7 @@ def get_aws_securityhub_organization_configuration(type, id, clfn, descfn, topke
         try:    
             response = client.describe_organization_configuration()
         except Exception as e:
-            log.info("NO access returning")
+            log.debug("NO access returning")
             return True
 
         if response == []: 

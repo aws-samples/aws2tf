@@ -6,10 +6,11 @@ import os
 import re
 import ast
 import shlex
+import json
+import time
 from io import StringIO
 from contextlib import suppress
 import shutil
-import json
 import context
 import glob
 import botocore
@@ -20,6 +21,7 @@ import resources
 from timed_interrupt import timed_int, initialize_timer, stop_timer
 import threading
 import logging
+from tqdm import tqdm
 
 from pathlib import Path
 
@@ -34,6 +36,340 @@ def log_warning(message, *args, **kwargs):
     """
     if context.warnings or context.debug:
         log.warning(message, *args, **kwargs)
+
+
+def run_terraform_plan_with_progress(command, description="Terraform plan"):
+    """
+    Run terraform plan command and show estimated progress with adaptive learning.
+    
+    Uses self-adjusting progress estimation that:
+    - Caps at 75% until completion
+    - Learns from previous plan executions to improve estimates
+    - Adapts to actual system performance
+    
+    Args:
+        command: Terraform plan command to execute
+        description: Description for progress bar
+        
+    Returns:
+        subprocess.CompletedProcess object
+    """
+    # Count import files to estimate total
+    import_files = glob.glob("import__*.tf")
+    total_resources = len(import_files)
+    
+    if total_resources == 0 or context.debug:
+        # No progress bar in debug mode or if no resources
+        return rc(command)
+    
+    try:
+        # Run terraform with output capture
+        process = subprocess.Popen(
+            command,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            bufsize=1
+        )
+        
+        # Use adaptive rate from previous runs, or default estimate
+        # Typical rate: 20-30 resources/second for plan
+        estimated_rate = context.terraform_plan_rate
+        estimated_time = total_resources / estimated_rate
+        
+        # Show estimated progress with 75% cap
+        with tqdm(total=100, 
+                 desc=description,
+                 unit="%",
+                 leave=True,
+                 bar_format='{desc}: {percentage:3.0f}%|{bar}| [{elapsed}<{remaining}]') as pbar:
+            
+            start = time.time()
+            
+            while process.poll() is None:
+                elapsed = time.time() - start
+                
+                # Calculate progress with 75% cap
+                if elapsed < estimated_time:
+                    # Normal progress up to estimated time, cap at 75%
+                    progress = int((elapsed / estimated_time) * 75)
+                else:
+                    # If taking longer, hover around 75-78%
+                    overtime = elapsed - estimated_time
+                    # Asymptotically approach 78%, never quite reaching it
+                    additional = 3 * (1 - (1 / (1 + overtime / 20)))
+                    progress = 75 + int(additional)
+                
+                pbar.n = progress
+                pbar.refresh()
+                time.sleep(0.5)
+            
+            # Process completed - jump to 100%
+            pbar.n = 100
+            pbar.refresh()
+            
+            # Record actual time for adaptive learning
+            actual_time = time.time() - start
+            actual_rate = total_resources / actual_time if actual_time > 0 else estimated_rate
+            
+            # Update adaptive rate (exponential moving average)
+            if context.terraform_plan_samples == 0:
+                # First sample - use it directly
+                context.terraform_plan_rate = actual_rate
+            else:
+                # Weighted average: 70% old rate, 30% new rate
+                context.terraform_plan_rate = (context.terraform_plan_rate * 0.7) + (actual_rate * 0.3)
+            
+            context.terraform_plan_samples += 1
+            
+            if context.debug:
+                log.debug(f"Terraform plan rate updated: {context.terraform_plan_rate:.2f} resources/sec (sample #{context.terraform_plan_samples})")
+        
+        # Collect output
+        stdout, stderr = process.communicate()
+        
+        # Create result object
+        class Result:
+            def __init__(self, returncode, stdout, stderr):
+                self.returncode = returncode
+                self.stdout = stdout.encode()
+                self.stderr = stderr.encode()
+        
+        return Result(
+            process.returncode,
+            stdout,
+            stderr
+        )
+    
+    except Exception as e:
+        # Fall back to regular execution if progress tracking fails
+        if context.debug:
+            log.debug(f"Progress tracking failed, using regular execution: {e}")
+        return rc(command)
+
+
+def run_terraform_command_with_spinner(command, description="Running terraform"):
+    """
+    Run terraform command with a simple spinner (for commands without progress).
+    
+    Args:
+        command: Command to execute
+        description: Description for spinner
+        
+    Returns:
+        subprocess.CompletedProcess object
+    """
+    if context.debug:
+        # No spinner in debug mode
+        return rc(command)
+    
+    try:
+        process = subprocess.Popen(
+            command,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+        
+        # Show spinner while running
+        with tqdm(desc=description, 
+                 bar_format='{desc}: {elapsed}',
+                 leave=False) as pbar:
+            while process.poll() is None:
+                time.sleep(0.5)
+                pbar.update(0)
+        
+        stdout, stderr = process.communicate()
+        
+        class Result:
+            def __init__(self, returncode, stdout, stderr):
+                self.returncode = returncode
+                self.stdout = stdout
+                self.stderr = stderr
+        
+        return Result(process.returncode, stdout, stderr)
+    
+    except Exception as e:
+        if context.debug:
+            log.debug(f"Spinner failed, using regular execution: {e}")
+        return rc(command)
+
+
+def get_import_count_from_plan(plan_file='plan2.json'):
+    """
+    Get number of resources to import from terraform plan JSON.
+    
+    Args:
+        plan_file: Path to plan JSON file
+        
+    Returns:
+        int: Number of resources to import
+    """
+    try:
+        with open(plan_file) as f:
+            for line in f:
+                try:
+                    data = json.loads(line)
+                    if data.get('type') == 'change_summary':
+                        return data['changes'].get('import', 0)
+                except (json.JSONDecodeError, KeyError):
+                    continue
+    except FileNotFoundError:
+        pass
+    
+    return 0
+
+
+def run_terraform_apply_with_progress(tfplan_file, plan_json='plan2.json'):
+    """
+    Run terraform apply command and show estimated progress with adaptive learning.
+    
+    Uses self-adjusting progress estimation that:
+    - Caps at 75% until completion
+    - Learns from actual apply performance
+    - Adapts to system speed and network conditions
+    
+    Args:
+        tfplan_file: Path to terraform plan file
+        plan_json: Path to plan JSON file for getting total count
+        
+    Returns:
+        subprocess.CompletedProcess object
+    """
+    # Get total resources to import
+    total_resources = get_import_count_from_plan(plan_json)
+    
+    if total_resources == 0 or context.debug:
+        # No progress bar in debug mode or if no resources
+        command = f"terraform apply -no-color {tfplan_file}"
+        return rc(command)
+    
+    try:
+        # Run terraform apply with JSON output
+        command = f"terraform apply -no-color -json {tfplan_file}"
+        
+        process = subprocess.Popen(
+            command,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            bufsize=1
+        )
+        
+        # Use adaptive rate from previous runs, or default estimate
+        # Apply is typically faster than plan (50-60 resources/second)
+        estimated_rate = context.terraform_apply_rate
+        estimated_time = total_resources / estimated_rate
+        
+        # Collect output for return
+        stdout_lines = []
+        stderr_lines = []
+        
+        # Track actual imports from JSON (for final rate calculation)
+        imported_count = 0
+        
+        # Show estimated progress with 75% cap
+        with tqdm(total=100,
+                 desc="Importing resources",
+                 unit="%",
+                 leave=True,
+                 bar_format='{desc}: {percentage:3.0f}%|{bar}| [{elapsed}<{remaining}]') as pbar:
+            
+            start = time.time()
+            
+            # Background thread to update progress
+            def update_progress():
+                while process.poll() is None:
+                    elapsed = time.time() - start
+                    
+                    # Calculate progress with 75% cap
+                    if elapsed < estimated_time:
+                        # Normal progress up to estimated time, cap at 75%
+                        progress = int((elapsed / estimated_time) * 75)
+                    else:
+                        # If taking longer, hover around 75-78%
+                        overtime = elapsed - estimated_time
+                        # Asymptotically approach 78%
+                        additional = 3 * (1 - (1 / (1 + overtime / 20)))
+                        progress = 75 + int(additional)
+                    
+                    pbar.n = progress
+                    pbar.refresh()
+                    time.sleep(0.5)
+            
+            # Start progress update thread
+            progress_thread = threading.Thread(target=update_progress, daemon=True)
+            progress_thread.start()
+            
+            # Read stdout line by line (for JSON parsing and output collection)
+            for line in process.stdout:
+                stdout_lines.append(line)
+                
+                # Try to parse JSON to count actual imports
+                try:
+                    if line.strip():
+                        data = json.loads(line)
+                        event_type = data.get('type', '')
+                        
+                        if event_type == 'apply_complete':
+                            imported_count += 1
+                
+                except (json.JSONDecodeError, KeyError, AttributeError):
+                    pass
+            
+            # Read any remaining stderr
+            stderr_output = process.stderr.read()
+            if stderr_output:
+                stderr_lines.append(stderr_output)
+            
+            # Wait for process and progress thread to complete
+            process.wait()
+            progress_thread.join(timeout=1)
+            
+            # Process completed - jump to 100%
+            pbar.n = 100
+            pbar.refresh()
+            
+            # Record actual time for adaptive learning
+            actual_time = time.time() - start
+            # Use imported_count if available, otherwise use total_resources
+            actual_count = imported_count if imported_count > 0 else total_resources
+            actual_rate = actual_count / actual_time if actual_time > 0 else estimated_rate
+            
+            # Update adaptive rate (exponential moving average)
+            if context.terraform_apply_samples == 0:
+                # First sample - use it directly
+                context.terraform_apply_rate = actual_rate
+            else:
+                # Weighted average: 70% old rate, 30% new rate
+                context.terraform_apply_rate = (context.terraform_apply_rate * 0.7) + (actual_rate * 0.3)
+            
+            context.terraform_apply_samples += 1
+            
+            if context.debug:
+                log.debug(f"Terraform apply rate updated: {context.terraform_apply_rate:.2f} resources/sec (sample #{context.terraform_apply_samples})")
+        
+        # Create result object
+        class Result:
+            def __init__(self, returncode, stdout, stderr):
+                self.returncode = returncode
+                self.stdout = stdout.encode()
+                self.stderr = stderr.encode()
+        
+        return Result(
+            process.returncode,
+            ''.join(stdout_lines),
+            ''.join(stderr_lines)
+        )
+    
+    except Exception as e:
+        # Fall back to regular execution if progress tracking fails
+        if context.debug:
+            log.debug(f"Apply progress tracking failed, using regular execution: {e}")
+        command = f"terraform apply -no-color {tfplan_file}"
+        return rc(command)
 
 # Security Fix #3: Path traversal prevention
 def safe_filename(filename: str, base_dir: str = None) -> str:
@@ -591,7 +927,9 @@ def tfplan1():
    com = "terraform plan -generate-config-out=" + \
        rf + " -out tfplan -json > plan1.json"
    if not context.fast: log.info(com)
-   rout = rc(com)
+   
+   # Use progress bar for terraform plan
+   rout = run_terraform_plan_with_progress(com, "Terraform plan (initial)")
       
    file = "plan1.json"
    f2 = open(file, "r")
@@ -804,7 +1142,10 @@ def tfplan3():
       com = "terraform plan -generate-config-out=" + \
           rf + " -out tfplan -json > plan2.json"
       if not context.fast: log.info(com)
-      rout = rc(com)
+      
+      # Use progress bar for terraform plan
+      rout = run_terraform_plan_with_progress(com, "Terraform plan (validation)")
+      
       zerod = False
       zeroc = False
       zeroa = False
@@ -1006,8 +1347,10 @@ def wrapup():
       
    log.info("Terraform import via apply of tfplan....")
    context.tracking_message="Stage 9 of 10, Terraform import via apply of tfplan...."
-   com = "terraform apply -no-color tfplan"
-   rout = rc(com)
+   
+   # Use progress bar for terraform apply
+   rout = run_terraform_apply_with_progress("tfplan")
+   
    zerod = False
    zeroc = False
    if "Error" in str(rout.stderr.decode().rstrip()):
@@ -1015,8 +1358,9 @@ def wrapup():
       errs=str(rout.stderr.decode().rstrip())
       ## Plan check
       log.info("\nPost Error Import Plan Check .....")
-      com = "terraform plan -no-color"
-      rout = rc(com)
+      com = "terraform plan -no-color -out tfplan"
+      rout = run_terraform_command_with_spinner(com, "Post-error validation")
+      
       if "No changes. Your infrastructure matches the configuration" not in str(rout.stdout.decode().rstrip()):
          log.error(errs)
          log.error("ERROR: unexpected final plan stuff - exiting")
@@ -1036,8 +1380,9 @@ def wrapup():
          return
    log.info("\nPost Import Plan Check .....")
    context.tracking_message="Stage 10 of 10, Post Import Plan Check ....."
-   com = "terraform plan -no-color"
-   rout = rc(com)
+   com = "terraform plan -no-color -out tfplan"
+   rout = run_terraform_command_with_spinner(com, "Post-import validation")
+   
    if "No changes. Your infrastructure matches the configuration" not in str(rout.stdout.decode().rstrip()):
       log.error("ERROR: unexpected final plan failure")
       out1=str(rout.stdout.decode().rstrip())
@@ -1841,7 +2186,7 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    exn=str(exc_type.__name__)
    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
    if exn == "EndpointConnectionError":
-      log.warning("No endpoint in this region for "+descfn+" - returning")
+      log.debug("No endpoint in this region for "+descfn+" - returning")
       return
    elif exn=="ClientError":
       if "does not exist" in str(e):
@@ -1850,7 +2195,7 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
       log.warning("Exception message :"+str(e))
       return
    elif exn=="ForbiddenException":
-      log.warning("Call Forbidden exception for "+fname+" - returning")
+      log.debug("Call Forbidden exception for "+fname+" - returning")
       return
    elif exn == "ParamValidationError" or exn=="ValidationException" or exn=="InvalidRequestException" or exn =="InvalidParameterValueException" or exn=="InvalidParameterException":
       log.warning(str(exc_obj)+" for "+frame+" id="+str(id)+" - returning")
@@ -1958,7 +2303,7 @@ def handle_error2(e,frame,id):
    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
    exn=str(exc_type.__name__)
    if exn == "EndpointConnectionError":
-      log.warning("No endpoint in this region - returning")
+      log.debug("No endpoint in this region - returning")
       return
    log.error(f"{e=} [e2] %s %s", fname, exc_tb.tb_lineno)
    with open('boto3-error.err', 'a') as f:

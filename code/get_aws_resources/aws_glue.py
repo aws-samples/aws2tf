@@ -408,7 +408,7 @@ def get_aws_glue_partition(type, id, clfn, descfn, topkey, key, filterid):
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.info("ID can not be None")
+            log.debug("ID can not be None")
         
         else:  
             id=id.strip()  
@@ -432,8 +432,8 @@ def get_aws_glue_partition(type, id, clfn, descfn, topkey, key, filterid):
                 context.rproc[tkey]=True
 
             if response == []: 
-                log.info("*-** Empty response for "+type+ " id="+str(id))
-                log.info("tkey="+tkey+" returning")
+                log.debug("*-** Empty response for "+type+ " id="+str(id))
+                log.debug("tkey="+tkey+" returning")
                 context.rproc[tkey]=True
                 return True
             
@@ -493,7 +493,7 @@ def get_aws_glue_workflow(type, id, clfn, descfn, topkey, key, filterid):
                 response = response + page[topkey]
             if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
-                log.info(j)
+                log.debug(j)
                 common.write_import(type, j, None)
 
         else:

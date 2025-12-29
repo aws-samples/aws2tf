@@ -68,7 +68,7 @@ def get_aws_sqs_queue_policy(type, id, clfn, descfn, topkey, key, filterid):
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.warning("Must pass queue url as parameter")
+            log.debug("Must pass queue url as parameter")
             return True
         else:   
             pkey="aws_sqs_queue_policy."+id
@@ -101,7 +101,7 @@ def get_aws_sqs_queue_redrive_allow_policy(type, id, clfn, descfn, topkey, key, 
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.warning("Must pass queue url as parameter")
+            log.debug("Must pass queue url as parameter")
             return True
         else:      
             response = client.get_queue_attributes(QueueUrl=id,AttributeNames=['RedriveAllowPolicy'])
@@ -134,7 +134,7 @@ def get_aws_sqs_queue_redrive_policy(type, id, clfn, descfn, topkey, key, filter
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.warning("Must pass queue url as parameter")
+            log.debug("Must pass queue url as parameter")
             return True
         else: 
             pkey="aws_sqs_queue_redrive_policy."+id     

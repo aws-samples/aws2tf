@@ -95,7 +95,7 @@ def get_aws_bedrockagent_agent_knowledge_base_association(type, id, clfn, descfn
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.info("ERROR: id is None with type="+type)
+            log.debug("ERROR: id is None with type="+type)
             return True
 
         else:
@@ -131,7 +131,7 @@ def get_aws_bedrockagent_data_source(type, id, clfn, descfn, topkey, key, filter
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.info("ERROR: id is None with type="+type)
+            log.debug("ERROR: id is None with type="+type)
             return True
 
         else:
@@ -159,7 +159,7 @@ def get_aws_bedrockagent_agent_alias(type, id, clfn, descfn, topkey, key, filter
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.info("ERROR: id is None with type="+type)
+            log.debug("ERROR: id is None with type="+type)
             return True
 
         else:
@@ -188,7 +188,7 @@ def get_aws_bedrockagent_agent_action_group(type, id, clfn, descfn, topkey, key,
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.info("ERROR: id is None with type="+type)
+            log.debug("ERROR: id is None with type="+type)
             return True
 
         else:

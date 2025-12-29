@@ -134,68 +134,88 @@ def build_lists():
             return []
 
 
-    # Use ThreadPoolExecutor to parallelize API calls
+    # Use ThreadPoolExecutor to parallelize API calls with progress bar
+    fetch_tasks = [
+        ('VPCs', fetch_vpc_data),
+        ('Lambda functions', fetch_lambda_data),
+        ('S3 buckets', fetch_s3_data),
+        ('Security groups', fetch_sg_data),
+        ('Subnets', fetch_subnet_data),
+        ('Transit gateways', fetch_tgw_data),
+        ('IAM roles', fetch_roles_data),
+        ('IAM policies', fetch_policies_data),
+        ('Instance profiles', fetch_instprof_data)
+    ]
+    
     with concurrent.futures.ThreadPoolExecutor(max_workers=context.cores) as executor:
-        futures = [
-            executor.submit(fetch_vpc_data),
-            executor.submit(fetch_lambda_data),
-            executor.submit(fetch_s3_data),
-            executor.submit(fetch_sg_data),
-            executor.submit(fetch_subnet_data),
-            executor.submit(fetch_tgw_data),
-            executor.submit(fetch_roles_data),
-            executor.submit(fetch_policies_data),
-            executor.submit(fetch_instprof_data)
-        ]
+        # Submit all tasks
+        future_to_name = {
+            executor.submit(func): name 
+            for name, func in fetch_tasks
+        }
         
-        # Process results as they complete
-        for future in concurrent.futures.as_completed(futures):
-            result = future.result()
-            if isinstance(result, list):
-                if result and isinstance(result[0], tuple):
-                    # Handle resource ID lists
-                    resource_type = result[0][0]
-                    if resource_type == 'vpc':
-                        for _, vpc_id in result:
-                            context.vpclist[vpc_id] = True
+        # Process results with progress bar
+        with tqdm(total=len(fetch_tasks),
+                 desc="Fetching resource lists",
+                 unit="type") as pbar:
+            
+            for future in concurrent.futures.as_completed(future_to_name):
+                resource_name = future_to_name[future]
+                pbar.set_postfix_str(resource_name[:30])
+                
+                result = future.result()
+                
+                if isinstance(result, list):
+                    if result and isinstance(result[0], tuple):
+                        # Handle resource ID lists
+                        resource_type = result[0][0]
+                        if resource_type == 'vpc':
+                            for _, vpc_id in result:
+                                context.vpclist[vpc_id] = True
 
-                    if resource_type == 'lambda':
-                        for _, lambda_id in result:
-                            context.lambdalist[lambda_id] = True
+                        if resource_type == 'lambda':
+                            for _, lambda_id in result:
+                                context.lambdalist[lambda_id] = True
 
-                    elif resource_type == 's3':
-                        client = boto3.client('s3')
-                        for _, bucket in result:
-                            try:
-                                ####### problematic call
-                                objs = client.list_objects_v2(Bucket=bucket,MaxKeys=1)      
-                            except Exception as e:
-                                log.error(f"Error details: {e}")
-                                continue
-
-                            context.s3list[bucket] = True
-                    elif resource_type == 'sg':
-                        for _, sg_id in result:
-                            context.sglist[sg_id] = True
-                    elif resource_type == 'subnet':
-                        for _, subnet_id in result:
-                            context.subnetlist[subnet_id] = True
-                    elif resource_type == 'tgw':
-                        for _, tgw_id in result:
-                            context.tgwlist[tgw_id] = True
-                    elif resource_type == 'iam':
-                        for _, role_name in result:
-                            context.rolelist[role_name] = True
-                    elif resource_type == 'pol':
-                        for _, policy_arn in result:
-                            context.policylist[policy_arn] = True
-                    elif resource_type == 'inp':
-                        for _, inst_prof in result:
-                            context.inplist[inst_prof] = True
-                else:
-                    # Handle roles data
-                    with open('imported/roles.json', 'w') as f:
-                        json.dump(result, f, indent=2, default=str)
+                        elif resource_type == 's3':
+                            client = boto3.client('s3')
+                            for _, bucket in result:
+                                try:
+                                    objs = client.list_objects_v2(Bucket=bucket,MaxKeys=1)      
+                                except Exception as e:
+                                    log.error(f"Error details: {e}")
+                                    continue
+                                context.s3list[bucket] = True
+                        
+                        elif resource_type == 'sg':
+                            for _, sg_id in result:
+                                context.sglist[sg_id] = True
+                        
+                        elif resource_type == 'subnet':
+                            for _, subnet_id in result:
+                                context.subnetlist[subnet_id] = True
+                        
+                        elif resource_type == 'tgw':
+                            for _, tgw_id in result:
+                                context.tgwlist[tgw_id] = True
+                        
+                        elif resource_type == 'iam':
+                            for _, role_name in result:
+                                context.rolelist[role_name] = True
+                        
+                        elif resource_type == 'pol':
+                            for _, policy_arn in result:
+                                context.policylist[policy_arn] = True
+                        
+                        elif resource_type == 'inp':
+                            for _, inst_prof in result:
+                                context.inplist[inst_prof] = True
+                    else:
+                        # Handle roles data
+                        with open('imported/roles.json', 'w') as f:
+                            json.dump(result, f, indent=2, default=str)
+                
+                pbar.update(1)
     # slower - 3m 29s
     ####    role attachments stuff
 

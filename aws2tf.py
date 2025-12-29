@@ -355,6 +355,7 @@ def parse_and_validate_arguments():
     argParser.add_argument("-f", "--fast", help="fast multi-threaded mode", action='store_true')
     argParser.add_argument("-v", "--validate", help="validate and exit", action='store_true')
     argParser.add_argument("-w", "--warn", help="show warning messages", action='store_true')
+    argParser.add_argument("--status", help="show STATUS messages every 20 seconds", action='store_true')
     argParser.add_argument("-a", "--accept", help="expected plan changes accepted", action='store_true')
     argParser.add_argument("-e", "--exclude", help="resource types to exclude")
     argParser.add_argument("-ec2tag", "--ec2tag", help="ec2 key:value pair to import")
@@ -463,6 +464,8 @@ def setup_environment_and_context(args):
         context.fast = False
     if args.warn:
         context.warnings = True
+    if args.status:
+        context.show_status = True
     
     # Validate EC2 tag if provided
     if args.ec2tag:
@@ -747,11 +750,11 @@ def handle_merge_mode(args):
 def build_resource_lists_phase():
     """Build core resource lists (VPCs, subnets, S3, etc.)."""
     st1 = datetime.datetime.now()
-    log.info("build lists started at %s" % st1)
+    log.debug("build lists started at %s" % st1)
     build_lists()
     now = datetime.datetime.now()
-    log.info("build lists finished at %s" % now)
-    log.info("build lists took %s" % (now - st1))
+    log.debug("build lists finished at %s" % now)
+    log.debug("build lists took %s" % (now - st1))
 
 
 def process_resource_types(type, id):
@@ -869,7 +872,7 @@ def process_terraform_type(type, id):
 def process_multiple_resource_types(all_types, id):
     """Process multiple resource types with progress tracking."""
     if "aws_iam" in str(all_types) and id is None:
-        log.info("INFO: Building secondary lists %s", id)
+        log.debug("INFO: Building secondary lists %s", id)
         build_secondary_lists(id)
     
     context.esttime = len(all_types)/4
@@ -952,6 +955,7 @@ def process_known_dependencies():
     context.tracking_message = "Stage 4 of 10, Known Dependancies: terraform plan"
     common.tfplan1()
     context.tracking_message = "Stage 4 of 10, Known Dependancies: moving files"
+    log.info("Stage 4 of 10, Known Dependancies: moving files")
     common.tfplan2()
 
 
@@ -991,17 +995,35 @@ def process_detected_dependencies():
     detdepstr = ""
     
     while detdep:
-        # Process dependencies
+        # Count unprocessed dependencies for progress bar
+        unprocessed_deps = [ti for ti in list(context.rproc) if not context.rproc.get(ti, True)]
+        total_deps = len(unprocessed_deps)
+        
+        # Process dependencies with progress bar
         if context.fast:
             context.tracking_message = "Stage 5 of 10, Detected Dependancies: Multi Threaded "+str(context.cores)
-            with ThreadPoolExecutor(max_workers=context.cores) as executor2:
-                futures2 = [
-                    executor2.submit(dd_threaded(ti))
-                    for ti in list(context.rproc)
-                ]
+            
+            if total_deps > 0:
+                log.info(f"Processing {total_deps} detected dependencies...")
+                with ThreadPoolExecutor(max_workers=context.cores) as executor2:
+                    futures = [
+                        executor2.submit(dd_threaded(ti))
+                        for ti in unprocessed_deps
+                    ]
+                    # Show progress as dependencies are processed
+                    for future in tqdm(concurrent.futures.as_completed(futures),
+                                      total=len(futures),
+                                      desc="Processing dependencies",
+                                      unit="resource",
+                                      disable=context.debug):
+                        future.result()
         else:
-            for ti in list(context.rproc):
-                if not context.rproc[ti]:
+            if total_deps > 0:
+                log.info(f"Processing {total_deps} detected dependencies...")
+                for ti in tqdm(unprocessed_deps,
+                              desc="Processing dependencies",
+                              unit="resource",
+                              disable=context.debug):
                     i = ti.split(".")[0]
                     id = ti.split(".", 1)[1]
                     log.debug("DD calling getresource with type="+i+" id="+str(id))
@@ -1019,14 +1041,17 @@ def process_detected_dependencies():
         context.esttime = len(x)/4
         
         # Move files
+        log.info("Move files.....")
         for fil in x:
             tf = fil.split('__',1)[1]
             com = "mv "+tf +" imported/"+tf
             rout = common.rc(com)
         
         context.tracking_message = "Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" terraform plan"
+        log.info("Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" terraform plan")
         common.tfplan1()
         context.tracking_message = "Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" moving files"
+        log.info("Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" moving files")
         common.tfplan2()
         
         # Check for remaining dependencies
@@ -1178,6 +1203,7 @@ def main():
     argParser.add_argument("-f", "--fast", help="fast multi-threaded mode", action='store_true')
     argParser.add_argument("-v", "--validate", help="validate and exit", action='store_true')
     argParser.add_argument("-w", "--warn", help="show warning messages", action='store_true')
+    argParser.add_argument("--status", help="show STATUS messages every 20 seconds", action='store_true')
     argParser.add_argument("-a", "--accept", help="expected plan changes accepted", action='store_true')
     argParser.add_argument("-e", "--exclude", help="resource types to exclude")
     argParser.add_argument("-ec2tag", "--ec2tag", help="ec2 key:value pair to import")
@@ -1332,6 +1358,8 @@ def main():
         context.validate = True
     if args.warn:
         context.warnings = True
+    if args.status:
+        context.show_status = True
 
     if args.datanet:  context.dnet = True
     if args.datasgs:  context.dsgs = True
@@ -1628,7 +1656,7 @@ def main():
             #log.debug("len all_types="+str(len(all_types))) # testing only
             #log.debug("all_types="+str(all_types))
             if "aws_iam" in str(all_types) and id is None:
-                log.info("INFO: Building secondary lists %s", id)
+                log.debug("INFO: Building secondary lists %s", id)
                 build_secondary_lists(id)
 
             
@@ -1769,13 +1797,18 @@ def main():
         x=glob.glob("import__aws_*.tf")
         context.esttime=len(x)/4
 
-        #td=""
-        for fil in x:
-            tf=fil.split('__',1)[1]
-            #td=td+" "+tf
-
-            com = "mv "+tf +" imported/"+tf
-            rout = common.rc(com)
+        # Move files with progress bar (only if many files)
+        if len(x) > 20:
+            for fil in tqdm(x, desc=f"Moving files (loop {lc})", unit="file"):
+                tf=fil.split('__',1)[1]
+                com = "mv "+tf +" imported/"+tf
+                rout = common.rc(com)
+        else:
+            # Few files, no progress bar needed
+            for fil in x:
+                tf=fil.split('__',1)[1]
+                com = "mv "+tf +" imported/"+tf
+                rout = common.rc(com)
 
         context.tracking_message="Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" terraform plan"
         common.tfplan1()

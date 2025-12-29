@@ -19,7 +19,7 @@ def get_aws_ssoadmin_instances(type, id, clfn, descfn, topkey, key, filterid):
         com="terraform state show -no-color data.aws_ssoadmin_instances.sso | grep :instance"
         rout = common.rc(com) 
         ins=rout.stdout.decode().strip().strip('\"').strip(",").replace('"', '')
-        log.info("SSO Instance=%s", ins)
+        log.debug("SSO Instance=%s", ins)
         context.ssoinstance=ins
         common.add_known_dependancy("aws_ssoadmin_permission_set",ins)
 

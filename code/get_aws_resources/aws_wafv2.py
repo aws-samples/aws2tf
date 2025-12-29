@@ -36,7 +36,7 @@ def get_aws_wafv2_ip_set(type, id, clfn, descfn, topkey, key, filterid):
             if response[topkey] == []:
                 if context.debug: 
                     log.debug("Empty response for "+type+ " Scope="+str(sc)+" returning")
-                    log.info(str(response))
+                    log.debug(str(response))
                 return True
             
             for j in response[topkey]:
@@ -100,7 +100,7 @@ def get_aws_wafv2_web_acl(type, id, clfn, descfn, topkey, key, filterid):
             if response[topkey] == []:
                 if context.debug: 
                     log.debug("Empty response for "+type+ " Scope="+str(sc)+" returning")
-                    log.info(str(response))
+                    log.debug(str(response))
                 return True
             
             for j in response[topkey]:
@@ -170,7 +170,7 @@ def get_aws_wafv2_rule_group(type, id, clfn, descfn, topkey, key, filterid):
             if response[topkey] == []:
                 if context.debug: 
                     log.debug("Empty response for "+type+ " Scope="+str(sc)+" returning")
-                    log.info(str(response))
+                    log.debug(str(response))
                 return True
             
             for j in response[topkey]:
@@ -220,7 +220,7 @@ def get_aws_wafv2_web_acl_logging_configuration(type, id, clfn, descfn, topkey, 
                 response = client.get_logging_configuration(ResourceArn=id)
             except ClientError as error:
                 if error.response['Error']['Code'] == 'WAFNonexistentItemException':
-                    log.info("The WAF resource you're trying to access doesn't exist.")
+                    log.debug("The WAF resource you're trying to access doesn't exist.")
                     response=[]
             if response == []: 
                     if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
@@ -248,7 +248,7 @@ def get_aws_wafv2_web_acl_association(type, id, clfn, descfn, topkey, key, filte
         config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
         client = boto3.client(clfn,config=config)
         if id is None:
-            log.warning("Must pass webacl arn as parameter")
+            log.debug("Must pass webacl arn as parameter")
             return True
 
         else: 

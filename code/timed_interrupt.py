@@ -18,7 +18,10 @@ class Counter():
         
 
     def _run(self):
-        log.info("STATUS: " + str(self.i*self.increment) + "s elapsed "+ context.tracking_message)
+        # Only show STATUS messages if enabled
+        if context.show_status or context.debug:
+            log.info("STATUS: " + str(self.i*self.increment) + "s elapsed "+ context.tracking_message)
+        
         self.next_t+=self.increment
         self.i+=1
         if not self.done:

@@ -177,7 +177,7 @@ def get_all_s3_buckets(fb,my_region):
 
 
       context.tracking_message="Stage 3 of 10 getting s3 bucket properties resources ..."
-      log.info(f"Getting S3 bucket properties for {len(accessible_buckets)} buckets...")
+      log.debug(f"Getting S3 bucket properties for {len(accessible_buckets)} buckets...")
       
       for bucket_name in tqdm(accessible_buckets,
                              desc="Getting bucket properties",

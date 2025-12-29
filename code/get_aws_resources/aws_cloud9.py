@@ -55,7 +55,7 @@ def get_aws_cloud9_environment_ec2(type, id, clfn, descfn, topkey, key, filterid
                 common.write_import(type,j,None) 
                 response2 = client.describe_environments(environmentIds=[j])
                 for k in response2['environments']:    
-                    log.info(str(k))
+                    log.debug(str(k))
 
 
         else:      

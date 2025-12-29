@@ -206,7 +206,7 @@ def get_aws_db_instance(type, id, clfn, descfn, topkey, key, filterid):
 
     except client.exceptions.InvalidParameterValue as error:
             log_warning("WARNING: InvalidParameterValue for "+type+ " "+str(id)+" returning")
-            log.info(str(error.response['Error']['Code']))
+            log.debug(str(error.response['Error']['Code']))
             pkey=type+"."+str(id)
             context.rproc[pkey]=True
             return True

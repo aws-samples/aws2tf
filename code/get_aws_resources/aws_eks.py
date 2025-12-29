@@ -67,7 +67,7 @@ def get_aws_eks_fargate_profile(type,id,clfn,descfn,topkey,key,filterid):
    
    try:
       if id is None:
-         log.info("No id passed in get_aws_eks_fargate_profile returning")  
+         log.debug("No id passed in get_aws_eks_fargate_profile returning")  
          return True
       
       
@@ -94,7 +94,7 @@ def get_aws_eks_node_group(type,id,clfn,descfn,topkey,key,filterid):
 
    try:
       if id is None:
-            log.info("No id passed in get_aws_eks_node_group returning")  
+            log.debug("No id passed in get_aws_eks_node_group returning")  
             return True
       
       
@@ -121,7 +121,7 @@ def get_aws_eks_addon(type,id,clfn,descfn,topkey,key,filterid):
    try:
        
       if id is None:
-            log.info("No id passed in get_aws_eks_addon returning")  
+            log.debug("No id passed in get_aws_eks_addon returning")  
             return True
       
       
@@ -149,7 +149,7 @@ def get_aws_eks_identity_provider_config(type,id,clfn,descfn,topkey,key,filterid
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
    try:   
       if id is None:
-            log.info("No id passed in aws_eks_identity_provider_config returning")  
+            log.debug("No id passed in aws_eks_identity_provider_config returning")  
             return True
       
       response=common.call_boto3(type,clfn,descfn,topkey,key,id)
@@ -176,7 +176,7 @@ def get_aws_eks_pod_identity_association(type,id,clfn,descfn,topkey,key,filterid
 
    try:
       if id is None:
-         log.info("No id passed in get_aws_eks_pod_identity_association returning")  
+         log.debug("No id passed in get_aws_eks_pod_identity_association returning")  
          return True
        
       response = []
@@ -209,7 +209,7 @@ def get_aws_eks_access_entry(type,id,clfn,descfn,topkey,key,filterid):
       response = []
         
       if id is None:
-         log.info("No id passed in get_aws_eks_access_entry returning")  
+         log.debug("No id passed in get_aws_eks_access_entry returning")  
          return True      
  
                  
@@ -249,15 +249,15 @@ def get_aws_eks_access_policy_association(type,id,clfn,descfn,topkey,key,filteri
       response = []
         
       if id is None:
-         log.info("No id passed in get_aws_eks_access_policy_association returning")  
+         log.debug("No id passed in get_aws_eks_access_policy_association returning")  
          return True      
  
       if "," not in id:
-         log.warning("Must pass cluster-name,principa_arn to get_aws_eks_access_policy_association returning")  
+         log.debug("Must pass cluster-name,principa_arn to get_aws_eks_access_policy_association returning")  
          return True
       
       if "arn:" not in id:
-         log.warning("Must pass cluster-name,principa_arn to get_aws_eks_access_policy_association returning")  
+         log.debug("Must pass cluster-name,principa_arn to get_aws_eks_access_policy_association returning")  
          return True
       
       cln=id.split(',')[0]

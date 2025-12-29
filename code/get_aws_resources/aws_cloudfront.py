@@ -18,7 +18,7 @@ def get_aws_cloudfront_distribution(type, id, clfn, descfn, topkey, key, filteri
                 try:
                     response = response + page['DistributionList']['Items']
                 except KeyError:
-                    log.info("No DistributionList in response for "+type+ " id="+str(id)+" returning") 
+                    log.debug("No DistributionList in response for "+type+ " id="+str(id)+" returning") 
                     return True
             if response == []: 
                 log.debug("Empty response for "+type+ " id="+str(id)+" returning")

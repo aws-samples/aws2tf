@@ -27,16 +27,16 @@ def get_aws_secretsmanager_secret(type, id, clfn, descfn, topkey, key, filterid)
                 sarn=j[key]
                 sn=sarn.split(":")[-1]
                 if sn.startswith("rds!"):
-                    log.info("INFO: skipping rds managed secret "+sn+" ...")
+                    log.debug("INFO: skipping rds managed secret "+sn+" ...")
                     return True
                 else:
                     common.write_import(type,j[key],None) 
                     #common.add_dependancy("aws_secretsmanager_secret_version",j[key])
                     try:
-                        log.info(j['RotationEnabled'])
+                        log.debug(j['RotationEnabled'])
                         common.add_dependancy("aws_secretsmanager_secret_rotation",j[key])
                     except KeyError:
-                        log.warning("INFO: No rotation config")
+                        log.debug("INFO: No rotation config")
 
 
         else:
@@ -50,7 +50,7 @@ def get_aws_secretsmanager_secret(type, id, clfn, descfn, topkey, key, filterid)
             try:
                 common.add_dependancy("aws_secretsmanager_secret_rotation",j[key])
             except KeyError:
-                log.warning("INFO: No rotation config")
+                log.debug("INFO: No rotation config")
             
 
 
@@ -70,14 +70,14 @@ def get_aws_secretsmanager_secret_rotation(type, id, clfn, descfn, topkey, key, 
         response = []
         client = boto3.client(clfn)
         if id is None:
-            log.info("ERROR: get_aws_secretsmanager_secret_rotation must be called with SecretID as parameter")
+            log.debug("ERROR: get_aws_secretsmanager_secret_rotation must be called with SecretID as parameter")
         else:
             pkey=type+"."+id
             response = client.describe_secret(SecretId=id)
             try:
                 roten=response['RotationEnabled']
             except KeyError:
-                log.warning("INFO: No rotation config")
+                log.debug("INFO: No rotation config")
                 
                 context.rproc[pkey]=True
                 return True
@@ -100,7 +100,7 @@ def get_aws_secretsmanager_secret_version(type, id, clfn, descfn, topkey, key, f
         client = boto3.client(clfn)
         if id is None:
             # calls list_secret_version
-            log.info("ERROR: get_aws_secretsmanager_secret_verion must be called with SecretID as parameter")
+            log.debug("ERROR: get_aws_secretsmanager_secret_verion must be called with SecretID as parameter")
         else:
             response = client.list_secret_version_ids(SecretId=id,IncludeDeprecated=False)
             if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
@@ -112,7 +112,7 @@ def get_aws_secretsmanager_secret_version(type, id, clfn, descfn, topkey, key, f
                     exc_type, exc_obj, exc_tb = sys.exc_info()
                     exn=str(exc_type.__name__)
                     if "(AccessDeniedException) when calling the GetSecretValue" in str(e):
-                        log.info("INFO: get_secret_value failed - not authorized skipping %s %s", type, id.split(":")[-1])
+                        log.debug("INFO: get_secret_value failed - not authorized skipping %s %s", type, id.split(":")[-1])
                         pkey=type+"."+id
                         context.rproc[pkey]=True
                         return True
@@ -135,7 +135,7 @@ def get_aws_secretsmanager_secret_policy(type, id, clfn, descfn, topkey, key, fi
         
     try:
         response = []
-        log.info("INFO: aws_secretsmanager_policy - policy embedded in aws_secretmager_secret by aws2tf")
+        log.debug("INFO: aws_secretsmanager_policy - policy embedded in aws_secretmager_secret by aws2tf")
 
 
     except Exception as e:

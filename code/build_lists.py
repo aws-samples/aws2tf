@@ -183,7 +183,7 @@ def build_lists():
                                 try:
                                     objs = client.list_objects_v2(Bucket=bucket,MaxKeys=1)      
                                 except Exception as e:
-                                    log.error(f"Error details: {e}")
+                                    log.debug(f"Error details: {e}")
                                     continue
                                 context.s3list[bucket] = True
                         

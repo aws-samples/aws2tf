@@ -36,3 +36,4 @@ __pycache__
 .python/bugs.md
 aws2tf.log
 possible-optimizations.md
+aws3tf.py

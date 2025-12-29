@@ -140,7 +140,7 @@ def get_all_s3_buckets(fb,my_region):
       
       
       # check can access
-      log.info(f"Checking access to {len(context.bucketlist)} S3 buckets...")
+      log.debug(f"Checking access to {len(context.bucketlist)} S3 buckets...")
       with ThreadPoolExecutor(max_workers=context.cores) as executor4:
          futures = [
             executor4.submit(check_access,key,my_region)
@@ -156,7 +156,7 @@ def get_all_s3_buckets(fb,my_region):
 
       # Process accessible buckets
       accessible_buckets = [k for k, v in context.bucketlist.items() if v is True]
-      log.info(f"Processing {len(accessible_buckets)} accessible S3 buckets...")
+      log.debug(f"Processing {len(accessible_buckets)} accessible S3 buckets...")
       
       for bucket_name in tqdm(accessible_buckets,
                              desc="Processing S3 buckets",

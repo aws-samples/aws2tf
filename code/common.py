@@ -168,6 +168,9 @@ def run_terraform_command_with_spinner(command, description="Running terraform")
     Returns:
         subprocess.CompletedProcess object
     """
+    return rc(command)
+
+    """
     if context.debug:
         # No spinner in debug mode
         return rc(command)
@@ -199,9 +202,11 @@ def run_terraform_command_with_spinner(command, description="Running terraform")
         return Result(process.returncode, stdout, stderr)
     
     except Exception as e:
-        if context.debug:
+         if context.debug:
             log.debug(f"Spinner failed, using regular execution: {e}")
-        return rc(command)
+         log.info(f"Spinner failed, using regular execution: {e}")
+         return rc(command)
+   """
 
 
 def get_import_count_from_plan(plan_file='plan2.json'):
@@ -1047,12 +1052,15 @@ def tfplan2():
    com = "cp imported/aws_*.tf ."
    rout = rc(com)
 
+   # Process .out files with fixtf (fix terraform files)
    x = glob.glob("aws_*__*.out")
-   for fil in x:
+   
+   if len(x) > 0:
+      for fil in tqdm(x, desc="Fixing terraform files", unit="file", leave=False):
          type = fil.split('__')[0]
          tf = fil.split('.')[0]
          fixtf.fixtf(type, tf)
-
+   
    com = "mv aws_*.out imported"
    rout = rc(com)
 
@@ -1262,7 +1270,7 @@ def tfplan3():
          stop_timer()
          exit()
 
-      log.info("Plan complete")
+      log.debug("Plan complete")
       ## if merging get .out files from imported ?
 
    ### validations checks
@@ -1387,20 +1395,39 @@ def wrapup():
          return
    log.info("\nPost Import Plan Check .....")
    context.tracking_message="Stage 10 of 10, Post Import Plan Check ....."
-   com = "terraform plan -no-color -out tfplan"
-   rout = run_terraform_command_with_spinner(com, "Post-import validation")
-   
-   if "No changes. Your infrastructure matches the configuration" not in str(rout.stdout.decode().rstrip()):
-      log.error("ERROR: unexpected final plan failure")
-      out1=str(rout.stdout.decode().rstrip())
-      log.error(out1)
-      #if "aws_bedrockagent_agent" in out1:
-      #   log.warning("WARNING: aws_bedrockagent_agent - continuing")"
-      log.error(str(rout.stderr.decode().rstrip()))
-      log.info("exit 035")
-      stop_timer()
-      exit()
-   else:
+   com = "terraform plan -no-color -out tfplan -json > final.json"
+   #com = "terraform plan -no-color -out tfplan"
+   #rout = run_terraform_command_with_spinner(com, "Post-import validation")
+   rout=rc(com)
+   # sync & flush files
+   com = "sync"
+   rout = rc(com)
+   zeroi=0
+   zeroa=0
+   zeroc=0
+   zerod=0
+   planList = []
+   planDict = {}
+   changeList = []
+   with open('final.json','r') as f:
+        for jsonObj in f:
+            planDict = json.loads(jsonObj)
+            planList.append(planDict)
+   with open('final.warn', 'w') as f:
+      for pe in planList:
+         if pe['type'] == "change_summary":  
+            zeroi=int(pe['changes']['import'])
+            zeroa=int(pe['changes']['add'])
+            zeroc=int(pe['changes']['change'])
+            zerod=int(pe['changes']['remove'])
+            json.dump(pe, f, indent=2, default=str)
+         elif pe['type'] == "diagnostic":
+            json.dump(pe, f, indent=2, default=str)
+
+
+   log.info("Plan: %s to import, %s to add, %s to change, %s to destroy", zeroi, zeroa, zeroc, zerod)
+   nchged=zeroi+zeroa+zeroc+zerod
+   if nchged == 0:
       log.info("PASSED: No changes in plan")
       context.tracking_message="Stage 10 of 10, Passed post import check - No changes in plan"
       com = "mv import__*.tf *.out *.json imported"
@@ -1410,6 +1437,17 @@ def wrapup():
       
       # Security Fix #7: Secure sensitive files after import
       secure_terraform_files('.')
+
+   else:
+      log.error("ERROR: unexpected final plan failure")
+      out1=str(rout.stdout.decode().rstrip())
+      log.error(out1)
+      #if "aws_bedrockagent_agent" in out1:
+      #   log.warning("WARNING: aws_bedrockagent_agent - continuing")"
+      log.error(str(rout.stderr.decode().rstrip()))
+      log.info("exit 035")
+      stop_timer()
+      exit()
 
 ######################################################################
 
@@ -2199,7 +2237,7 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
       if "does not exist" in str(e):
          log.warning(id+" does not exist " + fname + " " + str(exc_tb.tb_lineno) )
          return
-      log.warning("Exception message :"+str(e))
+      log.debug("Exception message :"+str(e))
       return
    elif exn=="ForbiddenException":
       log.debug("Call Forbidden exception for "+fname+" - returning")

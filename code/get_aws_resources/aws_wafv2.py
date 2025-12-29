@@ -30,7 +30,7 @@ def get_aws_wafv2_ip_set(type, id, clfn, descfn, topkey, key, filterid):
                     common.write_import(type,pkey,"w-"+pkey.replace("/","_")) 
             else:
                 log_warning("WARNING:Can only import CLOUDFRONT ip sets from us-east-1 region")
-            log.info("INFO: Getting Regional resources")
+            log.debug("INFO: Getting Regional resources")
             sc="REGIONAL"
             response = client.list_ip_sets(Scope=sc)
             if response[topkey] == []:

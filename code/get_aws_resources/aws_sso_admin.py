@@ -13,7 +13,7 @@ def get_aws_ssoadmin_instances(type, id, clfn, descfn, topkey, key, filterid):
 
         with open("data__aws_sso_admin_instances.tf", "w") as f:
             f.write("data \"aws_ssoadmin_instances\" \"sso\" {}\n")
-        log.info("Running terraform refresh")
+        log.debug("Running terraform refresh")
         com = "terraform refresh -no-color -target=data.aws_ssoadmin_instances.sso > /dev/null"
         rout = common.rc(com) 
         com="terraform state show -no-color data.aws_ssoadmin_instances.sso | grep :instance"

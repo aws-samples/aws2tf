@@ -1,11 +1,13 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
 
 def get_aws_kinesis_firehose_delivery_stream(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -13,7 +15,7 @@ def get_aws_kinesis_firehose_delivery_stream(type, id, clfn, descfn, topkey, key
         if id is None:
             response = client.list_delivery_streams()
             if response[topkey] == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 # have the name - not must get the arn
                 response = client.describe_delivery_stream(DeliveryStreamName=j)
@@ -25,7 +27,7 @@ def get_aws_kinesis_firehose_delivery_stream(type, id, clfn, descfn, topkey, key
         else:      
             response = client.describe_delivery_stream(DeliveryStreamName=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 context.rproc[pkey]=True
                 return True

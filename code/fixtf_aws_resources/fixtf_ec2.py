@@ -1,5 +1,7 @@
 import common
 import fixtf
+import logging
+log = logging.getLogger('aws2tf')
 import base64
 import boto3
 import context
@@ -95,11 +97,9 @@ def aws_default_security_group(t1,tt1,tt2,flag1,flag2):
 		if tt2 == "[]": skip = 1
 		if "[" in t1: context.lbc=context.lbc+1
 		if "]" in t1: context.lbc=context.lbc-1
-        #print("***t1="+t1+" lbc="+str(context.lbc))
 	
 		if context.lbc > 0: skip = 1
 		if context.lbc == 0:
-           #print("***t1="+t1+" lbc="+str(context.lbc))
 			if "]" in t1.strip(): skip=1
 
 	elif tt1 == "ingress" or context.lbc > 0 :
@@ -107,11 +107,9 @@ def aws_default_security_group(t1,tt1,tt2,flag1,flag2):
 		if tt2 == "[]": skip = 1
 		if "[" in t1: context.lbc=context.lbc+1
 		if "]" in t1: context.lbc=context.lbc-1
-        #print("***t1="+t1+" lbc="+str(context.lbc))
 	
 		if context.lbc > 0: skip = 1
 		if context.lbc == 0:
-           #print("***t1="+t1+" lbc="+str(context.lbc))
 			if "]" in t1.strip(): skip=1
 
 	elif tt1 == "name_prefix" and flag1 is True: skip=1
@@ -230,7 +228,7 @@ def aws_ec2_transit_gateway_peering_attachment(t1,tt1,tt2,flag1,flag2):
 	if tt1 == "peer_account_id":
 		if context.acc in tt2: flag1=True
 	if tt1=="peer_transit_gateway_id" and tt2 != "null":
-		print(str(flag1))
+		log.debug(str(flag1))
 		if flag1:
 			t1=tt1 + " = aws_ec2_transit_gateway." + tt2 + ".id\n"
 			common.add_dependancy("aws_ec2_transit_gateway", tt2)
@@ -367,8 +365,10 @@ def aws_instance(t1,tt1,tt2,flag1,flag2):
 	
 		elif tt1 == "iam_instance_profile":
 			if tt2 != "null":
-				t1=tt1 + " = aws_iam_instance_profile." + tt2 + ".name\n"
-				common.add_dependancy("aws_iam_instance_profile",tt2)
+				if tt2 in str(context.inplist.keys()):
+				#if context.inplist[tt2]:	
+					t1=tt1 + " = aws_iam_instance_profile." + tt2 + ".name\n"
+					common.add_dependancy("aws_iam_instance_profile",tt2)
 
 
 		elif tt1 == "security_groups": skip=1
@@ -462,13 +462,17 @@ def  aws_nat_gateway(t1,tt1,tt2,flag1,flag2):
     if "secondary_private_ip_address_count" in tt1:
         
         if tt2 == "0": skip=1
-
+    elif tt1=="regional_nat_gateway_address": skip=1
     elif tt1 == "private_ip": skip=1
     elif tt1 == "public_ip": skip=1
     elif tt1 == "allocation_id": 
         
         t1=tt1 + " = aws_eip." + tt2 + ".id\n"
         common.add_dependancy("aws_eip",tt2)
+    elif tt1=="vpc_id":
+        t1 = t1 + "\n lifecycle {\n   ignore_changes = [regional_nat_gateway_address]\n}\n"
+
+
     return skip,t1,flag1,flag2 
 
 def  aws_network_acl(t1,tt1,tt2,flag1,flag2):
@@ -587,7 +591,6 @@ def aws_route_table_association(t1,tt1,tt2,flag1,flag2):
 			t1 = tt1 + " = aws_internet_gateway." + tt2 + ".id\n"
 		if tt2 == "null":
 			skip=1
-    #print("------Yo t1="+t1)
 	return skip,t1,flag1,flag2
 
 def aws_security_group_rule(t1,tt1,tt2,flag1,flag2):
@@ -604,7 +607,6 @@ def aws_security_group_rule(t1,tt1,tt2,flag1,flag2):
 
 def aws_security_group(t1,tt1,tt2,flag1,flag2):
     skip = 0
-    #print("entry t1="+t1+" lbc="+str(context.lbc))
 
     if tt1 == "name":  
         if len(tt2) > 0: flag1=True
@@ -618,11 +620,9 @@ def aws_security_group(t1,tt1,tt2,flag1,flag2):
         if tt2 == "[]": skip = 1
         if "[" in t1: context.lbc=context.lbc+1
         if "]" in t1: context.lbc=context.lbc-1
-        #print("***t1="+t1+" lbc="+str(context.lbc))
 	
         if context.lbc > 0: skip = 1
         if context.lbc == 0:
-           #print("***t1="+t1+" lbc="+str(context.lbc))
            if "]" in t1.strip(): skip=1
 
     elif tt1 == "ingress" or context.lbc > 0 :
@@ -631,17 +631,14 @@ def aws_security_group(t1,tt1,tt2,flag1,flag2):
         if tt2 == "[]": skip = 1
         if "[" in t1: context.lbc=context.lbc+1
         if "]" in t1: context.lbc=context.lbc-1
-        #print("***t1="+t1+" lbc="+str(context.lbc))
 	
         if context.lbc > 0: skip = 1
         if context.lbc == 0:
-           #print("***t1="+t1+" lbc="+str(context.lbc))
            if "]" in t1.strip(): skip=1
 
     elif tt1 == "name_prefix" and flag1 is True: skip=1
        
     #  
-    #print("exit t1="+t1+" lbc="+str(context.lbc))          
     return skip,t1,flag1,flag2
 
 def aws_snapshot_create_volume_permission(t1,tt1,tt2,flag1,flag2):
@@ -698,7 +695,7 @@ def aws_subnet(t1,tt1,tt2,flag1,flag2):
 					vpcid=j['VpcId']
 					t1=tt1 + " = cidrsubnet(aws_vpc." + vpcid + ".ipv6_cidr_block, 8, "+str(nb)+")\n"
 		except Exception as e:
-			print("ERROR in ipv6_cidr_block, fix aws_subnet: "+str(e))
+			log.error("ERROR in ipv6_cidr_block, fix aws_subnet: "+str(e))
 
 	return skip,t1,flag1,flag2
 
@@ -885,6 +882,8 @@ def aws_verifiedaccess_group(t1,tt1,tt2,flag1,flag2):
 
 def aws_verifiedaccess_instance(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	if tt1=="region":
+		t1 = t1+"\n lifecycle {\n   ignore_changes = [name_servers]\n}\n"
 	return skip,t1,flag1,flag2
 
 def aws_verifiedaccess_instance_logging_configuration(t1,tt1,tt2,flag1,flag2):
@@ -897,4 +896,18 @@ def aws_verifiedaccess_instance_trust_provider_attachment(t1,tt1,tt2,flag1,flag2
 
 def aws_verifiedaccess_trust_provider(t1,tt1,tt2,flag1,flag2):
 	skip=0
+	# Handle required sensitive fields that can't be retrieved
+	if tt1 == "description":
+		# Skip this line and add lifecycle ignore
+		#skip = 1
+		# Add lifecycle block to ignore changes
+		#if not flag1:
+	#		flag1 = True
+		t1 = t1+"\n lifecycle {\n   ignore_changes = [oidc_options[0].client_secret]\n}\n"
+	
+	if tt1 == "client_secret":
+		if "null" in tt2:
+		    t1 = tt1 + ' = "PLACEHOLDER_UPDATE_MANUALLY" # TODO: Update with actual secret\n'
+		    common.log_warning("WARNING: client_secret for %s must be manually updated", flag2)
+
 	return skip,t1,flag1,flag2

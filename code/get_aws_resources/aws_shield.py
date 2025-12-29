@@ -1,11 +1,13 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
 
 def get_aws_shield_protection_group(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -14,10 +16,10 @@ def get_aws_shield_protection_group(type, id, clfn, descfn, topkey, key, filteri
             try:
                 response = client.list_protection_groups()
             except Exception as e:
-                print("No shield protection groups")
+                log.info("No shield protection groups")
                 return True
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -25,7 +27,7 @@ def get_aws_shield_protection_group(type, id, clfn, descfn, topkey, key, filteri
         else:      
             response = client.describe_protection_group(ProtectionGroupId=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response['ProtectionGroup']
       

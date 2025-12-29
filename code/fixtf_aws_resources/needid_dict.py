@@ -1780,6 +1780,11 @@ aws_transfer_user = {
   "clfn": "transfer"
 }
 
+aws_verifiedaccess_instance_trust_provider_attachment = {
+  "param": "VerifiedAccessTrustProviderIds",
+  "clfn": "ec2"
+}
+
 aws_vpc_ipam_pool_cidr = {
   "param": "IpamPoolId",
   "clfn": "ec2"
@@ -2219,6 +2224,7 @@ aws_needid = {
   "aws_transfer_access": aws_transfer_access,
   "aws_transfer_agreement": aws_transfer_agreement,
   "aws_transfer_user": aws_transfer_user,
+  "aws_verifiedaccess_instance_trust_provider_attachment": aws_verifiedaccess_instance_trust_provider_attachment,
   "aws_vpc_ipam_pool_cidr": aws_vpc_ipam_pool_cidr,
   "aws_vpc_ipam_pool_cidr_allocation": aws_vpc_ipam_pool_cidr_allocation,
   "aws_vpc_ipv6_cidr_block_association": aws_vpc_ipv6_cidr_block_association,

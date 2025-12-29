@@ -87,6 +87,7 @@ noimport = {
     "aws_opsworks_rds_db_instance": True,
     "aws_opsworks_user_profile": True,
     "aws_proxy_protocol_policy": True,
+    "aws_qldb_ledger": True,
     "aws_qldb_stream": True,
     "aws_quicksight_account_subscription": True,
     "aws_quicksight_user": True,

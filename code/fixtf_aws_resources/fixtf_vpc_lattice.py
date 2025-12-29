@@ -97,13 +97,11 @@ def aws_vpclattice_listener_rule(t1,tt1,tt2,flag1,flag2):
         elif tt1 == "listener_identifier":
             
             if flag2 is not False:
-                #print("flag2="+flag2)
                 rh=flag2.split('__')[1]
                 svc=rh.split('_listener-')[0]
                 ln=flag2.split('_listener-')[1]
                 ln2=ln.split('_rule-')[0]
                 tt2=svc+"_listener-"+ln2
-                #print("---->>>> tt2="+tt2)
                 t1=tt1 + " = aws_vpclattice_listener." + tt2 + ".listener_id\n"
     except Exception as e:
         common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id)

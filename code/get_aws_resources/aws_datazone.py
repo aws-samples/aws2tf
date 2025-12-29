@@ -1,4 +1,7 @@
 import common
+from common import log_warning
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
@@ -11,7 +14,7 @@ from timed_interrupt import timed_int
 
 def get_aws_datazone_asset_type(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -19,7 +22,7 @@ def get_aws_datazone_asset_type(type, id, clfn, descfn, topkey, key, filterid):
         paginator = client.get_paginator(descfn)
 
         if id is None:
-            print("WARNING must pass domain id to get_aws_datazone_asset_type")
+            log_warning("WARNING must pass domain id to get_aws_datazone_asset_type")
             return True
         else:
 
@@ -30,7 +33,7 @@ def get_aws_datazone_asset_type(type, id, clfn, descfn, topkey, key, filterid):
                     for page in paginator.paginate(domainIdentifier=id,searchScope=ut,managed=False):
                         response = response + page[topkey]
                 except Exception as e:
-                    print("ERROR: "+str(e))
+                    log.info("ERROR: "+str(e))
                     #if "ResourceNotFoundException" in str(e):
                     #    print("Resource not found for "+ut)
                     #    continue
@@ -39,15 +42,12 @@ def get_aws_datazone_asset_type(type, id, clfn, descfn, topkey, key, filterid):
                     #    exit()
  
                 if response == []: 
-                    if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                    if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                     context.rproc[pkey]=True  
                     continue  
                     
                 
                 for k in response:
-                    #print("----------------------------------------------------------")
-                    #print("ut="+ut)
-                    #print("\nk="+str(k))
                     try:
                         if ut == 'ASSET_TYPE': 
                             j=k['assetTypeItem']
@@ -56,10 +56,9 @@ def get_aws_datazone_asset_type(type, id, clfn, descfn, topkey, key, filterid):
                         elif ut == 'LINEAGE_NODE_TYPE': 
                             j=k['lineageNodeTypeItem']
                     except KeyError:
-                        #print("KeyError: "+str(k))
                         continue
                     theid=id+','+j[key]
-                    print("SKIPPING: "+str(type)+" "+str(theid)+" due to import issues")
+                    log.info("SKIPPING: "+str(type)+" "+str(theid)+" due to import issues")
                     #common.write_import(type,theid,None) 
                 
             context.rproc[pkey]=True
@@ -75,7 +74,7 @@ def get_aws_datazone_asset_type(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_datazone_user_profile(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     
     try:
@@ -84,26 +83,24 @@ def get_aws_datazone_user_profile(type, id, clfn, descfn, topkey, key, filterid)
         paginator = client.get_paginator(descfn)
 
         if id is None:
-            print("WARNING must pass domain id to get_aws_datazone_user_profile")
+            log_warning("WARNING must pass domain id to get_aws_datazone_user_profile")
             return True
         else:
             pkey=type+"."+id
             for ut in ['SSO_USER','DATAZONE_USER','DATAZONE_SSO_USER','DATAZONE_IAM_USER']:
-                #print("ut="+ut)
                 response == []
                 try:
                     for page in paginator.paginate(domainIdentifier=id,userType=ut):
                         response = response + page[topkey]
                 except Exception as e:
                     if "ResourceNotFoundException" in str(e):
-                        if context.debug: print("Resource not found for "+ut)
+                        if context.debug: log.debug("Resource not found for "+ut)
                         continue
                     else:
-                        print("ERROR: "+str(e))
+                        log.info("ERROR: "+str(e))
                         exit()
-                #print("response="+str(response))
                 if response == []: 
-                    if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                    if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                     context.rproc[pkey]=True    
               
                 for k in response:
@@ -114,11 +111,10 @@ def get_aws_datazone_user_profile(type, id, clfn, descfn, topkey, key, filterid)
                             common.write_import(type,theid,None)
                         else:
                             if context.debug: 
-                                print(str(k))
+                                log.debug(str(k))
                             j=k[key]
                             theid=j+","+id+','+k['type']
                             common.write_import(type,theid,None) 
-                    #print(theid)
                     #common.write_import(type,theid,None) 
                 
         context.rproc[pkey]=True
@@ -134,7 +130,7 @@ def get_aws_datazone_user_profile(type, id, clfn, descfn, topkey, key, filterid)
 
 def get_aws_datazone_domain(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -143,18 +139,17 @@ def get_aws_datazone_domain(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate(status='AVAILABLE'):
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 dzid=j[key]
                 dv=j['domainVersion']
                 if dv=="V1":
-                    #print(str(j))
                     resp2=client.get_domain(identifier=dzid)
                     dz_common(resp2,dzid,type,client)
                     
         else:      
             response = client.get_domain(identifier=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response
             dzid=j[key]
             dv=j['domainVersion']
@@ -172,7 +167,7 @@ def get_aws_datazone_domain(type, id, clfn, descfn, topkey, key, filterid):
 def dz_common(resp2,dzid,type,client):
     sso=resp2['singleSignOn']['type']
     dst=resp2['status']
-    if context.debug: print("DataZone sso="+str(sso)+" dst="+str(dst)," dzid="+dzid)
+    if context.debug: log.debug("DataZone sso="+str(sso)+" dst="+str(dst)," dzid="+dzid)
     common.write_import(type,dzid,None)
     common.add_dependancy("aws_datazone_project", dzid)
     common.add_dependancy("aws_datazone_glossary", dzid)
@@ -186,7 +181,7 @@ def dz_common(resp2,dzid,type,client):
         bid=k['id']
         bn=k['name']
         pn=k['provider']
-        if context.debug: print(str(bid),str(bn),str(pn))
+        if context.debug: log.debug(str(bid),str(bn),str(pn))
         output = StringIO()
         output.write('data "aws_datazone_environment_blueprint" "' + str(dzid)+"_"+str(bid)+ '" {\n')
         output.write('  domain_id = aws_datazone_domain.' + str(dzid) + '.id\n') ## error undefined
@@ -199,15 +194,15 @@ def dz_common(resp2,dzid,type,client):
             with open(fn, 'w') as f:
                f.write(output.getvalue().strip() + '\n')
         except:
-            print("ERROR: could not write to file: " + fn)
-            print("exit 139")
+            log.info("ERROR: could not write to file: " + fn)
+            log.info("exit 139")
             timed_int.stop()
             exit()
 
     if sso!="DISABLED":
         common.add_dependancy("aws_datazone_user_profile", dzid)
     else:
-        print("skipping sso="+str(sso)+" dst="+str(dst)+" dzid="+dzid)
+        log.info("skipping sso="+str(sso)+" dst="+str(dst)+" dzid="+dzid)
         return True
 
 
@@ -218,7 +213,7 @@ def dz_common(resp2,dzid,type,client):
 
 def get_aws_datazone_project(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         
@@ -227,14 +222,14 @@ def get_aws_datazone_project(type, id, clfn, descfn, topkey, key, filterid):
 
         paginator = client.get_paginator(descfn)
         if id is None:
-            print("WARNING must pass domain id to get_aws_datazone_project")
+            log_warning("WARNING must pass domain id to get_aws_datazone_project")
             return True
         else:
             for page in paginator.paginate(domainIdentifier=id):
                 response = response + page[topkey]
         pkey=type+"."+id
         if response == []: 
-            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+            if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
             context.rproc[pkey]=True
             return True
         for j in response:
@@ -253,7 +248,7 @@ def get_aws_datazone_project(type, id, clfn, descfn, topkey, key, filterid):
 # get-project has gloassary terms - each term has glossary id
 def get_aws_datazone_glossary(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         
@@ -262,21 +257,19 @@ def get_aws_datazone_glossary(type, id, clfn, descfn, topkey, key, filterid):
 
         paginator = client.get_paginator(descfn)
         if id is None:
-            print("WARNING must pass domain id to get_aws_datazone_glossary")
+            log_warning("WARNING must pass domain id to get_aws_datazone_glossary")
             return True
         else:
             for page in paginator.paginate(domainIdentifier=id,searchScope='GLOSSARY'):
                 response = response + page[topkey]
         pkey=type+"."+id
         if response == []: 
-            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+            if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             context.rproc[pkey]=True
             return True
-        #print(str(response))
         for k in response:
             j=k['glossaryItem']
             theid=id+","+j[key]+","+j['owningProjectId']
-            #print(theid)
             common.write_import(type,theid,None) 
             common.add_dependancy("aws_datazone_glossary_term", theid)
 
@@ -289,7 +282,7 @@ def get_aws_datazone_glossary(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_datazone_glossary_term(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -297,26 +290,22 @@ def get_aws_datazone_glossary_term(type, id, clfn, descfn, topkey, key, filterid
 
         paginator = client.get_paginator(descfn)
         if id is None:
-            print("WARNING must pass domain id to get_aws_datazone_glossary_term")
+            log_warning("WARNING must pass domain id to get_aws_datazone_glossary_term")
             return True
         else:
-            #print("Glossary terms id ",id)
             did=id.split(',')[0]
             pid=id.split(',')[2]
-            #print("Glossary terms for ",did,pid)
             for page in paginator.paginate(domainIdentifier=did,owningProjectIdentifier=pid,searchScope='GLOSSARY_TERM'):
                 response = response + page[topkey]
 
         pkey=type+"."+id
         if response == []: 
-            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+            if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             context.rproc[pkey]=True    
             return True
-        #print(str(response))
         for k in response:
             j=k['glossaryTermItem']
             theid=did+","+j[key]+","+j['glossaryId']
-            #print(theid)
             common.write_import(type,theid,theid+"_"+pid) 
         context.rproc[pkey]=True
         
@@ -329,7 +318,7 @@ def get_aws_datazone_glossary_term(type, id, clfn, descfn, topkey, key, filterid
 
 def get_aws_datazone_form_type(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         
@@ -338,7 +327,7 @@ def get_aws_datazone_form_type(type, id, clfn, descfn, topkey, key, filterid):
 
         paginator = client.get_paginator(descfn)
         if id is None:
-            print("WARNING must pass domain id to get_aws_datazone_form_type")
+            log_warning("WARNING must pass domain id to get_aws_datazone_form_type")
             return True
         else:
             for page in paginator.paginate(domainIdentifier=id,managed=False,
@@ -346,15 +335,13 @@ def get_aws_datazone_form_type(type, id, clfn, descfn, topkey, key, filterid):
                 response = response + page[topkey]
         pkey=type+"."+id
         if response == []: 
-            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+            if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             context.rproc[pkey]=True
             return True
-        #print(str(response))
         for k in response:
 
             j=k['formTypeItem']
             theid=id+","+j['name']+","+j['revision']
-            #print(theid)
             common.write_import(type,theid,None) 
 
         context.rproc[pkey]=True
@@ -368,7 +355,7 @@ def get_aws_datazone_form_type(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_datazone_environment_blueprint_configuration(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
       
@@ -377,14 +364,14 @@ def get_aws_datazone_environment_blueprint_configuration(type, id, clfn, descfn,
 
         paginator = client.get_paginator(descfn)
         if id is None:
-            print("WARNING must pass domain id to get_aws_datazone_environment_blueprint_configuration")
+            log_warning("WARNING must pass domain id to get_aws_datazone_environment_blueprint_configuration")
             return True
         else:
             for page in paginator.paginate(domainIdentifier=id):
                 response = response + page[topkey]
         pkey=type+"."+id
         if response == []: 
-            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+            if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             context.rproc[pkey]=True
             return True
         for j in response:
@@ -400,7 +387,7 @@ def get_aws_datazone_environment_blueprint_configuration(type, id, clfn, descfn,
 
 def get_aws_datazone_environment_profile(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -408,21 +395,21 @@ def get_aws_datazone_environment_profile(type, id, clfn, descfn, topkey, key, fi
 
         paginator = client.get_paginator(descfn)
         if id is None:
-            print("WARNING must pass domain id to get_aws_datazone_environment_profile")
+            log_warning("WARNING must pass domain id to get_aws_datazone_environment_profile")
             return True
         else:
             try:
                 for page in paginator.paginate(domainIdentifier=id):
                     response = response + page[topkey]
             except Exception as e:
-                print(str(e))
-                print("WARNING: no environment profiles found for domain id "+id)
+                log.info(str(e))
+                log_warning("WARNING: no environment profiles found for domain id "+id)
                 context.rproc[type+"."+id]=True
                 return True
 
         pkey=type+"."+id
         if response == []: 
-            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+            if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
             context.rproc[pkey]=True
             return True
         for j in response:
@@ -440,7 +427,7 @@ def get_aws_datazone_environment_profile(type, id, clfn, descfn, topkey, key, fi
 
 def get_aws_datazone_environment(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -448,19 +435,20 @@ def get_aws_datazone_environment(type, id, clfn, descfn, topkey, key, filterid):
     
         paginator = client.get_paginator(descfn)
         if id is None:
-            print("WARNING must pass domain_id:project_id to get_aws_datazone_environment")
+            log_warning("WARNING must pass domain_id:project_id to get_aws_datazone_environment")
             return True
         else:
             dzd=id.split(':')[0]
             pid=id.split(':')[1]
-            for page in paginator.paginate(domainIdentifier=dzd,projectIdentifier=pid):
+            for page in paginator.paginate(domainIdentifier=dzd,projectIdentifier=pid,status='ACTIVE'):
                 response = response + page[topkey]
         pkey=type+"."+id
         if response == []: 
-            if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+            if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             context.rproc[pkey]=True
             return True
         for j in response:
+            #print(j)
             theid=dzd+","+j[key]
             common.write_import(type,theid,None) 
 

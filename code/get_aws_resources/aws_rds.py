@@ -1,4 +1,7 @@
 import common
+from common import log_warning
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
@@ -12,7 +15,7 @@ def get_aws_db_parameter_group(type, id, clfn, descfn, topkey, key, filterid):
 
 
     if context.debug:
-        print("--> In get_aws_db_parameter_group  doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_db_parameter_group  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -23,8 +26,7 @@ def get_aws_db_parameter_group(type, id, clfn, descfn, topkey, key, filterid):
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate():
                 response = response + page[topkey]
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        #print(str(response))
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response:
             if id is None:
                 common.write_import(type,j[key],None) 
@@ -49,7 +51,7 @@ def get_aws_db_option_group(type, id, clfn, descfn, topkey, key, filterid):
 
 
     if context.debug:
-        print("--> In get_aws_db_option_group  doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_db_option_group  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -60,8 +62,7 @@ def get_aws_db_option_group(type, id, clfn, descfn, topkey, key, filterid):
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate():
                 response = response + page[topkey]
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        #print(str(response))
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response:
             if id is None:
                 if "default:" not in j[key]:
@@ -83,7 +84,7 @@ def get_aws_db_option_group(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_db_subnet_group(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     
     try:
@@ -94,8 +95,7 @@ def get_aws_db_subnet_group(type, id, clfn, descfn, topkey, key, filterid):
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate():
                 response = response + page[topkey]
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        #print(str(response))
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
 
         for j in response:
             if id is None:
@@ -119,7 +119,7 @@ def get_aws_db_subnet_group(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_rds_custom_db_engine_version(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -132,7 +132,7 @@ def get_aws_rds_custom_db_engine_version(type, id, clfn, descfn, topkey, key, fi
             for page in paginator.paginate(Engine=id):
                 response = response + page[topkey]
 
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response:
             eng=j['Engine']
             engv=j['EngineVersion']
@@ -151,7 +151,7 @@ def get_aws_rds_custom_db_engine_version(type, id, clfn, descfn, topkey, key, fi
 
 def get_aws_db_event_subscription(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -160,16 +160,14 @@ def get_aws_db_event_subscription(type, id, clfn, descfn, topkey, key, filterid)
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
-                #print(j)
                 common.write_import(type,j[key],None) 
 
         else:      
             response = client.describe_event_subscriptions(SubscriptionName=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
-                #print(j)
                 common.write_import(type,j[key],None)
 
     except Exception as e:
@@ -183,7 +181,7 @@ def get_aws_db_event_subscription(type, id, clfn, descfn, topkey, key, filterid)
 
 def get_aws_db_instance(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -192,7 +190,7 @@ def get_aws_db_instance(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response: 
                 engine=j['Engine']
                 if engine=="docdb" or engine.startswith("aurora"): continue
@@ -200,16 +198,15 @@ def get_aws_db_instance(type, id, clfn, descfn, topkey, key, filterid):
 
         else:
             response = client.describe_db_instances(DBInstanceIdentifier=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
-                #print(j)
                 engine=j['Engine']
                 if engine=="docdb" or engine.startswith("aurora"): continue
                 common.write_import(type, j[key], None)
 
     except client.exceptions.InvalidParameterValue as error:
-            print("WARNING: InvalidParameterValue for "+type+ " "+str(id)+" returning")
-            print(str(error.response['Error']['Code']))
+            log_warning("WARNING: InvalidParameterValue for "+type+ " "+str(id)+" returning")
+            log.info(str(error.response['Error']['Code']))
             pkey=type+"."+str(id)
             context.rproc[pkey]=True
             return True
@@ -222,7 +219,7 @@ def get_aws_db_instance(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_rds_cluster_instance(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -231,7 +228,7 @@ def get_aws_rds_cluster_instance(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response: 
                 engine=j['Engine']
                 if engine.startswith("aurora"): 
@@ -245,9 +242,8 @@ def get_aws_rds_cluster_instance(type, id, clfn, descfn, topkey, key, filterid):
 
         else:
             response = client.describe_db_instances(DBInstanceIdentifier=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
-                #print(j)
                 engine=j['Engine']
                 if engine.startswith("aurora"):
                     common.write_import(type, j[key], None)
@@ -263,7 +259,7 @@ def get_aws_rds_cluster_instance(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_rds_cluster(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -272,7 +268,7 @@ def get_aws_rds_cluster(type, id, clfn, descfn, topkey, key, filterid):
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response: 
                 engine=j['Engine']
                 if engine.startswith("aurora"): 
@@ -286,9 +282,8 @@ def get_aws_rds_cluster(type, id, clfn, descfn, topkey, key, filterid):
 
         else:
             response = client.describe_db_clusters(DBClusterIdentifier=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
-                #print(j)
                 engine=j['Engine']
                 if engine.startswith("aurora"):
                     common.write_import(type, j[key], None)

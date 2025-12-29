@@ -12,13 +12,54 @@ import concurrent.futures
 from typing import List, Dict
 import io
 from concurrent.futures import ThreadPoolExecutor
+import logging
+from tqdm import tqdm
 
 sys.path.insert(0, './code')
+
+# Configure logging
+def setup_logging(debug=False, log_file='aws2tf.log'):
+    """Setup logging configuration for aws2tf with console and file output."""
+    level = logging.DEBUG if debug else logging.INFO
+    
+    # Create formatter - simple format that matches existing output style
+    formatter = logging.Formatter('%(message)s')
+    
+    # Get logger and configure
+    logger = logging.getLogger('aws2tf')
+    logger.setLevel(level)
+    logger.handlers.clear()
+    
+    # Console handler
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
+    
+    # File handler with secure permissions (Security Fix #7)
+    # Create log file with restricted permissions (0o600 = rw-------)
+    # This prevents other users from reading potentially sensitive log data
+    if os.path.exists(log_file):
+        os.chmod(log_file, 0o600)
+    
+    file_handler = logging.FileHandler(log_file, mode='w')
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+    
+    # Set secure permissions on the log file after creation
+    try:
+        os.chmod(log_file, 0o600)
+    except Exception:
+        pass  # Ignore if we can't set permissions
+    
+    return logger
+
+# Initialize logger (will be reconfigured after args parsing)
+log = setup_logging()
 #from get_aws_resources import aws_s3
 import common
 import resources
 import context
-import timed_interrupt
+# Note: timed_interrupt imported later after validation to avoid orphaned threads
 
 import stacks
 from fixtf_aws_resources import aws_dict
@@ -27,8 +68,11 @@ from build_lists import build_lists, build_secondary_lists
 
 
 def extra_help():
-    print("\nExtra help\n")
-    print("Type codes supported - ./aws2tf.py -t [type code]:\n")
+    # Import here since it's needed for this function
+    import timed_interrupt
+    
+    log.info("\nExtra help\n")
+    log.info("Type codes supported - ./aws2tf.py -t [type code]:\n")
     with open('code/resources.py', 'r') as f:
         for line in f.readlines():
             line3=""
@@ -38,17 +82,17 @@ def extra_help():
                 line=line.split("==")[-1].strip().strip("'").strip('"')
                 if line3 != "": 
                     if len(line) < 3:
-                        print("./aws2tf.py  -t "+line+"     \t\t\t"+str(line3))
+                        log.info("./aws2tf.py  -t "+line+"     \t\t\t"+str(line3))
                     elif len(line) > 10:
-                        print("./aws2tf.py  -t "+line+"     \t"+str(line3))
+                        log.info("./aws2tf.py  -t "+line+"     \t"+str(line3))
                     else:
-                        print("./aws2tf.py  -t "+line+"     \t\t"+str(line3))
+                        log.info("./aws2tf.py  -t "+line+"     \t\t"+str(line3))
                 else:
-                    print("./aws2tf.py  -t "+line)
-    print("\nOr instead of the above type codes use the terraform type eg:\n\n./aws2tf.py -t aws_vpc\n")
-    print("\nTo get a deployed stack set:\n\n./aws2tf.py -t stack -i stackname\n")               
-    print("exit 001")
-    timed_interrupt.timed_int.stop()
+                    log.info("./aws2tf.py  -t "+line)
+    log.info("\nOr instead of the above type codes use the terraform type eg:\n\n./aws2tf.py -t aws_vpc\n")
+    log.info("\nTo get a deployed stack set:\n\n./aws2tf.py -t stack -i stackname\n")               
+    log.info("exit 001")
+    timed_interrupt.stop_timer()
     exit()
 
 
@@ -77,8 +121,8 @@ def apl_threaded(rn):
     try:
         response=client.list_attached_role_policies(RoleName=rn)
     except Exception as e:  
-        print(f"{e=}")
-    #print(str(response)+"\n")
+        log.error(f"{e=}")
+    #log.debug(str(response)+"\n")
     if response['AttachedPolicies'] == []: 
         context.attached_role_policies_list[rn]=False
     #else:
@@ -89,7 +133,7 @@ def dd_threaded(ti):
     if not context.rproc[ti]:
         i = ti.split(".")[0]
         id = ti.split(".", 1)[1]
-        if context.debug: print("DD calling getresource with type="+i+" id="+str(id))
+        log.debug("DD calling getresource with type="+i+" id="+str(id))
         context.tracking_message="Stage 5 of 10, Processing Dependancy, "+str(i)+" "+str(id)
         common.call_resource(i, id)
 
@@ -100,24 +144,205 @@ def kd_threaded(ti):
     if not context.rdep[ti]:
         i = ti.split(".")[0]
         id = ti.split(".")[1]
-        if context.debug: print("type="+i+" id="+str(id))
+        log.debug("type="+i+" id="+str(id))
         common.call_resource(i, id)
     return
 
 
-#if __name__ == '__main__':
+# Security Fix #4 & #6: Input validation functions
+def validate_region(region: str) -> str:
+    """
+    Validate AWS region format.
+    
+    Args:
+        region: AWS region string
+        
+    Returns:
+        Validated region string
+        
+    Raises:
+        ValueError: If region format is invalid
+    """
+    import re
+    # AWS region format: 2 letters, dash, direction, dash, 1-2 digits
+    # Examples: us-east-1, eu-west-2, ap-southeast-1
+    if not re.match(r'^[a-z]{2}-[a-z]+-\d{1,2}$', region):
+        raise ValueError(f"Invalid AWS region format: {region}")
+    return region
 
-def main():
 
-    now = datetime.datetime.now()
-    print("aws2tf "+context.aws2tfver+" started at %s" % now)
-    starttime=now
+def validate_profile(profile: str) -> str:
+    """
+    Validate AWS profile name.
+    
+    Args:
+        profile: AWS profile name
+        
+    Returns:
+        Validated profile string
+        
+    Raises:
+        ValueError: If profile contains invalid characters
+    """
+    import re
+    # Profile names should be alphanumeric with hyphens and underscores
+    if not re.match(r'^[a-zA-Z0-9_-]+$', profile):
+        raise ValueError(f"Invalid AWS profile name: {profile}")
+    return profile
 
 
-    #print("cwd="+str(sys.argv),str(len(sys.argv)))
-    if len(sys.argv) > 1:
-        if sys.argv[1]=="-h": timed_interrupt.timed_int.stop() 
+def validate_resource_type(resource_type: str) -> str:
+    """
+    Validate Terraform resource type format.
+    
+    Args:
+        resource_type: Terraform resource type (e.g., aws_vpc, aws_s3_bucket)
+        
+    Returns:
+        Validated resource type
+        
+    Raises:
+        ValueError: If resource type format is invalid
+    """
+    import re
+    # Resource types should be alphanumeric with underscores
+    # Can be comma-separated list
+    if ',' in resource_type:
+        types = resource_type.split(',')
+        for t in types:
+            validate_resource_type(t.strip())
+        return resource_type
+    
+    # Single resource type validation
+    if not re.match(r'^[a-z][a-z0-9_]*$', resource_type):
+        raise ValueError(f"Invalid resource type format: {resource_type}")
+    
+    return resource_type
 
+
+def validate_resource_id(resource_id: str, resource_type: str = None) -> str:
+    """
+    Validate AWS resource ID format.
+    
+    Args:
+        resource_id: AWS resource ID
+        resource_type: Optional resource type for specific validation
+        
+    Returns:
+        Validated resource ID
+        
+    Raises:
+        ValueError: If resource ID contains dangerous characters
+    """
+    import re
+    
+    # Check for path traversal attempts
+    if '..' in resource_id:
+        raise ValueError(f"Path traversal detected in resource ID: {resource_id}")
+    
+    # Check for shell metacharacters that could be dangerous
+    dangerous_chars = [';', '|', '&', '$', '`', '\n', '\r']
+    for char in dangerous_chars:
+        if char in resource_id:
+            raise ValueError(f"Invalid character '{char}' in resource ID: {resource_id}")
+    
+    # AWS resource IDs typically contain: alphanumeric, hyphens, underscores, colons, slashes, dots
+    # ARNs can contain: arn:aws:service:region:account:resource
+    if not re.match(r'^[a-zA-Z0-9:/_.\-*]+$', resource_id):
+        raise ValueError(f"Invalid characters in resource ID: {resource_id}")
+    
+    return resource_id
+
+
+def validate_ec2_tag(tag: str) -> tuple:
+    """
+    Validate EC2 tag format (key:value).
+    
+    Args:
+        tag: Tag string in format "key:value"
+        
+    Returns:
+        Tuple of (key, value)
+        
+    Raises:
+        ValueError: If tag format is invalid
+    """
+    if ':' not in tag:
+        raise ValueError(f"Invalid tag format: {tag}. Expected 'key:value'")
+    
+    parts = tag.split(':', 1)
+    if len(parts) != 2:
+        raise ValueError(f"Invalid tag format: {tag}. Expected 'key:value'")
+    
+    key, value = parts
+    
+    if not key or not value:
+        raise ValueError(f"Tag key and value cannot be empty: {tag}")
+    
+    # AWS tag keys and values have specific character restrictions
+    import re
+    if not re.match(r'^[a-zA-Z0-9+\-=._:/@\s]+$', key):
+        raise ValueError(f"Invalid characters in tag key: {key}")
+    
+    if not re.match(r'^[a-zA-Z0-9+\-=._:/@\s]+$', value):
+        raise ValueError(f"Invalid characters in tag value: {value}")
+    
+    return (key, value)
+
+
+def validate_terraform_version(version: str) -> str:
+    """
+    Validate Terraform provider version format.
+    
+    Args:
+        version: Version string (e.g., "6.20.0")
+        
+    Returns:
+        Validated version string
+        
+    Raises:
+        ValueError: If version format is invalid
+    """
+    import re
+    # Version format: major.minor.patch
+    if not re.match(r'^\d+\.\d+\.\d+$', version):
+        raise ValueError(f"Invalid version format: {version}. Expected X.Y.Z")
+    
+    return version
+
+
+def validate_exclude_list(exclude: str) -> list:
+    """
+    Validate and parse exclude list.
+    
+    Args:
+        exclude: Comma-separated list of resource types to exclude
+        
+    Returns:
+        List of validated resource types
+        
+    Raises:
+        ValueError: If any resource type is invalid
+    """
+    if not exclude:
+        return []
+    
+    types = [t.strip() for t in exclude.split(',')]
+    validated = []
+    
+    for t in types:
+        validated.append(validate_resource_type(t))
+    
+    return validated
+
+
+def parse_and_validate_arguments():
+    """
+    Parse command line arguments and validate inputs.
+    
+    Returns:
+        Parsed arguments object
+    """
     argParser = argparse.ArgumentParser()
     argParser.add_argument("-l", "--list",help="List extra help information" , action='store_true')
     argParser.add_argument("-t", "--type", help="resource type aws_s3, ec2 aws_vpc etc")
@@ -129,6 +354,7 @@ def main():
     argParser.add_argument("-s", "--singlefile", help="only a single file main.tf is produced", action='store_true')
     argParser.add_argument("-f", "--fast", help="fast multi-threaded mode", action='store_true')
     argParser.add_argument("-v", "--validate", help="validate and exit", action='store_true')
+    argParser.add_argument("-w", "--warn", help="show warning messages", action='store_true')
     argParser.add_argument("-a", "--accept", help="expected plan changes accepted", action='store_true')
     argParser.add_argument("-e", "--exclude", help="resource types to exclude")
     argParser.add_argument("-ec2tag", "--ec2tag", help="ec2 key:value pair to import")
@@ -144,22 +370,883 @@ def main():
     try:
         args = argParser.parse_args()
     except SystemExit as e:
-        timed_interrupt.timed_int.stop()
+        exit()
+    
+    # Security Fix #4 & #6: Validate CLI arguments
+    try:
+        if args.region:
+            args.region = validate_region(args.region)
+        if args.profile:
+            args.profile = validate_profile(args.profile)
+        if args.type:
+            args.type = validate_resource_type(args.type)
+        if args.id:
+            args.id = validate_resource_id(args.id)
+        if args.exclude:
+            validate_exclude_list(args.exclude)
+        if args.tv:
+            args.tv = validate_terraform_version(args.tv)
+    except ValueError as e:
+        log.error(f"ERROR: Invalid input - {e}")
+        log.info("exit 001")
+        exit(1)
+    
+    return args
+
+
+def setup_environment_and_context(args):
+    """
+    Setup environment, validate tools, configure context.
+    
+    Args:
+        args: Parsed command line arguments
+        
+    Returns:
+        tuple: (region, type, id)
+    """
+    global log
+    
+    # Import and initialize timer after validation
+    import timed_interrupt
+    timed_interrupt.initialize_timer(increment=20)
+    
+    common.check_python_version()
+    signal.signal(signal.SIGINT, common.ctrl_c_handler)
+    
+    # Check terraform is installed
+    path = shutil.which("terraform")
+    if path is None:
+        log.error("no executable found for command 'terraform'")
+        log.info("exit 002")
+        timed_interrupt.stop_timer()
+        exit()
+    
+    # Setup profile
+    if args.profile:
+        context.profile = args.profile
+    
+    # Detect and validate AWS credentials
+    info = common.detect_aws_credentials(context.profile)
+    context.credtype = info['credential_type']
+    context.sso = info['is_sso']
+    log.info("Credentials Type = %s", context.credtype)
+    log.info("Is SSO login = %s", info['is_sso'])
+    
+    if context.credtype == "unknown":
+        log.error("could not find valid login creds")
+        common.print_credentials_info(context.profile)
+        timed_interrupt.stop_timer()
+        exit()
+    
+    # Check and validate terraform version
+    if args.tv:
+        context.tfver = args.tv
+    
+    tv = check_terraform_version(timed_interrupt)
+    log.info("Terraform version: %s AWS provider version: %s", tv, context.tfver)
+    
+    # Setup context flags
+    context.expected = args.accept
+    context.merge = args.merge
+    
+    if args.list:
+        extra_help()
+    
+    if args.fast:
+        context.fast = True
+    if args.debug:
+        context.debug = True
+        context.fast = False
+        log = setup_logging(debug=True)
+    if args.debug5:
+        context.debug5 = True
+        context.fast = False
+    if args.warn:
+        context.warnings = True
+    
+    # Validate EC2 tag if provided
+    if args.ec2tag:
+        try:
+            context.ec2tagk, context.ec2tagv = validate_ec2_tag(args.ec2tag)
+            context.ec2tag = args.ec2tag
+        except ValueError as e:
+            log.error(f"ERROR: {e}")
+            log.info("exit 005")
+            timed_interrupt.stop_timer()
+            exit()
+    
+    # Setup data source flags
+    if args.validate:
+        context.validate = True
+    if args.datanet:
+        context.dnet = True
+    if args.datasgs:
+        context.dsgs = True
+    if args.datakms:
+        context.dkms = True
+    if args.datakey:
+        context.dkey = True
+    
+    # Determine resource type
+    if args.type is None or args.type == "":
+        if args.serverless:
+            log.error("type is required eg:  -t aws_vpc  when in serverless mode, exiting ....")
+            log.info("exit 003")
+            timed_interrupt.stop_timer()
+            exit()
+        log.info("type is recommended eg:  -t aws_vpc    \nsetting to all")
+        type = "all"
+    else:
+        type = args.type
+    
+    # Build exclusion list
+    if args.exclude is not None:
+        extypes = args.exclude
+        if "," in extypes:
+            extypes = extypes.split(",")
+        else:
+            extypes = [extypes]
+        context.all_extypes = []
+        for i in extypes:
+            context.all_extypes = context.all_extypes + resources.resource_types(i)
+    else:
+        context.all_extypes = []
+    
+    # Get and validate region
+    region = get_and_validate_region(args, timed_interrupt)
+    
+    # Setup AWS session
+    setup_aws_session(args, region, timed_interrupt)
+    
+    # Get AWS account
+    get_aws_account(timed_interrupt)
+    
+    log.info('Using region: '+region + ' account: ' + context.acc+ " profile: "+context.profile+"\n")
+    
+    return region, type, args.id
+
+
+def check_terraform_version(timed_interrupt):
+    """
+    Check terraform version meets minimum requirements.
+    
+    Returns:
+        str: Terraform version
+    """
+    com = "terraform version"
+    rout = common.rc(com)
+    tvr = rout.stdout.decode().rstrip()
+    
+    if "." not in tvr:
+        log.error("Unexpected Terraform version "+str(tvr))
+        timed_interrupt.stop_timer()
+        os._exit(1)
+    
+    tv = str(rout.stdout.decode().rstrip()).split("rm v")[-1].split("\n")[0]
+    tvmaj = int(tv.split(".")[0])
+    tvmin = int(tv.split(".")[1])
+    
+    if tvmaj < 1:
+        log.error("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
+        timed_interrupt.stop_timer()
+        os._exit(1)
+    
+    if tvmaj == 1 and tvmin < 8:
+        log.error("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
+        timed_interrupt.stop_timer()
+        os._exit(1)
+    
+    return tv
+
+
+def get_and_validate_region(args, timed_interrupt):
+    """
+    Get region from args or environment and validate it.
+    
+    Returns:
+        str: Validated AWS region
+    """
+    if args.region is None:
+        com = "aws configure get region"
+        rout = common.rc(com)
+        el = len(rout.stderr.decode().rstrip())
+        
+        if el != 0:
+            log.warning("region is required eg:  -r eu-west-1  [using eu-west-1 as default]")
+            region = "eu-west-1"
+        else:
+            region = rout.stdout.decode().rstrip()
+            if len(region) == 0:
+                region = os.getenv("AWS_REGION")
+                if region is None:
+                    region = os.getenv("AWS_DEFAULT_REGION")
+                    if region is None:
+                        log.error("region is required - set in AWS cli or pass with -r")
+                        log.info("exit 004")
+                        timed_interrupt.stop_timer()
+                        exit()
+            
+            log.info("region set from aws cli / environment variables as "+region)
+            try:
+                region = validate_region(region)
+            except ValueError as e:
+                log.error(f"ERROR: Invalid region from environment - {e}")
+                log.info("exit 004")
+                timed_interrupt.stop_timer()
+                exit()
+    else:
+        region = args.region
+    
+    context.region = region
+    context.regionl = len(region)
+    
+    return region
+
+
+def setup_aws_session(args, region, timed_interrupt):
+    """Setup AWS boto3 session with region and profile."""
+    log.debug("setting session region="+region)
+    
+    try:
+        if args.profile is None:
+            boto3.setup_default_session(region_name=region)
+        else:
+            boto3.setup_default_session(region_name=region, profile_name=context.profile)
+    except Exception as e:
+        log.error("AWS Authorization Error: "+str(e))
+
+
+def get_aws_account(timed_interrupt):
+    """Get AWS account ID from STS."""
+    log.debug("getting account")
+    
+    try:
+        context.acc = boto3.client('sts').get_caller_identity().get('Account')
+    except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        exn = str(exc_type.__name__)
+        
+        if "ExpiredToken" in str(e):
+            log.error("STS Authorization Error: ExpiredToken, exiting .....")
+        elif "EndpointConnectionError" in exn:
+            log.error("Failed to connect to AWS - check network connectivity, exiting .....")
+        else:
+            log.error(str(e))
+            log.error(str(exn))
+        
+        timed_interrupt.stop_timer()
+        exit()
+
+
+def setup_workspace(args, region):
+    """
+    Setup workspace directories and terraform initialization.
+    
+    Args:
+        args: Parsed arguments
+        region: AWS region
+    """
+    # Setup paths
+    if args.serverless:
+        context.serverless = True
+        context.path1 = "/tmp/aws2tf/generated/tf-"+context.pathadd+context.acc+"-"+region
+        context.path2 = context.path1+"/imported"
+        context.path3 = context.path1+"/notimported"
+    else:
+        context.serverless = False
+        context.path1 = "generated/tf-"+context.pathadd+context.acc+"-"+region
+        context.path2 = context.path1+"/imported"
+        context.path3 = context.path1+"/notimported"
+    
+    # Handle serverless S3 operations
+    if context.serverless:
+        if args.merge:
+            common.download_from_s3()
+        else:
+            common.empty_and_delete_bucket()
+    
+    # Check for existing state
+    if not os.path.isfile(context.path1+"/terraform.tfstate") and context.merge:
+        log.warning("No terraform.tfstate file found in "+context.path1+" - can not merge")
+        context.merge = False
+        com = "rm -rf "+context.path1
+        rout = common.rc(com)
+        if context.serverless:
+            common.empty_and_delete_bucket()
+    
+    # Clean workspace if not merging
+    if context.merge is False:
+        com = "rm -rf "+context.path1
+        rout = common.rc(com)
+        if context.serverless:
+            common.empty_and_delete_bucket()
+    
+    # Create directories
+    com = "mkdir -p "+context.path2
+    rout = common.rc(com)
+    com = "mkdir -p "+context.path3
+    rout = common.rc(com)
+    
+    # Change to workspace directory
+    context.cwd = os.getcwd()
+    os.chdir(context.path1)
+    
+    # Initialize terraform
+    context.tracking_message = "Stage 1 of 10, Terraform Initialise ..."
+    common.aws_tf(region, args)
+    
+    # Verify terraform initialized
+    foundtf = False
+    for root, dirs, files in os.walk(context.cwd+"/"+context.path1):
+        if '.terraform' in dirs:
+            log.info("PASSED: Terraform Initialise OK")
+            foundtf = True
+            break
+    
+    if not foundtf:
+        log.error("failed to find .terraform in "+context.cwd+"/"+context.path1)
+        log.error("Terraform Initialise may have failed exiting ...")
+        import timed_interrupt
+        timed_interrupt.stop_timer()
+        exit()
+
+
+def handle_merge_mode(args):
+    """
+    Handle merge mode - load previously processed resources.
+    
+    Args:
+        args: Parsed arguments
+    """
+    if args.merge:
+        log.info("Merging "+str(context.merge))
+        
+        try:
+            with open('pyprocessed.txt', 'r') as file:
+                content = file.readlines()
+            
+            for line in content:
+                line = line.strip()
+                context.rproc[line] = True
+            
+            if context.debug:
+                log.debug("Pre Processed:")
+                log.debug(str(context.rproc))
+            
+            com = "rm -f main.tf"
+            rout = common.rc(com)
+            com = "cp imported/*.tf ."
+            rout = common.rc(com)
+        
+        except FileNotFoundError:
+            log.warning("Could not find pyprocessed.txt")
+        except IOError as e:
+            log.error(f"IO error occurred: {str(e)}")
+
+
+def build_resource_lists_phase():
+    """Build core resource lists (VPCs, subnets, S3, etc.)."""
+    st1 = datetime.datetime.now()
+    log.info("build lists started at %s" % st1)
+    build_lists()
+    now = datetime.datetime.now()
+    log.info("build lists finished at %s" % now)
+    log.info("build lists took %s" % (now - st1))
+
+
+def process_resource_types(type, id):
+    """
+    Process requested resource types.
+    
+    Args:
+        type: Resource type(s) to process
+        id: Optional resource ID
+    """
+    import timed_interrupt
+    
+    if type == "" or type is None:
+        type = "all"
+    
+    log.info("---<><> "+ str(type)+" Id="+str(id)+" exclude="+str(context.all_extypes))
+    context.tracking_message = "Stage 3 of 10 getting resources ..."
+    
+    # Handle comma-separated types
+    if "," in type:
+        process_multiple_types(type, id, timed_interrupt)
+    else:
+        process_single_type(type, id, timed_interrupt)
+
+
+def process_multiple_types(type, id, timed_interrupt):
+    """Process comma-separated list of resource types."""
+    if "stack" in type:
+        log.error("Cannot mix stack with other types")
+        log.info("exit 006")
+        timed_interrupt.stop_timer()
+        exit()
+    
+    if id is not None:
+        log.error("Cannot pass id with multiple types")
+        log.info("exit 007")
+        timed_interrupt.stop_timer()
+        exit()
+    
+    types = type.split(",")
+    all_types = []
+    
+    for type1 in types:
+        all_types = all_types + resources.resource_types(type1)
+    
+    for type2 in all_types:
+        if type2 in aws_dict.aws_resources:
+            if type2 in context.all_extypes:
+                log.info("Excluding %s", type2)
+                continue
+            common.call_resource(type2, id)
+        else:
+            log.warning("Resource %s not found in aws_dict", type2)
+
+
+def process_single_type(type, id, timed_interrupt):
+    """Process a single resource type."""
+    if type == "all" and id is not None:
+        log.error("Cannot pass an id (-i) with all types")
+        log.info("exit 007")
+        timed_interrupt.stop_timer()
+        exit()
+    
+    all_types = resources.resource_types(type)
+    
+    try:
+        lall = len(all_types)
+    except:
+        lall = 0
+    
+    if all_types is None:
+        log.warning("No resources found all_types=None")
+    
+    # Handle stack type
+    if type == "stack":
+        process_stack_type(id, timed_interrupt)
+    
+    # Handle direct terraform type
+    elif type.startswith("aws_"):
+        process_terraform_type(type, id)
+    
+    # Handle multiple types
+    elif all_types is not None and lall > 1:
+        process_multiple_resource_types(all_types, id)
+    
+    # Handle single type
+    else:
+        process_single_resource_type(all_types, type, timed_interrupt)
+
+
+def process_stack_type(id, timed_interrupt):
+    """Process CloudFormation stack."""
+    if id is None:
+        log.error("Must pass a stack name as a parameter   -i <stack name>")
+        log.info("exit 008")
+        timed_interrupt.stop_timer()
+        exit()
+    else:
+        context.tracking_message = "Stage 3 of 10 getting stack " +id+" resources ..."
+        context.expected = True
+        stacks.get_stacks(id)
+
+
+def process_terraform_type(type, id):
+    """Process direct terraform resource type."""
+    if type in aws_dict.aws_resources:
+        if type in context.all_extypes:
+            log.info("Excluding type %s", type)
+        else:
+            common.call_resource(type, id)
+    else:
+        log.warning("Resource %s not found in aws_dict", type)
+
+
+def process_multiple_resource_types(all_types, id):
+    """Process multiple resource types with progress tracking."""
+    if "aws_iam" in str(all_types) and id is None:
+        log.info("INFO: Building secondary lists %s", id)
+        build_secondary_lists(id)
+    
+    context.esttime = len(all_types)/4
+    it = len(all_types)
+    context.expected = True
+    
+    if context.fast:
+        # Multi-threaded processing
+        context.tracking_message = "Stage 3 of 10 getting "+str(it)+" resources multi-threaded"
+        log.info(f"Processing {it} resource types (multi-threaded)...")
+        
+        with ThreadPoolExecutor(max_workers=context.cores) as executor:
+            futures = [
+                executor.submit(common.call_resource, i, id)
+                for i in all_types
+            ]
+            for future in tqdm(concurrent.futures.as_completed(futures),
+                              total=len(futures),
+                              desc="Processing resources",
+                              unit="resource",
+                              disable=context.debug):
+                future.result()
+    else:
+        # Single-threaded processing
+        log.info(f"Processing {it} resource types...")
+        ic = 0
+        istart = 0
+        
+        for i in tqdm(all_types,
+                     desc="Processing resources",
+                     unit="type",
+                     disable=context.debug):
+            ic = ic + 1
+            if ic > it:
+                break
+            if ic < istart:
+                continue
+            
+            log.debug(str(ic)+" of "+str(it) +"\t"+i)
+            context.tracking_message = "Stage 3 of 10, "+ str(ic)+" of "+str(it) +" resource types \t currently getting "+i
+            common.call_resource(i, id)
+
+
+def process_single_resource_type(all_types, resource_type, timed_interrupt):
+    """Process a single resource type."""
+    if all_types is not None:
+        for res_type in all_types:
+            if res_type in aws_dict.aws_resources:
+                common.call_resource(res_type, None)
+            else:
+                log.warning("Resource %s not found in aws_dict", res_type)
+    else:
+        log.warning("No resources found")
+        context.tracking_message = "Stage 3 of 10 no resources found exiting ..."
+        log.info("exit 009")
+        timed_interrupt.stop_timer()
+        exit()
+
+
+def process_known_dependencies():
+    """Process known dependencies (Stage 4)."""
+    context.tracking_message = "Stage 4 of 10, Known Dependancies"
+    log.info("Known Dependancies - Multi Threaded")
+    
+    if context.fast:
+        context.tracking_message = "Stage 4 of 10, Known Dependancies - Multi Threaded "+str(context.cores)
+        with ThreadPoolExecutor(max_workers=context.cores) as executor12:
+            futures2 = [
+                executor12.submit(kd_threaded(ti))
+                for ti in list(context.rdep)
+            ]
+    else:
+        for ti in list(context.rdep):
+            if not context.rdep[ti]:
+                i = ti.split(".")[0]
+                id = ti.split(".")[1]
+                log.debug("type="+i+" id="+str(id))
+                common.call_resource(i, id)
+    
+    context.tracking_message = "Stage 4 of 10, Known Dependancies: terraform plan"
+    common.tfplan1()
+    context.tracking_message = "Stage 4 of 10, Known Dependancies: moving files"
+    common.tfplan2()
+
+
+def process_detected_dependencies():
+    """Process detected dependencies with iterative loops (Stage 5-6)."""
+    import timed_interrupt
+    
+    # Check for invalid keys
+    if ":" in context.rproc:
+        log.error(": in rproc exiting")
+        log.info("exit 010")
+        timed_interrupt.stop_timer()
+        exit()
+    
+    now = datetime.datetime.now()
+    x = glob.glob("import__aws_*.tf")
+    context.esttime = len(x)/4
+    
+    if not context.fast:
+        log.info("\naws2tf Detected Dependancies started at %s\n" % now)
+    
+    context.tracking_message = "Stage 5 of 10, Detected Dependancies: starting"
+    
+    # Check if there are detected dependencies
+    detdep = False
+    for ti in context.rproc.keys():
+        if not context.rproc[ti]:
+            log.debug(str(ti))
+            detdep = True
+    
+    if not detdep:
+        log.info("No Detected Dependancies")
+    
+    # Iterative dependency resolution
+    lc = 0
+    olddetdepstr = ""
+    detdepstr = ""
+    
+    while detdep:
+        # Process dependencies
+        if context.fast:
+            context.tracking_message = "Stage 5 of 10, Detected Dependancies: Multi Threaded "+str(context.cores)
+            with ThreadPoolExecutor(max_workers=context.cores) as executor2:
+                futures2 = [
+                    executor2.submit(dd_threaded(ti))
+                    for ti in list(context.rproc)
+                ]
+        else:
+            for ti in list(context.rproc):
+                if not context.rproc[ti]:
+                    i = ti.split(".")[0]
+                    id = ti.split(".", 1)[1]
+                    log.debug("DD calling getresource with type="+i+" id="+str(id))
+                    common.call_resource(i, id)
+        
+        detdep = False
+        lc = lc + 1
+        
+        # Run terraform plan and fix
+        if not context.fast:
+            log.info("Terraform Plan - Dependancies Detection Loop "+str(lc)+".....")
+        
+        context.tracking_message = "Stage 6 of 10, Dependancies Detection: Loop "+str(lc)
+        x = glob.glob("import__aws_*.tf")
+        context.esttime = len(x)/4
+        
+        # Move files
+        for fil in x:
+            tf = fil.split('__',1)[1]
+            com = "mv "+tf +" imported/"+tf
+            rout = common.rc(com)
+        
+        context.tracking_message = "Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" terraform plan"
+        common.tfplan1()
+        context.tracking_message = "Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" moving files"
+        common.tfplan2()
+        
+        # Check for remaining dependencies
+        detdepstr = ""
+        for ti in context.rproc.keys():
+            if not context.rproc[ti]:
+                detdep = True
+                detdepstr = detdepstr + str(ti) + " "
+        
+        if not context.fast:
+            log.info("\n----------- Completed "+str(lc)+" dependancy check loops --------------")
+        
+        context.tracking_message = "Stage 6 of 10, Completed "+str(lc)+" dependancy check loops"
+        
+        # Check for stuck dependencies
+        if olddetdepstr == detdepstr and detdepstr != "":
+            context.tracking_message = "No change/progress in dependancies exiting..."
+            log.error("\nERROR: No change/progress in dependancies exiting... \n")
+            
+            for ti in context.rproc.keys():
+                if not context.rproc[ti]:
+                    log.error("ERROR: Not found "+str(ti)+" - check if this resource still exists in AWS. Also check what resource is using it - grep the *.tf files in the generated/tf.* subdirectory")
+                    context.tracking_message = "No change/progress in dependancies exiting..."
+            
+            log.info("exit 011")
+            timed_interrupt.stop_timer()
+            exit()
+        
+        olddetdepstr = detdepstr
+
+
+def validate_and_import():
+    """Run terraform validation and import (Stage 7-9)."""
+    import timed_interrupt
+    
+    common.tfplan3()
+    
+    # Restore data files
+    com = "cp imported/data-dz*.tf ."
+    rout = common.rc(com)
+    
+    if context.validate is False:
+        now = datetime.datetime.now()
+        log.info("aws2tf wrap up started at %s" % now)
+        common.wrapup()
+    else:
+        log.info("\nValidation only - no files written")
+        log.info("exit 012")
+        timed_interrupt.stop_timer()
+        exit()
+
+
+def finalize_and_cleanup(args, starttime):
+    """
+    Finalize processing - save state, run security checks, cleanup.
+    
+    Args:
+        args: Parsed arguments
+        starttime: Start time of execution
+    """
+    context.tracking_message = "Stage 10 of 10, Completed"
+    
+    # Save processed resources
+    with open("pyprocessed.txt", "a") as f:
+        for i in context.rproc.keys():
+            log.debug(str(i))
+            f.write(i+"\n")
+    
+    com = "sort -u pyprocessed.txt -o pyprocessed.txt"
+    rout = common.rc(com)
+    
+    # Run trivy security check if installed
+    path = shutil.which("trivy")
+    if path is not None:
+        x = glob.glob("aws_*__*.tf")
+        context.esttime = len(x)/4
+        awsf = len(x)
+        
+        if awsf < 256:
+            context.tracking_message = "Running trivy security check"
+            log.info("\nRunning trivy security check .....")
+            common.trivy_check()
+        else:
+            log.info("\nSkipping security check - too many files.")
+            log.info("Use trivy manually if required")
+    else:
+        log.info("trivy not installed, skipping security check")
+    
+    # Upload to S3 if serverless
+    if context.serverless:
+        common.upload_directory_to_s3()
+    
+    # Check for errors
+    x = glob.glob("*.err")
+    awsf = len(x)
+    if awsf > 0:
+        log.warning("\nErrors found - see *.err files, and please report via github issue")
+    
+    # Handle single file mode
+    if args.singlefile:
+        log.info("Single file mode .....")
+        tf_files = glob.glob("aws_*__*.tf")
+        if not tf_files:
+            log.warning("No aws_*.tf files found")
+        else:
+            process_file_operations(tf_files, 'main.tf')
+        log.info(f"Successfully merged {len(tf_files)} files into main.tf")
+        com = "mv aws_*__*.tf imported"
+        rout = common.rc(com)
+    
+    # Security Fix #7: Secure sensitive files
+    log.info("Securing sensitive files...")
+    common.secure_terraform_files(context.path1)
+    
+    # Final summary
+    context.tracking_message = "aws2tf, Completed"
+    now = datetime.datetime.now()
+    log.info("aws2tf started at  %s" % starttime)
+    log.info("aws2tf execution time h:mm:ss :"+ str(now - starttime))
+    log.info("\nTerraform files & state in sub-directory: "+ context.path1)
+    
+    import timed_interrupt
+    timed_interrupt.stop_timer()
+
+
+#if __name__ == '__main__':
+
+def main():
+    global log
+
+    now = datetime.datetime.now()
+    log.info("aws2tf "+context.aws2tfver+" started at %s" % now)
+    starttime=now
+
+
+    #log.debug("cwd="+str(sys.argv),str(len(sys.argv)))
+    # Note: Don't check for -h here since timed_interrupt isn't imported yet
+    # argparse will handle -h automatically
+
+    argParser = argparse.ArgumentParser()
+    argParser.add_argument("-l", "--list",help="List extra help information" , action='store_true')
+    argParser.add_argument("-t", "--type", help="resource type aws_s3, ec2 aws_vpc etc")
+    argParser.add_argument("-i", "--id", help="resource id")
+    argParser.add_argument("-r", "--region", help="region")
+    argParser.add_argument("-p", "--profile", help="profile")
+    argParser.add_argument("-m", "--merge", help="merge", action='store_true')
+    argParser.add_argument("-d", "--debug", help="debug", action='store_true')
+    argParser.add_argument("-s", "--singlefile", help="only a single file main.tf is produced", action='store_true')
+    argParser.add_argument("-f", "--fast", help="fast multi-threaded mode", action='store_true')
+    argParser.add_argument("-v", "--validate", help="validate and exit", action='store_true')
+    argParser.add_argument("-w", "--warn", help="show warning messages", action='store_true')
+    argParser.add_argument("-a", "--accept", help="expected plan changes accepted", action='store_true')
+    argParser.add_argument("-e", "--exclude", help="resource types to exclude")
+    argParser.add_argument("-ec2tag", "--ec2tag", help="ec2 key:value pair to import")
+    argParser.add_argument("-dnet", "--datanet", help="write data statements for aws_vpc, aws_subnet",action='store_true')
+    argParser.add_argument("-dsgs", "--datasgs", help="write data statements for aws_security_groups",action='store_true')
+    argParser.add_argument("-dkms", "--datakms", help="write data statements for aws_kms_key",action='store_true')
+    argParser.add_argument("-dkey", "--datakey", help="write data statements for aws_key_pair",action='store_true')
+    argParser.add_argument("-b3", "--boto3error", help="exit on boto3 api error (for debugging)", action='store_true')
+    argParser.add_argument("-la", "--serverless", help="Lambda mode - when running in a Lambda container", action='store_true')
+    argParser.add_argument("-tv", "--tv", help="Specify version of Terraform AWS provider default = "+context.tfver)
+    argParser.add_argument("-d5", "--debug5", help="debug5 special debug flag", action='store_true')
+
+    try:
+        args = argParser.parse_args()
+    except SystemExit as e:
+        # Don't try to stop timer here - it hasn't been imported yet
+        # argparse handles -h and exits cleanly
         exit()
         
     type=""
 
+    # Security Fix #4 & #6: Validate CLI arguments
+    try:
+        if args.region:
+            args.region = validate_region(args.region)
+        
+        if args.profile:
+            args.profile = validate_profile(args.profile)
+        
+        if args.type:
+            args.type = validate_resource_type(args.type)
+        
+        if args.id:
+            args.id = validate_resource_id(args.id)
+        
+        if args.exclude:
+            # validate_exclude_list will validate each type
+            validate_exclude_list(args.exclude)
+        
+        if args.ec2tag:
+            # Will validate later when processing
+            pass
+        
+        if args.tv:
+            args.tv = validate_terraform_version(args.tv)
+            
+    except ValueError as e:
+        log.error(f"ERROR: Invalid input - {e}")
+        log.info("exit 001")
+        # Don't need to stop timed_interrupt here as it hasn't been imported yet
+        exit(1)
+
+    # Import timed_interrupt after validation to avoid orphaned threads
+    # Security Fix: Prevents background threads when validation fails
+    import timed_interrupt
+    
+    # Initialize the timer now that validation passed
+    timed_interrupt.initialize_timer(increment=20)
 
     common.check_python_version()
-    # print("cwd=%s" % os.getcwd())
+    # log.debug("cwd=%s" % os.getcwd())
     signal.signal(signal.SIGINT, common.ctrl_c_handler)
 
     path = shutil.which("terraform")
 
     if path is None:
-        print("no executable found for command 'terraform'")
-        print("exit 002")
-        timed_interrupt.timed_int.stop()
+        log.error("no executable found for command 'terraform'")
+        log.info("exit 002")
+        timed_interrupt.stop_timer()
         exit()
 
     if args.profile: 
@@ -171,12 +1258,12 @@ def main():
     
     context.credtype=info['credential_type']
     context.sso=info['is_sso']
-    print("Credentials Type =",context.credtype)
-    print("Is SSO login =",info['is_sso'])
+    log.info("Credentials Type = %s", context.credtype)
+    log.info("Is SSO login = %s", info['is_sso'])
     if context.credtype=="unknown":
-        print("count not find valid login creds")
+        log.error("could not find valid login creds")
         common.print_credentials_info(context.profile)
-        timed_interrupt.timed_int.stop()
+        timed_interrupt.stop_timer()
         exit()
 
     # check terraform version
@@ -189,30 +1276,30 @@ def main():
     rout = common.rc(com)
     tvr=rout.stdout.decode().rstrip()
     if "." not in tvr:
-        print("Unexpected Terraform version "+str(tvr))
-        timed_interrupt.timed_int.stop()
+        log.error("Unexpected Terraform version "+str(tvr))
+        timed_interrupt.stop_timer()
         os._exit(1)                                      
     tv=str(rout.stdout.decode().rstrip()).split("rm v")[-1].split("\n")[0]
     tvmaj=int(tv.split(".")[0])
     tvmin=int(tv.split(".")[1])
     
     if tvmaj < 1:
-        print("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
-        timed_interrupt.timed_int.stop()
+        log.error("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
+        timed_interrupt.stop_timer()
         os._exit(1) 
     if tvmaj==1 and tvmin<8:                                      
-        print("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
-        timed_interrupt.timed_int.stop()
+        log.error("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
+        timed_interrupt.stop_timer()
         os._exit(1)
-    print("Terraform version:",tv,"AWS provider version:",context.tfver)
+    log.info("Terraform version: %s AWS provider version: %s", tv, context.tfver)
 
     context.expected=args.accept
 
-    # print("args=%s" % args)
+    # log.debug("args=%s" % args)
     
-    # print("args.bucket=%s" % args.bucket)
-    # print("args.type=%s" % args.type)
-    # print("args.id=%s" % args.id)
+    # log.debug("args.bucket=%s" % args.bucket)
+    # log.debug("args.type=%s" % args.type)
+    # log.debug("args.id=%s" % args.id)
     context.merge=args.merge
 
     if args.list: extra_help()
@@ -220,6 +1307,8 @@ def main():
     if args.debug: 
         context.debug = True
         context.fast = False
+        # Reconfigure logger for debug mode
+        log = setup_logging(debug=True)
 
     if args.debug5: 
         context.debug5 = True
@@ -228,26 +1317,21 @@ def main():
 
 
     if args.ec2tag:
-        isinv=True
-        if args.ec2tag!="" and ":" in args.ec2tag:
-            isinv=False             
-            #args.ec2tag = args.ec2tag[1:-1]
-            context.ec2tag=args.ec2tag
-            context.ec2tagk=context.ec2tag.split(":")[0]
-            context.ec2tagv=context.ec2tag.split(":")[1]
-        else:
-            isinv=True
-        
-        if isinv:
-            #if len(context.ec2tagk) < 1 or len(context.ec2tagv) < 1:
-            print("ec2tag must be in format (with quotes) \"key:value\"")
-            print("exit 005")
-            timed_interrupt.timed_int.stop()
+        # Security Fix #6: Validate EC2 tag format
+        try:
+            context.ec2tagk, context.ec2tagv = validate_ec2_tag(args.ec2tag)
+            context.ec2tag = args.ec2tag
+        except ValueError as e:
+            log.error(f"ERROR: {e}")
+            log.info("exit 005")
+            timed_interrupt.stop_timer()
             exit()
 
 
     if args.validate: 
         context.validate = True
+    if args.warn:
+        context.warnings = True
 
     if args.datanet:  context.dnet = True
     if args.datasgs:  context.dsgs = True
@@ -256,16 +1340,16 @@ def main():
 
     if args.type is None or args.type=="":
         if args.serverless:
-            print("type is required eg:  -t aws_vpc  when in serverless mode, exiting ....")
-            print("exit 003")
-            timed_interrupt.timed_int.stop()
+            log.error("type is required eg:  -t aws_vpc  when in serverless mode, exiting ....")
+            log.info("exit 003")
+            timed_interrupt.stop_timer()
             exit()
-        print("type is recommended eg:  -t aws_vpc    \nsetting to all")
+        log.info("type is recommended eg:  -t aws_vpc    \nsetting to all")
         args.type = "all"
     else:
         type = args.type
 
-    #print("args.exclude="+str(args.exclude))
+    #log.debug("args.exclude="+str(args.exclude))
 
  # build exclusion list 
 
@@ -286,7 +1370,7 @@ def main():
         rout = common.rc(com)
         el = len(rout.stderr.decode().rstrip())
         if el != 0:
-            print("region is required eg:  -r eu-west-1  [using eu-west-1 as default]")
+            log.warning("region is required eg:  -r eu-west-1  [using eu-west-1 as default]")
             region = "eu-west-1"
         else:
             region = rout.stdout.decode().rstrip()
@@ -295,11 +1379,19 @@ def main():
                 if region is None:
                     region=os.getenv("AWS_DEFAULT_REGION")
                     if region is None:
-                        print("region is required - set in AWS cli or pass with -r")
-                        print("exit 004")
-                        timed_interrupt.timed_int.stop()
+                        log.error("region is required - set in AWS cli or pass with -r")
+                        log.info("exit 004")
+                        timed_interrupt.stop_timer()
                         exit()
-            print("region set from aws cli / environment variables as "+region)
+            log.info("region set from aws cli / environment variables as "+region)
+            # Security Fix #6: Validate region from environment
+            try:
+                region = validate_region(region)
+            except ValueError as e:
+                log.error(f"ERROR: Invalid region from environment - {e}")
+                log.info("exit 004")
+                timed_interrupt.stop_timer()
+                exit()
     else:
         region = args.region
 
@@ -309,7 +1401,7 @@ def main():
  
     # get the current env and set directory
    
-    if context.debug: print("setting session region="+region)
+    log.debug("setting session region="+region)
     
     try:
         if args.profile is None:
@@ -317,9 +1409,9 @@ def main():
         else:
             boto3.setup_default_session(region_name=region,profile_name=context.profile)
     except Exception as e: 
-        print("AWS Authorization Error: "+str(e))
+        log.error("AWS Authorization Error: "+str(e))
       
-    if context.debug: print("getting account")
+    log.debug("getting account")
     try:
         context.acc = boto3.client('sts').get_caller_identity().get('Account')
     except Exception as e:
@@ -327,17 +1419,17 @@ def main():
         exn=str(exc_type.__name__)
         
         if "ExpiredToken" in str(e):
-            print("STS Authorization Error: ExpiredToken, exiting .....")
+            log.error("STS Authorization Error: ExpiredToken, exiting .....")
             
         elif "EndpointConnectionError" in exn:
-            print("Failed to connect to AWS - check network connectivity, exiting .....")
+            log.error("Failed to connect to AWS - check network connectivity, exiting .....")
             
         else:
-            print(str(e))
-            print(str(exn))
-        timed_interrupt.timed_int.stop()
+            log.error(str(e))
+            log.error(str(exn))
+        timed_interrupt.stop_timer()
         exit()
-    print('Using region: '+region + ' account: ' + context.acc+ " profile: "+context.profile+"\n")
+    log.info('Using region: '+region + ' account: ' + context.acc+ " profile: "+context.profile+"\n")
 ####  restore form S3 if merging & serverless
 
 ####    
@@ -362,7 +1454,7 @@ def main():
 
         # does a terraform.tfstate file exist in context.path1 directory ?
     if not os.path.isfile(context.path1+"/terraform.tfstate") and context.merge:
-            print("No terraform.tfstate file found in "+context.path1+" - can not merge")
+            log.warning("No terraform.tfstate file found in "+context.path1+" - can not merge")
             context.merge=False
             com = "rm -rf "+context.path1
             rout = common.rc(com)
@@ -391,19 +1483,19 @@ def main():
     foundtf=False
     for root, dirs, files in os.walk(context.cwd+"/"+context.path1):
         if '.terraform' in dirs:
-            print("PASSED: Terraform Initialise OK")
+            log.info("PASSED: Terraform Initialise OK")
             foundtf=True
             break
 
     if not foundtf:
-        print("failed to find .terraform in "+context.cwd+"/"+context.path1)
-        print("Terraform Initialise may have failed exiting ...")
-        timed_interrupt.timed_int.stop()
+        log.error("failed to find .terraform in "+context.cwd+"/"+context.path1)
+        log.error("Terraform Initialise may have failed exiting ...")
+        timed_interrupt.stop_timer()
         exit()
 
 
     if args.merge:
-        print("Merging "+str(context.merge))
+        log.info("Merging "+str(context.merge))
                     
         try:
             with open('pyprocessed.txt', 'r') as file:
@@ -418,8 +1510,8 @@ def main():
                 
                 
             if context.debug:
-                print("Pre Processed:")
-                print(str(context.rproc))
+                log.debug("Pre Processed:")
+                log.debug(str(context.rproc))
 
             com = "rm -f main.tf"
             rout = common.rc(com) 
@@ -427,75 +1519,75 @@ def main():
             rout = common.rc(com) 
 
         except FileNotFoundError:
-            print("Could not find pyprocessed.txt")
+            log.warning("Could not find pyprocessed.txt")
         except IOError as e:
-            print(f"IO error occurred: {str(e)}")   
+            log.error(f"IO error occurred: {str(e)}")   
 
     id = args.id
 
 
 #### setup
     st1 = datetime.datetime.now()
-    print("build lists started at %s" % now)
+    log.info("build lists started at %s" % now)
     build_lists()
     now = datetime.datetime.now()
-    print("build lists finished at %s" % now)
-    print("build lists took %s" % (now - st1))
-    #print(str(context.attached_role_policies_list))
+    log.info("build lists finished at %s" % now)
+    log.info("build lists took %s" % (now - st1))
+    #log.debug(str(context.attached_role_policies_list))
     #for k,v in context.attached_role_policies_list.items():
-    #    print(k,v)
+    #    log.debug(k,v)
     
     if type == "" or type is None: type = "all"
     
-    print("---<><> "+ str(type),"Id="+str(id)," exclude="+str(context.all_extypes))  
+    log.info("---<><> "+ str(type)+" Id="+str(id)+" exclude="+str(context.all_extypes))  
 
 ################# -- now we are calling ----   ###############################
     context.tracking_message="Stage 3 of 10 getting resources ..."
 
 
     if "," in type:
-        #print("type=",type)
+        #log.debug("type=",type)
         if "stack" in type:
-            print("Cannot mix stack with other types")
-            print("exit 006")
-            timed_interrupt.timed_int.stop()
+            log.error("Cannot mix stack with other types")
+            log.info("exit 006")
+            timed_interrupt.stop_timer()
             exit()
 
         if id is not None:
-            print("Cannot pass id with multiple types")
-            print("exit 007")
-            timed_interrupt.timed_int.stop()
+            log.error("Cannot pass id with multiple types")
+            log.info("exit 007")
+            timed_interrupt.stop_timer()
             exit()
 
         #if context.serverless:
-        #    print("Cannot pass multiple types when running on serverless")
+        #    log.error("Cannot pass multiple types when running on serverless")
         #    exit()
 
         types = type.split(",")
-        #print("types=",str(types))
+        #log.debug("types=",str(types))
         all_types = []
         for type1 in types:
-            #print("type1=",type1)
+            #log.debug("type1=",type1)
             if type1.startswith("aws_"): 
                 all_types = all_types + resources.resource_types(type1)
             else:
                 all_types = all_types + resources.resource_types(type1)
 
         for type2 in all_types:
-            #print("type2=",type2)
+            #log.debug("type2=",type2)
             if type2 in aws_dict.aws_resources:   
                 if type2 in context.all_extypes:
-                    print("Excluding", type2) 
+                    log.info("Excluding %s", type2) 
                     continue                 
                 common.call_resource(type2, id)
             else:
-                print("Resource",type2," not found in aws_dict")
+                log.warning("Resource %s not found in aws_dict", type2)
         
     else:
         if type=="all" and id is not None:
-            print("Cannot pass an id (-i) with all types")
-            print("exit 007")
-            timed_interrupt.timed_int.stop()
+            log.error("Cannot pass an id (-i) with all types")
+            log.info("exit 007")
+            timed_interrupt.stop_timer()
             exit()
         all_types = resources.resource_types(type)
 
@@ -504,15 +1596,15 @@ def main():
         except:
             lall=0
 
-        if all_types is None: print("No resources found all_types=None")
-        #print("all_types="+str(all_types))
+        if all_types is None: log.warning("No resources found all_types=None")
+        #log.debug("all_types="+str(all_types))
 
         if type == "stack":
             
             if id is None:
-                print("Must pass a stack name as a parameter   -i <stack name>")
-                print("exit 008")
-                timed_interrupt.timed_int.stop()
+                log.error("Must pass a stack name as a parameter   -i <stack name>")
+                log.info("exit 008")
+                timed_interrupt.stop_timer()
                 exit()
             else:
                 context.tracking_message="Stage 3 of 10 getting stack " +id+" resources ..."
@@ -522,27 +1614,27 @@ def main():
         elif type.startswith("aws_"):
             if type in aws_dict.aws_resources:
                 if type in context.all_extypes:
-                    print("Excluding type", type) 
+                    log.info("Excluding type %s", type) 
                 else:    
                     common.call_resource(type, id)
             else:
-                print("Resource",type," not found in aws_dict")
+                log.warning("Resource %s not found in aws_dict", type)
 
         
 ################
         
         elif all_types is not None and lall > 1:
             #all_types=all_types[:10]
-            #print("len all_types="+str(len(all_types))) # testing only
-            #print("all_types="+str(all_types))
+            #log.debug("len all_types="+str(len(all_types))) # testing only
+            #log.debug("all_types="+str(all_types))
             if "aws_iam" in str(all_types) and id is None:
-                print("INFO: Building secondary lists",id)
+                log.info("INFO: Building secondary lists %s", id)
                 build_secondary_lists(id)
 
             
             context.esttime=len(all_types)/4
             #id="foobar" # testing only
-            #print("------------------1-------------------------------------------")
+            #log.debug("------------------1-------------------------------------------")
             ic=0
             istart=0
             it=len(all_types)
@@ -551,19 +1643,32 @@ def main():
             
             if context.fast:
                 context.tracking_message="Stage 3 of 10 getting "+str(it)+" resources multi-threaded"
+                log.info(f"Processing {it} resource types (multi-threaded)...")
                 with ThreadPoolExecutor(max_workers=context.cores) as executor:
+                    # Use tqdm for progress bar
                     futures = [
                         executor.submit(common.call_resource, i, id)
                         for i in all_types
                     ]
-                    #return [f.result() for f in futures]     
+                    # Show progress as futures complete
+                    for future in tqdm(concurrent.futures.as_completed(futures), 
+                                      total=len(futures),
+                                      desc="Processing resources",
+                                      unit="resource",
+                                      disable=context.debug):
+                        future.result()
             else:
-                for i in all_types:
+                log.info(f"Processing {it} resource types...")
+                # Use tqdm for progress bar in non-fast mode
+                for i in tqdm(all_types, 
+                             desc="Processing resources",
+                             unit="type",
+                             disable=context.debug):
                     ic=ic+1
                     if ic > it: break 
                     if ic < istart: continue
                     
-                    if context.debug: print(str(ic)+" of "+str(it) +"\t"+i)
+                    log.debug(str(ic)+" of "+str(it) +"\t"+i)
                     context.tracking_message="Stage 3 of 10, "+ str(ic)+" of "+str(it) +" resource types \t currently getting "+i
                     common.call_resource(i, id)
                                 
@@ -573,12 +1678,12 @@ def main():
                     if type in aws_dict.aws_resources:
                         common.call_resource(type,id)
                     else:
-                        print("Resource",type," not found in aws_dict")
+                        log.warning("Resource %s not found in aws_dict", type)
             else:
-                print("No resources found")
+                log.warning("No resources found")
                 context.tracking_message="Stage 3 of 10 no resources found exiting ..."
-                print("exit 009")
-                timed_interrupt.timed_int.stop()
+                log.info("exit 009")
+                timed_interrupt.stop_timer()
                 exit()
 
 #########################################################################################################################
@@ -586,7 +1691,7 @@ def main():
  #########################################################################################################################   
 
     context.tracking_message="Stage 4 of 10, Known Dependancies"
-    print("Known Dependancies - Multi Threaded")
+    log.info("Known Dependancies - Multi Threaded")
     if context.fast:
         context.tracking_message="Stage 4 of 10, Known Dependancies - Multi Threaded "+str(context.cores)
         with ThreadPoolExecutor(max_workers=context.cores) as executor12:
@@ -600,10 +1705,10 @@ def main():
             if not context.rdep[ti]:
                 i = ti.split(".")[0]
                 id = ti.split(".")[1]
-                if context.debug: print("type="+i+" id="+str(id))
+                log.debug("type="+i+" id="+str(id))
                 common.call_resource(i, id)
     #else:
-    #    print("No Known Dependancies")
+    #    log.info("No Known Dependancies")
     context.tracking_message="Stage 4 of 10, Known Dependancies: terraform plan"
     common.tfplan1()
     context.tracking_message="Stage 4 of 10, Known Dependancies: moving files"
@@ -613,23 +1718,23 @@ def main():
     # Detected deps
     
     if ":" in context.rproc:
-        print(": in rproc exiting")
-        print("exit 010")
-        timed_interrupt.timed_int.stop()
+        log.error(": in rproc exiting")
+        log.info("exit 010")
+        timed_interrupt.stop_timer()
         exit()
     now = datetime.datetime.now()
     x=glob.glob("import__aws_*.tf")
     context.esttime=len(x)/4
-    if not context.fast: print("\naws2tf Detected Dependancies started at %s\n" % now)
+    if not context.fast: log.info("\naws2tf Detected Dependancies started at %s\n" % now)
     context.tracking_message="Stage 5 of 10, Detected Dependancies: starting"
     detdep=False
     for ti in context.rproc.keys():
         if not context.rproc[ti]: 
-            #print(str(ti)+":"+str(context.rproc[ti]))  
-            if context.debug: print(str(ti)) 
+            #log.debug(str(ti)+":"+str(context.rproc[ti]))  
+            log.debug(str(ti)) 
             detdep=True
             
-    if not detdep: print("No Detected Dependancies") 
+    if not detdep: log.info("No Detected Dependancies") 
 
     lc=0
     olddetdepstr=""
@@ -651,19 +1756,19 @@ def main():
                 if not context.rproc[ti]:
                     i = ti.split(".")[0]
                     id = ti.split(".", 1)[1]
-                    if context.debug: print("DD calling getresource with type="+i+" id="+str(id))
-                    #print("----- DD ----  calling getresource with type="+i+" id="+str(id))
+                    log.debug("DD calling getresource with type="+i+" id="+str(id))
+                    #log.debug("----- DD ----  calling getresource with type="+i+" id="+str(id))
                     common.call_resource(i, id)   
         
         detdep=False
         lc  = lc + 1
 
 # go again plan and split / fix
-        if not context.fast: print("Terraform Plan - Dependancies Detection Loop "+str(lc)+".....")
+        if not context.fast: log.info("Terraform Plan - Dependancies Detection Loop "+str(lc)+".....")
         context.tracking_message="Stage 6 of 10, Dependancies Detection: Loop "+str(lc)
         x=glob.glob("import__aws_*.tf")
         context.esttime=len(x)/4
-        #print(str(x))
+
         #td=""
         for fil in x:
             tf=fil.split('__',1)[1]
@@ -681,20 +1786,20 @@ def main():
         for ti in context.rproc.keys():
             if not context.rproc[ti]:
                 detdep=True 
-                #print(str(ti)+" is False")
+         
                 detdepstr=detdepstr+str(ti)+" "
 
-        if not context.fast: print("\n----------- Completed "+str(lc)+" dependancy check loops --------------") 
+        if not context.fast: log.info("\n----------- Completed "+str(lc)+" dependancy check loops --------------") 
         context.tracking_message="Stage 6 of 10, Completed "+str(lc)+" dependancy check loops"
         if olddetdepstr == detdepstr and detdepstr != "":
             context.tracking_message="No change/progress in dependancies exiting..."
-            print("\nERROR: No change/progress in dependancies exiting... \n")
+            log.error("\nERROR: No change/progress in dependancies exiting... \n")
             for ti in context.rproc.keys():
                 if not context.rproc[ti]:
-                    print("ERROR: Not found "+str(ti)+" - check if this resource still exists in AWS. Also check what resource is using it - grep the *.tf files in the generated/tf.* subdirectory")
+                    log.error("ERROR: Not found "+str(ti)+" - check if this resource still exists in AWS. Also check what resource is using it - grep the *.tf files in the generated/tf.* subdirectory")
                     context.tracking_message="No change/progress in dependancies exiting..."
-            print("exit 011")
-            timed_interrupt.timed_int.stop()
+            log.info("exit 011")
+            timed_interrupt.stop_timer()
             exit()
 
         olddetdepstr=detdepstr
@@ -707,12 +1812,12 @@ def main():
 
     if context.validate is False: 
         now = datetime.datetime.now()
-        print("aws2tf wrap up started at %s" % now)
+        log.info("aws2tf wrap up started at %s" % now)
         common.wrapup()
     else: 
-        print("\nValidation only - no files written")
-        print("exit 012")
-        timed_interrupt.timed_int.stop()
+        log.info("\nValidation only - no files written")
+        log.info("exit 012")
+        timed_interrupt.stop_timer()
         exit()
 
 ##########################################################################
@@ -722,7 +1827,7 @@ def main():
 
     with open("pyprocessed.txt", "a") as f:
         for i in context.rproc.keys():
-            if context.debug: print(str(i))
+            log.debug(str(i))
             f.write(i+"\n")
     com = "sort -u pyprocessed.txt -o pyprocessed.txt"
     rout = common.rc(com)
@@ -737,46 +1842,96 @@ def main():
         awsf=len(x)
         if awsf < 256:
             context.tracking_message="Running trivy security check"
-            print("\nRunning trivy security check .....")
+            log.info("\nRunning trivy security check .....")
             common.trivy_check()
 
         else:
-            print("\nSkipping security check - too many files.")
-            print("Use trivy manually if required")
+            log.info("\nSkipping security check - too many files.")
+            log.info("Use trivy manually if required")
     else:
-        print("trivy not installed, skipping security check")
+        log.info("trivy not installed, skipping security check")
 
     if context.serverless: common.upload_directory_to_s3()
 
     x = glob.glob("*.err")
     awsf=len(x)
     if awsf > 0:
-        print("\nErrors found - see *.err files, and please report via github issue")   
+        log.warning("\nErrors found - see *.err files, and please report via github issue")   
 
 
     if args.singlefile:
-        print("Single file mode .....")
+        log.info("Single file mode .....")
         #context.tracking_message="Single file mode - merging"
         tf_files = glob.glob("aws_*__*.tf")
         if not tf_files:
-            print("No aws_*.tf files found")
+            log.warning("No aws_*.tf files found")
         else:
             process_file_operations(tf_files, 'main.tf')
-        print(f"Successfully merged {len(tf_files)} files into main.tf")
+        log.info(f"Successfully merged {len(tf_files)} files into main.tf")
         com = "mv aws_*__*.tf imported"
         rout = common.rc(com)
     
+    # Security Fix #7: Secure sensitive files with appropriate permissions
+    log.info("Securing sensitive files...")
+    common.secure_terraform_files(context.path1)
+    
     context.tracking_message="aws2tf, Completed"
     now = datetime.datetime.now()
-    print("aws2tf started at  %s" % starttime)
-    #print("aws2tf finished at %s" % now)
-    # print execution time
-    print("aws2tf execution time h:mm:ss :"+ str(now - starttime))
-    print("\nTerraform files & state in sub-directory: "+ context.path1)
-    timed_interrupt.timed_int.stop()
+    log.info("aws2tf started at  %s" % starttime)
+    #log.info("aws2tf finished at %s" % now)
+
+    log.info("aws2tf execution time h:mm:ss :"+ str(now - starttime))
+    log.info("\nTerraform files & state in sub-directory: "+ context.path1)
+    timed_interrupt.stop_timer()
 
     exit(0)
 
 
+# Refactored main() - broken down into logical functions
+def main_new():
+    """
+    Main entry point for aws2tf.
+    Orchestrates the entire workflow in logical phases.
+    """
+    global log
+
+    # Record start time
+    starttime = datetime.datetime.now()
+    log.info("aws2tf "+context.aws2tfver+" started at %s" % starttime)
+
+    # Phase 1: Parse and validate arguments
+    args = parse_and_validate_arguments()
+    
+    # Phase 2: Setup environment and context
+    region, type, id = setup_environment_and_context(args)
+    
+    # Phase 3: Setup workspace and initialize terraform
+    setup_workspace(args, region)
+    
+    # Phase 4: Handle merge mode if enabled
+    handle_merge_mode(args)
+    
+    # Phase 5: Build core resource lists
+    build_resource_lists_phase()
+    
+    # Phase 6: Process requested resource types
+    process_resource_types(type, id)
+    
+    # Phase 7: Process known dependencies
+    process_known_dependencies()
+    
+    # Phase 8: Process detected dependencies (iterative)
+    process_detected_dependencies()
+    
+    # Phase 9: Validate and import
+    validate_and_import()
+    
+    # Phase 10: Finalize and cleanup
+    finalize_and_cleanup(args, starttime)
+    
+    exit(0)
+
+
 if __name__ == '__main__':
-    main()
+    main_new()
+

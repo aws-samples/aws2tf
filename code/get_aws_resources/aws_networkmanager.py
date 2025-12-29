@@ -1,4 +1,7 @@
 import common
+from common import log_warning
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 from botocore.config import Config
 import context
@@ -6,7 +9,7 @@ import inspect
 
 def get_aws_networkmanager_global_network(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -22,7 +25,7 @@ def get_aws_networkmanager_global_network(type, id, clfn, descfn, topkey, key, f
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -33,7 +36,7 @@ def get_aws_networkmanager_global_network(type, id, clfn, descfn, topkey, key, f
         else:      
             response = client.describe_global_networks(GlobalNetworkIds=[id])
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response[topkey]:
                 common.write_import(type,j[key],None) 
@@ -50,12 +53,12 @@ def get_aws_networkmanager_global_network(type, id, clfn, descfn, topkey, key, f
 
 def get_aws_networkmanager_site(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         if id is None:
-            print("WARNING: must pass global network id as parameter")
+            log_warning("WARNING: must pass global network id as parameter")
             return True
         else:  
             pkey=type+"."+id
@@ -65,7 +68,7 @@ def get_aws_networkmanager_site(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(GlobalNetworkId=id):
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 context.rproc[pkey]=True
                 return True
             for j in response:
@@ -79,12 +82,12 @@ def get_aws_networkmanager_site(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_networkmanager_device(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         if id is None:
-            print("WARNING: must pass global network id as parameter")
+            log_warning("WARNING: must pass global network id as parameter")
             return True
         else:  
             pkey=type+"."+id
@@ -94,7 +97,7 @@ def get_aws_networkmanager_device(type, id, clfn, descfn, topkey, key, filterid)
             for page in paginator.paginate(GlobalNetworkId=id):
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 context.rproc[pkey]=True
                 return True
             for j in response:
@@ -108,12 +111,12 @@ def get_aws_networkmanager_device(type, id, clfn, descfn, topkey, key, filterid)
 
 def get_aws_networkmanager_transit_gateway_registration(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
         if id is None:
-            print("WARNING: must pass global network id as parameter")
+            log_warning("WARNING: must pass global network id as parameter")
             return True
         else:  
             pkey=type+"."+id
@@ -123,7 +126,7 @@ def get_aws_networkmanager_transit_gateway_registration(type, id, clfn, descfn, 
             for page in paginator.paginate(GlobalNetworkId=id):
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 context.rproc[pkey]=True
                 return True
             for j in response:

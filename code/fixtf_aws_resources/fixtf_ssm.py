@@ -48,7 +48,6 @@ def aws_ssm_maintenance_windows(t1,tt1,tt2,flag1,flag2):
 
 def aws_ssm_parameter(t1,tt1,tt2,flag1,flag2):
 	skip=0
-	#print(str(tt1) + " " + str(tt2))
 	if tt1 == "arn": 
 		context.ssmparamn=tt2
 		skip=1 
@@ -58,7 +57,6 @@ def aws_ssm_parameter(t1,tt1,tt2,flag1,flag2):
 			response = client.get_parameter(Name=context.ssmparamn, WithDecryption=True)
 			vs=response["Parameter"]["Value"]
 			ml=len(vs.split('\n'))
-			#print("-->>>>>"+str(ml))
 			if ml > 1:
 				vs=vs.replace('\n','').replace('${','$${').replace('\t','')
 			if vs.startswith('{"') or vs.startswith('["') :

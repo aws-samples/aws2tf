@@ -1,4 +1,7 @@
 import context
+import logging
+log = logging.getLogger('aws2tf')
+
 def aws_apprunner_auto_scaling_configuration_version(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	return skip,t1,flag1,flag2
@@ -24,7 +27,7 @@ def aws_apprunner_service(t1,tt1,tt2,flag1,flag2):
 	if tt1=="auto_scaling_configuration_arn":
 		if "autoscalingconfiguration/DefaultConfiguration/1" in tt2: skip=1
 	if tt1=="image_identifier":
-		print(tt2)
+		log.debug(tt2)
 		if tt2.startswith(context.acc) and context.region in tt2:
 			backend=tt2.split("/")[-1]
 			t1=tt1 + " = format(\"%s.dkr.ecr.%s.amazonaws.com/%s\",data.aws_caller_identity.current.account_id,data.aws_region.current.region,\""+backend+"\")\n"

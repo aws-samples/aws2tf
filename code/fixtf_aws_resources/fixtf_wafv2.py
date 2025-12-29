@@ -1,5 +1,7 @@
 import common
 import fixtf
+import logging
+log = logging.getLogger('aws2tf')
 import base64
 import boto3
 import sys
@@ -31,7 +33,6 @@ def aws_wafv2_web_acl(t1,tt1,tt2,flag1,flag2):
 		aclid=wid.split("_")[0].split("w-")[1]
 		aclnm=wid.split("_")[1]
 		aclsc=wid.split("_")[2]
-		#print("web acl:",aclid,aclnm,aclsc)
 		context.waf2id=aclid
 		context.waf2nm=aclnm
 		context.waf2sc=aclsc
@@ -50,9 +51,9 @@ def aws_wafv2_web_acl(t1,tt1,tt2,flag1,flag2):
 				t1 = tt1 + ' = file("'+fn+'")\n'
 				t1=t1+"\n lifecycle {\n   ignore_changes = [rule_json,rule]\n}\n"
 			else:
-				print("empty rule",context.waf2nm,context.waf2sc,context.waf2id)
+				log.warning("empty rule %s %s %s", context.waf2nm, context.waf2sc, context.waf2id)
 		except Exception as e:
-			print("Error in get_web_acl",e)
+			log.error("Error in get_web_acl %s", e)
 			os._exit(1)
 
 

@@ -1,7 +1,10 @@
 import sys,os
+import logging
 
-aws2tfver="v6002"
-tfver="6.20.0"
+log = logging.getLogger('aws2tf')
+
+aws2tfver="v6270"
+tfver="6.27.0"
 esttime=120.0
 profile="default"
 sso=False
@@ -20,6 +23,7 @@ types=[]
 debug=False
 debug5=False
 validate=False
+warnings=False
 dnet=False
 dkms=False
 dkey=False
@@ -118,6 +122,7 @@ lambdalist={}
 s3list={}
 rolelist={}
 policylist={}
+inplist={}
 bucketlist={}
 tgwlist={}
 gluedbs={}
@@ -126,7 +131,7 @@ role_policies_list={}
 
 def exit_aws2tf(mess):
     if mess is not None or mess!="":
-        print(mess)
+        log.error(mess)
 
     if context.fast:
         os._exit(1) 

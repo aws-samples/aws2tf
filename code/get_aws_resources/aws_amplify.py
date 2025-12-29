@@ -1,4 +1,7 @@
 import common
+from common import log_warning
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
@@ -6,7 +9,7 @@ import inspect
 
 def get_aws_amplify_app(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -16,7 +19,7 @@ def get_aws_amplify_app(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 theid=j[key]
@@ -26,7 +29,7 @@ def get_aws_amplify_app(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.get_app(appId=id)
             if response['app'] == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response['app']
             common.write_import(type,j[key],None)
@@ -40,7 +43,7 @@ def get_aws_amplify_app(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_amplify_branch(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -50,7 +53,7 @@ def get_aws_amplify_branch(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(appId=id):
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response:
                 theid=id+"/"+j[key]
@@ -59,7 +62,7 @@ def get_aws_amplify_branch(type, id, clfn, descfn, topkey, key, filterid):
                 context.rproc[pkey]=True
 
         else:      
-            print("Must pass id for "+type+" returning")
+            log.warning("Must pass id for "+type+" returning")
             return True
 
     except Exception as e:

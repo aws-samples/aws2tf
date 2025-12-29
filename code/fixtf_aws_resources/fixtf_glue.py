@@ -1,5 +1,7 @@
 import context 
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import fixtf
 import base64
 import boto3
@@ -22,9 +24,9 @@ def aws_glue_crawler(t1,tt1,tt2,flag1,flag2):
 			t1 = tt1 + " = aws_glue_security_configuration."+tt2+".id\n"
 			common.add_dependancy("aws_glue_security_configuration",tt2)
 	except Exception as e:
-		print(e)
-		print("fixtf_glue.py aws_glue_crawler Exception=", str(e))
-		print("fixtf_glue.py t1=", t1)
+		log.error(e)
+		log.error("fixtf_glue.py aws_glue_crawler Exception= %s",  str(e))
+		log.error("fixtf_glue.py t1= %s",  t1)
 	
 	return skip,t1,flag1,flag2
 
@@ -63,7 +65,6 @@ def aws_glue_dev_endpoint(t1,tt1,tt2,flag1,flag2):
 
 def aws_glue_job(t1,tt1,tt2,flag1,flag2):
 	skip=0
-	#print("aws_glue_job t1=",t1)
 	if tt1 == "max_capacity" and tt2 != "null":
 		context.gulejobmaxcap=True
 	if tt1 == "number_of_workers":
@@ -80,7 +81,8 @@ def aws_glue_job(t1,tt1,tt2,flag1,flag2):
 		common.add_dependancy("aws_s3_bucket",tt2)
 	if tt1=="script_location" and tt2.endswith(".py"):
 		com="aws s3 cp "+tt2+" ."
-		print("executing: "+com)
+		log.debug("executing: "+com)
+		log.debug("aws_glue_job t1= %s", t1)
 		rout = common.rc(com) 
 	
 	return skip,t1,flag1,flag2

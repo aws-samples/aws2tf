@@ -1,11 +1,13 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
 
 def get_aws_docdb_cluster_parameter_group(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     
     try:
@@ -16,8 +18,7 @@ def get_aws_docdb_cluster_parameter_group(type, id, clfn, descfn, topkey, key, f
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate():
                 response = response + page[topkey]
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        #print(str(response))
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response:
             if id is None:
                 if "default." not in j[key]:
@@ -34,7 +35,7 @@ def get_aws_docdb_cluster_parameter_group(type, id, clfn, descfn, topkey, key, f
 
 def get_aws_docdb_subnet_group(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     
     try:
@@ -45,8 +46,7 @@ def get_aws_docdb_subnet_group(type, id, clfn, descfn, topkey, key, filterid):
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate():
                 response = response + page[topkey]
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        #print(str(response))
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response:
             if id is None:
                 if "default" != j[key]:
@@ -63,7 +63,7 @@ def get_aws_docdb_subnet_group(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_docdb_event_subscription(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     
     try:
@@ -72,8 +72,7 @@ def get_aws_docdb_event_subscription(type, id, clfn, descfn, topkey, key, filter
 
         response=client.describe_event_subscriptions()
 
-        if response[topkey] == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        #print(str(response))
+        if response[topkey] == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response[topkey]:
             if id is None:
                 if "default" != j[key]:
@@ -91,7 +90,7 @@ def get_aws_docdb_event_subscription(type, id, clfn, descfn, topkey, key, filter
 #aws_docdb_cluster_instance
 def get_aws_docdb_cluster_instance(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     try:
@@ -102,8 +101,7 @@ def get_aws_docdb_cluster_instance(type, id, clfn, descfn, topkey, key, filterid
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate():
                 response = response + page[topkey]
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        #print(str(response))
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response:
             engine=j['Engine']
             if engine != "docdb": continue
@@ -125,7 +123,7 @@ def get_aws_docdb_cluster_instance(type, id, clfn, descfn, topkey, key, filterid
 # aws_docdb_cluster
 def get_aws_docdb_cluster(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     try:
@@ -136,8 +134,7 @@ def get_aws_docdb_cluster(type, id, clfn, descfn, topkey, key, filterid):
         paginator = client.get_paginator(descfn)
         for page in paginator.paginate():
                 response = response + page[topkey]
-        if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
-        #print(str(response))
+        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response:
             engine=j['Engine']
             if engine != "docdb": continue

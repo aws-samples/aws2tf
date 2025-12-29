@@ -1,4 +1,6 @@
 
+import logging
+log = logging.getLogger('aws2tf')
 import common
 import boto3
 import context
@@ -6,7 +8,7 @@ import inspect
 
 def get_aws_autoscaling_group(type, id, clfn, descfn, topkey, key, filterid):    
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
         
     try:
@@ -18,7 +20,7 @@ def get_aws_autoscaling_group(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -29,10 +31,10 @@ def get_aws_autoscaling_group(type, id, clfn, descfn, topkey, key, filterid):
             else:
                 qid = id
             pkey=type+"."+id
-            if context.debug: print("Looking for "+pkey)
+            if context.debug: log.debug("Looking for "+pkey)
             response = client.describe_auto_scaling_groups(AutoScalingGroupNames=[qid])
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning") 
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 context.rproc[pkey] = True
                 return True
             for j in response[topkey]:

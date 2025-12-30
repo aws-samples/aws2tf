@@ -1,116 +1,66 @@
-def aws_route53_cidr_collection(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+"""
+ROUTE53 Resource Handlers - Optimized with __getattr__
 
-def aws_route53_cidr_location(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+This file contains ONLY ROUTE53 resources with custom transformation logic.
+All other resources automatically use the default handler via __getattr__.
 
-def aws_route53_delegation_set(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+Original: 2 functions
+Optimized: 2 functions + __getattr__
+Reduction: 0% less code
+"""
 
-def aws_route53_health_check(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+import logging
+from .base_handler import BaseResourceHandler
 
-def aws_route53_hosted_zone_dnssec(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+log = logging.getLogger('aws2tf')
 
-def aws_route53_key_signing_key(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
-def aws_route53_query_log(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_route53_resolver_config(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_route53_resolver_dnssec_config(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_route53_resolver_endpoint(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_route53_resolver_firewall_config(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_route53_resolver_firewall_domain_list(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_route53_resolver_firewall_rule(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_route53_resolver_firewall_rule_group(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_route53_resolver_firewall_rule_groups(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_route53_resolver_firewall_rules(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_route53_resolver_query_log_config(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_route53_resolver_query_log_config_association(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_route53_resolver_rule(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_route53_resolver_rule_association(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_route53_resolver_rules(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_route53_traffic_policy(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_route53_traffic_policy_document(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_route53_traffic_policy_instance(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_route53_vpc_association_authorization(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+# ============================================================================
+# ROUTE53 Resources with Custom Logic (2 functions)
+# ============================================================================
 
 def aws_route53_zone(t1,tt1,tt2,flag1,flag2):
+
+
 	skip=0
 	if tt1=="name":
 		t1=t1+"\n lifecycle {\n   ignore_changes = [comment,force_destroy]\n}\n"
 	return skip,t1,flag1,flag2
 
-def aws_route53_zone_association(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+
 
 def aws_route53_record(t1,tt1,tt2,flag1,flag2):
+
+
 	skip=0
 	if tt1=="records" and tt2=="[]": skip=1
 	elif tt1=="ttl" and tt2=="0": skip=1
 	elif tt1=="multivalue_answer_routing_policy" and tt2=="false": skip=1
 	return skip,t1,flag1,flag2
+
+
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
+
+
+
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
+
+def __getattr__(name):
+	"""
+	Dynamically provide default handler for resources without custom logic.
+	
+	This allows getattr(module, "aws_resource") to work even if the
+	function doesn't exist, by returning the default handler.
+	
+	All simple ROUTE53 resources (0 resources) automatically use this.
+	"""
+	if name.startswith("aws_"):
+		return BaseResourceHandler.default_handler
+	raise AttributeError(f"module 'fixtf_route53' has no attribute '{name}'")
+
+
+log.debug(f"ROUTE53 handlers: 2 custom functions + __getattr__ for 0 simple resources")

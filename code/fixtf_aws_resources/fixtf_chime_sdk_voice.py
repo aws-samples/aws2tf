@@ -1,19 +1,38 @@
+"""
+CHIME_SDK_VOICE Resource Handlers - Optimized with __getattr__
+
+This file contains ONLY CHIME_SDK_VOICE resources with custom transformation logic.
+All other resources automatically use the default handler via __getattr__.
+
+Original: 0 functions
+Optimized: 0 functions + __getattr__
+Reduction: 0% less code
+"""
+
+import logging
 import common
 import fixtf
+from .base_handler import BaseResourceHandler
 
-def aws_chimesdkvoice_global_settings(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+log = logging.getLogger('aws2tf')
 
-def aws_chimesdkvoice_sip_media_application(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
-def aws_chimesdkvoice_sip_rule(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
 
-def aws_chimesdkvoice_voice_profile_domain(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+def __getattr__(name):
+	"""
+	Dynamically provide default handler for resources without custom logic.
+	
+	This allows getattr(module, "aws_resource") to work even if the
+	function doesn't exist, by returning the default handler.
+	
+	All CHIME_SDK_VOICE resources automatically use this.
+	"""
+	if name.startswith("aws_"):
+		return BaseResourceHandler.default_handler
+	raise AttributeError(f"module 'fixtf_chime_sdk_voice' has no attribute '{name}'")
 
+
+log.debug(f"CHIME_SDK_VOICE handlers: __getattr__ for all 0 resources")

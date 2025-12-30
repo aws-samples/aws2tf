@@ -1421,10 +1421,39 @@ def wrapup():
    log.info("\nPost Import Plan Check .....")
    context.tracking_message="Stage 10 of 10, Post Import Plan Check ....."
    com = "terraform plan -no-color -out tfplan -json > final.json"
-   #com = "terraform plan -no-color -out tfplan"
-   #rout = run_terraform_command_with_spinner(com, "Post-import validation")
-   rout=rc(com)
-   # sync & flush files
+   # Get reference file size for progress estimation
+   plan2_size = os.path.getsize('plan2.json') if os.path.exists('plan2.json') else 0
+   
+   com = "terraform plan -no-color -out tfplan -json > final.json"
+   
+   # Run with progress bar based on file size
+   if plan2_size > 0 and not context.debug:
+       process = subprocess.Popen(com, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+       with tqdm(total=100, desc="Post-import validation", unit="%", bar_format='{desc}: {percentage:3.0f}%|{bar}| [{elapsed}]') as pbar:
+           start_time = time.time()
+           max_wait = plan2_size / 50000
+           while process.poll() is None:
+               elapsed = time.time() - start_time
+               if os.path.exists('final.json'):
+                   current_size = os.path.getsize('final.json')
+                   size_progress = min(75, int((current_size / plan2_size) * 75))
+                   pbar.n = size_progress
+               else:
+                   time_progress = min(50, int((elapsed / max_wait) * 50))
+                   pbar.n = time_progress
+               pbar.refresh()
+               time.sleep(0.5)
+           pbar.n = 100
+           pbar.refresh()
+       stdout, stderr = process.communicate()
+       class Result:
+           def __init__(self, returncode, stdout, stderr):
+               self.returncode = returncode
+               self.stdout = stdout
+               self.stderr = stderr
+       rout = Result(process.returncode, stdout, stderr)
+   else:
+       rout = rc(com)
    com = "sync"
    rout = rc(com)
    zeroi=0
@@ -1453,7 +1482,6 @@ def wrapup():
    log.info("Plan: %s to import, %s to add, %s to change, %s to destroy", zeroi, zeroa, zeroc, zerod)
    nchged=zeroi+zeroa+zeroc+zerod
    if nchged == 0:
-      log.info("PASSED: No changes in plan")
       context.tracking_message="Stage 10 of 10, Passed post import check - No changes in plan"
       log.info("Stage 10 of 10, Passed post import check - No changes in plan")
 

@@ -39,3 +39,4 @@ possible-optimizations.md
 aws3tf.py
 copy-to.sh
 code/.automation/terraform-provider-aws
+code/fixtf_aws_resources/backup*

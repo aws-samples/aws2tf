@@ -1,0 +1,1259 @@
+import context
+import os
+import sys
+import boto3
+import base64
+import resources
+import common
+import shutil
+import inspect
+import logging
+from timed_interrupt import timed_int
+
+log = logging.getLogger('aws2tf')
+
+from fixtf_aws_resources import arn_dict
+from fixtf_aws_resources import aws_common
+from fixtf_aws_resources import fixtf_accessanalyzer
+from fixtf_aws_resources import fixtf_acm
+from fixtf_aws_resources import fixtf_acm_pca
+from fixtf_aws_resources import fixtf_amp
+from fixtf_aws_resources import fixtf_amplify
+from fixtf_aws_resources import fixtf_apigateway
+from fixtf_aws_resources import fixtf_apigatewayv2
+from fixtf_aws_resources import fixtf_appconfig
+from fixtf_aws_resources import fixtf_appflow
+from fixtf_aws_resources import fixtf_appintegrations
+from fixtf_aws_resources import fixtf_application_autoscaling
+from fixtf_aws_resources import fixtf_application_insights
+from fixtf_aws_resources import fixtf_appmesh
+from fixtf_aws_resources import fixtf_apprunner
+from fixtf_aws_resources import fixtf_appstream
+from fixtf_aws_resources import fixtf_appsync
+from fixtf_aws_resources import fixtf_athena
+from fixtf_aws_resources import fixtf_auditmanager
+from fixtf_aws_resources import fixtf_autoscaling
+from fixtf_aws_resources import fixtf_autoscaling_plans
+from fixtf_aws_resources import fixtf_backup
+from fixtf_aws_resources import fixtf_batch
+from fixtf_aws_resources import fixtf_bedrock
+from fixtf_aws_resources import fixtf_bedrock_agent
+from fixtf_aws_resources import fixtf_billingconductor
+from fixtf_aws_resources import fixtf_budgets
+from fixtf_aws_resources import fixtf_ce
+from fixtf_aws_resources import fixtf_chime
+from fixtf_aws_resources import fixtf_chime_sdk_media_pipelines
+from fixtf_aws_resources import fixtf_chime_sdk_voice
+from fixtf_aws_resources import fixtf_cleanrooms
+from fixtf_aws_resources import fixtf_cloud9
+from fixtf_aws_resources import fixtf_cloudcontrol
+from fixtf_aws_resources import fixtf_cloudformation
+from fixtf_aws_resources import fixtf_cloudfront
+from fixtf_aws_resources import fixtf_cloudhsmv2
+from fixtf_aws_resources import fixtf_cloudsearch
+from fixtf_aws_resources import fixtf_cloudtrail
+from fixtf_aws_resources import fixtf_logs
+from fixtf_aws_resources import fixtf_codeartifact
+from fixtf_aws_resources import fixtf_codebuild
+from fixtf_aws_resources import fixtf_codecatalyst
+from fixtf_aws_resources import fixtf_codecommit
+from fixtf_aws_resources import fixtf_codedeploy
+from fixtf_aws_resources import fixtf_codeguru_reviewer
+from fixtf_aws_resources import fixtf_codeguruprofiler
+from fixtf_aws_resources import fixtf_codepipeline
+from fixtf_aws_resources import fixtf_codestar_connections
+from fixtf_aws_resources import fixtf_codestar_notifications
+from fixtf_aws_resources import fixtf_cognito_identity
+from fixtf_aws_resources import fixtf_cognito_idp
+from fixtf_aws_resources import fixtf_comprehend
+from fixtf_aws_resources import fixtf_config
+from fixtf_aws_resources import fixtf_connect
+from fixtf_aws_resources import fixtf_controltower
+from fixtf_aws_resources import fixtf_cur
+from fixtf_aws_resources import fixtf_customer_profiles
+from fixtf_aws_resources import fixtf_dataexchange
+from fixtf_aws_resources import fixtf_datapipeline
+from fixtf_aws_resources import fixtf_datasync
+from fixtf_aws_resources import fixtf_datazone
+from fixtf_aws_resources import fixtf_dax
+from fixtf_aws_resources import fixtf_detective
+from fixtf_aws_resources import fixtf_devicefarm
+from fixtf_aws_resources import fixtf_directconnect
+from fixtf_aws_resources import fixtf_dlm
+from fixtf_aws_resources import fixtf_dms
+from fixtf_aws_resources import fixtf_docdb
+from fixtf_aws_resources import fixtf_docdb_elastic
+from fixtf_aws_resources import fixtf_ds
+from fixtf_aws_resources import fixtf_dynamodb
+from fixtf_aws_resources import fixtf_ebs
+from fixtf_aws_resources import fixtf_ec2
+from fixtf_aws_resources import fixtf_ecr_public
+from fixtf_aws_resources import fixtf_ecr
+from fixtf_aws_resources import fixtf_ecs
+from fixtf_aws_resources import fixtf_efs
+from fixtf_aws_resources import fixtf_eks
+from fixtf_aws_resources import fixtf_elasticache
+from fixtf_aws_resources import fixtf_elasticbeanstalk
+from fixtf_aws_resources import fixtf_elastictranscoder
+from fixtf_aws_resources import fixtf_elb
+from fixtf_aws_resources import fixtf_elbv2
+from fixtf_aws_resources import fixtf_emr
+from fixtf_aws_resources import fixtf_emr_containers
+from fixtf_aws_resources import fixtf_emrserverless
+from fixtf_aws_resources import fixtf_es
+from fixtf_aws_resources import fixtf_events
+from fixtf_aws_resources import fixtf_evidently
+from fixtf_aws_resources import fixtf_finspace
+from fixtf_aws_resources import fixtf_firehose
+from fixtf_aws_resources import fixtf_fis
+from fixtf_aws_resources import fixtf_fms
+from fixtf_aws_resources import fixtf_fsx
+from fixtf_aws_resources import fixtf_gamelift
+from fixtf_aws_resources import fixtf_glacier
+from fixtf_aws_resources import fixtf_globalaccelerator
+from fixtf_aws_resources import fixtf_glue
+from fixtf_aws_resources import fixtf_grafana
+from fixtf_aws_resources import fixtf_guardduty
+from fixtf_aws_resources import fixtf_iam
+from fixtf_aws_resources import fixtf_identitystore
+from fixtf_aws_resources import fixtf_imagebuilder
+from fixtf_aws_resources import fixtf_inspector
+from fixtf_aws_resources import fixtf_inspector2
+from fixtf_aws_resources import fixtf_internetmonitor
+from fixtf_aws_resources import fixtf_iot
+from fixtf_aws_resources import fixtf_ivs
+from fixtf_aws_resources import fixtf_ivschat
+from fixtf_aws_resources import fixtf_kafka
+from fixtf_aws_resources import fixtf_kafkaconnect
+from fixtf_aws_resources import fixtf_kendra
+from fixtf_aws_resources import fixtf_keyspaces
+from fixtf_aws_resources import fixtf_kinesis
+from fixtf_aws_resources import fixtf_kinesisanalytics
+from fixtf_aws_resources import fixtf_kinesisanalyticsv2
+from fixtf_aws_resources import fixtf_kinesisvideo
+from fixtf_aws_resources import fixtf_kms
+from fixtf_aws_resources import fixtf_lakeformation
+from fixtf_aws_resources import fixtf_lambda
+from fixtf_aws_resources import fixtf_lex
+from fixtf_aws_resources import fixtf_lexv2_models
+from fixtf_aws_resources import fixtf_license_manager
+from fixtf_aws_resources import fixtf_lightsail
+from fixtf_aws_resources import fixtf_location
+from fixtf_aws_resources import fixtf_macie2
+from fixtf_aws_resources import fixtf_mediaconvert
+from fixtf_aws_resources import fixtf_medialive
+from fixtf_aws_resources import fixtf_mediapackage
+from fixtf_aws_resources import fixtf_mediastore
+from fixtf_aws_resources import fixtf_memorydb
+from fixtf_aws_resources import fixtf_mq
+from fixtf_aws_resources import fixtf_mwaa
+from fixtf_aws_resources import fixtf_neptune
+from fixtf_aws_resources import fixtf_network_firewall
+from fixtf_aws_resources import fixtf_networkmanager
+from fixtf_aws_resources import fixtf_opensearch
+from fixtf_aws_resources import fixtf_opsworks
+from fixtf_aws_resources import fixtf_organizations
+from fixtf_aws_resources import fixtf_outposts
+from fixtf_aws_resources import fixtf_pinpoint
+from fixtf_aws_resources import fixtf_pipes
+from fixtf_aws_resources import fixtf_polly
+from fixtf_aws_resources import fixtf_pricing
+from fixtf_aws_resources import fixtf_qldb
+from fixtf_aws_resources import fixtf_quicksight
+from fixtf_aws_resources import fixtf_ram
+from fixtf_aws_resources import fixtf_rds
+from fixtf_aws_resources import fixtf_redshift
+from fixtf_aws_resources import fixtf_redshift_data
+from fixtf_aws_resources import fixtf_redshift_serverless
+from fixtf_aws_resources import fixtf_resource_explorer_2
+from fixtf_aws_resources import fixtf_resource_groups
+from fixtf_aws_resources import fixtf_resourcegroupstaggingapi
+from fixtf_aws_resources import fixtf_rolesanywhere
+from fixtf_aws_resources import fixtf_route53
+from fixtf_aws_resources import fixtf_route53_recovery_control_config
+from fixtf_aws_resources import fixtf_route53_recovery_readiness
+from fixtf_aws_resources import fixtf_route53domains
+from fixtf_aws_resources import fixtf_route53resolver
+from fixtf_aws_resources import fixtf_rum
+from fixtf_aws_resources import fixtf_s3
+from fixtf_aws_resources import fixtf_s3control
+from fixtf_aws_resources import fixtf_s3outposts
+from fixtf_aws_resources import fixtf_s3tables
+from fixtf_aws_resources import fixtf_sagemaker
+from fixtf_aws_resources import fixtf_scheduler
+from fixtf_aws_resources import fixtf_schemas
+from fixtf_aws_resources import fixtf_secretsmanager
+from fixtf_aws_resources import fixtf_securityhub
+from fixtf_aws_resources import fixtf_securitylake
+from fixtf_aws_resources import fixtf_serverlessrepo
+from fixtf_aws_resources import fixtf_servicecatalog
+from fixtf_aws_resources import fixtf_servicediscovery
+from fixtf_aws_resources import fixtf_servicequotas
+from fixtf_aws_resources import fixtf_ses
+from fixtf_aws_resources import fixtf_sesv2
+from fixtf_aws_resources import fixtf_shield
+from fixtf_aws_resources import fixtf_signer
+from fixtf_aws_resources import fixtf_simpledb
+from fixtf_aws_resources import fixtf_sns
+from fixtf_aws_resources import fixtf_sqs
+from fixtf_aws_resources import fixtf_ssm
+from fixtf_aws_resources import fixtf_ssm_contacts
+from fixtf_aws_resources import fixtf_ssm_incidents
+from fixtf_aws_resources import fixtf_sso_admin
+from fixtf_aws_resources import fixtf_stepfunctions
+from fixtf_aws_resources import fixtf_storagegateway
+from fixtf_aws_resources import fixtf_sts
+from fixtf_aws_resources import fixtf_swf
+from fixtf_aws_resources import fixtf_synthetics
+from fixtf_aws_resources import fixtf_timestreamwrite
+from fixtf_aws_resources import fixtf_transcribe
+from fixtf_aws_resources import fixtf_transfer
+from fixtf_aws_resources import fixtf_vpc_lattice
+from fixtf_aws_resources import fixtf_waf
+from fixtf_aws_resources import fixtf_waf_regional
+from fixtf_aws_resources import fixtf_wafv2
+from fixtf_aws_resources import fixtf_worklink
+from fixtf_aws_resources import fixtf_workspaces
+from fixtf_aws_resources import fixtf_xray
+
+# Security Fix #2: Module registry to replace eval()
+# This prevents arbitrary code execution via eval()
+FIXTF_MODULES = {
+    'fixtf_accessanalyzer': fixtf_accessanalyzer,
+    'fixtf_acm': fixtf_acm,
+    'fixtf_acm_pca': fixtf_acm_pca,
+    'fixtf_amp': fixtf_amp,
+    'fixtf_amplify': fixtf_amplify,
+    'fixtf_apigateway': fixtf_apigateway,
+    'fixtf_apigatewayv2': fixtf_apigatewayv2,
+    'fixtf_appconfig': fixtf_appconfig,
+    'fixtf_appflow': fixtf_appflow,
+    'fixtf_appintegrations': fixtf_appintegrations,
+    'fixtf_application_autoscaling': fixtf_application_autoscaling,
+    'fixtf_application_insights': fixtf_application_insights,
+    'fixtf_appmesh': fixtf_appmesh,
+    'fixtf_apprunner': fixtf_apprunner,
+    'fixtf_appstream': fixtf_appstream,
+    'fixtf_appsync': fixtf_appsync,
+    'fixtf_athena': fixtf_athena,
+    'fixtf_auditmanager': fixtf_auditmanager,
+    'fixtf_autoscaling': fixtf_autoscaling,
+    'fixtf_autoscaling_plans': fixtf_autoscaling_plans,
+    'fixtf_backup': fixtf_backup,
+    'fixtf_batch': fixtf_batch,
+    'fixtf_bedrock': fixtf_bedrock,
+    'fixtf_bedrock_agent': fixtf_bedrock_agent,
+    'fixtf_billingconductor': fixtf_billingconductor,
+    'fixtf_budgets': fixtf_budgets,
+    'fixtf_ce': fixtf_ce,
+    'fixtf_chime': fixtf_chime,
+    'fixtf_chime_sdk_media_pipelines': fixtf_chime_sdk_media_pipelines,
+    'fixtf_chime_sdk_voice': fixtf_chime_sdk_voice,
+    'fixtf_cleanrooms': fixtf_cleanrooms,
+    'fixtf_cloud9': fixtf_cloud9,
+    'fixtf_cloudcontrol': fixtf_cloudcontrol,
+    'fixtf_cloudformation': fixtf_cloudformation,
+    'fixtf_cloudfront': fixtf_cloudfront,
+    'fixtf_cloudhsmv2': fixtf_cloudhsmv2,
+    'fixtf_cloudsearch': fixtf_cloudsearch,
+    'fixtf_cloudtrail': fixtf_cloudtrail,
+    'fixtf_logs': fixtf_logs,
+    'fixtf_codeartifact': fixtf_codeartifact,
+    'fixtf_codebuild': fixtf_codebuild,
+    'fixtf_codecatalyst': fixtf_codecatalyst,
+    'fixtf_codecommit': fixtf_codecommit,
+    'fixtf_codedeploy': fixtf_codedeploy,
+    'fixtf_codeguru_reviewer': fixtf_codeguru_reviewer,
+    'fixtf_codeguruprofiler': fixtf_codeguruprofiler,
+    'fixtf_codepipeline': fixtf_codepipeline,
+    'fixtf_codestar_connections': fixtf_codestar_connections,
+    'fixtf_codestar_notifications': fixtf_codestar_notifications,
+    'fixtf_cognito_identity': fixtf_cognito_identity,
+    'fixtf_cognito_idp': fixtf_cognito_idp,
+    'fixtf_comprehend': fixtf_comprehend,
+    'fixtf_config': fixtf_config,
+    'fixtf_connect': fixtf_connect,
+    'fixtf_controltower': fixtf_controltower,
+    'fixtf_cur': fixtf_cur,
+    'fixtf_customer_profiles': fixtf_customer_profiles,
+    'fixtf_dataexchange': fixtf_dataexchange,
+    'fixtf_datapipeline': fixtf_datapipeline,
+    'fixtf_datasync': fixtf_datasync,
+    'fixtf_datazone': fixtf_datazone,
+    'fixtf_dax': fixtf_dax,
+    'fixtf_detective': fixtf_detective,
+    'fixtf_devicefarm': fixtf_devicefarm,
+    'fixtf_directconnect': fixtf_directconnect,
+    'fixtf_dlm': fixtf_dlm,
+    'fixtf_dms': fixtf_dms,
+    'fixtf_docdb': fixtf_docdb,
+    'fixtf_docdb_elastic': fixtf_docdb_elastic,
+    'fixtf_ds': fixtf_ds,
+    'fixtf_dynamodb': fixtf_dynamodb,
+    'fixtf_ebs': fixtf_ebs,
+    'fixtf_ec2': fixtf_ec2,
+    'fixtf_ecr_public': fixtf_ecr_public,
+    'fixtf_ecr': fixtf_ecr,
+    'fixtf_ecs': fixtf_ecs,
+    'fixtf_efs': fixtf_efs,
+    'fixtf_eks': fixtf_eks,
+    'fixtf_elasticache': fixtf_elasticache,
+    'fixtf_elasticbeanstalk': fixtf_elasticbeanstalk,
+    'fixtf_elastictranscoder': fixtf_elastictranscoder,
+    'fixtf_elb': fixtf_elb,
+    'fixtf_elbv2': fixtf_elbv2,
+    'fixtf_emr': fixtf_emr,
+    'fixtf_emr_containers': fixtf_emr_containers,
+    'fixtf_emrserverless': fixtf_emrserverless,
+    'fixtf_es': fixtf_es,
+    'fixtf_events': fixtf_events,
+    'fixtf_evidently': fixtf_evidently,
+    'fixtf_finspace': fixtf_finspace,
+    'fixtf_firehose': fixtf_firehose,
+    'fixtf_fis': fixtf_fis,
+    'fixtf_fms': fixtf_fms,
+    'fixtf_fsx': fixtf_fsx,
+    'fixtf_gamelift': fixtf_gamelift,
+    'fixtf_glacier': fixtf_glacier,
+    'fixtf_globalaccelerator': fixtf_globalaccelerator,
+    'fixtf_glue': fixtf_glue,
+    'fixtf_grafana': fixtf_grafana,
+    'fixtf_guardduty': fixtf_guardduty,
+    'fixtf_iam': fixtf_iam,
+    'fixtf_identitystore': fixtf_identitystore,
+    'fixtf_imagebuilder': fixtf_imagebuilder,
+    'fixtf_inspector': fixtf_inspector,
+    'fixtf_inspector2': fixtf_inspector2,
+    'fixtf_internetmonitor': fixtf_internetmonitor,
+    'fixtf_iot': fixtf_iot,
+    'fixtf_ivs': fixtf_ivs,
+    'fixtf_ivschat': fixtf_ivschat,
+    'fixtf_kafka': fixtf_kafka,
+    'fixtf_kafkaconnect': fixtf_kafkaconnect,
+    'fixtf_kendra': fixtf_kendra,
+    'fixtf_keyspaces': fixtf_keyspaces,
+    'fixtf_kinesis': fixtf_kinesis,
+    'fixtf_kinesisanalytics': fixtf_kinesisanalytics,
+    'fixtf_kinesisanalyticsv2': fixtf_kinesisanalyticsv2,
+    'fixtf_kinesisvideo': fixtf_kinesisvideo,
+    'fixtf_kms': fixtf_kms,
+    'fixtf_lakeformation': fixtf_lakeformation,
+    'fixtf_lambda': fixtf_lambda,
+    'fixtf_lex': fixtf_lex,
+    'fixtf_lexv2_models': fixtf_lexv2_models,
+    'fixtf_license_manager': fixtf_license_manager,
+    'fixtf_lightsail': fixtf_lightsail,
+    'fixtf_location': fixtf_location,
+    'fixtf_macie2': fixtf_macie2,
+    'fixtf_mediaconvert': fixtf_mediaconvert,
+    'fixtf_medialive': fixtf_medialive,
+    'fixtf_mediapackage': fixtf_mediapackage,
+    'fixtf_mediastore': fixtf_mediastore,
+    'fixtf_memorydb': fixtf_memorydb,
+    'fixtf_mq': fixtf_mq,
+    'fixtf_mwaa': fixtf_mwaa,
+    'fixtf_neptune': fixtf_neptune,
+    'fixtf_network_firewall': fixtf_network_firewall,
+    'fixtf_networkmanager': fixtf_networkmanager,
+    'fixtf_opensearch': fixtf_opensearch,
+    'fixtf_opsworks': fixtf_opsworks,
+    'fixtf_organizations': fixtf_organizations,
+    'fixtf_outposts': fixtf_outposts,
+    'fixtf_pinpoint': fixtf_pinpoint,
+    'fixtf_pipes': fixtf_pipes,
+    'fixtf_polly': fixtf_polly,
+    'fixtf_pricing': fixtf_pricing,
+    'fixtf_qldb': fixtf_qldb,
+    'fixtf_quicksight': fixtf_quicksight,
+    'fixtf_ram': fixtf_ram,
+    'fixtf_rds': fixtf_rds,
+    'fixtf_redshift': fixtf_redshift,
+    'fixtf_redshift_data': fixtf_redshift_data,
+    'fixtf_redshift_serverless': fixtf_redshift_serverless,
+    'fixtf_resource_explorer_2': fixtf_resource_explorer_2,
+    'fixtf_resource_groups': fixtf_resource_groups,
+    'fixtf_resourcegroupstaggingapi': fixtf_resourcegroupstaggingapi,
+    'fixtf_rolesanywhere': fixtf_rolesanywhere,
+    'fixtf_route53': fixtf_route53,
+    'fixtf_route53_recovery_control_config': fixtf_route53_recovery_control_config,
+    'fixtf_route53_recovery_readiness': fixtf_route53_recovery_readiness,
+    'fixtf_route53domains': fixtf_route53domains,
+    'fixtf_route53resolver': fixtf_route53resolver,
+    'fixtf_rum': fixtf_rum,
+    'fixtf_s3': fixtf_s3,
+    'fixtf_s3control': fixtf_s3control,
+    'fixtf_s3outposts': fixtf_s3outposts,
+    'fixtf_s3tables': fixtf_s3tables,
+    'fixtf_sagemaker': fixtf_sagemaker,
+    'fixtf_scheduler': fixtf_scheduler,
+    'fixtf_schemas': fixtf_schemas,
+    'fixtf_secretsmanager': fixtf_secretsmanager,
+    'fixtf_securityhub': fixtf_securityhub,
+    'fixtf_securitylake': fixtf_securitylake,
+    'fixtf_serverlessrepo': fixtf_serverlessrepo,
+    'fixtf_servicecatalog': fixtf_servicecatalog,
+    'fixtf_servicediscovery': fixtf_servicediscovery,
+    'fixtf_servicequotas': fixtf_servicequotas,
+    'fixtf_ses': fixtf_ses,
+    'fixtf_sesv2': fixtf_sesv2,
+    'fixtf_shield': fixtf_shield,
+    'fixtf_signer': fixtf_signer,
+    'fixtf_simpledb': fixtf_simpledb,
+    'fixtf_sns': fixtf_sns,
+    'fixtf_sqs': fixtf_sqs,
+    'fixtf_ssm': fixtf_ssm,
+    'fixtf_ssm_contacts': fixtf_ssm_contacts,
+    'fixtf_ssm_incidents': fixtf_ssm_incidents,
+    'fixtf_sso_admin': fixtf_sso_admin,
+    'fixtf_stepfunctions': fixtf_stepfunctions,
+    'fixtf_storagegateway': fixtf_storagegateway,
+    'fixtf_sts': fixtf_sts,
+    'fixtf_swf': fixtf_swf,
+    'fixtf_synthetics': fixtf_synthetics,
+    'fixtf_timestreamwrite': fixtf_timestreamwrite,
+    'fixtf_transcribe': fixtf_transcribe,
+    'fixtf_transfer': fixtf_transfer,
+    'fixtf_vpc_lattice': fixtf_vpc_lattice,
+    'fixtf_waf': fixtf_waf,
+    'fixtf_waf_regional': fixtf_waf_regional,
+    'fixtf_wafv2': fixtf_wafv2,
+    'fixtf_worklink': fixtf_worklink,
+    'fixtf_workspaces': fixtf_workspaces,
+    'fixtf_xray': fixtf_xray,
+}
+
+
+##############################################
+
+
+def fixtf(ttft,tf):
+  
+    rf=tf+".out"
+    tf2=tf+".tf"
+
+#### Optimisation ???????
+    #if os.path.isfile("imported/"+tf2):
+    #    com = "cp imported/"+tf2+" ."
+    #    rout = common.rc(com)
+    #    com = "mv rf imported/"+rf
+    #    rout = common.rc(com)
+
+    ## will this check break things ?
+    # check if aws_*.tf exists already
+    if os.path.isfile(tf2):
+         if context.debug:
+            log.debug("File exists: " + tf2+ " skipping ...")                 
+         return 
+    else:
+        if context.debug:  log.debug("processing "+tf2)
+
+
+    if context.debug:
+        log.debug(ttft+" fixtf "+tf+".out") 
+   
+# open the *.out file
+
+    try:
+        f1 = open(rf, 'r')
+    except:
+        log.warning("no "+rf)
+        return
+    
+    clfn, descfn, topkey, key, filterid = resources.resource_data(ttft, None)
+    if clfn is None:
+        log.error("ERROR: clfn is None with type="+ttft)
+        log.info("exit 015")
+        timed_int.stop()
+        exit()
+
+    clfn=clfn.replace('-','_')
+    callfn="fixtf_"+clfn
+    if context.debug: log.debug("callfn="+callfn+" ttft="+ttft)
+
+    Lines = f1.readlines()
+    f1.close()
+    #with open(tf2, "a") as f2:
+
+    ##
+    ## Prescan blocks   
+    ##
+    context.elastirep=False
+    context.elastigrep=False
+    context.elasticc=False
+    context.kinesismsk=False
+    context.destbuck=False
+
+
+    if ttft=="aws_s3_bucket_replication_configuration":
+        for t1 in Lines:
+            t1=t1.strip()
+            if context.debug5: log.debug("DEBUG5: pre scan block1 : t1=%s %s",  t1)
+            skip=0
+            tt1=t1.split("=")[0].strip()
+            if tt1=="bucket":
+                try:
+                    tt2=t1.split("=")[1].strip().strip('\"')
+                    if "arn:aws:s3" in tt2:
+                        tt2=tt2.split(":")[-1]
+                        if context.debug5: log.debug("DEBUG5: pre scan block 2: common.add_dep bucket_name=%s %s",  tt2)
+                        common.add_dependancy("aws_s3_bucket", tt2)
+                except:
+                    tt2=""
+
+    if ttft=="aws_elasticache_cluster":
+        for t1 in Lines:
+            t1=t1.strip()
+            skip=0
+            tt1=t1.split("=")[0].strip()
+            try:
+                tt2=t1.split("=")[1].strip().strip('\"')
+            except:
+                tt2=""
+            if tt1=="replication_group_id":
+                if tt2 != "null": 
+                    context.elastirep=True
+                    if context.debug5: log.debug("***** set true *****")
+
+    if ttft=="aws_elasticache_replication_group":
+        for t1 in Lines:
+            t1=t1.strip()
+            skip=0
+            tt1=t1.split("=")[0].strip()
+            try:
+                tt2=t1.split("=")[1].strip().strip('\"')
+            except:
+                tt2=""
+            if tt1=="global_replication_group_id":
+                if tt2 != "null": 
+                    context.elastigrep=True
+            elif tt1=="num_cache_clusters":
+                if tt2 != "null": 
+                    context.elasticc=True
+
+
+    if ttft=="aws_kinesis_firehose_delivery_stream":
+        for t1 in Lines:
+            t1=t1.strip()
+            skip=0
+            tt1=t1.split("=")[0].strip()
+            try:
+                tt2=t1.split("=")[1].strip().strip('\"')
+            except:
+                tt2=""
+            if "msk_source_configuration" in tt1:
+                    context.kinesismsk=True
+
+
+
+    if ttft=="aws_db_instance":
+        for t1 in Lines:
+            t1=t1.strip()
+            skip=0
+            tt1=t1.split("=")[0].strip()
+            try:
+                tt2=t1.split("=")[1].strip().strip('\"')
+            except:
+                tt2=""
+            if tt1=="replicate_source_db":
+                if tt2 != "null": context.repdbin=True
+
+    elif ttft=="aws_lambda_event_source_mapping":
+        for t1 in Lines:
+            t1=t1.strip()
+            skip=0
+            tt1=t1.split("=")[0].strip()
+            try:
+                tt2=t1.split("=")[1].strip().strip('\"')
+            except:
+                tt2=""
+            if tt1=="destination_arn":
+                if tt2 == "null": context.levsmap=True
+
+    accessl=0
+    cnxl=0
+    context.lbskipaacl=False
+    context.lbskipcnxl=False
+    context.mskcfg=False
+
+    if ttft=="aws_lb":
+        for t1 in Lines:
+            t1=t1.strip()
+            tt1=t1.split("=")[0].strip()
+            try:
+                tt2=t1.split("=")[1].strip().strip('\"')
+            except:
+                tt2=""
+            if tt1=="access_logs": accessl=1;cnxl=0
+            if tt1=="connection_logs": accessl=0;cnxl=1
+            if tt1=="enabled":
+                if tt2 == "false" and accessl==1: context.lbskipaacl=True
+                if tt2 == "false" and cnxl==1: context.lbskipcnxl=True
+                else: context.lbenabled=True
+
+    ##
+    ## Block stripping init
+    ##
+    context.lbc=0
+    context.rbc=0
+    context.stripblock=""
+    context.stripblock2=""
+    context.stripstart=""
+    context.stripend=""
+    #if ttft=="aws_lb_listener_rule" or ttft=="aws_lb_listener":
+    #    context.stripblock="forward {"
+    #    context.stripstart="{"
+    #    context.stripend="}"
+    if ttft=="aws_lb":
+        context.stripblock="subnet_mapping {"
+        context.stripstart="{"
+        context.stripend="}"
+
+
+    if ttft=="aws_msk_cluster":
+        context.stripblock="configuration_info {"
+        context.stripstart="{"
+        context.stripend="}"
+
+
+    if ttft=="aws_lambda_event_source_mapping" and context.levsmap:
+        context.stripblock="destination_config {"
+        context.stripstart="{"
+        context.stripend="}"
+
+    if ttft=="aws_wafv2_web_acl":
+        context.stripblock="rule {"
+        context.stripstart="{"
+        context.stripend="}"
+
+    if ttft=="aws_instance":
+        context.stripblock="primary_network_interface {"
+        context.stripstart="{"
+        context.stripend="}"
+
+    if ttft=="aws_kinesis_firehose_delivery_stream":
+        if context.kinesismsk:
+            context.stripblock="server_side_encryption {"
+            context.stripstart="{"
+            context.stripend="}"
+
+    context.gulejobmaxcap=False
+    context.ec2ignore=False
+    context.secid=""
+    context.secvid=""
+    context.dzd=""
+    context.connectinid=""
+
+    #if context.acc in tf2:
+    #    tf2=tf2.replace(context.acc, "__")
+
+
+########################                       
+###Generic block remover 
+########################
+    
+    with open(tf2, "w") as f2:
+        skip=0
+        flag1=False
+        flag2=tf
+        nofind=0
+        f2.write("##START,"+ttft+"\n")
+        
+        # And off we go around the out file again
+        for t1 in Lines:
+            skip=0
+            tt1=t1.split("=")[0].strip()
+            try:
+                tt2=t1.split("=")[1].strip().strip('\"')
+            except:
+                tt2=""
+ 
+            try:   
+                # Security Fix #2: Use module registry instead of eval()
+                # Look up module in registry
+                module = FIXTF_MODULES.get(callfn)
+                
+                if module is None:
+                    log.warning(f"** Module not found in registry for callfn={callfn}")
+                    nofind = 1
+                else:
+                    # Get the function from the module
+                    getfn = getattr(module, ttft)
+            except Exception as e:
+                log.error(f"{e=}")
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                log.error("%s %s %s %s",  exc_type, fname, exc_tb.tb_lineno)
+                log.warning("** no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
+                nofind=1
+                
+            try:
+                ####
+                # common replacement code here
+                # rhs=account number
+                # rhs is still an arn
+                # : in tt1 for quote it
+
+                #call aws_common. fixtf
+                skip,t1,flag1,flag2=aws_common.aws_common(ttft,t1,tt1,tt2,flag1,flag2)
+
+                # call fixtf_aws_rsource if skip=0
+                if skip==0:                
+                    skip,t1,flag1,flag2=getfn(t1,tt1,tt2,flag1,flag2)
+
+                #####
+                ## block strip sections - 
+                ####
+                
+                if context.stripblock != "":
+                    if context.stripblock in t1: context.lbc=1
+                    elif context.stripstart in t1 and context.lbc>0: context.lbc=context.lbc+1
+                    
+                    if context.stripend in t1 and context.lbc>0:
+                        context.lbc=context.lbc-1
+                        skip=1
+                    elif context.lbc > 0: skip=1
+                
+
+            except Exception as e:
+                log.error(f"{e=}")
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                log.error("%s %s %s %s",  exc_type, fname, exc_tb.tb_lineno)
+                log.error("** error in "+ttft+" "+callfn+" OR .....")
+                log.error("-- no fixtf for type:"+ttft+" callfn:"+callfn)
+                log.error("-- no fixtf for "+tf+" calling generic fixtf2.aws_resource callfn="+callfn)
+                log.error("t1="+str(t1)) 
+                nofind=2
+                skip,t1,flag1,flag2=aws_resource(t1,tt1,tt2,flag1,flag2)           
+            #### 
+
+            if skip == 0:
+                f2.write(t1)
+
+
+
+        # extra block removals in aws_lb
+        if type=="aws_lb":
+            if context.lbskipaacl:
+                shutil.move(tf2, tf2+".saved")
+                context.stripblock="access_logs"
+                with open(tf2+".saved", "e") as f1:
+                    Lines = f1.readlines()
+                with open(tf2, "w") as f2:
+                    for t1 in Lines:
+                        t1=t1.strip()
+                        tt1=t1.split("=")[0].strip()
+                        if context.stripblock != "":
+                            if context.stripblock in t1: context.lbc=1
+                            elif context.stripstart in t1 and context.lbc>0: context.lbc=context.lbc+1
+                            
+                            if context.stripend in t1 and context.lbc>0:
+                                context.lbc=context.lbc-1
+                                skip=1
+                            elif context.lbc > 0: skip=1
+            if context.lbskipcnxl:
+                shutil.move(tf2, tf2+".saved")
+                context.stripblock="connection_logs"
+                with open(tf2+".saved", "e") as f1:
+                    Lines = f1.readlines()
+                with open(tf2, "w") as f2:
+                    for t1 in Lines:
+                        t1=t1.strip()
+                        tt1=t1.split("=")[0].strip()
+                        if context.stripblock != "":
+                            if context.stripblock in t1: context.lbc=1
+                            elif context.stripstart in t1 and context.lbc>0: context.lbc=context.lbc+1
+                            
+                            if context.stripend in t1 and context.lbc>0:
+                                context.lbc=context.lbc-1
+                                skip=1
+                            elif context.lbc > 0: skip=1
+
+
+
+        if nofind > 0:
+           log.warning("WARNING: No fixtf for "+tf+" calling generic fixtf2.aws_resource nofind="+str(nofind))
+        
+        
+        
+        ## move *.out to impoted
+        #shutil.move(rf, "imported/"+rf)
+
+def remove_block():
+
+
+
+
+
+    return        
+
+def aws_resource(t1,tt1,tt2,flag1,flag2):
+    skip=0
+    return skip,t1,flag1,flag2 
+
+
+# generic replace of acct and region in arn
+def globals_replace(t1,tt1,tt2):
+    if context.debug: log.debug("GR start:%s %s",  t1)
+    if "format(" in tt2: return t1
+    ends=""
+    tt2=tt2.replace("%", "%%")
+    if tt2.startswith('[') and tt1 != "managed_policy_arns" and "," in tt2:
+        tt2=tt2.replace('[','').replace(']','').replace('"','').replace(' ','')
+        arns=tt2.split(',')
+        if context.debug: log.debug("Globals replace an array:"+str(arns))
+        fins=""
+        for arn in arns:
+            tt2=str(arn)
+            
+            ends=""
+            if ":"+context.acc+":" in tt2:
+                while ":"+context.acc+":" in tt2:
+                    r1=tt2.find(":"+context.region+":")
+                    a1=tt2.find(":"+context.acc+":")
+                    if r1>0 and r1 < a1:
+                            ends=ends+",data.aws_region.current.region"
+                            tt2=tt2[:r1]+":%s:"+tt2[r1+context.regionl+2:]
+
+                    a1=tt2.find(":"+context.acc+":")
+                    tt2=tt2[:a1]+":%s:"+tt2[a1+14:]
+                    
+                    ends=ends+",data.aws_caller_identity.current.account_id"
+                    #if "\\" not in tt2:
+                    #    tt2=tt2.replace('"', '\\"')
+            
+
+                    
+                    t2 = 'format("'+tt2+ '"' +ends+'),'
+                    fins=fins+t2
+            else:
+                return t1
+        if fins=="":return t1
+        fins=fins.rstrip(',')
+        fins="["+fins+"]\n"
+        fins=tt1+" = "+fins
+        t1=fins
+
+    else:
+        if ":"+context.acc+":" in tt2:
+            while ":"+context.acc+":" in tt2:
+                    r1=tt2.find(":"+context.region+":")
+                    a1=tt2.find(":"+context.acc+":")
+                    if r1>0 and r1 < a1:
+                            ends=ends+",data.aws_region.current.region"
+                            tt2=tt2[:r1]+":%s:"+tt2[r1+context.regionl+2:]
+
+                    a1=tt2.find(":"+context.acc+":")
+                    tt2=tt2[:a1]+":%s:"+tt2[a1+14:]
+                    
+                    ends=ends+",data.aws_caller_identity.current.account_id"
+                    #if "\\" not in tt2:
+                    #    tt2=tt2.replace('"', '\\"')
+            
+
+                    
+                    if context.debug: log.debug("out tt2="+tt2)
+                    if "[" in tt2:
+                        tt2=tt2.lstrip("[").rstrip("]").lstrip('"').rstrip('"')
+                        if context.debug: log.debug("in tt2="+tt2)
+                        t1 = tt1+' = [format("' + tt2 + '"' + ends +')]\n'
+                    else:
+                        t1 = tt1+' = format("'+tt2+ '"' +ends+')\n'
+                    
+    
+    #if tt1 == "managed_policy_arns":
+    #    tt2=tt2.replace('[','')
+    #    tt2=tt2.replace(']','')
+    #    tt2=tt2.replace('"','')
+    #    t1 = tt1+' = [format("' + tt2 + '"' + ends +')]\n'
+    
+    if context.debug: log.debug("GR finish:="+t1)
+    return t1
+
+
+
+def rhs_replace(t1,tt1,tt2):
+    ends=""
+
+    if "{" not in tt2 and "[" not in tt2:  # so probably not a policy 
+
+        while context.acc in tt2:
+                    r1=tt2.find(context.region)
+                    a1=tt2.find(context.acc)
+                    if r1>0 and a1>0 and r1 < a1: # there is region and it comes 1st
+                            ends=ends+",data.aws_region.current.region"
+                            tt2=tt2[:r1]+"%s"+tt2[r1+context.regionl:]
+                            a1=tt2.find(context.acc)
+                            tt2=tt2[:a1]+"%s"+tt2[a1+12:]
+                            ends=ends+",data.aws_caller_identity.current.account_id"
+                    if r1>0 and a1>0 and r1 > a1: # there is region and it comes 2nd
+                            ends=ends+",data.aws_caller_identity.current.account_id"         
+                            tt2=tt2[:r1]+"%s"+tt2[r1+context.regionl:]
+                            a1=tt2.find(context.acc)
+                            tt2=tt2[:a1]+"%s"+tt2[a1+12:]
+                            ends=ends+",data.aws_region.current.region"
+                
+                    t1 = tt1+' = format("'+tt2+ '"' +ends+')\n'
+
+
+    return t1
+
+
+def deref_array(t1,tt1,tt2,ttft,prefix,skip):
+
+    try:
+        if tt2 == "null" or tt2 == "[]":
+            skip=1
+            return t1,skip
+        tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
+        cc=tt2.count(',')
+        subs=""
+        #if context.debug: 
+        if cc > 0:
+            for i in range(cc+1):
+                subn=tt2.split(',')[i]
+                # aws_subnet
+                if ttft == "aws_subnet": 
+                    try:
+                        if context.subnetlist[subn]:
+                            if not context.dnet:
+                                subs=subs + ttft + "." + subn + ".id,"
+                                common.add_dependancy(ttft,subn)
+                            else:
+                                subs=subs + "data."+ttft + "." + subn + ".id,"
+                                common.add_dependancy(ttft,subn)
+                        else:
+                            log.warning("WARNING: subnet not in subnetlist" + subn)
+                            subs=subs+'"'+subn+'"'+","
+                    except KeyError:
+                        log.warning("WARNING: subnet not in subnet list " + subn+ " Resource may be referencing a subnet that no longer exists")
+                        subs=subs+'"'+subn+'"'+","
+                
+                # security_group
+                elif ttft == "aws_security_group": 
+                    try:
+                        if context.sglist[subn]:
+                            if not context.dsgs:
+                                subs=subs + ttft + "." + subn + ".id,"
+                                common.add_dependancy(ttft,subn)
+                            else:
+                                subs=subs + "data."+ttft + "." + subn + ".id,"
+                                common.add_dependancy(ttft,subn)
+                        else:
+                            log.warning("WARNING: security group not in sg list" + subn)
+                            subs=subs+'"'+subn+'"'+","
+                    except KeyError:
+                        log.warning("WARNING: security group not in sg list " + subn+ " Resource may be referencing a security group that no longer exists")
+                        subs=subs+'"'+subn+'"'+","
+                #
+                else:
+                    subs=subs + ttft + "." + subn + ".id,"
+                    common.add_dependancy(ttft,subn)
+
+                
+        elif cc == 0 and prefix in tt2:
+            if ttft == "aws_subnet":
+                try:
+                    if context.subnetlist[tt2]:
+                        if not context.dnet:
+                            subs=ttft + "." + tt2 + ".id"
+                            common.add_dependancy(ttft, tt2)
+                        else:
+                            subs="data."+ttft + "." + tt2 + ".id"
+                            common.add_dependancy(ttft, tt2)
+                    else:
+                        log.warning("WARNING: subnet not in subnet list" + tt2)
+                        subs='"'+tt2+'"'
+                except KeyError:
+                    log.warning("WARNING: subnet not in subnet list " + tt2+ " Resource may be referencing a subnet that no longer exists")
+                    subs='"'+tt2+'"'
+
+            elif ttft == "aws_security_group":
+                try:
+                    if context.sglist[tt2]:
+                        if not context.dsgs:
+                            subs=ttft + "." + tt2 + ".id"
+                            common.add_dependancy(ttft, tt2)
+                        else:
+                            subs="data."+ttft + "." + tt2 + ".id"
+                            common.add_dependancy(ttft, tt2)
+                    else:
+                        log.warning("WARNING: security group not in sg list" + tt2)
+                        subs='"'+tt2+'"'
+                except KeyError:
+                    log.warning("WARNING: security group not in sg list " + tt2+ " Resource may be referencing a security group that no longer exists")
+                    subs='"'+tt2+'"'
+            else:
+                subs=ttft + "." + tt2 + ".id"
+                common.add_dependancy(ttft,tt2)
+
+        
+        if subs !="":       
+            t1=tt1 + " = [" + subs + "]\n"
+            t1=t1.replace(',]',']')
+        
+    
+    except Exception as e:  
+      log.error("t1=%s %s",  t1)
+      common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id) 
+    
+    return t1,skip
+
+
+
+def deref_role_arn(t1,tt1,tt2):
+    if tt2 == "null" or tt2 == "[]": return t1
+
+    if tt2.startswith("arn:aws:events:"): log.debug(tt2)
+
+    if tt2.startswith("arn:aws:s3:::"):
+        bn=tt2.split(":::")[-1]
+        try:
+            if context.bucketlist[bn]:
+                t1=tt1 + " = aws_s3_bucket.b-" + bn + ".arn\n"
+                common.add_dependancy("aws_s3_bucket",bn)
+        except KeyError as e:
+            return t1
+        
+    elif tt2.startswith("arn:aws:elasticloadbalancing"):
+        tarn=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_").replace(" ","_").replace("*","star").replace("\\052","star").replace("@","_").replace("\\64","_")
+        t1=tt1 + " = aws_lb." + tarn + ".arn\n"
+        common.add_dependancy("aws_lb",tt2)
+    elif tt2.startswith("arn:aws:wafv2") and ":regional/webacl" in tt2:
+        tarn=tt2.split("/webacl/")[-1]
+        wn=tarn.split("/")[0]
+        wi=tarn.split("/")[-1]
+        tarn2="w-"+wi+"_"+wn+"_REGIONAL"
+        t1=tt1 + " = aws_wafv2_web_acl." + tarn2 + ".arn\n"
+
+
+    elif tt2.startswith("arn:aws:events:") and ":rule/" in tt2 and ":rule/aws.partner" not in tt2:
+        rn=tt2.split("/")[-1]
+        t1=tt1 + " = aws_cloudwatch_event_rule.default_" + rn + ".arn\n"
+        #### TODO - note assumption it's on default event bus !
+        common.add_dependancy("aws_cloudwatch_event_rule",rn)
+
+    elif ":role/aws-service-role" in tt2:	
+        t1=globals_replace(t1,tt1,tt2)
+    elif ":role/" in tt2:
+        if tt2.endswith("*"): return t1
+        if tt2.startswith("arn:"): tt2=tt2.split('/')[-1]
+        if tt2 in context.rolelist:
+            t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+            common.add_dependancy("aws_iam_role",tt2)
+            
+    # it's not an arn - just a name
+    elif ":" not in tt2 and tt2 != "null": # assume it's a role name
+        t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+        common.add_dependancy("aws_iam_role", tt2)
+
+    return t1
+
+def deref_kms_key(t1,tt1,tt2):
+    log.debug("deref_kms_key 1: " + tt2)
+    if "arn:aws:kms:" in tt2:
+        log.debug("deref_kms_key 2: " + tt2)
+        t1=globals_replace(t1,tt1,tt2)
+    return t1
+
+
+def deref_s3(t1, tt1, tt2):
+    if tt2.startswith("s3://"):
+        sc=tt2.count("/")
+        if sc>=3:
+            bn=tt2.split("/",3)[2] 
+            tn=tt2.split("/",3)[3] 
+            try:
+                if context.bucketlist[tt2]:
+                    bv = "aws_s3_bucket.b-" + bn + ".bucket"
+                    if tn !="":
+                        t1=tt1 + ' = format("s3://%s/%s",'+bv+',"'+tn+'")\n'
+                    else:
+                        t1=tt1 + ' = format("s3://%s/",'+bv+')\n'
+            except KeyError as e:
+                return t1
+
+    return t1
+
+
+
+ #if tt1 == "security_groups": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
+def deref_role_arn_array(t1,tt1,tt2):
+
+    if tt2 == "null" or tt2 == "[]": return t1
+    tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
+    cc=tt2.count(',')
+    subs=""
+    if cc > 0:
+        for i in range(cc+1):
+            if ":role/" in tt2:
+                subn=tt2.split(',')[i]
+                subn=subn.strip('/')[-1]
+                subs=subs + "aws_iam_role." + subn + ".arn,"
+                common.add_dependancy("aws_iam_role",subn)
+
+            
+    if cc == 0:
+        if ":role/" in tt2:
+            tt2=tt2.split('/')[-1]
+            subs=subs + "aws_iam_role." + tt2 + ".arn,"
+            common.add_dependancy("aws_iam_role",tt2)
+             
+    t1=tt1 + " = [" + subs + "]\n"
+    t1=t1.replace(',]',']')
+
+    return t1
+
+def deref_secret_arn_array(t1,tt1,tt2):
+    if tt2 == "null" or tt2 == "[]": return t1
+    tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
+    cc=tt2.count(',')
+    subs=""
+    if cc > 0:
+        for i in range(cc+1):
+            if ":secret:" in tt2:
+                subn=tt2.split(',')[i]
+                sarn=subn
+                tarn=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
+                subs=subs + "aws_secretsmanager_secret." + tarn + ".arn,"
+                common.add_dependancy("aws_secretsmanager_secret",sarn)
+
+            
+    if cc == 0:
+        if ":secret:" in tt2:
+            sarn=tt2
+            tarn=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
+            subs=subs + "aws_secretsmanager_secret." + tarn + ".arn,"
+            common.add_dependancy("aws_secretsmanager_secret",sarn)
+             
+    t1=tt1 + " = [" + subs + "]\n"
+    t1=t1.replace(',]',']')
+
+    return t1
+
+
+
+def deref_elb_arn_array(t1,tt1,tt2):
+    if tt2 == "null" or tt2 == "[]": return t1
+    tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
+    cc=tt2.count(',')
+    subs=""
+    if cc > 0:
+        for i in range(cc+1):
+            subn=tt2.split(',')[i]
+            tarn=subn
+            rarn=tarn.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_")
+
+            subn=subn.strip('/')[-1]
+            subs=subs + "aws_lb." + rarn + ".arn,"
+            common.add_dependancy("aws_lb",tarn)
+
+            
+    if cc == 0:
+        tarn=tt2
+        rarn=tarn.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_")
+        tt2=tt2.split('/')[-1]
+        subs=subs + "aws_lb." + rarn + ".arn,"
+        common.add_dependancy("aws_lb",tarn)
+             
+    t1=tt1 + " = [" + subs + "]\n"
+    t1=t1.replace(',]',']')
+
+    return t1
+
+#### other arn derefs here
+def generic_deref_arn(t1, tt1, tt2):
+    if context.debug: log.debug("Here %s %s",  t1)
+    try:
+        if tt2.endswith("*"): return t1
+        if context.debug: log.debug("*** generic "+t1)
+        isstar=False
+    
+        if tt2 == "null" or tt2 == "[]": return t1
+        tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
+        cc=tt2.count(',')
+        subs=""
+        log.debug("generic %s cc= %s %s",  tt2, cc)
+        if tt2.endswith("*"): isstar=True
+
+        if cc==0 and ":log-stream:" in tt2:
+            logr=tt2.split(':')[3]
+            if logr==context.region:
+                logn=tt2.split(':log-stream:')[0].split(':')[-1]
+                common.add_dependancy("aws_cloudwatch_log_group", logn)
+                logn2=logn.replace("/", "_")
+                streamn=tt2.split(':log-stream:')[1]
+                if isstar: streamn=streamn.rstrip("*")
+                if isstar:
+                    period="."
+                    arnadr="aws_cloudwatch_log_stream."+logn2+"_"+streamn+".arn"
+                    log.debug(arnadr)
+                    t1=tt1 + ' = [format("%s*",'+arnadr+')]\n'
+                    #t1=tt1 + ' = ["' + 'format("%s*",'+arnadr+')"]\n'
+                
+                else:
+                    t1=tt1 + " = aws_cloudwatch_log_stream."+logn2+"_"+streamn+".arn\n" 
+
+        if cc==0 and ":role/" in tt2 and "arn:aws:iam" in tt2:
+
+            if "/aws_service_role" not in tt2:
+
+                roln=tt2.split('/')[-1]
+                if not roln.endswith("*"):
+                    common.add_dependancy("aws_iam_role", roln)
+                    arnadr="aws_iam_role."+roln+".arn"
+                    log.debug(arnadr)
+                    t1=tt1 + ' = [format("%s*",'+arnadr+')]\n'
+                
+
+
+    except Exception as e:  
+      common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id)     
+    log.debug("generic out = %s %s",  t1)
+    return t1
+    if cc == 0:
+        tarn=tt2
+        arn_list=tarn.split(':')[0:3] 
+        arn_fragment=':'.join(arn_list)
+        
+        if arn_fragment in arn_dict: 
+            subtype=arn_dict[arn_fragment]['subtype']
+            if arn_dict[arn_fragment]['named']:
+                subn=tt2.split('/')[-1]
+                subs=subs + subtype+"." + subn + ".arn,"
+            else:
+                rarn=tarn.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_")
+                subs=subs + subtype+"." + rarn + ".arn,"
+            common.add_dependancy(subtype,tarn)
+
+
+
+
+
+    if cc > 0:
+        for i in range(cc+1):
+            subn=tt2.split(',')[i]
+            tarn=subn
+            arn_list=tarn.split(':')[0:3]
+            arn_fragment=':'.join(arn_list)
+
+            if arn_fragment in arn_dict: 
+                subtype=arn_dict[arn_fragment]['subtype']
+                if arn_dict[arn_fragment]['named']:
+                    subn=tt2.split('/')[-1]
+                    subs=subs + subtype+"." + subn + ".arn,"
+                else:
+                    rarn=tarn.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_")
+                    subs=subs + subtype+"." + rarn + ".arn,"
+                common.add_dependancy(subtype,tarn)
+                        
+    if subs == "": return t1
+    
+    t1=tt1 + " = [" + subs + "]\n"
+    t1=t1.replace(',]',']')
+
+    log.debug("exit t1="+t1)
+    return t1
+
+
+

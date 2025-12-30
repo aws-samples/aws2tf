@@ -79,6 +79,43 @@ def aws_iam_policy(t1,tt1,tt2,flag1,flag2):
     return skip,t1,flag1,flag2
 
 
+def aws_iam_role(t1,tt1,tt2,flag1,flag2):
+	skip=0
+	if tt1 == "name":
+		if len(tt2) > 0: 
+			flag1=True
+			flag2=tt2
+	elif tt1 == "name_prefix" and flag1 is True: skip=1
+	elif tt1 == "policy": t1=fixtf.globals_replace(t1,tt1,tt2)
+	elif tt1 == "assume_role_policy": t1=fixtf.globals_replace(t1,tt1,tt2)
+	elif tt1 == "permissions_boundary" and tt2 != "null":
+		if "arn:aws:iam::aws:policy" not in tt2:
+			pn=tt2.split("/")[-1]
+			common.add_dependancy("aws_iam_policy",tt2)
+			t1=tt1+" = aws_iam_policy."+pn+".arn\n"
+	elif tt1 == "managed_policy_arns":   
+		if tt2 == "[]": 
+			skip=1
+		elif ":"+context.acc+":" in tt2:
+			fs=""
+			ends=",data.aws_caller_identity.current.account_id"
+			tt2=tt2.replace("[","").replace("]","")
+			cc=tt2.count(",")
+			pt1=tt1+" = ["
+			for j in range(0,cc+1):
+				ps=tt2.split(",")[j]
+				if ":"+context.acc+":" in ps:
+					a1=ps.find(":"+context.acc+":")
+					ps=ps[:a1]+":%s:"+ps[a1+14:]
+					ps = 'format('+ps+ends+')'
+				pt1=pt1+ps+","
+			pt1=pt1+"]\n"
+			t1=pt1.replace(",]","]")
+			context.roles=context.roles+[flag2]
+		else:
+			pass
+	return skip,t1,flag1,flag2
+
 
 def aws_iam_role_policy(t1,tt1,tt2,flag1,flag2):
 

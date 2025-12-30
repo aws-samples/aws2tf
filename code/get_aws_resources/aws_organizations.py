@@ -90,7 +90,7 @@ def get_aws_organizations_policy(type, id, clfn, descfn, topkey, key, filterid):
             scpskip=False
             
         if scpskip:
-            log.info("SCPs")
+            log.debug("SCPs")
             if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response[topkey]:
                 if "AWS" not in j[key]:
@@ -193,7 +193,7 @@ def get_aws_organizations_resource_policy(type, id, clfn, descfn, topkey, key, f
             #fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             exn=str(exc_type.__name__)
             if exn == "ResourcePolicyNotFoundException":
-                log.info("No Resource Policies found - returning True ....")
+                log.debug("No Resource Policies found - returning True ....")
                 return True
             elif exn == "AccessDeniedException":
                     log.info("Can't describe_resource_policy - no access or not a master account......")              
@@ -227,7 +227,7 @@ def get_aws_organizations_policy_attachment(type, id, clfn, descfn, topkey, key,
                 #fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                 exn=str(exc_type.__name__)
                 if exn == "ResourcePolicyNotFoundException":
-                    log.info("No Resource Policy found - returning True ....")
+                    log.debug("No Resource Policy found - returning True ....")
                     return True
                 elif exn == "AccessDeniedException":
                         log.info("Can't describe_resource_policy - no access or not a master account......")              
@@ -252,7 +252,7 @@ def get_aws_organizations_policy_attachment(type, id, clfn, descfn, topkey, key,
                 common.write_import(type, pkey, id)            
 
         else:
-            log.warning("Must pass a policy id as a parmeter - returning True")
+            log.debug("Must pass a policy id as a parmeter - returning True")
 
 
     except Exception as e:

@@ -205,7 +205,7 @@ def get_aws_vpclattice_target_group_attachment(type, id, clfn, descfn, topkey, k
     response = []
 
     if id is None:
-      log.warning("Must pass target group id")
+      log.debug("Must pass target group id")
       return True
     else:
         if id.startswith("tg-"):

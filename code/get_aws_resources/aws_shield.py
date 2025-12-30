@@ -16,7 +16,7 @@ def get_aws_shield_protection_group(type, id, clfn, descfn, topkey, key, filteri
             try:
                 response = client.list_protection_groups()
             except Exception as e:
-                log.info("No shield protection groups")
+                log.debug("No shield protection groups")
                 return True
             if response == []: 
                 log.debug("Empty response for "+type+ " id="+str(id)+" returning")

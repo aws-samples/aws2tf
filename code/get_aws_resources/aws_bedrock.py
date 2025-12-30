@@ -78,7 +78,7 @@ def get_aws_bedrock_guardrail(type, id, clfn, descfn, topkey, key, filterid):
                 tkey=j[key]+","+j['version']
                 try:
                     tresp=client.list_tags_for_resource(resourceARN=j['arn'])
-                    log.info(str(tresp))
+                    log.debug(str(tresp))
                 except Exception as e:
                     exc_type, exc_obj, exc_tb = sys.exc_info()
                     exn=str(exc_type.__name__)

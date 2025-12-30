@@ -62,7 +62,7 @@ def get_aws_amplify_branch(type, id, clfn, descfn, topkey, key, filterid):
                 context.rproc[pkey]=True
 
         else:      
-            log.warning("Must pass id for "+type+" returning")
+            log.debug("Must pass id for "+type+" returning")
             return True
 
     except Exception as e:

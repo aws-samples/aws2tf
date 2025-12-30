@@ -86,7 +86,6 @@ def get_aws_athena_data_catalog(type, id, clfn, descfn, topkey, key, filterid):
             if response == []: 
                 if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
-            log.info(response)
             for j in response:
                 if j[key] != "AwsDataCatalog":
                     log.info(j)

@@ -788,7 +788,7 @@ def get_aws_route(type, id, clfn, descfn, topkey, key, filterid):
             if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 routes=j['Routes']
-                log.info(str(routes))
+                log.debug(str(routes))
                 common.write_import(type,j[key],None) 
 
         else:      
@@ -796,7 +796,7 @@ def get_aws_route(type, id, clfn, descfn, topkey, key, filterid):
             if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
         for j in response[topkey]:
             routes=j['Routes']
-            log.info(str(routes))
+            log.debug(str(routes))
             common.write_import(type,j[key],None)
 
     except Exception as e:

@@ -52,7 +52,6 @@ def get_aws_dynamodb_kinesis_streaming_destination(type, id, clfn, descfn, topke
         else:      
             pkey=type+"."+id
             response = client.describe_kinesis_streaming_destination(TableName=id)
-            log.info(response[topkey])
             if response[topkey] == []: 
                 if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 context.rproc[pkey]=True

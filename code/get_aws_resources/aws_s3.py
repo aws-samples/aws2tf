@@ -18,6 +18,7 @@ from tqdm import tqdm
 
 def get_aws_s3_bucket(type, id, clfn, descfn, topkey, key, filterid):
    context.tracking_message="Stage 3 of 10 getting s3 resources ..."
+   #log.info(f"Getting s3 resources id=%s",id)
    get_all_s3_buckets(id,context.region)
    return True
 
@@ -125,22 +126,20 @@ def get_all_s3_buckets(fb,my_region):
       'aws_s3_bucket_website_configuration': s3.get_bucket_website
    }
   
-
-
    if not context.debug:
-
       for bn in context.s3list.keys():
+         #log.info("Checking bucket "+bn+" fb= "+str(fb))
       #for bucket in s3a.buckets.all():
          #if fb is not None and fb not in bucket.name: continue
-         if fb is not None and fb not in bn: continue
+         if fb is not None and fb not in bn: 
+            #log.info("skipping bucket "+bn)
+            continue
 
          #context.bucketlist[bucket.name]=True
          context.bucketlist[bn]=True
       
-      
-      
       # check can access
-      log.info(f"Checking access to {len(context.bucketlist)} S3 buckets...")
+      log.debug(f"Checking access to {len(context.bucketlist)} S3 buckets...")
       with ThreadPoolExecutor(max_workers=context.cores) as executor4:
          futures = [
             executor4.submit(check_access,key,my_region)
@@ -150,17 +149,17 @@ def get_all_s3_buckets(fb,my_region):
          for future in tqdm(concurrent.futures.as_completed(futures),
                            total=len(futures),
                            desc="Checking bucket access",
-                           unit="bucket"):
+                           unit="bucket", leave=False):
             future.result()
 
 
       # Process accessible buckets
       accessible_buckets = [k for k, v in context.bucketlist.items() if v is True]
-      log.info(f"Processing {len(accessible_buckets)} accessible S3 buckets...")
+      log.debug(f"Processing {len(accessible_buckets)} accessible S3 buckets...")
       
       for bucket_name in tqdm(accessible_buckets,
                              desc="Processing S3 buckets",
-                             unit="bucket"):
+                             unit="bucket", leave=False):
          
          if "aws_s3_bucket."+bucket_name in str(context.rproc):
             if context.rproc["aws_s3_bucket."+bucket_name] is True:
@@ -177,11 +176,11 @@ def get_all_s3_buckets(fb,my_region):
 
 
       context.tracking_message="Stage 3 of 10 getting s3 bucket properties resources ..."
-      log.info(f"Getting S3 bucket properties for {len(accessible_buckets)} buckets...")
+      log.debug(f"Getting S3 bucket properties for {len(accessible_buckets)} buckets...")
       
       for bucket_name in tqdm(accessible_buckets,
                              desc="Getting bucket properties",
-                             unit="bucket"):
+                             unit="bucket", leave=False):
          ### thread thread ?
          with ThreadPoolExecutor(max_workers=context.cores) as executor3:
                   futures = [

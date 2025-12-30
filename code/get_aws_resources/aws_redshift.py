@@ -90,12 +90,12 @@ def get_aws_redshift_parameter_group(type, id, clfn, descfn, topkey, key, filter
                 if "default." not in j[key]: 
                     common.write_import(type,j[key],None) 
                 else:
-                     log.info("Default param skipping "+j[key])
+                     log.debug("Default param skipping "+j[key])
             else:
                 if "default." not in id: 
                     if id==j[key]: common.write_import(type,j[key],None)
                 else:
-                    log.info("Default param skipping "+j[key])
+                    log.debug("Default param skipping "+j[key])
    
 
     except Exception as e:

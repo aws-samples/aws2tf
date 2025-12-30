@@ -87,7 +87,7 @@ def resource_types(type):
 
     elif type =="all": 
         keys_list = aws_dict.aws_resources.keys()
-        
+        #log.info(str(keys_list))
         for i in keys_list:
             rets.append(i)
         return rets

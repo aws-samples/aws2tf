@@ -1,24 +1,36 @@
-def aws_devicefarm_device_pool(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+"""
+DEVICEFARM Resource Handlers - Optimized with __getattr__
 
-def aws_devicefarm_instance_profile(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+This file contains ONLY DEVICEFARM resources with custom transformation logic.
+All other resources automatically use the default handler via __getattr__.
 
-def aws_devicefarm_network_profile(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+Original: 0 functions
+Optimized: 0 functions + __getattr__
+Reduction: 0% less code
+"""
 
-def aws_devicefarm_project(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+import logging
+from .base_handler import BaseResourceHandler
 
-def aws_devicefarm_test_grid_project(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+log = logging.getLogger('aws2tf')
 
-def aws_devicefarm_upload(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
+
+def __getattr__(name):
+	"""
+	Dynamically provide default handler for resources without custom logic.
+	
+	This allows getattr(module, "aws_resource") to work even if the
+	function doesn't exist, by returning the default handler.
+	
+	All DEVICEFARM resources automatically use this.
+	"""
+	if name.startswith("aws_"):
+		return BaseResourceHandler.default_handler
+	raise AttributeError(f"module 'fixtf_devicefarm' has no attribute '{name}'")
+
+
+log.debug(f"DEVICEFARM handlers: __getattr__ for all 0 resources")

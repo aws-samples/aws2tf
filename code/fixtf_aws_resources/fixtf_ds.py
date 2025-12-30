@@ -1,35 +1,57 @@
-def aws_directory_service_conditional_forwarder(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+"""
+DS Resource Handlers - Optimized with __getattr__
+
+This file contains ONLY DS resources with custom transformation logic.
+All other resources automatically use the default handler via __getattr__.
+
+Original: 1 functions
+Optimized: 1 functions + __getattr__
+Reduction: 0% less code
+"""
+
+import logging
+from .base_handler import BaseResourceHandler
+
+log = logging.getLogger('aws2tf')
+
+
+# ============================================================================
+# DS Resources with Custom Logic (1 functions)
+# ============================================================================
 
 def aws_directory_service_directory(t1,tt1,tt2,flag1,flag2):
+
+
 	skip=0
 	if tt1=="password":
 		t1=tt1+' = "set-me"\n'
 		t1=t1+"\n lifecycle {\n   ignore_changes = [password]\n}\n"
 	return skip,t1,flag1,flag2
 
-def aws_directory_service_log_subscription(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
-def aws_directory_service_radius_settings(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
-def aws_directory_service_region(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
 
-def aws_directory_service_shared_directory(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
-def aws_directory_service_shared_directory_acceptor(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
-def aws_directory_service_trust(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
 
+def __getattr__(name):
+	"""
+	Dynamically provide default handler for resources without custom logic.
+	
+	This allows getattr(module, "aws_resource") to work even if the
+	function doesn't exist, by returning the default handler.
+	
+	All simple DS resources (0 resources) automatically use this.
+	"""
+	if name.startswith("aws_"):
+		return BaseResourceHandler.default_handler
+	raise AttributeError(f"module 'fixtf_ds' has no attribute '{name}'")
+
+
+log.debug(f"DS handlers: 1 custom functions + __getattr__ for 0 simple resources")

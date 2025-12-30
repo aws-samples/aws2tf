@@ -1,68 +1,36 @@
-def aws_account_alternate_contact(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+"""
+ORGANIZATIONS Resource Handlers - Optimized with __getattr__
 
-def aws_account_primary_contact(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+This file contains ONLY ORGANIZATIONS resources with custom transformation logic.
+All other resources automatically use the default handler via __getattr__.
 
-def aws_organizations_account(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+Original: 0 functions
+Optimized: 0 functions + __getattr__
+Reduction: 0% less code
+"""
 
-def aws_organizations_delegated_administrator(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+import logging
+from .base_handler import BaseResourceHandler
 
-def aws_organizations_delegated_administrators(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+log = logging.getLogger('aws2tf')
 
-def aws_organizations_delegated_services(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
-def aws_organizations_organization(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
 
-def aws_organizations_organizational_unit(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+def __getattr__(name):
+	"""
+	Dynamically provide default handler for resources without custom logic.
+	
+	This allows getattr(module, "aws_resource") to work even if the
+	function doesn't exist, by returning the default handler.
+	
+	All ORGANIZATIONS resources automatically use this.
+	"""
+	if name.startswith("aws_"):
+		return BaseResourceHandler.default_handler
+	raise AttributeError(f"module 'fixtf_organizations' has no attribute '{name}'")
 
-def aws_organizations_organizational_unit_child_accounts(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
-def aws_organizations_organizational_unit_descendant_accounts(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_organizations_organizational_units(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_organizations_policies(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_organizations_policies_for_target(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_organizations_policy(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_organizations_policy_attachment(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_organizations_resource_policy(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_organizations_resource_tags(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
+log.debug(f"ORGANIZATIONS handlers: __getattr__ for all 0 resources")

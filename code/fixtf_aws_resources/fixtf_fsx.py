@@ -1,48 +1,36 @@
-def aws_fsx_backup(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+"""
+FSX Resource Handlers - Optimized with __getattr__
 
-def aws_fsx_data_repository_association(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+This file contains ONLY FSX resources with custom transformation logic.
+All other resources automatically use the default handler via __getattr__.
 
-def aws_fsx_file_cache(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+Original: 0 functions
+Optimized: 0 functions + __getattr__
+Reduction: 0% less code
+"""
 
-def aws_fsx_lustre_file_system(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+import logging
+from .base_handler import BaseResourceHandler
 
-def aws_fsx_ontap_file_system(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+log = logging.getLogger('aws2tf')
 
-def aws_fsx_ontap_storage_virtual_machine(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
-def aws_fsx_ontap_storage_virtual_machines(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
 
-def aws_fsx_ontap_volume(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+def __getattr__(name):
+	"""
+	Dynamically provide default handler for resources without custom logic.
+	
+	This allows getattr(module, "aws_resource") to work even if the
+	function doesn't exist, by returning the default handler.
+	
+	All FSX resources automatically use this.
+	"""
+	if name.startswith("aws_"):
+		return BaseResourceHandler.default_handler
+	raise AttributeError(f"module 'fixtf_fsx' has no attribute '{name}'")
 
-def aws_fsx_openzfs_file_system(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
-def aws_fsx_openzfs_snapshot(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_fsx_openzfs_volume(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_fsx_windows_file_system(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
+log.debug(f"FSX handlers: __getattr__ for all 0 resources")

@@ -1,7 +1,17 @@
+"""
+WAFV2 Resource Handlers - Optimized with __getattr__
+
+This file contains ONLY WAFV2 resources with custom transformation logic.
+All other resources automatically use the default handler via __getattr__.
+
+Original: 1 functions
+Optimized: 1 functions + __getattr__
+Reduction: 0% less code
+"""
+
 import common
 import fixtf
 import logging
-log = logging.getLogger('aws2tf')
 import base64
 import boto3
 import sys
@@ -9,24 +19,18 @@ import os
 import context
 import inspect
 import json
+from .base_handler import BaseResourceHandler
 
-def aws_proxy_protocol_policy(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+log = logging.getLogger('aws2tf')
 
-def aws_wafv2_ip_set(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
-def aws_wafv2_regex_pattern_set(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_wafv2_rule_group(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+# ============================================================================
+# WAFV2 Resources with Custom Logic (1 functions)
+# ============================================================================
 
 def aws_wafv2_web_acl(t1,tt1,tt2,flag1,flag2):
+
+
 	skip=0
 	if "resource" in t1 and "{" in t1 and "aws_wafv2_web_acl" in t1:
 		wid=t1.split('"')[3]
@@ -59,11 +63,30 @@ def aws_wafv2_web_acl(t1,tt1,tt2,flag1,flag2):
 
 	return skip,t1,flag1,flag2
 
-def aws_wafv2_web_acl_association(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
-def aws_wafv2_web_acl_logging_configuration(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
+
+
+
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
+
+def __getattr__(name):
+	"""
+	Dynamically provide default handler for resources without custom logic.
+	
+	This allows getattr(module, "aws_resource") to work even if the
+	function doesn't exist, by returning the default handler.
+	
+	All simple WAFV2 resources (0 resources) automatically use this.
+	"""
+	if name.startswith("aws_"):
+		return BaseResourceHandler.default_handler
+	raise AttributeError(f"module 'fixtf_wafv2' has no attribute '{name}'")
+
+
+log.debug(f"WAFV2 handlers: 1 custom functions + __getattr__ for 0 simple resources")

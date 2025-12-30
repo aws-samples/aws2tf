@@ -1,32 +1,36 @@
-def aws_macie2_account(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+"""
+MACIE2 Resource Handlers - Optimized with __getattr__
 
-def aws_macie2_classification_export_configuration(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+This file contains ONLY MACIE2 resources with custom transformation logic.
+All other resources automatically use the default handler via __getattr__.
 
-def aws_macie2_classification_job(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+Original: 0 functions
+Optimized: 0 functions + __getattr__
+Reduction: 0% less code
+"""
 
-def aws_macie2_custom_data_identifier(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+import logging
+from .base_handler import BaseResourceHandler
 
-def aws_macie2_findings_filter(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+log = logging.getLogger('aws2tf')
 
-def aws_macie2_invitation_accepter(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
-def aws_macie2_member(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
 
-def aws_macie2_organization_admin_account(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+def __getattr__(name):
+	"""
+	Dynamically provide default handler for resources without custom logic.
+	
+	This allows getattr(module, "aws_resource") to work even if the
+	function doesn't exist, by returning the default handler.
+	
+	All MACIE2 resources automatically use this.
+	"""
+	if name.startswith("aws_"):
+		return BaseResourceHandler.default_handler
+	raise AttributeError(f"module 'fixtf_macie2' has no attribute '{name}'")
 
+
+log.debug(f"MACIE2 handlers: __getattr__ for all 0 resources")

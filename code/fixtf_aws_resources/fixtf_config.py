@@ -1,53 +1,67 @@
-def aws_config_aggregate_authorization(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+"""
+CONFIG Resource Handlers - Optimized with __getattr__
+
+This file contains ONLY CONFIG resources with custom transformation logic.
+All other resources automatically use the default handler via __getattr__.
+
+Original: 2 functions
+Optimized: 2 functions + __getattr__
+Reduction: 0% less code
+"""
+
+import logging
+from .base_handler import BaseResourceHandler
+
+log = logging.getLogger('aws2tf')
+
+
+# ============================================================================
+# CONFIG Resources with Custom Logic (2 functions)
+# ============================================================================
 
 def aws_config_config_rule(t1,tt1,tt2,flag1,flag2):
+
+
 	skip=0
 	if tt1=="input_parameters":
 		t1="\n lifecycle {\n   ignore_changes = [input_parameters]\n}\n"+t1
 	return skip,t1,flag1,flag2
 
-def aws_config_configuration_aggregator(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
-def aws_config_configuration_recorder(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_config_configuration_recorder_status(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_config_conformance_pack(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
 def aws_config_delivery_channel(t1,tt1,tt2,flag1,flag2):
+
+
 	skip=0
 	if tt1=="s3_bucket_name":
 		t1=tt1+" = \""+tt2+"\"\n"
 			
 	return skip,t1,flag1,flag2
 
-def aws_config_organization_conformance_pack(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
-def aws_config_organization_custom_policy_rule(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
-def aws_config_organization_custom_rule(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
 
-def aws_config_organization_managed_rule(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
-def aws_config_remediation_configuration(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
+
+def __getattr__(name):
+	"""
+	Dynamically provide default handler for resources without custom logic.
+	
+	This allows getattr(module, "aws_resource") to work even if the
+	function doesn't exist, by returning the default handler.
+	
+	All simple CONFIG resources (0 resources) automatically use this.
+	"""
+	if name.startswith("aws_"):
+		return BaseResourceHandler.default_handler
+	raise AttributeError(f"module 'fixtf_config' has no attribute '{name}'")
+
+
+log.debug(f"CONFIG handlers: 2 custom functions + __getattr__ for 0 simple resources")

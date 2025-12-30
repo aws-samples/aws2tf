@@ -1,13 +1,33 @@
+"""
+LAMBDA Resource Handlers - Optimized with __getattr__
+
+This file contains ONLY LAMBDA resources with custom transformation logic.
+All other resources automatically use the default handler via __getattr__.
+
+Original: 4 functions
+Optimized: 4 functions + __getattr__
+Reduction: 0% less code
+"""
+
 import common
 import fixtf
 import logging
-log = logging.getLogger('aws2tf')
 import os
 import context
 import boto3
 from botocore.exceptions import ClientError
+from .base_handler import BaseResourceHandler
+
+log = logging.getLogger('aws2tf')
+
+
+# ============================================================================
+# LAMBDA Resources with Custom Logic (4 functions)
+# ============================================================================
 
 def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
+
+
     skip=0
     if tt1 == "role":
         tt2=tt2.split("/")[-1]
@@ -79,45 +99,21 @@ def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
 
     return skip,t1,flag1,flag2
 
-def aws_lambda_alias(t1,tt1,tt2,flag1,flag2):
-    skip=0
-    return skip,t1,flag1,flag2
+
 
 def aws_lambda_permission(t1,tt1,tt2,flag1,flag2):
+
+
     skip=0
     if tt1=="function_name" and tt2 != "null":
          t1 = tt1 + " = aws_lambda_function." + tt2 + ".function_name\n"
     return skip,t1,flag1,flag2
 
-def aws_lambda_function_event_invoke_configs(t1,tt1,tt2,flag1,flag2):
-    skip=0
-    return skip,t1,flag1,flag2
 
-def aws_lambda_event_source_mapping(t1,tt1,tt2,flag1,flag2):
-    skip=0
-    return skip,t1,flag1,flag2
-
-def aws_lambda_code_signing_config(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_lambda_function_url(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_lambda_functions(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_lambda_invocation(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_lambda_provisioned_concurrency_config(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
 def aws_lambda_layer_version(t1,tt1,tt2,flag1,flag2):
+
+
     skip=0
     if tt1 == "filename":    
         if os.path.isfile(flag2+".zip"):
@@ -127,11 +123,11 @@ def aws_lambda_layer_version(t1,tt1,tt2,flag1,flag2):
     
     return skip,t1,flag1,flag2
 
-def aws_lambda_layer_version_permission(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+
 
 def aws_lambda_function_event_invoke_config(t1, tt1, tt2, flag1, flag2):
+
+
     skip=0
     if tt1=="maximum_event_age_in_seconds" and tt2=="0": skip=1
     elif tt1=="function_name" and tt2 != "null":
@@ -141,3 +137,30 @@ def aws_lambda_function_event_invoke_config(t1, tt1, tt2, flag1, flag2):
         else:
             t1 = tt1 + " = aws_lambda_function." + tt2 + ".function_name\n"
     return skip,t1,flag1,flag2
+
+
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
+
+
+
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
+
+def __getattr__(name):
+	"""
+	Dynamically provide default handler for resources without custom logic.
+	
+	This allows getattr(module, "aws_resource") to work even if the
+	function doesn't exist, by returning the default handler.
+	
+	All simple LAMBDA resources (0 resources) automatically use this.
+	"""
+	if name.startswith("aws_"):
+		return BaseResourceHandler.default_handler
+	raise AttributeError(f"module 'fixtf_lambda' has no attribute '{name}'")
+
+
+log.debug(f"LAMBDA handlers: 4 custom functions + __getattr__ for 0 simple resources")

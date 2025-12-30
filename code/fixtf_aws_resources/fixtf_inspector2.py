@@ -1,16 +1,36 @@
-def aws_inspector2_delegated_admin_account(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+"""
+INSPECTOR2 Resource Handlers - Optimized with __getattr__
 
-def aws_inspector2_enabler(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+This file contains ONLY INSPECTOR2 resources with custom transformation logic.
+All other resources automatically use the default handler via __getattr__.
 
-def aws_inspector2_member_association(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+Original: 0 functions
+Optimized: 0 functions + __getattr__
+Reduction: 0% less code
+"""
 
-def aws_inspector2_organization_configuration(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+import logging
+from .base_handler import BaseResourceHandler
 
+log = logging.getLogger('aws2tf')
+
+
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
+
+def __getattr__(name):
+	"""
+	Dynamically provide default handler for resources without custom logic.
+	
+	This allows getattr(module, "aws_resource") to work even if the
+	function doesn't exist, by returning the default handler.
+	
+	All INSPECTOR2 resources automatically use this.
+	"""
+	if name.startswith("aws_"):
+		return BaseResourceHandler.default_handler
+	raise AttributeError(f"module 'fixtf_inspector2' has no attribute '{name}'")
+
+
+log.debug(f"INSPECTOR2 handlers: __getattr__ for all 0 resources")

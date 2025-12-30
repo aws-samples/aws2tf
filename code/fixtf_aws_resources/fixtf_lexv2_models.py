@@ -1,12 +1,36 @@
-def aws_lexv2models_bot(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+"""
+LEXV2_MODELS Resource Handlers - Optimized with __getattr__
 
-def aws_lexv2models_bot_locale(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+This file contains ONLY LEXV2_MODELS resources with custom transformation logic.
+All other resources automatically use the default handler via __getattr__.
 
-def aws_lexv2models_bot_version(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+Original: 0 functions
+Optimized: 0 functions + __getattr__
+Reduction: 0% less code
+"""
 
+import logging
+from .base_handler import BaseResourceHandler
+
+log = logging.getLogger('aws2tf')
+
+
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
+
+def __getattr__(name):
+	"""
+	Dynamically provide default handler for resources without custom logic.
+	
+	This allows getattr(module, "aws_resource") to work even if the
+	function doesn't exist, by returning the default handler.
+	
+	All LEXV2_MODELS resources automatically use this.
+	"""
+	if name.startswith("aws_"):
+		return BaseResourceHandler.default_handler
+	raise AttributeError(f"module 'fixtf_lexv2_models' has no attribute '{name}'")
+
+
+log.debug(f"LEXV2_MODELS handlers: __getattr__ for all 0 resources")

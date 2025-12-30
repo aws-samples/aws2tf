@@ -18,6 +18,7 @@ from tqdm import tqdm
 
 def get_aws_s3_bucket(type, id, clfn, descfn, topkey, key, filterid):
    context.tracking_message="Stage 3 of 10 getting s3 resources ..."
+   #log.info(f"Getting s3 resources id=%s",id)
    get_all_s3_buckets(id,context.region)
    return True
 
@@ -125,19 +126,17 @@ def get_all_s3_buckets(fb,my_region):
       'aws_s3_bucket_website_configuration': s3.get_bucket_website
    }
   
-
-
    if not context.debug:
-
       for bn in context.s3list.keys():
+         #log.info("Checking bucket "+bn+" fb= "+str(fb))
       #for bucket in s3a.buckets.all():
          #if fb is not None and fb not in bucket.name: continue
-         if fb is not None and fb not in bn: continue
+         if fb is not None and fb not in bn: 
+            #log.info("skipping bucket "+bn)
+            continue
 
          #context.bucketlist[bucket.name]=True
          context.bucketlist[bn]=True
-      
-      
       
       # check can access
       log.debug(f"Checking access to {len(context.bucketlist)} S3 buckets...")

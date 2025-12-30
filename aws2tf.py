@@ -842,7 +842,7 @@ def process_single_type(type, id, timed_interrupt):
     
     # Handle single type
     else:
-        process_single_resource_type(all_types, type, timed_interrupt)
+        process_single_resource_type(all_types, type, id, timed_interrupt)
 
 
 def process_stack_type(id, timed_interrupt):
@@ -916,12 +916,12 @@ def process_multiple_resource_types(all_types, id):
             common.call_resource(i, id)
 
 
-def process_single_resource_type(all_types, resource_type, timed_interrupt):
+def process_single_resource_type(all_types, resource_type, id, timed_interrupt):
     """Process a single resource type."""
     if all_types is not None:
         for res_type in all_types:
             if res_type in aws_dict.aws_resources:
-                common.call_resource(res_type, None)
+                common.call_resource(res_type, id)  # Pass id parameter
             else:
                 log.warning("Resource %s not found in aws_dict", res_type)
     else:
@@ -953,7 +953,7 @@ def process_known_dependencies():
                 common.call_resource(i, id)
     
     context.tracking_message = "Stage 4 of 10, Known Dependancies: terraform plan"
-    common.tfplan1()
+    common.tfplan1("Stage 4")
     context.tracking_message = "Stage 4 of 10, Known Dependancies: fixing tf files"
     log.info("Stage 4 of 10, Known Dependancies: fixing tf files")
     common.tfplan2()
@@ -1050,7 +1050,7 @@ def process_detected_dependencies():
                     pass  # File already moved or doesn't exist
         
         context.tracking_message = "Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" terraform plan"
-        common.tfplan1()
+        common.tfplan1("loop "+str(lc))
         context.tracking_message = "Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" fixing tf files"
         log.info("Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" fixing tf files")
         common.tfplan2()

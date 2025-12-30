@@ -37,3 +37,4 @@ __pycache__
 aws2tf.log
 possible-optimizations.md
 aws3tf.py
+copy-to.sh

@@ -917,7 +917,7 @@ def call_resource(type, id):
    with open('processed-resources.log', 'a') as f4:
       f4.write(str(type) + " : " + str(id)+"\n")
 
-def tfplan1():
+def tfplan1(mymess):
 
    rf = "resources.out"
    # com="terraform plan -generate-config-out="+ rf + " -out tfplan -json > plan2.json"
@@ -942,7 +942,7 @@ def tfplan1():
    if not context.fast: log.info(com)
    
    # Use progress bar for terraform plan
-   rout = run_terraform_plan_with_progress(com, "Terraform plan (initial)")
+   rout = run_terraform_plan_with_progress(com, "Terraform plan "+mymess)
       
    file = "plan1.json"
    f2 = open(file, "r")
@@ -1150,6 +1150,13 @@ def tfplan3():
       log.info("Penultimate Terraform Plan ... ")
       context.tracking_message="Stage 7 of 10, Penultimate Terraform Plan ..."
       # redo plan
+
+      com="ls imported/import*"
+      rout = rc(com)
+      print(rout.stdout.decode().rstrip())
+
+
+
       com = "rm -f resources.out tfplan"
       #log.debug(com)
       rout = rc(com)
@@ -1302,6 +1309,7 @@ def tfplan3():
          x = glob.glob("imported/import__*.tf")
          #log.debug("Imported files ="+str(x))
          preimpf=len(x)
+         log.info("previous imports %s",str(preimpf))
          # impf-preimpf  (num import* files - number import files in imported)
          #toimp=impf-preimpf
          toimp=awsf-preimpf
@@ -1310,19 +1318,19 @@ def tfplan3():
          stc=int(rout.stdout.decode().rstrip())
 
          if preimpf != stc:
-            log.error("Miss-matched previous imports %s and state file resources %s exiting %s",  str(preimpf), str(stc))
+            log.error("Miss-matched previous imports %s and state file resources %s exiting", str(preimpf), str(stc))
             log.info("exit 029")
             stop_timer()
             exit() 
          else:
-            log.info("Existing import file = Existing state count = %s %s",  str(stc))
+            log.info("Existing import file = Existing state count = %s", str(stc))
          if toimp != zeroi:
             log.warning("Unexpected import number exiting")
             #log.info("exit 030")
             #stop_timer()
             #exit() 
          else:
-            log.info("PASSED: importing expected number of resources = %s %s",  str(toimp))    
+            log.info("PASSED: importing expected number of resources = %s", str(toimp))    
 
    if not os.path.isfile("tfplan"):
       log.error("Plan - could not find expected tfplan file - exiting")
@@ -1388,11 +1396,28 @@ def wrapup():
             log.warning("WARNING: aws_bedrockagent_agent - continuing")
       else:
          log.info("PASSED: No changes in plan")
-         com = "mv import__*.tf *.out *.json imported"
-         rout = rc(com)
-         com = "cp aws_*.tf imported"
-         rout = rc(com)
+         patterns = ["import__aws_*.tf", "*.out", "*.json"]
+         files_to_move = [f for pattern in patterns for f in glob.glob(pattern)]
+         if files_to_move:
+            for tf in tqdm(files_to_move, desc="Moving files to imported/", unit="file", leave=False):
+               try:
+                     shutil.move(tf, f"imported/{tf}")
+               except (FileNotFoundError, shutil.Error):
+                     pass
+         x = glob.glob("aws_*.tf")        
+         if len(x) > 0:
+            for tf in tqdm(x, desc=f"Moving files", unit="file", leave=False):
+               try:
+                  shutil.copy(tf, f"imported/{tf}")
+               except (FileNotFoundError, shutil.Error):
+                  pass  # File already moved or doesn't exist
+         
+         # Security Fix #7: Secure sensitive files after import
+         secure_terraform_files('.')
          return
+
+
+         
    log.info("\nPost Import Plan Check .....")
    context.tracking_message="Stage 10 of 10, Post Import Plan Check ....."
    com = "terraform plan -no-color -out tfplan -json > final.json"
@@ -1430,10 +1455,26 @@ def wrapup():
    if nchged == 0:
       log.info("PASSED: No changes in plan")
       context.tracking_message="Stage 10 of 10, Passed post import check - No changes in plan"
-      com = "mv import__*.tf *.out *.json imported"
-      rout = rc(com)
-      com = "cp aws_*.tf imported"
-      rout = rc(com)
+      log.info("Stage 10 of 10, Passed post import check - No changes in plan")
+
+      # Move multiple file types in one operation
+      patterns = ["import__aws_*.tf", "*.out", "*.json"]
+      files_to_move = [f for pattern in patterns for f in glob.glob(pattern)]
+      if files_to_move:
+         for tf in tqdm(files_to_move, desc="Moving files to imported/", unit="file", leave=False):
+            try:
+                  shutil.move(tf, f"imported/{tf}")
+            except (FileNotFoundError, shutil.Error):
+                  pass
+
+      
+      x = glob.glob("aws_*.tf")        
+      if len(x) > 0:
+         for tf in tqdm(x, desc=f"Moving files", unit="file", leave=False):
+            try:
+               shutil.copy(tf, f"imported/{tf}")
+            except (FileNotFoundError, shutil.Error):
+               pass  # File already moved or doesn't exist
       
       # Security Fix #7: Secure sensitive files after import
       secure_terraform_files('.')

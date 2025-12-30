@@ -1004,7 +1004,7 @@ def process_detected_dependencies():
             context.tracking_message = "Stage 5 of 10, Detected Dependancies: Multi Threaded "+str(context.cores)
             
             if total_deps > 0:
-                log.info(f"Processing {total_deps} detected dependencies...")
+                log.info(f"Processing {total_deps} new detected dependencies...")
                 with ThreadPoolExecutor(max_workers=context.cores) as executor2:
                     futures = [
                         executor2.submit(dd_threaded(ti))
@@ -1019,7 +1019,7 @@ def process_detected_dependencies():
                         future.result()
         else:
             if total_deps > 0:
-                log.info(f"Processing {total_deps} detected dependencies...")
+                log.info(f"Processing {total_deps} new detected dependencies loop "+str(lc+1))
                 for ti in tqdm(unprocessed_deps,
                               desc="Processing detected dependencies (st)",
                               unit="resource",
@@ -1032,9 +1032,6 @@ def process_detected_dependencies():
         detdep = False
         lc = lc + 1
         
-        # Run terraform plan and fix
-        if not context.fast:
-            log.info("Terraform Plan - Dependancies Detection Loop "+str(lc)+".....")
         
         context.tracking_message = "Stage 6 of 10, Dependancies Detection: Loop "+str(lc)
         x = glob.glob("import__aws_*.tf")
@@ -1067,8 +1064,8 @@ def process_detected_dependencies():
         if context.debug and unprocessed:
             log.debug(f"Unprocessed dependencies: {len(unprocessed)}")
         
-        if not context.fast:
-            log.info("----------- Completed "+str(lc)+" dependancy check loops --------------")
+        #if not context.fast:
+        #    log.info("----------- Completed "+str(lc)+" dependancy check loops --------------")
         
         context.tracking_message = "Stage 6 of 10, Completed "+str(lc)+" dependancy check loops"
         

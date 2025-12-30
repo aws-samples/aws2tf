@@ -1,11 +1,13 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
 
 def get_aws_cloudfront_distribution(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -16,10 +18,10 @@ def get_aws_cloudfront_distribution(type, id, clfn, descfn, topkey, key, filteri
                 try:
                     response = response + page['DistributionList']['Items']
                 except KeyError:
-                    print("No DistributionList in response for "+type+ " id="+str(id)+" returning") 
+                    log.debug("No DistributionList in response for "+type+ " id="+str(id)+" returning") 
                     return True
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -27,7 +29,7 @@ def get_aws_cloudfront_distribution(type, id, clfn, descfn, topkey, key, filteri
         else:      
             response = client.get_distribution(Id=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response['Distribution']
             common.write_import(type,j[key],None)
@@ -39,7 +41,7 @@ def get_aws_cloudfront_distribution(type, id, clfn, descfn, topkey, key, filteri
 
 def get_aws_cloudfront_origin_access_identity(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -50,10 +52,10 @@ def get_aws_cloudfront_origin_access_identity(type, id, clfn, descfn, topkey, ke
                 try:
                     response = response + page[topkey]['Items']
                 except KeyError:
-                    print("No "+str(topkey)+" items in response for "+type+ " id="+str(id)+" returning")
+                    log.info("No "+str(topkey)+" items in response for "+type+ " id="+str(id)+" returning")
                     return True
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -61,7 +63,7 @@ def get_aws_cloudfront_origin_access_identity(type, id, clfn, descfn, topkey, ke
         else:      
             response = client.get_cloud_front_origin_access_identity(Id=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response['CloudFrontOriginAccessIdentity']
             common.write_import(type,j[key],None)
@@ -73,7 +75,7 @@ def get_aws_cloudfront_origin_access_identity(type, id, clfn, descfn, topkey, ke
 
 def get_aws_cloudfront_cache_policy(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -81,7 +83,7 @@ def get_aws_cloudfront_cache_policy(type, id, clfn, descfn, topkey, key, filteri
         if id is None:
             response = client.list_cache_policies()
             if response[topkey]['Items'] == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]['Items']:
                 oid=j['CachePolicy']['Id']
@@ -90,7 +92,7 @@ def get_aws_cloudfront_cache_policy(type, id, clfn, descfn, topkey, key, filteri
         else:      
             response = client.get_cache_policy(Id=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             common.write_import(type,id,"o-"+id) 
 
@@ -101,7 +103,7 @@ def get_aws_cloudfront_cache_policy(type, id, clfn, descfn, topkey, key, filteri
 
 def get_aws_cloudfront_continuous_deployment_policy(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -109,7 +111,7 @@ def get_aws_cloudfront_continuous_deployment_policy(type, id, clfn, descfn, topk
         if id is None:
             response = client.list_continuous_deployment_policies()
             if response[topkey]['Items'] == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
         
             for j in response[topkey]['Items']:    
@@ -119,7 +121,7 @@ def get_aws_cloudfront_continuous_deployment_policy(type, id, clfn, descfn, topk
         else:      
             response = client.get_continuous_deployment_policy(Id=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
 
             common.write_import(type,id,"o-"+id) 
@@ -131,7 +133,7 @@ def get_aws_cloudfront_continuous_deployment_policy(type, id, clfn, descfn, topk
 
 def get_aws_cloudfront_field_level_encryption_config(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -141,10 +143,10 @@ def get_aws_cloudfront_field_level_encryption_config(type, id, clfn, descfn, top
             try:
                 resp2=response[topkey]['Items']
             except KeyError:
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             if response[topkey]['Items'] == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]['Items']:
                 oid=j[key]
@@ -153,7 +155,7 @@ def get_aws_cloudfront_field_level_encryption_config(type, id, clfn, descfn, top
         else:      
             response = client.get_field_level_encryption_config(Id=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             common.write_import(type,id,"o-"+id) 
 
@@ -165,7 +167,7 @@ def get_aws_cloudfront_field_level_encryption_config(type, id, clfn, descfn, top
 
 def get_aws_cloudfront_field_level_encryption_profile(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -175,10 +177,10 @@ def get_aws_cloudfront_field_level_encryption_profile(type, id, clfn, descfn, to
             try:
                 resp2=response[topkey]['Items']
             except KeyError:
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             if response[topkey]['Items'] == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]['Items']:
                 oid=j[key]
@@ -187,7 +189,7 @@ def get_aws_cloudfront_field_level_encryption_profile(type, id, clfn, descfn, to
         else:      
             response = client.get_field_level_encryption_profile(Id=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             common.write_import(type,id,"o-"+id) 
 
@@ -202,7 +204,7 @@ def get_aws_cloudfront_field_level_encryption_profile(type, id, clfn, descfn, to
 #aws_cloudfront_response_headers_policy
 def get_aws_cloudfront_response_headers_policy(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -212,11 +214,11 @@ def get_aws_cloudfront_response_headers_policy(type, id, clfn, descfn, topkey, k
             try:
                 resp2=response[topkey]['Items']
             except KeyError:
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             
             if response[topkey]['Items'] == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]['Items']:
                 oid=j['ResponseHeadersPolicy'][key]
@@ -225,7 +227,7 @@ def get_aws_cloudfront_response_headers_policy(type, id, clfn, descfn, topkey, k
         else:      
             response = client.get_response_headers_policy(Id=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             common.write_import(type,id,"o-"+id) 
 
@@ -237,7 +239,7 @@ def get_aws_cloudfront_response_headers_policy(type, id, clfn, descfn, topkey, k
 ##aws_cloudfront_function
 def get_aws_cloudfront_function(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -247,11 +249,11 @@ def get_aws_cloudfront_function(type, id, clfn, descfn, topkey, key, filterid):
             try:
                 resp2=response[topkey]['Items']
             except KeyError:
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             
             if response[topkey]['Items'] == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]['Items']:
                 oid=j[key]
@@ -260,7 +262,7 @@ def get_aws_cloudfront_function(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.get_function(Name=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             common.write_import(type,id) 
 
@@ -272,7 +274,7 @@ def get_aws_cloudfront_function(type, id, clfn, descfn, topkey, key, filterid):
 ##aws_cloudfront_key_group
 def get_aws_cloudfront_key_group(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -282,11 +284,11 @@ def get_aws_cloudfront_key_group(type, id, clfn, descfn, topkey, key, filterid):
             try:
                 resp2=response[topkey]['Items']
             except KeyError:
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             
             if response[topkey]['Items'] == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]['Items']:
                 oid=j['KeyGroup'][key]
@@ -295,7 +297,7 @@ def get_aws_cloudfront_key_group(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.get_key_group(Name=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             common.write_import(type,id,"o-"+id) 
 
@@ -308,7 +310,7 @@ def get_aws_cloudfront_key_group(type, id, clfn, descfn, topkey, key, filterid):
 ## aws_cloudfront_origin_access_control
 def get_aws_cloudfront_origin_access_control(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -318,11 +320,11 @@ def get_aws_cloudfront_origin_access_control(type, id, clfn, descfn, topkey, key
             try:
                 resp2=response[topkey]['Items']
             except KeyError:
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             
             if response[topkey]['Items'] == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]['Items']:
                 oid=j[key]
@@ -331,7 +333,7 @@ def get_aws_cloudfront_origin_access_control(type, id, clfn, descfn, topkey, key
         else:      
             response = client.get_origin_access_control(Id=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             common.write_import(type,id,"o-"+id) 
 
@@ -343,7 +345,7 @@ def get_aws_cloudfront_origin_access_control(type, id, clfn, descfn, topkey, key
 ## aws_cloudfront_origin_request_policy
 def get_aws_cloudfront_origin_request_policy(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -353,11 +355,11 @@ def get_aws_cloudfront_origin_request_policy(type, id, clfn, descfn, topkey, key
             try:
                 resp2=response[topkey]['Items']
             except KeyError:
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             
             if response[topkey]['Items'] == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]['Items']:
                 oid=j['OriginRequestPolicy'][key]
@@ -365,7 +367,7 @@ def get_aws_cloudfront_origin_request_policy(type, id, clfn, descfn, topkey, key
 
         else:      
             response = client.get_origin_request_policy(Id=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning")
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             return True
             common.write_import(type,id,"o-"+id) 
 
@@ -377,7 +379,7 @@ def get_aws_cloudfront_origin_request_policy(type, id, clfn, descfn, topkey, key
 ## aws_cloudfront_public_key
 def get_aws_cloudfront_public_key(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -387,11 +389,11 @@ def get_aws_cloudfront_public_key(type, id, clfn, descfn, topkey, key, filterid)
             try:
                 resp2=response[topkey]['Items']
             except KeyError:
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             
             if response[topkey]['Items'] == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]['Items']:
                 oid=j[key]
@@ -400,7 +402,7 @@ def get_aws_cloudfront_public_key(type, id, clfn, descfn, topkey, key, filterid)
         else:      
             response = client.get_public_key(Id=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning") 
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             common.write_import(type,id,"o-"+id) 
 
@@ -412,7 +414,7 @@ def get_aws_cloudfront_public_key(type, id, clfn, descfn, topkey, key, filterid)
 ## aws_cloudfront_realtime_log_config
 def get_aws_cloudfront_realtime_log_config(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -422,11 +424,11 @@ def get_aws_cloudfront_realtime_log_config(type, id, clfn, descfn, topkey, key, 
             try:
                 resp2=response[topkey]['Items']
             except KeyError:
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             
             if response[topkey]['Items'] == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response[topkey]['Items']:
                 oid=j[key]
@@ -435,7 +437,7 @@ def get_aws_cloudfront_realtime_log_config(type, id, clfn, descfn, topkey, key, 
         else:      
             response = client.get_realtime_log_config(Id=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             common.write_import(type,id,"o-"+id) 
 

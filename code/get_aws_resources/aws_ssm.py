@@ -1,11 +1,14 @@
 import common
+from common import log_warning
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
 
 def get_aws_ssm_document(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -15,7 +18,7 @@ def get_aws_ssm_document(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(Filters=[{'Key': 'Owner','Values': ['Self']}]):
                 response = response + page[topkey]
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 common.write_import(type,j[key],None) 
@@ -23,7 +26,7 @@ def get_aws_ssm_document(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.describe_document(Name=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response['Document']
             common.write_import(type,id,None)
@@ -35,7 +38,7 @@ def get_aws_ssm_document(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_ssm_association(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -45,14 +48,14 @@ def get_aws_ssm_association(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(AssociationFilterList=[{'key': 'AssociationId','value': id}]):
                 response = response + page[topkey]
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
-                print("Here ......."+j[key])
+                log.info("Here ......."+j[key])
                 common.write_import(type,j[key],"a-"+j[key]) 
 
         else:      
-            print("WARNING: No id or invalid provided for "+type)
+            log_warning("WARNING: No id or invalid provided for "+type)
             return True
 
     except Exception as e:
@@ -62,7 +65,7 @@ def get_aws_ssm_association(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_ssm_default_patch_baseline(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -70,7 +73,7 @@ def get_aws_ssm_default_patch_baseline(type, id, clfn, descfn, topkey, key, filt
         if id is None:
             response = client.get_default_patch_baseline()
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j= response
             common.write_import(type,j['BaselineId'],None) 
@@ -78,7 +81,7 @@ def get_aws_ssm_default_patch_baseline(type, id, clfn, descfn, topkey, key, filt
         else:      
             response = client.get_default_patch_baseline(OperatingSystem=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j= response
             common.write_import(type,j['BaselineId'],None) 
@@ -90,7 +93,7 @@ def get_aws_ssm_default_patch_baseline(type, id, clfn, descfn, topkey, key, filt
 
 def get_aws_ssm_patch_baseline(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -100,7 +103,7 @@ def get_aws_ssm_patch_baseline(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 theid=j[key]
@@ -110,7 +113,7 @@ def get_aws_ssm_patch_baseline(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.get_patch_baseline(BaselineId=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j= response
             common.write_import(type,j['BaselineId'],None) 

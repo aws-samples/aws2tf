@@ -40,24 +40,20 @@ def aws_datazone_glossary_term(t1,tt1,tt2,flag1,flag2):
 		context.dzd=did
 		context.dzgid=gid
 		context.dzpid=pid
-		#print("did,gid,pid",did,gid,pid)
 
 
 	if tt1=="domain_identifier" and tt2!="null":
 		context.dzd=tt2
 		t1=tt1+" = aws_datazone_domain."+tt2+".id\n"
 	elif tt1=="glossary_identifier" and tt2!="null":
-		#print("fix term",context.dzd,context.dzgid,context.dzpid)
 		t1=tt1+" = aws_datazone_glossary."+context.dzd+"_"+context.dzgid+"_"+context.dzpid+".id\n"
 	elif tt1=="is_a" and tt2!="null":
-		#print("fix term",context.dzd,context.dzgid,context.dzpid)
 		if "," not in tt2:
 			tid=tt2.split('"')[1]
 			t1=tt1+" = [aws_datazone_glossary_term."+context.dzd+"_"+tid+"_"+context.dzgid+"_"+context.dzpid+".id]\n"
 	#	common.add_dependancy("aws_datazone_glossary", tt2)
 	# Will cause Terraform Error: cycle issues
 	#elif tt1=="classifies" and tt2!="null":
-#		#print("fix term",context.dzd,context.dzgid,context.dzpid)
 	#	if "," not in tt2:
 #			tid=tt2.split('"')[1]
 #			t1=tt1+" = [aws_datazone_glossary_term."+context.dzd+"_"+tid+"_"+context.dzgid+"_"+context.dzpid+".id]\n"

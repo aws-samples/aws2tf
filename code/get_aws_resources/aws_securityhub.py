@@ -1,11 +1,13 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
 
 def get_aws_securityhub_account(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -13,7 +15,7 @@ def get_aws_securityhub_account(type, id, clfn, descfn, topkey, key, filterid):
         try:
             client.list_members()
         except:
-            print("No access to "+type+" returning")
+            log.debug("No access to "+type+" returning")
             return True
 
         if id is None:
@@ -30,7 +32,7 @@ def get_aws_securityhub_account(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_securityhub_organization_configuration(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -39,11 +41,11 @@ def get_aws_securityhub_organization_configuration(type, id, clfn, descfn, topke
         try:    
             response = client.describe_organization_configuration()
         except Exception as e:
-            print("NO access returning")
+            log.debug("NO access returning")
             return True
 
         if response == []: 
-            print("Empty response for "+type+ " id="+str(id)+" returning")
+            log.debug("Empty response for "+type+ " id="+str(id)+" returning")
             return True
         j=response
         common.write_import(type,j[key],None) 

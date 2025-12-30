@@ -1,11 +1,14 @@
 import common
+from common import log_warning
+import logging
+log = logging.getLogger('aws2tf')
 import context
 import inspect
 import boto3
 
 def get_aws_cloudwatch_log_group(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In get_aws_cloudwatch_log_group  doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_cloudwatch_log_group  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -15,7 +18,7 @@ def get_aws_cloudwatch_log_group(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 logn=j[key]
@@ -26,7 +29,7 @@ def get_aws_cloudwatch_log_group(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 if j['arn'] == id:
@@ -38,7 +41,7 @@ def get_aws_cloudwatch_log_group(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate(logGroupNamePattern=id):
                 response = response + page[topkey]
             if response == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 logn=j[key]
@@ -54,14 +57,14 @@ def get_aws_cloudwatch_log_group(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_cloudwatch_log_stream(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In get_aws_cloudwatch_log_stream  doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_cloudwatch_log_stream  doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         client = boto3.client(clfn)
         if id is not None:    
             response = client.describe_log_streams(logGroupName=id)
             if response[topkey] == []: 
-                if context.debug: print("Empty response for "+type+ " id="+str(id)+" returning")
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 pkey=type+"."+id
                 context.rproc[pkey]=True
                 return True
@@ -74,7 +77,7 @@ def get_aws_cloudwatch_log_stream(type, id, clfn, descfn, topkey, key, filterid)
             context.rproc[pkey]=True
  
         else:
-            print("WARNING: No id provided for get_aws_cloudwatch_log_stream")
+            log_warning("WARNING: No id provided for get_aws_cloudwatch_log_stream")
             return True
     
     except Exception as e:

@@ -44,7 +44,6 @@ def aws_ecs_service(t1,tt1,tt2,flag1,flag2):
 		else:
 			skip=1
 	elif tt1 == "task_definition":
-		#print("--->>>>"+tt2)
 		
 		if "arn:" in tt2: 	
 			tt2 = tt2.split("/")[-1]
@@ -52,7 +51,6 @@ def aws_ecs_service(t1,tt1,tt2,flag1,flag2):
 			common.add_dependancy("aws_ecs_task_definition",tt2)
 		else:
 			tdarn="arn:aws:ecs:"+context.region+":"+context.acc+":"+"task-definition:"+tt2
-			#print("--->>>>"+tt2,tdarn)
 			#tdn=tdarn.replace("/","_").replace(".","_").replace(":","_")
 			#t1=tt1+" = aws_ecs_task_definition."+tdn+".id\n"
 			common.add_dependancy("aws_ecs_task_definition",tdarn)

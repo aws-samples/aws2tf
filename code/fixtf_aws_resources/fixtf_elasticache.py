@@ -1,9 +1,11 @@
 import context
 import common
+import logging
+log = logging.getLogger('aws2tf')
 
 def aws_elasticache_cluster(t1,tt1,tt2,flag1,flag2):
 	skip=0
-	if context.debug5: print("fix aws_elasticache_cluster",tt1,tt2,str(context.elastirep))
+	if context.debug5: log.debug("fix aws_elasticache_cluster %s %s %s %s",  tt1, tt2, str(context.elastirep))
 
 	if tt1 == "replication_group_id" and tt2 != "null":
 		t1=tt1+' = aws_elasticache_replication_group.'+tt2+'.id\n'

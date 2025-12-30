@@ -5,10 +5,12 @@ import subprocess
 import os
 import re
 import ast
+import shlex
+import json
+import time
 from io import StringIO
 from contextlib import suppress
 import shutil
-import json
 import context
 import glob
 import botocore
@@ -16,10 +18,573 @@ import fixtf
 import inspect
 from datetime import datetime,timezone
 import resources
-from timed_interrupt import timed_int
+from timed_interrupt import timed_int, initialize_timer, stop_timer
 import threading
+import logging
+from tqdm import tqdm
 
 from pathlib import Path
+
+# Get logger from parent aws2tf module
+log = logging.getLogger('aws2tf')
+
+# Conditional warning function
+def log_warning(message, *args, **kwargs):
+    """
+    Log warning only if warnings are enabled via -w flag.
+    Always logs in debug mode.
+    """
+    if context.warnings or context.debug:
+        log.warning(message, *args, **kwargs)
+
+
+def run_terraform_plan_with_progress(command, description="Terraform plan", record_time=False):
+    """
+    Run terraform plan command and show estimated progress with adaptive learning.
+    
+    Uses self-adjusting progress estimation that:
+    - Caps at 75% until completion
+    - Learns from previous plan executions to improve estimates
+    - Adapts to actual system performance
+    - Optionally records execution time for post-import estimates
+    
+    Args:
+        command: Terraform plan command to execute
+        description: Description for progress bar
+        record_time: If True, records execution time in context.last_plan_time
+        
+    Returns:
+        subprocess.CompletedProcess object
+    """
+    # Count import files to estimate total
+    import_files = glob.glob("import__*.tf")
+    total_resources = len(import_files)
+    
+    if total_resources == 0 or context.debug:
+        # No progress bar in debug mode or if no resources
+        return rc(command)
+    
+    try:
+        # Run terraform with output capture
+        process = subprocess.Popen(
+            command,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            bufsize=1
+        )
+        
+        # Use adaptive rate from previous runs, or default estimate
+        # Typical rate: 20-30 resources/second for plan
+        estimated_rate = context.terraform_plan_rate
+        estimated_time = total_resources / estimated_rate
+        
+        # Show estimated progress with 75% cap
+        with tqdm(total=100, 
+                 desc=description,
+                 unit="%",
+                 leave=False,
+                 bar_format='{desc}: {percentage:3.0f}%|{bar}| [{elapsed}<{remaining}]') as pbar:
+            
+            start = time.time()
+            
+            while process.poll() is None:
+                elapsed = time.time() - start
+                
+                # Calculate progress with 75% cap
+                if elapsed < estimated_time:
+                    # Normal progress up to estimated time, cap at 75%
+                    progress = int((elapsed / estimated_time) * 75)
+                else:
+                    # If taking longer, hover around 75-78%
+                    overtime = elapsed - estimated_time
+                    # Asymptotically approach 78%, never quite reaching it
+                    additional = 3 * (1 - (1 / (1 + overtime / 20)))
+                    progress = 75 + int(additional)
+                
+                pbar.n = progress
+                pbar.refresh()
+                time.sleep(0.5)
+            
+            # Process completed - jump to 100%
+            pbar.n = 100
+            pbar.refresh()
+            
+            # Record actual time for adaptive learning
+            actual_time = time.time() - start
+            actual_rate = total_resources / actual_time if actual_time > 0 else estimated_rate
+            
+            # Update adaptive rate (exponential moving average)
+            if context.terraform_plan_samples == 0:
+                # First sample - use it directly
+                context.terraform_plan_rate = actual_rate
+            else:
+                # Weighted average: 70% old rate, 30% new rate
+                context.terraform_plan_rate = (context.terraform_plan_rate * 0.7) + (actual_rate * 0.3)
+            
+            context.terraform_plan_samples += 1
+            
+            # Record time if requested (for post-import estimate)
+            if record_time:
+                context.last_plan_time = actual_time
+            
+            if context.debug:
+                log.debug(f"Terraform plan rate updated: {context.terraform_plan_rate:.2f} resources/sec (sample #{context.terraform_plan_samples})")
+                if record_time:
+                    log.debug(f"Recorded plan time: {actual_time:.2f} seconds")
+        
+        # Collect output
+        stdout, stderr = process.communicate()
+        
+        # Create result object
+        class Result:
+            def __init__(self, returncode, stdout, stderr):
+                self.returncode = returncode
+                self.stdout = stdout.encode()
+                self.stderr = stderr.encode()
+        
+        return Result(
+            process.returncode,
+            stdout,
+            stderr
+        )
+    
+    except Exception as e:
+        # Fall back to regular execution if progress tracking fails
+        if context.debug:
+            log.debug(f"Progress tracking failed, using regular execution: {e}")
+        return rc(command)
+
+
+def run_terraform_command_with_spinner(command, description="Running terraform"):
+    """
+    Run terraform command with a simple spinner (for commands without progress).
+    
+    Args:
+        command: Command to execute
+        description: Description for spinner
+        
+    Returns:
+        subprocess.CompletedProcess object
+    """
+    return rc(command)
+
+    """
+    if context.debug:
+        # No spinner in debug mode
+        return rc(command)
+    
+    try:
+        process = subprocess.Popen(
+            command,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+        
+        # Show spinner while running
+        with tqdm(desc=description, 
+                 bar_format='{desc}: {elapsed}',
+                 leave=False) as pbar:
+            while process.poll() is None:
+                time.sleep(0.5)
+                pbar.update(0)
+        
+        stdout, stderr = process.communicate()
+        
+        class Result:
+            def __init__(self, returncode, stdout, stderr):
+                self.returncode = returncode
+                self.stdout = stdout
+                self.stderr = stderr
+        
+        return Result(process.returncode, stdout, stderr)
+    
+    except Exception as e:
+         if context.debug:
+            log.debug(f"Spinner failed, using regular execution: {e}")
+         log.info(f"Spinner failed, using regular execution: {e}")
+         return rc(command)
+   """
+
+
+def get_import_count_from_plan(plan_file='plan2.json'):
+    """
+    Get number of resources to import from terraform plan JSON.
+    
+    Args:
+        plan_file: Path to plan JSON file
+        
+    Returns:
+        int: Number of resources to import
+    """
+    try:
+        with open(plan_file) as f:
+            for line in f:
+                try:
+                    data = json.loads(line)
+                    if data.get('type') == 'change_summary':
+                        return data['changes'].get('import', 0)
+                except (json.JSONDecodeError, KeyError):
+                    continue
+    except FileNotFoundError:
+        pass
+    
+    return 0
+
+
+def run_terraform_apply_with_progress(tfplan_file, plan_json='plan2.json'):
+    """
+    Run terraform apply command and show estimated progress with adaptive learning.
+    
+    Uses self-adjusting progress estimation that:
+    - Caps at 75% until completion
+    - Learns from actual apply performance
+    - Adapts to system speed and network conditions
+    
+    Args:
+        tfplan_file: Path to terraform plan file
+        plan_json: Path to plan JSON file for getting total count
+        
+    Returns:
+        subprocess.CompletedProcess object
+    """
+    # Get total resources to import
+    total_resources = get_import_count_from_plan(plan_json)
+    
+    if total_resources == 0 or context.debug:
+        # No progress bar in debug mode or if no resources
+        command = f"terraform apply -no-color {tfplan_file}"
+        return rc(command)
+    
+    try:
+        # Run terraform apply with JSON output
+        command = f"terraform apply -no-color -json {tfplan_file}"
+        
+        process = subprocess.Popen(
+            command,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            bufsize=1
+        )
+        
+        # Use adaptive rate from previous runs, or default estimate
+        # Apply is typically faster than plan (50-60 resources/second)
+        estimated_rate = context.terraform_apply_rate
+        estimated_time = total_resources / estimated_rate
+        
+        # Collect output for return
+        stdout_lines = []
+        stderr_lines = []
+        
+        # Track actual imports from JSON (for final rate calculation)
+        imported_count = 0
+        
+        # Show estimated progress with 75% cap
+        with tqdm(total=100,
+                 desc="Importing resources",
+                 unit="%",
+                 leave=False,
+                 bar_format='{desc}: {percentage:3.0f}%|{bar}| [{elapsed}<{remaining}]') as pbar:
+            
+            start = time.time()
+            
+            # Background thread to update progress
+            def update_progress():
+                while process.poll() is None:
+                    elapsed = time.time() - start
+                    
+                    # Calculate progress with 75% cap
+                    if elapsed < estimated_time:
+                        # Normal progress up to estimated time, cap at 75%
+                        progress = int((elapsed / estimated_time) * 75)
+                    else:
+                        # If taking longer, hover around 75-78%
+                        overtime = elapsed - estimated_time
+                        # Asymptotically approach 78%
+                        additional = 3 * (1 - (1 / (1 + overtime / 20)))
+                        progress = 75 + int(additional)
+                    
+                    pbar.n = progress
+                    pbar.refresh()
+                    time.sleep(0.5)
+            
+            # Start progress update thread
+            progress_thread = threading.Thread(target=update_progress, daemon=True)
+            progress_thread.start()
+            
+            # Read stdout line by line (for JSON parsing and output collection)
+            for line in process.stdout:
+                stdout_lines.append(line)
+                
+                # Try to parse JSON to count actual imports
+                try:
+                    if line.strip():
+                        data = json.loads(line)
+                        event_type = data.get('type', '')
+                        
+                        if event_type == 'apply_complete':
+                            imported_count += 1
+                
+                except (json.JSONDecodeError, KeyError, AttributeError):
+                    pass
+            
+            # Read any remaining stderr
+            stderr_output = process.stderr.read()
+            if stderr_output:
+                stderr_lines.append(stderr_output)
+            
+            # Wait for process and progress thread to complete
+            process.wait()
+            progress_thread.join(timeout=1)
+            
+            # Process completed - jump to 100%
+            pbar.n = 100
+            pbar.refresh()
+            
+            # Record actual time for adaptive learning
+            actual_time = time.time() - start
+            # Use imported_count if available, otherwise use total_resources
+            actual_count = imported_count if imported_count > 0 else total_resources
+            actual_rate = actual_count / actual_time if actual_time > 0 else estimated_rate
+            
+            # Update adaptive rate (exponential moving average)
+            if context.terraform_apply_samples == 0:
+                # First sample - use it directly
+                context.terraform_apply_rate = actual_rate
+            else:
+                # Weighted average: 70% old rate, 30% new rate
+                context.terraform_apply_rate = (context.terraform_apply_rate * 0.7) + (actual_rate * 0.3)
+            
+            context.terraform_apply_samples += 1
+            
+            if context.debug:
+                log.debug(f"Terraform apply rate updated: {context.terraform_apply_rate:.2f} resources/sec (sample #{context.terraform_apply_samples})")
+        
+        # Create result object
+        class Result:
+            def __init__(self, returncode, stdout, stderr):
+                self.returncode = returncode
+                self.stdout = stdout.encode()
+                self.stderr = stderr.encode()
+        
+        return Result(
+            process.returncode,
+            ''.join(stdout_lines),
+            ''.join(stderr_lines)
+        )
+    
+    except Exception as e:
+        # Fall back to regular execution if progress tracking fails
+        if context.debug:
+            log.debug(f"Apply progress tracking failed, using regular execution: {e}")
+        command = f"terraform apply -no-color {tfplan_file}"
+        return rc(command)
+
+# Security Fix #3: Path traversal prevention
+def safe_filename(filename: str, base_dir: str = None) -> str:
+    """
+    Validate and sanitize filename to prevent path traversal attacks.
+    
+    Args:
+        filename: The filename to validate
+        base_dir: Optional base directory to restrict to (defaults to current working dir)
+    
+    Returns:
+        Sanitized filename safe for use
+        
+    Raises:
+        ValueError: If path traversal attempt detected
+    """
+    if base_dir is None:
+        base_dir = os.getcwd()
+    
+    # Convert to Path objects for safe manipulation
+    base_path = Path(base_dir).resolve()
+    
+    # Remove any path separators and resolve the path
+    # This prevents ../../../etc/passwd type attacks
+    safe_name = os.path.basename(filename)
+    
+    # Additional sanitization - remove dangerous characters
+    # Keep alphanumeric, dash, underscore, dot
+    import re
+    safe_name = re.sub(r'[^\w\-\.]', '_', safe_name)
+    
+    # Prevent hidden files (starting with .)
+    if safe_name.startswith('.') and safe_name != '.terraform.lock.hcl':
+        safe_name = '_' + safe_name
+    
+    # Construct full path
+    full_path = (base_path / safe_name).resolve()
+    
+    # Verify the resolved path is still within base_dir
+    try:
+        full_path.relative_to(base_path)
+    except ValueError:
+        raise ValueError(f"Path traversal attempt detected: {filename}")
+    
+    return str(full_path)
+
+
+def safe_write_file(filename: str, content: str, mode: str = 'w', base_dir: str = None, permissions: int = 0o644) -> None:
+    """
+    Safely write content to a file with path validation and secure permissions.
+    
+    Args:
+        filename: The filename to write to
+        content: Content to write
+        mode: File mode ('w' or 'wb')
+        base_dir: Optional base directory to restrict to
+        permissions: Unix file permissions (default: 0o644 = rw-r--r--)
+                    Use 0o600 for sensitive files (rw-------)
+    
+    Security Features:
+    - Path traversal prevention
+    - Secure file permissions
+    - Atomic write operation
+    """
+    # For files in subdirectories like 'imported/', handle specially
+    if '/' in filename:
+        # Split into directory and filename
+        parts = filename.split('/')
+        subdir = '/'.join(parts[:-1])
+        fname = parts[-1]
+        
+        # Validate subdirectory doesn't contain traversal
+        if '..' in subdir:
+            raise ValueError(f"Path traversal attempt in directory: {subdir}")
+        
+        # Create subdirectory if it doesn't exist
+        if base_dir:
+            full_subdir = os.path.join(base_dir, subdir)
+        else:
+            full_subdir = subdir
+            
+        os.makedirs(full_subdir, mode=0o755, exist_ok=True)
+        
+        # Validate the filename part
+        safe_fname = safe_filename(fname, full_subdir)
+        safe_path = safe_fname
+    else:
+        # Simple filename, validate it
+        safe_path = safe_filename(filename, base_dir)
+    
+    # Write the file with specified permissions
+    if 'b' in mode:
+        # Binary mode
+        fd = os.open(safe_path, os.O_CREAT | os.O_WRONLY | os.O_TRUNC, permissions)
+        with os.fdopen(fd, mode) as f:
+            f.write(content)
+    else:
+        # Text mode - use os.open for atomic creation with permissions
+        fd = os.open(safe_path, os.O_CREAT | os.O_WRONLY | os.O_TRUNC, permissions)
+        with os.fdopen(fd, mode) as f:
+            f.write(content)
+    
+    # Verify permissions were set correctly
+    actual_perms = os.stat(safe_path).st_mode & 0o777
+    if actual_perms != permissions:
+        # Try to fix permissions
+        os.chmod(safe_path, permissions)
+
+
+def safe_write_sensitive_file(filename: str, content: str, mode: str = 'w', base_dir: str = None) -> None:
+    """
+    Write sensitive files (state, credentials, etc.) with restricted permissions.
+    
+    Uses 0o600 permissions (rw-------) - only owner can read/write.
+    """
+    safe_write_file(filename, content, mode, base_dir, permissions=0o600)
+
+
+def secure_terraform_files(directory: str = '.') -> None:
+    """
+    Secure terraform state files and other sensitive files with appropriate permissions.
+    
+    Security Fix #7: Set restrictive permissions on sensitive files
+    
+    Files secured:
+    - terraform.tfstate (0o600) - Contains sensitive data
+    - terraform.tfstate.backup (0o600) - Contains sensitive data
+    - .terraform.lock.hcl (0o644) - Lock file, less sensitive
+    - *.tfvars (0o600) - May contain secrets
+    - aws2tf.log (0o600) - May contain sensitive information
+    
+    Args:
+        directory: Directory to secure files in (default: current directory)
+    """
+    sensitive_files = {
+        'terraform.tfstate': 0o600,
+        'terraform.tfstate.backup': 0o600,
+        '.terraform.lock.hcl': 0o644,
+        'aws2tf.log': 0o600,
+    }
+    
+    # Secure specific files
+    for filename, perms in sensitive_files.items():
+        filepath = os.path.join(directory, filename)
+        if os.path.exists(filepath):
+            try:
+                os.chmod(filepath, perms)
+                if context.debug:
+                    log.debug(f"Secured {filename} with permissions {oct(perms)}")
+            except Exception as e:
+                log.warning(f"Could not set permissions on {filename}: {e}")
+    
+    # Secure all .tfvars files
+    import glob
+    for tfvars_file in glob.glob(os.path.join(directory, '*.tfvars')):
+        try:
+            os.chmod(tfvars_file, 0o600)
+            if context.debug:
+                log.debug(f"Secured {os.path.basename(tfvars_file)} with permissions 0o600")
+        except Exception as e:
+            log.warning(f"Could not set permissions on {tfvars_file}: {e}")
+
+
+def get_file_permissions_info() -> dict:
+    """
+    Get information about file permissions for security documentation.
+    
+    Returns:
+        Dictionary with file types and their recommended permissions
+    """
+    return {
+        'terraform_files': {
+            'description': 'Terraform configuration files',
+            'pattern': '*.tf',
+            'permissions': 0o644,
+            'reason': 'Configuration files, readable by group'
+        },
+        'state_files': {
+            'description': 'Terraform state files (SENSITIVE)',
+            'pattern': 'terraform.tfstate*',
+            'permissions': 0o600,
+            'reason': 'Contains secrets, credentials, and sensitive resource data'
+        },
+        'variable_files': {
+            'description': 'Terraform variable files (POTENTIALLY SENSITIVE)',
+            'pattern': '*.tfvars',
+            'permissions': 0o600,
+            'reason': 'May contain secrets and sensitive configuration'
+        },
+        'log_files': {
+            'description': 'Application log files (POTENTIALLY SENSITIVE)',
+            'pattern': '*.log',
+            'permissions': 0o600,
+            'reason': 'May contain AWS resource IDs, ARNs, and debugging information'
+        },
+        'import_files': {
+            'description': 'Terraform import files',
+            'pattern': 'import__*.tf',
+            'permissions': 0o644,
+            'reason': 'Import declarations, less sensitive'
+        },
+    }
 
 
 #####################
@@ -116,17 +681,122 @@ from fixtf_aws_resources import needid_dict
 from fixtf_aws_resources import aws_no_import
 from fixtf_aws_resources import aws_not_implemented
 
+# Security Fix #2: Module registry to replace eval()
+# This prevents arbitrary code execution via eval()
+AWS_RESOURCE_MODULES = {
+    'acm': aws_acm,
+    'amplify': aws_amplify,
+    'athena': aws_athena,
+    'autoscaling': aws_autoscaling,
+    'apigateway': aws_apigateway,
+    'apigatewayv2': aws_apigatewayv2,
+    'appmesh': aws_appmesh,
+    'application-autoscaling': aws_application_autoscaling,
+    'application_autoscaling': aws_application_autoscaling,
+    'appstream': aws_appstream,
+    'batch': aws_batch,
+    'backup': aws_backup,
+    'bedrock': aws_bedrock,
+    'bedrock-agent': aws_bedrock_agent,
+    'bedrock_agent': aws_bedrock_agent,
+    'cleanrooms': aws_cleanrooms,
+    'cloud9': aws_cloud9,
+    'cloudformation': aws_cloudformation,
+    'cloudfront': aws_cloudfront,
+    'cloudtrail': aws_cloudtrail,
+    'codebuild': aws_codebuild,
+    'codecommit': aws_codecommit,
+    'codeartifact': aws_codeartifact,
+    'codeguruprofiler': aws_codeguruprofiler,
+    'codestar-notifications': aws_codestar_notifications,
+    'codestar_notifications': aws_codestar_notifications,
+    'cognito-identity': aws_cognito_identity,
+    'cognito_identity': aws_cognito_identity,
+    'cognito-idp': aws_cognito_idp,
+    'cognito_idp': aws_cognito_idp,
+    'config': aws_config,
+    'connect': aws_connect,
+    'customer-profiles': aws_customer_profiles,
+    'customer_profiles': aws_customer_profiles,
+    'datazone': aws_datazone,
+    'dms': aws_dms,
+    'docdb': aws_docdb,
+    'ds': aws_ds,
+    'dynamodb': aws_dynamodb,
+    'kms': aws_kms,
+    'ec2': aws_ec2,
+    'ecs': aws_ecs,
+    'efs': aws_efs,
+    'ecr-public': aws_ecr_public,
+    'ecr_public': aws_ecr_public,
+    'ecr': aws_ecr,
+    'eks': aws_eks,
+    'elasticache': aws_elasticache,
+    'elbv2': aws_elbv2,
+    'emr': aws_emr,
+    'events': aws_events,
+    'firehose': aws_firehose,
+    'glue': aws_glue,
+    'guardduty': aws_guardduty,
+    'iam': aws_iam,
+    'kafka': aws_kafka,
+    'kendra': aws_kendra,
+    'kinesis': aws_kinesis,
+    'logs': aws_logs,
+    'lakeformation': aws_lakeformation,
+    'lambda': aws_lambda,
+    'license-manager': aws_license_manager,
+    'license_manager': aws_license_manager,
+    'mwaa': aws_mwaa,
+    'neptune': aws_neptune,
+    'network-firewall': aws_network_firewall,
+    'network_firewall': aws_network_firewall,
+    'networkmanager': aws_networkmanager,
+    'organizations': aws_organizations,
+    'ram': aws_ram,
+    'rds': aws_rds,
+    'redshift': aws_redshift,
+    'redshift-serverless': aws_redshift_serverless,
+    'redshift_serverless': aws_redshift_serverless,
+    'resource-explorer-2': aws_resource_explorer_2,
+    'resource_explorer_2': aws_resource_explorer_2,
+    'route53': aws_route53,
+    's3': aws_s3,
+    's3control': aws_s3control,
+    's3tables': aws_s3tables,
+    'sagemaker': aws_sagemaker,
+    'schemas': aws_schemas,
+    'scheduler': aws_scheduler,
+    'securityhub': aws_securityhub,
+    'secretsmanager': aws_secretsmanager,
+    'servicecatalog': aws_servicecatalog,
+    'servicediscovery': aws_servicediscovery,
+    'shield': aws_shield,
+    'ses': aws_ses,
+    'sns': aws_sns,
+    'sqs': aws_sqs,
+    'ssm': aws_ssm,
+    'sso-admin': aws_sso_admin,
+    'sso_admin': aws_sso_admin,
+    'transfer': aws_transfer,
+    'vpc-lattice': aws_vpc_lattice,
+    'vpc_lattice': aws_vpc_lattice,
+    'waf': aws_waf,
+    'wafv2': aws_wafv2,
+    'xray': aws_xray,
+}
+
 
 def call_resource(type, id):
-   #print("--1-- in call_resources >>>>> "+type+"   "+str(id))
+   #log.debug("--1-- in call_resources >>>>> "+type+"   "+str(id))
    if type in context.all_extypes:
-      if context.debug: print("Common Excluding:", type,id) 
+      log.debug("Common Excluding: %s %s %s",  type, id) 
       pkey=type+"."+id
       context.rproc[pkey] = True
       return
    
    if type in aws_no_import.noimport:
-      print("WARNING: Can not import type: " + type)
+      log_warning("WARNING: Can not import type: " + type)
       if id is not None:
          with open('not-imported.log', 'a') as f2:
             f2.write(type + " : " + str(id) + "\n")
@@ -134,7 +804,7 @@ def call_resource(type, id):
       return
 
    if type in aws_not_implemented.notimplemented:
-      print("Not supported by aws2tf currently: " + type +
+      log_warning("Not supported by aws2tf currently: " + type +
             " please submit github issue to request support")
       return
 
@@ -145,80 +815,81 @@ def call_resource(type, id):
 
     # don't get it if we alreay have it
     # if context.rproc
-   if context.debug: print("---->>>>> "+type+"   "+str(id))
+   log.debug("---->>>>> "+type+"   "+str(id))
    if id is not None:
       ti = type+"."+id
       try:
          if context.rproc[ti]:
-            if context.debug: print("Already processed " + ti)
-            print("Already processed " + ti)
+            log.debug("Already processed " + ti)
+            log.debug("Already processed " + ti)
             return
       except:
          pass
    else:
       if type in needid_dict.aws_needid:
-         print("WARNING: " + type + " can not have null id must pass parameter " +
+         log_warning("WARNING: " + type + " can not have null id must pass parameter " +
                needid_dict.aws_needid[type]['param'])
          # TODO api only
          return
-   #print("--2-- in call_resources >>>>> "+type+"   "+str(id))
+   #log.debug("--2-- in call_resources >>>>> "+type+"   "+str(id))
    rr = False
    sr = False
    clfn, descfn, topkey, key, filterid = resources.resource_data(type, id)
    if key == "NOIMPORT":
-      print("WARNING: Can not import type: " + type)
+      log_warning("WARNING: Can not import type: " + type)
       return
 
    if clfn is None:
-        print("ERROR: clfn is None with type="+type)
-        print("exit 016")
-        timed_int.stop()
+        log.error("ERROR: clfn is None with type="+type)
+        log.info("exit 016")
+        stop_timer()
         exit()
 # Try specific
 
    try:
             if context.debug:
-               print("calling specific common.get_"+type+" with type="+type+" id="+str(id)+"   clfn=" +
+               log.debug("calling specific common.get_"+type+" with type="+type+" id="+str(id)+"   clfn=" +
                     clfn+" descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
 
-            if clfn == "vpc-lattice":  getfn = getattr(eval("aws_vpc_lattice"), "get_"+type)
-            elif clfn == "redshift-serverless":  getfn = getattr(eval("aws_redshift_serverless"), "get_"+type)
-            elif clfn == "s3":  
-               #print("-1aa- clfn:"+clfn+" type:"+type)
-               getfn = getattr(eval("aws_s3"), "get_"+type)
-            #elif clfn == "s3":  getfn = getattr(ast.literal_eval("aws_s3"), "get_"+type)
-
+            # Security Fix #2: Use module registry instead of eval()
+            # Convert clfn to normalized form (replace hyphens with underscores)
+            mclfn = clfn.replace("-", "_")
+            
+            # Look up module in registry
+            module = AWS_RESOURCE_MODULES.get(clfn) or AWS_RESOURCE_MODULES.get(mclfn)
+            
+            if module is None:
+                # Module not in registry - will try generic handler instead
+                if context.debug:
+                    log.debug(f"Module not found in registry for clfn={clfn}, will try generic handler")
+                sr = False
             else:
-               #print("-1aa- clfn:"+clfn+" type:"+type)
-               mclfn = clfn.replace("-", "_")
-               #print("-1ab- mclfn:"+mclfn+" type:"+type)
-               getfn = getattr(eval("aws_"+mclfn), "get_"+type)
-               #print("-1ac- clfn:"+clfn+" type:"+type)
-
-            #print("type",type, "id",id, "clfn",clfn, "descfn",descfn, "topkey", topkey,"key",key, "filterid",filterid)   
-            sr = getfn(type, id, clfn, descfn, topkey, key, filterid)
+                # Get the function from the module
+                getfn = getattr(module, "get_"+type)
+                
+                #log.debug("type %s", type, "id",id, "clfn",clfn, "descfn",descfn, "topkey", topkey,"key",key, "filterid",filterid)   
+                sr = getfn(type, id, clfn, descfn, topkey, key, filterid)
 
    except AttributeError as e:
       if context.debug:
-         print("AttributeError: name 'getfn' - no aws_"+clfn+".py file ?")
-         print(f"{e=}")
+         log.debug("AttributeError: name 'getfn' - no aws_"+clfn+".py file ?")
+         log.debug(f"{e=}")
          exc_type, exc_obj, exc_tb = sys.exc_info()
          fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-         print(exc_type, fname, exc_tb.tb_lineno)
+         log.debug("%s %s %s %s",  exc_type, fname, exc_tb.tb_lineno)
       pass
 
    except SyntaxError:
-      if context.debug: print(
-          "SyntaxError: name 'getfn' - no aws_"+clfn+".py file ?")
+      log.debug("SyntaxError: name 'getfn' - no aws_"+clfn+".py file ?")
       pass
 
    except NameError as e:
       if context.debug:
-         print("WARNING: NameError: name 'getfn' - no aws_"+clfn+".py file ?")
-         print(f"{e=}")
+         log.debug("WARNING: NameError: name 'getfn' - no aws_"+clfn+".py file ?")
+         log.debug(f"{e=}")
          exc_type, exc_obj, exc_tb = sys.exc_info()
          fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-         print(exc_type, fname, exc_tb.tb_lineno)
+         log.debug("%s %s %s %s",  exc_type, fname, exc_tb.tb_lineno)
 
       pass
 
@@ -229,34 +900,35 @@ def call_resource(type, id):
    if not sr:
       try:
          if context.debug:
-               print("calling generic getresource with type="+type+" id="+str(id)+"   clfn="+clfn +
+               log.debug("calling generic getresource with type="+type+" id="+str(id)+"   clfn="+clfn +
                " descfn="+str(descfn)+" topkey="+topkey + "  key="+key + "  filterid="+filterid)
          rr = getresource(type, id, clfn, descfn, topkey, key, filterid)
       except Exception as e:
-         print(f"{e=}")
+         log.error(f"{e=}")
 
          exc_type, exc_obj, exc_tb = sys.exc_info()
          fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-         print(exc_type, fname, exc_tb.tb_lineno)
+         log.error("%s %s %s %s",  exc_type, fname, exc_tb.tb_lineno)
          if rr is False:
-            print("--->> Could not get resource "+type+" id="+str(id))
+            log.error("--->> Could not get resource "+type+" id="+str(id))
             pass
 
 
    with open('processed-resources.log', 'a') as f4:
       f4.write(str(type) + " : " + str(id)+"\n")
 
-def tfplan1():
+def tfplan1(mymess):
 
    rf = "resources.out"
    # com="terraform plan -generate-config-out="+ rf + " -out tfplan -json > plan2.json"
 
    if not glob.glob("import*.tf"):
 
-      print("INFO: No import*.tf files found - nothing to import, exiting ....")
-      print("INFO: Confirm the resource type exists in your account: "+context.acc+" & region: "+context.region)
+      log.info("INFO: No import*.tf files found - nothing to import, exiting ....")
+      log.info("INFO: Confirm the resource type exists in your account: "+context.acc+" & region: "+context.region)
       context.tracking_message="No import*.tf files found for this resource, exiting ...."
-      timed_int.stop()
+      if timed_int is not None:
+         stop_timer()
       os._exit(0)
 
    com = "cp imported/provider.tf provider.tf"
@@ -267,8 +939,10 @@ def tfplan1():
 
    com = "terraform plan -generate-config-out=" + \
        rf + " -out tfplan -json > plan1.json"
-   if not context.fast: print(com)
-   rout = rc(com)
+   if not context.fast: log.info(com)
+   
+   # Use progress bar for terraform plan
+   rout = run_terraform_plan_with_progress(com, "Terraform plan "+mymess)
       
    file = "plan1.json"
    f2 = open(file, "r")
@@ -278,29 +952,29 @@ def tfplan1():
       line = f2.readline()
       if not line:
          break
-      # print(line)
+      # log.debug(line)
       if '@level": "error"' in line:
          if context.debug is True:
-            print("Error" + line)
+            log.debug("Error" + line)
          try:
                mess = f2.readline()
                try:
                   if "VPC Lattice" in mess and "404" in mess:
-                     print("ERROR: VPC Lattice 404 error - see plan1.json")
+                     log.error("ERROR: VPC Lattice 404 error - see plan1.json")
                      i = mess.split('(')[1].split(')')[0].split('/')[-1]
                      if i != "":
-                        print("ERROR: Removing "+i +
+                        log.error("ERROR: Removing "+i +
                               " import files - plan errors see plan1.json [p1]")
                         context.badlist = context.badlist+[i]
                         shutil.move("import__*"+i+"*.tf",
                                     "notimported/import__*"+i+"*.tf")
 
                   elif "Error: Cannot import non-existent remote object" in mess:
-                     print(
+                     log.error(
                          "ERROR: Cannot import non-existent remote object - see plan1.json")
                      i = mess.split('(')[1].split(')')[0].split('/')[-1]
                      if i != "":
-                        print("ERROR: Removing "+i +
+                        log.error("ERROR: Removing "+i +
                               " import files - plan errors see plan1.json [p2]")
                         context.badlist = context.badlist+[i]
                         shutil.move("import__*"+i+"*.tf",
@@ -312,7 +986,7 @@ def tfplan1():
                try:
                   i = mess.split('(')[2].split(')')[0]
                   if i != "":
-                     print("ERROR: Removing "+i +
+                     log.error("ERROR: Removing "+i +
                            " files - plan errors see plan1.json [p3]")
                      context.badlist = context.badlist+[i]
                      shutil.move("import__*"+i+"*.tf",
@@ -322,27 +996,27 @@ def tfplan1():
 
                except:
                   if context.debug is True:
-                     print(mess.strip())
+                     log.debug(mess.strip())
                   context.plan2 = True
 
          except:
-               print("Error - no error message, check plan1.json")
+               log.error("Error - no error message, check plan1.json")
                dt = datetime.now().isoformat(timespec='seconds')
                com = "cp plan1.json plan1.json."+dt
-               print(com)
+               log.info(com)
                rout = rc(com)
                # continue
-               print("exit 018")
-               timed_int.stop()
+               log.info("exit 018")
+               stop_timer()
                exit()
 
-   # print("Plan 1 complete -- resources.out generated")
+   # log.debug("Plan 1 complete -- resources.out generated")
 
    if not os.path.isfile("resources.out"):
-         print("could not find expected resources.out file after Plan 1 - exiting")
+         log.error("could not find expected resources.out file after Plan 1 - exiting")
          dt = datetime.now().isoformat(timespec='seconds')
          com = "cp plan1.json plan1.json."+dt
-         print(com)
+         log.info(com)
          rout = rc(com)
 
          # exit()
@@ -350,26 +1024,26 @@ def tfplan1():
 
 
 def tfplan2():
-   # print("fix tf files.....")
+   # log.debug("fix tf files.....")
    if not os.path.isfile("resources.out"):
-         print("could not find expected resources.out file in tfplan2 - exiting")
+         log.error("could not find expected resources.out file in tfplan2 - exiting")
          # exit()
          return
 
-   # print("split resources.out")
+   # log.debug("split resources.out")
    splitf("resources.out")  # generated *.out files
    # zap the badlist
    for i in context.badlist:
       # com="rm -f aws_*"+i+"*.out"+" aws_*"+i+"*.tf"
-      print("ERROR: Removing "+i+" files - plan errors see plan1.json [p4]")
+      log.error("ERROR: Removing "+i+" files - plan errors see plan1.json [p4]")
 
-      # print(com)
+      # log.debug(com)
       # rout=rc(com)
       try:
          shutil.move("aws_*"+i+"*.tf", "notimported/aws_*"+i+"*.tf")
          shutil.move("aws_*"+i+"*.out", "notimported/aws_*"+i+"*.out")
       except FileNotFoundError as e:
-         print(f"{e=}")
+         log.error(f"{e=}")
          pass
       # sed to remove references
 
@@ -378,15 +1052,17 @@ def tfplan2():
    com = "cp imported/aws_*.tf ."
    rout = rc(com)
 
+   # Process .out files with fixtf (fix terraform files)
    x = glob.glob("aws_*__*.out")
-   for fil in x:
+   
+   if len(x) > 0:
+      for fil in tqdm(x, desc="Fixing terraform files", unit="file", leave=False):
          type = fil.split('__')[0]
          tf = fil.split('.')[0]
          fixtf.fixtf(type, tf)
-
+   
    com = "mv aws_*.out imported"
    rout = rc(com)
-
 
    com = "terraform fmt"
    rout = rc(com)
@@ -399,18 +1075,18 @@ def tfplan3():
    for fil in x:
       tf=fil.split('.tfproto',1)[0]
       com = "mv "+fil +" "+ tf+".tf"
-      print(com)
+      log.info(com)
       rout = rc(com)
 
    context.tracking_message="Validate and Test Plan  ..."
-   print("\nValidate and Test Plan  ... ")
+   log.info("\nValidate and Test Plan  ... ")
    if context.merge:
       com = "cp imported/aws_*.tf ."
       rout = rc(com)
    if not glob.glob("aws_*.tf"):
-      print("No aws_*.tf files found for this resource, exiting ....")
-      print("exit 019")
-      timed_int.stop()
+      log.error("No aws_*.tf files found for this resource, exiting ....")
+      log.info("exit 019")
+      stop_timer()
       exit()
 
    rf = "resources.out"
@@ -422,22 +1098,22 @@ def tfplan3():
    el = len(rout.stderr.decode().rstrip())
    if el != 0:
       errm = rout.stderr.decode().rstrip()
-      print(errm)
+      log.error(errm)
       com = "terraform validate -no-color -json > validate2.json"
       rout = rc(com)
 
    if "Success! The configuration is valid" not in str(rout.stdout.decode().rstrip()):
-      print(str(rout.stdout.decode().rstrip()))
-      print("Validation after fix failed - exiting")
+      log.error(str(rout.stdout.decode().rstrip()))
+      log.error("Validation after fix failed - exiting")
       context.tracking_message="Validation after fix failed - exiting"
-      print("exit 020",str(context.aws2tfver))
-      timed_int.stop()
+      log.info("exit 020 %s", str(context.aws2tfver))
+      stop_timer()
       exit()
 
    else:
-      print("Valid Configuration.")
+      log.info("Valid Configuration.")
       if context.validate:
-         print("Validate Only..")
+         log.info("Validate Only..")
          return
    zeroi=0    
 
@@ -446,23 +1122,22 @@ def tfplan3():
    context.esttime=len(x)/4
    awsf=len(x)
    y = glob.glob("import__*.tf")
-   #print("new import files="+str(y))
    impf=len(y)
 
    if awsf != impf:
       if context.workaround=="":
          if not context.merge:
-            print("ERROR: "+str(awsf)+ "x aws_*.tf and " + str(impf) +"x import__*.tf file counts do not match")      
-            #print("\nLikely import error [1] - do the following and report errors in github issue:")
-            #print("cd "+context.path1)
-            #print("terraform plan -generate-config-out=resources.out")
+            log.error("ERROR: "+str(awsf)+ "x aws_*.tf and " + str(impf) +"x import__*.tf file counts do not match")      
+            #log.info("\nLikely import error [1] - do the following and report errors in github issue:")
+            #log.info("cd "+context.path1)
+            #log.info("terraform plan -generate-config-out=resources.out")
             fix_imports()
          #exit()
       else:
-         print("INFO: "+str(awsf)+ "x aws_*.tf and " + str(impf) +"x import__*.tf file counts do not match")
-         print("INFO: Continuing due to workaround "+context.workaround)
+         log.info("INFO: "+str(awsf)+ "x aws_*.tf and " + str(impf) +"x import__*.tf file counts do not match")
+         log.info("INFO: Continuing due to workaround "+context.workaround)
    else:
-      print("PASSED: aws_*.tf and import__*.tf file counts match =",awsf)
+      log.info("PASSED: aws_*.tf and import__*.tf file counts match = %s", awsf)
 
 
 ################################################################################
@@ -472,17 +1147,27 @@ def tfplan3():
 
    if context.plan2:
 
-      print("Penultimate Terraform Plan ... ")
+      log.info("Penultimate Terraform Plan ... ")
       context.tracking_message="Stage 7 of 10, Penultimate Terraform Plan ..."
       # redo plan
+
+      com="ls imported/import*"
+      rout = rc(com)
+      print(rout.stdout.decode().rstrip())
+
+
+
       com = "rm -f resources.out tfplan"
-      #print(com)
+      #log.debug(com)
       rout = rc(com)
       
       com = "terraform plan -generate-config-out=" + \
           rf + " -out tfplan -json > plan2.json"
-      if not context.fast: print(com)
-      rout = rc(com)
+      if not context.fast: log.info(com)
+      
+      # Use progress bar for terraform plan
+      rout = run_terraform_plan_with_progress(com, "Terraform plan (validation)", record_time=True)
+      
       zerod = False
       zeroc = False
       zeroa = False
@@ -501,28 +1186,28 @@ def tfplan3():
             zeroc=pe['changes']['change']
             zerod=pe['changes']['remove']
 
-      print("Plan:",zeroi, "to import,",zeroa,"to add,",zeroc,"to change,",zerod,"to destroy")
+      log.info("Plan: %s to import, %s to add, %s to change, %s to destroy", zeroi, zeroa, zeroc, zerod)
 
       with open('plan2.json', 'r') as f:
          for line in f.readlines():
             if '@level":"error"' in line:
               if "Error: Conflicting configuration arguments" in line and "aws_security_group_rule." in line:
-                 print(
+                 log.warning(
                      "WARNING: Conflicting configuration arguments in aws_security_group_rule")
               else:
                   if context.debug is True:
-                     print("Error" + line)
+                     log.debug("Error" + line)
 
-                  print("-->> Plan 2 errors exiting - check plan2.json - or run terraform plan")
-                  print("exit 021",str(context.aws2tfver))
-                  timed_int.stop()
+                  log.error("-->> Plan 2 errors exiting - check plan2.json - or run terraform plan")
+                  log.info("exit 021 %s", str(context.aws2tfver))
+                  stop_timer()
                   exit()
 
       if zerod != 0:
-         print("-->> plan will destroy resources! - unexpected, is there existing state ?")
-         print("-->> look at plan2.json - or run terraform plan")
-         print("exit 022")
-         timed_int.stop()
+         log.error("-->> plan will destroy resources! - unexpected, is there existing state ?")
+         log.error("-->> look at plan2.json - or run terraform plan")
+         log.info("exit 022")
+         stop_timer()
          exit()
 
       if zeroc != 0:
@@ -545,54 +1230,54 @@ def tfplan3():
                   or ctype=="aws_bedrockagent_agent" or ctype=="aws_bedrockagent_agent_action_group":
                   
                   changeList.append(pe['change']['resource']['addr'])
-                  print("Planned changes found in Terraform Plan for type: " +
+                  log.info("Planned changes found in Terraform Plan for type: " +
                         str(pe['change']['resource']['resource_type']))
                   allowedchange = True
                   nallowedchanges = nallowedchanges+1
                else:
-                  print("Unexpected plan changes found in Terraform Plan for resource: " +
+                  log.warning("Unexpected plan changes found in Terraform Plan for resource: " +
                         str(pe['change']['resource']['addr']))
          if nchanges == nallowedchanges:
-            print("\n-->> plan will change " + str(nchanges) +
+            log.info("\n-->> plan will change " + str(nchanges) +
                   " resources! - these are expected changes only (should be non-consequential)")
             ci = 1
 
-            print(
+            log.info(
                 "-->> Check the planned changes in these resources listed below by running: terraform plan\n")
 
             for i in changeList:
-               print(str(ci)+": "+str(i))
+               log.info(str(ci)+": "+str(i))
                ci = ci+1
-            print("\n")
+            log.info("\n")
 
             if context.expected is False:
-               print("You can check the changes by running 'terraform plan' in ",context.path1+"\n")
-               print("Then rerun the same ./aws2tf.py command and add the '-a' flag to accept these plan changes and continue to import")
-               print("exit 023")
-               timed_int.stop()
+               log.info("You can check the changes by running 'terraform plan' in %s\n", context.path1)
+               log.info("Then rerun the same ./aws2tf.py command and add the '-a' flag to accept these plan changes and continue to import")
+               log.info("exit 023")
+               stop_timer()
                exit()
 
             if context.debug is True:
-               print("\n-->> Then if happy with the output changes for the above resources, run this command to complete aws2tf-py tasks:")
-               print("exit 024")
-               timed_int.stop()
-               print("terraform apply -no-color tfplan")
+               log.debug("\n-->> Then if happy with the output changes for the above resources, run this command to complete aws2tf-py tasks:")
+               log.info("exit 024")
+               stop_timer()
+               log.info("terraform apply -no-color tfplan")
                exit()
          else:
-            print("-->> plan will change resources! - unexpected")
-            print("-->> look at plan2.json - or run terraform plan")
-            print("exit 025",str(context.aws2tfver))
-            timed_int.stop()
+            log.error("-->> plan will change resources! - unexpected")
+            log.error("-->> look at plan2.json - or run terraform plan")
+            log.info("exit 025 %s", str(context.aws2tfver))
+            stop_timer()
             exit()
 
       if zeroa !=0:
-         print("-->> plan will add resources! - unexpected")
-         print("-->> look at plan2.json - or run terraform plan")
-         print("exit 026")
-         timed_int.stop()
+         log.error("-->> plan will add resources! - unexpected")
+         log.error("-->> look at plan2.json - or run terraform plan")
+         log.info("exit 026")
+         stop_timer()
          exit()
 
-      print("Plan complete")
+      log.debug("Plan complete")
       ## if merging get .out files from imported ?
 
    ### validations checks
@@ -600,30 +1285,31 @@ def tfplan3():
    #   
    if not context.merge:
       if zeroi == awsf:
-         print("PASSED: import count = file counts =",str(zeroi))
+         log.info("PASSED: import count = file counts = %s", str(zeroi))
       else:
-         print("INFO: import count "+str(zeroi) +" != file counts "+ str(awsf))
+         log.info("INFO: import count "+str(zeroi) +" != file counts "+ str(awsf))
          if context.workaround=="":
-            print("\nLikely import error [2] - do the following and report errors in github issue")
-            print("cd "+context.path1)
-            print("terraform plan -generate-config-out=resources.out")
-            print("exit 027")
-            timed_int.stop()
+            log.error("\nLikely import error [2] - do the following and report errors in github issue")
+            log.info("cd "+context.path1)
+            log.info("terraform plan -generate-config-out=resources.out")
+            log.info("exit 027")
+            stop_timer()
             exit()
          else:
-            print("INFO: Continuing due to workaround "+context.workaround)
+            log.info("INFO: Continuing due to workaround "+context.workaround)
          
    if context.merge:
-         print("Merge check")
+         log.info("Merge check")
          if zeroi==0:
-            print("Nothing to merge exiting ...")
-            print("exit 028")
-            timed_int.stop()
+            log.info("Nothing to merge exiting ...")
+            log.info("exit 028")
+            stop_timer()
             exit()
          # get imported
          x = glob.glob("imported/import__*.tf")
-         #print("Imported files ="+str(x))
+         #log.debug("Imported files ="+str(x))
          preimpf=len(x)
+         log.info("previous imports %s",str(preimpf))
          # impf-preimpf  (num import* files - number import files in imported)
          #toimp=impf-preimpf
          toimp=awsf-preimpf
@@ -632,121 +1318,222 @@ def tfplan3():
          stc=int(rout.stdout.decode().rstrip())
 
          if preimpf != stc:
-            print("Miss-matched previous imports",str(preimpf),"and state file resources",str(stc) ,"exiting")
-            print("exit 029")
-            timed_int.stop()
+            log.error("Miss-matched previous imports %s and state file resources %s exiting", str(preimpf), str(stc))
+            log.info("exit 029")
+            stop_timer()
             exit() 
          else:
-            print("Existing import file = Existing state count =",str(stc))
+            log.info("Existing import file = Existing state count = %s", str(stc))
          if toimp != zeroi:
-            print("Unexpected import number exiting")
-            #print("exit 030")
-            #timed_int.stop()
+            log.warning("Unexpected import number exiting")
+            #log.info("exit 030")
+            #stop_timer()
             #exit() 
          else:
-            print("PASSED: importing expected number of resources =",str(toimp))    
+            log.info("PASSED: importing expected number of resources = %s", str(toimp))    
 
    if not os.path.isfile("tfplan"):
-      print("Plan - could not find expected tfplan file - exiting")
-      print("exit 031")
-      timed_int.stop()
+      log.error("Plan - could not find expected tfplan file - exiting")
+      log.info("exit 031")
+      stop_timer()
       exit()
 
    #if context.merge:
    #   exit()
-   #   print("merge - exit after plan2")
+   #   log.info("merge - exit after plan2")
 
 def wrapup():
    ### copy predefined import files
-   print("Final Terraform Validation")
+   log.info("Final Terraform Validation")
    context.tracking_message="Stage 8 of 10, Final Terraform Validation"
    com = "terraform validate -no-color"
    rout = rc(com)
    el = len(rout.stderr.decode().rstrip())
    if el != 0:
       errm = rout.stderr.decode().rstrip()
-      print(errm)
+      log.error(errm)
    if "Success! The configuration is valid" not in str(rout.stdout.decode().rstrip()):
-      print(str(rout.stdout.decode().rstrip()))
-      print("exit 032")
-      timed_int.stop()
+      log.error(str(rout.stdout.decode().rstrip()))
+      log.info("exit 032")
+      stop_timer()
       exit()
    else:
-      print("PASSED: Valid Configuration.")
+      log.info("PASSED: Valid Configuration.")
 
    if context.merge:
-      print("Pre apply merge check")
+      log.info("Pre apply merge check")
       if not os.path.isfile("plan2.json"):
-         print("ERROR: Could not find plan2.json, unexpected on merge - exiting ....")
-         print("exit 033")
-         timed_int.stop()
+         log.error("ERROR: Could not find plan2.json, unexpected on merge - exiting ....")
+         log.info("exit 033")
+         stop_timer()
          exit()
       
-   print("Terraform import via apply of tfplan....")
+   log.info("Terraform import via apply of tfplan....")
    context.tracking_message="Stage 9 of 10, Terraform import via apply of tfplan...."
-   com = "terraform apply -no-color tfplan"
-   rout = rc(com)
+   
+   # Use progress bar for terraform apply
+   rout = run_terraform_apply_with_progress("tfplan")
+   
    zerod = False
    zeroc = False
    if "Error" in str(rout.stderr.decode().rstrip()):
-      print("ERROR: problem in apply ... further checks ....")
+      log.error("ERROR: problem in apply ... further checks ....")
       errs=str(rout.stderr.decode().rstrip())
       ## Plan check
-      print("\nPost Error Import Plan Check .....")
-      com = "terraform plan -no-color"
-      rout = rc(com)
+      log.info("\nPost Error Import Plan Check .....")
+      com = "terraform plan -no-color -out tfplan"
+      rout = run_terraform_command_with_spinner(com, "Post-error validation")
+      
       if "No changes. Your infrastructure matches the configuration" not in str(rout.stdout.decode().rstrip()):
-         print(errs)
-         print("ERROR: unexpected final plan stuff - exiting")
+         log.error(errs)
+         log.error("ERROR: unexpected final plan stuff - exiting")
 
          if "aws_bedrockagent_agent" not in errs:
-            print("exit 034")
-            timed_int.stop()
+            log.info("exit 034")
+            stop_timer()
             exit()
          else:
-            print("WARNING: aws_bedrockagent_agent - continuing")
+            log.warning("WARNING: aws_bedrockagent_agent - continuing")
       else:
-         print("PASSED: No changes in plan")
-         com = "mv import__*.tf *.out *.json imported"
-         rout = rc(com)
-         com = "cp aws_*.tf imported"
-         rout = rc(com)
+         log.info("PASSED: No changes in plan")
+         patterns = ["import__aws_*.tf", "*.out", "*.json"]
+         files_to_move = [f for pattern in patterns for f in glob.glob(pattern)]
+         if files_to_move:
+            for tf in tqdm(files_to_move, desc="Moving files to imported/", unit="file", leave=False):
+               try:
+                     shutil.move(tf, f"imported/{tf}")
+               except (FileNotFoundError, shutil.Error):
+                     pass
+         x = glob.glob("aws_*.tf")        
+         if len(x) > 0:
+            for tf in tqdm(x, desc=f"Moving files", unit="file", leave=False):
+               try:
+                  shutil.copy(tf, f"imported/{tf}")
+               except (FileNotFoundError, shutil.Error):
+                  pass  # File already moved or doesn't exist
+         
+         # Security Fix #7: Secure sensitive files after import
+         secure_terraform_files('.')
          return
-   #print(str(rout.stdout.decode().rstrip()))
-   print("\nPost Import Plan Check .....")
+
+
+         
+   log.info("\nPost Import Plan Check .....")
    context.tracking_message="Stage 10 of 10, Post Import Plan Check ....."
-   com = "terraform plan -no-color"
+   com = "terraform plan -no-color -out tfplan -json > final.json"
+   #com = "terraform plan -no-color -out tfplan"
+   #rout = run_terraform_command_with_spinner(com, "Post-import validation")
+   rout=rc(com)
+   # sync & flush files
+   com = "sync"
    rout = rc(com)
-   if "No changes. Your infrastructure matches the configuration" not in str(rout.stdout.decode().rstrip()):
-      print("ERROR: unexpected final plan failure")
-      out1=str(rout.stdout.decode().rstrip())
-      print(out1)
-      #if "aws_bedrockagent_agent" in out1:
-      #   print("WARNING: aws_bedrockagent_agent - continuing")"
-      print(str(rout.stderr.decode().rstrip()))
-      print("exit 035")
-      timed_int.stop()
-      exit()
-   else:
-      print("PASSED: No changes in plan")
+   zeroi=0
+   zeroa=0
+   zeroc=0
+   zerod=0
+   planList = []
+   planDict = {}
+   changeList = []
+   with open('final.json','r') as f:
+        for jsonObj in f:
+            planDict = json.loads(jsonObj)
+            planList.append(planDict)
+   with open('final.warn', 'w') as f:
+      for pe in planList:
+         if pe['type'] == "change_summary":  
+            zeroi=int(pe['changes']['import'])
+            zeroa=int(pe['changes']['add'])
+            zeroc=int(pe['changes']['change'])
+            zerod=int(pe['changes']['remove'])
+            json.dump(pe, f, indent=2, default=str)
+         elif pe['type'] == "diagnostic":
+            json.dump(pe, f, indent=2, default=str)
+
+
+   log.info("Plan: %s to import, %s to add, %s to change, %s to destroy", zeroi, zeroa, zeroc, zerod)
+   nchged=zeroi+zeroa+zeroc+zerod
+   if nchged == 0:
+      log.info("PASSED: No changes in plan")
       context.tracking_message="Stage 10 of 10, Passed post import check - No changes in plan"
-      com = "mv import__*.tf *.out *.json imported"
-      rout = rc(com)
-      com = "cp aws_*.tf imported"
-      rout = rc(com)
+      log.info("Stage 10 of 10, Passed post import check - No changes in plan")
+
+      # Move multiple file types in one operation
+      patterns = ["import__aws_*.tf", "*.out", "*.json"]
+      files_to_move = [f for pattern in patterns for f in glob.glob(pattern)]
+      if files_to_move:
+         for tf in tqdm(files_to_move, desc="Moving files to imported/", unit="file", leave=False):
+            try:
+                  shutil.move(tf, f"imported/{tf}")
+            except (FileNotFoundError, shutil.Error):
+                  pass
+
+      
+      x = glob.glob("aws_*.tf")        
+      if len(x) > 0:
+         for tf in tqdm(x, desc=f"Moving files", unit="file", leave=False):
+            try:
+               shutil.copy(tf, f"imported/{tf}")
+            except (FileNotFoundError, shutil.Error):
+               pass  # File already moved or doesn't exist
+      
+      # Security Fix #7: Secure sensitive files after import
+      secure_terraform_files('.')
+
+   else:
+      log.error("ERROR: unexpected final plan failure")
+      out1=str(rout.stdout.decode().rstrip())
+      log.error(out1)
+      #if "aws_bedrockagent_agent" in out1:
+      #   log.warning("WARNING: aws_bedrockagent_agent - continuing")"
+      log.error(str(rout.stderr.decode().rstrip()))
+      log.info("exit 035")
+      stop_timer()
+      exit()
 
 ######################################################################
 
 def rc(cmd):
-    out = subprocess.run(cmd, shell=True, capture_output=True)
+    """
+    Execute a command safely without shell=True.
+    
+    Args:
+        cmd: Either a string (for backwards compatibility, will be parsed) 
+             or a list of command arguments
+    
+    Returns:
+        subprocess.CompletedProcess object
+    """
+    # If cmd is a string, parse it into a list for safe execution
+    if isinstance(cmd, str):
+        # For simple commands, split on spaces
+        # For complex commands with pipes/redirects, we need special handling
+        if '>' in cmd or '|' in cmd or '&&' in cmd or ';' in cmd:
+            # These require shell, but we'll use shell=True only for these cases
+            # and log a warning
+            if context.debug:
+                log.debug(f"WARNING: Command requires shell features: {cmd[:100]}")
+            out = subprocess.run(cmd, shell=True, capture_output=True)
+        else:
+            # Safe to split and run without shell
+            import shlex
+            try:
+                cmd_list = shlex.split(cmd)
+                out = subprocess.run(cmd_list, capture_output=True, shell=False)
+            except Exception as e:
+                # Fallback to shell if parsing fails
+                log.warning(f"Command parsing failed, using shell: {e}")
+                out = subprocess.run(cmd, shell=True, capture_output=True)
+    else:
+        # cmd is already a list
+        out = subprocess.run(cmd, capture_output=True, shell=False)
+    
     ol = len(out.stdout.decode('utf-8').rstrip())
     el = len(out.stderr.decode().rstrip())
     if el != 0:
          errm = out.stderr.decode().rstrip()
-         # print(errm)
+         # log.error(errm)
          # exit(1)
 
-    # print(out.stdout.decode().rstrip())
     return out
 
 
@@ -756,11 +1543,7 @@ def fix_imports():
    awsf=len(x)
    y = glob.glob("import__*.tf")
    impf=len(y)
-   print("\nFix Import Intervention")
-   #print("aws_*.tf files =", str(awsf))
-   #print("import__*.tf files =", str(impf))
-   #print("Fix aws files",str(x))
-   #print("Fix import files",str(y))
+   log.info("\nFix Import Intervention")
 
 
 
@@ -773,18 +1556,16 @@ def fix_imports():
             tf=fil.split('.tf',1)[0]
             iseg=fil2.replace("import__","").replace(".tf", "")
             if tf == iseg:
-                  #print("Found a Match imp and aws:",iseg,tf)
                   #com = "mv "+fil2+" imported/"+fil2
                   #rc(com)
                   impok=True
                   break
          
          ## out of for loop
-         #print("impok =", str(impok))
          # got an import file we 
          if impok is False:
             com = "mv "+fil2+" "+fil2.replace(".tf",".err")
-            print(fil2.replace(".tf",".err"))
+            log.warning(fil2.replace(".tf",".err"))
             rc(com)
 
    y = glob.glob("import__*.tf")
@@ -793,9 +1574,9 @@ def fix_imports():
            
 
 def ctrl_c_handler(signum, frame):
-  print("Ctrl-C pressed.")
-  print("exit 036")
-  timed_int.stop()
+  log.info("Ctrl-C pressed.")
+  log.info("exit 036")
+  stop_timer()
   exit()
 
 
@@ -804,22 +1585,22 @@ def check_python_version():
    major = version.major
    minor = version.minor
    bv = str(boto3.__version__)
-   print("boto3 version: ",bv)
+   log.info("boto3 version: %s", bv)
    if major < 3 or (major == 3 and minor < 8):
-      print("This program requires Python 3.8 or later.")
+      log.error("This program requires Python 3.8 or later.")
       sys.exit(1)
 # check boto3 version
-   if boto3.__version__ < '1.36.13':
+   if boto3.__version__ < '1.42.16':
       bv = str(boto3.__version__)
-      print("boto3 version: ",bv)
+      log.info("boto3 version: %s", bv)
       vs = bv.split(".")
       v1 = int(vs[0])*100000+int(vs[1])*1000+int(vs[2])
-      if v1 < 136013:
-         print("boto3 version:"+bv)
-         print("This program requires boto3 1.36.13 or later.")
-         print("Try: pip install boto3  -or-  pip install boto3==1.36.13")
-         print("exit 037")
-         timed_int.stop()
+      if v1 < 142016:
+         log.error("boto3 version: %s", bv)
+         log.error("This program requires boto3 1.42.16 or later.")
+         log.error("Try: pip install boto3  -or-  pip install boto3==1.42.16")
+         log.info("exit 037")
+         stop_timer()
          sys.exit(1)
 
 
@@ -855,15 +1636,15 @@ def aws_tf(region,args):
          f3.write('state = "available"\n')
          f3.write('}\n')
    if not context.merge:
-      print("terraform init")
+      log.info("terraform init")
       com = "terraform init -no-color -upgrade"
       rout = rc(com)
       el = len(rout.stderr.decode().rstrip())
       if el != 0:
-         print(rout.stdout.decode().rstrip())
-         print(str(rout.stderr.decode().rstrip()))
+         log.error(rout.stdout.decode().rstrip())
+         log.error(str(rout.stderr.decode().rstrip()))
    else:
-      print("skipping terraform init")
+      log.info("skipping terraform init")
 
 
 # split resources.out
@@ -871,11 +1652,10 @@ def splitf_old(file):
    lhs = 0
    rhs = 0
    if os.path.isfile(file):
-      if context.debug: print("split file:" + file)
+      if context.debug: log.debug("split file:" + file)
       with open(file, "r") as f:
          Lines = f.readlines()
       for tt1 in Lines:
-         # print(tt1)
          if "{" in tt1: lhs = lhs+1
          if "}" in tt1: rhs = rhs+1
          if lhs > 1:
@@ -890,13 +1670,12 @@ def splitf_old(file):
                      pass
 
          if tt1.startswith("resource"):
-               # print("resource: " + tt1)
                ttft = tt1.split('"')[1]
                taddr = tt1.split('"')[3]
                # if context.acc in taddr:
                #   a1=taddr.find(context.acc)
                #   taddr=taddr[:a1]+taddr[a1+12:]
-               #   #print("taddr="+taddr)
+
 
                f2 = open(ttft+"__"+taddr+".out", "w")
                f2.write(tt1)
@@ -909,9 +1688,9 @@ def splitf_old(file):
                try:
                   f2.write(tt1)
                except:
-                  print("tried to write to closed file: >" + tt1 + "<")
+                  log.warning("tried to write to closed file: >" + tt1 + "<")
    else:
-      print("could not find expected resources.out file")
+      log.error("could not find expected resources.out file")
 
    # moves resources.out to imported
    f2.close()
@@ -924,7 +1703,7 @@ def splitf(input_file):
    # Compile regex patterns for better performance
    resource_pattern = re.compile(r'resource "(\w+)" "(.+?)"')
    comment_pattern = re.compile(r'^\s*#')
-   if context.debug: print("split file: " + input_file)
+   if context.debug: log.debug("split file: " + input_file)
    # Read the entire file content at once
    with open(input_file, 'r') as f:
         content = f.read()
@@ -939,7 +1718,10 @@ def splitf(input_file):
             resource_name = match.group(2)
 
             # Create filename
-            filename = f"{resource_type}__{resource_name.replace('/', '__')}.out"
+            resource_name_safe = resource_name.replace('/', '__')
+            # Security Fix #3: Sanitize filename
+            resource_name_safe = re.sub(r'[^\w\-\.]', '_', resource_name_safe)
+            filename = f"{resource_type}__{resource_name_safe}.out"
 
             # Use StringIO for efficient string operations
             output = StringIO()
@@ -950,17 +1732,20 @@ def splitf(input_file):
 
             # Write the filtered resource block to a new file
             
-            if len(filename) > 255: filename=filename[:250]+".tf"
+            if len(filename) > 255: filename=filename[:250]+".out"
             try:
-               with open(filename, 'w') as f:
-                  f.write(output.getvalue().strip() + '\n')
-            except:
-               print("ERROR: could not write to file: " + fn)
-               print("exit 038")
-               timed_int.stop()
+               # Security Fix #3: Use safe file write
+               safe_write_file(filename, output.getvalue().strip() + '\n')
+            except ValueError as e:
+               log.error(f"ERROR: Path validation failed: {e}")
+               log.info("exit 038")
+               stop_timer()
                exit()
-
-            # print(f"Created file: {filename}")
+            except Exception as e:
+               log.error(f"ERROR: could not write to file: {filename} - {e}")
+               log.info("exit 038")
+               stop_timer()
+               exit()
    shutil.move(input_file,"imported/"+input_file)
 
 
@@ -983,34 +1768,33 @@ def write_import(type,theid,tfid):
          #catch tfid starts with number
       if tfid[:1].isdigit(): tfid="r-"+tfid
 
+      # Security Fix #3: Additional sanitization to prevent path traversal
+      tfid = re.sub(r'\.\.', '_', tfid)  # Remove any remaining ..
+      tfid = tfid.replace('/', '_')  # Ensure no path separators
+
       if "!" in theid:
          fn="notimported/import__"+type+"__"+tfid+".tf"
-         print("ERROR: Not importing "+type+" "+theid)
-         print("ERROR: Invalid character ! in name")
+         log.error("ERROR: Not importing "+type+" "+theid)
+         log.error("ERROR: Invalid character ! in name")
       else:
          fn="import__"+type+"__"+tfid+".tf"
 
       #fn=fn.replace(context.acc,"012345678912")
 
-      if context.debug: print(fn)
-         #print(fn)
+      if context.debug: log.debug(fn)
          
          # check if file exists:
          #
       if context.merge:   
          #y = glob.glob("imported/import__*.tf")
-         #print("Pre imp check:", str(y))
          if os.path.isfile("imported/"+fn):
-            #print("File exists: imorted/" + fn)
             return
          
       if os.path.isfile(fn):
-            if context.debug: print("File exists: " + fn)
-            #print("File exists: " + fn)
+            if context.debug: log.debug("File exists: " + fn)
             pkey=type+"."+tfid
             context.rproc[pkey]=True
             return
-         #print("theid=",theid,"  tfid=",tfid)
 
       done_data=False
       done_data=do_data(type,theid)
@@ -1027,12 +1811,17 @@ def write_import(type,theid,tfid):
          if len(fn) > 255: fn=fn[:250]+".tf"
          #if context.merge:   print("Merge import",fn)
          try:
-            with open(fn, 'w') as f:
-               f.write(output.getvalue().strip() + '\n')
-         except:
-            print("ERROR: could not write to file: " + fn)
-            print("exit 039")
-            timed_int.stop()
+            # Security Fix #3: Use safe file write with path validation
+            safe_write_file(fn, output.getvalue().strip() + '\n')
+         except ValueError as e:
+            log.error(f"ERROR: Path validation failed: {e}")
+            log.info("exit 039")
+            stop_timer()
+            exit()
+         except Exception as e:
+            log.error(f"ERROR: could not write to file: {fn} - {e}")
+            log.info("exit 039")
+            stop_timer()
             exit()
 
 
@@ -1095,31 +1884,26 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
    #   if type == j: 
    #      print(type + " in specials list returning ..")
    #      return False
-   if context.debug: print("-1-> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+   if context.debug: log.debug("-1-> In getresource doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
    if type in str(context.types): 
-      print("Found "+type+"in types skipping ...")
+      log.info("Found "+type+"in types skipping ...")
       return True
-   #print("--4 >")
    try:
       if id is not None:
          pt=type+"."+id
          if pt in context.rproc:
             if context.rproc[pt] is True:
-               print("Found "+pt+" in processed skipping ...") 
+               log.info("Found "+pt+" in processed skipping ...") 
                return True
       response=call_boto3(type,clfn,descfn,topkey,key,id)   
-      #print("-->"+str(response))
       if str(response) != "[]":
             for item in response:
-               #print("-"+str(item))
-               #print("-gr01-")
                if id is None or filterid=="": # do it all
-                  #print("-gr21-")
-                  if context.debug: print("--"+str(item))
+                  if context.debug: log.debug("--"+str(item))
                   try:
                      if "aws-service-role" in str(item["Path"]): 
-                        if context.debug:  print("Skipping service role " + str(item[key])) 
+                        if context.debug:  log.debug("Skipping service role " + str(item[key])) 
                         continue
                   except:
                      pass
@@ -1127,7 +1911,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                   try:
                      theid=item[key]
                   except TypeError:
-                     print("ERROR: getresource TypeError: "+str(response)+" key="+key+" type="+type,descfn)
+                     log.error("ERROR: getresource TypeError: "+str(response)+" key="+key+" type="+type,descfn)
                      with open('boto3-error.err', 'a') as f:
                         f.write("ERROR: getresource TypeError: type="+type+" key="+key+" descfn="+descfn+"\n"+str(response)+"\n")
                      continue
@@ -1136,7 +1920,7 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                      write_import(type,theid,None)
                   else:
                      if context.rproc[pt] is True:
-                        print("Found "+pt+" in processed skipping ...") 
+                        log.info("Found "+pt+" in processed skipping ...") 
                         continue
                   #special_deps(type,theid)
                
@@ -1146,10 +1930,9 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                #
                else:  
                   if context.debug: 
-                     print("-gr31-"+"filterid="+str(filterid)+" id="+str(id)+"  key="+key)
-                     print(str(item))
+                     log.debug("-gr31-"+"filterid="+str(filterid)+" id="+str(id)+"  key="+key)
+                     log.debug(str(item))
                   if "." not in filterid:
-                     #print("***item=" + str(item))
                      try:
                         if id == str(item[filterid]):
                            #if context.debug: print("-gr31 item-"+str(item))
@@ -1158,12 +1941,12 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                            write_import(type,theid,None)
                         elif filterid != key:
                            if context.debug:
-                              print("id="+id+" filterid="+filterid)
-                              print("item="+str(item))
+                              log.debug("id="+id+" filterid="+filterid)
+                              log.debug("item="+str(item))
                            theid=item[filterid]
                            write_import(type,theid,None)
                      except Exception as e:
-                        print(f"{e=}")
+                        log.error(f"{e=}")
                         if context.mopup.get(type) is not None:
                            if id.startswith(context.mopup[type]):
                               write_import(type,id,None)
@@ -1175,36 +1958,35 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                            return False
                   else:
                      ### There IS a dot in the filterid so we need to dig deeper
-                     print(str(item))
-                     print("id="+id+" filterid="+filterid)
+                     log.debug(str(item))
+                     log.debug("id="+id+" filterid="+filterid)
                      filt1=filterid.split('.')[1]
                      filt2=filterid.split('.')[3]
-                     print("filt1="+filt1+" filt2="+filt2)
+                     log.debug("filt1="+filt1+" filt2="+filt2)
                      dotc=len(item[filt1])
-                     print("dotc="+str(dotc))
+                     log.debug("dotc="+str(dotc))
 
                      for j in range(0,dotc):
-                        #print(str(item[filt1][j]))
                         try:
                            val=str(item[filt1][j][filt2])
-                           print("val="+val + " id=" + id)
+                           log.debug("val="+val + " id=" + id)
                            if id == val:
                               theid=item[key]
                               if dotc>1: theid=id+"/"+item[key]
                               write_import(type,theid,None)
                         except:
-                           print("-------- error on processing")
-                           print(str(item))
-                           print("filterid="+filterid)
-                           print("----------------------------")
+                           log.error("-------- error on processing")
+                           log.error(str(item))
+                           log.error("filterid="+filterid)
+                           log.error("----------------------------")
                            pass
       else:
          if id is not None:
-            if context.debug: print("No "+type+" "+id+" found - empty response (common)") 
+            if context.debug: log.debug("No "+type+" "+id+" found - empty response (common)") 
             pkey=type+"."+id  
             context.rproc[pkey]=True      
          else:
-            if context.debug: print("No "+type+" found - empty response (common)")
+            if context.debug: log.debug("No "+type+" found - empty response (common)")
             return True
    
    except Exception as e:
@@ -1215,7 +1997,6 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
     #tfplan(type)
 
 def special_deps(ttft,taddr):
-   #print("In special deps"+ttft+"  "+taddr)
    """
    if ttft == "aws_security_group": 
       print("##### special dep security group") 
@@ -1243,8 +2024,8 @@ def special_deps(ttft,taddr):
 
 
 def get_test(type,id,clfn,descfn,topkey,key,filterid):
-   print("in get_test")
-   print("--> In get_test doing "+ type + ' with id ' + str(id))   
+   log.debug("in get_test")
+   log.debug("--> In get_test doing "+ type + ' with id ' + str(id))   
    return
 
 
@@ -1253,14 +2034,14 @@ def add_known_dependancy(type,id):
     # check if we alredy have it
     pkey=type+"."+id
     if pkey not in context.rdep:
-        if context.debug: print("add_known_dependancy: " + pkey)
+        if context.debug: log.debug("add_known_dependancy: " + pkey)
         context.rdep[pkey]=False
     return
 
 def add_dependancy(type,id):
     # check if we alredy have it
    if id is None: 
-      print("WARNING: add_dependancy: id is None")
+      log.warning("WARNING: add_dependancy: id is None")
       return
    try:
    #   if type=="aws_kms_alias" and id=="k-817bb810-7154-4d9b-b582-7dbb62e77876":
@@ -1269,8 +2050,7 @@ def add_dependancy(type,id):
          if ":" not in id: id=context.acc+":"+id
       pkey=type+"."+id
       if pkey not in context.rproc:
-         if context.debug: print("add_dependancy: " + pkey)
-         #print("add_dependancy: " + pkey)
+         if context.debug: log.debug("add_dependancy: " + pkey)
          context.rproc[pkey]=False
    except Exception as e:
       handle_error(e, str(inspect.currentframe().f_code.co_name), type, id)
@@ -1288,7 +2068,7 @@ def add_dependancy(type,id):
 def call_boto3(type,clfn,descfn,topkey,key,id): 
    try:
       if context.debug: 
-         print("call_boto3 clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+         log.debug("call_boto3 clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
       #if context.debug: print("pre-response")
       # get any pre-saved response
       #response=get_boto3_resp(descfn)  # sets response to [] if nothing saved
@@ -1310,20 +2090,15 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                
 
             elif descfn == "describe_launch_templates":
-               #print("*******  describe_launch_templates  ********" )
-               #print(">> id="+str(id))
                if id is not None:
                   if id.startswith("lt-"):
-                     #print("--->>> id="+str(id))
                      for page in paginator.paginate(LaunchTemplateIds=[id]): response.extend(page[topkey])
                   else:
-                     #print("-->> id="+str(id))
                      for page in paginator.paginate(LaunchTemplateNames=[id]): response.extend(page[topkey])
                else:
                   for page in paginator.paginate(): response.extend(page[topkey])
 
             elif descfn == "describe_instances":
-               #print("call_boto3 clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
                if id is not None:
                   if "i-" in id:
                      for page in paginator.paginate(InstanceIds=[id]): response.extend(page[topkey][0]['Instances'])
@@ -1334,10 +2109,8 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                      response.extend(page[topkey][0]['Instances'])
                   #sav_boto3_rep(descfn,response)
                
-               #print(str(response))
 
             elif descfn == "describe_pod_identity_association" or descfn == "list_fargate_profiles" or descfn == "list_nodegroups" or descfn == "list_identity_provider_configs" or descfn == "list_addons":
-               #print("--1a "+str(id))
                for page in paginator.paginate(clusterName=id): response.extend(page[topkey])
             
             
@@ -1347,7 +2120,6 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
             
             elif clfn=="kms" and descfn=="list_aliases" and id is not None:
                if id.startswith("k-"): id=id[2:]
-               #print("-- call boto3 --"+str(id))
                for page in paginator.paginate(KeyId=id): response.extend(page[topkey])
                return response
             
@@ -1370,7 +2142,7 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                
             
             else:
-               if context.debug: print("--1b")
+               if context.debug: log.debug("--1b")
                # main get all call - usually a list- describe- or get- 
                for page in paginator.paginate(): 
                   response.extend(page[topkey])
@@ -1378,16 +2150,16 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
 
                if id is not None:
                   fresp=response
-                  if context.debug:print("--2")
+                  if context.debug:log.debug("--2")
                   response=[]
-                  if context.debug: print(str(fresp))
+                  if context.debug: log.debug(str(fresp))
                   # get by id - useually a describe- or get-
                   for i in fresp:
                      if context.debug: 
                         try:
-                           print(i[key],id)
+                           log.debug("%s %s %s",  i[key], id)
                         except TypeError:
-                           print(i,id)
+                           log.debug("%s %s %s",  i, id)
                      try:
                         if id in i[key]:
                            response=[i]
@@ -1396,17 +2168,16 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                         if id in i:
                            response=[i]
                            break
-                  #print("--3")
                   # get by filter - useually a list- describe- or get-   
                # save a full paginate as we don't want to do it many times
                
 
          except botocore.exceptions.ParamValidationError as e:
 
-            print("ParamValidationError 1 in common.call_boto3: type="+type+" clfn="+clfn)
+            log.error("ParamValidationError 1 in common.call_boto3: type="+type+" clfn="+clfn)
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(f"{e=} [pv1] ", fname, exc_tb.tb_lineno)
+            log.error(f"{e=} [pv1] %s %s", fname, exc_tb.tb_lineno)
             with open('boto3-error.err', 'a') as f:
                      f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
                      f.write(f"{e=} [pv1] \n")
@@ -1417,30 +2188,30 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
 
          except botocore.exceptions.OperationNotPageableError as err:
                if context.debug:
-                  print(f"{err=}")
-                  print("calling non paginated fn "+str(descfn)+" id="+str(id))
+                  log.debug(f"{err=}")
+                  log.debug("calling non paginated fn "+str(descfn)+" id="+str(id))
                try:
                   getfn = getattr(client, descfn)                     
                   response1 = getfn()
                   response1=response1[topkey]
-                  if context.debug: print("Non-pag response1="+str(response1))
+                  if context.debug: log.debug("Non-pag response1="+str(response1))
                   if id is None:
-                     if context.debug: print("id None")
+                     if context.debug: log.debug("id None")
                      response=response1
-                     if context.debug: print("Non-pag response no ID ="+str(response))
+                     if context.debug: log.debug("Non-pag response no ID ="+str(response))
                   else: #try a match
                      for j in response1:
                         if id==j[key]:
                            response=[j]
-                           if context.debug: print("Non-pag response with ID ="+str(response))
+                           if context.debug: log.debug("Non-pag response with ID ="+str(response))
                            
 
                except botocore.exceptions.ParamValidationError as e:
 
-                  print("ParamValidationError 2 in common.call_boto3: type="+type+" clfn="+clfn)
+                  log.error("ParamValidationError 2 in common.call_boto3: type="+type+" clfn="+clfn)
                   exc_type, exc_obj, exc_tb = sys.exc_info()
                   fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                  print(f"{e=} [pv2] ", fname, exc_tb.tb_lineno)    
+                  log.error(f"{e=} [pv2] %s %s", fname, exc_tb.tb_lineno)    
                                     
                   with open('boto3-error.err', 'a') as f:
                      f.write("type="+type+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
@@ -1453,22 +2224,19 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
          except Exception as e:
             handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
-         #print("--2a")  
          rl=len(response)
-         #print("--2b" + str(rl)) 
          if rl==0:
-            if context.debug: print("** zero response length for "+ descfn + " in call_boto3 returning .. []")
+            if context.debug: log.debug("** zero response length for "+ descfn + " in call_boto3 returning .. []")
             return []
 
          if context.debug:
-            print("response length="+str(len(response)))
+            log.debug("response length="+str(len(response)))
             
             for item in response:
-               print(item)
-            print("--------------------------------------")
+               log.debug(item)
+            log.debug("--------------------------------------")
    
       else:
-         #print("Global response ")
          return response
       
    except Exception as e:
@@ -1503,137 +2271,134 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    exc_type, exc_obj, exc_tb = sys.exc_info()
    exn=str(exc_type.__name__)
    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-   #print("exn="+exn)
    if exn == "EndpointConnectionError":
-      print("No endpoint in this region for "+descfn+" - returning")
+      log.debug("No endpoint in this region for "+descfn+" - returning")
       return
    elif exn=="ClientError":
-      #print("ClientError exception for "+fname+" - returning")
       if "does not exist" in str(e):
-         print(id+" does not exist " + fname + " " + str(exc_tb.tb_lineno) )
+         log.warning(id+" does not exist " + fname + " " + str(exc_tb.tb_lineno) )
          return
-      print("Exception message :"+str(e))
+      log.debug("Exception message :"+str(e))
       return
    elif exn=="ForbiddenException":
-      print("Call Forbidden exception for "+fname+" - returning")
+      log.debug("Call Forbidden exception for "+fname+" - returning")
       return
    elif exn == "ParamValidationError" or exn=="ValidationException" or exn=="InvalidRequestException" or exn =="InvalidParameterValueException" or exn=="InvalidParameterException":
-      print(str(exc_obj)+" for "+frame+" id="+str(id)+" - returning")
+      log.warning(str(exc_obj)+" for "+frame+" id="+str(id)+" - returning")
       return
    elif exn == "BadRequestException" and clfn=="guardduty":
-      print(str(exc_obj)+" for "+frame+" id="+str(id)+" - returning")
+      log.warning(str(exc_obj)+" for "+frame+" id="+str(id)+" - returning")
       return  
    
    elif exn=="AccessDeniedException":
       pkey=frame.split("get_")[1]
-      print("AccessDeniedException exception for "+fname+" - returning")
+      log.warning("AccessDeniedException exception for "+fname+" - returning")
       return
 
 
    elif "NotFoundException" in exn:
       if frame.startswith("get_"):
-         print("NOT FOUND: "+frame.split("get_")[1]+" "+str(id)+" check if it exists and what references it - returning")
+         log.warning("NOT FOUND: "+frame.split("get_")[1]+" "+str(id)+" check if it exists and what references it - returning")
          pkey=frame.split("get_")[1]+"."+str(id)
          if "aws_glue_catalog_database" in pkey:
             pkey=frame.split("get_")[1]+"."+context.acc+":"+id
          context.rproc[pkey]=True
       else:
-         print("NOT FOUND: "+frame+" "+id+" check if it exists - returning")
+         log.warning("NOT FOUND: "+frame+" "+id+" check if it exists - returning")
       return    
 
    elif exn=="ResourceNotFoundException" or exn=="EntityNotFoundException" or exn=="NoSuchEntityException" or exn=="NotFoundException" or exn=="LoadBalancerNotFoundException" or exn=="NamespaceNotFound" or exn=="NoSuchHostedZone":
       if frame.startswith("get_"):
-         print("RESOURCE NOT FOUND: "+frame.split("get_")[1]+" "+str(id)+" check if it exists and what references it - returning")
+         log.warning("RESOURCE NOT FOUND: "+frame.split("get_")[1]+" "+str(id)+" check if it exists and what references it - returning")
          pkey=frame.split("get_")[1]+"."+str(id)
          context.rproc[pkey]=True
       else:
-         print("RESOURCE NOT FOUND: "+frame+" "+str(id)+" check if it exists - returning")
+         log.warning("RESOURCE NOT FOUND: "+frame+" "+str(id)+" check if it exists - returning")
       return    
    
    elif exn == "KeyError":
       if "kms" in str(exc_obj):
-         print("KeyError can not find key for " +fname+" id="+str(id)+" - returning")
+         log.warning("KeyError can not find key for " +fname+" id="+str(id)+" - returning")
          return
       
       if clfn=="sqs":
-         print("KeyError can not find queue url for " +fname+" id="+str(id)+" - returning")
+         log.warning("KeyError can not find queue url for " +fname+" id="+str(id)+" - returning")
          return
       
    elif exn == "InvalidDocument":
       if clfn=="ssm":
-         print("KeyError can not find ssm document for " +fname+" id="+str(id)+" - returning")
+         log.warning("KeyError can not find ssm document for " +fname+" id="+str(id)+" - returning")
          return
 
    elif exn == "AWSOrganizationsNotInUseException" or exn =="OrganizationAccessDeniedException":
-      print("NO ORG: "+frame+" this account doesn't appear to be in an AWS Organisation (or you don't have org permissions) - returning")
+      log.warning("NO ORG: "+frame+" this account doesn't appear to be in an AWS Organisation (or you don't have org permissions) - returning")
       return
 
    elif "NoSuch" in exn and clfn=="cloudfront":
-      print(str(exc_obj)+" for "+frame+" id="+str(id)+" - returning")
+      log.warning(str(exc_obj)+" for "+frame+" id="+str(id)+" - returning")
       return
    
    elif "BadRequest" in exn:
-      #print(str(exc_obj)+" for "+frame+" id="+str(id)+" - returning")
       if "The requested feature is not enabled for this AWS account" in str(exc_obj):
-            print(descfn + " returned feature not enabled for this account - returning")
+            log.warning(descfn + " returned feature not enabled for this account - returning")
             return
       elif "Your account isn't authorized to call this operation" in str(exc_obj):
-            print(descfn + " returned Your account isn't authorized to call this operation - returning")
+            log.warning(descfn + " returned Your account isn't authorized to call this operation - returning")
             return
-      print(exn)
-      print(str(exc_obj)+" for "+frame+" id="+str(id)+" - exit")
-      print("exit 040")
-      #timed_int.stop() # as it is multi-threaded
+      log.error(exn)
+      log.error(str(exc_obj)+" for "+frame+" id="+str(id)+" - exit")
+      log.info("exit 040")
+      #stop_timer() # as it is multi-threaded
       exit()
 
 
    elif "InvalidAccessException" in exn:
       if "is not subscribed" in str(exc_obj):
-         print(descfn + " returned Not subscribed "+clfn+" - returning")
+         log.warning(descfn + " returned Not subscribed "+clfn+" - returning")
          return
-      print("exit 041")
-      timed_int.stop()
+      log.info("exit 041")
+      stop_timer()
       exit()
       
 
 
 
-   print("\nERROR: in "+frame+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
+   log.error("\nERROR: in "+frame+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id))
    try:   
-      print(f"{e=} [e1]")
-      print(f"{exn=} [e1]")
-      print(fname, exc_tb.tb_lineno)
+      log.error(f"{e=} [e1]")
+      log.error(f"{exn=} [e1]")
+      log.error("%s %s", fname, exc_tb.tb_lineno)
    except:
-      print("except err")
+      log.error("except err")
       pass
    with open('boto3-error.err', 'a') as f:
       f.write("clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" id="+str(id)+"\n")
       f.write(f"{e=} [e1] \n")
       f.write(f"{fname=} {exc_tb.tb_lineno=} [e1] \n")
       f.write("-----------------------------------------------------------------------------\n")
-   print("stopping process ...")
+   log.error("stopping process ...")
    #threading.
-   timed_int.stop()
+   stop_timer()
    os._exit(1)
    exit()
 
 def handle_error2(e,frame,id):
-   print("\nERROR: in "+frame)
-   print("id="+str(id))
+   log.error("\nERROR: in "+frame)
+   log.error("id="+str(id))
    exc_type, exc_obj, exc_tb = sys.exc_info()
    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
    exn=str(exc_type.__name__)
    if exn == "EndpointConnectionError":
-      print("No endpoint in this region - returning")
+      log.debug("No endpoint in this region - returning")
       return
-   print(f"{e=} [e2] ", fname, exc_tb.tb_lineno)
+   log.error(f"{e=} [e2] %s %s", fname, exc_tb.tb_lineno)
    with open('boto3-error.err', 'a') as f:
       f.write("id="+str(id)+"\n")
       f.write(f"{e=} [e2] ")
       f.write(f"{fname=} {exc_tb.tb_lineno=} [e2] \n")
       f.write("-----------------------------------------------------------------------------\n")
-   print("exit 042")
-   timed_int.stop()
+   log.info("exit 042")
+   stop_timer()
    os._exit(1)
    exit()
 
@@ -1644,19 +2409,19 @@ def create_bucket_if_not_exists(bucket_name):
     
     try:
         s3_client.head_bucket(Bucket=bucket_name)
-        print(f"Bucket {bucket_name} already exists.")
+        log.info(f"Bucket {bucket_name} already exists.")
     except ClientError as e:
         error_code = int(e.response['Error']['Code'])
         if error_code == 404:
-            print(f"Bucket {bucket_name} does not exist. Creating now...")
+            log.info(f"Bucket {bucket_name} does not exist. Creating now...")
             try:
                s3_client.create_bucket(Bucket=bucket_name, CreateBucketConfiguration={'LocationConstraint': context.region})
-               print(f"Bucket {bucket_name} created successfully.")
+               log.info(f"Bucket {bucket_name} created successfully.")
             except ClientError as create_error:
-               print(f"Error creating bucket {bucket_name}: {create_error}")
+               log.error(f"Error creating bucket {bucket_name}: {create_error}")
                return False
         else:
-            print(f"Error checking bucket {bucket_name}: {e}")
+            log.error(f"Error checking bucket {bucket_name}: {e}")
             return False
     
     return True
@@ -1664,15 +2429,15 @@ def create_bucket_if_not_exists(bucket_name):
 
 
 def upload_directory_to_s3():
-   print("Uploading to S3...")
+   log.info("Uploading to S3...")
    s3_client = boto3.client('s3')
    local_directory="/tmp/aws2tf/generated/tf-"+context.pathadd+context.acc+"-"+context.region
    bucket_name="aws2tf-"+context.acc+"-"+context.region
    s3_prefix=''
-   print("Calling create_bucket_if_not_exists for",bucket_name)
+   log.info("Calling create_bucket_if_not_exists for %s %s",  bucket_name)
    bret=create_bucket_if_not_exists(bucket_name)
    if bret:
-      print("Upload files to s3",bucket_name)
+      log.info("Upload files to s3 %s %s",  bucket_name)
       for root, dirs, files in os.walk(local_directory):
          if '.terraform' in dirs:  dirs.remove('.terraform')
          if 'tfplan' in files: files.remove('tfplan')
@@ -1685,14 +2450,13 @@ def upload_directory_to_s3():
                s3_path = os.path.join(s3_prefix, relative_path).replace("\\", "/")
                
                try:
-                  #print(f"Uploading {local_path} to {bucket_name}/{s3_path}")
                   s3_client.upload_file(local_path, bucket_name, s3_path)
                except ClientError as e:
-                  print(f"Error uploading {local_path}: {e}")
+                  log.error(f"Error uploading {local_path}: {e}")
                   return False
-      print("Upload to S3 complete.")
+      log.info("Upload to S3 complete.")
    else:
-      print("Upload to S3 failed - False return from create_bucket_if_not_exists for", bucket_name)
+      log.error("Upload to S3 failed - False return from create_bucket_if_not_exists for %s %s",  bucket_name)
       return False
 
 def empty_and_delete_bucket():
@@ -1700,40 +2464,40 @@ def empty_and_delete_bucket():
     s3 = boto3.resource('s3')
     s3_client = boto3.client('s3')
     bucket = s3.Bucket(bucket_name)
-    print("Emptying and deleting bucket...",bucket_name)
+    log.info("Emptying and deleting bucket... %s %s",  bucket_name)
     # Check if the bucket exists
     try:
         s3_client.head_bucket(Bucket=bucket_name)
     except ClientError as e:
         error_code = int(e.response['Error']['Code'])
         if error_code == 404:
-            print(f"Bucket {bucket_name} does not exist. Nothing to delete.")
+            log.info(f"Bucket {bucket_name} does not exist. Nothing to delete.")
             return
         else:
-            print(f"Error checking bucket {bucket_name}: {e}")
+            log.error(f"Error checking bucket {bucket_name}: {e}")
             return
 
     # Empty the bucket
     try:
         bucket.objects.all().delete()
-        print(f"Bucket {bucket_name} emptied successfully.")
+        log.info(f"Bucket {bucket_name} emptied successfully.")
     except ClientError as e:
-        print(f"Error emptying bucket {bucket_name}: {e}")
+        log.error(f"Error emptying bucket {bucket_name}: {e}")
         return
 
     # Delete the bucket
     try:
         bucket.delete()
-        print(f"Bucket {bucket_name} deleted successfully.")
+        log.info(f"Bucket {bucket_name} deleted successfully.")
     except ClientError as e:
-        print(f"Error deleting bucket {bucket_name}: {e}")
+        log.error(f"Error deleting bucket {bucket_name}: {e}")
         return
 
-    print(f"Bucket {bucket_name} has been emptied and deleted.")
+    log.info(f"Bucket {bucket_name} has been emptied and deleted.")
 
 
 def download_from_s3():
-    print("Restore S3")
+    log.info("Restore S3")
     s3_client = boto3.client('s3')
     local_directory="/tmp/aws2tf/generated/tf-"+context.pathadd+context.acc+"-"+context.region
     bucket_name="aws2tf-"+context.acc+"-"+context.region
@@ -1744,10 +2508,10 @@ def download_from_s3():
     except ClientError as e:
         error_code = int(e.response['Error']['Code'])
         if error_code == 404:
-            print(f"Bucket {bucket_name} does not exist. Cannot download.")
+            log.error(f"Bucket {bucket_name} does not exist. Cannot download.")
             return
         else:
-            print(f"Error checking bucket {bucket_name}: {e}")
+            log.error(f"Error checking bucket {bucket_name}: {e}")
             return
 
     # Create the local directory if it doesn't exist
@@ -1773,12 +2537,11 @@ def download_from_s3():
 
             # Download the file
             try:
-                #print(f"Downloading {obj['Key']} to {local_file_path}")
                 s3_client.download_file(bucket_name, obj['Key'], local_file_path)
             except ClientError as e:
-                print(f"Error downloading {obj['Key']}: {e}")
+                log.error(f"Error downloading {obj['Key']}: {e}")
 
-    print(f"Download from {bucket_name}/{s3_prefix} to {local_directory} completed.")
+    log.info(f"Download from {bucket_name}/{s3_prefix} to {local_directory} completed.")
 
 def trivy_check():
     # Get current directory and extract the last two parts
@@ -1787,12 +2550,12 @@ def trivy_check():
 
     # Check if jq is installed
     if shutil.which('jq') is None:
-        print("jq is not installed. skipping security report")
+        log.warning("jq is not installed. skipping security report")
         return
 
     # Check if trivy is installed
     if shutil.which('trivy') is None:
-        print("trivy is not installed. skipping security report")
+        log.warning("trivy is not installed. skipping security report")
         return
 
     # Get trivy version
@@ -1800,14 +2563,14 @@ def trivy_check():
         trivy_version = subprocess.check_output(['trivy', 'version'], universal_newlines=True)
         ver = int(''.join(filter(str.isdigit, trivy_version.split('\n')[0].split(':')[1].strip())))
     except subprocess.CalledProcessError:
-        print("Error getting trivy version")
+        log.error("Error getting trivy version")
         return
 
     if ver < 480:
-        print("Please upgrade trivy to version v0.48.0 or higher")
+        log.warning("Please upgrade trivy to version v0.48.0 or higher")
         return
 
-    print("Generating trivy security report ....")
+    log.info("Generating trivy security report ....")
     
     with open('security-report.txt', 'w') as report:
         report.write("trivy security report\n")
@@ -1826,9 +2589,9 @@ def trivy_check():
                             references = misconfig.get('References', [])
                             report.write(json.dumps([resource, description, references]) + '\n')
             except subprocess.CalledProcessError:
-                print(f"Error running trivy for {severity} severity")
+                log.error(f"Error running trivy for {severity} severity")
 
-    print(f"Trivy security report: {mydir}/security-report.txt")
+    log.info(f"Trivy security report: {mydir}/security-report.txt")
 
 
 def detect_aws_credentials(profile_name=None):
@@ -2028,64 +2791,57 @@ def print_credentials_info(profile_name=None):
     """Print a formatted report of AWS credentials information."""
     info = detect_aws_credentials(profile_name)
     
-    print("AWS Credentials Analysis")
-    print("=" * 40)
-    print(f"Status: {info['status']}")
-    print(f"Profile: {info['profile_name']}")
-    print(f"Credential Type: {info['credential_type']}")
-    print(f"Using SSO: {'Yes' if info['is_sso'] else 'No'}")
-    print()
+    log.info("AWS Credentials Analysis")
+    log.info("=" * 40)
+    log.info(f"Status: {info['status']}")
+    log.info(f"Profile: {info['profile_name']}")
+    log.info(f"Credential Type: {info['credential_type']}")
+    log.info(f"Using SSO: {'Yes' if info['is_sso'] else 'No'}")
     
     if info['details']:
-        print("Details:")
-        print("-" * 20)
+        log.info("Details:")
+        log.info("-" * 20)
         
         # Print caller identity if available
         if 'caller_identity' in info['details']:
             ci = info['details']['caller_identity']
-            print(f"Account ID: {ci.get('account', 'N/A')}")
-            print(f"User ARN: {ci.get('arn', 'N/A')}")
-            print(f"User ID: {ci.get('user_id', 'N/A')}")
-            print()
+            log.info(f"Account ID: {ci.get('account', 'N/A')}")
+            log.info(f"User ARN: {ci.get('arn', 'N/A')}")
+            log.info(f"User ID: {ci.get('user_id', 'N/A')}")
         
         # Print SSO token info if available and relevant
         if 'sso_tokens' in info['details'] and info['is_sso']:
             tokens = info['details']['sso_tokens']
-            print(f"Active SSO Tokens for this session: {len(tokens)}")
+            log.info(f"Active SSO Tokens for this session: {len(tokens)}")
             for token in tokens:
-                print(f"  - Expires: {token['expires_at']}")
-                print(f"    Region: {token['region']}")
-            print()
+                log.info(f"  - Expires: {token['expires_at']}")
+                log.info(f"    Region: {token['region']}")
         elif 'available_sso_tokens' in info['details']:
             tokens = info['details']['available_sso_tokens']
-            print(f"Available SSO Tokens (not used by current session): {len(tokens)}")
-            print()
+            log.info(f"Available SSO Tokens (not used by current session): {len(tokens)}")
         
         # Print SSO configuration if available
         if 'sso_config' in info['details']:
             sso_config = info['details']['sso_config']
-            print("SSO Configuration:")
-            print(f"  Profile: {sso_config.get('profile', 'N/A')}")
-            print(f"  Start URL: {sso_config.get('sso_start_url', 'N/A')}")
-            print(f"  Account ID: {sso_config.get('sso_account_id', 'N/A')}")
-            print(f"  Role Name: {sso_config.get('sso_role_name', 'N/A')}")
-            print()
+            log.info("SSO Configuration:")
+            log.info(f"  Profile: {sso_config.get('profile', 'N/A')}")
+            log.info(f"  Start URL: {sso_config.get('sso_start_url', 'N/A')}")
+            log.info(f"  Account ID: {sso_config.get('sso_account_id', 'N/A')}")
+            log.info(f"  Role Name: {sso_config.get('sso_role_name', 'N/A')}")
         
         # Print environment variables
         if 'environment_variables' in info['details']:
             env_vars = info['details']['environment_variables']
-            print("Environment Variables:")
+            log.info("Environment Variables:")
             for var, status in env_vars.items():
-                print(f"  {var}: {status}")
-            print()
+                log.info(f"  {var}: {status}")
         
         # Print any important notes
         if 'note' in info['details']:
-            print(f"Note: {info['details']['note']}")
-            print()
+            log.info(f"Note: {info['details']['note']}")
         
         # Print any errors
         if 'error' in info['details']:
-            print(f"Error: {info['details']['error']}")
+            log.error(f"Error: {info['details']['error']}")
         if 'sts_error' in info['details']:
-            print(f"STS Error: {info['details']['sts_error']}")
+            log.error(f"STS Error: {info['details']['sts_error']}")

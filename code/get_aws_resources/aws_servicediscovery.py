@@ -1,11 +1,13 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
 
 def get_aws_service_discovery_private_dns_namespace(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -15,17 +17,14 @@ def get_aws_service_discovery_private_dns_namespace(type, id, clfn, descfn, topk
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 # get a vpc-id
                 if j['Type']=="DNS_PRIVATE":
-                    #print(str(j))
                     nsid=j['Id']
-                    #print(nsid)
                     hzid=j['Properties']['DnsProperties']['HostedZoneId']
                     response2=r53client.get_hosted_zone(Id=hzid)
                     vpcid=response2['VPCs'][0]['VPCId']
-                    #print(vpcid)
                     pkey=nsid+":"+vpcid
                     common.write_import(type,pkey,nsid) 
                     tkey="aws_service_discovery_private_dns_namespace."+id
@@ -34,17 +33,14 @@ def get_aws_service_discovery_private_dns_namespace(type, id, clfn, descfn, topk
 
         else:      
             response = client.get_namespace(Id=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Namespace']
             if j['Type']=="DNS_PRIVATE":
             # get a vpc-id
-                #print(str(j))
                 nsid=j['Id']
-                #print(nsid)
                 hzid=j['Properties']['DnsProperties']['HostedZoneId']
                 response2=r53client.get_hosted_zone(Id=hzid)
                 vpcid=response2['VPCs'][0]['VPCId']
-                #print(vpcid)
                 pkey=nsid+":"+vpcid
                 common.write_import(type,pkey,nsid) 
                 tkey="aws_service_discovery_private_dns_namespace."+id
@@ -59,7 +55,7 @@ def get_aws_service_discovery_private_dns_namespace(type, id, clfn, descfn, topk
 
 def get_aws_service_discovery_public_dns_namespace(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -68,14 +64,14 @@ def get_aws_service_discovery_public_dns_namespace(type, id, clfn, descfn, topke
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             for j in response:
                 if j['Type']=="DNS_PUBLIC":
                     common.write_import(type,j[key],"n-"+j[key]) 
 
         else:      
             response = client.get_namespace(Id=id)
-            if response == []: print("Empty response for "+type+ " id="+str(id)+" returning"); return True
+            if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j=response['Namespace']
             if j['Type']=="DNS_PUBLIC":
                 common.write_import(type,j[key],"n-"+j[key])

@@ -1,11 +1,13 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
 
 def get_aws_backup_region_settings(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         common.write_import(type,context.region,None)
@@ -17,7 +19,7 @@ def get_aws_backup_region_settings(type, id, clfn, descfn, topkey, key, filterid
 
 def get_aws_backup_vault(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
 
@@ -28,7 +30,7 @@ def get_aws_backup_vault(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 if "/" not in j[key]:
@@ -37,7 +39,7 @@ def get_aws_backup_vault(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.describe_backup_vault(BackupVaultName=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response
             common.write_import(type,j[key],None)
@@ -52,7 +54,7 @@ def get_aws_backup_vault(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_aws_backup_plan(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
 
@@ -63,7 +65,7 @@ def get_aws_backup_plan(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response = response + page[topkey]
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
                 if "/" not in j['BackupPlanName']:
@@ -72,7 +74,7 @@ def get_aws_backup_plan(type, id, clfn, descfn, topkey, key, filterid):
         else:      
             response = client.get_backup_plan(BackupPlanId=id)
             if response == []: 
-                print("Empty response for "+type+ " id="+str(id)+" returning")
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             j=response
             common.write_import(type,j[key],None)

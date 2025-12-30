@@ -7377,7 +7377,7 @@ aws_prometheus_workspace = {
 	"clfn":		"amp",
 	"descfn":	"list_workspaces",
 	"topkey":	"workspaces",
-	"key":		"arn",
+	"key":		"workspaceId",
 	"filterid":	"arn"
 }
 

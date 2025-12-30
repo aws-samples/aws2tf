@@ -1,5 +1,7 @@
 import common
 import fixtf
+import logging
+log = logging.getLogger('aws2tf')
 import context
 import inspect
 
@@ -117,11 +119,11 @@ def aws_rds_cluster(t1,tt1,tt2,flag1,flag2):
 				#t1=tt1 + " = aws_rds_cluster_instance." + inn + ".id\n"
 				common.add_dependancy("aws_rds_cluster_instance",inn)
 			if cc > 0:
-				print("---cc->>>>", cc)
+				log.debug("---cc->>>> %s",  cc)
 				for i in range(cc):
 					inn=tt2.split(', ')[i].strip('[]').strip("'")
 					inn=inn.strip('"')
-					print("--inn->>>>", inn)
+					log.debug("--inn->>>> %s",  inn)
 					#t1=tt1 + " = aws_rds_cluster_instance." + inn + ".id\n"
 					common.add_dependancy("aws_rds_cluster_instance", inn)
 		# Error: Cycle: aws_rds_cluster.launch-database-qkj2lkbcs7ne-auroras-auroracluster-oxhqkawhlbto, aws_rds_cluster_instance.mdadb
@@ -129,7 +131,7 @@ def aws_rds_cluster(t1,tt1,tt2,flag1,flag2):
 		
 
 	except Exception as e:
-		print("*** Exception in aws_rds_cluster: " + str(e))
+		log.error("*** Exception in aws_rds_cluster: " + str(e))
 		common.handle_error2(e,"aws_rds_cluster","mdadb")
     
 	return skip,t1,flag1,flag2

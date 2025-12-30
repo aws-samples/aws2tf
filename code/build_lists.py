@@ -3,10 +3,14 @@ import context
 import concurrent.futures
 import json
 import datetime
+import logging
+from tqdm import tqdm
+
+log = logging.getLogger('aws2tf')
 
 
 def build_lists():
-    print("Building core resource lists ...")
+    log.info("Building core resource lists ...")
     context.tracking_message="Stage 2 of 10, Building core resource lists ..."
     
     
@@ -20,7 +24,7 @@ def build_lists():
                 response.extend(page['Functions'])
             return [('lambda', j['FunctionName']) for j in response]
         except Exception as e:
-            print("Error fetching Lambda data:", e)
+            log.error("Error fetching Lambda data: %s %s",  e)
             return []
       
     
@@ -34,7 +38,7 @@ def build_lists():
             context.vpcs=response
             return [('vpc', j['VpcId']) for j in response]
         except Exception as e:
-            print("Error fetching ec2 data:", e)
+            log.error("Error fetching ec2 data: %s %s",  e)
             return []
     
     def fetch_s3_data():
@@ -46,7 +50,7 @@ def build_lists():
                 response.extend(page['Buckets'])
             return [('s3', j['Name']) for j in response]
         except Exception as e:
-            print("Error fetching s3 data:", e)
+            log.error("Error fetching s3 data: %s %s",  e)
             return []
 
     def fetch_sg_data():
@@ -58,7 +62,7 @@ def build_lists():
                 response.extend(page['SecurityGroups'])
             return [('sg', j['GroupId']) for j in response]
         except Exception as e:
-            print("Error fetching SG data:", e)
+            log.error("Error fetching SG data: %s %s",  e)
             return []
         
 
@@ -75,7 +79,7 @@ def build_lists():
                json.dump(response, f, indent=2, default=str)
             return [('subnet', j['SubnetId']) for j in response]
         except Exception as e:
-            print("Error fetching vpc data:", e)
+            log.error("Error fetching vpc data: %s %s",  e)
             return []
 
     def fetch_tgw_data():
@@ -87,7 +91,7 @@ def build_lists():
                 response.extend(page['TransitGateways'])
             return [('tgw', j['TransitGatewayId']) for j in response]
         except Exception as e:
-            print("Error fetching transit gateways:", e)
+            log.error("Error fetching transit gateways: %s %s",  e)
             return []
 
     def fetch_roles_data():
@@ -102,7 +106,7 @@ def build_lists():
                json.dump(response, f, indent=2, default=str)
             return [('iam', j['RoleName']) for j in response]
         except Exception as e:
-            print("Error fetching vpc data:", e)
+            log.error("Error fetching vpc data: %s %s",  e)
             return []
     
     def fetch_policies_data():
@@ -114,70 +118,104 @@ def build_lists():
                 response.extend(page['Policies'])
             return [('pol', j['Arn']) for j in response]
         except Exception as e:
-            print("Error fetching vpc data:", e)
+            log.error("Error fetching vpc data: %s %s",  e)
+            return []
+
+    def fetch_instprof_data():
+        try:
+            client = boto3.client('iam',region_name='us-east-1')
+            response = []
+            paginator = client.get_paginator('list_instance_profiles')
+            for page in paginator.paginate():
+                response.extend(page['InstanceProfiles'])
+            return [('inp', j['InstanceProfileName']) for j in response]
+        except Exception as e:
+            log.error("Error fetching vpc data: %s %s",  e)
             return []
 
 
-    # Use ThreadPoolExecutor to parallelize API calls
+    # Use ThreadPoolExecutor to parallelize API calls with progress bar
+    fetch_tasks = [
+        ('VPCs', fetch_vpc_data),
+        ('Lambda functions', fetch_lambda_data),
+        ('S3 buckets', fetch_s3_data),
+        ('Security groups', fetch_sg_data),
+        ('Subnets', fetch_subnet_data),
+        ('Transit gateways', fetch_tgw_data),
+        ('IAM roles', fetch_roles_data),
+        ('IAM policies', fetch_policies_data),
+        ('Instance profiles', fetch_instprof_data)
+    ]
+    
     with concurrent.futures.ThreadPoolExecutor(max_workers=context.cores) as executor:
-        futures = [
-            executor.submit(fetch_vpc_data),
-            executor.submit(fetch_lambda_data),
-            executor.submit(fetch_s3_data),
-            executor.submit(fetch_sg_data),
-            executor.submit(fetch_subnet_data),
-            executor.submit(fetch_tgw_data),
-            executor.submit(fetch_roles_data),
-            executor.submit(fetch_policies_data)
-        ]
+        # Submit all tasks
+        future_to_name = {
+            executor.submit(func): name 
+            for name, func in fetch_tasks
+        }
         
-        # Process results as they complete
-        for future in concurrent.futures.as_completed(futures):
-            result = future.result()
-            if isinstance(result, list):
-                if result and isinstance(result[0], tuple):
-                    # Handle resource ID lists
-                    resource_type = result[0][0]
-                    if resource_type == 'vpc':
-                        for _, vpc_id in result:
-                            context.vpclist[vpc_id] = True
+        # Process results with progress bar
+        with tqdm(total=len(fetch_tasks),
+                 desc="Fetching resource lists",
+                 unit="type",leave=False) as pbar:
+            
+            for future in concurrent.futures.as_completed(future_to_name):
+                resource_name = future_to_name[future]
+                pbar.set_postfix_str(resource_name[:30])
+                
+                result = future.result()
+                
+                if isinstance(result, list):
+                    if result and isinstance(result[0], tuple):
+                        # Handle resource ID lists
+                        resource_type = result[0][0]
+                        if resource_type == 'vpc':
+                            for _, vpc_id in result:
+                                context.vpclist[vpc_id] = True
 
-                    if resource_type == 'lambda':
-                        for _, lambda_id in result:
-                            context.lambdalist[lambda_id] = True
+                        if resource_type == 'lambda':
+                            for _, lambda_id in result:
+                                context.lambdalist[lambda_id] = True
 
-                    elif resource_type == 's3':
-                        client = boto3.client('s3')
-                        for _, bucket in result:
-                            #here ? 
-                            #print("Buck from result=",bucket)   
-                            try:
-                                ####### problematic call
-                                objs = client.list_objects_v2(Bucket=bucket,MaxKeys=1)      
-                            except Exception as e:
-                                print(f"Error details: {e}")
-                                continue
-
-                            context.s3list[bucket] = True
-                    elif resource_type == 'sg':
-                        for _, sg_id in result:
-                            context.sglist[sg_id] = True
-                    elif resource_type == 'subnet':
-                        for _, subnet_id in result:
-                            context.subnetlist[subnet_id] = True
-                    elif resource_type == 'tgw':
-                        for _, tgw_id in result:
-                            context.tgwlist[tgw_id] = True
-                    elif resource_type == 'iam':
-                        for _, role_name in result:
-                            context.rolelist[role_name] = True
-                    elif resource_type == 'pol':
-                        for _, policy_arn in result:
-                            context.policylist[policy_arn] = True
-                else:
-                    # Handle roles data
-                    with open('imported/roles.json', 'w') as f:
-                        json.dump(result, f, indent=2, default=str)
+                        elif resource_type == 's3':
+                            client = boto3.client('s3')
+                            for _, bucket in result:
+                                try:
+                                    objs = client.list_objects_v2(Bucket=bucket,MaxKeys=1)      
+                                except Exception as e:
+                                    log.debug(f"Error details: {e}")
+                                    continue
+                                context.s3list[bucket] = True
+                        
+                        elif resource_type == 'sg':
+                            for _, sg_id in result:
+                                context.sglist[sg_id] = True
+                        
+                        elif resource_type == 'subnet':
+                            for _, subnet_id in result:
+                                context.subnetlist[subnet_id] = True
+                        
+                        elif resource_type == 'tgw':
+                            for _, tgw_id in result:
+                                context.tgwlist[tgw_id] = True
+                        
+                        elif resource_type == 'iam':
+                            for _, role_name in result:
+                                context.rolelist[role_name] = True
+                        
+                        elif resource_type == 'pol':
+                            for _, policy_arn in result:
+                                context.policylist[policy_arn] = True
+                        
+                        elif resource_type == 'inp':
+                            for _, inst_prof in result:
+                                context.inplist[inst_prof] = True
+                    else:
+                        # Handle roles data
+                        with open('imported/roles.json', 'w') as f:
+                            json.dump(result, f, indent=2, default=str)
+                
+                pbar.update(1)
     # slower - 3m 29s
     ####    role attachments stuff
 
@@ -195,7 +233,7 @@ def build_lists():
 def build_secondary_lists(id=None):
     if id is None:
         st1 = datetime.datetime.now()
-        print("Building secondary IAM resource lists ...")
+        log.info("Building secondary IAM resource lists ...")
         context.esttime = (len(context.rolelist) * 3) / 4
         context.tracking_message = "Stage 2 of 10, Building secondary IAM resource lists ..."
         
@@ -214,7 +252,7 @@ def build_secondary_lists(id=None):
                     'inline_policies': inline_policies['PolicyNames'] if inline_policies['PolicyNames'] else False
                 }
             except Exception as e:
-                print(f"Error fetching policies for role {role_name}: {e}")
+                log.error(f"Error fetching policies for role {role_name}: {e}")
                 return {
                     'role_name': role_name,
                     'attached_policies': False,
@@ -223,6 +261,8 @@ def build_secondary_lists(id=None):
         
         # Use ThreadPoolExecutor to parallelize API calls
         rcl = len(context.rolelist)
+        log.debug(f"Fetching policies for {rcl} IAM roles...")
+        
         with concurrent.futures.ThreadPoolExecutor(max_workers=context.cores) as executor:
             # Submit all role policy fetch tasks
             future_to_role = {
@@ -230,21 +270,20 @@ def build_secondary_lists(id=None):
                 for role_name in context.rolelist.keys()
             }
             
-            # Process results as they complete
-            completed = 0
-            for future in concurrent.futures.as_completed(future_to_role):
-                completed += 1
-                context.tracking_message = f"Stage 2 of 10, Building secondary IAM resource lists... {completed} of {rcl}"
-                
+            # Process results with progress bar
+            for future in tqdm(concurrent.futures.as_completed(future_to_role),
+                              total=len(future_to_role),
+                              desc="Fetching IAM policies",
+                              unit="role",leave=False):
                 try:
                     result = future.result()
                     role_name = result['role_name']
                     context.attached_role_policies_list[role_name] = result['attached_policies']
                     context.role_policies_list[role_name] = result['inline_policies']
                 except Exception as e:
-                    print(f"Error processing result: {e}")
+                    log.error(f"Error processing result: {e}")
         
         st2 = datetime.datetime.now()
-        print("secondary lists built in " + str(st2 - st1))
+        log.debug("secondary lists built in " + str(st2 - st1))
     
     return

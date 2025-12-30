@@ -1,11 +1,13 @@
 import common
+import logging
+log = logging.getLogger('aws2tf')
 import boto3
 import context
 import inspect
 
 def get_aws_ses_active_receipt_rule_set(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
-        print("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         response = []
@@ -14,10 +16,10 @@ def get_aws_ses_active_receipt_rule_set(type, id, clfn, descfn, topkey, key, fil
         response=client.describe_active_receipt_rule_set()
         try:
                 if response[topkey] == []: 
-                    print("Empty response for "+type+ " id="+str(id)+" returning")
+                    log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                     return True
         except Exception as e:
-                print("No ses rule sets returning "+type)
+                log.debug("No ses rule sets returning "+type)
                 return True
             
         for j in response[topkey]:

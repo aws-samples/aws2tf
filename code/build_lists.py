@@ -161,9 +161,11 @@ def build_lists():
             
             for future in concurrent.futures.as_completed(future_to_name):
                 resource_name = future_to_name[future]
-                pbar.set_postfix_str(resource_name[:30])
-                
                 result = future.result()
+                
+                # Count resources found and show in progress bar
+                resource_count = len(result) if isinstance(result, list) else 0
+                pbar.set_postfix_str(f"{resource_name}: {resource_count} found")
                 
                 if isinstance(result, list):
                     if result and isinstance(result[0], tuple):

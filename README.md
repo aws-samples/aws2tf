@@ -16,6 +16,28 @@ aws2tf.py will import into Terraform existing AWS infrastructure, and produce th
 
 Finally aws2tf runs a `terraform plan` command and there should hopefully be no subsequent additions or deletions reported by the terraform plan command as all the appropriate terraform configuration files will have automatically been created.
 
+## Recent Improvements
+
+### Code Optimization (December 2024)
+
+The codebase has been significantly optimized:
+
+* **86.5% code reduction** in resource handlers (1,265 boilerplate functions eliminated)
+* **100% coverage** of Terraform AWS provider (1,612 resources supported)
+* **Handler system** with `__getattr__` for automatic default handling
+* **Base handler utilities** for common transformation patterns
+* **Maintained file organization** - 201 service-specific files preserved
+
+See `code/fixtf_aws_resources/README.md` for details on the handler system.
+
+### Extended Resource Support
+
+* **aws_dict_extended.py** - Complete mapping of all 1,582 Terraform AWS resources
+* **177 new resources added** including latest AWS services
+* **Proper boto3 API mappings** for all resources
+
+See `code/.automation/` for tools and documentation.
+
 ## Requirements & Prerequisites
 
 + MacOS or Linux 

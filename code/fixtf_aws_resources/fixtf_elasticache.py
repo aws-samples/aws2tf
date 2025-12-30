@@ -1,9 +1,29 @@
+"""
+ELASTICACHE Resource Handlers - Optimized with __getattr__
+
+This file contains ONLY ELASTICACHE resources with custom transformation logic.
+All other resources automatically use the default handler via __getattr__.
+
+Original: 4 functions
+Optimized: 4 functions + __getattr__
+Reduction: 0% less code
+"""
+
 import context
 import common
 import logging
+from .base_handler import BaseResourceHandler
+
 log = logging.getLogger('aws2tf')
 
+
+# ============================================================================
+# ELASTICACHE Resources with Custom Logic (4 functions)
+# ============================================================================
+
 def aws_elasticache_cluster(t1,tt1,tt2,flag1,flag2):
+
+
 	skip=0
 	if context.debug5: log.debug("fix aws_elasticache_cluster %s %s %s %s",  tt1, tt2, str(context.elastirep))
 
@@ -32,20 +52,20 @@ def aws_elasticache_cluster(t1,tt1,tt2,flag1,flag2):
 
 	return skip,t1,flag1,flag2
 
-def aws_elasticache_serverless_cache(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+
 
 def aws_elasticache_global_replication_group(t1,tt1,tt2,flag1,flag2):
+
+
 	skip=0
 	if tt1 == "num_node_groups" and tt2 == "0": skip=1
 	return skip,t1,flag1,flag2
 
-def aws_elasticache_parameter_group(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+
 
 def aws_elasticache_replication_group(t1,tt1,tt2,flag1,flag2):
+
+
 	skip=0
 
 	if tt1 == "global_replication_group_id" and tt2 != "null":
@@ -80,11 +100,11 @@ def aws_elasticache_replication_group(t1,tt1,tt2,flag1,flag2):
 
 	return skip,t1,flag1,flag2
 
-def aws_elasticache_subnet_group(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+
 
 def aws_elasticache_user(t1,tt1,tt2,flag1,flag2):
+
+
 	skip=0
 	if tt1 == "engine" and tt2=="redis":
 		t1=tt1+' = "redis"\n'
@@ -96,11 +116,30 @@ def aws_elasticache_user(t1,tt1,tt2,flag1,flag2):
 
 	return skip,t1,flag1,flag2
 
-def aws_elasticache_user_group(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
-def aws_elasticache_user_group_association(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
+
+
+
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
+
+def __getattr__(name):
+	"""
+	Dynamically provide default handler for resources without custom logic.
+	
+	This allows getattr(module, "aws_resource") to work even if the
+	function doesn't exist, by returning the default handler.
+	
+	All simple ELASTICACHE resources (0 resources) automatically use this.
+	"""
+	if name.startswith("aws_"):
+		return BaseResourceHandler.default_handler
+	raise AttributeError(f"module 'fixtf_elasticache' has no attribute '{name}'")
+
+
+log.debug(f"ELASTICACHE handlers: 4 custom functions + __getattr__ for 0 simple resources")

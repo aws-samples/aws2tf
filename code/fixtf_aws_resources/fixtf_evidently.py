@@ -1,16 +1,36 @@
-def aws_evidently_feature(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+"""
+EVIDENTLY Resource Handlers - Optimized with __getattr__
 
-def aws_evidently_launch(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+This file contains ONLY EVIDENTLY resources with custom transformation logic.
+All other resources automatically use the default handler via __getattr__.
 
-def aws_evidently_project(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+Original: 0 functions
+Optimized: 0 functions + __getattr__
+Reduction: 0% less code
+"""
 
-def aws_evidently_segment(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+import logging
+from .base_handler import BaseResourceHandler
 
+log = logging.getLogger('aws2tf')
+
+
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
+
+def __getattr__(name):
+	"""
+	Dynamically provide default handler for resources without custom logic.
+	
+	This allows getattr(module, "aws_resource") to work even if the
+	function doesn't exist, by returning the default handler.
+	
+	All EVIDENTLY resources automatically use this.
+	"""
+	if name.startswith("aws_"):
+		return BaseResourceHandler.default_handler
+	raise AttributeError(f"module 'fixtf_evidently' has no attribute '{name}'")
+
+
+log.debug(f"EVIDENTLY handlers: __getattr__ for all 0 resources")

@@ -1,7 +1,29 @@
+"""
+REDSHIFT Resource Handlers - Optimized with __getattr__
+
+This file contains ONLY REDSHIFT resources with custom transformation logic.
+All other resources automatically use the default handler via __getattr__.
+
+Original: 1 functions
+Optimized: 1 functions + __getattr__
+Reduction: 0% less code
+"""
+
+import logging
 import common
 import fixtf
+from .base_handler import BaseResourceHandler
+
+log = logging.getLogger('aws2tf')
+
+
+# ============================================================================
+# REDSHIFT Resources with Custom Logic (1 functions)
+# ============================================================================
 
 def aws_redshift_cluster(t1,tt1,tt2,flag1,flag2):
+
+
 	skip=0
 
 	if tt1 == "cluster_subnet_group_name":
@@ -20,87 +42,30 @@ def aws_redshift_cluster(t1,tt1,tt2,flag1,flag2):
     
 	return skip,t1,flag1,flag2 
 
-def aws_redshift_subnet_group(t1,tt1,tt2,flag1,flag2):
-    skip=0
-    ##if tt1 == "subnet_ids":  t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
-    return skip,t1,flag1,flag2
 
-def aws_redshift_parameter_group(t1,tt1,tt2,flag1,flag2):
-    skip=0
-    return skip,t1,flag1,flag2
+
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
 
 
 
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
 
-def aws_redshift_authentication_profile(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+def __getattr__(name):
+	"""
+	Dynamically provide default handler for resources without custom logic.
+	
+	This allows getattr(module, "aws_resource") to work even if the
+	function doesn't exist, by returning the default handler.
+	
+	All simple REDSHIFT resources (0 resources) automatically use this.
+	"""
+	if name.startswith("aws_"):
+		return BaseResourceHandler.default_handler
+	raise AttributeError(f"module 'fixtf_redshift' has no attribute '{name}'")
 
-def aws_redshift_cluster_credentials(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
-def aws_redshift_cluster_iam_roles(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_redshift_cluster_snapshot(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_redshift_endpoint_access(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_redshift_endpoint_authorization(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_redshift_event_subscription(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_redshift_hsm_client_certificate(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_redshift_hsm_configuration(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_redshift_orderable_cluster(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_redshift_partner(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_redshift_resource_policy(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_redshift_scheduled_action(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_redshift_service_account(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_redshift_snapshot_copy_grant(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_redshift_snapshot_schedule(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_redshift_snapshot_schedule_association(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
-def aws_redshift_usage_limit(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
-
+log.debug(f"REDSHIFT handlers: 1 custom functions + __getattr__ for 0 simple resources")

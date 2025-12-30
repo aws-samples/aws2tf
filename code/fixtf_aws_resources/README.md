@@ -2,17 +2,16 @@
 
 ## Overview
 
-This directory contains resource-specific transformation handlers for converting AWS resources to Terraform format. The system uses a **handler registry pattern** to eliminate code duplication while maintaining clear file organization.
+This directory contains resource-specific transformation handlers for converting AWS resources to Terraform format. The system uses **Python's `__getattr__` magic method** to eliminate code duplication while maintaining clear file organization.
 
 ## Architecture
 
 ### Core Components
 
 1. **base_handler.py** - Common utilities and base handler class
-2. **handler_registry.py** - Central registry for resource handlers
-3. **fixtf_*.py files** - Service-specific handler implementations (201 files)
-4. **aws_dict.py** - Resource metadata (boto3 client, API methods, keys)
-5. **aws_not_implemented.py** - Resources not yet implemented
+2. **fixtf_*.py files** - Service-specific handler implementations (201 files)
+3. **aws_dict.py** - Resource metadata (boto3 client, API methods, keys)
+4. **aws_not_implemented.py** - Resources not yet implemented
 
 ### Handler Function Signature
 
@@ -42,24 +41,25 @@ def aws_resource_name(t1, tt1, tt2, flag1, flag2):
 
 ### Default Behavior (86% of resources)
 
-Most resources (1,241 out of 1,443) have no custom logic and simply return `skip=0`. These automatically use the **default handler**:
+Most resources (1,265 out of 1,443) have no custom logic. These automatically use the **default handler via `__getattr__`**:
 
 ```python
-# No need to define this function anymore!
+# No need to define this function!
 # def aws_ami(t1, tt1, tt2, flag1, flag2):
 #     skip = 0
 #     return skip, t1, flag1, flag2
+
+# The __getattr__ method provides it automatically
 ```
 
-The registry automatically provides the default handler for any resource without custom logic.
+When code calls `getattr(module, 'aws_ami')`, Python's `__getattr__` returns the default handler.
 
 ### Custom Handlers (14% of resources)
 
-Resources with special logic are registered in their respective fixtf_*.py files:
+Resources with special logic are explicitly defined:
 
 ```python
 # In fixtf_ec2.py
-from handler_registry import registry
 
 def aws_instance(t1, tt1, tt2, flag1, flag2):
     skip = 0
@@ -70,26 +70,26 @@ def aws_instance(t1, tt1, tt2, flag1, flag2):
         pass
     elif tt1 == "iam_instance_profile":
         # Reference IAM instance profile
-        t1 = BaseResourceHandler.add_resource_reference(
-            t1, tt1, tt2, "iam_instance_profile", "name"
-        )
+        t1 = tt1 + " = aws_iam_instance_profile." + tt2 + ".name\n"
     
     return skip, t1, flag1, flag2
 
-# Register the custom handler
-registry.register('aws_instance', aws_instance)
+# At end of file:
+def __getattr__(name):
+    """Provide default handler for all other resources."""
+    if name.startswith('aws_'):
+        return BaseResourceHandler.default_handler
+    raise AttributeError(f"module has no attribute '{name}'")
 ```
 
-### Using the Registry
+### Using Handlers
 
 In the calling code (e.g., `fixtf.py`):
 
 ```python
-from handler_registry import registry
-
-# Get handler for any resource
-handler = registry.get_handler('aws_instance')  # Returns custom handler
-handler = registry.get_handler('aws_ami')       # Returns default handler
+# Get handler for any resource (works for both custom and default)
+handler = getattr(module, 'aws_instance')  # Returns custom handler
+handler = getattr(module, 'aws_ami')       # Returns default handler via __getattr__
 
 # Call the handler
 skip, t1, flag1, flag2 = handler(t1, tt1, tt2, flag1, flag2)

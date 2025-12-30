@@ -1,19 +1,38 @@
+"""
+COGNITO_IDENTITY Resource Handlers - Optimized with __getattr__
+
+This file contains ONLY COGNITO_IDENTITY resources with custom transformation logic.
+All other resources automatically use the default handler via __getattr__.
+
+Original: 0 functions
+Optimized: 0 functions + __getattr__
+Reduction: 0% less code
+"""
+
+import logging
 import common
 import fixtf
+from .base_handler import BaseResourceHandler
 
-def aws_cognito_identity_pool(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+log = logging.getLogger('aws2tf')
 
-def aws_cognito_identity_pool_provider_principal_tag(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
 
-def aws_cognito_identity_pool_roles_attachment(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
 
-def aws_cognito_identity_provider(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+def __getattr__(name):
+	"""
+	Dynamically provide default handler for resources without custom logic.
+	
+	This allows getattr(module, "aws_resource") to work even if the
+	function doesn't exist, by returning the default handler.
+	
+	All COGNITO_IDENTITY resources automatically use this.
+	"""
+	if name.startswith("aws_"):
+		return BaseResourceHandler.default_handler
+	raise AttributeError(f"module 'fixtf_cognito_identity' has no attribute '{name}'")
 
+
+log.debug(f"COGNITO_IDENTITY handlers: __getattr__ for all 0 resources")

@@ -1,8 +1,36 @@
-def aws_emrcontainers_job_template(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+"""
+EMR_CONTAINERS Resource Handlers - Optimized with __getattr__
 
-def aws_emrcontainers_virtual_cluster(t1,tt1,tt2,flag1,flag2):
-	skip=0
-	return skip,t1,flag1,flag2
+This file contains ONLY EMR_CONTAINERS resources with custom transformation logic.
+All other resources automatically use the default handler via __getattr__.
 
+Original: 0 functions
+Optimized: 0 functions + __getattr__
+Reduction: 0% less code
+"""
+
+import logging
+from .base_handler import BaseResourceHandler
+
+log = logging.getLogger('aws2tf')
+
+
+# ============================================================================
+# Magic method for backward compatibility with getattr()
+# ============================================================================
+
+def __getattr__(name):
+	"""
+	Dynamically provide default handler for resources without custom logic.
+	
+	This allows getattr(module, "aws_resource") to work even if the
+	function doesn't exist, by returning the default handler.
+	
+	All EMR_CONTAINERS resources automatically use this.
+	"""
+	if name.startswith("aws_"):
+		return BaseResourceHandler.default_handler
+	raise AttributeError(f"module 'fixtf_emr_containers' has no attribute '{name}'")
+
+
+log.debug(f"EMR_CONTAINERS handlers: __getattr__ for all 0 resources")

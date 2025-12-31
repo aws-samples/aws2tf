@@ -215,6 +215,7 @@ from fixtf_aws_resources import fixtf_waf_regional
 from fixtf_aws_resources import fixtf_wafv2
 from fixtf_aws_resources import fixtf_worklink
 from fixtf_aws_resources import fixtf_workspaces
+from fixtf_aws_resources import fixtf_workspaces_web
 from fixtf_aws_resources import fixtf_xray
 
 # Security Fix #2: Module registry to replace eval()
@@ -421,6 +422,7 @@ FIXTF_MODULES = {
     'fixtf_wafv2': fixtf_wafv2,
     'fixtf_worklink': fixtf_worklink,
     'fixtf_workspaces': fixtf_workspaces,
+    'fixtf_workspaces_web': fixtf_workspaces_web,
     'fixtf_xray': fixtf_xray,
 }
 

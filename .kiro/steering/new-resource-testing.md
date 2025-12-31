@@ -34,6 +34,22 @@ python3 -c "import boto3; client = boto3.client('s3vectors', region_name='us-eas
 - Update the `descfn` field in aws_dict.py before proceeding
 - Common mistake: `list_vector_indexes` vs `list_indexes`
 
+### 1.5b. Check if List Operation is Pageable
+
+Not all list operations support pagination. Check before implementing:
+
+```bash
+python3 -c "import boto3; client = boto3.client('<service>', region_name='<region>'); print(client.can_paginate('list_<resources>'))"
+```
+
+**Example:**
+```bash
+python3 -c "import boto3; client = boto3.client('workspaces-web', region_name='us-east-1'); print(client.can_paginate('list_portals'))"
+# Output: False
+```
+
+If `False`, use direct API call instead of paginator in the get function (see Step 5.7).
+
 ### 1.6. Verify Correct Key Field in aws_dict.py
 
 The `key` field in aws_dict.py must match what Terraform expects for import:
@@ -327,6 +343,18 @@ elif tt1 == "vector_bucket_arn":  # Use the parent resource identifier field
 
 ### Step 5.6: Register Handler Module (if new service)
 
+**IMPORTANT: Check if handler file already exists**
+
+Before creating a new handler file, check if it already exists:
+```bash
+ls code/fixtf_aws_resources/fixtf_<service>.py
+```
+
+If the file exists but you're getting "Module not found in registry" errors:
+- The file exists but isn't registered in `code/fixtf.py`
+- Skip file creation and go directly to registration steps
+- This commonly happens with newer services that have stub files
+
 If you created a new service handler file, register it in `code/fixtf.py`:
 
 **1. Add import (alphabetically):**
@@ -343,6 +371,7 @@ from fixtf_aws_resources import fixtf_<service>
 
 If you created a new service, implement `code/get_aws_resources/aws_<service>.py`:
 
+**For pageable list operations:**
 ```python
 def get_aws_<resource>(type, id, clfn, descfn, topkey, key, filterid):
     try:
@@ -366,6 +395,33 @@ def get_aws_<resource>(type, id, clfn, descfn, topkey, key, filterid):
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
     return True
 ```
+
+**For non-pageable list operations:**
+
+If the list operation is not pageable (check with Step 1.5b), use a direct API call:
+
+```python
+def get_aws_<resource>(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all resources - not pageable
+            response = client.list_<resources>()
+            for j in response[topkey]:
+                common.write_import(type, j[key], None)
+        else:
+            # Get specific resource
+            response = client.get_<resource>(<param>=id)
+            j = response.get('<singular_key>', response)
+            common.write_import(type, j[key], None)
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    return True
+```
+
+**Example:** `aws_workspacesweb_portal` uses non-pageable `list_portals`
 
 **Note on API Response Structures:**
 - **List operations** typically return: `{topkey: [items]}`
@@ -518,7 +574,19 @@ AWS_RESOURCE_MODULES = {
 }
 ```
 
-**Note:** The key should match the `clfn` value from aws_dict.py (e.g., if `"clfn": "s3vectors"`, use `'s3vectors'` as the key).
+**CRITICAL: Service Name with Hyphens**
+
+When the boto3 client name contains hyphens (e.g., `workspaces-web`), use the hyphenated name as the dictionary key:
+
+```python
+# In common.py AWS_RESOURCE_MODULES dictionary:
+'workspaces-web': aws_workspaces_web,  # ✓ Correct - matches clfn from aws_dict.py
+
+# NOT:
+'workspaces_web': aws_workspaces_web,  # ❌ Wrong - won't match
+```
+
+The key must exactly match the `clfn` value from aws_dict.py.
 
 ### Step 6: Cleanup Test Resources
 
@@ -727,6 +795,119 @@ cd ..
 # Create test-results.md or test-failed.md as appropriate
 ```
 
+## Complete Example: Testing aws_workspacesweb_portal (Non-Pageable)
+
+This example shows handling a resource with a non-pageable list operation and existing handler file:
+
+```bash
+# Step 1: Check prerequisites
+grep '"aws_workspacesweb_portal"' code/fixtf_aws_resources/aws_dict.py
+# Expected: Entry exists with workspaces-web client and list_portals method
+
+# Step 1.5b: Check if list operation is pageable
+python3 -c "import boto3; client = boto3.client('workspaces-web', region_name='us-east-1'); print(client.can_paginate('list_portals'))"
+# Output: False - means we need direct API call, not paginator
+
+# Step 2: Check if handler file exists
+ls code/fixtf_aws_resources/fixtf_workspaces_web.py
+# File exists! Check if it's registered in fixtf.py
+
+grep 'fixtf_workspaces_web' code/fixtf.py
+# Not found - needs registration
+
+# Step 3: Register handler in fixtf.py
+# Add import: from fixtf_aws_resources import fixtf_workspaces_web
+# Add to registry: 'fixtf_workspaces_web': fixtf_workspaces_web
+
+# Step 4: Create get function for non-pageable operation
+cat > code/get_aws_resources/aws_workspaces_web.py << 'EOF'
+import boto3
+import common
+import inspect
+from botocore.config import Config
+
+def get_aws_workspacesweb_portal(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all portals - not pageable
+            response = client.list_portals()
+            for j in response[topkey]:
+                common.write_import(type, j[key], None)
+        else:
+            # Get specific portal
+            response = client.get_portal(portalArn=id)
+            j = response.get('portal', response)
+            common.write_import(type, j[key], None)
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    return True
+EOF
+
+# Step 5: Register get function in common.py
+# Add import: from get_aws_resources import aws_workspaces_web
+# Add to AWS_RESOURCE_MODULES: 'workspaces-web': aws_workspaces_web
+# Note: Use hyphenated name to match clfn in aws_dict.py
+
+# Step 6: Create test directory
+mkdir -p code/.automation/test_aws_workspacesweb_portal
+cd code/.automation/test_aws_workspacesweb_portal
+
+# Step 7: Create Terraform files
+cat > main.tf << 'EOF'
+resource "aws_workspacesweb_portal" "test" {
+  display_name  = "test-portal-20250101"
+  instance_type = "standard.regular"
+
+  tags = {
+    Name    = "aws2tf-test-portal"
+    Purpose = "Testing"
+  }
+}
+EOF
+
+cat > provider.tf << 'EOF'
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.27"
+    }
+  }
+}
+
+provider "aws" {
+  region = "us-east-1"
+}
+EOF
+
+cat > outputs.tf << 'EOF'
+output "portal_arn" {
+  value = aws_workspacesweb_portal.test.portal_arn
+}
+EOF
+
+# Step 8: Deploy
+terraform init
+terraform validate
+terraform apply -auto-approve
+
+# Step 9: Test imports
+cd ../../..
+./aws2tf.py -r us-east-1 -t aws_workspacesweb_portal
+./aws2tf.py -r us-east-1 -t aws_workspacesweb_portal -i "arn:aws:workspaces-web:us-east-1:566972129213:portal/5b24f2e6-cc7b-4781-add8-c7dfcccee8c9"
+
+# Step 10: Verify - should show 0 changes after import
+# This resource needs no custom handler logic!
+
+# Step 11: Cleanup
+cd code/.automation/test_aws_workspacesweb_portal
+terraform destroy -auto-approve
+rm -rf .terraform .terraform.lock.hcl
+```
+
 ## Troubleshooting Common Issues
 
 ### Issue: Resource not in aws_dict.py
@@ -788,6 +969,26 @@ cd ..
 - Update the `descfn` field in aws_dict.py to match the actual method name
 - Example: Change `list_vector_indexes` to `list_indexes`
 
+### Issue: OperationNotPageableError
+**Symptom:** `OperationNotPageableError('Operation cannot be paginated: list_<resources>')` when testing
+**Cause:** Not all AWS list operations support pagination
+**Solution:** 
+- Use direct API call instead of paginator
+- Example:
+```python
+# Instead of:
+paginator = client.get_paginator(descfn)
+for page in paginator.paginate():
+    response = response + page[topkey]
+
+# Use:
+response = client.list_<resources>()
+for j in response[topkey]:
+    common.write_import(type, j[key], None)
+```
+**How to detect:** Check with `client.can_paginate('list_<resources>')` (see Step 1.5b)
+**Example:** `aws_workspacesweb_portal` uses non-pageable `list_portals`
+
 ### Issue: Resource requires parent resource parameter
 **Symptom:** API error like "Must specify vectorBucketName" or "Missing required parameter"
 **Cause:** Some resources can only be listed within a parent resource context
@@ -832,6 +1033,22 @@ cd ..
 - Example: For bucket policy, output the bucket ARN instead of policy ID
 
 ## Special Resource Types
+
+### Resources That Need No Custom Handler Logic
+
+Some resources import perfectly without any custom field handling:
+- All attributes are correctly captured
+- No computed fields cause drift
+- No lifecycle blocks needed
+- Post-import plan shows 0 changes
+
+**Example:** `aws_workspacesweb_portal`
+
+When this happens:
+- The existing stub handler (via `__getattr__`) is sufficient
+- No need to add custom logic to the handler file
+- Document this in test-results.md as a clean import
+- This is the ideal outcome for any resource test
 
 ### Policy Resources
 

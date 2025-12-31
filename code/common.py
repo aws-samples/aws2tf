@@ -676,6 +676,7 @@ from get_aws_resources import aws_transfer
 from get_aws_resources import aws_vpc_lattice
 from get_aws_resources import aws_waf
 from get_aws_resources import aws_wafv2
+from get_aws_resources import aws_workspaces_web
 from get_aws_resources import aws_xray
 
 from fixtf_aws_resources import needid_dict
@@ -785,6 +786,7 @@ AWS_RESOURCE_MODULES = {
     'vpc_lattice': aws_vpc_lattice,
     'waf': aws_waf,
     'wafv2': aws_wafv2,
+    'workspaces-web': aws_workspaces_web,
     'xray': aws_xray,
 }
 

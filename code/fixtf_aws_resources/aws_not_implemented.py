@@ -658,7 +658,7 @@ notimplemented = {
     "aws_workspacesweb_ip_access_settings_association": True,  ### TODO 6.27.0
     "aws_workspacesweb_network_settings": True,  ### TODO 6.27.0
     "aws_workspacesweb_network_settings_association": True,  ### TODO 6.27.0
-    "aws_workspacesweb_portal": True,  ### TODO 6.27.0
+    # "aws_workspacesweb_portal": True,  ### TODO 6.27.0
     "aws_workspacesweb_session_logger": True,  ### TODO 6.27.0
     "aws_workspacesweb_session_logger_association": True,  ### TODO 6.27.0
     "aws_workspacesweb_trust_store": True,  ### TODO 6.27.0

@@ -658,6 +658,7 @@ from get_aws_resources import aws_route53
 from get_aws_resources import aws_s3
 from get_aws_resources import aws_s3control
 from get_aws_resources import aws_s3tables
+from get_aws_resources import aws_s3vectors
 from get_aws_resources import aws_sagemaker
 from get_aws_resources import aws_schemas
 from get_aws_resources import aws_scheduler
@@ -764,6 +765,7 @@ AWS_RESOURCE_MODULES = {
     's3': aws_s3,
     's3control': aws_s3control,
     's3tables': aws_s3tables,
+    's3vectors': aws_s3vectors,
     'sagemaker': aws_sagemaker,
     'schemas': aws_schemas,
     'scheduler': aws_scheduler,
@@ -927,9 +929,9 @@ def tfplan1(mymess):
       log.info("INFO: No import*.tf files found - nothing to import, exiting ....")
       log.info("INFO: Confirm the resource type exists in your account: "+context.acc+" & region: "+context.region)
       context.tracking_message="No import*.tf files found for this resource, exiting ...."
-      if timed_int is not None:
-         stop_timer()
-      os._exit(0)
+      stop_timer()
+      # Use sys.exit to allow proper cleanup of threading resources
+      sys.exit(0)
 
    com = "cp imported/provider.tf provider.tf"
    rout = rc(com)
@@ -1218,6 +1220,8 @@ def tfplan3():
          allowedchange = False
          nchanges = 0
          nallowedchanges = 0
+         all_force_destroy_only = True  # Track if all changes are force_destroy only
+         
          with open('plan2.json') as f:
             for jsonObj in f:
                planDict = json.loads(jsonObj)
@@ -1226,8 +1230,37 @@ def tfplan3():
             if pe['type'] == "planned_change" and pe['change']['action'] == "update":
                nchanges = nchanges+1
                ctype = pe['change']['resource']['resource_type']
+               caddr = pe['change']['resource']['addr']
+               
+               # Check if only force_destroy is changing
+               force_destroy_only = False
+               try:
+                  # Run terraform plan and grep for force_destroy
+                  plan_output = subprocess.run(['terraform', 'plan'], 
+                                             capture_output=True, text=True, check=True)
+                  grep_output = subprocess.run(['grep', 'force_destroy'], 
+                                             input=plan_output.stdout,
+                                             capture_output=True, text=True)
+                  
+                  # Count lines with force_destroy
+                  force_destroy_lines = [line.strip() for line in grep_output.stdout.split('\n') if line.strip()]
+                  
+                  # If we found force_destroy lines and the count matches the number of changes, it's safe
+                  if force_destroy_lines and len(force_destroy_lines) == nchanges:
+                     force_destroy_only = True
+                     log.info("Only force_destroy changes detected (count matches)")
+                  else:
+                     all_force_destroy_only = False
+                     if context.debug:
+                        log.debug("force_destroy lines: %d, nchanges: %d", len(force_destroy_lines), nchanges)
+               except Exception as e:
+                  all_force_destroy_only = False
+                  if context.debug:
+                     log.debug("Could not parse terraform plan output: %s", e)
+               
                if ctype == "aws_lb_listener" or ctype == "aws_cognito_user_pool_client" \
-                  or ctype=="aws_bedrockagent_agent" or ctype=="aws_bedrockagent_agent_action_group":
+                  or ctype=="aws_bedrockagent_agent" or ctype=="aws_bedrockagent_agent_action_group" \
+                  or force_destroy_only:
                   
                   changeList.append(pe['change']['resource']['addr'])
                   log.info("Planned changes found in Terraform Plan for type: " +
@@ -1235,6 +1268,7 @@ def tfplan3():
                   allowedchange = True
                   nallowedchanges = nallowedchanges+1
                else:
+                  all_force_destroy_only = False
                   log.warning("Unexpected plan changes found in Terraform Plan for resource: " +
                         str(pe['change']['resource']['addr']))
          if nchanges == nallowedchanges:
@@ -1249,6 +1283,11 @@ def tfplan3():
                log.info(str(ci)+": "+str(i))
                ci = ci+1
             log.info("\n")
+
+            # Auto-accept if all changes are force_destroy only
+            if all_force_destroy_only and nchanges > 0:
+               log.info("All changes are force_destroy only - automatically continuing")
+               context.expected = True
 
             if context.expected is False:
                log.info("You can check the changes by running 'terraform plan' in %s\n", context.path1)

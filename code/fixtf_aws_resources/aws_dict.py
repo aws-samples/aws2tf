@@ -12388,7 +12388,7 @@ aws_s3vectors_vector_bucket = {
 	"clfn":		"s3vectors",
 	"descfn":	"list_vector_buckets",
 	"topkey":	"vectorBuckets",
-	"key":		"vectorBucketName",
+	"key":		"vectorBucketArn",
 	"filterid":	"prefix"
 }
 

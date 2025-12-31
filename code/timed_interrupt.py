@@ -1,7 +1,7 @@
 import time
 import threading
 import context
-import multiprocessing
+import os
 import logging
 
 log = logging.getLogger('aws2tf')
@@ -34,18 +34,25 @@ class Counter():
             self.t.cancel()
 
 
-logical_cores = multiprocessing.cpu_count()
-log.info("Logical cores: " + str(logical_cores))
-context.cores = logical_cores * 2
-if context.cores > 16: context.cores = 16
-
-# Security Fix: Lazy initialization to prevent orphaned threads
-# Don't start the timer until explicitly initialized
+# Lazy initialization to prevent semaphore leaks
+logical_cores = None
 timed_int = None
+
+def initialize_cores():
+    """Initialize core count. Call this after validation."""
+    global logical_cores
+    if logical_cores is None:
+        logical_cores = os.cpu_count()
+        log.info("Logical cores: " + str(logical_cores))
+        context.cores = logical_cores * 2
+        if context.cores > 16: context.cores = 16
+    return logical_cores
 
 def initialize_timer(increment=20):
     """Initialize the timed interrupt counter. Call this after validation."""
     global timed_int
+    # Ensure cores are initialized first
+    initialize_cores()
     if timed_int is None:
         timed_int = Counter(increment=increment)
     return timed_int
@@ -55,6 +62,7 @@ def stop_timer():
     global timed_int
     if timed_int is not None:
         timed_int.stop()
+
 
 
 

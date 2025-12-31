@@ -179,6 +179,7 @@ from fixtf_aws_resources import fixtf_s3
 from fixtf_aws_resources import fixtf_s3control
 from fixtf_aws_resources import fixtf_s3outposts
 from fixtf_aws_resources import fixtf_s3tables
+from fixtf_aws_resources import fixtf_s3vectors
 from fixtf_aws_resources import fixtf_sagemaker
 from fixtf_aws_resources import fixtf_scheduler
 from fixtf_aws_resources import fixtf_schemas
@@ -384,6 +385,7 @@ FIXTF_MODULES = {
     'fixtf_s3control': fixtf_s3control,
     'fixtf_s3outposts': fixtf_s3outposts,
     'fixtf_s3tables': fixtf_s3tables,
+    'fixtf_s3vectors': fixtf_s3vectors,
     'fixtf_sagemaker': fixtf_sagemaker,
     'fixtf_scheduler': fixtf_scheduler,
     'fixtf_schemas': fixtf_schemas,

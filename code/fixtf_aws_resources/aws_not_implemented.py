@@ -665,5 +665,5 @@ notimplemented = {
     "aws_workspacesweb_trust_store_association": True,  ### TODO 6.27.0
     "aws_workspacesweb_user_access_logging_settings": True,  ### TODO 6.27.0
     "aws_workspacesweb_user_access_logging_settings_association": True,  ### TODO 6.27.0
-    "aws_workspacesweb_user_settings": True,  ### TODO 6.27.0
+#    "aws_workspacesweb_user_settings": True,  ### TODO 6.27.0
 }

@@ -588,6 +588,109 @@ When the boto3 client name contains hyphens (e.g., `workspaces-web`), use the hy
 
 The key must exactly match the `clfn` value from aws_dict.py.
 
+### Step 5.8: Comprehensive Configuration Test (Optional but Recommended)
+
+After the basic tests pass, create a more comprehensive test to verify all optional features work correctly:
+
+**1. Update main.tf with comprehensive configuration:**
+- Review the Terraform documentation for all available arguments
+- Add as many optional features as practical
+- Include nested blocks (if applicable)
+- Add multiple tags
+- Test timeout/limit settings
+- Test complex data structures (lists, maps, nested blocks)
+
+**Example for aws_workspacesweb_user_settings:**
+```hcl
+resource "aws_workspacesweb_user_settings" "test" {
+  # Required fields
+  copy_allowed     = "Enabled"
+  download_allowed = "Enabled"
+  paste_allowed    = "Enabled"
+  print_allowed    = "Enabled"
+  upload_allowed   = "Enabled"
+  
+  # Optional fields
+  deep_link_allowed                  = "Enabled"
+  disconnect_timeout_in_minutes      = 30
+  idle_disconnect_timeout_in_minutes = 15
+  
+  # Nested blocks
+  cookie_synchronization_configuration {
+    allowlist {
+      domain = "example.com"
+      path   = "/app"
+      name   = "session"
+    }
+    allowlist {
+      domain = "test.example.com"
+      path   = "/"
+    }
+    blocklist {
+      domain = "blocked.com"
+    }
+  }
+  
+  toolbar_configuration {
+    toolbar_type           = "Docked"
+    visual_mode            = "Dark"
+    hidden_toolbar_items   = ["Webcam", "Microphone"]
+    max_display_resolution = "size1920X1080"
+  }
+  
+  tags = {
+    Name        = "comprehensive-test"
+    Environment = "Test"
+    Purpose     = "Testing"
+  }
+}
+```
+
+**2. Deploy and test:**
+```bash
+terraform validate
+terraform apply -auto-approve
+```
+
+**3. Run both import tests again:**
+```bash
+cd <workspace_root>
+./aws2tf.py -r <region> -t <resource_type>
+./aws2tf.py -r <region> -t <resource_type> -i <resource_id>
+```
+
+**4. Verify comprehensive import:**
+- Check that all nested blocks are captured
+- Verify all optional fields are present
+- Ensure no drift in post-import plan (0 changes)
+- Review generated .tf file for completeness
+
+**5. Document comprehensive test results:**
+Add to test-results.md:
+```markdown
+## Comprehensive Configuration Tested
+- List all optional features tested
+- Note any nested blocks included
+- Document any features that couldn't be tested (e.g., KMS keys requiring complex policies)
+```
+
+**When to skip this step:**
+- Resource has no optional arguments
+- Resource is very simple (only required fields)
+- Time constraints (but document this decision)
+
+**When to simplify the comprehensive test:**
+- Skip features requiring complex dependent resources (e.g., KMS keys with service-specific policies)
+- Skip features requiring additional IAM roles or complex permissions
+- Focus on features that can be tested with simple configuration
+- Document excluded features in test-results.md
+
+**Benefits:**
+- Confirms handler works with complex configurations
+- Validates nested block handling
+- Ensures no edge cases cause drift
+- Provides confidence for production use
+
 ### Step 6: Cleanup Test Resources
 
 **ALWAYS destroy test resources**, even if tests failed:
@@ -624,9 +727,12 @@ Create documentation in the test directory:
 ## Test Summary
 - Prerequisites: ✓
 - Terraform validation: ✓
-- Resource deployment: ✓
-- Type-level import: ✓
-- Specific import: ✓
+- Resource deployment (basic): ✓
+- Type-level import (basic): ✓
+- Specific import (basic): ✓
+- Comprehensive configuration (optional): ✓
+- Type-level import (comprehensive): ✓
+- Specific import (comprehensive): ✓
 - Cleanup: ✓
 
 ## Resource Details
@@ -1014,6 +1120,88 @@ for j in response[topkey]:
 - Don't use just the account ID: `"123456789012"` ❌
 - Get your account ID: `aws sts get-caller-identity --query Account --output text`
 - Example: `"AWS": "arn:aws:iam::566972129213:root"` ✓
+
+### Issue: KMS key permission errors
+**Symptom:** "The provided KMS Key does not provide sufficient permissions for [Service]" or "ValidationException: KMS key policy"
+**Cause:** Service-specific KMS key policies require explicit permissions for the AWS service to use the key
+**Solution:**
+
+**Step 1: Search AWS documentation for service-specific KMS requirements**
+- Use AWS documentation search to find KMS key policy requirements
+- Search for: "[service name] KMS key policy" or "[service name] customer managed key"
+- Example searches:
+  - "WorkSpaces Web KMS key policy"
+  - "S3 customer managed key permissions"
+  - "Lambda KMS encryption key policy"
+- Look for documentation sections on:
+  - "Encryption at rest"
+  - "Customer managed keys"
+  - "Key policies"
+  - "Required permissions"
+
+**Step 2: Check the Terraform resource documentation**
+- Review the `customer_managed_key` or similar argument description
+- Often includes links to AWS documentation about required permissions
+- May include example key policies
+
+**Step 3: Create KMS key with proper permissions**
+- KMS keys need policies that grant both IAM user permissions AND service permissions
+- Add a data source for account ID: `data "aws_caller_identity" "current" {}`
+- Create a comprehensive key policy:
+```hcl
+resource "aws_kms_key" "test" {
+  description             = "KMS key for [Service]"
+  deletion_window_in_days = 7
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "Enable IAM User Permissions"
+        Effect = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        }
+        Action   = "kms:*"
+        Resource = "*"
+      },
+      {
+        Sid    = "Allow [Service] to use the key"
+        Effect = "Allow"
+        Principal = {
+          Service = "[service].amazonaws.com"
+        }
+        Action = [
+          "kms:Decrypt",
+          "kms:GenerateDataKey",
+          "kms:CreateGrant",
+          "kms:DescribeKey"
+        ]
+        Resource = "*"
+        # Some services may require Condition blocks - check documentation
+      }
+    ]
+  })
+}
+```
+
+**Step 4: If KMS setup is too complex**
+- Skip KMS-related features in testing and document this limitation
+- After 2-3 failed attempts or if requirements are unclear, move on
+- **Example:** `aws_workspacesweb_user_settings` with `customer_managed_key` requires complex KMS policies
+- Focus on testing other features instead of spending excessive time on KMS configuration
+
+**When to skip KMS testing:**
+- KMS policy requirements are unclear or undocumented
+- Service requires additional IAM roles, conditions, or grants
+- After 2-3 failed attempts to configure KMS correctly
+- Documentation search yields no clear guidance
+- Document in test-results.md: "KMS encryption excluded - requires complex policy setup"
+
+**Common KMS permission patterns:**
+- Most services need: `kms:Decrypt`, `kms:GenerateDataKey`, `kms:CreateGrant`
+- Some services need: `kms:DescribeKey`, `kms:RetireGrant`, `kms:ReEncrypt*`
+- Some services require condition keys like `kms:ViaService` or `kms:EncryptionContext`
 
 ### Issue: Unsupported attribute in Terraform configuration
 **Symptom:** `Error: Unsupported attribute` or `This object has no argument, nested block, or exported attribute named "X"`

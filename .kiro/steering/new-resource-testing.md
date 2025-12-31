@@ -16,7 +16,25 @@ Before testing a new resource type (e.g., `aws_vpc`), verify these conditions in
 - **STOP IMMEDIATELY** if the resource is not found - it must be added first
 - If found, note the boto3 client and API method defined
 
-### 1.5. Verify Correct Key Field in aws_dict.py
+### 1.5. Verify boto3 API Method Names
+
+After checking aws_dict.py, verify the actual boto3 API method exists and matches:
+
+```bash
+python3 -c "import boto3; client = boto3.client('<service>', region_name='<region>'); print([m for m in dir(client) if '<keyword>' in m.lower()])"
+```
+
+**Example for s3vectors indexes:**
+```bash
+python3 -c "import boto3; client = boto3.client('s3vectors', region_name='us-east-1'); print([m for m in dir(client) if 'index' in m.lower()])"
+# Output: ['create_index', 'delete_index', 'get_index', 'list_indexes']
+```
+
+**If the method name in aws_dict.py doesn't match the actual boto3 method:**
+- Update the `descfn` field in aws_dict.py before proceeding
+- Common mistake: `list_vector_indexes` vs `list_indexes`
+
+### 1.6. Verify Correct Key Field in aws_dict.py
 
 The `key` field in aws_dict.py must match what Terraform expects for import:
 
@@ -43,6 +61,33 @@ aws_s3vectors_vector_bucket = {
     "key": "vectorBucketArn",  # ✓
 }
 ```
+
+### 1.7. Verify Terraform Resource Attributes
+
+Before writing test configuration, verify what attributes the resource actually exports:
+
+```bash
+grep -A 10 "## Attribute Reference" code/.automation/terraform-provider-aws/website/docs/r/<resource>.html.markdown
+```
+
+**Common mistakes:**
+- Assuming `.arn` exists when the actual attribute is `.vector_bucket_arn`
+- Assuming `.id` exists when the resource exports no additional attributes
+- Using intuitive names instead of checking documentation
+
+**Example:**
+```hcl
+# WRONG - assumes generic attribute name
+vector_bucket_arn = aws_s3vectors_vector_bucket.test.arn  # ❌
+
+# CORRECT - uses actual exported attribute
+vector_bucket_arn = aws_s3vectors_vector_bucket.test.vector_bucket_arn  # ✓
+```
+
+**For resources with no exported attributes:**
+- Documentation will say "This resource exports no additional attributes"
+- Don't try to output `.id` - it won't exist
+- Use the parent resource's identifier or input arguments for testing
 
 ### 2. Check aws_not_implemented.py Status
 - Open `code/fixtf_aws_resources/aws_not_implemented.py`
@@ -110,6 +155,12 @@ Create a minimal but complete Terraform configuration that demonstrates the reso
 4. Add `provider.tf` with AWS provider configuration
 5. Add `outputs.tf` to capture the resource ID
 
+**For resources with dependencies:**
+- Include only the minimal required parent resources
+- Use the simplest configuration for parent resources
+- Example: Testing `aws_s3vectors_index` requires `aws_s3vectors_vector_bucket`
+- Example: Testing `aws_subnet` requires `aws_vpc`
+
 **Required files:**
 - `main.tf` - Resource definitions
 - `provider.tf` - AWS provider configuration (with correct version)
@@ -137,7 +188,7 @@ terraform init
 terraform validate
 ```
 
-**Fix validation errors** - Iterate until `terraform validate` succeeds (maximum 3 attempts).
+**Fix validation errors** - Iterate until `terraform validate` succeeds (maximum 4 attempts).
 
 ### Step 3: Deploy Test Resources
 
@@ -183,7 +234,7 @@ Example: `./aws2tf.py -r us-east-1 -t aws_vpc`
 **On failure:**
 - Review error messages in console output
 - Check `aws2tf.log` for detailed errors
-- Make 2-3 fix attempts in the relevant handler file (`code/fixtf_aws_resources/fixtf_<service>.py`)
+- Make up to 4 fix attempts in the relevant handler file (`code/fixtf_aws_resources/fixtf_<service>.py`)
 - If still failing, document and proceed to cleanup
 
 ### Step 5: Test Resource-Specific Import
@@ -212,7 +263,7 @@ Example: `./aws2tf.py -r us-east-1 -t aws_vpc -i vpc-09d8b4321d497f01b`
 **On failure:**
 - Review error messages
 - Check if the ID format matches documentation
-- Make 2-3 fix attempts
+- Make up to 4 fix attempts
 - Document failure and proceed to cleanup
 
 ### Step 5.5: Implement Handler (if needed)
@@ -264,6 +315,16 @@ elif tt1 == "encryption_configuration" or context.lbc > 0:
         skip = 1
 ```
 
+**E. Handle JSON normalization drift (for policy resources):**
+```python
+# For resources with JSON fields (policy, assume_role_policy, etc.)
+# JSON key ordering causes perpetual drift - ignore it
+elif tt1 == "vector_bucket_arn":  # Use the parent resource identifier field
+    t1 = t1 + "\n lifecycle {\n   ignore_changes = [policy]\n}\n"
+```
+
+**Note:** Policy resources (like `aws_s3_bucket_policy`, `aws_iam_role_policy`, `aws_s3vectors_vector_bucket_policy`) often have JSON normalization issues where Terraform and AWS return different key ordering. Always add lifecycle blocks to ignore the policy field.
+
 ### Step 5.6: Register Handler Module (if new service)
 
 If you created a new service handler file, register it in `code/fixtf.py`:
@@ -306,7 +367,124 @@ def get_aws_<resource>(type, id, clfn, descfn, topkey, key, filterid):
     return True
 ```
 
-**Note:** List operations return `{topkey: [items]}`, but get operations may return `{singular_key: item}` or just `item`. Check the boto3 API response structure.
+**Note on API Response Structures:**
+- **List operations** typically return: `{topkey: [items]}`
+  - Example: `list_indexes` → `{indexes: [...]}`
+- **Get operations** may return:
+  - Wrapped: `{singular_key: item}` (e.g., `{index: {...}}`)
+  - Direct: `item` (just the object itself)
+
+**Always check the response structure:**
+```bash
+# Test list operation
+python3 -c "import boto3; client = boto3.client('<service>', region_name='<region>'); response = client.<list_method>(); print(response.keys())"
+
+# Test get operation
+python3 -c "import boto3; client = boto3.client('<service>', region_name='<region>'); response = client.<get_method>(<param>='<id>'); print(response.keys())"
+```
+
+**Handle both cases in get function:**
+```python
+# For get operations, check for singular key
+j = response.get('index', response)  # Try singular key, fallback to response
+```
+
+**For resources that require parent resource parameters:**
+
+Some resources can only be listed within a parent resource context (e.g., indexes require a vector bucket name).
+
+**Pattern for dependent resources:**
+```python
+def get_aws_<resource>(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn,config=config)
+        
+        if id is None:
+            # First get all parent resources
+            parent_paginator = client.get_paginator('list_parents')
+            parents = []
+            for page in parent_paginator.paginate():
+                parents = parents + page['parents']
+            
+            # Then list children for each parent
+            response = []
+            for parent in parents:
+                try:
+                    child_paginator = client.get_paginator(descfn)
+                    for page in child_paginator.paginate(parentParam=parent['parentKey']):
+                        response = response + page[topkey]
+                except Exception as e:
+                    if context.debug: log.debug(f"Error listing for parent {parent['parentKey']}: {e}")
+                    continue
+            
+            for j in response:
+                common.write_import(type,j[key],None)
+        else:
+            # Get specific resource by ID/ARN
+            response = client.get_<resource>(<param>=id)
+            j = response.get('<singular_key>', response)
+            common.write_import(type,j[key],None)
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+    return True
+```
+
+**Examples of dependent resources:**
+- `aws_s3vectors_index` (requires vectorBucketName to list)
+- `aws_route_table_association` (requires route table or subnet)
+
+**Pattern for resources without list operations (policy resources):**
+
+Some resources don't have a list operation - they can only be retrieved individually (e.g., bucket policies). For these:
+
+```python
+def get_aws_<resource>_policy(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn,config=config)
+        
+        if id is None:
+            # First get all parent resources
+            parent_paginator = client.get_paginator('list_parents')
+            parents = []
+            for page in parent_paginator.paginate():
+                parents = parents + page['parents']
+            
+            # Then try to get policy for each parent
+            for parent in parents:
+                parent_arn = parent['parentArn']  # Use ARN as import ID
+                try:
+                    # Try to get the policy - will fail if it doesn't exist
+                    policy_response = client.get_<resource>_policy(parentArn=parent_arn)
+                    # Policy exists for this parent
+                    common.write_import(type, parent_arn, None)
+                except client.exceptions.NoSuch<Resource>Policy:
+                    # No policy for this parent, skip it
+                    if context.debug: log.debug(f"No policy for {parent_arn}")
+                    continue
+                except Exception as e:
+                    if context.debug: log.debug(f"Error getting policy for {parent_arn}: {e}")
+                    continue
+
+        else:
+            # Get specific policy by parent ARN
+            response = client.get_<resource>_policy(parentArn=id)
+            # Use the parent ARN as the import ID
+            common.write_import(type, id, None)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+```
+
+**Key characteristics of policy resources:**
+- No list operation (e.g., no `list_bucket_policies`)
+- Must iterate through parent resources and try to get each policy
+- Handle `NoSuch*Policy` exceptions gracefully
+- Use parent resource ARN/ID as the import identifier
+- Policy may not exist for all parent resources
 
 **IMPORTANT: Register the get function in common.py**
 
@@ -435,9 +613,18 @@ Create documentation in the test directory:
 ## Constraints and Best Practices
 
 ### Iteration Limits
-- **Maximum 3 fix attempts** per failure point
+- **Maximum 4 fix attempts per failure point** (not per test step)
+- A "failure point" is a distinct issue that needs fixing
+- Examples of separate failure points:
+  - Terraform validation errors (e.g., wrong attribute name)
+  - Resource deployment errors (e.g., invalid principal format)
+  - Import errors (e.g., wrong key field in aws_dict.py)
+  - Handler implementation issues (e.g., missing lifecycle block)
+- Each failure point gets its own 4 attempts
+- If a step has multiple distinct issues, you can fix each one (up to 4 attempts per issue)
+- Example: Step 4 has both a validation error AND a deployment error = 2 failure points = 8 total attempts possible
 - Do not loop indefinitely trying to fix issues
-- Document failures and move on
+- Document failures and move on after exhausting attempts
 
 ### Resource Cleanup
 - **ALWAYS run `terraform destroy`** regardless of test outcome
@@ -452,7 +639,7 @@ Create documentation in the test directory:
 ### Early Exit Conditions
 - Missing entry in `aws_dict.py` → Stop immediately
 - Composite ID format detected → Stop and document
-- 3 failed fix attempts → Stop and document
+- 4 failed fix attempts per failure point → Stop and document
 
 ## Complete Example: Testing aws_vpc
 
@@ -592,6 +779,110 @@ cd ..
 - Ensure a `lifecycle.ignore_changes` block is present in the handler
 - After the first `terraform apply`, subsequent plans should show no changes
 - If changes persist, the lifecycle block may be in the wrong location (should be appended to a field line, not a closing brace)
+
+### Issue: boto3 API method not found
+**Symptom:** `KeyError('list_vector_indexes')` or similar when calling boto3
+**Cause:** The method name in aws_dict.py doesn't match the actual boto3 API
+**Solution:**
+- List available methods: `python3 -c "import boto3; client = boto3.client('<service>'); print([m for m in dir(client) if '<keyword>' in m.lower()])"`
+- Update the `descfn` field in aws_dict.py to match the actual method name
+- Example: Change `list_vector_indexes` to `list_indexes`
+
+### Issue: Resource requires parent resource parameter
+**Symptom:** API error like "Must specify vectorBucketName" or "Missing required parameter"
+**Cause:** Some resources can only be listed within a parent resource context
+**Solution:**
+- Implement a get function that first lists parent resources, then iterates to list child resources
+- See the "For resources that require parent resource parameters" section in Step 5.7
+- Example: `list_indexes` requires `vectorBucketName`, so list all vector buckets first
+
+### Issue: Resource name validation errors
+**Symptom:** "The requested bucket name is reserved" or similar naming errors during deployment
+**Solution:**
+- Avoid AWS-reserved prefixes like "aws", "aws2tf", "amazon"
+- Use simple, lowercase names with hyphens
+- Add timestamp suffix for uniqueness: `test-resource-20250101`
+- Try up to 4 different naming patterns before documenting as a failure
+- Check AWS service-specific naming requirements in the documentation
+
+### Issue: Invalid principal in policy
+**Symptom:** "Invalid principal in policy" or "ValidationException: Invalid principal" during deployment
+**Cause:** Policy principal format is incorrect
+**Solution:**
+- Use full ARN format: `arn:aws:iam::ACCOUNT_ID:root`
+- Don't use just the account ID: `"123456789012"` ❌
+- Get your account ID: `aws sts get-caller-identity --query Account --output text`
+- Example: `"AWS": "arn:aws:iam::566972129213:root"` ✓
+
+### Issue: Unsupported attribute in Terraform configuration
+**Symptom:** `Error: Unsupported attribute` or `This object has no argument, nested block, or exported attribute named "X"`
+**Cause:** Using wrong attribute name (e.g., `.arn` instead of `.vector_bucket_arn`)
+**Solution:**
+- Check the "Attribute Reference" section in Terraform docs
+- Use the exact attribute name from documentation
+- Don't assume generic names like `.arn` or `.id` exist
+- Example: Use `.vector_bucket_arn` not `.arn`
+
+### Issue: Resource exports no additional attributes
+**Symptom:** Cannot output `.id` or other attributes from resource
+**Cause:** Some resources (especially policy resources) export no additional attributes
+**Solution:**
+- Check documentation: "This resource exports no additional attributes"
+- Use input arguments or parent resource attributes for testing
+- Example: For bucket policy, output the bucket ARN instead of policy ID
+
+## Special Resource Types
+
+### Policy Resources
+
+Policy resources have unique characteristics that require special handling:
+
+**Identification:**
+- Resource names ending in `_policy` (e.g., `aws_s3_bucket_policy`, `aws_s3vectors_vector_bucket_policy`)
+- Attach policies to parent resources (buckets, roles, etc.)
+
+**Key characteristics:**
+1. **No unique ID** - Use parent resource ARN/ID as the import identifier
+2. **No list operation** - Must iterate through parents and try to get each policy
+3. **May not exist** - Not all parent resources have policies attached
+4. **JSON normalization drift** - Key ordering differences cause perpetual plan changes
+
+**Required implementation patterns:**
+
+**In aws_dict.py:**
+```python
+aws_<service>_<resource>_policy = {
+    "clfn": "<service>",
+    "descfn": "get_<resource>_policy",  # Note: get, not list
+    "topkey": "policy",
+    "key": "<parentResourceArn>",  # Use parent's ARN field
+    "filterid": "<parentResourceArn>"
+}
+```
+
+**In get function:**
+```python
+# Must iterate through parents and handle NoSuchPolicy exceptions
+for parent in parents:
+    try:
+        policy_response = client.get_<resource>_policy(parentArn=parent_arn)
+        common.write_import(type, parent_arn, None)  # Use parent ARN
+    except client.exceptions.NoSuch<Resource>Policy:
+        continue  # Policy doesn't exist for this parent
+```
+
+**In handler function:**
+```python
+# Always add lifecycle block to ignore JSON key ordering
+elif tt1 == "<parent_identifier_field>":
+    t1 = t1 + "\n lifecycle {\n   ignore_changes = [policy]\n}\n"
+```
+
+**Testing considerations:**
+- Must create parent resource first
+- Policy document must have valid format (proper principal ARNs, etc.)
+- Expect JSON key ordering changes in plan (handled by lifecycle block)
+- Cannot output `.id` - use parent resource identifier instead
 
 
 

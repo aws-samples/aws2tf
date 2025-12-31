@@ -602,9 +602,9 @@ notimplemented = {
     "aws_s3tables_table_bucket_replication": True,  ### TODO 6.27.0
     "aws_s3tables_table_policy": True,  ### TODO 6.27.0
     "aws_s3tables_table_replication": True,  ### TODO 6.27.0
-    "aws_s3vectors_index": True,  ### TODO 6.27.0
+    # "aws_s3vectors_index": True,  ### TODO 6.27.0 - Testing enabled
     # "aws_s3vectors_vector_bucket": True,  ### TODO 6.27.0 - Testing enabled
-    "aws_s3vectors_vector_bucket_policy": True,  ### TODO 6.27.0
+    # "aws_s3vectors_vector_bucket_policy": True,  ### TODO 6.27.0 - Testing enabled
     "aws_sagemaker_mlflow_tracking_server": True,  ### TODO 6.27.0
     "aws_securityhub_standards_control_association": True,  ### TODO 6.27.0
     "aws_securitylake_aws_log_source": True,  ### TODO 6.27.0

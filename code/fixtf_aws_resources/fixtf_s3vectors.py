@@ -45,6 +45,43 @@ def aws_s3vectors_vector_bucket(t1, tt1, tt2, flag1, flag2):
 	return skip, t1, flag1, flag2
 
 
+def aws_s3vectors_index(t1, tt1, tt2, flag1, flag2):
+	"""Handle S3 Vectors index resource."""
+	skip = 0
+	
+	# Skip computed fields
+	if tt1 in ["creation_time", "index_arn", "tags_all"]:
+		skip = 1
+	
+	# Skip encryption_configuration entirely - it's computed and has defaults
+	elif tt1 == "encryption_configuration" or context.lbc > 0:
+		if tt2 == "[]":
+			skip = 1
+		if "[" in t1:
+			context.lbc = context.lbc + 1
+		if "]" in t1:
+			context.lbc = context.lbc - 1
+		
+		# Skip everything in the block
+		if context.lbc > 0:
+			skip = 1
+		if context.lbc == 0 and "]" in t1.strip():
+			skip = 1
+	
+	return skip, t1, flag1, flag2
+
+
+def aws_s3vectors_vector_bucket_policy(t1, tt1, tt2, flag1, flag2):
+	"""Handle S3 Vectors vector bucket policy resource."""
+	skip = 0
+	
+	# Add lifecycle block to ignore policy JSON key ordering changes
+	if tt1 == "vector_bucket_arn":
+		t1 = t1 + "\n lifecycle {\n   ignore_changes = [policy]\n}\n"
+	
+	return skip, t1, flag1, flag2
+
+
 # ============================================================================
 # Magic method for backward compatibility with getattr()
 # ============================================================================

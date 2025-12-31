@@ -12378,9 +12378,9 @@ aws_s3tables_table_replication = {
 
 aws_s3vectors_index = {
 	"clfn":		"s3vectors",
-	"descfn":	"list_vector_indexes",
+	"descfn":	"list_indexes",
 	"topkey":	"indexes",
-	"key":		"indexName",
+	"key":		"indexArn",
 	"filterid":	"vectorBucketName"
 }
 
@@ -12396,8 +12396,8 @@ aws_s3vectors_vector_bucket_policy = {
 	"clfn":		"s3vectors",
 	"descfn":	"get_vector_bucket_policy",
 	"topkey":	"policy",
-	"key":		"vectorBucketName",
-	"filterid":	"vectorBucketName"
+	"key":		"vectorBucketArn",
+	"filterid":	"vectorBucketArn"
 }
 
 aws_sagemaker_mlflow_tracking_server = {

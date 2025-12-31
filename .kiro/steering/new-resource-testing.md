@@ -10,6 +10,28 @@ This document defines the testing procedure for new AWS resource types in the aw
 
 Before testing a new resource type (e.g., `aws_vpc`), verify these conditions in order:
 
+### 0. Check for Existing Test Results
+
+**FIRST:** Check if a test-results.md file already exists in the test directory:
+
+```bash
+cat code/.automation/test_<resource_type>/test-results.md
+```
+
+**If test-results.md exists and shows basic tests passed:**
+- Review the test summary section
+- If "Resource deployment (basic): ✓" and "Type-level import (basic): ✓" and "Specific import (basic): ✓" are all present
+- **SKIP to Step 5.8 (Comprehensive Configuration Test)** - No need to repeat basic tests
+- Use the existing test infrastructure or create new comprehensive test configuration
+- After comprehensive tests pass, update the existing test-results.md with comprehensive test results
+
+**If test-results.md does not exist OR basic tests failed:**
+- Continue with all steps below starting from Step 1
+
+**If test-results.md shows comprehensive tests already passed:**
+- No further testing needed unless you're debugging or adding new features
+- Document any additional work in the existing test-results.md
+
 ### 1. Check aws_dict.py Entry
 - Open `code/fixtf_aws_resources/aws_dict.py`
 - Search for the resource type (e.g., `"aws_vpc"`)
@@ -142,7 +164,7 @@ import {
 
 ## Testing Steps
 
-Execute these steps only if all prerequisites are met:
+Execute these steps only if all prerequisites are met AND basic tests haven't already passed (check Step 0):
 
 ### Step 1: Create Test Environment
 
@@ -176,6 +198,13 @@ Create a minimal but complete Terraform configuration that demonstrates the reso
 - Use the simplest configuration for parent resources
 - Example: Testing `aws_s3vectors_index` requires `aws_s3vectors_vector_bucket`
 - Example: Testing `aws_subnet` requires `aws_vpc`
+
+**For resources that can be referenced by other resources:**
+- It is acceptable to create additional related resources that reference the resource being tested
+- This helps verify the resource exports the correct attributes for use by other resources
+- Example: Testing `aws_workspacesweb_network_settings` can include `aws_workspacesweb_network_settings_association` to verify the ARN is exported correctly
+- Example: Testing `aws_s3_bucket` can include `aws_s3_bucket_policy` to verify the bucket can be referenced
+- Document these additional resources in test-results.md
 
 **Required files:**
 - `main.tf` - Resource definitions
@@ -588,9 +617,15 @@ When the boto3 client name contains hyphens (e.g., `workspaces-web`), use the hy
 
 The key must exactly match the `clfn` value from aws_dict.py.
 
-### Step 5.8: Comprehensive Configuration Test (Optional but Recommended)
+### Step 5.8: Comprehensive Configuration Test (Required)
 
-After the basic tests pass, create a more comprehensive test to verify all optional features work correctly:
+**Check if basic tests already passed:**
+```bash
+# If test-results.md exists and shows basic tests passed, start here
+cat code/.automation/test_<resource_type>/test-results.md | grep "Resource deployment (basic): ✓"
+```
+
+After the basic tests pass (or if they've already passed from a previous run), you MUST create a comprehensive test to verify all optional features work correctly:
 
 **1. Update main.tf with comprehensive configuration:**
 - Review the Terraform documentation for all available arguments
@@ -672,24 +707,27 @@ Add to test-results.md:
 - List all optional features tested
 - Note any nested blocks included
 - Document any features that couldn't be tested (e.g., KMS keys requiring complex policies)
+- List any additional related resources created to verify attribute exports
+- If resource has no optional arguments, explicitly state: "Resource has no optional arguments - only required fields tested"
 ```
 
-**When to skip this step:**
-- Resource has no optional arguments
-- Resource is very simple (only required fields)
-- Time constraints (but document this decision)
-
 **When to simplify the comprehensive test:**
+- Resource has no optional arguments (document this in test-results.md)
+- Resource is very simple with only required fields (still run the test to confirm)
 - Skip features requiring complex dependent resources (e.g., KMS keys with service-specific policies)
 - Skip features requiring additional IAM roles or complex permissions
 - Focus on features that can be tested with simple configuration
 - Document excluded features in test-results.md
 
-**Benefits:**
+**Why this step is required:**
 - Confirms handler works with complex configurations
 - Validates nested block handling
 - Ensures no edge cases cause drift
 - Provides confidence for production use
+- Verifies all optional features are correctly imported
+- Tests that the resource can be referenced by other resources (if applicable)
+
+**IMPORTANT:** This step is mandatory for all resource tests. Even if a resource has no optional arguments, you must still run this step to confirm and document that fact.
 
 ### Step 6: Cleanup Test Resources
 
@@ -715,7 +753,16 @@ This removes the Terraform state directory and lock file, keeping the test direc
 
 ### Step 7: Document Test Results
 
-Create documentation in the test directory:
+Create or update documentation in the test directory:
+
+**If updating existing test-results.md (basic tests already passed):**
+- Keep the existing basic test results
+- Add a new section "## Comprehensive Configuration Test Results" 
+- Update the Test Summary section to mark comprehensive tests as complete
+- Add timestamp for when comprehensive tests were completed
+- Document all comprehensive features tested
+
+**If creating new test-results.md (full test run):**
 
 **On Success** - Create `test-results.md`:
 ```markdown
@@ -730,7 +777,7 @@ Create documentation in the test directory:
 - Resource deployment (basic): ✓
 - Type-level import (basic): ✓
 - Specific import (basic): ✓
-- Comprehensive configuration (optional): ✓
+- Comprehensive configuration: ✓
 - Type-level import (comprehensive): ✓
 - Specific import (comprehensive): ✓
 - Cleanup: ✓
@@ -815,7 +862,45 @@ Create documentation in the test directory:
 - Composite ID format detected → Stop and document
 - 4 failed fix attempts per failure point → Stop and document
 
-## Complete Example: Testing aws_vpc
+## Complete Example: Testing aws_workspacesweb_network_settings (Comprehensive Only)
+
+This example shows running only the comprehensive test when basic tests have already passed:
+
+```bash
+# Step 0: Check existing test results
+cat code/.automation/test_aws_workspacesweb_network_settings/test-results.md
+# Shows: "Resource deployment (basic): ✓" - basic tests already passed!
+
+# Skip to Step 5.8: Update main.tf with comprehensive configuration
+cd code/.automation/test_aws_workspacesweb_network_settings
+
+# Update main.tf to add all optional features
+cat > main.tf << 'EOF'
+# ... comprehensive configuration with all optional arguments ...
+EOF
+
+# Deploy comprehensive configuration
+terraform init
+terraform validate
+terraform apply -auto-approve
+
+# Test imports with comprehensive configuration
+cd ../../..
+./aws2tf.py -r us-east-1 -t aws_workspacesweb_network_settings
+./aws2tf.py -r us-east-1 -t aws_workspacesweb_network_settings -i "<resource_arn>"
+
+# Verify - should show 0 changes after import
+
+# Cleanup
+cd code/.automation/test_aws_workspacesweb_network_settings
+terraform destroy -auto-approve
+rm -rf .terraform .terraform.lock.hcl
+
+# Update test-results.md with comprehensive test results
+# Add new section documenting comprehensive features tested
+```
+
+## Complete Example: Testing aws_vpc (Full Test Run)
 
 ```bash
 # Step 1: Check prerequisites

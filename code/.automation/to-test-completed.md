@@ -2,7 +2,7 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 11
+**Total Completed:** 12
 **Last Updated:** 2026-01-01
 
 ---
@@ -33,6 +33,7 @@ Resources are listed by service group in the order they were completed.
 ### aws_signer
 
 - [x] `aws_signer_signing_profile` - ✓ PASSED (2026-01-01) - [test results](test_aws_signer_signing_profile/test-results.md)
+- [x] `aws_signer_signing_profile_permission` - ✓ PASSED (2026-01-01) - [test results](test_aws_signer_signing_profile_permission/test-results.md)
 
 <!-- Add completed resources below in this format:
 

@@ -453,9 +453,9 @@ notimplemented = {
     "aws_shield_protection": True,
     "aws_shield_protection_health_check_association": True,
     #
-    "aws_signer_signing_job": True,  ### AWS API limitation - destination block not returned by describe_signing_job
+    "aws_signer_signing_job": True,  ### Requires complex handler - destination must be reconstructed from signedObject
 #    "aws_signer_signing_profile": True,
-    "aws_signer_signing_profile_permission": True,
+#    "aws_signer_signing_profile_permission": True,
     #
     "aws_ssm_resource_data_sync": True,
     #

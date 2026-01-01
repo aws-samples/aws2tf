@@ -782,7 +782,7 @@
 
 - [x] `aws_signer_signing_job` (FAILED - AWS API limitation)
 - [x] `aws_signer_signing_profile`
-- [ ] `aws_signer_signing_profile_permission`
+- [x] `aws_signer_signing_profile_permission`
 
 ### aws_ssm
 

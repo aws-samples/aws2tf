@@ -9309,10 +9309,10 @@ aws_signer_signing_profile = {
 
 aws_signer_signing_profile_permission = {
 	"clfn":		"signer",
-	"descfn":	"list_signing_profile_permissions",
-	"topkey":	"Permissions",
-	"key":		"ProfileName",
-	"filterid":	"ProfileName"
+	"descfn":	"list_profile_permissions",
+	"topkey":	"permissions",
+	"key":		"profileName",
+	"filterid":	"profileName"
 }
 
 aws_simpledb_domain = {

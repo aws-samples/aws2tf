@@ -650,9 +650,9 @@
 
 ### aws_route53
 
-- [ ] `aws_route53_resolver_config`
-- [ ] `aws_route53_resolver_dnssec_config`
-- [ ] `aws_route53_resolver_endpoint`
+- [x] `aws_route53_resolver_config`
+- [x] `aws_route53_resolver_dnssec_config`
+- [x] `aws_route53_resolver_endpoint`
 - [ ] `aws_route53_resolver_firewall_config`
 - [ ] `aws_route53_resolver_firewall_domain_list`
 - [ ] `aws_route53_resolver_firewall_rule`

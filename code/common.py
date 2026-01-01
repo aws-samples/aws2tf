@@ -656,6 +656,7 @@ from get_aws_resources import aws_redshift
 from get_aws_resources import aws_redshift_serverless
 from get_aws_resources import aws_resource_explorer_2
 from get_aws_resources import aws_route53
+from get_aws_resources import aws_route53resolver
 from get_aws_resources import aws_s3
 from get_aws_resources import aws_s3control
 from get_aws_resources import aws_s3tables
@@ -766,6 +767,7 @@ AWS_RESOURCE_MODULES = {
     'resource-explorer-2': aws_resource_explorer_2,
     'resource_explorer_2': aws_resource_explorer_2,
     'route53': aws_route53,
+    'route53resolver': aws_route53resolver,
     's3': aws_s3,
     's3control': aws_s3control,
     's3tables': aws_s3tables,

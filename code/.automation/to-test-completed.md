@@ -2,7 +2,7 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 12
+**Total Completed:** 15
 **Last Updated:** 2026-01-01
 
 ---
@@ -34,6 +34,12 @@ Resources are listed by service group in the order they were completed.
 
 - [x] `aws_signer_signing_profile` - ✓ PASSED (2026-01-01) - [test results](test_aws_signer_signing_profile/test-results.md)
 - [x] `aws_signer_signing_profile_permission` - ✓ PASSED (2026-01-01) - [test results](test_aws_signer_signing_profile_permission/test-results.md)
+
+### aws_route53
+
+- [x] `aws_route53_resolver_config` - ✓ PASSED (2026-01-01) - [test results](test_aws_route53_resolver_config/test-results.md)
+- [x] `aws_route53_resolver_dnssec_config` - ✓ PASSED (2026-01-01) - [test results](test_aws_route53_resolver_dnssec_config/test-results.md)
+- [x] `aws_route53_resolver_endpoint` - ✓ PASSED (2026-01-01) - [test results](test_aws_route53_resolver_endpoint/test-results.md)
 
 <!-- Add completed resources below in this format:
 

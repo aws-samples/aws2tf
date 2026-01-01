@@ -7910,7 +7910,7 @@ aws_route53_resolver_config = {
 aws_route53_resolver_dnssec_config = {
 	"clfn":		"route53resolver",
 	"descfn":	"list_resolver_dnssec_configs",
-	"topkey":	"ResolverDNSSECConfigs",
+	"topkey":	"ResolverDnssecConfigs",
 	"key":		"Id",
 	"filterid":	"Id"
 }

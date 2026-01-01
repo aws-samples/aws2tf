@@ -477,7 +477,7 @@ notimplemented = {
 #	"aws_api_gateway_api_key": True,
 #	"aws_api_gateway_base_path_mapping": True,
 #	"aws_api_gateway_client_certificate": True,
-	"aws_api_gateway_documentation_part": True,
+#	"aws_api_gateway_documentation_part": True,
 	"aws_api_gateway_documentation_version": True,
 	"aws_api_gateway_domain_name": True,
 	"aws_api_gateway_gateway_response": True,

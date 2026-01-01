@@ -102,6 +102,51 @@ def get_aws_api_gateway_client_certificate(type, id, clfn, descfn, topkey, key, 
 
     return True
 
+def get_aws_api_gateway_documentation_part(type, id, clfn, descfn, topkey, key, filterid):
+
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
+    try:
+        response = []
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # First get all REST APIs
+            rest_api_paginator = client.get_paginator('get_rest_apis')
+            rest_apis = []
+            for page in rest_api_paginator.paginate():
+                rest_apis = rest_apis + page['items']
+            
+            # Then get documentation parts for each REST API
+            for api in rest_apis:
+                try:
+                    doc_paginator = client.get_paginator(descfn)
+                    for page in doc_paginator.paginate(restApiId=api['id']):
+                        for j in page[topkey]:
+                            # ID format is restApiId/documentationPartId
+                            doc_id = api['id'] + '/' + j[key]
+                            common.write_import(type, doc_id, None)
+                except Exception as e:
+                    if context.debug: log.debug(f"Error listing docs for API {api['id']}: {e}")
+                    continue
+        else:
+            # Get specific documentation part (id format: restApiId/docPartId)
+            if '/' in id:
+                rest_api_id, doc_part_id = id.split('/', 1)
+                response = client.get_documentation_part(restApiId=rest_api_id, documentationPartId=doc_part_id)
+                if response:
+                    common.write_import(type, id, None)
+            else:
+                if context.debug: log.debug("Must pass restApiId/docPartId for "+type)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
 def get_aws_api_gateway_deployment(type, id, clfn, descfn, topkey, key, filterid):
 
     if context.debug:

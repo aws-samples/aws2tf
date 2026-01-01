@@ -203,6 +203,56 @@ Create a minimal but complete Terraform configuration that demonstrates the reso
 - Use the simplest configuration for parent resources
 - Example: Testing `aws_s3vectors_index` requires `aws_s3vectors_vector_bucket`
 - Example: Testing `aws_subnet` requires `aws_vpc`
+- Example: Testing `aws_api_gateway_documentation_part` requires `aws_api_gateway_rest_api`
+
+**Creating dependency infrastructure:**
+When a resource requires parent resources (REST API, VPC, etc.):
+1. **Include parent resources in the same main.tf** - Don't create separate test directories
+2. **Use minimal parent configuration** - Only required arguments for parent resources
+3. **Create multiple instances if needed** - Test different configurations of the target resource
+4. **Document dependencies** - Note which parent resources were created in test-results.md
+5. **Clean up all resources** - Terraform destroy will handle all resources in the configuration
+
+**Example: Testing documentation_part with REST API dependency:**
+```hcl
+# Parent resource (minimal configuration)
+resource "aws_api_gateway_rest_api" "test" {
+  name        = "test-api-20250101"
+  description = "Test REST API for documentation part testing"
+}
+
+# Target resource being tested (comprehensive configuration)
+resource "aws_api_gateway_documentation_part" "test" {
+  rest_api_id = aws_api_gateway_rest_api.test.id
+  
+  location {
+    type = "API"
+  }
+  
+  properties = jsonencode({
+    description = "Comprehensive test API documentation"
+    info = {
+      version = "1.0.0"
+      title   = "Test API"
+    }
+  })
+}
+
+# Additional instance to test different location types
+resource "aws_api_gateway_documentation_part" "test_method" {
+  rest_api_id = aws_api_gateway_rest_api.test.id
+  
+  location {
+    type   = "METHOD"
+    method = "GET"
+    path   = "/"
+  }
+  
+  properties = jsonencode({
+    description = "GET method documentation"
+  })
+}
+```
 
 **For resources that can be referenced by other resources:**
 - It is acceptable to create additional related resources that reference the resource being tested
@@ -506,7 +556,9 @@ j = response.get('index', response)  # Try singular key, fallback to response
 
 **For resources that require parent resource parameters:**
 
-Some resources can only be listed within a parent resource context (e.g., indexes require a vector bucket name).
+Some resources can only be listed within a parent resource context (e.g., indexes require a vector bucket name, documentation parts require a REST API ID).
+
+**Pattern A: Parent resource parameter required for listing (e.g., S3 Vectors indexes):**
 
 **Pattern for dependent resources:**
 ```python
@@ -548,6 +600,56 @@ def get_aws_<resource>(type, id, clfn, descfn, topkey, key, filterid):
 **Examples of dependent resources:**
 - `aws_s3vectors_index` (requires vectorBucketName to list)
 - `aws_route_table_association` (requires route table or subnet)
+- `aws_api_gateway_documentation_part` (requires restApiId to list)
+
+**Pattern B: Composite ID format with parent (e.g., API Gateway documentation parts):**
+
+Some resources use composite IDs that include the parent resource ID (e.g., `restApiId/docPartId`):
+
+```python
+def get_aws_<resource>(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # First get all parent resources
+            parent_paginator = client.get_paginator('get_<parents>')
+            parents = []
+            for page in parent_paginator.paginate():
+                parents = parents + page['items']
+            
+            # Then list children for each parent
+            for parent in parents:
+                try:
+                    child_paginator = client.get_paginator(descfn)
+                    for page in child_paginator.paginate(parentId=parent['id']):
+                        for j in page[topkey]:
+                            # Build composite ID: parentId/childId
+                            composite_id = parent['id'] + '/' + j[key]
+                            common.write_import(type, composite_id, None)
+                except Exception as e:
+                    if context.debug: log.debug(f"Error listing for parent {parent['id']}: {e}")
+                    continue
+        else:
+            # Get specific resource by composite ID
+            if '/' in id:
+                parent_id, child_id = id.split('/', 1)
+                response = client.get_<resource>(parentId=parent_id, childId=child_id)
+                if response:
+                    common.write_import(type, id, None)
+            else:
+                if context.debug: log.debug("Must pass parentId/childId for "+type)
+    
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+    return True
+```
+
+**Examples:**
+- `aws_api_gateway_documentation_part` (restApiId/docPartId)
+- `aws_api_gateway_deployment` (restApiId/deploymentId)
+- `aws_api_gateway_stage` (restApiId/stageName)
 
 ### Step 5.7b: Check if Get Function Already Exists
 

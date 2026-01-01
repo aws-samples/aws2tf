@@ -139,6 +139,80 @@ def get_aws_api_gateway_documentation_part(type, id, clfn, descfn, topkey, key, 
 
     return True
 
+def get_aws_api_gateway_model(type, id, clfn, descfn, topkey, key, filterid):
+
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
+    try:
+        response = []
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is not None:
+            # List models for the given REST API
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate(restApiId=id):
+                response = response + page[topkey]
+            if response == []:
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
+                pkey=type+"."+id
+                context.rproc[pkey]=True
+                return True
+            for j in response:
+                # ID format is restApiId/modelName
+                pkey = id + '/' + j['name']
+                altk = "r-" + pkey
+                common.write_import(type, pkey, altk)
+                pkey=type+"."+id
+                context.rproc[pkey]=True
+        else:
+            log.debug("Must pass restApiId for "+type+" returning")
+            return True
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+def get_aws_api_gateway_request_validator(type, id, clfn, descfn, topkey, key, filterid):
+
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
+    try:
+        response = []
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is not None:
+            # List request validators for the given REST API
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate(restApiId=id):
+                response = response + page[topkey]
+            if response == []:
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
+                pkey=type+"."+id
+                context.rproc[pkey]=True
+                return True
+            for j in response:
+                # ID format is restApiId/validatorId
+                pkey = id + '/' + j[key]
+                altk = "r-" + pkey
+                common.write_import(type, pkey, altk)
+                pkey=type+"."+id
+                context.rproc[pkey]=True
+        else:
+            log.debug("Must pass restApiId for "+type+" returning")
+            return True
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
 def get_aws_api_gateway_deployment(type, id, clfn, descfn, topkey, key, filterid):
 
     if context.debug:

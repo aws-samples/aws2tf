@@ -23,8 +23,8 @@
 - [ ] `aws_api_gateway_integration_response`
 - [ ] `aws_api_gateway_method_response`
 - [ ] `aws_api_gateway_method_settings`
-- [ ] `aws_api_gateway_model`
-- [ ] `aws_api_gateway_request_validator`
+- [x] `aws_api_gateway_model`
+- [x] `aws_api_gateway_request_validator`
 - [ ] `aws_api_gateway_rest_api_policy`
 - [ ] `aws_api_gateway_usage_plan`
 - [ ] `aws_api_gateway_usage_plan_key`
@@ -418,8 +418,8 @@
 
 ### aws_lambda
 
-- [ ] `aws_lambda_capacity_provider`
-- [ ] `aws_lambda_function_recursion_config`
+- [x] `aws_lambda_capacity_provider`
+- [x] `aws_lambda_function_recursion_config`
 
 ### aws_licensemanager
 

@@ -412,3 +412,79 @@ def get_aws_lambda_layer_version_permission(type, id, clfn, descfn, topkey, key,
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
     
     return True
+
+
+def get_aws_lambda_function_recursion_config(type, id, clfn, descfn, topkey, key, filterid):
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all Lambda functions first
+            paginator = client.get_paginator('list_functions')
+            functions = []
+            for page in paginator.paginate():
+                functions = functions + page['Functions']
+            
+            # Get recursion config for each function
+            for func in functions:
+                try:
+                    response = client.get_function_recursion_config(FunctionName=func['FunctionName'])
+                    # Only import if recursion config is explicitly set (not default)
+                    if response.get('RecursiveLoop'):
+                        common.write_import(type, func['FunctionName'], None)
+                except ClientError as e:
+                    if e.response['Error']['Code'] == 'ResourceNotFoundException':
+                        continue
+                    raise
+        else:
+            # Get specific function's recursion config
+            response = client.get_function_recursion_config(FunctionName=id)
+            if response.get('RecursiveLoop'):
+                common.write_import(type, id, None)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+
+def get_aws_lambda_capacity_provider(type, id, clfn, descfn, topkey, key, filterid):
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all capacity providers
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate():
+                response = response + page[topkey]
+            if response == []:
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
+            for j in response:
+                # Extract name from ARN: arn:aws:lambda:region:account:capacity-provider:name
+                arn = j[key]
+                name = arn.split(':')[-1]
+                common.write_import(type, name, None)
+        else:
+            # Get specific capacity provider
+            response = client.get_capacity_provider(Name=id)
+            if response.get('CapacityProvider'):
+                j = response['CapacityProvider']
+                arn = j[key]
+                name = arn.split(':')[-1]
+                common.write_import(type, name, None)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True

@@ -11906,10 +11906,10 @@ aws_lakeformation_resource_lf_tag = {
 
 aws_lambda_capacity_provider = {
 	"clfn":		"lambda",
-	"descfn":	"list_functions",
-	"topkey":	"Functions",
-	"key":		"FunctionName",
-	"filterid":	"FunctionName"
+	"descfn":	"list_capacity_providers",
+	"topkey":	"CapacityProviders",
+	"key":		"CapacityProviderArn",
+	"filterid":	"CapacityProviderArn"
 }
 
 aws_lambda_function_recursion_config = {

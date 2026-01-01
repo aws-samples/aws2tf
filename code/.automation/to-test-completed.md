@@ -2,7 +2,7 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 3
+**Total Completed:** 7
 **Last Updated:** 2026-01-01
 
 ---
@@ -16,6 +16,13 @@ Resources are listed by service group in the order they were completed.
 - [x] `aws_api_gateway_api_key` - ✓ PASSED (2026-01-01) - [test results](test_aws_api_gateway_api_key/test-results.md)
 - [x] `aws_api_gateway_client_certificate` - ✓ PASSED (2026-01-01) - [test results](test_aws_api_gateway_client_certificate/test-results.md)
 - [x] `aws_api_gateway_documentation_part` - ✓ PASSED (2026-01-01) - [test results](test_aws_api_gateway_documentation_part/test-results.md)
+- [x] `aws_api_gateway_model` - ✓ PASSED (2026-01-01) - [test results](test_aws_api_gateway_model/test-results.md)
+- [x] `aws_api_gateway_request_validator` - ✓ PASSED (2026-01-01) - [test results](test_aws_api_gateway_request_validator/test-results.md)
+
+### aws_lambda
+
+- [x] `aws_lambda_function_recursion_config` - ✓ PASSED (2026-01-01) - [test results](test_aws_lambda_function_recursion_config/test-results.md)
+- [x] `aws_lambda_capacity_provider` - ✓ PASSED (2026-01-01) - [test results](test_aws_lambda_capacity_provider/test-results.md)
 
 <!-- Add completed resources below in this format:
 

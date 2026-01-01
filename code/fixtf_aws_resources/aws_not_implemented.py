@@ -485,8 +485,8 @@ notimplemented = {
 	"aws_api_gateway_integration_response": True,
 	"aws_api_gateway_method_response": True,
 	"aws_api_gateway_method_settings": True,
-	"aws_api_gateway_model": True,
-	"aws_api_gateway_request_validator": True,
+#	"aws_api_gateway_model": True,
+#	"aws_api_gateway_request_validator": True,
 	"aws_api_gateway_rest_api_policy": True,
 	"aws_api_gateway_usage_plan": True,
 	"aws_api_gateway_usage_plan_key": True,
@@ -560,8 +560,8 @@ notimplemented = {
     "aws_lakeformation_lf_tag_expression": True,  ### TODO 6.27.0
     "aws_lakeformation_opt_in": True,  ### TODO 6.27.0
     "aws_lakeformation_resource_lf_tag": True,  ### TODO 6.27.0
-    "aws_lambda_capacity_provider": True,  ### TODO 6.27.0
-    "aws_lambda_function_recursion_config": True,  ### TODO 6.27.0
+#    "aws_lambda_capacity_provider": True,  ### TODO 6.27.0
+#    "aws_lambda_function_recursion_config": True,  ### TODO 6.27.0
     "aws_lambda_runtime_management_config": True,  ### TODO 6.27.0
     "aws_m2_application": True,  ### TODO 6.27.0
     "aws_m2_deployment": True,  ### TODO 6.27.0

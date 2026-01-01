@@ -199,21 +199,40 @@ Create a minimal but complete Terraform configuration that demonstrates the reso
 5. Add `outputs.tf` to capture the resource ID
 
 **For resources with dependencies:**
+- **It is expected and acceptable to create dependent resources** for testing
 - Include only the minimal required parent resources
 - Use the simplest configuration for parent resources
 - Example: Testing `aws_s3vectors_index` requires `aws_s3vectors_vector_bucket`
 - Example: Testing `aws_subnet` requires `aws_vpc`
 - Example: Testing `aws_api_gateway_documentation_part` requires `aws_api_gateway_rest_api`
+- Example: Testing `aws_lambda_function_recursion_config` requires `aws_lambda_function` and `aws_iam_role`
 
 **Creating dependency infrastructure:**
-When a resource requires parent resources (REST API, VPC, etc.):
+When a resource requires parent resources (REST API, VPC, Lambda function, etc.):
 1. **Include parent resources in the same main.tf** - Don't create separate test directories
 2. **Use minimal parent configuration** - Only required arguments for parent resources
-3. **Create multiple instances if needed** - Test different configurations of the target resource
-4. **Document dependencies** - Note which parent resources were created in test-results.md
-5. **Clean up all resources** - Terraform destroy will handle all resources in the configuration
+3. **Create supporting resources as needed** - IAM roles, zip files, certificates, etc.
+4. **Check AWS documentation for IAM permissions** - Search for managed policies or required permissions
+5. **Prefer AWS managed policies** - Use AWS managed policies (e.g., AWSLambdaManagedEC2ResourceOperator) instead of custom policies when available
+6. **Create multiple instances if needed** - Test different configurations of the target resource
+7. **Document dependencies** - Note which parent resources were created in test-results.md
+8. **Clean up all resources** - Terraform destroy will handle all resources in the configuration
+9. **Don't avoid testing due to dependencies** - Most AWS resources have dependencies; this is normal
 
-**Example: Testing documentation_part with REST API dependency:**
+**Finding required IAM permissions:**
+When a resource requires an IAM role with specific permissions:
+1. **Search AWS documentation first** - Use AWS documentation search for "[service] IAM permissions" or "[resource] operator role"
+2. **Look for managed policies** - AWS often provides managed policies with all required permissions
+3. **Check error messages** - If deployment fails with permission errors, the error message lists the missing permission
+4. **Iterate if needed** - Add permissions incrementally (max 4 attempts per failure point)
+5. **Document the solution** - Note which managed policy or permissions were required in test-results.md
+
+**Example: Lambda Capacity Provider IAM role**
+- Searched: "Lambda Capacity Provider IAM permissions operator role"
+- Found: AWS managed policy `AWSLambdaManagedEC2ResourceOperator`
+- Result: Single policy attachment instead of custom policy with trial-and-error permissions
+
+**Example: Testing recursion_config with Lambda function dependency:**
 ```hcl
 # Parent resource (minimal configuration)
 resource "aws_api_gateway_rest_api" "test" {
@@ -251,6 +270,42 @@ resource "aws_api_gateway_documentation_part" "test_method" {
   properties = jsonencode({
     description = "GET method documentation"
   })
+}
+```
+
+**Example: Testing recursion_config with Lambda function dependency:**
+```hcl
+# IAM role for Lambda (required dependency)
+resource "aws_iam_role" "lambda_role" {
+  name = "test-lambda-recursion-role-20250101"
+  
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Action = "sts:AssumeRole"
+      Effect = "Allow"
+      Principal = {
+        Service = "lambda.amazonaws.com"
+      }
+    }]
+  })
+}
+
+# Lambda function (parent resource - minimal configuration)
+resource "aws_lambda_function" "test" {
+  filename      = "lambda_function.zip"  # Create simple zip with index.py
+  function_name = "test-recursion-function-20250101"
+  role          = aws_iam_role.lambda_role.arn
+  handler       = "index.handler"
+  runtime       = "python3.12"
+  
+  source_code_hash = filebase64sha256("lambda_function.zip")
+}
+
+# Target resource being tested (comprehensive configuration)
+resource "aws_lambda_function_recursion_config" "test_allow" {
+  function_name  = aws_lambda_function.test.function_name
+  recursive_loop = "Allow"
 }
 ```
 

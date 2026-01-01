@@ -600,7 +600,7 @@
 ### aws_prometheus
 
 - [x] `aws_prometheus_query_logging_configuration`
-- [ ] `aws_prometheus_resource_policy`
+- [x] `aws_prometheus_resource_policy`
 - [ ] `aws_prometheus_scraper`
 - [ ] `aws_prometheus_workspace_configuration`
 

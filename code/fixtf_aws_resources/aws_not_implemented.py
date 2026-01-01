@@ -602,7 +602,7 @@ notimplemented = {
     "aws_pinpointsmsvoicev2_opt_out_list": True,  ### TODO 6.27.0
     "aws_pinpointsmsvoicev2_phone_number": True,  ### TODO 6.27.0
 #    "aws_prometheus_query_logging_configuration": True,  ### TODO 6.27.0
-    "aws_prometheus_resource_policy": True,  ### TODO 6.27.0
+#    "aws_prometheus_resource_policy": True,  ### TODO 6.27.0
     "aws_prometheus_scraper": True,  ### TODO 6.27.0
     "aws_prometheus_workspace_configuration": True,  ### TODO 6.27.0
     "aws_qbusiness_application": True,  ### TODO 6.27.0

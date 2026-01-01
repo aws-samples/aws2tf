@@ -4,8 +4,8 @@ AMP Resource Handlers - Optimized with __getattr__
 This file contains ONLY AMP resources with custom transformation logic.
 All other resources automatically use the default handler via __getattr__.
 
-Original: 1 functions
-Optimized: 1 functions + __getattr__
+Original: 2 functions
+Optimized: 2 functions + __getattr__
 Reduction: 0% less code
 """
 
@@ -37,6 +37,19 @@ def aws_prometheus_query_logging_configuration(t1, tt1, tt2, flag1, flag2):
 	return skip, t1, flag1, flag2
 
 
+def aws_prometheus_resource_policy(t1, tt1, tt2, flag1, flag2):
+	skip = 0
+	
+	# Add lifecycle block to ignore JSON normalization drift
+	if tt1 == "workspace_id" and tt2 != "null":
+		workspace_id = tt2.strip('"')
+		t1 = tt1 + " = aws_prometheus_workspace." + workspace_id + ".id\n"
+		t1 = t1 + "\n lifecycle {\n   ignore_changes = [policy_document]\n}\n"
+		common.add_dependancy("aws_prometheus_workspace", workspace_id)
+	
+	return skip, t1, flag1, flag2
+
+
 # ============================================================================
 # Magic method for backward compatibility with getattr()
 # ============================================================================
@@ -55,7 +68,7 @@ def __getattr__(name):
 	raise AttributeError(f"module 'fixtf_amp' has no attribute '{name}'")
 
 
-log.debug(f"AMP handlers: 1 custom + __getattr__ for remaining resources")
+log.debug(f"AMP handlers: 2 custom + __getattr__ for remaining resources")
 
 
 

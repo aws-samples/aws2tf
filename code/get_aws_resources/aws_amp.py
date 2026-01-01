@@ -88,3 +88,59 @@ def get_aws_prometheus_workspace(type, id, clfn, descfn, topkey, key, filterid):
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
+
+
+def get_aws_prometheus_resource_policy(type, id, clfn, descfn, topkey, key, filterid):
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all Prometheus workspaces first
+            paginator = client.get_paginator('list_workspaces')
+            workspaces = []
+            for page in paginator.paginate():
+                workspaces = workspaces + page['workspaces']
+            
+            # Try to get resource policy for each workspace
+            for workspace in workspaces:
+                workspace_id = workspace['workspaceId']
+                try:
+                    response = client.describe_resource_policy(workspaceId=workspace_id)
+                    # Policy exists for this workspace
+                    # Import using workspace ID (from import docs)
+                    common.write_import(type, workspace_id, None)
+                except ClientError as e:
+                    if e.response['Error']['Code'] in ['ResourceNotFoundException', 'AccessDeniedException']:
+                        continue
+                    raise
+        else:
+            # Get specific workspace's resource policy
+            # Handle both ARN and workspace ID
+            if id.startswith("arn:"):
+                # Extract workspace ID from ARN
+                workspace_id = id.split('/')[-1]
+            elif id.startswith("ws-"):
+                workspace_id = id
+            else:
+                if context.debug: log.debug("Invalid workspace ID format: "+id)
+                return True
+            
+            try:
+                response = client.describe_resource_policy(workspaceId=workspace_id)
+                # Import using workspace ID
+                common.write_import(type, workspace_id, None)
+            except ClientError as e:
+                if e.response['Error']['Code'] in ['ResourceNotFoundException', 'AccessDeniedException']:
+                    if context.debug: log.debug("No policy for workspace: "+id)
+                else:
+                    raise
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True

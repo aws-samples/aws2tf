@@ -12242,7 +12242,7 @@ aws_prometheus_query_logging_configuration = {
 
 aws_prometheus_resource_policy = {
 	"clfn":		"amp",
-	"descfn":	"get_resource_policy",
+	"descfn":	"describe_resource_policy",
 	"topkey":	"policy",
 	"key":		"resourceArn",
 	"filterid":	"resourceArn"

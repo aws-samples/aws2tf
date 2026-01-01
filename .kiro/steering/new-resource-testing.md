@@ -418,6 +418,8 @@ terraform state show <resource_address> | grep "^id"
 
 ### Step 4: Test Type-Level Import
 
+**REQUIRED TEST #1:** Test aws2tf's ability to discover and import all resources of this type.
+
 Test aws2tf's ability to discover and import all resources of this type:
 
 ```bash
@@ -454,6 +456,10 @@ Example: `./aws2tf.py -r us-east-1 -t aws_vpc`
 
 ### Step 5: Test Resource-Specific Import
 
+**REQUIRED TEST #2:** Test aws2tf's ability to import a specific resource by ID.
+
+**IMPORTANT:** This test is REQUIRED even if Step 4 passed. Do not skip this step!
+
 Test aws2tf's ability to import a specific resource by ID:
 
 ```bash
@@ -461,6 +467,12 @@ Test aws2tf's ability to import a specific resource by ID:
 ```
 
 Example: `./aws2tf.py -r us-east-1 -t aws_vpc -i vpc-09d8b4321d497f01b`
+
+**Why both tests are required:**
+- Type-level test (`-t` only): Validates discovery and listing logic
+- Specific test (`-t -i`): Validates get-by-ID logic and ID format handling
+- Both code paths are different and both must work correctly
+- Some resources are in needid_dict and ONLY support specific import (no type-level discovery)
 
 **Expected behavior:**
 - Tool should import only the specified resource

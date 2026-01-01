@@ -2,7 +2,7 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 8
+**Total Completed:** 9
 **Last Updated:** 2026-01-01
 
 ---
@@ -27,6 +27,7 @@ Resources are listed by service group in the order they were completed.
 ### aws_prometheus
 
 - [x] `aws_prometheus_query_logging_configuration` - ✓ PASSED (2026-01-01) - [test results](test_aws_prometheus_query_logging_configuration/test-results.md)
+- [x] `aws_prometheus_resource_policy` - ✓ PASSED (2026-01-01) - [test results](test_aws_prometheus_resource_policy/test-results.md)
 
 <!-- Add completed resources below in this format:
 

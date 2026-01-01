@@ -560,7 +560,6 @@ notimplemented = {
     "aws_lakeformation_lf_tag_expression": True,  ### TODO 6.27.0
     "aws_lakeformation_opt_in": True,  ### TODO 6.27.0
     "aws_lakeformation_resource_lf_tag": True,  ### TODO 6.27.0
-#    "aws_lambda_capacity_provider": True,  ### TODO 6.27.0
 #    "aws_lambda_function_recursion_config": True,  ### TODO 6.27.0
     "aws_lambda_runtime_management_config": True,  ### TODO 6.27.0
     "aws_m2_application": True,  ### TODO 6.27.0

@@ -15,7 +15,7 @@
 - [x] `aws_api_gateway_api_key`
 - [ ] `aws_api_gateway_base_path_mapping`
 - [x] `aws_api_gateway_client_certificate`
-- [ ] `aws_api_gateway_documentation_part`
+- [x] `aws_api_gateway_documentation_part`
 - [ ] `aws_api_gateway_documentation_version`
 - [ ] `aws_api_gateway_domain_name`
 - [ ] `aws_api_gateway_gateway_response`

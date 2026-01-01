@@ -4,8 +4,8 @@ APIGATEWAY Resource Handlers - Optimized with __getattr__
 This file contains ONLY APIGATEWAY resources with custom transformation logic.
 All other resources automatically use the default handler via __getattr__.
 
-Original: 3 functions
-Optimized: 3 functions + __getattr__
+Original: 4 functions
+Optimized: 4 functions + __getattr__
 Reduction: 0% less code
 """
 
@@ -30,8 +30,21 @@ def aws_api_gateway_method(t1,tt1,tt2,flag1,flag2):
 		context.apigwrestapiid=t1.split("r-")[1].split("_")[0]
 	if tt1=="resource_id" and tt2 != "null":
 		t1=tt1 + " = aws_api_gateway_resource.r-" + str(context.apigwrestapiid)+"_" + tt2 + ".id\n"
+		common.add_dependancy("aws_api_gateway_resource", str(context.apigwrestapiid)+"_"+tt2)
 	if tt1=="authorizer_id" and tt2 != "null":
 		t1=tt1 + " = aws_api_gateway_authorizer.r-" + str(context.apigwrestapiid)+"_" + tt2 + ".id\n"
+		common.add_dependancy("aws_api_gateway_authorizer", str(context.apigwrestapiid)+"_"+tt2)
+	return skip,t1,flag1,flag2
+
+
+def aws_api_gateway_documentation_part(t1,tt1,tt2,flag1,flag2):
+
+	skip=0
+	if t1.startswith("resource"):
+		context.apigwrestapiid=t1.split("r-")[1].split("_")[0]
+	if tt1=="rest_api_id" and tt2 != "null":
+		t1=tt1 + " = aws_api_gateway_rest_api.r-" + str(context.apigwrestapiid) + ".id\n"
+		common.add_dependancy("aws_api_gateway_rest_api", str(context.apigwrestapiid))
 	return skip,t1,flag1,flag2
 
 

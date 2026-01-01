@@ -448,7 +448,118 @@ elif tt1 == "vector_bucket_arn":  # Use the parent resource identifier field
     t1 = t1 + "\n lifecycle {\n   ignore_changes = [policy]\n}\n"
 ```
 
+**F. Dereference parent resource IDs and add dependencies:**
+
+When a resource references a parent resource by ID, you need to:
+1. Transform the ID field to reference the parent resource
+2. Add the parent as a dependency so aws2tf imports it automatically
+
+**Pattern:**
+```python
+def aws_<resource>(t1, tt1, tt2, flag1, flag2):
+    skip = 0
+    
+    # Extract parent ID from resource name when resource block starts
+    if t1.startswith("resource"):
+        context.parent_id = t1.split("r-")[1].split("_")[0]
+    
+    # Transform parent ID field to resource reference and add dependency
+    if tt1 == "parent_resource_id" and tt2 != "null":
+        # Transform: parent_resource_id = "abc123"
+        # Into: parent_resource_id = aws_parent_resource.r-abc123.id
+        t1 = tt1 + " = aws_parent_resource.r-" + str(context.parent_id) + ".id\n"
+        
+        # Add parent as dependency so aws2tf imports it automatically
+        common.add_dependancy("aws_parent_resource", str(context.parent_id))
+    
+    return skip, t1, flag1, flag2
+```
+
+**Real Example: API Gateway Documentation Part**
+```python
+def aws_api_gateway_documentation_part(t1, tt1, tt2, flag1, flag2):
+    skip = 0
+    
+    # Extract REST API ID from resource name
+    if t1.startswith("resource"):
+        context.apigwrestapiid = t1.split("r-")[1].split("_")[0]
+    
+    # Transform rest_api_id field and add REST API as dependency
+    if tt1 == "rest_api_id" and tt2 != "null":
+        t1 = tt1 + " = aws_api_gateway_rest_api.r-" + str(context.apigwrestapiid) + ".id\n"
+        common.add_dependancy("aws_api_gateway_rest_api", str(context.apigwrestapiid))
+    
+    return skip, t1, flag1, flag2
+```
+
+**Why this is needed:**
+- Generated Terraform initially has: `rest_api_id = "29bg9hqtq7"` (string literal)
+- Handler transforms to: `rest_api_id = aws_api_gateway_rest_api.r-29bg9hqtq7.id` (resource reference)
+- `common.add_dependancy()` tells aws2tf to import the REST API automatically
+- Without this, validation fails with "Reference to undeclared resource"
+
+**Common parent resource patterns:**
+- API Gateway resources → REST API (`aws_api_gateway_rest_api`)
+- VPC resources → VPC (`aws_vpc`)
+- Subnet resources → VPC (`aws_vpc`)
+- Security group rules → Security group (`aws_security_group`)
+- Route table associations → Route table (`aws_route_table`)
+
 **Note:** Policy resources (like `aws_s3_bucket_policy`, `aws_iam_role_policy`, `aws_s3vectors_vector_bucket_policy`) often have JSON normalization issues where Terraform and AWS return different key ordering. Always add lifecycle blocks to ignore the policy field.
+
+### Step 5.5b: Resources in needid_dict - Dependency Management
+
+Some resources are listed in `code/fixtf_aws_resources/needid_dict.py` because they require a parent resource ID parameter to list their resources.
+
+**Check if your resource is in needid_dict:**
+```bash
+grep "aws_<resource_type>" code/fixtf_aws_resources/needid_dict.py
+```
+
+**If found, you MUST implement both:**
+
+**1. Get function that accepts parent ID:**
+```python
+def get_aws_<resource>(type, id, clfn, descfn, topkey, key, filterid):
+    if id is not None:
+        # id parameter contains the parent resource ID
+        paginator = client.get_paginator(descfn)
+        for page in paginator.paginate(parentId=id):
+            for j in page[topkey]:
+                # Build composite ID if needed
+                child_id = id + '/' + j[key]
+                common.write_import(type, child_id, None)
+    else:
+        log.debug("Must pass parentId for "+type)
+```
+
+**2. Handler function that adds parent dependency:**
+```python
+def aws_<resource>(t1, tt1, tt2, flag1, flag2):
+    skip = 0
+    
+    # Extract parent ID from resource name
+    if t1.startswith("resource"):
+        context.parent_id = t1.split("r-")[1].split("_")[0]
+    
+    # Transform parent ID field and add dependency
+    if tt1 == "parent_id_field" and tt2 != "null":
+        t1 = tt1 + " = aws_parent_resource.r-" + str(context.parent_id) + ".id\n"
+        common.add_dependancy("aws_parent_resource", str(context.parent_id))
+    
+    return skip, t1, flag1, flag2
+```
+
+**Why both are needed:**
+- Get function: Lists child resources given parent ID
+- Handler function: Transforms parent ID references and triggers automatic parent import
+- Without handler: Validation fails with "Reference to undeclared resource"
+- With handler: aws2tf automatically imports parent resources
+
+**Testing command for needid_dict resources:**
+```bash
+./aws2tf.py -r us-east-1 -t <resource_type> -i <parent_resource_id>
+```
 
 ### Step 5.6: Register Handler Module (if new service)
 
@@ -1294,6 +1405,42 @@ rm -rf .terraform .terraform.lock.hcl
 
 ### Issue: Terraform validation fails
 **Solution:** Review the example in the Terraform docs, ensure all required arguments are provided
+
+### Issue: "Reference to undeclared resource" after import
+**Symptom:** Terraform validation fails with "Reference to undeclared resource" for a parent resource
+**Cause:** Generated Terraform references a parent resource that wasn't imported
+**Solution:** Add a handler function that:
+1. Transforms the parent ID field to a resource reference
+2. Calls `common.add_dependancy()` to trigger automatic import of the parent
+
+**Example:** For `aws_api_gateway_documentation_part` referencing `rest_api_id`:
+```python
+def aws_api_gateway_documentation_part(t1, tt1, tt2, flag1, flag2):
+    skip = 0
+    
+    # Extract parent ID from resource name
+    if t1.startswith("resource"):
+        context.apigwrestapiid = t1.split("r-")[1].split("_")[0]
+    
+    # Transform rest_api_id and add dependency
+    if tt1 == "rest_api_id" and tt2 != "null":
+        t1 = tt1 + " = aws_api_gateway_rest_api.r-" + str(context.apigwrestapiid) + ".id\n"
+        common.add_dependancy("aws_api_gateway_rest_api", str(context.apigwrestapiid))
+    
+    return skip, t1, flag1, flag2
+```
+
+This transforms `rest_api_id = "29bg9hqtq7"` into `rest_api_id = aws_api_gateway_rest_api.r-29bg9hqtq7.id` and automatically imports the REST API.
+
+### Issue: Resource in needid_dict requires parent ID
+**Symptom:** aws2tf says "can not have null id must pass parameter <paramName>"
+**Cause:** Resource is in `needid_dict` and requires a parent resource ID to list
+**Solution:**
+- Check `code/fixtf_aws_resources/needid_dict.py` to see what parameter is required
+- Pass the parent resource ID using `-i` flag: `./aws2tf.py -t <type> -i <parent_id>`
+- Example: `./aws2tf.py -t aws_api_gateway_documentation_part -i <rest_api_id>`
+- The get function should handle the parent ID and list all child resources
+- Add handler function to dereference parent and add dependency (see above)
 
 ### Issue: Wrong AWS provider version
 **Symptom:** `Error: Invalid resource type` or resource not found

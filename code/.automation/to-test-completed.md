@@ -2,7 +2,7 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 2
+**Total Completed:** 3
 **Last Updated:** 2026-01-01
 
 ---
@@ -15,6 +15,7 @@ Resources are listed by service group in the order they were completed.
 
 - [x] `aws_api_gateway_api_key` - ✓ PASSED (2026-01-01) - [test results](test_aws_api_gateway_api_key/test-results.md)
 - [x] `aws_api_gateway_client_certificate` - ✓ PASSED (2026-01-01) - [test results](test_aws_api_gateway_client_certificate/test-results.md)
+- [x] `aws_api_gateway_documentation_part` - ✓ PASSED (2026-01-01) - [test results](test_aws_api_gateway_documentation_part/test-results.md)
 
 <!-- Add completed resources below in this format:
 

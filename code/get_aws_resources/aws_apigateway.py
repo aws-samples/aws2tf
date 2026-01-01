@@ -113,34 +113,26 @@ def get_aws_api_gateway_documentation_part(type, id, clfn, descfn, topkey, key, 
         config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
         client = boto3.client(clfn, config=config)
         
-        if id is None:
-            # First get all REST APIs
-            rest_api_paginator = client.get_paginator('get_rest_apis')
-            rest_apis = []
-            for page in rest_api_paginator.paginate():
-                rest_apis = rest_apis + page['items']
-            
-            # Then get documentation parts for each REST API
-            for api in rest_apis:
-                try:
-                    doc_paginator = client.get_paginator(descfn)
-                    for page in doc_paginator.paginate(restApiId=api['id']):
-                        for j in page[topkey]:
-                            # ID format is restApiId/documentationPartId
-                            doc_id = api['id'] + '/' + j[key]
-                            common.write_import(type, doc_id, None)
-                except Exception as e:
-                    if context.debug: log.debug(f"Error listing docs for API {api['id']}: {e}")
-                    continue
+        if id is not None:
+            # List documentation parts for the given REST API
+            doc_paginator = client.get_paginator(descfn)
+            for page in doc_paginator.paginate(restApiId=id):
+                response = response + page[topkey]
+            if response == []:
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
+                pkey=type+"."+id
+                context.rproc[pkey]=True
+                return True
+            for j in response:
+                # ID format is restApiId/documentationPartId
+                pkey = id + '/' + j[key]
+                altk = "r-" + pkey
+                common.write_import(type, pkey, altk)
+                pkey=type+"."+id
+                context.rproc[pkey]=True
         else:
-            # Get specific documentation part (id format: restApiId/docPartId)
-            if '/' in id:
-                rest_api_id, doc_part_id = id.split('/', 1)
-                response = client.get_documentation_part(restApiId=rest_api_id, documentationPartId=doc_part_id)
-                if response:
-                    common.write_import(type, id, None)
-            else:
-                if context.debug: log.debug("Must pass restApiId/docPartId for "+type)
+            log.debug("Must pass restApiId for "+type+" returning")
+            return True
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

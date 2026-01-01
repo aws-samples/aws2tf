@@ -454,7 +454,7 @@ notimplemented = {
     "aws_shield_protection_health_check_association": True,
     #
     "aws_signer_signing_job": True,
-    "aws_signer_signing_profile": True,
+#    "aws_signer_signing_profile": True,
     "aws_signer_signing_profile_permission": True,
     #
     "aws_ssm_resource_data_sync": True,
@@ -604,7 +604,7 @@ notimplemented = {
 #    "aws_prometheus_query_logging_configuration": True,  ### TODO 6.27.0
 #    "aws_prometheus_resource_policy": True,  ### TODO 6.27.0
     "aws_prometheus_scraper": True,  ### TODO 6.27.0
-    "aws_prometheus_workspace_configuration": True,  ### TODO 6.27.0
+#    "aws_prometheus_workspace_configuration": True,  ### TODO 6.27.0
     "aws_qbusiness_application": True,  ### TODO 6.27.0
     "aws_quicksight_account_settings": True,  ### TODO 6.27.0
     "aws_quicksight_custom_permissions": True,  ### TODO 6.27.0

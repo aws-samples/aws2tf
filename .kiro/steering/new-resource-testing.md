@@ -1201,6 +1201,52 @@ Create or update documentation in the test directory:
 - Re-comment the entry in `code/fixtf_aws_resources/aws_not_implemented.py`
 - Add a comment explaining why (e.g., "# Composite ID format not supported")
 
+### Step 7.1: Update Tracking Files (MANDATORY)
+
+**CRITICAL:** After completing a test (success or failure), you MUST update the tracking files immediately:
+
+**For successful tests:**
+
+1. **Update to-test.md** - Mark resource as completed:
+```bash
+# Change from:
+- [ ] `aws_resource_name`
+# To:
+- [x] `aws_resource_name`
+```
+
+2. **Update to-test-completed.md** - Add entry with link:
+```markdown
+### aws_service
+
+- [x] `aws_resource_name` - ✓ PASSED (YYYY-MM-DD) - [test results](test_aws_resource_name/test-results.md)
+```
+
+3. **Update total count** in to-test-completed.md:
+```markdown
+**Total Completed:** X  # Increment by 1
+**Last Updated:** YYYY-MM-DD
+```
+
+**For failed/skipped tests:**
+
+1. **Update to-test.md** - Mark as attempted:
+```bash
+- [x] `aws_resource_name` (FAILED - see test directory)
+# OR
+- [x] `aws_resource_name` (SKIPPED - requires EKS cluster)
+```
+
+2. **Do NOT add to to-test-completed.md** - only successful tests go there
+
+**Why this is critical:**
+- Tracks progress across sessions
+- Prevents re-testing completed resources
+- Provides quick status overview
+- Essential for resumable bulk testing
+
+**REMEMBER:** Update these files IMMEDIATELY after Step 7, before moving to the next resource!
+
 ## Constraints and Best Practices
 
 ### Iteration Limits

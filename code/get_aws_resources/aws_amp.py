@@ -144,3 +144,42 @@ def get_aws_prometheus_resource_policy(type, id, clfn, descfn, topkey, key, filt
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
+
+
+def get_aws_prometheus_workspace_configuration(type, id, clfn, descfn, topkey, key, filterid):
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all Prometheus workspaces first
+            paginator = client.get_paginator('list_workspaces')
+            workspaces = []
+            for page in paginator.paginate():
+                workspaces = workspaces + page['workspaces']
+            
+            # Check each workspace for configuration
+            for workspace in workspaces:
+                try:
+                    response = client.describe_workspace_configuration(workspaceId=workspace['workspaceId'])
+                    # If configuration exists, import it
+                    if response.get('workspaceConfiguration'):
+                        common.write_import(type, workspace['workspaceId'], None)
+                except ClientError as e:
+                    if e.response['Error']['Code'] == 'ResourceNotFoundException':
+                        continue
+                    raise
+        else:
+            # Get specific workspace's configuration
+            response = client.describe_workspace_configuration(workspaceId=id)
+            if response.get('workspaceConfiguration'):
+                common.write_import(type, id, None)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True

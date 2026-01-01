@@ -9302,9 +9302,9 @@ aws_signer_signing_job = {
 aws_signer_signing_profile = {
 	"clfn":		"signer",
 	"descfn":	"list_signing_profiles",
-	"topkey":	"Profiles",
-	"key":		"ProfileName",
-	"filterid":	"ProfileName"
+	"topkey":	"profiles",
+	"key":		"profileName",
+	"filterid":	"profileName"
 }
 
 aws_signer_signing_profile_permission = {
@@ -12258,8 +12258,8 @@ aws_prometheus_scraper = {
 
 aws_prometheus_workspace_configuration = {
 	"clfn":		"amp",
-	"descfn":	"describe_workspace",
-	"topkey":	"workspace",
+	"descfn":	"describe_workspace_configuration",
+	"topkey":	"workspaceConfiguration",
 	"key":		"workspaceId",
 	"filterid":	"workspaceId"
 }

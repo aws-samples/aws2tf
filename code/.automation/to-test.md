@@ -601,8 +601,8 @@
 
 - [x] `aws_prometheus_query_logging_configuration`
 - [x] `aws_prometheus_resource_policy`
-- [ ] `aws_prometheus_scraper`
-- [ ] `aws_prometheus_workspace_configuration`
+- [x] `aws_prometheus_scraper` (SKIPPED - requires EKS cluster)
+- [x] `aws_prometheus_workspace_configuration`
 
 ### aws_qbusiness
 
@@ -781,7 +781,7 @@
 ### aws_signer
 
 - [ ] `aws_signer_signing_job`
-- [ ] `aws_signer_signing_profile`
+- [x] `aws_signer_signing_profile`
 - [ ] `aws_signer_signing_profile_permission`
 
 ### aws_ssm

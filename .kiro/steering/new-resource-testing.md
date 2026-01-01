@@ -140,9 +140,16 @@ vector_bucket_arn = aws_s3vectors_vector_bucket.test.vector_bucket_arn  # ✓
 - **STOP** if the resource cannot be found in either file
 
 ### 3. Verify Import ID Format
+
+**CRITICAL:** The import documentation is the source of truth for ID format throughout the system.
+
 - Navigate to `code/.automation/terraform-provider-aws/website/docs/r/<resource>.html.markdown`
 - Locate the import block example
-- Check if the `id` field contains composite identifiers with `,` or `/` separators
+- **The `id` field value determines everything:**
+  - What format the get function must write imports with
+  - What format resource names will use
+  - What format dependent resources must reference
+- Check if the `id` field contains composite identifiers with `,` separators
 
 **Example of simple ID (supported):**
 ```hcl
@@ -156,9 +163,37 @@ import {
 ```hcl
 import {
   to = aws_route_table_association.example
-  id = "subnet-12345,rtb-67890"
+  id = "subnet-12345,rtb-67890"  # Comma = composite ID
 }
 ```
+
+**IMPORTANT: Import ID vs API Response Mismatch**
+
+Sometimes the API returns a different identifier format than what Terraform import expects:
+
+**Example: Prometheus Workspace**
+- API returns: `arn:aws:aps:us-east-1:123456789012:workspace/ws-abc123` (ARN)
+- Import expects: `ws-abc123` (workspace ID)
+- aws_dict.py has: `key: "workspaceId"`, `filterid: "arn"` (conflicting!)
+
+**Solution:** Create custom get function that writes imports using the format from import docs:
+```python
+def get_aws_prometheus_workspace(type, id, clfn, descfn, topkey, key, filterid):
+    # ...
+    for j in response:
+        # Write import using workspace ID (from import docs)
+        # NOT using ARN (from filterid)
+        common.write_import(type, j['workspaceId'], None)
+```
+
+**Why this matters:**
+- Resource names are based on the import ID format
+- Dependent resources reference by resource name
+- If get function uses ARN but import expects ID, references break
+- Handler in dependent resource: `aws_prometheus_workspace.<workspace_id>.id` ✓
+- If using ARN: `aws_prometheus_workspace.arn_aws_aps_...` ✗ (unpredictable, breaks)
+
+**Rule:** Always write imports using the ID format from Terraform import documentation, even if the API returns something different (ARN, composite structure, etc.). Extract or transform the API response to match the import format.
 
 **If composite ID detected:**
 - **STOP testing**
@@ -1452,8 +1487,48 @@ rm -rf .terraform .terraform.lock.hcl
 **Symptom:** Import files are generated but with wrong IDs, or Terraform import fails
 **Solution:** 
 - Check the boto3 API response structure
-- Verify the Terraform import documentation for expected ID format
+- **Check the Terraform import documentation for expected ID format** (this is the source of truth!)
 - Update the `key` field in aws_dict.py to match (e.g., use ARN field instead of name field)
+- If API returns different format than import expects, create custom get function
+
+### Issue: Import ID format mismatch (API returns ARN, import expects ID)
+**Symptom:** 
+- Dependent resources can't find parent resource
+- Error: "Not found aws_<parent_resource>.<id>" 
+- aws_dict.py has `filterid: "arn"` but import docs show simple ID
+
+**Cause:** API returns ARN but Terraform import expects simpler ID (workspace ID, function name, etc.)
+
+**Solution:** Create custom get function that writes imports using the format from import documentation:
+
+**Example: Prometheus Workspace**
+- API returns: `{"arn": "arn:aws:aps:region:account:workspace/ws-abc123", "workspaceId": "ws-abc123"}`
+- Import docs show: `id = "ws-abc123"` (workspace ID, not ARN)
+- aws_dict.py has: `filterid: "arn"` (wrong for this case!)
+
+**Fix:**
+```python
+def get_aws_prometheus_workspace(type, id, clfn, descfn, topkey, key, filterid):
+    # ...
+    for j in response:
+        # Write import using workspace ID (from import docs)
+        # NOT using ARN (from filterid)
+        common.write_import(type, j['workspaceId'], None)
+    
+    # Handle both ARN and workspace ID when getting specific resource
+    if id.startswith("arn:"):
+        workspace_id = id.split('/')[-1]  # Extract ID from ARN
+    elif id.startswith("ws-"):
+        workspace_id = id
+```
+
+**Why this is critical:**
+- Resource names are based on import ID format
+- Dependent resources reference: `aws_prometheus_workspace.<workspace_id>.id`
+- If using ARN: resource name becomes `arn_aws_aps_...` (unpredictable, breaks references)
+- If using workspace ID: resource name is `ws-abc123` (predictable, references work)
+
+**Rule:** The Terraform import documentation `id =` value is the source of truth. Always write imports using that format, even if aws_dict.py or the API suggests otherwise.
 
 ### Issue: Composite ID format
 **Solution:** Document in test-failed.md - these require special handling in the codebase

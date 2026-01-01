@@ -2,7 +2,7 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 7
+**Total Completed:** 8
 **Last Updated:** 2026-01-01
 
 ---
@@ -23,6 +23,10 @@ Resources are listed by service group in the order they were completed.
 
 - [x] `aws_lambda_function_recursion_config` - ✓ PASSED (2026-01-01) - [test results](test_aws_lambda_function_recursion_config/test-results.md)
 - [x] `aws_lambda_capacity_provider` - ✓ PASSED (2026-01-01) - [test results](test_aws_lambda_capacity_provider/test-results.md)
+
+### aws_prometheus
+
+- [x] `aws_prometheus_query_logging_configuration` - ✓ PASSED (2026-01-01) - [test results](test_aws_prometheus_query_logging_configuration/test-results.md)
 
 <!-- Add completed resources below in this format:
 

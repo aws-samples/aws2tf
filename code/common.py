@@ -590,6 +590,7 @@ def get_file_permissions_info() -> dict:
 #####################
 
 from get_aws_resources import aws_acm
+from get_aws_resources import aws_amp
 from get_aws_resources import aws_amplify
 from get_aws_resources import aws_athena
 from get_aws_resources import aws_autoscaling
@@ -687,6 +688,7 @@ from fixtf_aws_resources import aws_not_implemented
 # This prevents arbitrary code execution via eval()
 AWS_RESOURCE_MODULES = {
     'acm': aws_acm,
+    'amp': aws_amp,
     'amplify': aws_amplify,
     'athena': aws_athena,
     'autoscaling': aws_autoscaling,

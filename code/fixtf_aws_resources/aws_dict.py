@@ -9294,9 +9294,9 @@ aws_shield_protection_health_check_association = {
 aws_signer_signing_job = {
 	"clfn":		"signer",
 	"descfn":	"list_signing_jobs",
-	"topkey":	"Jobs",
-	"key":		"JobId",
-	"filterid":	"JobId"
+	"topkey":	"jobs",
+	"key":		"jobId",
+	"filterid":	"jobId"
 }
 
 aws_signer_signing_profile = {

@@ -1239,6 +1239,22 @@ Create or update documentation in the test directory:
 
 2. **Do NOT add to to-test-completed.md** - only successful tests go there
 
+3. **Re-enable in aws_not_implemented.py** - Uncomment the resource with explanation:
+```python
+# In code/fixtf_aws_resources/aws_not_implemented.py
+# Change from:
+#    "aws_resource_name": True,
+# Back to:
+    "aws_resource_name": True,  ### Reason for failure (e.g., AWS API limitation - destination block not returned)
+```
+
+**Examples of failure reasons to document:**
+- `### AWS API limitation - destination block not returned by describe_<resource>`
+- `### Composite ID format not supported`
+- `### Requires EKS cluster - too complex for automated testing`
+- `### Requires domain ownership and SSL certificates`
+- `### API method does not exist in boto3`
+
 **Why this is critical:**
 - Tracks progress across sessions
 - Prevents re-testing completed resources

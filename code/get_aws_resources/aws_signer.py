@@ -37,3 +37,36 @@ def get_aws_signer_signing_profile(type, id, clfn, descfn, topkey, key, filterid
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
+
+
+def get_aws_signer_signing_job(type, id, clfn, descfn, topkey, key, filterid):
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        response = []
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all signing jobs
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate():
+                response = response + page[topkey]
+            if response == []:
+                if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
+            for j in response:
+                # Prefix with s- because job IDs can start with numbers
+                common.write_import(type, j[key], "s-"+j[key])
+        else:
+            # Get specific signing job
+            response = client.describe_signing_job(jobId=id)
+            if response:
+                # Prefix with s- because job IDs can start with numbers
+                common.write_import(type, id, "s-"+id)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True

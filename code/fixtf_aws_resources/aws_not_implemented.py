@@ -474,9 +474,9 @@ notimplemented = {
     "aws_transfer_ssh_key": True,
     "aws_transfer_tag": True,
 # apigateway stuff
-	"aws_api_gateway_api_key": True,
-	"aws_api_gateway_base_path_mapping": True,
-	"aws_api_gateway_client_certificate": True,
+#	"aws_api_gateway_api_key": True,
+#	"aws_api_gateway_base_path_mapping": True,
+#	"aws_api_gateway_client_certificate": True,
 	"aws_api_gateway_documentation_part": True,
 	"aws_api_gateway_documentation_version": True,
 	"aws_api_gateway_domain_name": True,

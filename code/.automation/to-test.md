@@ -12,9 +12,9 @@
 
 ### aws_api_gateway
 
-- [ ] `aws_api_gateway_api_key`
+- [x] `aws_api_gateway_api_key`
 - [ ] `aws_api_gateway_base_path_mapping`
-- [ ] `aws_api_gateway_client_certificate`
+- [x] `aws_api_gateway_client_certificate`
 - [ ] `aws_api_gateway_documentation_part`
 - [ ] `aws_api_gateway_documentation_version`
 - [ ] `aws_api_gateway_domain_name`

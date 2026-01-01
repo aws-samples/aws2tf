@@ -131,8 +131,12 @@ vector_bucket_arn = aws_s3vectors_vector_bucket.test.vector_bucket_arn  # ✓
 - Open `code/fixtf_aws_resources/aws_not_implemented.py`
 - Search for the resource type
 - **Note the TODO version** (e.g., `### TODO 6.27.0`) - you'll need this for provider.tf
-- If found and commented out, uncomment it to enable testing
-- If found and not commented, the resource is already enabled
+- **CRITICAL: If found and uncommented, you MUST comment it out to enable testing**
+  - Add `#` at the start of the line to comment it out
+  - Example: Change `"aws_api_gateway_api_key": True,` to `#"aws_api_gateway_api_key": True,`
+  - **This is required** - aws2tf will block the resource if it's in the notimplemented dictionary
+  - **LOGIC:** Resources in this dictionary are BLOCKED. Comment out = enable testing.
+- If found and already commented out, the resource is already enabled
 - **STOP** if the resource cannot be found in either file
 
 ### 3. Verify Import ID Format
@@ -182,9 +186,10 @@ Create a minimal but complete Terraform configuration that demonstrates the reso
 
 **Determine AWS Provider Version:**
 1. Check the TODO comment in `code/fixtf_aws_resources/aws_not_implemented.py`
-2. If marked `### TODO 6.27.0`, use `version = "~> 6.27"`
-3. If marked `### TODO 5.x.x`, use `version = "~> 5.0"`
-4. For older resources without TODO comments, use `version = "~> 5.0"`
+2. **For most resources:** Use `version = "~> 6.0"` to get the latest 6.x version
+3. If marked `### TODO 6.27.0` or similar, you can use `version = "~> 6.27"` for that specific version
+4. **IMPORTANT:** Always use version 6.x or later - do NOT use version 5.x (this is non-negotiable for consistency)
+5. For older resources without TODO comments, still use `version = "~> 6.0"`
 
 **Finding example code:**
 1. Check `code/.automation/terraform-provider-aws/website/docs/r/<resource>.html.markdown` for official examples
@@ -211,19 +216,35 @@ Create a minimal but complete Terraform configuration that demonstrates the reso
 - `provider.tf` - AWS provider configuration (with correct version)
 - `outputs.tf` - Output the resource ID for testing
 
-**Example provider.tf for new resources (6.27.0+):**
+**Example provider.tf (use latest 6.x):**
 ```hcl
 terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 6.27"  # Match version from aws_not_implemented.py
+      version = "~> 6.0"  # Use latest 6.x version
     }
   }
 }
 
 provider "aws" {
   region = "us-east-1"  # Remember this region for aws2tf.py -r flag
+}
+```
+
+**Example provider.tf for specific version:**
+```hcl
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.27"  # Match specific version from aws_not_implemented.py if needed
+    }
+  }
+}
+
+provider "aws" {
+  region = "us-east-1"
 }
 ```
 
@@ -268,6 +289,15 @@ cd <workspace_root>
 - **ALWAYS use the `-r` flag** to specify the same region as in your `provider.tf`
 - Example: If `provider.tf` has `region = "us-east-1"`, use `./aws2tf.py -r us-east-1 -t <resource_type>`
 - Without `-r`, aws2tf uses your default AWS CLI region, which may differ from where you created the test resource
+
+**Important: Command Timeouts and Performance**
+- aws2tf commands can take 30-60 seconds or longer depending on account size
+- Use timeout of at least 120000ms (2 minutes) when running commands
+- The tool performs initial resource discovery which scans 9 core resource types (~10 seconds)
+- Progress bar shows: "Fetching resource lists: X% | S3 buckets, Lambda functions, etc."
+- This discovery happens even when testing a single resource type
+- Don't assume timeout = failure; check for generated files in `generated/` directory
+- If command times out but files were generated, the import likely succeeded
 
 Example: `./aws2tf.py -r us-east-1 -t aws_vpc`
 
@@ -518,6 +548,31 @@ def get_aws_<resource>(type, id, clfn, descfn, topkey, key, filterid):
 **Examples of dependent resources:**
 - `aws_s3vectors_index` (requires vectorBucketName to list)
 - `aws_route_table_association` (requires route table or subnet)
+
+### Step 5.7b: Check if Get Function Already Exists
+
+**IMPORTANT:** Before creating a new get function file, check if the service file already exists:
+
+```bash
+ls code/get_aws_resources/aws_<service>.py
+```
+
+**If the file exists:**
+1. Open the file and search for your specific resource function
+2. Search for: `def get_aws_<resource_type>`
+3. **If function doesn't exist:** Add it to the existing file (don't create a new file)
+4. **If function exists:** Verify it's correct and skip creation
+5. Follow the same patterns as other functions in the file
+
+**Example:** For `aws_api_gateway_api_key`:
+- File `code/get_aws_resources/aws_apigateway.py` already exists ✓
+- Function `get_aws_api_gateway_api_key` didn't exist
+- Added function to existing file (didn't create new aws_apigateway.py)
+- Followed the pattern of other functions in the file
+
+**If the file doesn't exist:**
+- Create new file following the patterns in Step 5.7
+- Remember to register it in common.py (Step 5.7 final section)
 
 **Pattern for resources without list operations (policy resources):**
 
@@ -1100,6 +1155,27 @@ rm -rf .terraform .terraform.lock.hcl
 ```
 
 ## Troubleshooting Common Issues
+
+### Issue: "Not supported by aws2tf currently" message
+**Symptom:** aws2tf says "Not supported by aws2tf currently: aws_<resource>" and exits
+**Cause:** Resource is still uncommented in `aws_not_implemented.py`
+**Solution:** 
+- Open `code/fixtf_aws_resources/aws_not_implemented.py`
+- Find the resource line (e.g., `"aws_api_gateway_api_key": True,`)
+- Comment it out by adding `#` at the start: `#"aws_api_gateway_api_key": True,`
+- This is a **required step** - aws2tf blocks resources in the notimplemented dictionary
+- Re-run aws2tf after commenting out the resource
+
+### Issue: Specific import returns "NOT FOUND"
+**Symptom:** `./aws2tf.py -t <type> -i <id>` returns "NOT FOUND: aws_<resource> <id> check if it exists"
+**Cause:** The get function's specific ID handling may be incorrect, or resource doesn't exist
+**Solution:**
+1. Verify the resource still exists in your test directory
+2. Check the get function handles the `id is not None` case correctly
+3. Verify the boto3 get method parameter name matches the API
+   - Example: `get_api_key(apiKey=id)` not `get_api_key(id=id)`
+4. Test the boto3 API directly: `python3 -c "import boto3; client = boto3.client('<service>'); print(client.get_<resource>(<param>='<id>'))"`
+5. Ensure the get function extracts the correct key from the response
 
 ### Issue: Resource not in aws_dict.py
 **Solution:** Add the resource to `aws_dict.py` first using the pattern from `new-capability.md`

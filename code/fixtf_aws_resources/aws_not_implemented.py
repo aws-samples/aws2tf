@@ -1,10 +1,67 @@
 notimplemented = {
+    #
+    # ========================================
+    # DEPRECATED/LEGACY SERVICES
+    # These services have been deprecated, discontinued, or replaced
+    # Testing these resources is not recommended
+    # ========================================
+    #
+	"aws_waf_byte_match_set": True,  ### Deprecated - use WAFv2
+	"aws_waf_geo_match_set": True,  ### Deprecated - use WAFv2
+	"aws_waf_ipset": True,  ### Deprecated - use WAFv2
+	"aws_waf_rate_based_rule": True,  ### Deprecated - use WAFv2
+	"aws_waf_regex_match_set": True,  ### Deprecated - use WAFv2
+	"aws_waf_regex_pattern_set": True,  ### Deprecated - use WAFv2
+	"aws_waf_rule": True,  ### Deprecated - use WAFv2
+	"aws_waf_rule_group": True,  ### Deprecated - use WAFv2
+	"aws_waf_size_constraint_set": True,  ### Deprecated - use WAFv2
+	"aws_waf_sql_injection_match_set": True,  ### Deprecated - use WAFv2
+	"aws_waf_xss_match_set": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_byte_match_set": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_geo_match_set": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_ipset": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_rate_based_rule": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_regex_match_set": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_regex_pattern_set": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_rule": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_rule_group": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_size_constraint_set": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_sql_injection_match_set": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_web_acl": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_web_acl_association": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_xss_match_set": True,  ### Deprecated - use WAFv2
+    "aws_cloudsearch_domain": True,  ### Legacy - use OpenSearch
+    "aws_cloudsearch_domain_service_access_policy": True,  ### Legacy - use OpenSearch
+    "aws_datapipeline_pipeline": True,  ### Deprecated - use Glue/Step Functions
+    "aws_datapipeline_pipeline_definition": True,  ### Deprecated - use Glue/Step Functions
+    "aws_elastictranscoder_preset": True,  ### Deprecated - use MediaConvert
+    "aws_glacier_vault_lock": True,  ### Rebranded as S3 Glacier
+    "aws_inspector2_delegated_admin_account": True,  ### Deprecated - use Inspector v2
+    "aws_inspector2_filter": True,  ### Deprecated - use Inspector v2
+    "aws_inspector2_member_association": True,  ### Deprecated - use Inspector v2
+    "aws_inspector_assessment_target": True,  ### Deprecated - use Inspector v2
+    "aws_inspector_assessment_template": True,  ### Deprecated - use Inspector v2
+    "aws_opsworks_application": True,  ### Being phased out
+    "aws_opsworks_custom_layer": True,  ### Being phased out
+    "aws_opsworks_instance": True,  ### Being phased out
+    "aws_opsworks_php_app_layer": True,  ### Being phased out
+    "aws_opsworks_stack": True,  ### Being phased out
+    "aws_opsworks_static_web_layer": True,  ### Being phased out
+    "aws_simpledb_domain": True,  ### Legacy - use DynamoDB
+    "aws_wafv2_api_key": True,  ### Deprecated - use WAFv2
+    "aws_wafv2_web_acl_rule_group_association": True,  ### Deprecated - use WAFv2
+    "aws_worklink_fleet": True, ### Service discontinued (Dec 2021)
+    #
+    # ========================================
+    # ACTIVE SERVICES
+    # ========================================
+    #
     "aws_network_acl_rule": True, ### ? worth doing
     "aws_auditmanager_account_registration": True,  ### TODO
     "aws_cognito_user_pool_domain": True,  ### TODO  
     "aws_datasync_location_s3": True,  ### TODO
     "aws_dax_cluster": True,  ### TODO
-    "aws_inspector_assessment_target": True,  ### TODO
+
     "aws_iot_thing_group": True,  ### TODO
     "aws_lightsail_database": True,  ### TODO
     "aws_macie2_classification_job": True,  ### TODO
@@ -61,8 +118,6 @@ notimplemented = {
     "aws_cloudformation_stack_set_instance": True,
     "aws_cloudfront_monitoring_subscription": True,
     #
-    "aws_cloudsearch_domain": True,
-    "aws_cloudsearch_domain_service_access_policy": True,
     "aws_cloudwatch_composite_alarm": True,
     "aws_cloudwatch_dashboard": True,
     "aws_cloudwatch_event_api_destination": True,
@@ -106,8 +161,6 @@ notimplemented = {
     #
     "aws_cur_report_definition": True,
     "aws_dataexchange_revision": True,
-    "aws_datapipeline_pipeline": True,
-    "aws_datapipeline_pipeline_definition": True,
     #
     "aws_datasync_location_azure_blob": True,
     "aws_datasync_location_efs": True,
@@ -164,7 +217,6 @@ notimplemented = {
     "aws_ec2_subnet_cidr_reservation": True,
     #
     "aws_elasticache_user_group_association": True,
-    "aws_elastictranscoder_preset": True,
     #
     "aws_emr_studio": True,
     "aws_emr_studio_session_mapping": True,
@@ -188,7 +240,6 @@ notimplemented = {
     #
     "aws_gamelift_fleet": True,
     "aws_gamelift_game_session_queue": True,
-    "aws_glacier_vault_lock": True,
     #
     "aws_glue_partition_index": True,
     "aws_glue_resource_policy": True,
@@ -197,10 +248,7 @@ notimplemented = {
     "aws_guardduty_invite_accepter": True,
     "aws_guardduty_organization_configuration": True,
     #
-    "aws_inspector2_delegated_admin_account": True,
-    "aws_inspector2_member_association": True,
     #
-    "aws_inspector_assessment_template": True,
     "aws_internet_gateway_attachment": True,
     #
     "aws_iot_authorizer": True,
@@ -304,12 +352,6 @@ notimplemented = {
     "aws_opensearchserverless_security_config": True,
     "aws_opensearchserverless_security_policy": True,
     #
-    "aws_opsworks_application": True,
-    "aws_opsworks_custom_layer": True,
-    "aws_opsworks_instance": True,
-    "aws_opsworks_php_app_layer": True,
-    "aws_opsworks_stack": True,
-    "aws_opsworks_static_web_layer": True,
     #
     "aws_pinpoint_adm_channel": True,
     "aws_pinpoint_apns_channel": True,
@@ -414,7 +456,6 @@ notimplemented = {
     "aws_signer_signing_job": True,
     "aws_signer_signing_profile": True,
     "aws_signer_signing_profile_permission": True,
-    "aws_simpledb_domain": True,
     #
     "aws_ssm_resource_data_sync": True,
     #
@@ -451,30 +492,6 @@ notimplemented = {
 	"aws_api_gateway_usage_plan_key": True,
 	"aws_api_gateway_vpc_link": True,
 ### old WAF
-	"aws_waf_byte_match_set": True,
-	"aws_waf_geo_match_set": True,
-	"aws_waf_ipset": True,
-	"aws_waf_rate_based_rule": True,
-	"aws_waf_regex_match_set": True,
-	"aws_waf_regex_pattern_set": True,
-	"aws_waf_rule": True,
-	"aws_waf_rule_group": True,
-	"aws_waf_size_constraint_set": True,
-	"aws_waf_sql_injection_match_set": True,
-	"aws_waf_xss_match_set": True,
-	"aws_wafregional_byte_match_set": True,
-	"aws_wafregional_geo_match_set": True,
-	"aws_wafregional_ipset": True,
-	"aws_wafregional_rate_based_rule": True,
-	"aws_wafregional_regex_match_set": True,
-	"aws_wafregional_regex_pattern_set": True,
-	"aws_wafregional_rule": True,
-	"aws_wafregional_rule_group": True,
-	"aws_wafregional_size_constraint_set": True,
-	"aws_wafregional_sql_injection_match_set": True,
-	"aws_wafregional_web_acl": True,
-	"aws_wafregional_web_acl_association": True,
-	"aws_wafregional_xss_match_set": True,
     #
     "aws_auditmanager_account_registration": True,
 	"aws_auditmanager_assessment_delegation": True,
@@ -484,7 +501,7 @@ notimplemented = {
 	"aws_auditmanager_framework_share": True,
 	"aws_auditmanager_organization_admin_account_registration": True,
     #
-    "aws_worklink_fleet": True, ### region  
+
     "aws_timestreamwrite_database": True, ### region
     "aws_timestreamwrite_table": True, ### region
     #
@@ -535,7 +552,7 @@ notimplemented = {
     "aws_iam_user_policy_attachments_exclusive": True,  ### TODO 6.27.0
     "aws_imagebuilder_lifecycle_policy": True,  ### TODO 6.27.0
     "aws_imagebuilder_workflow": True,  ### TODO 6.27.0
-    "aws_inspector2_filter": True,  ### TODO 6.27.0
+
     "aws_invoicing_invoice_unit": True,  ### TODO 6.27.0
     "aws_kinesis_resource_policy": True,  ### TODO 6.27.0
     "aws_lakeformation_data_cells_filter": True,  ### TODO 6.27.0
@@ -647,8 +664,8 @@ notimplemented = {
     "aws_vpc_security_group_vpc_association": True,  ### TODO 6.27.0
     "aws_vpclattice_domain_verification": True,  ### TODO 6.27.0
     "aws_vpn_concentrator": True,  ### TODO 6.27.0
-    "aws_wafv2_api_key": True,  ### TODO 6.27.0
-    "aws_wafv2_web_acl_rule_group_association": True,  ### TODO 6.27.0
+
+
     "aws_workspacesweb_browser_settings": True,  ### TODO 6.27.0
     "aws_workspacesweb_browser_settings_association": True,  ### TODO 6.27.0
     "aws_workspacesweb_data_protection_settings": True,  ### TODO 6.27.0

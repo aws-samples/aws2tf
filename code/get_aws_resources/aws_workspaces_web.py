@@ -59,3 +59,34 @@ def get_aws_workspacesweb_network_settings(type, id, clfn, descfn, topkey, key, 
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
     return True
+
+
+def get_aws_workspacesweb_identity_provider(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        from botocore.config import Config
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all portals first
+            response = client.list_portals()
+            portals = response.get('portals', [])
+            
+            # For each portal, list identity providers
+            for portal in portals:
+                portal_arn = portal['portalArn']
+                try:
+                    idp_response = client.list_identity_providers(portalArn=portal_arn)
+                    for idp in idp_response.get('identityProviders', []):
+                        common.write_import(type, idp['identityProviderArn'], None)
+                except Exception as e:
+                    if context.debug: log.debug(f"Error listing identity providers for {portal_arn}: {e}")
+                    continue
+        else:
+            # Get specific identity provider by ARN
+            response = client.get_identity_provider(identityProviderArn=id)
+            if response:
+                common.write_import(type, id, None)
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    return True

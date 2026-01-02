@@ -721,11 +721,11 @@
 
 ### aws_securitylake
 
-- [ ] `aws_securitylake_aws_log_source`
-- [ ] `aws_securitylake_custom_log_source`
-- [ ] `aws_securitylake_data_lake`
-- [ ] `aws_securitylake_subscriber`
-- [ ] `aws_securitylake_subscriber_notification`
+- [x] `aws_securitylake_aws_log_source` (FAILED - requires Security Lake enabled)
+- [x] `aws_securitylake_custom_log_source` (FAILED - requires Security Lake enabled)
+- [x] `aws_securitylake_data_lake` (FAILED - Access Denied)
+- [x] `aws_securitylake_subscriber` (FAILED - requires Security Lake enabled)
+- [x] `aws_securitylake_subscriber_notification` (FAILED - requires Security Lake enabled)
 
 ### aws_servicecatalog
 
@@ -862,15 +862,15 @@
 ### aws_workspacesweb
 
 **Base Resources (test first):**
-- [ ] `aws_workspacesweb_browser_settings`
-- [ ] `aws_workspacesweb_ip_access_settings`
-- [ ] `aws_workspacesweb_data_protection_settings`
-- [ ] `aws_workspacesweb_user_access_logging_settings`
-- [ ] `aws_workspacesweb_session_logger`
-- [ ] `aws_workspacesweb_trust_store`
+- [x] `aws_workspacesweb_browser_settings`
+- [x] `aws_workspacesweb_ip_access_settings`
+- [x] `aws_workspacesweb_data_protection_settings`
+- [x] `aws_workspacesweb_user_access_logging_settings`
+- [x] `aws_workspacesweb_session_logger`
+- [x] `aws_workspacesweb_trust_store`
 
 **Complex Resources (test after base):**
-- [ ] `aws_workspacesweb_identity_provider`
+- [x] `aws_workspacesweb_identity_provider`
 
 ---
 

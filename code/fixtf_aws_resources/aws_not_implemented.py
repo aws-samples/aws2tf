@@ -575,8 +575,8 @@ notimplemented = {
     "aws_networkfirewall_firewall_transit_gateway_attachment_accepter": True,  ### TODO 6.27.0
     "aws_networkfirewall_tls_inspection_configuration": True,  ### TODO 6.27.0
     "aws_networkfirewall_vpc_endpoint_association": True,  ### TODO 6.27.0
-    "aws_networkflowmonitor_monitor": True,  ### TODO 6.27.0
-    "aws_networkflowmonitor_scope": True,  ### TODO 6.27.0
+    #"aws_networkflowmonitor_monitor": True,  ### TODO 6.27.0
+    #"aws_networkflowmonitor_scope": True,  ### TODO 6.27.0
     "aws_networkmanager_dx_gateway_attachment": True,  ### TODO 6.27.0
     "aws_networkmonitor_monitor": True,  ### TODO 6.27.0
     "aws_networkmonitor_probe": True,  ### TODO 6.27.0
@@ -623,10 +623,11 @@ notimplemented = {
     # "aws_s3vectors_vector_bucket_policy": True,  ### TODO 6.27.0 - Testing enabled
     "aws_sagemaker_mlflow_tracking_server": True,  ### TODO 6.27.0
     "aws_securityhub_standards_control_association": True,  ### TODO 6.27.0
-    "aws_securitylake_aws_log_source": True,  ### TODO 6.27.0
-    "aws_securitylake_custom_log_source": True,  ### TODO 6.27.0
-    "aws_securitylake_subscriber": True,  ### TODO 6.27.0
-    "aws_securitylake_subscriber_notification": True,  ### TODO 6.27.0
+    "aws_securitylake_aws_log_source": True,  ### TODO 6.27.0 - Requires Security Lake enabled
+    "aws_securitylake_custom_log_source": True,  ### TODO 6.27.0 - Requires Security Lake enabled
+    "aws_securitylake_data_lake": True,  ### TODO 6.27.0 - Access Denied - requires account-level setup
+    "aws_securitylake_subscriber": True,  ### TODO 6.27.0 - Requires Security Lake enabled
+    "aws_securitylake_subscriber_notification": True,  ### TODO 6.27.0 - Requires Security Lake enabled
     "aws_servicecatalogappregistry_application": True,  ### TODO 6.27.0
     "aws_servicecatalogappregistry_attribute_group": True,  ### TODO 6.27.0
     "aws_servicecatalogappregistry_attribute_group_association": True,  ### TODO 6.27.0
@@ -667,9 +668,9 @@ notimplemented = {
 
     #"aws_workspacesweb_browser_settings": True,  ### TODO 6.27.0
     "aws_workspacesweb_browser_settings_association": True,  ### TODO 6.27.0
-    "aws_workspacesweb_data_protection_settings": True,  ### TODO 6.27.0
+    #"aws_workspacesweb_data_protection_settings": True,  ### TODO 6.27.0
     "aws_workspacesweb_data_protection_settings_association": True,  ### TODO 6.27.0
-    "aws_workspacesweb_identity_provider": True,  ### TODO 6.27.0
+    #"aws_workspacesweb_identity_provider": True,  ### TODO 6.27.0
     #"aws_workspacesweb_ip_access_settings": True,  ### TODO 6.27.0
     "aws_workspacesweb_ip_access_settings_association": True,  ### TODO 6.27.0
     # "aws_workspacesweb_network_settings": True,  ### TODO 6.27.0

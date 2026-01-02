@@ -2,7 +2,7 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 31
+**Total Completed:** 38
 **Last Updated:** 2026-01-02
 
 ---
@@ -62,6 +62,16 @@ Resources are listed by service group in the order they were completed.
 
 - [x] `aws_s3tables_table_bucket_replication` - ✓ PASSED (2026-01-02) - [test results](test_aws_s3tables_table_bucket_replication/test-results.md)
 - [x] `aws_s3tables_table_replication` - ✓ PASSED (2026-01-02) - [test results](test_aws_s3tables_table_replication/test-results.md)
+
+### aws_workspacesweb
+
+- [x] `aws_workspacesweb_browser_settings` - ✓ PASSED (2026-01-02) - [test results](test_aws_workspacesweb_browser_settings/test-results.md)
+- [x] `aws_workspacesweb_ip_access_settings` - ✓ PASSED (2026-01-02) - [test results](test_aws_workspacesweb_ip_access_settings/test-results.md)
+- [x] `aws_workspacesweb_data_protection_settings` - ✓ PASSED (2026-01-02) - [test results](test_aws_workspacesweb_data_protection_settings/test-results.md)
+- [x] `aws_workspacesweb_user_access_logging_settings` - ✓ PASSED (2026-01-02) - [test results](test_aws_workspacesweb_user_access_logging_settings/test-results.md)
+- [x] `aws_workspacesweb_session_logger` - ✓ PASSED (2026-01-02) - [test results](test_aws_workspacesweb_session_logger/test-results.md)
+- [x] `aws_workspacesweb_trust_store` - ✓ PASSED (2026-01-02) - [test results](test_aws_workspacesweb_trust_store/test-results.md)
+- [x] `aws_workspacesweb_identity_provider` - ✓ PASSED (2026-01-02) - [test results](test_aws_workspacesweb_identity_provider/test-results.md)
 
 <!-- Add completed resources below in this format:
 

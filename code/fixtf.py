@@ -53,6 +53,7 @@ from fixtf_aws_resources import fixtf_cloudfront
 from fixtf_aws_resources import fixtf_cloudhsmv2
 from fixtf_aws_resources import fixtf_cloudsearch
 from fixtf_aws_resources import fixtf_cloudtrail
+from fixtf_aws_resources import fixtf_cloudwatch
 from fixtf_aws_resources import fixtf_logs
 from fixtf_aws_resources import fixtf_codeartifact
 from fixtf_aws_resources import fixtf_codebuild
@@ -262,6 +263,7 @@ FIXTF_MODULES = {
     'fixtf_cloudhsmv2': fixtf_cloudhsmv2,
     'fixtf_cloudsearch': fixtf_cloudsearch,
     'fixtf_cloudtrail': fixtf_cloudtrail,
+    'fixtf_cloudwatch': fixtf_cloudwatch,
     'fixtf_logs': fixtf_logs,
     'fixtf_codeartifact': fixtf_codeartifact,
     'fixtf_codebuild': fixtf_codebuild,

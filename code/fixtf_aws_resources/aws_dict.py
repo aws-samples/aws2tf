@@ -2149,16 +2149,16 @@ aws_cloudtrail_event_data_store = {
 
 aws_cloudwatch_composite_alarm = {
 	"clfn":		"cloudwatch",
-	"descfn":	"list_composite_alarms",
+	"descfn":	"describe_alarms",
 	"topkey":	"CompositeAlarms",
 	"key":		"AlarmName",
-	"filterid":	"AlarmName"
+	"filterid":	"AlarmNames"
 }
 
 aws_cloudwatch_dashboard = {
 	"clfn":		"cloudwatch",
 	"descfn":	"list_dashboards",
-	"topkey":	"Dashboards",
+	"topkey":	"DashboardEntries",
 	"key":		"DashboardName",
 	"filterid":	"DashboardName"
 }
@@ -2189,8 +2189,8 @@ aws_cloudwatch_event_bus = {
 
 aws_cloudwatch_event_bus_policy = {
 	"clfn":		"events",
-	"descfn":	"list_event_bus_policies",
-	"topkey":	"EventBusPolicies",
+	"descfn":	"describe_event_bus",
+	"topkey":	"Policy",
 	"key":		"Name",
 	"filterid":	"Name"
 }
@@ -2229,10 +2229,10 @@ aws_cloudwatch_event_target = {
 
 aws_cloudwatch_log_data_protection_policy = {
 	"clfn":		"logs",
-	"descfn":	"list_data_protection_policies",
-	"topkey":	"DataProtectionPolicies",
-	"key":		"Name",
-	"filterid":	"Name"
+	"descfn":	"get_data_protection_policy",
+	"topkey":	"Policy",
+	"key":		"logGroupName",
+	"filterid":	"logGroupName"
 }
 
 aws_cloudwatch_log_destination = {
@@ -2245,10 +2245,10 @@ aws_cloudwatch_log_destination = {
 
 aws_cloudwatch_log_destination_policy = {
 	"clfn":		"logs",
-	"descfn":	"list_destination_policies",
-	"topkey":	"DestinationPolicies",
-	"key":		"DestinationName",
-	"filterid":	"DestinationName"
+	"descfn":	"describe_destinations",
+	"topkey":	"destinations",
+	"key":		"destinationName",
+	"filterid":	"destinationName"
 }
 
 aws_cloudwatch_log_metric_filter = {
@@ -2261,10 +2261,10 @@ aws_cloudwatch_log_metric_filter = {
 
 aws_cloudwatch_log_resource_policy = {
 	"clfn":		"logs",
-	"descfn":	"list_resource_policies",
-	"topkey":	"ResourcePolicies",
-	"key":		"Name",
-	"filterid":	"Name"
+	"descfn":	"describe_resource_policies",
+	"topkey":	"resourcePolicies",
+	"key":		"policyName",
+	"filterid":	"policyName"
 }
 
 aws_cloudwatch_log_stream = {

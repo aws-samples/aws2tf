@@ -120,3 +120,46 @@ def get_aws_cloudwatch_event_target(type, id, clfn, descfn, topkey, key, filteri
 
     return True
     
+
+
+def get_aws_cloudwatch_event_bus_policy(type, id, clfn, descfn, topkey, key, filterid):
+    """
+    Get event bus policies by iterating through event buses and checking for policies
+    """
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        client = boto3.client(clfn)
+        
+        if id is None:
+            # List all event buses and check for policies
+            response = client.list_event_buses()
+            if response == []: 
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
+            
+            for bus in response['EventBuses']:
+                bus_name = bus['Name']
+                try:
+                    # Try to get the policy for this event bus
+                    bus_details = client.describe_event_bus(Name=bus_name)
+                    if 'Policy' in bus_details and bus_details['Policy']:
+                        # Policy exists for this bus
+                        common.write_import(type, bus_name, None)
+                except Exception as e:
+                    if context.debug:
+                        log.debug(f"No policy for event bus {bus_name}: {e}")
+                    continue
+        else:
+            # Get specific event bus policy
+            response = client.describe_event_bus(Name=id)
+            if 'Policy' in response and response['Policy']:
+                common.write_import(type, id, None)
+            else:
+                log_warning(f"No policy found for event bus {id}")
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True

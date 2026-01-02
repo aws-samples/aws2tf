@@ -118,19 +118,19 @@ notimplemented = {
     "aws_cloudformation_stack_set_instance": True,
     "aws_cloudfront_monitoring_subscription": True,
     #
-    "aws_cloudwatch_composite_alarm": True,
-    "aws_cloudwatch_dashboard": True,
-    "aws_cloudwatch_event_api_destination": True,
-    "aws_cloudwatch_event_archive": True,
-    "aws_cloudwatch_event_bus_policy": True,
-    "aws_cloudwatch_event_connection": True,
-    "aws_cloudwatch_event_endpoint": True,
+    #"aws_cloudwatch_composite_alarm": True,
+    #"aws_cloudwatch_dashboard": True,
+    #"aws_cloudwatch_event_api_destination": True,
+    #"aws_cloudwatch_event_archive": True,
+    #"aws_cloudwatch_event_bus_policy": True,
+    #"aws_cloudwatch_event_connection": True,
+    "aws_cloudwatch_event_endpoint": True,  # Requires multi-region setup - too complex
     "aws_cloudwatch_event_permission": True,
     #
-    "aws_cloudwatch_log_data_protection_policy": True,
-    "aws_cloudwatch_log_destination_policy": True,
+    #"aws_cloudwatch_log_data_protection_policy": True,
+    #"aws_cloudwatch_log_destination_policy": True,
     "aws_cloudwatch_log_metric_filter": True,
-    "aws_cloudwatch_log_resource_policy": True,
+    #"aws_cloudwatch_log_resource_policy": True,
     "aws_cloudwatch_log_subscription_filter": True,
     #
     "aws_codeartifact_domain_permissions_policy": True,
@@ -519,7 +519,7 @@ notimplemented = {
     "aws_bedrockagentcore_oauth2_credential_provider": True,  ### TODO 6.27.0 - Requires complex setup - too complex for automated testing
     #"aws_bedrockagentcore_token_vault_cmk": True,  ### TODO 6.27.0 - Requires complex setup - too complex for automated testing
     #"aws_bedrockagentcore_workload_identity": True,  ### TODO 6.27.0 - Requires complex setup - too complex for automated testing
-    "aws_cloudwatch_contributor_managed_insight_rule": True,  ### TODO 6.27.0
+    "aws_cloudwatch_contributor_managed_insight_rule": True,  ### TODO 6.27.0 - Composite ID format
     "aws_controltower_baseline": True,  ### TODO 6.27.0
     "aws_dataexchange_event_action": True,  ### TODO 6.27.0
     "aws_dataexchange_revision_assets": True,  ### TODO 6.27.0

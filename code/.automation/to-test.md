@@ -112,20 +112,20 @@
 
 ### aws_cloudwatch
 
-- [ ] `aws_cloudwatch_composite_alarm`
-- [ ] `aws_cloudwatch_contributor_managed_insight_rule`
-- [ ] `aws_cloudwatch_dashboard`
-- [ ] `aws_cloudwatch_event_api_destination`
-- [ ] `aws_cloudwatch_event_archive`
-- [ ] `aws_cloudwatch_event_bus_policy`
-- [ ] `aws_cloudwatch_event_connection`
-- [ ] `aws_cloudwatch_event_endpoint`
-- [ ] `aws_cloudwatch_event_permission`
-- [ ] `aws_cloudwatch_log_data_protection_policy`
-- [ ] `aws_cloudwatch_log_destination_policy`
-- [ ] `aws_cloudwatch_log_metric_filter`
-- [ ] `aws_cloudwatch_log_resource_policy`
-- [ ] `aws_cloudwatch_log_subscription_filter`
+- [x] `aws_cloudwatch_composite_alarm` (✅ PASSED - requires metric alarms, 0 drift)
+- [x] `aws_cloudwatch_contributor_managed_insight_rule` (FAILED - composite ID)
+- [x] `aws_cloudwatch_dashboard` (✅ PASSED - simple JSON config, 0 drift)
+- [x] `aws_cloudwatch_event_api_destination`
+- [x] `aws_cloudwatch_event_archive`
+- [x] `aws_cloudwatch_event_bus_policy`
+- [x] `aws_cloudwatch_event_connection`
+- [x] `aws_cloudwatch_event_endpoint` (SKIPPED - requires multi-region setup)
+- [x] `aws_cloudwatch_event_permission` (FAILED - composite ID)
+- [x] `aws_cloudwatch_log_data_protection_policy`
+- [x] `aws_cloudwatch_log_destination_policy`
+- [x] `aws_cloudwatch_log_metric_filter` (FAILED - composite ID)
+- [x] `aws_cloudwatch_log_resource_policy`
+- [x] `aws_cloudwatch_log_subscription_filter` (FAILED - composite ID)
 
 ### aws_codeartifact
 

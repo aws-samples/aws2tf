@@ -84,3 +84,88 @@ def get_aws_cloudwatch_log_stream(type, id, clfn, descfn, topkey, key, filterid)
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
+
+
+def get_aws_cloudwatch_log_data_protection_policy(type, id, clfn, descfn, topkey, key, filterid):
+    """
+    Get log data protection policies by iterating through log groups and checking for policies
+    """
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        client = boto3.client(clfn)
+        
+        if id is None:
+            # List all log groups and check for data protection policies
+            paginator = client.get_paginator('describe_log_groups')
+            for page in paginator.paginate():
+                for log_group in page['logGroups']:
+                    log_group_name = log_group['logGroupName']
+                    try:
+                        # Try to get the data protection policy for this log group
+                        response = client.get_data_protection_policy(logGroupIdentifier=log_group_name)
+                        if 'policyDocument' in response and response['policyDocument']:
+                            # Policy exists for this log group
+                            common.write_import(type, log_group_name, None)
+                    except client.exceptions.ResourceNotFoundException:
+                        # No policy for this log group
+                        if context.debug:
+                            log.debug(f"No data protection policy for log group {log_group_name}")
+                        continue
+                    except Exception as e:
+                        if context.debug:
+                            log.debug(f"Error getting policy for log group {log_group_name}: {e}")
+                        continue
+        else:
+            # Get specific log group's data protection policy
+            try:
+                response = client.get_data_protection_policy(logGroupIdentifier=id)
+                if 'policyDocument' in response and response['policyDocument']:
+                    common.write_import(type, id, None)
+                else:
+                    log_warning(f"No data protection policy found for log group {id}")
+            except client.exceptions.ResourceNotFoundException:
+                log_warning(f"No data protection policy found for log group {id}")
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+
+def get_aws_cloudwatch_log_destination_policy(type, id, clfn, descfn, topkey, key, filterid):
+    """
+    Get log destination policies by iterating through destinations and checking for policies
+    """
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        client = boto3.client(clfn)
+        
+        if id is None:
+            # List all destinations and check for policies
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate():
+                for destination in page[topkey]:
+                    # Check if destination has an access policy
+                    if 'accessPolicy' in destination and destination['accessPolicy']:
+                        destination_name = destination[key]
+                        common.write_import(type, destination_name, None)
+        else:
+            # Get specific destination's policy
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate(DestinationNamePrefix=id):
+                for destination in page[topkey]:
+                    if destination[key] == id:
+                        if 'accessPolicy' in destination and destination['accessPolicy']:
+                            common.write_import(type, id, None)
+                        else:
+                            log_warning(f"No access policy found for destination {id}")
+                        break
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True

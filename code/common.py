@@ -609,6 +609,7 @@ from get_aws_resources import aws_cloud9
 from get_aws_resources import aws_cloudformation
 from get_aws_resources import aws_cloudfront
 from get_aws_resources import aws_cloudtrail
+from get_aws_resources import aws_cloudwatch
 from get_aws_resources import aws_codebuild
 from get_aws_resources import aws_codecommit
 from get_aws_resources import aws_codeartifact
@@ -712,6 +713,7 @@ AWS_RESOURCE_MODULES = {
     'cloudformation': aws_cloudformation,
     'cloudfront': aws_cloudfront,
     'cloudtrail': aws_cloudtrail,
+    'cloudwatch': aws_cloudwatch,
     'codebuild': aws_codebuild,
     'codecommit': aws_codecommit,
     'codeartifact': aws_codeartifact,

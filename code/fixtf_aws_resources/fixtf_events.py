@@ -16,8 +16,22 @@ log = logging.getLogger('aws2tf')
 
 
 # ============================================================================
-# EVENTS Resources with Custom Logic (2 functions)
+# EVENTS Resources with Custom Logic (3 functions)
 # ============================================================================
+
+def aws_cloudwatch_event_connection(t1, tt1, tt2, flag1, flag2):
+	"""Handler for aws_cloudwatch_event_connection resource"""
+	skip = 0
+	
+	# Replace sensitive null value with placeholder - it's write-only
+	if "value = null # sensitive" in t1:
+		t1 = t1.replace("value = null # sensitive", 'value = "PLACEHOLDER_VALUE_CHANGE_ME" # sensitive - original value not returned by API')
+	
+	# Add lifecycle block to ignore auth_parameters changes (sensitive values)
+	if tt1 == "name" and tt2 != "null":
+		t1 = t1 + "\nlifecycle {\n   ignore_changes = [auth_parameters]\n}\n"
+	
+	return skip, t1, flag1, flag2
 
 def aws_cloudwatch_event_rule(t1,tt1,tt2,flag1,flag2):
 
@@ -62,4 +76,4 @@ def __getattr__(name):
 	raise AttributeError(f"module 'fixtf_events' has no attribute '{name}'")
 
 
-log.debug(f"EVENTS handlers: 2 custom functions + __getattr__ for 0 simple resources")
+log.debug(f"EVENTS handlers: 3 custom functions + __getattr__ for 0 simple resources")

@@ -2,7 +2,7 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 47
+**Total Completed:** 49
 **Last Updated:** 2026-01-02
 
 ---
@@ -20,6 +20,11 @@ Resources are listed by service group in the order they were completed.
 - [x] `aws_bedrockagentcore_memory` - ✓ PASSED (2026-01-02) - [test results](test_aws_bedrockagentcore_memory/test-results.md)
 - [x] `aws_bedrockagentcore_token_vault_cmk` - ✓ PASSED (2026-01-02) - [test results](test_aws_bedrockagentcore_token_vault_cmk/test-results.md)
 - [x] `aws_bedrockagentcore_workload_identity` - ✓ PASSED (2026-01-02) - [test results](test_aws_bedrockagentcore_workload_identity/test-results.md)
+
+### aws_ecr
+
+- [x] `aws_ecr_account_setting` - ✓ PASSED (2026-01-02) - [test results](test_aws_ecr_account_setting/test-results.md)
+- [x] `aws_ecr_repository_creation_template` - ✓ PASSED (2026-01-02) - [test results](test_aws_ecr_repository_creation_template/test-results.md)
 
 ### aws_api_gateway
 

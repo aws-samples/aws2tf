@@ -11714,10 +11714,10 @@ aws_ec2_transit_gateway_default_route_table_propagation = {
 
 aws_ecr_account_setting = {
 	"clfn":		"ecr",
-	"descfn":	"get_registry_policy",
-	"topkey":	"registryId",
-	"key":		"registryId",
-	"filterid":	""
+	"descfn":	"get_account_setting",
+	"topkey":	"name",
+	"key":		"name",
+	"filterid":	"name"
 }
 
 aws_ecr_repository_creation_template = {

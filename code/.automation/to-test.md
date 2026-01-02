@@ -288,8 +288,8 @@
 
 ### aws_ecr
 
-- [ ] `aws_ecr_account_setting`
-- [ ] `aws_ecr_repository_creation_template`
+- [x] `aws_ecr_account_setting` (✅ PASSED - account-level singleton, 2 settings, 0 drift)
+- [x] `aws_ecr_repository_creation_template` (✅ PASSED - simple config, 0 drift)
 
 ### aws_ecs
 

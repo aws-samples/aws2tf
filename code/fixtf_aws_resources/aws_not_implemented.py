@@ -536,8 +536,8 @@ notimplemented = {
     "aws_ec2_default_credit_specification": True,  ### TODO 6.27.0
     "aws_ec2_transit_gateway_default_route_table_association": True,  ### TODO 6.27.0
     "aws_ec2_transit_gateway_default_route_table_propagation": True,  ### TODO 6.27.0
-    "aws_ecr_account_setting": True,  ### TODO 6.27.0
-    "aws_ecr_repository_creation_template": True,  ### TODO 6.27.0
+    #"aws_ecr_account_setting": True,  ### TODO 6.27.0
+    #"aws_ecr_repository_creation_template": True,  ### TODO 6.27.0
     #"aws_ecs_express_gateway_service": True,  ### TODO 6.27.0
     "aws_eks_capability": True,  ### TODO 6.27.0
     "aws_fis_target_account_configuration": True,  ### TODO 6.27.0

@@ -2,7 +2,7 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 21
+**Total Completed:** 31
 **Last Updated:** 2026-01-02
 
 ---
@@ -47,6 +47,21 @@ Resources are listed by service group in the order they were completed.
 - [x] `aws_route53_resolver_query_log_config_association` - ✓ PASSED (2026-01-02) - [test results](test_aws_route53_resolver_query_log_config_association/test-results.md)
 - [x] `aws_route53_resolver_rule` - ✓ PASSED (2026-01-02) - [test results](test_aws_route53_resolver_rule/test-results.md)
 - [x] `aws_route53_resolver_rule_association` - ✓ PASSED (2026-01-02) - [test results](test_aws_route53_resolver_rule_association/test-results.md)
+
+### aws_vpc
+
+- [x] `aws_vpc_block_public_access_exclusion` - ✓ PASSED (2026-01-02) - [test results](test_aws_vpc_block_public_access_exclusion/test-results.md)
+- [x] `aws_vpc_block_public_access_options` - ✓ PASSED (2026-01-02) - [test results](test_aws_vpc_block_public_access_options/test-results.md)
+- [x] `aws_vpc_encryption_control` - ✓ PASSED (2026-01-02) - [test results](test_aws_vpc_encryption_control/test-results.md)
+- [x] `aws_vpc_route_server` - ✓ PASSED (2026-01-02) - [test results](test_aws_vpc_route_server/test-results.md)
+- [x] `aws_vpc_route_server_endpoint` - ✓ PASSED (2026-01-02) - [test results](test_aws_vpc_route_server_endpoint/test-results.md)
+- [x] `aws_vpc_route_server_peer` - ✓ PASSED (2026-01-02) - [test results](test_aws_vpc_route_server_peer/test-results.md)
+- [x] `aws_vpc_endpoint_private_dns` - ✓ PASSED (2026-01-02) - [test results](test_aws_vpc_endpoint_private_dns/test-results.md)
+
+### aws_s3tables
+
+- [x] `aws_s3tables_table_bucket_replication` - ✓ PASSED (2026-01-02) - [test results](test_aws_s3tables_table_bucket_replication/test-results.md)
+- [x] `aws_s3tables_table_replication` - ✓ PASSED (2026-01-02) - [test results](test_aws_s3tables_table_replication/test-results.md)
 
 <!-- Add completed resources below in this format:
 

@@ -1371,3 +1371,38 @@ def get_aws_verifiedaccess_endpoint(type, id, clfn, descfn, topkey, key, filteri
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
 
     return True
+
+
+def get_aws_vpc_block_public_access_exclusion(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        from botocore.config import Config
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all exclusions - not pageable, requires MaxResults
+            response = client.describe_vpc_block_public_access_exclusions(MaxResults=100)
+            for j in response[topkey]:
+                common.write_import(type, j[key], None)
+        else:
+            # Get specific exclusion
+            response = client.describe_vpc_block_public_access_exclusions(ExclusionIds=[id])
+            for j in response[topkey]:
+                common.write_import(type, j[key], None)
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    return True
+
+
+def get_aws_vpc_block_public_access_options(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        from botocore.config import Config
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        # This is a regional singleton - always use the region as the ID
+        region = context.region if hasattr(context, 'region') else 'us-east-1'
+        common.write_import(type, region, None)
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    return True

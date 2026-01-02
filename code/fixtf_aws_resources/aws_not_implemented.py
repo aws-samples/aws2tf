@@ -615,9 +615,9 @@ notimplemented = {
     "aws_rds_shard_group": True,  ### TODO 6.27.0
     "aws_resiliencehub_resiliency_policy": True,  ### TODO 6.27.0
     "aws_s3control_directory_bucket_access_point_scope": True,  ### TODO 6.27.0
-    "aws_s3tables_table_bucket_replication": True,  ### TODO 6.27.0
-    "aws_s3tables_table_policy": True,  ### TODO 6.27.0
-    "aws_s3tables_table_replication": True,  ### TODO 6.27.0
+    #"aws_s3tables_table_bucket_replication": True,  ### TODO 6.27.0
+    #"aws_s3tables_table_policy": True,  ### TODO 6.27.0
+    #"aws_s3tables_table_replication": True,  ### TODO 6.27.0
     # "aws_s3vectors_index": True,  ### TODO 6.27.0 - Testing enabled
     # "aws_s3vectors_vector_bucket": True,  ### TODO 6.27.0 - Testing enabled
     # "aws_s3vectors_vector_bucket_policy": True,  ### TODO 6.27.0 - Testing enabled
@@ -649,15 +649,15 @@ notimplemented = {
     "aws_verifiedpermissions_policy_store": True,  ### TODO 6.27.0
     "aws_verifiedpermissions_policy_template": True,  ### TODO 6.27.0
     "aws_verifiedpermissions_schema": True,  ### TODO 6.27.0
-    "aws_vpc_block_public_access_exclusion": True,  ### TODO 6.27.0
-    "aws_vpc_block_public_access_options": True,  ### TODO 6.27.0
-    "aws_vpc_encryption_control": True,  ### TODO 6.27.0
-    "aws_vpc_endpoint_private_dns": True,  ### TODO 6.27.0
+    #"aws_vpc_block_public_access_exclusion": True,  ### TODO 6.27.0
+    #"aws_vpc_block_public_access_options": True,  ### TODO 6.27.0
+    #"aws_vpc_encryption_control": True,  ### TODO 6.27.0
+    #"aws_vpc_endpoint_private_dns": True,  ### TODO 6.27.0
     "aws_vpc_endpoint_service_private_dns_verification": True,  ### TODO 6.27.0
-    "aws_vpc_route_server": True,  ### TODO 6.27.0
+    #"aws_vpc_route_server": True,  ### TODO 6.27.0
     "aws_vpc_route_server_association": True,  ### TODO 6.27.0
-    "aws_vpc_route_server_endpoint": True,  ### TODO 6.27.0
-    "aws_vpc_route_server_peer": True,  ### TODO 6.27.0
+    #"aws_vpc_route_server_endpoint": True,  ### TODO 6.27.0
+    #"aws_vpc_route_server_peer": True,  ### TODO 6.27.0
     "aws_vpc_route_server_propagation": True,  ### TODO 6.27.0
     "aws_vpc_route_server_vpc_association": True,  ### TODO 6.27.0
     "aws_vpc_security_group_vpc_association": True,  ### TODO 6.27.0
@@ -665,21 +665,21 @@ notimplemented = {
     "aws_vpn_concentrator": True,  ### TODO 6.27.0
 
 
-    "aws_workspacesweb_browser_settings": True,  ### TODO 6.27.0
+    #"aws_workspacesweb_browser_settings": True,  ### TODO 6.27.0
     "aws_workspacesweb_browser_settings_association": True,  ### TODO 6.27.0
     "aws_workspacesweb_data_protection_settings": True,  ### TODO 6.27.0
     "aws_workspacesweb_data_protection_settings_association": True,  ### TODO 6.27.0
     "aws_workspacesweb_identity_provider": True,  ### TODO 6.27.0
-    "aws_workspacesweb_ip_access_settings": True,  ### TODO 6.27.0
+    #"aws_workspacesweb_ip_access_settings": True,  ### TODO 6.27.0
     "aws_workspacesweb_ip_access_settings_association": True,  ### TODO 6.27.0
     # "aws_workspacesweb_network_settings": True,  ### TODO 6.27.0
     "aws_workspacesweb_network_settings_association": True,  ### TODO 6.27.0
     # "aws_workspacesweb_portal": True,  ### TODO 6.27.0
-    "aws_workspacesweb_session_logger": True,  ### TODO 6.27.0
+    #"aws_workspacesweb_session_logger": True,  ### TODO 6.27.0
     "aws_workspacesweb_session_logger_association": True,  ### TODO 6.27.0
-    "aws_workspacesweb_trust_store": True,  ### TODO 6.27.0
+    #"aws_workspacesweb_trust_store": True,  ### TODO 6.27.0
     "aws_workspacesweb_trust_store_association": True,  ### TODO 6.27.0
-    "aws_workspacesweb_user_access_logging_settings": True,  ### TODO 6.27.0
+    #"aws_workspacesweb_user_access_logging_settings": True,  ### TODO 6.27.0
     "aws_workspacesweb_user_access_logging_settings_association": True,  ### TODO 6.27.0
 #    "aws_workspacesweb_user_settings": True,  ### TODO 6.27.0
 }

@@ -12354,8 +12354,8 @@ aws_s3control_directory_bucket_access_point_scope = {
 
 aws_s3tables_table_bucket_replication = {
 	"clfn":		"s3tables",
-	"descfn":	"get_table_bucket_maintenance_configuration",
-	"topkey":	"tableBucketARN",
+	"descfn":	"get_table_bucket_replication",
+	"topkey":	"replicationConfiguration",
 	"key":		"tableBucketARN",
 	"filterid":	"tableBucketARN"
 }
@@ -12627,7 +12627,7 @@ aws_verifiedpermissions_schema = {
 aws_vpc_block_public_access_exclusion = {
 	"clfn":		"ec2",
 	"descfn":	"describe_vpc_block_public_access_exclusions",
-	"topkey":	"Exclusions",
+	"topkey":	"VpcBlockPublicAccessExclusions",
 	"key":		"ExclusionId",
 	"filterid":	"ExclusionId"
 }
@@ -12642,10 +12642,10 @@ aws_vpc_block_public_access_options = {
 
 aws_vpc_encryption_control = {
 	"clfn":		"ec2",
-	"descfn":	"get_vpc_encryption_by_default",
-	"topkey":	"VpcEncryptionByDefault",
-	"key":		"VpcEncryptionByDefault",
-	"filterid":	""
+	"descfn":	"describe_vpc_encryption_controls",
+	"topkey":	"VpcEncryptionControls",
+	"key":		"VpcEncryptionControlId",
+	"filterid":	"VpcEncryptionControlId"
 }
 
 aws_vpc_endpoint_private_dns = {

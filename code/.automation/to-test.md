@@ -601,7 +601,7 @@
 
 - [x] `aws_prometheus_query_logging_configuration`
 - [x] `aws_prometheus_resource_policy`
-- [x] `aws_prometheus_scraper` (SKIPPED - requires EKS cluster)
+- [ ] `aws_prometheus_scraper` (SKIPPED - requires EKS cluster)
 - [x] `aws_prometheus_workspace_configuration`
 
 ### aws_qbusiness
@@ -655,7 +655,7 @@
 - [x] `aws_route53_resolver_endpoint`
 - [x] `aws_route53_resolver_firewall_config`
 - [x] `aws_route53_resolver_firewall_domain_list`
-- [x] `aws_route53_resolver_firewall_rule` (FAILED - composite ID)
+- [ ] `aws_route53_resolver_firewall_rule` (FAILED - composite ID)
 - [x] `aws_route53_resolver_firewall_rule_group`
 - [x] `aws_route53_resolver_query_log_config`
 - [x] `aws_route53_resolver_query_log_config_association`
@@ -685,9 +685,9 @@
 
 ### aws_s3tables
 
-- [ ] `aws_s3tables_table_bucket_replication`
-- [ ] `aws_s3tables_table_policy`
-- [ ] `aws_s3tables_table_replication`
+- [x] `aws_s3tables_table_bucket_replication`
+- [ ] `aws_s3tables_table_policy` (FAILED - composite ID)
+- [x] `aws_s3tables_table_replication`
 
 ### aws_sagemaker
 
@@ -840,16 +840,16 @@
 
 ### aws_vpc
 
-- [ ] `aws_vpc_block_public_access_exclusion`
-- [ ] `aws_vpc_block_public_access_options`
-- [ ] `aws_vpc_encryption_control`
-- [ ] `aws_vpc_endpoint_private_dns`
-- [ ] `aws_vpc_endpoint_service_private_dns_verification`
-- [ ] `aws_vpc_route_server`
-- [ ] `aws_vpc_route_server_association`
-- [ ] `aws_vpc_route_server_endpoint`
-- [ ] `aws_vpc_route_server_peer`
-- [ ] `aws_vpc_security_group_vpc_association`
+- [x] `aws_vpc_block_public_access_exclusion`
+- [x] `aws_vpc_block_public_access_options`
+- [x] `aws_vpc_encryption_control`
+- [x] `aws_vpc_endpoint_private_dns`
+- [ ] `aws_vpc_endpoint_service_private_dns_verification` (cannot import)
+- [x] `aws_vpc_route_server`
+- [ ] `aws_vpc_route_server_association` (not in Terraform - use vpc_association)
+- [x] `aws_vpc_route_server_endpoint`
+- [x] `aws_vpc_route_server_peer`
+- [x] `aws_vpc_security_group_vpc_association` (FAILED - composite ID with identity block)
 
 ### aws_vpclattice
 

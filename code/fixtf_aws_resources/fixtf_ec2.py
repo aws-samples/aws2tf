@@ -488,3 +488,20 @@ def __getattr__(name):
 
 
 log.debug(f"EC2 handlers: 24 custom functions + __getattr__ for 104 simple resources")
+
+
+def aws_vpc_encryption_control(t1, tt1, tt2, flag1, flag2):
+    skip = 0
+    
+    # Set default exclusion fields explicitly instead of skipping
+    if tt1 in ["egress_only_internet_gateway_exclusion", "elastic_file_system_exclusion", 
+               "internet_gateway_exclusion", "lambda_exclusion", "nat_gateway_exclusion",
+               "virtual_private_gateway_exclusion", "vpc_lattice_exclusion", "vpc_peering_exclusion"]:
+        if tt2 == "null":
+            t1 = tt1 + " = \"disable\"\n"
+    
+    # Skip computed fields
+    if tt1 in ["state", "state_message", "resource_exclusions"]:
+        skip = 1
+    
+    return skip, t1, flag1, flag2

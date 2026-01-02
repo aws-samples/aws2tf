@@ -507,18 +507,18 @@ notimplemented = {
     #
     # New resources added from aws_dict_extended.py
     #
-    "aws_bedrockagentcore_agent_runtime": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_agent_runtime_endpoint": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_api_key_credential_provider": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_browser": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_code_interpreter": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_gateway": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_gateway_target": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_memory": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_memory_strategy": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_oauth2_credential_provider": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_token_vault_cmk": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_workload_identity": True,  ### TODO 6.27.0
+    #"aws_bedrockagentcore_agent_runtime": True,  ### TODO 6.27.0 - Requires container image in ECR - too complex for automated testing
+    "aws_bedrockagentcore_agent_runtime_endpoint": True,  ### TODO 6.27.0 - Composite ID
+    "aws_bedrockagentcore_api_key_credential_provider": True,  ### TODO 6.27.0 - API key is sensitive and not returned by API - cannot import
+    #"aws_bedrockagentcore_browser": True,  ### TODO 6.27.0 - Requires complex setup - too complex for automated testing
+    #"aws_bedrockagentcore_code_interpreter": True,  ### TODO 6.27.0 - Requires complex setup - too complex for automated testing
+    #"aws_bedrockagentcore_gateway": True,  ### TODO 6.27.0 - Requires complex setup - too complex for automated testing
+    "aws_bedrockagentcore_gateway_target": True,  ### TODO 6.27.0 - Composite ID
+    #"aws_bedrockagentcore_memory": True,  ### TODO 6.27.0 - Requires complex setup - too complex for automated testing
+    "aws_bedrockagentcore_memory_strategy": True,  ### TODO 6.27.0 - API method missing (list_memory_strategies)
+    "aws_bedrockagentcore_oauth2_credential_provider": True,  ### TODO 6.27.0 - Requires complex setup - too complex for automated testing
+    #"aws_bedrockagentcore_token_vault_cmk": True,  ### TODO 6.27.0 - Requires complex setup - too complex for automated testing
+    #"aws_bedrockagentcore_workload_identity": True,  ### TODO 6.27.0 - Requires complex setup - too complex for automated testing
     "aws_cloudwatch_contributor_managed_insight_rule": True,  ### TODO 6.27.0
     "aws_controltower_baseline": True,  ### TODO 6.27.0
     "aws_dataexchange_event_action": True,  ### TODO 6.27.0
@@ -538,7 +538,7 @@ notimplemented = {
     "aws_ec2_transit_gateway_default_route_table_propagation": True,  ### TODO 6.27.0
     "aws_ecr_account_setting": True,  ### TODO 6.27.0
     "aws_ecr_repository_creation_template": True,  ### TODO 6.27.0
-    "aws_ecs_express_gateway_service": True,  ### TODO 6.27.0
+    #"aws_ecs_express_gateway_service": True,  ### TODO 6.27.0
     "aws_eks_capability": True,  ### TODO 6.27.0
     "aws_fis_target_account_configuration": True,  ### TODO 6.27.0
     "aws_fsx_s3_access_point_attachment": True,  ### TODO 6.27.0
@@ -575,7 +575,7 @@ notimplemented = {
     "aws_networkfirewall_firewall_transit_gateway_attachment_accepter": True,  ### TODO 6.27.0
     "aws_networkfirewall_tls_inspection_configuration": True,  ### TODO 6.27.0
     "aws_networkfirewall_vpc_endpoint_association": True,  ### TODO 6.27.0
-    #"aws_networkflowmonitor_monitor": True,  ### TODO 6.27.0
+    "aws_networkflowmonitor_monitor": True,  ### TODO 6.27.0 - AWS API limitation - get_monitor does not return scopeArn
     #"aws_networkflowmonitor_scope": True,  ### TODO 6.27.0
     "aws_networkmanager_dx_gateway_attachment": True,  ### TODO 6.27.0
     "aws_networkmonitor_monitor": True,  ### TODO 6.27.0

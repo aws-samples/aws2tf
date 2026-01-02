@@ -63,15 +63,17 @@
 
 ### aws_bedrockagentcore
 
-- [ ] `aws_bedrockagentcore_agent_runtime`
-- [ ] `aws_bedrockagentcore_api_key_credential_provider`
-- [ ] `aws_bedrockagentcore_browser`
-- [ ] `aws_bedrockagentcore_code_interpreter`
-- [ ] `aws_bedrockagentcore_gateway`
-- [ ] `aws_bedrockagentcore_memory`
-- [ ] `aws_bedrockagentcore_oauth2_credential_provider`
-- [ ] `aws_bedrockagentcore_token_vault_cmk`
-- [ ] `aws_bedrockagentcore_workload_identity`
+**Note:** aws_dict.py corrected (service name, key fields, topkey fields). Handler module and get functions created. 7 of 9 testable resources successfully tested. 2 resources cannot be imported due to sensitive fields not returned by API.
+
+- [x] `aws_bedrockagentcore_agent_runtime` (✅ PASSED - full test with dummy container, 0 drift)
+- [x] `aws_bedrockagentcore_api_key_credential_provider` (❌ CANNOT IMPORT - API key is sensitive, not returned by API)
+- [x] `aws_bedrockagentcore_browser` (✅ PASSED - simple network config, 0 drift)
+- [x] `aws_bedrockagentcore_code_interpreter` (✅ PASSED - simple network config, 0 drift)
+- [x] `aws_bedrockagentcore_gateway` (✅ PASSED - requires IAM role, 0 drift)
+- [x] `aws_bedrockagentcore_memory` (✅ PASSED - 3min creation, 0 drift)
+- [x] `aws_bedrockagentcore_oauth2_credential_provider` (❌ CANNOT IMPORT - OAuth2 credentials sensitive, not returned by API)
+- [x] `aws_bedrockagentcore_token_vault_cmk` (✅ PASSED - singleton resource, requires KMS, 0 drift)
+- [x] `aws_bedrockagentcore_workload_identity` (✅ PASSED - simplest resource, 0 drift)
 
 ### aws_budgets
 
@@ -291,7 +293,7 @@
 
 ### aws_ecs
 
-- [ ] `aws_ecs_express_gateway_service`
+- [x] `aws_ecs_express_gateway_service` (NOTE: First import shows 1 change for ingress_paths - recheck plan after first apply)
 
 ### aws_emr
 
@@ -506,8 +508,8 @@
 
 ### aws_networkflowmonitor
 
-- [ ] `aws_networkflowmonitor_monitor`
-- [ ] `aws_networkflowmonitor_scope`
+- [ ] `aws_networkflowmonitor_monitor` (FAILED - AWS API does not return scopeArn)
+- [x] `aws_networkflowmonitor_scope`
 
 ### aws_networkmanager
 
@@ -884,9 +886,9 @@ These resources use composite IDs (multiple identifiers separated by commas) and
 
 ### aws_bedrockagentcore
 
-- `aws_bedrockagentcore_agent_runtime_endpoint` (composite ID)
-- `aws_bedrockagentcore_gateway_target` (composite ID)
-- `aws_bedrockagentcore_memory_strategy` (composite ID)
+- `aws_bedrockagentcore_agent_runtime_endpoint` (composite ID: agentRuntimeId/endpointId)
+- `aws_bedrockagentcore_gateway_target` (composite ID: gatewayId/targetId)
+- `aws_bedrockagentcore_memory_strategy` (API method missing: list_memory_strategies does not exist in boto3)
 
 ### aws_cloudformation
 

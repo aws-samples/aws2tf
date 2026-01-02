@@ -2,7 +2,7 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 38
+**Total Completed:** 47
 **Last Updated:** 2026-01-02
 
 ---
@@ -10,6 +10,16 @@ This file tracks all resources that have been successfully tested following the 
 ## Successfully Tested Resources
 
 Resources are listed by service group in the order they were completed.
+
+### aws_bedrockagentcore
+
+- [x] `aws_bedrockagentcore_agent_runtime` - ✓ PASSED (2026-01-02) - [test results](test_aws_bedrockagentcore_agent_runtime/test-results.md)
+- [x] `aws_bedrockagentcore_browser` - ✓ PASSED (2026-01-02) - [test results](test_aws_bedrockagentcore_browser/test-results.md)
+- [x] `aws_bedrockagentcore_code_interpreter` - ✓ PASSED (2026-01-02) - [test results](test_aws_bedrockagentcore_code_interpreter/test-results.md)
+- [x] `aws_bedrockagentcore_gateway` - ✓ PASSED (2026-01-02) - [test results](test_aws_bedrockagentcore_gateway/test-results.md)
+- [x] `aws_bedrockagentcore_memory` - ✓ PASSED (2026-01-02) - [test results](test_aws_bedrockagentcore_memory/test-results.md)
+- [x] `aws_bedrockagentcore_token_vault_cmk` - ✓ PASSED (2026-01-02) - [test results](test_aws_bedrockagentcore_token_vault_cmk/test-results.md)
+- [x] `aws_bedrockagentcore_workload_identity` - ✓ PASSED (2026-01-02) - [test results](test_aws_bedrockagentcore_workload_identity/test-results.md)
 
 ### aws_api_gateway
 
@@ -72,6 +82,14 @@ Resources are listed by service group in the order they were completed.
 - [x] `aws_workspacesweb_session_logger` - ✓ PASSED (2026-01-02) - [test results](test_aws_workspacesweb_session_logger/test-results.md)
 - [x] `aws_workspacesweb_trust_store` - ✓ PASSED (2026-01-02) - [test results](test_aws_workspacesweb_trust_store/test-results.md)
 - [x] `aws_workspacesweb_identity_provider` - ✓ PASSED (2026-01-02) - [test results](test_aws_workspacesweb_identity_provider/test-results.md)
+
+### aws_networkflowmonitor
+
+- [x] `aws_networkflowmonitor_scope` - ✓ PASSED (2026-01-02) - [test results](test_aws_networkflowmonitor_scope/test-results.md)
+
+### aws_ecs
+
+- [x] `aws_ecs_express_gateway_service` - ✓ PASSED (2026-01-02) - [test results](test_aws_ecs_express_gateway_service/test-results.md)
 
 <!-- Add completed resources below in this format:
 

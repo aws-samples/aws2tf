@@ -603,6 +603,7 @@ from get_aws_resources import aws_batch
 from get_aws_resources import aws_backup
 from get_aws_resources import aws_bedrock
 from get_aws_resources import aws_bedrock_agent
+from get_aws_resources import aws_bedrock_agentcore_control
 from get_aws_resources import aws_cleanrooms
 from get_aws_resources import aws_cloud9
 from get_aws_resources import aws_cloudformation
@@ -705,6 +706,7 @@ AWS_RESOURCE_MODULES = {
     'bedrock': aws_bedrock,
     'bedrock-agent': aws_bedrock_agent,
     'bedrock_agent': aws_bedrock_agent,
+    'bedrock-agentcore-control': aws_bedrock_agentcore_control,
     'cleanrooms': aws_cleanrooms,
     'cloud9': aws_cloud9,
     'cloudformation': aws_cloudformation,

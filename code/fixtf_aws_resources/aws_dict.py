@@ -11481,7 +11481,7 @@ aws_xray_resource_policy = {
 }
 
 aws_bedrockagentcore_agent_runtime = {
-	"clfn":		"bedrock-agent-runtime",
+	"clfn":		"bedrock-agentcore-control",
 	"descfn":	"list_agent_runtimes",
 	"topkey":	"agentRuntimes",
 	"key":		"agentRuntimeId",
@@ -11489,7 +11489,7 @@ aws_bedrockagentcore_agent_runtime = {
 }
 
 aws_bedrockagentcore_agent_runtime_endpoint = {
-	"clfn":		"bedrock-agent-runtime",
+	"clfn":		"bedrock-agentcore-control",
 	"descfn":	"list_agent_runtime_endpoints",
 	"topkey":	"endpoints",
 	"key":		"endpointId",
@@ -11497,39 +11497,39 @@ aws_bedrockagentcore_agent_runtime_endpoint = {
 }
 
 aws_bedrockagentcore_api_key_credential_provider = {
-	"clfn":		"bedrock-agent-runtime",
-	"descfn":	"list_credential_providers",
+	"clfn":		"bedrock-agentcore-control",
+	"descfn":	"list_api_key_credential_providers",
 	"topkey":	"credentialProviders",
-	"key":		"providerId",
-	"filterid":	"providerType"
+	"key":		"name",
+	"filterid":	"name"
 }
 
 aws_bedrockagentcore_browser = {
-	"clfn":		"bedrock-agent-runtime",
+	"clfn":		"bedrock-agentcore-control",
 	"descfn":	"list_browsers",
-	"topkey":	"browsers",
+	"topkey":	"browserSummaries",
 	"key":		"browserId",
 	"filterid":	"browserId"
 }
 
 aws_bedrockagentcore_code_interpreter = {
-	"clfn":		"bedrock-agent-runtime",
+	"clfn":		"bedrock-agentcore-control",
 	"descfn":	"list_code_interpreters",
-	"topkey":	"codeInterpreters",
+	"topkey":	"codeInterpreterSummaries",
 	"key":		"codeInterpreterId",
 	"filterid":	"codeInterpreterId"
 }
 
 aws_bedrockagentcore_gateway = {
-	"clfn":		"bedrock-agent-runtime",
+	"clfn":		"bedrock-agentcore-control",
 	"descfn":	"list_gateways",
-	"topkey":	"gateways",
+	"topkey":	"items",
 	"key":		"gatewayId",
 	"filterid":	"gatewayId"
 }
 
 aws_bedrockagentcore_gateway_target = {
-	"clfn":		"bedrock-agent-runtime",
+	"clfn":		"bedrock-agentcore-control",
 	"descfn":	"list_gateway_targets",
 	"topkey":	"gatewayTargets",
 	"key":		"targetId",
@@ -11537,15 +11537,15 @@ aws_bedrockagentcore_gateway_target = {
 }
 
 aws_bedrockagentcore_memory = {
-	"clfn":		"bedrock-agent-runtime",
+	"clfn":		"bedrock-agentcore-control",
 	"descfn":	"list_memories",
 	"topkey":	"memories",
-	"key":		"memoryId",
-	"filterid":	"memoryId"
+	"key":		"id",
+	"filterid":	"id"
 }
 
 aws_bedrockagentcore_memory_strategy = {
-	"clfn":		"bedrock-agent-runtime",
+	"clfn":		"bedrock-agentcore-control",
 	"descfn":	"list_memory_strategies",
 	"topkey":	"memoryStrategies",
 	"key":		"strategyId",
@@ -11553,27 +11553,27 @@ aws_bedrockagentcore_memory_strategy = {
 }
 
 aws_bedrockagentcore_oauth2_credential_provider = {
-	"clfn":		"bedrock-agent-runtime",
-	"descfn":	"list_credential_providers",
+	"clfn":		"bedrock-agentcore-control",
+	"descfn":	"list_oauth2_credential_providers",
 	"topkey":	"credentialProviders",
 	"key":		"providerId",
 	"filterid":	"providerType"
 }
 
 aws_bedrockagentcore_token_vault_cmk = {
-	"clfn":		"bedrock-agent-runtime",
-	"descfn":	"list_token_vaults",
-	"topkey":	"tokenVaults",
+	"clfn":		"bedrock-agentcore-control",
+	"descfn":	"get_token_vault",
+	"topkey":	"tokenVault",
 	"key":		"vaultId",
 	"filterid":	"vaultId"
 }
 
 aws_bedrockagentcore_workload_identity = {
-	"clfn":		"bedrock-agent-runtime",
+	"clfn":		"bedrock-agentcore-control",
 	"descfn":	"list_workload_identities",
 	"topkey":	"workloadIdentities",
-	"key":		"identityId",
-	"filterid":	"identityId"
+	"key":		"name",
+	"filterid":	"name"
 }
 
 aws_cloudwatch_contributor_managed_insight_rule = {
@@ -12036,16 +12036,16 @@ aws_networkflowmonitor_monitor = {
 	"clfn":		"networkflowmonitor",
 	"descfn":	"list_monitors",
 	"topkey":	"monitors",
-	"key":		"monitorArn",
-	"filterid":	"monitorArn"
+	"key":		"monitorName",
+	"filterid":	"monitorName"
 }
 
 aws_networkflowmonitor_scope = {
 	"clfn":		"networkflowmonitor",
 	"descfn":	"list_scopes",
 	"topkey":	"scopes",
-	"key":		"scopeArn",
-	"filterid":	"scopeArn"
+	"key":		"scopeId",
+	"filterid":	"scopeId"
 }
 
 aws_networkmanager_dx_gateway_attachment = {

@@ -1545,6 +1545,107 @@ terraform destroy -auto-approve
 rm -rf .terraform .terraform.lock.hcl
 ```
 
+## API Response Structure Patterns
+
+Understanding API response patterns saves hours of debugging. Here are the common patterns discovered across 40+ tested resources:
+
+### Pattern A: List Returns Objects
+- Response: `{topkey: [{id: "x", name: "y"}, ...]}`
+- Example: list_resolver_configs → ResolverConfigs (list of objects)
+- Use: Standard key field from aws_dict.py
+- Most common pattern
+
+### Pattern B: List Returns Strings (ARNs)
+- Response: `{topkey: ["arn:...", "arn:..."]}`
+- Example: list_services → serviceArns (list of strings)
+- Requires: Custom get function to handle string list
+- Cannot use standard key extraction
+
+### Pattern C: Get Returns Wrapped Object
+- Response: `{singular_key: {data}}`
+- Example: get_portal → {portal: {...}}
+- Use: `j = response.get('singular_key', response)`
+- Common with "get" operations
+
+### Pattern D: Regional Singleton
+- No list operation, uses region as ID
+- Example: aws_vpc_block_public_access_options
+- Requires: Custom get function that writes region as ID
+- Import ID is the region name
+
+### Pattern E: Policy-Type (No List Operation)
+- Must iterate parent resources and try to get each
+- Example: aws_s3tables_table_bucket_replication, aws_s3_bucket_policy
+- Requires: Custom get function with exception handling for NotFoundException
+- Pattern: list parents → try get policy for each → handle exceptions
+
+## Service-Specific Naming Requirements
+
+Certain AWS services have strict naming requirements that cause validation errors if not followed:
+
+### Kinesis Streams for WorkSpaces Web
+- **MUST** start with "amazon-workspaces-web-"
+- Example: "amazon-workspaces-web-test-20250102"
+- Error if not: "ValidationException: Kinesis stream must start with amazon-workspaces-web-"
+
+### S3 Buckets for Logging
+- **Avoid** AWS-reserved prefixes: "aws", "amazon", "aws2tf"
+- **Use:** "test-{purpose}-{date}-{account_id}"
+- Example: "test-session-logger-20250102-566972129213"
+
+### Browser Policies (WorkSpaces Web)
+- **MUST** use "chromePolicies" format
+- **NOT** "AdditionalSettings" format
+- Example: `chromePolicies: { DownloadRestrictions: { value: 3 } }`
+
+### Certificate Format
+- **MUST** be valid PEM format with proper headers
+- Use Amazon Root CA 1 for testing (provided in examples)
+- Invalid format causes immediate validation error
+
+## Resources Requiring Account-Level Enablement
+
+These resources cannot be tested without special account configuration. Identify and skip early to save time:
+
+### Security Lake (All Resources)
+- **Error:** "AccessDeniedException: account not authorized"
+- **Requires:** Security Lake enabled at account/organization level
+- **Skip all:** aws_securitylake_* (5 resources)
+- **Not an IAM issue** - requires service enablement
+
+### Similar Patterns to Watch For
+- **GuardDuty:** May require organization-level enablement
+- **Detective:** Requires AWS Organizations
+- **Macie:** Requires service enablement
+- **Control Tower:** Requires organization setup
+
+**Early Detection:**
+- If you see "AccessDeniedException" with "account not authorized"
+- And IAM permissions look correct
+- It's likely an account-level enablement issue
+- Document and skip the entire service group
+
+## Known AWS API Limitations
+
+Document API limitations to prevent repeated debugging efforts:
+
+### aws_networkflowmonitor_monitor
+- **Issue:** get_monitor API does not return scopeArn field
+- **Impact:** Cannot dereference scope dependency (required field)
+- **Result:** Import generates `scope_arn = null` → validation error
+- **Status:** Blocked until AWS adds scopeArn to API response
+- **Workaround:** None available
+
+### Pattern: Missing Required Fields in API Response
+If a Terraform resource requires a field that the AWS API doesn't return:
+1. Verify the API response structure with boto3
+2. Check if field exists in list vs get operations
+3. If truly missing, document as API limitation
+4. Re-comment in aws_not_implemented.py with explanation
+5. Create test-failed.md documenting the API gap
+
+**This is not an aws2tf bug - it's an AWS API limitation.**
+
 ## Troubleshooting Common Issues
 
 ### Issue: "Not supported by aws2tf currently" message

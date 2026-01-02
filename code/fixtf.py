@@ -38,6 +38,7 @@ from fixtf_aws_resources import fixtf_backup
 from fixtf_aws_resources import fixtf_batch
 from fixtf_aws_resources import fixtf_bedrock
 from fixtf_aws_resources import fixtf_bedrock_agent
+from fixtf_aws_resources import fixtf_bedrock_agentcore_control
 from fixtf_aws_resources import fixtf_billingconductor
 from fixtf_aws_resources import fixtf_budgets
 from fixtf_aws_resources import fixtf_ce
@@ -149,6 +150,7 @@ from fixtf_aws_resources import fixtf_mq
 from fixtf_aws_resources import fixtf_mwaa
 from fixtf_aws_resources import fixtf_neptune
 from fixtf_aws_resources import fixtf_network_firewall
+from fixtf_aws_resources import fixtf_networkflowmonitor
 from fixtf_aws_resources import fixtf_networkmanager
 from fixtf_aws_resources import fixtf_opensearch
 from fixtf_aws_resources import fixtf_opsworks
@@ -245,6 +247,7 @@ FIXTF_MODULES = {
     'fixtf_batch': fixtf_batch,
     'fixtf_bedrock': fixtf_bedrock,
     'fixtf_bedrock_agent': fixtf_bedrock_agent,
+    'fixtf_bedrock_agentcore_control': fixtf_bedrock_agentcore_control,
     'fixtf_billingconductor': fixtf_billingconductor,
     'fixtf_budgets': fixtf_budgets,
     'fixtf_ce': fixtf_ce,
@@ -356,6 +359,7 @@ FIXTF_MODULES = {
     'fixtf_mwaa': fixtf_mwaa,
     'fixtf_neptune': fixtf_neptune,
     'fixtf_network_firewall': fixtf_network_firewall,
+    'fixtf_networkflowmonitor': fixtf_networkflowmonitor,
     'fixtf_networkmanager': fixtf_networkmanager,
     'fixtf_opensearch': fixtf_opensearch,
     'fixtf_opsworks': fixtf_opsworks,

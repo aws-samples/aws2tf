@@ -7925,16 +7925,16 @@ aws_route53_resolver_endpoint = {
 
 aws_route53_resolver_firewall_config = {
 	"clfn":		"route53resolver",
-	"descfn":	"list_resolver_firewall_configs",
-	"topkey":	"ResolverFirewallConfigs",
+	"descfn":	"list_firewall_configs",
+	"topkey":	"FirewallConfigs",
 	"key":		"Id",
 	"filterid":	"Id"
 }
 
 aws_route53_resolver_firewall_domain_list = {
 	"clfn":		"route53resolver",
-	"descfn":	"list_resolver_firewall_domain_lists",
-	"topkey":	"ResolverFirewallDomainLists",
+	"descfn":	"list_firewall_domain_lists",
+	"topkey":	"FirewallDomainLists",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -7949,8 +7949,8 @@ aws_route53_resolver_firewall_rule = {
 
 aws_route53_resolver_firewall_rule_group = {
 	"clfn":		"route53resolver",
-	"descfn":	"list_resolver_firewall_rule_groups",
-	"topkey":	"ResolverFirewallRuleGroups",
+	"descfn":	"list_firewall_rule_groups",
+	"topkey":	"FirewallRuleGroups",
 	"key":		"Id",
 	"filterid":	"Id"
 }

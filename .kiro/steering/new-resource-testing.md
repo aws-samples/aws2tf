@@ -409,6 +409,16 @@ Review the plan carefully. Fix any errors and re-run.
 terraform apply -auto-approve
 ```
 
+**Important: Terraform Operation Timeouts**
+- Some resources can take up to 6 minutes to create, update, or destroy
+- Common slow operations:
+  - Route53 Resolver DNSSEC configs: 2-4 minutes to create/destroy
+  - Route53 Resolver configs: 1-2 minutes to create/update
+  - Route53 Resolver rule associations: 1-2 minutes to create/destroy
+- Use timeout of at least 180000ms (3 minutes) for terraform apply/destroy commands
+- For particularly slow resources, use 360000ms (6 minutes) timeout
+- If a command times out, check `terraform show` to see if the operation completed
+
 **Capture the resource ID** from the output or state:
 ```bash
 terraform output <resource_id_output_name>

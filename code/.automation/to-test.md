@@ -653,14 +653,14 @@
 - [x] `aws_route53_resolver_config`
 - [x] `aws_route53_resolver_dnssec_config`
 - [x] `aws_route53_resolver_endpoint`
-- [ ] `aws_route53_resolver_firewall_config`
-- [ ] `aws_route53_resolver_firewall_domain_list`
-- [ ] `aws_route53_resolver_firewall_rule`
-- [ ] `aws_route53_resolver_firewall_rule_group`
-- [ ] `aws_route53_resolver_query_log_config`
-- [ ] `aws_route53_resolver_query_log_config_association`
-- [ ] `aws_route53_resolver_rule`
-- [ ] `aws_route53_resolver_rule_association`
+- [x] `aws_route53_resolver_firewall_config`
+- [x] `aws_route53_resolver_firewall_domain_list`
+- [x] `aws_route53_resolver_firewall_rule` (FAILED - composite ID)
+- [x] `aws_route53_resolver_firewall_rule_group`
+- [x] `aws_route53_resolver_query_log_config`
+- [x] `aws_route53_resolver_query_log_config_association`
+- [x] `aws_route53_resolver_rule`
+- [x] `aws_route53_resolver_rule_association`
 
 ### aws_rum
 

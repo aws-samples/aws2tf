@@ -2,8 +2,8 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 15
-**Last Updated:** 2026-01-01
+**Total Completed:** 21
+**Last Updated:** 2026-01-02
 
 ---
 
@@ -40,6 +40,13 @@ Resources are listed by service group in the order they were completed.
 - [x] `aws_route53_resolver_config` - ✓ PASSED (2026-01-01) - [test results](test_aws_route53_resolver_config/test-results.md)
 - [x] `aws_route53_resolver_dnssec_config` - ✓ PASSED (2026-01-01) - [test results](test_aws_route53_resolver_dnssec_config/test-results.md)
 - [x] `aws_route53_resolver_endpoint` - ✓ PASSED (2026-01-01) - [test results](test_aws_route53_resolver_endpoint/test-results.md)
+- [x] `aws_route53_resolver_firewall_config` - ✓ PASSED (2026-01-01) - [test results](test_aws_route53_resolver_firewall_config/test-results.md)
+- [x] `aws_route53_resolver_firewall_domain_list` - ✓ PASSED (2026-01-01) - [test results](test_aws_route53_resolver_firewall_domain_list/test-results.md)
+- [x] `aws_route53_resolver_firewall_rule_group` - ✓ PASSED (2026-01-01) - [test results](test_aws_route53_resolver_firewall_rule_group/test-results.md)
+- [x] `aws_route53_resolver_query_log_config` - ✓ PASSED (2026-01-02) - [test results](test_aws_route53_resolver_query_log_config/test-results.md)
+- [x] `aws_route53_resolver_query_log_config_association` - ✓ PASSED (2026-01-02) - [test results](test_aws_route53_resolver_query_log_config_association/test-results.md)
+- [x] `aws_route53_resolver_rule` - ✓ PASSED (2026-01-02) - [test results](test_aws_route53_resolver_rule/test-results.md)
+- [x] `aws_route53_resolver_rule_association` - ✓ PASSED (2026-01-02) - [test results](test_aws_route53_resolver_rule_association/test-results.md)
 
 <!-- Add completed resources below in this format:
 

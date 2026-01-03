@@ -543,7 +543,7 @@ def check_terraform_version(timed_interrupt):
     if "." not in tvr:
         log.error("Unexpected Terraform version "+str(tvr))
         timed_interrupt.stop_timer()
-        os._exit(1)
+        sys.exit(1)
     
     tv = str(rout.stdout.decode().rstrip()).split("rm v")[-1].split("\n")[0]
     tvmaj = int(tv.split(".")[0])
@@ -552,12 +552,12 @@ def check_terraform_version(timed_interrupt):
     if tvmaj < 1:
         log.error("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
         timed_interrupt.stop_timer()
-        os._exit(1)
+        sys.exit(1)
     
     if tvmaj == 1 and tvmin < 8:
         log.error("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
         timed_interrupt.stop_timer()
-        os._exit(1)
+        sys.exit(1)
     
     return tv
 

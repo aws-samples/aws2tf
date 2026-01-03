@@ -142,7 +142,7 @@ def exit_aws2tf(mess):
         log.error(mess)
 
     if context.fast:
-        os._exit(1) 
+        sys.exit(1) 
     else:
         sys.exit(1)
     

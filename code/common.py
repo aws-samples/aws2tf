@@ -2460,8 +2460,8 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    log.error("stopping process ...")
    #threading.
    stop_timer()
-   os._exit(1)
-   exit()
+   sys.exit(1)
+   
 
 def handle_error2(e,frame,id):
    log.error("\nERROR: in "+frame)
@@ -2480,8 +2480,8 @@ def handle_error2(e,frame,id):
       f.write("-----------------------------------------------------------------------------\n")
    log.info("exit 042")
    stop_timer()
-   os._exit(1)
-   exit()
+   sys.exit(1)
+
 
 
 

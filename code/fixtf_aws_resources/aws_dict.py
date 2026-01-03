@@ -8478,9 +8478,9 @@ aws_sagemaker_app_image_config = {
 aws_sagemaker_code_repository = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_code_repositories",
-	"topkey":	"CodeRepositories",
-	"key":		"CodeRepositoryArn",
-	"filterid":	"CodeRepositoryArn"
+	"topkey":	"CodeRepositorySummaryList",
+	"key":		"CodeRepositoryName",
+	"filterid":	"CodeRepositoryName"
 }
 
 aws_sagemaker_data_quality_job_definition = {
@@ -8582,9 +8582,9 @@ aws_sagemaker_model = {
 aws_sagemaker_model_package_group = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_model_package_groups",
-	"topkey":	"ModelPackageGroups",
-	"key":		"ModelPackageGroupArn",
-	"filterid":	"ModelPackageGroupArn"
+	"topkey":	"ModelPackageGroupSummaryList",
+	"key":		"ModelPackageGroupName",
+	"filterid":	"ModelPackageGroupName"
 }
 
 aws_sagemaker_model_package_group_policy = {
@@ -8622,9 +8622,9 @@ aws_sagemaker_notebook_instance_lifecycle_configuration = {
 aws_sagemaker_pipeline = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_pipelines",
-	"topkey":	"Pipelines",
-	"key":		"PipelineArn",
-	"filterid":	"PipelineArn"
+	"topkey":	"PipelineSummaries",
+	"key":		"PipelineName",
+	"filterid":	"PipelineName"
 }
 
 aws_sagemaker_project = {

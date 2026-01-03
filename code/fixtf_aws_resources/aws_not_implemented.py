@@ -72,8 +72,8 @@ notimplemented = {
     "aws_redshiftserverless_resource_policy": True,  ### TODO
     "aws_s3_directory_bucket": True, ### TODO
     "aws_sagemaker_feature_group": True,  ### TODO
-    "aws_sagemaker_pipeline": True,  ### TODO
-    "aws_sagemaker_servicecatalog_portfolio_status": True, ### TODO
+    #"aws_sagemaker_pipeline": True,  ### TODO
+    #"aws_sagemaker_servicecatalog_portfolio_status": True, ### TODO
     "aws_securitylake_data_lake": True,  ### TODO
     "aws_auditmanager_assessment": True,   ### TODO
     "aws_ce_cost_allocation_tag": True, ### TODO
@@ -400,16 +400,16 @@ notimplemented = {
 
     "aws_s3control_bucket": True,
     #
-    "aws_sagemaker_code_repository": True,
-    "aws_sagemaker_data_quality_job_definition": True,
-    "aws_sagemaker_device": True,  
-    "aws_sagemaker_device_fleet": True,
-    "aws_sagemaker_endpoint_configuration": True,
+    #"aws_sagemaker_code_repository": True,
+    "aws_sagemaker_data_quality_job_definition": True,  ### Requires S3 buckets, IAM roles, data quality baselines - complex setup
+    "aws_sagemaker_device": True,  ### Composite ID: fleet-name/device-name + requires IoT device fleet
+    "aws_sagemaker_device_fleet": True,  ### Requires IAM roles and S3 buckets for edge devices
+    "aws_sagemaker_endpoint_configuration": True,  ### Requires ML models - complex setup
 
-    "aws_sagemaker_flow_definition": True,
-    "aws_sagemaker_human_task_ui": True,
-    "aws_sagemaker_model_package_group": True,
-    "aws_sagemaker_monitoring_schedule": True,
+    #"aws_sagemaker_flow_definition": True,  ### Requires S3 buckets, IAM roles, human task UI - complex setup
+    "aws_sagemaker_human_task_ui": True,  ### Requires HTML template for human review interface
+    #"aws_sagemaker_model_package_group": True,
+    "aws_sagemaker_monitoring_schedule": True,  ### Requires endpoint, baseline, S3 buckets - complex setup
     #
     "aws_schemas_registry_policy": True,
     #

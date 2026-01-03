@@ -2,7 +2,7 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 65
+**Total Completed:** 69
 **Last Updated:** 2026-01-03
 
 ---
@@ -116,6 +116,13 @@ Resources are listed by service group in the order they were completed.
 - [x] `aws_opensearchserverless_security_policy` - ✓ PASSED (2026-01-03) - [test results](test_aws_opensearchserverless_security_policy/test-results.md)
 - [x] `aws_opensearchserverless_access_policy` - ✓ PASSED (2026-01-03) - [test results](test_aws_opensearchserverless_access_policy/test-results.md)
 - [x] `aws_opensearchserverless_lifecycle_policy` - ✓ PASSED (2026-01-03) - [test results](test_aws_opensearchserverless_lifecycle_policy/test-results.md)
+
+### aws_sagemaker
+
+- [x] `aws_sagemaker_code_repository` - ✓ PASSED (2026-01-03) - [test results](test_aws_sagemaker_code_repository/test-results.md)
+- [x] `aws_sagemaker_model_package_group` - ✓ PASSED (2026-01-03) - [test results](test_aws_sagemaker_model_package_group/test-results.md)
+- [x] `aws_sagemaker_pipeline` - ✓ PASSED (2026-01-03) - [test results](test_aws_sagemaker_pipeline/test-results.md)
+- [x] `aws_sagemaker_servicecatalog_portfolio_status` - ✓ PASSED (2026-01-03) - [test results](test_aws_sagemaker_servicecatalog_portfolio_status/test-results.md)
 
 ### aws_ecs
 

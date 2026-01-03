@@ -139,6 +139,23 @@ vector_bucket_arn = aws_s3vectors_vector_bucket.test.vector_bucket_arn  # ✓
 - If found and already commented out, the resource is already enabled
 - **STOP** if the resource cannot be found in either file
 
+### 2.5. Check aws_no_import.py Status
+- Open `code/fixtf_aws_resources/aws_no_import.py`
+- Search for the resource type
+- **CRITICAL: If found and uncommented (marked True), STOP IMMEDIATELY**
+  - Resources in aws_no_import.py cannot be imported via Terraform
+  - These resources can only be created/managed, not imported from existing infrastructure
+  - **Mark in to-test.md as:** `(SKIPPED - no import support)`
+  - **Document reason:** Create test-skipped.md explaining the resource cannot be imported
+  - **Example resources:** Default resources, singleton resources without import support
+- If found and commented out, the resource has import support - continue testing
+- If not found in the file, the resource has import support - continue testing
+
+**Why this matters:**
+- aws_no_import.py contains resources that Terraform doesn't support importing
+- Testing these resources would fail at the import step
+- Early detection saves time and provides clear documentation
+
 ### 3. Verify Import ID Format
 
 **CRITICAL:** The import documentation is the source of truth for ID format throughout the system.

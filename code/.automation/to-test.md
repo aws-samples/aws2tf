@@ -21,8 +21,8 @@
 - [x] `aws_api_gateway_gateway_response`
 - [ ] `aws_api_gateway_integration` (SKIPPED - 3-part composite ID)
 - [ ] `aws_api_gateway_integration_response` (SKIPPED - 4-part composite ID)
-- [ ] `aws_api_gateway_method_response` (SKIPPED - 4-part composite ID)
-- [ ] `aws_api_gateway_method_settings` (SKIPPED - 3-part composite ID)
+- [ ] `aws_api_gateway_method_response` (SKIPPED - in no import got via chian)
+- [ ] `aws_api_gateway_method_settings` (SKIPPED - in no import got via chian)
 - [x] `aws_api_gateway_model`
 - [x] `aws_api_gateway_request_validator`
 - [x] `aws_api_gateway_rest_api_policy`

@@ -200,3 +200,12 @@ def aws_api_gateway_method_settings(t1,tt1,tt2,flag1,flag2):
 		t1=tt1 + " = aws_api_gateway_stage.r-" + str(context.apigwrestapiid) + "-" + str(context.apigwstagename) + ".stage_name\n"
 		common.add_dependancy("aws_api_gateway_stage", str(context.apigwrestapiid) + "/" + str(context.apigwstagename))
 	return skip,t1,flag1,flag2
+
+
+def aws_api_gateway_api_key(t1,tt1,tt2,flag1,flag2):
+
+	skip=0
+	# Add lifecycle block to ignore description field (gets default "Managed by Terraform")
+	if tt1=="name" and tt2 != "null":
+		t1 = t1 + "\n lifecycle {\n   ignore_changes = [description]\n}\n"
+	return skip,t1,flag1,flag2

@@ -112,9 +112,9 @@ noimport = {
     "aws_vpn_connection_route": True,
     "aws_vpn_gateway_attachment": True,
     "aws_vpn_gateway_route_propagation": True,
-    #
-    # hand driven exclusions
-    #
+    ####
+    ### hand driven exclusions
+    ####
     "aws_wafregional_web_acl_association": True,    # get it from target rsource
     "aws_vpc_ipam_organization_admin_account": True,
     "aws_grafana_license_association": True,
@@ -189,4 +189,7 @@ noimport = {
     "aws_s3_bucket_acl": True, # should not be using anymore
     # issues with import - seems to need arn - but no obvious boto3 call to get it
     "aws_codebuild_project": True, # needs arn for import - boto3 call for it ??
+    "aws_route53_resolver_rule": True, # us-east-1 only ? import errors
+    "aws_route53_resolver_firewall_domain_list": True, # import errors
+    "aws_ec2_allowed_images_settings": True # import errors
 } 

@@ -86,10 +86,10 @@ notimplemented = {
     #
     "aws_apprunner_observability_configuration": True,
     #
-    "aws_appstream_directory_config": True,
-    "aws_appstream_fleet_stack_association": True,
-    "aws_appstream_stack": True,
-    "aws_appstream_user_stack_association": True,
+    "aws_appstream_directory_config": True,  ### Requires Active Directory setup
+    "aws_appstream_fleet_stack_association": True,  ### Composite ID format
+    #"aws_appstream_stack": True,
+    "aws_appstream_user_stack_association": True,  ### Composite ID format
     "aws_appsync_api_cache": True,
     "aws_appsync_domain_name_api_association": True,
     "aws_appsync_graphql_api": True,
@@ -478,19 +478,19 @@ notimplemented = {
 #	"aws_api_gateway_base_path_mapping": True,
 #	"aws_api_gateway_client_certificate": True,
 #	"aws_api_gateway_documentation_part": True,
-	"aws_api_gateway_documentation_version": True,
-	"aws_api_gateway_domain_name": True,
-	"aws_api_gateway_gateway_response": True,
-	"aws_api_gateway_integration": True,
-	"aws_api_gateway_integration_response": True,
-	"aws_api_gateway_method_response": True,
-	"aws_api_gateway_method_settings": True,
+	#"aws_api_gateway_documentation_version": True,
+	"aws_api_gateway_domain_name": True,  ### Requires ACM certificate and domain ownership
+	#"aws_api_gateway_gateway_response": True,
+	"aws_api_gateway_integration": True,  ### Composite ID: REST-API-ID/RESOURCE-ID/HTTP-METHOD
+	"aws_api_gateway_integration_response": True,  ### Composite ID: REST-API-ID/RESOURCE-ID/HTTP-METHOD/STATUS-CODE
+	"aws_api_gateway_method_response": True,  ### Composite ID: REST-API-ID/RESOURCE-ID/HTTP-METHOD/STATUS-CODE
+	"aws_api_gateway_method_settings": True,  ### Composite ID: REST-API-ID/STAGE-NAME/METHOD-PATH
 #	"aws_api_gateway_model": True,
 #	"aws_api_gateway_request_validator": True,
-	"aws_api_gateway_rest_api_policy": True,
-	"aws_api_gateway_usage_plan": True,
-	"aws_api_gateway_usage_plan_key": True,
-	"aws_api_gateway_vpc_link": True,
+	#"aws_api_gateway_rest_api_policy": True,
+	#"aws_api_gateway_usage_plan": True,
+	#"aws_api_gateway_usage_plan_key": True,
+	#"aws_api_gateway_vpc_link": True,
 ### old WAF
     #
     "aws_auditmanager_account_registration": True,

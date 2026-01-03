@@ -488,3 +488,196 @@ def get_aws_api_gateway_method(type, id, clfn, descfn, topkey, key, filterid):
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
             
     return True
+
+
+def get_aws_api_gateway_documentation_version(type, id, clfn, descfn, topkey, key, filterid):
+
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
+    try:
+        response = []
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # First get all REST APIs
+            api_paginator = client.get_paginator('get_rest_apis')
+            apis = []
+            for page in api_paginator.paginate():
+                apis = apis + page['items']
+            
+            # Then list documentation versions for each REST API
+            for api in apis:
+                try:
+                    doc_paginator = client.get_paginator(descfn)
+                    for page in doc_paginator.paginate(restApiId=api['id']):
+                        for j in page[topkey]:
+                            # Build composite ID: restApiId/version
+                            composite_id = api['id'] + '/' + j[key]
+                            common.write_import(type, composite_id, None)
+                except Exception as e:
+                    if context.debug: log.debug(f"Error listing documentation versions for API {api['id']}: {e}")
+                    continue
+        else:
+            # Get specific documentation version by composite ID
+            if '/' in id:
+                rest_api_id, version = id.split('/', 1)
+                try:
+                    response = client.get_documentation_version(restApiId=rest_api_id, documentationVersion=version)
+                    if response:
+                        common.write_import(type, id, None)
+                except Exception as e:
+                    if context.debug: log.debug(f"Error getting documentation version {id}: {e}")
+            else:
+                if context.debug: log.debug("Must pass restApiId/version for "+type)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+
+def get_aws_api_gateway_gateway_response(type, id, clfn, descfn, topkey, key, filterid):
+
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
+    try:
+        response = []
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # First get all REST APIs
+            api_paginator = client.get_paginator('get_rest_apis')
+            apis = []
+            for page in api_paginator.paginate():
+                apis = apis + page['items']
+            
+            # Then list gateway responses for each REST API
+            for api in apis:
+                try:
+                    gw_paginator = client.get_paginator(descfn)
+                    for page in gw_paginator.paginate(restApiId=api['id']):
+                        for j in page[topkey]:
+                            # Build composite ID: restApiId/responseType
+                            composite_id = api['id'] + '/' + j[key]
+                            common.write_import(type, composite_id, None)
+                except Exception as e:
+                    if context.debug: log.debug(f"Error listing gateway responses for API {api['id']}: {e}")
+                    continue
+        else:
+            # Get specific gateway response by composite ID
+            if '/' in id:
+                rest_api_id, response_type = id.split('/', 1)
+                try:
+                    response = client.get_gateway_response(restApiId=rest_api_id, responseType=response_type)
+                    if response:
+                        common.write_import(type, id, None)
+                except Exception as e:
+                    if context.debug: log.debug(f"Error getting gateway response {id}: {e}")
+            else:
+                if context.debug: log.debug("Must pass restApiId/responseType for "+type)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+
+def get_aws_api_gateway_rest_api_policy(type, id, clfn, descfn, topkey, key, filterid):
+
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
+    try:
+        response = []
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # First get all REST APIs
+            api_paginator = client.get_paginator('get_rest_apis')
+            apis = []
+            for page in api_paginator.paginate():
+                apis = apis + page['items']
+            
+            # Then try to get policy for each REST API
+            for api in apis:
+                try:
+                    # Try to get the policy - will fail if it doesn't exist
+                    policy_response = client.get_rest_api(restApiId=api['id'])
+                    # Check if policy exists
+                    if 'policy' in policy_response and policy_response['policy']:
+                        # Policy exists for this REST API
+                        common.write_import(type, api['id'], None)
+                except Exception as e:
+                    if context.debug: log.debug(f"Error getting policy for REST API {api['id']}: {e}")
+                    continue
+        else:
+            # Get specific policy by REST API ID
+            try:
+                response = client.get_rest_api(restApiId=id)
+                # Check if policy exists
+                if 'policy' in response and response['policy']:
+                    common.write_import(type, id, None)
+            except Exception as e:
+                if context.debug: log.debug(f"Error getting policy for REST API {id}: {e}")
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+
+def get_aws_api_gateway_usage_plan_key(type, id, clfn, descfn, topkey, key, filterid):
+
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+
+    try:
+        response = []
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # First get all usage plans
+            plan_paginator = client.get_paginator('get_usage_plans')
+            plans = []
+            for page in plan_paginator.paginate():
+                plans = plans + page['items']
+            
+            # Then list keys for each usage plan
+            for plan in plans:
+                try:
+                    key_paginator = client.get_paginator(descfn)
+                    for page in key_paginator.paginate(usagePlanId=plan['id']):
+                        for j in page[topkey]:
+                            # Build composite ID: usagePlanId/keyId
+                            composite_id = plan['id'] + '/' + j[key]
+                            common.write_import(type, composite_id, None)
+                except Exception as e:
+                    if context.debug: log.debug(f"Error listing keys for usage plan {plan['id']}: {e}")
+                    continue
+        else:
+            # Get specific usage plan key by composite ID
+            if '/' in id:
+                usage_plan_id, key_id = id.split('/', 1)
+                try:
+                    response = client.get_usage_plan_key(usagePlanId=usage_plan_id, keyId=key_id)
+                    if response:
+                        common.write_import(type, id, None)
+                except Exception as e:
+                    if context.debug: log.debug(f"Error getting usage plan key {id}: {e}")
+            else:
+                if context.debug: log.debug("Must pass usagePlanId/keyId for "+type)
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True

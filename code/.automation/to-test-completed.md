@@ -2,7 +2,7 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 76
+**Total Completed:** 82
 **Last Updated:** 2026-01-03
 
 ---
@@ -49,10 +49,17 @@ Resources are listed by service group in the order they were completed.
 - [x] `aws_api_gateway_api_key` - ✓ PASSED (2026-01-01) - [test results](test_aws_api_gateway_api_key/test-results.md)
 - [x] `aws_api_gateway_client_certificate` - ✓ PASSED (2026-01-01) - [test results](test_aws_api_gateway_client_certificate/test-results.md)
 - [x] `aws_api_gateway_documentation_part` - ✓ PASSED (2026-01-01) - [test results](test_aws_api_gateway_documentation_part/test-results.md)
+- [x] `aws_api_gateway_documentation_version` - ✓ PASSED (2026-01-03) - [test results](test_aws_api_gateway_documentation_version/test-results.md)
+- [x] `aws_api_gateway_gateway_response` - ✓ PASSED (2026-01-03) - [test results](test_aws_api_gateway_gateway_response/test-results.md)
 - [x] `aws_api_gateway_model` - ✓ PASSED (2026-01-01) - [test results](test_aws_api_gateway_model/test-results.md)
 - [x] `aws_api_gateway_request_validator` - ✓ PASSED (2026-01-01) - [test results](test_aws_api_gateway_request_validator/test-results.md)
+- [x] `aws_api_gateway_rest_api_policy` - ✓ PASSED (2026-01-03) - [test results](test_aws_api_gateway_rest_api_policy/test-results.md)
+- [x] `aws_api_gateway_usage_plan` - ✓ PASSED (2026-01-03) - [test results](test_aws_api_gateway_usage_plan/test-results.md)
+- [x] `aws_api_gateway_usage_plan_key` - ✓ PASSED (2026-01-03) - [test results](test_aws_api_gateway_usage_plan_key/test-results.md)
 
-### aws_lambda
+### aws_appstream
+
+- [x] `aws_appstream_stack` - ✓ PASSED (2026-01-03) - [test results](test_aws_appstream_stack/test-results.md)
 
 - [x] `aws_lambda_function_recursion_config` - ✓ PASSED (2026-01-01) - [test results](test_aws_lambda_function_recursion_config/test-results.md)
 - [x] `aws_lambda_capacity_provider` - ✓ PASSED (2026-01-01) - [test results](test_aws_lambda_capacity_provider/test-results.md)
@@ -137,6 +144,10 @@ Resources are listed by service group in the order they were completed.
 ### aws_ecs
 
 - [x] `aws_ecs_express_gateway_service` - ✓ PASSED (2026-01-02) - [test results](test_aws_ecs_express_gateway_service/test-results.md)
+
+### aws_appstream
+
+- [x] `aws_appstream_stack` - ✓ PASSED (2026-01-03) - [test results](test_aws_appstream_stack/test-results.md)
 
 <!-- Add completed resources below in this format:
 

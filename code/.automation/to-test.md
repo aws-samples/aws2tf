@@ -13,22 +13,22 @@
 ### aws_api_gateway
 
 - [x] `aws_api_gateway_api_key`
-- [ ] `aws_api_gateway_base_path_mapping`
+- [ ] `aws_api_gateway_base_path_mapping` (SKIPPED - composite ID + requires domain)
 - [x] `aws_api_gateway_client_certificate`
 - [x] `aws_api_gateway_documentation_part`
-- [ ] `aws_api_gateway_documentation_version`
-- [ ] `aws_api_gateway_domain_name`
-- [ ] `aws_api_gateway_gateway_response`
-- [ ] `aws_api_gateway_integration`
-- [ ] `aws_api_gateway_integration_response`
-- [ ] `aws_api_gateway_method_response`
-- [ ] `aws_api_gateway_method_settings`
+- [x] `aws_api_gateway_documentation_version`
+- [ ] `aws_api_gateway_domain_name` (SKIPPED - requires ACM certificate and domain ownership)
+- [x] `aws_api_gateway_gateway_response`
+- [ ] `aws_api_gateway_integration` (SKIPPED - 3-part composite ID)
+- [ ] `aws_api_gateway_integration_response` (SKIPPED - 4-part composite ID)
+- [ ] `aws_api_gateway_method_response` (SKIPPED - 4-part composite ID)
+- [ ] `aws_api_gateway_method_settings` (SKIPPED - 3-part composite ID)
 - [x] `aws_api_gateway_model`
 - [x] `aws_api_gateway_request_validator`
-- [ ] `aws_api_gateway_rest_api_policy`
-- [ ] `aws_api_gateway_usage_plan`
-- [ ] `aws_api_gateway_usage_plan_key`
-- [ ] `aws_api_gateway_vpc_link`
+- [x] `aws_api_gateway_rest_api_policy`
+- [x] `aws_api_gateway_usage_plan`
+- [x] `aws_api_gateway_usage_plan_key`
+- [ ] `aws_api_gateway_vpc_link` (SKIPPED - requires Network Load Balancer)
 
 ### aws_apprunner
 
@@ -36,10 +36,10 @@
 
 ### aws_appstream
 
-- [ ] `aws_appstream_directory_config`
-- [ ] `aws_appstream_fleet_stack_association`
-- [ ] `aws_appstream_stack`
-- [ ] `aws_appstream_user_stack_association`
+- [ ] `aws_appstream_directory_config` (SKIPPED - requires Active Directory setup)
+- [ ] `aws_appstream_fleet_stack_association` (SKIPPED - composite ID format)
+- [x] `aws_appstream_stack`
+- [ ] `aws_appstream_user_stack_association` (SKIPPED - composite ID format)
 
 ### aws_appsync
 

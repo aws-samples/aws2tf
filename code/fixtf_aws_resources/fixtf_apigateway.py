@@ -118,3 +118,63 @@ def __getattr__(name):
 
 
 log.debug(f"APIGATEWAY handlers: 3 custom functions + __getattr__ for 0 simple resources")
+
+
+def aws_api_gateway_documentation_version(t1,tt1,tt2,flag1,flag2):
+
+	skip=0
+	if t1.startswith("resource"):
+		context.apigwrestapiid=t1.split("r-")[1].split("_")[0]
+	if tt1=="rest_api_id" and tt2 != "null":
+		t1=tt1 + " = aws_api_gateway_rest_api.r-" + str(context.apigwrestapiid) + ".id\n"
+		common.add_dependancy("aws_api_gateway_rest_api", str(context.apigwrestapiid))
+	return skip,t1,flag1,flag2
+
+
+def aws_api_gateway_gateway_response(t1,tt1,tt2,flag1,flag2):
+
+	skip=0
+	if t1.startswith("resource"):
+		context.apigwrestapiid=t1.split("r-")[1].split("_")[0]
+	if tt1=="rest_api_id" and tt2 != "null":
+		t1=tt1 + " = aws_api_gateway_rest_api.r-" + str(context.apigwrestapiid) + ".id\n"
+		common.add_dependancy("aws_api_gateway_rest_api", str(context.apigwrestapiid))
+	return skip,t1,flag1,flag2
+
+
+def aws_api_gateway_rest_api_policy(t1,tt1,tt2,flag1,flag2):
+
+	skip=0
+	if t1.startswith("resource"):
+		# Extract REST API ID from resource name (no "r-" prefix for policy resources)
+		parts = t1.split('"')
+		if len(parts) >= 4:
+			context.apigwrestapiid = parts[3]
+	if tt1=="rest_api_id" and tt2 != "null":
+		t1=tt1 + " = aws_api_gateway_rest_api.r-" + str(context.apigwrestapiid) + ".id\n"
+		# Add lifecycle block to ignore JSON key ordering changes
+		t1 = t1 + "\n lifecycle {\n   ignore_changes = [policy]\n}\n"
+		common.add_dependancy("aws_api_gateway_rest_api", str(context.apigwrestapiid))
+	return skip,t1,flag1,flag2
+
+
+def aws_api_gateway_usage_plan_key(t1,tt1,tt2,flag1,flag2):
+
+	skip=0
+	if t1.startswith("resource"):
+		# Extract usage plan ID and key ID from resource name
+		# Format: r-usagePlanId_keyId
+		name_parts = t1.split('"')[3]  # Get resource name
+		if '_' in name_parts:
+			parts = name_parts.split('_', 1)
+			context.usageplanid = parts[0].replace('r-', '')
+			if len(parts) > 1:
+				context.apikeyid = parts[1]
+	if tt1=="usage_plan_id" and tt2 != "null":
+		t1=tt1 + " = aws_api_gateway_usage_plan.r-" + str(context.usageplanid) + ".id\n"
+		common.add_dependancy("aws_api_gateway_usage_plan", str(context.usageplanid))
+	if tt1=="key_id" and tt2 != "null":
+		# API key resources don't use "r-" prefix
+		t1=tt1 + " = aws_api_gateway_api_key." + str(context.apikeyid) + ".id\n"
+		common.add_dependancy("aws_api_gateway_api_key", str(context.apikeyid))
+	return skip,t1,flag1,flag2

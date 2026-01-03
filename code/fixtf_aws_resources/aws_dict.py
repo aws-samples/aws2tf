@@ -7749,10 +7749,10 @@ aws_redshiftdata_statement = {
 
 aws_redshiftserverless_endpoint_access = {
 	"clfn":		"redshift-serverless",
-	"descfn":	"describe_endpoint_access",
-	"topkey":	"EndpointAccess",
-	"key":		"EndpointName",
-	"filterid":	"EndpointName"
+	"descfn":	"list_endpoint_access",
+	"topkey":	"endpoints",
+	"key":		"endpointName",
+	"filterid":	"endpointName"
 }
 
 aws_redshiftserverless_resource_policy = {
@@ -7765,18 +7765,18 @@ aws_redshiftserverless_resource_policy = {
 
 aws_redshiftserverless_snapshot = {
 	"clfn":		"redshift-serverless",
-	"descfn":	"describe_snapshots",
-	"topkey":	"Snapshots",
-	"key":		"SnapshotName",
-	"filterid":	"SnapshotName"
+	"descfn":	"list_snapshots",
+	"topkey":	"snapshots",
+	"key":		"snapshotName",
+	"filterid":	"snapshotName"
 }
 
 aws_redshiftserverless_usage_limit = {
 	"clfn":		"redshift-serverless",
-	"descfn":	"describe_usage_limits",
-	"topkey":	"UsageLimits",
-	"key":		"UsageLimitId",
-	"filterid":	"UsageLimitId"
+	"descfn":	"list_usage_limits",
+	"topkey":	"usageLimits",
+	"key":		"usageLimitId",
+	"filterid":	"usageLimitId"
 }
 
 aws_resourceexplorer2_index = {
@@ -8542,17 +8542,17 @@ aws_sagemaker_feature_group = {
 aws_sagemaker_flow_definition = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_flow_definitions",
-	"topkey":	"FlowDefinitions",
-	"key":		"FlowDefinitionArn",
-	"filterid":	"FlowDefinitionArn"
+	"topkey":	"FlowDefinitionSummaries",
+	"key":		"FlowDefinitionName",
+	"filterid":	"FlowDefinitionName"
 }
 
 aws_sagemaker_human_task_ui = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_human_task_uis",
-	"topkey":	"HumanTaskUIs",
-	"key":		"HumanTaskUiArn",
-	"filterid":	"HumanTaskUiArn"
+	"topkey":	"HumanTaskUiSummaries",
+	"key":		"HumanTaskUiName",
+	"filterid":	"HumanTaskUiName"
 }
 
 aws_sagemaker_image = {

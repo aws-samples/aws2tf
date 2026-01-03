@@ -213,3 +213,83 @@ def get_aws_s3tables_table_replication(type, id, clfn, descfn, topkey, key, filt
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
     return True
+
+
+def get_aws_s3tables_table_policy(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        from botocore.config import Config
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all table buckets
+            paginator = client.get_paginator('list_table_buckets')
+            table_buckets = []
+            for page in paginator.paginate():
+                table_buckets = table_buckets + page['tableBuckets']
+            
+            # For each table bucket, list namespaces and tables
+            for bucket in table_buckets:
+                bucket_arn = bucket['arn']
+                try:
+                    # List namespaces
+                    ns_paginator = client.get_paginator('list_namespaces')
+                    namespaces = []
+                    for ns_page in ns_paginator.paginate(tableBucketARN=bucket_arn):
+                        namespaces = namespaces + ns_page['namespaces']
+                    
+                    # For each namespace, list tables
+                    for namespace in namespaces:
+                        ns_name = namespace['namespace'][0] if isinstance(namespace['namespace'], list) else namespace['namespace']
+                        try:
+                            # List tables
+                            table_paginator = client.get_paginator('list_tables')
+                            tables = []
+                            for table_page in table_paginator.paginate(tableBucketARN=bucket_arn, namespace=ns_name):
+                                tables = tables + table_page['tables']
+                            
+                            # For each table, try to get its policy
+                            for table in tables:
+                                table_name = table['name']
+                                try:
+                                    # Try to get the table policy
+                                    policy_response = client.get_table_policy(
+                                        tableBucketARN=bucket_arn,
+                                        namespace=ns_name,
+                                        name=table_name
+                                    )
+                                    # Policy exists for this table
+                                    composite_id = f"{bucket_arn};{ns_name};{table_name}"
+                                    common.write_import(type, composite_id, None)
+                                except client.exceptions.NotFoundException:
+                                    # No policy for this table
+                                    if context.debug: log.debug(f"No policy for table {table_name}")
+                                    continue
+                                except Exception as e:
+                                    if context.debug: log.debug(f"Error getting policy for table {table_name}: {e}")
+                                    continue
+                        except Exception as e:
+                            if context.debug: log.debug(f"Error listing tables for namespace {ns_name}: {e}")
+                            continue
+                except Exception as e:
+                    if context.debug: log.debug(f"Error listing namespaces for bucket {bucket_arn}: {e}")
+                    continue
+        else:
+            # Specific import - id should be composite: bucket-arn;namespace;table-name
+            if ';' in id:
+                parts = id.split(';')
+                if len(parts) == 3:
+                    bucket_arn, namespace, table_name = parts
+                    try:
+                        # Verify the policy exists
+                        policy_response = client.get_table_policy(
+                            tableBucketARN=bucket_arn,
+                            namespace=namespace,
+                            name=table_name
+                        )
+                        common.write_import(type, id, None)
+                    except Exception as e:
+                        if context.debug: log.debug(f"Error getting policy for {id}: {e}")
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    return True

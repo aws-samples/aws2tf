@@ -69,7 +69,7 @@ notimplemented = {
     "aws_mskconnect_connector": True,  ### TODO
     "aws_networkfirewall_resource_policy": True, ### TODO
     "aws_opensearch_inbound_connection_accepter": True,  ### TODO
-    "aws_redshiftserverless_resource_policy": True,  ### TODO
+    "aws_redshiftserverless_resource_policy": True,  ### Requires snapshot (which requires namespace/workgroup) - complex and expensive
     "aws_s3_directory_bucket": True, ### TODO
     "aws_sagemaker_feature_group": True,  ### TODO
     #"aws_sagemaker_pipeline": True,  ### TODO
@@ -372,9 +372,9 @@ notimplemented = {
     #
     "aws_rbin_rule": True,
     #
-    "aws_redshiftserverless_endpoint_access": True,
-    "aws_redshiftserverless_snapshot": True,
-    "aws_redshiftserverless_usage_limit": True,
+    #"aws_redshiftserverless_endpoint_access": True,  ### Requires workgroup, VPC, subnets - complex and expensive
+    #"aws_redshiftserverless_snapshot": True,  ### Requires namespace and workgroup - complex and expensive
+    #"aws_redshiftserverless_usage_limit": True,  ### Requires workgroup - complex and expensive
     "aws_resourceexplorer2_index": True,
 
     "aws_rolesanywhere_profile": True,
@@ -385,7 +385,7 @@ notimplemented = {
     #"aws_route53_resolver_endpoint": True,
     #"aws_route53_resolver_firewall_config": True,
     #"aws_route53_resolver_firewall_domain_list": True,
-    "aws_route53_resolver_firewall_rule": True,  ### Composite ID format: rule_group_id:domain_list_id
+    #"aws_route53_resolver_firewall_rule": True,  ### Composite ID format: rule_group_id:domain_list_id
     #"aws_route53_resolver_firewall_rule_group": True,
     #"aws_route53_resolver_query_log_config": True,
     #"aws_route53_resolver_query_log_config_association": True,
@@ -403,13 +403,13 @@ notimplemented = {
     #"aws_sagemaker_code_repository": True,
     "aws_sagemaker_data_quality_job_definition": True,  ### Requires S3 buckets, IAM roles, data quality baselines - complex setup
     "aws_sagemaker_device": True,  ### Composite ID: fleet-name/device-name + requires IoT device fleet
-    "aws_sagemaker_device_fleet": True,  ### Requires IAM roles and S3 buckets for edge devices
+    "aws_sagemaker_device_fleet": True,  ### Creation timeout - takes 10+ minutes to create IoT infrastructure
     "aws_sagemaker_endpoint_configuration": True,  ### Requires ML models - complex setup
 
     #"aws_sagemaker_flow_definition": True,  ### Requires S3 buckets, IAM roles, human task UI - complex setup
-    "aws_sagemaker_human_task_ui": True,  ### Requires HTML template for human review interface
+    #"aws_sagemaker_human_task_ui": True,  ### Requires HTML template for human review interface
     #"aws_sagemaker_model_package_group": True,
-    "aws_sagemaker_monitoring_schedule": True,  ### Requires endpoint, baseline, S3 buckets - complex setup
+    #"aws_sagemaker_monitoring_schedule": True,  ### Requires endpoint, baseline, S3 buckets - complex setup
     #
     "aws_schemas_registry_policy": True,
     #

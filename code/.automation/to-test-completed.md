@@ -2,7 +2,7 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 69
+**Total Completed:** 73
 **Last Updated:** 2026-01-03
 
 ---
@@ -75,6 +75,7 @@ Resources are listed by service group in the order they were completed.
 - [x] `aws_route53_resolver_endpoint` - ✓ PASSED (2026-01-01) - [test results](test_aws_route53_resolver_endpoint/test-results.md)
 - [x] `aws_route53_resolver_firewall_config` - ✓ PASSED (2026-01-01) - [test results](test_aws_route53_resolver_firewall_config/test-results.md)
 - [x] `aws_route53_resolver_firewall_domain_list` - ✓ PASSED (2026-01-01) - [test results](test_aws_route53_resolver_firewall_domain_list/test-results.md)
+- [x] `aws_route53_resolver_firewall_rule` - ✓ PASSED (2026-01-03) - [test results](test_aws_route53_resolver_firewall_rule/test-results.md)
 - [x] `aws_route53_resolver_firewall_rule_group` - ✓ PASSED (2026-01-01) - [test results](test_aws_route53_resolver_firewall_rule_group/test-results.md)
 - [x] `aws_route53_resolver_query_log_config` - ✓ PASSED (2026-01-02) - [test results](test_aws_route53_resolver_query_log_config/test-results.md)
 - [x] `aws_route53_resolver_query_log_config_association` - ✓ PASSED (2026-01-02) - [test results](test_aws_route53_resolver_query_log_config_association/test-results.md)
@@ -95,6 +96,7 @@ Resources are listed by service group in the order they were completed.
 
 - [x] `aws_s3tables_table_bucket_replication` - ✓ PASSED (2026-01-02) - [test results](test_aws_s3tables_table_bucket_replication/test-results.md)
 - [x] `aws_s3tables_table_replication` - ✓ PASSED (2026-01-02) - [test results](test_aws_s3tables_table_replication/test-results.md)
+- [x] `aws_s3tables_table_policy` - ✓ PASSED (2026-01-03) - [test results](test_aws_s3tables_table_policy/test-results.md)
 
 ### aws_workspacesweb
 
@@ -123,6 +125,8 @@ Resources are listed by service group in the order they were completed.
 - [x] `aws_sagemaker_model_package_group` - ✓ PASSED (2026-01-03) - [test results](test_aws_sagemaker_model_package_group/test-results.md)
 - [x] `aws_sagemaker_pipeline` - ✓ PASSED (2026-01-03) - [test results](test_aws_sagemaker_pipeline/test-results.md)
 - [x] `aws_sagemaker_servicecatalog_portfolio_status` - ✓ PASSED (2026-01-03) - [test results](test_aws_sagemaker_servicecatalog_portfolio_status/test-results.md)
+- [x] `aws_sagemaker_flow_definition` - ✓ PASSED (2026-01-03) - [test results](test_aws_sagemaker_flow_definition/test-results.md)
+- [x] `aws_sagemaker_human_task_ui` - ✓ PASSED (2026-01-03) - [test results](test_aws_sagemaker_human_task_ui/test-results.md)
 
 ### aws_ecs
 

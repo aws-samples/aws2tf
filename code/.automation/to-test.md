@@ -113,19 +113,19 @@
 ### aws_cloudwatch
 
 - [x] `aws_cloudwatch_composite_alarm` (✅ PASSED - requires metric alarms, 0 drift)
-- [x] `aws_cloudwatch_contributor_managed_insight_rule` (FAILED - composite ID)
+- [ ] `aws_cloudwatch_contributor_managed_insight_rule` (FAILED - composite ID)
 - [x] `aws_cloudwatch_dashboard` (✅ PASSED - simple JSON config, 0 drift)
 - [x] `aws_cloudwatch_event_api_destination`
 - [x] `aws_cloudwatch_event_archive`
 - [x] `aws_cloudwatch_event_bus_policy`
 - [x] `aws_cloudwatch_event_connection`
 - [x] `aws_cloudwatch_event_endpoint` (SKIPPED - requires multi-region setup)
-- [x] `aws_cloudwatch_event_permission` (FAILED - composite ID)
+- [ ] `aws_cloudwatch_event_permission` (FAILED - composite ID)
 - [x] `aws_cloudwatch_log_data_protection_policy`
 - [x] `aws_cloudwatch_log_destination_policy`
-- [x] `aws_cloudwatch_log_metric_filter` (FAILED - composite ID)
+- [ ] `aws_cloudwatch_log_metric_filter` (FAILED - composite ID)
 - [x] `aws_cloudwatch_log_resource_policy`
-- [x] `aws_cloudwatch_log_subscription_filter` (FAILED - composite ID)
+- [ ] `aws_cloudwatch_log_subscription_filter` (FAILED - composite ID)
 
 ### aws_codeartifact
 
@@ -281,7 +281,7 @@
 
 - [x] `aws_ec2_allowed_images_settings`
 - [x] `aws_ec2_default_credit_specification`
-- [x] `aws_ec2_local_gateway_route` (FAILED - requires AWS Outposts hardware + composite ID)
+- [ ] `aws_ec2_local_gateway_route` (FAILED - requires AWS Outposts hardware + composite ID)
 - [x] `aws_ec2_subnet_cidr_reservation`
 - [x] `aws_ec2_transit_gateway_default_route_table_association` (FAILED - cannot import)
 - [x] `aws_ec2_transit_gateway_default_route_table_propagation` (FAILED - cannot import)
@@ -632,10 +632,10 @@
 
 ### aws_redshiftserverless
 
-- [ ] `aws_redshiftserverless_endpoint_access`
-- [ ] `aws_redshiftserverless_resource_policy`
-- [ ] `aws_redshiftserverless_snapshot`
-- [ ] `aws_redshiftserverless_usage_limit`
+- [x] `aws_redshiftserverless_endpoint_access` (SKIPPED - requires workgroup, VPC - complex/expensive)
+- [x] `aws_redshiftserverless_resource_policy` (SKIPPED - requires snapshot/workgroup - complex/expensive)
+- [x] `aws_redshiftserverless_snapshot` (SKIPPED - requires namespace/workgroup - complex/expensive)
+- [x] `aws_redshiftserverless_usage_limit` (SKIPPED - requires workgroup - complex/expensive)
 
 ### aws_resiliencehub
 
@@ -657,7 +657,7 @@
 - [x] `aws_route53_resolver_endpoint`
 - [x] `aws_route53_resolver_firewall_config`
 - [x] `aws_route53_resolver_firewall_domain_list`
-- [ ] `aws_route53_resolver_firewall_rule` (FAILED - composite ID)
+- [x] `aws_route53_resolver_firewall_rule`
 - [x] `aws_route53_resolver_firewall_rule_group`
 - [x] `aws_route53_resolver_query_log_config`
 - [x] `aws_route53_resolver_query_log_config_association`
@@ -688,22 +688,22 @@
 ### aws_s3tables
 
 - [x] `aws_s3tables_table_bucket_replication`
-- [ ] `aws_s3tables_table_policy` (FAILED - composite ID)
+- [x] `aws_s3tables_table_policy`
 - [x] `aws_s3tables_table_replication`
 
 ### aws_sagemaker
 
 - [x] `aws_sagemaker_code_repository`
 - [x] `aws_sagemaker_data_quality_job_definition` (SKIPPED - requires complex setup)
-- [x] `aws_sagemaker_device` (SKIPPED - composite ID + requires IoT fleet)
-- [x] `aws_sagemaker_device_fleet` (SKIPPED - requires IAM and S3)
-- [x] `aws_sagemaker_endpoint_configuration` (SKIPPED - requires ML models)
-- [x] `aws_sagemaker_feature_group` (SKIPPED - requires complex setup)
-- [x] `aws_sagemaker_flow_definition` (SKIPPED - requires S3, IAM, UI)
-- [x] `aws_sagemaker_human_task_ui` (SKIPPED - requires HTML template)
-- [x] `aws_sagemaker_mlflow_tracking_server` (SKIPPED - requires complex setup)
+- [ ] `aws_sagemaker_device` (SKIPPED - composite ID + requires IoT fleet)
+- [ ] `aws_sagemaker_device_fleet` (FAILED - creation timeout 30+ minutes)
+- [ ] `aws_sagemaker_endpoint_configuration` (SKIPPED - requires ML models)
+- [ ] `aws_sagemaker_feature_group` (SKIPPED - requires complex setup)
+- [x] `aws_sagemaker_flow_definition`
+- [x] `aws_sagemaker_human_task_ui`
+- [ ] `aws_sagemaker_mlflow_tracking_server` (SKIPPED - requires complex setup)
 - [x] `aws_sagemaker_model_package_group`
-- [x] `aws_sagemaker_monitoring_schedule` (SKIPPED - requires endpoint, baseline)
+- [ ] `aws_sagemaker_monitoring_schedule` (SKIPPED - requires endpoint, baseline)
 - [x] `aws_sagemaker_pipeline`
 - [x] `aws_sagemaker_servicecatalog_portfolio_status`
 
@@ -782,7 +782,7 @@
 
 ### aws_signer
 
-- [x] `aws_signer_signing_job` (FAILED - AWS API limitation)
+- [ ] `aws_signer_signing_job` (FAILED - AWS API limitation)
 - [x] `aws_signer_signing_profile`
 - [x] `aws_signer_signing_profile_permission`
 
@@ -851,7 +851,7 @@
 - [ ] `aws_vpc_route_server_association` (not in Terraform - use vpc_association)
 - [x] `aws_vpc_route_server_endpoint`
 - [x] `aws_vpc_route_server_peer`
-- [x] `aws_vpc_security_group_vpc_association` (FAILED - composite ID with identity block)
+- [ ] `aws_vpc_security_group_vpc_association` (FAILED - composite ID with identity block)
 
 ### aws_vpclattice
 

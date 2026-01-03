@@ -196,10 +196,12 @@ def get_aws_prometheus_workspace(type, id, clfn, descfn, topkey, key, filterid):
 **Rule:** Always write imports using the ID format from Terraform import documentation, even if the API returns something different (ARN, composite structure, etc.). Extract or transform the API response to match the import format.
 
 **If composite ID detected:**
-- **STOP testing**
-- Create `code/.automation/test_<resource_type>/test-failed.md`
-- Document that the resource uses composite IDs and requires special handling
-- Note the exact ID format from the documentation
+- **DO NOT immediately stop and document as unsupported**
+- **ATTEMPT to implement composite ID support** by creating a custom get function
+- Composite IDs can be supported with proper get function implementation
+- See successful examples: `aws_ec2_subnet_cidr_reservation`, `aws_opensearchserverless_security_policy`, `aws_route53_resolver_firewall_rule`, `aws_s3tables_table_policy`
+- Only mark as unsupported after attempting implementation (up to 4 attempts)
+- Document the composite ID format and implementation approach in test-results.md
 
 ## Testing Steps
 
@@ -235,19 +237,26 @@ Create a minimal but complete Terraform configuration that demonstrates the reso
 
 **For resources with dependencies:**
 - **It is expected and acceptable to create dependent resources** for testing
+- **ALWAYS attempt to create prerequisites** rather than skipping complex resources
 - Include only the minimal required parent resources
 - Use the simplest configuration for parent resources
 - Example: Testing `aws_s3vectors_index` requires `aws_s3vectors_vector_bucket`
 - Example: Testing `aws_subnet` requires `aws_vpc`
 - Example: Testing `aws_api_gateway_documentation_part` requires `aws_api_gateway_rest_api`
 - Example: Testing `aws_lambda_function_recursion_config` requires `aws_lambda_function` and `aws_iam_role`
+- Example: Testing `aws_redshiftserverless_endpoint_access` requires VPC, subnets, namespace, and workgroup
+- Example: Testing `aws_sagemaker_flow_definition` requires S3 bucket, IAM role, and human task UI
+- Example: Testing `aws_opensearchserverless_collection` requires encryption and network security policies
 
 **Creating dependency infrastructure:**
 When a resource requires parent resources (REST API, VPC, Lambda function, etc.):
 1. **Include parent resources in the same main.tf** - Don't create separate test directories
 2. **Use minimal parent configuration** - Only required arguments for parent resources
-3. **Create supporting resources as needed** - IAM roles, zip files, certificates, etc.
+3. **Create supporting resources as needed** - IAM roles, zip files, certificates, S3 buckets, etc.
 4. **Check AWS documentation for IAM permissions** - Search for managed policies or required permissions
+5. **Use dummy/sample artifacts when needed** - Create minimal HTML templates, JSON configs, XML metadata, etc.
+6. **Attempt up to 4 times to get prerequisites working** - Don't give up on first failure
+7. **Only skip after exhausting attempts** - Document what was tried and why it couldn't work
 5. **Prefer AWS managed policies** - Use AWS managed policies (e.g., AWSLambdaManagedEC2ResourceOperator) instead of custom policies when available
 6. **Create multiple instances if needed** - Test different configurations of the target resource
 7. **Document dependencies** - Note which parent resources were created in test-results.md
@@ -410,16 +419,20 @@ terraform apply -auto-approve
 ```
 
 **Important: Terraform Operation Timeouts**
-- Some resources can take up to 16 minutes to create, update, or destroy
+- Some resources can take up to 20 minutes to create, update, or destroy
 - Common slow operations:
   - Route53 Resolver DNSSEC configs: 2-4 minutes to create/destroy
   - Route53 Resolver configs: 1-2 minutes to create/update
   - Route53 Resolver rule associations: 1-2 minutes to create/destroy
   - VPC Block Public Access resources: 3-4 minutes to create/destroy
   - VPC Route Server endpoints: 1-2 minutes to create
-  - Some complex resources with multiple dependencies: up to 16 minutes
-- Use timeout of at least 360000ms (6 minutes) for terraform apply/destroy commands
-- For particularly slow resources or complex setups, use 960000ms (16 minutes) timeout
+  - Redshift Serverless workgroups: 1-2 minutes to create, 1-2 minutes to destroy
+  - Redshift Serverless namespaces: 1-2 minutes to create, 2-3 minutes to destroy
+  - OpenSearch Serverless collections: 1-2 minutes to create, 30-60 seconds to destroy
+  - SageMaker device fleets: 10+ minutes to create (may timeout)
+  - Some complex resources with multiple dependencies: up to 20 minutes
+- Use timeout of at least 960000ms (16 minutes) for terraform apply/destroy commands
+- For particularly slow resources or complex setups, use 1200000ms (20 minutes) timeout
 - If a command times out, check `terraform show` to see if the operation completed
 - Operations will continue in the background even if the command times out
 
@@ -1305,8 +1318,10 @@ Create or update documentation in the test directory:
 
 ### Early Exit Conditions
 - Missing entry in `aws_dict.py` → Stop immediately
-- Composite ID format detected → Stop and document
+- Composite ID format detected → **ATTEMPT to implement support first** (up to 4 attempts), only stop if implementation fails
 - 4 failed fix attempts per failure point → Stop and document
+- Physical hardware required (AWS Outposts) → Stop and document
+- Account-level service enablement required (Security Lake) → Stop and document after 2 attempts
 
 ## Complete Example: Testing aws_workspacesweb_network_settings (Comprehensive Only)
 
@@ -1720,7 +1735,55 @@ def get_aws_prometheus_workspace(type, id, clfn, descfn, topkey, key, filterid):
 **Rule:** The Terraform import documentation `id =` value is the source of truth. Always write imports using that format, even if aws_dict.py or the API suggests otherwise.
 
 ### Issue: Composite ID format
-**Solution:** Document in test-failed.md - these require special handling in the codebase
+**Solution:** Implement composite ID support with a custom get function
+
+**Composite ID resources CAN be supported** - don't immediately mark as unsupported!
+
+**Common composite ID formats:**
+- Colon separator: `parent-id:child-id` (e.g., `subnet-id:reservation-id`)
+- Slash separator: `name/type` (e.g., `policy-name/encryption`)
+- Semicolon separator: `arn;namespace;name` (e.g., S3 Tables table policy)
+- Multi-part: `type/account/name` (e.g., `saml/123456789012/config-name`)
+
+**Implementation approach:**
+1. Create custom get function that builds composite IDs
+2. Handle both type-level (list all) and specific import cases
+3. Parse composite ID in specific import case
+4. See successful examples in `code/get_aws_resources/`:
+   - `aws_ec2.py`: `get_aws_ec2_subnet_cidr_reservation` (colon separator)
+   - `aws_opensearchserverless.py`: `get_aws_opensearchserverless_security_policy` (slash separator)
+   - `aws_route53resolver.py`: `get_aws_route53_resolver_firewall_rule` (colon separator)
+   - `aws_s3tables.py`: `get_aws_s3tables_table_policy` (semicolon separator)
+
+**Example pattern for composite IDs:**
+```python
+def get_aws_resource(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all parent resources
+            for parent in list_parents():
+                # List children for each parent
+                for child in list_children(parent_id):
+                    # Build composite ID
+                    composite_id = f"{parent_id}:{child_id}"
+                    common.write_import(type, composite_id, None)
+        else:
+            # Handle composite ID in specific import
+            if ':' in id:  # or '/' or ';' depending on format
+                parent_id, child_id = id.split(':', 1)
+                # Verify resource exists
+                # Write import if found
+                common.write_import(type, id, None)
+```
+
+**Only mark as unsupported if:**
+- Implementation attempts fail after 4 tries
+- AWS API doesn't provide necessary data to build composite ID
+- Composite ID format is too complex (3+ parts with unclear structure)
+
+**Note:** aws2tf.py may reject certain characters (like semicolons) in command-line IDs, but type-level import will still work perfectly.
 
 ### Issue: Terraform validation fails
 **Solution:** Review the example in the Terraform docs, ensure all required arguments are provided

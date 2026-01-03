@@ -281,8 +281,8 @@
 
 - [x] `aws_ec2_allowed_images_settings`
 - [x] `aws_ec2_default_credit_specification`
-- [x] `aws_ec2_local_gateway_route` (FAILED - composite ID)
-- [x] `aws_ec2_subnet_cidr_reservation` (FAILED - composite ID)
+- [x] `aws_ec2_local_gateway_route` (FAILED - requires AWS Outposts hardware + composite ID)
+- [x] `aws_ec2_subnet_cidr_reservation`
 - [x] `aws_ec2_transit_gateway_default_route_table_association` (FAILED - cannot import)
 - [x] `aws_ec2_transit_gateway_default_route_table_propagation` (FAILED - cannot import)
 
@@ -563,11 +563,11 @@
 
 ### aws_opensearchserverless
 
-- [ ] `aws_opensearchserverless_access_policy`
-- [ ] `aws_opensearchserverless_collection`
-- [ ] `aws_opensearchserverless_lifecycle_policy`
-- [ ] `aws_opensearchserverless_security_config`
-- [ ] `aws_opensearchserverless_security_policy`
+- [x] `aws_opensearchserverless_access_policy`
+- [x] `aws_opensearchserverless_collection`
+- [x] `aws_opensearchserverless_lifecycle_policy`
+- [x] `aws_opensearchserverless_security_config` (FAILED - requires valid SAML IdP metadata)
+- [x] `aws_opensearchserverless_security_policy`
 
 ### aws_osis
 

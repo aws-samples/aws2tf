@@ -652,6 +652,7 @@ from get_aws_resources import aws_neptune
 from get_aws_resources import aws_network_firewall
 from get_aws_resources import aws_networkmanager
 from get_aws_resources import aws_organizations
+from get_aws_resources import aws_opensearchserverless
 from get_aws_resources import aws_ram
 from get_aws_resources import aws_rds
 from get_aws_resources import aws_redshift
@@ -763,6 +764,7 @@ AWS_RESOURCE_MODULES = {
     'network_firewall': aws_network_firewall,
     'networkmanager': aws_networkmanager,
     'organizations': aws_organizations,
+    'opensearchserverless': aws_opensearchserverless,
     'ram': aws_ram,
     'rds': aws_rds,
     'redshift': aws_redshift,

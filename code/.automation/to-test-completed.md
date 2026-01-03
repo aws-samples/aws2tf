@@ -2,7 +2,7 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 60
+**Total Completed:** 65
 **Last Updated:** 2026-01-03
 
 ---
@@ -42,6 +42,7 @@ Resources are listed by service group in the order they were completed.
 
 - [x] `aws_ec2_allowed_images_settings` - ✓ PASSED (2026-01-03) - [test results](test_aws_ec2_allowed_images_settings/test-results.md)
 - [x] `aws_ec2_default_credit_specification` - ✓ PASSED (2026-01-03) - [test results](test_aws_ec2_default_credit_specification/test-results.md)
+- [x] `aws_ec2_subnet_cidr_reservation` - ✓ PASSED (2026-01-03) - [test results](test_aws_ec2_subnet_cidr_reservation/test-results.md)
 
 ### aws_api_gateway
 
@@ -108,6 +109,13 @@ Resources are listed by service group in the order they were completed.
 ### aws_networkflowmonitor
 
 - [x] `aws_networkflowmonitor_scope` - ✓ PASSED (2026-01-02) - [test results](test_aws_networkflowmonitor_scope/test-results.md)
+
+### aws_opensearchserverless
+
+- [x] `aws_opensearchserverless_collection` - ✓ PASSED (2026-01-03) - [test results](test_aws_opensearchserverless_collection/test-results.md)
+- [x] `aws_opensearchserverless_security_policy` - ✓ PASSED (2026-01-03) - [test results](test_aws_opensearchserverless_security_policy/test-results.md)
+- [x] `aws_opensearchserverless_access_policy` - ✓ PASSED (2026-01-03) - [test results](test_aws_opensearchserverless_access_policy/test-results.md)
+- [x] `aws_opensearchserverless_lifecycle_policy` - ✓ PASSED (2026-01-03) - [test results](test_aws_opensearchserverless_lifecycle_policy/test-results.md)
 
 ### aws_ecs
 

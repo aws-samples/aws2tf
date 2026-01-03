@@ -213,8 +213,8 @@ notimplemented = {
     "aws_dx_transit_virtual_interface": True,
     #
     "aws_dynamodb_global_table": True,
-    "aws_ec2_local_gateway_route": True,  ### Composite ID: lgw-rtb-id_cidr
-    "aws_ec2_subnet_cidr_reservation": True,  ### Composite ID: subnet-id:reservation-id
+    "aws_ec2_local_gateway_route": True,  ### Requires AWS Outposts hardware + Composite ID: lgw-rtb-id_cidr
+    #"aws_ec2_subnet_cidr_reservation": True,  ### Composite ID: subnet-id:reservation-id
     #
     "aws_elasticache_user_group_association": True,
     #
@@ -346,11 +346,11 @@ notimplemented = {
     "aws_opensearch_outbound_connection": True,
     "aws_opensearch_package": True,
     #
-    "aws_opensearchserverless_access_policy": True,
-    "aws_opensearchserverless_collection": True,
-    "aws_opensearchserverless_lifecycle_policy": True,
-    "aws_opensearchserverless_security_config": True,
-    "aws_opensearchserverless_security_policy": True,
+    #"aws_opensearchserverless_access_policy": True,
+    #"aws_opensearchserverless_collection": True,
+    #"aws_opensearchserverless_lifecycle_policy": True,
+    "aws_opensearchserverless_security_config": True,  ### Requires valid SAML IdP metadata with certificates
+    #"aws_opensearchserverless_security_policy": True,
     #
     #
     "aws_pinpoint_adm_channel": True,

@@ -154,6 +154,7 @@ from fixtf_aws_resources import fixtf_network_firewall
 from fixtf_aws_resources import fixtf_networkflowmonitor
 from fixtf_aws_resources import fixtf_networkmanager
 from fixtf_aws_resources import fixtf_opensearch
+from fixtf_aws_resources import fixtf_opensearchserverless
 from fixtf_aws_resources import fixtf_opsworks
 from fixtf_aws_resources import fixtf_organizations
 from fixtf_aws_resources import fixtf_outposts
@@ -364,6 +365,7 @@ FIXTF_MODULES = {
     'fixtf_networkflowmonitor': fixtf_networkflowmonitor,
     'fixtf_networkmanager': fixtf_networkmanager,
     'fixtf_opensearch': fixtf_opensearch,
+    'fixtf_opensearchserverless': fixtf_opensearchserverless,
     'fixtf_opsworks': fixtf_opsworks,
     'fixtf_organizations': fixtf_organizations,
     'fixtf_outposts': fixtf_outposts,

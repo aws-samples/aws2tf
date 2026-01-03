@@ -2,7 +2,7 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 82
+**Total Completed:** 83
 **Last Updated:** 2026-01-03
 
 ---
@@ -56,6 +56,7 @@ Resources are listed by service group in the order they were completed.
 - [x] `aws_api_gateway_rest_api_policy` - ✓ PASSED (2026-01-03) - [test results](test_aws_api_gateway_rest_api_policy/test-results.md)
 - [x] `aws_api_gateway_usage_plan` - ✓ PASSED (2026-01-03) - [test results](test_aws_api_gateway_usage_plan/test-results.md)
 - [x] `aws_api_gateway_usage_plan_key` - ✓ PASSED (2026-01-03) - [test results](test_aws_api_gateway_usage_plan_key/test-results.md)
+- [x] `aws_api_gateway_vpc_link` - ✓ PASSED (2026-01-03) - [test results](test_aws_api_gateway_vpc_link/test-results.md)
 
 ### aws_appstream
 

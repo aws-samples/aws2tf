@@ -178,3 +178,25 @@ def aws_api_gateway_usage_plan_key(t1,tt1,tt2,flag1,flag2):
 		t1=tt1 + " = aws_api_gateway_api_key." + str(context.apikeyid) + ".id\n"
 		common.add_dependancy("aws_api_gateway_api_key", str(context.apikeyid))
 	return skip,t1,flag1,flag2
+
+
+def aws_api_gateway_method_settings(t1,tt1,tt2,flag1,flag2):
+
+	skip=0
+	if t1.startswith("resource"):
+		# Extract REST API ID and stage name from resource name
+		# Format: r-restApiId-stageName-methodPath
+		name_parts = t1.split('"')[3]  # Get resource name
+		if name_parts.startswith('r-'):
+			# Remove 'r-' prefix and split
+			parts = name_parts[2:].split('-', 2)
+			if len(parts) >= 2:
+				context.apigwrestapiid = parts[0]
+				context.apigwstagename = parts[1]
+	if tt1=="rest_api_id" and tt2 != "null":
+		t1=tt1 + " = aws_api_gateway_rest_api.r-" + str(context.apigwrestapiid) + ".id\n"
+		common.add_dependancy("aws_api_gateway_rest_api", str(context.apigwrestapiid))
+	if tt1=="stage_name" and tt2 != "null":
+		t1=tt1 + " = aws_api_gateway_stage.r-" + str(context.apigwrestapiid) + "-" + str(context.apigwstagename) + ".stage_name\n"
+		common.add_dependancy("aws_api_gateway_stage", str(context.apigwrestapiid) + "/" + str(context.apigwstagename))
+	return skip,t1,flag1,flag2

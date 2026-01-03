@@ -28,7 +28,7 @@
 - [x] `aws_api_gateway_rest_api_policy`
 - [x] `aws_api_gateway_usage_plan`
 - [x] `aws_api_gateway_usage_plan_key`
-- [ ] `aws_api_gateway_vpc_link` (SKIPPED - requires Network Load Balancer)
+- [x] `aws_api_gateway_vpc_link`
 
 ### aws_apprunner
 

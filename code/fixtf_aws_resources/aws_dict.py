@@ -8598,7 +8598,7 @@ aws_sagemaker_model_package_group_policy = {
 aws_sagemaker_monitoring_schedule = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_monitoring_schedules",
-	"topkey":	"MonitoringSchedules",
+	"topkey":	"MonitoringScheduleSummaries",
 	"key":		"MonitoringScheduleArn",
 	"filterid":	"MonitoringScheduleArn"
 }

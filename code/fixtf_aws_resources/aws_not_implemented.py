@@ -484,7 +484,7 @@ notimplemented = {
 	"aws_api_gateway_integration": True,  ### Composite ID: REST-API-ID/RESOURCE-ID/HTTP-METHOD
 	"aws_api_gateway_integration_response": True,  ### Composite ID: REST-API-ID/RESOURCE-ID/HTTP-METHOD/STATUS-CODE
 	"aws_api_gateway_method_response": True,  ### Composite ID: REST-API-ID/RESOURCE-ID/HTTP-METHOD/STATUS-CODE
-	"aws_api_gateway_method_settings": True,  ### Composite ID: REST-API-ID/STAGE-NAME/METHOD-PATH
+	#"aws_api_gateway_method_settings": True,
 #	"aws_api_gateway_model": True,
 #	"aws_api_gateway_request_validator": True,
 	#"aws_api_gateway_rest_api_policy": True,

@@ -37,14 +37,12 @@
 ### aws_appstream
 
 - [ ] `aws_appstream_directory_config` (SKIPPED - requires Active Directory setup)
-- [ ] `aws_appstream_fleet_stack_association` (SKIPPED - composite ID format)
 - [x] `aws_appstream_stack`
-- [ ] `aws_appstream_user_stack_association` (SKIPPED - composite ID format)
+
 
 ### aws_appsync
 
 - [ ] `aws_appsync_api_cache`
-- [ ] `aws_appsync_domain_name_api_association`
 - [ ] `aws_appsync_graphql_api`
 
 ### aws_auditmanager
@@ -444,7 +442,6 @@
 - [ ] `aws_location_place_index`
 - [ ] `aws_location_route_calculator`
 - [ ] `aws_location_tracker`
-- [ ] `aws_location_tracker_association`
 
 ### aws_m2
 
@@ -660,9 +657,8 @@
 - [x] `aws_route53_resolver_firewall_rule`
 - [x] `aws_route53_resolver_firewall_rule_group`
 - [x] `aws_route53_resolver_query_log_config`
-- [x] `aws_route53_resolver_query_log_config_association`
 - [x] `aws_route53_resolver_rule`
-- [x] `aws_route53_resolver_rule_association`
+`
 
 ### aws_rum
 
@@ -718,7 +714,6 @@
 - [ ] `aws_securityhub_invite_accepter`
 - [ ] `aws_securityhub_member`
 - [ ] `aws_securityhub_organization_admin_account`
-- [ ] `aws_securityhub_standards_control_association`
 - [ ] `aws_securityhub_standards_subscription`
 
 ### aws_securitylake
@@ -848,10 +843,8 @@
 - [x] `aws_vpc_endpoint_private_dns`
 - [ ] `aws_vpc_endpoint_service_private_dns_verification` (cannot import)
 - [x] `aws_vpc_route_server`
-- [ ] `aws_vpc_route_server_association` (not in Terraform - use vpc_association)
 - [x] `aws_vpc_route_server_endpoint`
 - [x] `aws_vpc_route_server_peer`
-- [ ] `aws_vpc_security_group_vpc_association` (FAILED - composite ID with identity block)
 
 ### aws_vpclattice
 
@@ -861,18 +854,7 @@
 
 - [ ] `aws_vpn_concentrator`
 
-### aws_workspacesweb
 
-**Base Resources (test first):**
-- [x] `aws_workspacesweb_browser_settings`
-- [x] `aws_workspacesweb_ip_access_settings`
-- [x] `aws_workspacesweb_data_protection_settings`
-- [x] `aws_workspacesweb_user_access_logging_settings`
-- [x] `aws_workspacesweb_session_logger`
-- [x] `aws_workspacesweb_trust_store`
-
-**Complex Resources (test after base):**
-- [x] `aws_workspacesweb_identity_provider`
 
 ---
 

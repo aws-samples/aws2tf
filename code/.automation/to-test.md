@@ -632,10 +632,10 @@
 
 ### aws_redshiftserverless
 
-- [x] `aws_redshiftserverless_endpoint_access` (SKIPPED - requires workgroup, VPC - complex/expensive)
-- [x] `aws_redshiftserverless_resource_policy` (SKIPPED - requires snapshot/workgroup - complex/expensive)
-- [x] `aws_redshiftserverless_snapshot` (SKIPPED - requires namespace/workgroup - complex/expensive)
-- [x] `aws_redshiftserverless_usage_limit` (SKIPPED - requires workgroup - complex/expensive)
+- [x] `aws_redshiftserverless_endpoint_access`
+- [ ] `aws_redshiftserverless_resource_policy` (SKIPPED - requires snapshot)
+- [x] `aws_redshiftserverless_snapshot`
+- [x] `aws_redshiftserverless_usage_limit`
 
 ### aws_resiliencehub
 

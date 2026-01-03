@@ -2,7 +2,7 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 73
+**Total Completed:** 76
 **Last Updated:** 2026-01-03
 
 ---
@@ -97,6 +97,12 @@ Resources are listed by service group in the order they were completed.
 - [x] `aws_s3tables_table_bucket_replication` - ✓ PASSED (2026-01-02) - [test results](test_aws_s3tables_table_bucket_replication/test-results.md)
 - [x] `aws_s3tables_table_replication` - ✓ PASSED (2026-01-02) - [test results](test_aws_s3tables_table_replication/test-results.md)
 - [x] `aws_s3tables_table_policy` - ✓ PASSED (2026-01-03) - [test results](test_aws_s3tables_table_policy/test-results.md)
+
+### aws_redshiftserverless
+
+- [x] `aws_redshiftserverless_endpoint_access` - ✓ PASSED (2026-01-03) - [test results](test_aws_redshiftserverless_endpoint_access/test-results.md)
+- [x] `aws_redshiftserverless_snapshot` - ✓ PASSED (2026-01-03) - [test results](test_aws_redshiftserverless_snapshot/test-results.md)
+- [x] `aws_redshiftserverless_usage_limit` - ✓ PASSED (2026-01-03) - [test results](test_aws_redshiftserverless_usage_limit/test-results.md)
 
 ### aws_workspacesweb
 

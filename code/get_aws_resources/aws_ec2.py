@@ -1406,3 +1406,38 @@ def get_aws_vpc_block_public_access_options(type, id, clfn, descfn, topkey, key,
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
     return True
+
+
+def get_aws_ec2_allowed_images_settings(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        from botocore.config import Config
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        # This is a regional singleton - always use the region as the ID
+        region = context.region if hasattr(context, 'region') else 'us-east-1'
+        common.write_import(type, region, None)
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    return True
+
+
+def get_aws_ec2_default_credit_specification(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        from botocore.config import Config
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        # This resource is per instance family (t2, t3, t3a, t4g)
+        # Import ID is the instance family name
+        if id is None:
+            # List all burstable instance families
+            families = ["t2", "t3", "t3a", "t4g"]
+            for family in families:
+                common.write_import(type, family, None)
+        else:
+            # Specific instance family
+            common.write_import(type, id, None)
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    return True

@@ -2,8 +2,8 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 58
-**Last Updated:** 2026-01-02
+**Total Completed:** 60
+**Last Updated:** 2026-01-03
 
 ---
 
@@ -37,6 +37,11 @@ Resources are listed by service group in the order they were completed.
 - [x] `aws_cloudwatch_log_data_protection_policy` - ✓ PASSED (2026-01-02) - [test results](test_aws_cloudwatch_log_data_protection_policy/test-results.md)
 - [x] `aws_cloudwatch_log_destination_policy` - ✓ PASSED (2026-01-02) - [test results](test_aws_cloudwatch_log_destination_policy/test-results.md)
 - [x] `aws_cloudwatch_log_resource_policy` - ✓ PASSED (2026-01-02) - [test results](test_aws_cloudwatch_log_resource_policy/test-results.md)
+
+### aws_ec2
+
+- [x] `aws_ec2_allowed_images_settings` - ✓ PASSED (2026-01-03) - [test results](test_aws_ec2_allowed_images_settings/test-results.md)
+- [x] `aws_ec2_default_credit_specification` - ✓ PASSED (2026-01-03) - [test results](test_aws_ec2_default_credit_specification/test-results.md)
 
 ### aws_api_gateway
 

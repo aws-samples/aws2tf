@@ -213,8 +213,8 @@ notimplemented = {
     "aws_dx_transit_virtual_interface": True,
     #
     "aws_dynamodb_global_table": True,
-    "aws_ec2_local_gateway_route": True,
-    "aws_ec2_subnet_cidr_reservation": True,
+    "aws_ec2_local_gateway_route": True,  ### Composite ID: lgw-rtb-id_cidr
+    "aws_ec2_subnet_cidr_reservation": True,  ### Composite ID: subnet-id:reservation-id
     #
     "aws_elasticache_user_group_association": True,
     #
@@ -532,10 +532,10 @@ notimplemented = {
     "aws_dsql_cluster": True,  ### TODO 6.27.0
     "aws_dsql_cluster_peering": True,  ### TODO 6.27.0
     "aws_dynamodb_table_export": True,  ### TODO 6.27.0
-    "aws_ec2_allowed_images_settings": True,  ### TODO 6.27.0
-    "aws_ec2_default_credit_specification": True,  ### TODO 6.27.0
-    "aws_ec2_transit_gateway_default_route_table_association": True,  ### TODO 6.27.0
-    "aws_ec2_transit_gateway_default_route_table_propagation": True,  ### TODO 6.27.0
+    #"aws_ec2_allowed_images_settings": True,  ### TODO 6.27.0
+    #"aws_ec2_default_credit_specification": True,  ### TODO 6.27.0
+    "aws_ec2_transit_gateway_default_route_table_association": True,  ### Cannot import - no import section in Terraform docs
+    "aws_ec2_transit_gateway_default_route_table_propagation": True,  ### Cannot import - no import section in Terraform docs
     #"aws_ecr_account_setting": True,  ### TODO 6.27.0
     #"aws_ecr_repository_creation_template": True,  ### TODO 6.27.0
     #"aws_ecs_express_gateway_service": True,  ### TODO 6.27.0

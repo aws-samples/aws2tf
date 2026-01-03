@@ -279,12 +279,12 @@
 
 ### aws_ec2
 
-- [ ] `aws_ec2_allowed_images_settings`
-- [ ] `aws_ec2_default_credit_specification`
-- [ ] `aws_ec2_local_gateway_route`
-- [ ] `aws_ec2_subnet_cidr_reservation`
-- [ ] `aws_ec2_transit_gateway_default_route_table_association`
-- [ ] `aws_ec2_transit_gateway_default_route_table_propagation`
+- [x] `aws_ec2_allowed_images_settings`
+- [x] `aws_ec2_default_credit_specification`
+- [x] `aws_ec2_local_gateway_route` (FAILED - composite ID)
+- [x] `aws_ec2_subnet_cidr_reservation` (FAILED - composite ID)
+- [x] `aws_ec2_transit_gateway_default_route_table_association` (FAILED - cannot import)
+- [x] `aws_ec2_transit_gateway_default_route_table_propagation` (FAILED - cannot import)
 
 ### aws_ecr
 

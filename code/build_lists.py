@@ -10,7 +10,7 @@ log = logging.getLogger('aws2tf')
 
 
 def build_lists():
-    log.info("Building core resource lists ...")
+    log.info("Stage 2 of 10, Building core resource lists ...")
     context.tracking_message="Stage 2 of 10, Building core resource lists ..."
     
     

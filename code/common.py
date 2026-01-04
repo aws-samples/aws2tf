@@ -1163,7 +1163,7 @@ def tfplan3():
 
    if context.plan2:
 
-      log.info("Penultimate Terraform Plan ... ")
+      log.info("Stage 7 of 10, Penultimate Terraform Plan ... ")
       context.tracking_message="Stage 7 of 10, Penultimate Terraform Plan ..."
       # redo plan
 
@@ -1224,7 +1224,7 @@ def tfplan3():
          log.error("-->> look at plan2.json - or run terraform plan")
          log.info("exit 022")
          stop_timer()
-         exit()
+         sys.exit(1)
 
       if zeroc != 0:
          # decide if to ignore ot not
@@ -1389,7 +1389,7 @@ def tfplan3():
       log.error("Plan - could not find expected tfplan file - exiting")
       log.info("exit 031")
       stop_timer()
-      exit()
+      sys.exit(1)
 
    #if context.merge:
    #   exit()
@@ -1397,7 +1397,7 @@ def tfplan3():
 
 def wrapup():
    ### copy predefined import files
-   log.info("Final Terraform Validation")
+   log.info("Stage 8 of 10, Final Terraform Validation")
    context.tracking_message="Stage 8 of 10, Final Terraform Validation"
    com = "terraform validate -no-color"
    rout = rc(com)
@@ -1421,7 +1421,7 @@ def wrapup():
          stop_timer()
          exit()
       
-   log.info("Terraform import via apply of tfplan....")
+   log.info("Stage 9 of 10, Terraform import via apply of tfplan....")
    context.tracking_message="Stage 9 of 10, Terraform import via apply of tfplan...."
    
    # Use progress bar for terraform apply
@@ -1471,7 +1471,7 @@ def wrapup():
 
 
          
-   log.info("\nPost Import Plan Check .....")
+   log.info("\nStage 10 of 10, Post Import Plan Check .....")
    context.tracking_message="Stage 10 of 10, Post Import Plan Check ....."
    com = "terraform plan -no-color -out tfplan -json > final.json"
    # Get reference file size for progress estimation

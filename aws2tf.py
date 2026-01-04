@@ -882,7 +882,7 @@ def process_multiple_resource_types(all_types, id):
     if context.fast:
         # Multi-threaded processing
         context.tracking_message = "Stage 3 of 10 getting "+str(it)+" resources multi-threaded"
-        log.info(f"Processing {it} resource types (multi-threaded)...")
+        log.info(f"Stage 3 of 10, Processing {it} resource types (multi-threaded)...")
         
         with ThreadPoolExecutor(max_workers=context.cores) as executor:
             futures = [
@@ -929,13 +929,13 @@ def process_single_resource_type(all_types, resource_type, id, timed_interrupt):
         context.tracking_message = "Stage 3 of 10 no resources found exiting ..."
         log.info("exit 009")
         timed_interrupt.stop_timer()
-        exit()
+        sys.exit(1)
 
 
 def process_known_dependencies():
     """Process known dependencies (Stage 4)."""
     context.tracking_message = "Stage 4 of 10, Known Dependancies"
-    log.info("Known Dependancies - Multi Threaded")
+    log.info("Stage 4 of 10, Known Dependancies - Multi Threaded")
     
     if context.fast:
         context.tracking_message = "Stage 4 of 10, Known Dependancies - Multi Threaded "+str(context.cores)
@@ -1104,7 +1104,7 @@ def validate_and_import():
         log.info("\nValidation only - no files written")
         log.info("exit 012")
         timed_interrupt.stop_timer()
-        exit()
+        sys.exit(1)
 
 
 def finalize_and_cleanup(args, starttime):

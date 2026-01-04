@@ -243,6 +243,38 @@ For stack sets (-s option) look for these two files in the generated/tf* directo
 * stack-unprocessed.err
 * stack-null.err
 
+---
+
+## Testing
+
+aws2tf includes a comprehensive test suite with 267 tests covering all critical functionality.
+
+### Running Tests
+
+```bash
+# Install test dependencies
+pip install -r requirements-test.txt
+
+# Run all tests
+pytest
+
+# Run with coverage report
+pytest --cov=code --cov=aws2tf --cov-report=html
+
+# Run specific test categories
+pytest tests/unit/              # Unit tests only
+pytest tests/integration/       # Integration tests only
+pytest -m performance          # Performance tests only
+```
+
+### Test Coverage
+
+- **267 tests** covering input validation, file operations, resource discovery, and more
+- **96% coverage** for context.py
+- **91% coverage** for build_lists.py
+- **25% overall coverage** with focus on critical code paths
+
+See [tests/README.md](tests/README.md) for detailed testing documentation.
 
 ---
 

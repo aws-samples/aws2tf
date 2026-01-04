@@ -125,15 +125,17 @@ def aws_eks_node_group(t1,tt1,tt2,flag1,flag2):
     elif tt1=="id":
         if tt2.startswith("lt-"):
             if flag1 is True:
-                t1 = tt1 +" = aws_launch_template."+tt2+".id\n"
-                common.add_dependancy("aws_launch_template",tt2)
-                flag1=False
+                if context.ltlist[id]:
+                    t1 = tt1 +" = aws_launch_template."+tt2+".id\n"
+                    common.add_dependancy("aws_launch_template",tt2)
+                    flag1=False
     
     elif tt1 == "name":
         if flag1 is True: 
-            t1=tt1 + " = aws_launch_template." + tt2 + ".name\n"
-            common.add_dependancy("aws_launch_template",tt2)
-            flag1=False
+            if context.ltlist[id]:
+                t1=tt1 + " = aws_launch_template." + tt2 + ".name\n"
+                common.add_dependancy("aws_launch_template",tt2)
+                flag1=False
         else:
             skip=1
         

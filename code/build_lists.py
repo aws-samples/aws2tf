@@ -133,6 +133,18 @@ def build_lists():
             log.error("Error fetching vpc data: %s %s",  e)
             return []
 
+    def fetch_launch_templates():
+        try:
+            client = boto3.client('ec2')
+            response = []
+            paginator = client.get_paginator('describe_launch_templates')
+            for page in paginator.paginate():
+                response.extend(page['LaunchTemplates'])
+            return [('lt', j['LaunchTemplateId']) for j in response]
+        except Exception as e:
+            log.error("Error fetching launch templates: %s %s", e)
+            return []
+
 
     # Use ThreadPoolExecutor to parallelize API calls with progress bar
     fetch_tasks = [
@@ -144,7 +156,8 @@ def build_lists():
         ('Transit gateways', fetch_tgw_data),
         ('IAM roles', fetch_roles_data),
         ('IAM policies', fetch_policies_data),
-        ('Instance profiles', fetch_instprof_data)
+        ('Instance profiles', fetch_instprof_data),
+        ('Launch templates', fetch_launch_templates)
     ]
     
     with concurrent.futures.ThreadPoolExecutor(max_workers=context.cores) as executor:
@@ -156,8 +169,8 @@ def build_lists():
         
         # Process results with progress bar
         with tqdm(total=len(fetch_tasks),
-                 desc="Fetching resource lists",
-                 unit="type",leave=False) as pbar:
+            desc="Fetching resource lists",
+            unit="type",leave=False) as pbar:
             
             for future in concurrent.futures.as_completed(future_to_name):
                 resource_name = future_to_name[future]
@@ -212,6 +225,10 @@ def build_lists():
                         elif resource_type == 'inp':
                             for _, inst_prof in result:
                                 context.inplist[inst_prof] = True
+
+                        elif resource_type == 'lt':
+                            for _, lt_id in result:
+                                context.ltlist[lt_id] = True
                     else:
                         # Handle roles data
                         with open('imported/roles.json', 'w') as f:

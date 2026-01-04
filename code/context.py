@@ -126,6 +126,7 @@ vpcs={}
 subnetlist={}
 sglist={}
 vpclist={}
+ltlist={}
 lambdalist={}
 s3list={}
 rolelist={}

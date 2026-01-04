@@ -94,3 +94,12 @@ def aws_sagemaker_flow_definition(t1, tt1, tt2, flag1, flag2):
         skip = 1
     
     return skip, t1, flag1, flag2
+
+
+def aws_sagemaker_pipeline(t1,tt1,tt2,flag1,flag2):
+
+	skip=0
+	# Add lifecycle block to ignore pipeline_definition changes (JSON formatting differences)
+	if tt1=="pipeline_name" and tt2 != "null":
+		t1 = t1 + "\n lifecycle {\n   ignore_changes = [pipeline_definition]\n}\n"
+	return skip,t1,flag1,flag2

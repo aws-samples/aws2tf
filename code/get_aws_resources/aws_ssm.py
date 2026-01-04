@@ -51,7 +51,6 @@ def get_aws_ssm_association(type, id, clfn, descfn, topkey, key, filterid):
                 log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
-                log.info("Here ......."+j[key])
                 common.write_import(type,j[key],"a-"+j[key]) 
 
         else:      

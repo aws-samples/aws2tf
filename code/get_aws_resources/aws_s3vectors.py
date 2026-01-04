@@ -16,7 +16,7 @@ def get_aws_s3vectors_vector_bucket(type, id, clfn, descfn, topkey, key, filteri
         config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
         client = boto3.client(clfn,config=config)
         if id is None:
-            print("here")
+
             paginator = client.get_paginator(descfn)
             for page in paginator.paginate():
                 response = response + page[topkey]

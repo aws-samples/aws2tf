@@ -56,7 +56,11 @@ def get_aws_lb_listener(type,id,clfn,descfn,topkey,key,filterid):
             return True
    
         response=response[topkey]
-        if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
+        if response == []: 
+            log.debug("Empty response for "+type+ " id="+str(id)+" returning")
+            pkey="aws_lb_listener."+id
+            context.rproc[pkey]=True
+            return True
         
         for j in response: 
             retid=j[key] # ListenerARN

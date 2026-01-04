@@ -344,13 +344,8 @@
 
 ### aws_iam
 
-- [ ] `aws_iam_group_policies_exclusive`
-- [ ] `aws_iam_group_policy_attachments_exclusive`
 - [ ] `aws_iam_outbound_web_identity_federation`
-- [ ] `aws_iam_role_policies_exclusive`
-- [ ] `aws_iam_role_policy_attachments_exclusive`
-- [ ] `aws_iam_user_policies_exclusive`
-- [ ] `aws_iam_user_policy_attachments_exclusive`
+
 
 ### aws_imagebuilder
 

@@ -191,5 +191,8 @@ noimport = {
     "aws_codebuild_project": True, # needs arn for import - boto3 call for it ??
     "aws_route53_resolver_rule": True, # us-east-1 only ? import errors
     "aws_route53_resolver_firewall_domain_list": True, # import errors
-    "aws_ec2_allowed_images_settings": True # import errors
+    "aws_ec2_allowed_images_settings": True, # import errors
+    "aws_elastictranscoder_pipeline": True, # support withdrawn by aws
+    "aws_elastictranscoder_preset": True, # support withdrawn by aws
+    "aws_vpc_block_public_access_exclusion": True # causes import error
 } 

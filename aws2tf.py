@@ -773,7 +773,7 @@ def process_resource_types(type, id):
     
     log.info("---<><> "+ str(type)+" Id="+str(id)+" exclude="+str(context.all_extypes))
     context.tracking_message = "Stage 3 of 10 getting resources ..."
-    
+    log.info("Stage 3 of 10 getting resources ...")
     # Handle comma-separated types
     if "," in type:
         process_multiple_types(type, id, timed_interrupt)
@@ -914,6 +914,7 @@ def process_multiple_resource_types(all_types, id):
             
             log.debug(str(ic)+" of "+str(it) +"\t"+i)
             context.tracking_message = "Stage 3 of 10, "+ str(ic)+" of "+str(it) +" resource types \t currently getting "+i
+            
             common.call_resource(i, id)
 
 

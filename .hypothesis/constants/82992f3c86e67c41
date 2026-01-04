@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_firehose.py
+# hypothesis_version: 6.148.11
+
+[' = "UTC"\n', 'aws2tf', 'aws_', 'custom_time_zone', 'destination_id', 'name', 'null']

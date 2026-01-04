@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_vpc_lattice.py
+# hypothesis_version: 6.148.11
+
+['\nlifecycle {\n', ' = ', ' = aws_vpc.', '.arn\n', '.id\n', '.listener_id\n', '0', '100', '99999', '__', '_listener-', '_rule-', 'aws2tf', 'aws_', 'aws_vpc', 'listener_identifier', 'null', 'port', 'priority', 'resource_identifier', 'service_arn', 'service_identifier', 'sn-', 'svc-', 'vpc_identifier', '}\n']

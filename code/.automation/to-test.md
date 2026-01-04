@@ -12,23 +12,13 @@
 
 ### aws_api_gateway
 
-- [x] `aws_api_gateway_api_key`
+
 - [ ] `aws_api_gateway_base_path_mapping` (SKIPPED - composite ID + requires domain)
-- [x] `aws_api_gateway_client_certificate`
-- [x] `aws_api_gateway_documentation_part`
-- [x] `aws_api_gateway_documentation_version`
 - [ ] `aws_api_gateway_domain_name` (SKIPPED - requires ACM certificate and domain ownership)
-- [x] `aws_api_gateway_gateway_response`
 - [ ] `aws_api_gateway_integration` (SKIPPED - 3-part composite ID)
 - [ ] `aws_api_gateway_integration_response` (SKIPPED - 4-part composite ID)
 - [ ] `aws_api_gateway_method_response` (SKIPPED - in no import got via chian)
 - [ ] `aws_api_gateway_method_settings` (SKIPPED - in no import got via chian)
-- [x] `aws_api_gateway_model`
-- [x] `aws_api_gateway_request_validator`
-- [x] `aws_api_gateway_rest_api_policy`
-- [x] `aws_api_gateway_usage_plan`
-- [x] `aws_api_gateway_usage_plan_key`
-- [x] `aws_api_gateway_vpc_link`
 
 ### aws_apprunner
 
@@ -37,8 +27,6 @@
 ### aws_appstream
 
 - [ ] `aws_appstream_directory_config` (SKIPPED - requires Active Directory setup)
-- [x] `aws_appstream_stack`
-
 
 ### aws_appsync
 
@@ -63,15 +51,9 @@
 
 **Note:** aws_dict.py corrected (service name, key fields, topkey fields). Handler module and get functions created. 7 of 9 testable resources successfully tested. 2 resources cannot be imported due to sensitive fields not returned by API.
 
-- [x] `aws_bedrockagentcore_agent_runtime` (✅ PASSED - full test with dummy container, 0 drift)
 - [x] `aws_bedrockagentcore_api_key_credential_provider` (❌ CANNOT IMPORT - API key is sensitive, not returned by API)
-- [x] `aws_bedrockagentcore_browser` (✅ PASSED - simple network config, 0 drift)
-- [x] `aws_bedrockagentcore_code_interpreter` (✅ PASSED - simple network config, 0 drift)
-- [x] `aws_bedrockagentcore_gateway` (✅ PASSED - requires IAM role, 0 drift)
-- [x] `aws_bedrockagentcore_memory` (✅ PASSED - 3min creation, 0 drift)
 - [x] `aws_bedrockagentcore_oauth2_credential_provider` (❌ CANNOT IMPORT - OAuth2 credentials sensitive, not returned by API)
 - [x] `aws_bedrockagentcore_token_vault_cmk` (✅ PASSED - singleton resource, requires KMS, 0 drift)
-- [x] `aws_bedrockagentcore_workload_identity` (✅ PASSED - simplest resource, 0 drift)
 
 ### aws_budgets
 
@@ -110,19 +92,10 @@
 
 ### aws_cloudwatch
 
-- [x] `aws_cloudwatch_composite_alarm` (✅ PASSED - requires metric alarms, 0 drift)
 - [ ] `aws_cloudwatch_contributor_managed_insight_rule` (FAILED - composite ID)
-- [x] `aws_cloudwatch_dashboard` (✅ PASSED - simple JSON config, 0 drift)
-- [x] `aws_cloudwatch_event_api_destination`
-- [x] `aws_cloudwatch_event_archive`
-- [x] `aws_cloudwatch_event_bus_policy`
-- [x] `aws_cloudwatch_event_connection`
-- [x] `aws_cloudwatch_event_endpoint` (SKIPPED - requires multi-region setup)
+- [ ] `aws_cloudwatch_event_endpoint` (SKIPPED - requires multi-region setup)
 - [ ] `aws_cloudwatch_event_permission` (FAILED - composite ID)
-- [x] `aws_cloudwatch_log_data_protection_policy`
-- [x] `aws_cloudwatch_log_destination_policy`
 - [ ] `aws_cloudwatch_log_metric_filter` (FAILED - composite ID)
-- [x] `aws_cloudwatch_log_resource_policy`
 - [ ] `aws_cloudwatch_log_subscription_filter` (FAILED - composite ID)
 
 ### aws_codeartifact
@@ -277,17 +250,9 @@
 
 ### aws_ec2
 
-- [x] `aws_ec2_allowed_images_settings`
-- [x] `aws_ec2_default_credit_specification`
 - [ ] `aws_ec2_local_gateway_route` (FAILED - requires AWS Outposts hardware + composite ID)
-- [x] `aws_ec2_subnet_cidr_reservation`
 - [x] `aws_ec2_transit_gateway_default_route_table_association` (FAILED - cannot import)
 - [x] `aws_ec2_transit_gateway_default_route_table_propagation` (FAILED - cannot import)
-
-### aws_ecr
-
-- [x] `aws_ecr_account_setting` (✅ PASSED - account-level singleton, 2 settings, 0 drift)
-- [x] `aws_ecr_repository_creation_template` (✅ PASSED - simple config, 0 drift)
 
 ### aws_ecs
 
@@ -555,11 +520,7 @@
 
 ### aws_opensearchserverless
 
-- [x] `aws_opensearchserverless_access_policy`
-- [x] `aws_opensearchserverless_collection`
-- [x] `aws_opensearchserverless_lifecycle_policy`
-- [x] `aws_opensearchserverless_security_config` (FAILED - requires valid SAML IdP metadata)
-- [x] `aws_opensearchserverless_security_policy`
+- [ ] `aws_opensearchserverless_security_config` (FAILED - requires valid SAML IdP metadata)
 
 ### aws_osis
 
@@ -593,10 +554,7 @@
 
 ### aws_prometheus
 
-- [x] `aws_prometheus_query_logging_configuration`
-- [x] `aws_prometheus_resource_policy`
 - [ ] `aws_prometheus_scraper` (SKIPPED - requires EKS cluster)
-- [x] `aws_prometheus_workspace_configuration`
 
 ### aws_qbusiness
 
@@ -624,10 +582,7 @@
 
 ### aws_redshiftserverless
 
-- [x] `aws_redshiftserverless_endpoint_access`
 - [ ] `aws_redshiftserverless_resource_policy` (SKIPPED - requires snapshot)
-- [x] `aws_redshiftserverless_snapshot`
-- [x] `aws_redshiftserverless_usage_limit`
 
 ### aws_resiliencehub
 
@@ -642,17 +597,6 @@
 - [ ] `aws_rolesanywhere_profile`
 - [ ] `aws_rolesanywhere_trust_anchor`
 
-### aws_route53
-
-- [x] `aws_route53_resolver_config`
-- [x] `aws_route53_resolver_dnssec_config`
-- [x] `aws_route53_resolver_endpoint`
-- [x] `aws_route53_resolver_firewall_config`
-- [x] `aws_route53_resolver_firewall_domain_list`
-- [x] `aws_route53_resolver_firewall_rule`
-- [x] `aws_route53_resolver_firewall_rule_group`
-- [x] `aws_route53_resolver_query_log_config`
-- [x] `aws_route53_resolver_rule`
 `
 
 ### aws_rum
@@ -676,27 +620,16 @@
 
 - [ ] `aws_s3control_bucket`
 
-### aws_s3tables
-
-- [x] `aws_s3tables_table_bucket_replication`
-- [x] `aws_s3tables_table_policy`
-- [x] `aws_s3tables_table_replication`
 
 ### aws_sagemaker
 
-- [x] `aws_sagemaker_code_repository`
-- [x] `aws_sagemaker_data_quality_job_definition` (SKIPPED - requires complex setup)
+- [ ] `aws_sagemaker_data_quality_job_definition` (SKIPPED - requires complex setup)
 - [ ] `aws_sagemaker_device` (SKIPPED - composite ID + requires IoT fleet)
 - [ ] `aws_sagemaker_device_fleet` (FAILED - creation timeout 30+ minutes)
 - [ ] `aws_sagemaker_endpoint_configuration` (SKIPPED - requires ML models)
 - [ ] `aws_sagemaker_feature_group` (SKIPPED - requires complex setup)
-- [x] `aws_sagemaker_flow_definition`
-- [x] `aws_sagemaker_human_task_ui`
 - [ ] `aws_sagemaker_mlflow_tracking_server` (SKIPPED - requires complex setup)
-- [x] `aws_sagemaker_model_package_group`
 - [ ] `aws_sagemaker_monitoring_schedule` (SKIPPED - requires endpoint, baseline)
-- [x] `aws_sagemaker_pipeline`
-- [x] `aws_sagemaker_servicecatalog_portfolio_status`
 
 ### aws_schemas
 
@@ -713,11 +646,11 @@
 
 ### aws_securitylake
 
-- [x] `aws_securitylake_aws_log_source` (FAILED - requires Security Lake enabled)
-- [x] `aws_securitylake_custom_log_source` (FAILED - requires Security Lake enabled)
-- [x] `aws_securitylake_data_lake` (FAILED - Access Denied)
-- [x] `aws_securitylake_subscriber` (FAILED - requires Security Lake enabled)
-- [x] `aws_securitylake_subscriber_notification` (FAILED - requires Security Lake enabled)
+- [ ] `aws_securitylake_aws_log_source` (FAILED - requires Security Lake enabled)
+- [ ] `aws_securitylake_custom_log_source` (FAILED - requires Security Lake enabled)
+- [ ] `aws_securitylake_data_lake` (FAILED - Access Denied)
+- [ ] `aws_securitylake_subscriber` (FAILED - requires Security Lake enabled)
+- [ ] `aws_securitylake_subscriber_notification` (FAILED - requires Security Lake enabled)
 
 ### aws_servicecatalog
 
@@ -773,8 +706,6 @@
 ### aws_signer
 
 - [ ] `aws_signer_signing_job` (FAILED - AWS API limitation)
-- [x] `aws_signer_signing_profile`
-- [x] `aws_signer_signing_profile_permission`
 
 ### aws_ssm
 
@@ -832,14 +763,7 @@
 
 ### aws_vpc
 
-- [x] `aws_vpc_block_public_access_exclusion`
-- [x] `aws_vpc_block_public_access_options`
-- [x] `aws_vpc_encryption_control`
-- [x] `aws_vpc_endpoint_private_dns`
 - [ ] `aws_vpc_endpoint_service_private_dns_verification` (cannot import)
-- [x] `aws_vpc_route_server`
-- [x] `aws_vpc_route_server_endpoint`
-- [x] `aws_vpc_route_server_peer`
 
 ### aws_vpclattice
 
@@ -848,7 +772,6 @@
 ### aws_vpn
 
 - [ ] `aws_vpn_concentrator`
-
 
 
 ---

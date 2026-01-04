@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_route53.py
+# hypothesis_version: 6.148.11
+
+[' clfn=', ' descfn=', ' doing ', ' filterid=', ' id=', ' key=', ' returning', ' topkey=', ' with id ', '*', '--> In ', '.', '/', '/hostedzone/', 'A', 'Empty response for ', 'HostedZone', 'Name', 'Type', '\\052', '_', 'aws2tf', 'aws_route53_record', 'star']

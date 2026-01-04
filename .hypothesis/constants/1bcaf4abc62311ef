@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_network_firewall.py
+# hypothesis_version: 6.148.11
+
+['!', '#', '$', '&', ',', ', ', '.', '.arn\n', '/', '0', ':', ';', '=', '[', ']', '_', 'arn:', 'aws2tf', 'aws_', 'firewall_arn', 'firewall_policy_arn', 'null', 'priority', 'resource_arn', '|']

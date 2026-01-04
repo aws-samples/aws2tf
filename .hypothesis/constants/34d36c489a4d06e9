@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_servicecatalog.py
+# hypothesis_version: 6.148.11
+
+[' = "en"\n', '.id\n', 'accept_language', 'aws2tf', 'aws_', 'null', 'port-', 'portfolio_id', 'prod-', 'product_id']

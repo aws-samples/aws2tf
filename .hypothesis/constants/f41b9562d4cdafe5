@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/build_lists.py
+# hypothesis_version: 6.148.11
+
+['Arn', 'AttachedPolicies', 'Buckets', 'FunctionName', 'Functions', 'GroupId', 'IAM policies', 'IAM roles', 'Instance profiles', 'InstanceProfileName', 'InstanceProfiles', 'Lambda functions', 'Launch templates', 'LaunchTemplateId', 'LaunchTemplates', 'Local', 'Name', 'Policies', 'PolicyNames', 'RoleName', 'Roles', 'S3 buckets', 'Security groups', 'SecurityGroups', 'SubnetId', 'Subnets', 'Transit gateways', 'TransitGatewayId', 'TransitGateways', 'VPCs', 'VpcId', 'Vpcs', 'attached_policies', 'aws2tf', 'describe_subnets', 'describe_vpcs', 'ec2', 'iam', 'imported/roles.json', 'inline_policies', 'inp', 'lambda', 'list_buckets', 'list_functions', 'list_policies', 'list_roles', 'lt', 'pol', 'role', 'role_name', 's3', 'sg', 'subnet', 'tgw', 'type', 'us-east-1', 'vpc', 'w']

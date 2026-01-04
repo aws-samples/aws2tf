@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_opensearchserverless.py
+# hypothesis_version: 6.148.11
+
+['/', 'Account', 'accessPolicyDetail', 'aws2tf', 'collectionDetails', 'data', 'encryption', 'max_attempts', 'mode', 'name', 'network', 'retention', 'saml', 'securityConfigDetail', 'securityPolicyDetail', 'standard', 'sts', 'type']

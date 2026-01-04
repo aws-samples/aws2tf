@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_eks.py
+# hypothesis_version: 6.148.11
+
+[' = "1.30"\n', ' = aws_eks_cluster.', ' = aws_iam_role.', ' = aws_kms_key.', '.arn\n', '.id\n', '.name\n', '/', '0', ':', ':role/', 'aws2tf', 'aws_', 'aws_eks_cluster', 'aws_iam_role', 'aws_kms_key', 'aws_launch_template', 'cluster_name', 'id', 'jsonencode(1.3)', 'k-', 'key_arn', 'launch_template {', 'lt-', 'max_unavailable', 'name', 'node_role_arn', 'version']

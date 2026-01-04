@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_connect.py
+# hypothesis_version: 6.148.11
+
+[' clfn=', ' descfn=', ' doing ', ' filterid=', ' id=', ' key=', ' returning', ' topkey=', ' with id ', ',', '--> In ', '.', ':', 'ACTIVE', 'AssociationId', 'CALL_RECORDINGS', 'CHAT_TRANSCRIPTS', 'Empty response for ', 'Instance', 'LexBot', 'LexRegion', 'SCHEDULED_REPORTS', 'STANDARD', 'V1', 'arn:aws:lambda:', 'aws2tf', 'aws_connect_queue', 'aws_connect_user', 'aws_lambda_function', 'r-']

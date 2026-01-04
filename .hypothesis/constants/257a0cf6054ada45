@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_dms.py
+# hypothesis_version: 6.148.11
+
+['\nlifecycle {\n', ' = 1048576\n', '.id\n', '0', 'CloudWatchLogGroup', 'CloudWatchLogStream', 'aws2tf', 'aws_', 'endpoint_id', 'max_file_size', 'null', '}\n']

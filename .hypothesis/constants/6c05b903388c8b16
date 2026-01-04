@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_emr.py
+# hypothesis_version: 6.148.11
+
+[' clfn=', ' descfn=', ' doing ', ' filterid=', ' id=', ' key=', ' returning', ' topkey=', ' with id ', '--> In ', '.', '/', 'Cluster', 'Empty response for ', 'InstanceFleets', 'InstanceGroups', 'ManagedScalingPolicy', 'State', 'Status', 'TERMINATED', 'aws2tf', 'current']

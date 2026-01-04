@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/base_handler.py
+# hypothesis_version: 6.148.11
+
+['!', '#', '$', '&', ',', '.', '/', '0', ':', ';', '=', '[', '[]', ']', '_', 'arn:aws:', 'aws2tf', 'false', 'id', 'name_prefix', 'null', '|']

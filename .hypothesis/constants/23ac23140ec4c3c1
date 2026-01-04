@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_iam.py
+# hypothesis_version: 6.148.11
+
+[' = "https://', ' = [', ' = aws_iam_group.', ' = aws_iam_policy.', ' = aws_iam_user.', '"\n', ')', ',', ',]', '.arn\n', '.id\n', '/', ':', ':%s:', '[', '[]', ']', ']\n', 'assume_role_policy', 'aws2tf', 'aws_', 'aws_iam_access_key.', 'aws_iam_group', 'aws_iam_policy', 'aws_iam_user', 'format(', 'group', 'groups', 'managed_policy_arns', 'name', 'name_prefix', 'null', 'permissions_boundary', 'policy', 'policy_arn', 'url', 'user']

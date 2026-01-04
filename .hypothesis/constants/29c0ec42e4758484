@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_bedrock_agentcore_control.py
+# hypothesis_version: 6.148.11
+
+['agentRuntime', 'browser', 'codeInterpreter', 'default', 'gateway', 'max_attempts', 'memory', 'mode', 'standard', 'tokenVaultId', 'workloadIdentity']

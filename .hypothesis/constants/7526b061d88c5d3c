@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_route53resolver.py
+# hypothesis_version: 6.148.11
+
+[':', 'ENABLED', 'FirewallDomainListId', 'FirewallRuleGroups', 'FirewallRules', 'Id', 'ResolverDnssecConfig', 'ValidationStatus', 'list_firewall_rules', 'max_attempts', 'mode', 'rslvr-frg-', 'standard', 'vpc-']

@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_cognito_idp.py
+# hypothesis_version: 6.148.11
+
+['\nlifecycle {\n', ' = "days"\n', ' = "hours"\n', ' = 1\n', '.id\n', '0', '[]', 'access_token', 'aws2tf', 'aws_', 'id_token_validity', 'null', 'refresh_token', 'user_pool_id', 'username_attributes', '}\n']

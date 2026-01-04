@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_amp.py
+# hypothesis_version: 6.148.11
+
+[' clfn=', ' descfn=', ' doing ', ' filterid=', ' id=', ' key=', ' returning', ' topkey=', ' with id ', '--> In ', '/', 'Code', 'Empty response for ', 'Error', 'arn:', 'aws2tf', 'list_workspaces', 'max_attempts', 'mode', 'standard', 'workspace', 'workspaceId', 'workspaces', 'ws-']

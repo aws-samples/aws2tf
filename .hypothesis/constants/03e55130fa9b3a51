@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/aws_no_import.py
+# hypothesis_version: 6.148.11
+
+['aws_ami_copy', 'aws_backup_framework', 'aws_dx_bgp_peer', 'aws_ec2_tag', 'aws_eip_association', 'aws_elb_attachment', 'aws_glue_partition', 'aws_iam_access_key', 'aws_iot_certificate', 'aws_kms_ciphertext', 'aws_lightsail_domain', 'aws_qldb_ledger', 'aws_qldb_stream', 'aws_quicksight_user', 'aws_route', 'aws_s3_bucket_acl', 'aws_s3_object_copy', 'aws_ssm_patch_group']

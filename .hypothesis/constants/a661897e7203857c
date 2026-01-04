@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_networkmanager.py
+# hypothesis_version: 6.148.11
+
+['\nlifecycle {\n', '.arn\n', '.id\n', '/', 'arn:', 'aws2tf', 'aws_', 'global_network_id', 'null', 'transit_gateway_arn', '}\n']

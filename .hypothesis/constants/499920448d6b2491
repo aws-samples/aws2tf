@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_wafv2.py
+# hypothesis_version: 6.148.11
+
+[' - returning', ' Scope=', ' clfn=', ' continue', ' descfn=', ' doing ', ' filterid=', ' id=', ' key=', ' returning', ' topkey=', ' with id ', ',', '--> In ', '.', '/', 'API_GATEWAY', 'APP_RUNNER_SERVICE', 'ARN', 'CLOUDFRONT', 'COGNITO_USER_POOL', 'Code', 'Empty response for ', 'Error', 'IPSet', 'Id', 'LoggingConfiguration', 'Name', 'REGIONAL', 'ResourceArns', 'RuleGroup', 'WebACL', '_', 'arn:', 'aws2tf', 'aws_lb', 'max_attempts', 'mode', 'standard', 'us-east-1', 'w-', '|']

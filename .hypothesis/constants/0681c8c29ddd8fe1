@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/arn_dict.py
+# hypothesis_version: 6.148.11
+
+['arn:aws:datazone', 'arn:aws:iam', 'aws_datazone_zone', 'aws_iam_role', 'named', 'rname', 'subtype']

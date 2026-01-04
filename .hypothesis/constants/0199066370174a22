@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_lambda.py
+# hypothesis_version: 6.148.11
+
+[' clfn=', ' descfn=', ' doing ', ' filterid=', ' id=', ' key=', ' returning', ' topkey=', ' with id ', '!', '"', '#', '$', '&', ',', '--> In ', '.', '.zip', '/', ':', ';', '=', 'CapacityProvider', 'Code', 'Configuration', 'Content', 'Empty response for ', 'Error', 'FunctionArn', 'FunctionName', 'Functions', 'LayerArn', 'LayerVersionArn', 'Layers', 'Location', 'Name', 'RecursiveLoop', 'RepositoryType', 'S3', 'Sid":', 'UUID', 'Version', '[', ']', '_', 'arn:', 'aws2tf', 'aws_lambda_alias', 'client', 'get_lambda_code', 'get_lambdalayer_code', 'l-', 'lambda', 'list_functions', 'list_layers', 'max_attempts', 'mode', 'standard', 'wb', '|']

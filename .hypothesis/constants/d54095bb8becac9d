@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_cloudformation.py
+# hypothesis_version: 6.148.11
+
+[' clfn=', ' descfn=', ' doing ', ' filterid=', ' id=', ' key=', ' returning', ' so skipping', ' status is ', ' topkey=', ' with id ', '--> In ', 'CREATE_COMPLETE', 'Empty response for ', 'Stack ', 'StackStatus', 'Stacks', 'aws2tf']

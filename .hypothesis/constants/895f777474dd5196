@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_workspaces_web.py
+# hypothesis_version: 6.148.11
+
+['identityProviderArn', 'identityProviders', 'max_attempts', 'mode', 'networkSettings', 'portal', 'portalArn', 'portals', 'standard', 'userSettings']

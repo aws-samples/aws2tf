@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_emr.py
+# hypothesis_version: 6.148.11
+
+[' = "CHANGE_ME"\n', ' = aws_emr_cluster.', '.id\n', '.name\n', 'applications', 'aws2tf', 'aws_', 'aws_emr_cluster', 'cluster_id', 'kdc_admin_password', 'name', 'null', 'subnet', 'subnet_id', 'subnet_ids']

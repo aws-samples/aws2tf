@@ -114,7 +114,7 @@ def get_aws_bedrockagent_agent_knowledge_base_association(type, id, clfn, descfn
                     common.add_dependancy("aws_bedrockagent_knowledge_base", kid)
                 context.rproc[pkey] = True
             else:
-                log.info("ERROR: with id - expected agentid,versionid got %s %s",  id)
+                log.info("ERROR: with id - expected agentid,versionid got %s",  id)
 
 
     except Exception as e:
@@ -206,7 +206,7 @@ def get_aws_bedrockagent_agent_action_group(type, id, clfn, descfn, topkey, key,
                     common.write_import(type, theid, None)
                 context.rproc[pkey] = True
             else:
-                log.info("ERROR: with id - expected agentid,versionid got %s %s",  id)
+                log.info("ERROR: with id - expected agentid,versionid got %s",  id)
 
 
     except Exception as e:

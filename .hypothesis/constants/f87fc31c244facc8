@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_ecs.py
+# hypothesis_version: 6.148.11
+
+[' = aws_ecs_cluster.', '$', '.', '.arn\n', '.id\n', '.name\n', '/', ':', '_', 'arn:', 'arn:aws:autoscaling:', 'arn:aws:ecs:', 'aws2tf', 'aws_', 'aws_ecs_cluster', 'awslogs-group', 'cluster', 'cluster_name', 'namespace', 'null', 'task-definition:', 'task_definition', '|']

@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_cloudwatch.py
+# hypothesis_version: 6.148.11
+
+['CompositeAlarm', 'ManagedRule', 'max_attempts', 'mode', 'standard']

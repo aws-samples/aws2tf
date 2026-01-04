@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_datazone.py
+# hypothesis_version: 6.148.11
+
+[' = "changeme"\n', '"', ',', '.id\n', '.id]\n', '_', 'aws2tf', 'aws_', 'aws_datazone_domain', 'description', 'domain_id', 'domain_identifier', 'dzd_', 'glossary_identifier', 'is_a', 'null', 'profile_identifier', 'project_identifier', 'resource', '{']

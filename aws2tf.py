@@ -980,7 +980,7 @@ def process_detected_dependencies():
         log.debug("\naws2tf Detected Dependancies started at %s\n" % now)
     
     context.tracking_message = "Stage 5 of 10, Detected Dependancies: starting"
-    
+    log.info("Stage 5 of 10, Detected Dependancies: starting")
     # Check if there are detected dependencies
     detdep = False
     for ti in context.rproc.keys():

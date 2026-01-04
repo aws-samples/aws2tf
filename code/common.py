@@ -2515,10 +2515,10 @@ def upload_directory_to_s3():
    local_directory="/tmp/aws2tf/generated/tf-"+context.pathadd+context.acc+"-"+context.region
    bucket_name="aws2tf-"+context.acc+"-"+context.region
    s3_prefix=''
-   log.info("Calling create_bucket_if_not_exists for %s %s",  bucket_name)
+   log.info("Calling create_bucket_if_not_exists for %s",  bucket_name)
    bret=create_bucket_if_not_exists(bucket_name)
    if bret:
-      log.info("Upload files to s3 %s %s",  bucket_name)
+      log.info("Upload files to s3 %s",  bucket_name)
       for root, dirs, files in os.walk(local_directory):
          if '.terraform' in dirs:  dirs.remove('.terraform')
          if 'tfplan' in files: files.remove('tfplan')
@@ -2537,7 +2537,7 @@ def upload_directory_to_s3():
                   return False
       log.info("Upload to S3 complete.")
    else:
-      log.error("Upload to S3 failed - False return from create_bucket_if_not_exists for %s %s",  bucket_name)
+      log.error("Upload to S3 failed - False return from create_bucket_if_not_exists for %s",  bucket_name)
       return False
 
 def empty_and_delete_bucket():
@@ -2545,7 +2545,7 @@ def empty_and_delete_bucket():
     s3 = boto3.resource('s3')
     s3_client = boto3.client('s3')
     bucket = s3.Bucket(bucket_name)
-    log.info("Emptying and deleting bucket... %s %s",  bucket_name)
+    log.info("Emptying and deleting bucket... %s",  bucket_name)
     # Check if the bucket exists
     try:
         s3_client.head_bucket(Bucket=bucket_name)

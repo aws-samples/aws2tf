@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_elasticache.py
+# hypothesis_version: 6.148.11
+
+[' clfn=', ' descfn=', ' doing ', ' filterid=', ' id=', ' key=', ' returning', ' topkey=', ' with id ', '--> In ', 'CacheClusters', 'Empty response for ', 'ServerlessCaches', 'aws2tf', 'max_attempts', 'mode', 'standard']

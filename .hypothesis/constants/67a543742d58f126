@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_kms.py
+# hypothesis_version: 6.148.11
+
+[' clfn=', ' descfn=', ' filterid=', ' id=', ' is managed by AWS', ' key=', ' returning', ' topkey=', ' with id ', '.', '.k-', '/', 'AWS', 'AliasName', 'Disabled', 'Empty response for ', 'Enabled', 'KeyManager', 'KeyMetadata', 'KeyState', 'Skipping ', 'alias/', 'alias/aws', 'arn:', 'aws2tf', 'aws_kms_alias', 'k-', 'key ', 'kms']

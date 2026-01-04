@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_ecs.py
+# hypothesis_version: 6.148.11
+
+[' clfn=', ' descfn=', ' filterid=', ' id=', ' key=', ' returning', ' topkey=', ' with id ', '/', ':', 'ERROR: -1->', 'Empty response for ', 'FARGATE', 'arn:', 'aws2tf', 'aws_ecs_service', 'ecs/service/', 'max_attempts', 'mode', 'services', 'standard', 'taskDefinitionArn', 'taskDefinitionArns']

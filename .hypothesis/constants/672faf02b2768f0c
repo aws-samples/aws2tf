@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_efs.py
+# hypothesis_version: 6.148.11
+
+[' clfn=', ' descfn=', ' doing ', ' filterid=', ' id=', ' key=', ' returning', ' topkey=', ' with id ', '--> In ', 'Empty response for ', 'PolicyNotFound', 'ReplicationNotFound', 'aws2tf', 'aws_efs_access_point', 'aws_efs_mount_target', 'fs-']

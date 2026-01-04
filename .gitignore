@@ -15,7 +15,6 @@ setup-local-git.sh
 .sh
 to-aws-samples.sh
 *.xlsx
-test*
 *.new
 *.sav
 *.zip
@@ -40,3 +39,5 @@ aws3tf.py
 copy-to.sh
 code/.automation/terraform-provider-aws
 code/fixtf_aws_resources/backup*
+code/.automation/test_aws*
+code/.automation/*.py

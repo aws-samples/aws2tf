@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_elbv2.py
+# hypothesis_version: 6.148.11
+
+['\nlifecycle {\n', ' = "no_rebalance"\n', ' = 1\n', ' = aws_lb.', ' = aws_lb_listener.', ' = true\n', '.', '.arn\n', '/', '0', ':', '_', 'aws2tf', 'aws_', 'duration', 'listener_arn', 'load_balancer_arn', 'name', 'null', 'on_deregistration', 'on_unhealthy', 'order', 'target_control_port', '}\n']

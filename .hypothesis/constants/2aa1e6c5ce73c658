@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_elasticache.py
+# hypothesis_version: 6.148.11
+
+[' = "', ' = "ROTATE"\n', ' = "redis"\n', '"\n', '.id\n', '0', 'auth_token', 'aws2tf', 'aws_', 'az_mode', 'cluster_id', 'engine', 'engine_version', 'maintenance_window', 'no-password', 'no-password-required', 'node_type', 'null', 'null # sensitive', 'num_cache_clusters', 'num_cache_nodes', 'num_node_groups', 'parameter_group_name', 'port', 'redis', 'replication_group_id', 'security_group_ids', 'security_group_names', 'snapshot_window', 'subnet_group_name', 'type']

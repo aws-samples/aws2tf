@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_rds.py
+# hypothesis_version: 6.148.11
+
+[' = "', ' = aws_db_instance.', ' = aws_rds_cluster.', '"', '"\n', "'", ',', ', ', '---cc->>>> %s', '--inn->>>> %s', '.arn\n', '.id\n', '0', ':', '[]', 'arn:', 'aws2tf', 'aws_', 'aws_db_instance', 'aws_db_subnet_group', 'aws_rds_cluster', 'cluster_identifier', 'cluster_members', 'db_name', 'db_subnet_group_name', 'default', 'default:', 'domain_dns_ips', 'mdadb', 'name', 'null', 'parameter_group_name', 'replicate_source_db', 'username']

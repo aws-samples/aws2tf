@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_wafv2.py
+# hypothesis_version: 6.148.11
+
+[' = file("', '"', '")\n', '.webacl', 'Rules', 'WebACL', '_', 'aws2tf', 'aws_', 'aws_wafv2_web_acl', 'empty rule %s %s %s', 'null', 'resource', 'rule_json', 'w', 'w-', 'wafv2', '{']

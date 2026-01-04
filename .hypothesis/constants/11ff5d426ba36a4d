@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_vpc_lattice.py
+# hypothesis_version: 6.148.11
+
+[' clfn=', ' descfn=', ' doing ', ' filterid=', ' id=', ' key=', ' returning', ' topkey=', ' with id ', '--> In ', '--client', '.', '/', ':', ':auth-policy/', 'ACTIVE', 'Empty response for ', 'Paginator', 'arn', 'arn:', 'arn:aws:vpclattice:', 'aws2tf', 'for', 'id', 'max_attempts', 'mode', 'pag', 'rcfg-', 'rgw-', 'sn-', 'standard', 'tg-']

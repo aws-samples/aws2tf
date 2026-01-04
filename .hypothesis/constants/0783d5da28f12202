@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_autoscaling.py
+# hypothesis_version: 6.148.11
+
+[' = "10m"\n', ' = aws_key_pair.', ' = false\n', '!', '#', '$', '&', ',', '.', '.id\n', '.key_name\n', '.sh', '/', '0', ':', ';', '=', 'LaunchConfigurations', 'UserData', '[', '[]', ']', '_', '__', 'autoscaling', 'availability_zones', 'aws2tf', 'aws_', 'aws_key_pair', 'aws_launch_template', 'capacity_rebalance', 'force_delete', 'iam_instance_profile', 'id', 'key_name', 'launch_configuration', 'launch_template_id', 'load_balancers', 'lt-', 'name', 'null', 'target_group_arns', 'user_data', 'user_data_base64', 'utf-8', 'vpc_zone_identifier', 'w', '|']

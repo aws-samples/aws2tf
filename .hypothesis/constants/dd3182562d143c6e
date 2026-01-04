@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_sagemaker.py
+# hypothesis_version: 6.148.11
+
+[' clfn=', ' descfn=', ' filterid=', ' id=', ' key=', ' returning', ' topkey=', ' with id ', ',', '/', 'AppArn', 'AppName', 'AppType', 'CREATED', 'CreateCompleted', 'DomainId', 'Empty response for ', 'ImageVersionStatus', 'ProjectStatus', 'SpaceArn', 'SpaceName', 'UserProfileArn', 'UserProfileName', 'Version', 'aws2tf', 'aws_sagemaker_app', 'aws_sagemaker_app.', 'd-', 'default', 'did=%s appn=%s', 'max_attempts', 'mode', 'region', 'standard', 'us-east-1']

@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_glue.py
+# hypothesis_version: 6.148.11
+
+[' .', ' = aws_s3_bucket.b-', '.bucket\n', '.id\n', '.name\n', '.py', '0', '__', 'aws s3 cp ', 'aws2tf', 'aws_', 'aws_glue_job t1= %s', 'aws_s3_bucket', 'database_name', 'description', 'executing: ', 'fixtf_glue.py t1= %s', 'max_capacity', 'null', 'number_of_workers', 'sample_size', 'script_location', 'timeout', 'worker_type']

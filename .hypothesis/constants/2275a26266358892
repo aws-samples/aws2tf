@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_secretsmanager.py
+# hypothesis_version: 6.148.11
+
+[' = jsonencode(', ' = true\n', '"', '""', '""""', ')\n', '= false\n', 'SecretString', '_', 'aws2tf', 'aws_', 'null', 'resource', 'rotate_immediately', 'secret_binary', 'secret_id', 'secret_string', 'secretsmanager', '{']

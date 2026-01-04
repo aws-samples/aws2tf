@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_iam.py
+# hypothesis_version: 6.148.11
+
+[' clfn=', ' descfn=', ' doing ', ' filterid=', ' id=', ' key=', ' not implemented', ' response=', ' returning', ' topkey=', ' with id ', '--> In ', '.', '/', '/aws-service-role/', ':', 'Arn', 'Empty response for ', 'Group', 'GroupName', 'Groups', 'Id is None for ', 'Policy', 'PolicyArn', 'PolicyName', 'PolicyNames', 'Role', 'RoleName=', 'Use alternatives to', 'User', '_', '__', 'adding ', 'arn:', 'aws2tf', 'aws_iam_group_policy', 'aws_iam_policy', 'aws_iam_role', 'aws_iam_role_policy', 'aws_iam_role_policy.', 'aws_iam_user_policy', 'aws_iam_user_policy.', 'client', 'max_attempts', 'mode', 'pn error', 'policy name=', 'standard', 'us-east-1']

@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_lambda.py
+# hypothesis_version: 6.148.11
+
+[' = "', ' = [', ' = aws_iam_role.', '!', '"', '")\n', '", ', '#', '$', '&', ',', '.', '.arn\n', '.arn,', '.arn]\n', '.function_name\n', '.zip', '/', '0', ':', ';', '=', '[', '[]', ']', ']\n', '_', 'arn:', 'aws2tf', 'aws_', 'aws_iam_role', 'filename', 'function_name', 'image_uri', 'layers', 'null', 'role', 's3_bucket', 'source_code_hash', '|']

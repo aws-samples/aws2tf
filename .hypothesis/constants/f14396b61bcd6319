@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_acm.py
+# hypothesis_version: 6.148.11
+
+[' as status is ', ' clfn=', ' descfn=', ' doing ', ' filterid=', ' id=', ' key=', ' returning', ' topkey=', ' with id ', '--> In ', 'Certificate', 'Empty response for ', 'ISSUED', 'Status', 'arn:', 'aws2tf']

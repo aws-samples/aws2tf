@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_kafka.py
+# hypothesis_version: 6.148.11
+
+['\nlifecycle {\n', ' = aws_msk_cluster.', '!', '#', '$', '&', ',', ', ', '.', '.arn\n', '.name\n', '/', '0', ':', ':configuration:', ':deliverystream/', ';', '=', '[', ']', '_', 'arn', 'arn:aws:firehose:', 'arn:aws:kafka', 'aws2tf', 'aws_', 'cluster_arn', 'cluster_name', 'delivery_stream', 'log_group', 'null', 'volume_throughput', '|', '}\n']

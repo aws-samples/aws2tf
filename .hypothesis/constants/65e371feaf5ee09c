@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/get_aws_resources/aws_s3.py
+# hypothesis_version: 6.148.11
+
+[' (MT)', ' (ST)', ' - continue', ' ...', ' config for bucket ', '%s %s %s', '.', ':', 'AccessDenied', 'Bucket', 'ClientError', 'Code', 'Destination', 'Error', 'ExpiredToken', 'No ', 'Rules', 'aws2tf', 'aws_s3_access_point', 'aws_s3_bucket', 'aws_s3_bucket,', 'aws_s3_bucket.', 'aws_s3_bucket_metric', 'aws_s3_bucket_policy', 'b-', 'bucket', 'get_s3 type=', 'my_region=', 'null', 's3']

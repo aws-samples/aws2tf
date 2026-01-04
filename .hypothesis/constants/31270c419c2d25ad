@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_apigatewayv2.py
+# hypothesis_version: 6.148.11
+
+[' = "1.0"\n', ' = "2.0"\n', '.id\n', '1', '2', '_', 'authorizer_id', 'aws2tf', 'aws_', 'deployment_id', 'null']

@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_s3vectors.py
+# hypothesis_version: 6.148.11
+
+[' = false\n', '[', '[]', ']', 'aws2tf', 'aws_', 'creation_time', 'force_destroy', 'index_arn', 'null', 'tags_all', 'vector_bucket_arn', 'vector_bucket_name']

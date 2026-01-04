@@ -1,0 +1,4 @@
+# file: /Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/fixtf_aws_resources/fixtf_connect.py
+# hypothesis_version: 6.148.11
+
+[' = 1\n', '"', '"r-', ',', '.arn\n', '.id\n', '.queue_id\n', '.routing_profile_id\n', '/', '0', '[', ']', '_', 'arn:aws:connect:', 'aws2tf', 'aws_', 'aws_connect_instance', 'aws_connect_queue', 'aws_connect_user', 'concurrency', 'instance_id', 'name', 'queue_id', 'resource', 'routing_profile_id', 'security_profile_ids', 'target_arn', '{']

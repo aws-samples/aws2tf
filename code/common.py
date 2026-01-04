@@ -1717,7 +1717,7 @@ def aws_tf(region,args):
          f3.write('state = "available"\n')
          f3.write('}\n')
    if not context.merge:
-      log.info("terraform init")
+      #log.info("terraform init")
       com = "terraform init -no-color -upgrade"
       rout = rc(com)
       el = len(rout.stderr.decode().rstrip())

@@ -54,12 +54,12 @@ def aws_autoscaling_group(t1,tt1,tt2,flag1,flag2):
 
 	elif tt1=="launch_template_id":
 		if tt2!="null":
-			if context.ltlist[id]:
+			if tt2 in str(context.ltlist.keys()):
 				t1 = tt1 +" = aws_launch_template."+tt2+".id\n"
 				common.add_dependancy("aws_launch_template",tt2)
 	elif tt1=="id":
 		if tt2.startswith("lt-"):
-			if context.ltlist[id]:
+			if tt2 in str(context.ltlist.keys()):
 				t1 = tt1 +" = aws_launch_template."+tt2+".id\n"
 				common.add_dependancy("aws_launch_template",tt2)
 				flag1=True

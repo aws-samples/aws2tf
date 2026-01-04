@@ -696,6 +696,7 @@ def setup_workspace(args, region):
     
     # Initialize terraform
     context.tracking_message = "Stage 1 of 10, Terraform Initialise ..."
+    log.info("Stage 1 of 10, Terraform Initialise ...")
     common.aws_tf(region, args)
     
     # Verify terraform initialized

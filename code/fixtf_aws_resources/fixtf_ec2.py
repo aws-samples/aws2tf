@@ -138,7 +138,7 @@ def aws_instance(t1, tt1, tt2, flag1, flag2):
 		elif tt1 == "id":
 			flag2 = id
 			if tt2.startswith("lt-"):
-				if context.ltlist[id]:
+				if tt2 in str(context.ltlist.keys()):
 					t1 = tt1 + " = aws_launch_template." + tt2 + ".id\n"
 					common.add_dependancy("aws_launch_template", tt2)
 			flag1 = True
@@ -360,7 +360,7 @@ def aws_spot_fleet_request(t1, tt1, tt2, flag1, flag2):
 	if tt1 == "load_balancers" and tt2 == "null": skip = 1
 	elif tt1 == "target_group_arns" and tt2 == "null": skip = 1
 	elif tt1 == "id" and tt2.startswith("lt-"):
-		if context.ltlist[id]:
+		if tt2 in str(context.ltlist.keys()):
 			t1 = tt1 + " = aws_launch_template." + tt2 + ".id\n"
 			common.add_dependancy("aws_launch_template", tt2)
 	elif tt1 == "allocation_strategy" and tt2 != "null":

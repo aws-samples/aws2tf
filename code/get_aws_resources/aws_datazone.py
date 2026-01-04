@@ -202,7 +202,7 @@ def dz_common(resp2,dzid,type,client):
     if sso!="DISABLED":
         common.add_dependancy("aws_datazone_user_profile", dzid)
     else:
-        log.info("skipping sso="+str(sso)+" dst="+str(dst)+" dzid="+dzid)
+        log.debug("skipping sso="+str(sso)+" dst="+str(dst)+" dzid="+dzid)
         return True
 
 

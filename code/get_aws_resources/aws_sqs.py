@@ -18,7 +18,7 @@ def get_aws_sqs_queue(type, id, clfn, descfn, topkey, key, filterid):
             try:
                 tempr=response[topkey]
             except:
-                log.info("No queues found "+type+ " id="+str(id)+" returning")
+                common.log_warning("No queues found "+type+ " id="+str(id)+" returning")
                 return True
             if response == []: 
                 log.debug("Empty response for "+type+ " id="+str(id)+" returning")

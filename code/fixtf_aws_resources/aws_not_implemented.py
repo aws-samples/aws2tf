@@ -1,10 +1,67 @@
 notimplemented = {
+    #
+    # ========================================
+    # DEPRECATED/LEGACY SERVICES
+    # These services have been deprecated, discontinued, or replaced
+    # Testing these resources is not recommended
+    # ========================================
+    #
+	"aws_waf_byte_match_set": True,  ### Deprecated - use WAFv2
+	"aws_waf_geo_match_set": True,  ### Deprecated - use WAFv2
+	"aws_waf_ipset": True,  ### Deprecated - use WAFv2
+	"aws_waf_rate_based_rule": True,  ### Deprecated - use WAFv2
+	"aws_waf_regex_match_set": True,  ### Deprecated - use WAFv2
+	"aws_waf_regex_pattern_set": True,  ### Deprecated - use WAFv2
+	"aws_waf_rule": True,  ### Deprecated - use WAFv2
+	"aws_waf_rule_group": True,  ### Deprecated - use WAFv2
+	"aws_waf_size_constraint_set": True,  ### Deprecated - use WAFv2
+	"aws_waf_sql_injection_match_set": True,  ### Deprecated - use WAFv2
+	"aws_waf_xss_match_set": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_byte_match_set": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_geo_match_set": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_ipset": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_rate_based_rule": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_regex_match_set": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_regex_pattern_set": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_rule": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_rule_group": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_size_constraint_set": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_sql_injection_match_set": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_web_acl": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_web_acl_association": True,  ### Deprecated - use WAFv2
+	"aws_wafregional_xss_match_set": True,  ### Deprecated - use WAFv2
+    "aws_cloudsearch_domain": True,  ### Legacy - use OpenSearch
+    "aws_cloudsearch_domain_service_access_policy": True,  ### Legacy - use OpenSearch
+    "aws_datapipeline_pipeline": True,  ### Deprecated - use Glue/Step Functions
+    "aws_datapipeline_pipeline_definition": True,  ### Deprecated - use Glue/Step Functions
+    "aws_elastictranscoder_preset": True,  ### Deprecated - use MediaConvert
+    "aws_glacier_vault_lock": True,  ### Rebranded as S3 Glacier
+    "aws_inspector2_delegated_admin_account": True,  ### Deprecated - use Inspector v2
+    "aws_inspector2_filter": True,  ### Deprecated - use Inspector v2
+    "aws_inspector2_member_association": True,  ### Deprecated - use Inspector v2
+    "aws_inspector_assessment_target": True,  ### Deprecated - use Inspector v2
+    "aws_inspector_assessment_template": True,  ### Deprecated - use Inspector v2
+    "aws_opsworks_application": True,  ### Being phased out
+    "aws_opsworks_custom_layer": True,  ### Being phased out
+    "aws_opsworks_instance": True,  ### Being phased out
+    "aws_opsworks_php_app_layer": True,  ### Being phased out
+    "aws_opsworks_stack": True,  ### Being phased out
+    "aws_opsworks_static_web_layer": True,  ### Being phased out
+    "aws_simpledb_domain": True,  ### Legacy - use DynamoDB
+    "aws_wafv2_api_key": True,  ### Deprecated - use WAFv2
+    "aws_wafv2_web_acl_rule_group_association": True,  ### Deprecated - use WAFv2
+    "aws_worklink_fleet": True, ### Service discontinued (Dec 2021)
+    #
+    # ========================================
+    # ACTIVE SERVICES
+    # ========================================
+    #
     "aws_network_acl_rule": True, ### ? worth doing
     "aws_auditmanager_account_registration": True,  ### TODO
     "aws_cognito_user_pool_domain": True,  ### TODO  
     "aws_datasync_location_s3": True,  ### TODO
     "aws_dax_cluster": True,  ### TODO
-    "aws_inspector_assessment_target": True,  ### TODO
+
     "aws_iot_thing_group": True,  ### TODO
     "aws_lightsail_database": True,  ### TODO
     "aws_macie2_classification_job": True,  ### TODO
@@ -12,11 +69,11 @@ notimplemented = {
     "aws_mskconnect_connector": True,  ### TODO
     "aws_networkfirewall_resource_policy": True, ### TODO
     "aws_opensearch_inbound_connection_accepter": True,  ### TODO
-    "aws_redshiftserverless_resource_policy": True,  ### TODO
+    "aws_redshiftserverless_resource_policy": True,  ### Requires snapshot (which requires namespace/workgroup) - complex and expensive
     "aws_s3_directory_bucket": True, ### TODO
     "aws_sagemaker_feature_group": True,  ### TODO
-    "aws_sagemaker_pipeline": True,  ### TODO
-    "aws_sagemaker_servicecatalog_portfolio_status": True, ### TODO
+    #"aws_sagemaker_pipeline": True,  ### TODO
+    #"aws_sagemaker_servicecatalog_portfolio_status": True, ### TODO
     "aws_securitylake_data_lake": True,  ### TODO
     "aws_auditmanager_assessment": True,   ### TODO
     "aws_ce_cost_allocation_tag": True, ### TODO
@@ -29,10 +86,10 @@ notimplemented = {
     #
     "aws_apprunner_observability_configuration": True,
     #
-    "aws_appstream_directory_config": True,
-    "aws_appstream_fleet_stack_association": True,
-    "aws_appstream_stack": True,
-    "aws_appstream_user_stack_association": True,
+    "aws_appstream_directory_config": True,  ### Requires Active Directory setup
+    "aws_appstream_fleet_stack_association": True,  ### Composite ID format
+    #"aws_appstream_stack": True,
+    "aws_appstream_user_stack_association": True,  ### Composite ID format
     "aws_appsync_api_cache": True,
     "aws_appsync_domain_name_api_association": True,
     "aws_appsync_graphql_api": True,
@@ -61,21 +118,19 @@ notimplemented = {
     "aws_cloudformation_stack_set_instance": True,
     "aws_cloudfront_monitoring_subscription": True,
     #
-    "aws_cloudsearch_domain": True,
-    "aws_cloudsearch_domain_service_access_policy": True,
-    "aws_cloudwatch_composite_alarm": True,
-    "aws_cloudwatch_dashboard": True,
-    "aws_cloudwatch_event_api_destination": True,
-    "aws_cloudwatch_event_archive": True,
-    "aws_cloudwatch_event_bus_policy": True,
-    "aws_cloudwatch_event_connection": True,
-    "aws_cloudwatch_event_endpoint": True,
+    #"aws_cloudwatch_composite_alarm": True,
+    #"aws_cloudwatch_dashboard": True,
+    #"aws_cloudwatch_event_api_destination": True,
+    #"aws_cloudwatch_event_archive": True,
+    #"aws_cloudwatch_event_bus_policy": True,
+    #"aws_cloudwatch_event_connection": True,
+    "aws_cloudwatch_event_endpoint": True,  # Requires multi-region setup - too complex
     "aws_cloudwatch_event_permission": True,
     #
-    "aws_cloudwatch_log_data_protection_policy": True,
-    "aws_cloudwatch_log_destination_policy": True,
+    #"aws_cloudwatch_log_data_protection_policy": True,
+    #"aws_cloudwatch_log_destination_policy": True,
     "aws_cloudwatch_log_metric_filter": True,
-    "aws_cloudwatch_log_resource_policy": True,
+    #"aws_cloudwatch_log_resource_policy": True,
     "aws_cloudwatch_log_subscription_filter": True,
     #
     "aws_codeartifact_domain_permissions_policy": True,
@@ -106,8 +161,6 @@ notimplemented = {
     #
     "aws_cur_report_definition": True,
     "aws_dataexchange_revision": True,
-    "aws_datapipeline_pipeline": True,
-    "aws_datapipeline_pipeline_definition": True,
     #
     "aws_datasync_location_azure_blob": True,
     "aws_datasync_location_efs": True,
@@ -160,11 +213,10 @@ notimplemented = {
     "aws_dx_transit_virtual_interface": True,
     #
     "aws_dynamodb_global_table": True,
-    "aws_ec2_local_gateway_route": True,
-    "aws_ec2_subnet_cidr_reservation": True,
+    "aws_ec2_local_gateway_route": True,  ### Requires AWS Outposts hardware + Composite ID: lgw-rtb-id_cidr
+    #"aws_ec2_subnet_cidr_reservation": True,  ### Composite ID: subnet-id:reservation-id
     #
     "aws_elasticache_user_group_association": True,
-    "aws_elastictranscoder_preset": True,
     #
     "aws_emr_studio": True,
     "aws_emr_studio_session_mapping": True,
@@ -188,7 +240,6 @@ notimplemented = {
     #
     "aws_gamelift_fleet": True,
     "aws_gamelift_game_session_queue": True,
-    "aws_glacier_vault_lock": True,
     #
     "aws_glue_partition_index": True,
     "aws_glue_resource_policy": True,
@@ -197,10 +248,7 @@ notimplemented = {
     "aws_guardduty_invite_accepter": True,
     "aws_guardduty_organization_configuration": True,
     #
-    "aws_inspector2_delegated_admin_account": True,
-    "aws_inspector2_member_association": True,
     #
-    "aws_inspector_assessment_template": True,
     "aws_internet_gateway_attachment": True,
     #
     "aws_iot_authorizer": True,
@@ -298,18 +346,12 @@ notimplemented = {
     "aws_opensearch_outbound_connection": True,
     "aws_opensearch_package": True,
     #
-    "aws_opensearchserverless_access_policy": True,
-    "aws_opensearchserverless_collection": True,
-    "aws_opensearchserverless_lifecycle_policy": True,
-    "aws_opensearchserverless_security_config": True,
-    "aws_opensearchserverless_security_policy": True,
+    #"aws_opensearchserverless_access_policy": True,
+    #"aws_opensearchserverless_collection": True,
+    #"aws_opensearchserverless_lifecycle_policy": True,
+    "aws_opensearchserverless_security_config": True,  ### Requires valid SAML IdP metadata with certificates
+    #"aws_opensearchserverless_security_policy": True,
     #
-    "aws_opsworks_application": True,
-    "aws_opsworks_custom_layer": True,
-    "aws_opsworks_instance": True,
-    "aws_opsworks_php_app_layer": True,
-    "aws_opsworks_stack": True,
-    "aws_opsworks_static_web_layer": True,
     #
     "aws_pinpoint_adm_channel": True,
     "aws_pinpoint_apns_channel": True,
@@ -330,25 +372,25 @@ notimplemented = {
     #
     "aws_rbin_rule": True,
     #
-    "aws_redshiftserverless_endpoint_access": True,
-    "aws_redshiftserverless_snapshot": True,
-    "aws_redshiftserverless_usage_limit": True,
+    #"aws_redshiftserverless_endpoint_access": True,  ### Requires workgroup, VPC, subnets - complex and expensive
+    #"aws_redshiftserverless_snapshot": True,  ### Requires namespace and workgroup - complex and expensive
+    #"aws_redshiftserverless_usage_limit": True,  ### Requires workgroup - complex and expensive
     "aws_resourceexplorer2_index": True,
 
     "aws_rolesanywhere_profile": True,
     "aws_rolesanywhere_trust_anchor": True,
     #
-    "aws_route53_resolver_config": True,
-    "aws_route53_resolver_dnssec_config": True,
-    "aws_route53_resolver_endpoint": True,
-    "aws_route53_resolver_firewall_config": True,
-    "aws_route53_resolver_firewall_domain_list": True,
-    "aws_route53_resolver_firewall_rule": True,
-    "aws_route53_resolver_firewall_rule_group": True,
-    "aws_route53_resolver_query_log_config": True,
-    "aws_route53_resolver_query_log_config_association": True,
-    "aws_route53_resolver_rule": True,
-    "aws_route53_resolver_rule_association": True,
+    #"aws_route53_resolver_config": True,
+    #"aws_route53_resolver_dnssec_config": True,
+    #"aws_route53_resolver_endpoint": True,
+    #"aws_route53_resolver_firewall_config": True,
+    #"aws_route53_resolver_firewall_domain_list": True,
+    #"aws_route53_resolver_firewall_rule": True,  ### Composite ID format: rule_group_id:domain_list_id
+    #"aws_route53_resolver_firewall_rule_group": True,
+    #"aws_route53_resolver_query_log_config": True,
+    #"aws_route53_resolver_query_log_config_association": True,
+    #"aws_route53_resolver_rule": True,
+    #"aws_route53_resolver_rule_association": True,
     #
     "aws_rum_app_monitor": True,
     "aws_rum_metrics_destination": True,
@@ -358,16 +400,16 @@ notimplemented = {
 
     "aws_s3control_bucket": True,
     #
-    "aws_sagemaker_code_repository": True,
-    "aws_sagemaker_data_quality_job_definition": True,
-    "aws_sagemaker_device": True,  
-    "aws_sagemaker_device_fleet": True,
-    "aws_sagemaker_endpoint_configuration": True,
+    #"aws_sagemaker_code_repository": True,
+    "aws_sagemaker_data_quality_job_definition": True,  ### Requires S3 buckets, IAM roles, data quality baselines - complex setup
+    "aws_sagemaker_device": True,  ### Composite ID: fleet-name/device-name + requires IoT device fleet
+    "aws_sagemaker_device_fleet": True,  ### Creation timeout - takes 10+ minutes to create IoT infrastructure
+    "aws_sagemaker_endpoint_configuration": True,  ### Requires ML models - complex setup
 
-    "aws_sagemaker_flow_definition": True,
-    "aws_sagemaker_human_task_ui": True,
-    "aws_sagemaker_model_package_group": True,
-    "aws_sagemaker_monitoring_schedule": True,
+    #"aws_sagemaker_flow_definition": True,  ### Requires S3 buckets, IAM roles, human task UI - complex setup
+    #"aws_sagemaker_human_task_ui": True,  ### Requires HTML template for human review interface
+    #"aws_sagemaker_model_package_group": True,
+    #"aws_sagemaker_monitoring_schedule": True,  ### Requires endpoint, baseline, S3 buckets - complex setup
     #
     "aws_schemas_registry_policy": True,
     #
@@ -411,10 +453,9 @@ notimplemented = {
     "aws_shield_protection": True,
     "aws_shield_protection_health_check_association": True,
     #
-    "aws_signer_signing_job": True,
-    "aws_signer_signing_profile": True,
-    "aws_signer_signing_profile_permission": True,
-    "aws_simpledb_domain": True,
+    "aws_signer_signing_job": True,  ### Requires complex handler - destination must be reconstructed from signedObject
+#    "aws_signer_signing_profile": True,
+#    "aws_signer_signing_profile_permission": True,
     #
     "aws_ssm_resource_data_sync": True,
     #
@@ -433,48 +474,24 @@ notimplemented = {
     "aws_transfer_ssh_key": True,
     "aws_transfer_tag": True,
 # apigateway stuff
-	"aws_api_gateway_api_key": True,
-	"aws_api_gateway_base_path_mapping": True,
-	"aws_api_gateway_client_certificate": True,
-	"aws_api_gateway_documentation_part": True,
-	"aws_api_gateway_documentation_version": True,
-	"aws_api_gateway_domain_name": True,
-	"aws_api_gateway_gateway_response": True,
-	"aws_api_gateway_integration": True,
-	"aws_api_gateway_integration_response": True,
-	"aws_api_gateway_method_response": True,
-	"aws_api_gateway_method_settings": True,
-	"aws_api_gateway_model": True,
-	"aws_api_gateway_request_validator": True,
-	"aws_api_gateway_rest_api_policy": True,
-	"aws_api_gateway_usage_plan": True,
-	"aws_api_gateway_usage_plan_key": True,
-	"aws_api_gateway_vpc_link": True,
+#	"aws_api_gateway_api_key": True,
+#	"aws_api_gateway_base_path_mapping": True,
+#	"aws_api_gateway_client_certificate": True,
+#	"aws_api_gateway_documentation_part": True,
+	#"aws_api_gateway_documentation_version": True,
+	"aws_api_gateway_domain_name": True,  ### Requires ACM certificate and domain ownership
+	#"aws_api_gateway_gateway_response": True,
+	"aws_api_gateway_integration": True,  ### Composite ID: REST-API-ID/RESOURCE-ID/HTTP-METHOD
+	"aws_api_gateway_integration_response": True,  ### Composite ID: REST-API-ID/RESOURCE-ID/HTTP-METHOD/STATUS-CODE
+	"aws_api_gateway_method_response": True,  ### Composite ID: REST-API-ID/RESOURCE-ID/HTTP-METHOD/STATUS-CODE
+	#"aws_api_gateway_method_settings": True,
+#	"aws_api_gateway_model": True,
+#	"aws_api_gateway_request_validator": True,
+	#"aws_api_gateway_rest_api_policy": True,
+	#"aws_api_gateway_usage_plan": True,
+	#"aws_api_gateway_usage_plan_key": True,
+	#"aws_api_gateway_vpc_link": True,
 ### old WAF
-	"aws_waf_byte_match_set": True,
-	"aws_waf_geo_match_set": True,
-	"aws_waf_ipset": True,
-	"aws_waf_rate_based_rule": True,
-	"aws_waf_regex_match_set": True,
-	"aws_waf_regex_pattern_set": True,
-	"aws_waf_rule": True,
-	"aws_waf_rule_group": True,
-	"aws_waf_size_constraint_set": True,
-	"aws_waf_sql_injection_match_set": True,
-	"aws_waf_xss_match_set": True,
-	"aws_wafregional_byte_match_set": True,
-	"aws_wafregional_geo_match_set": True,
-	"aws_wafregional_ipset": True,
-	"aws_wafregional_rate_based_rule": True,
-	"aws_wafregional_regex_match_set": True,
-	"aws_wafregional_regex_pattern_set": True,
-	"aws_wafregional_rule": True,
-	"aws_wafregional_rule_group": True,
-	"aws_wafregional_size_constraint_set": True,
-	"aws_wafregional_sql_injection_match_set": True,
-	"aws_wafregional_web_acl": True,
-	"aws_wafregional_web_acl_association": True,
-	"aws_wafregional_xss_match_set": True,
     #
     "aws_auditmanager_account_registration": True,
 	"aws_auditmanager_assessment_delegation": True,
@@ -484,25 +501,25 @@ notimplemented = {
 	"aws_auditmanager_framework_share": True,
 	"aws_auditmanager_organization_admin_account_registration": True,
     #
-    "aws_worklink_fleet": True, ### region  
+
     "aws_timestreamwrite_database": True, ### region
     "aws_timestreamwrite_table": True, ### region
     #
     # New resources added from aws_dict_extended.py
     #
-    "aws_bedrockagentcore_agent_runtime": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_agent_runtime_endpoint": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_api_key_credential_provider": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_browser": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_code_interpreter": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_gateway": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_gateway_target": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_memory": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_memory_strategy": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_oauth2_credential_provider": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_token_vault_cmk": True,  ### TODO 6.27.0
-    "aws_bedrockagentcore_workload_identity": True,  ### TODO 6.27.0
-    "aws_cloudwatch_contributor_managed_insight_rule": True,  ### TODO 6.27.0
+    #"aws_bedrockagentcore_agent_runtime": True,  ### TODO 6.27.0 - Requires container image in ECR - too complex for automated testing
+    "aws_bedrockagentcore_agent_runtime_endpoint": True,  ### TODO 6.27.0 - Composite ID
+    "aws_bedrockagentcore_api_key_credential_provider": True,  ### TODO 6.27.0 - API key is sensitive and not returned by API - cannot import
+    #"aws_bedrockagentcore_browser": True,  ### TODO 6.27.0 - Requires complex setup - too complex for automated testing
+    #"aws_bedrockagentcore_code_interpreter": True,  ### TODO 6.27.0 - Requires complex setup - too complex for automated testing
+    #"aws_bedrockagentcore_gateway": True,  ### TODO 6.27.0 - Requires complex setup - too complex for automated testing
+    "aws_bedrockagentcore_gateway_target": True,  ### TODO 6.27.0 - Composite ID
+    #"aws_bedrockagentcore_memory": True,  ### TODO 6.27.0 - Requires complex setup - too complex for automated testing
+    "aws_bedrockagentcore_memory_strategy": True,  ### TODO 6.27.0 - API method missing (list_memory_strategies)
+    "aws_bedrockagentcore_oauth2_credential_provider": True,  ### TODO 6.27.0 - Requires complex setup - too complex for automated testing
+    #"aws_bedrockagentcore_token_vault_cmk": True,  ### TODO 6.27.0 - Requires complex setup - too complex for automated testing
+    #"aws_bedrockagentcore_workload_identity": True,  ### TODO 6.27.0 - Requires complex setup - too complex for automated testing
+    "aws_cloudwatch_contributor_managed_insight_rule": True,  ### TODO 6.27.0 - Composite ID format
     "aws_controltower_baseline": True,  ### TODO 6.27.0
     "aws_dataexchange_event_action": True,  ### TODO 6.27.0
     "aws_dataexchange_revision_assets": True,  ### TODO 6.27.0
@@ -515,13 +532,13 @@ notimplemented = {
     "aws_dsql_cluster": True,  ### TODO 6.27.0
     "aws_dsql_cluster_peering": True,  ### TODO 6.27.0
     "aws_dynamodb_table_export": True,  ### TODO 6.27.0
-    "aws_ec2_allowed_images_settings": True,  ### TODO 6.27.0
-    "aws_ec2_default_credit_specification": True,  ### TODO 6.27.0
-    "aws_ec2_transit_gateway_default_route_table_association": True,  ### TODO 6.27.0
-    "aws_ec2_transit_gateway_default_route_table_propagation": True,  ### TODO 6.27.0
-    "aws_ecr_account_setting": True,  ### TODO 6.27.0
-    "aws_ecr_repository_creation_template": True,  ### TODO 6.27.0
-    "aws_ecs_express_gateway_service": True,  ### TODO 6.27.0
+    #"aws_ec2_allowed_images_settings": True,  ### TODO 6.27.0
+    #"aws_ec2_default_credit_specification": True,  ### TODO 6.27.0
+    "aws_ec2_transit_gateway_default_route_table_association": True,  ### Cannot import - no import section in Terraform docs
+    "aws_ec2_transit_gateway_default_route_table_propagation": True,  ### Cannot import - no import section in Terraform docs
+    #"aws_ecr_account_setting": True,  ### TODO 6.27.0
+    #"aws_ecr_repository_creation_template": True,  ### TODO 6.27.0
+    #"aws_ecs_express_gateway_service": True,  ### TODO 6.27.0
     "aws_eks_capability": True,  ### TODO 6.27.0
     "aws_fis_target_account_configuration": True,  ### TODO 6.27.0
     "aws_fsx_s3_access_point_attachment": True,  ### TODO 6.27.0
@@ -535,7 +552,7 @@ notimplemented = {
     "aws_iam_user_policy_attachments_exclusive": True,  ### TODO 6.27.0
     "aws_imagebuilder_lifecycle_policy": True,  ### TODO 6.27.0
     "aws_imagebuilder_workflow": True,  ### TODO 6.27.0
-    "aws_inspector2_filter": True,  ### TODO 6.27.0
+
     "aws_invoicing_invoice_unit": True,  ### TODO 6.27.0
     "aws_kinesis_resource_policy": True,  ### TODO 6.27.0
     "aws_lakeformation_data_cells_filter": True,  ### TODO 6.27.0
@@ -543,8 +560,7 @@ notimplemented = {
     "aws_lakeformation_lf_tag_expression": True,  ### TODO 6.27.0
     "aws_lakeformation_opt_in": True,  ### TODO 6.27.0
     "aws_lakeformation_resource_lf_tag": True,  ### TODO 6.27.0
-    "aws_lambda_capacity_provider": True,  ### TODO 6.27.0
-    "aws_lambda_function_recursion_config": True,  ### TODO 6.27.0
+#    "aws_lambda_function_recursion_config": True,  ### TODO 6.27.0
     "aws_lambda_runtime_management_config": True,  ### TODO 6.27.0
     "aws_m2_application": True,  ### TODO 6.27.0
     "aws_m2_deployment": True,  ### TODO 6.27.0
@@ -559,8 +575,8 @@ notimplemented = {
     "aws_networkfirewall_firewall_transit_gateway_attachment_accepter": True,  ### TODO 6.27.0
     "aws_networkfirewall_tls_inspection_configuration": True,  ### TODO 6.27.0
     "aws_networkfirewall_vpc_endpoint_association": True,  ### TODO 6.27.0
-    "aws_networkflowmonitor_monitor": True,  ### TODO 6.27.0
-    "aws_networkflowmonitor_scope": True,  ### TODO 6.27.0
+    "aws_networkflowmonitor_monitor": True,  ### TODO 6.27.0 - AWS API limitation - get_monitor does not return scopeArn
+    #"aws_networkflowmonitor_scope": True,  ### TODO 6.27.0
     "aws_networkmanager_dx_gateway_attachment": True,  ### TODO 6.27.0
     "aws_networkmonitor_monitor": True,  ### TODO 6.27.0
     "aws_networkmonitor_probe": True,  ### TODO 6.27.0
@@ -584,10 +600,10 @@ notimplemented = {
     "aws_pinpointsmsvoicev2_configuration_set": True,  ### TODO 6.27.0
     "aws_pinpointsmsvoicev2_opt_out_list": True,  ### TODO 6.27.0
     "aws_pinpointsmsvoicev2_phone_number": True,  ### TODO 6.27.0
-    "aws_prometheus_query_logging_configuration": True,  ### TODO 6.27.0
-    "aws_prometheus_resource_policy": True,  ### TODO 6.27.0
+#    "aws_prometheus_query_logging_configuration": True,  ### TODO 6.27.0
+#    "aws_prometheus_resource_policy": True,  ### TODO 6.27.0
     "aws_prometheus_scraper": True,  ### TODO 6.27.0
-    "aws_prometheus_workspace_configuration": True,  ### TODO 6.27.0
+#    "aws_prometheus_workspace_configuration": True,  ### TODO 6.27.0
     "aws_qbusiness_application": True,  ### TODO 6.27.0
     "aws_quicksight_account_settings": True,  ### TODO 6.27.0
     "aws_quicksight_custom_permissions": True,  ### TODO 6.27.0
@@ -599,18 +615,19 @@ notimplemented = {
     "aws_rds_shard_group": True,  ### TODO 6.27.0
     "aws_resiliencehub_resiliency_policy": True,  ### TODO 6.27.0
     "aws_s3control_directory_bucket_access_point_scope": True,  ### TODO 6.27.0
-    "aws_s3tables_table_bucket_replication": True,  ### TODO 6.27.0
-    "aws_s3tables_table_policy": True,  ### TODO 6.27.0
-    "aws_s3tables_table_replication": True,  ### TODO 6.27.0
-    "aws_s3vectors_index": True,  ### TODO 6.27.0
-    "aws_s3vectors_vector_bucket": True,  ### TODO 6.27.0
-    "aws_s3vectors_vector_bucket_policy": True,  ### TODO 6.27.0
+    #"aws_s3tables_table_bucket_replication": True,  ### TODO 6.27.0
+    #"aws_s3tables_table_policy": True,  ### TODO 6.27.0
+    #"aws_s3tables_table_replication": True,  ### TODO 6.27.0
+    # "aws_s3vectors_index": True,  ### TODO 6.27.0 - Testing enabled
+    # "aws_s3vectors_vector_bucket": True,  ### TODO 6.27.0 - Testing enabled
+    # "aws_s3vectors_vector_bucket_policy": True,  ### TODO 6.27.0 - Testing enabled
     "aws_sagemaker_mlflow_tracking_server": True,  ### TODO 6.27.0
     "aws_securityhub_standards_control_association": True,  ### TODO 6.27.0
-    "aws_securitylake_aws_log_source": True,  ### TODO 6.27.0
-    "aws_securitylake_custom_log_source": True,  ### TODO 6.27.0
-    "aws_securitylake_subscriber": True,  ### TODO 6.27.0
-    "aws_securitylake_subscriber_notification": True,  ### TODO 6.27.0
+    "aws_securitylake_aws_log_source": True,  ### TODO 6.27.0 - Requires Security Lake enabled
+    "aws_securitylake_custom_log_source": True,  ### TODO 6.27.0 - Requires Security Lake enabled
+    "aws_securitylake_data_lake": True,  ### TODO 6.27.0 - Access Denied - requires account-level setup
+    "aws_securitylake_subscriber": True,  ### TODO 6.27.0 - Requires Security Lake enabled
+    "aws_securitylake_subscriber_notification": True,  ### TODO 6.27.0 - Requires Security Lake enabled
     "aws_servicecatalogappregistry_application": True,  ### TODO 6.27.0
     "aws_servicecatalogappregistry_attribute_group": True,  ### TODO 6.27.0
     "aws_servicecatalogappregistry_attribute_group_association": True,  ### TODO 6.27.0
@@ -633,37 +650,37 @@ notimplemented = {
     "aws_verifiedpermissions_policy_store": True,  ### TODO 6.27.0
     "aws_verifiedpermissions_policy_template": True,  ### TODO 6.27.0
     "aws_verifiedpermissions_schema": True,  ### TODO 6.27.0
-    "aws_vpc_block_public_access_exclusion": True,  ### TODO 6.27.0
-    "aws_vpc_block_public_access_options": True,  ### TODO 6.27.0
-    "aws_vpc_encryption_control": True,  ### TODO 6.27.0
-    "aws_vpc_endpoint_private_dns": True,  ### TODO 6.27.0
+    #"aws_vpc_block_public_access_exclusion": True,  ### TODO 6.27.0
+    #"aws_vpc_block_public_access_options": True,  ### TODO 6.27.0
+    #"aws_vpc_encryption_control": True,  ### TODO 6.27.0
+    #"aws_vpc_endpoint_private_dns": True,  ### TODO 6.27.0
     "aws_vpc_endpoint_service_private_dns_verification": True,  ### TODO 6.27.0
-    "aws_vpc_route_server": True,  ### TODO 6.27.0
+    #"aws_vpc_route_server": True,  ### TODO 6.27.0
     "aws_vpc_route_server_association": True,  ### TODO 6.27.0
-    "aws_vpc_route_server_endpoint": True,  ### TODO 6.27.0
-    "aws_vpc_route_server_peer": True,  ### TODO 6.27.0
+    #"aws_vpc_route_server_endpoint": True,  ### TODO 6.27.0
+    #"aws_vpc_route_server_peer": True,  ### TODO 6.27.0
     "aws_vpc_route_server_propagation": True,  ### TODO 6.27.0
     "aws_vpc_route_server_vpc_association": True,  ### TODO 6.27.0
     "aws_vpc_security_group_vpc_association": True,  ### TODO 6.27.0
     "aws_vpclattice_domain_verification": True,  ### TODO 6.27.0
     "aws_vpn_concentrator": True,  ### TODO 6.27.0
-    "aws_wafv2_api_key": True,  ### TODO 6.27.0
-    "aws_wafv2_web_acl_rule_group_association": True,  ### TODO 6.27.0
-    "aws_workspacesweb_browser_settings": True,  ### TODO 6.27.0
+
+
+    #"aws_workspacesweb_browser_settings": True,  ### TODO 6.27.0
     "aws_workspacesweb_browser_settings_association": True,  ### TODO 6.27.0
-    "aws_workspacesweb_data_protection_settings": True,  ### TODO 6.27.0
+    #"aws_workspacesweb_data_protection_settings": True,  ### TODO 6.27.0
     "aws_workspacesweb_data_protection_settings_association": True,  ### TODO 6.27.0
-    "aws_workspacesweb_identity_provider": True,  ### TODO 6.27.0
-    "aws_workspacesweb_ip_access_settings": True,  ### TODO 6.27.0
+    #"aws_workspacesweb_identity_provider": True,  ### TODO 6.27.0
+    #"aws_workspacesweb_ip_access_settings": True,  ### TODO 6.27.0
     "aws_workspacesweb_ip_access_settings_association": True,  ### TODO 6.27.0
-    "aws_workspacesweb_network_settings": True,  ### TODO 6.27.0
+    # "aws_workspacesweb_network_settings": True,  ### TODO 6.27.0
     "aws_workspacesweb_network_settings_association": True,  ### TODO 6.27.0
-    "aws_workspacesweb_portal": True,  ### TODO 6.27.0
-    "aws_workspacesweb_session_logger": True,  ### TODO 6.27.0
+    # "aws_workspacesweb_portal": True,  ### TODO 6.27.0
+    #"aws_workspacesweb_session_logger": True,  ### TODO 6.27.0
     "aws_workspacesweb_session_logger_association": True,  ### TODO 6.27.0
-    "aws_workspacesweb_trust_store": True,  ### TODO 6.27.0
+    #"aws_workspacesweb_trust_store": True,  ### TODO 6.27.0
     "aws_workspacesweb_trust_store_association": True,  ### TODO 6.27.0
-    "aws_workspacesweb_user_access_logging_settings": True,  ### TODO 6.27.0
+    #"aws_workspacesweb_user_access_logging_settings": True,  ### TODO 6.27.0
     "aws_workspacesweb_user_access_logging_settings_association": True,  ### TODO 6.27.0
-    "aws_workspacesweb_user_settings": True,  ### TODO 6.27.0
+#    "aws_workspacesweb_user_settings": True,  ### TODO 6.27.0
 }

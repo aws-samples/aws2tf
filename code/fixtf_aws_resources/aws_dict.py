@@ -2149,16 +2149,16 @@ aws_cloudtrail_event_data_store = {
 
 aws_cloudwatch_composite_alarm = {
 	"clfn":		"cloudwatch",
-	"descfn":	"list_composite_alarms",
+	"descfn":	"describe_alarms",
 	"topkey":	"CompositeAlarms",
 	"key":		"AlarmName",
-	"filterid":	"AlarmName"
+	"filterid":	"AlarmNames"
 }
 
 aws_cloudwatch_dashboard = {
 	"clfn":		"cloudwatch",
 	"descfn":	"list_dashboards",
-	"topkey":	"Dashboards",
+	"topkey":	"DashboardEntries",
 	"key":		"DashboardName",
 	"filterid":	"DashboardName"
 }
@@ -2189,8 +2189,8 @@ aws_cloudwatch_event_bus = {
 
 aws_cloudwatch_event_bus_policy = {
 	"clfn":		"events",
-	"descfn":	"list_event_bus_policies",
-	"topkey":	"EventBusPolicies",
+	"descfn":	"describe_event_bus",
+	"topkey":	"Policy",
 	"key":		"Name",
 	"filterid":	"Name"
 }
@@ -2229,10 +2229,10 @@ aws_cloudwatch_event_target = {
 
 aws_cloudwatch_log_data_protection_policy = {
 	"clfn":		"logs",
-	"descfn":	"list_data_protection_policies",
-	"topkey":	"DataProtectionPolicies",
-	"key":		"Name",
-	"filterid":	"Name"
+	"descfn":	"get_data_protection_policy",
+	"topkey":	"Policy",
+	"key":		"logGroupName",
+	"filterid":	"logGroupName"
 }
 
 aws_cloudwatch_log_destination = {
@@ -2245,10 +2245,10 @@ aws_cloudwatch_log_destination = {
 
 aws_cloudwatch_log_destination_policy = {
 	"clfn":		"logs",
-	"descfn":	"list_destination_policies",
-	"topkey":	"DestinationPolicies",
-	"key":		"DestinationName",
-	"filterid":	"DestinationName"
+	"descfn":	"describe_destinations",
+	"topkey":	"destinations",
+	"key":		"destinationName",
+	"filterid":	"destinationName"
 }
 
 aws_cloudwatch_log_metric_filter = {
@@ -2261,10 +2261,10 @@ aws_cloudwatch_log_metric_filter = {
 
 aws_cloudwatch_log_resource_policy = {
 	"clfn":		"logs",
-	"descfn":	"list_resource_policies",
-	"topkey":	"ResourcePolicies",
-	"key":		"Name",
-	"filterid":	"Name"
+	"descfn":	"describe_resource_policies",
+	"topkey":	"resourcePolicies",
+	"key":		"policyName",
+	"filterid":	"policyName"
 }
 
 aws_cloudwatch_log_stream = {
@@ -7749,10 +7749,10 @@ aws_redshiftdata_statement = {
 
 aws_redshiftserverless_endpoint_access = {
 	"clfn":		"redshift-serverless",
-	"descfn":	"describe_endpoint_access",
-	"topkey":	"EndpointAccess",
-	"key":		"EndpointName",
-	"filterid":	"EndpointName"
+	"descfn":	"list_endpoint_access",
+	"topkey":	"endpoints",
+	"key":		"endpointName",
+	"filterid":	"endpointName"
 }
 
 aws_redshiftserverless_resource_policy = {
@@ -7765,18 +7765,18 @@ aws_redshiftserverless_resource_policy = {
 
 aws_redshiftserverless_snapshot = {
 	"clfn":		"redshift-serverless",
-	"descfn":	"describe_snapshots",
-	"topkey":	"Snapshots",
-	"key":		"SnapshotName",
-	"filterid":	"SnapshotName"
+	"descfn":	"list_snapshots",
+	"topkey":	"snapshots",
+	"key":		"snapshotName",
+	"filterid":	"snapshotName"
 }
 
 aws_redshiftserverless_usage_limit = {
 	"clfn":		"redshift-serverless",
-	"descfn":	"describe_usage_limits",
-	"topkey":	"UsageLimits",
-	"key":		"UsageLimitId",
-	"filterid":	"UsageLimitId"
+	"descfn":	"list_usage_limits",
+	"topkey":	"usageLimits",
+	"key":		"usageLimitId",
+	"filterid":	"usageLimitId"
 }
 
 aws_resourceexplorer2_index = {
@@ -7910,7 +7910,7 @@ aws_route53_resolver_config = {
 aws_route53_resolver_dnssec_config = {
 	"clfn":		"route53resolver",
 	"descfn":	"list_resolver_dnssec_configs",
-	"topkey":	"ResolverDNSSECConfigs",
+	"topkey":	"ResolverDnssecConfigs",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -7925,16 +7925,16 @@ aws_route53_resolver_endpoint = {
 
 aws_route53_resolver_firewall_config = {
 	"clfn":		"route53resolver",
-	"descfn":	"list_resolver_firewall_configs",
-	"topkey":	"ResolverFirewallConfigs",
+	"descfn":	"list_firewall_configs",
+	"topkey":	"FirewallConfigs",
 	"key":		"Id",
 	"filterid":	"Id"
 }
 
 aws_route53_resolver_firewall_domain_list = {
 	"clfn":		"route53resolver",
-	"descfn":	"list_resolver_firewall_domain_lists",
-	"topkey":	"ResolverFirewallDomainLists",
+	"descfn":	"list_firewall_domain_lists",
+	"topkey":	"FirewallDomainLists",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -7949,8 +7949,8 @@ aws_route53_resolver_firewall_rule = {
 
 aws_route53_resolver_firewall_rule_group = {
 	"clfn":		"route53resolver",
-	"descfn":	"list_resolver_firewall_rule_groups",
-	"topkey":	"ResolverFirewallRuleGroups",
+	"descfn":	"list_firewall_rule_groups",
+	"topkey":	"FirewallRuleGroups",
 	"key":		"Id",
 	"filterid":	"Id"
 }
@@ -8478,9 +8478,9 @@ aws_sagemaker_app_image_config = {
 aws_sagemaker_code_repository = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_code_repositories",
-	"topkey":	"CodeRepositories",
-	"key":		"CodeRepositoryArn",
-	"filterid":	"CodeRepositoryArn"
+	"topkey":	"CodeRepositorySummaryList",
+	"key":		"CodeRepositoryName",
+	"filterid":	"CodeRepositoryName"
 }
 
 aws_sagemaker_data_quality_job_definition = {
@@ -8542,17 +8542,17 @@ aws_sagemaker_feature_group = {
 aws_sagemaker_flow_definition = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_flow_definitions",
-	"topkey":	"FlowDefinitions",
-	"key":		"FlowDefinitionArn",
-	"filterid":	"FlowDefinitionArn"
+	"topkey":	"FlowDefinitionSummaries",
+	"key":		"FlowDefinitionName",
+	"filterid":	"FlowDefinitionName"
 }
 
 aws_sagemaker_human_task_ui = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_human_task_uis",
-	"topkey":	"HumanTaskUIs",
-	"key":		"HumanTaskUiArn",
-	"filterid":	"HumanTaskUiArn"
+	"topkey":	"HumanTaskUiSummaries",
+	"key":		"HumanTaskUiName",
+	"filterid":	"HumanTaskUiName"
 }
 
 aws_sagemaker_image = {
@@ -8582,9 +8582,9 @@ aws_sagemaker_model = {
 aws_sagemaker_model_package_group = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_model_package_groups",
-	"topkey":	"ModelPackageGroups",
-	"key":		"ModelPackageGroupArn",
-	"filterid":	"ModelPackageGroupArn"
+	"topkey":	"ModelPackageGroupSummaryList",
+	"key":		"ModelPackageGroupName",
+	"filterid":	"ModelPackageGroupName"
 }
 
 aws_sagemaker_model_package_group_policy = {
@@ -8598,7 +8598,7 @@ aws_sagemaker_model_package_group_policy = {
 aws_sagemaker_monitoring_schedule = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_monitoring_schedules",
-	"topkey":	"MonitoringSchedules",
+	"topkey":	"MonitoringScheduleSummaries",
 	"key":		"MonitoringScheduleArn",
 	"filterid":	"MonitoringScheduleArn"
 }
@@ -8622,9 +8622,9 @@ aws_sagemaker_notebook_instance_lifecycle_configuration = {
 aws_sagemaker_pipeline = {
 	"clfn":		"sagemaker",
 	"descfn":	"list_pipelines",
-	"topkey":	"Pipelines",
-	"key":		"PipelineArn",
-	"filterid":	"PipelineArn"
+	"topkey":	"PipelineSummaries",
+	"key":		"PipelineName",
+	"filterid":	"PipelineName"
 }
 
 aws_sagemaker_project = {
@@ -9294,25 +9294,25 @@ aws_shield_protection_health_check_association = {
 aws_signer_signing_job = {
 	"clfn":		"signer",
 	"descfn":	"list_signing_jobs",
-	"topkey":	"Jobs",
-	"key":		"JobId",
-	"filterid":	"JobId"
+	"topkey":	"jobs",
+	"key":		"jobId",
+	"filterid":	"jobId"
 }
 
 aws_signer_signing_profile = {
 	"clfn":		"signer",
 	"descfn":	"list_signing_profiles",
-	"topkey":	"Profiles",
-	"key":		"ProfileName",
-	"filterid":	"ProfileName"
+	"topkey":	"profiles",
+	"key":		"profileName",
+	"filterid":	"profileName"
 }
 
 aws_signer_signing_profile_permission = {
 	"clfn":		"signer",
-	"descfn":	"list_signing_profile_permissions",
-	"topkey":	"Permissions",
-	"key":		"ProfileName",
-	"filterid":	"ProfileName"
+	"descfn":	"list_profile_permissions",
+	"topkey":	"permissions",
+	"key":		"profileName",
+	"filterid":	"profileName"
 }
 
 aws_simpledb_domain = {
@@ -11481,7 +11481,7 @@ aws_xray_resource_policy = {
 }
 
 aws_bedrockagentcore_agent_runtime = {
-	"clfn":		"bedrock-agent-runtime",
+	"clfn":		"bedrock-agentcore-control",
 	"descfn":	"list_agent_runtimes",
 	"topkey":	"agentRuntimes",
 	"key":		"agentRuntimeId",
@@ -11489,7 +11489,7 @@ aws_bedrockagentcore_agent_runtime = {
 }
 
 aws_bedrockagentcore_agent_runtime_endpoint = {
-	"clfn":		"bedrock-agent-runtime",
+	"clfn":		"bedrock-agentcore-control",
 	"descfn":	"list_agent_runtime_endpoints",
 	"topkey":	"endpoints",
 	"key":		"endpointId",
@@ -11497,39 +11497,39 @@ aws_bedrockagentcore_agent_runtime_endpoint = {
 }
 
 aws_bedrockagentcore_api_key_credential_provider = {
-	"clfn":		"bedrock-agent-runtime",
-	"descfn":	"list_credential_providers",
+	"clfn":		"bedrock-agentcore-control",
+	"descfn":	"list_api_key_credential_providers",
 	"topkey":	"credentialProviders",
-	"key":		"providerId",
-	"filterid":	"providerType"
+	"key":		"name",
+	"filterid":	"name"
 }
 
 aws_bedrockagentcore_browser = {
-	"clfn":		"bedrock-agent-runtime",
+	"clfn":		"bedrock-agentcore-control",
 	"descfn":	"list_browsers",
-	"topkey":	"browsers",
+	"topkey":	"browserSummaries",
 	"key":		"browserId",
 	"filterid":	"browserId"
 }
 
 aws_bedrockagentcore_code_interpreter = {
-	"clfn":		"bedrock-agent-runtime",
+	"clfn":		"bedrock-agentcore-control",
 	"descfn":	"list_code_interpreters",
-	"topkey":	"codeInterpreters",
+	"topkey":	"codeInterpreterSummaries",
 	"key":		"codeInterpreterId",
 	"filterid":	"codeInterpreterId"
 }
 
 aws_bedrockagentcore_gateway = {
-	"clfn":		"bedrock-agent-runtime",
+	"clfn":		"bedrock-agentcore-control",
 	"descfn":	"list_gateways",
-	"topkey":	"gateways",
+	"topkey":	"items",
 	"key":		"gatewayId",
 	"filterid":	"gatewayId"
 }
 
 aws_bedrockagentcore_gateway_target = {
-	"clfn":		"bedrock-agent-runtime",
+	"clfn":		"bedrock-agentcore-control",
 	"descfn":	"list_gateway_targets",
 	"topkey":	"gatewayTargets",
 	"key":		"targetId",
@@ -11537,15 +11537,15 @@ aws_bedrockagentcore_gateway_target = {
 }
 
 aws_bedrockagentcore_memory = {
-	"clfn":		"bedrock-agent-runtime",
+	"clfn":		"bedrock-agentcore-control",
 	"descfn":	"list_memories",
 	"topkey":	"memories",
-	"key":		"memoryId",
-	"filterid":	"memoryId"
+	"key":		"id",
+	"filterid":	"id"
 }
 
 aws_bedrockagentcore_memory_strategy = {
-	"clfn":		"bedrock-agent-runtime",
+	"clfn":		"bedrock-agentcore-control",
 	"descfn":	"list_memory_strategies",
 	"topkey":	"memoryStrategies",
 	"key":		"strategyId",
@@ -11553,27 +11553,27 @@ aws_bedrockagentcore_memory_strategy = {
 }
 
 aws_bedrockagentcore_oauth2_credential_provider = {
-	"clfn":		"bedrock-agent-runtime",
-	"descfn":	"list_credential_providers",
+	"clfn":		"bedrock-agentcore-control",
+	"descfn":	"list_oauth2_credential_providers",
 	"topkey":	"credentialProviders",
 	"key":		"providerId",
 	"filterid":	"providerType"
 }
 
 aws_bedrockagentcore_token_vault_cmk = {
-	"clfn":		"bedrock-agent-runtime",
-	"descfn":	"list_token_vaults",
-	"topkey":	"tokenVaults",
+	"clfn":		"bedrock-agentcore-control",
+	"descfn":	"get_token_vault",
+	"topkey":	"tokenVault",
 	"key":		"vaultId",
 	"filterid":	"vaultId"
 }
 
 aws_bedrockagentcore_workload_identity = {
-	"clfn":		"bedrock-agent-runtime",
+	"clfn":		"bedrock-agentcore-control",
 	"descfn":	"list_workload_identities",
 	"topkey":	"workloadIdentities",
-	"key":		"identityId",
-	"filterid":	"identityId"
+	"key":		"name",
+	"filterid":	"name"
 }
 
 aws_cloudwatch_contributor_managed_insight_rule = {
@@ -11714,10 +11714,10 @@ aws_ec2_transit_gateway_default_route_table_propagation = {
 
 aws_ecr_account_setting = {
 	"clfn":		"ecr",
-	"descfn":	"get_registry_policy",
-	"topkey":	"registryId",
-	"key":		"registryId",
-	"filterid":	""
+	"descfn":	"get_account_setting",
+	"topkey":	"name",
+	"key":		"name",
+	"filterid":	"name"
 }
 
 aws_ecr_repository_creation_template = {
@@ -11906,10 +11906,10 @@ aws_lakeformation_resource_lf_tag = {
 
 aws_lambda_capacity_provider = {
 	"clfn":		"lambda",
-	"descfn":	"list_functions",
-	"topkey":	"Functions",
-	"key":		"FunctionName",
-	"filterid":	"FunctionName"
+	"descfn":	"list_capacity_providers",
+	"topkey":	"CapacityProviders",
+	"key":		"CapacityProviderArn",
+	"filterid":	"CapacityProviderArn"
 }
 
 aws_lambda_function_recursion_config = {
@@ -12036,16 +12036,16 @@ aws_networkflowmonitor_monitor = {
 	"clfn":		"networkflowmonitor",
 	"descfn":	"list_monitors",
 	"topkey":	"monitors",
-	"key":		"monitorArn",
-	"filterid":	"monitorArn"
+	"key":		"monitorName",
+	"filterid":	"monitorName"
 }
 
 aws_networkflowmonitor_scope = {
 	"clfn":		"networkflowmonitor",
 	"descfn":	"list_scopes",
 	"topkey":	"scopes",
-	"key":		"scopeArn",
-	"filterid":	"scopeArn"
+	"key":		"scopeId",
+	"filterid":	"scopeId"
 }
 
 aws_networkmanager_dx_gateway_attachment = {
@@ -12242,7 +12242,7 @@ aws_prometheus_query_logging_configuration = {
 
 aws_prometheus_resource_policy = {
 	"clfn":		"amp",
-	"descfn":	"get_resource_policy",
+	"descfn":	"describe_resource_policy",
 	"topkey":	"policy",
 	"key":		"resourceArn",
 	"filterid":	"resourceArn"
@@ -12258,8 +12258,8 @@ aws_prometheus_scraper = {
 
 aws_prometheus_workspace_configuration = {
 	"clfn":		"amp",
-	"descfn":	"describe_workspace",
-	"topkey":	"workspace",
+	"descfn":	"describe_workspace_configuration",
+	"topkey":	"workspaceConfiguration",
 	"key":		"workspaceId",
 	"filterid":	"workspaceId"
 }
@@ -12354,8 +12354,8 @@ aws_s3control_directory_bucket_access_point_scope = {
 
 aws_s3tables_table_bucket_replication = {
 	"clfn":		"s3tables",
-	"descfn":	"get_table_bucket_maintenance_configuration",
-	"topkey":	"tableBucketARN",
+	"descfn":	"get_table_bucket_replication",
+	"topkey":	"replicationConfiguration",
 	"key":		"tableBucketARN",
 	"filterid":	"tableBucketARN"
 }
@@ -12378,9 +12378,9 @@ aws_s3tables_table_replication = {
 
 aws_s3vectors_index = {
 	"clfn":		"s3vectors",
-	"descfn":	"list_vector_indexes",
+	"descfn":	"list_indexes",
 	"topkey":	"indexes",
-	"key":		"indexName",
+	"key":		"indexArn",
 	"filterid":	"vectorBucketName"
 }
 
@@ -12388,7 +12388,7 @@ aws_s3vectors_vector_bucket = {
 	"clfn":		"s3vectors",
 	"descfn":	"list_vector_buckets",
 	"topkey":	"vectorBuckets",
-	"key":		"vectorBucketName",
+	"key":		"vectorBucketArn",
 	"filterid":	"prefix"
 }
 
@@ -12396,8 +12396,8 @@ aws_s3vectors_vector_bucket_policy = {
 	"clfn":		"s3vectors",
 	"descfn":	"get_vector_bucket_policy",
 	"topkey":	"policy",
-	"key":		"vectorBucketName",
-	"filterid":	"vectorBucketName"
+	"key":		"vectorBucketArn",
+	"filterid":	"vectorBucketArn"
 }
 
 aws_sagemaker_mlflow_tracking_server = {
@@ -12627,7 +12627,7 @@ aws_verifiedpermissions_schema = {
 aws_vpc_block_public_access_exclusion = {
 	"clfn":		"ec2",
 	"descfn":	"describe_vpc_block_public_access_exclusions",
-	"topkey":	"Exclusions",
+	"topkey":	"VpcBlockPublicAccessExclusions",
 	"key":		"ExclusionId",
 	"filterid":	"ExclusionId"
 }
@@ -12642,10 +12642,10 @@ aws_vpc_block_public_access_options = {
 
 aws_vpc_encryption_control = {
 	"clfn":		"ec2",
-	"descfn":	"get_vpc_encryption_by_default",
-	"topkey":	"VpcEncryptionByDefault",
-	"key":		"VpcEncryptionByDefault",
-	"filterid":	""
+	"descfn":	"describe_vpc_encryption_controls",
+	"topkey":	"VpcEncryptionControls",
+	"key":		"VpcEncryptionControlId",
+	"filterid":	"VpcEncryptionControlId"
 }
 
 aws_vpc_endpoint_private_dns = {

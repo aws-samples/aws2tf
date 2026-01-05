@@ -107,6 +107,27 @@ class BaseResourceHandler:
         return skip, t1, flag1, flag2
     
     @staticmethod
+    def skip_fields(t1, tt1, tt2, flag1, flag2, fields):
+        """
+        Skip attribute unconditionally (regardless of value).
+        
+        Useful for computed/read-only fields that shouldn't be in Terraform config.
+        
+        Args:
+            fields: List of field names to skip
+            
+        Example:
+            skip, t1, flag1, flag2 = BaseResourceHandler.skip_fields(
+                t1, tt1, tt2, flag1, flag2,
+                ['owner_id', 'arn', 'id']
+            )
+        """
+        skip = 0
+        if tt1 in fields:
+            skip = 1
+        return skip, t1, flag1, flag2
+    
+    @staticmethod
     def add_resource_reference(t1, tt1, tt2, resource_type, id_field="id"):
         """
         Create a reference to another Terraform resource.
@@ -225,4 +246,11 @@ def skip_null_fields(fields):
     """Decorator to skip fields with null values"""
     def handler(t1, tt1, tt2, flag1, flag2):
         return BaseResourceHandler.skip_if_null(t1, tt1, tt2, flag1, flag2, fields)
+    return handler
+
+
+def skip_fields_unconditionally(fields):
+    """Decorator to skip fields unconditionally (computed/read-only fields)"""
+    def handler(t1, tt1, tt2, flag1, flag2):
+        return BaseResourceHandler.skip_fields(t1, tt1, tt2, flag1, flag2, fields)
     return handler

@@ -543,7 +543,7 @@ def check_terraform_version(timed_interrupt):
     if "." not in tvr:
         log.error("Unexpected Terraform version "+str(tvr))
         timed_interrupt.stop_timer()
-        os._exit(1)
+        sys.exit(1)
     
     tv = str(rout.stdout.decode().rstrip()).split("rm v")[-1].split("\n")[0]
     tvmaj = int(tv.split(".")[0])
@@ -552,12 +552,12 @@ def check_terraform_version(timed_interrupt):
     if tvmaj < 1:
         log.error("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
         timed_interrupt.stop_timer()
-        os._exit(1)
+        sys.exit(1)
     
     if tvmaj == 1 and tvmin < 8:
         log.error("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
         timed_interrupt.stop_timer()
-        os._exit(1)
+        sys.exit(1)
     
     return tv
 
@@ -696,6 +696,7 @@ def setup_workspace(args, region):
     
     # Initialize terraform
     context.tracking_message = "Stage 1 of 10, Terraform Initialise ..."
+    log.info("Stage 1 of 10, Terraform Initialise ...")
     common.aws_tf(region, args)
     
     # Verify terraform initialized
@@ -772,7 +773,7 @@ def process_resource_types(type, id):
     
     log.info("---<><> "+ str(type)+" Id="+str(id)+" exclude="+str(context.all_extypes))
     context.tracking_message = "Stage 3 of 10 getting resources ..."
-    
+    log.info("Stage 3 of 10 getting resources ...")
     # Handle comma-separated types
     if "," in type:
         process_multiple_types(type, id, timed_interrupt)
@@ -882,7 +883,7 @@ def process_multiple_resource_types(all_types, id):
     if context.fast:
         # Multi-threaded processing
         context.tracking_message = "Stage 3 of 10 getting "+str(it)+" resources multi-threaded"
-        log.info(f"Processing {it} resource types (multi-threaded)...")
+        log.info(f"Stage 3 of 10, Processing {it} resource types (multi-threaded)...")
         
         with ThreadPoolExecutor(max_workers=context.cores) as executor:
             futures = [
@@ -913,6 +914,7 @@ def process_multiple_resource_types(all_types, id):
             
             log.debug(str(ic)+" of "+str(it) +"\t"+i)
             context.tracking_message = "Stage 3 of 10, "+ str(ic)+" of "+str(it) +" resource types \t currently getting "+i
+            
             common.call_resource(i, id)
 
 
@@ -929,13 +931,13 @@ def process_single_resource_type(all_types, resource_type, id, timed_interrupt):
         context.tracking_message = "Stage 3 of 10 no resources found exiting ..."
         log.info("exit 009")
         timed_interrupt.stop_timer()
-        exit()
+        sys.exit(1)
 
 
 def process_known_dependencies():
     """Process known dependencies (Stage 4)."""
     context.tracking_message = "Stage 4 of 10, Known Dependancies"
-    log.info("Known Dependancies - Multi Threaded")
+    log.info("Stage 4 of 10, Known Dependancies - Multi Threaded")
     
     if context.fast:
         context.tracking_message = "Stage 4 of 10, Known Dependancies - Multi Threaded "+str(context.cores)
@@ -978,7 +980,7 @@ def process_detected_dependencies():
         log.debug("\naws2tf Detected Dependancies started at %s\n" % now)
     
     context.tracking_message = "Stage 5 of 10, Detected Dependancies: starting"
-    
+    log.info("Stage 5 of 10, Detected Dependancies: starting")
     # Check if there are detected dependencies
     detdep = False
     for ti in context.rproc.keys():
@@ -1104,7 +1106,7 @@ def validate_and_import():
         log.info("\nValidation only - no files written")
         log.info("exit 012")
         timed_interrupt.stop_timer()
-        exit()
+        sys.exit(1)
 
 
 def finalize_and_cleanup(args, starttime):

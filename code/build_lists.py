@@ -10,7 +10,7 @@ log = logging.getLogger('aws2tf')
 
 
 def build_lists():
-    log.info("Building core resource lists ...")
+    log.info("Stage 2 of 10, Building core resource lists ...")
     context.tracking_message="Stage 2 of 10, Building core resource lists ..."
     
     
@@ -24,7 +24,7 @@ def build_lists():
                 response.extend(page['Functions'])
             return [('lambda', j['FunctionName']) for j in response]
         except Exception as e:
-            log.error("Error fetching Lambda data: %s %s",  e)
+            log.error("Error fetching Lambda data: %s",  e)
             return []
       
     
@@ -38,7 +38,7 @@ def build_lists():
             context.vpcs=response
             return [('vpc', j['VpcId']) for j in response]
         except Exception as e:
-            log.error("Error fetching ec2 data: %s %s",  e)
+            log.error("Error fetching ec2 data: %s",  e)
             return []
     
     def fetch_s3_data():
@@ -50,7 +50,7 @@ def build_lists():
                 response.extend(page['Buckets'])
             return [('s3', j['Name']) for j in response]
         except Exception as e:
-            log.error("Error fetching s3 data: %s %s",  e)
+            log.error("Error fetching s3 data: %s",  e)
             return []
 
     def fetch_sg_data():
@@ -62,7 +62,7 @@ def build_lists():
                 response.extend(page['SecurityGroups'])
             return [('sg', j['GroupId']) for j in response]
         except Exception as e:
-            log.error("Error fetching SG data: %s %s",  e)
+            log.error("Error fetching SG data: %s",  e)
             return []
         
 
@@ -79,7 +79,7 @@ def build_lists():
                json.dump(response, f, indent=2, default=str)
             return [('subnet', j['SubnetId']) for j in response]
         except Exception as e:
-            log.error("Error fetching vpc data: %s %s",  e)
+            log.error("Error fetching vpc data: %s",  e)
             return []
 
     def fetch_tgw_data():
@@ -91,7 +91,7 @@ def build_lists():
                 response.extend(page['TransitGateways'])
             return [('tgw', j['TransitGatewayId']) for j in response]
         except Exception as e:
-            log.error("Error fetching transit gateways: %s %s",  e)
+            log.error("Error fetching transit gateways: %s",  e)
             return []
 
     def fetch_roles_data():
@@ -106,7 +106,7 @@ def build_lists():
                json.dump(response, f, indent=2, default=str)
             return [('iam', j['RoleName']) for j in response]
         except Exception as e:
-            log.error("Error fetching vpc data: %s %s",  e)
+            log.error("Error fetching vpc data: %s",  e)
             return []
     
     def fetch_policies_data():
@@ -118,7 +118,7 @@ def build_lists():
                 response.extend(page['Policies'])
             return [('pol', j['Arn']) for j in response]
         except Exception as e:
-            log.error("Error fetching vpc data: %s %s",  e)
+            log.error("Error fetching vpc data: %s",  e)
             return []
 
     def fetch_instprof_data():
@@ -130,7 +130,19 @@ def build_lists():
                 response.extend(page['InstanceProfiles'])
             return [('inp', j['InstanceProfileName']) for j in response]
         except Exception as e:
-            log.error("Error fetching vpc data: %s %s",  e)
+            log.error("Error fetching vpc data: %s",  e)
+            return []
+
+    def fetch_launch_templates():
+        try:
+            client = boto3.client('ec2')
+            response = []
+            paginator = client.get_paginator('describe_launch_templates')
+            for page in paginator.paginate():
+                response.extend(page['LaunchTemplates'])
+            return [('lt', j['LaunchTemplateId']) for j in response]
+        except Exception as e:
+            log.error("Error fetching launch templates: %s", e)
             return []
 
 
@@ -144,7 +156,8 @@ def build_lists():
         ('Transit gateways', fetch_tgw_data),
         ('IAM roles', fetch_roles_data),
         ('IAM policies', fetch_policies_data),
-        ('Instance profiles', fetch_instprof_data)
+        ('Instance profiles', fetch_instprof_data),
+        ('Launch templates', fetch_launch_templates)
     ]
     
     with concurrent.futures.ThreadPoolExecutor(max_workers=context.cores) as executor:
@@ -156,8 +169,8 @@ def build_lists():
         
         # Process results with progress bar
         with tqdm(total=len(fetch_tasks),
-                 desc="Fetching resource lists",
-                 unit="type",leave=False) as pbar:
+            desc="Fetching resource lists",
+            unit="type",leave=False) as pbar:
             
             for future in concurrent.futures.as_completed(future_to_name):
                 resource_name = future_to_name[future]
@@ -212,6 +225,10 @@ def build_lists():
                         elif resource_type == 'inp':
                             for _, inst_prof in result:
                                 context.inplist[inst_prof] = True
+
+                        elif resource_type == 'lt':
+                            for _, lt_id in result:
+                                context.ltlist[lt_id] = True
                     else:
                         # Handle roles data
                         with open('imported/roles.json', 'w') as f:

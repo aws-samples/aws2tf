@@ -590,6 +590,7 @@ def get_file_permissions_info() -> dict:
 #####################
 
 from get_aws_resources import aws_acm
+from get_aws_resources import aws_amp
 from get_aws_resources import aws_amplify
 from get_aws_resources import aws_athena
 from get_aws_resources import aws_autoscaling
@@ -602,11 +603,13 @@ from get_aws_resources import aws_batch
 from get_aws_resources import aws_backup
 from get_aws_resources import aws_bedrock
 from get_aws_resources import aws_bedrock_agent
+from get_aws_resources import aws_bedrock_agentcore_control
 from get_aws_resources import aws_cleanrooms
 from get_aws_resources import aws_cloud9
 from get_aws_resources import aws_cloudformation
 from get_aws_resources import aws_cloudfront
 from get_aws_resources import aws_cloudtrail
+from get_aws_resources import aws_cloudwatch
 from get_aws_resources import aws_codebuild
 from get_aws_resources import aws_codecommit
 from get_aws_resources import aws_codeartifact
@@ -649,15 +652,18 @@ from get_aws_resources import aws_neptune
 from get_aws_resources import aws_network_firewall
 from get_aws_resources import aws_networkmanager
 from get_aws_resources import aws_organizations
+from get_aws_resources import aws_opensearchserverless
 from get_aws_resources import aws_ram
 from get_aws_resources import aws_rds
 from get_aws_resources import aws_redshift
 from get_aws_resources import aws_redshift_serverless
 from get_aws_resources import aws_resource_explorer_2
 from get_aws_resources import aws_route53
+from get_aws_resources import aws_route53resolver
 from get_aws_resources import aws_s3
 from get_aws_resources import aws_s3control
 from get_aws_resources import aws_s3tables
+from get_aws_resources import aws_s3vectors
 from get_aws_resources import aws_sagemaker
 from get_aws_resources import aws_schemas
 from get_aws_resources import aws_scheduler
@@ -667,6 +673,7 @@ from get_aws_resources import aws_servicecatalog
 from get_aws_resources import aws_servicediscovery
 from get_aws_resources import aws_shield
 from get_aws_resources import aws_ses
+from get_aws_resources import aws_signer
 from get_aws_resources import aws_sns
 from get_aws_resources import aws_sqs
 from get_aws_resources import aws_ssm
@@ -675,6 +682,7 @@ from get_aws_resources import aws_transfer
 from get_aws_resources import aws_vpc_lattice
 from get_aws_resources import aws_waf
 from get_aws_resources import aws_wafv2
+from get_aws_resources import aws_workspaces_web
 from get_aws_resources import aws_xray
 
 from fixtf_aws_resources import needid_dict
@@ -685,6 +693,7 @@ from fixtf_aws_resources import aws_not_implemented
 # This prevents arbitrary code execution via eval()
 AWS_RESOURCE_MODULES = {
     'acm': aws_acm,
+    'amp': aws_amp,
     'amplify': aws_amplify,
     'athena': aws_athena,
     'autoscaling': aws_autoscaling,
@@ -699,11 +708,13 @@ AWS_RESOURCE_MODULES = {
     'bedrock': aws_bedrock,
     'bedrock-agent': aws_bedrock_agent,
     'bedrock_agent': aws_bedrock_agent,
+    'bedrock-agentcore-control': aws_bedrock_agentcore_control,
     'cleanrooms': aws_cleanrooms,
     'cloud9': aws_cloud9,
     'cloudformation': aws_cloudformation,
     'cloudfront': aws_cloudfront,
     'cloudtrail': aws_cloudtrail,
+    'cloudwatch': aws_cloudwatch,
     'codebuild': aws_codebuild,
     'codecommit': aws_codecommit,
     'codeartifact': aws_codeartifact,
@@ -753,6 +764,7 @@ AWS_RESOURCE_MODULES = {
     'network_firewall': aws_network_firewall,
     'networkmanager': aws_networkmanager,
     'organizations': aws_organizations,
+    'opensearchserverless': aws_opensearchserverless,
     'ram': aws_ram,
     'rds': aws_rds,
     'redshift': aws_redshift,
@@ -761,9 +773,11 @@ AWS_RESOURCE_MODULES = {
     'resource-explorer-2': aws_resource_explorer_2,
     'resource_explorer_2': aws_resource_explorer_2,
     'route53': aws_route53,
+    'route53resolver': aws_route53resolver,
     's3': aws_s3,
     's3control': aws_s3control,
     's3tables': aws_s3tables,
+    's3vectors': aws_s3vectors,
     'sagemaker': aws_sagemaker,
     'schemas': aws_schemas,
     'scheduler': aws_scheduler,
@@ -773,6 +787,7 @@ AWS_RESOURCE_MODULES = {
     'servicediscovery': aws_servicediscovery,
     'shield': aws_shield,
     'ses': aws_ses,
+    'signer': aws_signer,
     'sns': aws_sns,
     'sqs': aws_sqs,
     'ssm': aws_ssm,
@@ -783,6 +798,7 @@ AWS_RESOURCE_MODULES = {
     'vpc_lattice': aws_vpc_lattice,
     'waf': aws_waf,
     'wafv2': aws_wafv2,
+    'workspaces-web': aws_workspaces_web,
     'xray': aws_xray,
 }
 
@@ -927,9 +943,9 @@ def tfplan1(mymess):
       log.info("INFO: No import*.tf files found - nothing to import, exiting ....")
       log.info("INFO: Confirm the resource type exists in your account: "+context.acc+" & region: "+context.region)
       context.tracking_message="No import*.tf files found for this resource, exiting ...."
-      if timed_int is not None:
-         stop_timer()
-      os._exit(0)
+      stop_timer()
+      # Use sys.exit to allow proper cleanup of threading resources
+      sys.exit(0)
 
    com = "cp imported/provider.tf provider.tf"
    rout = rc(com)
@@ -1147,7 +1163,7 @@ def tfplan3():
 
    if context.plan2:
 
-      log.info("Penultimate Terraform Plan ... ")
+      log.info("Stage 7 of 10, Penultimate Terraform Plan ... ")
       context.tracking_message="Stage 7 of 10, Penultimate Terraform Plan ..."
       # redo plan
 
@@ -1208,7 +1224,7 @@ def tfplan3():
          log.error("-->> look at plan2.json - or run terraform plan")
          log.info("exit 022")
          stop_timer()
-         exit()
+         sys.exit(1)
 
       if zeroc != 0:
          # decide if to ignore ot not
@@ -1218,6 +1234,8 @@ def tfplan3():
          allowedchange = False
          nchanges = 0
          nallowedchanges = 0
+         all_force_destroy_only = True  # Track if all changes are force_destroy only
+         
          with open('plan2.json') as f:
             for jsonObj in f:
                planDict = json.loads(jsonObj)
@@ -1226,8 +1244,37 @@ def tfplan3():
             if pe['type'] == "planned_change" and pe['change']['action'] == "update":
                nchanges = nchanges+1
                ctype = pe['change']['resource']['resource_type']
+               caddr = pe['change']['resource']['addr']
+               
+               # Check if only force_destroy is changing
+               force_destroy_only = False
+               try:
+                  # Run terraform plan and grep for force_destroy
+                  plan_output = subprocess.run(['terraform', 'plan'], 
+                                             capture_output=True, text=True, check=True)
+                  grep_output = subprocess.run(['grep', 'force_destroy'], 
+                                             input=plan_output.stdout,
+                                             capture_output=True, text=True)
+                  
+                  # Count lines with force_destroy
+                  force_destroy_lines = [line.strip() for line in grep_output.stdout.split('\n') if line.strip()]
+                  
+                  # If we found force_destroy lines and the count matches the number of changes, it's safe
+                  if force_destroy_lines and len(force_destroy_lines) == nchanges:
+                     force_destroy_only = True
+                     log.info("Only force_destroy changes detected (count matches)")
+                  else:
+                     all_force_destroy_only = False
+                     if context.debug:
+                        log.debug("force_destroy lines: %d, nchanges: %d", len(force_destroy_lines), nchanges)
+               except Exception as e:
+                  all_force_destroy_only = False
+                  if context.debug:
+                     log.debug("Could not parse terraform plan output: %s", e)
+               
                if ctype == "aws_lb_listener" or ctype == "aws_cognito_user_pool_client" \
-                  or ctype=="aws_bedrockagent_agent" or ctype=="aws_bedrockagent_agent_action_group":
+                  or ctype=="aws_bedrockagent_agent" or ctype=="aws_bedrockagent_agent_action_group" \
+                  or force_destroy_only:
                   
                   changeList.append(pe['change']['resource']['addr'])
                   log.info("Planned changes found in Terraform Plan for type: " +
@@ -1235,6 +1282,7 @@ def tfplan3():
                   allowedchange = True
                   nallowedchanges = nallowedchanges+1
                else:
+                  all_force_destroy_only = False
                   log.warning("Unexpected plan changes found in Terraform Plan for resource: " +
                         str(pe['change']['resource']['addr']))
          if nchanges == nallowedchanges:
@@ -1249,6 +1297,11 @@ def tfplan3():
                log.info(str(ci)+": "+str(i))
                ci = ci+1
             log.info("\n")
+
+            # Auto-accept if all changes are force_destroy only
+            if all_force_destroy_only and nchanges > 0:
+               log.info("All changes are force_destroy only - automatically continuing")
+               context.expected = True
 
             if context.expected is False:
                log.info("You can check the changes by running 'terraform plan' in %s\n", context.path1)
@@ -1336,7 +1389,7 @@ def tfplan3():
       log.error("Plan - could not find expected tfplan file - exiting")
       log.info("exit 031")
       stop_timer()
-      exit()
+      sys.exit(1)
 
    #if context.merge:
    #   exit()
@@ -1344,7 +1397,7 @@ def tfplan3():
 
 def wrapup():
    ### copy predefined import files
-   log.info("Final Terraform Validation")
+   log.info("Stage 8 of 10, Final Terraform Validation")
    context.tracking_message="Stage 8 of 10, Final Terraform Validation"
    com = "terraform validate -no-color"
    rout = rc(com)
@@ -1368,7 +1421,7 @@ def wrapup():
          stop_timer()
          exit()
       
-   log.info("Terraform import via apply of tfplan....")
+   log.info("Stage 9 of 10, Terraform import via apply of tfplan....")
    context.tracking_message="Stage 9 of 10, Terraform import via apply of tfplan...."
    
    # Use progress bar for terraform apply
@@ -1418,7 +1471,7 @@ def wrapup():
 
 
          
-   log.info("\nPost Import Plan Check .....")
+   log.info("\nStage 10 of 10, Post Import Plan Check .....")
    context.tracking_message="Stage 10 of 10, Post Import Plan Check ....."
    com = "terraform plan -no-color -out tfplan -json > final.json"
    # Get reference file size for progress estimation
@@ -1664,7 +1717,7 @@ def aws_tf(region,args):
          f3.write('state = "available"\n')
          f3.write('}\n')
    if not context.merge:
-      log.info("terraform init")
+      #log.info("terraform init")
       com = "terraform init -no-color -upgrade"
       rout = rc(com)
       el = len(rout.stderr.decode().rstrip())
@@ -2326,22 +2379,22 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
 
    elif "NotFoundException" in exn:
       if frame.startswith("get_"):
-         log.warning("NOT FOUND: "+frame.split("get_")[1]+" "+str(id)+" check if it exists and what references it - returning")
+         log.debug("NOT FOUND: "+frame.split("get_")[1]+" "+str(id)+" check if it exists and what references it - returning")
          pkey=frame.split("get_")[1]+"."+str(id)
          if "aws_glue_catalog_database" in pkey:
             pkey=frame.split("get_")[1]+"."+context.acc+":"+id
          context.rproc[pkey]=True
       else:
-         log.warning("NOT FOUND: "+frame+" "+id+" check if it exists - returning")
+         log.debug("NOT FOUND: "+frame+" "+id+" check if it exists - returning")
       return    
 
    elif exn=="ResourceNotFoundException" or exn=="EntityNotFoundException" or exn=="NoSuchEntityException" or exn=="NotFoundException" or exn=="LoadBalancerNotFoundException" or exn=="NamespaceNotFound" or exn=="NoSuchHostedZone":
       if frame.startswith("get_"):
-         log.warning("RESOURCE NOT FOUND: "+frame.split("get_")[1]+" "+str(id)+" check if it exists and what references it - returning")
+         log.debug("NOT FOUND: "+frame.split("get_")[1]+" "+str(id)+" check if it exists and what references it - returning")
          pkey=frame.split("get_")[1]+"."+str(id)
          context.rproc[pkey]=True
       else:
-         log.warning("RESOURCE NOT FOUND: "+frame+" "+str(id)+" check if it exists - returning")
+         log.debug("RESOURCE NOT FOUND: "+frame+" "+str(id)+" check if it exists - returning")
       return    
    
    elif exn == "KeyError":
@@ -2407,8 +2460,8 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    log.error("stopping process ...")
    #threading.
    stop_timer()
-   os._exit(1)
-   exit()
+   sys.exit(1)
+   
 
 def handle_error2(e,frame,id):
    log.error("\nERROR: in "+frame)
@@ -2427,8 +2480,8 @@ def handle_error2(e,frame,id):
       f.write("-----------------------------------------------------------------------------\n")
    log.info("exit 042")
    stop_timer()
-   os._exit(1)
-   exit()
+   sys.exit(1)
+
 
 
 
@@ -2462,10 +2515,10 @@ def upload_directory_to_s3():
    local_directory="/tmp/aws2tf/generated/tf-"+context.pathadd+context.acc+"-"+context.region
    bucket_name="aws2tf-"+context.acc+"-"+context.region
    s3_prefix=''
-   log.info("Calling create_bucket_if_not_exists for %s %s",  bucket_name)
+   log.info("Calling create_bucket_if_not_exists for %s",  bucket_name)
    bret=create_bucket_if_not_exists(bucket_name)
    if bret:
-      log.info("Upload files to s3 %s %s",  bucket_name)
+      log.info("Upload files to s3 %s",  bucket_name)
       for root, dirs, files in os.walk(local_directory):
          if '.terraform' in dirs:  dirs.remove('.terraform')
          if 'tfplan' in files: files.remove('tfplan')
@@ -2484,7 +2537,7 @@ def upload_directory_to_s3():
                   return False
       log.info("Upload to S3 complete.")
    else:
-      log.error("Upload to S3 failed - False return from create_bucket_if_not_exists for %s %s",  bucket_name)
+      log.error("Upload to S3 failed - False return from create_bucket_if_not_exists for %s",  bucket_name)
       return False
 
 def empty_and_delete_bucket():
@@ -2492,7 +2545,7 @@ def empty_and_delete_bucket():
     s3 = boto3.resource('s3')
     s3_client = boto3.client('s3')
     bucket = s3.Bucket(bucket_name)
-    log.info("Emptying and deleting bucket... %s %s",  bucket_name)
+    log.info("Emptying and deleting bucket... %s",  bucket_name)
     # Check if the bucket exists
     try:
         s3_client.head_bucket(Bucket=bucket_name)

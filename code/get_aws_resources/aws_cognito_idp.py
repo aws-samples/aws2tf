@@ -38,10 +38,10 @@ def get_aws_cognito_user_group(type, id, clfn, descfn, topkey, key, filterid):
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         if id is None: 
-            log_warning("Warrning must pass UserPoolId as parameter for"+type); 
+            common.log_warning("Warrning must pass UserPoolId as parameter for"+type); 
             return True
         if ":" in id:
-            log.info("Unexpected id in "+type+" id="+id)
+            common.log_warning("Unexpected id in "+type+" id="+id)
             return True
         response = []
         client = boto3.client(clfn)
@@ -67,10 +67,10 @@ def get_aws_cognito_user_pool_client(type, id, clfn, descfn, topkey, key, filter
               " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
     try:
         if id is None: 
-            log_warning("Warrning must pass UserPoolId as parameter for"+type); 
+            common.log_warning("Warrning must pass UserPoolId as parameter for"+type); 
             return True
         if ":" in id:
-            log.info("Unexpected id in "+type+" id="+id)
+            common.log_warning("Unexpected id in "+type+" id="+id)
             return True
         response = []
         client = boto3.client(clfn)

@@ -4,15 +4,50 @@ AMP Resource Handlers - Optimized with __getattr__
 This file contains ONLY AMP resources with custom transformation logic.
 All other resources automatically use the default handler via __getattr__.
 
-Original: 0 functions
-Optimized: 0 functions + __getattr__
+Original: 2 functions
+Optimized: 2 functions + __getattr__
 Reduction: 0% less code
 """
 
 import logging
+import common
+import context
 from .base_handler import BaseResourceHandler
 
 log = logging.getLogger('aws2tf')
+
+
+# ============================================================================
+# AMP Resources with Custom Logic (1 function)
+# ============================================================================
+
+def aws_prometheus_query_logging_configuration(t1, tt1, tt2, flag1, flag2):
+	skip = 0
+	
+	# Transform workspace_id field and add workspace as dependency
+	if tt1 == "workspace_id" and tt2 != "null":
+		workspace_id = tt2.strip('"')
+		# Construct ARN-based resource name for workspace
+		# Format: arn_aws_aps_us-east-1_566972129213_workspace_ws-<id>
+		# We need to get the ARN, but we only have workspace ID
+		# For now, add dependency with workspace ID and let aws2tf handle it
+		t1="workspace_id = aws_prometheus_workspace."+workspace_id+".id\n"
+		common.add_dependancy("aws_prometheus_workspace", workspace_id)
+	
+	return skip, t1, flag1, flag2
+
+
+def aws_prometheus_resource_policy(t1, tt1, tt2, flag1, flag2):
+	skip = 0
+	
+	# Add lifecycle block to ignore JSON normalization drift
+	if tt1 == "workspace_id" and tt2 != "null":
+		workspace_id = tt2.strip('"')
+		t1 = tt1 + " = aws_prometheus_workspace." + workspace_id + ".id\n"
+		t1 = t1 + "\n lifecycle {\n   ignore_changes = [policy_document]\n}\n"
+		common.add_dependancy("aws_prometheus_workspace", workspace_id)
+	
+	return skip, t1, flag1, flag2
 
 
 # ============================================================================
@@ -26,11 +61,15 @@ def __getattr__(name):
 	This allows getattr(module, "aws_resource") to work even if the
 	function doesn't exist, by returning the default handler.
 	
-	All AMP resources automatically use this.
+	All other AMP resources automatically use this.
 	"""
 	if name.startswith("aws_"):
 		return BaseResourceHandler.default_handler
 	raise AttributeError(f"module 'fixtf_amp' has no attribute '{name}'")
 
 
-log.debug(f"AMP handlers: __getattr__ for all 0 resources")
+log.debug(f"AMP handlers: 2 custom + __getattr__ for remaining resources")
+
+
+
+

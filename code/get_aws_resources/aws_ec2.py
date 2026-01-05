@@ -1371,3 +1371,124 @@ def get_aws_verifiedaccess_endpoint(type, id, clfn, descfn, topkey, key, filteri
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
 
     return True
+
+
+def get_aws_vpc_block_public_access_exclusion(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        from botocore.config import Config
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all exclusions - not pageable, requires MaxResults
+            response = client.describe_vpc_block_public_access_exclusions(MaxResults=100)
+            for j in response[topkey]:
+                common.write_import(type, j[key], None)
+        else:
+            # Get specific exclusion
+            response = client.describe_vpc_block_public_access_exclusions(ExclusionIds=[id])
+            for j in response[topkey]:
+                common.write_import(type, j[key], None)
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    return True
+
+
+def get_aws_vpc_block_public_access_options(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        from botocore.config import Config
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        # This is a regional singleton - always use the region as the ID
+        region = context.region if hasattr(context, 'region') else 'us-east-1'
+        common.write_import(type, region, None)
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    return True
+
+
+def get_aws_ec2_allowed_images_settings(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        from botocore.config import Config
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        # This is a regional singleton - always use the region as the ID
+        region = context.region if hasattr(context, 'region') else 'us-east-1'
+        common.write_import(type, region, None)
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    return True
+
+
+def get_aws_ec2_default_credit_specification(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        from botocore.config import Config
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        # This resource is per instance family (t2, t3, t3a, t4g)
+        # Import ID is the instance family name
+        if id is None:
+            # List all burstable instance families
+            families = ["t2", "t3", "t3a", "t4g"]
+            for family in families:
+                common.write_import(type, family, None)
+        else:
+            # Specific instance family
+            common.write_import(type, id, None)
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    return True
+
+
+def get_aws_ec2_subnet_cidr_reservation(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        from botocore.config import Config
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all subnets and their CIDR reservations
+            paginator = client.get_paginator('describe_subnets')
+            for page in paginator.paginate():
+                for subnet in page['Subnets']:
+                    subnet_id = subnet['SubnetId']
+                    # Get CIDR reservations for this subnet
+                    try:
+                        reservations = client.get_subnet_cidr_reservations(SubnetId=subnet_id)
+                        for reservation in reservations.get('SubnetIpv4CidrReservations', []):
+                            reservation_id = reservation['SubnetCidrReservationId']
+                            # Build composite ID: subnet-id:reservation-id
+                            composite_id = f"{subnet_id}:{reservation_id}"
+                            common.write_import(type, composite_id, None)
+                    except Exception as e:
+                        if context.debug: log.debug(f"No reservations for subnet {subnet_id}: {e}")
+                        continue
+        else:
+            # Specific import - id should be composite: subnet-id:reservation-id
+            if ':' in id:
+                subnet_id, reservation_id = id.split(':', 1)
+                # Verify the reservation exists
+                try:
+                    reservations = client.get_subnet_cidr_reservations(SubnetId=subnet_id)
+                    for reservation in reservations.get('SubnetIpv4CidrReservations', []):
+                        if reservation['SubnetCidrReservationId'] == reservation_id:
+                            common.write_import(type, id, None)
+                            break
+                except Exception as e:
+                    if context.debug: log.debug(f"Error getting reservation {id}: {e}")
+            elif id.startswith('subnet-'):
+                # If just subnet ID provided, get all reservations for that subnet
+                try:
+                    reservations = client.get_subnet_cidr_reservations(SubnetId=id)
+                    for reservation in reservations.get('SubnetIpv4CidrReservations', []):
+                        reservation_id = reservation['SubnetCidrReservationId']
+                        composite_id = f"{id}:{reservation_id}"
+                        common.write_import(type, composite_id, None)
+                except Exception as e:
+                    if context.debug: log.debug(f"Error getting reservations for subnet {id}: {e}")
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    return True

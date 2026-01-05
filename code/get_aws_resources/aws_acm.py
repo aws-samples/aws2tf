@@ -23,7 +23,7 @@ def get_aws_acm_certificate(type, id, clfn, descfn, topkey, key, filterid):
                 if j['Status']=="ISSUED":
                     common.write_import(type,j[key],None) 
                 else:
-                    log.info("Skipping ACM Certificate "+str(j[key])+" as status is "+str(j['Status']))
+                    log.debug("Skipping ACM Certificate "+str(j[key])+" as status is "+str(j['Status']))
 
         elif id.startswith("arn:"):      
             response = client.describe_certificate(CertificateArn=id)

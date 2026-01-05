@@ -58,7 +58,7 @@ def aws_wafv2_web_acl(t1,tt1,tt2,flag1,flag2):
 				log.debug("empty rule %s %s %s", context.waf2nm, context.waf2sc, context.waf2id)
 		except Exception as e:
 			log.error("Error in get_web_acl %s", e)
-			os._exit(1)
+			sys.exit(1)
 
 
 	return skip,t1,flag1,flag2

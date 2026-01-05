@@ -1,32 +1,31 @@
+#!/usr/bin/env python3
 """
-CLOUDWATCH Resource Handlers - Optimized with __getattr__
-
-This file contains CLOUDWATCH resource handlers.
-All resources use the default handler via __getattr__.
-
-Auto-generated stub file.
+Handler for AWS CloudWatch resources
 """
 
-import logging
-from .base_handler import BaseResourceHandler
+import context
 
-log = logging.getLogger('aws2tf')
+def aws_cloudwatch_composite_alarm(t1, tt1, tt2, flag1, flag2):
+    """Handler for aws_cloudwatch_composite_alarm resource"""
+    skip = 0
+    return skip, t1, flag1, flag2
 
+def aws_cloudwatch_dashboard(t1, tt1, tt2, flag1, flag2):
+    """Handler for aws_cloudwatch_dashboard resource"""
+    skip = 0
+    return skip, t1, flag1, flag2
 
-# ============================================================================
-# Magic method for backward compatibility with getattr()
-# ============================================================================
+def aws_cloudwatch_contributor_managed_insight_rule(t1, tt1, tt2, flag1, flag2):
+    """Handler for aws_cloudwatch_contributor_managed_insight_rule resource"""
+    skip = 0
+    return skip, t1, flag1, flag2
 
-def __getattr__(name):
-	"""
-	Dynamically provide default handler for all CLOUDWATCH resources.
-	
-	This allows getattr(module, "aws_resource") to work by returning
-	the default handler for all resources.
-	"""
-	if name.startswith("aws_"):
-		return BaseResourceHandler.default_handler
-	raise AttributeError(f"module 'fixtf_cloudwatch' has no attribute '{name}'")
-
-
-log.debug(f"CLOUDWATCH handlers: __getattr__ for all resources")
+def aws_cloudwatch_event_connection(t1, tt1, tt2, flag1, flag2):
+    """Handler for aws_cloudwatch_event_connection resource"""
+    skip = 0
+    
+    # Replace sensitive null value with placeholder - it's write-only
+    if "value = null # sensitive" in t1:
+        t1 = t1.replace("value = null # sensitive", 'value = "PLACEHOLDER_VALUE_CHANGE_ME" # sensitive - original value not returned by API')
+    
+    return skip, t1, flag1, flag2

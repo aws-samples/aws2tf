@@ -62,7 +62,6 @@
 * AWS::CloudFront::Function
 * AWS::CloudFront::OriginRequestPolicy
 * AWS::CloudWatch::Alarm
-* AWS::CodeBuild::Project
 * AWS::CodeCommit::Repository
 * AWS::Cognito::UserPool
 * AWS::Cognito::UserPoolClient

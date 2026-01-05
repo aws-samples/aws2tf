@@ -10,6 +10,8 @@ Reduction: 0% less code
 """
 
 import logging
+import common
+import context
 from .base_handler import BaseResourceHandler
 
 log = logging.getLogger('aws2tf')
@@ -69,3 +71,13 @@ def __getattr__(name):
 
 
 log.debug(f"S3TABLES handlers: 2 custom functions + __getattr__ for 0 simple resources")
+
+
+def aws_s3tables_table_policy(t1, tt1, tt2, flag1, flag2):
+    skip = 0
+    
+    # Add lifecycle block to ignore resource_policy (JSON normalization issues)
+    if tt1 == "table_bucket_arn" and tt2 != "null":
+        t1 = t1 + "\n lifecycle {\n   ignore_changes = [resource_policy]\n}\n"
+    
+    return skip, t1, flag1, flag2

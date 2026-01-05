@@ -201,7 +201,7 @@ def get_all_s3_buckets(fb,my_region):
          #bucket_name=buck.name
          if "aws_s3_bucket,"+bucket_name in context.rproc:
             log.debug("Already processed skipping bucket " + bucket_name+ " (ST)")
-            os._exit(1)
+            sys.exit(1)
             continue
          # jump if bucket name does not match
          if fb is not None:

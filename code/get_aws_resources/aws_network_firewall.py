@@ -1,5 +1,6 @@
 import common
 import logging
+from common import log_warning
 log = logging.getLogger('aws2tf')
 import boto3
 from botocore.config import Config

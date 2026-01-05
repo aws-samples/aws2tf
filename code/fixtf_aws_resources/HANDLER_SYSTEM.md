@@ -287,6 +287,7 @@ This checks all optimized files against backups to ensure no custom logic was lo
 
 ### Pattern 1: Skip Zero Values
 
+**Manual approach (verbose):**
 ```python
 def aws_launch_template(t1, tt1, tt2, flag1, flag2):
     skip = 0
@@ -295,13 +296,79 @@ def aws_launch_template(t1, tt1, tt2, flag1, flag2):
     return skip, t1, flag1, flag2
 ```
 
+**Using convenience function (recommended):**
+```python
+def aws_launch_template(t1, tt1, tt2, flag1, flag2):
+    skip, t1, flag1, flag2 = BaseResourceHandler.skip_if_zero(
+        t1, tt1, tt2, flag1, flag2,
+        ['throughput']
+    )
+    return skip, t1, flag1, flag2
+```
+
+**Multiple fields example:**
+```python
+# Before: Manual checking for multiple fields
+def aws_autoscaling_group(t1, tt1, tt2, flag1, flag2):
+    skip = 0
+    if tt1 == "max_unavailable_percentage":
+        if tt2 == "0":
+            skip = 1
+    elif tt1 == "min_healthy_percentage":
+        if tt2 == "0":
+            skip = 1
+    elif tt1 == "default_cooldown":
+        if tt2 == "0":
+            skip = 1
+    return skip, t1, flag1, flag2
+
+# After: Using skip_if_zero with multiple fields
+def aws_autoscaling_group(t1, tt1, tt2, flag1, flag2):
+    skip, t1, flag1, flag2 = BaseResourceHandler.skip_if_zero(
+        t1, tt1, tt2, flag1, flag2,
+        ['max_unavailable_percentage', 'min_healthy_percentage', 'default_cooldown']
+    )
+    return skip, t1, flag1, flag2
+```
+
 ### Pattern 2: Skip Empty Arrays
 
+**Manual approach (verbose):**
 ```python
 def aws_security_group_rule(t1, tt1, tt2, flag1, flag2):
     skip = 0
     if tt1 == "cidr_blocks" and tt2 == "[]":
         skip = 1
+    return skip, t1, flag1, flag2
+```
+
+**Using convenience function (recommended):**
+```python
+def aws_security_group_rule(t1, tt1, tt2, flag1, flag2):
+    skip, t1, flag1, flag2 = BaseResourceHandler.skip_if_empty_array(
+        t1, tt1, tt2, flag1, flag2,
+        ['cidr_blocks']
+    )
+    return skip, t1, flag1, flag2
+```
+
+**Multiple fields example:**
+```python
+# Before: Manual checking
+def aws_instance(t1, tt1, tt2, flag1, flag2):
+    skip = 0
+    if tt1 == "security_group_names" and tt2 == "[]":
+        skip = 1
+    elif tt1 == "ipv6_addresses" and tt2 == "[]":
+        skip = 1
+    return skip, t1, flag1, flag2
+
+# After: Using skip_if_empty_array
+def aws_instance(t1, tt1, tt2, flag1, flag2):
+    skip, t1, flag1, flag2 = BaseResourceHandler.skip_if_empty_array(
+        t1, tt1, tt2, flag1, flag2,
+        ['security_group_names', 'ipv6_addresses']
+    )
     return skip, t1, flag1, flag2
 ```
 
@@ -328,6 +395,147 @@ def aws_iam_role(t1, tt1, tt2, flag1, flag2):
         skip = 1  # Skip name_prefix if name is set
     return skip, t1, flag1, flag2
 ```
+
+### Pattern 5: Combining Multiple Patterns
+
+When you need to handle multiple patterns in one handler, you have several options:
+
+**Option A: Use one convenience function for simple cases:**
+```python
+# If you only need to skip zero values, use the convenience function
+def aws_launch_template(t1, tt1, tt2, flag1, flag2):
+    skip, t1, flag1, flag2 = BaseResourceHandler.skip_if_zero(
+        t1, tt1, tt2, flag1, flag2,
+        ['throughput', 'max_entries', 'default_cooldown']
+    )
+    return skip, t1, flag1, flag2
+```
+
+**Option B: Chain multiple convenience functions:**
+```python
+# You can chain handlers by capturing and passing through the return values
+def aws_eks_node_group(t1, tt1, tt2, flag1, flag2):
+    # First check for zero values
+    skip, t1, flag1, flag2 = BaseResourceHandler.skip_if_zero(
+        t1, tt1, tt2, flag1, flag2,
+        ['max_unavailable_percentage', 'min_healthy_percentage']
+    )
+    
+    # If not skipped yet, check for empty arrays
+    if skip == 0:
+        skip, t1, flag1, flag2 = BaseResourceHandler.skip_if_empty_array(
+            t1, tt1, tt2, flag1, flag2,
+            ['security_group_ids', 'subnet_ids']
+        )
+    
+    # If not skipped yet, check for null values
+    if skip == 0:
+        skip, t1, flag1, flag2 = BaseResourceHandler.skip_if_null(
+            t1, tt1, tt2, flag1, flag2,
+            ['launch_template']
+        )
+    
+    return skip, t1, flag1, flag2
+```
+
+**Option C: Mix convenience functions with custom logic:**
+```python
+def aws_eks_node_group(t1, tt1, tt2, flag1, flag2):
+    # Use convenience function for common patterns
+    skip, t1, flag1, flag2 = BaseResourceHandler.skip_if_zero(
+        t1, tt1, tt2, flag1, flag2,
+        ['max_unavailable_percentage', 'min_healthy_percentage']
+    )
+    
+    # Add custom logic for resource references
+    if skip == 0 and tt1 == "cluster_name":
+        t1 = f'{tt1} = aws_eks_cluster.{tt2}.name\n'
+        common.add_dependancy("aws_eks_cluster", tt2)
+    
+    return skip, t1, flag1, flag2
+```
+
+**Option D: Write manual logic for complex cases:**
+```python
+# When logic is complex or doesn't fit convenience functions
+def aws_security_group(t1, tt1, tt2, flag1, flag2):
+    skip = 0
+    
+    if tt1 == "ingress" or context.lbc > 0:
+        # Complex multi-line block handling
+        if tt2 == "[]":
+            skip = 1
+        if "[" in t1:
+            context.lbc += 1
+        if "]" in t1:
+            context.lbc -= 1
+    
+    return skip, t1, flag1, flag2
+```
+
+**Key principle:** Always use the pattern `skip, t1, flag1, flag2 = BaseResourceHandler.x(...)` followed by `return skip, t1, flag1, flag2`. This allows you to chain multiple handlers and add custom logic before returning.
+
+### Pattern 6: Using Other Convenience Functions
+
+**Skip null fields:**
+```python
+def aws_lambda_function(t1, tt1, tt2, flag1, flag2):
+    skip, t1, flag1, flag2 = BaseResourceHandler.skip_if_null(
+        t1, tt1, tt2, flag1, flag2,
+        ['dead_letter_config', 'vpc_config']
+    )
+    return skip, t1, flag1, flag2
+```
+
+**Skip false boolean fields:**
+```python
+def aws_s3_bucket(t1, tt1, tt2, flag1, flag2):
+    skip, t1, flag1, flag2 = BaseResourceHandler.skip_if_false(
+        t1, tt1, tt2, flag1, flag2,
+        ['force_destroy', 'object_lock_enabled']
+    )
+    return skip, t1, flag1, flag2
+```
+
+**Skip computed/read-only fields unconditionally:**
+```python
+# Before: Manual checking
+def aws_vpc(t1, tt1, tt2, flag1, flag2):
+    skip = 0
+    if tt1 == "owner_id":
+        skip = 1
+    elif tt1 == "arn":
+        skip = 1
+    return skip, t1, flag1, flag2
+
+# After: Using skip_fields
+def aws_vpc(t1, tt1, tt2, flag1, flag2):
+    skip, t1, flag1, flag2 = BaseResourceHandler.skip_fields(
+        t1, tt1, tt2, flag1, flag2,
+        ['owner_id', 'arn']
+    )
+    return skip, t1, flag1, flag2
+```
+
+## Available Convenience Functions
+
+The base_handler.py module provides these utility functions:
+
+| Function | Purpose | Example |
+|----------|---------|---------|
+| `skip_if_zero(fields)` | Skip fields with value "0" | `['throughput', 'max_entries']` |
+| `skip_if_empty_array(fields)` | Skip fields with value "[]" | `['cidr_blocks', 'security_groups']` |
+| `skip_if_null(fields)` | Skip fields with value "null" | `['vpc_config', 'dead_letter_config']` |
+| `skip_if_false(fields)` | Skip fields with value "false" | `['force_destroy', 'enabled']` |
+| `skip_fields(fields)` | Skip fields unconditionally (any value) | `['owner_id', 'arn', 'id']` |
+| `add_resource_reference()` | Create Terraform resource reference | `add_resource_reference(t1, tt1, tt2, "vpc", "id")` |
+| `add_lifecycle_ignore()` | Add lifecycle ignore_changes block | `add_lifecycle_ignore(t1, ['user_data'])` |
+| `handle_arn_reference()` | Extract ID from ARN and create reference | `handle_arn_reference(t1, tt1, tt2, "iam_role")` |
+| `sanitize_resource_name()` | Clean resource name for Terraform | `sanitize_resource_name("my/resource:name")` |
+| `handle_name_prefix()` | Skip name_prefix if name is set | `handle_name_prefix(t1, tt1, tt2, flag1, flag2)` |
+| `handle_array_block()` | Handle multi-line array blocks | `handle_array_block(t1, tt1, tt2, flag1, flag2, "ingress")` |
+
+**Usage tip:** Always prefer these convenience functions over manual if/elif chains. They're more maintainable, less error-prone, and easier to read.
 
 ## Troubleshooting
 

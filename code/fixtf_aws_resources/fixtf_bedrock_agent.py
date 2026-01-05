@@ -21,12 +21,11 @@ log = logging.getLogger('aws2tf')
 
 def aws_bedrockagent_agent(t1,tt1,tt2,flag1,flag2):
 
-
 	skip=0
 	if tt1=="skip_resource_in_use_check" and tt2=="null":
 		t1 = tt1+" = false\n"
 	elif tt1=="agent_name":
-		t1 = t1 + "\n lifecycle {\n   ignore_changes = [skip_resource_in_use_check]\n}\n"
+		t1 = t1 + "\n lifecycle {\n   ignore_changes = [skip_resource_in_use_check, prepared_at]\n}\n"
 	
 	return skip,t1,flag1,flag2
 

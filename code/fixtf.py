@@ -38,6 +38,7 @@ from fixtf_aws_resources import fixtf_backup
 from fixtf_aws_resources import fixtf_batch
 from fixtf_aws_resources import fixtf_bedrock
 from fixtf_aws_resources import fixtf_bedrock_agent
+from fixtf_aws_resources import fixtf_bedrock_agentcore_control
 from fixtf_aws_resources import fixtf_billingconductor
 from fixtf_aws_resources import fixtf_budgets
 from fixtf_aws_resources import fixtf_ce
@@ -52,6 +53,7 @@ from fixtf_aws_resources import fixtf_cloudfront
 from fixtf_aws_resources import fixtf_cloudhsmv2
 from fixtf_aws_resources import fixtf_cloudsearch
 from fixtf_aws_resources import fixtf_cloudtrail
+from fixtf_aws_resources import fixtf_cloudwatch
 from fixtf_aws_resources import fixtf_logs
 from fixtf_aws_resources import fixtf_codeartifact
 from fixtf_aws_resources import fixtf_codebuild
@@ -149,8 +151,10 @@ from fixtf_aws_resources import fixtf_mq
 from fixtf_aws_resources import fixtf_mwaa
 from fixtf_aws_resources import fixtf_neptune
 from fixtf_aws_resources import fixtf_network_firewall
+from fixtf_aws_resources import fixtf_networkflowmonitor
 from fixtf_aws_resources import fixtf_networkmanager
 from fixtf_aws_resources import fixtf_opensearch
+from fixtf_aws_resources import fixtf_opensearchserverless
 from fixtf_aws_resources import fixtf_opsworks
 from fixtf_aws_resources import fixtf_organizations
 from fixtf_aws_resources import fixtf_outposts
@@ -179,6 +183,7 @@ from fixtf_aws_resources import fixtf_s3
 from fixtf_aws_resources import fixtf_s3control
 from fixtf_aws_resources import fixtf_s3outposts
 from fixtf_aws_resources import fixtf_s3tables
+from fixtf_aws_resources import fixtf_s3vectors
 from fixtf_aws_resources import fixtf_sagemaker
 from fixtf_aws_resources import fixtf_scheduler
 from fixtf_aws_resources import fixtf_schemas
@@ -214,6 +219,7 @@ from fixtf_aws_resources import fixtf_waf_regional
 from fixtf_aws_resources import fixtf_wafv2
 from fixtf_aws_resources import fixtf_worklink
 from fixtf_aws_resources import fixtf_workspaces
+from fixtf_aws_resources import fixtf_workspaces_web
 from fixtf_aws_resources import fixtf_xray
 
 # Security Fix #2: Module registry to replace eval()
@@ -243,6 +249,7 @@ FIXTF_MODULES = {
     'fixtf_batch': fixtf_batch,
     'fixtf_bedrock': fixtf_bedrock,
     'fixtf_bedrock_agent': fixtf_bedrock_agent,
+    'fixtf_bedrock_agentcore_control': fixtf_bedrock_agentcore_control,
     'fixtf_billingconductor': fixtf_billingconductor,
     'fixtf_budgets': fixtf_budgets,
     'fixtf_ce': fixtf_ce,
@@ -257,6 +264,7 @@ FIXTF_MODULES = {
     'fixtf_cloudhsmv2': fixtf_cloudhsmv2,
     'fixtf_cloudsearch': fixtf_cloudsearch,
     'fixtf_cloudtrail': fixtf_cloudtrail,
+    'fixtf_cloudwatch': fixtf_cloudwatch,
     'fixtf_logs': fixtf_logs,
     'fixtf_codeartifact': fixtf_codeartifact,
     'fixtf_codebuild': fixtf_codebuild,
@@ -354,8 +362,10 @@ FIXTF_MODULES = {
     'fixtf_mwaa': fixtf_mwaa,
     'fixtf_neptune': fixtf_neptune,
     'fixtf_network_firewall': fixtf_network_firewall,
+    'fixtf_networkflowmonitor': fixtf_networkflowmonitor,
     'fixtf_networkmanager': fixtf_networkmanager,
     'fixtf_opensearch': fixtf_opensearch,
+    'fixtf_opensearchserverless': fixtf_opensearchserverless,
     'fixtf_opsworks': fixtf_opsworks,
     'fixtf_organizations': fixtf_organizations,
     'fixtf_outposts': fixtf_outposts,
@@ -384,6 +394,7 @@ FIXTF_MODULES = {
     'fixtf_s3control': fixtf_s3control,
     'fixtf_s3outposts': fixtf_s3outposts,
     'fixtf_s3tables': fixtf_s3tables,
+    'fixtf_s3vectors': fixtf_s3vectors,
     'fixtf_sagemaker': fixtf_sagemaker,
     'fixtf_scheduler': fixtf_scheduler,
     'fixtf_schemas': fixtf_schemas,
@@ -419,6 +430,7 @@ FIXTF_MODULES = {
     'fixtf_wafv2': fixtf_wafv2,
     'fixtf_worklink': fixtf_worklink,
     'fixtf_workspaces': fixtf_workspaces,
+    'fixtf_workspaces_web': fixtf_workspaces_web,
     'fixtf_xray': fixtf_xray,
 }
 
@@ -487,7 +499,7 @@ def fixtf(ttft,tf):
     if ttft=="aws_s3_bucket_replication_configuration":
         for t1 in Lines:
             t1=t1.strip()
-            if context.debug5: log.debug("DEBUG5: pre scan block1 : t1=%s %s",  t1)
+            if context.debug5: log.debug("DEBUG5: pre scan block1 : t1=%s",  t1)
             skip=0
             tt1=t1.split("=")[0].strip()
             if tt1=="bucket":
@@ -495,7 +507,7 @@ def fixtf(ttft,tf):
                     tt2=t1.split("=")[1].strip().strip('\"')
                     if "arn:aws:s3" in tt2:
                         tt2=tt2.split(":")[-1]
-                        if context.debug5: log.debug("DEBUG5: pre scan block 2: common.add_dep bucket_name=%s %s",  tt2)
+                        if context.debug5: log.debug("DEBUG5: pre scan block 2: common.add_dep bucket_name=%s",  tt2)
                         common.add_dependancy("aws_s3_bucket", tt2)
                 except:
                     tt2=""
@@ -794,7 +806,7 @@ def aws_resource(t1,tt1,tt2,flag1,flag2):
 
 # generic replace of acct and region in arn
 def globals_replace(t1,tt1,tt2):
-    if context.debug: log.debug("GR start:%s %s",  t1)
+    if context.debug: log.debug("GR start:%s",  t1)
     if "format(" in tt2: return t1
     ends=""
     tt2=tt2.replace("%", "%%")
@@ -994,7 +1006,7 @@ def deref_array(t1,tt1,tt2,ttft,prefix,skip):
         
     
     except Exception as e:  
-      log.error("t1=%s %s",  t1)
+      log.error("t1=%s",  t1)
       common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id) 
     
     return t1,skip
@@ -1163,7 +1175,7 @@ def deref_elb_arn_array(t1,tt1,tt2):
 
 #### other arn derefs here
 def generic_deref_arn(t1, tt1, tt2):
-    if context.debug: log.debug("Here %s %s",  t1)
+    if context.debug: log.debug("Here %s",  t1)
     try:
         if tt2.endswith("*"): return t1
         if context.debug: log.debug("*** generic "+t1)
@@ -1209,7 +1221,7 @@ def generic_deref_arn(t1, tt1, tt2):
 
     except Exception as e:  
       common.handle_error2(e,str(inspect.currentframe().f_code.co_name),id)     
-    log.debug("generic out = %s %s",  t1)
+    log.debug("generic out = %s",  t1)
     return t1
     if cc == 0:
         tarn=tt2

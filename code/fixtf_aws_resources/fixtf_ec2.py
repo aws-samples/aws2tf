@@ -138,8 +138,9 @@ def aws_instance(t1, tt1, tt2, flag1, flag2):
 		elif tt1 == "id":
 			flag2 = id
 			if tt2.startswith("lt-"):
-				t1 = tt1 + " = aws_launch_template." + tt2 + ".id\n"
-				common.add_dependancy("aws_launch_template", tt2)
+				if tt2 in str(context.ltlist.keys()):
+					t1 = tt1 + " = aws_launch_template." + tt2 + ".id\n"
+					common.add_dependancy("aws_launch_template", tt2)
 			flag1 = True
 		
 		elif tt1 == "name":
@@ -359,8 +360,9 @@ def aws_spot_fleet_request(t1, tt1, tt2, flag1, flag2):
 	if tt1 == "load_balancers" and tt2 == "null": skip = 1
 	elif tt1 == "target_group_arns" and tt2 == "null": skip = 1
 	elif tt1 == "id" and tt2.startswith("lt-"):
-		t1 = tt1 + " = aws_launch_template." + tt2 + ".id\n"
-		common.add_dependancy("aws_launch_template", tt2)
+		if tt2 in str(context.ltlist.keys()):
+			t1 = tt1 + " = aws_launch_template." + tt2 + ".id\n"
+			common.add_dependancy("aws_launch_template", tt2)
 	elif tt1 == "allocation_strategy" and tt2 != "null":
 		t1 = t1 + "\n lifecycle {\n   ignore_changes = [target_group_arns,load_balancers,wait_for_fulfillment]\n}\n"
 	elif tt1 == "key_name" and tt2 != "null":
@@ -488,3 +490,20 @@ def __getattr__(name):
 
 
 log.debug(f"EC2 handlers: 24 custom functions + __getattr__ for 104 simple resources")
+
+
+def aws_vpc_encryption_control(t1, tt1, tt2, flag1, flag2):
+    skip = 0
+    
+    # Set default exclusion fields explicitly instead of skipping
+    if tt1 in ["egress_only_internet_gateway_exclusion", "elastic_file_system_exclusion", 
+               "internet_gateway_exclusion", "lambda_exclusion", "nat_gateway_exclusion",
+               "virtual_private_gateway_exclusion", "vpc_lattice_exclusion", "vpc_peering_exclusion"]:
+        if tt2 == "null":
+            t1 = tt1 + " = \"disable\"\n"
+    
+    # Skip computed fields
+    if tt1 in ["state", "state_message", "resource_exclusions"]:
+        skip = 1
+    
+    return skip, t1, flag1, flag2

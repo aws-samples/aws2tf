@@ -186,3 +186,27 @@ def get_aws_ecs_cluster_capacity_providers(type,id,clfn,descfn,topkey,key,filter
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
+
+
+def get_aws_ecs_express_gateway_service(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        from botocore.config import Config
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all services - returns list of ARNs
+            paginator = client.get_paginator(descfn)
+            service_arns = []
+            for page in paginator.paginate():
+                service_arns = service_arns + page[topkey]
+            
+            # Write imports using the ARNs
+            for service_arn in service_arns:
+                common.write_import(type, service_arn, None)
+        else:
+            # Get specific service by ARN
+            common.write_import(type, id, None)
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    return True

@@ -84,3 +84,22 @@ def __getattr__(name):
 
 
 log.debug(f"SAGEMAKER handlers: 3 custom functions + __getattr__ for 0 simple resources")
+
+
+def aws_sagemaker_flow_definition(t1, tt1, tt2, flag1, flag2):
+    skip = 0
+    
+    # Skip empty task_keywords list (requires at least 1 item)
+    if tt1 == "task_keywords" and tt2 == "[]":
+        skip = 1
+    
+    return skip, t1, flag1, flag2
+
+
+def aws_sagemaker_pipeline(t1,tt1,tt2,flag1,flag2):
+
+	skip=0
+	# Add lifecycle block to ignore pipeline_definition changes (JSON formatting differences)
+	if tt1=="pipeline_name" and tt2 != "null":
+		t1 = t1 + "\n lifecycle {\n   ignore_changes = [pipeline_definition]\n}\n"
+	return skip,t1,flag1,flag2

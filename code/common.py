@@ -647,6 +647,7 @@ from get_aws_resources import aws_logs
 from get_aws_resources import aws_lakeformation
 from get_aws_resources import aws_lambda
 from get_aws_resources import aws_license_manager
+from get_aws_resources import aws_memorydb
 from get_aws_resources import aws_mwaa
 from get_aws_resources import aws_neptune
 from get_aws_resources import aws_network_firewall
@@ -758,6 +759,7 @@ AWS_RESOURCE_MODULES = {
     'lambda': aws_lambda,
     'license-manager': aws_license_manager,
     'license_manager': aws_license_manager,
+    'memorydb': aws_memorydb,
     'mwaa': aws_mwaa,
     'neptune': aws_neptune,
     'network-firewall': aws_network_firewall,

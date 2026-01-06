@@ -2,8 +2,8 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 83
-**Last Updated:** 2026-01-03
+**Total Completed:** 92
+**Last Updated:** 2026-01-06
 
 ---
 
@@ -99,6 +99,21 @@ Resources are listed by service group in the order they were completed.
 - [x] `aws_vpc_route_server_endpoint` - ✓ PASSED (2026-01-02) - [test results](test_aws_vpc_route_server_endpoint/test-results.md)
 - [x] `aws_vpc_route_server_peer` - ✓ PASSED (2026-01-02) - [test results](test_aws_vpc_route_server_peer/test-results.md)
 - [x] `aws_vpc_endpoint_private_dns` - ✓ PASSED (2026-01-02) - [test results](test_aws_vpc_endpoint_private_dns/test-results.md)
+
+### aws_s3
+
+- [x] `aws_s3_bucket_cors_configuration` - ✓ PASSED (2026-01-06) - [test results](test_aws_s3_bucket_cors_configuration/test-results.md)
+- [x] `aws_s3_bucket_server_side_encryption_configuration` - ✓ PASSED (2026-01-06) - [test results](test_aws_s3_bucket_server_side_encryption_configuration/test-results.md)
+
+### aws_memorydb
+
+- [x] `aws_memorydb_subnet_group` - ✓ PASSED (2026-01-06) - [test results](test_aws_memorydb_subnet_group/test-results.md)
+- [x] `aws_memorydb_parameter_group` - ✓ PASSED (2026-01-06) - [test results](test_aws_memorydb_parameter_group/test-results.md)
+- [x] `aws_memorydb_user` - ✓ PASSED (2026-01-06) - [test results](test_aws_memorydb_user/test-results.md)
+- [x] `aws_memorydb_acl` - ✓ PASSED (2026-01-06) - [test results](test_aws_memorydb_acl/test-results.md)
+- [x] `aws_memorydb_cluster` - ✓ PASSED (2026-01-06) - [test results](test_aws_memorydb_cluster/test-results.md)
+- [x] `aws_memorydb_snapshot` - ✓ PASSED (2026-01-06) - [test results](test_aws_memorydb_snapshot/test-results.md)
+- [x] `aws_memorydb_multi_region_cluster` - ✓ PASSED (2026-01-06) - [test results](test_aws_memorydb_multi_region_cluster/test-results.md)
 
 ### aws_s3tables
 

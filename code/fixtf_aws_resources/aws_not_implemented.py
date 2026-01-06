@@ -65,12 +65,12 @@ notimplemented = {
     "aws_iot_thing_group": True,  ### TODO
     "aws_lightsail_database": True,  ### TODO
     "aws_macie2_classification_job": True,  ### TODO
-    "aws_memorydb_cluster": True,   ### TODO
+    #"aws_memorydb_cluster": True,   ### TODO
     "aws_mskconnect_connector": True,  ### TODO
     "aws_networkfirewall_resource_policy": True, ### TODO
     "aws_opensearch_inbound_connection_accepter": True,  ### TODO
     "aws_redshiftserverless_resource_policy": True,  ### Requires snapshot (which requires namespace/workgroup) - complex and expensive
-    "aws_s3_directory_bucket": True, ### TODO
+    "aws_s3_directory_bucket": True, ### S3 Express One Zone - requires account-level enablement, InvalidBucketName error in testing
     "aws_sagemaker_feature_group": True,  ### TODO
     #"aws_sagemaker_pipeline": True,  ### TODO
     #"aws_sagemaker_servicecatalog_portfolio_status": True, ### TODO
@@ -310,11 +310,11 @@ notimplemented = {
     #
     "aws_media_store_container_policy": True,
     #
-    "aws_memorydb_acl": True,
-    "aws_memorydb_parameter_group": True,
-    "aws_memorydb_snapshot": True,
-    "aws_memorydb_subnet_group": True,
-    "aws_memorydb_user": True,
+    #"aws_memorydb_acl": True,
+    #"aws_memorydb_parameter_group": True,
+    #"aws_memorydb_snapshot": True,
+    #"aws_memorydb_subnet_group": True,
+    #"aws_memorydb_user": True,
     #
     "aws_mskconnect_custom_plugin": True,
     "aws_mskconnect_worker_configuration": True,
@@ -395,10 +395,10 @@ notimplemented = {
     "aws_rum_app_monitor": True,
     "aws_rum_metrics_destination": True,
     #
-    "aws_s3_bucket_cors_configuration": True,
-    "aws_s3_bucket_server_side_encryption_configuration": True,
+    #"aws_s3_bucket_cors_configuration": True,
+    #"aws_s3_bucket_server_side_encryption_configuration": True,
 
-    "aws_s3control_bucket": True,
+    "aws_s3control_bucket": True,  ### Requires AWS Outposts physical hardware - cannot test without on-premises infrastructure
     #
     #"aws_sagemaker_code_repository": True,
     "aws_sagemaker_data_quality_job_definition": True,  ### Requires S3 buckets, IAM roles, data quality baselines - complex setup
@@ -567,7 +567,7 @@ notimplemented = {
     "aws_m2_environment": True,  ### TODO 6.27.0
     "aws_macie2_organization_configuration": True,  ### TODO 6.27.0
     "aws_media_packagev2_channel_group": True,  ### TODO 6.27.0
-    "aws_memorydb_multi_region_cluster": True,  ### TODO 6.27.0
+    #"aws_memorydb_multi_region_cluster": True,  ### TODO 6.27.0
     "aws_msk_single_scram_secret_association": True,  ### TODO 6.27.0
     "aws_nat_gateway_eip_association": True,  ### TODO 6.27.0
     "aws_neptunegraph_graph": True,  ### TODO 6.27.0

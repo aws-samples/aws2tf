@@ -12,7 +12,6 @@
 
 ### aws_api_gateway
 
-
 - [ ] `aws_api_gateway_base_path_mapping` (SKIPPED - composite ID + requires domain)
 - [ ] `aws_api_gateway_domain_name` (SKIPPED - requires ACM certificate and domain ownership)
 - [ ] `aws_api_gateway_integration` (SKIPPED - 3-part composite ID)
@@ -376,10 +375,6 @@
 - [ ] `aws_lakeformation_opt_in`
 - [ ] `aws_lakeformation_resource_lf_tag`
 
-### aws_lambda
-
-- [x] `aws_lambda_capacity_provider`
-- [x] `aws_lambda_function_recursion_config`
 
 ### aws_licensemanager
 
@@ -424,16 +419,6 @@
 
 - [ ] `aws_media_packagev2_channel_group`
 - [ ] `aws_media_store_container_policy`
-
-### aws_memorydb
-
-- [ ] `aws_memorydb_acl`
-- [ ] `aws_memorydb_cluster`
-- [ ] `aws_memorydb_multi_region_cluster`
-- [ ] `aws_memorydb_parameter_group`
-- [ ] `aws_memorydb_snapshot`
-- [ ] `aws_memorydb_subnet_group`
-- [ ] `aws_memorydb_user`
 
 ### aws_mskconnect
 
@@ -606,19 +591,15 @@
 
 ### aws_s3
 
-**Base Resources (test first):**
-- [ ] `aws_s3_bucket_cors_configuration`
-- [ ] `aws_s3_bucket_server_side_encryption_configuration`
-
 **Complex Resources (test after base):**
 
 ### aws_s3_directory
 
-- [ ] `aws_s3_directory_bucket`
+- [x] `aws_s3_directory_bucket` (FAILED - requires S3 Express One Zone enablement)
 
 ### aws_s3control
 
-- [ ] `aws_s3control_bucket`
+- [x] `aws_s3control_bucket` (SKIPPED - requires AWS Outposts hardware)
 
 
 ### aws_sagemaker
@@ -794,9 +775,6 @@ These resources use composite IDs (multiple identifiers separated by commas) and
 
 - `aws_cloudformation_stack_set_instance` (composite ID)
 
-### aws_codecommit
-
-- `aws_codecommit_approval_rule_template_association` (composite ID)
 
 ### aws_cognito
 
@@ -857,27 +835,11 @@ These resources use composite IDs (multiple identifiers separated by commas) and
 
 - `aws_m2_deployment` (composite ID)
 
-### aws_msk
-
-- `aws_msk_single_scram_secret_association` (composite ID)
-
-### aws_nat
-
-- `aws_nat_gateway_eip_association` (composite ID)
-
-### aws_networkmanager
-
-- `aws_networkmanager_customer_gateway_association` (composite ID)
-- `aws_networkmanager_link_association` (composite ID)
-- `aws_networkmanager_transit_gateway_connect_peer_association` (composite ID)
 
 ### aws_networkmonitor
 
 - `aws_networkmonitor_probe` (composite ID)
 
-### aws_notifications
-
-- `aws_notifications_channel_association` (composite ID)
 
 ### aws_opensearch
 
@@ -902,9 +864,6 @@ These resources use composite IDs (multiple identifiers separated by commas) and
 
 - `aws_securityhub_product_subscription` (composite ID)
 
-### aws_servicecatalogappregistry
-
-- `aws_servicecatalogappregistry_attribute_group_association` (composite ID)
 
 ### aws_servicequotas
 
@@ -936,19 +895,10 @@ These resources use composite IDs (multiple identifiers separated by commas) and
 ### aws_vpc
 
 - `aws_vpc_route_server_propagation` (composite ID)
-- `aws_vpc_route_server_vpc_association` (composite ID)
+
 
 ### aws_wafv2
 
 - `aws_wafv2_api_key` (composite ID)
-- `aws_wafv2_web_acl_rule_group_association` (composite ID)
 
-### aws_workspacesweb
 
-- `aws_workspacesweb_browser_settings_association` (composite ID)
-- `aws_workspacesweb_data_protection_settings_association` (composite ID)
-- `aws_workspacesweb_ip_access_settings_association` (composite ID)
-- `aws_workspacesweb_network_settings_association` (composite ID)
-- `aws_workspacesweb_session_logger_association` (composite ID)
-- `aws_workspacesweb_trust_store_association` (composite ID)
-- `aws_workspacesweb_user_access_logging_settings_association` (composite ID)

@@ -6445,7 +6445,7 @@ aws_medialive_multiplex_program = {
 
 aws_memorydb_acl = {
 	"clfn":		"memorydb",
-	"descfn":	"list_acls",
+	"descfn":	"describe_acls",
 	"topkey":	"ACLs",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -6453,7 +6453,7 @@ aws_memorydb_acl = {
 
 aws_memorydb_cluster = {
 	"clfn":		"memorydb",
-	"descfn":	"list_clusters",
+	"descfn":	"describe_clusters",
 	"topkey":	"Clusters",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -6461,7 +6461,7 @@ aws_memorydb_cluster = {
 
 aws_memorydb_parameter_group = {
 	"clfn":		"memorydb",
-	"descfn":	"list_parameter_groups",
+	"descfn":	"describe_parameter_groups",
 	"topkey":	"ParameterGroups",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -6469,7 +6469,7 @@ aws_memorydb_parameter_group = {
 
 aws_memorydb_snapshot = {
 	"clfn":		"memorydb",
-	"descfn":	"list_snapshots",
+	"descfn":	"describe_snapshots",
 	"topkey":	"Snapshots",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -6477,7 +6477,7 @@ aws_memorydb_snapshot = {
 
 aws_memorydb_subnet_group = {
 	"clfn":		"memorydb",
-	"descfn":	"list_subnet_groups",
+	"descfn":	"describe_subnet_groups",
 	"topkey":	"SubnetGroups",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -6485,7 +6485,7 @@ aws_memorydb_subnet_group = {
 
 aws_memorydb_user = {
 	"clfn":		"memorydb",
-	"descfn":	"list_users",
+	"descfn":	"describe_users",
 	"topkey":	"Users",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -8165,10 +8165,10 @@ aws_s3_bucket_analytics_configuration = {
 
 aws_s3_bucket_cors_configuration = {
 	"clfn":		"s3",
-	"descfn":	"get_bucket_cors_configuration",
+	"descfn":	"get_bucket_cors",
 	"topkey":	"CORSRules",
-	"key":		"AllowedMethods",
-	"filterid":	"AllowedMethods"
+	"key":		"Bucket",
+	"filterid":	"Bucket"
 }
 
 aws_s3_bucket_intelligent_tiering_configuration = {
@@ -8277,10 +8277,10 @@ aws_s3_bucket_request_payment_configuration = {
 
 aws_s3_bucket_server_side_encryption_configuration = {
 	"clfn":		"s3",
-	"descfn":	"get_bucket_server_side_encryption_configuration",
+	"descfn":	"get_bucket_encryption",
 	"topkey":	"Rules",
-	"key":		"ApplyServerSideEncryptionByDefault.SSEAlgorithm",
-	"filterid":	"ApplyServerSideEncryptionByDefault.SSEAlgorithm"
+	"key":		"Bucket",
+	"filterid":	"Bucket"
 }
 
 aws_s3_bucket_versioning = {
@@ -8301,7 +8301,7 @@ aws_s3_bucket_website_configuration = {
 
 aws_s3_directory_bucket = {
 	"clfn":		"s3",
-	"descfn":	"list_buckets",
+	"descfn":	"list_directory_buckets",
 	"topkey":	"Buckets",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -11970,10 +11970,10 @@ aws_media_packagev2_channel_group = {
 
 aws_memorydb_multi_region_cluster = {
 	"clfn":		"memorydb",
-	"descfn":	"describe_clusters",
-	"topkey":	"Clusters",
-	"key":		"Name",
-	"filterid":	"Name"
+	"descfn":	"describe_multi_region_clusters",
+	"topkey":	"MultiRegionClusters",
+	"key":		"MultiRegionClusterName",
+	"filterid":	"MultiRegionClusterName"
 }
 
 aws_msk_single_scram_secret_association = {

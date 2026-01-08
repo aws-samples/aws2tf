@@ -519,7 +519,7 @@ notimplemented = {
     "aws_bedrockagentcore_oauth2_credential_provider": True,  ### TODO 6.27.0 - Requires complex setup - too complex for automated testing
     #"aws_bedrockagentcore_token_vault_cmk": True,  ### TODO 6.27.0 - Requires complex setup - too complex for automated testing
     #"aws_bedrockagentcore_workload_identity": True,  ### TODO 6.27.0 - Requires complex setup - too complex for automated testing
-    "aws_cloudwatch_contributor_managed_insight_rule": True,  ### TODO 6.27.0 - Composite ID format
+    #"aws_cloudwatch_contributor_managed_insight_rule": True,  ### TODO 6.27.0 - Composite ID format
     "aws_controltower_baseline": True,  ### TODO 6.27.0
     "aws_dataexchange_event_action": True,  ### TODO 6.27.0
     "aws_dataexchange_revision_assets": True,  ### TODO 6.27.0

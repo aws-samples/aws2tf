@@ -2213,10 +2213,10 @@ aws_cloudwatch_event_endpoint = {
 
 aws_cloudwatch_event_permission = {
 	"clfn":		"events",
-	"descfn":	"list_permissions",
-	"topkey":	"Permissions",
-	"key":		"Name",
-	"filterid":	"Name"
+	"descfn":	"describe_event_bus",
+	"topkey":	"Policy",
+	"key":		"Sid",
+	"filterid":	"Sid"
 }
 
 aws_cloudwatch_event_target = {
@@ -2253,10 +2253,10 @@ aws_cloudwatch_log_destination_policy = {
 
 aws_cloudwatch_log_metric_filter = {
 	"clfn":		"logs",
-	"descfn":	"list_metric_filters",
-	"topkey":	"MetricFilters",
-	"key":		"Name",
-	"filterid":	"Name"
+	"descfn":	"describe_metric_filters",
+	"topkey":	"metricFilters",
+	"key":		"filterName",
+	"filterid":	"filterName"
 }
 
 aws_cloudwatch_log_resource_policy = {
@@ -2277,10 +2277,10 @@ aws_cloudwatch_log_stream = {
 
 aws_cloudwatch_log_subscription_filter = {
 	"clfn":		"logs",
-	"descfn":	"list_subscription_filters",
-	"topkey":	"SubscriptionFilters",
-	"key":		"Name",
-	"filterid":	"Name"
+	"descfn":	"describe_subscription_filters",
+	"topkey":	"subscriptionFilters",
+	"key":		"filterName",
+	"filterid":	"filterName"
 }
 
 aws_cloudwatch_metric_alarm = {

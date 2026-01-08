@@ -125,13 +125,13 @@ notimplemented = {
     #"aws_cloudwatch_event_bus_policy": True,
     #"aws_cloudwatch_event_connection": True,
     "aws_cloudwatch_event_endpoint": True,  # Requires multi-region setup - too complex
-    "aws_cloudwatch_event_permission": True,
+    #"aws_cloudwatch_event_permission": True,
     #
     #"aws_cloudwatch_log_data_protection_policy": True,
     #"aws_cloudwatch_log_destination_policy": True,
-    "aws_cloudwatch_log_metric_filter": True,
+    #"aws_cloudwatch_log_metric_filter": True,
     #"aws_cloudwatch_log_resource_policy": True,
-    "aws_cloudwatch_log_subscription_filter": True,
+    #"aws_cloudwatch_log_subscription_filter": True,
     #
     "aws_codeartifact_domain_permissions_policy": True,
     "aws_codeartifact_repository_permissions_policy": True,

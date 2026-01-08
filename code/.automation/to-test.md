@@ -93,9 +93,9 @@
 
 - [ ] `aws_cloudwatch_contributor_managed_insight_rule` (FAILED - composite ID)
 - [ ] `aws_cloudwatch_event_endpoint` (SKIPPED - requires multi-region setup)
-- [ ] `aws_cloudwatch_event_permission` (FAILED - composite ID)
-- [ ] `aws_cloudwatch_log_metric_filter` (FAILED - composite ID)
-- [ ] `aws_cloudwatch_log_subscription_filter` (FAILED - composite ID)
+- [x] `aws_cloudwatch_event_permission`
+- [x] `aws_cloudwatch_log_metric_filter`
+- [x] `aws_cloudwatch_log_subscription_filter`
 
 ### aws_codeartifact
 

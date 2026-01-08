@@ -2,7 +2,7 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 92
+**Total Completed:** 95
 **Last Updated:** 2026-01-06
 
 ---
@@ -37,6 +37,9 @@ Resources are listed by service group in the order they were completed.
 - [x] `aws_cloudwatch_log_data_protection_policy` - ✓ PASSED (2026-01-02) - [test results](test_aws_cloudwatch_log_data_protection_policy/test-results.md)
 - [x] `aws_cloudwatch_log_destination_policy` - ✓ PASSED (2026-01-02) - [test results](test_aws_cloudwatch_log_destination_policy/test-results.md)
 - [x] `aws_cloudwatch_log_resource_policy` - ✓ PASSED (2026-01-02) - [test results](test_aws_cloudwatch_log_resource_policy/test-results.md)
+- [x] `aws_cloudwatch_log_metric_filter` - ✓ PASSED (2026-01-06) - [test results](test_aws_cloudwatch_log_metric_filter/test-results.md) - Composite ID support
+- [x] `aws_cloudwatch_log_subscription_filter` - ✓ PASSED (2026-01-06) - [test results](test_aws_cloudwatch_log_subscription_filter/test-results.md) - Composite ID support
+- [x] `aws_cloudwatch_event_permission` - ✓ PASSED (2026-01-06) - [test results](test_aws_cloudwatch_event_permission/test-results.md) - Composite ID support
 
 ### aws_ec2
 

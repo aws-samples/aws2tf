@@ -621,6 +621,7 @@ from get_aws_resources import aws_config
 from get_aws_resources import aws_connect
 from get_aws_resources import aws_customer_profiles
 from get_aws_resources import aws_datazone
+from get_aws_resources import aws_devops_guru
 from get_aws_resources import aws_dms
 from get_aws_resources import aws_docdb
 from get_aws_resources import aws_ds
@@ -731,6 +732,7 @@ AWS_RESOURCE_MODULES = {
     'customer-profiles': aws_customer_profiles,
     'customer_profiles': aws_customer_profiles,
     'datazone': aws_datazone,
+    'devops-guru': aws_devops_guru,
     'dms': aws_dms,
     'docdb': aws_docdb,
     'ds': aws_ds,

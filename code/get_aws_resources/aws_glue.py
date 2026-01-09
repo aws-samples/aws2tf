@@ -506,3 +506,160 @@ def get_aws_glue_workflow(type, id, clfn, descfn, topkey, key, filterid):
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
 
     return True
+
+
+# aws_glue_partition_index
+def get_aws_glue_partition_index(type, id, clfn, descfn, topkey, key, filterid):
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        client = boto3.client(clfn)
+        
+        if id is None:
+            # First get all databases
+            db_paginator = client.get_paginator('get_databases')
+            databases = []
+            for page in db_paginator.paginate():
+                databases = databases + page['DatabaseList']
+            
+            # Then for each database, get all tables
+            for db in databases:
+                db_name = db['Name']
+                try:
+                    table_response = client.get_tables(DatabaseName=db_name)
+                    tables = table_response.get('TableList', [])
+                    
+                    # For each table, get partition indexes
+                    for table in tables:
+                        table_name = table['Name']
+                        try:
+                            index_response = client.get_partition_indexes(
+                                DatabaseName=db_name,
+                                TableName=table_name
+                            )
+                            indexes = index_response.get(topkey, [])
+                            
+                            # Build composite ID: catalog_id:database_name:table_name:index_name
+                            for idx in indexes:
+                                composite_id = f"{context.acc}:{db_name}:{table_name}:{idx[key]}"
+                                common.write_import(type, composite_id, None)
+                        except Exception as e:
+                            if context.debug: log.debug(f"Error getting indexes for table {table_name}: {e}")
+                            continue
+                except Exception as e:
+                    if context.debug: log.debug(f"Error getting tables for database {db_name}: {e}")
+                    continue
+        else:
+            # Handle composite ID: catalog_id:database_name:table_name:index_name
+            if id.count(':') == 3:
+                catalog_id, db_name, table_name, index_name = id.split(':', 3)
+                try:
+                    response = client.get_partition_indexes(
+                        DatabaseName=db_name,
+                        TableName=table_name
+                    )
+                    indexes = response.get(topkey, [])
+                    for idx in indexes:
+                        if idx[key] == index_name:
+                            common.write_import(type, id, None)
+                            break
+                except Exception as e:
+                    if context.debug: log.debug(f"Error getting specific index: {e}")
+            else:
+                if context.debug: log.debug("Must pass catalog_id:database_name:table_name:index_name for "+type)
+
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+
+    return True
+
+
+# aws_glue_resource_policy - Regional singleton
+def get_aws_glue_resource_policy(type, id, clfn, descfn, topkey, key, filterid):
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        client = boto3.client(clfn)
+        
+        # This is a regional singleton - import ID is the region
+        if id is None:
+            # Use the current region
+            region = context.region
+        else:
+            region = id
+        
+        try:
+            # Try to get the resource policy
+            response = client.get_resource_policy()
+            # Policy exists, write import using region as ID
+            common.write_import(type, region, None)
+        except client.exceptions.EntityNotFoundException:
+            # No policy exists for this region
+            if context.debug: log.debug(f"No resource policy found for region {region}")
+        except Exception as e:
+            if context.debug: log.debug(f"Error getting resource policy: {e}")
+
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+
+    return True
+
+
+# aws_glue_user_defined_function
+def get_aws_glue_user_defined_function(type, id, clfn, descfn, topkey, key, filterid):
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        client = boto3.client(clfn)
+        
+        if id is None:
+            # First get all databases
+            db_paginator = client.get_paginator('get_databases')
+            databases = []
+            for page in db_paginator.paginate():
+                databases = databases + page['DatabaseList']
+            
+            # Then for each database, get all user defined functions
+            for db in databases:
+                db_name = db['Name']
+                try:
+                    # Pattern is required - use ".*" to match all functions
+                    response = client.get_user_defined_functions(
+                        DatabaseName=db_name,
+                        Pattern='.*'
+                    )
+                    functions = response.get(topkey, [])
+                    
+                    # Build composite ID: catalog_id:database_name:function_name
+                    for func in functions:
+                        composite_id = f"{context.acc}:{db_name}:{func[key]}"
+                        common.write_import(type, composite_id, None)
+                except Exception as e:
+                    if context.debug: log.debug(f"Error getting functions for database {db_name}: {e}")
+                    continue
+        else:
+            # Handle composite ID: catalog_id:database_name:function_name
+            if id.count(':') == 2:
+                catalog_id, db_name, function_name = id.split(':', 2)
+                try:
+                    response = client.get_user_defined_functions(
+                        DatabaseName=db_name,
+                        Pattern='.*'
+                    )
+                    functions = response.get(topkey, [])
+                    for func in functions:
+                        if func[key] == function_name:
+                            common.write_import(type, id, None)
+                            break
+                except Exception as e:
+                    if context.debug: log.debug(f"Error getting specific function: {e}")
+            else:
+                if context.debug: log.debug("Must pass catalog_id:database_name:function_name for "+type)
+
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+
+    return True

@@ -91,11 +91,7 @@
 
 ### aws_cloudwatch
 
-- [ ] `aws_cloudwatch_contributor_managed_insight_rule` (FAILED - composite ID)
 - [ ] `aws_cloudwatch_event_endpoint` (SKIPPED - requires multi-region setup)
-- [x] `aws_cloudwatch_event_permission`
-- [x] `aws_cloudwatch_log_metric_filter`
-- [x] `aws_cloudwatch_log_subscription_filter`
 
 ### aws_codeartifact
 
@@ -190,13 +186,6 @@
 - [ ] `aws_devicefarm_project`
 - [ ] `aws_devicefarm_test_grid_project`
 - [ ] `aws_devicefarm_upload`
-
-### aws_devopsguru
-
-- [ ] `aws_devopsguru_event_sources_config`
-- [ ] `aws_devopsguru_notification_channel`
-- [ ] `aws_devopsguru_resource_collection`
-- [ ] `aws_devopsguru_service_integration`
 
 ### aws_directory
 
@@ -293,12 +282,6 @@
 
 - [ ] `aws_gamelift_fleet`
 - [ ] `aws_gamelift_game_session_queue`
-
-### aws_glue
-
-- [ ] `aws_glue_partition_index`
-- [ ] `aws_glue_resource_policy`
-- [ ] `aws_glue_user_defined_function`
 
 ### aws_guardduty
 

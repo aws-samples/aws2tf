@@ -1,0 +1,122 @@
+import boto3
+import common
+import inspect
+from botocore.config import Config
+import context
+
+def get_aws_devopsguru_event_sources_config(type, id, clfn, descfn, topkey, key, filterid):
+    """
+    Regional singleton resource - uses region as ID
+    """
+    try:
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # For regional singleton, write the current region as the ID
+            region = client.meta.region_name
+            common.write_import(type, region, None)
+        else:
+            # Verify the resource exists in the specified region
+            try:
+                response = client.describe_event_sources_config()
+                if response:
+                    common.write_import(type, id, None)
+            except Exception as e:
+                if context.debug: 
+                    print(f"Error getting event sources config: {e}")
+    
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    
+    return True
+
+
+def get_aws_devopsguru_notification_channel(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all notification channels
+            paginator = client.get_paginator(descfn)
+            response = []
+            for page in paginator.paginate():
+                response = response + page[topkey]
+            for j in response:
+                common.write_import(type, j[key], None)
+        else:
+            # Get specific notification channel by listing and filtering
+            # Note: There's no describe_notification_channel API method
+            paginator = client.get_paginator(descfn)
+            for page in paginator.paginate():
+                for j in page[topkey]:
+                    if j[key] == id:
+                        common.write_import(type, j[key], None)
+                        return True
+    
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    
+    return True
+
+
+def get_aws_devopsguru_resource_collection(type, id, clfn, descfn, topkey, key, filterid):
+    """
+    Resource collection - uses ResourceCollectionType as ID
+    """
+    try:
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all resource collection types (AWS_CLOUD_FORMATION, AWS_SERVICE, AWS_TAGS)
+            # Try each type and see which ones exist
+            collection_types = ['AWS_CLOUD_FORMATION', 'AWS_SERVICE', 'AWS_TAGS']
+            for collection_type in collection_types:
+                try:
+                    response = client.get_resource_collection(ResourceCollectionType=collection_type)
+                    if response and 'ResourceCollection' in response:
+                        common.write_import(type, collection_type, None)
+                except Exception as e:
+                    if context.debug:
+                        print(f"No resource collection for type {collection_type}: {e}")
+                    continue
+        else:
+            # Get specific resource collection
+            response = client.get_resource_collection(ResourceCollectionType=id)
+            if response and 'ResourceCollection' in response:
+                common.write_import(type, id, None)
+    
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    
+    return True
+
+
+def get_aws_devopsguru_service_integration(type, id, clfn, descfn, topkey, key, filterid):
+    """
+    Regional singleton resource - uses region as ID
+    """
+    try:
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # For regional singleton, write the current region as the ID
+            region = client.meta.region_name
+            common.write_import(type, region, None)
+        else:
+            # Verify the resource exists in the specified region
+            try:
+                response = client.describe_service_integration()
+                if response:
+                    common.write_import(type, id, None)
+            except Exception as e:
+                if context.debug:
+                    print(f"Error getting service integration: {e}")
+    
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    
+    return True

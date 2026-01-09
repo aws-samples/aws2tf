@@ -4933,10 +4933,10 @@ aws_glue_partition = {
 
 aws_glue_partition_index = {
 	"clfn":		"glue",
-	"descfn":	"list_partition_indexes",
-	"topkey":	"PartitionIndexNames",
-	"key":		"Name",
-	"filterid":	"Name"
+	"descfn":	"get_partition_indexes",
+	"topkey":	"PartitionIndexDescriptorList",
+	"key":		"IndexName",
+	"filterid":	"IndexName"
 }
 
 aws_glue_registry = {
@@ -4981,10 +4981,10 @@ aws_glue_trigger = {
 
 aws_glue_user_defined_function = {
 	"clfn":		"glue",
-	"descfn":	"list_user_defined_functions",
-	"topkey":	"UserDefinedFunctionNames",
-	"key":		"Name",
-	"filterid":	"Name"
+	"descfn":	"get_user_defined_functions",
+	"topkey":	"UserDefinedFunctions",
+	"key":		"FunctionName",
+	"filterid":	"FunctionName"
 }
 
 aws_glue_workflow = {

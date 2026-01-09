@@ -2,8 +2,8 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 95
-**Last Updated:** 2026-01-06
+**Total Completed:** 105
+**Last Updated:** 2026-01-09
 
 ---
 
@@ -40,6 +40,20 @@ Resources are listed by service group in the order they were completed.
 - [x] `aws_cloudwatch_log_metric_filter` - ✓ PASSED (2026-01-06) - [test results](test_aws_cloudwatch_log_metric_filter/test-results.md) - Composite ID support
 - [x] `aws_cloudwatch_log_subscription_filter` - ✓ PASSED (2026-01-06) - [test results](test_aws_cloudwatch_log_subscription_filter/test-results.md) - Composite ID support
 - [x] `aws_cloudwatch_event_permission` - ✓ PASSED (2026-01-06) - [test results](test_aws_cloudwatch_event_permission/test-results.md) - Composite ID support
+- [x] `aws_cloudwatch_contributor_managed_insight_rule` - ✓ PASSED (2026-01-06) - [test results](test_aws_cloudwatch_contributor_managed_insight_rule/test-results.md) - Import file generation works
+
+### aws_devopsguru
+
+- [x] `aws_devopsguru_event_sources_config` - ✓ PASSED (2026-01-09) - [test results](test_aws_devopsguru_event_sources_config/test-results.md)
+- [x] `aws_devopsguru_notification_channel` - ✓ PASSED (2026-01-09) - [test results](test_aws_devopsguru_notification_channel/test-results.md)
+- [x] `aws_devopsguru_resource_collection` - ✓ PASSED (2026-01-09) - [test results](test_aws_devopsguru_resource_collection/test-results.md)
+- [x] `aws_devopsguru_service_integration` - ✓ PASSED (2026-01-09) - [test results](test_aws_devopsguru_service_integration/test-results.md)
+
+### aws_glue
+
+- [x] `aws_glue_partition_index` - ✓ PASSED (2026-01-09) - [test results](test_aws_glue_partition_index/test-results.md) - Composite ID support
+- [x] `aws_glue_resource_policy` - ✓ PASSED (2026-01-09) - [test results](test_aws_glue_resource_policy/test-results.md) - Regional singleton
+- [x] `aws_glue_user_defined_function` - ✓ PASSED (2026-01-09) - [test results](test_aws_glue_user_defined_function/test-results.md) - Composite ID support
 
 ### aws_ec2
 

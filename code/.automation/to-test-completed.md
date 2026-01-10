@@ -2,7 +2,7 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 120
+**Total Completed:** 121
 **Last Updated:** 2026-01-10
 
 ---
@@ -60,6 +60,10 @@ Resources are listed by service group in the order they were completed.
 ### aws_devopsguru
 
 - [x] `aws_devopsguru_event_sources_config` - ✓ PASSED (2026-01-09) - [test results](test_aws_devopsguru_event_sources_config/test-results.md)
+
+### aws_dx
+
+- [x] `aws_dx_gateway` - ✓ PASSED (2026-01-10) - [test results](test_aws_dx_gateway/test-results.md)
 - [x] `aws_devopsguru_notification_channel` - ✓ PASSED (2026-01-09) - [test results](test_aws_devopsguru_notification_channel/test-results.md)
 - [x] `aws_devopsguru_resource_collection` - ✓ PASSED (2026-01-09) - [test results](test_aws_devopsguru_resource_collection/test-results.md)
 - [x] `aws_devopsguru_service_integration` - ✓ PASSED (2026-01-09) - [test results](test_aws_devopsguru_service_integration/test-results.md)

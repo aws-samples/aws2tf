@@ -180,18 +180,18 @@ notimplemented = {
     "aws_dms_s3_endpoint": True,
     "aws_docdbelastic_cluster": True,
     #
-    "aws_dx_gateway": True,
-    "aws_dx_gateway_association": True,
-    "aws_dx_gateway_association_proposal": True,
-    "aws_dx_hosted_private_virtual_interface": True,
-    "aws_dx_hosted_private_virtual_interface_accepter": True,
-    "aws_dx_hosted_public_virtual_interface": True,
-    "aws_dx_hosted_public_virtual_interface_accepter": True,
-    "aws_dx_hosted_transit_virtual_interface": True,
-    "aws_dx_hosted_transit_virtual_interface_accepter": True,
-    "aws_dx_private_virtual_interface": True,
-    "aws_dx_public_virtual_interface": True,
-    "aws_dx_transit_virtual_interface": True,
+    #"aws_dx_gateway": True,  ### PASSED - tested successfully
+    "aws_dx_gateway_association": True,  ### Requires physical Direct Connect connection
+    "aws_dx_gateway_association_proposal": True,  ### Requires physical Direct Connect connection
+    "aws_dx_hosted_private_virtual_interface": True,  ### Requires physical Direct Connect connection
+    "aws_dx_hosted_private_virtual_interface_accepter": True,  ### Requires physical Direct Connect connection
+    "aws_dx_hosted_public_virtual_interface": True,  ### Requires physical Direct Connect connection
+    "aws_dx_hosted_public_virtual_interface_accepter": True,  ### Requires physical Direct Connect connection
+    "aws_dx_hosted_transit_virtual_interface": True,  ### Requires physical Direct Connect connection
+    "aws_dx_hosted_transit_virtual_interface_accepter": True,  ### Requires physical Direct Connect connection
+    "aws_dx_private_virtual_interface": True,  ### Requires physical Direct Connect connection
+    "aws_dx_public_virtual_interface": True,  ### Requires physical Direct Connect connection
+    "aws_dx_transit_virtual_interface": True,  ### Requires physical Direct Connect connection
     #
     "aws_dynamodb_global_table": True,
     "aws_ec2_local_gateway_route": True,  ### Requires AWS Outposts hardware + Composite ID: lgw-rtb-id_cidr

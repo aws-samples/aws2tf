@@ -3549,26 +3549,26 @@ aws_dx_connection_confirmation = {
 
 aws_dx_gateway = {
 	"clfn":		"directconnect",
-	"descfn":	"describe_gateways",
-	"topkey":	"Gateways",
-	"key":		"GatewayId",
-	"filterid":	"GatewayId"
+	"descfn":	"describe_direct_connect_gateways",
+	"topkey":	"directConnectGateways",
+	"key":		"directConnectGatewayId",
+	"filterid":	"directConnectGatewayId"
 }
 
 aws_dx_gateway_association = {
 	"clfn":		"directconnect",
-	"descfn":	"describe_gateway_associations",
-	"topkey":	"GatewayAssociations",
-	"key":		"GatewayId",
-	"filterid":	"GatewayId"
+	"descfn":	"describe_direct_connect_gateway_associations",
+	"topkey":	"directConnectGatewayAssociations",
+	"key":		"associationId",
+	"filterid":	"associationId"
 }
 
 aws_dx_gateway_association_proposal = {
 	"clfn":		"directconnect",
-	"descfn":	"describe_gateway_association_proposals",
-	"topkey":	"GatewayAssociationProposals",
-	"key":		"GatewayId",
-	"filterid":	"GatewayId"
+	"descfn":	"describe_direct_connect_gateway_association_proposals",
+	"topkey":	"directConnectGatewayAssociationProposals",
+	"key":		"proposalId",
+	"filterid":	"proposalId"
 }
 
 aws_dx_hosted_connection = {

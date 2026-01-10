@@ -206,18 +206,18 @@
 
 ### aws_dx
 
-- [ ] `aws_dx_gateway`
-- [ ] `aws_dx_gateway_association`
-- [ ] `aws_dx_gateway_association_proposal`
-- [ ] `aws_dx_hosted_private_virtual_interface`
-- [ ] `aws_dx_hosted_private_virtual_interface_accepter`
-- [ ] `aws_dx_hosted_public_virtual_interface`
-- [ ] `aws_dx_hosted_public_virtual_interface_accepter`
-- [ ] `aws_dx_hosted_transit_virtual_interface`
-- [ ] `aws_dx_hosted_transit_virtual_interface_accepter`
-- [ ] `aws_dx_private_virtual_interface`
-- [ ] `aws_dx_public_virtual_interface`
-- [ ] `aws_dx_transit_virtual_interface`
+- [x] `aws_dx_gateway`
+- [ ] `aws_dx_gateway_association` (SKIPPED - requires physical Direct Connect)
+- [ ] `aws_dx_gateway_association_proposal` (SKIPPED - requires physical Direct Connect)
+- [ ] `aws_dx_hosted_private_virtual_interface` (SKIPPED - requires physical Direct Connect)
+- [ ] `aws_dx_hosted_private_virtual_interface_accepter` (SKIPPED - requires physical Direct Connect)
+- [ ] `aws_dx_hosted_public_virtual_interface` (SKIPPED - requires physical Direct Connect)
+- [ ] `aws_dx_hosted_public_virtual_interface_accepter` (SKIPPED - requires physical Direct Connect)
+- [ ] `aws_dx_hosted_transit_virtual_interface` (SKIPPED - requires physical Direct Connect)
+- [ ] `aws_dx_hosted_transit_virtual_interface_accepter` (SKIPPED - requires physical Direct Connect)
+- [ ] `aws_dx_private_virtual_interface` (SKIPPED - requires physical Direct Connect)
+- [ ] `aws_dx_public_virtual_interface` (SKIPPED - requires physical Direct Connect)
+- [ ] `aws_dx_transit_virtual_interface` (SKIPPED - requires physical Direct Connect)
 
 ### aws_dynamodb
 
@@ -630,17 +630,9 @@
 
 ### aws_sesv2
 
-- [x] `aws_sesv2_account_suppression_attributes`
-- [x] `aws_sesv2_account_vdm_attributes`
-- [x] `aws_sesv2_configuration_set`
 - [ ] `aws_sesv2_configuration_set_event_destination`
-- [x] `aws_sesv2_contact_list`
-- [x] `aws_sesv2_dedicated_ip_pool`
-- [x] `aws_sesv2_email_identity`
 - [ ] `aws_sesv2_email_identity_feedback_attributes`
 - [ ] `aws_sesv2_email_identity_mail_from_attributes`
-- [x] `aws_sesv2_email_identity_policy`
-- [x] `aws_sesv2_tenant`
 
 ### aws_shield
 

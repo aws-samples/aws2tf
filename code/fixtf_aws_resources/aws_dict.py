@@ -2350,17 +2350,17 @@ aws_codebuild_project = {
 aws_codebuild_report_group = {
 	"clfn":		"codebuild",
 	"descfn":	"list_report_groups",
-	"topkey":	"ReportGroups",
-	"key":		"Name",
-	"filterid":	"Name"
+	"topkey":	"reportGroups",
+	"key":		"arn",
+	"filterid":	"arn"
 }
 
 aws_codebuild_resource_policy = {
 	"clfn":		"codebuild",
-	"descfn":	"list_resource_policies",
-	"topkey":	"ResourcePolicies",
-	"key":		"Name",
-	"filterid":	"Name"
+	"descfn":	"get_resource_policy",
+	"topkey":	"policy",
+	"key":		"resourceArn",
+	"filterid":	"resourceArn"
 }
 
 aws_codebuild_source_credential = {
@@ -2437,18 +2437,18 @@ aws_codecommit_trigger = {
 
 aws_codedeploy_app = {
 	"clfn":		"codedeploy",
-	"descfn":	"list_apps",
-	"topkey":	"Apps",
-	"key":		"Name",
-	"filterid":	"Name"
+	"descfn":	"list_applications",
+	"topkey":	"applications",
+	"key":		"name",
+	"filterid":	"name"
 }
 
 aws_codedeploy_deployment_config = {
 	"clfn":		"codedeploy",
 	"descfn":	"list_deployment_configs",
-	"topkey":	"DeploymentConfigs",
-	"key":		"Name",
-	"filterid":	"Name"
+	"topkey":	"deploymentConfigsList",
+	"key":		"name",
+	"filterid":	"name"
 }
 
 aws_codedeploy_deployment_group = {
@@ -2485,18 +2485,18 @@ aws_codepipeline = {
 
 aws_codepipeline_custom_action_type = {
 	"clfn":		"codepipeline",
-	"descfn":	"list_custom_action_types",
-	"topkey":	"CustomActionTypes",
-	"key":		"Category",
-	"filterid":	"Category"
+	"descfn":	"list_action_types",
+	"topkey":	"actionTypes",
+	"key":		"id",
+	"filterid":	"id"
 }
 
 aws_codepipeline_webhook = {
 	"clfn":		"codepipeline",
 	"descfn":	"list_webhooks",
-	"topkey":	"Webhooks",
-	"key":		"Name",
-	"filterid":	"Name"
+	"topkey":	"webhooks",
+	"key":		"arn",
+	"filterid":	"arn"
 }
 
 aws_codestarconnections_connection = {

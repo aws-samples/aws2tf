@@ -100,19 +100,7 @@
 
 ### aws_codebuild
 
-- [ ] `aws_codebuild_report_group`
-- [ ] `aws_codebuild_resource_policy`
-- [ ] `aws_codebuild_webhook`
-
-### aws_codedeploy
-
-- [ ] `aws_codedeploy_app`
-- [ ] `aws_codedeploy_deployment_config`
-
-### aws_codepipeline
-
-- [ ] `aws_codepipeline_custom_action_type`
-- [ ] `aws_codepipeline_webhook`
+- [x] `aws_codebuild_webhook` (CANNOT IMPORT - AWS API limitation)
 
 ### aws_cognito
 

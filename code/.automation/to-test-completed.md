@@ -2,8 +2,8 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 105
-**Last Updated:** 2026-01-09
+**Total Completed:** 111
+**Last Updated:** 2026-01-10
 
 ---
 
@@ -41,6 +41,21 @@ Resources are listed by service group in the order they were completed.
 - [x] `aws_cloudwatch_log_subscription_filter` - ✓ PASSED (2026-01-06) - [test results](test_aws_cloudwatch_log_subscription_filter/test-results.md) - Composite ID support
 - [x] `aws_cloudwatch_event_permission` - ✓ PASSED (2026-01-06) - [test results](test_aws_cloudwatch_event_permission/test-results.md) - Composite ID support
 - [x] `aws_cloudwatch_contributor_managed_insight_rule` - ✓ PASSED (2026-01-06) - [test results](test_aws_cloudwatch_contributor_managed_insight_rule/test-results.md) - Import file generation works
+
+### aws_codebuild
+
+- [x] `aws_codebuild_report_group` - ✓ PASSED (2026-01-10) - [test results](test_aws_codebuild_report_group/test-results.md)
+- [x] `aws_codebuild_resource_policy` - ✓ PASSED (2026-01-10) - [test results](test_aws_codebuild_resource_policy/test-results.md)
+
+### aws_codedeploy
+
+- [x] `aws_codedeploy_app` - ✓ PASSED (2026-01-10) - [test results](test_aws_codedeploy_app/test-results.md)
+- [x] `aws_codedeploy_deployment_config` - ✓ PASSED (2026-01-10) - [test results](test_aws_codedeploy_deployment_config/test-results.md)
+
+### aws_codepipeline
+
+- [x] `aws_codepipeline_custom_action_type` - ✓ PASSED (2026-01-10) - [test results](test_aws_codepipeline_custom_action_type/test-results.md) - Composite ID support
+- [x] `aws_codepipeline_webhook` - ✓ PASSED (2026-01-10) - [test results](test_aws_codepipeline_webhook/test-results.md) - Implementation complete
 
 ### aws_devopsguru
 

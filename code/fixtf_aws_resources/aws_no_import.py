@@ -13,6 +13,7 @@ noimport = {
     "aws_cloudcontrolapi_resource": True,
     "aws_codecatalyst_dev_environment": True,
     "aws_codecommit_trigger": True,
+    "aws_codebuild_webhook": True,  ### AWS API does not provide list or get methods for webhooks
     "aws_codegurureviewer_repository_association": True,
     "aws_cognito_user_in_group": True,
     "aws_default_route_table": True,

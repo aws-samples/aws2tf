@@ -613,6 +613,8 @@ from get_aws_resources import aws_cloudwatch
 from get_aws_resources import aws_codebuild
 from get_aws_resources import aws_codecommit
 from get_aws_resources import aws_codeartifact
+from get_aws_resources import aws_codedeploy
+from get_aws_resources import aws_codepipeline
 from get_aws_resources import aws_codeguruprofiler
 from get_aws_resources import aws_codestar_notifications
 from get_aws_resources import aws_cognito_identity
@@ -720,6 +722,8 @@ AWS_RESOURCE_MODULES = {
     'codebuild': aws_codebuild,
     'codecommit': aws_codecommit,
     'codeartifact': aws_codeartifact,
+    'codedeploy': aws_codedeploy,
+    'codepipeline': aws_codepipeline,
     'codeguruprofiler': aws_codeguruprofiler,
     'codestar-notifications': aws_codestar_notifications,
     'codestar_notifications': aws_codestar_notifications,

@@ -116,15 +116,15 @@ notimplemented = {
     #
     "aws_codeartifact_domain_permissions_policy": True,
     "aws_codeartifact_repository_permissions_policy": True,
-    "aws_codebuild_report_group": True,
-    "aws_codebuild_resource_policy": True,
-    "aws_codebuild_webhook": True,
+    #"aws_codebuild_report_group": True,  ### Testing in progress
+    #"aws_codebuild_resource_policy": True,  ### Testing in progress
+    #"aws_codebuild_webhook": True,  ### AWS API does not provide list or get methods for webhooks
     "aws_codecommit_approval_rule_template_association": True,
-    "aws_codedeploy_app": True,
-    "aws_codedeploy_deployment_config": True,
+    #"aws_codedeploy_app": True,  ### Testing in progress
+    #"aws_codedeploy_deployment_config": True,  ### Testing in progress
     #
-    "aws_codepipeline_custom_action_type": True,
-    "aws_codepipeline_webhook": True,
+    #"aws_codepipeline_custom_action_type": True,  ### Testing in progress
+    #"aws_codepipeline_webhook": True,  ### Testing in progress
     #
     "aws_cognito_identity_pool_provider_principal_tag": True,
     "aws_cognito_risk_configuration": True,

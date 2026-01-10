@@ -3566,7 +3566,7 @@ aws_dx_gateway_association = {
 aws_dx_gateway_association_proposal = {
 	"clfn":		"directconnect",
 	"descfn":	"describe_direct_connect_gateway_association_proposals",
-	"topkey":	"directConnectGatewayAssociationProposals",
+	"topkey":	"",
 	"key":		"proposalId",
 	"filterid":	"proposalId"
 }

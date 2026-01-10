@@ -2,7 +2,7 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 116
+**Total Completed:** 120
 **Last Updated:** 2026-01-10
 
 ---
@@ -204,6 +204,13 @@ Resources are listed by service group in the order they were completed.
 - [x] `aws_lightsail_instance` - ✓ PASSED (2026-01-10) - [test results](test_aws_lightsail_instance/test-results.md)
 - [x] `aws_lightsail_lb` - ✓ PASSED (2026-01-10) - [test results](test_aws_lightsail_lb/test-results.md)
 - [x] `aws_lightsail_lb_stickiness_policy` - ✓ PASSED (2026-01-10) - [test results](test_aws_lightsail_lb_stickiness_policy/test-results.md)
+
+### aws_sesv2
+
+- [x] `aws_sesv2_configuration_set` - ✓ PASSED (2026-01-10) - [test results](test_aws_sesv2_configuration_set/test-results.md)
+- [x] `aws_sesv2_contact_list` - ✓ PASSED (2026-01-10) - [test results](test_aws_sesv2_contact_list/test-results.md)
+- [x] `aws_sesv2_dedicated_ip_pool` - ✓ PASSED (2026-01-10) - [test results](test_aws_sesv2_dedicated_ip_pool/test-results.md)
+- [x] `aws_sesv2_email_identity` - ✓ PARTIAL (2026-01-10) - [test results](test_aws_sesv2_email_identity/test-results.md) - @ symbol limitation
 
 <!-- Add completed resources below in this format:
 

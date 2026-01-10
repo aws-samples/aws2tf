@@ -9157,10 +9157,10 @@ aws_sesv2_account_vdm_attributes = {
 
 aws_sesv2_configuration_set = {
 	"clfn":		"sesv2",
-	"descfn":	"describe_configuration_set",
-	"topkey":	"ConfigurationSet",
-	"key":		"ConfigurationSet",
-	"filterid":	"ConfigurationSet"
+	"descfn":	"list_configuration_sets",
+	"topkey":	"ConfigurationSets",
+	"key":		"ConfigurationSetName",
+	"filterid":	"ConfigurationSetName"
 }
 
 aws_sesv2_configuration_set_event_destination = {
@@ -9173,10 +9173,10 @@ aws_sesv2_configuration_set_event_destination = {
 
 aws_sesv2_contact_list = {
 	"clfn":		"sesv2",
-	"descfn":	"describe_contact_list",
-	"topkey":	"ContactList",
-	"key":		"ContactList",
-	"filterid":	"ContactList"
+	"descfn":	"list_contact_lists",
+	"topkey":	"ContactLists",
+	"key":		"ContactListName",
+	"filterid":	"ContactListName"
 }
 
 aws_sesv2_dedicated_ip_assignment = {
@@ -9189,18 +9189,18 @@ aws_sesv2_dedicated_ip_assignment = {
 
 aws_sesv2_dedicated_ip_pool = {
 	"clfn":		"sesv2",
-	"descfn":	"describe_dedicated_ip_pool",
-	"topkey":	"DedicatedIpPool",
-	"key":		"DedicatedIpPool",
-	"filterid":	"DedicatedIpPool"
+	"descfn":	"list_dedicated_ip_pools",
+	"topkey":	"DedicatedIpPools",
+	"key":		"PoolName",
+	"filterid":	"PoolName"
 }
 
 aws_sesv2_email_identity = {
 	"clfn":		"sesv2",
-	"descfn":	"describe_email_identity",
-	"topkey":	"EmailIdentity",
-	"key":		"EmailIdentity",
-	"filterid":	"EmailIdentity"
+	"descfn":	"list_email_identities",
+	"topkey":	"EmailIdentities",
+	"key":		"IdentityName",
+	"filterid":	"IdentityName"
 }
 
 aws_sesv2_email_identity_feedback_attributes = {
@@ -12490,10 +12490,10 @@ aws_sesv2_email_identity_policy = {
 
 aws_sesv2_tenant = {
 	"clfn":		"sesv2",
-	"descfn":	"list_contact_lists",
-	"topkey":	"ContactLists",
-	"key":		"ContactListName",
-	"filterid":	"ContactListName"
+	"descfn":	"list_tenants",
+	"topkey":	"Tenants",
+	"key":		"TenantName",
+	"filterid":	"TenantName"
 }
 
 aws_shield_proactive_engagement = {

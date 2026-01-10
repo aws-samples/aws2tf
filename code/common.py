@@ -678,6 +678,7 @@ from get_aws_resources import aws_servicecatalog
 from get_aws_resources import aws_servicediscovery
 from get_aws_resources import aws_shield
 from get_aws_resources import aws_ses
+from get_aws_resources import aws_sesv2
 from get_aws_resources import aws_signer
 from get_aws_resources import aws_sns
 from get_aws_resources import aws_sqs
@@ -797,6 +798,7 @@ AWS_RESOURCE_MODULES = {
     'servicediscovery': aws_servicediscovery,
     'shield': aws_shield,
     'ses': aws_ses,
+    'sesv2': aws_sesv2,
     'signer': aws_signer,
     'sns': aws_sns,
     'sqs': aws_sqs,

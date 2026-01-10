@@ -377,15 +377,15 @@ notimplemented = {
     "aws_ses_receipt_filter": True,
     "aws_ses_template": True,
     #
-    "aws_sesv2_account_vdm_attributes": True,
-    "aws_sesv2_configuration_set": True,
-    "aws_sesv2_configuration_set_event_destination": True,
-    "aws_sesv2_contact_list": True,
+    #"aws_sesv2_account_vdm_attributes": True,
+    #"aws_sesv2_configuration_set": True,
+    #"aws_sesv2_configuration_set_event_destination": True,
+    #"aws_sesv2_contact_list": True,
     "aws_sesv2_dedicated_ip_assignment": True,
-    "aws_sesv2_dedicated_ip_pool": True,
-    "aws_sesv2_email_identity": True,
-    "aws_sesv2_email_identity_feedback_attributes": True,
-    "aws_sesv2_email_identity_mail_from_attributes": True,
+    #"aws_sesv2_dedicated_ip_pool": True,
+    #"aws_sesv2_email_identity": True,
+    #"aws_sesv2_email_identity_feedback_attributes": True,
+    #"aws_sesv2_email_identity_mail_from_attributes": True,
     #
     "aws_shield_protection": True,
     "aws_shield_protection_health_check_association": True,
@@ -524,9 +524,9 @@ notimplemented = {
     "aws_servicecatalogappregistry_application": True,  ### TODO 6.27.0
     "aws_servicecatalogappregistry_attribute_group": True,  ### TODO 6.27.0
     "aws_servicecatalogappregistry_attribute_group_association": True,  ### TODO 6.27.0
-    "aws_sesv2_account_suppression_attributes": True,  ### TODO 6.27.0
-    "aws_sesv2_email_identity_policy": True,  ### TODO 6.27.0
-    "aws_sesv2_tenant": True,  ### TODO 6.27.0
+    #"aws_sesv2_account_suppression_attributes": True,  ### TODO 6.27.0
+    #"aws_sesv2_email_identity_policy": True,  ### TODO 6.27.0
+    "aws_sesv2_tenant": True,  ### TODO 6.27.0 - Terraform provider issue: "provider does not support resource type" during import
     "aws_shield_proactive_engagement": True,  ### TODO 6.27.0
     "aws_shield_subscription": True,  ### TODO 6.27.0
     "aws_ssmcontacts_rotation": True,  ### TODO 6.27.0

@@ -418,7 +418,6 @@
 ### aws_networkflowmonitor
 
 - [ ] `aws_networkflowmonitor_monitor` (FAILED - AWS API does not return scopeArn)
-- [x] `aws_networkflowmonitor_scope`
 
 ### aws_networkmanager
 
@@ -549,7 +548,6 @@
 - [ ] `aws_rolesanywhere_profile`
 - [ ] `aws_rolesanywhere_trust_anchor`
 
-`
 
 ### aws_rum
 
@@ -632,17 +630,17 @@
 
 ### aws_sesv2
 
-- [ ] `aws_sesv2_account_suppression_attributes`
-- [ ] `aws_sesv2_account_vdm_attributes`
-- [ ] `aws_sesv2_configuration_set`
+- [x] `aws_sesv2_account_suppression_attributes`
+- [x] `aws_sesv2_account_vdm_attributes`
+- [x] `aws_sesv2_configuration_set`
 - [ ] `aws_sesv2_configuration_set_event_destination`
-- [ ] `aws_sesv2_contact_list`
-- [ ] `aws_sesv2_dedicated_ip_pool`
-- [ ] `aws_sesv2_email_identity`
+- [x] `aws_sesv2_contact_list`
+- [x] `aws_sesv2_dedicated_ip_pool`
+- [x] `aws_sesv2_email_identity`
 - [ ] `aws_sesv2_email_identity_feedback_attributes`
 - [ ] `aws_sesv2_email_identity_mail_from_attributes`
-- [ ] `aws_sesv2_email_identity_policy`
-- [ ] `aws_sesv2_tenant`
+- [x] `aws_sesv2_email_identity_policy`
+- [x] `aws_sesv2_tenant`
 
 ### aws_shield
 
@@ -792,11 +790,8 @@ These resources use composite IDs (multiple identifiers separated by commas) and
 ### aws_lightsail
 
 - `aws_lightsail_bucket_resource_access` (composite ID)
-- `aws_lightsail_disk_attachment` (composite ID)
 - `aws_lightsail_domain_entry` (composite ID)
-- `aws_lightsail_lb_attachment` (composite ID)
 - `aws_lightsail_lb_certificate` (composite ID)
-- `aws_lightsail_lb_certificate_attachment` (composite ID)
 
 ### aws_m2
 

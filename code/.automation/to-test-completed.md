@@ -2,7 +2,7 @@
 
 This file tracks all resources that have been successfully tested following the new resource testing procedure.
 
-**Total Completed:** 111
+**Total Completed:** 116
 **Last Updated:** 2026-01-10
 
 ---
@@ -196,6 +196,14 @@ Resources are listed by service group in the order they were completed.
 ### aws_appstream
 
 - [x] `aws_appstream_stack` - ✓ PASSED (2026-01-03) - [test results](test_aws_appstream_stack/test-results.md)
+
+### aws_lightsail
+
+- [x] `aws_lightsail_database` - ✓ PASSED (2026-01-10) - [test results](test_aws_lightsail_database/test-results.md)
+- [x] `aws_lightsail_disk` - ✓ PASSED (2026-01-10) - [test results](test_aws_lightsail_disk/test-results.md)
+- [x] `aws_lightsail_instance` - ✓ PASSED (2026-01-10) - [test results](test_aws_lightsail_instance/test-results.md)
+- [x] `aws_lightsail_lb` - ✓ PASSED (2026-01-10) - [test results](test_aws_lightsail_lb/test-results.md)
+- [x] `aws_lightsail_lb_stickiness_policy` - ✓ PASSED (2026-01-10) - [test results](test_aws_lightsail_lb_stickiness_policy/test-results.md)
 
 <!-- Add completed resources below in this format:
 

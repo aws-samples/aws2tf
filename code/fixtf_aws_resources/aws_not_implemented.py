@@ -63,7 +63,7 @@ notimplemented = {
     "aws_dax_cluster": True,  ### TODO
 
     "aws_iot_thing_group": True,  ### TODO
-    "aws_lightsail_database": True,  ### TODO
+    #"aws_lightsail_database": True,  ### TODO
     "aws_macie2_classification_job": True,  ### TODO
     "aws_mskconnect_connector": True,  ### TODO
     "aws_networkfirewall_resource_policy": True, ### TODO
@@ -258,16 +258,16 @@ notimplemented = {
     "aws_licensemanager_grant_accepter": True,
     #
     "aws_lightsail_bucket_resource_access": True,
-    "aws_lightsail_disk": True,
+    #"aws_lightsail_disk": True,
     "aws_lightsail_disk_attachment": True,
     "aws_lightsail_domain_entry": True,
-    "aws_lightsail_instance": True,
-    "aws_lightsail_lb": True,
+    #"aws_lightsail_instance": True,
+    #"aws_lightsail_lb": True,
     "aws_lightsail_lb_attachment": True,
     "aws_lightsail_lb_certificate": True,
     "aws_lightsail_lb_certificate_attachment": True,
-    "aws_lightsail_lb_https_redirection_policy": True,
-    "aws_lightsail_lb_stickiness_policy": True,
+    #"aws_lightsail_lb_https_redirection_policy": True,
+    #"aws_lightsail_lb_stickiness_policy": True,
     #
     "aws_location_geofence_collection": True,
     "aws_location_map": True,

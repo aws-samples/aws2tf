@@ -354,12 +354,8 @@
 
 ### aws_lightsail
 
-- [ ] `aws_lightsail_database`
-- [ ] `aws_lightsail_disk`
-- [ ] `aws_lightsail_instance`
-- [ ] `aws_lightsail_lb`
-- [ ] `aws_lightsail_lb_https_redirection_policy`
-- [ ] `aws_lightsail_lb_stickiness_policy`
+- [x] `aws_lightsail_lb_https_redirection_policy` (SKIPPED - requires SSL certificate and domain)
+
 
 ### aws_location
 

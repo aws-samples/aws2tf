@@ -6093,8 +6093,8 @@ aws_lightsail_container_service_deployment_version = {
 
 aws_lightsail_database = {
 	"clfn":		"lightsail",
-	"descfn":	"get_databases",
-	"topkey":	"Databases",
+	"descfn":	"get_relational_databases",
+	"topkey":	"relationalDatabases",
 	"key":		"name",
 	"filterid":	"name"
 }
@@ -6102,7 +6102,7 @@ aws_lightsail_database = {
 aws_lightsail_disk = {
 	"clfn":		"lightsail",
 	"descfn":	"get_disks",
-	"topkey":	"Disks",
+	"topkey":	"disks",
 	"key":		"name",
 	"filterid":	"name"
 }
@@ -6142,7 +6142,7 @@ aws_lightsail_domain_entry = {
 aws_lightsail_instance = {
 	"clfn":		"lightsail",
 	"descfn":	"get_instances",
-	"topkey":	"Instances",
+	"topkey":	"instances",
 	"key":		"name",
 	"filterid":	"name"
 }
@@ -6165,8 +6165,8 @@ aws_lightsail_key_pair = {
 
 aws_lightsail_lb = {
 	"clfn":		"lightsail",
-	"descfn":	"get_key_pairs",
-	"topkey":	"KeyPairs",
+	"descfn":	"get_load_balancers",
+	"topkey":	"loadBalancers",
 	"key":		"name",
 	"filterid":	"name"
 }

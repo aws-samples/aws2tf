@@ -340,6 +340,10 @@ This file lists all CloudFormation resource types that cannot currently be imple
 
 - [ ] `AWS::Lightsail::StaticIp` <!-- NO IMPORT SUPPORT: aws_lightsail_static_ip - Terraform does not support importing this resource type -->
 
+### Logs (1 resources)
+
+- [ ] `AWS::Logs::QueryDefinition` <!-- NO IMPORT SUPPORT: aws_cloudwatch_query_definition - Terraform does not support importing this resource type -->
+
 ### Location (7 resources)
 
 - [ ] `AWS::Location::GeofenceCollection` <!-- NOT SUPPORTED: aws_location_geofence_collection is in aws_not_implemented.py -->

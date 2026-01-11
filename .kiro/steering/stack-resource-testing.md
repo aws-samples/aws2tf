@@ -4,6 +4,853 @@ This document defines the testing procedure for importing resources from existin
 
 **Note:** Before testing stack resources, you may want to run the PRE-TEST assessment. See `code/.automation/stack-pre-test-procedure.md` for details.
 
+## Testing Stages Overview
+
+Stack resource testing follows these stages:
+
+1. **Stage 1: Create and Deploy Test Stack** - Create a working CloudFormation stack with the resource
+2. **Stage 2: Import Stack Resources** - Use aws2tf to import the stack
+3. **Stage 3: Verify and Validate** - Ensure Terraform generation is correct
+4. **Stage 4: Cleanup** - Destroy the test stack
+
+---
+
+## Stage 1: Create and Deploy Test Stack
+
+### Purpose
+
+Create a fully functional CloudFormation stack containing the resource type being tested. This validates that the resource can be created and provides a real resource to import.
+
+### Directory Structure
+
+Create a test directory using the CloudFormation resource type name with `::` replaced by `_`:
+
+**Format:** `code/.automation/test_<CloudFormation_Type_With_Underscores>`
+
+**Examples:**
+- `AWS::Backup::BackupPlan` → `code/.automation/test_AWS_Backup_BackupPlan`
+- `AWS::EC2::VPC` → `code/.automation/test_AWS_EC2_VPC`
+- `AWS::Lambda::Function` → `code/.automation/test_AWS_Lambda_Function`
+
+### Step 1.1: Create Test Directory
+
+```bash
+# Example for AWS::Backup::BackupPlan
+mkdir -p code/.automation/test_AWS_Backup_BackupPlan
+cd code/.automation/test_AWS_Backup_BackupPlan
+```
+
+### Step 1.2: Determine Terraform Resource Name and Check Support
+
+**CRITICAL:** Before creating the CloudFormation template, verify the resource can be imported.
+
+#### Convert CloudFormation Type to Terraform Resource Name
+
+From the CloudFormation resource type (e.g., `AWS::Logs::QueryDefinition`):
+- Service: `Logs`
+- Resource: `QueryDefinition`
+- Expected Terraform resource name: `aws_cloudwatch_query_definition` or `aws_logs_query_definition`
+
+**Naming patterns:**
+- Most resources: `aws_<service_lowercase>_<resource_snake_case>`
+- CloudWatch Logs: Often use `aws_cloudwatch_` prefix
+- Check aws_dict.py to confirm exact name
+
+#### Check aws_not_implemented.py
+
+```bash
+grep "aws_cloudwatch_query_definition" code/fixtf_aws_resources/aws_not_implemented.py
+```
+
+**If found and UNCOMMENTED:**
+- Resource is marked as not implemented in aws2tf
+- **STOP:** Document as NOT SUPPORTED and skip to next resource
+- Do not create CloudFormation stack
+
+#### Check aws_no_import.py (CRITICAL)
+
+```bash
+grep "aws_cloudwatch_query_definition" code/fixtf_aws_resources/aws_no_import.py
+```
+
+**If found and UNCOMMENTED:**
+- Resource cannot be imported via Terraform
+- **STOP:** Document as NO IMPORT SUPPORT and skip to next resource
+- Do not create CloudFormation stack
+- Update tracking files and move to next resource
+
+**Example - Resource Cannot Be Imported:**
+```markdown
+# In test directory, create TEST_SKIPPED.md:
+
+# Test Skipped: AWS::Logs::QueryDefinition
+
+**Date:** 2026-01-11
+**Status:** SKIPPED - NO IMPORT SUPPORT
+
+## Reason
+
+The Terraform resource `aws_cloudwatch_query_definition` is listed in 
+`code/fixtf_aws_resources/aws_no_import.py`, which means Terraform does 
+not support importing this resource type.
+
+## Actions Taken
+
+1. Moved from to-test-stack.md to stack-unsupported.md
+2. Marked with NO IMPORT SUPPORT status
+3. No CloudFormation stack created (saved time)
+
+## Recommendation
+
+This resource cannot be tested via stack import. It can only be managed 
+if created by Terraform, not imported from existing infrastructure.
+```
+
+#### Check aws_dict.py Entry Exists
+
+```bash
+grep "aws_cloudwatch_query_definition" code/fixtf_aws_resources/aws_dict.py
+```
+
+**If not found:**
+- Resource needs to be added to aws_dict.py first
+- Follow standard resource testing procedure
+- **STOP:** Document that aws_dict.py entry is required
+
+**If found:** Verify the entry details:
+- Note the `clfn` (boto3 client name)
+- Note the `descfn` (API method name)
+- Note the `key` (ID field name)
+
+#### Verify Get Function Exists
+
+```bash
+find code/get_aws_resources/ -name "*.py" -exec grep -l "def get_aws_cloudwatch_query_definition" {} \;
+```
+
+**If not found:**
+- Get function needs to be created
+- Note this for Stage 2 implementation
+- Can proceed with stack creation (will implement in Stage 2)
+
+#### Optional: Verify boto3 API
+
+**Recommended for complex resources:**
+
+```bash
+python3 << 'EOF'
+import boto3
+
+# Check client and method exist
+client = boto3.client('logs', region_name='us-east-1')
+
+# List available methods
+methods = [m for m in dir(client) if 'query' in m.lower()]
+print("Available methods:", methods)
+
+# Test the describe method
+response = client.describe_query_definitions(maxResults=10)
+print(f"API works! Found {len(response['queryDefinitions'])} query definitions")
+EOF
+```
+
+**This helps identify:**
+- Correct client name
+- Correct API method name
+- Required parameters
+- Response structure
+
+#### If Resource Can Be Imported - Proceed
+
+If the resource passes all checks:
+- ✅ NOT in aws_not_implemented.py
+- ✅ NOT in aws_no_import.py
+- ✅ EXISTS in aws_dict.py (or will be added)
+- ✅ Get function exists (or will be created)
+
+Proceed to Step 1.3.
+
+### Step 1.3: Create CloudFormation Template
+
+Create a YAML file named `template.yaml` with a working CloudFormation template.
+
+**Template Requirements:**
+- Must include the resource type being tested
+- Should use a minimal but complete configuration
+- Must be deployable to `us-east-1` region
+- Can include prerequisite resources if needed
+- Should use descriptive resource names
+
+**Example Template Structure:**
+```yaml
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Test stack for AWS::Backup::BackupPlan'
+
+Resources:
+  # Prerequisite resources (if needed)
+  TestVault:
+    Type: AWS::Backup::BackupVault
+    Properties:
+      BackupVaultName: test-backup-vault-20260111
+  
+  # Main resource being tested
+  TestBackupPlan:
+    Type: AWS::Backup::BackupPlan
+    Properties:
+      BackupPlan:
+        BackupPlanName: test-backup-plan-20260111
+        BackupPlanRule:
+          - RuleName: DailyBackup
+            TargetBackupVault: !Ref TestVault
+            ScheduleExpression: "cron(0 5 ? * * *)"
+            StartWindowMinutes: 60
+            CompletionWindowMinutes: 120
+            Lifecycle:
+              DeleteAfterDays: 30
+
+Outputs:
+  BackupPlanId:
+    Description: Backup Plan ID
+    Value: !Ref TestBackupPlan
+  BackupPlanArn:
+    Description: Backup Plan ARN
+    Value: !GetAtt TestBackupPlan.BackupPlanArn
+```
+
+**Guidelines for Creating Templates:**
+
+1. **Search AWS Documentation** for the resource type
+2. **Use minimal configuration** - only required properties
+3. **Include prerequisites** - create dependent resources in the same template
+4. **Add unique identifiers** - use timestamps or unique names (e.g., `test-resource-20260111`)
+5. **Add outputs** - capture resource IDs and ARNs for verification
+6. **Test incrementally** - start simple, add complexity if needed
+
+### Step 1.4: Deploy the Stack
+
+Deploy the CloudFormation stack to `us-east-1` region. **IMPORTANT:** Stack names must use hyphens, not underscores.
+
+```bash
+# Stack name: Use hyphens to match directory name pattern
+# Directory: test_AWS_CloudWatch_Dashboard
+# Stack name: test-AWS-CloudWatch-Dashboard (underscores replaced with hyphens)
+
+STACK_NAME="test-AWS-CloudWatch-Dashboard"
+
+# Deploy the stack
+aws cloudformation create-stack \
+  --stack-name ${STACK_NAME} \
+  --template-body file://template.yaml \
+  --region us-east-1 \
+  --capabilities CAPABILITY_IAM
+
+# Wait for stack creation to complete (REQUIRED - do not skip this step)
+aws cloudformation wait stack-create-complete \
+  --stack-name ${STACK_NAME} \
+  --region us-east-1
+```
+
+**Critical Notes:**
+- ⚠️ **Stack naming:** CloudFormation stack names cannot contain underscores. Use hyphens instead.
+  - Directory: `test_AWS_CloudWatch_Dashboard` (underscores OK)
+  - Stack name: `test-AWS-CloudWatch-Dashboard` (must use hyphens)
+- ⚠️ **Always use `aws cloudformation wait`** - This command blocks until CREATE_COMPLETE status
+- Use `--capabilities CAPABILITY_IAM` if the stack creates IAM resources
+- Use `--capabilities CAPABILITY_NAMED_IAM` if creating named IAM resources
+- Some resources may take several minutes to create
+- The wait command will timeout after 30 minutes by default
+
+### Step 1.5: Verify Stack Deployment
+
+Verify the stack was created successfully:
+
+```bash
+# Check stack status
+aws cloudformation describe-stacks \
+  --stack-name ${STACK_NAME} \
+  --region us-east-1 \
+  --query 'Stacks[0].StackStatus'
+
+# Expected output: "CREATE_COMPLETE"
+
+# List stack resources
+aws cloudformation list-stack-resources \
+  --stack-name ${STACK_NAME} \
+  --region us-east-1
+```
+
+### Step 1.6: Document Stack Creation
+
+Create a `README.md` in the test directory documenting:
+
+```markdown
+# Test Stack: AWS::Backup::BackupPlan
+
+**Created:** 2026-01-11
+**Region:** us-east-1
+**Stack Name:** test_AWS_Backup_BackupPlan
+
+## Resources Created
+
+- AWS::Backup::BackupVault (prerequisite)
+- AWS::Backup::BackupPlan (target resource)
+
+## Deployment
+
+\`\`\`bash
+aws cloudformation create-stack \
+  --stack-name test_AWS_Backup_BackupPlan \
+  --template-body file://template.yaml \
+  --region us-east-1 \
+  --capabilities CAPABILITY_IAM
+
+aws cloudformation wait stack-create-complete \
+  --stack-name test_AWS_Backup_BackupPlan \
+  --region us-east-1
+\`\`\`
+
+## Outputs
+
+- BackupPlanId: plan-abc123...
+- BackupPlanArn: arn:aws:backup:us-east-1:123456789012:backup-plan:...
+
+## Notes
+
+- Backup vault is required prerequisite
+- Plan includes daily backup rule
+- 30-day retention policy
+```
+
+### Stage 1 Completion Criteria
+
+Stage 1 is complete when:
+- ✅ Test directory created
+- ✅ Checked aws_not_implemented.py (not blocked)
+- ✅ Checked aws_no_import.py (import supported) **CRITICAL**
+- ✅ Verified resource in aws_dict.py (or noted for Stage 2)
+- ✅ Verified get function exists (or noted for Stage 2)
+- ✅ CloudFormation template created
+- ✅ Stack deployed successfully
+- ✅ Stack status is CREATE_COMPLETE
+- ✅ Target resource exists
+- ✅ README.md documented
+
+**IMPORTANT:** Do not proceed to Stage 2 until Stage 1 is complete.
+
+### Handling Prerequisites
+
+Many CloudFormation resources require prerequisite resources. This is expected and acceptable:
+
+**Common Prerequisites:**
+- **IAM Roles** - For Lambda, ECS, etc.
+- **VPCs/Subnets** - For network-dependent resources
+- **S3 Buckets** - For logging, artifacts
+- **KMS Keys** - For encryption
+- **Security Groups** - For network resources
+
+**Best Practices:**
+1. Create prerequisites in the same template
+2. Use minimal configuration for prerequisites
+3. Use `!Ref` and `!GetAtt` to reference prerequisites
+4. Document all prerequisites in README.md
+5. Keep the template as simple as possible
+
+### Troubleshooting Stage 1
+
+**Issue: Stack name validation error**
+```
+ValidationError: Member must satisfy regular expression pattern: [a-zA-Z][-a-zA-Z0-9]*
+```
+- **Cause:** Stack name contains underscores
+- **Solution:** Replace underscores with hyphens in stack name
+- **Example:** `test_AWS_CloudWatch_Dashboard` → `test-AWS-CloudWatch-Dashboard`
+
+**Issue: Stack creation fails**
+- Check CloudFormation events: `aws cloudformation describe-stack-events --stack-name <name>`
+- Review error messages in the events
+- Fix template and retry (delete failed stack first)
+
+**Issue: Resource requires complex prerequisites**
+- Start with minimal prerequisites
+- Add complexity incrementally
+- Document what's required in README.md
+
+**Issue: Resource not available in us-east-1**
+- Check AWS service availability
+- Try alternative region if necessary
+- Document region requirements
+
+**Issue: Wait command times out**
+- Check stack status manually: `aws cloudformation describe-stacks --stack-name <name>`
+- Some resources take longer than 30 minutes
+- Consider using `--no-wait` and checking status separately
+
+### Lessons Learned from Testing
+
+**From AWS::CloudWatch::Dashboard test (2026-01-11):**
+
+1. **Stack Naming Convention**
+   - Directory names use underscores: `test_AWS_CloudWatch_Dashboard`
+   - Stack names must use hyphens: `test-AWS-CloudWatch-Dashboard`
+   - CloudFormation regex pattern: `[a-zA-Z][-a-zA-Z0-9]*`
+
+2. **Wait Command is Critical**
+   - Always use `aws cloudformation wait stack-create-complete`
+   - This command blocks until CREATE_COMPLETE status
+   - Do not proceed to Stage 2 without confirming CREATE_COMPLETE
+
+3. **Simple Resources Work Best**
+   - CloudWatch Dashboard had zero dependencies
+   - Deployed in seconds
+   - Perfect for initial testing
+
+4. **Template Best Practices**
+   - Use inline JSON/YAML for simple content (like dashboard body)
+   - Add descriptive outputs for verification
+   - Include timestamp in resource names for uniqueness
+
+5. **Verification Steps**
+   - Use `aws cloudformation describe-stacks` to confirm status
+   - Use `aws cloudformation list-stack-resources` to see all resources
+   - Check physical resource IDs match expected values
+
+---
+
+## Stage 2: Update stacks.py and Import Stack
+
+### Purpose
+
+Update the stacks.py mapping to use the correct Terraform resource type instead of `aws_null`, then import the CloudFormation stack using aws2tf to generate Terraform configuration.
+
+### Step 2.1: Check PhysicalResourceId Format
+
+Determine whether to use `pid` or `parn` in stacks.py by examining the PhysicalResourceId:
+
+```bash
+aws cloudformation describe-stack-resource \
+  --stack-name test-AWS-CloudWatch-Dashboard \
+  --region us-east-1 \
+  --logical-resource-id <LogicalResourceId> \
+  --query 'StackResourceDetail.[ResourceType,PhysicalResourceId]' \
+  --output table
+```
+
+**Decision Rule:**
+- If PhysicalResourceId **starts with "arn:"** → Use `parn`
+- If PhysicalResourceId **does NOT start with "arn:"** → Use `pid`
+
+**Examples:**
+- `test-cloudwatch-dashboard-20260111` → Use `pid`
+- `arn:aws:sns:us-east-1:123456789012:my-topic` → Use `parn`
+
+### Step 2.2: Verify Terraform Resource in aws_dict.py
+
+Check if the Terraform resource type is already defined:
+
+```bash
+grep "aws_cloudwatch_dashboard" code/fixtf_aws_resources/aws_dict.py
+```
+
+**If found:** Note the resource name and proceed to Step 2.3
+
+**If not found:** You must first implement the resource following the standard resource testing procedure in `.kiro/steering/new-resource-testing.md`
+
+### Step 2.3: Update stacks.py Entry
+
+Find and update the CloudFormation resource mapping in `code/stacks.py`:
+
+**Before (placeholder):**
+```python
+elif type == "AWS::CloudWatch::Dashboard": common.call_resource("aws_null", type+" "+pid)
+```
+
+**After (using pid):**
+```python
+elif type == "AWS::CloudWatch::Dashboard": common.call_resource("aws_cloudwatch_dashboard", pid)
+```
+
+**After (using parn - if PhysicalResourceId is an ARN):**
+```python
+elif type == "AWS::SNS::Topic": common.call_resource("aws_sns_topic", parn)
+```
+
+**Important:**
+- Use the exact Terraform resource name from aws_dict.py
+- Use `pid` or `parn` based on Step 2.1 determination
+- Maintain alphabetical ordering in stacks.py
+
+### Step 2.4: Run aws2tf Stack Import
+
+Import the CloudFormation stack:
+
+```bash
+cd <workspace_root>
+./aws2tf.py -r us-east-1 -t stack -i test-AWS-CloudWatch-Dashboard
+```
+
+**Expected Output:**
+```
+Stage 1 of 10, Terraform Initialise ... PASSED
+Stage 2 of 10, Building core resource lists ...
+Stage 3 of 10 getting resources ...
+...
+Stage 7 of 10, Penultimate Terraform Plan ...
+Plan: 1 to import, 0 to add, 0 to change, 0 to destroy
+...
+Stage 10 of 10, Passed post import check - No changes in plan
+```
+
+**Success Criteria:**
+- ✅ All 10 stages pass
+- ✅ Resource is discovered and imported
+- ✅ Terraform files generated in `generated/tf-<account>-<region>/`
+- ✅ Post-import plan shows 0 changes (no drift)
+
+### Step 2.5: Verify Generated Terraform
+
+Check the generated Terraform configuration:
+
+```bash
+ls -la generated/tf-*/aws_cloudwatch_dashboard*.tf
+cat generated/tf-*/aws_cloudwatch_dashboard*.tf
+```
+
+**Verify:**
+- ✅ Resource type matches expected Terraform resource
+- ✅ Resource name is based on PhysicalResourceId
+- ✅ All properties are captured correctly
+- ✅ No syntax errors
+
+### Step 2.6: Validate Post-Import Plan
+
+```bash
+cd generated/tf-<account>-<region>
+terraform plan
+```
+
+**Expected Result:**
+```
+Plan: 0 to import, 0 to add, 0 to change, 0 to destroy
+```
+
+**If plan shows changes:**
+- Review what fields are changing
+- May need to add handler in `code/fixtf_aws_resources/fixtf_<service>.py`
+- May need lifecycle blocks to ignore computed fields
+- Document any drift issues
+
+### Stage 2 Completion Criteria
+
+Stage 2 is complete when:
+- ✅ PhysicalResourceId format determined (pid vs parn)
+- ✅ Terraform resource verified in aws_dict.py
+- ✅ Resource added to aws_dict.py dictionary (if missing)
+- ✅ Get function created (if missing)
+- ✅ stacks.py updated with correct resource mapping
+- ✅ aws2tf import completed successfully (all 10 stages passed)
+- ✅ Terraform files generated
+- ✅ Post-import plan shows 0 changes (or documented drift)
+- ✅ Results documented
+
+### Troubleshooting Stage 2
+
+**Issue: "Can not import type: aws_resource_name"**
+- **Symptom:** Warning message during import, no import files generated
+- **Cause:** Resource is in aws_no_import.py
+- **Solution:** 
+  - This should have been caught in Stage 1, Step 1.2
+  - Delete the stack immediately
+  - Move resource to stack-unsupported.md with NO IMPORT SUPPORT status
+  - Create TEST_SKIPPED.md documenting why
+  - STOP testing this resource
+
+**Issue: "ERROR: clfn is None with type=aws_resource_name"**
+- **Symptom:** Import fails with clfn is None error
+- **Cause:** Resource not in aws_dict.py dictionary (only defined as variable)
+- **Solution:** 
+  - Find the resource variable definition in aws_dict.py
+  - Add it to the dictionary at the end of the file (alphabetically)
+  - Example: `"aws_cloudwatch_contributor_insight_rule": aws_cloudwatch_contributor_insight_rule,`
+  - Retry import
+
+**Issue: "Parameter validation failed: Unknown parameter"**
+- **Symptom:** boto3 API rejects parameters in get function
+- **Cause:** API doesn't support the parameters being used
+- **Solution:** 
+  - Test API directly with boto3 to find correct parameters
+  - Update get function to use correct parameters
+  - Some APIs require `maxResults`, others don't support filtering by ID
+  - May need to list all and filter manually
+  - Example: `describe_query_definitions(maxResults=1000)`
+
+**Issue: Validation fails with "required field is null"**
+- **Symptom:** Terraform validation fails: `Must set a configuration value for the X attribute`
+- **Cause:** API response field name doesn't match Terraform attribute name
+- **Examples:**
+  - API returns `Definition`, Terraform expects `rule_definition`
+  - API returns `State`, Terraform expects `rule_state`
+- **Solution:** 
+  - Check API response structure with AWS CLI or boto3
+  - Create custom handler in `fixtf_<service>.py` to map fields
+  - May require significant handler logic
+  - Consider if resource is worth the effort (max 4 attempts)
+
+**Issue: Wrong boto3 client name in aws_dict.py**
+- **Symptom:** Get function not called, or API errors
+- **Cause:** aws_dict.py has wrong `clfn` value
+- **Examples:**
+  - `cloudwatch` vs `logs` for CloudWatch Logs resources
+  - `cloudwatch` vs `cloudwatch-logs` for some services
+- **Solution:**
+  - Test with boto3: `boto3.client('<client_name>')`
+  - Update `clfn` in aws_dict.py
+  - Retry import
+
+**Issue: Resource not found during import**
+- Verify stack name matches exactly (use hyphens, not underscores)
+- Check region is correct (`-r us-east-1`)
+- Verify stack still exists and is in CREATE_COMPLETE state
+
+**Issue: Wrong resource type imported**
+- Check stacks.py entry uses correct Terraform resource name
+- Verify spelling matches aws_dict.py exactly
+
+**Issue: Post-import plan shows changes**
+- Review which fields are changing
+- Check if fields are computed/read-only
+- May need handler to skip computed fields
+- May need lifecycle block to ignore changes
+- Document the drift and reason
+
+**Issue: Import fails with "aws_null"**
+- Forgot to update stacks.py
+- Check that you changed `aws_null` to actual resource type
+
+### Lessons Learned from Testing
+
+**From AWS::CloudWatch::Dashboard test (2026-01-11) - SUCCESS:**
+
+1. **PhysicalResourceId Determines pid vs parn**
+   - Dashboard uses dashboard name (simple ID) → Use `pid`
+   - SNS Topic uses ARN → Use `parn`
+   - Always check before updating stacks.py
+
+2. **Clean Imports Are Possible**
+   - CloudWatch Dashboard imported with zero drift
+   - No handler needed
+   - No lifecycle blocks needed
+   - Post-import plan: 0 changes
+
+3. **aws2tf Execution Time**
+   - Simple resources: ~45 seconds
+   - Includes all 10 stages
+   - Most time in Terraform operations
+
+4. **Generated File Naming**
+   - Pattern: `aws_<resource>__<physical-id>.tf`
+   - Example: `aws_cloudwatch_dashboard__test-cloudwatch-dashboard-20260111.tf`
+
+**From AWS::Logs::QueryDefinition test (2026-01-11) - FAILED (NO IMPORT SUPPORT):**
+
+1. **aws_no_import.py Check is Critical**
+   - Should be done in Stage 1, Step 1.2 BEFORE creating stack
+   - Saves time by not creating unnecessary stacks
+   - QueryDefinition was in aws_no_import.py - caught too late
+
+2. **boto3 Client Name Must Be Correct**
+   - aws_dict.py had `cloudwatch` but should be `logs`
+   - Wrong client name causes "clfn is None" errors
+   - Always verify client name with boto3
+
+3. **API Parameter Requirements Vary**
+   - `describe_query_definitions` requires `maxResults` parameter
+   - Cannot call without it (returns 0 results)
+   - Not all APIs support filtering by ID
+   - May need to list all and filter manually
+
+4. **Dictionary Registration Required**
+   - Resource variable can exist in aws_dict.py
+   - But must also be in the dictionary at the end of the file
+   - Missing from dictionary causes "clfn is None" error
+   - Always add to dictionary alphabetically
+
+**From AWS::CloudWatch::InsightRule test (2026-01-11) - PARTIAL (Field Mapping Issues):**
+
+1. **Field Name Mapping Issues**
+   - API returns `Definition`, Terraform expects `rule_definition`
+   - API returns `State`, Terraform expects `rule_state`
+   - Requires custom handler to map fields
+   - Cannot rely on automatic field mapping
+
+2. **Complex Resources Need Handlers**
+   - Some resources need custom field transformation
+   - Generic handler may not work for all fields
+   - May require multiple iterations to get right
+   - Consider effort vs value (max 4 attempts)
+
+3. **Import Can Succeed But Validation Fail**
+   - Resource imported successfully
+   - Terraform files generated
+   - But validation fails due to null required fields
+   - Indicates handler is needed
+
+### Quick Fail Criteria
+
+**STOP testing immediately if:**
+
+1. ✅ **Resource in aws_no_import.py** → Mark as NO IMPORT SUPPORT, move to stack-unsupported.md
+2. ✅ **Resource in aws_not_implemented.py** → Mark as NOT SUPPORTED, move to stack-unsupported.md
+3. ✅ **No Terraform resource exists** → Mark as NO TERRAFORM SUPPORT, move to stack-unsupported.md
+4. ✅ **After 4 failed fix attempts** → Document issues, consider marking as complex/deferred
+
+**Do NOT:**
+- Create CloudFormation stacks for resources that can't be imported
+- Spend excessive time on complex field mapping issues
+- Continue after 4 failed attempts per issue
+
+### Stage 2 Decision Tree
+
+When a test fails in Stage 2, follow this decision tree:
+
+```
+Import failed?
+├─ "Can not import type" → Resource in aws_no_import.py
+│  └─ Action: Move to stack-unsupported.md, delete stack, STOP
+│
+├─ "clfn is None" → Resource not in aws_dict.py dictionary
+│  └─ Action: Add to dictionary, retry import
+│
+├─ "Parameter validation failed" → Wrong API parameters
+│  └─ Action: Fix get function parameters, retry import
+│
+├─ "Validation failed: required field is null" → Field mapping issue
+│  └─ Action: Create handler to map fields, retry (max 4 attempts)
+│
+└─ Other errors → Review logs, fix incrementally (max 4 attempts)
+```
+
+---
+
+## Stage 3: Cleanup and Documentation
+
+### Purpose
+
+Clean up test resources and update tracking files to mark the resource as tested.
+
+### Step 3.1: Delete CloudFormation Stack
+
+Delete the test stack:
+
+```bash
+aws cloudformation delete-stack \
+  --stack-name test-AWS-CloudWatch-Dashboard \
+  --region us-east-1
+
+# Wait for deletion to complete (REQUIRED)
+aws cloudformation wait stack-delete-complete \
+  --stack-name test-AWS-CloudWatch-Dashboard \
+  --region us-east-1
+```
+
+**Verify Deletion:**
+```bash
+aws cloudformation describe-stacks \
+  --stack-name test-AWS-CloudWatch-Dashboard \
+  --region us-east-1
+```
+
+**Expected:** `ValidationError: Stack with id ... does not exist`
+
+### Step 3.2: Update Tracking File
+
+Update `code/.automation/to-test-stack.md`:
+
+**Before:**
+```markdown
+- [ ] `AWS::CloudWatch::Dashboard` <!-- READY: aws_cloudwatch_dashboard can be implemented in aws2tf -->
+```
+
+**After:**
+```markdown
+- [x] `AWS::CloudWatch::Dashboard` <!-- COMPLETED: Test Successful -->
+```
+
+### Step 3.3: Document Test Results
+
+Create a summary document in the test directory:
+
+**File:** `code/.automation/test_AWS_CloudWatch_Dashboard/STAGE3_CLEANUP.md`
+
+**Include:**
+- Test date and status
+- All three stage results
+- Key metrics (prerequisites, import success, drift)
+- Changes made to aws2tf (stacks.py updates)
+- Lessons learned
+- Test artifacts and file locations
+
+### Step 3.4: Preserve Test Artifacts
+
+**Keep these files for reference:**
+- `template.yaml` - CloudFormation template
+- `README.md` - Initial setup documentation
+- `STAGE2_RESULTS.md` - Import test results
+- `STAGE3_CLEANUP.md` - Final summary
+
+**Optional: Clean up generated Terraform**
+```bash
+rm -rf generated/tf-<account>-<region>
+```
+
+### Stage 3 Completion Criteria
+
+Stage 3 is complete when:
+- ✅ CloudFormation stack deleted
+- ✅ Stack deletion verified
+- ✅ Tracking file updated (marked [x] with COMPLETED comment)
+- ✅ Test results documented
+- ✅ Test artifacts preserved
+
+### Troubleshooting Stage 3
+
+**Issue: Stack deletion fails**
+- Check for resources with deletion protection
+- Review stack events for specific errors
+- May need to manually delete dependent resources first
+
+**Issue: Stack deletion hangs**
+- Some resources take time to delete (up to 30 minutes)
+- Check stack status: `aws cloudformation describe-stacks`
+- Review DELETE_IN_PROGRESS events
+
+### Complete Test Summary Template
+
+After completing all stages, your test directory should contain:
+
+```
+code/.automation/test_AWS_CloudWatch_Dashboard/
+├── template.yaml              # CloudFormation template
+├── README.md                  # Stage 1 documentation
+├── STAGE2_RESULTS.md         # Stage 2 import results
+└── STAGE3_CLEANUP.md         # Final summary
+```
+
+### Success Metrics
+
+A successful test should achieve:
+- ✅ Stack deployed in Stage 1
+- ✅ Clean import in Stage 2 (all 10 stages passed)
+- ✅ Zero drift (post-import plan: 0 changes)
+- ✅ Stack cleaned up in Stage 3
+- ✅ Documentation complete
+
+**If drift detected:**
+- Document the specific fields causing drift
+- Note if handler or lifecycle blocks are needed
+- Still mark as COMPLETED if import works (drift can be fixed later)
+
+---
+
 ## What is Stack Resource Import?
 
 Stack resource import is a feature that allows aws2tf to discover and import all AWS resources that were created by a CloudFormation stack. Instead of importing resources one-by-one by type, you can import an entire stack's resources at once.

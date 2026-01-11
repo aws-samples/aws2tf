@@ -233,7 +233,7 @@ To fully implement any of these resources, follow the stack resource testing pro
 
 - [ ] `AWS::CloudWatch::AnomalyDetector` <!-- READY: aws_cloudwatch_anomaly_detector can be implemented in aws2tf -->
 - [ ] `AWS::CloudWatch::CompositeAlarm` <!-- READY: aws_cloudwatch_composite_alarm can be implemented in aws2tf -->
-- [ ] `AWS::CloudWatch::Dashboard` <!-- READY: aws_cloudwatch_dashboard can be implemented in aws2tf -->
+- [x] `AWS::CloudWatch::Dashboard` <!-- COMPLETED: Test Successful -->
 - [ ] `AWS::CloudWatch::InsightRule` <!-- READY: aws_cloudwatch_insight_rule can be implemented in aws2tf -->
 - [ ] `AWS::CloudWatch::MetricStream` <!-- READY: aws_cloudwatch_metric_stream can be implemented in aws2tf -->
 
@@ -855,7 +855,6 @@ To fully implement any of these resources, follow the stack resource testing pro
 - [ ] `AWS::Logs::LogStream` <!-- READY: aws_logs_log_stream can be implemented in aws2tf -->
 - [ ] `AWS::Logs::LogStream` <!-- READY: aws_logs_log_stream can be implemented in aws2tf -->
 - [ ] `AWS::Logs::MetricFilter` <!-- READY: aws_logs_metric_filter can be implemented in aws2tf -->
-- [ ] `AWS::Logs::QueryDefinition` <!-- READY: aws_logs_query_definition can be implemented in aws2tf -->
 - [ ] `AWS::Logs::ResourcePolicy` <!-- READY: aws_logs_resource_policy can be implemented in aws2tf -->
 - [ ] `AWS::Logs::SubscriptionFilter` <!-- READY: aws_logs_subscription_filter can be implemented in aws2tf -->
 
@@ -1259,7 +1258,7 @@ To fully implement any of these resources, follow the stack resource testing pro
 ### Scheduler (2 resources)
 
 - [ ] `AWS::Scheduler::Schedule` <!-- READY: aws_scheduler_schedule can be implemented in aws2tf -->
-- [ ] `AWS::Scheduler::ScheduleGroup` <!-- READY: aws_scheduler_schedule_group can be implemented in aws2tf -->
+- [x] `AWS::Scheduler::ScheduleGroup` <!-- COMPLETED: Test Successful -->
 
 ### SecurityHub (3 resources)
 

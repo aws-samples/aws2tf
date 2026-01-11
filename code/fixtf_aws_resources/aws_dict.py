@@ -2300,7 +2300,7 @@ aws_cloudwatch_metric_stream = {
 }
 
 aws_cloudwatch_query_definition = {
-	"clfn":		"cloudwatch",
+	"clfn":		"logs",
 	"descfn":	"describe_query_definitions",
 	"topkey":	"queryDefinitions",
 	"key":		"queryDefinitionId",
@@ -13175,6 +13175,7 @@ aws_resources = {
 	"aws_cloudtrail": aws_cloudtrail,
 	"aws_cloudtrail_event_data_store": aws_cloudtrail_event_data_store,
 	"aws_cloudwatch_composite_alarm": aws_cloudwatch_composite_alarm,
+	"aws_cloudwatch_contributor_insight_rule": aws_cloudwatch_contributor_insight_rule,
 	"aws_cloudwatch_dashboard": aws_cloudwatch_dashboard,
 	"aws_cloudwatch_event_api_destination": aws_cloudwatch_event_api_destination,
 	"aws_cloudwatch_event_archive": aws_cloudwatch_event_archive,

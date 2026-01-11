@@ -5,6 +5,7 @@ log = logging.getLogger('aws2tf')
 import context
 import inspect
 import boto3
+from botocore.config import Config
 
 def get_aws_cloudwatch_log_group(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
@@ -280,4 +281,29 @@ def get_aws_cloudwatch_log_subscription_filter(type, id, clfn, descfn, topkey, k
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
+    return True
+
+def get_aws_cloudwatch_query_definition(type, id, clfn, descfn, topkey, key, filterid):
+    """
+    Get CloudWatch Logs query definitions
+    """
+    try:
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all query definitions - not pageable, but needs maxResults
+            response = client.describe_query_definitions(maxResults=1000)
+            for j in response[topkey]:
+                common.write_import(type, j[key], None)
+        else:
+            # Get specific query definition - API doesn't support filtering by ID
+            # So we list all and filter manually
+            response = client.describe_query_definitions(maxResults=1000)
+            for j in response[topkey]:
+                if j[key] == id:
+                    common.write_import(type, j[key], None)
+                    break
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
     return True

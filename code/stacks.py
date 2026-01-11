@@ -1448,7 +1448,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::WorkSpacesWeb::TrustStore": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::WorkSpacesWeb::UserAccessLoggingSettings": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::WorkSpacesWeb::UserSettings": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::XRay::Group": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::XRay::Group": common.call_resource("aws_xray_group", parn)
             elif type == "AWS::XRay::ResourcePolicy": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::XRay::SamplingRule": common.call_resource("aws_null", type+" "+pid)
             elif type == "": common.call_resource("aws_null", type+" "+pid)      

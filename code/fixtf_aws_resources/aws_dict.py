@@ -10517,10 +10517,10 @@ aws_xray_encryption_config = {
 
 aws_xray_group = {
 	"clfn":		"xray",
-	"descfn":	"get_group",
-	"topkey":	"Group",
+	"descfn":	"get_groups",
+	"topkey":	"Groups",
 	"key":		"GroupName",
-	"filterid":	"GroupName"
+	"filterid":	"GroupARN"
 }
 
 aws_xray_sampling_rule = {

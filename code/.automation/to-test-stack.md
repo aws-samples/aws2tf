@@ -1380,7 +1380,7 @@ To fully implement any of these resources, follow the stack resource testing pro
 
 ### XRay (3 resources)
 
-- [ ] `AWS::XRay::Group` <!-- READY: aws_xray_group can be implemented in aws2tf -->
+- [x] `AWS::XRay::Group` <!-- COMPLETED: Test Successful -->
 - [ ] `AWS::XRay::ResourcePolicy` <!-- READY: aws_xray_resource_policy can be implemented in aws2tf -->
 - [ ] `AWS::XRay::SamplingRule` <!-- READY: aws_xray_sampling_rule can be implemented in aws2tf -->
 

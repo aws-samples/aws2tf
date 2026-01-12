@@ -22,24 +22,124 @@ def get_aws_sesv2_configuration_set(type, id, clfn, descfn, topkey, key, filteri
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
     return True
 
+def get_aws_sesv2_email_identity_mail_from_attributes(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all email identities - mail-from attributes are part of each identity
+            response = client.list_email_identities()
+            for j in response.get('EmailIdentities', []):
+                identity_name = j['IdentityName']
+                # Check if this identity has mail-from attributes configured
+                try:
+                    detail = client.get_email_identity(EmailIdentity=identity_name)
+                    # Only import if mail-from domain is explicitly configured
+                    if 'MailFromAttributes' in detail and detail['MailFromAttributes'].get('MailFromDomain'):
+                        common.write_import(type, identity_name, None)
+                except Exception as e:
+                    if common.context.debug:
+                        common.log.debug(f"No mail-from attributes for {identity_name}: {e}")
+                    continue
+        else:
+            # Get specific email identity mail-from attributes
+            response = client.get_email_identity(EmailIdentity=id)
+            if response and 'MailFromAttributes' in response and response['MailFromAttributes'].get('MailFromDomain'):
+                common.write_import(type, id, None)
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    return True
+
+def get_aws_sesv2_email_identity_feedback_attributes(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all email identities - feedback attributes are part of each identity
+            response = client.list_email_identities()
+            for j in response.get('EmailIdentities', []):
+                identity_name = j['IdentityName']
+                # Check if this identity has feedback attributes configured
+                try:
+                    detail = client.get_email_identity(EmailIdentity=identity_name)
+                    # Only import if feedback forwarding is explicitly configured
+                    if 'FeedbackForwardingStatus' in detail:
+                        common.write_import(type, identity_name, None)
+                except Exception as e:
+                    if common.context.debug:
+                        common.log.debug(f"No feedback attributes for {identity_name}: {e}")
+                    continue
+        else:
+            # Get specific email identity feedback attributes
+            response = client.get_email_identity(EmailIdentity=id)
+            if response and 'FeedbackForwardingStatus' in response:
+                common.write_import(type, id, None)
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    return True
+
 def get_aws_sesv2_email_identity(type, id, clfn, descfn, topkey, key, filterid):
     try:
         config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
         client = boto3.client(clfn, config=config)
         
         if id is None:
-            # List all email identities
-            paginator = client.get_paginator(descfn)
-            response = []
-            for page in paginator.paginate():
-                response = response + page[topkey]
-            for j in response:
+            # List all email identities - not pageable
+            response = client.list_email_identities()
+            for j in response[topkey]:
                 common.write_import(type, j[key], None)
         else:
             # Get specific email identity
             response = client.get_email_identity(EmailIdentity=id)
             if response:
                 common.write_import(type, id, None)
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    return True
+
+def get_aws_sesv2_configuration_set_event_destination(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all configuration sets, then get event destinations for each
+            response = client.list_configuration_sets()
+            config_sets = response.get('ConfigurationSets', [])
+            
+            for config_set_name in config_sets:
+                try:
+                    # Get event destinations for this configuration set
+                    dest_response = client.get_configuration_set_event_destinations(
+                        ConfigurationSetName=config_set_name
+                    )
+                    destinations = dest_response.get('EventDestinations', [])
+                    for dest in destinations:
+                        dest_name = dest['Name']
+                        composite_id = f"{config_set_name}|{dest_name}"
+                        common.write_import(type, composite_id, None)
+                except Exception as e:
+                    if common.context.debug:
+                        common.log.debug(f"No event destinations for config set {config_set_name}: {e}")
+                    continue
+        else:
+            # Handle composite ID: configuration_set_name|event_destination_name
+            if '|' in id:
+                config_set_name, dest_name = id.split('|', 1)
+                try:
+                    response = client.get_configuration_set_event_destinations(
+                        ConfigurationSetName=config_set_name
+                    )
+                    destinations = response.get('EventDestinations', [])
+                    for dest in destinations:
+                        if dest['Name'] == dest_name:
+                            common.write_import(type, id, None)
+                            break
+                except Exception as e:
+                    if common.context.debug:
+                        common.log.debug(f"Event destination not found: {e}")
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
     return True
@@ -59,6 +159,37 @@ def get_aws_sesv2_contact_list(type, id, clfn, descfn, topkey, key, filterid):
             response = client.get_contact_list(ContactListName=id)
             if response:
                 common.write_import(type, id, None)
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    return True
+
+def get_aws_sesv2_dedicated_ip_assignment(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all dedicated IPs and their pool assignments
+            response = client.get_dedicated_ips()
+            for ip_info in response.get('DedicatedIps', []):
+                ip = ip_info.get('Ip')
+                pool = ip_info.get('PoolName')
+                if ip and pool:
+                    # Composite ID: ip,pool_name
+                    composite_id = f"{ip},{pool}"
+                    common.write_import(type, composite_id, None)
+        else:
+            # Handle composite ID: ip,pool_name
+            if ',' in id:
+                ip, pool = id.split(',', 1)
+                try:
+                    # Get specific dedicated IP
+                    response = client.get_dedicated_ip(Ip=ip)
+                    if response and response.get('DedicatedIp', {}).get('PoolName') == pool:
+                        common.write_import(type, id, None)
+                except Exception as e:
+                    if common.context.debug:
+                        common.log.debug(f"Dedicated IP assignment not found: {e}")
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
     return True

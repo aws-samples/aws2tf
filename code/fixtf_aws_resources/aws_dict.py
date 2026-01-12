@@ -9149,10 +9149,10 @@ aws_ses_template = {
 
 aws_sesv2_account_vdm_attributes = {
 	"clfn":		"sesv2",
-	"descfn":	"describe_account_vdm_attributes",
-	"topkey":	"AccountVdmAttributes",
-	"key":		"AccountVdmAttributes",
-	"filterid":	"AccountVdmAttributes"
+	"descfn":	"get_account",
+	"topkey":	"VdmAttributes",
+	"key":		"VdmAttributes",
+	"filterid":	"VdmAttributes"
 }
 
 aws_sesv2_configuration_set = {
@@ -9165,10 +9165,10 @@ aws_sesv2_configuration_set = {
 
 aws_sesv2_configuration_set_event_destination = {
 	"clfn":		"sesv2",
-	"descfn":	"describe_configuration_set_event_destination",
-	"topkey":	"EventDestination",
-	"key":		"EventDestination",
-	"filterid":	"EventDestination"
+	"descfn":	"get_configuration_set_event_destinations",
+	"topkey":	"EventDestinations",
+	"key":		"Name",
+	"filterid":	"Name"
 }
 
 aws_sesv2_contact_list = {
@@ -9181,10 +9181,10 @@ aws_sesv2_contact_list = {
 
 aws_sesv2_dedicated_ip_assignment = {
 	"clfn":		"sesv2",
-	"descfn":	"describe_dedicated_ip_assignment",
-	"topkey":	"DedicatedIpAssignment",
-	"key":		"DedicatedIpAssignment",
-	"filterid":	"DedicatedIpAssignment"
+	"descfn":	"get_dedicated_ips",
+	"topkey":	"DedicatedIps",
+	"key":		"Ip",
+	"filterid":	"Ip"
 }
 
 aws_sesv2_dedicated_ip_pool = {
@@ -9205,18 +9205,18 @@ aws_sesv2_email_identity = {
 
 aws_sesv2_email_identity_feedback_attributes = {
 	"clfn":		"sesv2",
-	"descfn":	"describe_email_identity_feedback_attributes",
-	"topkey":	"EmailIdentityFeedbackAttributes",
-	"key":		"EmailIdentityFeedbackAttributes",
-	"filterid":	"EmailIdentityFeedbackAttributes"
+	"descfn":	"get_email_identity",
+	"topkey":	"EmailIdentities",
+	"key":		"IdentityName",
+	"filterid":	"IdentityName"
 }
 
 aws_sesv2_email_identity_mail_from_attributes = {
 	"clfn":		"sesv2",
-	"descfn":	"describe_email_identity_mail_from_attributes",
-	"topkey":	"MailFromAttributes",
-	"key":		"MailFromAttributes",
-	"filterid":	"MailFromAttributes"
+	"descfn":	"get_email_identity",
+	"topkey":	"EmailIdentities",
+	"key":		"IdentityName",
+	"filterid":	"IdentityName"
 }
 
 aws_sfn_activity = {

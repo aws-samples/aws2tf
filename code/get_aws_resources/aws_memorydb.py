@@ -40,11 +40,15 @@ def get_aws_memorydb_parameter_group(type, id, clfn, descfn, topkey, key, filter
             for page in paginator.paginate():
                 response.extend(page[topkey])
             for j in response:
-                common.write_import(type, j[key], None)
+                # Skip default parameter groups (AWS managed)
+                if not j[key].startswith('default'):
+                    common.write_import(type, j[key], None)
         else:
-            response = client.describe_parameter_groups(ParameterGroupName=id)
-            if response[topkey]:
-                common.write_import(type, id, None)
+            # Skip default parameter groups (AWS managed)
+            if not id.startswith('default'):
+                response = client.describe_parameter_groups(ParameterGroupName=id)
+                if response[topkey]:
+                    common.write_import(type, id, None)
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
     return True

@@ -696,7 +696,7 @@ def fixtf(ttft,tf):
                 log.error(f"{e=}")
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                log.error("%s %s %s %s",  exc_type, fname, exc_tb.tb_lineno)
+                log.error("%s %s %s",  exc_type, fname, exc_tb.tb_lineno)
                 log.warning("** no fixtf2 for "+ttft+" calling generic fixtf2.aws_resource")
                 nofind=1
                 
@@ -732,7 +732,7 @@ def fixtf(ttft,tf):
                 log.error(f"{e=}")
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                log.error("%s %s %s %s",  exc_type, fname, exc_tb.tb_lineno)
+                log.error("%s %s %s",  exc_type, fname, exc_tb.tb_lineno)
                 log.error("** error in "+ttft+" "+callfn+" OR .....")
                 log.error("-- no fixtf for type:"+ttft+" callfn:"+callfn)
                 log.error("-- no fixtf for "+tf+" calling generic fixtf2.aws_resource callfn="+callfn)

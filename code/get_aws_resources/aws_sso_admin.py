@@ -119,12 +119,12 @@ def get_aws_ssoadmin_permission_set_inline_policy(type, id, clfn, descfn, topkey
 
         j=response['InlinePolicy']
         if j == {}: 
-            log.info("Empty inline policy [1] for "+type+ " id="+str(id)+" returning")
+            log.debug("Empty inline policy [1] for "+type+ " id="+str(id)+" returning")
             rkey=type+"."+psarn+","+inid
             context.rproc[rkey] = True
             return True
         if len(j) < 4: 
-            log.info("Empty inline policy [2] for "+type+ " id="+str(id)+" returning")
+            log.debug("Empty inline policy [2] for "+type+ " id="+str(id)+" returning")
             rkey=type+"."+psarn+","+inid
             context.rproc[rkey] = True
             return True

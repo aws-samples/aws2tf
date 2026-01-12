@@ -85,22 +85,70 @@ def get_aws_devopsguru_resource_collection(type, id, clfn, descfn, topkey, key, 
         
         if id is None:
             # List all resource collection types (AWS_CLOUD_FORMATION, AWS_SERVICE, AWS_TAGS)
-            # Try each type and see which ones exist
+            # Try each type and see which ones exist with actual resources
             collection_types = ['AWS_CLOUD_FORMATION', 'AWS_SERVICE', 'AWS_TAGS']
             for collection_type in collection_types:
                 try:
                     response = client.get_resource_collection(ResourceCollectionType=collection_type)
                     if response and 'ResourceCollection' in response:
-                        common.write_import(type, collection_type, None)
+                        # Check if the collection actually has resources configured
+                        resource_collection = response['ResourceCollection']
+                        has_resources = False
+                        
+                        # Check CloudFormation stacks
+                        if 'CloudFormation' in resource_collection:
+                            cf = resource_collection['CloudFormation']
+                            if cf.get('StackNames') or cf.get('StackFilters'):
+                                has_resources = True
+                        
+                        # Check AWS Services
+                        if 'Service' in resource_collection:
+                            service = resource_collection['Service']
+                            if service.get('ServiceNames'):
+                                has_resources = True
+                        
+                        # Check Tags
+                        if 'Tags' in resource_collection:
+                            tags = resource_collection['Tags']
+                            if tags:
+                                has_resources = True
+                        
+                        # Only import if there are actual resources configured
+                        if has_resources:
+                            common.write_import(type, collection_type, None)
                 except Exception as e:
                     if context.debug:
                         print(f"No resource collection for type {collection_type}: {e}")
                     continue
         else:
             # Get specific resource collection
-            response = client.get_resource_collection(ResourceCollectionType=id)
-            if response and 'ResourceCollection' in response:
-                common.write_import(type, id, None)
+            try:
+                response = client.get_resource_collection(ResourceCollectionType=id)
+                if response and 'ResourceCollection' in response:
+                    # Verify it has actual resources configured
+                    resource_collection = response['ResourceCollection']
+                    has_resources = False
+                    
+                    if 'CloudFormation' in resource_collection:
+                        cf = resource_collection['CloudFormation']
+                        if cf.get('StackNames') or cf.get('StackFilters'):
+                            has_resources = True
+                    
+                    if 'Service' in resource_collection:
+                        service = resource_collection['Service']
+                        if service.get('ServiceNames'):
+                            has_resources = True
+                    
+                    if 'Tags' in resource_collection:
+                        tags = resource_collection['Tags']
+                        if tags:
+                            has_resources = True
+                    
+                    if has_resources:
+                        common.write_import(type, id, None)
+            except Exception as e:
+                if context.debug:
+                    print(f"Error getting resource collection {id}: {e}")
     
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)

@@ -65,11 +65,20 @@ def get_aws_memorydb_user(type, id, clfn, descfn, topkey, key, filterid):
             for page in paginator.paginate():
                 response.extend(page[topkey])
             for j in response:
-                common.write_import(type, j[key], None)
+                # Skip users with no-password authentication (not supported by Terraform)
+                auth_mode = j.get('Authentication', {})
+                auth_type = auth_mode.get('Type', '')
+                if auth_type != 'no-password':
+                    common.write_import(type, j[key], None)
         else:
             response = client.describe_users(UserName=id)
             if response[topkey]:
-                common.write_import(type, id, None)
+                # Skip users with no-password authentication (not supported by Terraform)
+                user = response[topkey][0]
+                auth_mode = user.get('Authentication', {})
+                auth_type = auth_mode.get('Type', '')
+                if auth_type != 'no-password':
+                    common.write_import(type, id, None)
     except Exception as e:
         common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
     return True

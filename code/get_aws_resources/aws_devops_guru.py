@@ -13,15 +13,29 @@ def get_aws_devopsguru_event_sources_config(type, id, clfn, descfn, topkey, key,
         client = boto3.client(clfn, config=config)
         
         if id is None:
-            # For regional singleton, write the current region as the ID
-            region = client.meta.region_name
-            common.write_import(type, region, None)
+            # For regional singleton, verify the resource exists before writing import
+            try:
+                response = client.describe_event_sources_config()
+                if response:
+                    region = client.meta.region_name
+                    common.write_import(type, region, None)
+            except client.exceptions.ResourceNotFoundException:
+                # Resource doesn't exist in this region - skip it
+                if context.debug: 
+                    print(f"DevOps Guru event sources config not found in region {client.meta.region_name}")
+            except Exception as e:
+                if context.debug: 
+                    print(f"Error checking event sources config: {e}")
         else:
             # Verify the resource exists in the specified region
             try:
                 response = client.describe_event_sources_config()
                 if response:
                     common.write_import(type, id, None)
+            except client.exceptions.ResourceNotFoundException:
+                # Resource doesn't exist - skip it
+                if context.debug: 
+                    print(f"DevOps Guru event sources config not found for id {id}")
             except Exception as e:
                 if context.debug: 
                     print(f"Error getting event sources config: {e}")

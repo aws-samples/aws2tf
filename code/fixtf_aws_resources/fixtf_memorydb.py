@@ -10,6 +10,7 @@ Reduction: N/A
 """
 
 import logging
+import context
 from .base_handler import BaseResourceHandler
 
 log = logging.getLogger('aws2tf')
@@ -23,15 +24,29 @@ def aws_memorydb_user(t1, tt1, tt2, flag1, flag2):
 	"""Handler for aws_memorydb_user resource"""
 	skip = 0
 	
-	# Fix authentication_mode type - AWS API returns "no-password" but Terraform only accepts "password" or "iam"
+	# Track authentication_mode block with no-password type
+	if tt1 == "authentication_mode":
+		context.in_auth_mode_block = 0
+		if "{" in t1:
+			context.in_auth_mode_block = 1
+	
+	# Check if type is no-password inside authentication_mode block
 	if tt1 == "type" and tt2 == '"no-password"':
-		# Skip the no-password type as it's not valid in Terraform
-		# The authentication_mode block will be skipped entirely
+		context.skip_auth_mode_block = True
 		skip = 1
 	
-	# Skip the entire authentication_mode block if it contains no-password
-	if tt1 == "authentication_mode" and "no-password" in t1:
-		skip = 1
+	# Skip entire authentication_mode block if it has no-password type
+	if hasattr(context, 'in_auth_mode_block') and context.in_auth_mode_block > 0:
+		if hasattr(context, 'skip_auth_mode_block') and context.skip_auth_mode_block:
+			skip = 1
+		
+		# Track nested braces
+		if "{" in t1:
+			context.in_auth_mode_block += 1
+		if "}" in t1:
+			context.in_auth_mode_block -= 1
+			if context.in_auth_mode_block == 0:
+				context.skip_auth_mode_block = False
 	
 	return skip, t1, flag1, flag2
 

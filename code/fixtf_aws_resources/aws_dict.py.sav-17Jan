@@ -758,7 +758,7 @@ aws_amplify_webhook = {
 aws_api_gateway_account = {
 	"clfn":		"apigateway",
 	"descfn":	"get_account",
-	"topkey":	"",  # get_account returns data directly, no wrapper key
+	"topkey":	"account",
 	"key":		"cloudwatchRoleArn",
 	"filterid":	"cloudwatchRoleArn"
 }
@@ -845,7 +845,7 @@ aws_api_gateway_integration = {
 
 aws_api_gateway_integration_response = {
 	"clfn":		"apigateway",
-	"descfn":	"get_integration_response",
+	"descfn":	"get_integration_responses",
 	"topkey":	"items",
 	"key":		"id",
 	"filterid":	"id"
@@ -869,7 +869,7 @@ aws_api_gateway_method_response = {
 
 aws_api_gateway_method_settings = {
 	"clfn":		"apigateway",
-	"descfn":	"get_stage",
+	"descfn":	"get_method_settings",
 	"topkey":	"items",
 	"key":		"httpMethod",
 	"filterid":	"httpMethod"
@@ -1293,7 +1293,7 @@ aws_apprunner_vpc_ingress_connection = {
 
 aws_appstream_directory_config = {
 	"clfn":		"appstream",
-	"descfn":	"describe_directory_configs",
+	"descfn":	"list_directory_configs",
 	"topkey":	"DirectoryConfigs",
 	"key":		"DirectoryName",
 	"filterid":	"DirectoryName"
@@ -1309,7 +1309,7 @@ aws_appstream_fleet = {
 
 aws_appstream_fleet_stack_association = {
 	"clfn":		"appstream",
-	"descfn":	"describe_fleets",
+	"descfn":	"list_fleet_stack_associations",
 	"topkey":	"FleetStackAssociations",
 	"key":		"FleetName",
 	"filterid":	"FleetName"
@@ -1341,7 +1341,7 @@ aws_appstream_user = {
 
 aws_appstream_user_stack_association = {
 	"clfn":		"appstream",
-	"descfn":	"describe_user_stack_associations",
+	"descfn":	"list_user_stack_associations",
 	"topkey":	"UserStackAssociations",
 	"key":		"UserName",
 	"filterid":	"UserName"
@@ -1349,7 +1349,7 @@ aws_appstream_user_stack_association = {
 
 aws_appsync_api_cache = {
 	"clfn":		"appsync",
-	"descfn":	"get_api_cache",
+	"descfn":	"list_api_caches",
 	"topkey":	"ApiCaches",
 	"key":		"ApiCacheName",
 	"filterid":	"ApiCacheName"
@@ -1381,7 +1381,7 @@ aws_appsync_domain_name = {
 
 aws_appsync_domain_name_api_association = {
 	"clfn":		"appsync",
-	"descfn":	"get_domain_name",
+	"descfn":	"list_domain_name_api_associations",
 	"topkey":	"DomainNameApiAssociations",
 	"key":		"DomainName",
 	"filterid":	"DomainName"
@@ -1461,7 +1461,7 @@ aws_athena_workgroup = {
 
 aws_auditmanager_account_registration = {
 	"clfn":		"auditmanager",
-	"descfn":	"get_account_status",
+	"descfn":	"list_account_registrations",
 	"topkey":	"AccountRegistrations",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -1477,7 +1477,7 @@ aws_auditmanager_assessment = {
 
 aws_auditmanager_assessment_delegation = {
 	"clfn":		"auditmanager",
-	"descfn":	"get_delegations",
+	"descfn":	"list_assessment_delegations",
 	"topkey":	"AssessmentDelegations",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -1501,7 +1501,7 @@ aws_auditmanager_control = {
 
 aws_auditmanager_framework = {
 	"clfn":		"auditmanager",
-	"descfn":	"list_assessment_frameworks",
+	"descfn":	"list_frameworks",
 	"topkey":	"Frameworks",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -1509,7 +1509,7 @@ aws_auditmanager_framework = {
 
 aws_auditmanager_framework_share = {
 	"clfn":		"auditmanager",
-	"descfn":	"list_assessment_framework_share_requests",
+	"descfn":	"list_framework_shares",
 	"topkey":	"FrameworkShares",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -1517,7 +1517,7 @@ aws_auditmanager_framework_share = {
 
 aws_auditmanager_organization_admin_account_registration = {
 	"clfn":		"auditmanager",
-	"descfn":	"get_organization_admin_account",
+	"descfn":	"list_organization_admin_accounts",
 	"topkey":	"OrganizationAdminAccounts",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -1525,7 +1525,7 @@ aws_auditmanager_organization_admin_account_registration = {
 
 aws_autoscaling_attachment = {
 	"clfn":		"autoscaling",
-	"descfn":	"describe_auto_scaling_groups",
+	"descfn":	"list_attachments",
 	"topkey":	"Attachments",
 	"key":		"AttachmentName",
 	"filterid":	"AttachmentName"
@@ -1557,7 +1557,7 @@ aws_autoscaling_lifecycle_hook = {
 
 aws_autoscaling_notification = {
 	"clfn":		"autoscaling",
-	"descfn":	"describe_notification_configurations",
+	"descfn":	"list_notifications",
 	"topkey":	"Notifications",
 	"key":		"TopicARN",
 	"filterid":	"TopicARN"
@@ -1581,7 +1581,7 @@ aws_autoscaling_schedule = {
 
 aws_autoscaling_traffic_source_attachment = {
 	"clfn":		"autoscaling",
-	"descfn":	"describe_traffic_sources",
+	"descfn":	"list_traffic_source_attachments",
 	"topkey":	"TrafficSourceAttachments",
 	"key":		"TrafficSourceAttachmentName",
 	"filterid":	"TrafficSourceAttachmentName"
@@ -1773,7 +1773,7 @@ aws_bedrockagent_agent_action_group = {
 
 aws_budgets_budget = {
 	"clfn":		"budgets",
-	"descfn":	"describe_budgets",
+	"descfn":	"list_budgets",
 	"topkey":	"Budgets",
 	"key":		"BudgetName",
 	"filterid":	"BudgetName"
@@ -1781,7 +1781,7 @@ aws_budgets_budget = {
 
 aws_budgets_budget_action = {
 	"clfn":		"budgets",
-	"descfn":	"describe_budget_actions_for_budget",
+	"descfn":	"list_budget_actions",
 	"topkey":	"BudgetActions",
 	"key":		"ActionId",
 	"filterid":	"ActionId"
@@ -1789,7 +1789,7 @@ aws_budgets_budget_action = {
 
 aws_ce_anomaly_monitor = {
 	"clfn":		"ce",
-	"descfn":	"get_anomaly_monitors",
+	"descfn":	"list_anomaly_monitors",
 	"topkey":	"AnomalyMonitors",
 	"key":		"MonitorName",
 	"filterid":	"MonitorName"
@@ -1797,7 +1797,7 @@ aws_ce_anomaly_monitor = {
 
 aws_ce_anomaly_subscription = {
 	"clfn":		"ce",
-	"descfn":	"get_anomaly_subscriptions",
+	"descfn":	"list_anomaly_subscriptions",
 	"topkey":	"AnomalySubscriptions",
 	"key":		"SubscriptionName",
 	"filterid":	"SubscriptionName"
@@ -1813,7 +1813,7 @@ aws_ce_cost_allocation_tag = {
 
 aws_ce_cost_category = {
 	"clfn":		"ce",
-	"descfn":	"list_cost_category_definitions",
+	"descfn":	"list_cost_categories",
 	"topkey":	"CostCategories",
 	"key":		"CostCategoryArn",
 	"filterid":	"CostCategoryArn"
@@ -1837,7 +1837,7 @@ aws_chime_voice_connector_group = {
 
 aws_chime_voice_connector_logging = {
 	"clfn":		"chime-sdk-voice",
-	"descfn":	"get_voice_connector_logging_configuration",
+	"descfn":	"list_voice_connector_logging_configurations",
 	"topkey":	"VoiceConnectorLoggingConfigurations",
 	"key":		"VoiceConnectorName",
 	"filterid":	"VoiceConnectorName"
@@ -1845,7 +1845,7 @@ aws_chime_voice_connector_logging = {
 
 aws_chime_voice_connector_origination = {
 	"clfn":		"chime-sdk-voice",
-	"descfn":	"get_voice_connector_origination",
+	"descfn":	"list_voice_connector_origination_configurations",
 	"topkey":	"VoiceConnectorOriginationConfigurations",
 	"key":		"VoiceConnectorName",
 	"filterid":	"VoiceConnectorName"
@@ -1853,7 +1853,7 @@ aws_chime_voice_connector_origination = {
 
 aws_chime_voice_connector_streaming = {
 	"clfn":		"chime-sdk-voice",
-	"descfn":	"get_voice_connector_streaming_configuration",
+	"descfn":	"list_voice_connector_streaming_configurations",
 	"topkey":	"VoiceConnectorStreamingConfigurations",
 	"key":		"VoiceConnectorName",
 	"filterid":	"VoiceConnectorName"
@@ -1861,7 +1861,7 @@ aws_chime_voice_connector_streaming = {
 
 aws_chime_voice_connector_termination = {
 	"clfn":		"chime-sdk-voice",
-	"descfn":	"get_voice_connector_termination",
+	"descfn":	"list_voice_connector_termination_configurations",
 	"topkey":	"VoiceConnectorTerminationConfigurations",
 	"key":		"VoiceConnectorName",
 	"filterid":	"VoiceConnectorName"
@@ -1877,7 +1877,7 @@ aws_chime_voice_connector_termination_credentials = {
 
 aws_chimesdkmediapipelines_media_insights_pipeline_configuration = {
 	"clfn":		"chime-sdk-media-pipelines",
-	"descfn":	"list_media_insights_pipeline_configurations",
+	"descfn":	"list_media_insights_pipelines",
 	"topkey":	"MediaInsightsPipelines",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -1885,7 +1885,7 @@ aws_chimesdkmediapipelines_media_insights_pipeline_configuration = {
 
 aws_chimesdkvoice_global_settings = {
 	"clfn":		"chime-sdk-voice",
-	"descfn":	"get_global_settings",
+	"descfn":	"list_global_settings",
 	"topkey":	"GlobalSettings",
 	"key":		"GlobalSettingsName",
 	"filterid":	"GlobalSettingsName"
@@ -1973,7 +1973,7 @@ aws_cloudformation_stack_set = {
 
 aws_cloudformation_stack_set_instance = {
 	"clfn":		"cloudformation",
-	"descfn":	"list_stack_instances",
+	"descfn":	"list_stack_set_instances",
 	"topkey":	"StackSetInstances",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -2045,7 +2045,7 @@ aws_cloudfront_key_group = {
 
 aws_cloudfront_monitoring_subscription = {
 	"clfn":		"cloudfront",
-	"descfn":	"get_monitoring_subscription",
+	"descfn":	"list_monitoring_subscriptions",
 	"topkey":	"MonitoringSubscriptions",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -2117,7 +2117,7 @@ aws_cloudhsm_v2_hsm = {
 
 aws_cloudsearch_domain = {
 	"clfn":		"cloudsearch",
-	"descfn":	"describe_domains",
+	"descfn":	"list_domains",
 	"topkey":	"DomainNames",
 	"key":		"DomainName",
 	"filterid":	"DomainName"
@@ -2125,7 +2125,7 @@ aws_cloudsearch_domain = {
 
 aws_cloudsearch_domain_service_access_policy = {
 	"clfn":		"cloudsearch",
-	"descfn":	"describe_service_access_policies",
+	"descfn":	"list_domain_service_access_policies",
 	"topkey":	"DomainServiceAccessPolicies",
 	"key":		"DomainName",
 	"filterid":	"DomainName"
@@ -2317,7 +2317,7 @@ aws_codeartifact_domain = {
 
 aws_codeartifact_domain_permissions_policy = {
 	"clfn":		"codeartifact",
-	"descfn":	"get_domain_permissions_policy",
+	"descfn":	"list_domain_permissions_policies",
 	"topkey":	"DomainPermissionsPolicies",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -2333,7 +2333,7 @@ aws_codeartifact_repository = {
 
 aws_codeartifact_repository_permissions_policy = {
 	"clfn":		"codeartifact",
-	"descfn":	"get_repository_permissions_policy",
+	"descfn":	"list_repository_permissions_policies",
 	"topkey":	"RepositoryPermissionsPolicies",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -2373,7 +2373,7 @@ aws_codebuild_source_credential = {
 
 aws_codebuild_webhook = {
 	"clfn":		"codebuild",
-	"descfn":	"batch_get_projects",
+	"descfn":	"list_webhooks",
 	"topkey":	"Webhooks",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -2413,7 +2413,7 @@ aws_codecommit_approval_rule_template = {
 
 aws_codecommit_approval_rule_template_association = {
 	"clfn":		"codecommit",
-	"descfn":	"list_associated_approval_rule_templates_for_repository",
+	"descfn":	"list_associated_approval_rule_templates",
 	"topkey":	"AssociatedApprovalRuleTemplates",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -2429,7 +2429,7 @@ aws_codecommit_repository = {
 
 aws_codecommit_trigger = {
 	"clfn":		"codecommit",
-	"descfn":	"get_repository_triggers",
+	"descfn":	"list_repository_triggers",
 	"topkey":	"RepositoryTriggers",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -2533,7 +2533,7 @@ aws_cognito_identity_pool = {
 
 aws_cognito_identity_pool_provider_principal_tag = {
 	"clfn":		"cognito-identity",
-	"descfn":	"get_principal_tag_attribute_map",
+	"descfn":	"list_identity_pool_roles",
 	"topkey":	"IdentityPoolRoles",
 	"key":		"IdentityPoolId",
 	"filterid":	"IdentityPoolId"
@@ -2541,7 +2541,7 @@ aws_cognito_identity_pool_provider_principal_tag = {
 
 aws_cognito_identity_pool_roles_attachment = {
 	"clfn":		"cognito-identity",
-	"descfn":	"get_identity_pool_roles",
+	"descfn":	"list_identity_pool_roles_attachments",
 	"topkey":	"IdentityPoolRolesAttachments",
 	"key":		"IdentityPoolId",
 	"filterid":	"IdentityPoolId"
@@ -2573,7 +2573,7 @@ aws_cognito_resource_server = {
 
 aws_cognito_risk_configuration = {
 	"clfn":		"cognito-idp",
-	"descfn":	"describe_risk_configuration",
+	"descfn":	"list_risk_configurations",
 	"topkey":	"RiskConfigurations",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -2621,7 +2621,7 @@ aws_cognito_user_pool_client = {
 
 aws_cognito_user_pool_domain = {
 	"clfn":		"cognito-idp",
-	"descfn":	"describe_user_pool_domain",
+	"descfn":	"list_user_pool_domains",
 	"topkey":	"UserPoolDomains",
 	"key":		"Domain",
 	"filterid":	"Domain"
@@ -2629,7 +2629,7 @@ aws_cognito_user_pool_domain = {
 
 aws_cognito_user_pool_ui_customization = {
 	"clfn":		"cognito-idp",
-	"descfn":	"get_ui_customization",
+	"descfn":	"list_user_pool_uis",
 	"topkey":	"UserPoolUis",
 	"key":		"UserPoolId",
 	"filterid":	"UserPoolId"
@@ -2853,7 +2853,7 @@ aws_connect_user_hierarchy_group = {
 
 aws_connect_user_hierarchy_structure = {
 	"clfn":		"connect",
-	"descfn":	"describe_user_hierarchy_structure",
+	"descfn":	"list_user_hierarchy_structures",
 	"topkey":	"UserHierarchyStructures",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -2869,7 +2869,7 @@ aws_connect_vocabulary = {
 
 aws_controltower_control = {
 	"clfn":		"controltower",
-	"descfn":	"list_enabled_controls",
+	"descfn":	"list_controls",
 	"topkey":	"Controls",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -2877,7 +2877,7 @@ aws_controltower_control = {
 
 aws_cur_report_definition = {
 	"clfn":		"cur",
-	"descfn":	"describe_report_definitions",
+	"descfn":	"list_report_definitions",
 	"topkey":	"ReportDefinitions",
 	"key":		"ReportName",
 	"filterid":	"ReportName"
@@ -2901,7 +2901,7 @@ aws_customerprofiles_domain = {
 
 aws_customerprofiles_profile = {
 	"clfn":		"customer-profiles",
-	"descfn":	"search_profiles",
+	"descfn":	"list_profiles",
 	"topkey":	"Profiles",
 	"key":		"ProfileArn",
 	"filterid":	"ProfileArn"
@@ -2917,7 +2917,7 @@ aws_dataexchange_data_set = {
 
 aws_dataexchange_revision = {
 	"clfn":		"dataexchange",
-	"descfn":	"list_data_set_revisions",
+	"descfn":	"list_revisions",
 	"topkey":	"Revisions",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -2933,7 +2933,7 @@ aws_datapipeline_pipeline = {
 
 aws_datapipeline_pipeline_definition = {
 	"clfn":		"datapipeline",
-	"descfn":	"get_pipeline_definition",
+	"descfn":	"list_pipeline_definition",
 	"topkey":	"PipelineDefinition",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -2949,7 +2949,7 @@ aws_datasync_agent = {
 
 aws_datasync_location_azure_blob = {
 	"clfn":		"datasync",
-	"descfn":	"list_locations",
+	"descfn":	"list_location_s3",
 	"topkey":	"Locations",
 	"key":		"LocationArn",
 	"filterid":	"LocationArn"
@@ -2957,7 +2957,7 @@ aws_datasync_location_azure_blob = {
 
 aws_datasync_location_efs = {
 	"clfn":		"datasync",
-	"descfn":	"list_locations",
+	"descfn":	"list_location_efs",
 	"topkey":	"Locations",
 	"key":		"LocationArn",
 	"filterid":	"LocationArn"
@@ -2965,7 +2965,7 @@ aws_datasync_location_efs = {
 
 aws_datasync_location_fsx_lustre_file_system = {
 	"clfn":		"datasync",
-	"descfn":	"list_locations",
+	"descfn":	"list_location_fsx_lustre",
 	"topkey":	"Locations",
 	"key":		"LocationArn",
 	"filterid":	"LocationArn"
@@ -2973,7 +2973,7 @@ aws_datasync_location_fsx_lustre_file_system = {
 
 aws_datasync_location_fsx_ontap_file_system = {
 	"clfn":		"datasync",
-	"descfn":	"list_locations",
+	"descfn":	"list_location_fsx_ontap",
 	"topkey":	"Locations",
 	"key":		"LocationArn",
 	"filterid":	"LocationArn"
@@ -2981,7 +2981,7 @@ aws_datasync_location_fsx_ontap_file_system = {
 
 aws_datasync_location_fsx_openzfs_file_system = {
 	"clfn":		"datasync",
-	"descfn":	"list_locations",
+	"descfn":	"list_location_fsx_openzfs",
 	"topkey":	"Locations",
 	"key":		"LocationArn",
 	"filterid":	"LocationArn"
@@ -2989,7 +2989,7 @@ aws_datasync_location_fsx_openzfs_file_system = {
 
 aws_datasync_location_fsx_windows_file_system = {
 	"clfn":		"datasync",
-	"descfn":	"list_locations",
+	"descfn":	"list_location_fsx_windows",
 	"topkey":	"Locations",
 	"key":		"LocationArn",
 	"filterid":	"LocationArn"
@@ -2997,7 +2997,7 @@ aws_datasync_location_fsx_windows_file_system = {
 
 aws_datasync_location_hdfs = {
 	"clfn":		"datasync",
-	"descfn":	"list_locations",
+	"descfn":	"list_location_hdfs",
 	"topkey":	"Locations",
 	"key":		"LocationArn",
 	"filterid":	"LocationArn"
@@ -3005,7 +3005,7 @@ aws_datasync_location_hdfs = {
 
 aws_datasync_location_nfs = {
 	"clfn":		"datasync",
-	"descfn":	"list_locations",
+	"descfn":	"list_location_nfs",
 	"topkey":	"Locations",
 	"key":		"LocationArn",
 	"filterid":	"LocationArn"
@@ -3013,7 +3013,7 @@ aws_datasync_location_nfs = {
 
 aws_datasync_location_object_storage = {
 	"clfn":		"datasync",
-	"descfn":	"list_locations",
+	"descfn":	"list_location_object_storage",
 	"topkey":	"Locations",
 	"key":		"LocationArn",
 	"filterid":	"LocationArn"
@@ -3021,7 +3021,7 @@ aws_datasync_location_object_storage = {
 
 aws_datasync_location_s3 = {
 	"clfn":		"datasync",
-	"descfn":	"list_locations",
+	"descfn":	"list_location_s3",
 	"topkey":	"Locations",
 	"key":		"LocationArn",
 	"filterid":	"LocationArn"
@@ -3029,7 +3029,7 @@ aws_datasync_location_s3 = {
 
 aws_datasync_location_smb = {
 	"clfn":		"datasync",
-	"descfn":	"list_locations",
+	"descfn":	"list_location_smb",
 	"topkey":	"Locations",
 	"key":		"LocationArn",
 	"filterid":	"LocationArn"
@@ -3125,7 +3125,7 @@ aws_datazone_user_profile = {
 
 aws_dax_cluster = {
 	"clfn":		"dax",
-	"descfn":	"describe_clusters",
+	"descfn":	"list_clusters",
 	"topkey":	"Clusters",
 	"key":		"ClusterName",
 	"filterid":	"ClusterName"
@@ -3133,7 +3133,7 @@ aws_dax_cluster = {
 
 aws_dax_parameter_group = {
 	"clfn":		"dax",
-	"descfn":	"describe_parameter_groups",
+	"descfn":	"list_parameter_groups",
 	"topkey":	"ParameterGroups",
 	"key":		"ParameterGroupName",
 	"filterid":	"ParameterGroupName"
@@ -3141,7 +3141,7 @@ aws_dax_parameter_group = {
 
 aws_dax_subnet_group = {
 	"clfn":		"dax",
-	"descfn":	"describe_subnet_groups",
+	"descfn":	"list_subnet_groups",
 	"topkey":	"SubnetGroups",
 	"key":		"SubnetGroupName",
 	"filterid":	"SubnetGroupName"
@@ -3165,7 +3165,7 @@ aws_db_instance_automated_backups_replication = {
 
 aws_db_instance_role_association = {
 	"clfn":		"rds",
-	"descfn":	"describe_db_instances",
+	"descfn":	"describe_db_instance_role_associations",
 	"topkey":	"DBInstanceRoleAssociations",
 	"key":		"DBInstanceArn",
 	"filterid":	"DBInstanceArn"
@@ -3189,7 +3189,7 @@ aws_db_proxy = {
 
 aws_db_proxy_default_target_group = {
 	"clfn":		"rds",
-	"descfn":	"describe_db_proxy_target_groups",
+	"descfn":	"describe_db_proxy_default_target_groups",
 	"topkey":	"DBProxyDefaultTargetGroups",
 	"key":		"DBProxyName",
 	"filterid":	"DBProxyName"
@@ -3229,7 +3229,7 @@ aws_db_snapshot_copy = {
 
 aws_default_vpc_dhcp_options = {
 	"clfn":		"ec2",
-	"descfn":	"describe_dhcp_options",
+	"descfn":	"describe_vpc_dhcp_options",
 	"topkey":	"VpcDhcpOptions",
 	"key":		"VpcDhcpOptionsId",
 	"filterid":	"VpcDhcpOptionsId"
@@ -3245,7 +3245,7 @@ aws_detective_graph = {
 
 aws_detective_invitation_accepter = {
 	"clfn":		"detective",
-	"descfn":	"list_invitations",
+	"descfn":	"list_invitation_accepters",
 	"topkey":	"InvitationAccepters",
 	"key":		"GraphArn",
 	"filterid":	"GraphArn"
@@ -3269,7 +3269,7 @@ aws_detective_organization_admin_account = {
 
 aws_detective_organization_configuration = {
 	"clfn":		"detective",
-	"descfn":	"describe_organization_configuration",
+	"descfn":	"list_organization_configurations",
 	"topkey":	"OrganizationConfigurations",
 	"key":		"GraphArn",
 	"filterid":	"GraphArn"
@@ -3325,7 +3325,7 @@ aws_devicefarm_upload = {
 
 aws_directory_service_conditional_forwarder = {
 	"clfn":		"ds",
-	"descfn":	"describe_conditional_forwarders",
+	"descfn":	"list_conditional_forwarders",
 	"topkey":	"ConditionalForwarders",
 	"key":		"DirectoryId",
 	"filterid":	"DirectoryId"
@@ -3349,7 +3349,7 @@ aws_directory_service_log_subscription = {
 
 aws_directory_service_radius_settings = {
 	"clfn":		"ds",
-	"descfn":	"describe_directories",
+	"descfn":	"list_radius_settings",
 	"topkey":	"RadiusSettings",
 	"key":		"DirectoryId",
 	"filterid":	"DirectoryId"
@@ -3357,7 +3357,7 @@ aws_directory_service_radius_settings = {
 
 aws_directory_service_region = {
 	"clfn":		"ds",
-	"descfn":	"describe_regions",
+	"descfn":	"list_regions",
 	"topkey":	"Regions",
 	"key":		"DirectoryId",
 	"filterid":	"DirectoryId"
@@ -3365,7 +3365,7 @@ aws_directory_service_region = {
 
 aws_directory_service_shared_directory = {
 	"clfn":		"ds",
-	"descfn":	"describe_shared_directories",
+	"descfn":	"list_shared_directories",
 	"topkey":	"SharedDirectories",
 	"key":		"SharedDirectoryId",
 	"filterid":	"SharedDirectoryId"
@@ -3373,7 +3373,7 @@ aws_directory_service_shared_directory = {
 
 aws_directory_service_trust = {
 	"clfn":		"ds",
-	"descfn":	"describe_trusts",
+	"descfn":	"list_trusts",
 	"topkey":	"Trusts",
 	"key":		"TrustId",
 	"filterid":	"TrustId"
@@ -3381,7 +3381,7 @@ aws_directory_service_trust = {
 
 aws_dlm_lifecycle_policy = {
 	"clfn":		"dlm",
-	"descfn":	"get_lifecycle_policies",
+	"descfn":	"list_policies",
 	"topkey":	"Policies",
 	"key":		"PolicyId",
 	"filterid":	"PolicyId"
@@ -3445,7 +3445,7 @@ aws_dms_replication_task = {
 
 aws_dms_s3_endpoint = {
 	"clfn":		"dms",
-	"descfn":	"describe_endpoints",
+	"descfn":	"describe_s3_endpoints",
 	"topkey":	"S3Endpoints",
 	"key":		"EndpointIdentifier",
 	"filterid":	"EndpointIdentifier"
@@ -3509,7 +3509,7 @@ aws_docdb_subnet_group = {
 
 aws_docdbelastic_cluster = {
 	"clfn":		"docdb-elastic",
-	"descfn":	"list_clusters",
+	"descfn":	"describe_clusters",
 	"topkey":	"Clusters",
 	"key":		"ClusterName",
 	"filterid":	"ClusterName"
@@ -3517,7 +3517,7 @@ aws_docdbelastic_cluster = {
 
 aws_dx_bgp_peer = {
 	"clfn":		"directconnect",
-	"descfn":	"describe_virtual_interfaces",
+	"descfn":	"describe_bgp_peers",
 	"topkey":	"BgpPeers",
 	"key":		"BgpPeerId",
 	"filterid":	"BgpPeerId"
@@ -3533,7 +3533,7 @@ aws_dx_connection = {
 
 aws_dx_connection_association = {
 	"clfn":		"directconnect",
-	"descfn":	"describe_connections",
+	"descfn":	"describe_connection_associations",
 	"topkey":	"ConnectionAssociations",
 	"key":		"ConnectionId",
 	"filterid":	"ConnectionId"
@@ -3541,7 +3541,7 @@ aws_dx_connection_association = {
 
 aws_dx_connection_confirmation = {
 	"clfn":		"directconnect",
-	"descfn":	"describe_connections",
+	"descfn":	"describe_confirmations",
 	"topkey":	"Confirmations",
 	"key":		"ConfirmationToken",
 	"filterid":	"ConfirmationToken"
@@ -3573,7 +3573,7 @@ aws_dx_gateway_association_proposal = {
 
 aws_dx_hosted_connection = {
 	"clfn":		"directconnect",
-	"descfn":	"describe_connections",
+	"descfn":	"describe_gateway_association_proposals",
 	"topkey":	"GatewayAssociationProposals",
 	"key":		"ProposalId",
 	"filterid":	"ProposalId"
@@ -3581,7 +3581,7 @@ aws_dx_hosted_connection = {
 
 aws_dx_hosted_private_virtual_interface = {
 	"clfn":		"directconnect",
-	"descfn":	"describe_virtual_interfaces",
+	"descfn":	"describe_hosted_private_virtual_interfaces",
 	"topkey":	"VirtualInterfaces",
 	"key":		"VirtualInterfaceId",
 	"filterid":	"VirtualInterfaceId"
@@ -3589,7 +3589,7 @@ aws_dx_hosted_private_virtual_interface = {
 
 aws_dx_hosted_private_virtual_interface_accepter = {
 	"clfn":		"directconnect",
-	"descfn":	"describe_virtual_interfaces",
+	"descfn":	"describe_hosted_private_virtual_interfaces",
 	"topkey":	"VirtualInterfaces",
 	"key":		"VirtualInterfaceId",
 	"filterid":	"VirtualInterfaceId"
@@ -3597,7 +3597,7 @@ aws_dx_hosted_private_virtual_interface_accepter = {
 
 aws_dx_hosted_public_virtual_interface = {
 	"clfn":		"directconnect",
-	"descfn":	"describe_virtual_interfaces",
+	"descfn":	"describe_hosted_public_virtual_interfaces",
 	"topkey":	"VirtualInterfaces",
 	"key":		"VirtualInterfaceId",
 	"filterid":	"VirtualInterfaceId"
@@ -3605,7 +3605,7 @@ aws_dx_hosted_public_virtual_interface = {
 
 aws_dx_hosted_public_virtual_interface_accepter = {
 	"clfn":		"directconnect",
-	"descfn":	"describe_virtual_interfaces",
+	"descfn":	"describe_hosted_public_virtual_interfaces",
 	"topkey":	"VirtualInterfaces",
 	"key":		"VirtualInterfaceId",
 	"filterid":	"VirtualInterfaceId"
@@ -3613,7 +3613,7 @@ aws_dx_hosted_public_virtual_interface_accepter = {
 
 aws_dx_hosted_transit_virtual_interface = {
 	"clfn":		"directconnect",
-	"descfn":	"describe_virtual_interfaces",
+	"descfn":	"describe_hosted_transit_virtual_interfaces",
 	"topkey":	"VirtualInterfaces",
 	"key":		"VirtualInterfaceId",
 	"filterid":	"VirtualInterfaceId"
@@ -3621,7 +3621,7 @@ aws_dx_hosted_transit_virtual_interface = {
 
 aws_dx_hosted_transit_virtual_interface_accepter = {
 	"clfn":		"directconnect",
-	"descfn":	"describe_virtual_interfaces",
+	"descfn":	"describe_hosted_transit_virtual_interfaces",
 	"topkey":	"VirtualInterfaces",
 	"key":		"VirtualInterfaceId",
 	"filterid":	"VirtualInterfaceId"
@@ -3637,7 +3637,7 @@ aws_dx_lag = {
 
 aws_dx_macsec_key_association = {
 	"clfn":		"directconnect",
-	"descfn":	"describe_connections",
+	"descfn":	"describe_macsec_key_associations",
 	"topkey":	"MacsecKeyAssociations",
 	"key":		"AssociationId",
 	"filterid":	"AssociationId"
@@ -3645,7 +3645,7 @@ aws_dx_macsec_key_association = {
 
 aws_dx_private_virtual_interface = {
 	"clfn":		"directconnect",
-	"descfn":	"describe_virtual_interfaces",
+	"descfn":	"describe_private_virtual_interfaces",
 	"topkey":	"VirtualInterfaces",
 	"key":		"VirtualInterfaceId",
 	"filterid":	"VirtualInterfaceId"
@@ -3653,7 +3653,7 @@ aws_dx_private_virtual_interface = {
 
 aws_dx_public_virtual_interface = {
 	"clfn":		"directconnect",
-	"descfn":	"describe_virtual_interfaces",
+	"descfn":	"describe_public_virtual_interfaces",
 	"topkey":	"VirtualInterfaces",
 	"key":		"VirtualInterfaceId",
 	"filterid":	"VirtualInterfaceId"
@@ -3661,7 +3661,7 @@ aws_dx_public_virtual_interface = {
 
 aws_dx_transit_virtual_interface = {
 	"clfn":		"directconnect",
-	"descfn":	"describe_virtual_interfaces",
+	"descfn":	"describe_transit_virtual_interfaces",
 	"topkey":	"VirtualInterfaces",
 	"key":		"VirtualInterfaceId",
 	"filterid":	"VirtualInterfaceId"
@@ -3677,7 +3677,7 @@ aws_dynamodb_contributor_insights = {
 
 aws_dynamodb_global_table = {
 	"clfn":		"dynamodb",
-	"descfn":	"list_global_tables",
+	"descfn":	"describe_global_tables",
 	"topkey":	"GlobalTables",
 	"key":		"GlobalTableName",
 	"filterid":	"GlobalTableName"
@@ -3748,16 +3748,16 @@ aws_ebs_snapshot = {
 }
 
 aws_ebs_snapshot_copy = {
-	"clfn":		"ec2",
-	"descfn":	"describe_snapshots",
+	"clfn":		"ebs",
+	"descfn":	"describe_snapshot_copy_grants",
 	"topkey":	"SnapshotCopyGrants",
 	"key":		"SnapshotCopyGrantName",
 	"filterid":	"SnapshotCopyGrantName"
 }
 
 aws_ebs_snapshot_import = {
-	"clfn":		"ec2",
-	"descfn":	"describe_import_snapshot_tasks",
+	"clfn":		"ebs",
+	"descfn":	"describe_snapshot_import_tasks",
 	"topkey":	"SnapshotTasks",
 	"key":		"SnapshotTaskIdentifier",
 	"filterid":	"SnapshotTaskIdentifier"
@@ -4397,7 +4397,7 @@ aws_elasticache_user_group = {
 
 aws_elasticache_user_group_association = {
 	"clfn":		"elasticache",
-	"descfn":	"describe_user_groups",
+	"descfn":	"describe_user_group_memberships",
 	"topkey":	"UserGroupMemberships",
 	"key":		"UserGroupId",
 	"filterid":	"UserGroupId"
@@ -4413,7 +4413,7 @@ aws_elasticsearch_domain = {
 
 aws_elasticsearch_domain_policy = {
 	"clfn":		"es",
-	"descfn":	"describe_elasticsearch_domain_config",
+	"descfn":	"describe_elasticsearch_domain_policy",
 	"topkey":	"Policy",
 	"key":		"Policy",
 	"filterid":	"Policy"
@@ -4461,7 +4461,7 @@ aws_elb_attachment = {
 
 aws_emr_block_public_access_configuration = {
 	"clfn":		"emr",
-	"descfn":	"get_block_public_access_configuration",
+	"descfn":	"describe_block_public_access_configurations",
 	"topkey":	"BlockPublicAccessConfigurations",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -4477,7 +4477,7 @@ aws_emr_cluster = {
 
 aws_emr_instance_fleet = {
 	"clfn":		"emr",
-	"descfn":	"list_instance_fleets",
+	"descfn":	"describe_instance_fleets",
 	"topkey":	"InstanceFleets",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -4509,7 +4509,7 @@ aws_emr_security_configuration = {
 
 aws_emr_studio = {
 	"clfn":		"emr",
-	"descfn":	"list_studios",
+	"descfn":	"describe_studios",
 	"topkey":	"Studios",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -4517,7 +4517,7 @@ aws_emr_studio = {
 
 aws_emr_studio_session_mapping = {
 	"clfn":		"emr",
-	"descfn":	"list_studio_session_mappings",
+	"descfn":	"describe_studio_session_mappings",
 	"topkey":	"SessionMappings",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -4580,7 +4580,7 @@ aws_evidently_segment = {
 }
 
 aws_finspace_kx_cluster = {
-	"clfn":		"finspace-data",
+	"clfn":		"finspace",
 	"descfn":	"list_clusters",
 	"topkey":	"Clusters",
 	"key":		"ClusterId",
@@ -4588,7 +4588,7 @@ aws_finspace_kx_cluster = {
 }
 
 aws_finspace_kx_database = {
-	"clfn":		"finspace-data",
+	"clfn":		"finspace",
 	"descfn":	"list_databases",
 	"topkey":	"Databases",
 	"key":		"DatabaseId",
@@ -4596,7 +4596,7 @@ aws_finspace_kx_database = {
 }
 
 aws_finspace_kx_dataview = {
-	"clfn":		"finspace-data",
+	"clfn":		"finspace",
 	"descfn":	"list_data_views",
 	"topkey":	"DataViews",
 	"key":		"DataViewId",
@@ -4612,7 +4612,7 @@ aws_finspace_kx_environment = {
 }
 
 aws_finspace_kx_scaling_group = {
-	"clfn":		"finspace-data",
+	"clfn":		"finspace",
 	"descfn":	"list_scaling_groups",
 	"topkey":	"ScalingGroups",
 	"key":		"ScalingGroupId",
@@ -4620,7 +4620,7 @@ aws_finspace_kx_scaling_group = {
 }
 
 aws_finspace_kx_user = {
-	"clfn":		"finspace-data",
+	"clfn":		"finspace",
 	"descfn":	"list_users",
 	"topkey":	"Users",
 	"key":		"UserId",
@@ -4628,7 +4628,7 @@ aws_finspace_kx_user = {
 }
 
 aws_finspace_kx_volume = {
-	"clfn":		"finspace-data",
+	"clfn":		"finspace",
 	"descfn":	"list_volumes",
 	"topkey":	"Volumes",
 	"key":		"VolumeId",
@@ -4645,7 +4645,7 @@ aws_fis_experiment_template = {
 
 aws_fms_admin_account = {
 	"clfn":		"fms",
-	"descfn":	"list_admin_accounts_for_organization",
+	"descfn":	"list_admin_accounts",
 	"topkey":	"AdminAccounts",
 	"key":		"AdminAccountId",
 	"filterid":	"AdminAccountId"
@@ -4781,7 +4781,7 @@ aws_gamelift_game_server_group = {
 
 aws_gamelift_game_session_queue = {
 	"clfn":		"gamelift",
-	"descfn":	"describe_game_session_queues",
+	"descfn":	"list_game_session_queues",
 	"topkey":	"GameSessionQueues",
 	"key":		"GameSessionQueueName",
 	"filterid":	"GameSessionQueueName"
@@ -4805,7 +4805,7 @@ aws_glacier_vault = {
 
 aws_glacier_vault_lock = {
 	"clfn":		"glacier",
-	"descfn":	"get_vault_lock",
+	"descfn":	"list_vault_locks",
 	"topkey":	"VaultLockList",
 	"key":		"VaultLockId",
 	"filterid":	"VaultLockId"
@@ -4925,7 +4925,7 @@ aws_glue_ml_transform = {
 
 aws_glue_partition = {
 	"clfn":		"glue",
-	"descfn":	"get_partitions",
+	"descfn":	"list_partitions",
 	"topkey":	"Partitions",
 	"key":		"Values",
 	"filterid":	"Values"
@@ -4949,7 +4949,7 @@ aws_glue_registry = {
 
 aws_glue_resource_policy = {
 	"clfn":		"glue",
-	"descfn":	"get_resource_policy",
+	"descfn":	"list_resource_policies",
 	"topkey":	"ResourcePolicies",
 	"key":		"PolicyHash",
 	"filterid":	"PolicyHash"
@@ -4997,7 +4997,7 @@ aws_glue_workflow = {
 
 aws_grafana_license_association = {
 	"clfn":		"grafana",
-	"descfn":	"describe_workspace",
+	"descfn":	"list_license_associations",
 	"topkey":	"LicenseAssociations",
 	"key":		"LicenseAssociationArn",
 	"filterid":	"LicenseAssociationArn"
@@ -5005,7 +5005,7 @@ aws_grafana_license_association = {
 
 aws_grafana_role_association = {
 	"clfn":		"grafana",
-	"descfn":	"list_permissions",
+	"descfn":	"list_role_associations",
 	"topkey":	"RoleAssociations",
 	"key":		"RoleAssociationArn",
 	"filterid":	"RoleAssociationArn"
@@ -5021,7 +5021,7 @@ aws_grafana_workspace = {
 
 aws_grafana_workspace_api_key = {
 	"clfn":		"grafana",
-	"descfn":	"list_workspaces",
+	"descfn":	"list_workspace_api_keys",
 	"topkey":	"ApiKeys",
 	"key":		"KeyId",
 	"filterid":	"KeyId"
@@ -5045,7 +5045,7 @@ aws_guardduty_detector = {
 
 aws_guardduty_detector_feature = {
 	"clfn":		"guardduty",
-	"descfn":	"get_detector",
+	"descfn":	"list_detector_features",
 	"topkey":	"DetectorFeatures",
 	"key":		"DetectorFeatureName",
 	"filterid":	"DetectorFeatureName"
@@ -5061,7 +5061,7 @@ aws_guardduty_filter = {
 
 aws_guardduty_invite_accepter = {
 	"clfn":		"guardduty",
-	"descfn":	"list_invitations",
+	"descfn":	"list_invitation_accepters",
 	"topkey":	"InvitationAccepters",
 	"key":		"InvitationAccepterId",
 	"filterid":	"InvitationAccepterId"
@@ -5093,7 +5093,7 @@ aws_guardduty_organization_admin_account = {
 
 aws_guardduty_organization_configuration = {
 	"clfn":		"guardduty",
-	"descfn":	"describe_organization_configuration",
+	"descfn":	"list_organization_configurations",
 	"topkey":	"OrganizationConfigurations",
 	"key":		"OrganizationConfigurationId",
 	"filterid":	"OrganizationConfigurationId"
@@ -5101,7 +5101,7 @@ aws_guardduty_organization_configuration = {
 
 aws_guardduty_organization_configuration_feature = {
 	"clfn":		"guardduty",
-	"descfn":	"describe_organization_configuration",
+	"descfn":	"list_organization_configuration_features",
 	"topkey":	"OrganizationConfigurationFeatures",
 	"key":		"OrganizationConfigurationFeature",
 	"filterid":	"OrganizationConfigurationFeature"
@@ -5205,7 +5205,7 @@ aws_iam_saml_provider = {
 
 aws_iam_security_token_service_preferences = {
 	"clfn":		"iam",
-	"descfn":	"get_account_summary",
+	"descfn":	"get_account_token_version",
 	"topkey":	"AccountTokenVersion",
 	"key":		"AccountTokenVersion",
 	"filterid":	"AccountTokenVersion"
@@ -5381,7 +5381,7 @@ aws_inspector2_delegated_admin_account = {
 
 aws_inspector2_enabler = {
 	"clfn":		"inspector2",
-	"descfn":	"batch_get_account_status",
+	"descfn":	"list_enablers",
 	"topkey":	"Enablers",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -5389,7 +5389,7 @@ aws_inspector2_enabler = {
 
 aws_inspector2_member_association = {
 	"clfn":		"inspector2",
-	"descfn":	"list_members",
+	"descfn":	"list_member_associations",
 	"topkey":	"MemberAssociations",
 	"key":		"AccountId",
 	"filterid":	"AccountId"
@@ -5397,7 +5397,7 @@ aws_inspector2_member_association = {
 
 aws_inspector2_organization_configuration = {
 	"clfn":		"inspector2",
-	"descfn":	"describe_organization_configuration",
+	"descfn":	"list_organization_configurations",
 	"topkey":	"OrganizationConfigurations",
 	"key":		"OrganizationConfigurationArn",
 	"filterid":	"OrganizationConfigurationArn"
@@ -5421,7 +5421,7 @@ aws_inspector_assessment_template = {
 
 aws_inspector_resource_group = {
 	"clfn":		"inspector",
-	"descfn":	"list_assessment_targets",
+	"descfn":	"list_resource_groups",
 	"topkey":	"ResourceGroups",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -5429,7 +5429,7 @@ aws_inspector_resource_group = {
 
 aws_internet_gateway_attachment = {
 	"clfn":		"ec2",
-	"descfn":	"describe_internet_gateways",
+	"descfn":	"describe_internet_gateway_attachments",
 	"topkey":	"InternetGatewayAttachments",
 	"key":		"InternetGatewayId",
 	"filterid":	"InternetGatewayId"
@@ -5485,7 +5485,7 @@ aws_iot_domain_configuration = {
 
 aws_iot_event_configurations = {
 	"clfn":		"iot",
-	"descfn":	"describe_event_configurations",
+	"descfn":	"list_event_configurations",
 	"topkey":	"EventConfigurations",
 	"key":		"EventConfigurationName",
 	"filterid":	"EventConfigurationName"
@@ -5493,7 +5493,7 @@ aws_iot_event_configurations = {
 
 aws_iot_indexing_configuration = {
 	"clfn":		"iot",
-	"descfn":	"get_indexing_configuration",
+	"descfn":	"list_indexing_configurations",
 	"topkey":	"IndexingConfigurations",
 	"key":		"IndexingConfigurationName",
 	"filterid":	"IndexingConfigurationName"
@@ -5501,7 +5501,7 @@ aws_iot_indexing_configuration = {
 
 aws_iot_logging_options = {
 	"clfn":		"iot",
-	"descfn":	"get_v2_logging_options",
+	"descfn":	"describe_logging_options",
 	"topkey":	"LoggingOptions",
 	"key":		"roleArn",
 	"filterid":	"roleArn"
@@ -5557,7 +5557,7 @@ aws_iot_thing_group = {
 
 aws_iot_thing_group_membership = {
 	"clfn":		"iot",
-	"descfn":	"list_things_in_thing_group",
+	"descfn":	"list_thing_group_memberships",
 	"topkey":	"ThingGroupMemberships",
 	"key":		"ThingGroupName",
 	"filterid":	"ThingGroupName"
@@ -5565,7 +5565,7 @@ aws_iot_thing_group_membership = {
 
 aws_iot_thing_principal_attachment = {
 	"clfn":		"iot",
-	"descfn":	"list_thing_principals",
+	"descfn":	"list_thing_principal_attachments",
 	"topkey":	"ThingPrincipalAttachments",
 	"key":		"ThingName",
 	"filterid":	"ThingName"
@@ -5837,7 +5837,7 @@ aws_lakeformation_resource = {
 
 aws_lakeformation_resource_lf_tags = {
 	"clfn":		"lakeformation",
-	"descfn":	"get_resource_lf_tags",
+	"descfn":	"list_resource_lf_tags",
 	"topkey":	"LFTags",
 	"key":		"LFTagKey",
 	"filterid":	"LFTagKey"
@@ -6013,7 +6013,7 @@ aws_lexv2models_bot_version = {
 
 aws_licensemanager_association = {
 	"clfn":		"license-manager",
-	"descfn":	"list_associations_for_license_configuration",
+	"descfn":	"list_associations",
 	"topkey":	"Associations",
 	"key":		"LicenseConfigurationArn",
 	"filterid":	"LicenseConfigurationArn"
@@ -6021,7 +6021,7 @@ aws_licensemanager_association = {
 
 aws_licensemanager_grant = {
 	"clfn":		"license-manager",
-	"descfn":	"list_received_grants",
+	"descfn":	"list_grants",
 	"topkey":	"Grants",
 	"key":		"GrantArn",
 	"filterid":	"GrantArn"
@@ -6029,7 +6029,7 @@ aws_licensemanager_grant = {
 
 aws_licensemanager_grant_accepter = {
 	"clfn":		"license-manager",
-	"descfn":	"list_received_grants",
+	"descfn":	"list_grant_accepters",
 	"topkey":	"GrantAccepters",
 	"key":		"GrantId",
 	"filterid":	"GrantId"
@@ -6061,7 +6061,7 @@ aws_lightsail_bucket_access_key = {
 
 aws_lightsail_bucket_resource_access = {
 	"clfn":		"lightsail",
-	"descfn":	"get_buckets",
+	"descfn":	"get_bucket_resources",
 	"topkey":	"Buckets",
 	"key":		"name",
 	"filterid":	"name"
@@ -6109,7 +6109,7 @@ aws_lightsail_disk = {
 
 aws_lightsail_disk_attachment = {
 	"clfn":		"lightsail",
-	"descfn":	"get_disks",
+	"descfn":	"get_disk_attachments",
 	"topkey":	"DiskAttachments",
 	"key":		"name",
 	"filterid":	"name"
@@ -6133,7 +6133,7 @@ aws_lightsail_domain = {
 
 aws_lightsail_domain_entry = {
 	"clfn":		"lightsail",
-	"descfn":	"get_domains",
+	"descfn":	"get_domain_entries",
 	"topkey":	"DomainEntries",
 	"key":		"name",
 	"filterid":	"name"
@@ -6149,7 +6149,7 @@ aws_lightsail_instance = {
 
 aws_lightsail_instance_public_ports = {
 	"clfn":		"lightsail",
-	"descfn":	"get_instance_port_states",
+	"descfn":	"get_instance_public_ports",
 	"topkey":	"PublicPorts",
 	"key":		"name",
 	"filterid":	"name"
@@ -6157,7 +6157,7 @@ aws_lightsail_instance_public_ports = {
 
 aws_lightsail_key_pair = {
 	"clfn":		"lightsail",
-	"descfn":	"get_key_pairs",
+	"descfn":	"get_instance_public_ports",
 	"topkey":	"PortInfo",
 	"key":		"name",
 	"filterid":	"name"
@@ -6189,7 +6189,7 @@ aws_lightsail_lb_certificate = {
 
 aws_lightsail_lb_certificate_attachment = {
 	"clfn":		"lightsail",
-	"descfn":	"get_load_balancer_tls_certificates",
+	"descfn":	"get_load_balancer_certificates",
 	"topkey":	"Certificates",
 	"key":		"name",
 	"filterid":	"name"
@@ -6205,7 +6205,7 @@ aws_lightsail_lb_https_redirection_policy = {
 
 aws_lightsail_lb_stickiness_policy = {
 	"clfn":		"lightsail",
-	"descfn":	"get_load_balancers",
+	"descfn":	"get_load_balancer_https_redirection_policies",
 	"topkey":	"HttpsRedirectPolicies",
 	"key":		"name",
 	"filterid":	"name"
@@ -6229,7 +6229,7 @@ aws_lightsail_static_ip_attachment = {
 
 aws_load_balancer_backend_server_policy = {
 	"clfn":		"elbv2",
-	"descfn":	"describe_load_balancers",
+	"descfn":	"describe_backend_server_policies",
 	"topkey":	"BackendServerDescriptions",
 	"key":		"PolicyName",
 	"filterid":	"PolicyName"
@@ -6245,7 +6245,7 @@ aws_load_balancer_listener_policy = {
 
 aws_load_balancer_policy = {
 	"clfn":		"elbv2",
-	"descfn":	"describe_load_balancer_policy_types",
+	"descfn":	"describe_load_balancer_policies",
 	"topkey":	"Policies",
 	"key":		"PolicyName",
 	"filterid":	"PolicyName"
@@ -6293,7 +6293,7 @@ aws_location_tracker = {
 
 aws_location_tracker_association = {
 	"clfn":		"location",
-	"descfn":	"list_tracker_consumers",
+	"descfn":	"list_tracker_associations",
 	"topkey":	"TrackerAssociations",
 	"key":		"TrackerName",
 	"filterid":	"TrackerName"
@@ -6301,7 +6301,7 @@ aws_location_tracker_association = {
 
 aws_macie2_account = {
 	"clfn":		"macie2",
-	"descfn":	"get_macie_session",
+	"descfn":	"list_account_settings",
 	"topkey":	"AccountSettings",
 	"key":		"Name",
 	"filterid":	"Name"
@@ -6317,7 +6317,7 @@ aws_macie2_classification_export_configuration = {
 
 aws_macie2_classification_job = {
 	"clfn":		"macie2",
-	"descfn":	"list_jobs",
+	"descfn":	"list_classification_jobs",
 	"topkey":	"ClassificationJobs",
 	"key":		"Id",
 	"filterid":	"Id"
@@ -6397,7 +6397,7 @@ aws_media_store_container = {
 
 aws_media_store_container_policy = {
 	"clfn":		"mediastore",
-	"descfn":	"get_container_policy",
+	"descfn":	"list_container_policies",
 	"topkey":	"ContainerPolicies",
 	"key":		"Policy",
 	"filterid":	"Policy"
@@ -10906,7 +10906,7 @@ aws_controltower_landing_zone = {
 
 aws_costoptimizationhub_enrollment_status = {
 	"clfn":		"cost-optimization-hub",
-	"descfn":	"get_preferences",
+	"descfn":	"get_enrollment_status",
 	"topkey":	"status",
 	"key":		"status",
 	"filterid":	""
@@ -11546,7 +11546,7 @@ aws_bedrockagentcore_memory = {
 
 aws_bedrockagentcore_memory_strategy = {
 	"clfn":		"bedrock-agentcore-control",
-	"descfn":	"list_memories",
+	"descfn":	"list_memory_strategies",
 	"topkey":	"memoryStrategies",
 	"key":		"strategyId",
 	"filterid":	"strategyId"
@@ -11666,7 +11666,7 @@ aws_dsql_cluster = {
 
 aws_dsql_cluster_peering = {
 	"clfn":		"dsql",
-	"descfn":	"list_clusters",
+	"descfn":	"list_cluster_peerings",
 	"topkey":	"clusterPeerings",
 	"key":		"id",
 	"filterid":	"clusterId"

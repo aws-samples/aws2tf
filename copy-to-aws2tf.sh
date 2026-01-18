@@ -3,5 +3,6 @@ cp code/*.py ../aws2tf/code
 cp -r code/fixtf_aws_resources ../aws2tf/code
 cp -r code/get_aws_resources ../aws2tf/code
 cp -r documentation ../aws2tf/documentation
+cp .kiro/steering/*.md ../aws2tf/.kiro/steering
 cp requirements.txt ../aws2tf
 cp Dockerfile ../aws2tf 

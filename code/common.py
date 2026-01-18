@@ -613,6 +613,8 @@ from get_aws_resources import aws_cloudwatch
 from get_aws_resources import aws_codebuild
 from get_aws_resources import aws_codecommit
 from get_aws_resources import aws_codeartifact
+from get_aws_resources import aws_codedeploy
+from get_aws_resources import aws_codepipeline
 from get_aws_resources import aws_codeguruprofiler
 from get_aws_resources import aws_codestar_notifications
 from get_aws_resources import aws_cognito_identity
@@ -621,6 +623,8 @@ from get_aws_resources import aws_config
 from get_aws_resources import aws_connect
 from get_aws_resources import aws_customer_profiles
 from get_aws_resources import aws_datazone
+from get_aws_resources import aws_devops_guru
+from get_aws_resources import aws_directconnect
 from get_aws_resources import aws_dms
 from get_aws_resources import aws_docdb
 from get_aws_resources import aws_ds
@@ -647,6 +651,8 @@ from get_aws_resources import aws_logs
 from get_aws_resources import aws_lakeformation
 from get_aws_resources import aws_lambda
 from get_aws_resources import aws_license_manager
+from get_aws_resources import aws_lightsail
+from get_aws_resources import aws_memorydb
 from get_aws_resources import aws_mwaa
 from get_aws_resources import aws_neptune
 from get_aws_resources import aws_network_firewall
@@ -673,6 +679,7 @@ from get_aws_resources import aws_servicecatalog
 from get_aws_resources import aws_servicediscovery
 from get_aws_resources import aws_shield
 from get_aws_resources import aws_ses
+from get_aws_resources import aws_sesv2
 from get_aws_resources import aws_signer
 from get_aws_resources import aws_sns
 from get_aws_resources import aws_sqs
@@ -718,6 +725,8 @@ AWS_RESOURCE_MODULES = {
     'codebuild': aws_codebuild,
     'codecommit': aws_codecommit,
     'codeartifact': aws_codeartifact,
+    'codedeploy': aws_codedeploy,
+    'codepipeline': aws_codepipeline,
     'codeguruprofiler': aws_codeguruprofiler,
     'codestar-notifications': aws_codestar_notifications,
     'codestar_notifications': aws_codestar_notifications,
@@ -730,6 +739,8 @@ AWS_RESOURCE_MODULES = {
     'customer-profiles': aws_customer_profiles,
     'customer_profiles': aws_customer_profiles,
     'datazone': aws_datazone,
+    'devops-guru': aws_devops_guru,
+    'directconnect': aws_directconnect,
     'dms': aws_dms,
     'docdb': aws_docdb,
     'ds': aws_ds,
@@ -758,6 +769,8 @@ AWS_RESOURCE_MODULES = {
     'lambda': aws_lambda,
     'license-manager': aws_license_manager,
     'license_manager': aws_license_manager,
+    'lightsail': aws_lightsail,
+    'memorydb': aws_memorydb,
     'mwaa': aws_mwaa,
     'neptune': aws_neptune,
     'network-firewall': aws_network_firewall,
@@ -787,6 +800,7 @@ AWS_RESOURCE_MODULES = {
     'servicediscovery': aws_servicediscovery,
     'shield': aws_shield,
     'ses': aws_ses,
+    'sesv2': aws_sesv2,
     'signer': aws_signer,
     'sns': aws_sns,
     'sqs': aws_sqs,

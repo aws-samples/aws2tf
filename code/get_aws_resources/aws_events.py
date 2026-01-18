@@ -163,3 +163,67 @@ def get_aws_cloudwatch_event_bus_policy(type, id, clfn, descfn, topkey, key, fil
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
     return True
+
+
+def get_aws_cloudwatch_event_permission(type, id, clfn, descfn, topkey, key, filterid):
+    """
+    Get event permissions with composite ID support (event-bus-name/statement-id)
+    Permissions are stored as statements in the event bus policy
+    """
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        import json
+        client = boto3.client(clfn)
+        
+        if id is None:
+            # List all event buses and extract permissions from their policies
+            response = client.list_event_buses()
+            if response == []: 
+                log.debug("Empty response for "+type+ " id="+str(id)+" returning")
+                return True
+            
+            for bus in response['EventBuses']:
+                bus_name = bus['Name']
+                try:
+                    # Get the policy for this event bus
+                    bus_details = client.describe_event_bus(Name=bus_name)
+                    if 'Policy' in bus_details and bus_details['Policy']:
+                        # Parse the policy JSON to extract statement IDs
+                        policy = json.loads(bus_details['Policy'])
+                        if 'Statement' in policy:
+                            for statement in policy['Statement']:
+                                if 'Sid' in statement:
+                                    statement_id = statement['Sid']
+                                    # Build composite ID: event-bus-name/statement-id
+                                    composite_id = bus_name + '/' + statement_id
+                                    common.write_import(type, composite_id, None)
+                except Exception as e:
+                    if context.debug:
+                        log.debug(f"Error processing event bus {bus_name}: {e}")
+                    continue
+        else:
+            # Handle composite ID in specific import
+            if '/' in id:
+                bus_name, statement_id = id.split('/', 1)
+                try:
+                    # Verify the permission exists
+                    bus_details = client.describe_event_bus(Name=bus_name)
+                    if 'Policy' in bus_details and bus_details['Policy']:
+                        policy = json.loads(bus_details['Policy'])
+                        if 'Statement' in policy:
+                            for statement in policy['Statement']:
+                                if statement.get('Sid') == statement_id:
+                                    common.write_import(type, id, None)
+                                    break
+                except Exception as e:
+                    if context.debug:
+                        log.debug(f"Error getting permission {id}: {e}")
+            else:
+                log_warning(f"Invalid ID format for {type}: expected event-bus-name/statement-id, got {id}")
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True

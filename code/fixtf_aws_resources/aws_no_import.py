@@ -13,6 +13,7 @@ noimport = {
     "aws_cloudcontrolapi_resource": True,
     "aws_codecatalyst_dev_environment": True,
     "aws_codecommit_trigger": True,
+    "aws_codebuild_webhook": True,  ### AWS API does not provide list or get methods for webhooks
     "aws_codegurureviewer_repository_association": True,
     "aws_cognito_user_in_group": True,
     "aws_default_route_table": True,
@@ -136,6 +137,7 @@ noimport = {
     "aws_route53recoveryreadiness_readiness_check": True,
     "aws_route53recoveryreadiness_recovery_group": True,
     "aws_route53recoveryreadiness_resource_set": True,
+    "aws_cloudwatch_contributor_insight_rule": True,  ### AWS API does not return rule_definition field (required)
     "aws_cloudwatch_query_definition": True,
     "aws_cloudfront_response_headers_policy": True, ### insufficient block errors on plan
     "aws_db_cluster_snapshot": True, ### id is too long

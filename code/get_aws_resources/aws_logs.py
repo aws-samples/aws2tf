@@ -5,6 +5,7 @@ log = logging.getLogger('aws2tf')
 import context
 import inspect
 import boto3
+from botocore.config import Config
 
 def get_aws_cloudwatch_log_group(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
@@ -168,4 +169,141 @@ def get_aws_cloudwatch_log_destination_policy(type, id, clfn, descfn, topkey, ke
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
+    return True
+
+
+def get_aws_cloudwatch_log_metric_filter(type, id, clfn, descfn, topkey, key, filterid):
+    """
+    Get log metric filters with composite ID support (log-group-name:filter-name)
+    """
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        client = boto3.client(clfn)
+        
+        if id is None:
+            # List all log groups and their metric filters
+            log_group_paginator = client.get_paginator('describe_log_groups')
+            for page in log_group_paginator.paginate():
+                for log_group in page['logGroups']:
+                    log_group_name = log_group['logGroupName']
+                    try:
+                        # List metric filters for this log group
+                        filter_paginator = client.get_paginator(descfn)
+                        for filter_page in filter_paginator.paginate(logGroupName=log_group_name):
+                            for metric_filter in filter_page[topkey]:
+                                filter_name = metric_filter['filterName']
+                                # Build composite ID: log-group-name:filter-name
+                                composite_id = log_group_name + ':' + filter_name
+                                common.write_import(type, composite_id, None)
+                    except Exception as e:
+                        if context.debug:
+                            log.debug(f"Error listing metric filters for log group {log_group_name}: {e}")
+                        continue
+        else:
+            # Handle composite ID in specific import
+            if ':' in id:
+                log_group_name, filter_name = id.split(':', 1)
+                try:
+                    # Verify the metric filter exists
+                    response = client.describe_metric_filters(
+                        logGroupName=log_group_name,
+                        filterNamePrefix=filter_name
+                    )
+                    # Check if the exact filter exists
+                    for metric_filter in response[topkey]:
+                        if metric_filter['filterName'] == filter_name:
+                            common.write_import(type, id, None)
+                            break
+                except Exception as e:
+                    if context.debug:
+                        log.debug(f"Error getting metric filter {id}: {e}")
+            else:
+                log_warning(f"Invalid ID format for {type}: expected log-group-name:filter-name, got {id}")
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+
+def get_aws_cloudwatch_log_subscription_filter(type, id, clfn, descfn, topkey, key, filterid):
+    """
+    Get log subscription filters with composite ID support (log-group-name|filter-name)
+    """
+    if context.debug:
+        log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
+              " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    try:
+        client = boto3.client(clfn)
+        
+        if id is None:
+            # List all log groups and their subscription filters
+            log_group_paginator = client.get_paginator('describe_log_groups')
+            for page in log_group_paginator.paginate():
+                for log_group in page['logGroups']:
+                    log_group_name = log_group['logGroupName']
+                    try:
+                        # List subscription filters for this log group
+                        filter_paginator = client.get_paginator(descfn)
+                        for filter_page in filter_paginator.paginate(logGroupName=log_group_name):
+                            for sub_filter in filter_page[topkey]:
+                                filter_name = sub_filter['filterName']
+                                # Build composite ID: log-group-name|filter-name
+                                composite_id = log_group_name + '|' + filter_name
+                                common.write_import(type, composite_id, None)
+                    except Exception as e:
+                        if context.debug:
+                            log.debug(f"Error listing subscription filters for log group {log_group_name}: {e}")
+                        continue
+        else:
+            # Handle composite ID in specific import
+            if '|' in id:
+                log_group_name, filter_name = id.split('|', 1)
+                try:
+                    # Verify the subscription filter exists
+                    response = client.describe_subscription_filters(
+                        logGroupName=log_group_name,
+                        filterNamePrefix=filter_name
+                    )
+                    # Check if the exact filter exists
+                    for sub_filter in response[topkey]:
+                        if sub_filter['filterName'] == filter_name:
+                            common.write_import(type, id, None)
+                            break
+                except Exception as e:
+                    if context.debug:
+                        log.debug(f"Error getting subscription filter {id}: {e}")
+            else:
+                log_warning(f"Invalid ID format for {type}: expected log-group-name|filter-name, got {id}")
+
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+
+    return True
+
+def get_aws_cloudwatch_query_definition(type, id, clfn, descfn, topkey, key, filterid):
+    """
+    Get CloudWatch Logs query definitions
+    """
+    try:
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all query definitions - not pageable, but needs maxResults
+            response = client.describe_query_definitions(maxResults=1000)
+            for j in response[topkey]:
+                common.write_import(type, j[key], None)
+        else:
+            # Get specific query definition - API doesn't support filtering by ID
+            # So we list all and filter manually
+            response = client.describe_query_definitions(maxResults=1000)
+            for j in response[topkey]:
+                if j[key] == id:
+                    common.write_import(type, j[key], None)
+                    break
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
     return True

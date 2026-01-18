@@ -23,6 +23,41 @@ def get_aws_s3_bucket(type, id, clfn, descfn, topkey, key, filterid):
    return True
 
 
+def get_aws_s3_bucket_cors_configuration(type, id, clfn, descfn, topkey, key, filterid):
+   """Route CORS configuration requests to main S3 bucket handler"""
+   return get_aws_s3_bucket(type, id, clfn, descfn, topkey, key, filterid)
+
+
+def get_aws_s3_bucket_server_side_encryption_configuration(type, id, clfn, descfn, topkey, key, filterid):
+   """Route server-side encryption configuration requests to main S3 bucket handler"""
+   return get_aws_s3_bucket(type, id, clfn, descfn, topkey, key, filterid)
+
+
+def get_aws_s3_directory_bucket(type, id, clfn, descfn, topkey, key, filterid):
+   """Get S3 Express directory buckets"""
+   try:
+      from botocore.config import Config
+      config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+      client = boto3.client(clfn, config=config)
+      
+      if id is None:
+         # List all directory buckets
+         response = client.list_directory_buckets()
+         for j in response[topkey]:
+            common.write_import(type, j[key], None)
+      else:
+         # Get specific directory bucket
+         response = client.list_directory_buckets()
+         for j in response[topkey]:
+            if id in j[key]:
+               common.write_import(type, j[key], None)
+               break
+   except Exception as e:
+      common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+   
+   return True
+
+
 def check_access(bucket_name,my_region):
    
    try:

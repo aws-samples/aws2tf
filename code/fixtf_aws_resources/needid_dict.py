@@ -2253,3 +2253,845 @@ aws_needid = {
   "aws_vpclattice_auth_policy": aws_vpclattice_auth_policy,
   "aws_customerprofiles_profile": aws_customerprofiles_profile
 }
+
+# Auto-generated additions from verification report
+
+aws_api_gateway_method_response = {
+  "param": "restApiId,resourceId,httpMethod,statusCode",
+  "clfn": "apigateway"
+}
+
+aws_api_gateway_method_settings = {
+  "param": "restApiId,stageName",
+  "clfn": "apigateway"
+}
+
+aws_api_gateway_rest_api_policy = {
+  "param": "restApiId",
+  "clfn": "apigateway"
+}
+
+aws_appfabric_app_authorization = {
+  "param": "appBundleIdentifier",
+  "clfn": "appfabric"
+}
+
+aws_appfabric_app_authorization_connection = {
+  "param": "appBundleIdentifier",
+  "clfn": "appfabric"
+}
+
+aws_appfabric_ingestion = {
+  "param": "appBundleIdentifier",
+  "clfn": "appfabric"
+}
+
+aws_appfabric_ingestion_destination = {
+  "param": "appBundleIdentifier,ingestionIdentifier",
+  "clfn": "appfabric"
+}
+
+aws_apprunner_auto_scaling_configuration_version = {
+  "param": "AutoScalingConfigurationArn",
+  "clfn": "apprunner"
+}
+
+aws_apprunner_deployment = {
+  "param": "ServiceArn",
+  "clfn": "apprunner"
+}
+
+aws_appstream_user = {
+  "param": "AuthenticationType",
+  "clfn": "appstream"
+}
+
+aws_appsync_api_cache = {
+  "param": "apiId",
+  "clfn": "appsync"
+}
+
+aws_appsync_channel_namespace = {
+  "param": "apiId",
+  "clfn": "appsync"
+}
+
+aws_appsync_domain_name_api_association = {
+  "param": "domainName",
+  "clfn": "appsync"
+}
+
+aws_appsync_source_api_association = {
+  "param": "apiId",
+  "clfn": "appsync"
+}
+
+aws_athena_workgroup = {
+  "param": "WorkGroup",
+  "clfn": "athena"
+}
+
+aws_auditmanager_framework = {
+  "param": "frameworkType",
+  "clfn": "auditmanager"
+}
+
+aws_auditmanager_framework_share = {
+  "param": "requestType",
+  "clfn": "auditmanager"
+}
+
+aws_autoscaling_lifecycle_hook = {
+  "param": "AutoScalingGroupName",
+  "clfn": "autoscaling"
+}
+
+aws_autoscaling_traffic_source_attachment = {
+  "param": "AutoScalingGroupName",
+  "clfn": "autoscaling"
+}
+
+aws_backup_restore_testing_selection = {
+  "param": "RestoreTestingPlanName",
+  "clfn": "backup"
+}
+
+aws_budgets_budget = {
+  "param": "AccountId",
+  "clfn": "budgets"
+}
+
+aws_budgets_budget_action = {
+  "param": "AccountId,BudgetName",
+  "clfn": "budgets"
+}
+
+aws_cloudcontrolapi_resource = {
+  "param": "TypeName",
+  "clfn": "cloudcontrol"
+}
+
+aws_cloudformation_stack_instances = {
+  "param": "StackSetName",
+  "clfn": "cloudformation"
+}
+
+aws_cloudformation_stack_set_instance = {
+  "param": "StackSetName",
+  "clfn": "cloudformation"
+}
+
+aws_cloudfront_monitoring_subscription = {
+  "param": "DistributionId",
+  "clfn": "cloudfront"
+}
+
+aws_cloudsearch_domain_service_access_policy = {
+  "param": "DomainName",
+  "clfn": "cloudsearch"
+}
+
+aws_cloudwatch_event_target = {
+  "param": "Rule",
+  "clfn": "events"
+}
+
+aws_cloudwatch_log_account_policy = {
+  "param": "policyType",
+  "clfn": "logs"
+}
+
+aws_cloudwatch_log_data_protection_policy = {
+  "param": "logGroupIdentifier",
+  "clfn": "logs"
+}
+
+aws_cloudwatch_log_delivery_destination_policy = {
+  "param": "deliveryDestinationName",
+  "clfn": "logs"
+}
+
+aws_cloudwatch_log_index_policy = {
+  "param": "logGroupIdentifiers",
+  "clfn": "logs"
+}
+
+aws_cloudwatch_log_subscription_filter = {
+  "param": "logGroupName",
+  "clfn": "logs"
+}
+
+aws_cloudwatch_log_transformer = {
+  "param": "logGroupIdentifier",
+  "clfn": "logs"
+}
+
+aws_codeartifact_domain_permissions_policy = {
+  "param": "domain",
+  "clfn": "codeartifact"
+}
+
+aws_codeartifact_repository_permissions_policy = {
+  "param": "domain,repository",
+  "clfn": "codeartifact"
+}
+
+aws_codebuild_resource_policy = {
+  "param": "resourceArn",
+  "clfn": "codebuild"
+}
+
+aws_codebuild_webhook = {
+  "param": "names",
+  "clfn": "codebuild"
+}
+
+aws_codecommit_approval_rule_template_association = {
+  "param": "repositoryName",
+  "clfn": "codecommit"
+}
+
+aws_codecommit_trigger = {
+  "param": "repositoryName",
+  "clfn": "codecommit"
+}
+
+aws_connect_bot_association = {
+  "param": "InstanceId,LexVersion",
+  "clfn": "connect"
+}
+
+aws_connect_lambda_function_association = {
+  "param": "InstanceId",
+  "clfn": "connect"
+}
+
+aws_connect_user_hierarchy_structure = {
+  "param": "InstanceId",
+  "clfn": "connect"
+}
+
+aws_connect_vocabulary = {
+  "param": "InstanceId",
+  "clfn": "connect"
+}
+
+aws_dataexchange_revision = {
+  "param": "DataSetId",
+  "clfn": "dataexchange"
+}
+
+aws_dataexchange_revision_assets = {
+  "param": "DataSetId,RevisionId",
+  "clfn": "dataexchange"
+}
+
+aws_datapipeline_pipeline_definition = {
+  "param": "pipelineId",
+  "clfn": "datapipeline"
+}
+
+aws_datazone_asset_type = {
+  "param": "domainIdentifier,managed,searchScope",
+  "clfn": "datazone"
+}
+
+aws_datazone_environment = {
+  "param": "domainIdentifier,projectIdentifier",
+  "clfn": "datazone"
+}
+
+aws_datazone_environment_blueprint_configuration = {
+  "param": "domainIdentifier",
+  "clfn": "datazone"
+}
+
+aws_datazone_environment_profile = {
+  "param": "domainIdentifier",
+  "clfn": "datazone"
+}
+
+aws_datazone_form_type = {
+  "param": "domainIdentifier,managed,searchScope",
+  "clfn": "datazone"
+}
+
+aws_datazone_glossary = {
+  "param": "domainIdentifier,searchScope",
+  "clfn": "datazone"
+}
+
+aws_datazone_glossary_term = {
+  "param": "domainIdentifier,searchScope",
+  "clfn": "datazone"
+}
+
+aws_datazone_project = {
+  "param": "domainIdentifier",
+  "clfn": "datazone"
+}
+
+aws_datazone_user_profile = {
+  "param": "domainIdentifier,userType",
+  "clfn": "datazone"
+}
+
+aws_db_proxy_default_target_group = {
+  "param": "DBProxyName",
+  "clfn": "rds"
+}
+
+aws_detective_organization_configuration = {
+  "param": "GraphArn",
+  "clfn": "detective"
+}
+
+aws_directory_service_conditional_forwarder = {
+  "param": "DirectoryId",
+  "clfn": "ds"
+}
+
+aws_directory_service_region = {
+  "param": "DirectoryId",
+  "clfn": "ds"
+}
+
+aws_directory_service_shared_directory = {
+  "param": "OwnerDirectoryId",
+  "clfn": "ds"
+}
+
+aws_directory_service_shared_directory_accepter = {
+  "param": "OwnerDirectoryId",
+  "clfn": "ds"
+}
+
+aws_dynamodb_resource_policy = {
+  "param": "ResourceArn",
+  "clfn": "dynamodb"
+}
+
+aws_dynamodb_table = {
+  "param": "TableName",
+  "clfn": "dynamodb"
+}
+
+aws_ec2_transit_gateway_route = {
+  "param": "TransitGatewayRouteTableId,Filters",
+  "clfn": "ec2"
+}
+
+aws_ec2_transit_gateway_route_table_propagation = {
+  "param": "TransitGatewayRouteTableId",
+  "clfn": "ec2"
+}
+
+aws_ecr_account_setting = {
+  "param": "name",
+  "clfn": "ecr"
+}
+
+aws_ecs_task_definition = {
+  "param": "taskDefinition",
+  "clfn": "ecs"
+}
+
+aws_eks_access_policy_association = {
+  "param": "clusterName,principalArn",
+  "clfn": "eks"
+}
+
+aws_eks_capability = {
+  "param": "name",
+  "clfn": "eks"
+}
+
+aws_elasticsearch_domain_policy = {
+  "param": "DomainName",
+  "clfn": "es"
+}
+
+aws_elasticsearch_domain_saml_options = {
+  "param": "DomainName",
+  "clfn": "es"
+}
+
+aws_emr_instance_fleet = {
+  "param": "ClusterId",
+  "clfn": "emr"
+}
+
+aws_emr_instance_group = {
+  "param": "ClusterId",
+  "clfn": "emr"
+}
+
+aws_emr_managed_scaling_policy = {
+  "param": "ClusterId",
+  "clfn": "emr"
+}
+
+aws_fis_target_account_configuration = {
+  "param": "experimentTemplateId",
+  "clfn": "fis"
+}
+
+aws_glacier_vault_lock = {
+  "param": "vaultName",
+  "clfn": "glacier"
+}
+
+aws_glue_catalog_table_optimizer = {
+  "param": "CatalogId,DatabaseName,TableName,Type",
+  "clfn": "glue"
+}
+
+aws_glue_partition_index = {
+  "param": "DatabaseName,TableName",
+  "clfn": "glue"
+}
+
+aws_glue_trigger = {
+  "param": "Name",
+  "clfn": "glue"
+}
+
+aws_glue_user_defined_function = {
+  "param": "Pattern",
+  "clfn": "glue"
+}
+
+aws_grafana_license_association = {
+  "param": "workspaceId",
+  "clfn": "grafana"
+}
+
+aws_grafana_role_association = {
+  "param": "workspaceId",
+  "clfn": "grafana"
+}
+
+aws_grafana_workspace_service_account = {
+  "param": "workspaceId",
+  "clfn": "grafana"
+}
+
+aws_grafana_workspace_service_account_token = {
+  "param": "serviceAccountId,workspaceId",
+  "clfn": "grafana"
+}
+
+aws_guardduty_detector_feature = {
+  "param": "DetectorId",
+  "clfn": "guardduty"
+}
+
+aws_guardduty_member_detector_feature = {
+  "param": "DetectorId,AccountIds",
+  "clfn": "guardduty"
+}
+
+aws_guardduty_organization_configuration = {
+  "param": "DetectorId",
+  "clfn": "guardduty"
+}
+
+aws_guardduty_organization_configuration_feature = {
+  "param": "DetectorId",
+  "clfn": "guardduty"
+}
+
+aws_iam_group_policies_exclusive = {
+  "param": "GroupName",
+  "clfn": "iam"
+}
+
+aws_iam_group_policy_attachments_exclusive = {
+  "param": "GroupName",
+  "clfn": "iam"
+}
+
+aws_iam_instance_profile = {
+  "param": "InstanceProfileName",
+  "clfn": "iam"
+}
+
+aws_iam_organizations_features = {
+  "param": "JobId",
+  "clfn": "iam"
+}
+
+aws_iam_role_policies_exclusive = {
+  "param": "RoleName",
+  "clfn": "iam"
+}
+
+aws_iam_role_policy_attachments_exclusive = {
+  "param": "RoleName",
+  "clfn": "iam"
+}
+
+aws_iam_user_policies_exclusive = {
+  "param": "UserName",
+  "clfn": "iam"
+}
+
+aws_iam_user_policy_attachments_exclusive = {
+  "param": "UserName",
+  "clfn": "iam"
+}
+
+aws_iot_thing_group_membership = {
+  "param": "thingGroupName",
+  "clfn": "iot"
+}
+
+aws_iot_thing_principal_attachment = {
+  "param": "thingName",
+  "clfn": "iot"
+}
+
+aws_kinesis_resource_policy = {
+  "param": "ResourceARN",
+  "clfn": "kinesis"
+}
+
+aws_lakeformation_resource_lf_tags = {
+  "param": "Resource",
+  "clfn": "lakeformation"
+}
+
+aws_lambda_function_recursion_config = {
+  "param": "FunctionName",
+  "clfn": "lambda"
+}
+
+aws_lambda_runtime_management_config = {
+  "param": "FunctionName",
+  "clfn": "lambda"
+}
+
+aws_lightsail_instance_public_ports = {
+  "param": "instanceName",
+  "clfn": "lightsail"
+}
+
+aws_lightsail_lb_certificate_attachment = {
+  "param": "loadBalancerName",
+  "clfn": "lightsail"
+}
+
+aws_location_tracker_association = {
+  "param": "TrackerName",
+  "clfn": "location"
+}
+
+aws_m2_deployment = {
+  "param": "applicationId",
+  "clfn": "m2"
+}
+
+aws_media_store_container_policy = {
+  "param": "ContainerName",
+  "clfn": "mediastore"
+}
+
+aws_msk_scram_secret_association = {
+  "param": "ClusterArn",
+  "clfn": "kafka"
+}
+
+aws_msk_single_scram_secret_association = {
+  "param": "ClusterArn",
+  "clfn": "kafka"
+}
+
+aws_networkmanager_device = {
+  "param": "GlobalNetworkId",
+  "clfn": "networkmanager"
+}
+
+aws_networkmanager_site = {
+  "param": "GlobalNetworkId",
+  "clfn": "networkmanager"
+}
+
+aws_networkmanager_transit_gateway_registration = {
+  "param": "GlobalNetworkId",
+  "clfn": "networkmanager"
+}
+
+aws_notifications_event_rule = {
+  "param": "notificationConfigurationArn",
+  "clfn": "notifications"
+}
+
+aws_opensearch_authorize_vpc_endpoint_access = {
+  "param": "DomainName",
+  "clfn": "opensearch"
+}
+
+aws_opensearchserverless_access_policy = {
+  "param": "type",
+  "clfn": "opensearchserverless"
+}
+
+aws_opensearchserverless_lifecycle_policy = {
+  "param": "type",
+  "clfn": "opensearchserverless"
+}
+
+aws_opensearchserverless_security_config = {
+  "param": "type",
+  "clfn": "opensearchserverless"
+}
+
+aws_opensearchserverless_security_policy = {
+  "param": "type",
+  "clfn": "opensearchserverless"
+}
+
+aws_organizations_policy = {
+  "param": "Filter",
+  "clfn": "organizations"
+}
+
+aws_organizations_policy_attachment = {
+  "param": "PolicyId",
+  "clfn": "organizations"
+}
+
+aws_organizations_tag = {
+  "param": "ResourceId",
+  "clfn": "organizations"
+}
+
+aws_prometheus_query_logging_configuration = {
+  "param": "workspaceId",
+  "clfn": "amp"
+}
+
+aws_prometheus_resource_policy = {
+  "param": "workspaceId",
+  "clfn": "amp"
+}
+
+aws_prometheus_rule_group_namespace = {
+  "param": "workspaceId",
+  "clfn": "amp"
+}
+
+aws_prometheus_workspace_configuration = {
+  "param": "workspaceId",
+  "clfn": "amp"
+}
+
+aws_quicksight_account_settings = {
+  "param": "AwsAccountId",
+  "clfn": "quicksight"
+}
+
+aws_quicksight_custom_permissions = {
+  "param": "AwsAccountId,CustomPermissionsName",
+  "clfn": "quicksight"
+}
+
+aws_quicksight_ip_restriction = {
+  "param": "AwsAccountId",
+  "clfn": "quicksight"
+}
+
+aws_quicksight_refresh_schedule = {
+  "param": "AwsAccountId,DataSetId",
+  "clfn": "quicksight"
+}
+
+aws_quicksight_role_custom_permission = {
+  "param": "Role,AwsAccountId,Namespace",
+  "clfn": "quicksight"
+}
+
+aws_quicksight_role_membership = {
+  "param": "Role,AwsAccountId,Namespace",
+  "clfn": "quicksight"
+}
+
+aws_quicksight_user_custom_permission = {
+  "param": "UserName,AwsAccountId,Namespace",
+  "clfn": "quicksight"
+}
+
+aws_quicksight_vpc_connection = {
+  "param": "AwsAccountId",
+  "clfn": "quicksight"
+}
+
+aws_ram_principal_association = {
+  "param": "resourceOwner",
+  "clfn": "ram"
+}
+
+aws_ram_resource_association = {
+  "param": "resourceOwner",
+  "clfn": "ram"
+}
+
+aws_ram_resource_share = {
+  "param": "resourceOwner",
+  "clfn": "ram"
+}
+
+aws_redshift_logging = {
+  "param": "ClusterIdentifier",
+  "clfn": "redshift"
+}
+
+aws_route53_records_exclusive = {
+  "param": "HostedZoneId",
+  "clfn": "route53"
+}
+
+aws_route53domains_delegation_signer_record = {
+  "param": "DomainName",
+  "clfn": "route53domains"
+}
+
+aws_route53profiles_resource_association = {
+  "param": "ProfileId",
+  "clfn": "route53profiles"
+}
+
+aws_s3_bucket_abac = {
+  "param": "Bucket",
+  "clfn": "s3"
+}
+
+aws_s3_bucket_cors_configuration = {
+  "param": "Bucket",
+  "clfn": "s3"
+}
+
+aws_s3_bucket_inventory_configuration = {
+  "param": "Bucket",
+  "clfn": "s3"
+}
+
+aws_s3_bucket_metadata_configuration = {
+  "param": "Bucket",
+  "clfn": "s3"
+}
+
+aws_s3_bucket_metrics_configuration = {
+  "param": "Bucket",
+  "clfn": "s3"
+}
+
+aws_s3_bucket_server_side_encryption_configuration = {
+  "param": "Bucket",
+  "clfn": "s3"
+}
+
+aws_s3tables_namespace = {
+  "param": "tableBucketARN",
+  "clfn": "s3tables"
+}
+
+aws_s3tables_table = {
+  "param": "tableBucketARN",
+  "clfn": "s3tables"
+}
+
+aws_s3tables_table_bucket_policy = {
+  "param": "tableBucketARN",
+  "clfn": "s3tables"
+}
+
+aws_s3tables_table_bucket_replication = {
+  "param": "tableBucketARN",
+  "clfn": "s3tables"
+}
+
+aws_s3tables_table_policy = {
+  "param": "tableBucketARN,namespace,name",
+  "clfn": "s3tables"
+}
+
+aws_secretsmanager_secret_policy = {
+  "param": "SecretId",
+  "clfn": "secretsmanager"
+}
+
+aws_securityhub_standards_control_association = {
+  "param": "SecurityControlId",
+  "clfn": "securityhub"
+}
+
+aws_securitylake_subscriber_notification = {
+  "param": "subscriberId",
+  "clfn": "securitylake"
+}
+
+aws_sesv2_configuration_set_event_destination = {
+  "param": "ConfigurationSetName",
+  "clfn": "sesv2"
+}
+
+aws_sesv2_email_identity_feedback_attributes = {
+  "param": "EmailIdentity",
+  "clfn": "sesv2"
+}
+
+aws_sesv2_email_identity_mail_from_attributes = {
+  "param": "EmailIdentity",
+  "clfn": "sesv2"
+}
+
+aws_sesv2_email_identity_policy = {
+  "param": "EmailIdentity",
+  "clfn": "sesv2"
+}
+
+aws_signer_signing_profile_permission = {
+  "param": "profileName",
+  "clfn": "signer"
+}
+
+aws_transfer_host_key = {
+  "param": "ServerId",
+  "clfn": "transfer"
+}
+
+aws_transfer_web_app_customization = {
+  "param": "WebAppId",
+  "clfn": "transfer"
+}
+
+aws_verifiedpermissions_identity_source = {
+  "param": "policyStoreId",
+  "clfn": "verifiedpermissions"
+}
+
+aws_verifiedpermissions_policy = {
+  "param": "policyStoreId",
+  "clfn": "verifiedpermissions"
+}
+
+aws_verifiedpermissions_policy_template = {
+  "param": "policyStoreId",
+  "clfn": "verifiedpermissions"
+}
+
+aws_verifiedpermissions_schema = {
+  "param": "policyStoreId",
+  "clfn": "verifiedpermissions"
+}
+
+aws_wafv2_api_key = {
+  "param": "Scope",
+  "clfn": "wafv2"
+}
+
+aws_wafv2_web_acl_rule_group_association = {
+  "param": "WebACLArn",
+  "clfn": "wafv2"
+}

@@ -62,6 +62,8 @@
 * AWS::CloudFront::Function
 * AWS::CloudFront::OriginRequestPolicy
 * AWS::CloudWatch::Alarm
+* AWS::CloudWatch::Dashboard
+* AWS::CloudWatch::InsightRule
 * AWS::CodeCommit::Repository
 * AWS::Cognito::UserPool
 * AWS::Cognito::UserPoolClient
@@ -227,6 +229,7 @@
 * AWS::SageMaker::Space
 * AWS::SageMaker::UserProfile
 * AWS::SageMaker::Workteam
+* AWS::Scheduler::ScheduleGroup
 * AWS::SecretsManager::ResourcePolicy
 * AWS::SecretsManager::RotationSchedule
 * AWS::SecretsManager::Secret
@@ -251,3 +254,4 @@
 * AWS::WAFv2::LoggingConfiguration
 * AWS::WAFv2::WebACL
 * AWS::WorkSpaces::Workspace
+* AWS::XRay::Group

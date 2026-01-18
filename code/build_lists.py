@@ -1,12 +1,32 @@
+"""
+AWS Resource List Building Module
+
+This module builds lists of AWS resources using parallel API calls via ThreadPoolExecutor.
+It discovers core resources (VPCs, Lambda functions, S3 buckets, etc.) and stores them
+in the context module for later processing.
+
+Thread Safety Notes:
+- Dictionary updates (context.vpclist[id] = True) are GIL-protected and thread-safe
+- Attribute assignments (context.vpcs = response) happen in separate threads
+- Each fetch function writes to different context attributes (no conflicts)
+- Assumption: No two fetch functions write to the same context attribute
+"""
+
 import boto3
 import context
 import concurrent.futures
 import json
 import datetime
 import logging
+from botocore.config import Config
 from tqdm import tqdm
 
 log = logging.getLogger('aws2tf')
+
+# Boto3 retry configuration for resilience
+BOTO3_RETRY_CONFIG = Config(
+    retries={'max_attempts': 10, 'mode': 'standard'}
+)
 
 
 def build_lists():
@@ -17,134 +37,301 @@ def build_lists():
     
     def fetch_lambda_data():
         try:
-            client = boto3.client('lambda')
+            client = boto3.client('lambda', config=BOTO3_RETRY_CONFIG)
             response = []
             paginator = client.get_paginator('list_functions')
             for page in paginator.paginate():
                 response.extend(page['Functions'])
-            return [('lambda', j['FunctionName']) for j in response]
+            return {
+                'resource_type': 'lambda',
+                'items': [{'id': j['FunctionName'], 'data': j} for j in response],
+                'metadata': {}
+            }
         except Exception as e:
-            log.error("Error fetching Lambda data: %s",  e)
-            return []
+            log.error("Error fetching Lambda data: %s", e)
+            return {'resource_type': 'lambda', 'items': [], 'metadata': {}}
       
     
     def fetch_vpc_data():
         try:
-            client = boto3.client('ec2')
+            client = boto3.client('ec2', config=BOTO3_RETRY_CONFIG)
             response = []
             paginator = client.get_paginator('describe_vpcs')
             for page in paginator.paginate():
                 response.extend(page['Vpcs'])
-            context.vpcs=response
-            return [('vpc', j['VpcId']) for j in response]
+            context.vpcs = response
+            return {
+                'resource_type': 'vpc',
+                'items': [{'id': j['VpcId'], 'data': j} for j in response],
+                'metadata': {'full_data': response}
+            }
         except Exception as e:
-            log.error("Error fetching ec2 data: %s",  e)
-            return []
+            log.error("Error fetching ec2 data: %s", e)
+            return {'resource_type': 'vpc', 'items': [], 'metadata': {}}
     
     def fetch_s3_data():
         try:
-            client = boto3.client('s3')
+            client = boto3.client('s3', config=BOTO3_RETRY_CONFIG)
             response = []
             paginator = client.get_paginator('list_buckets')
             for page in paginator.paginate(BucketRegion=context.region):
                 response.extend(page['Buckets'])
-            return [('s3', j['Name']) for j in response]
+            
+            # Validate buckets in this thread (parallel execution)
+            validated_items = []
+            for bucket_data in response:
+                bucket_name = bucket_data['Name']
+                try:
+                    # Validate bucket is accessible
+                    client.list_objects_v2(Bucket=bucket_name, MaxKeys=1)
+                    validated_items.append({'id': bucket_name, 'data': bucket_data})
+                except Exception as e:
+                    log.debug("S3 bucket %s not accessible: %s", bucket_name, e)
+                    continue
+            
+            return {
+                'resource_type': 's3',
+                'items': validated_items,
+                'metadata': {}
+            }
         except Exception as e:
-            log.error("Error fetching s3 data: %s",  e)
-            return []
+            log.error("Error fetching s3 data: %s", e)
+            return {'resource_type': 's3', 'items': [], 'metadata': {}}
 
     def fetch_sg_data():
         try:
-            client = boto3.client('ec2')
+            client = boto3.client('ec2', config=BOTO3_RETRY_CONFIG)
             response = []
             paginator = client.get_paginator('describe_security_groups')
             for page in paginator.paginate():
                 response.extend(page['SecurityGroups'])
-            return [('sg', j['GroupId']) for j in response]
+            return {
+                'resource_type': 'sg',
+                'items': [{'id': j['GroupId'], 'data': j} for j in response],
+                'metadata': {}
+            }
         except Exception as e:
-            log.error("Error fetching SG data: %s",  e)
-            return []
+            log.error("Error fetching SG data: %s", e)
+            return {'resource_type': 'sg', 'items': [], 'metadata': {}}
         
 
     def fetch_subnet_data():
         try:
-            client = boto3.client('ec2')
+            client = boto3.client('ec2', config=BOTO3_RETRY_CONFIG)
             response = []
             paginator = client.get_paginator('describe_subnets')
             for page in paginator.paginate():
                 response.extend(page['Subnets'])
-            context.subnets=response
-            # save response
-            with open('imported/subnets.json', 'w') as f:
-               json.dump(response, f, indent=2, default=str)
-            return [('subnet', j['SubnetId']) for j in response]
+            context.subnets = response
+            return {
+                'resource_type': 'subnet',
+                'items': [{'id': j['SubnetId'], 'data': j} for j in response],
+                'metadata': {'full_data': response}
+            }
         except Exception as e:
-            log.error("Error fetching vpc data: %s",  e)
-            return []
+            log.error("Error fetching subnet data: %s", e)
+            return {'resource_type': 'subnet', 'items': [], 'metadata': {}}
 
     def fetch_tgw_data():
         try:
-            client = boto3.client('ec2')
+            client = boto3.client('ec2', config=BOTO3_RETRY_CONFIG)
             response = []
             paginator = client.get_paginator('describe_transit_gateways')
             for page in paginator.paginate():
                 response.extend(page['TransitGateways'])
-            return [('tgw', j['TransitGatewayId']) for j in response]
+            return {
+                'resource_type': 'tgw',
+                'items': [{'id': j['TransitGatewayId'], 'data': j} for j in response],
+                'metadata': {}
+            }
         except Exception as e:
-            log.error("Error fetching transit gateways: %s",  e)
-            return []
+            log.error("Error fetching transit gateways: %s", e)
+            return {'resource_type': 'tgw', 'items': [], 'metadata': {}}
 
     def fetch_roles_data():
         try:
-            client = boto3.client('iam',region_name='us-east-1')
+            client = boto3.client('iam', region_name='us-east-1', config=BOTO3_RETRY_CONFIG)
             response = []
             paginator = client.get_paginator('list_roles')
             for page in paginator.paginate():
                 response.extend(page['Roles'])
-            # save
-            with open('imported/roles.json', 'w') as f:
-               json.dump(response, f, indent=2, default=str)
-            return [('iam', j['RoleName']) for j in response]
+            return {
+                'resource_type': 'iam',
+                'items': [{'id': j['RoleName'], 'data': j} for j in response],
+                'metadata': {'full_data': response}
+            }
         except Exception as e:
-            log.error("Error fetching vpc data: %s",  e)
-            return []
+            log.error("Error fetching IAM roles data: %s", e)
+            return {'resource_type': 'iam', 'items': [], 'metadata': {}}
     
     def fetch_policies_data():
         try:
-            client = boto3.client('iam',region_name='us-east-1')
+            client = boto3.client('iam', region_name='us-east-1', config=BOTO3_RETRY_CONFIG)
             response = []
             paginator = client.get_paginator('list_policies')
             for page in paginator.paginate(Scope='Local'):
                 response.extend(page['Policies'])
-            return [('pol', j['Arn']) for j in response]
+            return {
+                'resource_type': 'pol',
+                'items': [{'id': j['Arn'], 'data': j} for j in response],
+                'metadata': {}
+            }
         except Exception as e:
-            log.error("Error fetching vpc data: %s",  e)
-            return []
+            log.error("Error fetching IAM policies data: %s", e)
+            return {'resource_type': 'pol', 'items': [], 'metadata': {}}
 
     def fetch_instprof_data():
         try:
-            client = boto3.client('iam',region_name='us-east-1')
+            client = boto3.client('iam', region_name='us-east-1', config=BOTO3_RETRY_CONFIG)
             response = []
             paginator = client.get_paginator('list_instance_profiles')
             for page in paginator.paginate():
                 response.extend(page['InstanceProfiles'])
-            return [('inp', j['InstanceProfileName']) for j in response]
+            return {
+                'resource_type': 'inp',
+                'items': [{'id': j['InstanceProfileName'], 'data': j} for j in response],
+                'metadata': {}
+            }
         except Exception as e:
-            log.error("Error fetching vpc data: %s",  e)
-            return []
+            log.error("Error fetching instance profiles data: %s", e)
+            return {'resource_type': 'inp', 'items': [], 'metadata': {}}
 
     def fetch_launch_templates():
         try:
-            client = boto3.client('ec2')
+            client = boto3.client('ec2', config=BOTO3_RETRY_CONFIG)
             response = []
             paginator = client.get_paginator('describe_launch_templates')
             for page in paginator.paginate():
                 response.extend(page['LaunchTemplates'])
-            return [('lt', j['LaunchTemplateId']) for j in response]
+            return {
+                'resource_type': 'lt',
+                'items': [{'id': j['LaunchTemplateId'], 'data': j} for j in response],
+                'metadata': {}
+            }
         except Exception as e:
             log.error("Error fetching launch templates: %s", e)
-            return []
+            return {'resource_type': 'lt', 'items': [], 'metadata': {}}
 
+    # Result processing handler functions
+    def _process_vpc_result(items, metadata):
+        """Process VPC fetch results."""
+        context.vpcs = metadata.get('full_data', [])
+        for item in items:
+            context.vpclist[item['id']] = True
+    
+    def _process_lambda_result(items, metadata):
+        """Process Lambda fetch results."""
+        for item in items:
+            context.lambdalist[item['id']] = True
+    
+    def _process_s3_result(items, metadata):
+        """Process S3 fetch results (already validated)."""
+        for item in items:
+            context.s3list[item['id']] = True
+    
+    def _process_sg_result(items, metadata):
+        """Process security group fetch results."""
+        for item in items:
+            context.sglist[item['id']] = True
+    
+    def _process_subnet_result(items, metadata):
+        """Process subnet fetch results."""
+        context.subnets = metadata.get('full_data', [])
+        for item in items:
+            context.subnetlist[item['id']] = True
+    
+    def _process_tgw_result(items, metadata):
+        """Process transit gateway fetch results."""
+        for item in items:
+            context.tgwlist[item['id']] = True
+    
+    def _process_iam_result(items, metadata):
+        """Process IAM role fetch results."""
+        for item in items:
+            context.rolelist[item['id']] = True
+    
+    def _process_pol_result(items, metadata):
+        """Process IAM policy fetch results."""
+        for item in items:
+            context.policylist[item['id']] = True
+    
+    def _process_inp_result(items, metadata):
+        """Process instance profile fetch results."""
+        for item in items:
+            context.inplist[item['id']] = True
+    
+    def _process_lt_result(items, metadata):
+        """Process launch template fetch results."""
+        for item in items:
+            context.ltlist[item['id']] = True
+    
+    def _process_single_result(result):
+        """Process a single fetch result using the dispatch table.
+        
+        Args:
+            result: Result dictionary from a fetch function
+            
+        Returns:
+            int: Number of resources found (for progress reporting)
+        """
+        if not isinstance(result, dict):
+            return 0
+        
+        resource_count = len(result.get('items', []))
+        resource_type = result.get('resource_type')
+        items = result.get('items', [])
+        metadata = result.get('metadata', {})
+        
+        # Get handler from dispatch table and execute
+        handler = RESULT_HANDLERS.get(resource_type)
+        if handler:
+            try:
+                handler(items, metadata)
+            except Exception as e:
+                log.error("Error processing %s results: %s", resource_type, e)
+        
+        return resource_count
+    
+    def _write_resource_files(results):
+        """Write resource data to JSON files after all fetches complete.
+        
+        Args:
+            results: List of result dictionaries from fetch functions
+        """
+        files_to_write = {
+            'imported/subnets.json': None,
+            'imported/roles.json': None,
+        }
+        
+        # Collect data from results
+        for result in results:
+            if result.get('resource_type') == 'subnet':
+                files_to_write['imported/subnets.json'] = result.get('metadata', {}).get('full_data')
+            elif result.get('resource_type') == 'iam':
+                files_to_write['imported/roles.json'] = result.get('metadata', {}).get('full_data')
+        
+        # Write files with UTF-8 encoding
+        for filepath, data in files_to_write.items():
+            if data:
+                try:
+                    with open(filepath, 'w', encoding='utf-8') as f:
+                        json.dump(data, f, indent=2, default=str)
+                except Exception as e:
+                    log.error("Error writing %s: %s", filepath, e)
+    
+    # Dispatch table for result processing
+    RESULT_HANDLERS = {
+        'vpc': _process_vpc_result,
+        'lambda': _process_lambda_result,
+        's3': _process_s3_result,
+        'sg': _process_sg_result,
+        'subnet': _process_subnet_result,
+        'tgw': _process_tgw_result,
+        'iam': _process_iam_result,
+        'pol': _process_pol_result,
+        'inp': _process_inp_result,
+        'lt': _process_lt_result,
+    }
 
     # Use ThreadPoolExecutor to parallelize API calls with progress bar
     fetch_tasks = [
@@ -167,6 +354,9 @@ def build_lists():
             for name, func in fetch_tasks
         }
         
+        # Collect results for file writing
+        all_results = []
+        
         # Process results with progress bar
         with tqdm(total=len(fetch_tasks),
             desc="Fetching resource lists",
@@ -176,65 +366,16 @@ def build_lists():
                 resource_name = future_to_name[future]
                 result = future.result()
                 
-                # Count resources found and show in progress bar
-                resource_count = len(result) if isinstance(result, list) else 0
+                # Store result for file writing
+                all_results.append(result)
+                
+                # Process result and get resource count
+                resource_count = _process_single_result(result)
                 pbar.set_postfix_str(f"{resource_name}: {resource_count} found")
-                
-                if isinstance(result, list):
-                    if result and isinstance(result[0], tuple):
-                        # Handle resource ID lists
-                        resource_type = result[0][0]
-                        if resource_type == 'vpc':
-                            for _, vpc_id in result:
-                                context.vpclist[vpc_id] = True
-
-                        if resource_type == 'lambda':
-                            for _, lambda_id in result:
-                                context.lambdalist[lambda_id] = True
-
-                        elif resource_type == 's3':
-                            client = boto3.client('s3')
-                            for _, bucket in result:
-                                try:
-                                    objs = client.list_objects_v2(Bucket=bucket,MaxKeys=1)      
-                                except Exception as e:
-                                    log.debug(f"Error details: {e}")
-                                    continue
-                                context.s3list[bucket] = True
-                        
-                        elif resource_type == 'sg':
-                            for _, sg_id in result:
-                                context.sglist[sg_id] = True
-                        
-                        elif resource_type == 'subnet':
-                            for _, subnet_id in result:
-                                context.subnetlist[subnet_id] = True
-                        
-                        elif resource_type == 'tgw':
-                            for _, tgw_id in result:
-                                context.tgwlist[tgw_id] = True
-                        
-                        elif resource_type == 'iam':
-                            for _, role_name in result:
-                                context.rolelist[role_name] = True
-                        
-                        elif resource_type == 'pol':
-                            for _, policy_arn in result:
-                                context.policylist[policy_arn] = True
-                        
-                        elif resource_type == 'inp':
-                            for _, inst_prof in result:
-                                context.inplist[inst_prof] = True
-
-                        elif resource_type == 'lt':
-                            for _, lt_id in result:
-                                context.ltlist[lt_id] = True
-                    else:
-                        # Handle roles data
-                        with open('imported/roles.json', 'w') as f:
-                            json.dump(result, f, indent=2, default=str)
-                
                 pbar.update(1)
+    
+    # Write resource files after thread pool completes
+    _write_resource_files(all_results)
     # slower - 3m 29s
     ####    role attachments stuff
 
@@ -257,7 +398,7 @@ def build_secondary_lists(id=None):
         context.tracking_message = "Stage 2 of 10, Building secondary IAM resource lists ..."
         
         def fetch_role_policies(role_name):
-            client = boto3.client('iam',region_name='us-east-1')
+            client = boto3.client('iam', region_name='us-east-1', config=BOTO3_RETRY_CONFIG)
             try:
                 # Get attached policies
                 attached_policies = client.list_attached_role_policies(RoleName=role_name)
@@ -271,7 +412,7 @@ def build_secondary_lists(id=None):
                     'inline_policies': inline_policies['PolicyNames'] if inline_policies['PolicyNames'] else False
                 }
             except Exception as e:
-                log.error(f"Error fetching policies for role {role_name}: {e}")
+                log.error("Error fetching policies for role %s: %s", role_name, e)
                 return {
                     'role_name': role_name,
                     'attached_policies': False,
@@ -280,7 +421,7 @@ def build_secondary_lists(id=None):
         
         # Use ThreadPoolExecutor to parallelize API calls
         rcl = len(context.rolelist)
-        log.debug(f"Fetching policies for {rcl} IAM roles...")
+        log.debug("Fetching policies for %s IAM roles...", rcl)
         
         with concurrent.futures.ThreadPoolExecutor(max_workers=context.cores) as executor:
             # Submit all role policy fetch tasks
@@ -300,9 +441,9 @@ def build_secondary_lists(id=None):
                     context.attached_role_policies_list[role_name] = result['attached_policies']
                     context.role_policies_list[role_name] = result['inline_policies']
                 except Exception as e:
-                    log.error(f"Error processing result: {e}")
+                    log.error("Error processing result: %s", e)
         
         st2 = datetime.datetime.now()
-        log.debug("secondary lists built in " + str(st2 - st1))
+        log.debug("secondary lists built in %s", str(st2 - st1))
     
     return

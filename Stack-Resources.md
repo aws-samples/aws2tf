@@ -171,8 +171,11 @@
 * AWS::LakeFormation::Permissions
 * AWS::LakeFormation::PrincipalPermissions
 * AWS::LakeFormation::Resource
+* AWS::Lambda::EventInvokeConfig
+* AWS::Lambda::EventSourceMapping
 * AWS::Lambda::Function
 * AWS::Lambda::LayerVersion
+* AWS::Lambda::Permission
 * AWS::Logs::LogGroup
 * AWS::MSK::Cluster
 * AWS::MSK::ClusterPolicy

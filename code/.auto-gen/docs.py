@@ -1,7 +1,10 @@
 excl = {}
 with open('../fixtf_aws_resources/aws_no_import.py', 'r') as f:
     for line in f.readlines():
-        if '#' not in line:
+        line=line.strip()
+        if line.startswith("#"): 
+            continue
+        else:
             if ":" in line and "aws_" in line:
                 myline = line.strip('\n').split(
                     ':')[0].strip().strip(',').strip('"')
@@ -9,7 +12,10 @@ with open('../fixtf_aws_resources/aws_no_import.py', 'r') as f:
 
 with open('../fixtf_aws_resources/aws_not_implemented.py', 'r') as f:
     for line in f.readlines():
-        if '#' not in line:
+        line=line.strip()
+        if line.startswith("#"): 
+            continue
+        else:
             if ":" in line and "aws_" in line:
                 myline = line.strip('\n').split(
                     ':')[0].strip().strip(',').strip('"')
@@ -27,7 +33,10 @@ with open('../fixtf_aws_resources/aws_not_implemented.py', 'r') as f:
 dictl = {}
 with open('../fixtf_aws_resources/aws_dict.py', 'r') as f:
     for line in f.readlines():
-        if '#' not in line:
+        line=line.strip()
+        if line.startswith("#"):
+            continue
+        else:
             if ":" in line and "aws_" in line:
                 myline = line.strip('\n').split(':')[-1].strip().strip(',')
                 dictl[myline] = True
@@ -54,12 +63,15 @@ with open('../../Terraform-Resources.md', 'w') as f:
 print("--------------------\n")
 print("AWS Stack set types currectly supported\n")
 dictl = {}
-with open('../../StackSet-Resources.md', 'w') as f2:
+with open('../../Stack-Resources.md', 'w') as f2:
 
     f2.write("\n## AWS Stack set types currectly supported\n\n")
     with open('../stacks.py', 'r') as f:
         for line in f.readlines():
-            if '#' not in line:
+            line=line.strip()
+            if line.startswith("#"):
+                continue
+            else:
                 if "::" in line  and "aws_null" not in line:
                     if  "aws_" in line or "f3.write(" in line:
                         myline = line.strip('\n').split('==')[-1].split("common.")[0]

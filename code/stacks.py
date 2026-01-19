@@ -231,12 +231,6 @@ def getstackresources(stack_name,client):
             elif type == "AWS::LakeFormation::Permissions":  common.call_resource("aws_lakeformation_permissions", pid) 
             elif type == "AWS::LakeFormation::PrincipalPermissions":  common.call_resource("aws_lakeformation_permissions", lrid) 
 
-            elif type == "AWS::Lambda::Function":  common.call_resource("aws_lambda_function", pid) 
-            elif type == "AWS::Lambda::LayerVersion":  common.call_resource("aws_lambda_layer_version", pid) 
-            elif type == "AWS::Lambda::Permission": f3.write(type+" "+pid+"  as part of function..\n")          # fetched as part of function
-            elif type == "AWS::Lambda::EventInvokeConfig": f3.write(type+" "+pid+"  as part of function..\n")   # fetched as part of function
-            elif type == "AWS::Lambda::EventSourceMapping": f3.write(type+" "+pid+"  as part of function..\n")  # fetched as part of function
-
             elif type == "AWS::Logs::LogGroup": common.call_resource("aws_cloudwatch_log_group", pid) 
             
             ##### terraform crash !
@@ -971,12 +965,21 @@ def getstackresources(stack_name,client):
             elif type == "AWS::KinesisVideo::Stream": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::LakeFormation::DataCellsFilter": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::LakeFormation::Tag": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::LakeFormation::TagAssociation": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::Lambda::Alias": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::Lambda::CodeSigningConfig": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::LakeFormation::TagAssociation": common.call_resource("aws_null", type+" "+pid)            
+            elif type == "AWS::Lambda::Function":  common.call_resource("aws_lambda_function", pid) 
+            elif type == "AWS::Lambda::LayerVersion":  common.call_resource("aws_lambda_layer_version", pid) 
+            elif type == "AWS::Lambda::Permission": f3.write(type+" "+pid+"  as part of function..\n")          # fetched as part of function
+            elif type == "AWS::Lambda::EventInvokeConfig": f3.write(type+" "+pid+"  as part of function..\n")   # fetched as part of function
+            elif type == "AWS::Lambda::EventSourceMapping": f3.write(type+" "+pid+"  as part of function..\n")  # fetched as part of function
+            elif type == "AWS::Lambda::Alias": common.call_resource("aws_lambda_alias", parn)
+            elif type == "AWS::Lambda::CodeSigningConfig": common.call_resource("aws_lambda_code_signing_config", parn)
             elif type == "AWS::Lambda::LayerVersionPermission": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::Lambda::Url": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::Lambda::Version": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::Lambda::Url": 
+                # Extract function name from ARN for import
+                # ARN format: arn:aws:lambda:region:account:function:function-name
+                function_name = pid.split(":")[-1] if pid.startswith("arn:") else pid
+                common.call_resource("aws_lambda_function_url", function_name)
+            elif type == "AWS::Lambda::Version": f3.write(type+" "+pid+" fetched as part of Lambda function..\n")
             elif type == "AWS::LaunchWizard::Deployment": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Lex::Bot": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::Lex::BotAlias": common.call_resource("aws_null", type+" "+pid)

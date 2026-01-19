@@ -811,10 +811,8 @@ To fully implement any of these resources, follow the stack resource testing pro
 
 ### Lambda (5 resources)
 
-- [ ] `AWS::Lambda::Alias` <!-- READY: aws_lambda_alias can be implemented in aws2tf -->
-- [ ] `AWS::Lambda::CodeSigningConfig` <!-- READY: aws_lambda_code_signing_config can be implemented in aws2tf -->
-- [ ] `AWS::Lambda::Url` <!-- READY: aws_lambda_url can be implemented in aws2tf -->
-- [ ] `AWS::Lambda::Version` <!-- READY: aws_lambda_version can be implemented in aws2tf -->
+
+- [x] `AWS::Lambda::Version` <!-- SKIPPED: No Terraform equivalent - versions managed via aws_lambda_function publish attribute -->
 
 ### Lex (4 resources)
 

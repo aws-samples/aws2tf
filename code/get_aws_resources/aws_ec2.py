@@ -10,13 +10,55 @@ import inspect
 import json
 
 
+def extract_resource_id_from_arn(id_or_arn):
+    """
+    Extract resource ID from either a resource ID or ARN.
+    
+    Args:
+        id_or_arn: Either a resource ID (e.g., vpc-12345) or ARN
+    
+    Returns:
+        The resource ID
+    """
+    if id_or_arn is None:
+        return None
+    
+    # If it's an ARN, extract the resource ID
+    if id_or_arn.startswith('arn:'):
+        # ARN format: arn:aws:service:region:account:resource-type/resource-id
+        # or: arn:aws:service:region:account:resource-type:resource-id
+        parts = id_or_arn.split(':')
+        if len(parts) >= 6:
+            # The resource part is after the 5th colon
+            resource_part = parts[5]
+            # Handle both / and : as separators
+            if '/' in resource_part:
+                resource_id = resource_part.split('/')[-1]
+            else:
+                resource_id = resource_part
+            
+            if context.debug:
+                log.debug(f"Extracted resource ID '{resource_id}' from ARN '{id_or_arn}'")
+            return resource_id
+        else:
+            if context.debug:
+                log.debug(f"Invalid ARN format: {id_or_arn}, using as-is")
+            return id_or_arn
+    
+    # Not an ARN, return as-is (it's already a resource ID)
+    return id_or_arn
+
+
 def get_aws_vpc(type, id, clfn, descfn, topkey, key, filterid):
+    # Extract VPC ID from ARN if needed
+    vpc_id = extract_resource_id_from_arn(id)
+    
     if context.debug:
-        log.debug("--> In get_aws_vpc doing " + type + ' with id ' + str(id) +
+        log.debug("--> In get_aws_vpc doing " + type + ' with id ' + str(vpc_id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     try:    
-        if id is None:
+        if vpc_id is None:
             for sn in context.vpclist.keys():
                 common.write_import(type,sn,None)
                 common.add_known_dependancy("aws_subnet",sn)
@@ -26,31 +68,31 @@ def get_aws_vpc(type, id, clfn, descfn, topkey, key, filterid):
                     common.add_dependancy("aws_vpc_ipv4_cidr_block_association",sn)
                     common.add_dependancy("aws_vpc_endpoint", sn)
 
-        elif id.startswith("vpc-"):
+        elif vpc_id.startswith("vpc-"):
             try:
-                if context.vpclist[id]:
-                    common.write_import(type, id, None)
-                    common.add_known_dependancy("aws_subnet",id)
+                if context.vpclist[vpc_id]:
+                    common.write_import(type, vpc_id, None)
+                    common.add_known_dependancy("aws_subnet",vpc_id)
                     if not context.dnet:
-                        common.add_known_dependancy("aws_route_table_association",id)   
-                        common.add_dependancy("aws_route_table_association",id)
-                        common.add_dependancy("aws_vpc_ipv4_cidr_block_association",id)
-                        common.add_dependancy("aws_vpc_endpoint", id)
+                        common.add_known_dependancy("aws_route_table_association",vpc_id)   
+                        common.add_dependancy("aws_route_table_association",vpc_id)
+                        common.add_dependancy("aws_vpc_ipv4_cidr_block_association",vpc_id)
+                        common.add_dependancy("aws_vpc_endpoint", vpc_id)
 
-                    pkey = type+"."+id
+                    pkey = type+"."+vpc_id
                     context.rproc[pkey] = True
                 else:
-                    log_warning("WARNING: vpc not in vpclist" + id)
+                    log_warning("WARNING: vpc not in vpclist" + vpc_id)
             except KeyError:
-                    log_warning("WARNING: vpc not in vpclist " + id+ " Resource may be referencing a vpc that no longer exists")  
+                    log_warning("WARNING: vpc not in vpclist " + vpc_id+ " Resource may be referencing a vpc that no longer exists")  
             
         else:
-            log_warning("WARNING: get_aws_vpc unexpected id value %s", tr(id))
+            log_warning("WARNING: get_aws_vpc unexpected id value %s", tr(vpc_id))
             return True
                     
 
     except Exception as e:
-        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,vpc_id)
 
     return True
 

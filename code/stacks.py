@@ -685,7 +685,7 @@ def getstackresources(stack_name,client):
             elif type == "AWS::EC2::TrafficMirrorFilterRule": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::EC2::TrafficMirrorSession": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::EC2::TrafficMirrorTarget": common.call_resource("aws_null", type+" "+pid)
-            elif type == "AWS::EC2::TransitGateway": common.call_resource("aws_null", type+" "+pid)
+            elif type == "AWS::EC2::TransitGateway": common.call_resource("aws_ec2_transit_gateway", pid)
             elif type == "AWS::EC2::TransitGatewayAttachment": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::EC2::TransitGatewayConnect": common.call_resource("aws_null", type+" "+pid)
             elif type == "AWS::EC2::TransitGatewayMulticastDomain": common.call_resource("aws_null", type+" "+pid)

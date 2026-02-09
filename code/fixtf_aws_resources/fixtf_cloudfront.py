@@ -21,7 +21,7 @@ _cache_policy_types = {}
 
 
 # ============================================================================
-# CLOUDFRONT Resources with Custom Logic (2 functions)
+# CLOUDFRONT Resources with Custom Logic (3 functions)
 # ============================================================================
 
 def aws_cloudfront_distribution(t1,tt1,tt2,flag1,flag2):
@@ -32,6 +32,14 @@ def aws_cloudfront_distribution(t1,tt1,tt2,flag1,flag2):
 			# Custom policy - dereference it
 			t1=tt1+" = aws_cloudfront_cache_policy.o-"+tt2+".id\n"
 		# else: AWS-managed policy - keep literal value
+	return skip,t1,flag1,flag2
+
+
+def aws_cloudfront_origin_access_control(t1,tt1,tt2,flag1,flag2):
+	skip=0
+	# Add lifecycle block to ignore description changes
+	if tt1=="name":
+		t1=t1+"\n lifecycle {\n   ignore_changes = [description]\n}\n"
 	return skip,t1,flag1,flag2
 
 

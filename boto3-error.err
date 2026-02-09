@@ -1,4 +1,0 @@
-clfn=logs descfn=describe_query_definitions topkey=queryDefinitions id=adf1eae2-16d3-464c-830e-17434bfab24b
-e=NameError("name 'Config' is not defined") [e1] 
-fname='aws_logs.py' exc_tb.tb_lineno=290 [e1] 
------------------------------------------------------------------------------

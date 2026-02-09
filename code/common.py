@@ -1318,7 +1318,7 @@ def tfplan3():
                   
                   changeList.append(pe['change']['resource']['addr'])
                   log.info("Planned changes found in Terraform Plan for type: " +
-                        str(pe['change']['resource']['resource_type']))
+                        str(pe['change']['resource']['resource_type'])+" "+str(pe['change']['resource']['addr']))
                   allowedchange = True
                   nallowedchanges = nallowedchanges+1
                else:

@@ -1,0 +1,38 @@
+aws2tf v6273 started at 2026-02-09 07:49:06.325990
+Logical cores: 10
+boto3 version: 1.42.16
+Credentials Type = iam_user
+Is SSO login = False
+Terraform version: 1.13.3 AWS provider version: 6.27.0
+region set from aws cli / environment variables as eu-west-2
+Using region: eu-west-2 account: 566972129213 profile: default
+
+Stage 1 of 10, Terraform Initialise ...
+PASSED: Terraform Initialise OK
+Stage 2 of 10, Building core resource lists ...
+Fetching resource lists:   0%|          | 0/10 [00:00<?, ?type/s]Fetching resource lists:   0%|          | 0/10 [00:01<?, ?type/s, Transit gateways: 2 found]Fetching resource lists:  10%|█         | 1/10 [00:01<00:09,  1.03s/type, Transit gateways: 2 found]Fetching resource lists:  10%|█         | 1/10 [00:01<00:09,  1.03s/type, VPCs: 5 found]            Fetching resource lists:  20%|██        | 2/10 [00:01<00:08,  1.03s/type, Launch templates: 9 found]Fetching resource lists:  30%|███       | 3/10 [00:01<00:02,  2.99type/s, Launch templates: 9 found]Fetching resource lists:  30%|███       | 3/10 [00:01<00:02,  2.99type/s, Subnets: 32 found]        Fetching resource lists:  40%|████      | 4/10 [00:01<00:02,  2.99type/s, Lambda functions: 25 found]Fetching resource lists:  50%|█████     | 5/10 [00:01<00:01,  4.52type/s, Lambda functions: 25 found]Fetching resource lists:  50%|█████     | 5/10 [00:01<00:01,  4.52type/s, Security groups: 40 found] Fetching resource lists:  60%|██████    | 6/10 [00:01<00:00,  4.52type/s, Instance profiles: 28 found]Fetching resource lists:  70%|███████   | 7/10 [00:01<00:00,  5.06type/s, Instance profiles: 28 found]Fetching resource lists:  70%|███████   | 7/10 [00:02<00:00,  5.06type/s, IAM policies: 271 found]    Fetching resource lists:  80%|████████  | 8/10 [00:02<00:00,  3.70type/s, IAM policies: 271 found]Fetching resource lists:  80%|████████  | 8/10 [00:02<00:00,  3.70type/s, IAM roles: 563 found]   Fetching resource lists:  90%|█████████ | 9/10 [00:02<00:00,  2.62type/s, IAM roles: 563 found]Fetching resource lists:  90%|█████████ | 9/10 [00:24<00:00,  2.62type/s, S3 buckets: 73 found]Fetching resource lists: 100%|██████████| 10/10 [00:24<00:00,  5.80s/type, S3 buckets: 73 found]                                                                                                ---<><> stack Id=SamArbBotStack exclude=[]
+Stage 3 of 10 getting resources ...
+No resources found all_types=None
+Level 1 stack nesting for SamArbBotStack
+Traceback (most recent call last):
+  File "/Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/./aws2tf.py", line 1231, in <module>
+    main_new()
+    ~~~~~~~~^^
+  File "/Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/./aws2tf.py", line 1213, in main_new
+    process_resource_types(type, id)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/./aws2tf.py", line 781, in process_resource_types
+    process_single_type(type, id, timed_interrupt)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/./aws2tf.py", line 834, in process_single_type
+    process_stack_type(id, timed_interrupt)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/./aws2tf.py", line 859, in process_stack_type
+    stacks.get_stacks(id)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/stacks.py", line 20, in get_stacks
+    nested=getstack(stack_name,nested,client)
+  File "/Users/awsandy/odp/AWS/temp/kiro/aws2tf-kiro1/aws2tf/code/stacks.py", line 71, in getstack
+    stacki=j['StackId']
+           ~^^^^^^^^^^^
+KeyError: 'StackId'

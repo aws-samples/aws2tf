@@ -44,8 +44,15 @@ def get_stacks(stack_name):
 
 def getstack(stack_name,nested,client):
     try:
-        resp = client.describe_stack_resources(StackName=stack_name)
-        response=resp['StackResources']
+        # Get the stack info to get StackId
+        stack_info = client.describe_stacks(StackName=stack_name)
+        stack_id = stack_info['Stacks'][0]['StackId']
+        
+        # Use paginator to get all stack resources (handles >100 resources)
+        paginator = client.get_paginator('list_stack_resources')
+        response = []
+        for page in paginator.paginate(StackName=stack_name):
+            response.extend(page['StackResourceSummaries'])
     
     except botocore.exceptions.ClientError as err:
         log.error("ValidationError error in getstack")
@@ -61,13 +68,13 @@ def getstack(stack_name,nested,client):
         log.error("%s %s %s %s",  exc_type, fname, exc_tb.tb_lineno)
         return
 
+    # Add the stack ID to nested list
+    if stack_id not in (str(nested)):
+        nested=nested+[stack_id]
 
     for j in response:
         type=j['ResourceType']
         stat=j['ResourceStatus']
-        stacki=j['StackId']
-        if stacki not in (str(nested)):
-            nested=nested+[stacki]
         
         # most added here
         if type == "AWS::CloudFormation::Stack":
@@ -85,8 +92,11 @@ def getstackresources(stack_name,client):
     try:
         log.info("Getting resources for stack: "+stack_name.split("/")[1])
         
-        resp = client.describe_stack_resources(StackName=stack_name)
-        response=resp['StackResources']
+        # Use paginator to get all stack resources (handles >100 resources)
+        paginator = client.get_paginator('list_stack_resources')
+        response = []
+        for page in paginator.paginate(StackName=stack_name):
+            response.extend(page['StackResourceSummaries'])
     except Exception as e:
         
         log.error(f"{e=}")

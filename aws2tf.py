@@ -1153,7 +1153,9 @@ def finalize_and_cleanup(args, starttime):
     x = glob.glob("*.err")
     awsf = len(x)
     if awsf > 0:
-        log.warning("\nErrors found - see *.err files, and please report via github issue")
+        err_files = ", ".join(x)
+        log.warning(f"\nErrors found in {awsf} file(s): {err_files}")
+        log.warning("Please review these error files and report via github issue if needed")
     
     # Handle single file mode
     if args.singlefile:

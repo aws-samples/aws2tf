@@ -39,7 +39,7 @@ def get_aws_bedrockagent_agent(type, id, clfn, descfn, topkey, key, filterid):
             j=response['agent']
             aid=j['agentId']
       
-            common.write_import(type,aid,None)
+            common.write_import(type,aid,"r-"+aid)
             resp2=client.list_agent_versions(agentId=aid)
             for k in resp2['agentVersionSummaries']:
                 av=k['agentVersion']

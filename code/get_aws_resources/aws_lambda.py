@@ -259,7 +259,17 @@ def get_aws_lambda_alias(type, id, clfn, descfn, topkey, key, filterid):
         log.debug("--> In get_aws_lambda_alias doing " + type + ' with id ' + str(id) +
             " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
-    response = common.call_boto3(type,clfn, descfn, topkey, key, id)
+    # Extract function name from ARN if needed
+    # ARN format: arn:aws:lambda:region:account:function:function-name:alias-name
+    # We need just the function-name for list_aliases API
+    function_name = id
+    if id and id.startswith("arn:"):
+        # Split ARN and extract function name (7th part)
+        arn_parts = id.split(":")
+        if len(arn_parts) >= 7:
+            function_name = arn_parts[6]  # function name without alias
+    
+    response = common.call_boto3(type,clfn, descfn, topkey, key, function_name)
     
     try:
         if response == []: 
@@ -268,7 +278,7 @@ def get_aws_lambda_alias(type, id, clfn, descfn, topkey, key, filterid):
         
         for j in response: 
             fn=j['Name']
-            theid=id+"/"+fn
+            theid=function_name+"/"+fn
             common.write_import(type, theid, None)
         
 
@@ -487,4 +497,51 @@ def get_aws_lambda_capacity_provider(type, id, clfn, descfn, topkey, key, filter
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
 
+    return True
+
+
+def get_aws_lambda_function_url(type, id, clfn, descfn, topkey, key, filterid):
+    if context.debug:
+        log.debug("--> In get_aws_lambda_function_url doing " + type + ' with id ' + str(id) +
+            " clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
+    
+    try:
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all Lambda functions first, then check each for URL config
+            paginator = client.get_paginator('list_functions')
+            functions = []
+            for page in paginator.paginate():
+                functions = functions + page['Functions']
+            
+            # Check each function for URL configuration
+            for func in functions:
+                function_name = func['FunctionName']
+                try:
+                    response = client.list_function_url_configs(FunctionName=function_name)
+                    if response.get(topkey):
+                        for j in response[topkey]:
+                            # Import using function name
+                            common.write_import(type, function_name, None)
+                except Exception as e:
+                    if context.debug: log.debug(f"No URL config for {function_name}: {e}")
+                    continue
+        else:
+            # Get specific function URL config
+            # id could be function name or ARN - extract function name
+            function_name = id
+            if id.startswith("arn:"):
+                # ARN format: arn:aws:lambda:region:account:function:function-name
+                function_name = id.split(":")[-1]
+            
+            response = client.list_function_url_configs(FunctionName=function_name)
+            if response.get(topkey):
+                for j in response[topkey]:
+                    common.write_import(type, function_name, None)
+    
+    except Exception as e:
+        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+    
     return True

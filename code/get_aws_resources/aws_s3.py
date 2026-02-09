@@ -16,10 +16,47 @@ from botocore.exceptions import NoCredentialsError, ClientError
 from tqdm import tqdm
 
 
+def extract_bucket_name_from_arn(id_or_arn):
+    """
+    Extract bucket name from either a bucket name or bucket ARN.
+    
+    Args:
+        id_or_arn: Either a bucket name or ARN (arn:aws:s3:::bucket-name)
+    
+    Returns:
+        The bucket name
+    """
+    if id_or_arn is None:
+        return None
+    
+    # If it's an ARN, extract the bucket name
+    if id_or_arn.startswith('arn:'):
+        # S3 ARN format: arn:aws:s3:::bucket-name or arn:aws:s3:::bucket-name/*
+        parts = id_or_arn.split(':')
+        if len(parts) >= 6:
+            # The bucket name is after the 5th colon
+            bucket_part = parts[5]
+            # Remove any path components (e.g., bucket-name/path -> bucket-name)
+            bucket_name = bucket_part.split('/')[0]
+            if context.debug:
+                log.debug(f"Extracted bucket name '{bucket_name}' from ARN '{id_or_arn}'")
+            return bucket_name
+        else:
+            if context.debug:
+                log.debug(f"Invalid S3 ARN format: {id_or_arn}, using as-is")
+            return id_or_arn
+    
+    # Not an ARN, return as-is (it's already a bucket name)
+    return id_or_arn
+
+
 def get_aws_s3_bucket(type, id, clfn, descfn, topkey, key, filterid):
+   # Extract bucket name from ARN if needed
+   bucket_name = extract_bucket_name_from_arn(id)
+   
    context.tracking_message="Stage 3 of 10 getting s3 resources ..."
    #log.info(f"Getting s3 resources id=%s",id)
-   get_all_s3_buckets(id,context.region)
+   get_all_s3_buckets(bucket_name,context.region)
    return True
 
 
@@ -40,7 +77,10 @@ def get_aws_s3_directory_bucket(type, id, clfn, descfn, topkey, key, filterid):
       config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
       client = boto3.client(clfn, config=config)
       
-      if id is None:
+      # Extract bucket name from ARN if needed
+      bucket_name = extract_bucket_name_from_arn(id)
+      
+      if bucket_name is None:
          # List all directory buckets
          response = client.list_directory_buckets()
          for j in response[topkey]:
@@ -49,7 +89,7 @@ def get_aws_s3_directory_bucket(type, id, clfn, descfn, topkey, key, filterid):
          # Get specific directory bucket
          response = client.list_directory_buckets()
          for j in response[topkey]:
-            if id in j[key]:
+            if bucket_name in j[key]:
                common.write_import(type, j[key], None)
                break
    except Exception as e:

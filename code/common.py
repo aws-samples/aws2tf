@@ -1225,8 +1225,34 @@ def tfplan3():
                  log.warning(
                      "WARNING: Conflicting configuration arguments in aws_security_group_rule")
               else:
-                  if context.debug is True:
-                     log.debug("Error" + line)
+                  # Extract and display the actual error message
+                  try:
+                      error_obj = json.loads(line)
+                      error_message = error_obj.get('@message', 'Unknown error')
+                      error_detail = error_obj.get('diagnostic', {}).get('detail', '')
+                      
+                      log.error("=" * 80)
+                      log.error("TERRAFORM PLAN ERROR DETECTED:")
+                      log.error("-" * 80)
+                      log.error("Error Message: %s", error_message)
+                      if error_detail:
+                          log.error("Error Detail: %s", error_detail)
+                      log.error("=" * 80)
+                      
+                      # Also print to console
+                      print("\n" + "=" * 80)
+                      print("TERRAFORM PLAN ERROR DETECTED:")
+                      print("-" * 80)
+                      print(f"Error Message: {error_message}")
+                      if error_detail:
+                          print(f"Error Detail: {error_detail}")
+                      print("=" * 80 + "\n")
+                      
+                  except json.JSONDecodeError:
+                      if context.debug is True:
+                         log.debug("Error parsing JSON: " + line)
+                      log.error("Error line (raw): %s", line.strip())
+                      print(f"\nError line (raw): {line.strip()}\n")
 
                   log.error("-->> Plan 2 errors exiting - check plan2.json - or run terraform plan")
                   log.info("exit 021 %s", str(context.aws2tfver))
@@ -1292,7 +1318,7 @@ def tfplan3():
                   
                   changeList.append(pe['change']['resource']['addr'])
                   log.info("Planned changes found in Terraform Plan for type: " +
-                        str(pe['change']['resource']['resource_type']))
+                        str(pe['change']['resource']['resource_type'])+" "+str(pe['change']['resource']['addr']))
                   allowedchange = True
                   nallowedchanges = nallowedchanges+1
                else:

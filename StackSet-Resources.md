@@ -60,15 +60,12 @@
 * AWS::CloudFront::CloudFrontOriginAccessIdentity
 * AWS::CloudFront::Distribution
 * AWS::CloudFront::Function
-* AWS::CloudFront::OriginAccessControl
 * AWS::CloudFront::OriginRequestPolicy
 * AWS::CloudWatch::Alarm
-* AWS::CloudWatch::Dashboard
-* AWS::CloudWatch::InsightRule
+* AWS::CodeBuild::Project
 * AWS::CodeCommit::Repository
 * AWS::Cognito::UserPool
 * AWS::Cognito::UserPoolClient
-* AWS::Cognito::UserPoolDomain
 * AWS::Cognito::UserPoolGroup
 * AWS::Config::ConfigRule
 * AWS::Config::ConfigurationRecorder
@@ -120,7 +117,6 @@
 * AWS::EC2::Subnet
 * AWS::EC2::SubnetNetworkAclAssociation
 * AWS::EC2::SubnetRouteTableAssociation
-* AWS::EC2::TransitGateway
 * AWS::EC2::VPC
 * AWS::EC2::VPCDHCPOptionsAssociation
 * AWS::EC2::VPCEndpoint
@@ -174,14 +170,8 @@
 * AWS::LakeFormation::Permissions
 * AWS::LakeFormation::PrincipalPermissions
 * AWS::LakeFormation::Resource
-* AWS::Lambda::Alias
-* AWS::Lambda::CodeSigningConfig
-* AWS::Lambda::EventInvokeConfig
-* AWS::Lambda::EventSourceMapping
 * AWS::Lambda::Function
 * AWS::Lambda::LayerVersion
-* AWS::Lambda::Permission
-* AWS::Lambda::Version
 * AWS::Logs::LogGroup
 * AWS::MSK::Cluster
 * AWS::MSK::ClusterPolicy
@@ -238,7 +228,6 @@
 * AWS::SageMaker::Space
 * AWS::SageMaker::UserProfile
 * AWS::SageMaker::Workteam
-* AWS::Scheduler::ScheduleGroup
 * AWS::SecretsManager::ResourcePolicy
 * AWS::SecretsManager::RotationSchedule
 * AWS::SecretsManager::Secret
@@ -263,4 +252,3 @@
 * AWS::WAFv2::LoggingConfiguration
 * AWS::WAFv2::WebACL
 * AWS::WorkSpaces::Workspace
-* AWS::XRay::Group

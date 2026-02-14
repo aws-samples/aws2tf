@@ -92,7 +92,6 @@ Generated: 2025-12-30 18:43:49
 | eks | 9 | 9 | 0 | 0.0% |
 | elasticache | 4 | 4 | 0 | 0.0% |
 | elasticbeanstalk | 0 | 0 | 0 | 0.0% |
-| elastictranscoder | 0 | 0 | 0 | 0.0% |
 | elb | 0 | 0 | 0 | 0.0% |
 | elbv2 | 3 | 3 | 0 | 0.0% |
 | emr | 4 | 4 | 0 | 0.0% |

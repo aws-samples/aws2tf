@@ -83,7 +83,6 @@ Total Services: 179
 - [eks](#eks)
 - [elasticache](#elasticache)
 - [elasticbeanstalk](#elasticbeanstalk)
-- [elastictranscoder](#elastictranscoder)
 - [elb](#elb)
 - [elbv2](#elbv2)
 - [emr](#emr)
@@ -1185,14 +1184,6 @@ Total Services: 179
 | `aws_elastic_beanstalk_configuration_template` | `describe_configuration_settings` |
 | `aws_elastic_beanstalk_environment` | `describe_environments` |
 
-## elastictranscoder
-
-**Boto3 Client:** `elastictranscoder`
-
-| Terraform Resource | Boto3 API Method |
-|-------------------|------------------|
-| `aws_elastictranscoder_pipeline` | `list_pipelines` |
-| `aws_elastictranscoder_preset` | `list_presets` |
 
 ## elb
 

@@ -4433,21 +4433,6 @@ aws_elasticsearch_vpc_endpoint = {
 	"filterid":	"VpcEndpointId"
 }
 
-aws_elastictranscoder_pipeline = {
-	"clfn":		"elastictranscoder",
-	"descfn":	"list_pipelines",
-	"topkey":	"Pipelines",
-	"key":		"Id",
-	"filterid":	"Id"
-}
-
-aws_elastictranscoder_preset = {
-	"clfn":		"elastictranscoder",
-	"descfn":	"list_presets",
-	"topkey":	"Presets",
-	"key":		"Id",
-	"filterid":	"Id"
-}
 
 aws_elb = {
 	"clfn":		"elb",
@@ -13545,8 +13530,6 @@ aws_resources = {
 	"aws_elasticsearch_domain": aws_elasticsearch_domain,
 	"aws_elasticsearch_domain_policy": aws_elasticsearch_domain_policy,
 	"aws_elasticsearch_vpc_endpoint": aws_elasticsearch_vpc_endpoint,
-	"aws_elastictranscoder_pipeline": aws_elastictranscoder_pipeline,
-	"aws_elastictranscoder_preset": aws_elastictranscoder_preset,
 	"aws_elb": aws_elb,
 	"aws_elb_attachment": aws_elb_attachment,
 	"aws_emr_block_public_access_configuration": aws_emr_block_public_access_configuration,

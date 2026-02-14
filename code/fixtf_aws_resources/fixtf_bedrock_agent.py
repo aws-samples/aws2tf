@@ -11,6 +11,7 @@ Reduction: 0% less code
 
 import logging
 from .base_handler import BaseResourceHandler
+import context
 
 log = logging.getLogger('aws2tf')
 
@@ -72,10 +73,23 @@ def aws_bedrockagent_agent_action_group(t1,tt1,tt2,flag1,flag2):
 
 def aws_bedrockagent_agent_alias(t1,tt1,tt2,flag1,flag2):
 
-
 	skip=0
 	if tt1=="agent_id" and tt2 != "null":
 		t1 = tt1+" = aws_bedrockagent_agent.r-"+tt2+".id\n"
+	
+	# Always skip routing_configuration block for agent aliases
+	# AWS Bedrock Agent aliases work best without explicit routing configuration
+	# Omitting it allows the alias to automatically point to the DRAFT version
+	elif tt1=="routing_configuration" or context.lbc > 0:
+		if "[" in t1:
+			context.lbc = context.lbc + 1
+		if "]" in t1:
+			context.lbc = context.lbc - 1
+		
+		skip = 1
+		if context.lbc == 0 and "]" in t1.strip():
+			skip = 1
+	
 	return skip,t1,flag1,flag2
 
 

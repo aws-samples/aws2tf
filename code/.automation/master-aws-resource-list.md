@@ -600,8 +600,6 @@ aws_elasticsearch_domain
 aws_elasticsearch_domain_policy
 aws_elasticsearch_domain_saml_options
 aws_elasticsearch_vpc_endpoint
-aws_elastictranscoder_pipeline
-aws_elastictranscoder_preset
 aws_elb
 aws_elb_attachment
 aws_emr_block_public_access_configuration

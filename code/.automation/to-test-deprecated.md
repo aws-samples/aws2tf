@@ -23,13 +23,6 @@ These resources are from AWS services that have been deprecated, discontinued, o
 - `aws_datapipeline_pipeline`
 - `aws_datapipeline_pipeline_definition`
 
-## aws_elastictranscoder
-
-**Status:** Replaced by AWS Elemental MediaConvert
-
-**Resources:**
-- `aws_elastictranscoder_preset`
-
 ## aws_glacier
 
 **Status:** Rebranded as Amazon S3 Glacier (now part of S3 service)

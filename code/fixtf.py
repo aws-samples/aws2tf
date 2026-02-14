@@ -1135,7 +1135,8 @@ def deref_s3(t1, tt1, tt2):
  #if tt1 == "security_groups": t1,skip = deref_array(t1,tt1,tt2,"aws_security_group","sg-",skip)
 def deref_role_arn_array(t1,tt1,tt2):
 
-    if tt2 == "null" or tt2 == "[]": return t1
+    if tt2 == "null" or tt2 == "[]": 
+        return t1
     tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
     cc=tt2.count(',')
     subs=""

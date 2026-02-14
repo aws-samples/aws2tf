@@ -799,7 +799,11 @@ def process_multiple_types(type, id, timed_interrupt):
     all_types = []
     
     for type1 in types:
-        all_types = all_types + resources.resource_types(type1)
+        result = resources.resource_types(type1)
+        if result is not None:
+            all_types = all_types + result
+        else:
+            log.warning("Resource type %s not recognized", type1)
     
     for type2 in all_types:
         if type2 in aws_dict.aws_resources:

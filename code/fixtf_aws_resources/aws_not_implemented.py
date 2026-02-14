@@ -35,6 +35,7 @@ notimplemented = {
     "aws_datapipeline_pipeline": True,  ### Deprecated - use Glue/Step Functions
     "aws_datapipeline_pipeline_definition": True,  ### Deprecated - use Glue/Step Functions
     "aws_elastictranscoder_preset": True,  ### Deprecated - use MediaConvert
+    "aws_elastictranscoder_pipeline": True,  ### Deprecated - use MediaConvert
     "aws_glacier_vault_lock": True,  ### Rebranded as S3 Glacier
     "aws_inspector2_delegated_admin_account": True,  ### Deprecated - use Inspector v2
     "aws_inspector2_filter": True,  ### Deprecated - use Inspector v2

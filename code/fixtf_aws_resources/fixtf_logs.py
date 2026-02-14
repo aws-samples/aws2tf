@@ -4,8 +4,8 @@ LOGS Resource Handlers - Optimized with __getattr__
 This file contains ONLY LOGS resources with custom transformation logic.
 All other resources automatically use the default handler via __getattr__.
 
-Original: 1 functions
-Optimized: 1 functions + __getattr__
+Original: 2 functions
+Optimized: 2 functions + __getattr__
 Reduction: 0% less code
 """
 
@@ -16,13 +16,11 @@ from .base_handler import BaseResourceHandler
 
 log = logging.getLogger('aws2tf')
 
-
 # ============================================================================
-# LOGS Resources with Custom Logic (1 functions)
+# LOGS Resources with Custom Logic (2 functions)
 # ============================================================================
 
 def aws_cloudwatch_log_group(t1,tt1,tt2,flag1,flag2):
-
 
     skip=0
     if tt1 == "name":
@@ -35,6 +33,21 @@ def aws_cloudwatch_log_group(t1,tt1,tt2,flag1,flag2):
     if tt1 == "name_prefix" and flag1 is True: skip=1
 
     return skip,t1,flag1,flag2 
+
+
+def aws_cloudwatch_log_stream(t1, tt1, tt2, flag1, flag2):
+
+	skip = 0
+        
+	# Transform log_group_name field to reference the parent log group resource
+	if tt1 == "log_group_name" and tt2 != "null":
+		lgn=tt2.replace("/","_")
+        # Dereference to parent log group resource
+		t1 = tt1 + ' = aws_cloudwatch_log_group.' + lgn + '.name\n'
+		# Add dependency so aws2tf imports the log group automatically
+		common.add_dependancy("aws_cloudwatch_log_group", tt2)
+    
+	return skip, t1, flag1, flag2 
 
 
 
@@ -62,4 +75,4 @@ def __getattr__(name):
 	raise AttributeError(f"module 'fixtf_logs' has no attribute '{name}'")
 
 
-log.debug(f"LOGS handlers: 1 custom functions + __getattr__ for 0 simple resources")
+log.debug(f"LOGS handlers: 2 custom functions + __getattr__ for 0 simple resources")

@@ -97,7 +97,6 @@ from fixtf_aws_resources import fixtf_efs
 from fixtf_aws_resources import fixtf_eks
 from fixtf_aws_resources import fixtf_elasticache
 from fixtf_aws_resources import fixtf_elasticbeanstalk
-from fixtf_aws_resources import fixtf_elastictranscoder
 from fixtf_aws_resources import fixtf_elb
 from fixtf_aws_resources import fixtf_elbv2
 from fixtf_aws_resources import fixtf_emr
@@ -309,7 +308,6 @@ FIXTF_MODULES = {
     'fixtf_eks': fixtf_eks,
     'fixtf_elasticache': fixtf_elasticache,
     'fixtf_elasticbeanstalk': fixtf_elasticbeanstalk,
-    'fixtf_elastictranscoder': fixtf_elastictranscoder,
     'fixtf_elb': fixtf_elb,
     'fixtf_elbv2': fixtf_elbv2,
     'fixtf_emr': fixtf_emr,
@@ -809,9 +807,52 @@ def aws_resource(t1,tt1,tt2,flag1,flag2):
 # generic replace of acct and region in arn
 def globals_replace(t1,tt1,tt2):
     if context.debug: log.debug("GR start:%s",  t1)
-    if "format(" in tt2: return t1
+    if "format(" in tt2 or "/service-role/" in tt2:
+        return t1
     ends=""
     tt2=tt2.replace("%", "%%")
+    ## it is a single arn
+    if tt2.startswith("arn:") and "," not in tt2:
+        if tt2.startswith("arn:aws:kms:"): 
+            tt2=tt2.split("/")[-1]	
+            if aws_common.check_key(tt2):
+                if not context.dkms:
+                    t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
+                    common.add_dependancy("aws_kms_key",tt2) 
+                else:
+                    t1=tt1 + " = data.aws_kms_key.k-" + tt2 + ".arn\n"
+                    common.add_dependancy("aws_kms_key", tt2)
+            return t1
+        
+        if tt2.startswith("arn:aws:lambda") and "function:" in tt2:
+            fname=tt2.split(":")[-1]
+            t1 = tt1 + " = aws_lambda_function." + fname + ".arn\n"
+            common.add_dependancy("aws_lambda_function", fname)
+            return t1
+
+        if tt2.startswith("arn:aws:cloudfront:") and ":distribution/" in tt2:
+            fname=tt2.split("/")[-1]
+            t1 = tt1 + " = aws_cloudfront_distribution." + fname + ".arn\n"
+            common.add_dependancy("aws_cloudfront_distribution", fname)
+            return t1
+
+        if tt2.startswith("arn:aws:cognito-idp:") and ":userpool/" in tt2:
+            fname=tt2.split("/")[-1]
+            t1 = tt1 + " = aws_cognito_user_pool." + fname + ".arn\n"
+            common.add_dependancy("aws_cognito_user_pool", fname)
+            return t1
+
+        if tt2.startswith("arn:aws:iam") and ":role/" in tt2:
+            if tt2.endswith("*"): 
+                return t1
+            tt2=tt2.split('/')[-1]
+            if tt2 in context.rolelist:
+                t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+                common.add_dependancy("aws_iam_role",tt2)
+            return t1
+
+        #print("----->>>>> tt2="+tt2)
+
     if tt2.startswith('[') and tt1 != "managed_policy_arns" and "," in tt2:
         tt2=tt2.replace('[','').replace(']','').replace('"','').replace(' ','')
         arns=tt2.split(',')

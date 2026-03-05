@@ -214,7 +214,7 @@ def validate_resource_type(resource_type: str) -> str:
         return resource_type
     
     # Single resource type validation
-    if not re.match(r'^[a-z][a-z0-9_]*$', resource_type):
+    if not re.match(r'^[a-z][a-z0-9_-]*$', resource_type):
         raise ValueError(f"Invalid resource type format: {resource_type}")
     
     return resource_type

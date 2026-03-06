@@ -70,7 +70,7 @@ def resource_types(type):
     elif type == "secrets" or type == "secret": rets=["aws_secretsmanager_secret"]; return rets # secrets manager secrets
     elif type == "sc": rets=["aws_servicecatalog_portfolio"]; return rets     # service catalog
     elif type == "sfn": rets=["aws_sfn_state_machine"]; return rets  # State machines
-    elif type == "security-group": rets=["aws_security_group"]; return rets # security group
+    elif type == "security_group": rets=["aws_security_group"]; return rets # security group
     elif type == "sns": rets=["aws_sns_topic"]; return rets  # SNS topics
     elif type == "sqs": rets=["aws_sqs_queue"]; return rets   # SQS queues
     elif type == "spot": rets=["aws_spot_fleet_request"]; return rets # Spot fleet request

@@ -5,6 +5,11 @@ Handler for AWS CloudWatch resources
 
 import context
 
+def aws_cloudwatch_metric_alarm(t1, tt1, tt2, flag1, flag2):
+    """Handler for aws_cloudwatch_metric_alarm resource"""
+    skip = 0
+    return skip, t1, flag1, flag2
+
 def aws_cloudwatch_composite_alarm(t1, tt1, tt2, flag1, flag2):
     """Handler for aws_cloudwatch_composite_alarm resource"""
     skip = 0

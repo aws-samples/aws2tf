@@ -2292,7 +2292,7 @@ aws_cloudwatch_log_subscription_filter = {
 aws_cloudwatch_metric_alarm = {
 	"clfn":		"cloudwatch",
 	"descfn":	"describe_alarms",
-	"topkey":	"CompositeAlarms",
+	"topkey":	"MetricAlarms",
 	"key":		"AlarmName",
 	"filterid":	"AlarmName"
 }
@@ -14471,4 +14471,3 @@ aws_resources = {
 #     "aws_workspacesweb_user_settings_association": aws_workspacesweb_user_settings_association
 
 }
-

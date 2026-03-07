@@ -11,6 +11,30 @@ import context
 import inspect
 from botocore.config import Config
 
+def get_aws_cloudwatch_metric_alarm(type, id, clfn, descfn, topkey, key, filterid):
+    """
+    Get metric alarms using describe_alarms with AlarmTypes filter.
+    """
+    try:
+        config = Config(retries={'max_attempts': 10, 'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+
+        if id is None:
+            paginator = client.get_paginator(descfn)
+            response = []
+            for page in paginator.paginate(AlarmTypes=['MetricAlarm']):
+                response = response + page[topkey]
+            for j in response:
+                common.write_import(type, j[key], None)
+        else:
+            response = client.describe_alarms(AlarmNames=[id], AlarmTypes=['MetricAlarm'])
+            if response[topkey]:
+                j = response[topkey][0]
+                common.write_import(type, j[key], None)
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    return True
+
 def get_aws_cloudwatch_composite_alarm(type, id, clfn, descfn, topkey, key, filterid):
     """
     Get composite alarms using describe_alarms with AlarmTypes filter

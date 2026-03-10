@@ -123,8 +123,11 @@ def aws_eip_association(t1, tt1, tt2, flag1, flag2):
 	elif tt1 == "private_ip_address": skip = 1
 	elif tt1 == "network_interface_id": skip = 1
 	elif tt1 == "allocation_id":
-		t1 = tt1 + " = aws_eip." + tt2 + ".id\n"
-		common.add_dependancy("aws_eip", tt2)
+		if tt2 == "null" or tt2 == "":
+			skip = 1
+		else:
+			t1 = tt1 + " = aws_eip." + tt2 + ".id\n"
+			common.add_dependancy("aws_eip", tt2)
 	return skip, t1, flag1, flag2
 
 
@@ -240,8 +243,11 @@ def aws_nat_gateway(t1, tt1, tt2, flag1, flag2):
 	elif tt1 == "private_ip": skip = 1
 	elif tt1 == "public_ip": skip = 1
 	elif tt1 == "allocation_id":
-		t1 = tt1 + " = aws_eip." + tt2 + ".id\n"
-		common.add_dependancy("aws_eip", tt2)
+		if tt2 == "null" or tt2 == "":
+			skip = 1  # private NAT gateways have no EIP
+		else:
+			t1 = tt1 + " = aws_eip." + tt2 + ".id\n"
+			common.add_dependancy("aws_eip", tt2)
 	elif tt1 == "vpc_id":
 		t1 = t1 + "\n lifecycle {\n   ignore_changes = [regional_nat_gateway_address]\n}\n"
 	return skip, t1, flag1, flag2

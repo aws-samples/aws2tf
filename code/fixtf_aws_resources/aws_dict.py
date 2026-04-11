@@ -13810,6 +13810,7 @@ aws_resources = {
 	"aws_neptune_subnet_group": aws_neptune_subnet_group,
 	"aws_network_acl_association": aws_network_acl_association,
 	"aws_network_acl_rule": aws_network_acl_rule,
+	"aws_network_interface": aws_network_interface,
 	"aws_network_interface_attachment": aws_network_interface_attachment,
 	"aws_network_interface_sg_attachment": aws_network_interface_sg_attachment,
 	"aws_networkfirewall_firewall": aws_networkfirewall_firewall,

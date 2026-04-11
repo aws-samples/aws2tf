@@ -280,6 +280,12 @@ def aws_network_interface(t1, tt1, tt2, flag1, flag2):
 		if tt2 == "0": skip = 1
 	elif "ipv4_prefixes" in tt1:
 		if tt2 == "[]": skip = 1
+	elif "interface_type" in tt1:
+		# Skip interface_type if it's "interface" (invalid value, only efa/efa-only/branch/trunk are valid)
+		if tt2 == "interface": skip = 1
+	elif "private_ip_list" in tt1:
+        # Skip private_ip_list as it conflicts with private_ips (use private_ips instead)
+		skip = 1	
 	return skip, t1, flag1, flag2
 
 

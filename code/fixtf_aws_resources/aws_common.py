@@ -34,6 +34,11 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
     skip=0
     #if context.debug: log.debug("aws_common t1= %s", t1)
     try:
+        if t1.startswith("resource"):
+            if "aws_kms_key" in t1:
+                context.kmskeyid=True
+            else:
+                context.kmskeyid=False
         if tt1=="api_id" and "apigatewayv2" in type:
             t1=tt1 + " = aws_apigatewayv2_api." + tt2 + ".id\n"
             context.api_id=tt2

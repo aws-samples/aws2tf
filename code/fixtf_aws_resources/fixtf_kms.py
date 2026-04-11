@@ -12,6 +12,7 @@ Reduction: 0% less code
 import logging
 import fixtf
 import sys
+import context
 from .base_handler import BaseResourceHandler
 
 log = logging.getLogger('aws2tf')
@@ -23,9 +24,14 @@ log = logging.getLogger('aws2tf')
 
 def aws_kms_key(t1,tt1,tt2,flag1,flag2):
 
-
+	if t1.startswith("resource"):
+		context.kmskeyid=True
+	if tt1=="tags":
+		context.kmskeyid=False
 	skip=0
-	if tt1 == "policy": t1=fixtf.globals_replace(t1,tt1,tt2)
+	if tt1 == "policy": 
+		print("passing:",t1)
+		t1=fixtf.globals_replace(t1,tt1,tt2)
 	elif tt1=="rotation_period_in_days" and tt2=="0": skip=1
 	return skip,t1,flag1,flag2 
 

@@ -93,6 +93,7 @@ elastigrep=False
 elasticc=False
 kinesismsk=False
 destbuck=False
+iskmskey=False
 
 badlist=[]
 

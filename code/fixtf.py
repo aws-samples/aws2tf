@@ -815,13 +815,16 @@ def globals_replace(t1,tt1,tt2):
     if tt2.startswith("arn:") and "," not in tt2:
         if tt2.startswith("arn:aws:kms:"): 
             tt2=tt2.split("/")[-1]	
-            if aws_common.check_key(tt2):
-                if not context.dkms:
-                    t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
-                    common.add_dependancy("aws_kms_key",tt2) 
-                else:
-                    t1=tt1 + " = data.aws_kms_key.k-" + tt2 + ".arn\n"
-                    common.add_dependancy("aws_kms_key", tt2)
+            if tt1!="Resource":
+                if aws_common.check_key(tt2):
+                    if not context.dkms:
+                        t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
+                        common.add_dependancy("aws_kms_key",tt2) 
+                    else:
+                        t1=tt1 + " = data.aws_kms_key.k-" + tt2 + ".arn\n"
+                        common.add_dependancy("aws_kms_key", tt2)
+            #else:
+            #    print(t1,str(context.iskmskey))
             return t1
         
         if tt2.startswith("arn:aws:lambda") and "function:" in tt2:

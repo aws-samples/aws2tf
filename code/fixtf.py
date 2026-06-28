@@ -846,7 +846,13 @@ def globals_replace(t1,tt1,tt2):
             return t1
 
         if tt2.startswith("arn:aws:iam") and ":role/" in tt2:
-            if tt2.endswith("*"): 
+            if tt2.endswith("*"):
+                return t1
+            # account-portable ARN (wildcard/empty account, common in AWS-managed
+            # policy copies, e.g. arn:aws:iam::*:role/aws-service-role/...): keep
+            # the literal ARN; de-referencing would pin the account -> perpetual drift
+            arnparts=tt2.split(":")
+            if len(arnparts) > 4 and arnparts[4] in ("", "*"):
                 return t1
             tt2=tt2.split('/')[-1]
             if tt2 in context.rolelist:

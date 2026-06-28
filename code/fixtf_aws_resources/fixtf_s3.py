@@ -59,7 +59,11 @@ def aws_s3_bucket_lifecycle_configuration(t1, tt1, tt2, flag1, flag2):
 	# Skip null values for mutually exclusive expiration fields
 	if tt1 in ["date", "days", "expired_object_delete_marker"] and tt2 == "null":
 		skip = 1
-	
+	# expiration requires exactly one of date/days/expired_object_delete_marker;
+	# AWS often returns days alongside expired_object_delete_marker=false - drop it
+	if tt1 == "expired_object_delete_marker" and tt2 == "false":
+		skip = 1
+
 	# Add lifecycle ignore block for the bucket field
 	if tt1 == "bucket":
 		t1 = t1 + "\n lifecycle {\n   ignore_changes = [rule]\n}\n"

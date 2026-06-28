@@ -11,6 +11,62 @@ import sys
 from botocore.config import Config
 from botocore.exceptions import ClientError
 
+def get_aws_db_snapshot(type, id, clfn, descfn, topkey, key, filterid):
+    # Only MANUAL snapshots are importable as aws_db_snapshot. describe_db_snapshots
+    # also returns automated ("rds:" prefix) and AWS Backup ("awsbackup:" prefix)
+    # snapshots, which are service-managed and fail import with
+    # "Cannot import non-existent remote object".
+    if context.debug:
+        log.debug("--> In get_aws_db_snapshot doing " + type + ' with id ' + str(id))
+    try:
+        response = []
+        client = boto3.client(clfn)
+        paginator = client.get_paginator(descfn)
+        for page in paginator.paginate():
+            response = response + page[topkey]
+        if response == []:
+            log.debug("Empty response for "+type+" id="+str(id)+" returning"); return True
+        for j in response:
+            if j.get('SnapshotType') != 'manual':
+                continue
+            if id is None or id == j.get(filterid):
+                common.write_import(type, j[key], None)
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+
+    return True
+
+
+def get_aws_db_instance_automated_backups_replication(type, id, clfn, descfn, topkey, key, filterid):
+    # aws_db_instance_automated_backups_replication manages *cross-region*
+    # automated-backup replication. describe_db_instance_automated_backups returns
+    # both local backups and replicas, and its read uses the
+    # DB_INSTANCE_AUTOMATED_BACKUPS_ARN filter - so the import id must be the
+    # automated-backup ARN (...:auto-backup:ab-...), NOT the db instance ARN. A
+    # local backup (source region == current region) is part of the db_instance and
+    # is not a replication resource, so only emit genuine cross-region replicas.
+    if context.debug:
+        log.debug("--> In get_aws_db_instance_automated_backups_replication doing " + type + ' with id ' + str(id))
+    try:
+        response = []
+        client = boto3.client(clfn)
+        paginator = client.get_paginator(descfn)
+        for page in paginator.paginate():
+            response = response + page[topkey]
+        if response == []:
+            log.debug("Empty response for "+type+" id="+str(id)+" returning"); return True
+        for j in response:
+            bkarn = j.get('DBInstanceAutomatedBackupsArn')
+            srcarn = j.get('DBInstanceArn', '') or ''
+            src_region = srcarn.split(':')[3] if srcarn.count(':') >= 4 else ''
+            if bkarn and src_region and src_region != context.region:
+                common.write_import(type, bkarn, None)
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+
+    return True
+
+
 def get_aws_db_parameter_group(type, id, clfn, descfn, topkey, key, filterid):
 
 

@@ -969,6 +969,16 @@ def tfplan1(mymess):
    com = "mv aws_*.tf imported"
    rout = rc(com)
 
+   # Ensure all previously-generated resource configs are present in the working
+   # dir before generate-config-out, otherwise terraform fails the plan with
+   # "Reference to undeclared resource" (e.g. log_stream -> log_group) and never
+   # writes resources.out. Done in Python because rc() runs simple commands
+   # without a shell, so the "cp imported/aws_*.tf ." glob above is a no-op.
+   for src in glob.glob("imported/aws_*.tf"):
+      dst = os.path.basename(src)
+      if not os.path.exists(dst):
+         shutil.copy(src, dst)
+
    com = "terraform plan -generate-config-out=" + \
        rf + " -out tfplan -json > plan1.json"
    if not context.fast: log.info(com)
@@ -1115,6 +1125,16 @@ def tfplan3():
    if context.merge:
       com = "cp imported/aws_*.tf ."
       rout = rc(com)
+   else:
+      # On re-runs, resources generated in a prior pass live only in imported/.
+      # Restore them so referenced targets (log groups, LBs, web ACLs, etc.) are
+      # declared in the module at validate time. Done in Python because rc() runs
+      # without a shell for simple commands, so a "cp imported/aws_*.tf ." glob is
+      # never expanded. Skip files already present to keep freshly-generated ones.
+      for src in glob.glob("imported/aws_*.tf"):
+         dst = os.path.basename(src)
+         if not os.path.exists(dst):
+            shutil.copy(src, dst)
    if not glob.glob("aws_*.tf"):
       log.error("No aws_*.tf files found for this resource, exiting ....")
       log.info("exit 019")

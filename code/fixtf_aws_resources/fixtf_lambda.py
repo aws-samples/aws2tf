@@ -31,18 +31,14 @@ def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
     skip=0
     if tt1 == "role":
         tt2=tt2.split("/")[-1]
-        if common.ref_skipped("aws_iam_role", tt2):
-            # role was excluded/skipped - keep the literal role ARN, not a dangling ref
-            pass
+        if "." in tt2:
+            rn=tt2.replace(".","_")
+            t1=tt1 + " = aws_iam_role." + rn + ".arn\n"
         else:
-            if "." in tt2:
-                rn=tt2.replace(".","_")
-                t1=tt1 + " = aws_iam_role." + rn + ".arn\n"
-            else:
-                t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
-            common.add_dependancy("aws_iam_role",tt2)
-            pkey="aws_iam_role"+"."+tt2
-            #context.rproc[pkey]=True
+            t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+        common.add_dependancy("aws_iam_role",tt2)
+        pkey="aws_iam_role"+"."+tt2
+        #context.rproc[pkey]=True
 
     elif tt1 == "log_group":
         #aws_cloudwatch_log_group._aws_lambda_document-generator-handler.name
@@ -73,18 +69,42 @@ def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
     ###### layers code
     elif tt1 == "layers" and tt2!="[]":
         if tt2 != "null" and "arn:" in tt2:
-            # Reference layer versions by literal ARN. Lambda layer versions are
-            # immutable and terraform's -generate-config-out does not materialize
-            # them as aws_lambda_layer_version resources, so a managed-resource
-            # reference would point at an undeclared resource. The literal ARN keeps
-            # the layer attached to the function and validates/imports correctly.
-            inner=tt2.lstrip('[').rstrip(']')
-            arns=[a.strip().strip('"').strip() for a in inner.split(',')]
-            arns=[a for a in arns if a]
-            builds=", ".join('"'+a+'"' for a in arns)
-            t1 = tt1+" = ["+builds+"]\n"
+            cc=tt2.count(',')
+            tt2=tt2.lstrip('[').rstrip(']')
         else:
-            common.log_warning("WARNING: layers is not an array %s",  tt2)
+             common.log_warning("WARNING: layers is not an array %s",  tt2)
+             return skip,t1,flag1,flag2
+        #if context.debug: 
+        builds=""
+        if cc > 0:
+            for i in range(cc+1):
+                subn=tt2.split(',')[i]
+                subn=subn.strip(" ").lstrip('"').rstrip('"').strip(" ")
+                if context.acc in subn:
+                    tarn=subn.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
+                    common.add_dependancy("aws_lambda_layer_version",subn)
+                    builds=builds+"aws_lambda_layer_version."+tarn+".arn,"
+                else:
+                    builds=builds+"\""+subn+"\", "
+            
+            if builds.endswith(','):
+                builds=builds.rstrip(',')
+            t1 = tt1+" = ["+builds+"]\n"
+                
+        elif cc == 0:
+            if context.acc in tt2:  
+                tt2=tt2.lstrip('"').rstrip('"')
+                larn=tt2.split(":")[:-1]
+                myarn=""
+                for ta in larn:
+                    myarn=myarn+ta+":"
+                
+                myarn=myarn.rstrip(":")
+                tarn=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
+                # test we can get at it before sub
+                
+                t1 = tt1+" = [aws_lambda_layer_version."+tarn+ ".arn]\n"
+                common.add_dependancy("aws_lambda_layer_version",tt2)
 
     return skip,t1,flag1,flag2
 

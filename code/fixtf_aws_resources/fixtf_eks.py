@@ -106,15 +106,10 @@ def aws_eks_node_group(t1,tt1,tt2,flag1,flag2):
         flag1=True
 
 
-    if "max_unavailable_percentage" in tt1:
+    if "max_unavailable_percentage" in tt1: 
         if tt2 == "0": skip=1
 
     elif "max_unavailable" in tt1:
-        if tt2 == "0": skip=1
-
-    # node_repair_config: *_count conflicts with *_percentage; AWS returns all 0
-    # when unset. Drop the zero-valued numerics, leaving enabled=false.
-    elif tt1 in ("max_parallel_nodes_repaired_count","max_parallel_nodes_repaired_percentage","max_unhealthy_node_threshold_count","max_unhealthy_node_threshold_percentage"):
         if tt2 == "0": skip=1
 
     elif "node_group_name_prefix" in tt1: skip=1

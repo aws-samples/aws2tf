@@ -34,12 +34,8 @@ def aws_lb_listener(t1,tt1,tt2,flag1,flag2):
 	if "order" == tt1:
 		if tt2 == "0": skip=1
 	elif "duration" == tt1:
-		if tt2 == "0": t1=tt1+" = 1\n"
+		if tt2 == "0": t1=tt1+" = 1\n"	
 		#if tt2 == "0": skip=1
-	elif "ignore_client_certificate_expiry" == tt1:
-		# only valid when mutual_authentication mode = "verify"; false is the
-		# default and conflicts when mode = "off", so drop it
-		if tt2 == "false": skip=1
 
 	return skip,t1,flag1,flag2
 
@@ -65,21 +61,10 @@ def aws_lb_listener_rule(t1,tt1,tt2,flag1,flag2):
 
 
 
-def aws_lb(t1,tt1,tt2,flag1,flag2):
-
-
-	skip=0
-	# name_prefix conflicts with name; imported resources always have a name
-	if tt1 == "name_prefix": skip=1
-	return skip,t1,flag1,flag2
-
-
 def aws_lb_target_group(t1,tt1,tt2,flag1,flag2):
 
 
 	skip=0
-	# name_prefix conflicts with name; imported resources always have a name
-	if tt1 == "name_prefix": skip=1
 	if "on_deregistration" in tt1:
 		if tt2 == "null": t1=tt1+" = \"no_rebalance\"\n"
 	if "on_unhealthy" in tt1:

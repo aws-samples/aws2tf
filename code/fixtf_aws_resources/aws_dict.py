@@ -9958,8 +9958,8 @@ aws_transfer_workflow = {
 	"clfn":		"transfer",
 	"descfn":	"list_workflows",
 	"topkey":	"Workflows",
-	"key":		"WorkflowId",
-	"filterid":	"WorkflowId"
+	"key":		"Arn",
+	"filterid":	"Arn"
 }
 
 aws_verifiedaccess_endpoint = {

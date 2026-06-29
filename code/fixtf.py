@@ -439,10 +439,7 @@ FIXTF_MODULES = {
 
 
 def fixtf(ttft,tf):
-    # record the resource currently being generated so is_self_ref() can detect
-    # a deref target that is this same resource (illegal self-reference).
-    context.current_tf=tf
-
+  
     rf=tf+".out"
     tf2=tf+".tf"
 
@@ -831,16 +828,9 @@ def globals_replace(t1,tt1,tt2):
             return t1
         
         if tt2.startswith("arn:aws:lambda") and "function:" in tt2:
-            if tt2.endswith("*"):
-                return t1
-            if tt1=="Resource":
-                return t1
             fname=tt2.split(":")[-1]
-            # only build a reference if the function was collected; otherwise
-            # (e.g. service-managed lambdas, or a policy Resource) keep the literal ARN
-            if fname in context.lambdalist and not common.ref_skipped("aws_lambda_function", fname) and not common.is_self_ref("aws_lambda_function", fname):
-                t1 = tt1 + " = aws_lambda_function." + fname + ".arn\n"
-                common.add_dependancy("aws_lambda_function", fname)
+            t1 = tt1 + " = aws_lambda_function." + fname + ".arn\n"
+            common.add_dependancy("aws_lambda_function", fname)
             return t1
 
         if tt2.startswith("arn:aws:cloudfront:") and ":distribution/" in tt2:
@@ -856,16 +846,10 @@ def globals_replace(t1,tt1,tt2):
             return t1
 
         if tt2.startswith("arn:aws:iam") and ":role/" in tt2:
-            if tt2.endswith("*"):
-                return t1
-            # account-portable ARN (wildcard/empty account, common in AWS-managed
-            # policy copies, e.g. arn:aws:iam::*:role/aws-service-role/...): keep
-            # the literal ARN; de-referencing would pin the account -> perpetual drift
-            arnparts=tt2.split(":")
-            if len(arnparts) > 4 and arnparts[4] in ("", "*"):
+            if tt2.endswith("*"): 
                 return t1
             tt2=tt2.split('/')[-1]
-            if tt2 in context.rolelist and not common.ref_skipped("aws_iam_role", tt2) and not common.is_self_ref("aws_iam_role", tt2):
+            if tt2 in context.rolelist:
                 t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
                 common.add_dependancy("aws_iam_role",tt2)
             return t1

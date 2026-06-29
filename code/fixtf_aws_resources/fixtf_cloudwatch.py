@@ -8,17 +8,6 @@ import context
 def aws_cloudwatch_metric_alarm(t1, tt1, tt2, flag1, flag2):
     """Handler for aws_cloudwatch_metric_alarm resource"""
     skip = 0
-    # datapoints_to_alarm must be >= 1; AWS returns 0 when it was never set.
-    # Drop the line so the provider uses its default.
-    if tt1 == "datapoints_to_alarm" and tt2 == "0":
-        skip = 1
-    # empty dimensions map conflicts with metric_query - drop it
-    elif tt1 == "dimensions" and tt2 == "{}":
-        skip = 1
-    # period/threshold-style scalars are 0 when metric_query is used; period=0
-    # both is invalid and conflicts with metric_query - drop it
-    elif tt1 == "period" and tt2 == "0":
-        skip = 1
     return skip, t1, flag1, flag2
 
 def aws_cloudwatch_composite_alarm(t1, tt1, tt2, flag1, flag2):

@@ -969,16 +969,6 @@ def tfplan1(mymess):
    com = "mv aws_*.tf imported"
    rout = rc(com)
 
-   # Ensure all previously-generated resource configs are present in the working
-   # dir before generate-config-out, otherwise terraform fails the plan with
-   # "Reference to undeclared resource" (e.g. log_stream -> log_group) and never
-   # writes resources.out. Done in Python because rc() runs simple commands
-   # without a shell, so the "cp imported/aws_*.tf ." glob above is a no-op.
-   for src in glob.glob("imported/aws_*.tf"):
-      dst = os.path.basename(src)
-      if not os.path.exists(dst):
-         shutil.copy(src, dst)
-
    com = "terraform plan -generate-config-out=" + \
        rf + " -out tfplan -json > plan1.json"
    if not context.fast: log.info(com)
@@ -1125,16 +1115,6 @@ def tfplan3():
    if context.merge:
       com = "cp imported/aws_*.tf ."
       rout = rc(com)
-   else:
-      # On re-runs, resources generated in a prior pass live only in imported/.
-      # Restore them so referenced targets (log groups, LBs, web ACLs, etc.) are
-      # declared in the module at validate time. Done in Python because rc() runs
-      # without a shell for simple commands, so a "cp imported/aws_*.tf ." glob is
-      # never expanded. Skip files already present to keep freshly-generated ones.
-      for src in glob.glob("imported/aws_*.tf"):
-         dst = os.path.basename(src)
-         if not os.path.exists(dst):
-            shutil.copy(src, dst)
    if not glob.glob("aws_*.tf"):
       log.error("No aws_*.tf files found for this resource, exiting ....")
       log.info("exit 019")
@@ -1297,24 +1277,7 @@ def tfplan3():
          nchanges = 0
          nallowedchanges = 0
          all_force_destroy_only = True  # Track if all changes are force_destroy only
-
-         # "Computed-only" updates: the planned change's before == after, so no configured
-         # attribute differs and the update is driven solely by read-only/computed attributes
-         # that show as "(known after apply)" (e.g. aws_nat_gateway.regional_nat_gateway_address
-         # on AWS provider 6.27+). These are non-consequential, not unexpected, changes.
-         computed_only_addrs = set()
-         try:
-            _show = subprocess.run(['terraform', 'show', '-json', 'tfplan'],
-                                   capture_output=True, text=True)
-            _sp = json.loads(_show.stdout)
-            for _rc in _sp.get('resource_changes', []):
-               _ch = _rc.get('change', {})
-               if _ch.get('actions') == ['update'] and _ch.get('before') == _ch.get('after'):
-                  computed_only_addrs.add(_rc['address'])
-         except Exception as _e:
-            if context.debug:
-               log.debug("computed-only change detection skipped: %s", _e)
-
+         
          with open('plan2.json') as f:
             for jsonObj in f:
                planDict = json.loads(jsonObj)
@@ -1353,7 +1316,6 @@ def tfplan3():
                
                if ctype == "aws_lb_listener" or ctype == "aws_cognito_user_pool_client" \
                   or ctype=="aws_bedrockagent_agent" or ctype=="aws_bedrockagent_agent_action_group" \
-                  or caddr in computed_only_addrs \
                   or force_destroy_only:
                   
                   changeList.append(pe['change']['resource']['addr'])
@@ -1869,11 +1831,6 @@ def splitf(input_file):
    with open(input_file, 'r') as f:
         content = f.read()
    
-   # generate-config-out can emit a provider-invalid stickiness { duration = 0 }
-   # (valid range is 1-604800); sanitize 0 -> 1 before splitting so the
-   # per-resource .out validates.
-   content = re.sub(r'(\n[ \t]*)duration = 0(?=\n)', r'\g<1>duration = 1', content)
-
     # Use a more efficient splitting method
    resource_blocks = re.split(r'(?=\nresource ")', '\n' + content)
 
@@ -1920,37 +1877,6 @@ def splitf(input_file):
 
 
 # if type == "aws_vpc_endpoint": return "ec2","describe_vpc_endpoints","VpcEndpoints","VpcEndpointId","vpc-id"
-
-def ref_skipped(type, name):
-   # True if a referenced resource was excluded (-e/--exclude) or skipped
-   # (--skipname). In that case the target resource is never generated, so deref
-   # handlers must keep the attribute as a literal id/ARN string rather than emit
-   # a dangling Terraform reference to a resource that does not exist.
-   if type in context.all_extypes:
-       return True
-   if context.skipname and name is not None and context.skipname.lower() in str(name).lower():
-       return True
-   return False
-
-
-def is_self_ref(type, name):
-   # True if a deref target is the resource currently being generated. Building a
-   # reference to it would create an illegal self-reference (Terraform rejects a
-   # block that refers to itself, e.g. a role whose trust policy lists its own ARN).
-   return context.current_tf == type + "__" + name
-
-
-def tfname(theid):
-   # Sanitize an identifier the same way write_import generates a resource label,
-   # so cross-resource references (e.g. aws_iam_user.<name>.id) match the declared
-   # resource name. Names containing '.', '@', spaces etc. would otherwise produce
-   # references Terraform parses as attribute access (aws_iam_user.first.last.id).
-   tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_").replace(" ","_").replace("*","star").replace("\\052","star").replace("@","_").replace("\\64","_")
-   if tfid[:1].isdigit(): tfid="r-"+tfid
-   tfid = re.sub(r'\.\.', '_', tfid)
-   tfid = tfid.replace('/', '_')
-   return tfid
-
 
 #generally pass 3rd param as None - unless overriding
 def write_import(type,theid,tfid):

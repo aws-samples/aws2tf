@@ -91,8 +91,20 @@ def aws_iam_role(t1,tt1,tt2,flag1,flag2):
 	elif tt1 == "permissions_boundary" and tt2 != "null":
 		if "arn:aws:iam::aws:policy" not in tt2:
 			pn=tt2.split("/")[-1]
-			common.add_dependancy("aws_iam_policy",tt2)
-			t1=tt1+" = aws_iam_policy."+pn+".arn\n"
+			bparts=tt2.split(":")
+			bacct=bparts[4] if len(bparts) > 4 else ""
+			# the provider's ARN validator only accepts these account-id forms
+			valid_acct=(len(bacct)==12 and bacct.isdigit()) or bacct in ("aws","aws-managed","third-party","aws-marketplace") or (len(bacct)==12 and bacct.startswith("cw"))
+			if not valid_acct:
+				# Non-standard account segment (e.g. a vendor-issued boundary) that
+				# the provider's ARN validator rejects: keeping the literal fails
+				# `terraform validate`, and dropping it makes terraform plan to
+				# REMOVE the live boundary. Drop it and ignore_changes so the live
+				# boundary is left untouched.
+				t1="  lifecycle {\n    ignore_changes = [permissions_boundary]\n  }\n"
+			else:
+				common.add_dependancy("aws_iam_policy",tt2)
+				t1=tt1+" = aws_iam_policy."+pn+".arn\n"
 	elif tt1 == "managed_policy_arns":   
 		if tt2 == "[]": 
 			skip=1

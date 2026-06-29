@@ -17,21 +17,63 @@ from tqdm import tqdm
 
 sys.path.insert(0, './code')
 
+# ---------------------------------------------------------------------------
+# boto3 client cache.
+# The resource getters call boto3.client() ~435 places, thousands of times
+# across threads. Each client owns a urllib3 connection pool (sockets = file
+# descriptors); creating them per-call leaks FDs faster than GC reclaims them,
+# eventually causing "[Errno 24] Too many open files" and, once sockets are
+# exhausted, DNS NameResolutionError / throttling cascades. boto3 clients are
+# thread-safe and intended to be reused, so cache one per (service, region).
+# ---------------------------------------------------------------------------
+import threading as _threading
+_boto3_client_cache = {}
+_boto3_client_cache_lock = _threading.Lock()
+_orig_boto3_client = boto3.client
+
+def _cached_boto3_client(service_name, *args, **kwargs):
+    # Cache by (service, region). aws2tf passes a uniform Config(retries=...) to
+    # most calls (incl. the generic call_boto3 path), so we must reuse those too -
+    # honor whatever kwargs (config/endpoint/region) the FIRST call used. Only
+    # positional args (not used by aws2tf) bypass the cache.
+    if args:
+        return _orig_boto3_client(service_name, *args, **kwargs)
+    key = (service_name, kwargs.get("region_name"), kwargs.get("endpoint_url"))
+    c = _boto3_client_cache.get(key)
+    if c is None:
+        with _boto3_client_cache_lock:
+            c = _boto3_client_cache.get(key)
+            if c is None:
+                c = _orig_boto3_client(service_name, **kwargs)
+                _boto3_client_cache[key] = c
+    return c
+
 # Configure logging
+class _TqdmLoggingHandler(logging.Handler):
+    """Console log handler that writes via tqdm.write so log lines don't get
+    interleaved with / overwritten by active tqdm progress bars."""
+    def emit(self, record):
+        try:
+            msg = self.format(record)
+            tqdm.write(msg)
+        except Exception:
+            self.handleError(record)
+
+
 def setup_logging(debug=False, log_file='aws2tf.log'):
     """Setup logging configuration for aws2tf with console and file output."""
     level = logging.DEBUG if debug else logging.INFO
-    
+
     # Create formatter - simple format that matches existing output style
     formatter = logging.Formatter('%(message)s')
-    
+
     # Get logger and configure
     logger = logging.getLogger('aws2tf')
     logger.setLevel(level)
     logger.handlers.clear()
-    
-    # Console handler
-    console_handler = logging.StreamHandler(sys.stdout)
+
+    # Console handler (tqdm-aware to avoid clobbering progress bars)
+    console_handler = _TqdmLoggingHandler()
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
     
@@ -143,7 +185,7 @@ def dd_threaded(ti):
 def kd_threaded(ti):
     if not context.rdep[ti]:
         i = ti.split(".")[0]
-        id = ti.split(".")[1]
+        id = ti.split(".", 1)[1]
         log.debug("type="+i+" id="+str(id))
         common.call_resource(i, id)
     return
@@ -367,6 +409,7 @@ def parse_and_validate_arguments():
     argParser.add_argument("-la", "--serverless", help="Lambda mode - when running in a Lambda container", action='store_true')
     argParser.add_argument("-tv", "--tv", help="Specify version of Terraform AWS provider default = "+context.tfver)
     argParser.add_argument("-d5", "--debug5", help="debug5 special debug flag", action='store_true')
+    argParser.add_argument("-sn", "--skipname", help="skip any resource containing this string")
 
     try:
         args = argParser.parse_args()
@@ -477,6 +520,9 @@ def setup_environment_and_context(args):
             log.info("exit 005")
             timed_interrupt.stop_timer()
             exit()
+    # add a skip string to skip resources
+    if args.skipname:
+        context.skipname = args.skipname
     
     # Setup data source flags
     if args.validate:
@@ -615,6 +661,11 @@ def setup_aws_session(args, region, timed_interrupt):
             boto3.setup_default_session(region_name=region)
         else:
             boto3.setup_default_session(region_name=region, profile_name=context.profile)
+        # Install the client cache now that the default session is configured,
+        # so cached clients pick up the right region/profile/credentials. Reset
+        # the cache in case of re-entry with a different session.
+        _boto3_client_cache.clear()
+        boto3.client = _cached_boto3_client
     except Exception as e:
         log.error("AWS Authorization Error: "+str(e))
 
@@ -947,7 +998,7 @@ def process_known_dependencies():
         context.tracking_message = "Stage 4 of 10, Known Dependancies - Multi Threaded "+str(context.cores)
         with ThreadPoolExecutor(max_workers=context.cores) as executor12:
             futures2 = [
-                executor12.submit(kd_threaded(ti))
+                executor12.submit(kd_threaded, ti)
                 for ti in list(context.rdep)
             ]
     else:
@@ -1013,7 +1064,7 @@ def process_detected_dependencies():
                 log.info(f"Processing {total_deps} new detected dependencies...")
                 with ThreadPoolExecutor(max_workers=context.cores) as executor2:
                     futures = [
-                        executor2.submit(dd_threaded(ti))
+                        executor2.submit(dd_threaded, ti)
                         for ti in unprocessed_deps
                     ]
                     # Show progress as dependencies are processed
@@ -1235,4 +1286,3 @@ def main_new():
 
 if __name__ == '__main__':
     main_new()
-

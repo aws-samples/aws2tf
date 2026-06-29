@@ -170,9 +170,13 @@ def aws_instance(t1, tt1, tt2, flag1, flag2):
 		
 		elif tt1 == "iam_instance_profile":
 			if tt2 != "null":
-				if tt2 in str(context.inplist.keys()):
-					t1 = tt1 + " = aws_iam_instance_profile." + tt2 + ".name\n"
-					common.add_dependancy("aws_iam_instance_profile", tt2)
+				# Reference by literal name. Instance profiles are import-only
+				# (materialized via -generate-config-out); a TF reference to one breaks
+				# generate-config-out with "Reference to undeclared resource" and aborts
+				# the whole plan, so no import-only resource ever materializes. The
+				# profile is still collected (add_dependancy) and imported separately.
+				t1 = tt1 + " = \"" + tt2 + "\"\n"
+				common.add_dependancy("aws_iam_instance_profile", tt2)
 		
 		elif tt1 == "security_groups": skip = 1
 		
@@ -248,8 +252,6 @@ def aws_nat_gateway(t1, tt1, tt2, flag1, flag2):
 		else:
 			t1 = tt1 + " = aws_eip." + tt2 + ".id\n"
 			common.add_dependancy("aws_eip", tt2)
-	elif tt1 == "vpc_id":
-		t1 = t1 + "\n lifecycle {\n   ignore_changes = [regional_nat_gateway_address]\n}\n"
 	return skip, t1, flag1, flag2
 
 
@@ -460,6 +462,10 @@ def aws_vpc_endpoint_service(t1, tt1, tt2, flag1, flag2):
 def aws_vpn_connection(t1, tt1, tt2, flag1, flag2):
 	skip = 0
 	if tt1.startswith("tunnel") and tt2 == "0": skip = 1
+	# enable_acceleration / tunnel_bandwidth are only valid for transit-gateway
+	# VPNs; drop their defaults so vpn_gateway_id (VGW) connections validate.
+	elif tt1 == "enable_acceleration" and tt2 == "false": skip = 1
+	elif tt1 == "tunnel_bandwidth" and tt2 == "standard": skip = 1
 	return skip, t1, flag1, flag2
 
 

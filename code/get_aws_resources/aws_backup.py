@@ -68,8 +68,20 @@ def get_aws_backup_plan(type, id, clfn, descfn, topkey, key, filterid):
                 log.debug("Empty response for "+type+ " id="+str(id)+" returning")
                 return True
             for j in response:
-                if "/" not in j['BackupPlanName']:
-                    common.write_import(type,j[key],None) 
+                if "/" in j['BackupPlanName']:
+                    continue
+                # Service-managed plans (e.g. AWS RDS automatic backups) use rule
+                # names containing '/', which are invalid Terraform rule_name
+                # values and cannot be imported - skip them.
+                try:
+                    det = client.get_backup_plan(BackupPlanId=j[key])
+                    rules = det.get('BackupPlan', {}).get('Rules', [])
+                    if any("/" in r.get('RuleName', '') for r in rules):
+                        log.info("Skipping service-managed backup plan %s (invalid rule_name)", j['BackupPlanName'])
+                        continue
+                except Exception:
+                    pass
+                common.write_import(type,j[key],None)
 
         else:      
             response = client.get_backup_plan(BackupPlanId=id)

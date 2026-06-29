@@ -29,8 +29,7 @@ def aws_kms_key(t1,tt1,tt2,flag1,flag2):
 	if tt1=="tags":
 		context.kmskeyid=False
 	skip=0
-	if tt1 == "policy": 
-		print("passing:",t1)
+	if tt1 == "policy":
 		t1=fixtf.globals_replace(t1,tt1,tt2)
 	elif tt1=="rotation_period_in_days" and tt2=="0": skip=1
 	return skip,t1,flag1,flag2 

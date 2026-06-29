@@ -47,7 +47,20 @@ def aws_cloudwatch_log_stream(t1, tt1, tt2, flag1, flag2):
 		# Add dependency so aws2tf imports the log group automatically
 		common.add_dependancy("aws_cloudwatch_log_group", tt2)
     
-	return skip, t1, flag1, flag2 
+	return skip, t1, flag1, flag2
+
+
+def aws_cloudwatch_log_metric_filter(t1, tt1, tt2, flag1, flag2):
+    skip = 0
+    # The provider defaults metric_transformation.unit to "None", but AWS returns
+    # "" for filters created without a unit, giving a perpetual in-place diff on
+    # import. unit cannot be set to "" (fails the provider's StandardUnit
+    # validation), so ignore changes to it. Hooked on log_group_name (a required,
+    # top-level, single-occurrence attribute) so the lifecycle block lands at the
+    # resource level.
+    if tt1 == "log_group_name":
+        t1 = t1 + "\n  lifecycle {\n    ignore_changes = [metric_transformation[0].unit]\n  }\n"
+    return skip, t1, flag1, flag2
 
 
 

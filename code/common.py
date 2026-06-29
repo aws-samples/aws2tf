@@ -1869,6 +1869,11 @@ def splitf(input_file):
    with open(input_file, 'r') as f:
         content = f.read()
    
+   # generate-config-out can emit a provider-invalid stickiness { duration = 0 }
+   # (valid range is 1-604800); sanitize 0 -> 1 before splitting so the
+   # per-resource .out validates.
+   content = re.sub(r'(\n[ \t]*)duration = 0(?=\n)', r'\g<1>duration = 1', content)
+
     # Use a more efficient splitting method
    resource_blocks = re.split(r'(?=\nresource ")', '\n' + content)
 
@@ -1915,6 +1920,37 @@ def splitf(input_file):
 
 
 # if type == "aws_vpc_endpoint": return "ec2","describe_vpc_endpoints","VpcEndpoints","VpcEndpointId","vpc-id"
+
+def ref_skipped(type, name):
+   # True if a referenced resource was excluded (-e/--exclude) or skipped
+   # (--skipname). In that case the target resource is never generated, so deref
+   # handlers must keep the attribute as a literal id/ARN string rather than emit
+   # a dangling Terraform reference to a resource that does not exist.
+   if type in context.all_extypes:
+       return True
+   if context.skipname and name is not None and context.skipname.lower() in str(name).lower():
+       return True
+   return False
+
+
+def is_self_ref(type, name):
+   # True if a deref target is the resource currently being generated. Building a
+   # reference to it would create an illegal self-reference (Terraform rejects a
+   # block that refers to itself, e.g. a role whose trust policy lists its own ARN).
+   return context.current_tf == type + "__" + name
+
+
+def tfname(theid):
+   # Sanitize an identifier the same way write_import generates a resource label,
+   # so cross-resource references (e.g. aws_iam_user.<name>.id) match the declared
+   # resource name. Names containing '.', '@', spaces etc. would otherwise produce
+   # references Terraform parses as attribute access (aws_iam_user.first.last.id).
+   tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_").replace(" ","_").replace("*","star").replace("\\052","star").replace("@","_").replace("\\64","_")
+   if tfid[:1].isdigit(): tfid="r-"+tfid
+   tfid = re.sub(r'\.\.', '_', tfid)
+   tfid = tfid.replace('/', '_')
+   return tfid
+
 
 #generally pass 3rd param as None - unless overriding
 def write_import(type,theid,tfid):

@@ -29,7 +29,7 @@ def aws_iam_access_key(t1,tt1,tt2,flag1,flag2):
     if tt1 == "user":
         pkey="aws_iam_access_key."+tt2
         context.rproc[pkey]=True
-        t1=tt1+" = aws_iam_user."+tt2+".id\n"
+        t1=tt1+" = aws_iam_user."+common.tfname(tt2)+".id\n"
     return skip,t1,flag1,flag2
 
 
@@ -39,7 +39,7 @@ def aws_iam_group_membership(t1,tt1,tt2,flag1,flag2):
 
     skip=0
     if tt1=="user" and tt2 !="null":
-        t1=tt1+" = aws_iam_user."+tt2+".id\n"
+        t1=tt1+" = aws_iam_user."+common.tfname(tt2)+".id\n"
         common.add_dependancy("aws_iam_user", tt2)
 		
     return skip,t1,flag1,flag2
@@ -177,7 +177,7 @@ def aws_iam_user_group_membership(t1,tt1,tt2,flag1,flag2):
 
     skip=0
     if tt1 == "user":
-        t1=tt1+" = aws_iam_user."+tt2+".id\n"
+        t1=tt1+" = aws_iam_user."+common.tfname(tt2)+".id\n"
         common.add_dependancy("aws_iam_user", tt2)
     elif tt1 == "groups":
         t1,skip = fixtf.deref_array(t1, tt1, tt2, "aws_iam_group", "", skip)

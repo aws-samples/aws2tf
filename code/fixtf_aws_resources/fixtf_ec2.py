@@ -170,9 +170,13 @@ def aws_instance(t1, tt1, tt2, flag1, flag2):
 		
 		elif tt1 == "iam_instance_profile":
 			if tt2 != "null":
-				if tt2 in str(context.inplist.keys()):
-					t1 = tt1 + " = aws_iam_instance_profile." + tt2 + ".name\n"
-					common.add_dependancy("aws_iam_instance_profile", tt2)
+				# Reference by literal name. Instance profiles are import-only
+				# (materialized via -generate-config-out); a TF reference to one breaks
+				# generate-config-out with "Reference to undeclared resource" and aborts
+				# the whole plan, so no import-only resource ever materializes. The
+				# profile is still collected (add_dependancy) and imported separately.
+				t1 = tt1 + " = \"" + tt2 + "\"\n"
+				common.add_dependancy("aws_iam_instance_profile", tt2)
 		
 		elif tt1 == "security_groups": skip = 1
 		

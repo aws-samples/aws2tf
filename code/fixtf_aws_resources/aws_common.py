@@ -186,7 +186,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             if tt2 != "null":     
                 if "arn:" in tt2: 
                     tt2=tt2.split("/")[-1]
-                    if check_key(tt2) and not common.ref_skipped("aws_kms_key", tt2):	
+                    if check_key(tt2):	
                         if not context.dkms:
                             t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
                             common.add_dependancy("aws_kms_key",tt2)
@@ -213,7 +213,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                         if "arn:" in tt2:   
                             tt2=tt2.split("/")[-1]	
                             skip=0
-                            if check_key(tt2) and not common.ref_skipped("aws_kms_key", tt2):
+                            if check_key(tt2):
                                 if not context.dkms:
                                     t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
                                     common.add_dependancy("aws_kms_key",tt2) 
@@ -224,7 +224,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                         else:
                             tt2=tt2.split("/")[-1]
                             skip=0
-                            if check_key(tt2) and not common.ref_skipped("aws_kms_key", tt2):
+                            if check_key(tt2):
                                 if not context.dkms:
                                     t1=tt1 + " = aws_kms_key.k-" + tt2 + ".id\n"
                                     common.add_dependancy("aws_kms_key", tt2)

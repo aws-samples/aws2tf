@@ -127,7 +127,11 @@ def get_aws_athena_database(type, id, clfn, descfn, topkey, key, filterid):
                 common.write_import(type,j[key],None) 
 
         else:     
-            response = client.get_database(CatalogName=catn,DatabaseName=id)
+            try:
+                response = client.get_database(CatalogName=catn,DatabaseName=id)
+            except client.exceptions.MetadataException:
+                if context.debug: log.debug("Database not found in catalog: "+str(id)+" skipping")
+                return True
             if response == []: 
                 if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True

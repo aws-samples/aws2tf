@@ -75,6 +75,7 @@ meshname=""
 workaround=""
 expected=False
 all_extypes=[]
+skipname=None
 current_tf=""
 serverless=False
 dzd=""

@@ -2496,6 +2496,10 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    elif "NoSuch" in exn and clfn=="cloudfront":
       log.warning(str(exc_obj)+" for "+frame+" id="+str(id)+" - returning")
       return
+
+   elif exn == "TooManyRequestsException" or exn == "ThrottlingException" or exn == "Throttling":
+      log.warning("Throttled: "+frame+" clfn="+clfn+" id="+str(id)+" - returning")
+      return
    
    elif "BadRequest" in exn:
       if "The requested feature is not enabled for this AWS account" in str(exc_obj):

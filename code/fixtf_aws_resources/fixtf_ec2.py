@@ -252,6 +252,8 @@ def aws_nat_gateway(t1, tt1, tt2, flag1, flag2):
 		else:
 			t1 = tt1 + " = aws_eip." + tt2 + ".id\n"
 			common.add_dependancy("aws_eip", tt2)
+	elif tt1 == "vpc_id":
+		t1 = t1 + "\n lifecycle {\n   ignore_changes = [regional_nat_gateway_address]\n}\n"
 	return skip, t1, flag1, flag2
 
 

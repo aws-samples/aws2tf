@@ -1297,24 +1297,7 @@ def tfplan3():
          nchanges = 0
          nallowedchanges = 0
          all_force_destroy_only = True  # Track if all changes are force_destroy only
-
-         # "Computed-only" updates: the planned change's before == after, so no configured
-         # attribute differs and the update is driven solely by read-only/computed attributes
-         # that show as "(known after apply)" (e.g. aws_nat_gateway.regional_nat_gateway_address
-         # on AWS provider 6.27+). These are non-consequential, not unexpected, changes.
-         computed_only_addrs = set()
-         try:
-            _show = subprocess.run(['terraform', 'show', '-json', 'tfplan'],
-                                   capture_output=True, text=True)
-            _sp = json.loads(_show.stdout)
-            for _rc in _sp.get('resource_changes', []):
-               _ch = _rc.get('change', {})
-               if _ch.get('actions') == ['update'] and _ch.get('before') == _ch.get('after'):
-                  computed_only_addrs.add(_rc['address'])
-         except Exception as _e:
-            if context.debug:
-               log.debug("computed-only change detection skipped: %s", _e)
-
+         
          with open('plan2.json') as f:
             for jsonObj in f:
                planDict = json.loads(jsonObj)
@@ -1353,7 +1336,6 @@ def tfplan3():
                
                if ctype == "aws_lb_listener" or ctype == "aws_cognito_user_pool_client" \
                   or ctype=="aws_bedrockagent_agent" or ctype=="aws_bedrockagent_agent_action_group" \
-                  or caddr in computed_only_addrs \
                   or force_destroy_only:
                   
                   changeList.append(pe['change']['resource']['addr'])

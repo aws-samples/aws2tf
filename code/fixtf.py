@@ -845,12 +845,16 @@ def globals_replace(t1,tt1,tt2):
 
         if tt2.startswith("arn:aws:cloudfront:") and ":distribution/" in tt2:
             fname=tt2.split("/")[-1]
+            if fname == "*":
+                return t1
             t1 = tt1 + " = aws_cloudfront_distribution." + fname + ".arn\n"
             common.add_dependancy("aws_cloudfront_distribution", fname)
             return t1
 
         if tt2.startswith("arn:aws:cognito-idp:") and ":userpool/" in tt2:
             fname=tt2.split("/")[-1]
+            if fname == "*":
+                return t1
             t1 = tt1 + " = aws_cognito_user_pool." + fname + ".arn\n"
             common.add_dependancy("aws_cognito_user_pool", fname)
             return t1
@@ -866,7 +870,7 @@ def globals_replace(t1,tt1,tt2):
                 return t1
             tt2=tt2.split('/')[-1]
             if tt2 in context.rolelist and not common.ref_skipped("aws_iam_role", tt2) and not common.is_self_ref("aws_iam_role", tt2):
-                t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+                t1=tt1 + " = aws_iam_role." + common.tfname(tt2) + ".arn\n"
                 common.add_dependancy("aws_iam_role",tt2)
             return t1
 
@@ -1103,9 +1107,10 @@ def deref_role_arn(t1,tt1,tt2):
 
     elif tt2.startswith("arn:aws:events:") and ":rule/" in tt2 and ":rule/aws.partner" not in tt2:
         rn=tt2.split("/")[-1]
-        t1=tt1 + " = aws_cloudwatch_event_rule.default_" + rn + ".arn\n"
-        #### TODO - note assumption it's on default event bus !
-        common.add_dependancy("aws_cloudwatch_event_rule",rn)
+        if rn in context.eventrulelist:
+            t1=tt1 + " = aws_cloudwatch_event_rule.default_" + rn + ".arn\n"
+            #### TODO - note assumption it's on default event bus !
+            common.add_dependancy("aws_cloudwatch_event_rule",rn)
 
     elif ":role/aws-service-role" in tt2:	
         t1=globals_replace(t1,tt1,tt2)
@@ -1113,12 +1118,12 @@ def deref_role_arn(t1,tt1,tt2):
         if tt2.endswith("*"): return t1
         if tt2.startswith("arn:"): tt2=tt2.split('/')[-1]
         if tt2 in context.rolelist:
-            t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+            t1=tt1 + " = aws_iam_role." + common.tfname(tt2) + ".arn\n"
             common.add_dependancy("aws_iam_role",tt2)
             
     # it's not an arn - just a name
     elif ":" not in tt2 and tt2 != "null": # assume it's a role name
-        t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+        t1=tt1 + " = aws_iam_role." + common.tfname(tt2) + ".arn\n"
         common.add_dependancy("aws_iam_role", tt2)
 
     return t1
@@ -1164,14 +1169,14 @@ def deref_role_arn_array(t1,tt1,tt2):
             if ":role/" in tt2:
                 subn=tt2.split(',')[i]
                 subn=subn.strip('/')[-1]
-                subs=subs + "aws_iam_role." + subn + ".arn,"
+                subs=subs + "aws_iam_role." + common.tfname(subn) + ".arn,"
                 common.add_dependancy("aws_iam_role",subn)
 
             
     if cc == 0:
         if ":role/" in tt2:
             tt2=tt2.split('/')[-1]
-            subs=subs + "aws_iam_role." + tt2 + ".arn,"
+            subs=subs + "aws_iam_role." + common.tfname(tt2) + ".arn,"
             common.add_dependancy("aws_iam_role",tt2)
              
     t1=tt1 + " = [" + subs + "]\n"
@@ -1276,7 +1281,7 @@ def generic_deref_arn(t1, tt1, tt2):
                 roln=tt2.split('/')[-1]
                 if not roln.endswith("*"):
                     common.add_dependancy("aws_iam_role", roln)
-                    arnadr="aws_iam_role."+roln+".arn"
+                    arnadr="aws_iam_role."+common.tfname(roln)+".arn"
                     log.debug(arnadr)
                     t1=tt1 + ' = [format("%s*",'+arnadr+')]\n'
                 

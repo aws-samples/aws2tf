@@ -1226,6 +1226,9 @@ def tfplan3():
               if "Error: Conflicting configuration arguments" in line and "aws_security_group_rule." in line:
                  log.warning(
                      "WARNING: Conflicting configuration arguments in aws_security_group_rule")
+              elif "Operation not supported on Multi Dialect Views" in line:
+                 log.warning(
+                     "WARNING: Glue Multi Dialect View detected - skipping (Terraform provider limitation)")
               else:
                   # Extract and display the actual error message
                   try:

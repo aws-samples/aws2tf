@@ -28,9 +28,17 @@ def aws_s3tables_table(t1,tt1,tt2,flag1,flag2):
     #if tt1=="namespace" and tt2 !="null":
     #    t1=tt1+" = aws_s3tables_namespace."+tt2+".id\n"
     if tt1=="table_bucket_arn" and tt2 !="null":
-        barn=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
+        barn=common.tfname(tt2)
         t1=tt1+" = aws_s3tables_table_bucket."+barn+".arn\n"
- 
+
+    # Skip encryption_configuration block - when sse_algorithm is AES256,
+    # kms_key_arn is required by the schema but not applicable.
+    elif tt1 == "encryption_configuration" or context.lbc > 0:
+        if "{" in t1:
+            context.lbc = context.lbc + 1
+        if "}" in t1:
+            context.lbc = context.lbc - 1
+        skip = 1
     
     return skip,t1,flag1,flag2
 
@@ -41,7 +49,7 @@ def aws_s3tables_namespace(t1,tt1,tt2,flag1,flag2):
 
     skip=0
     if tt1=="table_bucket_arn" and tt2 !="null":
-        barn=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
+        barn=common.tfname(tt2)
         t1=tt1+" = aws_s3tables_table_bucket."+barn+".arn\n"
     return skip,t1,flag1,flag2
 
@@ -79,5 +87,21 @@ def aws_s3tables_table_policy(t1, tt1, tt2, flag1, flag2):
     # Add lifecycle block to ignore resource_policy (JSON normalization issues)
     if tt1 == "table_bucket_arn" and tt2 != "null":
         t1 = t1 + "\n lifecycle {\n   ignore_changes = [resource_policy]\n}\n"
+    
+    return skip, t1, flag1, flag2
+
+
+def aws_s3tables_table_bucket(t1, tt1, tt2, flag1, flag2):
+    skip = 0
+    
+    # Skip encryption_configuration block - when sse_algorithm is AES256,
+    # kms_key_arn is required by the schema but not applicable.
+    # Skip the entire block to avoid validation errors.
+    if tt1 == "encryption_configuration" or context.lbc > 0:
+        if "{" in t1:
+            context.lbc = context.lbc + 1
+        if "}" in t1:
+            context.lbc = context.lbc - 1
+        skip = 1
     
     return skip, t1, flag1, flag2

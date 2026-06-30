@@ -32,7 +32,7 @@ def aws_eks_addon(t1,tt1,tt2,flag1,flag2):
     elif tt1 == "service_account_role_arn":
         if ":role/" in tt2:
             tt2=tt2.split("/")[-1]
-            t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+            t1=tt1 + " = aws_iam_role." + common.tfname(tt2) + ".arn\n"
             common.add_dependancy("aws_iam_role",tt2)
 
     return skip,t1,flag1,flag2 
@@ -88,7 +88,7 @@ def aws_eks_fargate_profile(t1,tt1,tt2,flag1,flag2):
     if tt1 == "pod_execution_role_arn":     
         if ":" in tt2: tt2=tt2.split("/")[-1]
         if tt2 in context.rolelist:
-            t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+            t1=tt1 + " = aws_iam_role." + common.tfname(tt2) + ".arn\n"
             common.add_dependancy("aws_iam_role",tt2)
     elif tt1 == "cluster_name":
         t1=tt1 + " = aws_eks_cluster." + tt2 + ".id\n"
@@ -125,7 +125,7 @@ def aws_eks_node_group(t1,tt1,tt2,flag1,flag2):
     elif tt1 == "node_role_arn":
         
         if ":" in tt2: tt2=tt2.split("/")[-1]
-        t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+        t1=tt1 + " = aws_iam_role." + common.tfname(tt2) + ".arn\n"
         common.add_dependancy("aws_iam_role",tt2)
     elif tt1=="id":
         if tt2.startswith("lt-"):

@@ -271,7 +271,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                 if "/" not in tt2: 
                     try:
                         if context.rolelist[tt2]:
-                            rn=tt2.replace(".","_")
+                            rn=common.tfname(tt2)
                             t1=tt1 + " = aws_iam_role." + rn + ".id\n"
                             common.add_dependancy("aws_iam_role",tt2)
                         else:

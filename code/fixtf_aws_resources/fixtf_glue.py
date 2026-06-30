@@ -34,9 +34,9 @@ def aws_glue_crawler(t1,tt1,tt2,flag1,flag2):
 	
 	try:
 		if tt1 == "database_name" and tt2 != "null":
-			if tt2 in str(context.gluedbs):
+			if tt2 in context.gluedbs:
 				t1 = tt1 + " = aws_glue_catalog_database.d-"+context.acc+"__"+tt2+".name\n"
-			#common.add_dependancy("aws_glue_catalog_database",tt2)
+				common.add_dependancy("aws_glue_catalog_database",tt2)
 
 		elif tt1 == "sample_size":
 			if tt2 == "0": skip=1
@@ -57,8 +57,9 @@ def aws_glue_catalog_table(t1,tt1,tt2,flag1,flag2):
 
 	skip=0
 	if tt1 == "database_name" and tt2 != "null":
-		t1 = tt1 + " = aws_glue_catalog_database.d-"+context.acc+"__"+tt2+".name\n"
-		common.add_dependancy("aws_glue_catalog_database",tt2)
+		if tt2 in str(context.gluedbs):
+			t1 = tt1 + " = aws_glue_catalog_database.d-"+context.acc+"__"+tt2+".name\n"
+			common.add_dependancy("aws_glue_catalog_database",tt2)
 	return skip,t1,flag1,flag2
 
 

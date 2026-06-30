@@ -35,11 +35,8 @@ def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
             # role was excluded/skipped - keep the literal role ARN, not a dangling ref
             pass
         else:
-            if "." in tt2:
-                rn=tt2.replace(".","_")
-                t1=tt1 + " = aws_iam_role." + rn + ".arn\n"
-            else:
-                t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+            rn=common.tfname(tt2)
+            t1=tt1 + " = aws_iam_role." + rn + ".arn\n"
             common.add_dependancy("aws_iam_role",tt2)
             pkey="aws_iam_role"+"."+tt2
             #context.rproc[pkey]=True
@@ -47,9 +44,10 @@ def aws_lambda_function(t1,tt1,tt2,flag1,flag2):
     elif tt1 == "log_group":
         #aws_cloudwatch_log_group._aws_lambda_document-generator-handler.name
         lgn=tt2
-        tt2=tt2.replace("/","_")
-        t1=tt1 + " = aws_cloudwatch_log_group." + tt2 + ".name\n"
-        common.add_dependancy("aws_cloudwatch_log_group", lgn)
+        if lgn in context.loggrouplist:
+            tt2=common.tfname(tt2)
+            t1=tt1 + " = aws_cloudwatch_log_group." + tt2 + ".name\n"
+            common.add_dependancy("aws_cloudwatch_log_group", lgn)
 
 
     elif tt1 == "filename":

@@ -196,7 +196,5 @@ noimport = {
     "aws_ec2_allowed_images_settings": True, # import errors
     "aws_elastictranscoder_pipeline": True, # support withdrawn by aws
     "aws_elastictranscoder_preset": True, # support withdrawn by aws
-    "aws_vpc_block_public_access_exclusion": True, # causes import error
-    "aws_organizations_delegated_administrator": True, # import id needs ACCOUNTID/SERVICEPRINCIPAL; generic getter only has the account id
-    "aws_sagemaker_servicecatalog_portfolio_status": True # plan refresh needs sagemaker:GetSagemakerServicecatalogPortfolioStatus (often not granted)
-}
+    "aws_vpc_block_public_access_exclusion": True # causes import error
+} 

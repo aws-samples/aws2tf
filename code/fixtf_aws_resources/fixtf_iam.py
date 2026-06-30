@@ -159,19 +159,6 @@ def aws_iam_role_policy_attachment(t1,tt1,tt2,flag1,flag2):
 
 
 
-def aws_iam_server_certificate(t1,tt1,tt2,flag1,flag2):
-
-
-    skip=0
-    if tt1 == "private_key":
-        # AWS never returns the private key, so it is exported as null. private_key
-        # is a required argument, so emit a placeholder and ignore changes to it -
-        # this lets the imported certificate validate without the real (unrecoverable) key.
-        t1='  private_key       = "IMPORT_PLACEHOLDER_PRIVATE_KEY" # sensitive - not retrievable from AWS\n  lifecycle {\n    ignore_changes = [private_key]\n  }\n'
-    return skip,t1,flag1,flag2
-
-
-
 def aws_iam_user_group_membership(t1,tt1,tt2,flag1,flag2):
 
 

@@ -126,13 +126,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
 
 
 
-        elif tt1 == "subnets" or tt1 == "subnet_ids" or tt1 == "client_subnets":
-            # subnet_ids is required for elasticache subnet groups; keep an empty
-            # list literal rather than dropping the line (deref_array skips []).
-            if tt1 == "subnet_ids" and tt2 == "[]" and type == "aws_elasticache_subnet_group":
-                t1 = tt1 + " = []\n"
-            else:
-                t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
+        elif tt1 == "subnets" or tt1 == "subnet_ids" or tt1 == "client_subnets": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
         elif tt1 == "route_table_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_route_table","rtb-",skip)
         elif tt1 == "iam_roles": t1=fixtf.deref_role_arn_array(t1,tt1,tt2)
         elif tt1 == "secret_arn_list": t1=fixtf.deref_secret_arn_array(t1,tt1,tt2)

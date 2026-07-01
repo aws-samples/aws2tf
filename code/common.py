@@ -1280,6 +1280,26 @@ def tfplan3():
          nchanges = 0
          nallowedchanges = 0
          all_force_destroy_only = True  # Track if all changes are force_destroy only
+
+         # Detect force_destroy-only changes from saved plan (fast - no re-plan needed)
+         force_destroy_only_addrs = set()
+         try:
+            _show = subprocess.run(['terraform', 'show', '-json', 'tfplan'],
+                                   capture_output=True, text=True)
+            _sp = json.loads(_show.stdout)
+            for _rc in _sp.get('resource_changes', []):
+               _ch = _rc.get('change', {})
+               if _ch.get('actions') == ['update']:
+                  _before = _ch.get('before', {}) or {}
+                  _after = _ch.get('after', {}) or {}
+                  # Check if only force_destroy differs
+                  diff_keys = [k for k in set(list(_before.keys()) + list(_after.keys())) 
+                              if _before.get(k) != _after.get(k)]
+                  if diff_keys == ['force_destroy'] or (_before == _after):
+                     force_destroy_only_addrs.add(_rc['address'])
+         except Exception as _e:
+            if context.debug:
+               log.debug("force_destroy detection skipped: %s", _e)
          
          with open('plan2.json') as f:
             for jsonObj in f:
@@ -1292,33 +1312,14 @@ def tfplan3():
                caddr = pe['change']['resource']['addr']
                
                # Check if only force_destroy is changing
-               force_destroy_only = False
-               try:
-                  # Run terraform plan and grep for force_destroy
-                  plan_output = subprocess.run(['terraform', 'plan'], 
-                                             capture_output=True, text=True, check=True)
-                  grep_output = subprocess.run(['grep', 'force_destroy'], 
-                                             input=plan_output.stdout,
-                                             capture_output=True, text=True)
-                  
-                  # Count lines with force_destroy
-                  force_destroy_lines = [line.strip() for line in grep_output.stdout.split('\n') if line.strip()]
-                  
-                  # If we found force_destroy lines and the count matches the number of changes, it's safe
-                  if force_destroy_lines and len(force_destroy_lines) == nchanges:
-                     force_destroy_only = True
-                     log.info("Only force_destroy changes detected (count matches)")
-                  else:
-                     all_force_destroy_only = False
-                     if context.debug:
-                        log.debug("force_destroy lines: %d, nchanges: %d", len(force_destroy_lines), nchanges)
-               except Exception as e:
+               force_destroy_only = caddr in force_destroy_only_addrs
+               if not force_destroy_only:
                   all_force_destroy_only = False
-                  if context.debug:
-                     log.debug("Could not parse terraform plan output: %s", e)
                
                if ctype == "aws_lb_listener" or ctype == "aws_cognito_user_pool_client" \
                   or ctype=="aws_bedrockagent_agent" or ctype=="aws_bedrockagent_agent_action_group" \
+                  or ctype=="aws_ssm_parameter" or ctype=="aws_s3tables_table_bucket" \
+                  or ctype=="aws_s3vectors_vector_bucket" \
                   or force_destroy_only:
                   
                   changeList.append(pe['change']['resource']['addr'])
@@ -1606,15 +1607,49 @@ def wrapup():
       secure_terraform_files('.')
 
    else:
-      log.error("ERROR: unexpected final plan failure")
-      out1=str(rout.stdout.decode().rstrip())
-      log.error(out1)
-      #if "aws_bedrockagent_agent" in out1:
-      #   log.warning("WARNING: aws_bedrockagent_agent - continuing")"
-      log.error(str(rout.stderr.decode().rstrip()))
-      log.info("exit 035")
-      stop_timer()
-      exit()
+      # Check if all changes are from known-drift resource types
+      known_drift_types = {"aws_ssm_parameter", "aws_s3tables_table_bucket", 
+                          "aws_s3vectors_vector_bucket", "aws_lb_listener",
+                          "aws_cognito_user_pool_client", "aws_bedrockagent_agent",
+                          "aws_bedrockagent_agent_action_group", "aws_s3tables_table"}
+      all_known_drift = True
+      for pe in planList:
+         if pe['type'] == "planned_change" and pe['change']['action'] == "update":
+            ctype = pe['change']['resource']['resource_type']
+            if ctype not in known_drift_types:
+               all_known_drift = False
+               break
+      
+      if all_known_drift and zeroc > 0 and zeroa == 0 and zerod == 0:
+         log.warning("WARNING: %s known-drift changes detected (non-consequential) - continuing", zeroc)
+         context.tracking_message="Stage 10 of 10, Passed post import check - known drift only"
+         log.info("Stage 10 of 10, Passed post import check - known drift only")
+         
+         # Move files as normal
+         patterns = ["import__aws_*.tf", "*.out", "*.json"]
+         files_to_move = [f for pattern in patterns for f in glob.glob(pattern)]
+         if files_to_move:
+            for tf in tqdm(files_to_move, desc="Moving files to imported/", unit="file", leave=False):
+               try:
+                     shutil.move(tf, f"imported/{tf}")
+               except (FileNotFoundError, shutil.Error):
+                     pass
+         x = glob.glob("aws_*.tf")        
+         if len(x) > 0:
+            for tf in tqdm(x, desc=f"Moving files", unit="file", leave=False):
+               try:
+                  shutil.copy(tf, f"imported/{tf}")
+               except (FileNotFoundError, shutil.Error):
+                  pass
+         secure_terraform_files('.')
+      else:
+         log.error("ERROR: unexpected final plan failure")
+         out1=str(rout.stdout.decode().rstrip())
+         log.error(out1)
+         log.error(str(rout.stderr.decode().rstrip()))
+         log.info("exit 035")
+         stop_timer()
+         exit()
 
 ######################################################################
 

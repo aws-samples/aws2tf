@@ -60,7 +60,8 @@ def aws_ssm_parameter(t1,tt1,tt2,flag1,flag2):
 			vs=response["Parameter"]["Value"]
 			ml=len(vs.split('\n'))
 			if ml > 1:
-				vs=vs.replace('\n','').replace('${','$${').replace('\t','')
+				vs=vs.replace('\n','').replace('\t','')
+			vs=vs.replace('${','$${')
 			if vs.startswith('{"') or vs.startswith('["') :
 				t1 = tt1 + " = jsonencode("+vs+")\n"
 			else:

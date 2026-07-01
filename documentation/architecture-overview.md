@@ -86,7 +86,7 @@ aws2tf is a Python tool that imports existing AWS infrastructure into Terraform,
 **Purpose:** Parallel discovery of AWS resources across the account
 
 **Key Functions:**
-- `build_lists()` - Main function that discovers 10 core resource types in parallel
+- `build_lists()` - Main function that discovers 13 core resource types in parallel
 - `build_secondary_lists()` - Discovers IAM policy attachments
 
 **Optimizations (2024):**
@@ -104,6 +104,9 @@ aws2tf is a Python tool that imports existing AWS infrastructure into Terraform,
 - Transit Gateways
 - IAM roles, policies, instance profiles
 - Launch templates
+- CloudWatch Log groups
+- Athena databases
+- EventBridge rules
 
 **Performance:**
 - Parallel execution using ThreadPoolExecutor
@@ -264,6 +267,7 @@ aws_<resource> = {
 - `cores` - CPU cores for parallel execution
 - `vpclist`, `subnetlist`, `sglist` - Discovered resources
 - `lambdalist`, `s3list`, `rolelist` - More discovered resources
+- `loggrouplist`, `athenadatabaselist`, `eventrulelist` - Resources for safe de-referencing
 - `rproc` - Processed resources (avoid duplicates)
 - `tracking_message` - Current operation status
 - `esttime` - Estimated time remaining
@@ -423,7 +427,7 @@ aws2tf/
 ## Performance Characteristics
 
 ### Resource Discovery (build_lists.py)
-- **Parallel execution:** 10 resource types discovered simultaneously
+- **Parallel execution:** 13 resource types discovered simultaneously
 - **Estimated improvement:** 25-50% faster than sequential
 - **Bottlenecks:** AWS API rate limits, S3 bucket validation
 

@@ -14,66 +14,25 @@ import io
 from concurrent.futures import ThreadPoolExecutor
 import logging
 from tqdm import tqdm
+import json
 
 sys.path.insert(0, './code')
 
-# ---------------------------------------------------------------------------
-# boto3 client cache.
-# The resource getters call boto3.client() ~435 places, thousands of times
-# across threads. Each client owns a urllib3 connection pool (sockets = file
-# descriptors); creating them per-call leaks FDs faster than GC reclaims them,
-# eventually causing "[Errno 24] Too many open files" and, once sockets are
-# exhausted, DNS NameResolutionError / throttling cascades. boto3 clients are
-# thread-safe and intended to be reused, so cache one per (service, region).
-# ---------------------------------------------------------------------------
-import threading as _threading
-_boto3_client_cache = {}
-_boto3_client_cache_lock = _threading.Lock()
-_orig_boto3_client = boto3.client
-
-def _cached_boto3_client(service_name, *args, **kwargs):
-    # Cache by (service, region). aws2tf passes a uniform Config(retries=...) to
-    # most calls (incl. the generic call_boto3 path), so we must reuse those too -
-    # honor whatever kwargs (config/endpoint/region) the FIRST call used. Only
-    # positional args (not used by aws2tf) bypass the cache.
-    if args:
-        return _orig_boto3_client(service_name, *args, **kwargs)
-    key = (service_name, kwargs.get("region_name"), kwargs.get("endpoint_url"))
-    c = _boto3_client_cache.get(key)
-    if c is None:
-        with _boto3_client_cache_lock:
-            c = _boto3_client_cache.get(key)
-            if c is None:
-                c = _orig_boto3_client(service_name, **kwargs)
-                _boto3_client_cache[key] = c
-    return c
-
 # Configure logging
-class _TqdmLoggingHandler(logging.Handler):
-    """Console log handler that writes via tqdm.write so log lines don't get
-    interleaved with / overwritten by active tqdm progress bars."""
-    def emit(self, record):
-        try:
-            msg = self.format(record)
-            tqdm.write(msg)
-        except Exception:
-            self.handleError(record)
-
-
 def setup_logging(debug=False, log_file='aws2tf.log'):
     """Setup logging configuration for aws2tf with console and file output."""
     level = logging.DEBUG if debug else logging.INFO
-
+    
     # Create formatter - simple format that matches existing output style
     formatter = logging.Formatter('%(message)s')
-
+    
     # Get logger and configure
     logger = logging.getLogger('aws2tf')
     logger.setLevel(level)
     logger.handlers.clear()
-
-    # Console handler (tqdm-aware to avoid clobbering progress bars)
-    console_handler = _TqdmLoggingHandler()
+    
+    # Console handler
+    console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
     
@@ -185,7 +144,7 @@ def dd_threaded(ti):
 def kd_threaded(ti):
     if not context.rdep[ti]:
         i = ti.split(".")[0]
-        id = ti.split(".", 1)[1]
+        id = ti.split(".")[1]
         log.debug("type="+i+" id="+str(id))
         common.call_resource(i, id)
     return
@@ -409,7 +368,6 @@ def parse_and_validate_arguments():
     argParser.add_argument("-la", "--serverless", help="Lambda mode - when running in a Lambda container", action='store_true')
     argParser.add_argument("-tv", "--tv", help="Specify version of Terraform AWS provider default = "+context.tfver)
     argParser.add_argument("-d5", "--debug5", help="debug5 special debug flag", action='store_true')
-    argParser.add_argument("-sn", "--skipname", help="skip any resource containing this string")
 
     try:
         args = argParser.parse_args()
@@ -520,9 +478,6 @@ def setup_environment_and_context(args):
             log.info("exit 005")
             timed_interrupt.stop_timer()
             exit()
-    # add a skip string to skip resources
-    if args.skipname:
-        context.skipname = args.skipname
     
     # Setup data source flags
     if args.validate:
@@ -589,7 +544,7 @@ def check_terraform_version(timed_interrupt):
     if "." not in tvr:
         log.error("Unexpected Terraform version "+str(tvr))
         timed_interrupt.stop_timer()
-        sys.exit(1)
+        os._exit(1)
     
     tv = str(rout.stdout.decode().rstrip()).split("rm v")[-1].split("\n")[0]
     tvmaj = int(tv.split(".")[0])
@@ -598,12 +553,12 @@ def check_terraform_version(timed_interrupt):
     if tvmaj < 1:
         log.error("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
         timed_interrupt.stop_timer()
-        sys.exit(1)
+        os._exit(1)
     
     if tvmaj == 1 and tvmin < 8:
         log.error("Terraform version is too old - please upgrade to v1.9.5 or later "+str(tv))
         timed_interrupt.stop_timer()
-        sys.exit(1)
+        os._exit(1)
     
     return tv
 
@@ -661,11 +616,6 @@ def setup_aws_session(args, region, timed_interrupt):
             boto3.setup_default_session(region_name=region)
         else:
             boto3.setup_default_session(region_name=region, profile_name=context.profile)
-        # Install the client cache now that the default session is configured,
-        # so cached clients pick up the right region/profile/credentials. Reset
-        # the cache in case of re-entry with a different session.
-        _boto3_client_cache.clear()
-        boto3.client = _cached_boto3_client
     except Exception as e:
         log.error("AWS Authorization Error: "+str(e))
 
@@ -747,7 +697,6 @@ def setup_workspace(args, region):
     
     # Initialize terraform
     context.tracking_message = "Stage 1 of 10, Terraform Initialise ..."
-    log.info("Stage 1 of 10, Terraform Initialise ...")
     common.aws_tf(region, args)
     
     # Verify terraform initialized
@@ -824,7 +773,7 @@ def process_resource_types(type, id):
     
     log.info("---<><> "+ str(type)+" Id="+str(id)+" exclude="+str(context.all_extypes))
     context.tracking_message = "Stage 3 of 10 getting resources ..."
-    log.info("Stage 3 of 10 getting resources ...")
+    
     # Handle comma-separated types
     if "," in type:
         process_multiple_types(type, id, timed_interrupt)
@@ -850,11 +799,7 @@ def process_multiple_types(type, id, timed_interrupt):
     all_types = []
     
     for type1 in types:
-        result = resources.resource_types(type1)
-        if result is not None:
-            all_types = all_types + result
-        else:
-            log.warning("Resource type %s not recognized", type1)
+        all_types = all_types + resources.resource_types(type1)
     
     for type2 in all_types:
         if type2 in aws_dict.aws_resources:
@@ -898,7 +843,7 @@ def process_single_type(type, id, timed_interrupt):
     
     # Handle single type
     else:
-        process_single_resource_type(all_types, type, id, timed_interrupt)
+        process_single_resource_type(all_types, type, timed_interrupt)
 
 
 def process_stack_type(id, timed_interrupt):
@@ -938,7 +883,7 @@ def process_multiple_resource_types(all_types, id):
     if context.fast:
         # Multi-threaded processing
         context.tracking_message = "Stage 3 of 10 getting "+str(it)+" resources multi-threaded"
-        log.info(f"Stage 3 of 10, Processing {it} resource types (multi-threaded)...")
+        log.info(f"Processing {it} resource types (multi-threaded)...")
         
         with ThreadPoolExecutor(max_workers=context.cores) as executor:
             futures = [
@@ -969,16 +914,15 @@ def process_multiple_resource_types(all_types, id):
             
             log.debug(str(ic)+" of "+str(it) +"\t"+i)
             context.tracking_message = "Stage 3 of 10, "+ str(ic)+" of "+str(it) +" resource types \t currently getting "+i
-            
             common.call_resource(i, id)
 
 
-def process_single_resource_type(all_types, resource_type, id, timed_interrupt):
+def process_single_resource_type(all_types, resource_type, timed_interrupt):
     """Process a single resource type."""
     if all_types is not None:
         for res_type in all_types:
             if res_type in aws_dict.aws_resources:
-                common.call_resource(res_type, id)  # Pass id parameter
+                common.call_resource(res_type, None)
             else:
                 log.warning("Resource %s not found in aws_dict", res_type)
     else:
@@ -986,19 +930,19 @@ def process_single_resource_type(all_types, resource_type, id, timed_interrupt):
         context.tracking_message = "Stage 3 of 10 no resources found exiting ..."
         log.info("exit 009")
         timed_interrupt.stop_timer()
-        sys.exit(1)
+        exit()
 
 
 def process_known_dependencies():
     """Process known dependencies (Stage 4)."""
     context.tracking_message = "Stage 4 of 10, Known Dependancies"
-    log.info("Stage 4 of 10, Known Dependancies - Multi Threaded")
+    log.info("Known Dependancies - Multi Threaded")
     
     if context.fast:
         context.tracking_message = "Stage 4 of 10, Known Dependancies - Multi Threaded "+str(context.cores)
         with ThreadPoolExecutor(max_workers=context.cores) as executor12:
             futures2 = [
-                executor12.submit(kd_threaded, ti)
+                executor12.submit(kd_threaded(ti))
                 for ti in list(context.rdep)
             ]
     else:
@@ -1010,7 +954,7 @@ def process_known_dependencies():
                 common.call_resource(i, id)
     
     context.tracking_message = "Stage 4 of 10, Known Dependancies: terraform plan"
-    common.tfplan1("Stage 4")
+    common.tfplan1()
     context.tracking_message = "Stage 4 of 10, Known Dependancies: fixing tf files"
     log.info("Stage 4 of 10, Known Dependancies: fixing tf files")
     common.tfplan2()
@@ -1035,7 +979,7 @@ def process_detected_dependencies():
         log.debug("\naws2tf Detected Dependancies started at %s\n" % now)
     
     context.tracking_message = "Stage 5 of 10, Detected Dependancies: starting"
-    log.info("Stage 5 of 10, Detected Dependancies: starting")
+    
     # Check if there are detected dependencies
     detdep = False
     for ti in context.rproc.keys():
@@ -1061,10 +1005,10 @@ def process_detected_dependencies():
             context.tracking_message = "Stage 5 of 10, Detected Dependancies: Multi Threaded "+str(context.cores)
             
             if total_deps > 0:
-                log.info(f"Processing {total_deps} new detected dependencies...")
+                log.info(f"Processing {total_deps} detected dependencies...")
                 with ThreadPoolExecutor(max_workers=context.cores) as executor2:
                     futures = [
-                        executor2.submit(dd_threaded, ti)
+                        executor2.submit(dd_threaded(ti))
                         for ti in unprocessed_deps
                     ]
                     # Show progress as dependencies are processed
@@ -1076,7 +1020,7 @@ def process_detected_dependencies():
                         future.result()
         else:
             if total_deps > 0:
-                log.info(f"Processing {total_deps} new detected dependencies loop "+str(lc+1))
+                log.info(f"Processing {total_deps} detected dependencies...")
                 for ti in tqdm(unprocessed_deps,
                               desc="Processing detected dependencies (st)",
                               unit="resource",
@@ -1089,6 +1033,9 @@ def process_detected_dependencies():
         detdep = False
         lc = lc + 1
         
+        # Run terraform plan and fix
+        if not context.fast:
+            log.info("Terraform Plan - Dependancies Detection Loop "+str(lc)+".....")
         
         context.tracking_message = "Stage 6 of 10, Dependancies Detection: Loop "+str(lc)
         x = glob.glob("import__aws_*.tf")
@@ -1104,7 +1051,7 @@ def process_detected_dependencies():
                     pass  # File already moved or doesn't exist
         
         context.tracking_message = "Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" terraform plan"
-        common.tfplan1("loop "+str(lc))
+        common.tfplan1()
         context.tracking_message = "Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" fixing tf files"
         log.info("Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" fixing tf files")
         common.tfplan2()
@@ -1121,8 +1068,8 @@ def process_detected_dependencies():
         if context.debug and unprocessed:
             log.debug(f"Unprocessed dependencies: {len(unprocessed)}")
         
-        #if not context.fast:
-        #    log.info("----------- Completed "+str(lc)+" dependancy check loops --------------")
+        if not context.fast:
+            log.info("----------- Completed "+str(lc)+" dependancy check loops --------------")
         
         context.tracking_message = "Stage 6 of 10, Completed "+str(lc)+" dependancy check loops"
         
@@ -1161,7 +1108,7 @@ def validate_and_import():
         log.info("\nValidation only - no files written")
         log.info("exit 012")
         timed_interrupt.stop_timer()
-        sys.exit(1)
+        exit()
 
 
 def finalize_and_cleanup(args, starttime):
@@ -1249,8 +1196,14 @@ def main_new():
 
     # Record start time
     starttime = datetime.datetime.now()
+    os.chdir("generated/tf-566972129213-eu-west-2")
+    common.wrapup()
+    exit()
+
+
     log.info("aws2tf "+context.aws2tfver+" started at %s" % starttime)
 
+    
     # Phase 1: Parse and validate arguments
     args = parse_and_validate_arguments()
     
@@ -1286,3 +1239,4 @@ def main_new():
 
 if __name__ == '__main__':
     main_new()
+

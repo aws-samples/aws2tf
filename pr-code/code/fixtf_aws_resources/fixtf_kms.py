@@ -1,42 +1,52 @@
 """
-ATHENA Resource Handlers - Optimized with __getattr__
+KMS Resource Handlers - Optimized with __getattr__
 
-This file contains ONLY ATHENA resources with custom transformation logic.
+This file contains ONLY KMS resources with custom transformation logic.
 All other resources automatically use the default handler via __getattr__.
 
-Original: 1 functions
-Optimized: 1 functions + __getattr__
+Original: 2 functions
+Optimized: 2 functions + __getattr__
 Reduction: 0% less code
 """
 
-import common
-import context
 import logging
+import fixtf
+import sys
+import context
 from .base_handler import BaseResourceHandler
 
 log = logging.getLogger('aws2tf')
 
 
 # ============================================================================
-# ATHENA Resources with Custom Logic (1 functions)
+# KMS Resources with Custom Logic (2 functions)
 # ============================================================================
 
-def aws_athena_named_query(t1,tt1,tt2,flag1,flag2):
+def aws_kms_key(t1,tt1,tt2,flag1,flag2):
 
-
+	if t1.startswith("resource"):
+		context.kmskeyid=True
+	if tt1=="tags":
+		context.kmskeyid=False
 	skip=0
-	if tt1 == "database" and tt2 != "null":
-		if "-" not in tt2 and tt2 in context.athenadatabaselist:
-			t1 = tt1 + " = aws_athena_database." + tt2 + ".name\n"
-			common.add_dependancy("aws_athena_database", tt2)
-		elif "-" in tt2:
-			common.log_warning("WARNING: aws_athena_named_query database name has a dash in it %s",  tt2)
-	elif tt1 == "workgroup" and tt2 != "null":
-		t1 = tt1 + " = aws_athena_workgroup." + tt2 + ".name\n"
-		common.add_dependancy("aws_athena_workgroup", tt2)
-		
+	if tt1 == "policy":
+		t1=fixtf.globals_replace(t1,tt1,tt2)
+	elif tt1=="rotation_period_in_days" and tt2=="0": skip=1
+	return skip,t1,flag1,flag2 
 
-	return skip,t1,flag1,flag2
+
+
+def aws_kms_alias(t1,tt1,tt2,flag1,flag2):
+
+
+    skip=0
+    if tt1 == "policy": t1=fixtf.globals_replace(t1,tt1,tt2)
+    #if tt1 == "target_key_id":    
+    #    t1=tt1 + " = aws_kms_key.k-" + tt2 + ".id\n"
+    #    common.add_dependancy("aws_kms_key","k-"+tt2)
+	
+    return skip,t1,flag1,flag2 
+
 
 
 
@@ -57,11 +67,11 @@ def __getattr__(name):
 	This allows getattr(module, "aws_resource") to work even if the
 	function doesn't exist, by returning the default handler.
 	
-	All simple ATHENA resources (0 resources) automatically use this.
+	All simple KMS resources (0 resources) automatically use this.
 	"""
 	if name.startswith("aws_"):
 		return BaseResourceHandler.default_handler
-	raise AttributeError(f"module 'fixtf_athena' has no attribute '{name}'")
+	raise AttributeError(f"module 'fixtf_kms' has no attribute '{name}'")
 
 
-log.debug(f"ATHENA handlers: 1 custom functions + __getattr__ for 0 simple resources")
+log.debug(f"KMS handlers: 2 custom functions + __getattr__ for 0 simple resources")

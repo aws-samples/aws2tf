@@ -11,6 +11,7 @@ Reduction: 0% less code
 
 import logging
 import common
+import context
 import fixtf
 from .base_handler import BaseResourceHandler
 
@@ -41,11 +42,12 @@ def aws_cloudwatch_log_stream(t1, tt1, tt2, flag1, flag2):
         
 	# Transform log_group_name field to reference the parent log group resource
 	if tt1 == "log_group_name" and tt2 != "null":
-		lgn=tt2.replace("/","_")
-        # Dereference to parent log group resource
-		t1 = tt1 + ' = aws_cloudwatch_log_group.' + lgn + '.name\n'
-		# Add dependency so aws2tf imports the log group automatically
-		common.add_dependancy("aws_cloudwatch_log_group", tt2)
+		if tt2 in context.loggrouplist:
+			lgn=common.tfname(tt2)
+			# Dereference to parent log group resource
+			t1 = tt1 + ' = aws_cloudwatch_log_group.' + lgn + '.name\n'
+			# Add dependency so aws2tf imports the log group automatically
+			common.add_dependancy("aws_cloudwatch_log_group", tt2)
     
 	return skip, t1, flag1, flag2
 

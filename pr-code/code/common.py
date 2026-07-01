@@ -969,6 +969,16 @@ def tfplan1(mymess):
    com = "mv aws_*.tf imported"
    rout = rc(com)
 
+   # Ensure all previously-generated resource configs are present in the working
+   # dir before generate-config-out, otherwise terraform fails the plan with
+   # "Reference to undeclared resource" (e.g. log_stream -> log_group) and never
+   # writes resources.out. Done in Python because rc() runs simple commands
+   # without a shell, so the "cp imported/aws_*.tf ." glob above is a no-op.
+   for src in glob.glob("imported/aws_*.tf"):
+      dst = os.path.basename(src)
+      if not os.path.exists(dst):
+         shutil.copy(src, dst)
+
    com = "terraform plan -generate-config-out=" + \
        rf + " -out tfplan -json > plan1.json"
    if not context.fast: log.info(com)
@@ -1115,6 +1125,16 @@ def tfplan3():
    if context.merge:
       com = "cp imported/aws_*.tf ."
       rout = rc(com)
+   else:
+      # On re-runs, resources generated in a prior pass live only in imported/.
+      # Restore them so referenced targets (log groups, LBs, web ACLs, etc.) are
+      # declared in the module at validate time. Done in Python because rc() runs
+      # without a shell for simple commands, so a "cp imported/aws_*.tf ." glob is
+      # never expanded. Skip files already present to keep freshly-generated ones.
+      for src in glob.glob("imported/aws_*.tf"):
+         dst = os.path.basename(src)
+         if not os.path.exists(dst):
+            shutil.copy(src, dst)
    if not glob.glob("aws_*.tf"):
       log.error("No aws_*.tf files found for this resource, exiting ....")
       log.info("exit 019")
@@ -1226,9 +1246,6 @@ def tfplan3():
               if "Error: Conflicting configuration arguments" in line and "aws_security_group_rule." in line:
                  log.warning(
                      "WARNING: Conflicting configuration arguments in aws_security_group_rule")
-              elif "Operation not supported on Multi Dialect Views" in line:
-                 log.warning(
-                     "WARNING: Glue Multi Dialect View detected - skipping (Terraform provider limitation)")
               else:
                   # Extract and display the actual error message
                   try:
@@ -1281,26 +1298,23 @@ def tfplan3():
          nallowedchanges = 0
          all_force_destroy_only = True  # Track if all changes are force_destroy only
 
-         # Detect force_destroy-only changes from saved plan (fast - no re-plan needed)
-         force_destroy_only_addrs = set()
+         # "Computed-only" updates: the planned change's before == after, so no configured
+         # attribute differs and the update is driven solely by read-only/computed attributes
+         # that show as "(known after apply)" (e.g. aws_nat_gateway.regional_nat_gateway_address
+         # on AWS provider 6.27+). These are non-consequential, not unexpected, changes.
+         computed_only_addrs = set()
          try:
             _show = subprocess.run(['terraform', 'show', '-json', 'tfplan'],
                                    capture_output=True, text=True)
             _sp = json.loads(_show.stdout)
             for _rc in _sp.get('resource_changes', []):
                _ch = _rc.get('change', {})
-               if _ch.get('actions') == ['update']:
-                  _before = _ch.get('before', {}) or {}
-                  _after = _ch.get('after', {}) or {}
-                  # Check if only force_destroy differs
-                  diff_keys = [k for k in set(list(_before.keys()) + list(_after.keys())) 
-                              if _before.get(k) != _after.get(k)]
-                  if diff_keys == ['force_destroy'] or (_before == _after):
-                     force_destroy_only_addrs.add(_rc['address'])
+               if _ch.get('actions') == ['update'] and _ch.get('before') == _ch.get('after'):
+                  computed_only_addrs.add(_rc['address'])
          except Exception as _e:
             if context.debug:
-               log.debug("force_destroy detection skipped: %s", _e)
-         
+               log.debug("computed-only change detection skipped: %s", _e)
+
          with open('plan2.json') as f:
             for jsonObj in f:
                planDict = json.loads(jsonObj)
@@ -1312,14 +1326,34 @@ def tfplan3():
                caddr = pe['change']['resource']['addr']
                
                # Check if only force_destroy is changing
-               force_destroy_only = caddr in force_destroy_only_addrs
-               if not force_destroy_only:
+               force_destroy_only = False
+               try:
+                  # Run terraform plan and grep for force_destroy
+                  plan_output = subprocess.run(['terraform', 'plan'], 
+                                             capture_output=True, text=True, check=True)
+                  grep_output = subprocess.run(['grep', 'force_destroy'], 
+                                             input=plan_output.stdout,
+                                             capture_output=True, text=True)
+                  
+                  # Count lines with force_destroy
+                  force_destroy_lines = [line.strip() for line in grep_output.stdout.split('\n') if line.strip()]
+                  
+                  # If we found force_destroy lines and the count matches the number of changes, it's safe
+                  if force_destroy_lines and len(force_destroy_lines) == nchanges:
+                     force_destroy_only = True
+                     log.info("Only force_destroy changes detected (count matches)")
+                  else:
+                     all_force_destroy_only = False
+                     if context.debug:
+                        log.debug("force_destroy lines: %d, nchanges: %d", len(force_destroy_lines), nchanges)
+               except Exception as e:
                   all_force_destroy_only = False
+                  if context.debug:
+                     log.debug("Could not parse terraform plan output: %s", e)
                
                if ctype == "aws_lb_listener" or ctype == "aws_cognito_user_pool_client" \
                   or ctype=="aws_bedrockagent_agent" or ctype=="aws_bedrockagent_agent_action_group" \
-                  or ctype=="aws_ssm_parameter" or ctype=="aws_s3tables_table_bucket" \
-                  or ctype=="aws_s3vectors_vector_bucket" \
+                  or caddr in computed_only_addrs \
                   or force_destroy_only:
                   
                   changeList.append(pe['change']['resource']['addr'])
@@ -1607,49 +1641,15 @@ def wrapup():
       secure_terraform_files('.')
 
    else:
-      # Check if all changes are from known-drift resource types
-      known_drift_types = {"aws_ssm_parameter", "aws_s3tables_table_bucket", 
-                          "aws_s3vectors_vector_bucket", "aws_lb_listener",
-                          "aws_cognito_user_pool_client", "aws_bedrockagent_agent",
-                          "aws_bedrockagent_agent_action_group", "aws_s3tables_table"}
-      all_known_drift = True
-      for pe in planList:
-         if pe['type'] == "planned_change" and pe['change']['action'] == "update":
-            ctype = pe['change']['resource']['resource_type']
-            if ctype not in known_drift_types:
-               all_known_drift = False
-               break
-      
-      if all_known_drift and zeroc > 0 and zeroa == 0 and zerod == 0:
-         log.warning("WARNING: %s known-drift changes detected (non-consequential) - continuing", zeroc)
-         context.tracking_message="Stage 10 of 10, Passed post import check - known drift only"
-         log.info("Stage 10 of 10, Passed post import check - known drift only")
-         
-         # Move files as normal
-         patterns = ["import__aws_*.tf", "*.out", "*.json"]
-         files_to_move = [f for pattern in patterns for f in glob.glob(pattern)]
-         if files_to_move:
-            for tf in tqdm(files_to_move, desc="Moving files to imported/", unit="file", leave=False):
-               try:
-                     shutil.move(tf, f"imported/{tf}")
-               except (FileNotFoundError, shutil.Error):
-                     pass
-         x = glob.glob("aws_*.tf")        
-         if len(x) > 0:
-            for tf in tqdm(x, desc=f"Moving files", unit="file", leave=False):
-               try:
-                  shutil.copy(tf, f"imported/{tf}")
-               except (FileNotFoundError, shutil.Error):
-                  pass
-         secure_terraform_files('.')
-      else:
-         log.error("ERROR: unexpected final plan failure")
-         out1=str(rout.stdout.decode().rstrip())
-         log.error(out1)
-         log.error(str(rout.stderr.decode().rstrip()))
-         log.info("exit 035")
-         stop_timer()
-         exit()
+      log.error("ERROR: unexpected final plan failure")
+      out1=str(rout.stdout.decode().rstrip())
+      log.error(out1)
+      #if "aws_bedrockagent_agent" in out1:
+      #   log.warning("WARNING: aws_bedrockagent_agent - continuing")"
+      log.error(str(rout.stderr.decode().rstrip()))
+      log.info("exit 035")
+      stop_timer()
+      exit()
 
 ######################################################################
 
@@ -2533,10 +2533,6 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
 
    elif "NoSuch" in exn and clfn=="cloudfront":
       log.warning(str(exc_obj)+" for "+frame+" id="+str(id)+" - returning")
-      return
-
-   elif exn == "TooManyRequestsException" or exn == "ThrottlingException" or exn == "Throttling":
-      log.warning("Throttled: "+frame+" clfn="+clfn+" id="+str(id)+" - returning")
       return
    
    elif "BadRequest" in exn:

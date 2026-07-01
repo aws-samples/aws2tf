@@ -107,6 +107,11 @@ def get_aws_glue_catalog_table(type, id, clfn, descfn, topkey, key, filterid):
             return True
         for j in response[topkey]:
             #Terraform import id = "123456789012:MyDatabase:MyTable"
+                # Skip views - Terraform provider can't handle GetPartitionIndexes on views
+                ttype = j.get('TableType', '')
+                if ttype == 'VIRTUAL_VIEW' or j.get('IsMultiDialectView', False):
+                    if context.debug: log.debug("Skipping view: "+j[key])
+                    continue
                 pkey=catalogn+":"+databasen+":"+j[key]
                 tfid="d-"+pkey.replace(":","__")
                 common.write_import(type,pkey,tfid)

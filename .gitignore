@@ -15,6 +15,7 @@ setup-local-git.sh
 .sh
 to-aws-samples.sh
 *.xlsx
+test*
 *.new
 *.sav
 *.zip
@@ -34,10 +35,7 @@ __pycache__
 .python/data/*.log
 .python/bugs.md
 aws2tf.log
-possible-optimizations.md
-aws3tf.py
-copy-to.sh
+copy-to-kiro.sh
+
 code/.automation/terraform-provider-aws
-code/fixtf_aws_resources/backup*
-code/.automation/test_aws*
-code/.automation/*.py
+**/backup_before_getattr*

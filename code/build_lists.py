@@ -132,6 +132,54 @@ def build_lists():
             log.error("Error fetching subnet data: %s", e)
             return {'resource_type': 'subnet', 'items': [], 'metadata': {}}
 
+    def fetch_log_group_data():
+        try:
+            client = boto3.client('logs', config=BOTO3_RETRY_CONFIG)
+            response = []
+            paginator = client.get_paginator('describe_log_groups')
+            for page in paginator.paginate():
+                response.extend(page['logGroups'])
+            return {
+                'resource_type': 'loggroup',
+                'items': [{'id': j['logGroupName'], 'data': j} for j in response],
+                'metadata': {}
+            }
+        except Exception as e:
+            log.error("Error fetching log group data: %s", e)
+            return {'resource_type': 'loggroup', 'items': [], 'metadata': {}}
+
+    def fetch_athena_database_data():
+        try:
+            client = boto3.client('athena', config=BOTO3_RETRY_CONFIG)
+            response = []
+            paginator = client.get_paginator('list_databases')
+            for page in paginator.paginate(CatalogName='AwsDataCatalog'):
+                response.extend(page['DatabaseList'])
+            return {
+                'resource_type': 'athenadatabase',
+                'items': [{'id': j['Name'], 'data': j} for j in response],
+                'metadata': {}
+            }
+        except Exception as e:
+            log.error("Error fetching athena database data: %s", e)
+            return {'resource_type': 'athenadatabase', 'items': [], 'metadata': {}}
+
+    def fetch_event_rule_data():
+        try:
+            client = boto3.client('events', config=BOTO3_RETRY_CONFIG)
+            response = []
+            paginator = client.get_paginator('list_rules')
+            for page in paginator.paginate():
+                response.extend(page['Rules'])
+            return {
+                'resource_type': 'eventrule',
+                'items': [{'id': j['Name'], 'data': j} for j in response],
+                'metadata': {}
+            }
+        except Exception as e:
+            log.error("Error fetching event rule data: %s", e)
+            return {'resource_type': 'eventrule', 'items': [], 'metadata': {}}
+
     def fetch_tgw_data():
         try:
             client = boto3.client('ec2', config=BOTO3_RETRY_CONFIG)
@@ -240,6 +288,21 @@ def build_lists():
         for item in items:
             context.subnetlist[item['id']] = True
     
+    def _process_loggroup_result(items, metadata):
+        """Process log group fetch results."""
+        for item in items:
+            context.loggrouplist[item['id']] = True
+    
+    def _process_athenadatabase_result(items, metadata):
+        """Process athena database fetch results."""
+        for item in items:
+            context.athenadatabaselist[item['id']] = True
+    
+    def _process_eventrule_result(items, metadata):
+        """Process event rule fetch results."""
+        for item in items:
+            context.eventrulelist[item['id']] = True
+    
     def _process_tgw_result(items, metadata):
         """Process transit gateway fetch results."""
         for item in items:
@@ -326,6 +389,9 @@ def build_lists():
         's3': _process_s3_result,
         'sg': _process_sg_result,
         'subnet': _process_subnet_result,
+        'loggroup': _process_loggroup_result,
+        'athenadatabase': _process_athenadatabase_result,
+        'eventrule': _process_eventrule_result,
         'tgw': _process_tgw_result,
         'iam': _process_iam_result,
         'pol': _process_pol_result,
@@ -340,6 +406,9 @@ def build_lists():
         ('S3 buckets', fetch_s3_data),
         ('Security groups', fetch_sg_data),
         ('Subnets', fetch_subnet_data),
+        ('Log groups', fetch_log_group_data),
+        ('Athena databases', fetch_athena_database_data),
+        ('Event rules', fetch_event_rule_data),
         ('Transit gateways', fetch_tgw_data),
         ('IAM roles', fetch_roles_data),
         ('IAM policies', fetch_policies_data),

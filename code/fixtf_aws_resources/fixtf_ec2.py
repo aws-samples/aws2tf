@@ -298,20 +298,35 @@ def aws_route_table(t1, tt1, tt2, flag1, flag2):
 	if "cidr_block" in tt1:
 		if tt2 == "": t1 = tt1 + " = null\n"
 	elif "nat_gateway_id" in tt1 and tt2.startswith("nat-"):
-		t1 = tt1 + " = aws_nat_gateway." + tt2 + ".id\n"
-		common.add_dependancy("aws_nat_gateway", tt2)
+		if context.natgwlist.get(tt2):
+			t1 = tt1 + " = aws_nat_gateway." + tt2 + ".id\n"
+			common.add_dependancy("aws_nat_gateway", tt2)
+		else:
+			log.warning("WARNING: nat gateway not in natgw list " + tt2 + " Resource may be referencing a nat gateway that no longer exists")
 	elif tt1 == "gateway_id" and tt2.startswith("igw-"):
-		t1 = tt1 + " = aws_internet_gateway." + tt2 + ".id\n"
-		common.add_dependancy("aws_internet_gateway", tt2)
+		if context.igwlist.get(tt2):
+			t1 = tt1 + " = aws_internet_gateway." + tt2 + ".id\n"
+			common.add_dependancy("aws_internet_gateway", tt2)
+		else:
+			log.warning("WARNING: internet gateway not in igw list " + tt2 + " Resource may be referencing an internet gateway that no longer exists")
 	elif tt1 == "vpc_peering_connection_id" and tt2.startswith("pcx-"):
-		t1 = tt1 + " = aws_vpc_peering_connection." + tt2 + ".id\n"
-		common.add_dependancy("aws_vpc_peering_connection", tt2)
+		if context.vpcpeerlist.get(tt2):
+			t1 = tt1 + " = aws_vpc_peering_connection." + tt2 + ".id\n"
+			common.add_dependancy("aws_vpc_peering_connection", tt2)
+		else:
+			log.warning("WARNING: vpc peering connection not in vpcpeer list " + tt2 + " Resource may be referencing a vpc peering connection that no longer exists")
 	elif tt1 == "transit_gateway_id" and tt2.startswith("tgw-"):
-		t1 = tt1 + " = aws_ec2_transit_gateway." + tt2 + ".id\n"
-		common.add_dependancy("aws_ec2_transit_gateway", tt2)
+		if context.tgwlist.get(tt2):
+			t1 = tt1 + " = aws_ec2_transit_gateway." + tt2 + ".id\n"
+			common.add_dependancy("aws_ec2_transit_gateway", tt2)
+		else:
+			log.warning("WARNING: transit gateway not in tgw list " + tt2 + " Resource may be referencing a transit gateway that no longer exists")
 	elif tt1 == "network_interface_id" and tt2.startswith("eni-"):
-		t1 = tt1 + " = aws_network_interface." + tt2 + ".id\n"
-		common.add_dependancy("aws_network_interface", tt2)
+		if context.enilist.get(tt2):
+			t1 = tt1 + " = aws_network_interface." + tt2 + ".id\n"
+			common.add_dependancy("aws_network_interface", tt2)
+		else:
+			log.warning("WARNING: network interface not in eni list " + tt2 + " Resource may be referencing a network interface that no longer exists")
 	return skip, t1, flag1, flag2
 
 
@@ -327,7 +342,10 @@ def aws_route_table_association(t1, tt1, tt2, flag1, flag2):
 		common.add_dependancy("aws_route_table", tt2)
 	elif tt1 == "gateway_id":
 		if tt2.startswith("igw-"):
-			t1 = tt1 + " = aws_internet_gateway." + tt2 + ".id\n"
+			if context.igwlist.get(tt2):
+				t1 = tt1 + " = aws_internet_gateway." + tt2 + ".id\n"
+			else:
+				log.warning("WARNING: internet gateway not in igw list " + tt2 + " Resource may be referencing an internet gateway that no longer exists")
 		if tt2 == "null":
 			skip = 1
 	return skip, t1, flag1, flag2

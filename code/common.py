@@ -822,9 +822,9 @@ AWS_RESOURCE_MODULES = {
 def call_resource(type, id):
    #log.debug("--1-- in call_resources >>>>> "+type+"   "+str(id))
    if type in context.all_extypes:
-      log.debug("Common Excluding: %s %s %s",  type, id) 
-      pkey=type+"."+id
-      context.rproc[pkey] = True
+      log.debug("Common Excluding: %s %s", type, id)
+      if id is not None:
+         context.rproc[type+"."+id] = True
       return
    
    if type in aws_no_import.noimport:
@@ -1946,6 +1946,7 @@ def tfname(theid):
    # resource name. Names containing '.', '@', spaces etc. would otherwise produce
    # references Terraform parses as attribute access (aws_iam_user.first.last.id).
    tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_").replace(" ","_").replace("*","star").replace("\\052","star").replace("@","_").replace("\\64","_")
+   tfid = re.sub(r'[^A-Za-z0-9_-]', '_', tfid)  # any remaining char invalid in a TF label -> _
    if tfid[:1].isdigit(): tfid="r-"+tfid
    tfid = re.sub(r'\.\.', '_', tfid)
    tfid = tfid.replace('/', '_')
@@ -1955,12 +1956,17 @@ def tfname(theid):
 #generally pass 3rd param as None - unless overriding
 def write_import(type,theid,tfid):
    try:
+      if not isinstance(theid, str):
+         log.error("write_import: non-string id for type=%s (%s=%r) - skipping this resource", type, theid.__class__.__name__, theid)
+         return
       ## todo -  if theid starts with a number or is an od (but what if its hexdecimal  ?)
 
       if tfid is None:
             tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_").replace(" ","_").replace("*","star").replace("\\052","star").replace("@","_").replace("\\64","_")
       else:
             tfid=tfid.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_").replace(" ","_").replace("*","star").replace("\\052","star").replace("@","_").replace("\\64","_")
+
+      tfid = re.sub(r'[^A-Za-z0-9_-]', '_', tfid)  # any remaining char invalid in a TF label -> _
 
          #catch tfid starts with number
       if tfid[:1].isdigit(): tfid="r-"+tfid
@@ -2471,6 +2477,12 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    if exn == "EndpointConnectionError":
       log.debug("No endpoint in this region for "+descfn+" - returning")
       return
+   elif exn in ("SSLError", "ConnectionError", "ConnectionClosedError", "ConnectTimeoutError", "ReadTimeoutError"):
+      log.warning("Transient connection error ("+exn+") for "+descfn+" clfn="+clfn+" - skipping this resource type")
+      return
+   elif exn == "UnsupportedCommandException":
+      log.warning(descfn+" not supported in this region for "+clfn+" - returning")
+      return
    elif exn=="ClientError":
       if "does not exist" in str(e):
          log.warning(id+" does not exist " + fname + " " + str(exc_tb.tb_lineno) )
@@ -2488,7 +2500,6 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
       return  
    
    elif exn=="AccessDeniedException":
-      pkey=frame.split("get_")[1]
       log.warning("AccessDeniedException exception for "+fname+" - returning")
       return
 

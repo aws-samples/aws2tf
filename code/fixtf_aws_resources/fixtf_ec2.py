@@ -27,7 +27,16 @@ log = logging.getLogger('aws2tf')
 
 def aws_ebs_volume(t1, tt1, tt2, flag1, flag2):
 	skip = 0
-	if "throughput" in tt1:
+	if tt1 == "iops":
+		# Always skip iops line - will be re-added on type line if needed
+		context.ebs_iops_value = tt2
+		skip = 1
+	elif tt1 == "type":
+		# Re-add iops only for volume types that support it (io1, io2, gp3)
+		if tt2 in ("io1", "io2", "gp3") and hasattr(context, 'ebs_iops_value') and context.ebs_iops_value != "0":
+			t1 = "iops = " + str(context.ebs_iops_value) + "\n" + t1
+		context.ebs_iops_value = None
+	elif "throughput" in tt1:
 		if tt2 == "0": skip = 1
 	elif tt1 == "volume_initialization_rate" and tt2 == "0": skip = 1
 	return skip, t1, flag1, flag2

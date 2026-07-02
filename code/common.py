@@ -1385,6 +1385,7 @@ def tfplan3():
    if not context.merge:
       if zeroi == awsf:
          log.info("PASSED: import count = file counts = %s", str(zeroi))
+         context.stage7_clean = True
       else:
          log.info("INFO: import count "+str(zeroi) +" != file counts "+ str(awsf))
          if context.workaround=="":
@@ -1519,6 +1520,31 @@ def wrapup():
          
    log.info("\nStage 10 of 10, Post Import Plan Check .....")
    context.tracking_message="Stage 10 of 10, Post Import Plan Check ....."
+
+   # Skip post-import plan check if Stage 7 was clean (import count matched
+   # file counts with 0 adds/changes/destroys) - the plan would be redundant.
+   if hasattr(context, 'stage7_clean') and context.stage7_clean:
+      log.info("Stage 10 of 10, Skipping post-import plan check - Stage 7 was clean")
+      context.tracking_message="Stage 10 of 10, Skipped - Stage 7 was clean"
+      
+      # Move files as normal
+      patterns = ["import__aws_*.tf", "*.out", "*.json"]
+      files_to_move = [f for pattern in patterns for f in glob.glob(pattern)]
+      if files_to_move:
+         for tf in tqdm(files_to_move, desc="Moving files to imported/", unit="file", leave=False):
+            try:
+                  shutil.move(tf, f"imported/{tf}")
+            except (FileNotFoundError, shutil.Error):
+                  pass
+      x = glob.glob("aws_*.tf")        
+      if len(x) > 0:
+         for tf in tqdm(x, desc=f"Moving files", unit="file", leave=False):
+            try:
+               shutil.copy(tf, f"imported/{tf}")
+            except (FileNotFoundError, shutil.Error):
+               pass
+      secure_terraform_files('.')
+      return
    com = "terraform plan -no-color -out tfplan -json > final.json"
    # Get reference file size for progress estimation
    plan2_size = os.path.getsize('plan2.json') if os.path.exists('plan2.json') else 0

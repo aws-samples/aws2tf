@@ -40,14 +40,11 @@ def aws_cloudwatch_log_stream(t1, tt1, tt2, flag1, flag2):
 
 	skip = 0
         
-	# Transform log_group_name field to reference the parent log group resource
+	# Keep log_group_name as literal string - dereferencing causes validation
+	# errors in full runs where log group .tf is in imported/ during plan passes.
+	# The log group is still imported via add_dependancy.
 	if tt1 == "log_group_name" and tt2 != "null":
-		if tt2 in context.loggrouplist:
-			lgn=common.tfname(tt2)
-			# Dereference to parent log group resource
-			t1 = tt1 + ' = aws_cloudwatch_log_group.' + lgn + '.name\n'
-			# Add dependency so aws2tf imports the log group automatically
-			common.add_dependancy("aws_cloudwatch_log_group", tt2)
+		common.add_dependancy("aws_cloudwatch_log_group", tt2)
     
 	return skip, t1, flag1, flag2
 

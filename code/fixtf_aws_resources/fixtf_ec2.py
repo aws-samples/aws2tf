@@ -457,6 +457,16 @@ def aws_vpc_endpoint(t1, tt1, tt2, flag1, flag2):
 		elif tt2 == "DUALSTACK":
 			t1 = tt1 + ' = "dualstack"\n'
 			t1 = t1 + "\n lifecycle {\n   ignore_changes = [ip_address_type]\n}\n"
+	elif tt1 == "private_dns_specified_domains" and tt2 == "[]":
+		skip = 1
+	return skip, t1, flag1, flag2
+
+
+def aws_placement_group(t1, tt1, tt2, flag1, flag2):
+	skip = 0
+	# partition_count must be >= 1; AWS returns 0 for non-partition strategies
+	if tt1 == "partition_count" and tt2 == "0":
+		skip = 1
 	return skip, t1, flag1, flag2
 
 

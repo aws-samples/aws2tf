@@ -214,20 +214,35 @@ def get_aws_lambda_function_old(type, id, clfn, descfn, topkey, key, filterid):
 
 def get_lambda_code(fn):
     
-    try:
-        clfn="lambda"
-        lc = boto3.client(clfn) 
-        resp=lc.get_function(FunctionName=fn)
-        if resp['Code']['RepositoryType']=="S3":
-            s3loc=resp['Code']['Location']
-            r=requests.get(s3loc)
-            with open("aws_lambda_function__"+fn+".zip", 'wb') as f:
-                f.write(r.content)
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            clfn="lambda"
+            config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+            lc = boto3.client(clfn, config=config) 
+            resp=lc.get_function(FunctionName=fn)
+            if resp['Code']['RepositoryType']=="S3":
+                s3loc=resp['Code']['Location']
+                r=requests.get(s3loc)
+                with open("aws_lambda_function__"+fn+".zip", 'wb') as f:
+                    f.write(r.content)
+            return True
 
-    except Exception as e:
-        descfn="get_lambda_code"
-        topkey=fn
-        common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+        except (ConnectionError, requests.exceptions.ConnectionError) as e:
+            if attempt < max_retries - 1:
+                import time
+                wait = 2 ** (attempt + 1)
+                log.warning("ConnectionError downloading lambda code for %s - retry %s/%s after %ss", fn, attempt+1, max_retries, wait)
+                time.sleep(wait)
+            else:
+                log.warning("ConnectionError downloading lambda code for %s - giving up after %s retries", fn, max_retries)
+                return True
+
+        except Exception as e:
+            descfn="get_lambda_code"
+            topkey=fn
+            common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)
+            return True
 
     return True
 

@@ -19,6 +19,10 @@ def aws_cloudwatch_metric_alarm(t1, tt1, tt2, flag1, flag2):
     # both is invalid and conflicts with metric_query - drop it
     elif tt1 == "period" and tt2 == "0":
         skip = 1
+    # evaluation_interval = 0 requires evaluation_criteria to also be set;
+    # drop it when 0 since it means "not configured"
+    elif tt1 == "evaluation_interval" and tt2 == "0":
+        skip = 1
     return skip, t1, flag1, flag2
 
 def aws_cloudwatch_composite_alarm(t1, tt1, tt2, flag1, flag2):

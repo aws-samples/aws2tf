@@ -1283,6 +1283,9 @@ def tfplan3():
 
          # Detect force_destroy-only changes from saved plan (fast - no re-plan needed)
          force_destroy_only_addrs = set()
+         # "Computed-only" updates: before == after, update driven solely by read-only/computed
+         # attributes that show as "(known after apply)" (e.g. aws_nat_gateway.regional_nat_gateway_address)
+         computed_only_addrs = set()
          try:
             _show = subprocess.run(['terraform', 'show', '-json', 'tfplan'],
                                    capture_output=True, text=True)
@@ -1292,11 +1295,14 @@ def tfplan3():
                if _ch.get('actions') == ['update']:
                   _before = _ch.get('before', {}) or {}
                   _after = _ch.get('after', {}) or {}
-                  # Check if only force_destroy differs
-                  diff_keys = [k for k in set(list(_before.keys()) + list(_after.keys())) 
-                              if _before.get(k) != _after.get(k)]
-                  if diff_keys == ['force_destroy'] or (_before == _after):
-                     force_destroy_only_addrs.add(_rc['address'])
+                  if _before == _after:
+                     computed_only_addrs.add(_rc['address'])
+                  else:
+                     # Check if only force_destroy differs
+                     diff_keys = [k for k in set(list(_before.keys()) + list(_after.keys())) 
+                                 if _before.get(k) != _after.get(k)]
+                     if diff_keys == ['force_destroy']:
+                        force_destroy_only_addrs.add(_rc['address'])
          except Exception as _e:
             if context.debug:
                log.debug("force_destroy detection skipped: %s", _e)
@@ -1320,6 +1326,7 @@ def tfplan3():
                   or ctype=="aws_bedrockagent_agent" or ctype=="aws_bedrockagent_agent_action_group" \
                   or ctype=="aws_ssm_parameter" or ctype=="aws_s3tables_table_bucket" \
                   or ctype=="aws_s3vectors_vector_bucket" \
+                  or caddr in computed_only_addrs \
                   or force_destroy_only:
                   
                   changeList.append(pe['change']['resource']['addr'])
@@ -2563,6 +2570,12 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
 
    elif exn == "TooManyRequestsException" or exn == "ThrottlingException" or exn == "Throttling":
       log.warning("Throttled: "+frame+" clfn="+clfn+" id="+str(id)+" - returning")
+      return
+
+   elif exn == "ConnectionError" or exn == "ConnectionResetError":
+      log.warning("ConnectionError: "+frame+" clfn="+clfn+" id="+str(id)+" - retrying after backoff")
+      import time
+      time.sleep(2)
       return
    
    elif "BadRequest" in exn:

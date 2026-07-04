@@ -38,4 +38,4 @@ aws2tf.log
 copy-to-kiro.sh
 ISSUE-reverted-prs.md
 code/.automation/terraform*
-
+.hypothesis

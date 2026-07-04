@@ -26,6 +26,7 @@ class Counter():
         self.i+=1
         if not self.done:
             self.t=threading.Timer( self.next_t - time.time(), self._run)
+            self.t.daemon = True  # heartbeat must not block interpreter exit on crash
             self.t.start()
     
     def stop(self):

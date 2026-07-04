@@ -1285,7 +1285,6 @@ def main_new():
 
 
 if __name__ == '__main__':
-    main_new()
     import timed_interrupt  # imported locally elsewhere; bind it here for the finally
     try:
         main_new()
@@ -1294,8 +1293,3 @@ if __name__ == '__main__':
         # sys.exit, or uncaught exception) so the process never hangs the terminal.
         timed_interrupt.stop_timer()
 
-
-
-
-
-    main_new()

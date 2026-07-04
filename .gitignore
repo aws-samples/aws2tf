@@ -36,6 +36,6 @@ __pycache__
 .python/bugs.md
 aws2tf.log
 copy-to-kiro.sh
+ISSUE-reverted-prs.md
+code/.automation/terraform*
 
-code/.automation/terraform-provider-aws
-**/backup_before_getattr*

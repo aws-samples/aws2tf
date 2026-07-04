@@ -822,9 +822,9 @@ AWS_RESOURCE_MODULES = {
 def call_resource(type, id):
    #log.debug("--1-- in call_resources >>>>> "+type+"   "+str(id))
    if type in context.all_extypes:
-      log.debug("Common Excluding: %s %s %s",  type, id) 
-      pkey=type+"."+id
-      context.rproc[pkey] = True
+      log.debug("Common Excluding: %s %s", type, id)
+      if id is not None:
+         context.rproc[type+"."+id] = True
       return
    
    if type in aws_no_import.noimport:
@@ -1283,6 +1283,9 @@ def tfplan3():
 
          # Detect force_destroy-only changes from saved plan (fast - no re-plan needed)
          force_destroy_only_addrs = set()
+         # "Computed-only" updates: before == after, update driven solely by read-only/computed
+         # attributes that show as "(known after apply)" (e.g. aws_nat_gateway.regional_nat_gateway_address)
+         computed_only_addrs = set()
          try:
             _show = subprocess.run(['terraform', 'show', '-json', 'tfplan'],
                                    capture_output=True, text=True)
@@ -1292,11 +1295,14 @@ def tfplan3():
                if _ch.get('actions') == ['update']:
                   _before = _ch.get('before', {}) or {}
                   _after = _ch.get('after', {}) or {}
-                  # Check if only force_destroy differs
-                  diff_keys = [k for k in set(list(_before.keys()) + list(_after.keys())) 
-                              if _before.get(k) != _after.get(k)]
-                  if diff_keys == ['force_destroy'] or (_before == _after):
-                     force_destroy_only_addrs.add(_rc['address'])
+                  if _before == _after:
+                     computed_only_addrs.add(_rc['address'])
+                  else:
+                     # Check if only force_destroy differs
+                     diff_keys = [k for k in set(list(_before.keys()) + list(_after.keys())) 
+                                 if _before.get(k) != _after.get(k)]
+                     if diff_keys == ['force_destroy']:
+                        force_destroy_only_addrs.add(_rc['address'])
          except Exception as _e:
             if context.debug:
                log.debug("force_destroy detection skipped: %s", _e)
@@ -1320,6 +1326,7 @@ def tfplan3():
                   or ctype=="aws_bedrockagent_agent" or ctype=="aws_bedrockagent_agent_action_group" \
                   or ctype=="aws_ssm_parameter" or ctype=="aws_s3tables_table_bucket" \
                   or ctype=="aws_s3vectors_vector_bucket" \
+                  or caddr in computed_only_addrs \
                   or force_destroy_only:
                   
                   changeList.append(pe['change']['resource']['addr'])
@@ -1385,6 +1392,7 @@ def tfplan3():
    if not context.merge:
       if zeroi == awsf:
          log.info("PASSED: import count = file counts = %s", str(zeroi))
+         context.stage7_clean = True
       else:
          log.info("INFO: import count "+str(zeroi) +" != file counts "+ str(awsf))
          if context.workaround=="":
@@ -1519,6 +1527,31 @@ def wrapup():
          
    log.info("\nStage 10 of 10, Post Import Plan Check .....")
    context.tracking_message="Stage 10 of 10, Post Import Plan Check ....."
+
+   # Skip post-import plan check if Stage 7 was clean (import count matched
+   # file counts with 0 adds/changes/destroys) - the plan would be redundant.
+   if hasattr(context, 'stage7_clean') and context.stage7_clean:
+      log.info("Stage 10 of 10, Skipping post-import plan check - Stage 7 was clean")
+      context.tracking_message="Stage 10 of 10, Skipped - Stage 7 was clean"
+      
+      # Move files as normal
+      patterns = ["import__aws_*.tf", "*.out", "*.json"]
+      files_to_move = [f for pattern in patterns for f in glob.glob(pattern)]
+      if files_to_move:
+         for tf in tqdm(files_to_move, desc="Moving files to imported/", unit="file", leave=False):
+            try:
+                  shutil.move(tf, f"imported/{tf}")
+            except (FileNotFoundError, shutil.Error):
+                  pass
+      x = glob.glob("aws_*.tf")        
+      if len(x) > 0:
+         for tf in tqdm(x, desc=f"Moving files", unit="file", leave=False):
+            try:
+               shutil.copy(tf, f"imported/{tf}")
+            except (FileNotFoundError, shutil.Error):
+               pass
+      secure_terraform_files('.')
+      return
    com = "terraform plan -no-color -out tfplan -json > final.json"
    # Get reference file size for progress estimation
    plan2_size = os.path.getsize('plan2.json') if os.path.exists('plan2.json') else 0
@@ -1946,6 +1979,7 @@ def tfname(theid):
    # resource name. Names containing '.', '@', spaces etc. would otherwise produce
    # references Terraform parses as attribute access (aws_iam_user.first.last.id).
    tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_").replace(" ","_").replace("*","star").replace("\\052","star").replace("@","_").replace("\\64","_")
+   tfid = re.sub(r'[^A-Za-z0-9_-]', '_', tfid)  # any remaining char invalid in a TF label -> _
    if tfid[:1].isdigit(): tfid="r-"+tfid
    tfid = re.sub(r'\.\.', '_', tfid)
    tfid = tfid.replace('/', '_')
@@ -1955,12 +1989,17 @@ def tfname(theid):
 #generally pass 3rd param as None - unless overriding
 def write_import(type,theid,tfid):
    try:
+      if not isinstance(theid, str):
+         log.error("write_import: non-string id for type=%s (%s=%r) - skipping this resource", type, theid.__class__.__name__, theid)
+         return
       ## todo -  if theid starts with a number or is an od (but what if its hexdecimal  ?)
 
       if tfid is None:
             tfid=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_").replace(" ","_").replace("*","star").replace("\\052","star").replace("@","_").replace("\\64","_")
       else:
             tfid=tfid.replace("/", "_").replace(".", "_").replace(":", "_").replace("|", "_").replace("$", "_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_").replace(" ","_").replace("*","star").replace("\\052","star").replace("@","_").replace("\\64","_")
+
+      tfid = re.sub(r'[^A-Za-z0-9_-]', '_', tfid)  # any remaining char invalid in a TF label -> _
 
          #catch tfid starts with number
       if tfid[:1].isdigit(): tfid="r-"+tfid
@@ -2471,6 +2510,12 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
    if exn == "EndpointConnectionError":
       log.debug("No endpoint in this region for "+descfn+" - returning")
       return
+   elif exn in ("SSLError", "ConnectionError", "ConnectionClosedError", "ConnectTimeoutError", "ReadTimeoutError"):
+      log.warning("Transient connection error ("+exn+") for "+descfn+" clfn="+clfn+" - skipping this resource type")
+      return
+   elif exn == "UnsupportedCommandException":
+      log.warning(descfn+" not supported in this region for "+clfn+" - returning")
+      return
    elif exn=="ClientError":
       if "does not exist" in str(e):
          log.warning(id+" does not exist " + fname + " " + str(exc_tb.tb_lineno) )
@@ -2488,7 +2533,6 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
       return  
    
    elif exn=="AccessDeniedException":
-      pkey=frame.split("get_")[1]
       log.warning("AccessDeniedException exception for "+fname+" - returning")
       return
 
@@ -2537,6 +2581,12 @@ def handle_error(e,frame,clfn,descfn,topkey,id):
 
    elif exn == "TooManyRequestsException" or exn == "ThrottlingException" or exn == "Throttling":
       log.warning("Throttled: "+frame+" clfn="+clfn+" id="+str(id)+" - returning")
+      return
+
+   elif exn == "ConnectionError" or exn == "ConnectionResetError":
+      log.warning("ConnectionError: "+frame+" clfn="+clfn+" id="+str(id)+" - retrying after backoff")
+      import time
+      time.sleep(2)
       return
    
    elif "BadRequest" in exn:

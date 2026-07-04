@@ -817,6 +817,10 @@ def globals_replace(t1,tt1,tt2):
     ## it is a single arn
     if tt2.startswith("arn:") and "," not in tt2:
         if tt2.startswith("arn:aws:kms:"): 
+            # Only dereference if the key is in the current region
+            arn_region = tt2.split(":")[3]
+            if arn_region and arn_region != context.region:
+                return t1
             tt2=tt2.split("/")[-1]	
             if tt1!="Resource":
                 if aws_common.check_key(tt2):
@@ -835,6 +839,10 @@ def globals_replace(t1,tt1,tt2):
                 return t1
             if tt1=="Resource":
                 return t1
+            # Only dereference if the function is in the current region
+            arn_region = tt2.split(":")[3]
+            if arn_region and arn_region != context.region:
+                return t1
             fname=tt2.split(":")[-1]
             # only build a reference if the function was collected; otherwise
             # (e.g. service-managed lambdas, or a policy Resource) keep the literal ARN
@@ -847,6 +855,10 @@ def globals_replace(t1,tt1,tt2):
             fname=tt2.split("/")[-1]
             if fname == "*":
                 return t1
+            # CloudFront is global but ARN may contain a region - skip if non-empty and doesn't match
+            arn_region = tt2.split(":")[3]
+            if arn_region and arn_region != context.region:
+                return t1
             t1 = tt1 + " = aws_cloudfront_distribution." + fname + ".arn\n"
             common.add_dependancy("aws_cloudfront_distribution", fname)
             return t1
@@ -854,6 +866,10 @@ def globals_replace(t1,tt1,tt2):
         if tt2.startswith("arn:aws:cognito-idp:") and ":userpool/" in tt2:
             fname=tt2.split("/")[-1]
             if fname == "*":
+                return t1
+            # Only dereference if the pool is in the current region
+            arn_region = tt2.split(":")[3]
+            if arn_region != context.region:
                 return t1
             t1 = tt1 + " = aws_cognito_user_pool." + fname + ".arn\n"
             common.add_dependancy("aws_cognito_user_pool", fname)
@@ -1094,10 +1110,18 @@ def deref_role_arn(t1,tt1,tt2):
             return t1
         
     elif tt2.startswith("arn:aws:elasticloadbalancing"):
+        # Only dereference if the LB is in the current region
+        arn_region = tt2.split(":")[3]
+        if arn_region and arn_region != context.region:
+            return t1
         tarn=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_").replace(" ","_").replace("*","star").replace("\\052","star").replace("@","_").replace("\\64","_")
         t1=tt1 + " = aws_lb." + tarn + ".arn\n"
         common.add_dependancy("aws_lb",tt2)
     elif tt2.startswith("arn:aws:wafv2") and ":regional/webacl" in tt2:
+        # Only dereference if the WAF is in the current region
+        arn_region = tt2.split(":")[3]
+        if arn_region and arn_region != context.region:
+            return t1
         tarn=tt2.split("/webacl/")[-1]
         wn=tarn.split("/")[0]
         wi=tarn.split("/")[-1]
@@ -1106,6 +1130,10 @@ def deref_role_arn(t1,tt1,tt2):
 
 
     elif tt2.startswith("arn:aws:events:") and ":rule/" in tt2 and ":rule/aws.partner" not in tt2:
+        # Only dereference if the event rule is in the current region
+        arn_region = tt2.split(":")[3]
+        if arn_region and arn_region != context.region:
+            return t1
         rn=tt2.split("/")[-1]
         if rn in context.eventrulelist:
             t1=tt1 + " = aws_cloudwatch_event_rule.default_" + rn + ".arn\n"

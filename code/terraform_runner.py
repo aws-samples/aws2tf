@@ -9,6 +9,7 @@ import shutil
 import threading
 import sys
 import context
+import manifest
 import logging
 from datetime import datetime
 from tqdm import tqdm
@@ -686,17 +687,30 @@ def tfplan3():
 
       log.debug("Plan complete")
 
+   # Update manifest with Stage 7 plan results
+   manifest.update_resource_counts(
+      plan_to_import=zeroi if zeroi != -1 else 0,
+      plan_to_add=zeroa if zeroa else 0,
+      plan_to_change=zeroc if zeroc else 0,
+      plan_to_destroy=zerod if zerod else 0,
+      aws_tf_files=awsf,
+      import_tf_files=impf,
+   )
+
    if not context.merge:
       if zeroi == awsf:
          log.info("PASSED: import count = file counts = %s", str(zeroi))
          context.stage7_clean = True
+         manifest.stage_complete(7, {"plan_summary": {"to_import": zeroi, "to_add": zeroa, "to_change": zeroc, "to_destroy": zerod}})
       elif zeroi == 0 and zeroa == 0 and zeroc == 0 and zerod == 0:
          # All resources already in state (e.g. --resume after successful import)
          log.info("PASSED: All resources already imported (0 changes in plan) — nothing to do")
          context.stage7_clean = True
+         manifest.stage_complete(7, {"plan_summary": {"to_import": 0, "to_add": 0, "to_change": 0, "to_destroy": 0}, "note": "all_already_in_state"})
       else:
          log.info("INFO: import count "+str(zeroi) +" != file counts "+ str(awsf))
          if context.workaround=="":
+            manifest.stage_failed(7, f"import count {zeroi} != file counts {awsf}")
             log.error("\nLikely import error [2] - do the following and report errors in github issue")
             log.info("cd "+context.path1)
             log.info("terraform plan -generate-config-out=resources.out")
@@ -742,6 +756,7 @@ def tfplan3():
 
 def wrapup():
    log.info("Stage 8 of 10, Final Terraform Validation")
+   manifest.stage_start(8, "Final Terraform Validation")
    context.tracking_message="Stage 8 of 10, Final Terraform Validation"
    com = "terraform validate -no-color"
    rout = rc(com)
@@ -751,11 +766,13 @@ def wrapup():
       log.error(errm)
    if "Success! The configuration is valid" not in str(rout.stdout.decode().rstrip()):
       log.error(str(rout.stdout.decode().rstrip()))
+      manifest.stage_failed(8, "Validation failed")
       log.info("exit 032")
       stop_timer()
       exit()
    else:
       log.info("PASSED: Valid Configuration.")
+      manifest.stage_complete(8)
 
    if context.merge:
       log.info("Pre apply merge check")
@@ -766,6 +783,7 @@ def wrapup():
          exit()
       
    log.info("Stage 9 of 10, Terraform import via apply of tfplan....")
+   manifest.stage_start(9, "Terraform import via apply")
    context.tracking_message="Stage 9 of 10, Terraform import via apply of tfplan...."
    
    rout = run_terraform_apply_with_progress("tfplan")
@@ -808,9 +826,13 @@ def wrapup():
                   pass
          
          secure_terraform_files('.')
+         manifest.stage_complete(9, {"note": "apply_error_but_plan_clean"})
+         manifest.stage_complete(10, {"note": "skipped_post_error_clean"})
          return
 
    log.info("\nStage 10 of 10, Post Import Plan Check .....")
+   manifest.stage_complete(9)
+   manifest.stage_start(10, "Post Import Plan Check")
    context.tracking_message="Stage 10 of 10, Post Import Plan Check ....."
 
    if hasattr(context, 'stage7_clean') and context.stage7_clean:
@@ -833,6 +855,7 @@ def wrapup():
             except (FileNotFoundError, shutil.Error):
                pass
       secure_terraform_files('.')
+      manifest.stage_complete(10, {"note": "skipped_stage7_clean"})
       return
 
    com = "terraform plan -no-color -out tfplan -json > final.json"
@@ -915,6 +938,7 @@ def wrapup():
                pass
       
       secure_terraform_files('.')
+      manifest.stage_complete(10, {"final_plan": {"import": zeroi, "add": zeroa, "change": zeroc, "destroy": zerod}})
 
    else:
       known_drift_types = {"aws_ssm_parameter", "aws_s3tables_table_bucket", 
@@ -950,11 +974,13 @@ def wrapup():
                except (FileNotFoundError, shutil.Error):
                   pass
          secure_terraform_files('.')
+         manifest.stage_complete(10, {"final_plan": {"import": zeroi, "add": zeroa, "change": zeroc, "destroy": zerod}, "note": "known_drift_only"})
       else:
          log.error("ERROR: unexpected final plan failure")
          out1=str(rout.stdout.decode().rstrip())
          log.error(out1)
          log.error(str(rout.stderr.decode().rstrip()))
+         manifest.stage_failed(10, "unexpected final plan failure")
          log.info("exit 035")
          stop_timer()
          exit()

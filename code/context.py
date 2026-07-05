@@ -3,6 +3,33 @@ import logging
 
 log = logging.getLogger('aws2tf')
 
+
+class _State:
+    """
+    Encapsulates mutable application state that needs to be reset between runs/tests.
+    
+    Attributes managed here can be reset cleanly via reset(). Over time, more module-level
+    variables will migrate into this class.
+    """
+    def __init__(self):
+        self.reset()
+
+    def reset(self):
+        """Reset all managed state to initial values."""
+        self.vpclist = {}
+
+
+# Singleton instance — all access goes through this
+_state = _State()
+
+
+def reset():
+    """Reset all managed state. Call between test runs or before a new import."""
+    _state.reset()
+
+
+# --- Module-level variables (not yet migrated to _State) ---
+
 aws2tfver="v6273"
 tfver="6.27.0"
 esttime=120.0
@@ -123,7 +150,7 @@ tested={
     
 }
 
-# List Dicts
+# List Dicts (migrating to _State over time)
 subnets={}
 vpcs={}
 subnetlist={}
@@ -131,7 +158,7 @@ loggrouplist={}
 athenadatabaselist={}
 eventrulelist={}
 sglist={}
-vpclist={}
+# vpclist is now managed by _State — accessed via module __getattr__/__setattr__
 igwlist={}
 natgwlist={}
 vpcpeerlist={}
@@ -152,10 +179,40 @@ def exit_aws2tf(mess):
     if mess is not None or mess!="":
         log.error(mess)
 
-    if context.fast:
+    if fast:
         sys.exit(1) 
     else:
         sys.exit(1)
+
+
+# --- Module-level attribute routing for migrated state ---
+# This makes `context.vpclist` transparently delegate to `_state.vpclist`
+
+def __getattr__(name):
+    if name == 'vpclist':
+        return _state.vpclist
+    raise AttributeError(f"module 'context' has no attribute {name!r}")
+
+
+# To intercept `context.vpclist = {...}` we need the module to be its own class.
+# Python 3.7+ supports module __getattr__ but NOT module __setattr__.
+# So we use the sys.modules trick to make the module instance support setattr.
+
+class _ModuleProxy(sys.modules[__name__].__class__):
+    """Allow attribute assignment to route to _state for managed attributes."""
+    def __setattr__(self, name, value):
+        if name == 'vpclist':
+            _state.vpclist = value
+        else:
+            super().__setattr__(name, value)
+
+    def __getattr__(self, name):
+        if name == 'vpclist':
+            return _state.vpclist
+        raise AttributeError(f"module 'context' has no attribute {name!r}")
+
+
+sys.modules[__name__].__class__ = _ModuleProxy
     
 
 

@@ -300,23 +300,11 @@ def get_aws_security_group_rule(type, id, clfn, descfn, topkey, key, filterid):
             except KeyError:
                 pass
 
-            #if "icmp" in protocol:
-            #    print(str(j))
-
 
             if "icmp" not in protocol:
                 if protocol=="-1": protocol="all"
                 if fromport=="-1": fromport="0"
                 if toport=="-1": toport="0"
-
-
-            #if ing=="ingress" and sgid=="sg-0b70930caea1aac99": 
-            #    print("************1************")
-            #    print(sgid+ing+protocol+fromport+toport)
-            #    print("************2************")
-            #    print(cidr4+cidr6+prefixlistid)
-            #    print("************3************")
-            #    print(refgrp_sgid+refgrp_peerst+refgrp_userid+refgrp_vpcid+refgrp_peerid)
 
 
             impstring=sgid+"_"+ing

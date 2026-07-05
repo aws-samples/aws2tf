@@ -101,6 +101,7 @@ log = setup_logging()
 import common
 import resources
 import context
+import manifest
 # Note: timed_interrupt imported later after validation to avoid orphaned threads
 
 import stacks
@@ -410,6 +411,7 @@ def parse_and_validate_arguments():
     argParser.add_argument("-tv", "--tv", help="Specify version of Terraform AWS provider default = "+context.tfver)
     argParser.add_argument("-d5", "--debug5", help="debug5 special debug flag", action='store_true')
     argParser.add_argument("-sn", "--skipname", help="skip any resource containing this string")
+    argParser.add_argument("--resume", help="resume from Stage 7 (validation/import) in existing workspace", action='store_true')
 
     try:
         args = argParser.parse_args()
@@ -1230,6 +1232,7 @@ def finalize_and_cleanup(args, starttime):
     
     # Final summary
     context.tracking_message = "aws2tf, Completed"
+    manifest.complete(success=True)
     now = datetime.datetime.now()
     log.info("aws2tf started at  %s" % starttime)
     log.info("aws2tf execution time h:mm:ss :"+ str(now - starttime))
@@ -1254,31 +1257,153 @@ def main_new():
     # Phase 1: Parse and validate arguments
     args = parse_and_validate_arguments()
     
+    # --resume: skip straight to Stage 7 (validate/import) in existing workspace
+    if args.resume:
+        _resume_from_stage7(args, starttime)
+        return
+    
     # Phase 2: Setup environment and context
     region, type, id = setup_environment_and_context(args)
     
     # Phase 3: Setup workspace and initialize terraform
     setup_workspace(args, region)
     
+    # Initialize manifest after workspace is ready
+    manifest.init(context.path1, context.acc, region, args)
+    manifest.stage_start(1, "Terraform Initialise")
+    manifest.stage_complete(1)
+    
     # Phase 4: Handle merge mode if enabled
     handle_merge_mode(args)
     
     # Phase 5: Build core resource lists
+    manifest.stage_start(2, "Building core resource lists")
     build_resource_lists_phase()
+    manifest.stage_complete(2, {
+        "vpcs": len(context.vpclist),
+        "subnets": len(context.subnetlist),
+        "security_groups": len(context.sglist),
+        "s3_buckets": len(context.s3list),
+        "lambda_functions": len(context.lambdalist),
+        "iam_roles": len(context.rolelist),
+    })
     
     # Phase 6: Process requested resource types
+    manifest.stage_start(3, "Getting resources")
     process_resource_types(type, id)
+    import_files = glob.glob("import__*.tf")
+    aws_files = glob.glob("aws_*__*.tf")
+    manifest.stage_complete(3, {
+        "resource_type": type,
+        "resource_id": id,
+        "import_files": len(import_files),
+        "aws_files": len(aws_files),
+    })
+    manifest.update_resource_counts(
+        import_files=len(import_files),
+        aws_files=len(aws_files),
+    )
     
     # Phase 7: Process known dependencies
+    manifest.stage_start(4, "Known dependencies")
     process_known_dependencies()
+    manifest.stage_complete(4)
     
     # Phase 8: Process detected dependencies (iterative)
+    manifest.stage_start(5, "Detected dependencies")
     process_detected_dependencies()
+    # Count files after dependency resolution
+    import_files = glob.glob("import__*.tf") + glob.glob("imported/import__*.tf")
+    aws_files = glob.glob("aws_*__*.tf") + glob.glob("imported/aws_*__*.tf")
+    manifest.stage_complete(5, {
+        "total_import_files": len(import_files),
+        "total_aws_files": len(aws_files),
+    })
+    manifest.update_resource_counts(
+        import_files_after_deps=len(import_files),
+        aws_files_after_deps=len(aws_files),
+    )
     
     # Phase 9: Validate and import
+    manifest.stage_start(7, "Penultimate Terraform Plan")
     validate_and_import()
     
     # Phase 10: Finalize and cleanup
+    finalize_and_cleanup(args, starttime)
+    
+    exit(0)
+
+
+def _resume_from_stage7(args, starttime):
+    """
+    Resume from Stage 7 (terraform validation and import) in an existing workspace.
+    
+    Finds the most recent generated/tf-* directory and runs tfplan3() + wrapup().
+    Useful after transient failures (network errors, DNS timeouts) in Stage 7+.
+    """
+    import timed_interrupt
+    
+    # Setup minimal context from args
+    if args.debug:
+        context.debug = True
+    if args.fast:
+        context.fast = True
+    if args.accept:
+        context.expected = True
+    if args.warn:
+        context.warnings = True
+    
+    # Find the workspace directory
+    tf_dirs = sorted(glob.glob("generated/tf-*"), key=os.path.getmtime, reverse=True)
+    if not tf_dirs:
+        log.error("No generated/tf-* workspace found. Nothing to resume.")
+        exit(1)
+    
+    workspace = tf_dirs[0]
+    log.info("Resuming in workspace: %s", workspace)
+    
+    # Extract account and region from directory name (format: tf-<account>-<region>)
+    parts = os.path.basename(workspace).replace("tf-", "").rsplit("-", 2)
+    if len(parts) >= 3:
+        context.acc = parts[0]
+        context.region = parts[1] + "-" + parts[2]
+    
+    context.path1 = workspace
+    context.cwd = os.getcwd()
+    os.chdir(workspace)
+    
+    # Load existing manifest — required for resume
+    existing_manifest = manifest.load(workspace)
+    if not existing_manifest:
+        log.error("No aws2tf.json manifest found in %s — cannot resume.", workspace)
+        log.error("The manifest is created during a normal aws2tf run. Re-run without --resume.")
+        timed_interrupt.stop_timer()
+        exit(1)
+    
+    last_stage = manifest.get_last_completed_stage()
+    log.info("Manifest found: last completed stage %d", last_stage)
+    
+    # Verify terraform is initialized
+    if not os.path.isdir(".terraform"):
+        log.error("No .terraform directory found in %s — workspace not initialized", workspace)
+        timed_interrupt.stop_timer()
+        exit(1)
+    
+    # Verify we have import files to work with
+    import_files = glob.glob("import__*.tf")
+    aws_files = glob.glob("aws_*__*.tf")
+    if not import_files and not aws_files:
+        log.error("No import__*.tf or aws_*.tf files found — nothing to resume")
+        timed_interrupt.stop_timer()
+        exit(1)
+    
+    log.info("Found %d import files, %d aws files — resuming Stage 7", len(import_files), len(aws_files))
+    
+    # Run Stage 7+ (validate, plan, apply)
+    manifest.stage_start(7, "Penultimate Terraform Plan (resume)")
+    validate_and_import()
+    
+    # Finalize
     finalize_and_cleanup(args, starttime)
     
     exit(0)

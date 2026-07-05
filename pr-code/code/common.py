@@ -2132,7 +2132,6 @@ def getresource(type,id,clfn,descfn,topkey,key,filterid):
                   if "." not in filterid:
                      try:
                         if id == str(item[filterid]):
-                           #if context.debug: print("-gr31 item-"+str(item))
                            theid=item[key]
                            #special_deps(type,theid)
                            write_import(type,theid,None)
@@ -2282,8 +2281,6 @@ def call_boto3(type,clfn,descfn,topkey,key,id):
                   response.extend(page[topkey]) 
                pkey=type+"."+id
                context.rproc[pkey]=True
-               #if response != []:
-               #   print(str(response))
                
 
             elif descfn == "describe_launch_templates":

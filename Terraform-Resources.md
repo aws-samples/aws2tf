@@ -537,6 +537,7 @@
 * aws_neptune_parameter_group
 * aws_neptune_subnet_group
 * aws_network_acl
+* aws_network_interface
 * aws_networkfirewall_firewall
 * aws_networkfirewall_firewall_policy
 * aws_networkfirewall_rule_group
@@ -556,7 +557,6 @@
 * aws_opensearchserverless_security_policy
 * aws_opensearchserverless_vpc_endpoint
 * aws_organizations_account
-* aws_organizations_delegated_administrator
 * aws_organizations_organization
 * aws_organizations_organizational_unit
 * aws_organizations_policy
@@ -709,7 +709,6 @@
 * aws_sagemaker_notebook_instance_lifecycle_configuration
 * aws_sagemaker_pipeline
 * aws_sagemaker_project
-* aws_sagemaker_servicecatalog_portfolio_status
 * aws_sagemaker_space
 * aws_sagemaker_studio_lifecycle_config
 * aws_sagemaker_user_profile

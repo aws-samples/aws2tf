@@ -241,36 +241,53 @@ aws_<resource> = {
 - Looked up by `common.py` to route resource processing
 - Provides all information needed to discover and import resources
 
-### 7. Common Utilities (`code/common.py`)
+### 7. Common Utilities (`code/common.py` — Facade)
 
-**Purpose:** Shared utilities used throughout the codebase
+**Purpose:** Backward-compatible facade that re-exports functions from focused sub-modules
 
-**Key Functions:**
-- `write_import()` - Write Terraform import statements
-- `add_dependancy()` - Track resource dependencies
-- `rc()` - Execute shell commands
-- `wrapup()` - Final terraform plan and validation
-- `secure_terraform_files()` - Set secure file permissions
-- `trivy_check()` - Run security scanning
+Since December 2024, `common.py` is a slim ~100-line file that re-exports everything from the decomposed modules below. All existing code using `import common; common.write_import(...)` continues working unchanged.
 
-**Module Registry:**
+**Sub-modules:**
+
+| Module | Responsibility |
+|--------|---------------|
+| `file_ops.py` | `safe_filename()`, `safe_write_file()`, `secure_terraform_files()` |
+| `terraform_runner.py` | `tfplan1()`, `tfplan2()`, `tfplan3()`, `wrapup()`, progress bars |
+| `cmd_runner.py` | `rc()`, `splitf()`, `fix_imports()`, `aws_tf()`, `log_warning()` |
+| `import_writer.py` | `write_import()`, `do_data()`, `tfname()`, `ref_skipped()` |
+| `resource_processor.py` | `call_resource()`, `getresource()`, `call_boto3()` |
+| `dependency.py` | `add_dependancy()`, `add_known_dependancy()` |
+| `error_handler.py` | `handle_error()`, `handle_error2()` |
+| `s3_state.py` | S3 bucket state backup/restore |
+| `credentials.py` | `detect_aws_credentials()`, `trivy_check()` |
+| `module_registry.py` | `AWS_RESOURCE_MODULES` dict, service imports |
+
+**Module Registry (in `module_registry.py`):**
 - Maps service names to get function modules
 - Maps service names to handler modules
-- Enables dynamic loading of handlers
+- Enables dynamic loading of handlers without `eval()`
 
 ### 8. Context Management (`code/context.py`)
 
 **Purpose:** Global state management across the application
 
-**Key Attributes:**
-- `region` - AWS region
-- `cores` - CPU cores for parallel execution
-- `vpclist`, `subnetlist`, `sglist` - Discovered resources
-- `lambdalist`, `s3list`, `rolelist` - More discovered resources
-- `loggrouplist`, `athenadatabaselist`, `eventrulelist` - Resources for safe de-referencing
-- `rproc` - Processed resources (avoid duplicates)
-- `tracking_message` - Current operation status
-- `esttime` - Estimated time remaining
+**Architecture:**
+- A `_State` class encapsulates all mutable run-time state (80 attributes)
+- A module-level `_ModuleProxy` transparently routes `context.vpclist` etc. to the `_State` instance
+- `context.reset()` clears all transient state cleanly (used between test runs)
+- Configuration variables (set from CLI) remain as module-level attributes and are NOT reset
+
+**Managed State (reset by `context.reset()`):**
+- Resource dicts: `vpclist`, `subnetlist`, `sglist`, `lambdalist`, `s3list`, `rolelist`, etc. (26 dicts)
+- Accumulator lists: `processed`, `dependancies`, `all_extypes`, `badlist`, `roles`, etc. (14 lists)
+- Cached API responses: `aws_subnet_resp`, `aws_vpc_resp`, etc. (6 lists)
+- Transient flags: `lbc`, `rbc`, `plan2`, `expected`, `serverless`, etc. (20 flags)
+- Transient strings: `api_id`, `apigwrestapiid`, `current_tf`, `meshname`, etc. (20 strings)
+
+**Configuration (NOT reset — set from CLI args):**
+- `region`, `acc`, `profile`, `debug`, `fast`, `merge`, `validate`
+- `dnet`, `dkms`, `dkey`, `dsgs`, `cores`, `tfver`, `aws2tfver`
+- `ec2tag`, `ec2tagk`, `ec2tagv`, `skipname`, `credtype`, `ssoinstance`
 
 **Thread Safety:**
 - Dictionary updates are GIL-protected
@@ -404,21 +421,34 @@ aws2tf/
 ├── code/
 │   ├── build_lists.py          # Parallel resource discovery
 │   ├── resources.py            # Type code mapping
-│   ├── common.py               # Shared utilities
-│   ├── context.py              # Global state
+│   ├── common.py               # Facade (re-exports from sub-modules)
+│   ├── context.py              # Global state (_State class + config)
 │   ├── stacks.py               # CloudFormation stack handling
 │   ├── fixtf.py                # File transformation
+│   │
+│   │── # Decomposed from common.py:
+│   ├── file_ops.py             # File security and permissions
+│   ├── terraform_runner.py     # Terraform CLI execution and progress
+│   ├── cmd_runner.py           # Shell execution, splitf, utilities
+│   ├── import_writer.py        # Import/data block generation
+│   ├── resource_processor.py   # Core boto3 dispatch and resource discovery
+│   ├── dependency.py           # Dependency tracking
+│   ├── error_handler.py        # Error classification and handling
+│   ├── s3_state.py             # S3 bucket state backup/restore
+│   ├── credentials.py          # AWS credential detection, trivy
+│   ├── module_registry.py      # Service module imports + registry dict
+│   │
 │   ├── get_aws_resources/      # AWS API calls (discovery)
 │   │   ├── aws_ec2.py
 │   │   ├── aws_lambda.py
-│   │   └── ... (one per service)
+│   │   └── ... (106 service files)
 │   └── fixtf_aws_resources/    # Terraform transformations
 │       ├── base_handler.py     # Common utilities
 │       ├── aws_dict.py         # Resource registry
 │       ├── fixtf_ec2.py
 │       ├── fixtf_lambda.py
-│       └── ... (one per service)
-├── tests/                       # Comprehensive test suite
+│       └── ... (244 service files)
+├── tests/                       # Comprehensive test suite (267 tests)
 ├── documentation/               # Project documentation
 └── generated/                   # Output directory (created at runtime)
     └── tf-<account>-<region>/  # Terraform files
@@ -505,7 +535,7 @@ def aws_new_resource(t1, tt1, tt2, flag1, flag2):
     return skip, t1, flag1, flag2
 ```
 
-4. **Register modules** in `common.py` if new service
+4. **Register modules** in `module_registry.py` if new service
 
 ### Testing New Resources
 See `code/.automation/new-resource-testing.md` for comprehensive testing procedure.

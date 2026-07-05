@@ -116,7 +116,7 @@ def reset():
 # --- Module-level variables (not yet migrated to _State) ---
 
 aws2tfver="v6273"
-tfver="6.27.0"
+tfver="6.53.0"
 esttime=120.0
 profile="default"
 sso=False

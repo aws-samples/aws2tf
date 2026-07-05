@@ -6,6 +6,18 @@ so that existing code using `import common` or `from common import X` continues
 to work unchanged.
 """
 
+# Standard library re-exports (some callers use common.boto3, common.os, etc.)
+import boto3
+import os
+import sys
+import json
+import re
+import glob
+import shutil
+import inspect
+import subprocess
+import botocore
+
 # Re-export file operations
 from file_ops import (
     safe_filename,

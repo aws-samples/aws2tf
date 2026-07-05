@@ -364,7 +364,7 @@ def tfplan3():
    for fil in x:
       tf=fil.split('.tfproto',1)[0]
       com = "mv "+fil +" "+ tf+".tf"
-      log.info(com)
+      log.debug(com)
       rout = rc(com)
 
    context.tracking_message="Validate and Test Plan  ..."
@@ -444,7 +444,71 @@ def tfplan3():
           rf + " -out tfplan -json > plan2.json"
       if not context.fast: log.info(com)
       
-      rout = run_terraform_plan_with_progress(com, "Terraform plan (validation)", record_time=True)
+      # Patterns that indicate transient network errors (worth retrying)
+      _TRANSIENT_ERROR_PATTERNS = (
+          "no such host",
+          "dial tcp",
+          "connection reset",
+          "connection refused",
+          "TLS handshake timeout",
+          "request send failed",
+          "i/o timeout",
+      )
+      
+      def _run_plan2():
+          return run_terraform_plan_with_progress(com, "Terraform plan (validation)", record_time=True)
+      
+      def _check_plan2_for_errors():
+          """Check plan2.json for errors. Returns (has_fatal_error, has_transient_error)."""
+          has_fatal = False
+          has_transient = False
+          with open('plan2.json', 'r') as f:
+             for line in f.readlines():
+                if '@level":"error"' in line:
+                  if "Error: Conflicting configuration arguments" in line and "aws_security_group_rule." in line:
+                     log.warning(
+                         "WARNING: Conflicting configuration arguments in aws_security_group_rule")
+                  elif "Operation not supported on Multi Dialect Views" in line:
+                     log.warning(
+                         "WARNING: Glue Multi Dialect View detected - skipping (Terraform provider limitation)")
+                  else:
+                      # Check if this is a transient network error
+                      is_transient = any(p in line.lower() for p in _TRANSIENT_ERROR_PATTERNS)
+                      if is_transient:
+                          has_transient = True
+                      else:
+                          has_fatal = True
+                      
+                      try:
+                          error_obj = json.loads(line)
+                          error_message = error_obj.get('@message', 'Unknown error')
+                          error_detail = error_obj.get('diagnostic', {}).get('detail', '')
+                          
+                          log.error("=" * 80)
+                          log.error("TERRAFORM PLAN ERROR DETECTED:")
+                          log.error("-" * 80)
+                          log.error("Error Message: %s", error_message)
+                          if error_detail:
+                              log.error("Error Detail: %s", error_detail)
+                          log.error("=" * 80)
+                          
+                          print("\n" + "=" * 80)
+                          print("TERRAFORM PLAN ERROR DETECTED:")
+                          print("-" * 80)
+                          print(f"Error Message: {error_message}")
+                          if error_detail:
+                              print(f"Error Detail: {error_detail}")
+                          print("=" * 80 + "\n")
+                          
+                      except json.JSONDecodeError:
+                          if context.debug is True:
+                             log.debug("Error parsing JSON: " + line)
+                          log.error("Error line (raw): %s", line.strip())
+                          print(f"\nError line (raw): {line.strip()}\n")
+          
+          return has_fatal, has_transient
+      
+      rout = _run_plan2()
       
       zerod = False
       zeroc = False
@@ -466,47 +530,47 @@ def tfplan3():
 
       log.info("Plan: %s to import, %s to add, %s to change, %s to destroy", zeroi, zeroa, zeroc, zerod)
 
-      with open('plan2.json', 'r') as f:
-         for line in f.readlines():
-            if '@level":"error"' in line:
-              if "Error: Conflicting configuration arguments" in line and "aws_security_group_rule." in line:
-                 log.warning(
-                     "WARNING: Conflicting configuration arguments in aws_security_group_rule")
-              elif "Operation not supported on Multi Dialect Views" in line:
-                 log.warning(
-                     "WARNING: Glue Multi Dialect View detected - skipping (Terraform provider limitation)")
-              else:
-                  try:
-                      error_obj = json.loads(line)
-                      error_message = error_obj.get('@message', 'Unknown error')
-                      error_detail = error_obj.get('diagnostic', {}).get('detail', '')
-                      
-                      log.error("=" * 80)
-                      log.error("TERRAFORM PLAN ERROR DETECTED:")
-                      log.error("-" * 80)
-                      log.error("Error Message: %s", error_message)
-                      if error_detail:
-                          log.error("Error Detail: %s", error_detail)
-                      log.error("=" * 80)
-                      
-                      print("\n" + "=" * 80)
-                      print("TERRAFORM PLAN ERROR DETECTED:")
-                      print("-" * 80)
-                      print(f"Error Message: {error_message}")
-                      if error_detail:
-                          print(f"Error Detail: {error_detail}")
-                      print("=" * 80 + "\n")
-                      
-                  except json.JSONDecodeError:
-                      if context.debug is True:
-                         log.debug("Error parsing JSON: " + line)
-                      log.error("Error line (raw): %s", line.strip())
-                      print(f"\nError line (raw): {line.strip()}\n")
-
-                  log.error("-->> Plan 2 errors exiting - check plan2.json - or run terraform plan")
-                  log.info("exit 021 %s", str(context.aws2tfver))
-                  stop_timer()
-                  exit()
+      has_fatal, has_transient = _check_plan2_for_errors()
+      
+      if has_transient and not has_fatal:
+          # Transient network error — retry once after a short delay
+          log.warning("Transient network error detected — retrying plan in 10 seconds...")
+          time.sleep(10)
+          
+          com2 = "rm -f resources.out tfplan"
+          rc(com2)
+          
+          rout = _run_plan2()
+          
+          # Re-parse plan2.json
+          planList = []
+          with open('plan2.json') as f:
+             for jsonObj in f:
+                planDict = json.loads(jsonObj)
+                planList.append(planDict)
+          for pe in planList:
+             if pe['type'] == "change_summary":  
+                zeroi=pe['changes']['import']
+                zeroa=pe['changes']['add']
+                zeroc=pe['changes']['change']
+                zerod=pe['changes']['remove']
+          
+          log.info("Retry Plan: %s to import, %s to add, %s to change, %s to destroy", zeroi, zeroa, zeroc, zerod)
+          
+          has_fatal, has_transient = _check_plan2_for_errors()
+          if has_fatal or has_transient:
+              log.error("-->> Plan 2 errors persist after retry - check plan2.json - or run terraform plan")
+              log.info("exit 021 %s", str(context.aws2tfver))
+              stop_timer()
+              exit()
+          else:
+              log.info("Retry succeeded - transient error resolved")
+      
+      elif has_fatal:
+          log.error("-->> Plan 2 errors exiting - check plan2.json - or run terraform plan")
+          log.info("exit 021 %s", str(context.aws2tfver))
+          stop_timer()
+          exit()
 
       if zerod != 0:
          log.error("-->> plan will destroy resources! - unexpected, is there existing state ?")
@@ -625,6 +689,10 @@ def tfplan3():
    if not context.merge:
       if zeroi == awsf:
          log.info("PASSED: import count = file counts = %s", str(zeroi))
+         context.stage7_clean = True
+      elif zeroi == 0 and zeroa == 0 and zeroc == 0 and zerod == 0:
+         # All resources already in state (e.g. --resume after successful import)
+         log.info("PASSED: All resources already imported (0 changes in plan) — nothing to do")
          context.stage7_clean = True
       else:
          log.info("INFO: import count "+str(zeroi) +" != file counts "+ str(awsf))

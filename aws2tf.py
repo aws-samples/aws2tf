@@ -410,6 +410,7 @@ def parse_and_validate_arguments():
     argParser.add_argument("-tv", "--tv", help="Specify version of Terraform AWS provider default = "+context.tfver)
     argParser.add_argument("-d5", "--debug5", help="debug5 special debug flag", action='store_true')
     argParser.add_argument("-sn", "--skipname", help="skip any resource containing this string")
+    argParser.add_argument("--resume", help="resume from Stage 7 (validation/import) in existing workspace", action='store_true')
 
     try:
         args = argParser.parse_args()
@@ -1254,6 +1255,11 @@ def main_new():
     # Phase 1: Parse and validate arguments
     args = parse_and_validate_arguments()
     
+    # --resume: skip straight to Stage 7 (validate/import) in existing workspace
+    if args.resume:
+        _resume_from_stage7(args, starttime)
+        return
+    
     # Phase 2: Setup environment and context
     region, type, id = setup_environment_and_context(args)
     
@@ -1279,6 +1285,69 @@ def main_new():
     validate_and_import()
     
     # Phase 10: Finalize and cleanup
+    finalize_and_cleanup(args, starttime)
+    
+    exit(0)
+
+
+def _resume_from_stage7(args, starttime):
+    """
+    Resume from Stage 7 (terraform validation and import) in an existing workspace.
+    
+    Finds the most recent generated/tf-* directory and runs tfplan3() + wrapup().
+    Useful after transient failures (network errors, DNS timeouts) in Stage 7+.
+    """
+    import timed_interrupt
+    
+    # Setup minimal context from args
+    if args.debug:
+        context.debug = True
+    if args.fast:
+        context.fast = True
+    if args.accept:
+        context.expected = True
+    if args.warn:
+        context.warnings = True
+    
+    # Find the workspace directory
+    tf_dirs = sorted(glob.glob("generated/tf-*"), key=os.path.getmtime, reverse=True)
+    if not tf_dirs:
+        log.error("No generated/tf-* workspace found. Nothing to resume.")
+        exit(1)
+    
+    workspace = tf_dirs[0]
+    log.info("Resuming in workspace: %s", workspace)
+    
+    # Extract account and region from directory name (format: tf-<account>-<region>)
+    parts = os.path.basename(workspace).replace("tf-", "").rsplit("-", 2)
+    if len(parts) >= 3:
+        context.acc = parts[0]
+        context.region = parts[1] + "-" + parts[2]
+    
+    context.path1 = workspace
+    context.cwd = os.getcwd()
+    os.chdir(workspace)
+    
+    # Verify terraform is initialized
+    if not os.path.isdir(".terraform"):
+        log.error("No .terraform directory found in %s — workspace not initialized", workspace)
+        timed_interrupt.stop_timer()
+        exit(1)
+    
+    # Verify we have import files to work with
+    import_files = glob.glob("import__*.tf")
+    aws_files = glob.glob("aws_*__*.tf")
+    if not import_files and not aws_files:
+        log.error("No import__*.tf or aws_*.tf files found — nothing to resume")
+        timed_interrupt.stop_timer()
+        exit(1)
+    
+    log.info("Found %d import files, %d aws files — resuming Stage 7", len(import_files), len(aws_files))
+    
+    # Run Stage 7+ (validate, plan, apply)
+    validate_and_import()
+    
+    # Finalize
     finalize_and_cleanup(args, starttime)
     
     exit(0)

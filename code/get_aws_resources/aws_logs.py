@@ -69,6 +69,9 @@ def get_aws_cloudwatch_log_stream(type, id, clfn, descfn, topkey, key, filterid)
                 pkey=type+"."+id
                 context.rproc[pkey]=True
                 return True
+            # Import the parent log group as a known dependency so it's
+            # imported in the same pass (before the handler dereferences it)
+            common.add_known_dependancy("aws_cloudwatch_log_group", id)
             for j in response[topkey]:
                 sn = j[key]
                 lgn=id

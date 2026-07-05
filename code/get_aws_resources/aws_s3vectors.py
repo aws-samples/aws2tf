@@ -119,7 +119,7 @@ def get_aws_s3vectors_vector_bucket_policy(type, id, clfn, descfn, topkey, key, 
                     policy_response = client.get_vector_bucket_policy(vectorBucketArn=bucket_arn)
                     # Policy exists for this bucket
                     common.write_import(type, bucket_arn, None)
-                except client.exceptions.NoSuchVectorBucketPolicy:
+                except client.exceptions.NotFoundException:
                     # No policy for this bucket, skip it
                     if context.debug: log.debug(f"No policy for bucket {bucket_arn}")
                     continue

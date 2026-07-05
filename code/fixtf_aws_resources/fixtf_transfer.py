@@ -10,9 +10,23 @@ Reduction: 0% less code
 """
 
 import logging
+import context
 from .base_handler import BaseResourceHandler
 
 log = logging.getLogger('aws2tf')
+
+
+def aws_transfer_server(t1, tt1, tt2, flag1, flag2):
+	skip = 0
+	# vpc_endpoint_id is only valid for the (deprecated) VPC_ENDPOINT endpoint
+	# type; for the VPC endpoint type it conflicts with address_allocation_ids.
+	# endpoint_type appears before endpoint_details, so remember it.
+	if tt1 == "endpoint_type":
+		context.transfer_endpoint_type = tt2
+	elif tt1 == "vpc_endpoint_id":
+		if getattr(context, "transfer_endpoint_type", "") != "VPC_ENDPOINT":
+			skip = 1
+	return skip, t1, flag1, flag2
 
 
 # ============================================================================

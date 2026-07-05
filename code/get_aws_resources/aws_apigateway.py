@@ -358,8 +358,8 @@ def get_aws_api_gateway_resource(type, id, clfn, descfn, topkey, key, filterid):
         response = []
         config = Config(
             retries = {
-                'max_attempts': 10,
-                'mode': 'standard'
+                'max_attempts': 20,
+                'mode': 'adaptive'
             }
 )
         client = boto3.client(clfn,config=config)

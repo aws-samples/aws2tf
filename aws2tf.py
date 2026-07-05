@@ -17,21 +17,63 @@ from tqdm import tqdm
 
 sys.path.insert(0, './code')
 
+# ---------------------------------------------------------------------------
+# boto3 client cache.
+# The resource getters call boto3.client() ~435 places, thousands of times
+# across threads. Each client owns a urllib3 connection pool (sockets = file
+# descriptors); creating them per-call leaks FDs faster than GC reclaims them,
+# eventually causing "[Errno 24] Too many open files" and, once sockets are
+# exhausted, DNS NameResolutionError / throttling cascades. boto3 clients are
+# thread-safe and intended to be reused, so cache one per (service, region).
+# ---------------------------------------------------------------------------
+import threading as _threading
+_boto3_client_cache = {}
+_boto3_client_cache_lock = _threading.Lock()
+_orig_boto3_client = boto3.client
+
+def _cached_boto3_client(service_name, *args, **kwargs):
+    # Cache by (service, region). aws2tf passes a uniform Config(retries=...) to
+    # most calls (incl. the generic call_boto3 path), so we must reuse those too -
+    # honor whatever kwargs (config/endpoint/region) the FIRST call used. Only
+    # positional args (not used by aws2tf) bypass the cache.
+    if args:
+        return _orig_boto3_client(service_name, *args, **kwargs)
+    key = (service_name, kwargs.get("region_name"), kwargs.get("endpoint_url"))
+    c = _boto3_client_cache.get(key)
+    if c is None:
+        with _boto3_client_cache_lock:
+            c = _boto3_client_cache.get(key)
+            if c is None:
+                c = _orig_boto3_client(service_name, **kwargs)
+                _boto3_client_cache[key] = c
+    return c
+
 # Configure logging
+class _TqdmLoggingHandler(logging.Handler):
+    """Console log handler that writes via tqdm.write so log lines don't get
+    interleaved with / overwritten by active tqdm progress bars."""
+    def emit(self, record):
+        try:
+            msg = self.format(record)
+            tqdm.write(msg)
+        except Exception:
+            self.handleError(record)
+
+
 def setup_logging(debug=False, log_file='aws2tf.log'):
     """Setup logging configuration for aws2tf with console and file output."""
     level = logging.DEBUG if debug else logging.INFO
-    
+
     # Create formatter - simple format that matches existing output style
     formatter = logging.Formatter('%(message)s')
-    
+
     # Get logger and configure
     logger = logging.getLogger('aws2tf')
     logger.setLevel(level)
     logger.handlers.clear()
-    
-    # Console handler
-    console_handler = logging.StreamHandler(sys.stdout)
+
+    # Console handler (tqdm-aware to avoid clobbering progress bars)
+    console_handler = _TqdmLoggingHandler()
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
     
@@ -59,6 +101,7 @@ log = setup_logging()
 import common
 import resources
 import context
+import manifest
 # Note: timed_interrupt imported later after validation to avoid orphaned threads
 
 import stacks
@@ -143,7 +186,7 @@ def dd_threaded(ti):
 def kd_threaded(ti):
     if not context.rdep[ti]:
         i = ti.split(".")[0]
-        id = ti.split(".")[1]
+        id = ti.split(".", 1)[1]
         log.debug("type="+i+" id="+str(id))
         common.call_resource(i, id)
     return
@@ -367,6 +410,8 @@ def parse_and_validate_arguments():
     argParser.add_argument("-la", "--serverless", help="Lambda mode - when running in a Lambda container", action='store_true')
     argParser.add_argument("-tv", "--tv", help="Specify version of Terraform AWS provider default = "+context.tfver)
     argParser.add_argument("-d5", "--debug5", help="debug5 special debug flag", action='store_true')
+    argParser.add_argument("-sn", "--skipname", help="skip any resource containing this string")
+    argParser.add_argument("--resume", help="resume from Stage 7 (validation/import) in existing workspace", action='store_true')
 
     try:
         args = argParser.parse_args()
@@ -477,6 +522,9 @@ def setup_environment_and_context(args):
             log.info("exit 005")
             timed_interrupt.stop_timer()
             exit()
+    # add a skip string to skip resources
+    if args.skipname:
+        context.skipname = args.skipname
     
     # Setup data source flags
     if args.validate:
@@ -615,6 +663,11 @@ def setup_aws_session(args, region, timed_interrupt):
             boto3.setup_default_session(region_name=region)
         else:
             boto3.setup_default_session(region_name=region, profile_name=context.profile)
+        # Install the client cache now that the default session is configured,
+        # so cached clients pick up the right region/profile/credentials. Reset
+        # the cache in case of re-entry with a different session.
+        _boto3_client_cache.clear()
+        boto3.client = _cached_boto3_client
     except Exception as e:
         log.error("AWS Authorization Error: "+str(e))
 
@@ -947,7 +1000,7 @@ def process_known_dependencies():
         context.tracking_message = "Stage 4 of 10, Known Dependancies - Multi Threaded "+str(context.cores)
         with ThreadPoolExecutor(max_workers=context.cores) as executor12:
             futures2 = [
-                executor12.submit(kd_threaded(ti))
+                executor12.submit(kd_threaded, ti)
                 for ti in list(context.rdep)
             ]
     else:
@@ -1013,7 +1066,7 @@ def process_detected_dependencies():
                 log.info(f"Processing {total_deps} new detected dependencies...")
                 with ThreadPoolExecutor(max_workers=context.cores) as executor2:
                     futures = [
-                        executor2.submit(dd_threaded(ti))
+                        executor2.submit(dd_threaded, ti)
                         for ti in unprocessed_deps
                     ]
                     # Show progress as dependencies are processed
@@ -1179,6 +1232,7 @@ def finalize_and_cleanup(args, starttime):
     
     # Final summary
     context.tracking_message = "aws2tf, Completed"
+    manifest.complete(success=True)
     now = datetime.datetime.now()
     log.info("aws2tf started at  %s" % starttime)
     log.info("aws2tf execution time h:mm:ss :"+ str(now - starttime))
@@ -1203,28 +1257,75 @@ def main_new():
     # Phase 1: Parse and validate arguments
     args = parse_and_validate_arguments()
     
+    # --resume: skip straight to Stage 7 (validate/import) in existing workspace
+    if args.resume:
+        _resume_from_stage7(args, starttime)
+        return
+    
     # Phase 2: Setup environment and context
     region, type, id = setup_environment_and_context(args)
     
     # Phase 3: Setup workspace and initialize terraform
     setup_workspace(args, region)
     
+    # Initialize manifest after workspace is ready
+    manifest.init(context.path1, context.acc, region, args)
+    manifest.stage_start(1, "Terraform Initialise")
+    manifest.stage_complete(1)
+    
     # Phase 4: Handle merge mode if enabled
     handle_merge_mode(args)
     
     # Phase 5: Build core resource lists
+    manifest.stage_start(2, "Building core resource lists")
     build_resource_lists_phase()
+    manifest.stage_complete(2, {
+        "vpcs": len(context.vpclist),
+        "subnets": len(context.subnetlist),
+        "security_groups": len(context.sglist),
+        "s3_buckets": len(context.s3list),
+        "lambda_functions": len(context.lambdalist),
+        "iam_roles": len(context.rolelist),
+    })
     
     # Phase 6: Process requested resource types
+    manifest.stage_start(3, "Getting resources")
     process_resource_types(type, id)
+    import_files = glob.glob("import__*.tf")
+    aws_files = glob.glob("aws_*__*.tf")
+    manifest.stage_complete(3, {
+        "resource_type": type,
+        "resource_id": id,
+        "import_files": len(import_files),
+        "aws_files": len(aws_files),
+    })
+    manifest.update_resource_counts(
+        import_files=len(import_files),
+        aws_files=len(aws_files),
+    )
     
     # Phase 7: Process known dependencies
+    manifest.stage_start(4, "Known dependencies")
     process_known_dependencies()
+    manifest.stage_complete(4)
     
     # Phase 8: Process detected dependencies (iterative)
+    manifest.stage_start(5, "Detected dependencies")
     process_detected_dependencies()
+    # Count files after dependency resolution
+    import_files = glob.glob("import__*.tf") + glob.glob("imported/import__*.tf")
+    aws_files = glob.glob("aws_*__*.tf") + glob.glob("imported/aws_*__*.tf")
+    manifest.stage_complete(5, {
+        "total_import_files": len(import_files),
+        "total_aws_files": len(aws_files),
+    })
+    manifest.update_resource_counts(
+        import_files_after_deps=len(import_files),
+        aws_files_after_deps=len(aws_files),
+    )
     
     # Phase 9: Validate and import
+    manifest.stage_start(7, "Penultimate Terraform Plan")
     validate_and_import()
     
     # Phase 10: Finalize and cleanup
@@ -1233,6 +1334,87 @@ def main_new():
     exit(0)
 
 
+def _resume_from_stage7(args, starttime):
+    """
+    Resume from Stage 7 (terraform validation and import) in an existing workspace.
+    
+    Finds the most recent generated/tf-* directory and runs tfplan3() + wrapup().
+    Useful after transient failures (network errors, DNS timeouts) in Stage 7+.
+    """
+    import timed_interrupt
+    
+    # Setup minimal context from args
+    if args.debug:
+        context.debug = True
+    if args.fast:
+        context.fast = True
+    if args.accept:
+        context.expected = True
+    if args.warn:
+        context.warnings = True
+    
+    # Find the workspace directory
+    tf_dirs = sorted(glob.glob("generated/tf-*"), key=os.path.getmtime, reverse=True)
+    if not tf_dirs:
+        log.error("No generated/tf-* workspace found. Nothing to resume.")
+        exit(1)
+    
+    workspace = tf_dirs[0]
+    log.info("Resuming in workspace: %s", workspace)
+    
+    # Extract account and region from directory name (format: tf-<account>-<region>)
+    parts = os.path.basename(workspace).replace("tf-", "").rsplit("-", 2)
+    if len(parts) >= 3:
+        context.acc = parts[0]
+        context.region = parts[1] + "-" + parts[2]
+    
+    context.path1 = workspace
+    context.cwd = os.getcwd()
+    os.chdir(workspace)
+    
+    # Load existing manifest — required for resume
+    existing_manifest = manifest.load(workspace)
+    if not existing_manifest:
+        log.error("No aws2tf.json manifest found in %s — cannot resume.", workspace)
+        log.error("The manifest is created during a normal aws2tf run. Re-run without --resume.")
+        timed_interrupt.stop_timer()
+        exit(1)
+    
+    last_stage = manifest.get_last_completed_stage()
+    log.info("Manifest found: last completed stage %d", last_stage)
+    
+    # Verify terraform is initialized
+    if not os.path.isdir(".terraform"):
+        log.error("No .terraform directory found in %s — workspace not initialized", workspace)
+        timed_interrupt.stop_timer()
+        exit(1)
+    
+    # Verify we have import files to work with
+    import_files = glob.glob("import__*.tf")
+    aws_files = glob.glob("aws_*__*.tf")
+    if not import_files and not aws_files:
+        log.error("No import__*.tf or aws_*.tf files found — nothing to resume")
+        timed_interrupt.stop_timer()
+        exit(1)
+    
+    log.info("Found %d import files, %d aws files — resuming Stage 7", len(import_files), len(aws_files))
+    
+    # Run Stage 7+ (validate, plan, apply)
+    manifest.stage_start(7, "Penultimate Terraform Plan (resume)")
+    validate_and_import()
+    
+    # Finalize
+    finalize_and_cleanup(args, starttime)
+    
+    exit(0)
+
+
 if __name__ == '__main__':
-    main_new()
+    import timed_interrupt  # imported locally elsewhere; bind it here for the finally
+    try:
+        main_new()
+    finally:
+        # Ensure the heartbeat timer is stopped on every exit path (normal exit,
+        # sys.exit, or uncaught exception) so the process never hangs the terminal.
+        timed_interrupt.stop_timer()
 

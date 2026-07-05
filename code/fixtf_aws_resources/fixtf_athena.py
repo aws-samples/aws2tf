@@ -26,10 +26,10 @@ def aws_athena_named_query(t1,tt1,tt2,flag1,flag2):
 
 	skip=0
 	if tt1 == "database" and tt2 != "null":
-		if "-" not in tt2:
+		if "-" not in tt2 and tt2 in context.athenadatabaselist:
 			t1 = tt1 + " = aws_athena_database." + tt2 + ".name\n"
 			common.add_dependancy("aws_athena_database", tt2)
-		else:
+		elif "-" in tt2:
 			common.log_warning("WARNING: aws_athena_named_query database name has a dash in it %s",  tt2)
 	elif tt1 == "workgroup" and tt2 != "null":
 		t1 = tt1 + " = aws_athena_workgroup." + tt2 + ".name\n"

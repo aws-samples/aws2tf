@@ -126,7 +126,13 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
 
 
 
-        elif tt1 == "subnets" or tt1 == "subnet_ids" or tt1 == "client_subnets": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
+        elif tt1 == "subnets" or tt1 == "subnet_ids" or tt1 == "client_subnets":
+            # subnet_ids is required for elasticache subnet groups; keep an empty
+            # list literal rather than dropping the line (deref_array skips []).
+            if tt1 == "subnet_ids" and tt2 == "[]" and type == "aws_elasticache_subnet_group":
+                t1 = tt1 + " = []\n"
+            else:
+                t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_subnet","subnet-",skip)
         elif tt1 == "route_table_ids": t1,skip = fixtf.deref_array(t1,tt1,tt2,"aws_route_table","rtb-",skip)
         elif tt1 == "iam_roles": t1=fixtf.deref_role_arn_array(t1,tt1,tt2)
         elif tt1 == "secret_arn_list": t1=fixtf.deref_secret_arn_array(t1,tt1,tt2)
@@ -186,7 +192,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
             if tt2 != "null":     
                 if "arn:" in tt2: 
                     tt2=tt2.split("/")[-1]
-                    if check_key(tt2):	
+                    if check_key(tt2) and not common.ref_skipped("aws_kms_key", tt2):	
                         if not context.dkms:
                             t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
                             common.add_dependancy("aws_kms_key",tt2)
@@ -213,7 +219,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                         if "arn:" in tt2:   
                             tt2=tt2.split("/")[-1]	
                             skip=0
-                            if check_key(tt2):
+                            if check_key(tt2) and not common.ref_skipped("aws_kms_key", tt2):
                                 if not context.dkms:
                                     t1=tt1 + " = aws_kms_key.k-" + tt2 + ".arn\n"
                                     common.add_dependancy("aws_kms_key",tt2) 
@@ -224,7 +230,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                         else:
                             tt2=tt2.split("/")[-1]
                             skip=0
-                            if check_key(tt2):
+                            if check_key(tt2) and not common.ref_skipped("aws_kms_key", tt2):
                                 if not context.dkms:
                                     t1=tt1 + " = aws_kms_key.k-" + tt2 + ".id\n"
                                     common.add_dependancy("aws_kms_key", tt2)
@@ -265,7 +271,7 @@ def aws_common(type,t1,tt1,tt2,flag1,flag2):
                 if "/" not in tt2: 
                     try:
                         if context.rolelist[tt2]:
-                            rn=tt2.replace(".","_")
+                            rn=common.tfname(tt2)
                             t1=tt1 + " = aws_iam_role." + rn + ".id\n"
                             common.add_dependancy("aws_iam_role",tt2)
                         else:

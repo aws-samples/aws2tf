@@ -91,10 +91,11 @@ def aws_ecs_task_definition(t1,tt1,tt2,flag1,flag2):
 	skip=0
 	
 	if tt1=="awslogs-group" and tt2 !="null":
-		# fixup cw log name
-		lgn=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_")
-		t1=tt1 + " = aws_cloudwatch_log_group." + lgn + ".id\n"
-		common.add_dependancy("aws_cloudwatch_log_group", tt2) 
+		# fixup cw log name - only deref if log group exists
+		if tt2 in context.loggrouplist:
+			lgn=common.tfname(tt2)
+			t1=tt1 + " = aws_cloudwatch_log_group." + lgn + ".id\n"
+			common.add_dependancy("aws_cloudwatch_log_group", tt2)
 	return skip,t1,flag1,flag2
 
 

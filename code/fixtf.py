@@ -439,7 +439,10 @@ FIXTF_MODULES = {
 
 
 def fixtf(ttft,tf):
-  
+    # record the resource currently being generated so is_self_ref() can detect
+    # a deref target that is this same resource (illegal self-reference).
+    context.current_tf=tf
+
     rf=tf+".out"
     tf2=tf+".tf"
 
@@ -814,6 +817,10 @@ def globals_replace(t1,tt1,tt2):
     ## it is a single arn
     if tt2.startswith("arn:") and "," not in tt2:
         if tt2.startswith("arn:aws:kms:"): 
+            # Only dereference if the key is in the current region
+            arn_region = tt2.split(":")[3]
+            if arn_region and arn_region != context.region:
+                return t1
             tt2=tt2.split("/")[-1]	
             if tt1!="Resource":
                 if aws_common.check_key(tt2):
@@ -828,29 +835,58 @@ def globals_replace(t1,tt1,tt2):
             return t1
         
         if tt2.startswith("arn:aws:lambda") and "function:" in tt2:
+            if tt2.endswith("*"):
+                return t1
+            if tt1=="Resource":
+                return t1
+            # Only dereference if the function is in the current region
+            arn_region = tt2.split(":")[3]
+            if arn_region and arn_region != context.region:
+                return t1
             fname=tt2.split(":")[-1]
-            t1 = tt1 + " = aws_lambda_function." + fname + ".arn\n"
-            common.add_dependancy("aws_lambda_function", fname)
+            # only build a reference if the function was collected; otherwise
+            # (e.g. service-managed lambdas, or a policy Resource) keep the literal ARN
+            if fname in context.lambdalist and not common.ref_skipped("aws_lambda_function", fname) and not common.is_self_ref("aws_lambda_function", fname):
+                t1 = tt1 + " = aws_lambda_function." + fname + ".arn\n"
+                common.add_dependancy("aws_lambda_function", fname)
             return t1
 
         if tt2.startswith("arn:aws:cloudfront:") and ":distribution/" in tt2:
             fname=tt2.split("/")[-1]
+            if fname == "*":
+                return t1
+            # CloudFront is global but ARN may contain a region - skip if non-empty and doesn't match
+            arn_region = tt2.split(":")[3]
+            if arn_region and arn_region != context.region:
+                return t1
             t1 = tt1 + " = aws_cloudfront_distribution." + fname + ".arn\n"
             common.add_dependancy("aws_cloudfront_distribution", fname)
             return t1
 
         if tt2.startswith("arn:aws:cognito-idp:") and ":userpool/" in tt2:
             fname=tt2.split("/")[-1]
+            if fname == "*":
+                return t1
+            # Only dereference if the pool is in the current region
+            arn_region = tt2.split(":")[3]
+            if arn_region != context.region:
+                return t1
             t1 = tt1 + " = aws_cognito_user_pool." + fname + ".arn\n"
             common.add_dependancy("aws_cognito_user_pool", fname)
             return t1
 
         if tt2.startswith("arn:aws:iam") and ":role/" in tt2:
-            if tt2.endswith("*"): 
+            if tt2.endswith("*"):
+                return t1
+            # account-portable ARN (wildcard/empty account, common in AWS-managed
+            # policy copies, e.g. arn:aws:iam::*:role/aws-service-role/...): keep
+            # the literal ARN; de-referencing would pin the account -> perpetual drift
+            arnparts=tt2.split(":")
+            if len(arnparts) > 4 and arnparts[4] in ("", "*"):
                 return t1
             tt2=tt2.split('/')[-1]
-            if tt2 in context.rolelist:
-                t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+            if tt2 in context.rolelist and not common.ref_skipped("aws_iam_role", tt2) and not common.is_self_ref("aws_iam_role", tt2):
+                t1=tt1 + " = aws_iam_role." + common.tfname(tt2) + ".arn\n"
                 common.add_dependancy("aws_iam_role",tt2)
             return t1
 
@@ -1074,10 +1110,18 @@ def deref_role_arn(t1,tt1,tt2):
             return t1
         
     elif tt2.startswith("arn:aws:elasticloadbalancing"):
+        # Only dereference if the LB is in the current region
+        arn_region = tt2.split(":")[3]
+        if arn_region and arn_region != context.region:
+            return t1
         tarn=tt2.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_").replace(" ","_").replace("*","star").replace("\\052","star").replace("@","_").replace("\\64","_")
         t1=tt1 + " = aws_lb." + tarn + ".arn\n"
         common.add_dependancy("aws_lb",tt2)
     elif tt2.startswith("arn:aws:wafv2") and ":regional/webacl" in tt2:
+        # Only dereference if the WAF is in the current region
+        arn_region = tt2.split(":")[3]
+        if arn_region and arn_region != context.region:
+            return t1
         tarn=tt2.split("/webacl/")[-1]
         wn=tarn.split("/")[0]
         wi=tarn.split("/")[-1]
@@ -1086,10 +1130,15 @@ def deref_role_arn(t1,tt1,tt2):
 
 
     elif tt2.startswith("arn:aws:events:") and ":rule/" in tt2 and ":rule/aws.partner" not in tt2:
+        # Only dereference if the event rule is in the current region
+        arn_region = tt2.split(":")[3]
+        if arn_region and arn_region != context.region:
+            return t1
         rn=tt2.split("/")[-1]
-        t1=tt1 + " = aws_cloudwatch_event_rule.default_" + rn + ".arn\n"
-        #### TODO - note assumption it's on default event bus !
-        common.add_dependancy("aws_cloudwatch_event_rule",rn)
+        if rn in context.eventrulelist:
+            t1=tt1 + " = aws_cloudwatch_event_rule.default_" + rn + ".arn\n"
+            #### TODO - note assumption it's on default event bus !
+            common.add_dependancy("aws_cloudwatch_event_rule",rn)
 
     elif ":role/aws-service-role" in tt2:	
         t1=globals_replace(t1,tt1,tt2)
@@ -1097,12 +1146,12 @@ def deref_role_arn(t1,tt1,tt2):
         if tt2.endswith("*"): return t1
         if tt2.startswith("arn:"): tt2=tt2.split('/')[-1]
         if tt2 in context.rolelist:
-            t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+            t1=tt1 + " = aws_iam_role." + common.tfname(tt2) + ".arn\n"
             common.add_dependancy("aws_iam_role",tt2)
             
     # it's not an arn - just a name
     elif ":" not in tt2 and tt2 != "null": # assume it's a role name
-        t1=tt1 + " = aws_iam_role." + tt2 + ".arn\n"
+        t1=tt1 + " = aws_iam_role." + common.tfname(tt2) + ".arn\n"
         common.add_dependancy("aws_iam_role", tt2)
 
     return t1
@@ -1148,14 +1197,14 @@ def deref_role_arn_array(t1,tt1,tt2):
             if ":role/" in tt2:
                 subn=tt2.split(',')[i]
                 subn=subn.strip('/')[-1]
-                subs=subs + "aws_iam_role." + subn + ".arn,"
+                subs=subs + "aws_iam_role." + common.tfname(subn) + ".arn,"
                 common.add_dependancy("aws_iam_role",subn)
 
             
     if cc == 0:
         if ":role/" in tt2:
             tt2=tt2.split('/')[-1]
-            subs=subs + "aws_iam_role." + tt2 + ".arn,"
+            subs=subs + "aws_iam_role." + common.tfname(tt2) + ".arn,"
             common.add_dependancy("aws_iam_role",tt2)
              
     t1=tt1 + " = [" + subs + "]\n"
@@ -1260,7 +1309,7 @@ def generic_deref_arn(t1, tt1, tt2):
                 roln=tt2.split('/')[-1]
                 if not roln.endswith("*"):
                     common.add_dependancy("aws_iam_role", roln)
-                    arnadr="aws_iam_role."+roln+".arn"
+                    arnadr="aws_iam_role."+common.tfname(roln)+".arn"
                     log.debug(arnadr)
                     t1=tt1 + ' = [format("%s*",'+arnadr+')]\n'
                 

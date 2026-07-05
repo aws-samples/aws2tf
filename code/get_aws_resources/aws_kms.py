@@ -20,11 +20,12 @@ def get_aws_kms_key(type,id,clfn,descfn,topkey,key,filterid):
         log.debug("--> In get_aws_kms_key    doing "+ type + ' with id ' + str(id)+" clfn="+clfn+" descfn="+descfn+" topkey="+topkey+" key="+key+" filterid="+filterid)
 
     response=common.call_boto3(type,clfn,descfn,topkey,key,id)
-    if response == []: 
+    if response == []:
         if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning")
-        pkey=type+"."+id
-        if not context.rproc[pkey]:
-            context.rproc[pkey]=True
+        if id is not None:
+            pkey=type+"."+id
+            if not context.rproc[pkey]:
+                context.rproc[pkey]=True
         return True
    
     try:

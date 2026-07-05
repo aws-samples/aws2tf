@@ -11,6 +11,7 @@ Reduction: 0% less code
 
 import logging
 import common
+import context
 import fixtf
 from .base_handler import BaseResourceHandler
 
@@ -39,15 +40,26 @@ def aws_cloudwatch_log_stream(t1, tt1, tt2, flag1, flag2):
 
 	skip = 0
         
-	# Transform log_group_name field to reference the parent log group resource
+	# Keep log_group_name as literal string - dereferencing causes validation
+	# errors in full runs where log group .tf is in imported/ during plan passes.
+	# The log group is still imported via add_dependancy.
 	if tt1 == "log_group_name" and tt2 != "null":
-		lgn=tt2.replace("/","_")
-        # Dereference to parent log group resource
-		t1 = tt1 + ' = aws_cloudwatch_log_group.' + lgn + '.name\n'
-		# Add dependency so aws2tf imports the log group automatically
 		common.add_dependancy("aws_cloudwatch_log_group", tt2)
     
-	return skip, t1, flag1, flag2 
+	return skip, t1, flag1, flag2
+
+
+def aws_cloudwatch_log_metric_filter(t1, tt1, tt2, flag1, flag2):
+    skip = 0
+    # The provider defaults metric_transformation.unit to "None", but AWS returns
+    # "" for filters created without a unit, giving a perpetual in-place diff on
+    # import. unit cannot be set to "" (fails the provider's StandardUnit
+    # validation), so ignore changes to it. Hooked on log_group_name (a required,
+    # top-level, single-occurrence attribute) so the lifecycle block lands at the
+    # resource level.
+    if tt1 == "log_group_name":
+        t1 = t1 + "\n  lifecycle {\n    ignore_changes = [metric_transformation[0].unit]\n  }\n"
+    return skip, t1, flag1, flag2
 
 
 

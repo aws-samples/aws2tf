@@ -27,7 +27,16 @@ log = logging.getLogger('aws2tf')
 
 def aws_ebs_volume(t1, tt1, tt2, flag1, flag2):
 	skip = 0
-	if "throughput" in tt1:
+	if tt1 == "iops":
+		# Always skip iops line - will be re-added on type line if needed
+		context.ebs_iops_value = tt2
+		skip = 1
+	elif tt1 == "type":
+		# Re-add iops only for volume types that support it (io1, io2, gp3)
+		if tt2 in ("io1", "io2", "gp3") and hasattr(context, 'ebs_iops_value') and context.ebs_iops_value != "0":
+			t1 = "iops = " + str(context.ebs_iops_value) + "\n" + t1
+		context.ebs_iops_value = None
+	elif "throughput" in tt1:
 		if tt2 == "0": skip = 1
 	elif tt1 == "volume_initialization_rate" and tt2 == "0": skip = 1
 	return skip, t1, flag1, flag2
@@ -170,9 +179,13 @@ def aws_instance(t1, tt1, tt2, flag1, flag2):
 		
 		elif tt1 == "iam_instance_profile":
 			if tt2 != "null":
-				if tt2 in str(context.inplist.keys()):
-					t1 = tt1 + " = aws_iam_instance_profile." + tt2 + ".name\n"
-					common.add_dependancy("aws_iam_instance_profile", tt2)
+				# Reference by literal name. Instance profiles are import-only
+				# (materialized via -generate-config-out); a TF reference to one breaks
+				# generate-config-out with "Reference to undeclared resource" and aborts
+				# the whole plan, so no import-only resource ever materializes. The
+				# profile is still collected (add_dependancy) and imported separately.
+				t1 = tt1 + " = \"" + tt2 + "\"\n"
+				common.add_dependancy("aws_iam_instance_profile", tt2)
 		
 		elif tt1 == "security_groups": skip = 1
 		
@@ -294,20 +307,35 @@ def aws_route_table(t1, tt1, tt2, flag1, flag2):
 	if "cidr_block" in tt1:
 		if tt2 == "": t1 = tt1 + " = null\n"
 	elif "nat_gateway_id" in tt1 and tt2.startswith("nat-"):
-		t1 = tt1 + " = aws_nat_gateway." + tt2 + ".id\n"
-		common.add_dependancy("aws_nat_gateway", tt2)
+		if context.natgwlist.get(tt2):
+			t1 = tt1 + " = aws_nat_gateway." + tt2 + ".id\n"
+			common.add_dependancy("aws_nat_gateway", tt2)
+		else:
+			log.warning("WARNING: nat gateway not in natgw list " + tt2 + " Resource may be referencing a nat gateway that no longer exists")
 	elif tt1 == "gateway_id" and tt2.startswith("igw-"):
-		t1 = tt1 + " = aws_internet_gateway." + tt2 + ".id\n"
-		common.add_dependancy("aws_internet_gateway", tt2)
+		if context.igwlist.get(tt2):
+			t1 = tt1 + " = aws_internet_gateway." + tt2 + ".id\n"
+			common.add_dependancy("aws_internet_gateway", tt2)
+		else:
+			log.warning("WARNING: internet gateway not in igw list " + tt2 + " Resource may be referencing an internet gateway that no longer exists")
 	elif tt1 == "vpc_peering_connection_id" and tt2.startswith("pcx-"):
-		t1 = tt1 + " = aws_vpc_peering_connection." + tt2 + ".id\n"
-		common.add_dependancy("aws_vpc_peering_connection", tt2)
+		if context.vpcpeerlist.get(tt2):
+			t1 = tt1 + " = aws_vpc_peering_connection." + tt2 + ".id\n"
+			common.add_dependancy("aws_vpc_peering_connection", tt2)
+		else:
+			log.warning("WARNING: vpc peering connection not in vpcpeer list " + tt2 + " Resource may be referencing a vpc peering connection that no longer exists")
 	elif tt1 == "transit_gateway_id" and tt2.startswith("tgw-"):
-		t1 = tt1 + " = aws_ec2_transit_gateway." + tt2 + ".id\n"
-		common.add_dependancy("aws_ec2_transit_gateway", tt2)
+		if context.tgwlist.get(tt2):
+			t1 = tt1 + " = aws_ec2_transit_gateway." + tt2 + ".id\n"
+			common.add_dependancy("aws_ec2_transit_gateway", tt2)
+		else:
+			log.warning("WARNING: transit gateway not in tgw list " + tt2 + " Resource may be referencing a transit gateway that no longer exists")
 	elif tt1 == "network_interface_id" and tt2.startswith("eni-"):
-		t1 = tt1 + " = aws_network_interface." + tt2 + ".id\n"
-		common.add_dependancy("aws_network_interface", tt2)
+		if context.enilist.get(tt2):
+			t1 = tt1 + " = aws_network_interface." + tt2 + ".id\n"
+			common.add_dependancy("aws_network_interface", tt2)
+		else:
+			log.warning("WARNING: network interface not in eni list " + tt2 + " Resource may be referencing a network interface that no longer exists")
 	return skip, t1, flag1, flag2
 
 
@@ -323,7 +351,10 @@ def aws_route_table_association(t1, tt1, tt2, flag1, flag2):
 		common.add_dependancy("aws_route_table", tt2)
 	elif tt1 == "gateway_id":
 		if tt2.startswith("igw-"):
-			t1 = tt1 + " = aws_internet_gateway." + tt2 + ".id\n"
+			if context.igwlist.get(tt2):
+				t1 = tt1 + " = aws_internet_gateway." + tt2 + ".id\n"
+			else:
+				log.warning("WARNING: internet gateway not in igw list " + tt2 + " Resource may be referencing an internet gateway that no longer exists")
 		if tt2 == "null":
 			skip = 1
 	return skip, t1, flag1, flag2
@@ -444,6 +475,16 @@ def aws_vpc_endpoint(t1, tt1, tt2, flag1, flag2):
 		elif tt2 == "DUALSTACK":
 			t1 = tt1 + ' = "dualstack"\n'
 			t1 = t1 + "\n lifecycle {\n   ignore_changes = [ip_address_type]\n}\n"
+	elif tt1 == "private_dns_specified_domains" and tt2 == "[]":
+		skip = 1
+	return skip, t1, flag1, flag2
+
+
+def aws_placement_group(t1, tt1, tt2, flag1, flag2):
+	skip = 0
+	# partition_count must be >= 1; AWS returns 0 for non-partition strategies
+	if tt1 == "partition_count" and tt2 == "0":
+		skip = 1
 	return skip, t1, flag1, flag2
 
 
@@ -460,6 +501,10 @@ def aws_vpc_endpoint_service(t1, tt1, tt2, flag1, flag2):
 def aws_vpn_connection(t1, tt1, tt2, flag1, flag2):
 	skip = 0
 	if tt1.startswith("tunnel") and tt2 == "0": skip = 1
+	# enable_acceleration / tunnel_bandwidth are only valid for transit-gateway
+	# VPNs; drop their defaults so vpn_gateway_id (VGW) connections validate.
+	elif tt1 == "enable_acceleration" and tt2 == "false": skip = 1
+	elif tt1 == "tunnel_bandwidth" and tt2 == "standard": skip = 1
 	return skip, t1, flag1, flag2
 
 

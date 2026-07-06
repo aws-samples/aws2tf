@@ -68,6 +68,14 @@ def aws_default_security_group(t1, tt1, tt2, flag1, flag2):
 	return skip, t1, flag1, flag2
 
 
+def aws_ec2_client_vpn_endpoint(t1, tt1, tt2, flag1, flag2):
+	skip = 0
+	if tt1 == "security_group_ids" and context.cvpntgw:
+		# conflicts with transit_gateway_configuration on TGW-attached endpoints
+		skip = 1
+	return skip, t1, flag1, flag2
+
+
 def aws_ec2_managed_prefix_list(t1, tt1, tt2, flag1, flag2):
 	skip = 0
 	if tt1 == "max_entries":

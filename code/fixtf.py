@@ -497,6 +497,7 @@ def fixtf(ttft,tf):
     context.elasticc=False
     context.kinesismsk=False
     context.destbuck=False
+    context.cvpntgw=False
 
 
     if ttft=="aws_s3_bucket_replication_configuration":
@@ -584,6 +585,17 @@ def fixtf(ttft,tf):
             if tt1=="destination_arn":
                 if tt2 == "null": context.levsmap=True
 
+    if ttft=="aws_ec2_client_vpn_endpoint":
+        for t1 in Lines:
+            t1=t1.strip()
+            tt1=t1.split("=")[0].strip()
+            try:
+                tt2=t1.split("=")[1].strip().strip('\"')
+            except:
+                tt2=""
+            if tt1=="transit_gateway_id":
+                if tt2 != "null": context.cvpntgw=True
+
     accessl=0
     cnxl=0
     context.lbskipaacl=False
@@ -642,6 +654,13 @@ def fixtf(ttft,tf):
 
     if ttft=="aws_instance":
         context.stripblock="primary_network_interface {"
+        context.stripstart="{"
+        context.stripend="}"
+
+    # transit_gateway_configuration conflicts with security_group_ids; strip the
+    # generated null-filled block unless the endpoint really is TGW-attached
+    if ttft=="aws_ec2_client_vpn_endpoint" and not context.cvpntgw:
+        context.stripblock="transit_gateway_configuration {"
         context.stripstart="{"
         context.stripend="}"
 

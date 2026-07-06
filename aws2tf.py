@@ -1018,6 +1018,22 @@ def process_known_dependencies():
     common.tfplan2()
 
 
+def stash_generated_tf(lc):
+    """Move generated configs to imported/ so the next plan re-generates them.
+
+    Globs the aws_*__*.tf files directly rather than deriving their names from
+    the import__*.tf files: filenames longer than 255 chars are truncated at
+    different points for the two (import_writer.write_import vs cmd_runner.splitf),
+    so a derived name can miss the real config, leaving a stale .tf in the root
+    that references resources which were stashed - failing plan and validate.
+    """
+    for fil in tqdm(glob.glob("aws_*__*.tf"), desc=f"Moving files (loop {lc})", unit="file", leave=False):
+        try:
+            shutil.move(fil, f"imported/{fil}")
+        except (FileNotFoundError, shutil.Error):
+            pass  # File already moved or doesn't exist
+
+
 def process_detected_dependencies():
     """Process detected dependencies with iterative loops (Stage 5-6)."""
     import timed_interrupt
@@ -1097,13 +1113,7 @@ def process_detected_dependencies():
         context.esttime = len(x)/4
         
         # Move files efficiently using shutil (10-50x faster than subprocess)
-        if len(x) > 0:
-            for fil in tqdm(x, desc=f"Moving files (loop {lc})", unit="file", leave=False):
-                tf = fil.split('__',1)[1]
-                try:
-                    shutil.move(tf, f"imported/{tf}")
-                except (FileNotFoundError, shutil.Error):
-                    pass  # File already moved or doesn't exist
+        stash_generated_tf(lc)
         
         context.tracking_message = "Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" terraform plan"
         common.tfplan1("loop "+str(lc))

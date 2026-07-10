@@ -67,6 +67,8 @@ def get_aws_organizations_organizational_unit(type, id, clfn, descfn, topkey, ke
         
         for j in response[topkey]:
             common.write_import(type, j[key], None)
+            # Recurse into child OUs directly (rdep snapshot won't pick up new entries)
+            get_aws_organizations_organizational_unit(type, j[key], clfn, descfn, topkey, key, filterid)
 
 
     except Exception as e:
@@ -249,7 +251,7 @@ def get_aws_organizations_policy_attachment(type, id, clfn, descfn, topkey, key,
                 tid=j['TargetId']
                 pkey=tid+":"+id
 
-                common.write_import(type, pkey, id)            
+                common.write_import(type, pkey, None)
 
         else:
             log.debug("Must pass a policy id as a parmeter - returning True")

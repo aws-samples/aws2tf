@@ -1099,11 +1099,24 @@ def process_detected_dependencies():
         # Move files efficiently using shutil (10-50x faster than subprocess)
         if len(x) > 0:
             for fil in tqdm(x, desc=f"Moving files (loop {lc})", unit="file", leave=False):
-                tf = fil.split('__',1)[1]
+                tf = fil.split('__', 1)[1]
                 try:
                     shutil.move(tf, f"imported/{tf}")
-                except (FileNotFoundError, shutil.Error):
-                    pass  # File already moved or doesn't exist
+                except FileNotFoundError:
+                    # Exact name didn't match — likely truncated differently.
+                    # Use a prefix glob to find the actual config file.
+                    prefix = tf[:200]
+                    matches = glob.glob(f"{prefix}*")
+                    matches = [m for m in matches if m.endswith('.tf')
+                               and not m.startswith('import__')
+                               and not m.startswith('data-')]
+                    for m in matches:
+                        try:
+                            shutil.move(m, f"imported/{m}")
+                        except (FileNotFoundError, shutil.Error):
+                            pass
+                except shutil.Error:
+                    pass  # File already moved
         
         context.tracking_message = "Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" terraform plan"
         common.tfplan1("loop "+str(lc))

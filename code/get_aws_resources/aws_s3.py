@@ -167,7 +167,7 @@ def get_all_s3_buckets(fb,my_region):
          return True
       
       if fb not in str(context.s3list.keys()):
-            log.info("Bucket %s not in s3list %s",  fb)
+            log.info("Bucket %s not in s3list", fb)
             pkey=type+"."+fb
             context.rproc[pkey]=True
             return True

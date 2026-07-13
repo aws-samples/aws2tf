@@ -20,26 +20,30 @@ def get_aws_organizations_organization(type, id, clfn, descfn, topkey, key, filt
 
             if response == []: log.debug("Empty response for "+type+ " id="+str(id)+" returning"); return True
             j = response[topkey]
-  
-            common.write_import(type,j[key],None) 
+
+            # describe_organization works from any member account, but terraform reads this
+            # resource with list_roots/list_accounts - importing it without those fails the plan
             response2=[]
             try:
                 response2=client.list_roots()
-
-                if response2 == []: log.info("Empty response2 for list_roots id="+str(id)+" returning"); return True
-                for j in response2['Roots']:
-                    #common.add_known_dependancy("aws_organizations_policy", j[key])
-                    common.add_known_dependancy("aws_organizations_organizational_unit", j['Id'])
+                client.list_accounts()
             except Exception as e:
                 exc_type, exc_obj, exc_tb = sys.exc_info()
             #fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                 exn=str(exc_type.__name__)
                 if exn == "AccessDeniedException":
-                    log.info("Can't list_roots - no access or not a master account......")              
+                    log.info("Can't read organization - no access or not a master account......")
                     return True
                 #else:
                 #    print(f"{e=} [org1]")
                 #    return True
+
+            common.write_import(type,j[key],None)
+
+            if response2 == []: log.info("Empty response2 for list_roots id="+str(id)+" returning"); return True
+            for j in response2['Roots']:
+                #common.add_known_dependancy("aws_organizations_policy", j[key])
+                common.add_known_dependancy("aws_organizations_organizational_unit", j['Id'])
 
 
     except Exception as e:

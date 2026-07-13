@@ -225,6 +225,14 @@ def run_terraform_apply_with_progress(tfplan_file, plan_json='plan2.json'):
         return rc(command)
 
 
+def move_to_notimported(pattern):
+    """shutil.move does not expand wildcards - glob and move each match."""
+    os.makedirs("notimported", exist_ok=True)
+    for f in glob.glob(pattern):
+        log.error("ERROR: moved "+f+" to notimported/")
+        shutil.move(f, os.path.join("notimported", f))
+
+
 def tfplan1(mymess):
 
    rf = "resources.out"
@@ -269,8 +277,7 @@ def tfplan1(mymess):
                         log.error("ERROR: Removing "+i +
                               " import files - plan errors see plan1.json [p1]")
                         context.badlist = context.badlist+[i]
-                        shutil.move("import__*"+i+"*.tf",
-                                    "notimported/import__*"+i+"*.tf")
+                        move_to_notimported("import__*"+i+"*.tf")
 
                   elif "Error: Cannot import non-existent remote object" in mess:
                      log.error(
@@ -280,8 +287,7 @@ def tfplan1(mymess):
                         log.error("ERROR: Removing "+i +
                               " import files - plan errors see plan1.json [p2]")
                         context.badlist = context.badlist+[i]
-                        shutil.move("import__*"+i+"*.tf",
-                                    "notimported/import__*"+i+"*.tf")
+                        move_to_notimported("import__*"+i+"*.tf")
 
                except:
                   pass
@@ -292,10 +298,8 @@ def tfplan1(mymess):
                      log.error("ERROR: Removing "+i +
                            " files - plan errors see plan1.json [p3]")
                      context.badlist = context.badlist+[i]
-                     shutil.move("import__*"+i+"*.tf",
-                                 "notimported/import__*"+i+"*.tf")
-                     shutil.move("aws_*"+i+"*.tf",
-                                 "notimported/aws_*"+i+"*.tf")
+                     move_to_notimported("import__*"+i+"*.tf")
+                     move_to_notimported("aws_*"+i+"*.tf")
 
                except:
                   if context.debug is True:
@@ -331,12 +335,8 @@ def tfplan2():
    # zap the badlist
    for i in context.badlist:
       log.error("ERROR: Removing "+i+" files - plan errors see plan1.json [p4]")
-      try:
-         shutil.move("aws_*"+i+"*.tf", "notimported/aws_*"+i+"*.tf")
-         shutil.move("aws_*"+i+"*.out", "notimported/aws_*"+i+"*.out")
-      except FileNotFoundError as e:
-         log.error(f"{e=}")
-         pass
+      move_to_notimported("aws_*"+i+"*.tf")
+      move_to_notimported("aws_*"+i+"*.out")
 
    # copy all imported/aws_*.tf to here ?
    com = "cp imported/aws_*.tf ."

@@ -105,6 +105,7 @@ noimport = {
     "aws_spot_instance_request": True,
     "aws_ssm_patch_group": True,
     "aws_verifiedaccess_group": True,
+    "aws_vpc_endpoint_private_dns": True, # aws_vpc_endpoint already carries private_dns_enabled; the read returns null for endpoint types with no private dns (Gateway/GatewayLoadBalancer) and the provider marks it required
     "aws_vpc_endpoint_security_group_association": True,
     "aws_vpc_endpoint_service_allowed_principal": True,
     "aws_vpc_ipam_preview_next_cidr": True,

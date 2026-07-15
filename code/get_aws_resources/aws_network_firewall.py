@@ -7,6 +7,18 @@ from botocore.config import Config
 import context
 import inspect
 
+def has_logging_configuration(client, arn):
+    """Network Firewall logging is optional - importing a logging configuration that isn't
+    there fails the plan with "Cannot import non-existent remote object"."""
+    try:
+        response = client.describe_logging_configuration(FirewallArn=arn)
+    except Exception as e:
+        log.info("Can't describe_logging_configuration for "+str(arn)+" - not importing one")
+        return False
+    lc = response.get('LoggingConfiguration') or {}
+    return bool(lc.get('LogDestinationConfigs'))
+
+
 def get_aws_networkfirewall_firewall(type, id, clfn, descfn, topkey, key, filterid):
     if context.debug:
         log.debug("--> In "+str(inspect.currentframe().f_code.co_name)+" doing " + type + ' with id ' + str(id) +
@@ -23,10 +35,11 @@ def get_aws_networkfirewall_firewall(type, id, clfn, descfn, topkey, key, filter
                 if context.debug: log.debug("Empty response for "+type+ " id="+str(id)+" returning") 
                 return True
             for j in response:
-                common.write_import(type,j[key],None) 
-                common.write_import("aws_networkfirewall_logging_configuration",j[key],None) 
+                common.write_import(type,j[key],None)
+                if has_logging_configuration(client, j[key]):
+                    common.write_import("aws_networkfirewall_logging_configuration",j[key],None)
 
-        else: 
+        else:
             if id.startswith("arn:"):
                 response = client.describe_firewall(FirewallArn=id)
             else:      
@@ -36,7 +49,8 @@ def get_aws_networkfirewall_firewall(type, id, clfn, descfn, topkey, key, filter
                 return True
             j=response['Firewall']
             common.write_import(type,j[key],None)
-            common.write_import("aws_networkfirewall_logging_configuration",j[key],None) 
+            if has_logging_configuration(client, j[key]):
+                common.write_import("aws_networkfirewall_logging_configuration",j[key],None)
 
     except Exception as e:
         common.handle_error(e,str(inspect.currentframe().f_code.co_name),clfn,descfn,topkey,id)

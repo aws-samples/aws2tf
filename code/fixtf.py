@@ -858,6 +858,11 @@ def globals_replace(t1,tt1,tt2):
                 return t1
             if tt1=="Resource":
                 return t1
+            # a policy condition ("aws:SourceArn") naming the function that uses this role:
+            # referencing it would make the role depend on a lambda that already depends on
+            # the role - aws allows it, terraform can't order it and errors with a cycle
+            if tt1.strip('"').lower().endswith(":sourcearn"):
+                return t1
             # Only dereference if the function is in the current region
             arn_region = tt2.split(":")[3]
             if arn_region and arn_region != context.region:

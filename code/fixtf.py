@@ -438,6 +438,58 @@ FIXTF_MODULES = {
 ##############################################
 
 
+def strip_non_ec2_advanced_backup_settings(fname):
+    # aws_backup_plan.advanced_backup_setting only accepts resource_type "EC2"
+    # (Windows VSS) in the AWS provider, but AWS also returns S3 advanced settings
+    # (BackupACLs/BackupObjectTags) which generate-config-out emits and validate then
+    # rejects ("expected ... one of [\"EC2\"], got S3"). Drop each
+    # advanced_backup_setting block whose resource_type is not EC2, keeping any EC2
+    # blocks. A post-pass because resource_type sits at the end of the block, after
+    # the lines the main line-by-line loop has already written.
+    try:
+        with open(fname) as f:
+            lines = f.readlines()
+    except FileNotFoundError:
+        return
+    out = []
+    i = 0
+    n = len(lines)
+    changed = False
+    while i < n:
+        line = lines[i]
+        if line.strip().startswith("advanced_backup_setting {"):
+            depth = line.count("{") - line.count("}")
+            block = [line]
+            i += 1
+            while i < n and depth > 0:
+                block.append(lines[i])
+                depth += lines[i].count("{") - lines[i].count("}")
+                i += 1
+            keep = any(b.strip().startswith("resource_type") and '"EC2"' in b for b in block)
+            if keep:
+                out.extend(block)
+            else:
+                changed = True
+        else:
+            out.append(line)
+            i += 1
+    if not changed:
+        return
+    # AWS still returns the stripped (S3) advanced setting on read and the provider
+    # cannot express it in config, so terraform would otherwise plan a perpetual
+    # update. Ignore advanced_backup_setting so the import plans clean; insert the
+    # meta-block before the resource's own closing brace (a line that is just "}").
+    if not any("ignore_changes" in l and "advanced_backup_setting" in l for l in out):
+        for j in range(len(out) - 1, -1, -1):
+            if out[j].rstrip("\n") == "}":
+                out[j:j] = ["  lifecycle {\n",
+                            "    ignore_changes = [advanced_backup_setting]\n",
+                            "  }\n"]
+                break
+    with open(fname, "w") as f:
+        f.writelines(out)
+
+
 def fixtf(ttft,tf):
     # record the resource currently being generated so is_self_ref() can detect
     # a deref target that is this same resource (illegal self-reference).
@@ -831,6 +883,11 @@ def fixtf(ttft,tf):
         
         ## move *.out to impoted
         #shutil.move(rf, "imported/"+rf)
+
+    # drop advanced_backup_setting blocks the provider can't represent (resource_type
+    # other than EC2, e.g. S3) now that the config file is fully written and closed
+    if ttft == "aws_backup_plan":
+        strip_non_ec2_advanced_backup_settings(tf2)
 
 def remove_block():
 

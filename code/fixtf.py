@@ -498,6 +498,7 @@ def fixtf(ttft,tf):
     context.kinesismsk=False
     context.destbuck=False
     context.cvpntgw=False
+    context.s3routingdup=False
 
 
     if ttft=="aws_s3_bucket_replication_configuration":
@@ -596,6 +597,17 @@ def fixtf(ttft,tf):
             if tt1=="transit_gateway_id":
                 if tt2 != "null": context.cvpntgw=True
 
+    # generate-config-out emits the deprecated routing_rules (jsonencode) string
+    # alongside the routing_rule {} blocks; the provider marks them ConflictsWith.
+    # Only flag the duplicate when both are present, so we never strip the sole copy.
+    if ttft=="aws_s3_bucket_website_configuration":
+        rr_str=False; rr_block=False
+        for t1 in Lines:
+            s=t1.strip()
+            if s.startswith("routing_rules") and "jsonencode" in s: rr_str=True
+            if s.startswith("routing_rule {"): rr_block=True
+        if rr_str and rr_block: context.s3routingdup=True
+
     accessl=0
     cnxl=0
     context.lbskipaacl=False
@@ -661,6 +673,13 @@ def fixtf(ttft,tf):
     # generated null-filled block unless the endpoint really is TGW-attached
     if ttft=="aws_ec2_client_vpn_endpoint" and not context.cvpntgw:
         context.stripblock="transit_gateway_configuration {"
+        context.stripstart="{"
+        context.stripend="}"
+
+    # strip the conflicting deprecated routing_rules (jsonencode) block, keeping the
+    # routing_rule {} blocks that match the imported state (see prescan above)
+    if ttft=="aws_s3_bucket_website_configuration" and context.s3routingdup:
+        context.stripblock="routing_rules = jsonencode(["
         context.stripstart="{"
         context.stripend="}"
 

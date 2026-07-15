@@ -902,6 +902,29 @@ def aws_resource(t1,tt1,tt2,flag1,flag2):
     return skip,t1,flag1,flag2 
 
 
+# Make an ARN we are deliberately keeping literal (not de-referencing to a resource
+# address) account/region-portable, by substituting this account's id/region with the
+# same data sources other ARN types get at the end of globals_replace. Used for lambda
+# ARNs we must keep literal to avoid a terraform dependency cycle (an aws:SourceArn
+# condition or policy Resource naming the function that owns the role - see #170), or that
+# we cannot dereference (another region, or a function that was not collected). An ARN in
+# a different account (context.acc not present) is left fully literal.
+def sub_acct_region(t1, tt1, tt2):
+    if ":" + context.acc + ":" not in tt2:
+        return t1
+    ends = ""
+    while ":" + context.acc + ":" in tt2:
+        r1 = tt2.find(":" + context.region + ":")
+        a1 = tt2.find(":" + context.acc + ":")
+        if r1 > 0 and r1 < a1:
+            ends = ends + ",data.aws_region.current.region"
+            tt2 = tt2[:r1] + ":%s:" + tt2[r1 + context.regionl + 2:]
+        a1 = tt2.find(":" + context.acc + ":")
+        tt2 = tt2[:a1] + ":%s:" + tt2[a1 + 14:]
+        ends = ends + ",data.aws_caller_identity.current.account_id"
+    return tt1 + ' = format("' + tt2 + '"' + ends + ')\n'
+
+
 # generic replace of acct and region in arn
 def globals_replace(t1,tt1,tt2):
     if context.debug: log.debug("GR start:%s",  t1)
@@ -930,26 +953,30 @@ def globals_replace(t1,tt1,tt2):
             return t1
         
         if tt2.startswith("arn:aws:lambda") and "function:" in tt2:
+            # The branches below keep the ARN literal rather than de-referencing it to
+            # aws_lambda_function.<name>.arn, but still make the account id / region
+            # portable via sub_acct_region instead of leaving them hard-coded inline.
             if tt2.endswith("*"):
-                return t1
+                return sub_acct_region(t1, tt1, tt2)
             if tt1=="Resource":
-                return t1
+                return sub_acct_region(t1, tt1, tt2)
             # a policy condition ("aws:SourceArn") naming the function that uses this role:
             # referencing it would make the role depend on a lambda that already depends on
             # the role - aws allows it, terraform can't order it and errors with a cycle
             if tt1.strip('"').lower().endswith(":sourcearn"):
-                return t1
+                return sub_acct_region(t1, tt1, tt2)
             # Only dereference if the function is in the current region
             arn_region = tt2.split(":")[3]
             if arn_region and arn_region != context.region:
-                return t1
+                return sub_acct_region(t1, tt1, tt2)
             fname=tt2.split(":")[-1]
             # only build a reference if the function was collected; otherwise
-            # (e.g. service-managed lambdas, or a policy Resource) keep the literal ARN
+            # (e.g. service-managed lambdas) keep the ARN literal but portable
             if fname in context.lambdalist and not common.ref_skipped("aws_lambda_function", fname) and not common.is_self_ref("aws_lambda_function", fname):
                 t1 = tt1 + " = aws_lambda_function." + fname + ".arn\n"
                 common.add_dependancy("aws_lambda_function", fname)
-            return t1
+                return t1
+            return sub_acct_region(t1, tt1, tt2)
 
         if tt2.startswith("arn:aws:cloudfront:") and ":distribution/" in tt2:
             fname=tt2.split("/")[-1]

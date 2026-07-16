@@ -189,6 +189,7 @@ def kd_threaded(ti):
         id = ti.split(".", 1)[1]
         log.debug("type="+i+" id="+str(id))
         common.call_resource(i, id)
+        context.rdep[ti] = True
     return
 
 
@@ -994,24 +995,49 @@ def process_single_resource_type(all_types, resource_type, id, timed_interrupt):
 
 
 def process_known_dependencies():
-    """Process known dependencies (Stage 4)."""
+    """Process known dependencies (Stage 4).
+    
+    Iterates until no new unprocessed entries remain, so that dependencies
+    added by handlers during processing are picked up in subsequent passes.
+    (Fixes #166)
+    """
     context.tracking_message = "Stage 4 of 10, Known Dependancies"
     log.info("Stage 4 of 10, Known Dependancies - Multi Threaded")
     
-    if context.fast:
-        context.tracking_message = "Stage 4 of 10, Known Dependancies - Multi Threaded "+str(context.cores)
-        with ThreadPoolExecutor(max_workers=context.cores) as executor12:
-            futures2 = [
-                executor12.submit(kd_threaded, ti)
-                for ti in list(context.rdep)
-            ]
-    else:
-        for ti in list(context.rdep):
-            if not context.rdep[ti]:
-                i = ti.split(".")[0]
-                id = ti.split(".")[1]
-                log.debug("type="+i+" id="+str(id))
-                common.call_resource(i, id)
+    passes = 0
+    max_passes = 10  # Safety limit to prevent infinite loops
+    
+    while True:
+        unprocessed = [ti for ti in list(context.rdep) if not context.rdep[ti]]
+        if not unprocessed:
+            break
+        
+        passes += 1
+        if passes > max_passes:
+            log.warning("Stage 4: exceeded %d passes, %d entries still unprocessed — breaking",
+                        max_passes, len(unprocessed))
+            break
+        
+        log.info("Stage 4 of 10, Known Dependancies pass %d (%d entries)", passes, len(unprocessed))
+        
+        if context.fast:
+            context.tracking_message = "Stage 4 of 10, Known Dependancies - Multi Threaded "+str(context.cores)+" pass "+str(passes)
+            with ThreadPoolExecutor(max_workers=context.cores) as executor12:
+                futures2 = [
+                    executor12.submit(kd_threaded, ti)
+                    for ti in unprocessed
+                ]
+                # Wait for all futures to complete before checking for new entries
+                for f in futures2:
+                    f.result()
+        else:
+            for ti in unprocessed:
+                if not context.rdep[ti]:
+                    i = ti.split(".")[0]
+                    id = ti.split(".", 1)[1]
+                    log.debug("type="+i+" id="+str(id))
+                    common.call_resource(i, id)
+                    context.rdep[ti] = True
     
     context.tracking_message = "Stage 4 of 10, Known Dependancies: terraform plan"
     common.tfplan1("Stage 4")

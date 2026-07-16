@@ -106,12 +106,16 @@ def aws_elasticache_user(t1,tt1,tt2,flag1,flag2):
 
 
 	skip=0
-	if tt1 == "engine" and tt2=="redis":
-		t1=tt1+' = "redis"\n'
-		t1=t1+"\n lifecycle {\n   ignore_changes = [engine,authentication_mode[0].type]\n}\n"
-	if tt1 == "type" and tt2=="no-password":
-		tt2="no-password-required"
-		t1=tt1+' = "'+tt2+'"\n'
+	if context.debug5: log.debug("fix aws_elasticache_user %s %s", tt1, tt2)
+
+	# Add lifecycle block to ignore authentication_mode drift (API returns 'no-password'
+	# but provider expects 'no-password-required'; also covers engine drift for valkey)
+	if tt1 == "user_id":
+		t1=t1+"\n lifecycle {\n   ignore_changes = [authentication_mode,engine]\n}\n"
+
+	# Map the API value 'no-password' to the provider-valid 'no-password-required'
+	if tt1 == "type" and tt2 == "no-password":
+		t1='    type = "no-password-required"\n'
 
 
 	return skip,t1,flag1,flag2

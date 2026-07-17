@@ -189,6 +189,7 @@ def kd_threaded(ti):
         id = ti.split(".", 1)[1]
         log.debug("type="+i+" id="+str(id))
         common.call_resource(i, id)
+        context.rdep[ti] = True
     return
 
 
@@ -467,9 +468,11 @@ def setup_environment_and_context(args):
         timed_interrupt.stop_timer()
         exit()
     
-    # Setup profile
+    # Setup profile - respect AWS_PROFILE env var when -p is not passed
     if args.profile:
         context.profile = args.profile
+    elif os.environ.get('AWS_PROFILE'):
+        context.profile = os.environ['AWS_PROFILE']
     
     # Detect and validate AWS credentials
     info = common.detect_aws_credentials(context.profile)
@@ -992,24 +995,49 @@ def process_single_resource_type(all_types, resource_type, id, timed_interrupt):
 
 
 def process_known_dependencies():
-    """Process known dependencies (Stage 4)."""
+    """Process known dependencies (Stage 4).
+    
+    Iterates until no new unprocessed entries remain, so that dependencies
+    added by handlers during processing are picked up in subsequent passes.
+    (Fixes #166)
+    """
     context.tracking_message = "Stage 4 of 10, Known Dependancies"
     log.info("Stage 4 of 10, Known Dependancies - Multi Threaded")
     
-    if context.fast:
-        context.tracking_message = "Stage 4 of 10, Known Dependancies - Multi Threaded "+str(context.cores)
-        with ThreadPoolExecutor(max_workers=context.cores) as executor12:
-            futures2 = [
-                executor12.submit(kd_threaded, ti)
-                for ti in list(context.rdep)
-            ]
-    else:
-        for ti in list(context.rdep):
-            if not context.rdep[ti]:
-                i = ti.split(".")[0]
-                id = ti.split(".")[1]
-                log.debug("type="+i+" id="+str(id))
-                common.call_resource(i, id)
+    passes = 0
+    max_passes = 10  # Safety limit to prevent infinite loops
+    
+    while True:
+        unprocessed = [ti for ti in list(context.rdep) if not context.rdep[ti]]
+        if not unprocessed:
+            break
+        
+        passes += 1
+        if passes > max_passes:
+            log.warning("Stage 4: exceeded %d passes, %d entries still unprocessed — breaking",
+                        max_passes, len(unprocessed))
+            break
+        
+        log.info("Stage 4 of 10, Known Dependancies pass %d (%d entries)", passes, len(unprocessed))
+        
+        if context.fast:
+            context.tracking_message = "Stage 4 of 10, Known Dependancies - Multi Threaded "+str(context.cores)+" pass "+str(passes)
+            with ThreadPoolExecutor(max_workers=context.cores) as executor12:
+                futures2 = [
+                    executor12.submit(kd_threaded, ti)
+                    for ti in unprocessed
+                ]
+                # Wait for all futures to complete before checking for new entries
+                for f in futures2:
+                    f.result()
+        else:
+            for ti in unprocessed:
+                if not context.rdep[ti]:
+                    i = ti.split(".")[0]
+                    id = ti.split(".", 1)[1]
+                    log.debug("type="+i+" id="+str(id))
+                    common.call_resource(i, id)
+                    context.rdep[ti] = True
     
     context.tracking_message = "Stage 4 of 10, Known Dependancies: terraform plan"
     common.tfplan1("Stage 4")
@@ -1099,11 +1127,24 @@ def process_detected_dependencies():
         # Move files efficiently using shutil (10-50x faster than subprocess)
         if len(x) > 0:
             for fil in tqdm(x, desc=f"Moving files (loop {lc})", unit="file", leave=False):
-                tf = fil.split('__',1)[1]
+                tf = fil.split('__', 1)[1]
                 try:
                     shutil.move(tf, f"imported/{tf}")
-                except (FileNotFoundError, shutil.Error):
-                    pass  # File already moved or doesn't exist
+                except FileNotFoundError:
+                    # Exact name didn't match — likely truncated differently.
+                    # Use a prefix glob to find the actual config file.
+                    prefix = tf[:200]
+                    matches = glob.glob(f"{prefix}*")
+                    matches = [m for m in matches if m.endswith('.tf')
+                               and not m.startswith('import__')
+                               and not m.startswith('data-')]
+                    for m in matches:
+                        try:
+                            shutil.move(m, f"imported/{m}")
+                        except (FileNotFoundError, shutil.Error):
+                            pass
+                except shutil.Error:
+                    pass  # File already moved
         
         context.tracking_message = "Stage 6 of 10, Dependancies Detection: Loop "+str(lc)+" terraform plan"
         common.tfplan1("loop "+str(lc))

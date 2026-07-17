@@ -985,6 +985,51 @@ def get_aws_<resource>_policy(type, id, clfn, descfn, topkey, key, filterid):
 - Use parent resource ARN/ID as the import identifier
 - Policy may not exist for all parent resources
 
+**Pattern for optional child/companion resources:**
+
+Some resources are optional companions to a parent resource (e.g., logging configuration, monitoring configuration). These may not exist for every parent. Always verify the child resource exists before writing the import block, otherwise terraform will fail with "Cannot import non-existent remote object".
+
+```python
+def get_aws_<parent>_<companion>(type, id, clfn, descfn, topkey, key, filterid):
+    try:
+        config = Config(retries = {'max_attempts': 10,'mode': 'standard'})
+        client = boto3.client(clfn, config=config)
+        
+        if id is None:
+            # List all parent resources
+            paginator = client.get_paginator('list_<parents>')
+            parents = []
+            for page in paginator.paginate():
+                parents = parents + page['<parents_key>']
+            
+            # Verify companion exists before writing import
+            for parent in parents:
+                try:
+                    response = client.describe_<companion>(parentId=parent[key])
+                    # Only import if companion actually has configuration
+                    if response.get('<companion_key>'):
+                        common.write_import(type, parent[key], None)
+                except client.exceptions.ResourceNotFoundException:
+                    continue  # Companion not configured for this parent
+                except Exception as e:
+                    if context.debug: log.debug(f"No companion for {parent[key]}: {e}")
+                    continue
+        else:
+            response = client.describe_<companion>(parentId=id)
+            if response.get('<companion_key>'):
+                common.write_import(type, id, None)
+    except Exception as e:
+        common.handle_error(e, str(inspect.currentframe().f_code.co_name), clfn, descfn, topkey, id)
+    return True
+```
+
+**Examples of optional companion resources:**
+- `aws_networkfirewall_logging_configuration` — logging is optional per firewall
+- `aws_s3_bucket_logging` — not all buckets have logging configured
+- `aws_cloudwatch_metric_alarm` — attached to resources optionally
+
+**Key rule:** Never write an import block for a resource you haven't confirmed exists. The Stage 6 self-heal will catch unimportable resources, but it's better to avoid them upfront.
+
 **IMPORTANT: Register the get function in common.py**
 
 After creating the get function file, you must register it in two places in `code/common.py`:
@@ -2028,6 +2073,44 @@ resource "aws_kms_key" "test" {
 - Check documentation: "This resource exports no additional attributes"
 - Use input arguments or parent resource attributes for testing
 - Example: For bucket policy, output the bucket ARN instead of policy ID
+
+### Issue: Generated config has conflicting attributes
+**Symptom:** `terraform validate` fails with `"X": conflicts with Y` (e.g., `"routing_rules": conflicts with routing_rule`)
+**Cause:** `terraform plan -generate-config-out` emits both a deprecated attribute and its replacement block
+**Solution:**
+- Use `stripblock()` in a handler to remove the deprecated form when both are present
+- Example: `aws_s3_bucket_website_configuration` emits both `routing_rules` (deprecated jsonencode string) and `routing_rule {}` blocks
+- The deprecated form should be stripped, keeping the structured blocks
+- This is handled in fixtf.py prescan logic, not individual resource handlers
+
+### Issue: Terraform cycle error after ARN dereferencing
+**Symptom:** `Error: Cycle: aws_lambda_function.X, aws_iam_role.Y`
+**Cause:** A role's trust policy contains `aws:SourceArn` referencing the Lambda that uses it. Dereferencing creates a circular dependency.
+**Solution:**
+- This is handled automatically by `fixtf.py`'s `globals_replace` function
+- Lambda ARNs in `aws:SourceArn` conditions and policy `Resource` blocks are kept literal (not dereferenced)
+- The account ID and region are substituted with `data.aws_caller_identity` / `data.aws_region`
+- No handler action needed — aws2tf handles this pattern internally
+
+### Issue: Stage 7 abort (exit 021) due to unimportable resources
+**Symptom:** aws2tf exits at Stage 7 with "exit 021" after plan errors
+**Cause:** A resource in the import set doesn't exist remotely or can't be read (AccessDenied)
+**Solution:**
+- As of PR #168, Stage 6 self-heals by automatically moving unimportable resources to `notimported/`
+- Resources that return "Cannot import non-existent remote object" are removed automatically
+- Resources with AccessDenied are also removed
+- Config-generation errors (Conflicting arguments, Missing required argument) are left for fixtf to repair
+- If you still hit exit 021, check `plan1.json` for the specific error
+- For get functions: always verify a resource exists before writing `import__` blocks (prevents the issue at source)
+
+### Issue: Recursive resource discovery (e.g., nested OUs)
+**Symptom:** Only immediate children are discovered, not deeply nested resources
+**Cause:** Previously `add_known_dependancy()` entries added during Stage 4 were never picked up
+**Solution:**
+- As of the #166 fix, Stage 4 iterates in passes until no new unprocessed entries remain
+- `add_known_dependancy()` now works correctly for recursive discovery
+- You can call `add_known_dependancy()` from within a get function, and the newly-added entry will be processed in the next pass
+- Alternative: implement recursion directly in the get function (still valid but no longer required)
 
 ## Special Resource Types
 

@@ -155,7 +155,7 @@ def aws_tf(region, args):
       f3.write('}\n')
       f3.write('provider "aws" {\n')
       f3.write('  region                   = "' + region + '"\n')
-      if args.profile is not None:
+      if context.profile != "default":
          f3.write('  profile                  = "' + context.profile + '"\n')
       if not context.serverless: f3.write('  shared_credentials_files = ["~/.aws/credentials"]\n')
       f3.write('}\n')

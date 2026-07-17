@@ -6721,7 +6721,7 @@ aws_networkfirewall_firewall_policy = {
 
 aws_networkfirewall_logging_configuration = {
 	"clfn":		"network-firewall",
-	"descfn":	"list_logging_configurations",
+	"descfn":	"describe_logging_configuration",
 	"topkey":	"LoggingConfigurations",
 	"key":		"FirewallArn",
 	"filterid":	"FirewallArn"

@@ -438,6 +438,58 @@ FIXTF_MODULES = {
 ##############################################
 
 
+def strip_non_ec2_advanced_backup_settings(fname):
+    # aws_backup_plan.advanced_backup_setting only accepts resource_type "EC2"
+    # (Windows VSS) in the AWS provider, but AWS also returns S3 advanced settings
+    # (BackupACLs/BackupObjectTags) which generate-config-out emits and validate then
+    # rejects ("expected ... one of [\"EC2\"], got S3"). Drop each
+    # advanced_backup_setting block whose resource_type is not EC2, keeping any EC2
+    # blocks. A post-pass because resource_type sits at the end of the block, after
+    # the lines the main line-by-line loop has already written.
+    try:
+        with open(fname) as f:
+            lines = f.readlines()
+    except FileNotFoundError:
+        return
+    out = []
+    i = 0
+    n = len(lines)
+    changed = False
+    while i < n:
+        line = lines[i]
+        if line.strip().startswith("advanced_backup_setting {"):
+            depth = line.count("{") - line.count("}")
+            block = [line]
+            i += 1
+            while i < n and depth > 0:
+                block.append(lines[i])
+                depth += lines[i].count("{") - lines[i].count("}")
+                i += 1
+            keep = any(b.strip().startswith("resource_type") and '"EC2"' in b for b in block)
+            if keep:
+                out.extend(block)
+            else:
+                changed = True
+        else:
+            out.append(line)
+            i += 1
+    if not changed:
+        return
+    # AWS still returns the stripped (S3) advanced setting on read and the provider
+    # cannot express it in config, so terraform would otherwise plan a perpetual
+    # update. Ignore advanced_backup_setting so the import plans clean; insert the
+    # meta-block before the resource's own closing brace (a line that is just "}").
+    if not any("ignore_changes" in l and "advanced_backup_setting" in l for l in out):
+        for j in range(len(out) - 1, -1, -1):
+            if out[j].rstrip("\n") == "}":
+                out[j:j] = ["  lifecycle {\n",
+                            "    ignore_changes = [advanced_backup_setting]\n",
+                            "  }\n"]
+                break
+    with open(fname, "w") as f:
+        f.writelines(out)
+
+
 def fixtf(ttft,tf):
     # record the resource currently being generated so is_self_ref() can detect
     # a deref target that is this same resource (illegal self-reference).
@@ -497,6 +549,8 @@ def fixtf(ttft,tf):
     context.elasticc=False
     context.kinesismsk=False
     context.destbuck=False
+    context.cvpntgw=False
+    context.s3routingdup=False
 
 
     if ttft=="aws_s3_bucket_replication_configuration":
@@ -584,6 +638,28 @@ def fixtf(ttft,tf):
             if tt1=="destination_arn":
                 if tt2 == "null": context.levsmap=True
 
+    if ttft=="aws_ec2_client_vpn_endpoint":
+        for t1 in Lines:
+            t1=t1.strip()
+            tt1=t1.split("=")[0].strip()
+            try:
+                tt2=t1.split("=")[1].strip().strip('\"')
+            except:
+                tt2=""
+            if tt1=="transit_gateway_id":
+                if tt2 != "null": context.cvpntgw=True
+
+    # generate-config-out emits the deprecated routing_rules (jsonencode) string
+    # alongside the routing_rule {} blocks; the provider marks them ConflictsWith.
+    # Only flag the duplicate when both are present, so we never strip the sole copy.
+    if ttft=="aws_s3_bucket_website_configuration":
+        rr_str=False; rr_block=False
+        for t1 in Lines:
+            s=t1.strip()
+            if s.startswith("routing_rules") and "jsonencode" in s: rr_str=True
+            if s.startswith("routing_rule {"): rr_block=True
+        if rr_str and rr_block: context.s3routingdup=True
+
     accessl=0
     cnxl=0
     context.lbskipaacl=False
@@ -642,6 +718,20 @@ def fixtf(ttft,tf):
 
     if ttft=="aws_instance":
         context.stripblock="primary_network_interface {"
+        context.stripstart="{"
+        context.stripend="}"
+
+    # transit_gateway_configuration conflicts with security_group_ids; strip the
+    # generated null-filled block unless the endpoint really is TGW-attached
+    if ttft=="aws_ec2_client_vpn_endpoint" and not context.cvpntgw:
+        context.stripblock="transit_gateway_configuration {"
+        context.stripstart="{"
+        context.stripend="}"
+
+    # strip the conflicting deprecated routing_rules (jsonencode) block, keeping the
+    # routing_rule {} blocks that match the imported state (see prescan above)
+    if ttft=="aws_s3_bucket_website_configuration" and context.s3routingdup:
+        context.stripblock="routing_rules = jsonencode(["
         context.stripstart="{"
         context.stripend="}"
 
@@ -794,6 +884,11 @@ def fixtf(ttft,tf):
         ## move *.out to impoted
         #shutil.move(rf, "imported/"+rf)
 
+    # drop advanced_backup_setting blocks the provider can't represent (resource_type
+    # other than EC2, e.g. S3) now that the config file is fully written and closed
+    if ttft == "aws_backup_plan":
+        strip_non_ec2_advanced_backup_settings(tf2)
+
 def remove_block():
 
 
@@ -805,6 +900,29 @@ def remove_block():
 def aws_resource(t1,tt1,tt2,flag1,flag2):
     skip=0
     return skip,t1,flag1,flag2 
+
+
+# Make an ARN we are deliberately keeping literal (not de-referencing to a resource
+# address) account/region-portable, by substituting this account's id/region with the
+# same data sources other ARN types get at the end of globals_replace. Used for lambda
+# ARNs we must keep literal to avoid a terraform dependency cycle (an aws:SourceArn
+# condition or policy Resource naming the function that owns the role - see #170), or that
+# we cannot dereference (another region, or a function that was not collected). An ARN in
+# a different account (context.acc not present) is left fully literal.
+def sub_acct_region(t1, tt1, tt2):
+    if ":" + context.acc + ":" not in tt2:
+        return t1
+    ends = ""
+    while ":" + context.acc + ":" in tt2:
+        r1 = tt2.find(":" + context.region + ":")
+        a1 = tt2.find(":" + context.acc + ":")
+        if r1 > 0 and r1 < a1:
+            ends = ends + ",data.aws_region.current.region"
+            tt2 = tt2[:r1] + ":%s:" + tt2[r1 + context.regionl + 2:]
+        a1 = tt2.find(":" + context.acc + ":")
+        tt2 = tt2[:a1] + ":%s:" + tt2[a1 + 14:]
+        ends = ends + ",data.aws_caller_identity.current.account_id"
+    return tt1 + ' = format("' + tt2 + '"' + ends + ')\n'
 
 
 # generic replace of acct and region in arn
@@ -835,21 +953,30 @@ def globals_replace(t1,tt1,tt2):
             return t1
         
         if tt2.startswith("arn:aws:lambda") and "function:" in tt2:
+            # The branches below keep the ARN literal rather than de-referencing it to
+            # aws_lambda_function.<name>.arn, but still make the account id / region
+            # portable via sub_acct_region instead of leaving them hard-coded inline.
             if tt2.endswith("*"):
-                return t1
+                return sub_acct_region(t1, tt1, tt2)
             if tt1=="Resource":
-                return t1
+                return sub_acct_region(t1, tt1, tt2)
+            # a policy condition ("aws:SourceArn") naming the function that uses this role:
+            # referencing it would make the role depend on a lambda that already depends on
+            # the role - aws allows it, terraform can't order it and errors with a cycle
+            if tt1.strip('"').lower().endswith(":sourcearn"):
+                return sub_acct_region(t1, tt1, tt2)
             # Only dereference if the function is in the current region
             arn_region = tt2.split(":")[3]
             if arn_region and arn_region != context.region:
-                return t1
+                return sub_acct_region(t1, tt1, tt2)
             fname=tt2.split(":")[-1]
             # only build a reference if the function was collected; otherwise
-            # (e.g. service-managed lambdas, or a policy Resource) keep the literal ARN
+            # (e.g. service-managed lambdas) keep the ARN literal but portable
             if fname in context.lambdalist and not common.ref_skipped("aws_lambda_function", fname) and not common.is_self_ref("aws_lambda_function", fname):
                 t1 = tt1 + " = aws_lambda_function." + fname + ".arn\n"
                 common.add_dependancy("aws_lambda_function", fname)
-            return t1
+                return t1
+            return sub_acct_region(t1, tt1, tt2)
 
         if tt2.startswith("arn:aws:cloudfront:") and ":distribution/" in tt2:
             fname=tt2.split("/")[-1]

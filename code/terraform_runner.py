@@ -3,6 +3,7 @@
 import subprocess
 import os
 import json
+import re
 import time
 import glob
 import shutil
@@ -225,6 +226,34 @@ def run_terraform_apply_with_progress(tfplan_file, plan_json='plan2.json'):
         return rc(command)
 
 
+def move_to_notimported(pattern):
+    """shutil.move does not expand wildcards - glob and move each match."""
+    os.makedirs("notimported", exist_ok=True)
+    for f in glob.glob(pattern):
+        log.error("ERROR: moved "+f+" to notimported/")
+        shutil.move(f, os.path.join("notimported", f))
+
+
+# AccessDenied read diagnostics carry no address - only 'reading <Description>
+# (<name>): ...' in the summary - so map the human description to a terraform type.
+# Add entries as new resource families are seen to fail this way (issue #168).
+_READ_ERR_TYPE = {
+   "S3 Bucket Server-side Encryption Configuration": "aws_s3_bucket_server_side_encryption_configuration",
+   "S3 Bucket Versioning": "aws_s3_bucket_versioning",
+   "S3 Bucket Ownership Controls": "aws_s3_bucket_ownership_controls",
+   "S3 Bucket Request Payment Configuration": "aws_s3_bucket_request_payment_configuration",
+   "S3 Bucket Policy": "aws_s3_bucket_policy",
+   "S3 Bucket Object Lock Configuration": "aws_s3_bucket_object_lock_configuration",
+   "S3 Bucket Lifecycle Configuration": "aws_s3_bucket_lifecycle_configuration",
+   "Route 53 Record": "aws_route53_record",
+   "Route53 Hosted Zone": "aws_route53_zone",
+   "IAM OIDC Provider": "aws_iam_openid_connect_provider",
+   "IAM SAML Provider": "aws_iam_saml_provider",
+   "CodeStar Connections Connection": "aws_codestarconnections_connection",
+   "Glue Data Catalog Encryption Settings": "aws_glue_data_catalog_encryption_settings",
+}
+
+
 def tfplan1(mymess):
 
    rf = "resources.out"
@@ -248,69 +277,44 @@ def tfplan1(mymess):
    
    rout = run_terraform_plan_with_progress(com, "Terraform plan "+mymess)
       
-   file = "plan1.json"
-   f2 = open(file, "r")
-   plan2 = True
-
-   while True:
-      line = f2.readline()
-      if not line:
-         break
-      if '@level": "error"' in line:
-         if context.debug is True:
-            log.debug("Error" + line)
+   # Stage-6 self-heal (issue #168): terraform writes plan1.json as -json, one compact
+   # JSON object per line. Move genuinely unimportable resources to notimported/ so the
+   # run continues instead of aborting at Stage 7. Only errors terraform can never
+   # recover from are removed - a vanished or unreadable object; config-generation
+   # errors (Conflicting arguments, Missing required argument, ...) are left for fixtf.
+   with open("plan1.json") as f2:
+      for line in f2:
+         if '"@level":"error"' not in line:
+            continue
          try:
-               mess = f2.readline()
-               try:
-                  if "VPC Lattice" in mess and "404" in mess:
-                     log.error("ERROR: VPC Lattice 404 error - see plan1.json")
-                     i = mess.split('(')[1].split(')')[0].split('/')[-1]
-                     if i != "":
-                        log.error("ERROR: Removing "+i +
-                              " import files - plan errors see plan1.json [p1]")
-                        context.badlist = context.badlist+[i]
-                        shutil.move("import__*"+i+"*.tf",
-                                    "notimported/import__*"+i+"*.tf")
+            diag = json.loads(line).get("diagnostic") or {}
+         except (ValueError, TypeError):
+            continue
+         summary = diag.get("summary", "") or ""
+         detail = diag.get("detail", "") or ""
 
-                  elif "Error: Cannot import non-existent remote object" in mess:
-                     log.error(
-                         "ERROR: Cannot import non-existent remote object - see plan1.json")
-                     i = mess.split('(')[1].split(')')[0].split('/')[-1]
-                     if i != "":
-                        log.error("ERROR: Removing "+i +
-                              " import files - plan errors see plan1.json [p2]")
-                        context.badlist = context.badlist+[i]
-                        shutil.move("import__*"+i+"*.tf",
-                                    "notimported/import__*"+i+"*.tf")
+         # [p1]/[p2] unimportable import - the resource address is in detail
+         if summary == "Cannot import non-existent remote object" or ("VPC Lattice" in detail and "404" in detail):
+            m = re.search(r'import an existing object to "([^"]+)"', detail)
+            if m:
+               rtype, _, label = m.group(1).partition(".")
+               if label:
+                  log.error("ERROR: Removing %s - unimportable, see plan1.json [p2]", m.group(1))
+                  context.badlist = context.badlist + [label]
+                  move_to_notimported("import__" + rtype + "__" + label + "*.tf")
+            continue
 
-               except:
-                  pass
-
-               try:
-                  i = mess.split('(')[2].split(')')[0]
-                  if i != "":
-                     log.error("ERROR: Removing "+i +
-                           " files - plan errors see plan1.json [p3]")
-                     context.badlist = context.badlist+[i]
-                     shutil.move("import__*"+i+"*.tf",
-                                 "notimported/import__*"+i+"*.tf")
-                     shutil.move("aws_*"+i+"*.tf",
-                                 "notimported/aws_*"+i+"*.tf")
-
-               except:
-                  if context.debug is True:
-                     log.debug(mess.strip())
-                  context.plan2 = True
-
-         except:
-               log.error("Error - no error message, check plan1.json")
-               dt = datetime.now().isoformat(timespec='seconds')
-               com = "cp plan1.json plan1.json."+dt
-               log.info(com)
-               rout = rc(com)
-               log.info("exit 018")
-               stop_timer()
-               exit()
+         # AccessDenied read - the resource can't be read so it can't be imported. These
+         # carry no address (detail empty); the identity is in summary as
+         # 'reading <Description> (<name>): ...', so map <Description> -> type.
+         if re.search(r'AccessDenied|StatusCode:\s*403|not authorized', summary):
+            m = re.match(r'reading (.+?) \((.+?)\): ', summary)
+            if m and _READ_ERR_TYPE.get(m.group(1)):
+               name = re.sub(r'[^A-Za-z0-9_-]', '_', m.group(2))
+               log.error("ERROR: Removing %s (%s) - AccessDenied, see plan1.json [p2r]", name, m.group(1))
+               context.badlist = context.badlist + [name]
+               move_to_notimported("import__" + _READ_ERR_TYPE[m.group(1)] + "__*" + name + "*.tf")
+            continue
 
    if not os.path.isfile("resources.out"):
          log.error("could not find expected resources.out file after Plan 1 - exiting")
@@ -331,12 +335,8 @@ def tfplan2():
    # zap the badlist
    for i in context.badlist:
       log.error("ERROR: Removing "+i+" files - plan errors see plan1.json [p4]")
-      try:
-         shutil.move("aws_*"+i+"*.tf", "notimported/aws_*"+i+"*.tf")
-         shutil.move("aws_*"+i+"*.out", "notimported/aws_*"+i+"*.out")
-      except FileNotFoundError as e:
-         log.error(f"{e=}")
-         pass
+      move_to_notimported("aws_*"+i+"*.tf")
+      move_to_notimported("aws_*"+i+"*.out")
 
    # copy all imported/aws_*.tf to here ?
    com = "cp imported/aws_*.tf ."

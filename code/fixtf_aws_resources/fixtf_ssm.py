@@ -46,6 +46,19 @@ def aws_ssm_maintenance_window(t1,tt1,tt2,flag1,flag2):
 
 
 
+def hcl_string(vs):
+	"""A byte-exact hcl string literal for an ssm parameter value.
+
+	jsonencode() re-serialises a json value - sorting its keys, dropping its whitespace - so it
+	never matches the string ssm actually stores, and terraform plans a change on every run.
+	Escaping the value instead keeps it byte for byte, whatever it holds.
+	"""
+	vs = vs.replace('\\', '\\\\').replace('"', '\\"')
+	vs = vs.replace('\n', '\\n').replace('\r', '\\r').replace('\t', '\\t')
+	vs = vs.replace('${', '$${').replace('%{', '%%{')
+	return '"' + vs + '"'
+
+
 def aws_ssm_parameter(t1,tt1,tt2,flag1,flag2):
 
 
@@ -58,15 +71,8 @@ def aws_ssm_parameter(t1,tt1,tt2,flag1,flag2):
 			client = boto3.client("ssm")
 			response = client.get_parameter(Name=context.ssmparamn, WithDecryption=True)
 			vs=response["Parameter"]["Value"]
-			ml=len(vs.split('\n'))
-			if ml > 1:
-				vs=vs.replace('\n','').replace('\t','')
-			vs=vs.replace('${','$${')
-			if vs.startswith('{"') or vs.startswith('["') :
-				t1 = tt1 + " = jsonencode("+vs+")\n"
-			else:
-				t1 = tt1 + " = \"" + vs + "\"\n"
-			context.ssmparamn=""	
+			t1 = tt1 + " = " + hcl_string(vs) + "\n"
+			context.ssmparamn=""
 	elif tt1 == "insecure_value": 
 		t1 ="lifecycle {\n" + "   ignore_changes = [value]\n" +  "}\n"
 		

@@ -14,6 +14,33 @@ from error_handler import handle_error2
 log = logging.getLogger('aws2tf')
 
 
+def escape_hcl_string(value):
+   """Escape a value for safe embedding inside an HCL double-quoted string literal.
+
+   Prevents HCL injection by ensuring that characters which could break out of
+   a string literal (double-quote, backslash, newline, interpolation markers)
+   are properly escaped. See: https://developer.hashicorp.com/terraform/language/expressions/strings
+
+   Args:
+       value: The raw string value (e.g. an AWS resource identifier).
+
+   Returns:
+       The escaped string safe to place between double quotes in HCL.
+   """
+   if not isinstance(value, str):
+      return value
+   # Order matters: escape backslashes first so we don't double-escape later substitutions
+   value = value.replace('\\', '\\\\')
+   value = value.replace('"', '\\"')
+   value = value.replace('\n', '\\n')
+   value = value.replace('\r', '\\r')
+   value = value.replace('\t', '\\t')
+   # Escape interpolation/directive sequences so they are treated as literal text
+   value = value.replace('${', '$${')
+   value = value.replace('%{', '%%{')
+   return value
+
+
 def ref_skipped(type, name):
    # True if a referenced resource was excluded (-e/--exclude) or skipped
    # (--skipname). In that case the target resource is never generated, so deref
@@ -99,7 +126,7 @@ def write_import(type, theid, tfid):
          output = StringIO()
          output.write('import {\n')
          output.write('  to = ' +type + '.' + tfid + '\n')
-         output.write('  id = "'+ theid + '"\n')
+         output.write('  id = "'+ escape_hcl_string(theid) + '"\n')
          output.write('}\n')
 
                   # Write the filtered resource block to a new file
@@ -136,36 +163,40 @@ def write_import(type, theid, tfid):
 def do_data(type, theid):
    if context.dnet:
       if type == "aws_vpc" or type=="aws_subnet":
-         fn="data-"+type+"_"+theid+".tf"
+         safe_label = re.sub(r'[^A-Za-z0-9_-]', '_', theid)
+         fn="data-"+type+"_"+safe_label+".tf"
          with open(fn, 'w') as f3:
-            f3.write('data "'+type+'" "'+theid+'" {\n')
-            f3.write(' id = "'+theid+'"\n')
+            f3.write('data "'+type+'" "'+safe_label+'" {\n')
+            f3.write(' id = "'+escape_hcl_string(theid)+'"\n')
             f3.write('}\n')
          return True
       
    if context.dsgs:
       if type=="aws_security_groups":
-         fn="data-"+type+"_"+theid+".tf"
+         safe_label = re.sub(r'[^A-Za-z0-9_-]', '_', theid)
+         fn="data-"+type+"_"+safe_label+".tf"
          with open(fn, 'w') as f3:
-            f3.write('data "'+type+'" "'+theid+'" {\n')
-            f3.write(' id = "'+theid+'"\n')
+            f3.write('data "'+type+'" "'+safe_label+'" {\n')
+            f3.write(' id = "'+escape_hcl_string(theid)+'"\n')
             f3.write('}\n')
          return True
    if context.dkms:
       if type == "aws_kms_key":
-         fn="data-"+type+"_"+theid+".tf"
+         safe_label = re.sub(r'[^A-Za-z0-9_-]', '_', theid)
+         fn="data-"+type+"_"+safe_label+".tf"
          with open(fn, 'w') as f3:
-            f3.write('data "'+type+'" "k-'+theid+'" {\n')
-            f3.write(' key_id = "'+theid+'"\n')
+            f3.write('data "'+type+'" "k-'+safe_label+'" {\n')
+            f3.write(' key_id = "'+escape_hcl_string(theid)+'"\n')
             f3.write('}\n')
          return True
    if context.dkey:
       if type == "aws_key_pair":
          tfil=theid.replace("/","_").replace(".","_").replace(":","_").replace("|","_").replace("$","_").replace(",","_").replace("&","_").replace("#","_").replace("[","_").replace("]","_").replace("=","_").replace("!","_").replace(";","_")
+         tfil = re.sub(r'[^A-Za-z0-9_-]', '_', tfil)
          fn="data-"+type+"_"+tfil+".tf"
          with open(fn, 'w') as f3:
             f3.write('data "'+type+'" "'+tfil+'" {\n')
-            f3.write(' key_name = "'+theid+'"\n')
+            f3.write(' key_name = "'+escape_hcl_string(theid)+'"\n')
             f3.write('}\n')
          return True
 

@@ -41,4 +41,4 @@ ISSUE-reverted-prs.md
 ISSUE-reverted-prs.md
 
 .hypothesis/
-code/.automation/terraform-provider-aws/website/
+code/.automation/terraform-provider-aws/

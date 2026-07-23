@@ -37,5 +37,8 @@ __pycache__
 aws2tf.log
 copy-to-kiro.sh
 ISSUE-reverted-prs.md
-code/.automation/terraform*
-.hypothesis
+
+ISSUE-reverted-prs.md
+
+.hypothesis/
+code/.automation/terraform-provider-aws/website/

@@ -1408,7 +1408,7 @@ def generic_deref_arn(t1, tt1, tt2):
         tt2=tt2.replace('"','').replace(' ','').replace('[','').replace(']','')
         cc=tt2.count(',')
         subs=""
-        log.debug("generic %s cc= %s %s",  tt2, cc)
+        log.debug("generic %s cc= %s", tt2, cc)
         if tt2.endswith("*"): isstar=True
 
         if cc==0 and ":log-stream:" in tt2:

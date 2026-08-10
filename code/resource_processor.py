@@ -98,7 +98,7 @@ def call_resource(type, id):
          log.debug(f"{e=}")
          exc_type, exc_obj, exc_tb = sys.exc_info()
          fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-         log.debug("%s %s %s %s",  exc_type, fname, exc_tb.tb_lineno)
+         log.debug("%s %s %s", exc_type, fname, exc_tb.tb_lineno)
       pass
 
    except SyntaxError:
@@ -111,7 +111,7 @@ def call_resource(type, id):
          log.debug(f"{e=}")
          exc_type, exc_obj, exc_tb = sys.exc_info()
          fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-         log.debug("%s %s %s %s",  exc_type, fname, exc_tb.tb_lineno)
+         log.debug("%s %s %s", exc_type, fname, exc_tb.tb_lineno)
       pass
 
    except Exception as e:
@@ -129,7 +129,7 @@ def call_resource(type, id):
 
          exc_type, exc_obj, exc_tb = sys.exc_info()
          fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-         log.error("%s %s %s %s",  exc_type, fname, exc_tb.tb_lineno)
+         log.error("%s %s %s", exc_type, fname, exc_tb.tb_lineno)
          if rr is False:
             log.error("--->> Could not get resource "+type+" id="+str(id))
             pass
@@ -323,9 +323,9 @@ def call_boto3(type, clfn, descfn, topkey, key, id):
                   for i in fresp:
                      if context.debug: 
                         try:
-                           log.debug("%s %s %s",  i[key], id)
+                           log.debug("%s %s", i[key], id)
                         except TypeError:
-                           log.debug("%s %s %s",  i, id)
+                           log.debug("%s %s", i, id)
                      try:
                         if id in i[key]:
                            response=[i]

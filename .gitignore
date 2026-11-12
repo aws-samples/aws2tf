@@ -37,6 +37,11 @@ __pycache__
 aws2tf.log
 *.log
 copy-to-kiro.sh
+copy-to.sh
+code/.auto-gen/port-test.sh
+code/.auto-gen/rm-ami.sh
+code/.auto-gen/rm-ebs.sh
+.coverage
 ISSUE-reverted-prs.md
 
 ISSUE-reverted-prs.md

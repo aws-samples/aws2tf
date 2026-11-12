@@ -56,8 +56,8 @@ Resource = ["arn:aws:s3:::sam-arb-documents-${data.aws_caller_identity.current.a
 
 **After:**
 ```hcl
-Resource = [aws_s3_bucket.b-sam-arb-documents-566972129213-eu-west-2.arn,
-  "${aws_s3_bucket.b-sam-arb-documents-566972129213-eu-west-2.arn}/*"]
+Resource = [aws_s3_bucket.b-sam-arb-documents-123456789012-eu-west-2.arn,
+  "${aws_s3_bucket.b-sam-arb-documents-123456789012-eu-west-2.arn}/*"]
 ```
 
 **Files affected:** 8 resources

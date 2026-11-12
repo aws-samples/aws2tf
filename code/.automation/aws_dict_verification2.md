@@ -5607,7 +5607,7 @@ These resources require additional IAM permissions:
 - **Method:** `list_policies`
 - **Error Code:** `AccessDeniedException`
 
-**Error:** Permission denied: No default admin could be found for account 566972129213 in Region us-east-1
+**Error:** Permission denied: No default admin could be found for account 123456789012 in Region us-east-1
 
 **Action Needed:**
 1. Grant IAM permissions for this service
@@ -5621,7 +5621,7 @@ These resources require additional IAM permissions:
 - **Method:** `list_resource_sets`
 - **Error Code:** `AccessDeniedException`
 
-**Error:** Permission denied: No default admin could be found for account 566972129213 in Region us-east-1
+**Error:** Permission denied: No default admin could be found for account 123456789012 in Region us-east-1
 
 **Action Needed:**
 1. Grant IAM permissions for this service
@@ -9007,7 +9007,7 @@ Missing required parameter in input: "repositoryName"
 - **Error Code:** `RegistryPolicyNotFoundException`
 - **Error Type:** `api_error`
 
-**Error:** API error (RegistryPolicyNotFoundException): Registry policy does not exist in the registry with id '566972129213'
+**Error:** API error (RegistryPolicyNotFoundException): Registry policy does not exist in the registry with id '123456789012'
 
 **Action Needed:**
 1. Investigate the API error
@@ -9021,7 +9021,7 @@ Missing required parameter in input: "repositoryName"
 - **Error Code:** `RegistryPolicyNotFoundException`
 - **Error Type:** `api_error`
 
-**Error:** API error (RegistryPolicyNotFoundException): Registry policy does not exist in the registry with id '566972129213'
+**Error:** API error (RegistryPolicyNotFoundException): Registry policy does not exist in the registry with id '123456789012'
 
 **Action Needed:**
 1. Investigate the API error
@@ -10003,7 +10003,7 @@ Missing required parameter in input: "DetectorId"
 - **Error Code:** `NoSuchEntity`
 - **Error Type:** `api_error`
 
-**Error:** API error (NoSuchEntity): The Password Policy with domain name 566972129213 cannot be found.
+**Error:** API error (NoSuchEntity): The Password Policy with domain name 123456789012 cannot be found.
 
 **Action Needed:**
 1. Investigate the API error
@@ -13158,7 +13158,7 @@ Missing required parameter in input: "SecretId"
 - **Error Code:** `InvalidAccessException`
 - **Error Type:** `api_error`
 
-**Error:** API error (InvalidAccessException): Account 566972129213 is not an administrator for this organization
+**Error:** API error (InvalidAccessException): Account 123456789012 is not an administrator for this organization
 
 **Action Needed:**
 1. Investigate the API error

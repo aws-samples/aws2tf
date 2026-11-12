@@ -35,6 +35,7 @@ __pycache__
 .python/data/*.log
 .python/bugs.md
 aws2tf.log
+*.log
 copy-to-kiro.sh
 ISSUE-reverted-prs.md
 

@@ -93,10 +93,12 @@ def aws_glue_job(t1,tt1,tt2,flag1,flag2):
 		t1=tt1 + " = aws_s3_bucket.b-" + tt2 + ".bucket\n"
 		common.add_dependancy("aws_s3_bucket",tt2)
 	if tt1=="script_location" and tt2.endswith(".py"):
-		com="aws s3 cp "+tt2+" ."
-		log.debug("executing: "+com)
+		# Pass as an argument list so rc() never invokes a shell: tt2 comes
+		# from the AWS API and S3 keys may contain shell metacharacters.
+		com=["aws", "s3", "cp", tt2, "."]
+		log.debug("executing: %s", com)
 		log.debug("aws_glue_job t1= %s", t1)
-		rout = common.rc(com) 
+		rout = common.rc(com)
 	
 	return skip,t1,flag1,flag2
 

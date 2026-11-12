@@ -74,7 +74,6 @@ class _State:
         self.ec2ignore = False
         self.emrsubnetid = False
         self.expected = False
-        self.serverless = False
         self.elastirep = False
         self.elastigrep = False
         self.elasticc = False
@@ -213,7 +212,7 @@ _MANAGED_ATTRS = frozenset([
     # Transient processing flags
     'lbc', 'rbc', 'asg_azs', 'plan2', 'lbskipaacl', 'lbskipcnxl', 'mskcfg',
     'repdbin', 'gulejobmaxcap', 'levsmap', 'ec2ignore', 'emrsubnetid',
-    'expected', 'serverless', 'elastirep', 'elastigrep', 'elasticc',
+    'expected', 'elastirep', 'elastigrep', 'elasticc',
     'kinesismsk', 'destbuck', 'iskmskey',
     # Transient strings
     'ssmparamn', 'api_id', 'stripblock', 'stripstart', 'stripend',

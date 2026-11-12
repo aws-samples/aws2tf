@@ -39,3 +39,11 @@ copy-to-kiro.sh
 ISSUE-reverted-prs.md
 
 ISSUE-reverted-prs.md
+
+.hypothesis/
+code/.automation/terraform-provider-aws/
+Dockerfile
+
+# Local backups
+backup_*/
+*.sav-*

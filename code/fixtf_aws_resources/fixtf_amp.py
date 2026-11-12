@@ -28,7 +28,7 @@ def aws_prometheus_query_logging_configuration(t1, tt1, tt2, flag1, flag2):
 	if tt1 == "workspace_id" and tt2 != "null":
 		workspace_id = tt2.strip('"')
 		# Construct ARN-based resource name for workspace
-		# Format: arn_aws_aps_us-east-1_566972129213_workspace_ws-<id>
+		# Format: arn_aws_aps_us-east-1_123456789012_workspace_ws-<id>
 		# We need to get the ARN, but we only have workspace ID
 		# For now, add dependency with workspace ID and let aws2tf handle it
 		t1="workspace_id = aws_prometheus_workspace."+workspace_id+".id\n"

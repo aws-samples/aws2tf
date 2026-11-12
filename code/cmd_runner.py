@@ -157,7 +157,7 @@ def aws_tf(region, args):
       f3.write('  region                   = "' + region + '"\n')
       if context.profile != "default":
          f3.write('  profile                  = "' + context.profile + '"\n')
-      if not context.serverless: f3.write('  shared_credentials_files = ["~/.aws/credentials"]\n')
+      f3.write('  shared_credentials_files = ["~/.aws/credentials"]\n')
       f3.write('}\n')
 
    com = "cp provider.tf imported/provider.tf"

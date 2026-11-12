@@ -1611,7 +1611,7 @@ terraform apply -auto-approve
 # Step 9: Test imports
 cd ../../..
 ./aws2tf.py -r us-east-1 -t aws_workspacesweb_portal
-./aws2tf.py -r us-east-1 -t aws_workspacesweb_portal -i "arn:aws:workspaces-web:us-east-1:566972129213:portal/5b24f2e6-cc7b-4781-add8-c7dfcccee8c9"
+./aws2tf.py -r us-east-1 -t aws_workspacesweb_portal -i "arn:aws:workspaces-web:us-east-1:123456789012:portal/5b24f2e6-cc7b-4781-add8-c7dfcccee8c9"
 
 # Step 10: Verify - should show 0 changes after import
 # This resource needs no custom handler logic!
@@ -1668,7 +1668,7 @@ Certain AWS services have strict naming requirements that cause validation error
 ### S3 Buckets for Logging
 - **Avoid** AWS-reserved prefixes: "aws", "amazon", "aws2tf"
 - **Use:** "test-{purpose}-{date}-{account_id}"
-- Example: "test-session-logger-20250102-566972129213"
+- Example: "test-session-logger-20250102-123456789012"
 
 ### Browser Policies (WorkSpaces Web)
 - **MUST** use "chromePolicies" format
@@ -1973,7 +1973,7 @@ for j in response[topkey]:
 - Use full ARN format: `arn:aws:iam::ACCOUNT_ID:root`
 - Don't use just the account ID: `"123456789012"` ❌
 - Get your account ID: `aws sts get-caller-identity --query Account --output text`
-- Example: `"AWS": "arn:aws:iam::566972129213:root"` ✓
+- Example: `"AWS": "arn:aws:iam::123456789012:root"` ✓
 
 ### Issue: KMS key permission errors
 **Symptom:** "The provided KMS Key does not provide sufficient permissions for [Service]" or "ValidationException: KMS key policy"

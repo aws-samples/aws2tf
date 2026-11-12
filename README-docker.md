@@ -59,7 +59,7 @@ RUN set -eux \
     && rm -f terraform_${VERSION}_linux_${ARCH}.zip
 
 RUN adduser -D aws2tf
-RUN git clone -b python https://github.com/aws-samples/aws2tf.git /aws2tf
+RUN git clone https://github.com/aws-samples/aws2tf.git /aws2tf
 RUN chown -R aws2tf /aws2tf
 USER aws2tf
 WORKDIR /aws2tf

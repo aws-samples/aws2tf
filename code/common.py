@@ -81,14 +81,6 @@ from resource_processor import (
     get_test,
 )
 
-# Re-export S3 state operations
-from s3_state import (
-    create_bucket_if_not_exists,
-    upload_directory_to_s3,
-    empty_and_delete_bucket,
-    download_from_s3,
-)
-
 # Re-export credentials utilities
 from credentials import (
     detect_aws_credentials,

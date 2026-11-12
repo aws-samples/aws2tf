@@ -60,7 +60,6 @@ def init(workspace_path, account, region, command_args):
                 "validate": getattr(command_args, 'validate', False),
                 "accept": getattr(command_args, 'accept', False),
                 "singlefile": getattr(command_args, 'singlefile', False),
-                "serverless": getattr(command_args, 'serverless', False),
             }
         },
         "current_stage": 1,

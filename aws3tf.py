@@ -365,7 +365,6 @@ def parse_and_validate_arguments():
     argParser.add_argument("-dkms", "--datakms", help="write data statements for aws_kms_key",action='store_true')
     argParser.add_argument("-dkey", "--datakey", help="write data statements for aws_key_pair",action='store_true')
     argParser.add_argument("-b3", "--boto3error", help="exit on boto3 api error (for debugging)", action='store_true')
-    argParser.add_argument("-la", "--serverless", help="Lambda mode - when running in a Lambda container", action='store_true')
     argParser.add_argument("-tv", "--tv", help="Specify version of Terraform AWS provider default = "+context.tfver)
     argParser.add_argument("-d5", "--debug5", help="debug5 special debug flag", action='store_true')
 
@@ -493,11 +492,6 @@ def setup_environment_and_context(args):
     
     # Determine resource type
     if args.type is None or args.type == "":
-        if args.serverless:
-            log.error("type is required eg:  -t aws_vpc  when in serverless mode, exiting ....")
-            log.info("exit 003")
-            timed_interrupt.stop_timer()
-            exit()
         log.info("type is recommended eg:  -t aws_vpc    \nsetting to all")
         type = "all"
     else:
@@ -651,23 +645,9 @@ def setup_workspace(args, region):
         region: AWS region
     """
     # Setup paths
-    if args.serverless:
-        context.serverless = True
-        context.path1 = "/tmp/aws2tf/generated/tf-"+context.pathadd+context.acc+"-"+region
-        context.path2 = context.path1+"/imported"
-        context.path3 = context.path1+"/notimported"
-    else:
-        context.serverless = False
-        context.path1 = "generated/tf-"+context.pathadd+context.acc+"-"+region
-        context.path2 = context.path1+"/imported"
-        context.path3 = context.path1+"/notimported"
-    
-    # Handle serverless S3 operations
-    if context.serverless:
-        if args.merge:
-            common.download_from_s3()
-        else:
-            common.empty_and_delete_bucket()
+    context.path1 = "generated/tf-"+context.pathadd+context.acc+"-"+region
+    context.path2 = context.path1+"/imported"
+    context.path3 = context.path1+"/notimported"
     
     # Check for existing state
     if not os.path.isfile(context.path1+"/terraform.tfstate") and context.merge:
@@ -675,15 +655,11 @@ def setup_workspace(args, region):
         context.merge = False
         com = "rm -rf "+context.path1
         rout = common.rc(com)
-        if context.serverless:
-            common.empty_and_delete_bucket()
     
     # Clean workspace if not merging
     if context.merge is False:
         com = "rm -rf "+context.path1
         rout = common.rc(com)
-        if context.serverless:
-            common.empty_and_delete_bucket()
     
     # Create directories
     com = "mkdir -p "+context.path2
@@ -1146,10 +1122,6 @@ def finalize_and_cleanup(args, starttime):
             log.info("Use trivy manually if required")
     else:
         log.info("trivy not installed, skipping security check")
-    
-    # Upload to S3 if serverless
-    if context.serverless:
-        common.upload_directory_to_s3()
     
     # Check for errors
     x = glob.glob("*.err")

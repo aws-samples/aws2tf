@@ -108,7 +108,6 @@ def mock_context():
     context.warnings = False
     context.show_status = False
     context.expected = False
-    context.serverless = False
     context.credtype = 'environment'
     context.sso = False
     

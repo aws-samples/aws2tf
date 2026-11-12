@@ -1,5 +1,5 @@
 
-<img src="https://github.com/aws-samples/aws2tf/blob/python/.logos/aws2tf.png" width="300" alt="aws2tf" class="center">
+<img src="https://github.com/aws-samples/aws2tf/blob/master/aws2tf.png" width="300" alt="aws2tf" class="center">
 
 ----
 
@@ -76,7 +76,7 @@ Running the tool in your local shell (bash) required these steps:
     ```
 
 2. login to the AWS cli  (aws configure).
-3. Install th4 requirements:
+3. Install the requirements:
 
 ```bash
 pip3 install -r requirements.txt
@@ -128,7 +128,7 @@ You can also combine type requests by using a comma delimited list:
 ./aws2tf.py -t vpc,efs,aws_sagemaker_domain
 ```
 
-By default aws2tf genrates a separate aws_xxxx.tf file for every resource it finds, if you would prefer to have them all merged into a single file (main.tf)
+By default aws2tf generates a separate aws_xxxx.tf file for every resource it finds, if you would prefer to have them all merged into a single file (main.tf)
 use the -s option:
 
 ```bash
@@ -162,7 +162,7 @@ or for a specific domain:
 Add a specific S3 bucket:
 
 ```bash
-./aws2tf -t aws_s3_bucket -i my_bucket_name -m
+./aws2tf.py -t aws_s3_bucket -i my_bucket_name -m
 ```
 
 
@@ -170,11 +170,13 @@ Add a specific S3 bucket:
 
 Often Organisations (and AWS blogs/workshops) deploy resources for use using a stack.
 
-aws2tf can convert these to terraform for you using the -s [stack name] option
+aws2tf can convert these to terraform for you using the stack type with the -i [stack name] option
 
 ```bash
-./aws2tf.sh -s <stack name>
+./aws2tf.py -t stack -i <stack name>
 ```
+
+Note: stack cannot be combined with other types in the same -t list.
 
 
 ### Getting everything in an account
@@ -227,7 +229,31 @@ These flags will cause aws2tf to use data sources (rather than resources) for ce
 * -dkms:  uses Terraform data sources for aws_kms_key
 * -dkey:  uses Terraform data sources for aws_key_pair
 
-Please raise an issues if you'd like to see this expanded to other types.
+Please raise an issue if you'd like to see this expanded to other types.
+
+
+### Excluding resources
+
+Exclude resource types (comma delimited list) from an import:
+
+```bash
+./aws2tf.py -t vpc -e aws_security_group
+```
+
+Skip any resource whose name contains a given string:
+
+```bash
+./aws2tf.py -t vpc -sn test
+```
+
+
+### Other useful flags
+
+* -w / --warn:      show warning messages
+* --status:         show STATUS messages every 20 seconds
+* -v / --validate:  validate and exit
+* -a / --accept:    accept expected plan changes
+* --resume:         resume from Stage 7 (validation/import) in an existing workspace
 
 ----------
 
@@ -238,7 +264,7 @@ You may come across some kind of error as trying to test everyone's AWS combinat
 
 **If you happen to find one of these errors please open an issue [here](https://github.com/aws-samples/aws2tf/issues) and paste in the error and it will get fixed.**
 
-For stack sets (-s option) look for these two files in the generated/tf* directory - and paste their contents into the issue:
+For stacks (-t stack option) look for these two files in the generated/tf* directory - and paste their contents into the issue:
 
 * stack-unprocessed.err
 * stack-null.err
@@ -300,7 +326,7 @@ see [here](https://github.com/aws-samples/aws2tf/blob/master/Terraform-Resources
 
 ### Terraform State
 
-aws2tf maintains state in it's own local directory:
+aws2tf maintains state in its own local directory:
 
 generated/tf.<account-number>.<region>/
 
@@ -313,7 +339,7 @@ It is not possible at this time to use your own state location (eg. on s3)
 
 **October  2024**
 
-*The python version of this tool `aws2tf.py` has now superceded the old bash script version.*
+*The python version of this tool `aws2tf.py` has now superseded the old bash script version.*
 *You can still find and use the old version in the bash-version branch`*
 
 ```bash

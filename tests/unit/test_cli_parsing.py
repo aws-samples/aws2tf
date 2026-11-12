@@ -144,11 +144,15 @@ class TestParseAndValidateArguments:
             assert args.datakms is True
             assert args.datakey is True
     
-    def test_serverless_flag(self):
-        """Test that serverless flag is parsed correctly."""
-        with mock.patch('sys.argv', ['aws2tf.py', '-la']):
-            args = parse_and_validate_arguments()
-            assert args.serverless is True
+    def test_serverless_flag_removed(self):
+        """Test that the removed --serverless flag is rejected.
+
+        Note: '-la' is not tested because argparse now parses it as the
+        combined short flags '-l -a' (--list --accept).
+        """
+        with mock.patch('sys.argv', ['aws2tf.py', '--serverless']):
+            with pytest.raises(SystemExit):
+                parse_and_validate_arguments()
     
     def test_combined_arguments(self):
         """Test that multiple arguments can be combined."""

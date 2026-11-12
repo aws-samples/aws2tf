@@ -258,7 +258,6 @@ Since December 2024, `common.py` is a slim ~100-line file that re-exports everyt
 | `resource_processor.py` | `call_resource()`, `getresource()`, `call_boto3()` |
 | `dependency.py` | `add_dependancy()`, `add_known_dependancy()` |
 | `error_handler.py` | `handle_error()`, `handle_error2()` |
-| `s3_state.py` | S3 bucket state backup/restore |
 | `credentials.py` | `detect_aws_credentials()`, `trivy_check()` |
 | `module_registry.py` | `AWS_RESOURCE_MODULES` dict, service imports |
 
@@ -281,7 +280,7 @@ Since December 2024, `common.py` is a slim ~100-line file that re-exports everyt
 - Resource dicts: `vpclist`, `subnetlist`, `sglist`, `lambdalist`, `s3list`, `rolelist`, etc. (26 dicts)
 - Accumulator lists: `processed`, `dependancies`, `all_extypes`, `badlist`, `roles`, etc. (14 lists)
 - Cached API responses: `aws_subnet_resp`, `aws_vpc_resp`, etc. (6 lists)
-- Transient flags: `lbc`, `rbc`, `plan2`, `expected`, `serverless`, etc. (20 flags)
+- Transient flags: `lbc`, `rbc`, `plan2`, `expected`, etc. (19 flags)
 - Transient strings: `api_id`, `apigwrestapiid`, `current_tf`, `meshname`, etc. (20 strings)
 
 **Configuration (NOT reset — set from CLI args):**
@@ -434,7 +433,6 @@ aws2tf/
 │   ├── resource_processor.py   # Core boto3 dispatch and resource discovery
 │   ├── dependency.py           # Dependency tracking
 │   ├── error_handler.py        # Error classification and handling
-│   ├── s3_state.py             # S3 bucket state backup/restore
 │   ├── credentials.py          # AWS credential detection, trivy
 │   ├── module_registry.py      # Service module imports + registry dict
 │   │

@@ -42,3 +42,8 @@ ISSUE-reverted-prs.md
 
 .hypothesis/
 code/.automation/terraform-provider-aws/
+Dockerfile
+
+# Local backups
+backup_*/
+*.sav-*

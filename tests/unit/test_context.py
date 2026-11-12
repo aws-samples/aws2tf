@@ -41,7 +41,7 @@ class TestContextInitialization:
         """Test that boolean flag attributes are initialized."""
         flags = [
             'debug', 'debug5', 'fast', 'merge', 'validate',
-            'warnings', 'show_status', 'expected', 'serverless',
+            'warnings', 'show_status', 'expected',
             'dnet', 'dkms', 'dkey', 'dsgs'
         ]
         
